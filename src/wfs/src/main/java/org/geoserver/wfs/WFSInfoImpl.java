@@ -99,12 +99,13 @@ public class WFSInfoImpl extends ServiceInfoImpl implements WFSInfo {
 
     @Override
     public Integer getMaxNumberOfFeaturesForPreview() {
-        return maxNumberOfFeaturesForPreview;
+        Integer i = getMetadata().get("maxNumberOfFeaturesForPreview", Integer.class);
+        return i != null ? i : 50;
     }
 
     @Override
     public void setMaxNumberOfFeaturesForPreview(Integer maxNumberOfFeaturesForPreview) {
-        this.maxNumberOfFeaturesForPreview = maxNumberOfFeaturesForPreview;
+        getMetadata().put("maxNumberOfFeaturesForPreview", maxNumberOfFeaturesForPreview);
     }
     
     public List<String> getSRS() {
@@ -169,13 +170,5 @@ public class WFSInfoImpl extends ServiceInfoImpl implements WFSInfo {
             return false;
         
         return true;
-    }
-    
-    private Object readResolve() {
-        if (this.maxNumberOfFeaturesForPreview == null) {
-            this.maxNumberOfFeaturesForPreview = 50;
-        }
-        
-        return this;
     }
 }

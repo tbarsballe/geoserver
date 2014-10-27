@@ -112,7 +112,7 @@ public class MapPreviewPage extends GeoServerBasePage {
     /**
      * Generates the maxFeatures element of the WFS request using the value of 
      * maxNumberOfFeaturesForPreview. Values <= 0 give no limit.
-     * @return "&maxFeatures=${maxNumberOfFeaturesForPreview} or "" if 
+     * @return "&maxFeatures=${maxNumberOfFeaturesForPreview}" or "" if 
      * maxNumberOfFeaturesForPreview <= 0"
      */
     private String getMaxFeatures() {
