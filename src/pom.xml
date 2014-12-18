@@ -262,7 +262,7 @@
    </dependency>
    <dependency>
     <groupId>org.geotools</groupId>
-    <artifactId>gt-property</artifactId>
+    <artifactId>gt-property-ng</artifactId>
     <version>${gt.version}</version>
    </dependency>
    <dependency>

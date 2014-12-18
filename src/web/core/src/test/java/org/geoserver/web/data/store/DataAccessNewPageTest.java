@@ -15,7 +15,7 @@ import org.geoserver.catalog.NamespaceInfo;
 import org.geoserver.catalog.WorkspaceInfo;
 import org.geoserver.web.GeoServerWicketTestSupport;
 import org.geoserver.web.data.store.panel.WorkspacePanel;
-import org.geotools.data.property.PropertyDataStoreFactory;
+import org.geotools.data.property.ng.PropertyDataStoreFactory;
 import org.junit.Test;
 
 /**

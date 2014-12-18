@@ -22,7 +22,7 @@ import javax.xml.namespace.QName;
 import org.geoserver.data.test.MockData;
 import org.geoserver.data.util.IOUtils;
 import org.geotools.data.DataStore;
-import org.geotools.data.property.PropertyDataStore;
+import org.geotools.data.property.ng.PropertyDataStore;
 import org.geotools.data.simple.SimpleFeatureIterator;
 import org.geotools.data.simple.SimpleFeatureLocking;
 import org.geotools.data.simple.SimpleFeatureSource;

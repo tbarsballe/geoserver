@@ -31,8 +31,8 @@ import org.geotools.data.DataAccess;
 import org.geotools.data.DataStore;
 import org.geotools.data.DataUtilities;
 import org.geotools.data.FeatureSource;
-import org.geotools.data.property.PropertyDataStore;
-import org.geotools.data.property.PropertyDataStoreFactory;
+import org.geotools.data.property.ng.PropertyDataStore;
+import org.geotools.data.property.ng.PropertyDataStoreFactory;
 import org.geotools.feature.NameImpl;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.referencing.CRS;
@@ -109,6 +109,7 @@ public class MockCatalogBuilder {
         expect(ns.getName()).andReturn(name).anyTimes();
         expect(ns.getPrefix()).andReturn(name).anyTimes();
         expect(ns.getMetadata()).andReturn(new MetadataMap()).anyTimes();
+        expect(ns.getURI()).andReturn(uri).anyTimes();
     
         expect(catalog.getNamespace(nsId)).andReturn(ns).anyTimes();
         expect(catalog.getNamespaceByPrefix(name)).andReturn(ns).anyTimes();

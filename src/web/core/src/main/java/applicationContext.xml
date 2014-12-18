@@ -387,7 +387,7 @@
   <bean id="propertyDataStorePanel" class="org.geoserver.web.data.resource.DataStorePanelInfo">
     <property name="id" value="property" />
     <property name="factoryClass"
-      value="org.geotools.data.property.PropertyDataStoreFactory" />
+      value="org.geotools.data.property.ng.PropertyDataStoreFactory" />
     <property name="iconBase" value="org.geoserver.web.GeoServerApplication" />
     <property name="icon" value="img/icons/geosilk/page_white_vector.png" />
   </bean>

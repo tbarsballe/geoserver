@@ -80,7 +80,7 @@ public class AboutTest extends GeoServerSystemTestSupport {
     public void testGetAsVersionsJSON() throws Exception {
         // make the request, parsing the result into a json object
         JSONObject json = (JSONObject) getAsJSON("/rest/about/version.json");
-
+        //TODO: gt-property-ng: json instanceof JSONObject
         checkJSONModel(json);
     }
 

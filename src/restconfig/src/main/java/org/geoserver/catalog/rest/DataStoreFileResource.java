@@ -59,7 +59,7 @@ public class DataStoreFileResource extends StoreFileResource {
     protected static final HashMap<String,String> formatToDataStoreFactory = new HashMap();
     static {
         formatToDataStoreFactory.put( "shp", "org.geotools.data.shapefile.ShapefileDataStoreFactory");
-        formatToDataStoreFactory.put( "properties", "org.geotools.data.property.PropertyDataStoreFactory");
+        formatToDataStoreFactory.put( "properties", "org.geotools.data.property.ng.PropertyDataStoreFactory");
         formatToDataStoreFactory.put( "h2", "org.geotools.data.h2.H2DataStoreFactory");
         formatToDataStoreFactory.put( "spatialite", "org.geotools.data.spatialite.SpatiaLiteDataStoreFactory");
     }

@@ -44,8 +44,8 @@ public class DataAccessEditPageTest extends GeoServerWicketTestSupport {
     public void testLoad() {
         tester.assertRenderedPage(DataAccessEditPage.class);
         tester.assertNoErrorMessage();
-
-        tester.assertLabel("dataStoreForm:storeType", "Properties");
+        //TODO: gt-properties-ng: change from "Properties" to "Properties NG" (maybe?)
+        tester.assertLabel("dataStoreForm:storeType", "Properties NG");
         tester.assertModelValue("dataStoreForm:dataStoreNamePanel:border:paramValue", "cite");
         String expectedPath = new File(getTestData().getDataDirectoryRoot(), "cite").getPath();
         tester.assertModelValue(

@@ -50,7 +50,7 @@ import org.geoserver.web.data.store.StorePage;
 import org.geoserver.web.data.workspace.WorkspaceEditPage;
 import org.geoserver.web.data.workspace.WorkspaceNewPage;
 import org.geoserver.web.data.workspace.WorkspacePage;
-import org.geotools.data.property.PropertyDataStoreFactory;
+import org.geotools.data.property.ng.PropertyDataStoreFactory;
 import org.junit.After;
 import org.junit.Test;
 import org.springframework.security.core.GrantedAuthority;

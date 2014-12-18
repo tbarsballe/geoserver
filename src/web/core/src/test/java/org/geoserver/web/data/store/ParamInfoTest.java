@@ -3,7 +3,7 @@ package org.geoserver.web.data.store;
 import static org.junit.Assert.*;
 
 import org.geotools.data.DataAccessFactory.Param;
-import org.geotools.data.property.PropertyDataStoreFactory;
+import org.geotools.data.property.ng.PropertyDataStoreFactory;
 import org.geotools.util.SimpleInternationalString;
 import org.junit.Test;
 

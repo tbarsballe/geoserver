@@ -36,7 +36,7 @@ import org.geotools.coverage.grid.GridGeometry2D;
 import org.geotools.coverage.grid.io.GridCoverage2DReader;
 import org.geotools.coverage.grid.io.AbstractGridFormat;
 import org.geotools.coverage.grid.io.GridFormatFinder;
-import org.geotools.data.property.PropertyDataStoreFactory;
+import org.geotools.data.property.ng.PropertyDataStoreFactory;
 import org.geotools.geometry.GeneralEnvelope;
 import org.geotools.referencing.CRS;
 import org.opengis.coverage.grid.GridGeometry;

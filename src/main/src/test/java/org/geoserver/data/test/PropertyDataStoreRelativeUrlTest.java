@@ -15,7 +15,7 @@ import org.geoserver.catalog.impl.DataStoreInfoImpl;
 import org.geoserver.test.GeoServerSystemTestSupport;
 import org.geotools.data.DataAccess;
 import org.geotools.data.DataAccessFactory;
-import org.geotools.data.property.PropertyDataStoreFactory;
+import org.geotools.data.property.ng.PropertyDataStoreFactory;
 import org.junit.Test;
 
 /***
