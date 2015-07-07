@@ -35,7 +35,8 @@ public class NoExternalEntityResolver implements EntityResolver {
         }
         
         // allow schema parsing for validation (jar or external only)
-        if (systemId != null && systemId.endsWith(".xsd") && !systemId.startsWith("file")) {
+        if (systemId != null && systemId.toLowerCase().endsWith(".xsd") 
+                && !systemId.toLowerCase().startsWith("file")) {
             return null;
         }
         
