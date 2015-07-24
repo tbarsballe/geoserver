@@ -1,4 +1,4 @@
-/* (c) 2014 Open Source Geospatial Foundation - all rights reserved
+/* (c) 2014 - 2015 Open Source Geospatial Foundation - all rights reserved
  * (c) 2001 - 2013 OpenPlans
  * This code is licensed under the GPL 2.0 license, available at the root
  * application directory.
@@ -176,6 +176,9 @@ public class TestWfsPost extends HttpServlet {
             PrintWriter xmlOut = null;
             StringBuffer sbf = new StringBuffer();
             String resp = null;
+            
+            OutputStream output = null;
+            InputStream in = null;
 
             try {
                 URL u = new URL(urlString);
@@ -243,9 +246,9 @@ public class TestWfsPost extends HttpServlet {
                     response.setHeader("Content-disposition",
                         acon.getHeaderField("Content-disposition"));
 
-                    OutputStream output = response.getOutputStream();
+                    output = response.getOutputStream();
                     int c;
-                    InputStream in = acon.getInputStream();
+                    in = acon.getInputStream();
 
                     while ((c = in.read()) != -1)
                         output.write(c);
@@ -258,24 +261,31 @@ public class TestWfsPost extends HttpServlet {
                 //    out.print(line);
                 //}
             } catch (Exception e) {
-                PrintWriter out = response.getWriter();
-                out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-                out.println("<servlet-exception>");
-                out.println(e.toString());
-                out.println("</servlet-exception>");
-                out.close();
+                // if the output stream for the response has already been opened, 
+                // response.getWriter will throw an exception.
+                if (output == null) {
+                    PrintWriter out = response.getWriter();
+                    out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+                    out.println("<servlet-exception>");
+                    out.println(e.toString());
+                    out.println("</servlet-exception>");
+                    out.close();
+                }
             } finally {
+                
                 try {
                     if (xmlIn != null) {
                         xmlIn.close();
                     }
                 } catch (Exception e1) {
-                    PrintWriter out = response.getWriter();
-                    out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-                    out.println("<servlet-exception>");
-                    out.println(e1.toString());
-                    out.println("</servlet-exception>");
-                    out.close();
+                    if (output == null) {
+                        PrintWriter out = response.getWriter();
+                        out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+                        out.println("<servlet-exception>");
+                        out.println(e1.toString());
+                        out.println("</servlet-exception>");
+                        out.close();
+                    }
                 }
 
                 try {
@@ -283,12 +293,28 @@ public class TestWfsPost extends HttpServlet {
                         xmlOut.close();
                     }
                 } catch (Exception e2) {
-                    PrintWriter out = response.getWriter();
-                    out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-                    out.println("<servlet-exception>");
-                    out.println(e2.toString());
-                    out.println("</servlet-exception>");
-                    out.close();
+                    if (output == null) {
+                        PrintWriter out = response.getWriter();
+                        out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+                        out.println("<servlet-exception>");
+                        out.println(e2.toString());
+                        out.println("</servlet-exception>");
+                        out.close();
+                    }
+                }
+                try {
+                    if (output != null) {
+                        output.close();
+                    }
+                } catch (Exception e) {
+                    
+                }
+                try {
+                    if (in != null) {
+                        in.close();
+                    }
+                } catch (Exception e) {
+                    
                 }
             }
         }
