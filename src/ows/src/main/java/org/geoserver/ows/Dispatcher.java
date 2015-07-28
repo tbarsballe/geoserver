@@ -307,7 +307,11 @@ public class Dispatcher extends AbstractController {
 
     void fireFinishedCallback(Request req) {
         for ( DispatcherCallback cb : callbacks ) {
-            cb.finished( req );
+            try {
+                cb.finished( req );
+            } catch (Exception e) {
+                logger.log(Level.WARNING, "Error firing finished callback for "+cb.getClass(), e);
+            }
         }
     }
     
@@ -433,8 +437,12 @@ public class Dispatcher extends AbstractController {
 
     Request fireInitCallback(Request req) {
         for ( DispatcherCallback cb : callbacks ) {
-            Request r = cb.init( req );
-            req = r != null ? r : req;
+            try {
+                Request r = cb.init( req );
+                req = r != null ? r : req;
+            } catch (Exception e) {
+                logger.log(Level.WARNING, "Error firing init callback for "+cb.getClass(), e);
+            }
         }
         return req;
     }
@@ -575,8 +583,12 @@ public class Dispatcher extends AbstractController {
     
     Service fireServiceDispatchedCallback(Request req, Service service ) {
         for ( DispatcherCallback cb : callbacks ) {
-            Service s = cb.serviceDispatched( req, service );
-            service = s != null ? s : service;
+            try {
+                Service s = cb.serviceDispatched( req, service );
+                service = s != null ? s : service;
+            } catch (Exception e) {
+                logger.log(Level.WARNING, "Error firing serviceDispatched callback for "+cb.getClass(), e);
+            }
         }
         return service;
     }
@@ -793,8 +805,12 @@ public class Dispatcher extends AbstractController {
 
     Operation fireOperationDispatchedCallback(Request req, Operation op ) {
         for ( DispatcherCallback cb : callbacks ) {
-            Operation o = cb.operationDispatched( req, op );
-            op = o != null ? o : op;
+            try {
+                Operation o = cb.operationDispatched( req, op );
+                op = o != null ? o : op;
+            } catch (Exception e) {
+                logger.log(Level.WARNING, "Error firing operationDispatched callback for "+cb.getClass(), e);
+            }
         }
         return op;
     }
@@ -852,8 +868,12 @@ public class Dispatcher extends AbstractController {
 
     Object fireOperationExecutedCallback(Request req, Operation op, Object result ) {
         for ( DispatcherCallback cb : callbacks ) {
-            Object r = cb.operationExecuted( req, op, result );
-            result = r != null ? r : result;
+            try {
+                Object r = cb.operationExecuted( req, op, result );
+                result = r != null ? r : result;
+            } catch (Exception e) {
+                logger.log(Level.WARNING, "Error firing operationExecuted callback for "+cb.getClass(), e);
+            }
         }
         return result;
     }
@@ -1079,8 +1099,12 @@ public class Dispatcher extends AbstractController {
 
     Response fireResponseDispatchedCallback(Request req, Operation op, Object result, Response response ) {
         for ( DispatcherCallback cb : callbacks ) {
-            Response r = cb.responseDispatched(req, op, result, response);
-            response = r != null ? r : response;
+            try {
+                Response r = cb.responseDispatched(req, op, result, response);
+                response = r != null ? r : response;
+            } catch (Exception e) {
+                logger.log(Level.WARNING, "Error firing responseDispatched callback for "+cb.getClass(), e);
+            }
         }
         return response;
     }
