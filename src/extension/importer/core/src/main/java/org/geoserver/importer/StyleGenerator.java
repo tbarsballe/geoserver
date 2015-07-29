@@ -76,16 +76,17 @@ public class StyleGenerator {
     public StyleGenerator(Catalog catalog) {
         this.catalog = catalog;
         ramp = new ColorRamp();
-        ramp.add("red", Color.decode("0xFF3300"));
-        ramp.add("orange", Color.decode("0xFF6600"));
-        ramp.add("dark orange", Color.decode("0xFF9900"));
-        ramp.add("gold", Color.decode("0xFFCC00"));
+        ramp.add("red", Color.decode("0xFF0000"));
+        ramp.add("orange", Color.decode("0xFFA500"));
         ramp.add("yellow", Color.decode("0xFFFF00"));
-        ramp.add("dark yellow", Color.decode("0x99CC00"));
-        ramp.add("teal", Color.decode("0x00CC33"));
-        ramp.add("cyan", Color.decode("0x0099CC"));
-        ramp.add("azure", Color.decode("0x0033CC"));
-        ramp.add("violet", Color.decode("0x3300FF"));
+        ramp.add("chartreuse", Color.decode("0x7FFF00"));
+        ramp.add("lime", Color.decode("0x00FF00"));
+        ramp.add("springgreen", Color.decode("0x00FF7F"));
+        ramp.add("cyan", Color.decode("0x00FFFF"));
+        ramp.add("deepskyblue", Color.decode("0x00BFFF"));
+        ramp.add("blue", Color.decode("0x0000FF"));
+        ramp.add("darkviolet", Color.decode("0x9400D3"));
+        ramp.add("magenta", Color.decode("0xFF00FF"));
         randomizeRamp();
     }
 
