@@ -15,7 +15,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import org.apache.wicket.Component;
-import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
@@ -50,21 +49,15 @@ import org.xml.sax.SAXParseException;
 @SuppressWarnings("serial")
 public abstract class AbstractStylePage extends GeoServerSecuredPage {
 
-    protected String format;
-    
-    protected Form styleForm;
+    protected Form<StyleInfo> styleForm;
 
     protected AjaxTabbedPanel<ITab> tabbedPanel;
 
     protected CodeMirrorEditor editor;
 
-    protected MarkupContainer formatReadOnlyMessage;
-    
     protected CompoundPropertyModel<StyleInfo> styleModel;
 
     String rawStyle;
-
-    String lastStyle;
 
     public AbstractStylePage() {
     }
@@ -75,14 +68,14 @@ public abstract class AbstractStylePage extends GeoServerSecuredPage {
 
     protected void initUI(StyleInfo style) {
         
-        //init model
+        /* init model */
         if (style == null) {
             styleModel = new CompoundPropertyModel<StyleInfo>(getCatalog().getFactory().createStyle());
         } else {
             styleModel = new CompoundPropertyModel<StyleInfo>(new StyleDetachableModel(style));
         }
         
-        //init main form
+        /* init main form */
         styleForm = new Form<StyleInfo>("styleForm", styleModel) {
             @Override
             protected void onSubmit() {
@@ -97,7 +90,7 @@ public abstract class AbstractStylePage extends GeoServerSecuredPage {
         };
         add(styleForm);
         
-        //init tabs
+        /* init tabs */
         List<ITab> tabs = new ArrayList<ITab>();
         
         //Well known tabs
@@ -113,7 +106,7 @@ public abstract class AbstractStylePage extends GeoServerSecuredPage {
         //Dynamic tabs
         List<StyleEditTabPanelInfo> tabPanels = getGeoServerApplication().getBeansOfType(StyleEditTabPanelInfo.class);
         
-     // sort the tabs based on order
+        // sort the tabs based on order
         Collections.sort(tabPanels, new Comparator<StyleEditTabPanelInfo>() {
             public int compare(StyleEditTabPanelInfo o1, StyleEditTabPanelInfo o2) {
                 Integer order1 = o1.getOrder() >= 0 ? o1.getOrder() : Integer.MAX_VALUE;
@@ -122,7 +115,7 @@ public abstract class AbstractStylePage extends GeoServerSecuredPage {
                 return order1.compareTo(order2);
             }
         });
-
+        // instantiate tab panels and add to tabs list
         for (StyleEditTabPanelInfo tabPanelInfo : tabPanels) {
             String titleKey = tabPanelInfo.getTitleKey();
             IModel<String> titleModel = null;
@@ -136,7 +129,6 @@ public abstract class AbstractStylePage extends GeoServerSecuredPage {
             
             tabs.add(new AbstractTab(titleModel) {
                 private static final long serialVersionUID = -6637277497986497791L;
-                private final Class<StyleEditTabPanel> panelType = panelClass;
                 @Override
                 public Panel getPanel(String panelId) {
                     StyleEditTabPanel tabPanel;
@@ -145,7 +137,6 @@ public abstract class AbstractStylePage extends GeoServerSecuredPage {
                                 .newInstance(panelId, styleModel);
                     } catch (Exception e) {
                         throw new WicketRuntimeException(e);
-                        // LOGGER.log(Level.WARNING, "Error creating resource panel", e);
                     }
                     return tabPanel;
                 }
@@ -158,7 +149,7 @@ public abstract class AbstractStylePage extends GeoServerSecuredPage {
         
         /* init editor */
         styleForm.add(editor = new CodeMirrorEditor("styleEditor", styleHandler()
-                .getCodeMirrorEditMode(), new PropertyModel(this, "rawStyle")));
+                .getCodeMirrorEditMode(), new PropertyModel<String>(this, "rawStyle")));
         // force the id otherwise this blasted thing won't be usable from other forms
         editor.setTextAreaMarkupId("editor");
         editor.setOutputMarkupId(true);
@@ -166,7 +157,7 @@ public abstract class AbstractStylePage extends GeoServerSecuredPage {
         styleForm.add(editor);
         
         add(validateLink());
-        Link cancelLink = new Link("cancel") {
+        Link<StylePage> cancelLink = new Link<StylePage>("cancel") {
             @Override
             public void onClick() {
                 doReturn(StylePage.class);
@@ -184,7 +175,7 @@ public abstract class AbstractStylePage extends GeoServerSecuredPage {
         return new GeoServerAjaxFormLink("validate", styleForm) {
             
             @Override
-            protected void onClick(AjaxRequestTarget target, Form form) {
+            protected void onClick(AjaxRequestTarget target, Form<?> form) {
                 editor.processInput();
 
                 List<Exception> errors = validateSLD();

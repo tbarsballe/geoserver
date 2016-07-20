@@ -1,3 +1,7 @@
+/* (c) 2016 Open Source Geospatial Foundation - all rights reserved
+ * This code is licensed under the GPL 2.0 license, available at the root
+ * application directory.
+ */
 package org.geoserver.wms.web.data;
 
 import java.awt.image.BufferedImage;
@@ -59,34 +63,29 @@ import org.geoserver.wms.web.publish.StylesModel;
 import org.geotools.styling.Style;
 
 public class StyleAdminPanel extends StyleEditTabPanel {
+    private static final long serialVersionUID = -2443344473474977026L;
+
+    protected TextField<String> nameTextField;
     
-    protected TextField nameTextField;
+    protected DropDownChoice<WorkspaceInfo> wsChoice;
     
-    protected FileUploadField fileUploadField;
-    
-    protected DropDownChoice templates;
-    
-    protected AjaxSubmitLink generateLink;
-    
-    protected DropDownChoice styles;
-    
-    protected AjaxSubmitLink copyLink;
-    
-    protected AjaxSubmitLink uploadLink;
-    
-        
+    protected DropDownChoice<String> formatChoice;
     protected MarkupContainer formatReadOnlyMessage;
     
-    String rawStyle;
+    protected WebMarkupContainer legendContainer;
+    protected Image legendImg;
     
-    private Image legendImg;
+    protected DropDownChoice<StyleType> templates;
+    protected AjaxSubmitLink generateLink;
+    
+    protected DropDownChoice<StyleInfo> styles;
+    protected AjaxSubmitLink copyLink;
+    
+    protected FileUploadField fileUploadField;
+    protected AjaxSubmitLink uploadLink;
+    
     
     String lastStyle;
-    
-    private WebMarkupContainer legendContainer;
-    
-    private DropDownChoice<WorkspaceInfo> wsChoice;
-    DropDownChoice<String> formatChoice;
     
     public StyleAdminPanel(String id, CompoundPropertyModel<StyleInfo> model, AbstractStylePage parent) {
         super(id, model, parent);
@@ -127,8 +126,11 @@ public class StyleAdminPanel extends StyleEditTabPanel {
         add(wsChoice);
 
         IModel<String> formatBinding = styleModel.bind("format");
-        formatChoice = new DropDownChoice<String>("format", formatBinding,
-                new StyleFormatsModel(), new ChoiceRenderer<String>() {
+        formatChoice = new DropDownChoice<String>("format", formatBinding, new StyleFormatsModel(), 
+                new ChoiceRenderer<String>() {
+
+            private static final long serialVersionUID = 2064887235303504013L;
+
             @Override
             public String getIdValue(String object, int index) {
                 return object;
@@ -140,6 +142,9 @@ public class StyleAdminPanel extends StyleEditTabPanel {
             }
         });
         formatChoice.add(new AjaxFormComponentUpdatingBehavior("change") {
+
+            private static final long serialVersionUID = -8372146231225388561L;
+
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
                 target.appendJavaScript(String.format(
@@ -148,7 +153,7 @@ public class StyleAdminPanel extends StyleEditTabPanel {
         });
         add(formatChoice);
 
-        formatReadOnlyMessage = new WebMarkupContainer("formatReadOnly", new Model());
+        formatReadOnlyMessage = new WebMarkupContainer("formatReadOnly", new Model<String>());
         formatReadOnlyMessage.setVisible(false);
         add(formatReadOnlyMessage);
         // add the Legend fields        
@@ -165,9 +170,11 @@ public class StyleAdminPanel extends StyleEditTabPanel {
         }
         
         // style generation functionality
-        templates = new DropDownChoice("templates", new Model(), new StyleTypeModel(), new StyleTypeChoiceRenderer());
+        templates = new DropDownChoice<StyleType>("templates", new Model<StyleType>(), new StyleTypeModel(), new StyleTypeChoiceRenderer());
         templates.setOutputMarkupId(true);
         templates.add(new AjaxFormComponentUpdatingBehavior("change") {
+
+            private static final long serialVersionUID = -6649152103570059645L;
 
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
@@ -182,9 +189,11 @@ public class StyleAdminPanel extends StyleEditTabPanel {
         add(generateLink);
 
         // style copy functionality
-        styles = new DropDownChoice("existingStyles", new Model(), new StylesModel(), new StyleChoiceRenderer());
+        styles = new DropDownChoice<StyleInfo>("existingStyles", new Model<StyleInfo>(), new StylesModel(), new StyleChoiceRenderer());
         styles.setOutputMarkupId(true);
         styles.add(new AjaxFormComponentUpdatingBehavior("change") {
+
+            private static final long serialVersionUID = 8098121930876372129L;
 
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
@@ -210,6 +219,9 @@ public class StyleAdminPanel extends StyleEditTabPanel {
         legendContainer.setOutputMarkupId(true);
         add(legendContainer);
         this.legendImg = new Image("legendImg", new AbstractResource() {
+
+            private static final long serialVersionUID = -6932528694575832606L;
+
             @Override
             protected ResourceResponse newResourceResponse(Attributes attributes) {
                 ResourceResponse rr = new ResourceResponse();
@@ -242,12 +254,9 @@ public class StyleAdminPanel extends StyleEditTabPanel {
                                 request.setLegendOptions(legendOptions);
                                 BufferedImageLegendGraphicBuilder builder = new BufferedImageLegendGraphicBuilder();
                                 BufferedImage image = builder.buildLegendGraphic(request);
-        
-                                ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        
+
                                 ImageIO.write(image, "PNG", attributes.getResponse().getOutputStream());
                             }
-        
                             error("Failed to build legend preview");
                         } catch (IOException e) {
                             throw new RuntimeException(e);
@@ -265,54 +274,13 @@ public class StyleAdminPanel extends StyleEditTabPanel {
         this.legendImg.setOutputMarkupId(true);
     }
 
-    AjaxSubmitLink uploadLink() {
-        return new AjaxSubmitLink("upload", stylePage.styleForm) {
-            @Override
-            protected void onSubmit(AjaxRequestTarget target, Form form) {
-                FileUpload upload = fileUploadField.getFileUpload();
-                if (upload == null) {
-                    warn("No file selected.");
-                    return;
-                }
-                ByteArrayOutputStream bout = new ByteArrayOutputStream();
-                try {
-                    IOUtils.copy(upload.getInputStream(), bout);
-                    stylePage.editor.reset();
-                    stylePage.setRawStyle(new InputStreamReader(new ByteArrayInputStream(bout.toByteArray()), "UTF-8"));
-                    target.appendJavaScript(String
-                            .format("if (document.gsEditors) { document.gsEditors.editor.setOption('mode', '%s'); }", stylePage.styleHandler().getCodeMirrorEditMode()));
-                } catch (IOException e) {
-                    throw new WicketRuntimeException(e);
-                }
-
-                // update the style object
-                StyleInfo s = getStyleInfo();
-                if (s.getName() == null || "".equals(s.getName().trim())) {
-                    // set it
-                    nameTextField.setModelValue(new String[] {ResponseUtils.stripExtension(upload
-                            .getClientFileName())});
-                    nameTextField.modelChanged();
-                }
-                target.add(stylePage.styleForm);
-            }
-            @Override
-            protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
-                super.updateAjaxAttributes(attributes);
-                attributes.getAjaxCallListeners().add(new ConfirmOverwriteListener());
-            }
-
-            @Override
-            public boolean getDefaultFormProcessing() {
-                return false;
-            }
-        };
-    }
-    
-    Component previewLink() {
+    protected Component previewLink() {
         return new GeoServerAjaxFormLink("preview", stylePage.styleForm) {
 
+            private static final long serialVersionUID = 7404304424029960594L;
+
             @Override
-            protected void onClick(AjaxRequestTarget target, Form form) {
+            protected void onClick(AjaxRequestTarget target, Form<?> form) {
                 stylePage.editor.processInput();
                 wsChoice.processInput();
                 lastStyle = stylePage.editor.getInput();
@@ -329,11 +297,13 @@ public class StyleAdminPanel extends StyleEditTabPanel {
         };
     }
     
-    AjaxSubmitLink generateLink() {
-        return new AjaxSubmitLink("generate") {
+    protected AjaxSubmitLink generateLink() {
+        return new ConfirmOverwriteSubmitLink("generate") {
+
+            private static final long serialVersionUID = 55921414750155395L;
 
             @Override
-            protected void onSubmit(AjaxRequestTarget target, Form form) {
+            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 // we need to force validation or the value won't be converted
                 templates.processInput();
                 StyleType template = (StyleType) templates.getConvertedInput();
@@ -344,9 +314,11 @@ public class StyleAdminPanel extends StyleEditTabPanel {
                     try {
                         // same here, force validation or the field won't be updated
                         stylePage.editor.reset();
-                        stylePage.setRawStyle(new StringReader(styleGen.generateStyle(stylePage.styleHandler(), template, nameTextField.getInput())));
-                        target.appendJavaScript(String
-                                .format("if (document.gsEditors) { document.gsEditors.editor.setOption('mode', '%s'); }", stylePage.styleHandler().getCodeMirrorEditMode()));
+                        stylePage.setRawStyle(new StringReader(styleGen.generateStyle(
+                                stylePage.styleHandler(), template, nameTextField.getInput())));
+                        target.appendJavaScript(String.format(
+                                "if (document.gsEditors) { document.gsEditors.editor.setOption('mode', '%s'); }", 
+                                stylePage.styleHandler().getCodeMirrorEditMode()));
 
                     } catch (Exception e) {
                         error("Errors occurred generating the style");
@@ -354,26 +326,16 @@ public class StyleAdminPanel extends StyleEditTabPanel {
                     target.add(stylePage.styleForm);
                 }
             }
-            
-            @Override
-            protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
-                super.updateAjaxAttributes(attributes);
-                attributes.getAjaxCallListeners().add(new ConfirmOverwriteListener());
-            }
-
-            @Override
-            public boolean getDefaultFormProcessing() {
-                return false;
-            }
-
         };
     }
-    
-    AjaxSubmitLink copyLink() {
-        return new AjaxSubmitLink("copy") {
+
+    protected AjaxSubmitLink copyLink() {
+        return new ConfirmOverwriteSubmitLink("copy") {
+
+            private static final long serialVersionUID = -6388040033082157163L;
 
             @Override
-            protected void onSubmit(AjaxRequestTarget target, Form form) {
+            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 // we need to force validation or the value won't be converted
                 styles.processInput();
                 StyleInfo style = (StyleInfo) styles.getConvertedInput();
@@ -384,43 +346,90 @@ public class StyleAdminPanel extends StyleEditTabPanel {
                         stylePage.editor.reset();
                         stylePage.setRawStyle(stylePage.readFile(style));
                         formatChoice.setModelObject(style.getFormat());
-                        target.appendJavaScript(String
-                                .format("if (document.gsEditors) { document.gsEditors.editor.setOption('mode', '%s'); }", stylePage.styleHandler().getCodeMirrorEditMode()));
-
+                        target.appendJavaScript(String.format(
+                                "if (document.gsEditors) { document.gsEditors.editor.setOption('mode', '%s'); }", 
+                                stylePage.styleHandler().getCodeMirrorEditMode()));
                     } catch (Exception e) {
                         error("Errors occurred loading the '" + style.getName() + "' style");
                     }
                     target.add(stylePage.styleForm);
                 }
             }
-            
-            @Override
-            protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
-                super.updateAjaxAttributes(attributes);
-                attributes.getAjaxCallListeners().add(new ConfirmOverwriteListener());
-            }
-
-            @Override
-            public boolean getDefaultFormProcessing() {
-                return false;
-            }
-
         };
     }
-    
-    class ConfirmOverwriteListener extends AjaxCallListener {
-        @Override
-        public CharSequence getPrecondition(Component component) {
-            CharSequence message = new ParamResourceModel("confirmOverwrite", stylePage)
-                    .getString();
-            message = JavaScriptUtils.escapeQuotes(message);
-            return "var val = attrs.event.view.document.gsEditors ? "
-                    + "attrs.event.view.document.gsEditors." + stylePage.editor.getTextAreaMarkupId() + ".getValue() : "
-                    + "attrs.event.view.document.getElementById(\"" + stylePage.editor.getTextAreaMarkupId() + "\").value; "
-                    + "if(val != '' &&"
-                    + "!confirm('"
-                    + message + "')) return false;";
-        }
+
+    AjaxSubmitLink uploadLink() {
+        return new ConfirmOverwriteSubmitLink("upload", stylePage.styleForm) {
+
+            private static final long serialVersionUID = 658341311654601761L;
+
+            @Override
+            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                FileUpload upload = fileUploadField.getFileUpload();
+                if (upload == null) {
+                    warn("No file selected.");
+                    return;
+                }
+                ByteArrayOutputStream bout = new ByteArrayOutputStream();
+                try {
+                    IOUtils.copy(upload.getInputStream(), bout);
+                    stylePage.editor.reset();
+                    stylePage.setRawStyle(new InputStreamReader(new ByteArrayInputStream(bout.toByteArray()), "UTF-8"));
+                    target.appendJavaScript(String.format(
+                            "if (document.gsEditors) { document.gsEditors.editor.setOption('mode', '%s'); }", 
+                            stylePage.styleHandler().getCodeMirrorEditMode()));
+                } catch (IOException e) {
+                    throw new WicketRuntimeException(e);
+                }
+
+                // update the style object
+                StyleInfo s = getStyleInfo();
+                if (s.getName() == null || "".equals(s.getName().trim())) {
+                    // set it
+                    nameTextField.setModelValue(new String[] {ResponseUtils.stripExtension(upload
+                            .getClientFileName())});
+                    nameTextField.modelChanged();
+                }
+                target.add(stylePage.styleForm);
+            }
+        };
     }
 
+    class ConfirmOverwriteSubmitLink extends AjaxSubmitLink {
+
+        private static final long serialVersionUID = 2673499149884774636L;
+
+        public ConfirmOverwriteSubmitLink(String id) {
+            super(id);
+        }
+        public ConfirmOverwriteSubmitLink(String id, Form<?> form) {
+            super(id, form);
+        }
+        @Override
+        protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
+            super.updateAjaxAttributes(attributes);
+            attributes.getAjaxCallListeners().add(new AjaxCallListener() {
+                /** serialVersionUID */
+                private static final long serialVersionUID = 8637613472102572505L;
+
+                @Override
+                public CharSequence getPrecondition(Component component) {
+                    CharSequence message = new ParamResourceModel("confirmOverwrite", stylePage)
+                            .getString();
+                    message = JavaScriptUtils.escapeQuotes(message);
+                    return "var val = attrs.event.view.document.gsEditors ? "
+                            + "attrs.event.view.document.gsEditors." + stylePage.editor.getTextAreaMarkupId() + ".getValue() : "
+                            + "attrs.event.view.document.getElementById(\"" + stylePage.editor.getTextAreaMarkupId() + "\").value; "
+                            + "if(val != '' &&"
+                            + "!confirm('"
+                            + message + "')) return false;";
+                }
+            });
+        }
+
+        @Override
+        public boolean getDefaultFormProcessing() {
+            return false;
+        }
+    }
 }
