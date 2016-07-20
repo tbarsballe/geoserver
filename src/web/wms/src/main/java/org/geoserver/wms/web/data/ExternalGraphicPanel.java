@@ -39,6 +39,7 @@ import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
 import org.apache.wicket.validation.validator.RangeValidator;
 import org.apache.wicket.validation.validator.StringValidator;
+import org.geoserver.catalog.LegendInfo;
 import org.geoserver.catalog.ResourceInfo;
 import org.geoserver.catalog.StyleInfo;
 import org.geoserver.config.GeoServer;
@@ -80,7 +81,7 @@ public class ExternalGraphicPanel extends Panel {
         super(id, styleModel);
         
         // container for ajax updates
-        final WebMarkupContainer container = new WebMarkupContainer("container");
+        final WebMarkupContainer container = new WebMarkupContainer("externalGraphicContainer");
         container.setOutputMarkupId(true);
         add(container);
         
@@ -267,8 +268,8 @@ public class ExternalGraphicPanel extends Panel {
         container.add(hide);
         showhideForm.add(hide);
         
-        String url = styleModel.getObject().getLegend().getOnlineResource();
-        boolean visible = url != null && !url.isEmpty();
+        LegendInfo legend = styleModel.getObject().getLegend();
+        boolean visible = legend != null && legend.getOnlineResource() != null && !legend.getOnlineResource().isEmpty();
         updateVisibility(visible);
         
     }

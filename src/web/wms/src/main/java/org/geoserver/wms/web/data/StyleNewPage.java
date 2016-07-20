@@ -48,7 +48,6 @@ public class StyleNewPage extends AbstractStylePage {
         // add the style
         Catalog catalog = getCatalog();
         StyleInfo s = (StyleInfo) styleForm.getModelObject();
-        s.setFormat(format);
 
         StyleHandler styleHandler = styleHandler();
 

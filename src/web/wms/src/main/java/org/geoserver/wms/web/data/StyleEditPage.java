@@ -54,8 +54,6 @@ public class StyleEditPage extends AbstractStylePage {
             //global styles only editable by full admin
             if (si.getWorkspace() == null) {
                 styleForm.setEnabled(false);
-                nameTextField.setEnabled(false);
-                uploadForm.setEnabled(false);
 
                 editor.add(new AttributeAppender("class", new Model("disabled"), " "));
                 get("validate").add(new AttributeAppender("style", new Model("display:none;"), " "));
@@ -80,14 +78,11 @@ public class StyleEditPage extends AbstractStylePage {
             f.get("workspace").setEnabled(false);
         }
 
-        // format only settable upon creation
-        formatChoice.setEnabled(false);
-        formatReadOnlyMessage.setVisible(true);
+        
     }
     
     public StyleEditPage(StyleInfo style) {
         super(style);
-        uploadForm.setVisible(false);
     }
 
     @Override
@@ -95,7 +90,7 @@ public class StyleEditPage extends AbstractStylePage {
         // write out the file and save name modifications
         try {
             StyleInfo style = (StyleInfo) styleForm.getModelObject();
-            String format = formatChoice.getModelObject();
+            String format = style.getFormat();
             style.setFormat(format);
             Version version = Styles.handler(format).version(rawStyle);
             style.setSLDVersion(version);
