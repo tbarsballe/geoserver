@@ -1,7 +1,7 @@
 <html xmlns:wicket="http://wicket.apache.org/">
 <body>
 <wicket:extend>
-    <form wicket:id="styleForm" id="mainForm">
+    <form wicket:id="styleForm" id="styleForm">
         <div wicket:id="context"> </div>
         <div class="field textarea" wicket:id="styleEditor"> </div>
     </form>
@@ -10,15 +10,12 @@
 
     <div class="button-group selfclear">
        <a href="#" wicket:id="validate"><wicket:message key="validate">Validate</wicket:message></a>
-       <!--a href="#" wicket:id="submit"><wicket:message key="submit">Submit</wicket:message></a-->
-       <a href="#" id="mainFormSubmit" onclick="document.forms['mainForm'].submit();">
-         <wicket:message key="submit">Submit</wicket:message>
+       <a href="#" id="mainFormSubmit" onclick="document.forms['styleForm'].submit();">
+           <wicket:message key="submit">Submit</wicket:message>
        </a>
        <a href="#" wicket:id="cancel"><wicket:message key="cancel">Cancel</wicket:message></a>
     </div>
     <br/>
-    
-
 </wicket:extend>
 </body>
 </html>
