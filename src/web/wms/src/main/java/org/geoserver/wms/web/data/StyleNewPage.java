@@ -21,7 +21,9 @@ import org.geotools.util.Version;
  * Allows for editing a new style, includes file upload
  */
 public class StyleNewPage extends AbstractStylePage {
-    
+
+    private static final long serialVersionUID = -6137191207739266238L;
+
     public StyleNewPage() {
         initUI(null);
     }
@@ -32,13 +34,10 @@ public class StyleNewPage extends AbstractStylePage {
 
         if (!isAuthenticatedAsAdmin()) {
             //initialize the workspace drop down
-            DropDownChoice<WorkspaceInfo> wsChoice = 
-                    (DropDownChoice<WorkspaceInfo>) get("form:workspace");
-    
             //default to first available workspace
             List<WorkspaceInfo> ws = getCatalog().getWorkspaces(); 
             if (!ws.isEmpty()) {
-                wsChoice.setModelObject(ws.get(0));
+                styleModel.getObject().setWorkspace(ws.get(0));
             }
         }
     }
@@ -47,7 +46,7 @@ public class StyleNewPage extends AbstractStylePage {
     protected void onStyleFormSubmit() {
         // add the style
         Catalog catalog = getCatalog();
-        StyleInfo s = (StyleInfo) styleForm.getModelObject();
+        StyleInfo s = styleForm.getModelObject();
 
         StyleHandler styleHandler = styleHandler();
 
@@ -61,7 +60,7 @@ public class StyleNewPage extends AbstractStylePage {
         // write out the SLD before creating the style
         try {
             if (s.getFilename() == null) {
-                // TODO: check that this does not overriDe any existing files
+                // TODO: check that this does not override any existing files
                 s.setFilename(s.getName() + "."+styleHandler.getFileExtension());
             }
             catalog.getResourcePool().writeStyle(s,
@@ -73,17 +72,13 @@ public class StyleNewPage extends AbstractStylePage {
         // store in the catalog
         try {
             Version version = styleHandler.version(rawStyle);
-            s.setSLDVersion(version);
+            s.setFormatVersion(version);
             getCatalog().add(s);
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Error occurred saving the style", e);
             error(e.getMessage());
             return;
         }
-
         doReturn(StylePage.class);
-
     }
-
-    
 }

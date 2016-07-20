@@ -308,14 +308,14 @@ public class StyleAdminPanel extends StyleEditTabPanel {
                 templates.processInput();
                 StyleType template = (StyleType) templates.getConvertedInput();
                 StyleGenerator styleGen = new StyleGenerator(stylePage.getCatalog());
-                styleGen.setWorkspace(wsChoice.getModelObject());
+                styleGen.setWorkspace(getStyleInfo().getWorkspace());
 
                 if (template != null) {
                     try {
                         // same here, force validation or the field won't be updated
                         stylePage.editor.reset();
                         stylePage.setRawStyle(new StringReader(styleGen.generateStyle(
-                                stylePage.styleHandler(), template, nameTextField.getInput())));
+                                stylePage.styleHandler(), template, getStyleInfo().getName())));
                         target.appendJavaScript(String.format(
                                 "if (document.gsEditors) { document.gsEditors.editor.setOption('mode', '%s'); }", 
                                 stylePage.styleHandler().getCodeMirrorEditMode()));
@@ -345,7 +345,8 @@ public class StyleAdminPanel extends StyleEditTabPanel {
                         // same here, force validation or the field won't be udpated
                         stylePage.editor.reset();
                         stylePage.setRawStyle(stylePage.readFile(style));
-                        formatChoice.setModelObject(style.getFormat());
+                        //TODO: confirm removal
+                        //formatChoice.setModelObject(style.getFormat());
                         target.appendJavaScript(String.format(
                                 "if (document.gsEditors) { document.gsEditors.editor.setOption('mode', '%s'); }", 
                                 stylePage.styleHandler().getCodeMirrorEditMode()));
