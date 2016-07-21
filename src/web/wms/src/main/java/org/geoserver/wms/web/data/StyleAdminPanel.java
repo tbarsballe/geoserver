@@ -89,7 +89,7 @@ public class StyleAdminPanel extends StyleEditTabPanel {
     protected AjaxSubmitLink uploadLink;
     
     
-    String lastStyle;
+    BufferedImage legendImage;
     
     public StyleAdminPanel(String id, CompoundPropertyModel<StyleInfo> model, AbstractStylePage parent) {
         super(id, model, parent);
@@ -233,42 +233,7 @@ public class StyleAdminPanel extends StyleEditTabPanel {
                 rr.setWriteCallback(new WriteCallback() {
                     @Override
                     public void writeData(Attributes attributes) throws IOException {
-                        GeoServerDataDirectory dd = GeoServerExtensions.bean(GeoServerDataDirectory.class, stylePage.getGeoServerApplication().getApplicationContext());
-                        StyleInfo si = new StyleInfoImpl(stylePage.getCatalog());
-                        String styleName = "tmp" + UUID.randomUUID().toString();
-                        String styleFileName =  styleName + ".sld";
-                        si.setFilename(styleFileName);
-                        si.setName(styleName);
-                        si.setWorkspace(stylePage.styleModel.getObject().getWorkspace());
-                        Resource styleResource = null;
-                        try {
-                            styleResource = dd.style(si);
-                            try(OutputStream os = styleResource.out()) {
-                                IOUtils.write(lastStyle, os);
-                            }
-                            Style style = dd.parsedStyle(si);
-                            if (style != null) {
-                                GetLegendGraphicRequest request = new GetLegendGraphicRequest();
-                                request.setLayer(null);
-                                request.setStyle(style);
-                                request.setStrict(false);
-                                Map<String, String> legendOptions = new HashMap<String, String>();
-                                legendOptions.put("forceLabels", "on");
-                                legendOptions.put("fontAntiAliasing", "true");
-                                request.setLegendOptions(legendOptions);
-                                BufferedImageLegendGraphicBuilder builder = new BufferedImageLegendGraphicBuilder();
-                                BufferedImage image = builder.buildLegendGraphic(request);
-
-                                ImageIO.write(image, "PNG", attributes.getResponse().getOutputStream());
-                            }
-                            error("Failed to build legend preview");
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        } finally {
-                            if(styleResource != null) {
-                                styleResource.delete();
-                            }
-                        }
+                        ImageIO.write(legendImage, "PNG", attributes.getResponse().getOutputStream());
                     }
                 });
                 return rr;
@@ -294,9 +259,48 @@ public class StyleAdminPanel extends StyleEditTabPanel {
             protected void onClick(AjaxRequestTarget target, Form<?> form) {
                 stylePage.editor.processInput();
                 wsChoice.processInput();
-                lastStyle = stylePage.editor.getInput();
 
+                clearFeedbackMessages();
                 legendImg.setVisible(true);
+                
+                // Generate the legend
+                GeoServerDataDirectory dd = GeoServerExtensions.bean(GeoServerDataDirectory.class, stylePage.getGeoServerApplication().getApplicationContext());
+                StyleInfo si = new StyleInfoImpl(stylePage.getCatalog());
+                String styleName = "tmp" + UUID.randomUUID().toString();
+                String styleFileName =  styleName + ".sld";
+                si.setFilename(styleFileName);
+                si.setName(styleName);
+                si.setWorkspace(stylePage.styleModel.getObject().getWorkspace());
+                Resource styleResource = null;
+                try {
+                    styleResource = dd.style(si);
+                    try(OutputStream os = styleResource.out()) {
+                        IOUtils.write(stylePage.editor.getInput(), os);
+                    }
+                    Style style = dd.parsedStyle(si);
+                    if (style != null) {
+                        GetLegendGraphicRequest request = new GetLegendGraphicRequest();
+                        request.setLayer(null);
+                        request.setStyle(style);
+                        request.setStrict(false);
+                        Map<String, String> legendOptions = new HashMap<String, String>();
+                        legendOptions.put("forceLabels", "on");
+                        legendOptions.put("fontAntiAliasing", "true");
+                        request.setLegendOptions(legendOptions);
+                        BufferedImageLegendGraphicBuilder builder = new BufferedImageLegendGraphicBuilder();
+                        legendImage = builder.buildLegendGraphic(request);
+                    }
+                } catch (IOException e) {
+                    throw new WicketRuntimeException(e);
+                } catch (Exception e) {
+                    legendImg.setVisible(false);
+                    legendContainer.error("Failed to build legend preview. Check to see if the style is valid.");
+                    LOGGER.log(Level.WARNING, "Failed to build legend preview", e);
+                } finally {
+                    if(styleResource != null) {
+                        styleResource.delete();
+                    }
+                }
                 target.add(legendContainer);
             }
 
@@ -401,6 +405,8 @@ public class StyleAdminPanel extends StyleEditTabPanel {
                             stylePage.styleHandler().getCodeMirrorEditMode()));
                     clearFeedbackMessages();
                 } catch (IOException e) {
+                    throw new WicketRuntimeException(e);
+                } catch (Exception e) {
                     clearFeedbackMessages();
                     stylePage.error("Errors occurred uploading the '" + upload.getClientFileName() + "' style");
                     LOGGER.log(Level.WARNING, "Errors occurred uploading the '" + upload.getClientFileName() + "' style", e);
