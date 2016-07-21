@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.StringReader;
+import java.net.URLConnection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -77,6 +78,7 @@ public class StyleAdminPanel extends StyleEditTabPanel {
     protected MarkupContainer formatReadOnlyMessage;
     
     protected WebMarkupContainer legendContainer;
+    protected ExternalGraphicPanel legendPanel;
     protected Image legendImg;
     
     protected DropDownChoice<StyleType> templates;
@@ -161,7 +163,7 @@ public class StyleAdminPanel extends StyleEditTabPanel {
         formatReadOnlyMessage.setVisible(false);
         add(formatReadOnlyMessage);
         // add the Legend fields        
-        ExternalGraphicPanel legendPanel = new ExternalGraphicPanel("legendPanel", styleModel, stylePage.styleForm);
+        legendPanel = new ExternalGraphicPanel("legendPanel", styleModel, stylePage.styleForm);
         legendPanel.setOutputMarkupId(true);
         add(legendPanel);
         if (style.getId() != null) {
@@ -243,6 +245,11 @@ public class StyleAdminPanel extends StyleEditTabPanel {
         this.legendImg.setOutputMarkupId(true);
     }
 
+    /**
+     * Clears validation messages from form input elements.
+     * Called when it is necessary to submit the form without needing to show validation, 
+     * such as when you are generating a new style
+     */
     protected void clearFeedbackMessages() {
         nameTextField.getFeedbackMessages().clear();
         wsChoice.getFeedbackMessages().clear();
@@ -261,44 +268,62 @@ public class StyleAdminPanel extends StyleEditTabPanel {
                 wsChoice.processInput();
 
                 clearFeedbackMessages();
-                legendImg.setVisible(true);
+                legendImg.setVisible(false);
                 
                 // Generate the legend
-                GeoServerDataDirectory dd = GeoServerExtensions.bean(GeoServerDataDirectory.class, stylePage.getGeoServerApplication().getApplicationContext());
-                StyleInfo si = new StyleInfoImpl(stylePage.getCatalog());
-                String styleName = "tmp" + UUID.randomUUID().toString();
-                String styleFileName =  styleName + ".sld";
-                si.setFilename(styleFileName);
-                si.setName(styleName);
-                si.setWorkspace(stylePage.styleModel.getObject().getWorkspace());
-                Resource styleResource = null;
-                try {
-                    styleResource = dd.style(si);
-                    try(OutputStream os = styleResource.out()) {
-                        IOUtils.write(stylePage.editor.getInput(), os);
+                
+                //Try External Legend
+                URLConnection conn = legendPanel.getExternalGraphic(target, form);
+                String onlineResource = legendPanel.getOnlineResource();
+                if (onlineResource != null && !onlineResource.isEmpty()) {
+                    if (conn != null) {
+                        try {
+                            legendImage = ImageIO.read(conn.getInputStream());
+                            legendImg.setVisible(true);
+                        } catch (IOException e) {
+                            LOGGER.log(Level.WARNING, "Failed to render external legend graphic", e);
+                            legendContainer.error("Failed to render external legend graphic");
+                        }
                     }
-                    Style style = dd.parsedStyle(si);
-                    if (style != null) {
-                        GetLegendGraphicRequest request = new GetLegendGraphicRequest();
-                        request.setLayer(null);
-                        request.setStyle(style);
-                        request.setStrict(false);
-                        Map<String, String> legendOptions = new HashMap<String, String>();
-                        legendOptions.put("forceLabels", "on");
-                        legendOptions.put("fontAntiAliasing", "true");
-                        request.setLegendOptions(legendOptions);
-                        BufferedImageLegendGraphicBuilder builder = new BufferedImageLegendGraphicBuilder();
-                        legendImage = builder.buildLegendGraphic(request);
-                    }
-                } catch (IOException e) {
-                    throw new WicketRuntimeException(e);
-                } catch (Exception e) {
-                    legendImg.setVisible(false);
-                    legendContainer.error("Failed to build legend preview. Check to see if the style is valid.");
-                    LOGGER.log(Level.WARNING, "Failed to build legend preview", e);
-                } finally {
-                    if(styleResource != null) {
-                        styleResource.delete();
+                } else {
+                    //No external legend, use generated legend
+                    GeoServerDataDirectory dd = GeoServerExtensions.bean(GeoServerDataDirectory.class, stylePage.getGeoServerApplication().getApplicationContext());
+                    StyleInfo si = new StyleInfoImpl(stylePage.getCatalog());
+                    String styleName = "tmp" + UUID.randomUUID().toString();
+                    String styleFileName =  styleName + ".sld";
+                    si.setFilename(styleFileName);
+                    si.setName(styleName);
+                    si.setWorkspace(stylePage.styleModel.getObject().getWorkspace());
+                    Resource styleResource = null;
+                    try {
+                        styleResource = dd.style(si);
+                        try(OutputStream os = styleResource.out()) {
+                            IOUtils.write(stylePage.editor.getInput(), os);
+                        }
+                        Style style = dd.parsedStyle(si);
+                        if (style != null) {
+                            GetLegendGraphicRequest request = new GetLegendGraphicRequest();
+                            request.setLayer(null);
+                            request.setStyle(style);
+                            request.setStrict(false);
+                            Map<String, String> legendOptions = new HashMap<String, String>();
+                            legendOptions.put("forceLabels", "on");
+                            legendOptions.put("fontAntiAliasing", "true");
+                            request.setLegendOptions(legendOptions);
+                            BufferedImageLegendGraphicBuilder builder = new BufferedImageLegendGraphicBuilder();
+                            legendImage = builder.buildLegendGraphic(request);
+                            legendImg.setVisible(true);
+                        }
+                    } catch (IOException e) {
+                        throw new WicketRuntimeException(e);
+                    } catch (Exception e) {
+                        legendImg.setVisible(false);
+                        legendContainer.error("Failed to build legend preview. Check to see if the style is valid.");
+                        LOGGER.log(Level.WARNING, "Failed to build legend preview", e);
+                    } finally {
+                        if(styleResource != null) {
+                            styleResource.delete();
+                        }
                     }
                 }
                 target.add(legendContainer);
@@ -363,11 +388,9 @@ public class StyleAdminPanel extends StyleEditTabPanel {
 
                 if (style != null) {
                     try {
-                        // same here, force validation or the field won't be udpated
+                        // same here, force validation or the field won't be updated
                         stylePage.editor.reset();
                         stylePage.setRawStyle(stylePage.readFile(style));
-                        //TODO: confirm removal
-                        //formatChoice.setModelObject(style.getFormat());
                         target.appendJavaScript(String.format(
                                 "if (document.gsEditors) { document.gsEditors.editor.setOption('mode', '%s'); }", 
                                 stylePage.styleHandler().getCodeMirrorEditMode()));

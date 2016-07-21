@@ -26,19 +26,16 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.request.http.WebRequest;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
 import org.apache.wicket.validation.validator.RangeValidator;
-import org.apache.wicket.validation.validator.StringValidator;
 import org.geoserver.catalog.LegendInfo;
 import org.geoserver.catalog.ResourceInfo;
 import org.geoserver.catalog.StyleInfo;
@@ -60,9 +57,8 @@ public class ExternalGraphicPanel extends Panel {
 
     private TextField<String> onlineResource;
     private TextField<String> format;
-    private TextField<String> width;
-    private TextField<String> height;
-    private Label noLegend;
+    private TextField<Integer> width;
+    private TextField<Integer> height;
     private WebMarkupContainer table;
     private GeoServerAjaxFormLink autoFill;
     
@@ -77,7 +73,7 @@ public class ExternalGraphicPanel extends Panel {
      * @param id
      * @param model Must return a {@link ResourceInfo}
      */
-    public ExternalGraphicPanel(String id,  final CompoundPropertyModel<StyleInfo> styleModel, final Form styleForm) {
+    public ExternalGraphicPanel(String id,  final CompoundPropertyModel<StyleInfo> styleModel, final Form<?> styleForm) {
         super(id, styleModel);
         
         // container for ajax updates
@@ -117,7 +113,7 @@ public class ExternalGraphicPanel extends Panel {
                             onlineResource.warn("Recommend use of styles directory at "+baseUrl);
                         }
                         URL url = uri.toURL();
-                        URLConnection conn = url.openConnection();                        
+                        URLConnection conn = url.openConnection();
                         if("text/html".equals(conn.getContentType())){
                             ValidationError error = new ValidationError();
                             error.setMessage("Unable to access image");
@@ -165,43 +161,18 @@ public class ExternalGraphicPanel extends Panel {
         // add the autofill button
         autoFill = new GeoServerAjaxFormLink("autoFill", styleForm) {
             @Override
-            public void onClick(AjaxRequestTarget target, Form form) {
-                onlineResource.processInput();
-                if (onlineResource.getModelObject() != null) {
-                    URL url = null;
-                    try {
-                        String baseUrl = baseURL(form);                       
-                        String external = onlineResource.getModelObject().toString();
-                        
-                        URI uri = new URI( external );
-                        if( uri.isAbsolute() ){
-                            url = uri.toURL();
-                            if( !external.startsWith(baseUrl)){
-                                form.warn( "Recommend use of styles directory at "+baseUrl);
-                            }
-                        }
-                        else {
-                            url = new URL( baseUrl + "styles/"+external );
-                        }
-                        
-                        URLConnection conn = url.openConnection();                        
-                        if("text/html".equals(conn.getContentType())){
-                            form.error("Unable to access url");
-                            return; // error message back!
-                        }
-                        
-                        format.setModelValue(new String[] {conn.getContentType()});
-                        BufferedImage image = ImageIO.read(conn.getInputStream());
-                        width.setModelValue(new String[] {"" + image.getWidth()});
-                        height.setModelValue(new String[] {"" + image.getHeight()});
-                    } catch (FileNotFoundException notFound ){
-                        form.error( "Unable to access "+url);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        form.error( "Recommend use of styles directory at "+e);
-                    }
+            public void onClick(AjaxRequestTarget target, Form<?> form) {
+                
+                URLConnection conn = getExternalGraphic(target, form);
+                format.setModelValue(new String[] {conn.getContentType()});
+                BufferedImage image;
+                try {
+                    image = ImageIO.read(conn.getInputStream());
+                    width.setModelValue(new String[] {"" + image.getWidth()});
+                    height.setModelValue(new String[] {"" + image.getHeight()});
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-
                 target.add(format);
                 target.add(width);
                 target.add(height);
@@ -210,16 +181,16 @@ public class ExternalGraphicPanel extends Panel {
         
         table.add(autoFill);
 
-        format = new TextField("format", styleModel.bind("legend.format"));
+        format = new TextField<String>("format", styleModel.bind("legend.format"));
         format.setOutputMarkupId(true);
         table.add(format);
 
-        width = new TextField("width", styleModel.bind("legend.width"), Integer.class);
+        width = new TextField<Integer>("width", styleModel.bind("legend.width"), Integer.class);
         width.add(RangeValidator.minimum(0));
         width.setOutputMarkupId(true);
         table.add(width);
 
-        height = new TextField("height", styleModel.bind("legend.height"), Integer.class);
+        height = new TextField<Integer>("height", styleModel.bind("legend.height"), Integer.class);
         height.add(RangeValidator.minimum(0));
         height.setOutputMarkupId(true);
         table.add(height);
@@ -258,8 +229,8 @@ public class ExternalGraphicPanel extends Panel {
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 onlineResource.setModelObject("");
                 format.setModelObject("");
-                width.setModelObject("0");
-                height.setModelObject("0");
+                width.setModelObject(0);
+                height.setModelObject(0);
                 
                 updateVisibility(false);
                 target.add(ExternalGraphicPanel.this);
@@ -275,12 +246,12 @@ public class ExternalGraphicPanel extends Panel {
     }
     
     /**
-     * Lookup base URL using provied form
+     * Lookup base URL using provided form
      * @param form
      * @see ResponseUtils
      * @return baseUrl
      */
-    protected String baseURL(Form form) {
+    protected String baseURL(Form<?> form) {
         HttpServletRequest httpServletRequest = (HttpServletRequest) form.getRequest().getContainerRequest();
         String baseUrl = GeoServerExtensions.getProperty("PROXY_BASE_URL");
         if (StringUtils.isEmpty(baseUrl)) {
@@ -293,6 +264,56 @@ public class ExternalGraphicPanel extends Panel {
         return baseUrl;
     }
 
+    /**
+     * Validates the external graphic and returns a connection to the graphic.
+     * If validation fails, error messages will be added to the passed form
+     * 
+     * @param target
+     * @param form
+     * @return URLConnection to the External Graphic file
+     */
+    protected URLConnection getExternalGraphic(AjaxRequestTarget target, Form<?> form) {
+        onlineResource.processInput();
+        if (onlineResource.getModelObject() != null) {
+            URL url = null;
+            try {
+                String baseUrl = baseURL(form);
+                String external = onlineResource.getModelObject().toString();
+                
+                URI uri = new URI( external );
+                if( uri.isAbsolute() ){
+                    url = uri.toURL();
+                    if( !external.startsWith(baseUrl)){
+                        form.warn( "Recommend use of styles directory at "+baseUrl);
+                    }
+                }
+                else {
+                    url = new URL( baseUrl + "styles/"+external );
+                }
+                
+                URLConnection conn = url.openConnection();
+                if("text/html".equals(conn.getContentType())){
+                    form.error("Unable to access url");
+                    return null; // error message back!
+                }
+                return conn;
+
+            } catch (FileNotFoundException notFound ){
+                form.error( "Unable to access "+url);
+            } catch (Exception e) {
+                e.printStackTrace();
+                form.error( "Recommend use of styles directory at "+e);
+            }
+        }
+        return null;
+    }
+    
+    /**
+     * @return the value of the onlineResource field
+     */
+    protected String getOnlineResource() {
+        return onlineResource.getInput();
+    }
     
     private void updateVisibility(boolean b) {
         if (b) {
