@@ -71,6 +71,8 @@ public abstract class AbstractStylePage extends GeoServerSecuredPage {
         /* init model */
         if (style == null) {
             styleModel = new CompoundPropertyModel<StyleInfo>(getCatalog().getFactory().createStyle());
+            styleModel.getObject().setName("");
+            styleModel.getObject().setLegend(getCatalog().getFactory().createLegend());
         } else {
             styleModel = new CompoundPropertyModel<StyleInfo>(new StyleDetachableModel(style));
         }
@@ -79,13 +81,13 @@ public abstract class AbstractStylePage extends GeoServerSecuredPage {
         styleForm = new Form<StyleInfo>("styleForm", styleModel) {
             @Override
             protected void onSubmit() {
-                super.onSubmit();
-                onStyleFormSubmit();
                 tabbedPanel.visitChildren(StyleEditTabPanel.class, (component, visit) -> {
                     if (component instanceof StyleEditTabPanel) {
                         ((StyleEditTabPanel) component).onStyleFormSubmit();
                     }
                 });
+                onStyleFormSubmit();
+                super.onSubmit();
             }
         };
         add(styleForm);

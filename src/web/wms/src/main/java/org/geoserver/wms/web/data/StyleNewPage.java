@@ -12,6 +12,7 @@ import java.util.logging.Level;
 import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.geoserver.catalog.Catalog;
+import org.geoserver.catalog.CatalogBuilder;
 import org.geoserver.catalog.StyleHandler;
 import org.geoserver.catalog.StyleInfo;
 import org.geoserver.catalog.WorkspaceInfo;
@@ -46,7 +47,11 @@ public class StyleNewPage extends AbstractStylePage {
     protected void onStyleFormSubmit() {
         // add the style
         Catalog catalog = getCatalog();
-        StyleInfo s = styleForm.getModelObject();
+        StyleInfo model = styleForm.getModelObject();
+        //Duplicate the model style so that values are preserved as models are detached
+        StyleInfo s = catalog.getFactory().createStyle();
+        CatalogBuilder builder = new CatalogBuilder(catalog);
+        builder.updateStyle(s,  model);
 
         StyleHandler styleHandler = styleHandler();
 
@@ -73,7 +78,8 @@ public class StyleNewPage extends AbstractStylePage {
         try {
             Version version = styleHandler.version(rawStyle);
             s.setFormatVersion(version);
-            getCatalog().add(s);
+            catalog.add(s);
+            
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Error occurred saving the style", e);
             error(e.getMessage());

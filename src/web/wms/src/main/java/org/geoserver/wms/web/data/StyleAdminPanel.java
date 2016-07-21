@@ -14,6 +14,8 @@ import java.io.StringReader;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
 
@@ -61,9 +63,11 @@ import org.geoserver.wms.web.publish.StyleTypeChoiceRenderer;
 import org.geoserver.wms.web.publish.StyleTypeModel;
 import org.geoserver.wms.web.publish.StylesModel;
 import org.geotools.styling.Style;
+import org.geotools.util.logging.Logging;
 
 public class StyleAdminPanel extends StyleEditTabPanel {
     private static final long serialVersionUID = -2443344473474977026L;
+    private static final Logger LOGGER = Logging.getLogger(StyleAdminPanel.class);
 
     protected TextField<String> nameTextField;
     
@@ -274,6 +278,13 @@ public class StyleAdminPanel extends StyleEditTabPanel {
         this.legendImg.setOutputMarkupId(true);
     }
 
+    protected void clearFeedbackMessages() {
+        nameTextField.getFeedbackMessages().clear();
+        wsChoice.getFeedbackMessages().clear();
+        formatChoice.getFeedbackMessages().clear();
+        stylePage.editor.getFeedbackMessages().clear();
+    }
+    
     protected Component previewLink() {
         return new GeoServerAjaxFormLink("preview", stylePage.styleForm) {
 
@@ -306,6 +317,8 @@ public class StyleAdminPanel extends StyleEditTabPanel {
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 // we need to force validation or the value won't be converted
                 templates.processInput();
+                nameTextField.processInput();
+                wsChoice.processInput();
                 StyleType template = (StyleType) templates.getConvertedInput();
                 StyleGenerator styleGen = new StyleGenerator(stylePage.getCatalog());
                 styleGen.setWorkspace(getStyleInfo().getWorkspace());
@@ -319,11 +332,15 @@ public class StyleAdminPanel extends StyleEditTabPanel {
                         target.appendJavaScript(String.format(
                                 "if (document.gsEditors) { document.gsEditors.editor.setOption('mode', '%s'); }", 
                                 stylePage.styleHandler().getCodeMirrorEditMode()));
-
+                        clearFeedbackMessages();
                     } catch (Exception e) {
-                        error("Errors occurred generating the style");
+                        clearFeedbackMessages();
+                        stylePage.editor.getFeedbackMessages().clear();
+                        stylePage.error("Errors occurred generating the style");
+                        LOGGER.log(Level.WARNING, "Errors occured generating the style", e);
                     }
-                    target.add(stylePage.styleForm);
+                    
+                    target.add(stylePage);
                 }
             }
         };
@@ -350,10 +367,13 @@ public class StyleAdminPanel extends StyleEditTabPanel {
                         target.appendJavaScript(String.format(
                                 "if (document.gsEditors) { document.gsEditors.editor.setOption('mode', '%s'); }", 
                                 stylePage.styleHandler().getCodeMirrorEditMode()));
+                        clearFeedbackMessages();
                     } catch (Exception e) {
-                        error("Errors occurred loading the '" + style.getName() + "' style");
+                        clearFeedbackMessages();
+                        stylePage.error("Errors occurred loading the '" + style.getName() + "' style");
+                        LOGGER.log(Level.WARNING, "Errors occurred loading the '" + style.getName() + "' style", e);
                     }
-                    target.add(stylePage.styleForm);
+                    target.add(stylePage);
                 }
             }
         };
@@ -379,8 +399,11 @@ public class StyleAdminPanel extends StyleEditTabPanel {
                     target.appendJavaScript(String.format(
                             "if (document.gsEditors) { document.gsEditors.editor.setOption('mode', '%s'); }", 
                             stylePage.styleHandler().getCodeMirrorEditMode()));
+                    clearFeedbackMessages();
                 } catch (IOException e) {
-                    throw new WicketRuntimeException(e);
+                    clearFeedbackMessages();
+                    stylePage.error("Errors occurred uploading the '" + upload.getClientFileName() + "' style");
+                    LOGGER.log(Level.WARNING, "Errors occurred uploading the '" + upload.getClientFileName() + "' style", e);
                 }
 
                 // update the style object
@@ -391,7 +414,7 @@ public class StyleAdminPanel extends StyleEditTabPanel {
                             .getClientFileName())});
                     nameTextField.modelChanged();
                 }
-                target.add(stylePage.styleForm);
+                target.add(stylePage);
             }
         };
     }
