@@ -96,7 +96,7 @@ public abstract class AbstractStylePage extends GeoServerSecuredPage {
         List<ITab> tabs = new ArrayList<ITab>();
         
         //Well known tabs
-        tabs.add(new PanelCachingTab(new AbstractTab(new Model<String>("Generated SLD")) {
+        tabs.add(new PanelCachingTab(new AbstractTab(new Model<String>("Data")) {
             private static final long serialVersionUID = 8555701231692660833L;
 
             public Panel getPanel(String id) {
