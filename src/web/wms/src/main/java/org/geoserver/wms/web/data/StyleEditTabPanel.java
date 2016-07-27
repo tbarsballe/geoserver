@@ -45,10 +45,6 @@ public class StyleEditTabPanel extends Panel {
     public StyleInfo getStyleInfo() {
         return ((CompoundPropertyModel<? extends StyleInfo>) getDefaultModel()).getObject();
     }
-    
-    /**
-     * @return the parent page containing this tab
-     */
 
     /**
      * Called by {@link AbstractStylePage} when the style form is submitted.
