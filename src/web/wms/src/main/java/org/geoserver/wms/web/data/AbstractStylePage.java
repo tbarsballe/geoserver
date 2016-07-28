@@ -30,6 +30,11 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.geoserver.catalog.Catalog;
+import org.geoserver.catalog.CoverageInfo;
+import org.geoserver.catalog.DataStoreInfo;
+import org.geoserver.catalog.FeatureTypeInfo;
+import org.geoserver.catalog.LayerInfo;
+import org.geoserver.catalog.ResourceInfo;
 import org.geoserver.catalog.ResourcePool;
 import org.geoserver.catalog.StyleHandler;
 import org.geoserver.catalog.StyleInfo;
@@ -50,6 +55,8 @@ import org.xml.sax.SAXParseException;
 public abstract class AbstractStylePage extends GeoServerSecuredPage {
 
     protected Form<StyleInfo> styleForm;
+    
+    protected LayerInfo previewLayer;
 
     protected AjaxTabbedPanel<ITab> tabbedPanel;
 
@@ -63,11 +70,44 @@ public abstract class AbstractStylePage extends GeoServerSecuredPage {
     }
 
     public AbstractStylePage(StyleInfo style) {
+        initPreviewLayer(style);
         initUI(style);
     }
-
-    protected void initUI(StyleInfo style) {
+    protected void initPreviewLayer(StyleInfo style) {
+        Catalog catalog = getCatalog();
+        List<LayerInfo> layers;
         
+        //Try getting the first layer associated with this style
+        if (style != null) {
+            layers = catalog.getLayers(style);
+            if (layers.size() > 0) {
+                previewLayer = layers.get(0);
+                return;
+            }
+        }
+        
+        //Try getting the first layer in the default store in the default workspace
+        DataStoreInfo defaultStore = catalog.getDefaultDataStore(catalog.getDefaultWorkspace());
+        if (defaultStore != null) {
+            List<ResourceInfo> resources = catalog.getResourcesByStore(defaultStore, ResourceInfo.class);
+            for (ResourceInfo resource : resources) {
+                layers = catalog.getLayers(resource);
+                if (layers.size() > 0) {
+                    previewLayer = layers.get(0);
+                    return;
+                }
+            }
+        }
+        
+        //Try getting the first layer returned by the catalog
+        layers = catalog.getLayers();
+        if (layers.size() > 0) {
+            previewLayer = layers.get(0);
+            return;
+        }
+    }
+    
+    protected void initUI(StyleInfo style) {
         /* init model */
         if (style == null) {
             styleModel = new CompoundPropertyModel<StyleInfo>(getCatalog().getFactory().createStyle());
@@ -96,14 +136,41 @@ public abstract class AbstractStylePage extends GeoServerSecuredPage {
         List<ITab> tabs = new ArrayList<ITab>();
         
         //Well known tabs
+        //TODO: Support alternate constructors for each of the main tabs?
         tabs.add(new PanelCachingTab(new AbstractTab(new Model<String>("Data")) {
-            private static final long serialVersionUID = 8555701231692660833L;
 
             public Panel getPanel(String id) {
-                StyleAdminPanel panel = new StyleAdminPanel(id, styleModel, AbstractStylePage.this);
-                return panel;
+                return new StyleAdminPanel(id, styleModel, AbstractStylePage.this);
             }
         }));
+        
+        tabs.add(new PanelCachingTab(new AbstractTab(new Model<String>("Preview")) {
+
+            public Panel getPanel(String id) {
+                return new OpenLayersPreviewPanel(id, styleModel, AbstractStylePage.this);
+            }
+        }));
+        if (previewLayer.getResource() instanceof FeatureTypeInfo) {
+            tabs.add(new PanelCachingTab(new AbstractTab(new Model<String>("Data")) {
+                private static final long serialVersionUID = 4184410057835108176L;
+
+                public Panel getPanel(String id) {
+                    try {
+                        return new DataPanel(id, styleModel, AbstractStylePage.this);
+                    } catch (IOException e) {
+                        throw new WicketRuntimeException(e);
+                    }
+                };
+            }));
+        } else if (previewLayer.getResource() instanceof CoverageInfo) {
+            tabs.add(new PanelCachingTab(new AbstractTab(new Model<String>("Data")) {
+                private static final long serialVersionUID = 646758948234232061L;
+
+                public Panel getPanel(String id) {
+                    return new BandsPanel(id, styleModel, AbstractStylePage.this);
+                };
+            }));
+        }
         
         //Dynamic tabs
         List<StyleEditTabPanelInfo> tabPanels = getGeoServerApplication().getBeansOfType(StyleEditTabPanelInfo.class);
@@ -260,6 +327,10 @@ public abstract class AbstractStylePage extends GeoServerSecuredPage {
         return ComponentAuthorizer.WORKSPACE_ADMIN;
     }
     
+    public LayerInfo getLayer() {
+        return this.previewLayer;
+    }
+    
     //Make sure child tabs can see this
     @Override
     protected boolean isAuthenticatedAsAdmin() {
@@ -274,6 +345,4 @@ public abstract class AbstractStylePage extends GeoServerSecuredPage {
     protected GeoServerApplication getGeoServerApplication() {
         return super.getGeoServerApplication();
     }
-    
- 
 }

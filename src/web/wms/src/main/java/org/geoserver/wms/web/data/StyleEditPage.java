@@ -45,6 +45,7 @@ public class StyleEditPage extends AbstractStylePage {
             doReturn(StylePage.class);
             return;
         }
+        initPreviewLayer(si);
         initUI(si);
 
         if (!isAuthenticatedAsAdmin()) {
