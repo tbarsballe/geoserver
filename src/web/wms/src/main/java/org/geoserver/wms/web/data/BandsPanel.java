@@ -10,11 +10,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
 
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.ReuseIfModelsEqualStrategy;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
 import org.geoserver.catalog.CoverageDimensionInfo;
 import org.geoserver.catalog.CoverageInfo;
 import org.geoserver.catalog.StyleInfo;
@@ -22,6 +25,7 @@ import org.geoserver.web.wicket.GeoServerDataProvider;
 import org.geoserver.web.wicket.GeoServerDataProvider.Property;
 import org.geoserver.web.wicket.GeoServerTablePanel;
 import org.geoserver.web.wicket.ParamResourceModel;
+import org.geoserver.web.wicket.SimpleAjaxLink;
 import org.geotools.util.logging.Logging;
 import org.opengis.coverage.SampleDimensionType;
 
@@ -31,9 +35,24 @@ public class BandsPanel extends StyleEditTabPanel {
 
     private GeoServerTablePanel<CoverageDimensionInfo> bands;
 
-    public BandsPanel(String id, CompoundPropertyModel<? extends StyleInfo> model,
-            AbstractStylePage parent) {
-        super(id, model, parent);
+    public BandsPanel(String id, AbstractStylePage parent) {
+        super(id, parent);
+        
+        //Change layer link
+        PropertyModel<String> layerNameModel = new PropertyModel<String>(parent.getLayerModel(),"prefixedName");
+        add(new SimpleAjaxLink<String>("change.layer", layerNameModel) {
+            private static final long serialVersionUID = 7341058018479354596L;
+
+            public void onClick(AjaxRequestTarget target) {
+                ModalWindow popup = parent.getPopup();
+                
+                popup.setInitialHeight(400);
+                popup.setInitialWidth(600);
+                popup.setTitle(new Model<String>("Choose layer to edit"));
+                popup.setContent(new LayerChooser(popup.getContentId(), parent));
+                popup.show(target);
+            }
+        });
 
         // the parameters table
         bands = new GeoServerTablePanel<CoverageDimensionInfo>("bands",

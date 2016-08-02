@@ -14,23 +14,27 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.io.IOUtils;
 import org.apache.wicket.Component;
 import org.apache.wicket.WicketRuntimeException;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.OnLoadHeaderItem;
 import org.apache.wicket.markup.html.IHeaderContributor;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
-import org.geoserver.catalog.LayerInfo;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
 import org.geoserver.catalog.ResourceInfo;
 import org.geoserver.catalog.StyleInfo;
+import org.geoserver.catalog.WorkspaceInfo;
 import org.geoserver.config.GeoServerDataDirectory;
 import org.geoserver.ows.URLMangler.URLType;
 import org.geoserver.ows.util.ResponseUtils;
 import org.geoserver.platform.resource.Resource;
 import org.geoserver.platform.resource.Resources;
 import org.geoserver.web.GeoServerApplication;
+import org.geoserver.web.wicket.SimpleAjaxLink;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.util.logging.Logging;
 
@@ -53,18 +57,27 @@ public class OpenLayersPreviewPanel extends StyleEditTabPanel implements IHeader
     }
     
     final Random rand = new Random();
-    final ReferencedEnvelope bbox;
-    final ResourceInfo resource;
-    final StyleInfo style;
     final Component olPreview;
     
-    public OpenLayersPreviewPanel(String id, CompoundPropertyModel<? extends StyleInfo> model,
-            AbstractStylePage parent) {
-        super(id, model, parent);
-        this.resource = parent.getLayer().getResource();
-        this.bbox = resource.getLatLonBoundingBox();
-        this.style = model.getObject();
+    public OpenLayersPreviewPanel(String id, AbstractStylePage parent) {
+        super(id, parent);
         this.olPreview = new WebMarkupContainer("olPreview").setOutputMarkupId(true);
+        
+        // Change layer link
+        PropertyModel<String> layerNameModel = new PropertyModel<String>(parent.getLayerModel(),"prefixedName");
+        add(new SimpleAjaxLink<String>("change.layer", layerNameModel) {
+            private static final long serialVersionUID = 7341058018479354596L;
+
+            public void onClick(AjaxRequestTarget target) {
+                ModalWindow popup = parent.getPopup();
+                
+                popup.setInitialHeight(400);
+                popup.setInitialWidth(600);
+                popup.setTitle(new Model<String>("Choose layer to edit"));
+                popup.setContent(new LayerChooser(popup.getContentId(), parent));
+                popup.show(target);
+            }
+        });
         add(olPreview);
         setOutputMarkupId(true);
         
@@ -118,15 +131,17 @@ public class OpenLayersPreviewPanel extends StyleEditTabPanel implements IHeader
         throws IOException, TemplateException 
     {
         Map<String, Object> context = new HashMap<String, Object>();
+        ReferencedEnvelope bbox = getStylePage().getLayerInfo().getResource().getLatLonBoundingBox();
+        WorkspaceInfo workspace = getStylePage().getStyleInfo().getWorkspace();
         context.put("minx", bbox.getMinX());
         context.put("miny", bbox.getMinY());
         context.put("maxx", bbox.getMaxX());
         context.put("maxy", bbox.getMaxY());
         context.put("id", olPreview.getMarkupId());
-        context.put("layer", resource.prefixedName());
-        context.put("style", style.getName());
-        if (style.getWorkspace() != null) {
-          context.put("styleWorkspace", style.getWorkspace().getName());
+        context.put("layer", getStylePage().getLayerInfo().getResource().getName());
+        context.put("style", getStylePage().getStyleInfo().getName());
+        if (workspace != null) {
+          context.put("styleWorkspace", workspace.getName());
         }
         context.put("cachebuster", rand.nextInt());
         context.put("resolution", Math.max(bbox.getSpan(0), bbox.getSpan(1)) / 256.0);

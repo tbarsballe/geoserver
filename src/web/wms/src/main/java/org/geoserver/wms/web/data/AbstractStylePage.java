@@ -18,6 +18,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
+import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.extensions.ajax.markup.html.tabs.AjaxTabbedPanel;
 import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
 import org.apache.wicket.extensions.markup.html.tabs.ITab;
@@ -42,6 +43,7 @@ import org.geoserver.catalog.Styles;
 import org.geoserver.web.ComponentAuthorizer;
 import org.geoserver.web.GeoServerApplication;
 import org.geoserver.web.GeoServerSecuredPage;
+import org.geoserver.web.data.layer.LayerDetachableModel;
 import org.geoserver.web.data.style.StyleDetachableModel;
 import org.geoserver.web.wicket.CodeMirrorEditor;
 import org.geoserver.web.wicket.GeoServerAjaxFormLink;
@@ -55,14 +57,15 @@ import org.xml.sax.SAXParseException;
 public abstract class AbstractStylePage extends GeoServerSecuredPage {
 
     protected Form<StyleInfo> styleForm;
-    
-    protected LayerInfo previewLayer;
 
     protected AjaxTabbedPanel<ITab> tabbedPanel;
 
     protected CodeMirrorEditor editor;
+    
+    protected ModalWindow popup;
 
     protected CompoundPropertyModel<StyleInfo> styleModel;
+    protected IModel<LayerInfo> layerModel;
 
     String rawStyle;
 
@@ -81,7 +84,7 @@ public abstract class AbstractStylePage extends GeoServerSecuredPage {
         if (style != null) {
             layers = catalog.getLayers(style);
             if (layers.size() > 0) {
-                previewLayer = layers.get(0);
+                layerModel = new Model<LayerInfo>(layers.get(0));
                 return;
             }
         }
@@ -93,7 +96,7 @@ public abstract class AbstractStylePage extends GeoServerSecuredPage {
             for (ResourceInfo resource : resources) {
                 layers = catalog.getLayers(resource);
                 if (layers.size() > 0) {
-                    previewLayer = layers.get(0);
+                    layerModel = new Model<LayerInfo>(layers.get(0));
                     return;
                 }
             }
@@ -102,7 +105,7 @@ public abstract class AbstractStylePage extends GeoServerSecuredPage {
         //Try getting the first layer returned by the catalog
         layers = catalog.getLayers();
         if (layers.size() > 0) {
-            previewLayer = layers.get(0);
+            layerModel = new Model<LayerInfo>(layers.get(0));
             return;
         }
     }
@@ -132,6 +135,9 @@ public abstract class AbstractStylePage extends GeoServerSecuredPage {
         };
         add(styleForm);
         
+        /* init popup */
+        popup = new ModalWindow("popup");
+        styleForm.add(popup);
         /* init tabs */
         List<ITab> tabs = new ArrayList<ITab>();
         
@@ -140,34 +146,34 @@ public abstract class AbstractStylePage extends GeoServerSecuredPage {
         tabs.add(new PanelCachingTab(new AbstractTab(new Model<String>("Data")) {
 
             public Panel getPanel(String id) {
-                return new StyleAdminPanel(id, styleModel, AbstractStylePage.this);
+                return new StyleAdminPanel(id, AbstractStylePage.this);
             }
         }));
         
         tabs.add(new PanelCachingTab(new AbstractTab(new Model<String>("Preview")) {
 
             public Panel getPanel(String id) {
-                return new OpenLayersPreviewPanel(id, styleModel, AbstractStylePage.this);
+                return new OpenLayersPreviewPanel(id, AbstractStylePage.this);
             }
         }));
-        if (previewLayer.getResource() instanceof FeatureTypeInfo) {
+        if (layerModel.getObject().getResource() instanceof FeatureTypeInfo) {
             tabs.add(new PanelCachingTab(new AbstractTab(new Model<String>("Data")) {
                 private static final long serialVersionUID = 4184410057835108176L;
 
                 public Panel getPanel(String id) {
                     try {
-                        return new DataPanel(id, styleModel, AbstractStylePage.this);
+                        return new DataPanel(id, AbstractStylePage.this);
                     } catch (IOException e) {
                         throw new WicketRuntimeException(e);
                     }
                 };
             }));
-        } else if (previewLayer.getResource() instanceof CoverageInfo) {
+        } else if (layerModel.getObject().getResource() instanceof CoverageInfo) {
             tabs.add(new PanelCachingTab(new AbstractTab(new Model<String>("Data")) {
                 private static final long serialVersionUID = 646758948234232061L;
 
                 public Panel getPanel(String id) {
-                    return new BandsPanel(id, styleModel, AbstractStylePage.this);
+                    return new BandsPanel(id, AbstractStylePage.this);
                 };
             }));
         }
@@ -233,6 +239,7 @@ public abstract class AbstractStylePage extends GeoServerSecuredPage {
             }
         };
         add(cancelLink);
+        
     }
     
     StyleHandler styleHandler() {
@@ -321,16 +328,28 @@ public abstract class AbstractStylePage extends GeoServerSecuredPage {
      * Subclasses must implement to define the submit behavior
      */
     protected abstract void onStyleFormSubmit();
-
+    
+    protected ModalWindow getPopup() {
+        return popup;
+    }
+    protected IModel<LayerInfo> getLayerModel() {
+        return layerModel;
+    }
+    protected CompoundPropertyModel<StyleInfo> getStyleModel() {
+        return styleModel;
+    }
+    public LayerInfo getLayerInfo() {
+        return layerModel.getObject();
+    }
+    
+    public StyleInfo getStyleInfo() {
+        return styleModel.getObject();
+    }
+    
     @Override
     protected ComponentAuthorizer getPageAuthorizer() {
         return ComponentAuthorizer.WORKSPACE_ADMIN;
     }
-    
-    public LayerInfo getLayer() {
-        return this.previewLayer;
-    }
-    
     //Make sure child tabs can see this
     @Override
     protected boolean isAuthenticatedAsAdmin() {

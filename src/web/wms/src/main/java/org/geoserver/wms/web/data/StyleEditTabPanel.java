@@ -32,18 +32,14 @@ public class StyleEditTabPanel extends Panel {
      * @param id The id given to the panel.
      * @param model The model for the panel which wraps a {@link LayerInfo} instance.
      */
-    public StyleEditTabPanel(String id, CompoundPropertyModel<? extends StyleInfo> model, AbstractStylePage parent) {
-        super(id, model);
+    public StyleEditTabPanel(String id, AbstractStylePage parent) {
+        super(id);
         
         this.stylePage = parent;
     }
 
-    /**
-     * @return the style currently being edited by the panel.
-     */
-    @SuppressWarnings("unchecked")
-    public StyleInfo getStyleInfo() {
-        return ((CompoundPropertyModel<? extends StyleInfo>) getDefaultModel()).getObject();
+    protected AbstractStylePage getStylePage() {
+        return stylePage;
     }
 
     /**

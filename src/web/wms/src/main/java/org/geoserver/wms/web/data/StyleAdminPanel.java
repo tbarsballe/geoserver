@@ -93,13 +93,13 @@ public class StyleAdminPanel extends StyleEditTabPanel {
     
     BufferedImage legendImage;
     
-    public StyleAdminPanel(String id, CompoundPropertyModel<StyleInfo> model, AbstractStylePage parent) {
-        super(id, model, parent);
-        initUI(model);
+    public StyleAdminPanel(String id, AbstractStylePage parent) {
+        super(id, parent);
+        initUI(parent.getStyleModel());
         
         if (stylePage instanceof StyleEditPage) {
             //global styles only editable by full admin
-            if (!stylePage.isAuthenticatedAsAdmin() && getStyleInfo().getWorkspace() == null) {
+            if (!stylePage.isAuthenticatedAsAdmin() && parent.getStyleInfo().getWorkspace() == null) {
                 nameTextField.setEnabled(false);
                 uploadLink.setEnabled(false);
             }
@@ -113,7 +113,7 @@ public class StyleAdminPanel extends StyleEditTabPanel {
     
     public void initUI(CompoundPropertyModel<StyleInfo> styleModel) {
         
-        StyleInfo style = getStyleInfo();
+        StyleInfo style = getStylePage().getStyleInfo();
         
         IModel<String> nameBinding = styleModel.bind("name");
         
@@ -256,7 +256,7 @@ public class StyleAdminPanel extends StyleEditTabPanel {
         formatChoice.getFeedbackMessages().clear();
         stylePage.editor.getFeedbackMessages().clear();
     }
-    
+    //TODO: Note - this does not reload the form...
     protected Component previewLink() {
         return new GeoServerAjaxFormLink("preview", stylePage.styleForm) {
 
@@ -336,6 +336,8 @@ public class StyleAdminPanel extends StyleEditTabPanel {
             }
         };
     }
+    //TODO: Change to some sort of form updating behavior that doesn't actually reload the form...
+    //Perhaps AjaxFormUpdateingBehavior(click).
     
     protected AjaxSubmitLink generateLink() {
         return new ConfirmOverwriteSubmitLink("generate") {
@@ -350,14 +352,14 @@ public class StyleAdminPanel extends StyleEditTabPanel {
                 wsChoice.processInput();
                 StyleType template = (StyleType) templates.getConvertedInput();
                 StyleGenerator styleGen = new StyleGenerator(stylePage.getCatalog());
-                styleGen.setWorkspace(getStyleInfo().getWorkspace());
+                styleGen.setWorkspace(getStylePage().getStyleInfo().getWorkspace());
 
                 if (template != null) {
                     try {
                         // same here, force validation or the field won't be updated
                         stylePage.editor.reset();
                         stylePage.setRawStyle(new StringReader(styleGen.generateStyle(
-                                stylePage.styleHandler(), template, getStyleInfo().getName())));
+                                stylePage.styleHandler(), template, getStylePage().getStyleInfo().getName())));
                         target.appendJavaScript(String.format(
                                 "if (document.gsEditors) { document.gsEditors.editor.setOption('mode', '%s'); }", 
                                 stylePage.styleHandler().getCodeMirrorEditMode()));
@@ -374,7 +376,7 @@ public class StyleAdminPanel extends StyleEditTabPanel {
             }
         };
     }
-
+    //TODO: Change to some sort of form updating behavior that doesn't actually reload the form...
     protected AjaxSubmitLink copyLink() {
         return new ConfirmOverwriteSubmitLink("copy") {
 
@@ -405,7 +407,7 @@ public class StyleAdminPanel extends StyleEditTabPanel {
             }
         };
     }
-
+    //TODO: Change to some sort of form updating behavior that doesn't actually reload the form...
     AjaxSubmitLink uploadLink() {
         return new ConfirmOverwriteSubmitLink("upload", stylePage.styleForm) {
 
@@ -436,7 +438,7 @@ public class StyleAdminPanel extends StyleEditTabPanel {
                 }
 
                 // update the style object
-                StyleInfo s = getStyleInfo();
+                StyleInfo s = getStylePage().getStyleInfo();
                 if (s.getName() == null || "".equals(s.getName().trim())) {
                     // set it
                     nameTextField.setModelValue(new String[] {ResponseUtils.stripExtension(upload
