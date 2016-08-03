@@ -62,7 +62,7 @@ public class ExternalGraphicPanel extends Panel {
     private WebMarkupContainer table;
     private GeoServerAjaxFormLink autoFill;
     
-    private Form showhideForm;
+    private Form<StyleInfo> showhideForm;
     
     private AjaxButton show;
     private AjaxButton hide;
@@ -199,7 +199,7 @@ public class ExternalGraphicPanel extends Panel {
         
         container.add(table);
         
-        showhideForm = new Form("showhide") {
+        showhideForm = new Form<StyleInfo>("showhide") {
             @Override
             protected void onSubmit() {
                 super.onSubmit();

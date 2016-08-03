@@ -11,21 +11,16 @@ import java.util.logging.Logger;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.model.PropertyModel;
 import org.geoserver.catalog.FeatureTypeInfo;
-import org.geoserver.catalog.StyleInfo;
 import org.geoserver.web.GeoServerApplication;
 import org.geoserver.web.wicket.GeoServerDataProvider.Property;
 import org.geoserver.web.wicket.GeoServerTablePanel;
-import org.geoserver.web.wicket.SimpleAjaxLink;
 import org.geotools.data.FeatureSource;
 import org.geotools.data.Query;
 import org.geotools.feature.FeatureCollection;
@@ -39,37 +34,19 @@ import org.opengis.feature.type.PropertyDescriptor;
 
 import com.vividsolutions.jts.geom.Geometry;
 
-public class DataPanel extends StyleEditTabPanel {
+public class DataPanel extends Panel {
     private static final long serialVersionUID = -2635691554700860434L;
 
     static final Logger LOGGER = Logging.getLogger(DataPanel.class);
     
     String featureTypeId;
     
-    public DataPanel(String id, AbstractStylePage parent)
-        throws IOException
-    {
-        super(id, parent);
-        this.featureTypeId = parent.getLayerInfo().getId();
+    public DataPanel(String id, FeatureTypeInfo ft) throws IOException {
+        super(id, new Model<FeatureTypeInfo>(ft));
+        this.featureTypeId = ft.getId();
         
-        Feature sample = getSampleFeature((FeatureTypeInfo) parent.getLayerInfo().getResource());
+        Feature sample = getSampleFeature(ft);
         DataAttributesProvider summaries = new DataAttributesProvider(sample);
-        
-        //change layer link
-        PropertyModel<String> layerNameModel = new PropertyModel<String>(parent.getLayerModel(),"prefixedName");
-        add(new SimpleAjaxLink<String>("change.layer", layerNameModel) {
-            private static final long serialVersionUID = 7341058018479354596L;
-
-            public void onClick(AjaxRequestTarget target) {
-                ModalWindow popup = parent.getPopup();
-                
-                popup.setInitialHeight(400);
-                popup.setInitialWidth(600);
-                popup.setTitle(new Model<String>("Choose layer to edit"));
-                popup.setContent(new LayerChooser(popup.getContentId(), parent));
-                popup.show(target);
-            }
-        });
         
         add(new Label("summary-message",
             "For reference, here is a listing of the attributes in this data set."

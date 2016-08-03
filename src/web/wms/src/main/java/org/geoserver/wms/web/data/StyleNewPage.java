@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.logging.Level;
 import org.apache.wicket.WicketRuntimeException;
-import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.geoserver.catalog.Catalog;
 import org.geoserver.catalog.CatalogBuilder;
 import org.geoserver.catalog.StyleHandler;

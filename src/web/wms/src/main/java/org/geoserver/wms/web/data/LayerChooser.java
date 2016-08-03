@@ -10,17 +10,13 @@ import java.util.List;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.geoserver.catalog.LayerInfo;
-import org.geoserver.catalog.WorkspaceInfo;
 import org.geoserver.web.wicket.GeoServerAjaxFormLink;
 import org.geoserver.web.wicket.GeoServerDataProvider;
 import org.geoserver.web.wicket.GeoServerDataProvider.Property;
@@ -107,6 +103,7 @@ public class LayerChooser extends Panel {
                                     protected void onClick(AjaxRequestTarget target, Form<?> form) {
                                         parent.getLayerModel().setObject(layer);
                                         parent.getPopup().close(target);
+                                        parent.configurationChanged();
                                         target.add(parent.styleForm);
                                     }
                                     @Override

@@ -4,12 +4,8 @@
  */
 package org.geoserver.wms.web.data;
 
-import java.io.IOException;
-
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
-import org.geoserver.catalog.StyleInfo;
 
 /**
  * Extension point for panels which appear in separate tabs on the style edit page.
@@ -46,7 +42,10 @@ public class StyleEditTabPanel extends Panel {
      * Called by {@link AbstractStylePage} when the style form is submitted.
      * <p>
      */
-    public void onStyleFormSubmit() {
+    protected void onStyleFormSubmit() {
+        //do nothing by default
+    }
+    protected void configurationChanged() {
         //do nothing by default
     }
 

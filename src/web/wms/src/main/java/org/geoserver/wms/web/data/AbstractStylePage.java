@@ -31,9 +31,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.geoserver.catalog.Catalog;
-import org.geoserver.catalog.CoverageInfo;
 import org.geoserver.catalog.DataStoreInfo;
-import org.geoserver.catalog.FeatureTypeInfo;
 import org.geoserver.catalog.LayerInfo;
 import org.geoserver.catalog.ResourceInfo;
 import org.geoserver.catalog.ResourcePool;
@@ -43,7 +41,6 @@ import org.geoserver.catalog.Styles;
 import org.geoserver.web.ComponentAuthorizer;
 import org.geoserver.web.GeoServerApplication;
 import org.geoserver.web.GeoServerSecuredPage;
-import org.geoserver.web.data.layer.LayerDetachableModel;
 import org.geoserver.web.data.style.StyleDetachableModel;
 import org.geoserver.web.wicket.CodeMirrorEditor;
 import org.geoserver.web.wicket.GeoServerAjaxFormLink;
@@ -124,11 +121,6 @@ public abstract class AbstractStylePage extends GeoServerSecuredPage {
         styleForm = new Form<StyleInfo>("styleForm", styleModel) {
             @Override
             protected void onSubmit() {
-                tabbedPanel.visitChildren(StyleEditTabPanel.class, (component, visit) -> {
-                    if (component instanceof StyleEditTabPanel) {
-                        ((StyleEditTabPanel) component).onStyleFormSubmit();
-                    }
-                });
                 onStyleFormSubmit();
                 super.onSubmit();
             }
@@ -156,28 +148,19 @@ public abstract class AbstractStylePage extends GeoServerSecuredPage {
                 return new OpenLayersPreviewPanel(id, AbstractStylePage.this);
             }
         }));
-        if (layerModel.getObject().getResource() instanceof FeatureTypeInfo) {
-            tabs.add(new PanelCachingTab(new AbstractTab(new Model<String>("Data")) {
-                private static final long serialVersionUID = 4184410057835108176L;
 
-                public Panel getPanel(String id) {
-                    try {
-                        return new DataPanel(id, AbstractStylePage.this);
-                    } catch (IOException e) {
-                        throw new WicketRuntimeException(e);
-                    }
-                };
-            }));
-        } else if (layerModel.getObject().getResource() instanceof CoverageInfo) {
-            tabs.add(new PanelCachingTab(new AbstractTab(new Model<String>("Data")) {
-                private static final long serialVersionUID = 646758948234232061L;
+        tabs.add(new PanelCachingTab(new AbstractTab(new Model<String>("Data")) {
+            private static final long serialVersionUID = 4184410057835108176L;
 
-                public Panel getPanel(String id) {
-                    return new BandsPanel(id, AbstractStylePage.this);
-                };
-            }));
-        }
-        
+            public Panel getPanel(String id) {
+                try {
+                    return new LayerAttributePanel(id, AbstractStylePage.this);
+                } catch (IOException e) {
+                    throw new WicketRuntimeException(e);
+                }
+            };
+        }));
+
         //Dynamic tabs
         List<StyleEditTabPanelInfo> tabPanels = getGeoServerApplication().getBeansOfType(StyleEditTabPanelInfo.class);
         
@@ -241,12 +224,12 @@ public abstract class AbstractStylePage extends GeoServerSecuredPage {
         add(cancelLink);
         
     }
-    
+
     StyleHandler styleHandler() {
         String format = styleModel.getObject().getFormat();
         return Styles.handler(format);
     }
-    
+
     Component validateLink() {
         return new GeoServerAjaxFormLink("validate", styleForm) {
             
@@ -255,14 +238,14 @@ public abstract class AbstractStylePage extends GeoServerSecuredPage {
                 editor.processInput();
 
                 List<Exception> errors = validateSLD();
-                
+
                 if ( errors.isEmpty() ) {
                     form.info( "No validation errors.");
                 } else {
                     for( Exception e : errors ) {
                         form.error( sldErrorWithLineNo(e) );
-                    }    
-                }        
+                    }
+                }
             }
             
             @Override
@@ -272,8 +255,6 @@ public abstract class AbstractStylePage extends GeoServerSecuredPage {
             }
         };
     }
-    
-    
 
     private String sldErrorWithLineNo(Exception e) {
         if (e instanceof SAXParseException) {
@@ -322,6 +303,17 @@ public abstract class AbstractStylePage extends GeoServerSecuredPage {
         this.rawStyle = builder.toString();
         editor.setModelObject(rawStyle);
         in.close();
+    }
+    
+    /**
+     * Called when a configuration change requires updating an inactive tab
+     */
+    protected void configurationChanged() {
+        tabbedPanel.visitChildren(StyleEditTabPanel.class, (component, visit) -> {
+            if (component instanceof StyleEditTabPanel) {
+                ((StyleEditTabPanel) component).configurationChanged();
+            }
+        });
     }
 
     /**
