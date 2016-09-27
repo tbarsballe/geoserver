@@ -611,6 +611,19 @@ public class ResourcePool {
                             }
                         }
                         
+                        // see if the store has a entity resolver param, if so, pass it down
+                        EntityResolver resolver = getEntityResolver();
+                        if(resolver != null && params != null) {
+                            for ( Param p : params ) {
+                                if(EntityResolver.class.equals(p.getType())) {
+                                    if(!(resolver instanceof Serializable)) {
+                                        resolver = new SerializableEntityResolver(resolver);
+                                    }
+                                    connectionParameters.put(p.getName(), (Serializable) resolver);
+                                }
+                            }
+                        }
+                        
                         dataStore = DataStoreUtils.getDataAccess(connectionParameters);
                         if (dataStore == null) {
                             /*
@@ -1665,10 +1678,7 @@ public class ResourcePool {
      */
     public WebMapServer getWebMapServer(WMSStoreInfo info) throws IOException {
         try {
-            EntityResolver entityResolver = null;
-            if(entityResolverProvider != null) {
-                 entityResolver = entityResolverProvider.getEntityResolver();
-            }
+            EntityResolver entityResolver = getEntityResolver();
             
             String id = info.getId();
             WebMapServer wms = wmsCache.get(id);
@@ -1704,6 +1714,14 @@ public class ResourcePool {
         } catch (Exception e) {
             throw (IOException) new IOException().initCause(e);
         }
+    }
+
+    private EntityResolver getEntityResolver() {
+        EntityResolver entityResolver = null;
+        if(entityResolverProvider != null) {
+             entityResolver = entityResolverProvider.getEntityResolver();
+        }
+        return entityResolver;
     }
     
     private HTTPClient getHTTPClient(WMSStoreInfo info) {
