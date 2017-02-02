@@ -24,85 +24,89 @@ import org.xml.sax.EntityResolver;
 
 public class MBStyleHandler extends StyleHandler {
 
-	public static final String FORMAT = "json";
+    public static final String FORMAT = "json";
 
-	public static final String MIME_TYPE = "application/vnd.geoserver.json";
+    public static final String MIME_TYPE = "application/vnd.geoserver.json";
 
-	private SLDHandler sldHandler;
+    private SLDHandler sldHandler;
 
-	protected MBStyleHandler(SLDHandler sldHandler) {
-		super("JSON", FORMAT);
-		this.sldHandler = sldHandler;
-	}
+    protected MBStyleHandler(SLDHandler sldHandler) {
+        super("JSON", FORMAT);
+        this.sldHandler = sldHandler;
+    }
 
-	@Override
-	public StyledLayerDescriptor parse(Object input, Version version, ResourceLocator resourceLocator,
-			EntityResolver entityResolver) throws IOException {
-		// see if we can use the SLD cache, some conversions are expensive.
-		if (input instanceof File) {
-			// convert to resource, to avoid code duplication (the code for file
-			// would be very
-			// similar to the resource one, but unfortunately using an unrelated
-			// set of classes
-			File jsonFile = (File) input;
-			input = new FileSystemResourceStore(jsonFile.getParentFile()).get(jsonFile.getName());
-		}
+    @Override
+    public StyledLayerDescriptor parse(Object input, Version version,
+            ResourceLocator resourceLocator, EntityResolver entityResolver) throws IOException {
+        // see if we can use the SLD cache, some conversions are expensive.
+        if (input instanceof File) {
+            // convert to resource, to avoid code duplication (the code for file
+            // would be very
+            // similar to the resource one, but unfortunately using an unrelated
+            // set of classes
+            File jsonFile = (File) input;
+            input = new FileSystemResourceStore(jsonFile.getParentFile()).get(jsonFile.getName());
+        }
 
-		if (input instanceof Resource) {
-			Resource jsonResource = (Resource) input;
-			Resource sldResource = jsonResource.parent().get(FilenameUtils.getBaseName(jsonResource.name()) + ".sld");
-			if (sldResource.getType() != Resource.Type.UNDEFINED
-					&& sldResource.lastmodified() > jsonResource.lastmodified()) {
-				return sldHandler.parse(sldResource, SLDHandler.VERSION_10, resourceLocator, entityResolver);
-			} else {
-				// otherwise convert and write the cache
-				try (Reader reader = toReader(input)) {
-					StyledLayerDescriptor sld = convertToSLD(reader);
-					try (OutputStream fos = sldResource.out()) {
-						sldHandler.encode(sld, SLDHandler.VERSION_10, true, fos);
-					}
-					// be consistent, have the SLD always be generated from and
-					// SLD parse,
-					// different code paths could result in different
-					// defaults/results due
-					// to inconsistencies/bugs happening over time
-					return sldHandler.parse(sldResource, SLDHandler.VERSION_10, resourceLocator, entityResolver);
-				} catch (ParseException e) {
-					throw new IOException(e);
-				}
-			}
+        if (input instanceof Resource) {
+            Resource jsonResource = (Resource) input;
+            Resource sldResource = jsonResource.parent()
+                    .get(FilenameUtils.getBaseName(jsonResource.name()) + ".sld");
+            if (sldResource.getType() != Resource.Type.UNDEFINED
+                    && sldResource.lastmodified() > jsonResource.lastmodified()) {
+                return sldHandler.parse(sldResource, SLDHandler.VERSION_10, resourceLocator,
+                        entityResolver);
+            } else {
+                // otherwise convert and write the cache
+                try (Reader reader = toReader(input)) {
+                    StyledLayerDescriptor sld = convertToSLD(reader);
+                    try (OutputStream fos = sldResource.out()) {
+                        sldHandler.encode(sld, SLDHandler.VERSION_10, true, fos);
+                    }
+                    // be consistent, have the SLD always be generated from and
+                    // SLD parse,
+                    // different code paths could result in different
+                    // defaults/results due
+                    // to inconsistencies/bugs happening over time
+                    return sldHandler.parse(sldResource, SLDHandler.VERSION_10, resourceLocator,
+                            entityResolver);
+                } catch (ParseException e) {
+                    throw new IOException(e);
+                }
+            }
 
-		}
+        }
 
-		// in this case, just do a plain on the fly conversion
-		try (Reader reader = toReader(input)) {
-			StyledLayerDescriptor sld = convertToSLD(toReader(input));
-			return sld;
-		} catch (ParseException e) {
-			throw new IOException(e);
-		}
-	}
+        // in this case, just do a plain on the fly conversion
+        try (Reader reader = toReader(input)) {
+            StyledLayerDescriptor sld = convertToSLD(toReader(input));
+            return sld;
+        } catch (ParseException e) {
+            throw new IOException(e);
+        }
+    }
 
-	StyledLayerDescriptor convertToSLD(Reader reader) throws IOException, ParseException {
-		return MapBoxStyle.parse(reader);
-	}
+    StyledLayerDescriptor convertToSLD(Reader reader) throws IOException, ParseException {
+        return MapBoxStyle.parse(reader);
+    }
 
-	@Override
+    @Override
     public void encode(StyledLayerDescriptor sld, Version version, boolean pretty,
             OutputStream output) throws IOException {
         throw new UnsupportedOperationException();
     }
 
-	@Override
-	public List<Exception> validate(Object input, Version version, EntityResolver entityResolver) throws IOException {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public List<Exception> validate(Object input, Version version, EntityResolver entityResolver)
+            throws IOException {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public String mimeType(Version version) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public String mimeType(Version version) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
 }
