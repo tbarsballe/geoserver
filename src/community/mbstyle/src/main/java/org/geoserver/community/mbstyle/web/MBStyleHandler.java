@@ -26,12 +26,12 @@ public class MBStyleHandler extends StyleHandler {
 
     public static final String FORMAT = "json";
 
-    public static final String MIME_TYPE = "application/vnd.geoserver.json";
+    public static final String MIME_TYPE = "application/vnd.geoserver.mbstyle+json";
 
     private SLDHandler sldHandler;
 
     protected MBStyleHandler(SLDHandler sldHandler) {
-        super("JSON", FORMAT);
+        super("MBStyle", FORMAT);
         this.sldHandler = sldHandler;
     }
 
@@ -105,8 +105,7 @@ public class MBStyleHandler extends StyleHandler {
 
     @Override
     public String mimeType(Version version) {
-        // TODO Auto-generated method stub
-        return null;
+        return MIME_TYPE;
     }
 
 }
