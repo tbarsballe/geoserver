@@ -944,6 +944,7 @@ public class GeoServerSystemTestSupport extends GeoServerBaseTestSupport<SystemT
      */
     protected InputStream get( String path ) throws Exception {
         MockHttpServletResponse response = getAsServletResponse(path);
+        System.out.println(response.getContentAsString());
         return new ByteArrayInputStream( response.getContentAsString().getBytes() );
     }
     
@@ -1228,13 +1229,14 @@ public class GeoServerSystemTestSupport extends GeoServerBaseTestSupport<SystemT
      *  
      * @return The result parsed as json.
      */
-    protected JSON getAsJSON(final String path) throws Exception {
+    public JSON getAsJSON(final String path) throws Exception {
         MockHttpServletResponse response = getAsServletResponse(path);
         return json(response);
     }
     
     protected JSON json(MockHttpServletResponse response) throws UnsupportedEncodingException {
         String content = response.getContentAsString();
+        System.out.println(content);
         return JSONSerializer.toJSON(content);
     }
     

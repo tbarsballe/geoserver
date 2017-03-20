@@ -122,15 +122,15 @@
      <param-value>false</param-value>
      </init-param>
    </filter>
-   
+
    <filter>
      <filter-name>Advanced Dispatch Filter</filter-name>
      <filter-class>org.geoserver.platform.AdvancedDispatchFilter</filter-class>
-     <!-- 
+     <!--
      This filter allows for a single mapping to the spring dispatcher. However using /* as a mapping
      in a servlet mapping causes the servlet path to be "/" of the request. This causes problems with
-     library like wicket and restlet. So this filter fakes the servlet path by assuming the first 
-     component of the path is the mapped path. 
+     library like wicket and restlet. So this filter fakes the servlet path by assuming the first
+     component of the path is the mapped path.
      -->
    </filter>
    
@@ -202,7 +202,7 @@
       <filter-name>filterChainProxy</filter-name>
       <url-pattern>/*</url-pattern>
     </filter-mapping>
-    
+
     <filter-mapping>
       <filter-name>Advanced Dispatch Filter</filter-name>
       <url-pattern>/*</url-pattern>
