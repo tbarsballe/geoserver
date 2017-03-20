@@ -73,7 +73,7 @@ public class StyleControllerTest extends CatalogRESTTestSupport {
 
     @Test
     public void testGetAllASJSON() throws Exception {
-        JSON json = getAsJSON("/rest/resstyles.json");
+        JSON json = getAsJSON("/rest/restng/styles.json");
 
         List<StyleInfo> styles = catalog.getStyles();
         assertEquals( styles.size(),
@@ -462,7 +462,7 @@ public class StyleControllerTest extends CatalogRESTTestSupport {
         Catalog cat = getCatalog();
         assertNotNull(cat.getStyleByName("gs", "foo"));
 
-        MockHttpServletResponse response = deleteAsServletResponse("/rest/restng/workspaces/gs/styles/foo");
+        MockHttpServletResponse response = deleteAsServletResponse("/rest/restng/workspaces/gs/styles/foo.xml");
         assertEquals(200, response.getStatus());
 
         assertNull(cat.getStyleByName("gs", "foo"));
