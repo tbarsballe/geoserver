@@ -76,11 +76,21 @@ public class StyleController {
 
     @RequestMapping(value = "/styles", method = RequestMethod.POST,
         consumes = {SLDHandler.MIMETYPE_11, SLDHandler.MIMETYPE_10})
-    public ResponseEntity<String> postStyle(@RequestBody Style style,
+    public ResponseEntity<String> postStyle(@RequestBody Style style, @RequestParam(required = false) String name,
         @RequestHeader("Content-Type") String contentType, UriComponentsBuilder builder)
     {
         StyleHandler handler = org.geoserver.catalog.Styles.handler(contentType);
-        return postStyleInternal(style, null, null, handler, contentType, builder);
+        return postStyleInternal(style, name, null, handler, contentType, builder);
+    }
+
+    @RequestMapping(value = "/workspaces/{workspaceName}/styles", method = RequestMethod.POST,
+        consumes = {SLDHandler.MIMETYPE_11, SLDHandler.MIMETYPE_10})
+    public ResponseEntity<String> postStyle(@RequestBody Style style, @RequestParam(required = false) String name,
+        @PathVariable String workspaceName, @RequestHeader("Content-Type") String contentType,
+        UriComponentsBuilder builder)
+    {
+        StyleHandler handler = org.geoserver.catalog.Styles.handler(contentType);
+        return postStyleInternal(style, name, workspaceName, handler, contentType, builder);
     }
 
     public ResponseEntity<String> postStyleInternal(Object object, String name, String workspace,
@@ -128,9 +138,14 @@ public class StyleController {
 
         catalog.add(sinfo);
         LOGGER.info("POST Style " + name);
-
-        UriComponents uriComponents = builder.path("/styles/{id}").buildAndExpand(name);
-
+        //build the new path
+        UriComponents uriComponents;
+        if (workspace != null) {
+            uriComponents = builder.path("/workspaces/{workspaceName}/styles/{styleName}")
+                .buildAndExpand(workspace, name);
+        } else {
+            uriComponents = builder.path("/styles/{id}").buildAndExpand(name);
+        }
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(uriComponents.toUri());
         return new ResponseEntity<String>(name, headers, HttpStatus.CREATED);
