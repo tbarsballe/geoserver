@@ -1,23 +1,36 @@
 package org.geoserver.restng.catalog;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
+import java.util.UUID;
 import java.util.logging.Logger;
 
+import org.apache.commons.io.FileUtils;
 import org.geoserver.catalog.CascadeDeleteVisitor;
 import org.geoserver.catalog.Catalog;
 import org.geoserver.catalog.CatalogFacade;
 import org.geoserver.catalog.LayerInfo;
+import org.geoserver.catalog.ResourcePool;
+import org.geoserver.catalog.SLDHandler;
+import org.geoserver.catalog.StyleHandler;
 import org.geoserver.catalog.StyleInfo;
+import org.geoserver.catalog.rest.StyleFormat;
+import org.geoserver.config.GeoServerDataDirectory;
 import org.geoserver.config.util.XStreamPersister;
+import org.geoserver.platform.resource.Resource;
 import org.geoserver.rest.RestletException;
 import org.geoserver.restng.ForbiddenException;
 import org.geoserver.restng.ResourceNotFoundException;
+import org.geotools.styling.Style;
 import org.geotools.util.logging.Logging;
 import org.restlet.data.Status;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -27,6 +40,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
 
 /**
  * Example style resource controller
@@ -57,6 +72,68 @@ public class StyleController {
     @ResponseStatus(HttpStatus.CREATED)
     public String postStyle(@RequestBody StyleInfo style) {
         return postStyleInfoInternal(style, null, null);
+    }
+
+    @RequestMapping(value = "/styles", method = RequestMethod.POST,
+        consumes = {SLDHandler.MIMETYPE_11, SLDHandler.MIMETYPE_10})
+    public ResponseEntity<String> postStyle(@RequestBody Style style,
+        @RequestHeader("Content-Type") String contentType, UriComponentsBuilder builder)
+    {
+        StyleHandler handler = org.geoserver.catalog.Styles.handler(contentType);
+        return postStyleInternal(style, null, null, handler, contentType, builder);
+    }
+
+    public ResponseEntity<String> postStyleInternal(Object object, String name, String workspace,
+        StyleHandler styleFormat, String mediaType, UriComponentsBuilder builder)
+    {
+
+        if (name == null) {
+            name = findNameFromObject(object);
+        }
+
+        //ensure that the style does not already exist
+        if (catalog.getStyleByName(workspace, name) != null) {
+            throw new RestletException("Style " + name + " already exists.",
+                Status.CLIENT_ERROR_FORBIDDEN);
+        }
+
+        StyleInfo sinfo = catalog.getFactory().createStyle();
+        sinfo.setName(name);
+        sinfo.setFilename(name + "." + styleFormat.getFileExtension());
+        sinfo.setFormat(styleFormat.getFormat());
+        sinfo.setFormatVersion(styleFormat.versionForMimeType(mediaType));
+
+        if (workspace != null) {
+            sinfo.setWorkspace(catalog.getWorkspaceByName(workspace));
+        }
+
+        // ensure that a existing resource does not already exist, because we may not want to overwrite it
+        GeoServerDataDirectory dataDir = new GeoServerDataDirectory(catalog.getResourceLoader());
+        if (dataDir.style(sinfo).getType() != Resource.Type.UNDEFINED) {
+            String msg = "Style resource " + sinfo.getFilename() + " already exists.";
+            throw new RestletException(msg, Status.CLIENT_ERROR_FORBIDDEN);
+        }
+
+
+        ResourcePool resourcePool = catalog.getResourcePool();
+        try {
+            if (object instanceof Style) {
+                resourcePool.writeStyle(sinfo, (Style) object);
+            } else {
+                resourcePool.writeStyle(sinfo, (InputStream) object);
+            }
+        } catch (IOException e) {
+            throw new RestletException("Error writing style", Status.SERVER_ERROR_INTERNAL, e);
+        }
+
+        catalog.add(sinfo);
+        LOGGER.info("POST Style " + name);
+
+        UriComponents uriComponents = builder.path("/styles/{id}").buildAndExpand(name);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setLocation(uriComponents.toUri());
+        return new ResponseEntity<String>(name, headers, HttpStatus.CREATED);
     }
 
     @RequestMapping(value = "/workspaces/{workspaceName}/styles",
@@ -168,6 +245,30 @@ public class StyleController {
         catalog.getResourcePool().deleteStyle(style, purge);
 
         LOGGER.info("DELETE style " + styleName);
+    }
+
+    String findNameFromObject(Object object) {
+        String name = null;
+        if (object instanceof Style) {
+            name = ((Style)object).getName();
+        }
+
+        if (name == null) {
+            // generate a random one
+            for (int i = 0; name == null && i < 100; i++) {
+                String candidate = "style-"+ UUID.randomUUID().toString().substring(0, 7);
+                if (catalog.getStyleByName(candidate) == null) {
+                    name = candidate;
+                }
+            }
+        }
+
+        if (name == null) {
+            throw new RestletException("Unable to generate style name, specify one with 'name' parameter",
+                Status.SERVER_ERROR_INTERNAL);
+        }
+
+        return name;
     }
 
 }

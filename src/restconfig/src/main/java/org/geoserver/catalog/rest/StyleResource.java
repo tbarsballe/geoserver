@@ -199,7 +199,6 @@ public class StyleResource extends AbstractCatalogResource {
 
             //figure out the name of the new style, first check if specified directly
             String name = getRequest().getResourceRef().getQueryAsForm().getFirstValue("name");
-            ;
 
             if (name == null) {
                 name = findNameFromObject(object);
