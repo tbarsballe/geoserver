@@ -1,28 +1,13 @@
 package org.geoserver.restng.catalog;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.List;
-import java.util.UUID;
-import java.util.logging.Logger;
-
-import org.apache.commons.io.FileUtils;
-import org.geoserver.catalog.CascadeDeleteVisitor;
-import org.geoserver.catalog.Catalog;
-import org.geoserver.catalog.CatalogFacade;
-import org.geoserver.catalog.LayerInfo;
-import org.geoserver.catalog.ResourcePool;
-import org.geoserver.catalog.SLDHandler;
-import org.geoserver.catalog.StyleHandler;
-import org.geoserver.catalog.StyleInfo;
-import org.geoserver.catalog.rest.StyleFormat;
+import org.geoserver.catalog.*;
 import org.geoserver.config.GeoServerDataDirectory;
-import org.geoserver.config.util.XStreamPersister;
 import org.geoserver.platform.resource.Resource;
 import org.geoserver.rest.RestletException;
 import org.geoserver.restng.ForbiddenException;
 import org.geoserver.restng.ResourceNotFoundException;
+import org.geoserver.restng.catalog.wrapper.CatalogFreemarkerContextWrapper;
+import org.geoserver.restng.catalog.wrapper.Styles;
 import org.geotools.styling.Style;
 import org.geotools.util.logging.Logging;
 import org.restlet.data.Status;
@@ -31,24 +16,23 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
+import java.util.UUID;
+import java.util.logging.Logger;
 
 /**
  * Example style resource controller
  */
 @RestController @RequestMapping(path = "/restng", produces = {
     MediaType.APPLICATION_JSON_VALUE,
-    MediaType.APPLICATION_XML_VALUE })
+    MediaType.APPLICATION_XML_VALUE,
+    MediaType.TEXT_HTML_VALUE})
 public class StyleController {
 
     private final Catalog catalog;
@@ -60,12 +44,20 @@ public class StyleController {
         this.catalog = catalog;
     }
 
-    @RequestMapping(value = "/styles", method = RequestMethod.GET)
+    @RequestMapping(value = "/styles", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public Styles test(@RequestParam(required = false) String workspace,
-        @RequestParam(required = false) String layer) {
+                       @RequestParam(required = false) String layer) {
 
         List<StyleInfo> styles = catalog.getStylesByWorkspace(CatalogFacade.NO_WORKSPACE);
         return new Styles(styles);
+    }
+
+    @RequestMapping(value = "/styles", method = RequestMethod.GET, produces = {MediaType.TEXT_HTML_VALUE})
+    public CatalogFreemarkerContextWrapper testFreemarker(@RequestParam(required = false) String workspace,
+                                         @RequestParam(required = false) String layer) {
+
+        List<StyleInfo> styles = catalog.getStylesByWorkspace(CatalogFacade.NO_WORKSPACE);
+        return new CatalogFreemarkerContextWrapper(styles, StyleInfo.class);
     }
 
     @RequestMapping(value = "/styles", method = RequestMethod.POST, consumes = { "text/xml", "application/xml" })
@@ -191,17 +183,30 @@ public class StyleController {
         return style.getName();
     }
 
-    @RequestMapping(path = "/workspaces/{workspaceName}/styles/{styleName}", method = RequestMethod.GET)
+    @RequestMapping(path = "/workspaces/{workspaceName}/styles/{styleName}", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     protected StyleInfo getStyleFromWorkspace(
         @PathVariable String styleName,
         @PathVariable String workspaceName) {
         return getStyleInternal(styleName, workspaceName);
     }
 
-    @RequestMapping(path = "/styles/{styleName}", method = RequestMethod.GET)
+    @RequestMapping(path = "/styles/{styleName}", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     protected StyleInfo getStyle(
         @PathVariable String styleName) {
         return getStyleInternal(styleName, null);
+    }
+
+    @RequestMapping(path = "/workspaces/{workspaceName}/styles/{styleName}", method = RequestMethod.GET, produces = {MediaType.TEXT_HTML_VALUE})
+    protected CatalogFreemarkerContextWrapper getStyleFromWorkspaceFreemarker(
+            @PathVariable String styleName,
+            @PathVariable String workspaceName) {
+        return new CatalogFreemarkerContextWrapper(getStyleInternal(styleName, workspaceName));
+    }
+
+    @RequestMapping(path = "/styles/{styleName}", method = RequestMethod.GET, produces = {MediaType.TEXT_HTML_VALUE})
+    protected CatalogFreemarkerContextWrapper getStyleFreemarker(
+            @PathVariable String styleName) {
+        return new CatalogFreemarkerContextWrapper(getStyleInternal(styleName, null));
     }
 
     protected StyleInfo getStyleInternal(String styleName, String workspace) {
