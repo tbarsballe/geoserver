@@ -58,11 +58,16 @@ public class StyleController extends CatalogController {
     }
 
     @RequestMapping(value = "/styles", method = RequestMethod.GET, produces = {MediaType.TEXT_HTML_VALUE})
-    public FreemarkerConfigurationWrapper testFreemarker(@RequestParam(required = false) String workspace,
-                                                         @RequestParam(required = false) String layer) {
-
+    public FreemarkerConfigurationWrapper getStylesFreemarker() {
         List<StyleInfo> styles = catalog.getStylesByWorkspace(CatalogFacade.NO_WORKSPACE);
         return toFreemarkerList(styles, StyleInfo.class);
+    }
+
+    @RequestMapping(value = "/workspaces/{workspaceName}/styles", method = RequestMethod.GET,
+            produces = {MediaType.TEXT_HTML_VALUE})
+    public FreemarkerConfigurationWrapper getStylesFromWorkspaceFreemarker(@PathVariable String workspaceName) {
+        LOGGER.fine("GET styles for workspace " + workspaceName);
+        return toFreemarkerList(catalog.getStylesByWorkspace(workspaceName));
     }
 
     @RequestMapping(value = "/styles", method = RequestMethod.POST, consumes = { "text/xml", "application/xml" })
@@ -200,7 +205,7 @@ public class StyleController extends CatalogController {
     @RequestMapping(path = "/styles/{styleName}", method = RequestMethod.GET,
         produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE,
             SLDHandler.MIMETYPE_10, SLDHandler.MIMETYPE_11})
-    protected StyleInfo getStyleInfo(
+    protected StyleInfo getStyle(
         @PathVariable String styleName) {
         return getStyleInternal(styleName, null);
     }

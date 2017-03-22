@@ -10,7 +10,7 @@ import java.util.List;
 import org.geoserver.config.util.SecureXStream;
 import org.geoserver.config.util.XStreamPersister;
 import org.geoserver.ows.util.OwsUtils;
-import org.geoserver.rest.PageInfo;
+import org.geoserver.restng.RequestInfo;
 import org.geoserver.restng.catalog.wrapper.XStreamListWrapper;
 import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpInputMessage;
@@ -153,8 +153,8 @@ public abstract class XStreamCatalogListConverter extends BaseMessageConverter {
 
     protected String href( String link) {
 
-        final PageInfo pg = (PageInfo) RequestContextHolder
-            .getRequestAttributes().getAttribute( PageInfo.KEY, RequestAttributes.SCOPE_REQUEST );
+        final RequestInfo pg = (RequestInfo) RequestContextHolder
+            .getRequestAttributes().getAttribute( RequestInfo.KEY, RequestAttributes.SCOPE_REQUEST );
         String ext = getExtension();
 
         if(ext != null && ext.length() > 0)
@@ -163,7 +163,7 @@ public abstract class XStreamCatalogListConverter extends BaseMessageConverter {
         // encode as relative or absolute depending on the link type
         if ( link.startsWith( "/") ) {
             // absolute, encode from "root"
-            return pg.rootURI(link);
+            return pg.servletURI(link);
         } else {
             //encode as relative
             return pg.pageURI(link);
