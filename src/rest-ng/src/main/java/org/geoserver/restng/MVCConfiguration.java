@@ -53,7 +53,7 @@ public class MVCConfiguration extends WebMvcConfigurationSupport {
 
     @Override
     protected void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new RESTInterceptor());
+        registry.addInterceptor(new RestInterceptor());
     }
 
     @Override

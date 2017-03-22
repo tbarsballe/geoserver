@@ -6,8 +6,8 @@ import org.geoserver.platform.resource.Resource;
 import org.geoserver.rest.RestletException;
 import org.geoserver.restng.ForbiddenException;
 import org.geoserver.restng.ResourceNotFoundException;
-import org.geoserver.restng.catalog.wrapper.CatalogFreemarkerContextWrapper;
 import org.geoserver.restng.catalog.wrapper.Styles;
+import org.geoserver.restng.wrapper.FreemarkerConfigurationWrapper;
 import org.geotools.styling.Style;
 import org.geotools.util.logging.Logging;
 import org.restlet.data.Status;
@@ -33,15 +33,13 @@ import java.util.logging.Logger;
     MediaType.APPLICATION_JSON_VALUE,
     MediaType.APPLICATION_XML_VALUE,
     MediaType.TEXT_HTML_VALUE})
-public class StyleController {
-
-    private final Catalog catalog;
+public class StyleController extends CatalogController {
 
     private static final Logger LOGGER = Logging.getLogger(StyleController.class);
 
     @Autowired
     public StyleController(Catalog catalog) {
-        this.catalog = catalog;
+        super(catalog);
     }
 
     @RequestMapping(value = "/styles", method = RequestMethod.GET,
@@ -60,11 +58,11 @@ public class StyleController {
     }
 
     @RequestMapping(value = "/styles", method = RequestMethod.GET, produces = {MediaType.TEXT_HTML_VALUE})
-    public CatalogFreemarkerContextWrapper testFreemarker(@RequestParam(required = false) String workspace,
-                                         @RequestParam(required = false) String layer) {
+    public FreemarkerConfigurationWrapper testFreemarker(@RequestParam(required = false) String workspace,
+                                                         @RequestParam(required = false) String layer) {
 
         List<StyleInfo> styles = catalog.getStylesByWorkspace(CatalogFacade.NO_WORKSPACE);
-        return new CatalogFreemarkerContextWrapper(styles, StyleInfo.class);
+        return toFreemarkerList(styles, StyleInfo.class);
     }
 
     @RequestMapping(value = "/styles", method = RequestMethod.POST, consumes = { "text/xml", "application/xml" })
@@ -208,16 +206,16 @@ public class StyleController {
     }
 
     @RequestMapping(path = "/workspaces/{workspaceName}/styles/{styleName}", method = RequestMethod.GET, produces = {MediaType.TEXT_HTML_VALUE})
-    protected CatalogFreemarkerContextWrapper getStyleFromWorkspaceFreemarker(
+    protected FreemarkerConfigurationWrapper getStyleFromWorkspaceFreemarker(
             @PathVariable String styleName,
             @PathVariable String workspaceName) {
-        return new CatalogFreemarkerContextWrapper(getStyleInternal(styleName, workspaceName));
+        return toFreemarkerMap(getStyleInternal(styleName, workspaceName));
     }
 
     @RequestMapping(path = "/styles/{styleName}", method = RequestMethod.GET, produces = {MediaType.TEXT_HTML_VALUE})
-    protected CatalogFreemarkerContextWrapper getStyleFreemarker(
+    protected FreemarkerConfigurationWrapper getStyleFreemarker(
             @PathVariable String styleName) {
-        return new CatalogFreemarkerContextWrapper(getStyleInternal(styleName, null));
+        return toFreemarkerMap(getStyleInternal(styleName, null));
     }
 
     protected StyleInfo getStyleInternal(String styleName, String workspace) {
