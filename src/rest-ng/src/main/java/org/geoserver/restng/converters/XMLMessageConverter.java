@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.geoserver.config.util.XStreamPersister;
+import org.geoserver.restng.catalog.wrapper.XStreamListWrapper;
 import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.HttpOutputMessage;
@@ -23,12 +24,14 @@ public class XMLMessageConverter extends BaseMessageConverter {
 
     @Override
     public boolean canRead(Class clazz, MediaType mediaType) {
-        return MediaType.APPLICATION_XML.equals(mediaType) || MediaType.TEXT_XML.equals(mediaType);
+        return !XStreamListWrapper.class.isAssignableFrom(clazz) &&
+            MediaType.APPLICATION_XML.equals(mediaType) || MediaType.TEXT_XML.equals(mediaType);
     }
 
     @Override
     public boolean canWrite(Class clazz, MediaType mediaType) {
-        return true;
+        return !XStreamListWrapper.class.isAssignableFrom(clazz)
+            && MediaType.APPLICATION_XML.equals(mediaType) || MediaType.TEXT_XML.equals(mediaType);
     }
 
     @Override

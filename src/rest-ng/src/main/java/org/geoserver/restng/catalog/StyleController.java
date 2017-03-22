@@ -44,12 +44,19 @@ public class StyleController {
         this.catalog = catalog;
     }
 
-    @RequestMapping(value = "/styles", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public Styles test(@RequestParam(required = false) String workspace,
-                       @RequestParam(required = false) String layer) {
+    @RequestMapping(value = "/styles", method = RequestMethod.GET,
+        produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public Styles getStyles() {
 
         List<StyleInfo> styles = catalog.getStylesByWorkspace(CatalogFacade.NO_WORKSPACE);
         return new Styles(styles);
+    }
+
+    @RequestMapping(value = "/workspaces/{workspaceName}/styles", method = RequestMethod.GET,
+        produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public Styles getStylesFromWorkspace(@PathVariable String workspaceName) {
+        LOGGER.fine("GET styles for workspace " + workspaceName);
+        return new Styles(catalog.getStylesByWorkspace(workspaceName));
     }
 
     @RequestMapping(value = "/styles", method = RequestMethod.GET, produces = {MediaType.TEXT_HTML_VALUE})
@@ -183,15 +190,19 @@ public class StyleController {
         return style.getName();
     }
 
-    @RequestMapping(path = "/workspaces/{workspaceName}/styles/{styleName}", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @RequestMapping(path = "/workspaces/{workspaceName}/styles/{styleName}", method = RequestMethod.GET,
+        produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE,
+            SLDHandler.MIMETYPE_10, SLDHandler.MIMETYPE_11})
     protected StyleInfo getStyleFromWorkspace(
         @PathVariable String styleName,
         @PathVariable String workspaceName) {
         return getStyleInternal(styleName, workspaceName);
     }
 
-    @RequestMapping(path = "/styles/{styleName}", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    protected StyleInfo getStyle(
+    @RequestMapping(path = "/styles/{styleName}", method = RequestMethod.GET,
+        produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE,
+            SLDHandler.MIMETYPE_10, SLDHandler.MIMETYPE_11})
+    protected StyleInfo getStyleInfo(
         @PathVariable String styleName) {
         return getStyleInternal(styleName, null);
     }

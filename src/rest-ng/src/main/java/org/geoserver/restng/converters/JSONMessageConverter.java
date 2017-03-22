@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.geoserver.config.util.XStreamPersister;
+import org.geoserver.restng.catalog.wrapper.XStreamListWrapper;
 import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.HttpOutputMessage;
@@ -23,7 +24,8 @@ public class JSONMessageConverter extends BaseMessageConverter {
 
     @Override
     public boolean canRead(Class clazz, MediaType mediaType) {
-        return MediaType.APPLICATION_JSON.equals(mediaType);
+        return !XStreamListWrapper.class.isAssignableFrom(clazz) &&
+            MediaType.APPLICATION_JSON.equals(mediaType);
     }
 
     @Override
@@ -37,7 +39,8 @@ public class JSONMessageConverter extends BaseMessageConverter {
          * - So, you can't actually rely on media type not being null
          * - BUT, this method is only called anyway if they requested media type (via Accepts header) is in the list of getSupportedMediaTypes
          */
-        return MediaType.APPLICATION_JSON.equals(mediaType);
+        return !XStreamListWrapper.class.isAssignableFrom(clazz) &&
+            MediaType.APPLICATION_JSON.equals(mediaType);
     }
 
     @Override

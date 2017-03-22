@@ -1,15 +1,23 @@
 package org.geoserver.restng.converters;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.io.IOUtils;
 import org.geoserver.catalog.SLDHandler;
 import org.geoserver.catalog.StyleHandler;
+import org.geoserver.catalog.StyleInfo;
 import org.geoserver.catalog.Styles;
+import org.geoserver.config.GeoServerDataDirectory;
+import org.geoserver.platform.GeoServerExtensions;
+import org.geoserver.platform.resource.Resource;
 import org.geotools.styling.Style;
+import org.geotools.styling.StyledLayerDescriptor;
 import org.geotools.util.Version;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.HttpOutputMessage;
@@ -47,7 +55,8 @@ public class StyleConverter implements HttpMessageConverter {
 
     @Override
     public boolean canWrite(Class clazz, MediaType mediaType) {
-        return false;
+        return (Style.class.equals(clazz) || StyleInfo.class.isAssignableFrom(clazz)) &&
+            supportedMediaTypes.contains(mediaType);
     }
 
     @Override
@@ -62,7 +71,34 @@ public class StyleConverter implements HttpMessageConverter {
     }
 
     @Override
-    public void write(Object o, MediaType contentType, HttpOutputMessage outputMessage)
+    public void write(Object object, MediaType contentType, HttpOutputMessage outputMessage)
         throws IOException, HttpMessageNotWritableException {
+        if (object instanceof StyleInfo) {
+            StyleInfo style = (StyleInfo) object;
+            // optimization, if the requested format is the same as the native format
+            // of the style, stream the file directly from the disk, otherwise encode
+            // the style in the requested format
+            if (handler.getFormat().equalsIgnoreCase(style.getFormat())) {
+                copyFromFile(style, outputMessage.getBody());
+                return;
+            }
+        }
+
+        Style style = object instanceof StyleInfo ? ((StyleInfo)object).getStyle() : (Style) object;
+        StyledLayerDescriptor sld = Styles.sld(style);
+        //todo support pretty print somehow
+        handler.encode(sld, version, false, outputMessage.getBody());
+    }
+
+    void copyFromFile(StyleInfo style, OutputStream out) throws IOException {
+        GeoServerDataDirectory dd = GeoServerExtensions.bean(GeoServerDataDirectory.class);
+        Resource resource = dd.style(style);
+        InputStream in = resource.in();
+        try {
+            IOUtils.copy(in, out);
+        }
+        finally {
+            in.close();
+        }
     }
 }
