@@ -537,11 +537,11 @@
     <artifactId>gwc-kml</artifactId>
     <version>${gwc.version}</version>
    </dependency>
-    <dependency>
-      <groupId>org.geowebcache</groupId>
-      <artifactId>gwc-rest</artifactId>
-      <version>${gwc.version}</version>
-    </dependency>
+   <dependency>
+    <groupId>org.geowebcache</groupId>
+    <artifactId>gwc-rest</artifactId>
+    <version>${gwc.version}</version>
+   </dependency>
    <dependency>
     <groupId>org.geowebcache</groupId>
     <artifactId>gwc-tms</artifactId>

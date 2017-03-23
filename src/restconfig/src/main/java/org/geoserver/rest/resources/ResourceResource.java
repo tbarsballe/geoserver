@@ -62,7 +62,7 @@ public class ResourceResource extends AbstractResource {
      * XML/Json object for resource reference.
      *
      */
-    public static class ResourceReference {
+    protected static class ResourceReference {
                 
         private String path;
 
@@ -88,7 +88,7 @@ public class ResourceResource extends AbstractResource {
      * 
      */
     @XStreamAlias("child")
-    public static class ResourceChild {
+    protected static class ResourceChild {
                 
         private String name;
 
@@ -114,7 +114,7 @@ public class ResourceResource extends AbstractResource {
      *
      */
     @XStreamAlias("ResourceMetadata")
-    public static class ResourceMetadata {
+    protected static class ResourceMetadata {
         
         private String name;
         private ResourceReference parent;
@@ -133,7 +133,7 @@ public class ResourceResource extends AbstractResource {
          * Create from resource.
          * The class must be static for serialization, but output is request dependent so passing on self.
          */
-        public ResourceMetadata(Resource resource, ResourceResource self, boolean isDir) {
+        protected ResourceMetadata(Resource resource, ResourceResource self, boolean isDir) {
             if (!resource.path().isEmpty()) {
                 parent = new ResourceReference("/" + resource.parent().path(),
                         new AtomLink(self.href(resource.parent().path()), "alternate", 
@@ -173,7 +173,7 @@ public class ResourceResource extends AbstractResource {
      *
      */
     @XStreamAlias("ResourceDirectory")
-    public static class ResourceDirectory extends ResourceMetadata {
+    protected static class ResourceDirectory extends ResourceMetadata {
         
         private List<ResourceChild> children = new ArrayList<ResourceChild>();
 

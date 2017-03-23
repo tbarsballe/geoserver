@@ -1228,14 +1228,13 @@ public class GeoServerSystemTestSupport extends GeoServerBaseTestSupport<SystemT
      *  
      * @return The result parsed as json.
      */
-    public JSON getAsJSON(final String path) throws Exception {
+    protected JSON getAsJSON(final String path) throws Exception {
         MockHttpServletResponse response = getAsServletResponse(path);
         return json(response);
     }
     
     protected JSON json(MockHttpServletResponse response) throws UnsupportedEncodingException {
         String content = response.getContentAsString();
-        System.out.println(content);
         return JSONSerializer.toJSON(content);
     }
     

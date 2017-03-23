@@ -35,6 +35,7 @@ import org.geotools.styling.Style;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.restlet.resource.Representation;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.w3c.dom.Document;
@@ -327,8 +328,8 @@ public class StyleControllerTest extends CatalogRESTTestSupport {
         Style s = catalog.getStyleByName( "Ponds" ).getStyle();
         ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-        new StyleFormat(SLDHandler.MIMETYPE_10, SLDHandler.VERSION_10, false, new SLDHandler(), null, getCatalog().getResourcePool().getEntityResolver()).write(s, out);
-
+        Representation representation = new StyleFormat(SLDHandler.MIMETYPE_10, SLDHandler.VERSION_10, false, new SLDHandler(), null, getCatalog().getResourcePool().getEntityResolver()).toRepresentation(s);
+        representation.write(out);
         xml = new String(out.toByteArray());
         assertTrue(xml.contains("<sld:Name>foo</sld:Name>"));
     }

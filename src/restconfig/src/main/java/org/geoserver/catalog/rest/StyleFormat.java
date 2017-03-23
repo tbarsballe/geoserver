@@ -60,7 +60,7 @@ public class StyleFormat extends StreamDataFormat {
     }
 
     @Override
-    public void write(Object object, OutputStream out) throws IOException {
+    protected void write(Object object, OutputStream out) throws IOException {
         if (object instanceof StyleInfo) {
             StyleInfo style = (StyleInfo) object;
             // optimization, if the requested format is the same as the native format
