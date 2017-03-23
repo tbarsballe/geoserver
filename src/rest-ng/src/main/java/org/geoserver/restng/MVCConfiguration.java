@@ -17,6 +17,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 import org.xml.sax.EntityResolver;
 
@@ -66,5 +67,12 @@ public class MVCConfiguration extends WebMvcConfigurationSupport {
         //todo properties files are only supported for test cases. should try to find a way to
         //support them without polluting prod code with handling
 //        configurer.mediaType("properties", MediaType.valueOf("application/prs.gs.psl"));
+    }
+
+    @Override
+    public void configurePathMatch(PathMatchConfigurer configurer) {
+        //Force MVC to use /restng endpoint. If we need something more advanced, we should make a custom PathHelper
+        configurer.setUrlPathHelper(mvcUrlPathHelper());
+        configurer.getUrlPathHelper().setAlwaysUseFullPath(true);
     }
 }
