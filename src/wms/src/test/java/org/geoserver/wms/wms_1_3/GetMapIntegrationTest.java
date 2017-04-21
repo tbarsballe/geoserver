@@ -289,6 +289,27 @@ public class GetMapIntegrationTest extends WMSTestSupport {
 
         checkImage(response);
     }
+
+    @Test
+    public void testSmallImage() throws Exception {
+        MockHttpServletResponse response = getAsServletResponse("wms?bbox=-120,35,-100,45&styles=" +
+                "&layers=" + WORLD.getLocalPart() +
+                "&format=image/png&request=GetMap&width=42&height=21&srs=EPSG:4326");
+
+        BufferedImage image = ImageIO.read(new ByteArrayInputStream(response.getContentAsByteArray()));
+        Color rgb = new Color(image.getRGB(5,5));
+        assertEquals(rgb, new Color(170,170,170));
+        checkImage(response);
+
+        response = getAsServletResponse("wms?bbox=-120,35,-100,45&styles=" +
+                "&layers=" + WORLD.getLocalPart() +
+                "&format=image/png&request=GetMap&width=40&height=20&srs=EPSG:4326");
+
+        image = ImageIO.read(new ByteArrayInputStream(response.getContentAsByteArray()));
+        rgb = new Color(image.getRGB(5,5));
+        assertEquals(rgb, new Color(170,170,170));
+        checkImage(response);
+    }
     
     
     @Test    
