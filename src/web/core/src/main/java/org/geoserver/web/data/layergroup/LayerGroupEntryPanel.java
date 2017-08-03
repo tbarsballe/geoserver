@@ -46,6 +46,9 @@ public class LayerGroupEntryPanel extends Panel {
 
     private static final long serialVersionUID = -5483938812185582866L;
 
+    public static Property<LayerGroupEntry> LAYER_TYPE = new PropertyPlaceholder<LayerGroupEntry>(
+            "layerType");
+
     public static Property<LayerGroupEntry> LAYER = new PropertyPlaceholder<LayerGroupEntry>(
             "layer");
 
@@ -58,7 +61,7 @@ public class LayerGroupEntryPanel extends Panel {
     public static Property<LayerGroupEntry> REMOVE = new PropertyPlaceholder<LayerGroupEntry>(
             "remove");
 
-    static List<Property<LayerGroupEntry>> PROPERTIES = Arrays.asList(LAYER, DEFAULT_STYLE, STYLE, REMOVE);
+    static List<Property<LayerGroupEntry>> PROPERTIES = Arrays.asList(LAYER_TYPE, LAYER, DEFAULT_STYLE, STYLE, REMOVE);
 
     ModalWindow popupWindow;
     GeoServerTablePanel<LayerGroupEntry> layerTable;
@@ -78,6 +81,7 @@ public class LayerGroupEntryPanel extends Panel {
         add( popupWindow = new ModalWindow( "popup" ) );
         add(dialog = new GeoServerDialog("dialog"));
         add(new HelpLink("layersHelp").setDialog(dialog));
+        add(new HelpLink("styleGroupHelp").setDialog(dialog));
         
         //layers
         add(layerTable = new ReorderableTablePanel<LayerGroupEntry>("layers", items, PROPERTIES) {
@@ -87,6 +91,9 @@ public class LayerGroupEntryPanel extends Panel {
             @Override
             protected Component getComponentForProperty(String id, IModel<LayerGroupEntry> itemModel,
                     Property<LayerGroupEntry> property) {
+                if (property == LAYER_TYPE) {
+                    return typeLink( id, itemModel );
+                }
                 if (property == LAYER) {
                     return layerLink( id, itemModel );
                 }
@@ -159,15 +166,41 @@ public class LayerGroupEntryPanel extends Panel {
                 popupWindow.show(target);
             }
         });
+
+        add( new AjaxLink<LayerGroupInfo>( "addStyleGroup" ) {
+
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                popupWindow.setInitialHeight( 375 );
+                popupWindow.setInitialWidth( 525 );
+                popupWindow.setTitle(new ParamResourceModel("chooseStyleGroup", this));
+                popupWindow.setContent( new StyleListPanel(popupWindow.getContentId(), new StyleListPanel.StyleListProvider()) {
+
+                    @Override
+                    protected void handleStyle(StyleInfo style, AjaxRequestTarget target) {
+                        popupWindow.close( target );
+                        items.add(new LayerGroupEntry( null, style ) );
+                        target.add( layerTable );
+                    }
+                });
+
+                popupWindow.show(target);
+            }
+        });
     }
     
     public List<LayerGroupEntry> getEntries() {
         return items;
     }
-    
+
+    Component typeLink(String id, IModel<LayerGroupEntry> itemModel) {
+        LayerGroupEntry entry = itemModel.getObject();
+        return new Label( id, "<i>"+entry.getType().toString()+"</i>").setEscapeModelStrings(false);
+    }
+
     Component layerLink(String id, IModel<LayerGroupEntry> itemModel) {
         LayerGroupEntry entry = itemModel.getObject();
-        return new Label( id, entry.getLayer().prefixedName());
+        return new Label( id, entry.getLayer() == null ? "" : entry.getLayer().prefixedName());
     }
     
     Component defaultStyleCheckbox(String id, IModel<LayerGroupEntry> itemModel) {
