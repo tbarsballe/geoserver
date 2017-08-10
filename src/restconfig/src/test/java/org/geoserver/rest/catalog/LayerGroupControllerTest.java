@@ -9,12 +9,20 @@ import static org.custommonkey.xmlunit.XMLAssert.assertXpathEvaluatesTo;
 import static org.custommonkey.xmlunit.XMLAssert.assertXpathExists;
 import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 import net.sf.json.JSON;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.geoserver.catalog.Catalog;
+import org.geoserver.catalog.Keyword;
 import org.geoserver.catalog.LayerGroupInfo;
 import org.geoserver.catalog.PublishedInfo;
 import org.geoserver.catalog.StyleInfo;
@@ -23,22 +31,23 @@ import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.referencing.CRS;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.w3c.dom.Document;
 
-import org.springframework.mock.web.MockHttpServletResponse;
-
+import java.util.ArrayList;
 import java.util.List;
 
 public class LayerGroupControllerTest extends CatalogRESTTestSupport {
     @Before
     public void revertChanges() throws Exception {
         removeLayerGroup(null, "nestedLayerGroupTest");
-        removeLayerGroup(null, "sfLayerGroup");
         removeLayerGroup(null, "citeLayerGroup");
+        removeLayerGroup(null, "sfLayerGroup");
         removeLayerGroup("sf", "workspaceLayerGroup");
         removeLayerGroup(null, "newLayerGroup");
         removeLayerGroup(null, "newLayerGroupWithTypeCONTAINER");
         removeLayerGroup(null, "newLayerGroupWithTypeEO");
+        removeLayerGroup(null, "newLayerGroupWithStyleGroup");
 
         LayerGroupInfo lg = catalog.getFactory().createLayerGroup();
         lg.setName("sfLayerGroup");
@@ -68,7 +77,11 @@ public class LayerGroupControllerTest extends CatalogRESTTestSupport {
         styles.add(null);
 
         lg2.setBounds(new ReferencedEnvelope(-180, -90, 180, 90, CRS.decode("EPSG:4326")));
+
         catalog.add(lg2);
+
+        // add some keywords to the CITE layer group
+        addKeywordsToLayerGroup("citeLayerGroup");
     }
 
     @Test
@@ -138,6 +151,26 @@ public class LayerGroupControllerTest extends CatalogRESTTestSupport {
         assertXpathEvaluatesTo("citeLayerGroup", "/layerGroup/name", dom );
         assertXpathEvaluatesTo( "6", "count(//published)", dom );
         assertXpathEvaluatesTo( "6", "count(//style)", dom );
+        assertXpathEvaluatesTo( "2", "count(//layerGroup/keywords/string)", dom );
+        assertXpathEvaluatesTo( "1", "count(//layerGroup/keywords[string='keyword1\\@language=en\\;\\@vocabulary=vocabulary1\\;'])", dom );
+        assertXpathEvaluatesTo( "1", "count(//layerGroup/keywords[string='keyword2\\@language=pt\\;\\@vocabulary=vocabulary2\\;'])", dom );
+        // check keywords were encoded
+
+    }
+
+    @Test
+    public void testGetAsXMLNestedLinks() throws Exception {
+        LayerGroupInfo cite = catalog.getLayerGroupByName("citeLayerGroup");
+        cite.getLayers().add(catalog.getLayerGroupByName("sfLayerGroup"));
+        cite.getStyles().add(null);
+        catalog.save(cite);
+
+        Document dom = getAsDOM( RestBaseController.ROOT_PATH + "/layergroups/citeLayerGroup.xml");
+        assertEquals( "layerGroup", dom.getDocumentElement().getNodeName() );
+        assertXpathEvaluatesTo("citeLayerGroup", "/layerGroup/name", dom );
+        assertXpathEvaluatesTo( "7", "count(//published)", dom );
+        assertXpathEvaluatesTo( "7", "count(//style)", dom );
+        assertXpathEvaluatesTo( "7", "count(//published/atom:link)", dom );
     }
 
     @Test
@@ -165,10 +198,23 @@ public class LayerGroupControllerTest extends CatalogRESTTestSupport {
 
         print(get(RestBaseController.ROOT_PATH + "/layergroups/citeLayerGroup.json"));
         json = getAsJSON( RestBaseController.ROOT_PATH + "/layergroups/citeLayerGroup.json");
-        arr = ((JSONObject)json).getJSONObject("layerGroup").getJSONObject("publishables").getJSONArray("published");
+        JSONObject layerGroup = ((JSONObject) json).getJSONObject("layerGroup");
+        arr = layerGroup.getJSONObject("publishables").getJSONArray("published");
         assertEquals(6, arr.size());
-        arr = ((JSONObject)json).getJSONObject("layerGroup").getJSONObject("styles").getJSONArray("style");
+        arr = layerGroup.getJSONObject("styles").getJSONArray("style");
         assertEquals(6, arr.size());
+        // check keywords were correctly encoded
+        assertThat(layerGroup.containsKey("keywords"), is(true));
+        JSONObject keywordsObject = layerGroup.getJSONObject("keywords");
+        assertThat(keywordsObject.containsKey("string"), is(true));
+        JSONArray keywords = keywordsObject.getJSONArray("string");
+        assertThat(keywords.size(), is(2));
+        // created a list of keywords so we can check is content with hamcrest
+        List<Object> keywordsList = new ArrayList<>();
+        keywordsList.addAll(keywords);
+        assertThat(keywordsList, containsInAnyOrder(
+                "keyword1\\@language=en\\;\\@vocabulary=vocabulary1\\;",
+                "keyword2\\@language=pt\\;\\@vocabulary=vocabulary2\\;"));
     }
 
 
@@ -297,19 +343,21 @@ public class LayerGroupControllerTest extends CatalogRESTTestSupport {
 
     @Test
     public void testPost() throws Exception {
-        String xml =
-                "<layerGroup>" +
-                        "<name>newLayerGroup</name>" +
-                        "<layers>" +
-                        "<layer>Ponds</layer>" +
-                        "<layer>Forests</layer>" +
-                        "</layers>" +
-                        "<styles>" +
-                        "<style>polygon</style>" +
-                        "<style>point</style>" +
-                        "</styles>" +
-                        "</layerGroup>";
-
+        String xml = "<layerGroup>" +
+                "    <name>newLayerGroup</name>" +
+                "    <layers>" +
+                "        <layer>Ponds</layer>" +
+                "        <layer>Forests</layer>" +
+                "    </layers>" +
+                "    <styles>" +
+                "        <style>polygon</style>" +
+                "        <style>point</style>" +
+                "    </styles>" +
+                "    <keywords>" +
+                "        <string>keyword1\\@language=en\\;\\@vocabulary=vocabulary1\\;</string>" +
+                "        <string>keyword2\\@language=pt\\;\\@vocabulary=vocabulary2\\;</string>" +
+                "    </keywords>" +
+                "</layerGroup>";
         MockHttpServletResponse response = postAsServletResponse(RestBaseController.ROOT_PATH + "/layergroups", xml );
         assertEquals( 201, response.getStatus() );
 
@@ -328,6 +376,72 @@ public class LayerGroupControllerTest extends CatalogRESTTestSupport {
         assertEquals( "point", lg.getStyles().get( 1 ).getName() );
 
         assertNotNull( lg.getBounds() );
+
+        // expected keywords
+        Keyword keyword1 = new Keyword("keyword1");
+        keyword1.setLanguage("en");
+        keyword1.setVocabulary("vocabulary1");
+        Keyword keyword2 = new Keyword("keyword2");
+        keyword2.setLanguage("pt");
+        keyword2.setVocabulary("vocabulary2");
+        // check that the keywords were correctly added
+        assertThat(lg.getKeywords().size(), is(2));
+        assertThat(lg.getKeywords(), containsInAnyOrder(keyword1, keyword2));
+    }
+
+    @Test
+    public void testPostWithStyleGroups() throws Exception{
+        // right now styleGroups need declared bounds to work
+        String xml = "<layerGroup>" +
+                "    <name>newLayerGroupWithStyleGroup</name>" +
+                "    <layers>" +
+                "        <layer>Ponds</layer>" +
+                "        <styleGroup></styleGroup>" +
+                "    </layers>" +
+                "    <styles>" +
+                "        <style>polygon</style>" +
+                "        <style>point</style>" +
+                "    </styles>" +
+                "    <bounds>" +
+                "       <minx>-180</minx>" +
+                "       <maxx>180</maxx>" +
+                "       <miny>-90</miny>" +
+                "       <maxy>90</maxy>" +
+                "    </bounds>" +
+                "    <keywords>" +
+                "        <string>keyword1\\@language=en\\;\\@vocabulary=vocabulary1\\;</string>" +
+                "        <string>keyword2\\@language=pt\\;\\@vocabulary=vocabulary2\\;</string>" +
+                "    </keywords>" +
+                "</layerGroup>";
+        MockHttpServletResponse response = postAsServletResponse(RestBaseController.ROOT_PATH + "/layergroups", xml );
+        assertEquals( 201, response.getStatus() );
+
+        assertNotNull( response.getHeader( "Location") );
+        assertTrue( response.getHeader("Location").endsWith( "/layergroups/newLayerGroupWithStyleGroup" ) );
+
+        LayerGroupInfo lg = catalog.getLayerGroupByName( "newLayerGroupWithStyleGroup");
+        assertNotNull( lg );
+
+        assertEquals( 2, lg.getLayers().size() );
+        assertEquals( "Ponds", lg.getLayers().get( 0 ).getName() );
+        assertNull( lg.getLayers().get( 1 ) );
+
+        assertEquals( 2, lg.getStyles().size() );
+        assertEquals( "polygon", lg.getStyles().get( 0 ).getName() );
+        assertEquals( "point", lg.getStyles().get( 1 ).getName() );
+
+        assertNotNull( lg.getBounds() );
+
+        // expected keywords
+        Keyword keyword1 = new Keyword("keyword1");
+        keyword1.setLanguage("en");
+        keyword1.setVocabulary("vocabulary1");
+        Keyword keyword2 = new Keyword("keyword2");
+        keyword2.setLanguage("pt");
+        keyword2.setVocabulary("vocabulary2");
+        // check that the keywords were correctly added
+        assertThat(lg.getKeywords().size(), is(2));
+        assertThat(lg.getKeywords(), containsInAnyOrder(keyword1, keyword2));
     }
 
     @Test

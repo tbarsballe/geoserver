@@ -42,6 +42,9 @@ import com.vividsolutions.jts.simplify.TopologyPreservingSimplifier;
 
 class PipelineBuilder {
 
+    // The base simplification tolerance for screen coordinates.
+    private static final double PIXEL_BASE_SAMPLE_SIZE = 0.25;
+
     static class Context {
 
         @Nullable
@@ -69,6 +72,7 @@ class PipelineBuilder {
 
         public double pixelSizeInTargetCRS; // approximate size of a pixel in the Target CRS
 
+        public int queryBuffer;
     }
 
     Context context;
@@ -85,21 +89,34 @@ class PipelineBuilder {
         this.context = context;
     }
 
+    /**
+     * 
+     * @param renderingArea The extent of the tile in target CRS
+     * @param paintArea The extent of the tile in screen/pixel coordinates
+     * @param sourceCrs The CRS of the features
+     * @param overSampleFactor Divisor for simplification tolerance.
+     * @return
+     * @throws FactoryException
+     */
     public static PipelineBuilder newBuilder(ReferencedEnvelope renderingArea, Rectangle paintArea,
-            CoordinateReferenceSystem sourceCrs, double overSampleFactor) throws FactoryException {
+            CoordinateReferenceSystem sourceCrs, double overSampleFactor, int queryBuffer)
+                    throws FactoryException {
 
-        Context context = createContext(renderingArea, paintArea, sourceCrs, overSampleFactor);
+        Context context = createContext(renderingArea, paintArea, sourceCrs, overSampleFactor, 
+                queryBuffer);
         return new PipelineBuilder(context);
     }
 
     private static Context createContext(ReferencedEnvelope mapArea, Rectangle paintArea,
-            CoordinateReferenceSystem sourceCrs, double overSampleFactor) throws FactoryException {
+            CoordinateReferenceSystem sourceCrs, double overSampleFactor, int queryBuffer)
+                    throws FactoryException {
 
         Context context = new Context();
         context.renderingArea = mapArea;
         context.paintArea = paintArea;
         context.sourceCrs = sourceCrs;
         context.worldToScreen = RendererUtilities.worldToScreenTransform(mapArea, paintArea);
+        context.queryBuffer = queryBuffer;
 
         final boolean wrap = false;
         context.projectionHandler = ProjectionHandlerFinder.getHandler(mapArea, sourceCrs, wrap);
@@ -129,7 +146,7 @@ class PipelineBuilder {
             throw Throwables.propagate(e);
         }
 
-        context.screenSimplificationDistance = 0.25 / overSampleFactor;
+        context.screenSimplificationDistance = PIXEL_BASE_SAMPLE_SIZE / overSampleFactor;
         // use min so generalize "less" (if pixel is different size in X and Y)
         context.targetCRSSimplificationDistance = Math.min(spans_targetCRS[0], spans_targetCRS[1])
                 / overSampleFactor;
@@ -142,16 +159,27 @@ class PipelineBuilder {
         return context;
     }
 
+    /**
+     * Prepares features for subsequent manipulation
+     * @return
+     */
     public PipelineBuilder preprocess() {
         addLast(new PreProcess(context.projectionHandler, context.screenMap));
         return this;
     }
 
+    /**
+     * Flatten singleton feature collections
+     * @return
+     */
     public PipelineBuilder collapseCollections() {
         addLast(new CollapseCollections());
         return this;
     }
 
+    /**
+     * @return the completed pipeline
+     */
     public Pipeline build() {
         return first;
     }
@@ -218,6 +246,11 @@ class PipelineBuilder {
 
     }
 
+    /**
+     * Transform from source CRS to target.
+     * @param transformToScreenCoordinates If true, further transfrorm from target to screen coordinates
+     * @return
+     */
     public PipelineBuilder transform(final boolean transformToScreenCoordinates) {
         final MathTransform sourceToScreen = context.sourceToScreen;
         final MathTransform sourceToTargetCrs = context.sourceToTargetCrs;
@@ -228,6 +261,11 @@ class PipelineBuilder {
         return this;
     }
 
+    /**
+     * Simplify the geometry
+     * @param isTransformToScreenCoordinates Use screen coordinate space simplification tolerance
+     * @return
+     */
     public PipelineBuilder simplify(boolean isTransformToScreenCoordinates) {
 
         double pixelDistance = context.screenSimplificationDistance;
@@ -240,6 +278,12 @@ class PipelineBuilder {
         return this;
     }
 
+    /**
+     * Clip to the area of the tile plus its gutter
+     * @param clipToMapBounds Do we actually want to clip.  Does nothing if false.
+     * @param transformToScreenCoordinates is the pipeline working in screen coordinates
+     * @return
+     */
     public PipelineBuilder clip(boolean clipToMapBounds, boolean transformToScreenCoordinates) {
         if (clipToMapBounds) {
 
@@ -249,12 +293,12 @@ class PipelineBuilder {
                 Rectangle screen = context.paintArea;
 
                 Envelope paintArea = new Envelope(0, screen.getWidth(), 0, screen.getHeight());
-                paintArea.expandBy(clipBBOXSizeIncreasePixels);
+                paintArea.expandBy(clipBBOXSizeIncreasePixels+context.queryBuffer);
 
                 clippingEnvelope = paintArea;
             } else {
                 ReferencedEnvelope renderingArea = context.renderingArea;
-                renderingArea.expandBy(clipBBOXSizeIncreasePixels * context.pixelSizeInTargetCRS);
+                renderingArea.expandBy((clipBBOXSizeIncreasePixels+context.queryBuffer) * context.pixelSizeInTargetCRS);
                 clippingEnvelope = renderingArea;
             }
 

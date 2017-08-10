@@ -19,6 +19,10 @@
   <name>GeoServer Web Application</name>
   <dependencies>
     <dependency>
+        <groupId>org.marlin</groupId>
+        <artifactId>marlin</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.geoserver.web</groupId>
       <artifactId>gs-web-core</artifactId>
       <version>${project.version}</version>
@@ -508,16 +512,6 @@
         <dependency>
           <groupId>org.geoserver.extension</groupId>
           <artifactId>gs-imagemosaic-jdbc</artifactId>
-          <version>${project.version}</version>
-        </dependency>
-      </dependencies>
-    </profile>
-    <profile>
-      <id>dem</id>
-      <dependencies>
-        <dependency>
-          <groupId>org.geoserver.community</groupId>
-          <artifactId>gs-dem</artifactId>
           <version>${project.version}</version>
         </dependency>
       </dependencies>
@@ -1514,6 +1508,11 @@
         <dependency>
           <groupId>org.geoserver.community</groupId>
           <artifactId>gs-oseo-core</artifactId>
+          <version>${project.version}</version>
+        </dependency>
+        <dependency>
+          <groupId>org.geoserver.community</groupId>
+          <artifactId>gs-oseo-rest</artifactId>
           <version>${project.version}</version>
         </dependency>
         <dependency>

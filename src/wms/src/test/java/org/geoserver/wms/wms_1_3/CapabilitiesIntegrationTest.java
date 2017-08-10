@@ -292,14 +292,20 @@ public class CapabilitiesIntegrationTest extends WMSTestSupport {
         info.setContent("http://my/metadata/link");
         lg.getMetadataLinks().add(info);
         getCatalog().add(lg);
+        // add keywords to layer group
+        addKeywordsToLayerGroup("MyLayerGroup");
         
         try {
-            Document doc = getAsDOM("wms?service=WMS&request=getCapabilities&version=1.1.1", true);
+            Document doc = getAsDOM("wms?service=WMS&request=getCapabilities&version=1.3.0", true);
             //print(doc);
-            assertXpathEvaluatesTo("1", "count(//Layer[Name='MyLayerGroup']/Attribution)", doc);
-            assertXpathEvaluatesTo("My Attribution", "//Layer[Name='MyLayerGroup']/Attribution/Title", doc);
-            assertXpathEvaluatesTo("1", "count(//Layer[Name='MyLayerGroup']/MetadataURL)", doc);
-            assertXpathEvaluatesTo("http://my/metadata/link", "//Layer[Name='MyLayerGroup']/MetadataURL/OnlineResource/@xlink:href", doc);
+            assertXpathEvaluatesTo("1", "count(//wms:Layer[wms:Name='MyLayerGroup']/wms:Attribution)", doc);
+            assertXpathEvaluatesTo("My Attribution", "//wms:Layer[wms:Name='MyLayerGroup']/wms:Attribution/wms:Title", doc);
+            assertXpathEvaluatesTo("1", "count(//wms:Layer[wms:Name='MyLayerGroup']/wms:MetadataURL)", doc);
+            assertXpathEvaluatesTo("http://my/metadata/link", "//wms:Layer[wms:Name='MyLayerGroup']/wms:MetadataURL/wms:OnlineResource/@xlink:href", doc);
+            // check keywords are present
+            assertXpathEvaluatesTo("2", "count(//wms:Layer[wms:Name='MyLayerGroup']/wms:KeywordList/wms:Keyword)", doc);
+            assertXpathEvaluatesTo("keyword1", "//wms:Layer[wms:Name='MyLayerGroup']/wms:KeywordList/wms:Keyword[@vocabulary='vocabulary1']", doc);
+            assertXpathEvaluatesTo("keyword2", "//wms:Layer[wms:Name='MyLayerGroup']/wms:KeywordList/wms:Keyword[@vocabulary='vocabulary2']", doc);
         } finally {    
             //clean up
             getCatalog().remove(lg);
@@ -829,26 +835,6 @@ public class CapabilitiesIntegrationTest extends WMSTestSupport {
         checkNumberSimilar(maxX, expectedBoundingBox.getMaxX(), 0.0001);
         checkNumberSimilar(minY, expectedBoundingBox.getMinY(), 0.0001);
         checkNumberSimilar(maxY, expectedBoundingBox.getMaxY(), 0.0001);
-    }
-
-    /**
-     * Check that a number represent by a string is similar to the expected number
-     * A number is considered similar to another if the difference between them is
-     * inferior or equal to the provided precision.
-     */
-    private void checkNumberSimilar(String rawValue, double expected, double precision) {
-        // try to extract a double value
-        assertThat(rawValue, is(notNullValue()));
-        assertThat(rawValue.trim().isEmpty(), is(false));
-        double value = 0;
-        try {
-            value = Double.parseDouble(rawValue);
-        } catch (NumberFormatException exception) {
-            fail(String.format("Value '%s' is not a number.", rawValue));
-        }
-        // compare the parsed double value with the expected one
-        double difference = Math.abs(expected - value);
-        assertThat(difference <= precision, is(true));
     }
 
     /**

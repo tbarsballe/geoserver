@@ -382,7 +382,7 @@
     </bean>
 	
 	<bean id="srsNameKvpParser" class="org.geoserver.wfs.kvp.SrsNameKvpParser"/>
-	<bean id="sortByKvpParser" class="org.geoserver.wfs.kvp.SortByKvpParser">
+	<bean id="sortByKvpParser" class="org.geoserver.ows.kvp.SortByKvpParser">
 		<constructor-arg ref="filterFactory"/>
 	</bean>
 	<bean id="expiryKvpParser" class="org.geoserver.ows.util.NumericKvpParser">
@@ -672,4 +672,8 @@
     <!-- XStream persister initializer -->
     <bean id="wfsXStreamPersisterInitializer" class="org.geoserver.wfs.WFSXStreamPersisterInitializer" />
 
+	  <!-- dispatcher callback that will enforce configured MIME type for WFS GML responses -->
+		<bean id="wfsGMLMimeTypeEnforcer" class="org.geoserver.wfs.WFSGMLMimeTypeEnforcer">
+			<constructor-arg ref="geoServer"/>
+		</bean>
 </beans>

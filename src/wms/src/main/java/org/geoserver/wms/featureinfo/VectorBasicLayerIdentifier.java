@@ -138,6 +138,7 @@ public class VectorBasicLayerIdentifier extends AbstractVectorLayerIdentifier {
         String typeName = schema.getName().getLocalPart();
         Query q = new Query(typeName, null, getFInfoFilter, maxFeatures, params.getPropertyNames(),
                 null);
+        q.setSortBy(params.getSort());
 
         // handle sql view params
         final Map<String, String> viewParams = params.getViewParams();
@@ -147,6 +148,11 @@ public class VectorBasicLayerIdentifier extends AbstractVectorLayerIdentifier {
 
         FeatureCollection match;
         LOGGER.log(Level.FINE, q.toString());
+        // let's see if we need to reproject
+        if (!wms.isFeaturesReprojectionDisabled()) {
+            // reproject the features to the request CRS, this way complex feature will also be reprojected
+            q.setCoordinateSystemReproject(requestedCRS);
+        }
         match = featureSource.getFeatures(q);
 
         // if we could not include the rules filter into the query, post process in

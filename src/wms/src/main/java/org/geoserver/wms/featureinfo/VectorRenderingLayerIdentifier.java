@@ -78,6 +78,7 @@ import org.opengis.filter.Filter;
 import org.opengis.filter.FilterFactory2;
 import org.opengis.filter.spatial.BBOX;
 import org.opengis.referencing.FactoryException;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.operation.TransformException;
 
 import com.vividsolutions.jts.geom.Envelope;
@@ -95,7 +96,7 @@ public class VectorRenderingLayerIdentifier extends AbstractVectorLayerIdentifie
     static final Logger LOGGER = Logging.getLogger(VectorRenderingLayerIdentifier.class);
     private static final String FEATURE_INFO_RENDERING_ENABLED_KEY = "org.geoserver.wms.featureinfo.render.enabled";
     protected static final int MIN_BUFFER_SIZE = Integer.getInteger("org.geoserver.wms.featureinfo.render.minBuffer", 3);
-    protected static boolean RENDERING_FEATUREINFO_ENABLED;
+    public static boolean RENDERING_FEATUREINFO_ENABLED;
     
     private WMS wms;
     private VectorBasicLayerIdentifier fallback;
@@ -203,7 +204,8 @@ public class VectorRenderingLayerIdentifier extends AbstractVectorLayerIdentifie
             rim.produceMap(mc);
             
             List<SimpleFeature> features = featureInfoListener.getFeatures();
-            return aggregateByFeatureType(features);
+
+            return aggregateByFeatureType(features, params.getRequestedCRS());
         } finally {
             mc.dispose();
         }
@@ -287,7 +289,7 @@ public class VectorRenderingLayerIdentifier extends AbstractVectorLayerIdentifie
         return result;
     }
 
-    private List<FeatureCollection> aggregateByFeatureType(List<? extends Feature> features) {
+    private List<FeatureCollection> aggregateByFeatureType(List<? extends Feature> features, CoordinateReferenceSystem targetcrs) {
         // group by feature type (rendering transformations might cause us to get more
         // than one type from the original layer)
         Map<FeatureType, List<Feature>> map = new HashMap<FeatureType, List<Feature>>();
@@ -312,7 +314,14 @@ public class VectorRenderingLayerIdentifier extends AbstractVectorLayerIdentifie
                 result.add(new ListComplexFeatureCollection(type, list));
             }
         }
-        
+
+        // let's see if we need to reproject
+        if (!wms.isFeaturesReprojectionDisabled()) {
+            // try to reproject to target CRS
+            return LayerIdentifierUtils.reproject(result, targetcrs);
+        }
+
+        // reprojection no allowed
         return result;
     }
 
@@ -338,6 +347,7 @@ public class VectorRenderingLayerIdentifier extends AbstractVectorLayerIdentifie
         final Query definitionQuery = new Query(featureSource.getSchema().getName().getLocalPart());
         definitionQuery.setVersion(getMap.getFeatureVersion());
         definitionQuery.setFilter(filter);
+        definitionQuery.setSortBy(params.getSort());
         Map<String, String> viewParams = params.getViewParams();
         if (viewParams != null) {
             definitionQuery.setHints(new Hints(Hints.VIRTUAL_TABLE_PARAMETERS, viewParams));
