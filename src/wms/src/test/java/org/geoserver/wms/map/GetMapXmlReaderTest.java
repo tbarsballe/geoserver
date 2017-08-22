@@ -12,11 +12,10 @@ import java.util.HashMap;
 
 import junit.framework.Test;
 
-import org.geoserver.catalog.CatalogBuilder;
-import org.geoserver.catalog.CatalogFactory;
-import org.geoserver.catalog.LayerGroupInfo;
+import org.geoserver.catalog.*;
 import org.geoserver.config.GeoServerLoader;
 import org.geoserver.data.test.MockData;
+import org.geoserver.data.test.SystemTestData;
 import org.geoserver.ows.Dispatcher;
 import org.geoserver.platform.ServiceException;
 import org.geoserver.test.ows.KvpRequestReaderTestSupport;
@@ -50,6 +49,11 @@ public class GetMapXmlReaderTest extends KvpRequestReaderTestSupport {
         gi.getStyles().add(getCatalog().getStyleByName("polygon"));
         cb.calculateLayerGroupBounds(gi);
         getCatalog().add(gi);
+
+    }
+
+    protected void onSetUp(SystemTestData testData) throws IOException {
+        testData.addStyle("BasicStyleGroup", "BasicStyleGroup.sld", GetMapKvpRequestReaderTest.class, getCatalog());
     }
     
     @Override
@@ -84,6 +88,32 @@ public class GetMapXmlReaderTest extends KvpRequestReaderTestSupport {
 
         assertEquals(1, request.getStyles().size());
         Style expected = getCatalog().getStyleByName("polygon").getStyle();
+        Style style = request.getStyles().get(0);
+        assertEquals(expected, style);
+    }
+
+    public void testResolveLayersForStyleGroup() throws Exception {
+        Catalog catalog = getCatalog();
+        LayerGroupInfo lg = catalog.getFactory().createLayerGroup();
+        LayerInfo l = null;
+        StyleInfo s = catalog.getStyleByName("BasicStyleGroup");
+
+        lg.setName("styleGroup");
+        lg.getLayers().add(null);
+        lg.getStyles().add(s);
+        catalog.add(lg);
+
+        GetMapRequest request = (GetMapRequest) reader.createRequest();
+        BufferedReader input = getResourceInputStream("WMSPostLayerGroupWithStyleGroup.xml");
+
+        request = (GetMapRequest) reader.read(request, input, new HashMap());
+
+        String layer = MockData.BASIC_POLYGONS.getLocalPart();
+        assertEquals(1, request.getLayers().size());
+        assertTrue(request.getLayers().get(0).getName().endsWith(layer));
+
+        assertEquals(1, request.getStyles().size());
+        Style expected = getCatalog().getStyleByName("BasicStyleGroup").getStyle();
         Style style = request.getStyles().get(0);
         assertEquals(expected, style);
     }

@@ -5,44 +5,18 @@
  */
 package org.geoserver.wms.map;
 
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.junit.Assert.assertThat;
-
-import java.awt.Color;
-import java.awt.geom.Point2D;
-import java.io.Serializable;
-import java.net.URL;
-import java.net.URLDecoder;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.TimeZone;
-
-import javax.media.jai.InterpolationBicubic;
-import javax.media.jai.InterpolationBilinear;
-import javax.media.jai.InterpolationNearest;
-
-import org.geoserver.catalog.CatalogBuilder;
-import org.geoserver.catalog.CatalogFactory;
-import org.geoserver.catalog.LayerGroupInfo;
-import org.geoserver.catalog.LayerInfo;
-import org.geoserver.catalog.PublishedType;
+import junit.framework.Test;
+import org.geoserver.catalog.*;
 import org.geoserver.config.GeoServerInfo;
 import org.geoserver.config.GeoServerLoader;
 import org.geoserver.data.test.MockData;
+import org.geoserver.data.test.SystemTestData;
 import org.geoserver.ows.Dispatcher;
 import org.geoserver.ows.kvp.URLKvpParser;
 import org.geoserver.platform.ServiceException;
 import org.geoserver.test.RemoteOWSTestSupport;
 import org.geoserver.test.ows.KvpRequestReaderTestSupport;
-import org.geoserver.wms.GetMapRequest;
-import org.geoserver.wms.MapLayerInfo;
-import org.geoserver.wms.WMS;
-import org.geoserver.wms.WMSInfo;
-import org.geoserver.wms.WMSInfoImpl;
+import org.geoserver.wms.*;
 import org.geoserver.wms.kvp.PaletteManager;
 import org.geotools.factory.CommonFactoryFinder;
 import org.geotools.styling.Style;
@@ -53,7 +27,20 @@ import org.opengis.filter.PropertyIsEqualTo;
 import org.opengis.filter.sort.SortBy;
 import org.opengis.filter.sort.SortOrder;
 
-import junit.framework.Test;
+import javax.media.jai.InterpolationBicubic;
+import javax.media.jai.InterpolationBilinear;
+import javax.media.jai.InterpolationNearest;
+import java.awt.*;
+import java.awt.geom.Point2D;
+import java.io.IOException;
+import java.io.Serializable;
+import java.net.URL;
+import java.net.URLDecoder;
+import java.util.*;
+import java.util.List;
+
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.junit.Assert.assertThat;
 
 @SuppressWarnings("unchecked")
 public class GetMapKvpRequestReaderTest extends KvpRequestReaderTestSupport {
@@ -97,6 +84,19 @@ public class GetMapKvpRequestReaderTest extends KvpRequestReaderTestSupport {
         gi2.getStyles().add(getCatalog().getStyleByName("raster"));
         cb.calculateLayerGroupBounds(gi2);
         getCatalog().add(gi2);
+
+    }
+
+    protected void onSetUp(SystemTestData testData) throws IOException {
+        testData.addStyle("BasicStyleGroup", "BasicStyleGroup.sld", GetMapKvpRequestReaderTest.class, getCatalog());
+        Catalog catalog = getCatalog();
+        LayerGroupInfo lg = catalog.getFactory().createLayerGroup();
+        StyleInfo s = catalog.getStyleByName("BasicStyleGroup");
+
+        lg.setName("styleGroup");
+        lg.getLayers().add(null);
+        lg.getStyles().add(s);
+        catalog.add(lg);
     }
 
     @Override
@@ -529,6 +529,19 @@ public class GetMapKvpRequestReaderTest extends KvpRequestReaderTestSupport {
         final Style style = (Style) request.getStyles().get(0);
         assertNotNull(style);
         assertEquals("TheLibraryModeStyle", style.getName());
+    }
+
+    public void testStyleGroup() throws Exception {
+        // asserts the a layerGroup can be created with null layer and a styleGroup sld
+        HashMap kvp = new HashMap();
+        kvp.put("layers", "styleGroup");
+        kvp.put("styles", "");
+
+        GetMapRequest request = (GetMapRequest) reader.createRequest();
+        request = (GetMapRequest) reader.read(request, parseKvp(kvp), kvp);
+
+        assertNotNull(request.getLayers());
+        assertNotNull(request.getStyles());
     }
 
     public void testSldFailLookup() throws Exception {
