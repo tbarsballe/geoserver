@@ -53,7 +53,16 @@ public class GetMapXmlReaderTest extends KvpRequestReaderTestSupport {
     }
 
     protected void onSetUp(SystemTestData testData) throws IOException {
-        testData.addStyle("BasicStyleGroup", "BasicStyleGroup.sld", GetMapKvpRequestReaderTest.class, getCatalog());
+        testData.addStyle("BasicStyleGroup", "BasicStyleGroup.sld", GetMapXmlReaderTest.class, getCatalog());
+
+        Catalog catalog = getCatalog();
+        LayerGroupInfo lg = catalog.getFactory().createLayerGroup();
+        StyleInfo s = catalog.getStyleByName("BasicStyleGroup");
+
+        lg.setName("styleGroup");
+        lg.getLayers().add(null);
+        lg.getStyles().add(s);
+        catalog.add(lg);
     }
     
     @Override
@@ -93,16 +102,6 @@ public class GetMapXmlReaderTest extends KvpRequestReaderTestSupport {
     }
 
     public void testResolveLayersForStyleGroup() throws Exception {
-        Catalog catalog = getCatalog();
-        LayerGroupInfo lg = catalog.getFactory().createLayerGroup();
-        LayerInfo l = null;
-        StyleInfo s = catalog.getStyleByName("BasicStyleGroup");
-
-        lg.setName("styleGroup");
-        lg.getLayers().add(null);
-        lg.getStyles().add(s);
-        catalog.add(lg);
-
         GetMapRequest request = (GetMapRequest) reader.createRequest();
         BufferedReader input = getResourceInputStream("WMSPostLayerGroupWithStyleGroup.xml");
 
@@ -113,7 +112,7 @@ public class GetMapXmlReaderTest extends KvpRequestReaderTestSupport {
         assertTrue(request.getLayers().get(0).getName().endsWith(layer));
 
         assertEquals(1, request.getStyles().size());
-        Style expected = getCatalog().getStyleByName("BasicStyleGroup").getStyle();
+        Style expected = getCatalog().getStyleByName("styleGroup").getStyle();
         Style style = request.getStyles().get(0);
         assertEquals(expected, style);
     }
