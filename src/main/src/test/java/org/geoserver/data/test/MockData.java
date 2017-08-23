@@ -84,7 +84,7 @@ public class MockData implements TestData {
      */
     public static final String KEY_NATIVE_ENVELOPE = "native_envelope";
     static final Envelope DEFAULT_ENVELOPE = new Envelope(-180,180,-90,90);
-    
+
     // //// WMS 1.1.1
     /**
      * WMS 1.1.1 cite namespace + uri
@@ -203,17 +203,17 @@ public class MockData implements TestData {
     public static QName ROTATED_CAD = new QName(WCS_URI, "RotatedCad", WCS_PREFIX);
     public static QName WORLD = new QName(WCS_URI, "World", WCS_PREFIX);
     public static String TIFF = "tiff";
-    
+
     // DEFAULT
     public static String DEFAULT_PREFIX = "gs";
     public static String DEFAULT_URI = "http://geoserver.org";
 
     // public static QName ENTIT\u00C9G\u00C9N\u00C9RIQUE = new QName( SF_URI,
     // "Entit\u00E9G\u00E9n\u00E9rique", SF_PREFIX );
-    
+
     // Extra types
     public static QName GEOMETRYLESS = new QName(CITE_URI, "Geometryless", CITE_PREFIX);
-    
+
     /**
      * List of all cite types names
      */
@@ -224,7 +224,7 @@ public class MockData implements TestData {
             DELETES, FIFTEEN, INSERTS, LOCKS, NULLS, OTHER, SEVEN, UPDATES, LINES, MLINES, MPOINTS,
             MPOLYGONS, POINTS, POLYGONS, // WFS 1.1
             PRIMITIVEGEOFEATURE, AGGREGATEGEOFEATURE, GENERICENTITY, GEOMETRYLESS /* ENTIT\u00C9G\u00C9N\u00C9RIQUE */
-        };
+    };
 
     /**
      * List of wms type names.
@@ -232,7 +232,7 @@ public class MockData implements TestData {
     public static QName[] WMS_TYPENAMES = new QName[] {
             BASIC_POLYGONS, BRIDGES, BUILDINGS, DIVIDED_ROUTES, FORESTS, LAKES, MAP_NEATLINE,
             NAMED_PLACES, PONDS, ROAD_SEGMENTS, STREAMS
-        };
+    };
 
     /**
      * List of wfs 1.0 type names.
@@ -240,15 +240,15 @@ public class MockData implements TestData {
     public static QName[] WFS10_TYPENAMES = new QName[] {
             DELETES, FIFTEEN, INSERTS, LOCKS, NULLS, OTHER, SEVEN, UPDATES, LINES, MLINES, MPOINTS,
             MPOLYGONS, POINTS, POLYGONS
-        };
+    };
 
     /**
      * List of wfs 1.1 type names.
      */
     public static QName[] WFS11_TYPENAMES = new QName[] {
             PRIMITIVEGEOFEATURE, AGGREGATEGEOFEATURE, GENERICENTITY /* ENTIT\u00C9G\u00C9N\u00C9RIQUE */
-        };
-    
+    };
+
     /**
      * map of qname to srs
      */
@@ -267,7 +267,7 @@ public class MockData implements TestData {
 
     /** the 'featureTypes' directory, under 'data' */
     File featureTypes;
-    
+
     /** the 'coverages' directory, under 'data' */
     File coverages;
 
@@ -282,32 +282,32 @@ public class MockData implements TestData {
 
     /** the 'templates' director under 'data' */
     File templates;
-    
+
     /** The datastore definition map */
     HashMap dataStores = new HashMap();
-    
+
     /** The set of disabled data stores */
     Set disabledDataStores = new HashSet();
-    
+
     /** The datastore to namespace map */
     private HashMap dataStoreNamepaces = new HashMap();
-    
+
     /** The namespaces map */
     private HashMap namespaces = new HashMap();
-    
+
     /** The styles map */
     private HashMap layerStyles = new HashMap();
-    
+
     /** The coverage store map */
     private HashMap coverageStores = new HashMap();
-    
+
     /** The set of disabled coverage stores */
     Set disabledCoverageStores = new HashSet();
-    
+
     /** The coverage store id to namespace map */
     private HashMap coverageStoresNamespaces = new HashMap();
 
-    
+
     public MockData() throws IOException {
         // setup the root
         data = IOUtils.createRandomDirectory("./target", "mock", "data");
@@ -317,7 +317,7 @@ public class MockData implements TestData {
         // create a featureTypes directory
         featureTypes = new File(data, "featureTypes");
         featureTypes.mkdir();
-        
+
         // create a coverages directory
         coverages = new File(data, "coverages");
         coverages.mkdir();
@@ -339,18 +339,18 @@ public class MockData implements TestData {
         //templates
         templates = new File(data, "templates");
         templates.mkdir();
-        
+
         // setup basic map information
         namespaces.put(DEFAULT_PREFIX, DEFAULT_URI);
         namespaces.put("", DEFAULT_URI);
         layerStyles.put("Default", "Default.sld");
     }
-    
+
     public void setUp() throws IOException {
         setUpCatalog();
         copyTo(MockData.class.getResourceAsStream("services.xml"), "services.xml");
     }
-    
+
     public boolean isTestDataAvailable() {
         return true;
     }
@@ -368,14 +368,14 @@ public class MockData implements TestData {
     public File getFeatureTypesDirectory() {
         return featureTypes;
     }
-    
+
     /**
      * @return the "coverages" directory under the root
      */
     public File getCoveragesDirectory() {
         return coverages;
     }
-    
+
     /**
      * Copies some content to a file under the base of the data directory.
      * <p>
@@ -390,12 +390,12 @@ public class MockData implements TestData {
      * @param location A relative path
      */
     public void copyTo(InputStream input, String location)
-        throws IOException {
+            throws IOException {
         IOUtils.copy(input, new File(getDataDirectoryRoot(), location));
     }
-    
+
     /**
-     * Copies some content to a file udner a specific feature type directory 
+     * Copies some content to a file udner a specific feature type directory
      * of the data directory.
      * Example:
      * <p>
@@ -405,21 +405,21 @@ public class MockData implements TestData {
      * </p>
      * @param input The content to copy.
      * @param featureTypeName The name of the feature type.
-     * @param location The resulting location to copy to relative to the 
+     * @param location The resulting location to copy to relative to the
      *  feautre type directory.
      */
     public void copyToFeatureTypeDirectory(InputStream input, QName featureTypeName, String location )
-        throws IOException {
-        
-        copyTo(input, "featureTypes" + File.separator + featureTypeName.getPrefix() 
+            throws IOException {
+
+        copyTo(input, "featureTypes" + File.separator + featureTypeName.getPrefix()
                 + "_" + featureTypeName.getLocalPart() + File.separator + location );
     }
-    
+
     /**
      * Adds the list of well known types to the data directory. Well known types
      * are listed as constants in the MockData class header, and are organized
      * as arrays based on the cite test they do come from
-     * 
+     *
      * @param names
      * @throws IOException
      */
@@ -429,10 +429,10 @@ public class MockData implements TestData {
             addWellKnownType(name, null);
         }
     }
-    
+
     /**
      * Adds a single well known type with the custom properties specified
-     * 
+     *
      * @param name
      * @param extraProperties The extra properties to be used
      * @throws IOException
@@ -445,7 +445,7 @@ public class MockData implements TestData {
             styleName = name.getLocalPart();
             addStyle(styleName, style);
         }
-        
+
         if(extraProperties == null)
             addPropertiesType(name, properties, Collections.singletonMap(KEY_STYLE, styleName));
         else {
@@ -454,7 +454,7 @@ public class MockData implements TestData {
             addPropertiesType(name, properties, props);
         }
     }
-    
+
     public void removeFeatureType(QName typeName) throws IOException {
         String prefix = typeName.getPrefix();
         String type = typeName.getLocalPart();
@@ -473,16 +473,16 @@ public class MockData implements TestData {
                     + featureTypeDir.getAbsolutePath());
         }
     }
-    
+
     /**
      * Adds the "well known" coverage types to the data directory.
-     * 
+     *
      * @deprecated use {@link #addWcs11Coverages()}
      */
     public void addWellKnownCoverageTypes() throws Exception {
         addWcs11Coverages();
     }
-    
+
     /**
      * Adds the wcs 1.0 coverages.
      */
@@ -490,14 +490,14 @@ public class MockData implements TestData {
         URL style = MockData.class.getResource("raster.sld");
         String styleName = "raster";
         addStyle(styleName, style);
-        
+
         //wcs 1.0
         //addCoverage(GTOPO_DEM, TestData.class.getResource("W020N90/W020N90.manifest"),
         //        "dem", styleName);
-        
+
         addCoverageFromZip(USA_WORLDIMG, TestData.class.getResource("usa.zip"), PNG, styleName);
     }
-    
+
     /**
      * Adds the wcs 1.1 coverages.
      */
@@ -505,7 +505,7 @@ public class MockData implements TestData {
         URL style = MockData.class.getResource("raster.sld");
         String styleName = "raster";
         addStyle(styleName, style);
-        
+
         //wcs 1.1
         addCoverage(TASMANIA_DEM, TestData.class.getResource("tazdem.tiff"),
                 TIFF, styleName);
@@ -516,7 +516,7 @@ public class MockData implements TestData {
         addCoverage(WORLD, TestData.class.getResource("world.tiff"),
                 TIFF, styleName);
     }
-    
+
     /**
      * Adds the specified style to the data directory
      * @param styleId the style id
@@ -532,7 +532,7 @@ public class MockData implements TestData {
 
     /**
      * Adds a property file as a feature type in a property datastore.
-     * 
+     *
      * @param name
      *            the fully qualified name of the feature type. The prefix and
      *            namespace URI will be used to create a namespace, the prefix
@@ -549,16 +549,16 @@ public class MockData implements TestData {
         // sanitize input params
         if(extraParams == null)
             extraParams = Collections.EMPTY_MAP;
-        
+
         // setup the type directory if needed
         File directory = new File(data, name.getPrefix());
         if ( !directory.exists() ) {
-            directory.mkdir();    
+            directory.mkdir();
         }
-        
+
         // create the properties file
         File f = new File(directory, name.getLocalPart() + ".properties");
-        
+
         // copy over the contents
         InputStream propertiesContents;
         if(properties == null)
@@ -566,11 +566,11 @@ public class MockData implements TestData {
         else
             propertiesContents = properties.openStream();
         IOUtils.copy( propertiesContents, f );
-        
+
         // write the info file
         info(name, extraParams);
-        
-        // setup the meta information to be written in the catalog 
+
+        // setup the meta information to be written in the catalog
         namespaces.put(name.getPrefix(), name.getNamespaceURI());
         dataStoreNamepaces.put(name.getPrefix(), name.getPrefix());
         Map params = new HashMap();
@@ -578,7 +578,7 @@ public class MockData implements TestData {
         params.put(PropertyDataStoreFactory.NAMESPACE.key, name.getNamespaceURI());
         dataStores.put(name.getPrefix(), params);
     }
-    
+
     /**
      * Adds a new coverage.
      *<p>
@@ -596,36 +596,36 @@ public class MockData implements TestData {
     public void addCoverage(QName name, URL coverage, String extension, String styleName) throws Exception {
         if (extension == null)
             throw new IllegalArgumentException("Use addCoverageFromZip instead of passing NULL");
-        
+
         File directory = new File(data, name.getPrefix());
         if ( !directory.exists() ) {
-            directory.mkdir();    
+            directory.mkdir();
         }
-        
+
         // create the coverage file
         File f = new File(directory, name.getLocalPart() + "." + extension);
-        
+
         IOUtils.copy( coverage.openStream(), f );
-        
+
         addCoverageFromPath(name, f, "file:" + name.getPrefix() + "/" + name.getLocalPart() + "." + extension, styleName);
     }
-    
+
     public void addCoverageFromZip(QName name, URL coverage, String extension, String styleName) throws Exception {
         File directory = new File(data, name.getPrefix());
         if (!directory.exists()) {
             directory.mkdir();
         }
-        
+
         File f = new File(directory, name.getLocalPart());
         f.mkdir();
-        
+
         File compressedFile = new File(f, name.getLocalPart() + ".zip");
         IOUtils.copy(coverage.openStream(), compressedFile);
         IOUtils.decompress(compressedFile,  f);
         final File srcDir = new File(f, name.getLocalPart());
         srcDir.mkdir();
         FileUtils.copyDirectory(srcDir,  f, true);
-        
+
         if (extension != null) {
             File coverageFile = new File(srcDir, name.getLocalPart() + "." + extension);
             addCoverageFromPath(name, coverageFile,
@@ -637,11 +637,11 @@ public class MockData implements TestData {
                     styleName);
         }
     }
-    
+
     private void addCoverageFromPath(QName name, File coverage, String relpath, String styleName) throws Exception {
         coverageInfo(name, coverage, styleName);
 
-        // setup the meta information to be written in the catalog 
+        // setup the meta information to be written in the catalog
         AbstractGridFormat format = (AbstractGridFormat) GridFormatFinder.findFormat(coverage);
         namespaces.put(name.getPrefix(), name.getNamespaceURI());
         coverageStoresNamespaces.put(name.getLocalPart(), name.getPrefix());
@@ -650,7 +650,7 @@ public class MockData implements TestData {
         params.put(CatalogWriter.COVERAGE_URL_KEY, relpath);
         coverageStores.put(name.getLocalPart(), params);
     }
-    
+
     /**
      * Disables the specificed datastore (it's still configured, but with enabled=false)
      * @param datastoreId
@@ -658,7 +658,7 @@ public class MockData implements TestData {
     public void disableDataStore(String datastoreId) {
         disabledDataStores.add(datastoreId);
     }
-    
+
     /**
      * Disables the specificed coveragestore (it's still configured, but with enabled=false)
      * @param datastoreId
@@ -666,18 +666,18 @@ public class MockData implements TestData {
     public void disableCoverageStore(String datastoreId) {
         disabledCoverageStores.add(datastoreId);
     }
-    
+
     /**
-     * Populates a map with prefix to namespace uri mappings for all the 
-     * mock data namespaces. 
+     * Populates a map with prefix to namespace uri mappings for all the
+     * mock data namespaces.
      */
     public void registerNamespaces(Map<String,String> namespaces) {
-        namespaces.put(MockData.CITE_PREFIX, MockData.CITE_URI); 
+        namespaces.put(MockData.CITE_PREFIX, MockData.CITE_URI);
         namespaces.put(MockData.CDF_PREFIX, MockData.CDF_URI);
         namespaces.put(MockData.CGF_PREFIX, MockData.CGF_URI);
         namespaces.put(MockData.SF_PREFIX, MockData.SF_URI);
     }
-    
+
     /**
      * Sets up the catalog in the data directory
      *
@@ -696,29 +696,29 @@ public class MockData implements TestData {
     void properties(QName name) throws IOException {
         // copy over the properties file
         InputStream from = MockData.class.getResourceAsStream(name.getLocalPart() + ".properties");
-        
+
         File directory = new File(data, name.getPrefix());
         directory.mkdir();
 
         File to = new File(directory, name.getLocalPart() + ".properties");
-        IOUtils.copy(from, to);     
+        IOUtils.copy(from, to);
     }
 
     void info(QName name, Map<String, Object> extraParams) throws IOException {
         String type = name.getLocalPart();
         String prefix = name.getPrefix();
-        
+
         // prepare extra params default
         Map<String, Object> params = new HashMap<String, Object>();
         params.put(KEY_STYLE, "Default");
         params.put(KEY_ALIAS, null);
-        
+
         Integer srs = SRS.get( name );
         if ( srs == null ) {
             srs = 4326;
         }
         params.put(KEY_SRS_NUMBER, srs);
-        
+
         // override with whatever the user provided
         params.putAll(extraParams);
 
@@ -746,7 +746,7 @@ public class MockData implements TestData {
             } else if(handling instanceof Number) {
                 srsHandling = ((Number) params.get(KEY_SRS_HANDLINGS)).intValue();
             }
-        } 
+        }
         writer.write("<SRSHandling>" + srsHandling +  "</SRSHandling>");
         writer.write("<title>" + type + "</title>");
         writer.write("<abstract>abstract about " + type + "</abstract>");
@@ -777,7 +777,7 @@ public class MockData implements TestData {
         writer.close();
     }
 
-    
+
     void coverageInfo(QName name, File coverageFile, String styleName) throws Exception {
         String coverage = name.getLocalPart();
 
@@ -786,7 +786,7 @@ public class MockData implements TestData {
 
         File info = new File(coverageDir, "info.xml");
         info.createNewFile();
-        
+
         // let's grab the necessary metadata
         AbstractGridFormat format = (AbstractGridFormat) GridFormatFinder.findFormat(coverageFile);
         GridCoverage2DReader reader;
@@ -796,7 +796,7 @@ public class MockData implements TestData {
             String message = "Exception while trying to read " + coverageFile.getCanonicalPath() + " with format" + format.getName();
             throw new RuntimeException(message, e);
         }
-        
+
         if (reader == null) {
             throw new RuntimeException("No reader for " + coverageFile.getCanonicalPath() + " with format " + format.getName());
         }
@@ -811,7 +811,7 @@ public class MockData implements TestData {
         if(styleName == null)
             styleName = "raster";
         writer.write("<styles default=\"" + styleName + "\"/>\n");
-        
+
         // envelope
         CoordinateReferenceSystem crs = reader.getCoordinateReferenceSystem();
         GeneralEnvelope envelope = reader.getOriginalEnvelope();
@@ -821,7 +821,7 @@ public class MockData implements TestData {
         writer.write("<pos>" + wgs84envelope.getMinimum(0) + " " + wgs84envelope.getMinimum(1) + "</pos>\n");
         writer.write("<pos>" + wgs84envelope.getMaximum(0) + " " + wgs84envelope.getMaximum(1) + "</pos>\n");
         writer.write("</envelope>\n");
-        
+
         /**
          * Now reading a fake small GridCoverage just to retrieve meta information:
          * - calculating a new envelope which is 1/20 of the original one
@@ -834,22 +834,22 @@ public class MockData implements TestData {
         double[] maxCP = new double[] {
                 minCP[0] + (envelope.getSpan(0) / 20.0),
                 minCP[1] + (envelope.getSpan(1) / 20.0)
-            };
+        };
         final GeneralEnvelope subEnvelope = new GeneralEnvelope(minCP, maxCP);
         subEnvelope.setCoordinateReferenceSystem(reader.getCoordinateReferenceSystem());
 
         parameters.put(AbstractGridFormat.READ_GRIDGEOMETRY2D.getName().toString(),
-            new GridGeometry2D(reader.getOriginalGridRange(), subEnvelope));
+                new GridGeometry2D(reader.getOriginalGridRange(), subEnvelope));
         GridCoverage2D gc = (GridCoverage2D) reader.read(CoverageUtils.getParameters(readParams, parameters,
-                    true));
-        
+                true));
+
         // grid geometry
         final GridGeometry geometry = gc.getGridGeometry();
         final int dimensions = geometry.getGridRange().getDimension();
         String lower = "";
         String upper = "";
         for(int i = 0; i < dimensions; i++) {
-            lower = lower + geometry.getGridRange().getLow(i) + " "; 
+            lower = lower + geometry.getGridRange().getLow(i) + " ";
             upper = upper + geometry.getGridRange().getHigh(i) + " ";
         }
         writer.write("<grid dimension = \"" + dimensions + "\">\n");
@@ -862,16 +862,16 @@ public class MockData implements TestData {
         if(geometry.getGridToCRS() instanceof AffineTransform) {
             AffineTransform aTX = (AffineTransform) geometry.getGridToCRS();
             writer.write("<geoTransform>");
-                writer.write("<scaleX>" + aTX.getScaleX() + "</scaleX>\n");
-                writer.write("<scaleY>" + aTX.getScaleY() + "</scaleY>\n");
-                writer.write("<shearX>" + aTX.getShearX() + "</shearX>\n");
-                writer.write("<shearY>" + aTX.getShearY() + "</shearY>\n");
-                writer.write("<translateX>" + aTX.getTranslateX() + "</translateX>\n");
-                writer.write("<translateY>" + aTX.getTranslateY() + "</translateY>\n");
-            writer.write("</geoTransform>\n");                    
+            writer.write("<scaleX>" + aTX.getScaleX() + "</scaleX>\n");
+            writer.write("<scaleY>" + aTX.getScaleY() + "</scaleY>\n");
+            writer.write("<shearX>" + aTX.getShearX() + "</shearX>\n");
+            writer.write("<shearY>" + aTX.getShearY() + "</shearY>\n");
+            writer.write("<translateX>" + aTX.getTranslateX() + "</translateX>\n");
+            writer.write("<translateY>" + aTX.getTranslateY() + "</translateY>\n");
+            writer.write("</geoTransform>\n");
         }
         writer.write("</grid>\n");
-        
+
         // coverage dimensions
         final GridSampleDimension[] sd = gc.getSampleDimensions();
         for (int i = 0; i < sd.length; i++) {
@@ -883,43 +883,43 @@ public class MockData implements TestData {
             writer.write("</interval>\n");
             final List<Category> categories = sd[i].getCategories();
             if (categories != null && categories.size() >= 1) {
-				writer.write("<nullValues>\n");
-				for (Iterator<Category> it = sd[i].getCategories().iterator(); it
-						.hasNext();) {
-					Category cat = (Category) it.next();
-					if ((cat != null)
-							&& cat.getName().toString().equalsIgnoreCase(
-									"no data")) {
-						double min = cat.getRange().getMinimum();
-						double max = cat.getRange().getMaximum();
-						writer.write("<value>" + min + "</value>\n");
-						if (min != max)
-							writer.write("<value>" + max + "</value>\n");
-					}
-				}
-				writer.write("</nullValues>\n");
-			}
+                writer.write("<nullValues>\n");
+                for (Iterator<Category> it = sd[i].getCategories().iterator(); it
+                        .hasNext();) {
+                    Category cat = (Category) it.next();
+                    if ((cat != null)
+                            && cat.getName().toString().equalsIgnoreCase(
+                            "no data")) {
+                        double min = cat.getRange().getMinimum();
+                        double max = cat.getRange().getMaximum();
+                        writer.write("<value>" + min + "</value>\n");
+                        if (min != max)
+                            writer.write("<value>" + max + "</value>\n");
+                    }
+                }
+                writer.write("</nullValues>\n");
+            }
             else
-            	 writer.write("<nullValues/>\n");
+                writer.write("<nullValues/>\n");
             writer.write("</CoverageDimension>\n");
         }
-        
+
         // supported crs
         writer.write("<supportedCRSs>\n");
         writer.write("<requestCRSs>" + nativeCrsName + "</requestCRSs>\n");
         writer.write("<responseCRSs>" + nativeCrsName + "</responseCRSs>\n");
         writer.write("</supportedCRSs>\n");
-        
+
         // supported formats
         writer.write("<supportedFormats nativeFormat = \"" + format.getName() + "\">\n");
         writer.write("<formats>ARCGRID,ARCGRID-GZIP,GEOTIFF,PNG,GIF,TIFF</formats>\n");
         writer.write("</supportedFormats>\n");
-        
+
         // supported interpolations
         writer.write("<supportedInterpolations default = \"nearest neighbor\">\n");
         writer.write("<interpolationMethods>nearest neighbor</interpolationMethods>\n");
         writer.write("</supportedInterpolations>\n");
-        
+
         // the end
         writer.write("</coverage>\n");
         writer.flush();
