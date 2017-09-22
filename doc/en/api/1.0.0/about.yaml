@@ -39,6 +39,16 @@ paths:
           description: | 
             The manifest parameter is used to filter over resulting resource (manifest) names attribute using Java regular expressions.
           required: false
+        - name: from
+          description: Must be used with `to`. Filter the results to include only resource (manifest) names between `from` and `to` (inclusive).
+          type: string
+          in: query
+          required: false
+        - name: to
+          description: Must be used with `from`. Filter the results to include only resource (manifest) names between `from` and `to` (inclusive).
+          type: string
+          in: query
+          required: false
         - name: key
           type: string
           in: query
@@ -174,18 +184,47 @@ paths:
                       <Specification-Title>Wicket Core</Specification-Title>
                   </resource>    
               </about>
+    put:
+      operationId: putManifest
+      description: Invalid. Manifests cannot be updated through the REST API.
+      responses:
+        405:
+          description: Method Not Allowed
+    post:
+      operationId: postManifest
+      description: Invalid. Manifests cannot be created through the REST API.
+      responses:
+        405:
+          description: Method Not Allowed
+    delete:
+      operationId: deleteManifest
+      description: Invalid. Manifests cannot be deleted through the REST API.
+      responses:
+        405:
+          description: Method Not Allowed
   /about/version:
     get:
+      operationId: getVersion
       description: |
-        'This endpoint shows only the details for the high-level components: GeoServer, GeoTools, and GeoWebCache.'
+        This endpoint shows only the details for the high-level components: GeoServer, GeoTools, and GeoWebCache.
 
-        Use the "Accept:" header to specify format or append an extension to the endpoint (example "/about/manifest.xml" for XML).'
+        Use the "Accept:" header to specify format or append an extension to the endpoint (example "/about/manifest.xml" for XML).
       parameters:
         - name: manifest
           type: string 
           in: query
           description: | 
             The manifest parameter is used to filter over resulting resource (manifest) names attribute using Java regular expressions.
+          required: false
+        - name: from
+          description: Must be used with `to`. Filter the results to include only resource (manifest) names between `from` and `to` (inclusive).
+          type: string
+          in: query
+          required: false
+        - name: to
+          description: Must be used with `from`. Filter the results to include only resource (manifest) names between `from` and `to` (inclusive).
+          type: string
+          in: query
           required: false
         - name: key
           type: string
@@ -231,32 +270,32 @@ paths:
                     }
                   ]
                 }
-              }                            
+              }
+    put:
+      operationId: putVersion
+      description: Invalid. Versions cannot be updated through the REST API.
+      responses:
+        405:
+          description: Method Not Allowed
+    post:
+      operationId: postVersion
+      description: Invalid. Versions cannot be created through the REST API.
+      responses:
+        405:
+          description: Method Not Allowed
+    delete:
+      operationId: deleteVersion
+      description: Invalid. Versions cannot be deleted through the REST API.
+      responses:
+        405:
+          description: Method Not Allowed
   /about/status:
     get:
+      operationId: getStatus
       description: |
         This endpoint shows the status details of all installed and configured modules. Status details always include human readable name, and module name. Optional details include version, availability, status message, and links to documentation.
 
-        Use the "Accept:" header to specify format or append an extension to the endpoint (example "/about/manifest.xml" for XML).
-      parameters:
-        - name: manifest
-          type: string 
-          in: query
-          description: | 
-            The manifest parameter is used to filter over resulting resource (manifest) names attribute using Java regular expressions.
-          required: false
-        - name: key
-          type: string
-          in: query
-          description: |
-            Only return manifest entries with this key in their properties. It can be optionally combined with the value parameter. 
-          required: false
-        - name: value
-          type: string
-          in: query
-          description: |
-            Only return manifest entries that have this value for the provided key parameter.          
-          required: false
+        Use the "Accept:" header to specify format or append an extension to the endpoint (example "/about/status.xml" for XML).
       responses:
         200:
           description: Successfully retrieved status details.
@@ -378,9 +417,82 @@ paths:
                   <isAvailable>true</isAvailable>
                 </status>
               </about>
-        
+    put:
+      operationId: putStatus
+      description: Invalid. Status cannot be updated through the REST API.
+      responses:
+        405:
+          description: Method Not Allowed
+    post:
+      operationId: postStatus
+      description: Invalid. Status cannot be created through the REST API.
+      responses:
+        405:
+          description: Method Not Allowed
+    delete:
+      operationId: deleteStatus
+      description: Invalid. Status cannot be deleted through the REST API.
+      responses:
+        405:
+          description: Method Not Allowed
+  /about/status/{target}:
+    get:
+      operationId: getStatusTarget
+      description: |
+        This endpoint shows the status details of a single installed modules. Status details always include human readable name, and module name. Optional details include version, availability, status message, and links to documentation.
 
-          
+        Use the "Accept:" header to specify format or append an extension to the endpoint (example "/about/status.xml" for XML).
+      parameters:
+        - name: target
+          type: string 
+          in: path
+          description: The name of the module to retrieve status details for.
+          required: true
+      responses:
+        200:
+          description: Successfully retrieved status details.
+          schema:
+            $ref: "#/definitions/Status"
+          examples: 
+            application/json: |
+              {"about": {
+                  "status": [
+                    {
+                      "module": "gs-web-core",
+                      "name": "GeoServer Web UI Core",
+                      "isEnabled": true,
+                      "isAvailable": true
+                    }
+                  ]
+                }
+              }
+            application/xml: |
+              <about>
+                <status>
+                  <module>gs-web-core</module>
+                  <name>GeoServer Web UI Core</name>
+                  <isEnabled>true</isEnabled>
+                  <isAvailable>true</isAvailable>
+                </status>
+              </about>
+    put:
+      operationId: putStatusTarget
+      description: Invalid. Status cannot be updated through the REST API.
+      responses:
+        405:
+          description: Method Not Allowed
+    post:
+      operationId: postStatusTarget
+      description: Invalid. Status cannot be created through the REST API.
+      responses:
+        405:
+          description: Method Not Allowed
+    delete:
+      operationId: deleteStatusTarget
+      description: Invalid. Status cannot be deleted through the REST API.
+      responses:
+        405:
+          description: Method Not Allowed
 
 
 definitions:

@@ -10,7 +10,7 @@ paths:
     get:
       operationId: getFonts
       summary: Get a list of fonts
-      description: Displays a list of all fonts on the server. You must use the "Accept:" header to specify format or append an extension to the endpoint (example "/fonts.xml" for XML)
+      description: Displays a list of all fonts on the server. You may use the "Accept:" header to specify format or append an extension to the endpoint (example "/fonts.xml" for XML)
       produces:
         - application/json
         - application/xml
