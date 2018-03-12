@@ -11,12 +11,11 @@ import org.geoserver.catalog.StyleInfo;
 @SuppressWarnings("serial")
 public class StyleChoiceRenderer extends ChoiceRenderer<StyleInfo> {
 
-    public Object getDisplayValue(StyleInfo object) {
-        return object.prefixedName();
-    }
+  public Object getDisplayValue(StyleInfo object) {
+    return object.prefixedName();
+  }
 
-    public String getIdValue(StyleInfo object, int index) {
-        return object.getId();
-    }
-
+  public String getIdValue(StyleInfo object, int index) {
+    return object.getId();
+  }
 }

@@ -5,39 +5,35 @@
  */
 package org.geoserver.template;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
 import freemarker.ext.beans.BeansWrapper;
 import freemarker.ext.beans.MapModel;
 import freemarker.template.TemplateModel;
 import freemarker.template.TemplateModelException;
 import freemarker.template.TemplateSequenceModel;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
-
-/**
- * A freemarker model that's at the same time a sequence and a map
- */
+/** A freemarker model that's at the same time a sequence and a map */
 public class SequenceMapModel extends MapModel implements TemplateSequenceModel {
-    private ArrayList list;
+  private ArrayList list;
 
-    public SequenceMapModel(Map map, BeansWrapper wrapper) {
-        super(map, wrapper);
+  public SequenceMapModel(Map map, BeansWrapper wrapper) {
+    super(map, wrapper);
 
-        this.list = new ArrayList(map.values());
-    }
+    this.list = new ArrayList(map.values());
+  }
 
-    public TemplateModel get(int index) throws TemplateModelException {
-        return wrap(list.get(index));
-    }
+  public TemplateModel get(int index) throws TemplateModelException {
+    return wrap(list.get(index));
+  }
 
-    protected Set keySet() {
-        // override, just return the map contents
-        Set set = new HashSet();
-        set.addAll(((Map) object).keySet());
+  protected Set keySet() {
+    // override, just return the map contents
+    Set set = new HashSet();
+    set.addAll(((Map) object).keySet());
 
-        return set;
-    }
+    return set;
+  }
 }

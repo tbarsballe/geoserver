@@ -5,14 +5,12 @@
  */
 package org.geoserver.ows;
 
-
-
 public class MessageKvpParser extends KvpParser {
-    public MessageKvpParser() {
-        super("message", Message.class);
-    }
+  public MessageKvpParser() {
+    super("message", Message.class);
+  }
 
-    public Object parse(String value) throws Exception {
-        return new Message(value);
-    }
+  public Object parse(String value) throws Exception {
+    return new Message(value);
+  }
 }

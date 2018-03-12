@@ -7,19 +7,17 @@ package org.geoserver.rest.catalog;
 
 import org.geoserver.platform.resource.Resource;
 
-/**
- * Data transfer info object, used to transport template name.
- */
+/** Data transfer info object, used to transport template name. */
 public class TemplateInfo {
 
-    private String name;
+  private String name;
 
-    public TemplateInfo(Resource resource) {
-        name = resource.name();
-    }
+  public TemplateInfo(Resource resource) {
+    name = resource.name();
+  }
 
-    /** Resource name of Freemarker Template. */
-    public String getName() {
-        return name;
-    }
+  /** Resource name of Freemarker Template. */
+  public String getName() {
+    return name;
+  }
 }

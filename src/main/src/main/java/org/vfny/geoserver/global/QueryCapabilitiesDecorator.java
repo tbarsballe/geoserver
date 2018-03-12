@@ -9,42 +9,39 @@ import org.geotools.data.QueryCapabilities;
 import org.opengis.filter.sort.SortBy;
 
 /**
- * Decorates a given query capabilities, subclasses should override
- * methods they inded to change
- * 
- * @author Andrea Aime - GeoSolutions
+ * Decorates a given query capabilities, subclasses should override methods they inded to change
  *
+ * @author Andrea Aime - GeoSolutions
  */
 abstract class QueryCapabilitiesDecorator extends QueryCapabilities {
-    QueryCapabilities delegate;
-    
-    public QueryCapabilitiesDecorator(QueryCapabilities delegate) {
-        super();
-        this.delegate = delegate;
-    }
+  QueryCapabilities delegate;
 
-    public boolean isOffsetSupported() {
-        return delegate.isOffsetSupported();
-    }
+  public QueryCapabilitiesDecorator(QueryCapabilities delegate) {
+    super();
+    this.delegate = delegate;
+  }
 
-    public boolean supportsSorting(SortBy[] sortAttributes) {
-        return delegate.supportsSorting(sortAttributes);
-    }
+  public boolean isOffsetSupported() {
+    return delegate.isOffsetSupported();
+  }
 
-    public boolean isReliableFIDSupported() {
-        return delegate.isReliableFIDSupported();
-    }
+  public boolean supportsSorting(SortBy[] sortAttributes) {
+    return delegate.supportsSorting(sortAttributes);
+  }
 
-    public boolean isUseProvidedFIDSupported() {
-        return delegate.isUseProvidedFIDSupported();
-    }
+  public boolean isReliableFIDSupported() {
+    return delegate.isReliableFIDSupported();
+  }
 
-    public boolean isJoiningSupported() {
-        return delegate.isJoiningSupported();
-    }
+  public boolean isUseProvidedFIDSupported() {
+    return delegate.isUseProvidedFIDSupported();
+  }
 
-    public boolean isVersionSupported() {
-        return delegate.isVersionSupported();
-    }
-    
+  public boolean isJoiningSupported() {
+    return delegate.isJoiningSupported();
+  }
+
+  public boolean isVersionSupported() {
+    return delegate.isVersionSupported();
+  }
 }

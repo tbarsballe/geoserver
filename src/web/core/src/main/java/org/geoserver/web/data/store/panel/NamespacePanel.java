@@ -13,48 +13,51 @@ import org.apache.wicket.model.PropertyModel;
 
 /**
  * A label + namespace dropdown form panel
- * 
+ *
  * @author Gabriel Roldan
  */
 @SuppressWarnings("serial")
 public class NamespacePanel extends Panel {
 
-    //private final DropDownChoice choice;
+  // private final DropDownChoice choice;
 
-    private Label nsLabel;
-    
-    public NamespacePanel(final String componentId, final IModel selectedItemModel,
-            final IModel paramLabelModel, final boolean required) {
-        // make the value of the combo field the model of this panel, for easy
-        // value retrieval
-        super(componentId, selectedItemModel);
+  private Label nsLabel;
 
-        // the label
-        String requiredMark = required ? " *" : ""; 
-        Label label = new Label("paramName", paramLabelModel.getObject() + requiredMark);
-        add(label);
+  public NamespacePanel(
+      final String componentId,
+      final IModel selectedItemModel,
+      final IModel paramLabelModel,
+      final boolean required) {
+    // make the value of the combo field the model of this panel, for easy
+    // value retrieval
+    super(componentId, selectedItemModel);
 
-        nsLabel = new Label("paramValue", new PropertyModel(selectedItemModel, "URI"));
-        nsLabel.setOutputMarkupId(true);
-        add(nsLabel);
-        /*
-        // the drop down field, with a decorator for validations
-        choice = new DropDownChoice("paramValue", selectedItemModel, new NamespacesModel(),
-                new NamespaceChoiceRenderer());
-        choice.setRequired(required);
-        // set the label to be the paramLabelModel otherwise a validation error would look like
-        // "Parameter 'paramValue' is required"
-        choice.setLabel(paramLabelModel);
-        choice.setOutputMarkupId(true);
+    // the label
+    String requiredMark = required ? " *" : "";
+    Label label = new Label("paramName", paramLabelModel.getObject() + requiredMark);
+    add(label);
 
-        FormComponentFeedbackBorder feedback = new FormComponentFeedbackBorder("border");
-        feedback.add(choice);
-        add(feedback);
-        */
-    }
+    nsLabel = new Label("paramValue", new PropertyModel(selectedItemModel, "URI"));
+    nsLabel.setOutputMarkupId(true);
+    add(nsLabel);
+    /*
+    // the drop down field, with a decorator for validations
+    choice = new DropDownChoice("paramValue", selectedItemModel, new NamespacesModel(),
+            new NamespaceChoiceRenderer());
+    choice.setRequired(required);
+    // set the label to be the paramLabelModel otherwise a validation error would look like
+    // "Parameter 'paramValue' is required"
+    choice.setLabel(paramLabelModel);
+    choice.setOutputMarkupId(true);
 
-    public Component getFormComponent() {
-        //return choice;
-        return nsLabel;
-    }
+    FormComponentFeedbackBorder feedback = new FormComponentFeedbackBorder("border");
+    feedback.add(choice);
+    add(feedback);
+    */
+  }
+
+  public Component getFormComponent() {
+    // return choice;
+    return nsLabel;
+  }
 }

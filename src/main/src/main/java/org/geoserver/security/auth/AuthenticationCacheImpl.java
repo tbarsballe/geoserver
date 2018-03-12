@@ -10,34 +10,32 @@ import org.springframework.security.core.Authentication;
 
 /**
  * @author mcr
- *
- * Null implementation doing nothing
+ *     <p>Null implementation doing nothing
  */
 public class AuthenticationCacheImpl implements AuthenticationCache {
 
-    @Override
-    public void removeAll() {
-    }
+  @Override
+  public void removeAll() {}
 
-    @Override
-    public void removeAll(String filterName) {
-    }
+  @Override
+  public void removeAll(String filterName) {}
 
-    @Override
-    public void remove(String filterName, String cacheKey) {
-    }
+  @Override
+  public void remove(String filterName, String cacheKey) {}
 
-    @Override
-    public Authentication get(String filterName, String cacheKey) {
-        return null;
-    }
+  @Override
+  public Authentication get(String filterName, String cacheKey) {
+    return null;
+  }
 
-    @Override
-    public void put(String filterName, String cacheKey, Authentication auth,
-            Integer timeToIdleSeconds, Integer timeToLiveSeconds) {
-    }
+  @Override
+  public void put(
+      String filterName,
+      String cacheKey,
+      Authentication auth,
+      Integer timeToIdleSeconds,
+      Integer timeToLiveSeconds) {}
 
-    @Override
-    public void put(String filterName, String cacheKey, Authentication auth) {
-    }
+  @Override
+  public void put(String filterName, String cacheKey, Authentication auth) {}
 }

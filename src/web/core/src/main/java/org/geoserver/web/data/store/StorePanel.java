@@ -35,7 +35,7 @@ import org.geoserver.web.wicket.SimpleBookmarkableLink;
 
 /**
  * Panel listing the configured StoreInfo object on a table
- * 
+ *
  * @author Justin Deoliveira
  * @author Gabriel Roldan
  * @version $Id$
@@ -45,102 +45,123 @@ import org.geoserver.web.wicket.SimpleBookmarkableLink;
 @SuppressWarnings("serial")
 public class StorePanel extends GeoServerTablePanel<StoreInfo> {
 
-    private static final long serialVersionUID = 5957961031378924960L;
+  private static final long serialVersionUID = 5957961031378924960L;
 
-    private ModalWindow popupWindow;
+  private ModalWindow popupWindow;
 
-    public StorePanel(String id, StoreProvider provider, boolean selectable) {
-        super(id, provider, selectable);
+  public StorePanel(String id, StoreProvider provider, boolean selectable) {
+    super(id, provider, selectable);
 
-        // the popup window for messages
-        popupWindow = new ModalWindow("popupWindow");
-        add(popupWindow);
+    // the popup window for messages
+    popupWindow = new ModalWindow("popupWindow");
+    add(popupWindow);
+  }
+
+  private Catalog getCatalog() {
+    return GeoServerApplication.get().getCatalog();
+  }
+
+  @Override
+  protected Component getComponentForProperty(
+      String id, IModel<StoreInfo> itemModel, Property<StoreInfo> property) {
+
+    final CatalogIconFactory icons = CatalogIconFactory.get();
+
+    if (property == StoreProvider.DATA_TYPE) {
+      final StoreInfo storeInfo = (StoreInfo) itemModel.getObject();
+
+      PackageResourceReference storeIcon = icons.getStoreIcon(storeInfo);
+
+      Fragment f = new Fragment(id, "iconFragment", StorePanel.this);
+      f.add(new Image("storeIcon", storeIcon));
+
+      return f;
+    } else if (property == WORKSPACE) {
+      return workspaceLink(id, itemModel);
+    } else if (property == NAME) {
+      return storeNameLink(id, itemModel);
+    } else if (property == ENABLED) {
+      final StoreInfo storeInfo = (StoreInfo) itemModel.getObject();
+      PackageResourceReference enabledIcon;
+      if (storeInfo.isEnabled()) {
+        enabledIcon = icons.getEnabledIcon();
+      } else {
+        enabledIcon = icons.getDisabledIcon();
+      }
+      Fragment f = new Fragment(id, "iconFragment", StorePanel.this);
+      f.add(new Image("storeIcon", enabledIcon));
+      return f;
     }
+    return null;
+  }
 
-    private Catalog getCatalog() {
-        return GeoServerApplication.get().getCatalog();
+  private Component storeNameLink(String id, final IModel itemModel) {
+    String wsName = (String) WORKSPACE.getModel(itemModel).getObject();
+    IModel storeNameModel = NAME.getModel(itemModel);
+    String storeName = (String) storeNameModel.getObject();
+    StoreInfo store = getCatalog().getStoreByName(wsName, storeName, StoreInfo.class);
+    if (store instanceof DataStoreInfo) {
+      return new SimpleBookmarkableLink(
+          id,
+          DataAccessEditPage.class,
+          storeNameModel,
+          DataAccessEditPage.STORE_NAME,
+          storeName,
+          DataAccessEditPage.WS_NAME,
+          wsName);
+    } else if (store instanceof CoverageStoreInfo) {
+      return new SimpleBookmarkableLink(
+          id,
+          CoverageStoreEditPage.class,
+          storeNameModel,
+          DataAccessEditPage.STORE_NAME,
+          storeName,
+          DataAccessEditPage.WS_NAME,
+          wsName);
+    } else if (store instanceof WMSStoreInfo) {
+      return new SimpleBookmarkableLink(
+          id,
+          WMSStoreEditPage.class,
+          storeNameModel,
+          DataAccessEditPage.STORE_NAME,
+          storeName,
+          DataAccessEditPage.WS_NAME,
+          wsName);
+    } else if (store instanceof WMTSStoreInfo) {
+      return new SimpleBookmarkableLink(
+          id,
+          WMTSStoreEditPage.class,
+          storeNameModel,
+          DataAccessEditPage.STORE_NAME,
+          storeName,
+          DataAccessEditPage.WS_NAME,
+          wsName);
+    } else {
+      throw new RuntimeException("Don't know what to do with this store " + store);
     }
+  }
 
-    @Override
-    protected Component getComponentForProperty(String id, IModel<StoreInfo> itemModel,
-            Property<StoreInfo> property) {
+  private Component workspaceLink(String id, IModel itemModel) {
+    IModel nameModel = WORKSPACE.getModel(itemModel);
+    return new SimpleBookmarkableLink(
+        id, WorkspaceEditPage.class, nameModel, "name", (String) nameModel.getObject());
+  }
 
-        final CatalogIconFactory icons = CatalogIconFactory.get();
+  protected Component removeLink(String id, final IModel itemModel) {
+    StoreInfo info = (StoreInfo) itemModel.getObject();
 
-        if (property == StoreProvider.DATA_TYPE) {
-            final StoreInfo storeInfo = (StoreInfo) itemModel.getObject();
+    ResourceModel resRemove = new ResourceModel("removeStore", "Remove");
 
-            PackageResourceReference storeIcon = icons.getStoreIcon(storeInfo);
+    ParamResourceModel confirmRemove =
+        new ParamResourceModel("confirmRemoveStoreX", this, info.getName());
 
-            Fragment f = new Fragment(id, "iconFragment", StorePanel.this);
-            f.add(new Image("storeIcon", storeIcon));
-
-            return f;
-        } else if (property == WORKSPACE) {
-            return workspaceLink(id, itemModel);
-        } else if (property == NAME) {
-            return storeNameLink(id, itemModel);
-        } else if (property == ENABLED) {
-            final StoreInfo storeInfo = (StoreInfo) itemModel.getObject();
-            PackageResourceReference enabledIcon;
-            if (storeInfo.isEnabled()) {
-                enabledIcon = icons.getEnabledIcon();
-            } else {
-                enabledIcon = icons.getDisabledIcon();
-            }
-            Fragment f = new Fragment(id, "iconFragment", StorePanel.this);
-            f.add(new Image("storeIcon", enabledIcon));
-            return f;
-        }
-        return null;
-    }
-
-    private Component storeNameLink(String id, final IModel itemModel) {
-        String wsName = (String) WORKSPACE.getModel(itemModel).getObject();
-        IModel storeNameModel = NAME.getModel(itemModel);
-        String storeName = (String) storeNameModel.getObject();
-        StoreInfo store = getCatalog().getStoreByName(wsName, storeName, StoreInfo.class);
-        if(store instanceof DataStoreInfo) {
-            return new SimpleBookmarkableLink(id, DataAccessEditPage.class, storeNameModel, 
-                    DataAccessEditPage.STORE_NAME, storeName, 
-                    DataAccessEditPage.WS_NAME, wsName);
-        } else if(store instanceof CoverageStoreInfo){
-            return new SimpleBookmarkableLink(id, CoverageStoreEditPage.class, storeNameModel, 
-                    DataAccessEditPage.STORE_NAME, storeName, 
-                    DataAccessEditPage.WS_NAME, wsName);
-        } else if(store instanceof WMSStoreInfo){
-            return new SimpleBookmarkableLink(id, WMSStoreEditPage.class, storeNameModel, 
-                    DataAccessEditPage.STORE_NAME, storeName, 
-                    DataAccessEditPage.WS_NAME, wsName);
-        } else if(store instanceof WMTSStoreInfo){
-            return new SimpleBookmarkableLink(id, WMTSStoreEditPage.class, storeNameModel, 
-                    DataAccessEditPage.STORE_NAME, storeName, 
-                    DataAccessEditPage.WS_NAME, wsName);
-        }else {
-            throw new RuntimeException("Don't know what to do with this store " + store);
-        }
-    }
-
-    private Component workspaceLink(String id, IModel itemModel) {
-        IModel nameModel = WORKSPACE.getModel(itemModel);
-        return new SimpleBookmarkableLink(id, WorkspaceEditPage.class, nameModel, 
-                "name", (String) nameModel.getObject());
-    }
-
-    protected Component removeLink(String id, final IModel itemModel) {
-        StoreInfo info = (StoreInfo) itemModel.getObject();
-
-        ResourceModel resRemove = new ResourceModel("removeStore", "Remove");
-
-        ParamResourceModel confirmRemove = new ParamResourceModel("confirmRemoveStoreX", this, info
-                .getName());
-
-        SimpleAjaxLink linkPanel = new ConfirmationAjaxLink(id, null, resRemove, confirmRemove) {
-            public void onClick(AjaxRequestTarget target) {
-                getCatalog().remove((StoreInfo) itemModel.getObject());
-                target.add(StorePanel.this);
-            }
+    SimpleAjaxLink linkPanel =
+        new ConfirmationAjaxLink(id, null, resRemove, confirmRemove) {
+          public void onClick(AjaxRequestTarget target) {
+            getCatalog().remove((StoreInfo) itemModel.getObject());
+            target.add(StorePanel.this);
+          }
         };
-        return linkPanel;
-    }
+    return linkPanel;
+  }
 }

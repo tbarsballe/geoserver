@@ -6,14 +6,11 @@
 package org.geoserver.ows.xml.v1_0;
 
 import javax.xml.namespace.QName;
-
 import net.opengis.ows10.AcceptFormatsType;
 import net.opengis.ows10.Ows10Factory;
-
 import org.geotools.xml.AbstractComplexBinding;
 import org.geotools.xml.ElementInstance;
 import org.geotools.xml.Node;
-
 
 /**
  * Binding object for the type http://www.opengis.net/ows:AcceptFormatsType.
@@ -32,40 +29,39 @@ import org.geotools.xml.Node;
  * @generated
  */
 public class AcceptFormatsTypeBinding extends AbstractComplexBinding {
-    Ows10Factory owsfactory;
+  Ows10Factory owsfactory;
 
-    public AcceptFormatsTypeBinding(Ows10Factory owsfactory) {
-        this.owsfactory = owsfactory;
-    }
+  public AcceptFormatsTypeBinding(Ows10Factory owsfactory) {
+    this.owsfactory = owsfactory;
+  }
 
-    /**
-     * @generated
-     */
-    public QName getTarget() {
-        return OWS.ACCEPTFORMATSTYPE;
-    }
+  /** @generated */
+  public QName getTarget() {
+    return OWS.ACCEPTFORMATSTYPE;
+  }
 
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     *
-     * @generated modifiable
-     */
-    public Class getType() {
-        return AcceptFormatsType.class;
-    }
+  /**
+   *
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   *
+   * @generated modifiable
+   */
+  public Class getType() {
+    return AcceptFormatsType.class;
+  }
 
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     *
-     * @generated modifiable
-     */
-    public Object parse(ElementInstance instance, Node node, Object value)
-        throws Exception {
-        AcceptFormatsType acceptFormats = owsfactory.createAcceptFormatsType();
-        acceptFormats.getOutputFormat().addAll(node.getChildValues("OutputFormat"));
+  /**
+   *
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   *
+   * @generated modifiable
+   */
+  public Object parse(ElementInstance instance, Node node, Object value) throws Exception {
+    AcceptFormatsType acceptFormats = owsfactory.createAcceptFormatsType();
+    acceptFormats.getOutputFormat().addAll(node.getChildValues("OutputFormat"));
 
-        return acceptFormats;
-    }
+    return acceptFormats;
+  }
 }

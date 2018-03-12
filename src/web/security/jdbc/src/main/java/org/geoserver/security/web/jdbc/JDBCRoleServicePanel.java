@@ -14,17 +14,17 @@ import org.geoserver.security.web.role.RoleServicePanel;
 
 /**
  * Configuration panel for {@link JDBCRoleService}.
- *  
+ *
  * @author Justin Deoliveira, OpenGeo
  */
 public class JDBCRoleServicePanel extends RoleServicePanel<JDBCRoleServiceConfig> {
 
-    public JDBCRoleServicePanel(String id, IModel<JDBCRoleServiceConfig> model) {
-        super(id, model);
+  public JDBCRoleServicePanel(String id, IModel<JDBCRoleServiceConfig> model) {
+    super(id, model);
 
-        add(new JDBCConnectionPanel("cx", model));
-        add(new CheckBox("creatingTables"));
-        add(new TextField("propertyFileNameDDL"));
-        add(new TextField("propertyFileNameDML"));
-    }
+    add(new JDBCConnectionPanel("cx", model));
+    add(new CheckBox("creatingTables"));
+    add(new TextField("propertyFileNameDDL"));
+    add(new TextField("propertyFileNameDML"));
+  }
 }

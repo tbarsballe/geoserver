@@ -14,98 +14,97 @@ import java.util.TreeMap;
  * Map decorator which makes String keys case-insensitive.
  *
  * @author Justin Deoliveira, The Open Planning Project, jdeolive@openplans.org
- *
  */
 public class CaseInsensitiveMap implements Map {
-    Map delegate = new TreeMap();
+  Map delegate = new TreeMap();
 
-    public CaseInsensitiveMap(Map delegate) {
-        putAll(delegate);
+  public CaseInsensitiveMap(Map delegate) {
+    putAll(delegate);
+  }
+
+  public void clear() {
+    delegate.clear();
+  }
+
+  public boolean containsKey(Object key) {
+    return delegate.containsKey(upper(key));
+  }
+
+  public boolean containsValue(Object value) {
+    return delegate.containsValue(value);
+  }
+
+  public Set entrySet() {
+    return delegate.entrySet();
+  }
+
+  public boolean equals(Object o) {
+    return delegate.equals(o);
+  }
+
+  public Object get(Object key) {
+    return delegate.get(upper(key));
+  }
+
+  public int hashCode() {
+    return delegate.hashCode();
+  }
+
+  public boolean isEmpty() {
+    return delegate.isEmpty();
+  }
+
+  public Set keySet() {
+    return delegate.keySet();
+  }
+
+  public Object put(Object key, Object value) {
+    return delegate.put(upper(key), value);
+  }
+
+  public void putAll(Map t) {
+    // make sure to upcase all keys
+    for (Object entry : t.entrySet()) {
+      Object key = ((Entry) entry).getKey();
+      Object value = ((Entry) entry).getValue();
+      put(key, value);
+    }
+  }
+
+  public Object remove(Object key) {
+    return delegate.remove(upper(key));
+  }
+
+  public int size() {
+    return delegate.size();
+  }
+
+  public Collection values() {
+    return delegate.values();
+  }
+
+  Object upper(Object key) {
+    if ((key != null) && key instanceof String) {
+      return ((String) key).toUpperCase();
     }
 
-    public void clear() {
-        delegate.clear();
-    }
+    return key;
+  }
 
-    public boolean containsKey(Object key) {
-        return delegate.containsKey(upper(key));
-    }
+  @Override
+  public String toString() {
+    return delegate.toString();
+  }
 
-    public boolean containsValue(Object value) {
-        return delegate.containsValue(value);
+  /**
+   * Wraps a map in case insensitive one.
+   *
+   * <p>If the instance is already a case insensitive map it is returned as is.
+   */
+  public static Map wrap(Map other) {
+    if (other instanceof CaseInsensitiveMap) {
+      return other;
     }
-
-    public Set entrySet() {
-        return delegate.entrySet();
-    }
-
-    public boolean equals(Object o) {
-        return delegate.equals(o);
-    }
-
-    public Object get(Object key) {
-        return delegate.get(upper(key));
-    }
-
-    public int hashCode() {
-        return delegate.hashCode();
-    }
-
-    public boolean isEmpty() {
-        return delegate.isEmpty();
-    }
-
-    public Set keySet() {
-        return delegate.keySet();
-    }
-
-    public Object put(Object key, Object value) {
-        return delegate.put(upper(key), value);
-    }
-
-    public void putAll(Map t) {
-        // make sure to upcase all keys
-        for (Object entry : t.entrySet()) {
-            Object key = ((Entry) entry).getKey();
-            Object value = ((Entry) entry).getValue();
-            put(key, value);
-        }
-    }
-
-    public Object remove(Object key) {
-        return delegate.remove(upper(key));
-    }
-
-    public int size() {
-        return delegate.size();
-    }
-
-    public Collection values() {
-        return delegate.values();
-    }
-
-    Object upper(Object key) {
-        if ((key != null) && key instanceof String) {
-            return ((String) key).toUpperCase();
-        }
-
-        return key;
-    }
-    
-    @Override
-    public String toString() {
-        return delegate.toString();
-    }
-
-    /**
-     * Wraps a map in case insensitive one.
-     * 
-     * If the instance is already a case insensitive map it is returned as is.
-     */
-    public static Map wrap(Map other) {
-        if (other instanceof CaseInsensitiveMap) {
-            return other;
-        }
-        return new CaseInsensitiveMap(other);
-    }
+    return new CaseInsensitiveMap(other);
+  }
 }

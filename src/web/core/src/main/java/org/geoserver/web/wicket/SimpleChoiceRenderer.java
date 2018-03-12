@@ -7,18 +7,15 @@ package org.geoserver.web.wicket;
 
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 
-/**
- * A choice renderer in which each displayed value is also the id
- */
+/** A choice renderer in which each displayed value is also the id */
 @SuppressWarnings("serial")
-public class SimpleChoiceRenderer<T> extends ChoiceRenderer<T> { 
+public class SimpleChoiceRenderer<T> extends ChoiceRenderer<T> {
 
-    public Object getDisplayValue(T object) {
-        return object;
-    }
+  public Object getDisplayValue(T object) {
+    return object;
+  }
 
-    public String getIdValue(T object, int index) {
-        return object.toString();
-    }
-
+  public String getIdValue(T object, int index) {
+    return object.toString();
+  }
 }

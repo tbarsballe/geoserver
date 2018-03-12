@@ -12,10 +12,10 @@ import org.apache.wicket.model.CompoundPropertyModel;
 
 public class PropertyEditorTestPage extends WebPage {
 
-    public PropertyEditorTestPage(Foo foo) {
-        Form form = new Form("form", new CompoundPropertyModel(foo));
-        form.add(new PropertyEditorFormComponent("props"));
-        form.add(new SubmitLink("save"));
-        add(form);
-    }
+  public PropertyEditorTestPage(Foo foo) {
+    Form form = new Form("form", new CompoundPropertyModel(foo));
+    form.add(new PropertyEditorFormComponent("props"));
+    form.add(new SubmitLink("save"));
+    add(form);
+  }
 }

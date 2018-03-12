@@ -11,25 +11,22 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 
 /**
  * Abstract base class for all security filter configurations.
- * 
+ *
  * @author mcr
  */
 public abstract class SecurityFilterConfig extends BaseSecurityNamedServiceConfig {
 
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-    /**
-     * Determines if the filter provides an {@link AuthenticationEntryPoint}.
-     * <p>
-     * If <code>true</code>, the corresponding {@link GeoServerSecurityFilter} class must return 
-     * non-null from the method {@link GeoServerSecurityFilter#getAuthenticationEntryPoint()}.
-     * </p>
-     * 
-     * @return true if the corresponding filter provides an
-     * {@link AuthenticationEntryPoint} object. 
-     */
-    public boolean providesAuthenticationEntryPoint() {
-        return false;
-    }
-
+  /**
+   * Determines if the filter provides an {@link AuthenticationEntryPoint}.
+   *
+   * <p>If <code>true</code>, the corresponding {@link GeoServerSecurityFilter} class must return
+   * non-null from the method {@link GeoServerSecurityFilter#getAuthenticationEntryPoint()}.
+   *
+   * @return true if the corresponding filter provides an {@link AuthenticationEntryPoint} object.
+   */
+  public boolean providesAuthenticationEntryPoint() {
+    return false;
+  }
 }

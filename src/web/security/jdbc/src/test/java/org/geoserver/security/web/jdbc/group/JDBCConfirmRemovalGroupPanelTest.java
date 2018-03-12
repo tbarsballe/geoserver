@@ -11,26 +11,24 @@ import org.geoserver.security.web.group.ConfirmRemovalGroupPanelTest;
 import org.junit.Test;
 
 public class JDBCConfirmRemovalGroupPanelTest extends ConfirmRemovalGroupPanelTest {
-    
-    private static final long serialVersionUID = 1L;
 
-    @Test
-    public void testRemoveGroup() throws Exception {
-        disassociateRoles=false;
-        initializeForJDBC();
-        removeObject();
-        
-    }
+  private static final long serialVersionUID = 1L;
 
-    @Test
-    public void testRemoveGroupWithRoles() throws Exception {
-        disassociateRoles=true;
-        initializeForJDBC();
-        removeObject();
-    }
+  @Test
+  public void testRemoveGroup() throws Exception {
+    disassociateRoles = false;
+    initializeForJDBC();
+    removeObject();
+  }
 
-    void initializeForJDBC() throws Exception {
-        initialize(new H2UserGroupServiceTest(), new H2RoleServiceTest());
-    }
+  @Test
+  public void testRemoveGroupWithRoles() throws Exception {
+    disassociateRoles = true;
+    initializeForJDBC();
+    removeObject();
+  }
+
+  void initializeForJDBC() throws Exception {
+    initialize(new H2UserGroupServiceTest(), new H2RoleServiceTest());
+  }
 }
-

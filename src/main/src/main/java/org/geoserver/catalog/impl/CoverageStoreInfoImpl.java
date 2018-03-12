@@ -6,56 +6,50 @@
 package org.geoserver.catalog.impl;
 
 import java.io.IOException;
-
 import org.geoserver.catalog.Catalog;
 import org.geoserver.catalog.CatalogVisitor;
 import org.geoserver.catalog.CoverageStoreInfo;
-import org.geoserver.catalog.ProjectionPolicy;
 import org.geotools.coverage.grid.io.AbstractGridFormat;
 import org.geotools.factory.Hints;
 import org.opengis.coverage.grid.GridCoverageReader;
 import org.opengis.util.ProgressListener;
 
-/**
- * Default implementation of {@link CoverageStoreInfo}.
- */
-public class CoverageStoreInfoImpl extends StoreInfoImpl implements
-        CoverageStoreInfo {
+/** Default implementation of {@link CoverageStoreInfo}. */
+public class CoverageStoreInfoImpl extends StoreInfoImpl implements CoverageStoreInfo {
 
-    protected String url;
-    
-    protected AbstractGridFormat format;
+  protected String url;
 
-    protected CoverageStoreInfoImpl() {
-    }
-    
-    public CoverageStoreInfoImpl(Catalog catalog) {
-        super(catalog);
-    }
+  protected AbstractGridFormat format;
 
-    public CoverageStoreInfoImpl(Catalog catalog,String id) {
-        super(catalog,id);
-    }
+  protected CoverageStoreInfoImpl() {}
 
-    public String getURL() {
-        return url;
-    }
+  public CoverageStoreInfoImpl(Catalog catalog) {
+    super(catalog);
+  }
 
-    public void setURL(String url) {
-        this.url = url;
-    }
-    
-    public AbstractGridFormat getFormat() {
-        return catalog.getResourcePool().getGridCoverageFormat(this);
-    }
-    
-    public void accept(CatalogVisitor visitor) {
-        visitor.visit( this );
-    }
+  public CoverageStoreInfoImpl(Catalog catalog, String id) {
+    super(catalog, id);
+  }
 
-    @Override
-    public GridCoverageReader getGridCoverageReader(ProgressListener listener, Hints hints)
-            throws IOException {
-        return catalog.getResourcePool().getGridCoverageReader(this, null, hints);
-    }
+  public String getURL() {
+    return url;
+  }
+
+  public void setURL(String url) {
+    this.url = url;
+  }
+
+  public AbstractGridFormat getFormat() {
+    return catalog.getResourcePool().getGridCoverageFormat(this);
+  }
+
+  public void accept(CatalogVisitor visitor) {
+    visitor.visit(this);
+  }
+
+  @Override
+  public GridCoverageReader getGridCoverageReader(ProgressListener listener, Hints hints)
+      throws IOException {
+    return catalog.getResourcePool().getGridCoverageReader(this, null, hints);
+  }
 }

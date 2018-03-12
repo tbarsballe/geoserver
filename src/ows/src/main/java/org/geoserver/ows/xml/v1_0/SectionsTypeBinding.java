@@ -6,20 +6,18 @@
 package org.geoserver.ows.xml.v1_0;
 
 import javax.xml.namespace.QName;
-
 import net.opengis.ows10.Ows10Factory;
 import net.opengis.ows10.SectionsType;
-
 import org.geotools.xml.AbstractComplexBinding;
 import org.geotools.xml.ElementInstance;
 import org.geotools.xml.Node;
-
 
 /**
  * Binding object for the type http://www.opengis.net/ows:SectionsType.
  *
  * <p>
- *        <pre>
+ *
+ * <pre>
  *         <code>
  *  &lt;complexType name="SectionsType"&gt;
  *      &lt;annotation&gt;
@@ -32,43 +30,43 @@ import org.geotools.xml.Node;
  *
  *          </code>
  *         </pre>
+ *
  * @generated
  */
 public class SectionsTypeBinding extends AbstractComplexBinding {
-    Ows10Factory owsfactory;
+  Ows10Factory owsfactory;
 
-    public SectionsTypeBinding(Ows10Factory owsfactory) {
-        this.owsfactory = owsfactory;
-    }
+  public SectionsTypeBinding(Ows10Factory owsfactory) {
+    this.owsfactory = owsfactory;
+  }
 
-    /**
-     * @generated
-     */
-    public QName getTarget() {
-        return OWS.SECTIONSTYPE;
-    }
+  /** @generated */
+  public QName getTarget() {
+    return OWS.SECTIONSTYPE;
+  }
 
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     *
-     * @generated modifiable
-     */
-    public Class getType() {
-        return SectionsType.class;
-    }
+  /**
+   *
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   *
+   * @generated modifiable
+   */
+  public Class getType() {
+    return SectionsType.class;
+  }
 
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     *
-     * @generated modifiable
-     */
-    public Object parse(ElementInstance instance, Node node, Object value)
-        throws Exception {
-        SectionsType sections = owsfactory.createSectionsType();
-        sections.getSection().addAll(node.getChildValues("Section"));
+  /**
+   *
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   *
+   * @generated modifiable
+   */
+  public Object parse(ElementInstance instance, Node node, Object value) throws Exception {
+    SectionsType sections = owsfactory.createSectionsType();
+    sections.getSection().addAll(node.getChildValues("Section"));
 
-        return sections;
-    }
+    return sections;
+  }
 }

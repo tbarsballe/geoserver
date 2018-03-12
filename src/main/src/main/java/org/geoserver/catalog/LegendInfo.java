@@ -5,74 +5,69 @@
  */
 package org.geoserver.catalog;
 
-
 /**
  * A legend for a layer.
- * 
+ *
  * @author Justin Deoliveira, The Open Planning Project
- * 
  */
 public interface LegendInfo extends Info {
 
-    /**
-     * Identifier.
-     */
-    String getId();
-    
-    /**
-     * Width of the legend.
-     * 
-     * @uml.property name="width"
-     */
-    int getWidth();
+  /** Identifier. */
+  String getId();
 
-    /**
-     * Sets width of the legend.
-     * 
-     * @uml.property name="width"
-     */
-    void setWidth(int width);
+  /**
+   * Width of the legend.
+   *
+   * @uml.property name="width"
+   */
+  int getWidth();
 
-    /**
-     * Height of the legend.
-     * 
-     * @uml.property name="height"
-     */
-    int getHeight();
+  /**
+   * Sets width of the legend.
+   *
+   * @uml.property name="width"
+   */
+  void setWidth(int width);
 
-    /**
-     * Sets height of the legend.
-     * 
-     * @uml.property name="height"
-     */
-    void setHeight(int height);
+  /**
+   * Height of the legend.
+   *
+   * @uml.property name="height"
+   */
+  int getHeight();
 
-    /**
-     * Format of the legend.
-     * 
-     * @uml.property name="format"
-     */
-    String getFormat();
+  /**
+   * Sets height of the legend.
+   *
+   * @uml.property name="height"
+   */
+  void setHeight(int height);
 
-    /**
-     * Sets format of the legend.
-     * 
-     * @uml.property name="format"
-     */
-    void setFormat(String format);
+  /**
+   * Format of the legend.
+   *
+   * @uml.property name="format"
+   */
+  String getFormat();
 
-    /**
-     * Online resource of the legend.
-     * 
-     * @uml.property name="onlineResource"
-     */
-    String getOnlineResource();
+  /**
+   * Sets format of the legend.
+   *
+   * @uml.property name="format"
+   */
+  void setFormat(String format);
 
-    /**
-     * Sets online resource of the legend.
-     * 
-     * @uml.property name="onlineResource"
-     */
-    void setOnlineResource(String onlineResource);
+  /**
+   * Online resource of the legend.
+   *
+   * @uml.property name="onlineResource"
+   */
+  String getOnlineResource();
 
+  /**
+   * Sets online resource of the legend.
+   *
+   * @uml.property name="onlineResource"
+   */
+  void setOnlineResource(String onlineResource);
 }

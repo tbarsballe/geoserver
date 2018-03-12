@@ -12,7 +12,6 @@ import static org.geotools.data.shapefile.ShapefileDataStoreFactory.MEMORY_MAPPE
 import static org.geotools.data.shapefile.ShapefileDataStoreFactory.URLP;
 
 import java.util.logging.Logger;
-
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -29,44 +28,59 @@ import org.geotools.util.logging.Logging;
 
 /**
  * Provides the form components for the shapefile datastore
- * 
+ *
  * @author Andrea Aime - GeoSolution
- * 
  */
 @SuppressWarnings("serial")
 public class ShapefileStoreEditPanel extends StoreEditPanel {
 
-    private static final Logger LOGGER = Logging.getLogger(ShapefileStoreEditPanel.class);
+  private static final Logger LOGGER = Logging.getLogger(ShapefileStoreEditPanel.class);
 
-    public ShapefileStoreEditPanel(final String componentId, final Form storeEditForm) {
-        super(componentId, storeEditForm);
+  public ShapefileStoreEditPanel(final String componentId, final Form storeEditForm) {
+    super(componentId, storeEditForm);
 
-        final IModel model = storeEditForm.getModel();
-        setDefaultModel(model);
+    final IModel model = storeEditForm.getModel();
+    setDefaultModel(model);
 
-        final IModel paramsModel = new PropertyModel(model, "connectionParameters");
+    final IModel paramsModel = new PropertyModel(model, "connectionParameters");
 
-        FileParamPanel file = buildFileParamPanel(paramsModel);
-        add(file);
+    FileParamPanel file = buildFileParamPanel(paramsModel);
+    add(file);
 
-        add(new CharsetPanel("charset", new MapModel(paramsModel, DBFCHARSET.key),
-                new ParamResourceModel("charset", this), false));
+    add(
+        new CharsetPanel(
+            "charset",
+            new MapModel(paramsModel, DBFCHARSET.key),
+            new ParamResourceModel("charset", this),
+            false));
 
-        add(new CheckBoxParamPanel("memoryMapped", new MapModel(paramsModel, MEMORY_MAPPED.key),
-                new ParamResourceModel("memoryMapped", this)));
-        add(new CheckBoxParamPanel("cacheMemoryMaps", new MapModel(paramsModel,
-                CACHE_MEMORY_MAPS.key), new ParamResourceModel("cacheMemoryMaps", this)));
+    add(
+        new CheckBoxParamPanel(
+            "memoryMapped",
+            new MapModel(paramsModel, MEMORY_MAPPED.key),
+            new ParamResourceModel("memoryMapped", this)));
+    add(
+        new CheckBoxParamPanel(
+            "cacheMemoryMaps",
+            new MapModel(paramsModel, CACHE_MEMORY_MAPS.key),
+            new ParamResourceModel("cacheMemoryMaps", this)));
 
-        add(new CheckBoxParamPanel("spatialIndex", new MapModel(paramsModel,
-                CREATE_SPATIAL_INDEX.key), new ParamResourceModel("spatialIndex", this)));
-    }
+    add(
+        new CheckBoxParamPanel(
+            "spatialIndex",
+            new MapModel(paramsModel, CREATE_SPATIAL_INDEX.key),
+            new ParamResourceModel("spatialIndex", this)));
+  }
 
-    protected FileParamPanel buildFileParamPanel(final IModel paramsModel) {
-        FileParamPanel file = new FileParamPanel("url", new MapModel(paramsModel, URLP.key),
-                new ParamResourceModel("shapefile", this), true);
-        file.setFileFilter(new Model(new ExtensionFileFilter(".shp")));
-        file.getFormComponent().add(new FileExistsValidator());
-        return file;
-    }
-
+  protected FileParamPanel buildFileParamPanel(final IModel paramsModel) {
+    FileParamPanel file =
+        new FileParamPanel(
+            "url",
+            new MapModel(paramsModel, URLP.key),
+            new ParamResourceModel("shapefile", this),
+            true);
+    file.setFileFilter(new Model(new ExtensionFileFilter(".shp")));
+    file.getFormComponent().add(new FileExistsValidator());
+    return file;
+  }
 }

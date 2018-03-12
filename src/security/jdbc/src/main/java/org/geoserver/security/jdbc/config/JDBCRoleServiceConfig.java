@@ -8,60 +8,58 @@ package org.geoserver.security.jdbc.config;
 import org.geoserver.security.config.SecurityRoleServiceConfig;
 
 public class JDBCRoleServiceConfig extends JDBCSecurityServiceConfig
-        implements SecurityRoleServiceConfig {
+    implements SecurityRoleServiceConfig {
 
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-    protected String adminRoleName;
-    protected String groupAdminRoleName;
+  protected String adminRoleName;
+  protected String groupAdminRoleName;
 
+  public JDBCRoleServiceConfig() {
+    super();
+  }
 
-    public JDBCRoleServiceConfig() {
-        super();
-    }
+  public JDBCRoleServiceConfig(JDBCRoleServiceConfig other) {
+    super(other);
+    adminRoleName = other.getAdminRoleName();
+    groupAdminRoleName = other.getGroupAdminRoleName();
+  }
 
-    public JDBCRoleServiceConfig(JDBCRoleServiceConfig other) {
-        super(other);
-        adminRoleName = other.getAdminRoleName();
-        groupAdminRoleName = other.getGroupAdminRoleName();
-    }
+  @Override
+  public String getAdminRoleName() {
+    return adminRoleName;
+  }
 
-    @Override
-    public String getAdminRoleName() {
-        return adminRoleName;
-    }
+  @Override
+  public void setAdminRoleName(String name) {
+    adminRoleName = name;
+  }
 
-    @Override
-    public void setAdminRoleName(String name) {
-        adminRoleName=name;
-    }
+  @Override
+  protected String defaultDDLFilename() {
+    return "rolesddl.xml";
+  }
 
-    @Override
-    protected String defaultDDLFilename() {
-        return "rolesddl.xml";
-    }
+  @Override
+  protected String defaultDDLFilenameMySQL() {
+    return "rolesddl.mysql.xml";
+  }
 
-    @Override
-    protected String defaultDDLFilenameMySQL() {
-        return "rolesddl.mysql.xml";
-    }
+  @Override
+  protected String defaultDMLFilename() {
+    return "rolesdml.xml";
+  }
 
-    @Override
-    protected String defaultDMLFilename() {
-        return "rolesdml.xml";
-    }
+  @Override
+  protected String defaultDMLFilenameMySQL() {
+    return defaultDMLFilename();
+  }
 
-    @Override
-    protected String defaultDMLFilenameMySQL() {
-        return defaultDMLFilename();
-    }
+  public String getGroupAdminRoleName() {
+    return groupAdminRoleName;
+  }
 
-    public String getGroupAdminRoleName() {
-        return groupAdminRoleName;
-    }
-
-    public void setGroupAdminRoleName(String groupAdminRoleName) {
-        this.groupAdminRoleName = groupAdminRoleName;
-    }
-
+  public void setGroupAdminRoleName(String groupAdminRoleName) {
+    this.groupAdminRoleName = groupAdminRoleName;
+  }
 }

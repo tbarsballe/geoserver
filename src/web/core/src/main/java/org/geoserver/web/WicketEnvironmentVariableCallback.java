@@ -7,7 +7,6 @@ package org.geoserver.web;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import org.apache.wicket.request.component.IRequestablePage;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.geotools.filter.function.EnvFunction;
@@ -17,44 +16,40 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 public class WicketEnvironmentVariableCallback implements WicketCallback {
 
-    public void onBeginRequest() {
-        // inject the current user in it
-        Map<String, Object> envVars = null;
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth != null && !(auth instanceof AnonymousAuthenticationToken)) {
-            String name = auth.getName();
-            if (envVars == null) {
-                envVars = new HashMap<String, Object>();
-            }
-            envVars.put("GSUSER", name);
-        }
-
-        // set it into the EnvFunction
-        if (envVars != null) {
-            EnvFunction.setLocalValues(envVars);
-        }
+  public void onBeginRequest() {
+    // inject the current user in it
+    Map<String, Object> envVars = null;
+    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    if (auth != null && !(auth instanceof AnonymousAuthenticationToken)) {
+      String name = auth.getName();
+      if (envVars == null) {
+        envVars = new HashMap<String, Object>();
+      }
+      envVars.put("GSUSER", name);
     }
 
-    public void onAfterTargetsDetached() {
-        // nothing to do
+    // set it into the EnvFunction
+    if (envVars != null) {
+      EnvFunction.setLocalValues(envVars);
     }
+  }
 
-    public void onEndRequest() {
-        // clean up when we're done
-        EnvFunction.clearLocalValues();
+  public void onAfterTargetsDetached() {
+    // nothing to do
+  }
 
-    }
+  public void onEndRequest() {
+    // clean up when we're done
+    EnvFunction.clearLocalValues();
+  }
 
-    @Override
-    public void onRequestTargetSet(Class<? extends IRequestablePage> requestTarget) {
-        // nothing to do
-    }
+  @Override
+  public void onRequestTargetSet(Class<? extends IRequestablePage> requestTarget) {
+    // nothing to do
+  }
 
-    @Override
-    public void onRuntimeException(RequestCycle cycle, Exception ex) {
-        // nothing to do
-    }
-
-   
-
+  @Override
+  public void onRuntimeException(RequestCycle cycle, Exception ex) {
+    // nothing to do
+  }
 }

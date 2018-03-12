@@ -10,21 +10,20 @@ import org.geoserver.catalog.LayerInfo;
 import org.geoserver.web.GeoServerApplication;
 
 /**
- * A loadable model for layers. Warning, don't use it in a tabbed form
- * or in any other places where you might need to keep the modifications
- * in a resource stable across page loads.
+ * A loadable model for layers. Warning, don't use it in a tabbed form or in any other places where
+ * you might need to keep the modifications in a resource stable across page loads.
  */
 @SuppressWarnings("serial")
 public class LayerDetachableModel extends LoadableDetachableModel<LayerInfo> {
-    String id;
+  String id;
 
-    public LayerDetachableModel(LayerInfo layer) {
-        super(layer);
-        this.id = layer.getId();
-    }
+  public LayerDetachableModel(LayerInfo layer) {
+    super(layer);
+    this.id = layer.getId();
+  }
 
-    @Override
-    protected LayerInfo load() {
-        return GeoServerApplication.get().getCatalog().getLayer(id);
-    }
+  @Override
+  protected LayerInfo load() {
+    return GeoServerApplication.get().getCatalog().getLayer(id);
+  }
 }

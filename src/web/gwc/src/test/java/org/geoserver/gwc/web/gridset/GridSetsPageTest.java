@@ -10,13 +10,13 @@ import org.junit.Test;
 
 public class GridSetsPageTest extends GeoServerWicketTestSupport {
 
-    @Test
-    public void testPageLoad() {
-        GridSetsPage page = new GridSetsPage();
+  @Test
+  public void testPageLoad() {
+    GridSetsPage page = new GridSetsPage();
 
-        tester.startPage(page);
-        tester.assertRenderedPage(GridSetsPage.class);
+    tester.startPage(page);
+    tester.assertRenderedPage(GridSetsPage.class);
 
-        // print(page, true, true);
-    }
+    // print(page, true, true);
+  }
 }

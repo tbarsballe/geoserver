@@ -15,23 +15,23 @@ import org.geoserver.web.wicket.FileExistsValidator;
 
 /**
  * Provides the URL form component to edit a {@link CoverageStoreInfo}
- * 
+ *
  * @author Gabriel Roldan
  * @see AbstractCoverageStorePage
  */
 public class DefaultCoverageStoreEditPanel extends StoreEditPanel {
 
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-    public DefaultCoverageStoreEditPanel(final String componentId, final Form storeEditForm) {
-        super(componentId, storeEditForm);
+  public DefaultCoverageStoreEditPanel(final String componentId, final Form storeEditForm) {
+    super(componentId, storeEditForm);
 
-        final IModel formModel = storeEditForm.getModel();
-        // url
-        TextParamPanel url = new TextParamPanel("urlPanel", new PropertyModel(formModel, "URL"),
-                new ResourceModel("url", "URL"), true);
-        url.getFormComponent().add(new FileExistsValidator());
-        add(url);
-    }
-
+    final IModel formModel = storeEditForm.getModel();
+    // url
+    TextParamPanel url =
+        new TextParamPanel(
+            "urlPanel", new PropertyModel(formModel, "URL"), new ResourceModel("url", "URL"), true);
+    url.getFormComponent().add(new FileExistsValidator());
+    add(url);
+  }
 }

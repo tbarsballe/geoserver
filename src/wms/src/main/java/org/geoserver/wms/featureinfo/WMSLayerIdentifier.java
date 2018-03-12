@@ -11,9 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import net.opengis.wfs.FeatureCollectionType;
-
 import org.geoserver.catalog.WMSLayerInfo;
 import org.geoserver.platform.GeoServerExtensions;
 import org.geoserver.util.EntityResolverProvider;
@@ -38,148 +36,149 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 /**
  * Layer identifier specialized in WMS cascading layers
- * 
- * @author Andrea Aime - GeoSolutions 
+ *
+ * @author Andrea Aime - GeoSolutions
  */
 public class WMSLayerIdentifier implements LayerIdentifier {
-    
-    static final Logger LOGGER = Logging.getLogger(WMSLayerIdentifier.class);
 
-    private EntityResolverProvider resolverProvider;
+  static final Logger LOGGER = Logging.getLogger(WMSLayerIdentifier.class);
 
-    // WMS service configuration facade, maybe be NULL use method getWms()
-    private WMS wms;
+  private EntityResolverProvider resolverProvider;
 
-    @Deprecated
-    public WMSLayerIdentifier(EntityResolverProvider resolverProvider) {
-        this(resolverProvider, null);
+  // WMS service configuration facade, maybe be NULL use method getWms()
+  private WMS wms;
+
+  @Deprecated
+  public WMSLayerIdentifier(EntityResolverProvider resolverProvider) {
+    this(resolverProvider, null);
+  }
+
+  public WMSLayerIdentifier(EntityResolverProvider resolverProvider, WMS wms) {
+    this.resolverProvider = resolverProvider;
+    this.wms = wms;
+  }
+
+  public List<FeatureCollection> identify(FeatureInfoRequestParameters params, int maxFeatures)
+      throws IOException {
+    final int x = params.getX();
+    final int y = params.getY();
+    WMSLayerInfo info = (WMSLayerInfo) params.getLayer().getResource();
+    WebMapServer wms = info.getStore().getWebMapServer(null);
+    Layer layer = info.getWMSLayer(null);
+
+    CoordinateReferenceSystem crs = params.getRequestedCRS();
+    if (crs == null) {
+      // use the native one
+      crs = info.getCRS();
+    }
+    ReferencedEnvelope bbox = params.getRequestedBounds();
+    int width = params.getWidth();
+    int height = params.getHeight();
+
+    // we can cascade GetFeatureInfo on queryable layers and if the GML mime type is supported
+    if (!layer.isQueryable()) {
+      return null;
     }
 
-    public WMSLayerIdentifier(EntityResolverProvider resolverProvider, WMS wms) {
-        this.resolverProvider = resolverProvider;
-        this.wms = wms;
+    List<String> infoFormats;
+    infoFormats = wms.getCapabilities().getRequest().getGetFeatureInfo().getFormats();
+    if (!infoFormats.contains("application/vnd.ogc.gml")) {
+      return null;
     }
 
-    public List<FeatureCollection> identify(FeatureInfoRequestParameters params, int maxFeatures) throws IOException {
-        final int x = params.getX();
-        final int y = params.getY();
-        WMSLayerInfo info = (WMSLayerInfo) params.getLayer().getResource();
-        WebMapServer wms = info.getStore().getWebMapServer(null);
-        Layer layer = info.getWMSLayer(null);
+    // the wms layer does request in a CRS that's compatible with the WMS server srs
+    // list,
+    // we may need to transform
+    WMSLayer ml = new WMSLayer(wms, layer);
+    // delegate to the web map layer as there's quite a bit of reprojection magic
+    // code
+    // that we want to be consistently reproduced for GetFeatureInfo as well
+    final InputStream is =
+        ml.getFeatureInfo(bbox, width, height, x, y, "application/vnd.ogc.gml", maxFeatures);
+    List<FeatureCollection> results = new ArrayList<FeatureCollection>();
+    try {
+      Parser parser = new Parser(new WFSConfiguration());
+      parser.setStrict(false);
+      parser.setEntityResolver(resolverProvider.getEntityResolver());
+      Object result = parser.parse(is);
+      if (result instanceof FeatureCollectionType) {
+        FeatureCollectionType fcList = (FeatureCollectionType) result;
+        List<SimpleFeatureCollection> rawResults = fcList.getFeature();
 
-        CoordinateReferenceSystem crs = params.getRequestedCRS();
-        if (crs == null) {
-            // use the native one
-            crs = info.getCRS();
+        // retyping feature collections to replace name and namespace
+        // from cascading server with our local WMSLayerInfo
+        for (SimpleFeatureCollection fc : rawResults) {
+          SimpleFeatureType ft = fc.getSchema();
+
+          SimpleFeatureTypeBuilder builder = new SimpleFeatureTypeBuilder();
+          builder.init(ft);
+
+          builder.setName(info.getName());
+          builder.setNamespaceURI(info.getNamespace().getURI());
+
+          SimpleFeatureType targetFeatureType = builder.buildFeatureType();
+          FeatureCollection rfc = new ReTypingFeatureCollection(fc, targetFeatureType);
+
+          // if possible force a CRS to be defined
+          results.add(forceCrs(rfc));
         }
-        ReferencedEnvelope bbox = params.getRequestedBounds();
-        int width = params.getWidth();
-        int height = params.getHeight();
-
-        // we can cascade GetFeatureInfo on queryable layers and if the GML mime type is supported
-        if (!layer.isQueryable()) {
-            return null;
-        }
-
-        List<String> infoFormats;
-        infoFormats = wms.getCapabilities().getRequest().getGetFeatureInfo().getFormats();
-        if (!infoFormats.contains("application/vnd.ogc.gml")) {
-            return null;
-        }
-
-        // the wms layer does request in a CRS that's compatible with the WMS server srs
-        // list,
-        // we may need to transform
-        WMSLayer ml = new WMSLayer(wms, layer);
-        // delegate to the web map layer as there's quite a bit of reprojection magic
-        // code
-        // that we want to be consistently reproduced for GetFeatureInfo as well
-        final InputStream is = ml.getFeatureInfo(bbox, width, height, x, y,
-                "application/vnd.ogc.gml", maxFeatures);
-        List<FeatureCollection> results = new ArrayList<FeatureCollection>();
-        try {
-            Parser parser = new Parser(new WFSConfiguration());
-            parser.setStrict(false);
-            parser.setEntityResolver(resolverProvider.getEntityResolver());
-            Object result = parser.parse(is);
-            if (result instanceof FeatureCollectionType) {
-                FeatureCollectionType fcList = (FeatureCollectionType) result;
-                List<SimpleFeatureCollection> rawResults = fcList.getFeature();
-
-                // retyping feature collections to replace name and namespace
-                // from cascading server with our local WMSLayerInfo
-                for (SimpleFeatureCollection fc : rawResults) {                    
-                    SimpleFeatureType ft = fc.getSchema();
-                                    
-                    SimpleFeatureTypeBuilder builder = new SimpleFeatureTypeBuilder();                    
-                    builder.init(ft);                                                                       
-                    
-                    builder.setName(info.getName());
-                    builder.setNamespaceURI(info.getNamespace().getURI());
-                   
-                    SimpleFeatureType targetFeatureType = builder.buildFeatureType();
-                    FeatureCollection rfc = new ReTypingFeatureCollection(fc, targetFeatureType);
-
-                    // if possible force a CRS to be defined
-                    results.add(forceCrs(rfc));
-                }
-            }
-        } catch (Throwable t) {
-            LOGGER.log(Level.SEVERE, "Tried to parse GML2 response, but failed", t);
-        } finally {
-            is.close();
-        }
-
-        // let's see if we need to reproject
-        if (!getWms().isFeaturesReprojectionDisabled()) {
-            // try to reproject to target CRS
-            return LayerIdentifierUtils.reproject(results, params.getRequestedCRS());
-        }
-
-        // reprojection no allowed
-        return results;
+      }
+    } catch (Throwable t) {
+      LOGGER.log(Level.SEVERE, "Tried to parse GML2 response, but failed", t);
+    } finally {
+      is.close();
     }
 
-    public boolean canHandle(MapLayerInfo layer) {
-        return layer.getType() == MapLayerInfo.TYPE_WMS;
+    // let's see if we need to reproject
+    if (!getWms().isFeaturesReprojectionDisabled()) {
+      // try to reproject to target CRS
+      return LayerIdentifierUtils.reproject(results, params.getRequestedCRS());
     }
 
-    /**
-     * Helper method that tries to force a CRS to be defined. If no CRS is defined
-     * buf if all the feature collection geometries use the same CRS that CRS will
-     * be forced. This only work for simple features.
-     */
-    private FeatureCollection forceCrs(FeatureCollection featureCollection) {
-        if (featureCollection.getSchema().getCoordinateReferenceSystem() != null) {
-            // a CRS is already defined
-            return featureCollection;
-        }
-        // try to extract a CRS from the feature collection features
-        CoordinateReferenceSystem crs = LayerIdentifierUtils.getCrs(featureCollection);
-        if (crs == null) {
-            // there is nothing more we can do
-            return featureCollection;
-        }
-        try {
-            // force the CRS
-            return new ForceCoordinateSystemFeatureResults(featureCollection, crs);
-        } catch (Exception exception) {
-            throw new RuntimeException(String.format(
-                    "Error forcing feature collection to use SRS '%s'.",
-                    CRS.toSRS(crs)), exception);
-        }
-    }
+    // reprojection no allowed
+    return results;
+  }
 
-    /**
-     * Does a lookup on the application context if needed.
-     *
-     * @return WMS service configuration facade
-     */
-    private WMS getWms() {
-        if (wms == null) {
-            // no need for synchronization here
-            wms = GeoServerExtensions.bean(WMS.class);
-        }
-        return wms;
+  public boolean canHandle(MapLayerInfo layer) {
+    return layer.getType() == MapLayerInfo.TYPE_WMS;
+  }
+
+  /**
+   * Helper method that tries to force a CRS to be defined. If no CRS is defined buf if all the
+   * feature collection geometries use the same CRS that CRS will be forced. This only work for
+   * simple features.
+   */
+  private FeatureCollection forceCrs(FeatureCollection featureCollection) {
+    if (featureCollection.getSchema().getCoordinateReferenceSystem() != null) {
+      // a CRS is already defined
+      return featureCollection;
     }
+    // try to extract a CRS from the feature collection features
+    CoordinateReferenceSystem crs = LayerIdentifierUtils.getCrs(featureCollection);
+    if (crs == null) {
+      // there is nothing more we can do
+      return featureCollection;
+    }
+    try {
+      // force the CRS
+      return new ForceCoordinateSystemFeatureResults(featureCollection, crs);
+    } catch (Exception exception) {
+      throw new RuntimeException(
+          String.format("Error forcing feature collection to use SRS '%s'.", CRS.toSRS(crs)),
+          exception);
+    }
+  }
+
+  /**
+   * Does a lookup on the application context if needed.
+   *
+   * @return WMS service configuration facade
+   */
+  private WMS getWms() {
+    if (wms == null) {
+      // no need for synchronization here
+      wms = GeoServerExtensions.bean(WMS.class);
+    }
+    return wms;
+  }
 }

@@ -14,39 +14,40 @@ import org.apache.wicket.markup.html.navigation.paging.PagingNavigation;
 
 /**
  * A custom navigator that sets classes for the elements
- * @author Andrea Aime - TOPP
  *
+ * @author Andrea Aime - TOPP
  */
 @SuppressWarnings("serial")
 public class GeoServerPagingNavigator extends AjaxPagingNavigator {
 
-    public GeoServerPagingNavigator(String id, IPageable pageable) {
-        super(id, pageable);
-        setOutputMarkupId(true);
-    }
-    
-    @Override
-    protected PagingNavigation newNavigation(String id, IPageable pageable, IPagingLabelProvider labelProvider) {
-        // make sure we don't have too many links, it gets quite busy in popups
-        PagingNavigation navigation = super.newNavigation(id, pageable, labelProvider);
-        navigation.setViewSize(5);
-        return navigation;
-    }
-    
-    @Override
-    protected AbstractLink newPagingNavigationLink(String id, IPageable pageable, int pageNumber) {
-        AbstractLink link = super.newPagingNavigationLink(id, pageable, pageNumber);
-        // we turn the id into the css class
-        link.add(AttributeModifier.replace("class", id));
-        return link;
-    }
-    
-    @Override
-    protected AbstractLink newPagingNavigationIncrementLink(String id, IPageable pageable, int increment) {
-        AbstractLink link = super.newPagingNavigationIncrementLink(id, pageable, increment);
-        // we turn the id into the css class
-        link.add(AttributeModifier.replace("class", id));
-        return link;
-    }
-    
+  public GeoServerPagingNavigator(String id, IPageable pageable) {
+    super(id, pageable);
+    setOutputMarkupId(true);
+  }
+
+  @Override
+  protected PagingNavigation newNavigation(
+      String id, IPageable pageable, IPagingLabelProvider labelProvider) {
+    // make sure we don't have too many links, it gets quite busy in popups
+    PagingNavigation navigation = super.newNavigation(id, pageable, labelProvider);
+    navigation.setViewSize(5);
+    return navigation;
+  }
+
+  @Override
+  protected AbstractLink newPagingNavigationLink(String id, IPageable pageable, int pageNumber) {
+    AbstractLink link = super.newPagingNavigationLink(id, pageable, pageNumber);
+    // we turn the id into the css class
+    link.add(AttributeModifier.replace("class", id));
+    return link;
+  }
+
+  @Override
+  protected AbstractLink newPagingNavigationIncrementLink(
+      String id, IPageable pageable, int increment) {
+    AbstractLink link = super.newPagingNavigationIncrementLink(id, pageable, increment);
+    // we turn the id into the css class
+    link.add(AttributeModifier.replace("class", id));
+    return link;
+  }
 }

@@ -6,31 +6,30 @@
 package org.geoserver.security;
 
 /**
- * Thread local that maintains the state of an administrative request. 
- * <p>
- * Such requests are typically used to configure the server, be it via the web ui, restconfig,
- *  etc...
- * </p>
- * 
+ * Thread local that maintains the state of an administrative request.
+ *
+ * <p>Such requests are typically used to configure the server, be it via the web ui, restconfig,
+ * etc...
+ *
  * @author Justin Deoliveira, OpenGeo
  */
 public class AdminRequest {
 
-    static ThreadLocal<Object> REQUEST = new ThreadLocal<Object>();
+  static ThreadLocal<Object> REQUEST = new ThreadLocal<Object>();
 
-    public static void start(Object request) {
-        REQUEST.set(request);
-    }
+  public static void start(Object request) {
+    REQUEST.set(request);
+  }
 
-    public static void abort() {
-        REQUEST.remove();
-    }
+  public static void abort() {
+    REQUEST.remove();
+  }
 
-    public static Object get() {
-        return REQUEST.get();
-    }
+  public static Object get() {
+    return REQUEST.get();
+  }
 
-    public static void finish() {
-        REQUEST.remove();
-    }
+  public static void finish() {
+    REQUEST.remove();
+  }
 }

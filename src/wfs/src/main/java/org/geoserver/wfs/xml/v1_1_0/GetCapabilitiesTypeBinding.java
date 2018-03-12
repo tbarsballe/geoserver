@@ -6,20 +6,18 @@
 package org.geoserver.wfs.xml.v1_1_0;
 
 import javax.xml.namespace.QName;
-
 import net.opengis.wfs.GetCapabilitiesType;
 import net.opengis.wfs.WfsFactory;
-
 import org.geotools.xml.AbstractComplexBinding;
 import org.geotools.xml.ElementInstance;
 import org.geotools.xml.Node;
-
 
 /**
  * Binding object for the type http://www.opengis.net/wfs:GetCapabilitiesType.
  *
  * <p>
- *        <pre>
+ *
+ * <pre>
  *         <code>
  *  &lt;xsd:complexType name="GetCapabilitiesType"&gt;
  *      &lt;xsd:annotation&gt;
@@ -46,56 +44,57 @@ import org.geotools.xml.Node;
  *
  *          </code>
  *         </pre>
+ *
  * @generated
  */
 public class GetCapabilitiesTypeBinding extends AbstractComplexBinding {
-    WfsFactory wfsfactory;
+  WfsFactory wfsfactory;
 
-    public GetCapabilitiesTypeBinding(WfsFactory wfsfactory) {
-        this.wfsfactory = wfsfactory;
+  public GetCapabilitiesTypeBinding(WfsFactory wfsfactory) {
+    this.wfsfactory = wfsfactory;
+  }
+
+  public int getExecutionMode() {
+    return AFTER;
+  }
+
+  /** @generated */
+  public QName getTarget() {
+    return WFS.GETCAPABILITIESTYPE;
+  }
+
+  /**
+   *
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   *
+   * @generated modifiable
+   */
+  public Class getType() {
+    return GetCapabilitiesType.class;
+  }
+
+  /**
+   *
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   *
+   * @generated modifiable
+   */
+  public Object parse(ElementInstance instance, Node node, Object value) throws Exception {
+    net.opengis.ows10.GetCapabilitiesType owsGetCapabilities =
+        (net.opengis.ows10.GetCapabilitiesType) value;
+    GetCapabilitiesType getCapabilities = wfsfactory.createGetCapabilitiesType();
+
+    getCapabilities.setAcceptFormats(owsGetCapabilities.getAcceptFormats());
+    getCapabilities.setAcceptVersions(owsGetCapabilities.getAcceptVersions());
+    getCapabilities.setSections(owsGetCapabilities.getSections());
+    getCapabilities.setUpdateSequence(owsGetCapabilities.getUpdateSequence());
+
+    if (node.hasAttribute("service")) {
+      getCapabilities.setService((String) node.getAttributeValue("service"));
     }
 
-    public int getExecutionMode() {
-        return AFTER;
-    }
-
-    /**
-     * @generated
-     */
-    public QName getTarget() {
-        return WFS.GETCAPABILITIESTYPE;
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     *
-     * @generated modifiable
-     */
-    public Class getType() {
-        return GetCapabilitiesType.class;
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     *
-     * @generated modifiable
-     */
-    public Object parse(ElementInstance instance, Node node, Object value)
-        throws Exception {
-        net.opengis.ows10.GetCapabilitiesType owsGetCapabilities = (net.opengis.ows10.GetCapabilitiesType) value;
-        GetCapabilitiesType getCapabilities = wfsfactory.createGetCapabilitiesType();
-
-        getCapabilities.setAcceptFormats(owsGetCapabilities.getAcceptFormats());
-        getCapabilities.setAcceptVersions(owsGetCapabilities.getAcceptVersions());
-        getCapabilities.setSections(owsGetCapabilities.getSections());
-        getCapabilities.setUpdateSequence(owsGetCapabilities.getUpdateSequence());
-
-        if (node.hasAttribute("service")) {
-            getCapabilities.setService((String) node.getAttributeValue("service"));
-        }
-
-        return getCapabilities;
-    }
+    return getCapabilities;
+  }
 }

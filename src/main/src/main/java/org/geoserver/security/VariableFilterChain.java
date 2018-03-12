@@ -10,99 +10,79 @@ import java.io.IOException;
 import java.util.List;
 import java.util.SortedSet;
 
-
-
-
 /**
- * Filter chains of this type can be modified  
- * 
- * @author christian
+ * Filter chains of this type can be modified
  *
+ * @author christian
  */
 public abstract class VariableFilterChain extends RequestFilterChain {
 
-    String interceptorName, exceptionTranslationName;
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 1L;
-    
+  String interceptorName, exceptionTranslationName;
+  /** */
+  private static final long serialVersionUID = 1L;
 
-    public VariableFilterChain(String... patterns) {
-        super(patterns);     
-        interceptorName=GeoServerSecurityFilterChain.FILTER_SECURITY_INTERCEPTOR;
-        exceptionTranslationName=GeoServerSecurityFilterChain.DYNAMIC_EXCEPTION_TRANSLATION_FILTER;
-    }
+  public VariableFilterChain(String... patterns) {
+    super(patterns);
+    interceptorName = GeoServerSecurityFilterChain.FILTER_SECURITY_INTERCEPTOR;
+    exceptionTranslationName = GeoServerSecurityFilterChain.DYNAMIC_EXCEPTION_TRANSLATION_FILTER;
+  }
 
-    
-    public boolean isConstant() {
-        return false;
-    }
-        
-    
-    /**
-     * list the filter names which can be added to this chain
-     * 
-     * @param m
-     *
-     */
-    public abstract SortedSet<String> listFilterCandidates(GeoServerSecurityManager m) throws IOException;
-        
+  public boolean isConstant() {
+    return false;
+  }
 
-    @Override
-    void createCompiledFilterList(List<String> list) {
-        list.addAll(getFilterNames());
-        list.add(exceptionTranslationName);
-        list.add(interceptorName);
-    }
-    
-    @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof VariableFilterChain == false)
-            return false;
-        
-        VariableFilterChain other = (VariableFilterChain) obj;
-        if (this.interceptorName ==null && other.interceptorName!=null)
-            return false;
-        if (this.interceptorName !=null && this.interceptorName.equals(other.interceptorName)==false)
-            return false;                
+  /**
+   * list the filter names which can be added to this chain
+   *
+   * @param m
+   */
+  public abstract SortedSet<String> listFilterCandidates(GeoServerSecurityManager m)
+      throws IOException;
 
-        
-        return super.equals(obj);
-    }
-    
-    @Override
-    public int hashCode() {
-        int hash = super.hashCode();        
-        hash = hash * ((interceptorName == null) ? 1 : interceptorName.hashCode());
-        return hash;
-    }
+  @Override
+  void createCompiledFilterList(List<String> list) {
+    list.addAll(getFilterNames());
+    list.add(exceptionTranslationName);
+    list.add(interceptorName);
+  }
 
+  @Override
+  public boolean equals(Object obj) {
+    if (obj instanceof VariableFilterChain == false) return false;
 
-    public String getInterceptorName() {
-        return interceptorName;
-    }
+    VariableFilterChain other = (VariableFilterChain) obj;
+    if (this.interceptorName == null && other.interceptorName != null) return false;
+    if (this.interceptorName != null && this.interceptorName.equals(other.interceptorName) == false)
+      return false;
 
+    return super.equals(obj);
+  }
 
-    public void setInterceptorName(String interceptorName) {
-        this.interceptorName = interceptorName;
-    }
-    
-    @Override
-    public boolean canBeRemoved() {
-        return true;
-    }
+  @Override
+  public int hashCode() {
+    int hash = super.hashCode();
+    hash = hash * ((interceptorName == null) ? 1 : interceptorName.hashCode());
+    return hash;
+  }
 
+  public String getInterceptorName() {
+    return interceptorName;
+  }
 
-    public String getExceptionTranslationName() {
-        return exceptionTranslationName;
-    }
+  public void setInterceptorName(String interceptorName) {
+    this.interceptorName = interceptorName;
+  }
 
+  @Override
+  public boolean canBeRemoved() {
+    return true;
+  }
 
-    public void setExceptionTranslationName(String exceptionTranslationName) {
-        this.exceptionTranslationName = exceptionTranslationName;
-    }
+  public String getExceptionTranslationName() {
+    return exceptionTranslationName;
+  }
 
-
-
+  public void setExceptionTranslationName(String exceptionTranslationName) {
+    this.exceptionTranslationName = exceptionTranslationName;
+  }
 }

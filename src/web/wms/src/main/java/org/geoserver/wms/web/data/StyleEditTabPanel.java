@@ -9,50 +9,51 @@ import org.apache.wicket.model.IModel;
 
 /**
  * Extension point for panels which appear in separate tabs on the style edit page.
- * <p>
- * Subclasses <b>must</b> override the {@link #StyleEditTabPanel(String, IModel)} constructor
- * and <b>not</b> change its signature.
- * </p>
- * <p>
- * Instances of this class are described in a spring context with a {@link StyleEditTabPanelInfo}
+ *
+ * <p>Subclasses <b>must</b> override the {@link #StyleEditTabPanel(String, IModel)} constructor and
+ * <b>not</b> change its signature.
+ *
+ * <p>Instances of this class are described in a spring context with a {@link StyleEditTabPanelInfo}
  * bean.
- * </p>
  */
 public class StyleEditTabPanel extends Panel {
 
-    private static final long serialVersionUID = 8044055895040826418L;
-    
-    protected AbstractStylePage stylePage;
+  private static final long serialVersionUID = 8044055895040826418L;
 
-    /**
-     * @param id The id given to the panel.
-     * @param model The model for the panel which wraps a {@link LayerInfo} instance.
-     */
-    public StyleEditTabPanel(String id, AbstractStylePage parent) {
-        super(id);
-        
-        this.stylePage = parent;
-    }
+  protected AbstractStylePage stylePage;
 
-    protected AbstractStylePage getStylePage() {
-        return stylePage;
-    }
+  /**
+   * @param id The id given to the panel.
+   * @param model The model for the panel which wraps a {@link LayerInfo} instance.
+   */
+  public StyleEditTabPanel(String id, AbstractStylePage parent) {
+    super(id);
 
-    /**
-     * Called by {@link AbstractStylePage} when the style form is submitted.
-     * <p>
-     */
-    protected void onStyleFormSubmit() {
-        //do nothing by default
-    }
-    protected void configurationChanged() {
-        //do nothing by default
-    }
+    this.stylePage = parent;
+  }
 
-    public StyleEditTabPanel setInputEnabled(final boolean enabled) {
-        visitChildren((component, visit) -> {
-            component.setEnabled(enabled);
+  protected AbstractStylePage getStylePage() {
+    return stylePage;
+  }
+
+  /**
+   * Called by {@link AbstractStylePage} when the style form is submitted.
+   *
+   * <p>
+   */
+  protected void onStyleFormSubmit() {
+    // do nothing by default
+  }
+
+  protected void configurationChanged() {
+    // do nothing by default
+  }
+
+  public StyleEditTabPanel setInputEnabled(final boolean enabled) {
+    visitChildren(
+        (component, visit) -> {
+          component.setEnabled(enabled);
         });
-        return this;
-    }
+    return this;
+  }
 }

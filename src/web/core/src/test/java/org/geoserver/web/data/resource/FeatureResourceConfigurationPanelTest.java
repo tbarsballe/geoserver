@@ -1,7 +1,7 @@
 /* (c) 2015 Open Source Geospatial Foundation - all rights reserved
-* This code is licensed under the GPL 2.0 license, available at the root
-* application directory.
-*/
+ * This code is licensed under the GPL 2.0 license, available at the root
+ * application directory.
+ */
 package org.geoserver.web.data.resource;
 
 import org.apache.wicket.model.IModel;
@@ -12,24 +12,28 @@ import org.junit.Test;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 public class FeatureResourceConfigurationPanelTest extends GeoServerWicketTestSupport {
-    @Test()
-    public void testResourceUpdatedAcceptsNull() {
-        FeatureResourceConfigurationPanel panel = new FeatureResourceConfigurationPanel("toto", new IModel() {
-            @Override
-            public FeatureTypeInfo getObject() {
-                return getCatalog().getResourceByName(MockData.BRIDGES.getLocalPart(), FeatureTypeInfo.class);
-            }
+  @Test()
+  public void testResourceUpdatedAcceptsNull() {
+    FeatureResourceConfigurationPanel panel =
+        new FeatureResourceConfigurationPanel(
+            "toto",
+            new IModel() {
+              @Override
+              public FeatureTypeInfo getObject() {
+                return getCatalog()
+                    .getResourceByName(MockData.BRIDGES.getLocalPart(), FeatureTypeInfo.class);
+              }
 
-            @Override
-            public void setObject(Object o) {
+              @Override
+              public void setObject(Object o) {
                 throw new NotImplementedException();
-            }
+              }
 
-            @Override
-            public void detach() {
+              @Override
+              public void detach() {
                 throw new NotImplementedException();
-            }
-        });
-        panel.resourceUpdated(null);
-    }
+              }
+            });
+    panel.resourceUpdated(null);
+  }
 }

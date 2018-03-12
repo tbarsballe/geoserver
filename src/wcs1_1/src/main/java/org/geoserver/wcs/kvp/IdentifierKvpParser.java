@@ -15,20 +15,19 @@ import org.vfny.geoserver.wcs.WcsException;
 
 public class IdentifierKvpParser extends CodeTypeKvpParser {
 
-    private Catalog catalog;
+  private Catalog catalog;
 
-    public IdentifierKvpParser(Catalog catalog) {
-        super("identifier", "wcs");
-        this.catalog = catalog;
-    }
+  public IdentifierKvpParser(Catalog catalog) {
+    super("identifier", "wcs");
+    this.catalog = catalog;
+  }
 
-    @Override
-    public Object parse(String value) throws Exception {
-        LayerInfo layer = catalog.getLayerByName(value);
-        if (layer == null || layer.getType() != PublishedType.RASTER)
-            throw new WcsException("Could not find coverage '" + value + "'",
-                    InvalidParameterValue, "identifier");
-        return super.parse(value);
-    }
-
+  @Override
+  public Object parse(String value) throws Exception {
+    LayerInfo layer = catalog.getLayerByName(value);
+    if (layer == null || layer.getType() != PublishedType.RASTER)
+      throw new WcsException(
+          "Could not find coverage '" + value + "'", InvalidParameterValue, "identifier");
+    return super.parse(value);
+  }
 }

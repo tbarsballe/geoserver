@@ -8,15 +8,14 @@ package org.geoserver.rest;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import net.sf.json.JSON;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 import org.geoserver.test.GeoServerSystemTestSupport;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-
-import net.sf.json.JSON;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 
 /**
  * Class with FontListResource tests
@@ -25,31 +24,31 @@ import net.sf.json.JSONObject;
  */
 public class FontListTest extends GeoServerSystemTestSupport {
 
-    @Test
-    public void testGetAsXML() throws Exception {
-        //make the request, parsing the result as a dom
-        Document dom = getAsDOM(RestBaseController.ROOT_PATH + "/fonts.xml");
+  @Test
+  public void testGetAsXML() throws Exception {
+    // make the request, parsing the result as a dom
+    Document dom = getAsDOM(RestBaseController.ROOT_PATH + "/fonts.xml");
 
-        /*TransformerFactory tf = TransformerFactory.newInstance();
-        Transformer transformer = tf.newTransformer();
-        transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
-        StringWriter writer = new StringWriter();
-        transformer.transform(new DOMSource(dom), new StreamResult(writer));
-        String output = writer.toString();
-        System.out.println(output);*/
-        //make assertions
-        Node fonts = getFirstElementByTagName(dom, "fonts");
-        assertNotNull(fonts);
-        assertTrue( ((Element) fonts).getElementsByTagName("entry").getLength()  > 0);
-    }
+    /*TransformerFactory tf = TransformerFactory.newInstance();
+    Transformer transformer = tf.newTransformer();
+    transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+    StringWriter writer = new StringWriter();
+    transformer.transform(new DOMSource(dom), new StreamResult(writer));
+    String output = writer.toString();
+    System.out.println(output);*/
+    // make assertions
+    Node fonts = getFirstElementByTagName(dom, "fonts");
+    assertNotNull(fonts);
+    assertTrue(((Element) fonts).getElementsByTagName("entry").getLength() > 0);
+  }
 
-    @Test
-    public void testGetAsJSON() throws Exception {
-        //make the request, parsing the result into a json object
-        JSON json = getAsJSON(RestBaseController.ROOT_PATH + "/fonts.json");
+  @Test
+  public void testGetAsJSON() throws Exception {
+    // make the request, parsing the result into a json object
+    JSON json = getAsJSON(RestBaseController.ROOT_PATH + "/fonts.json");
 
-        //make assertions
-        assertTrue(json instanceof JSONObject);
-        assertTrue(((JSONObject) json).get("fonts") instanceof JSONArray);
-    }
+    // make assertions
+    assertTrue(json instanceof JSONObject);
+    assertTrue(((JSONObject) json).get("fonts") instanceof JSONArray);
+  }
 }

@@ -5,6 +5,8 @@
 package org.geoserver.rest;
 
 import freemarker.template.ObjectWrapper;
+import java.lang.reflect.Type;
+import java.util.Collections;
 import org.geoserver.catalog.Catalog;
 import org.geoserver.catalog.WorkspaceInfo;
 import org.geoserver.config.*;
@@ -22,107 +24,117 @@ import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.bind.annotation.*;
 
-import java.lang.reflect.Type;
-import java.util.Collections;
-
 /**
  * Local Settings controller
  *
- * Provides access to workspace-specific settings
+ * <p>Provides access to workspace-specific settings
  */
 @RestController
 @ControllerAdvice
 @RequestMapping(path = RestBaseController.ROOT_PATH + "/workspaces/{workspaceName}/settings")
 public class LocalSettingsController extends AbstractGeoServerController {
 
-    @Autowired
-    public LocalSettingsController(@Qualifier("geoServer") GeoServer geoServer) {
-        super(geoServer);
+  @Autowired
+  public LocalSettingsController(@Qualifier("geoServer") GeoServer geoServer) {
+    super(geoServer);
+  }
+
+  @GetMapping(
+    produces = {
+      MediaType.APPLICATION_JSON_VALUE,
+      MediaType.APPLICATION_XML_VALUE,
+      MediaType.TEXT_HTML_VALUE
     }
+  )
+  public RestWrapper<SettingsInfo> localSettingsGet(@PathVariable String workspaceName) {
 
-    @GetMapping(produces = {
-            MediaType.APPLICATION_JSON_VALUE,
-            MediaType.APPLICATION_XML_VALUE,
-            MediaType.TEXT_HTML_VALUE })
-    public RestWrapper<SettingsInfo> localSettingsGet(@PathVariable String workspaceName) {
-
-        WorkspaceInfo workspaceInfo = geoServer.getCatalog().getWorkspaceByName(workspaceName);
-        SettingsInfo settingsInfo = geoServer.getSettings(workspaceInfo);
-        if (settingsInfo == null) {
-            settingsInfo = new SettingsInfoImpl();
-            settingsInfo.setVerbose(false);
-        }
-        return wrapObject(settingsInfo, SettingsInfo.class);
+    WorkspaceInfo workspaceInfo = geoServer.getCatalog().getWorkspaceByName(workspaceName);
+    SettingsInfo settingsInfo = geoServer.getSettings(workspaceInfo);
+    if (settingsInfo == null) {
+      settingsInfo = new SettingsInfoImpl();
+      settingsInfo.setVerbose(false);
     }
+    return wrapObject(settingsInfo, SettingsInfo.class);
+  }
 
-    @PostMapping(consumes = {
-            MediaType.APPLICATION_JSON_VALUE,
-            MediaTypeExtensions.TEXT_JSON_VALUE,
-            MediaType.APPLICATION_XML_VALUE,
-            MediaType.TEXT_XML_VALUE })
-    @ResponseStatus(HttpStatus.CREATED)
-    public String localSettingsCreate(@PathVariable String workspaceName, @RequestBody SettingsInfo settingsInfo) {
-        String name = "";
-        if (workspaceName != null) {
-            Catalog catalog = geoServer.getCatalog();
-            WorkspaceInfo workspaceInfo = catalog.getWorkspaceByName(workspaceName);
-            settingsInfo.setWorkspace(workspaceInfo);
-            geoServer.add(settingsInfo);
-            geoServer.save(geoServer.getSettings(workspaceInfo));
-            name = settingsInfo.getWorkspace().getName();
-        }
-        return name;
+  @PostMapping(
+    consumes = {
+      MediaType.APPLICATION_JSON_VALUE,
+      MediaTypeExtensions.TEXT_JSON_VALUE,
+      MediaType.APPLICATION_XML_VALUE,
+      MediaType.TEXT_XML_VALUE
     }
-
-    @PutMapping(consumes = {
-            MediaType.APPLICATION_JSON_VALUE,
-            MediaTypeExtensions.TEXT_JSON_VALUE,
-            MediaType.APPLICATION_XML_VALUE,
-            MediaType.TEXT_XML_VALUE })
-    public void localSettingsPut(@PathVariable String workspaceName, @RequestBody SettingsInfo settingsInfo) {
-        if (workspaceName != null) {
-            WorkspaceInfo workspaceInfo = geoServer.getCatalog().getWorkspaceByName(workspaceName);
-            SettingsInfo original = geoServer.getSettings(workspaceInfo);
-            if (original == null) {
-                settingsInfo.setWorkspace(workspaceInfo);
-                geoServer.add(settingsInfo);
-                geoServer.save(geoServer.getSettings(workspaceInfo));
-            } else {
-                OwsUtils.copy(settingsInfo, original, SettingsInfo.class);
-                original.setWorkspace(workspaceInfo);
-                geoServer.save(original);
-            }
-        }
+  )
+  @ResponseStatus(HttpStatus.CREATED)
+  public String localSettingsCreate(
+      @PathVariable String workspaceName, @RequestBody SettingsInfo settingsInfo) {
+    String name = "";
+    if (workspaceName != null) {
+      Catalog catalog = geoServer.getCatalog();
+      WorkspaceInfo workspaceInfo = catalog.getWorkspaceByName(workspaceName);
+      settingsInfo.setWorkspace(workspaceInfo);
+      geoServer.add(settingsInfo);
+      geoServer.save(geoServer.getSettings(workspaceInfo));
+      name = settingsInfo.getWorkspace().getName();
     }
+    return name;
+  }
 
-    @DeleteMapping
-    public void localSetingsDelete(@PathVariable String workspaceName) {
-        if (workspaceName != null) {
-            WorkspaceInfo workspaceInfo = geoServer.getCatalog().getWorkspaceByName(workspaceName);
-            SettingsInfo settingsInfo = geoServer.getSettings(workspaceInfo);
-            geoServer.remove(settingsInfo);
-        }
+  @PutMapping(
+    consumes = {
+      MediaType.APPLICATION_JSON_VALUE,
+      MediaTypeExtensions.TEXT_JSON_VALUE,
+      MediaType.APPLICATION_XML_VALUE,
+      MediaType.TEXT_XML_VALUE
     }
-
-    @Override
-    public boolean supports(MethodParameter methodParameter, Type targetType, Class<? extends HttpMessageConverter<?>> converterType) {
-        return SettingsInfo.class.isAssignableFrom(methodParameter.getParameterType());
+  )
+  public void localSettingsPut(
+      @PathVariable String workspaceName, @RequestBody SettingsInfo settingsInfo) {
+    if (workspaceName != null) {
+      WorkspaceInfo workspaceInfo = geoServer.getCatalog().getWorkspaceByName(workspaceName);
+      SettingsInfo original = geoServer.getSettings(workspaceInfo);
+      if (original == null) {
+        settingsInfo.setWorkspace(workspaceInfo);
+        geoServer.add(settingsInfo);
+        geoServer.save(geoServer.getSettings(workspaceInfo));
+      } else {
+        OwsUtils.copy(settingsInfo, original, SettingsInfo.class);
+        original.setWorkspace(workspaceInfo);
+        geoServer.save(original);
+      }
     }
+  }
 
-    @Override
-    protected String getTemplateName(Object object) {
-        return "localSettings";
+  @DeleteMapping
+  public void localSetingsDelete(@PathVariable String workspaceName) {
+    if (workspaceName != null) {
+      WorkspaceInfo workspaceInfo = geoServer.getCatalog().getWorkspaceByName(workspaceName);
+      SettingsInfo settingsInfo = geoServer.getSettings(workspaceInfo);
+      geoServer.remove(settingsInfo);
     }
+  }
 
-    @Override
-    protected <T> ObjectWrapper createObjectWrapper(Class<T> clazz) {
-        return new ObjectToMapWrapper<>(clazz, Collections.singletonList(WorkspaceInfo.class));
-    }
+  @Override
+  public boolean supports(
+      MethodParameter methodParameter,
+      Type targetType,
+      Class<? extends HttpMessageConverter<?>> converterType) {
+    return SettingsInfo.class.isAssignableFrom(methodParameter.getParameterType());
+  }
 
-    @Override
-    public void configurePersister(XStreamPersister persister, XStreamMessageConverter converter) {
-        persister.setHideFeatureTypeAttributes();
-        persister.getXStream().alias("contact", ContactInfo.class);
-    }
+  @Override
+  protected String getTemplateName(Object object) {
+    return "localSettings";
+  }
 
+  @Override
+  protected <T> ObjectWrapper createObjectWrapper(Class<T> clazz) {
+    return new ObjectToMapWrapper<>(clazz, Collections.singletonList(WorkspaceInfo.class));
+  }
+
+  @Override
+  public void configurePersister(XStreamPersister persister, XStreamMessageConverter converter) {
+    persister.setHideFeatureTypeAttributes();
+    persister.getXStream().alias("contact", ContactInfo.class);
+  }
 }

@@ -8,31 +8,30 @@ package org.geoserver.security.web.data;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
-
 import org.geoserver.ows.util.OwsUtils;
 import org.geoserver.security.impl.DataAccessRule;
 import org.geoserver.security.web.AbstractConfirmRemovalPanel;
 
 public class ConfirmRemovalDataAccessRulePanel extends AbstractConfirmRemovalPanel<DataAccessRule> {
 
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-    
-    public ConfirmRemovalDataAccessRulePanel(String id, List<DataAccessRule> roots) {
-        super(id, roots);        
-    }
-    
-    public ConfirmRemovalDataAccessRulePanel(String id,DataAccessRule... roots) {
-        this(id, Arrays.asList(roots));
-    }
+  public ConfirmRemovalDataAccessRulePanel(String id, List<DataAccessRule> roots) {
+    super(id, roots);
+  }
 
-    @Override
-    protected String getConfirmationMessage(DataAccessRule object) throws Exception{
-        return OwsUtils.property(object, "workspace", String.class) + "."
-                + OwsUtils.property(object, "layer", String.class) + "."
-                + OwsUtils.property(object, "accessMode", String.class) + "="
-                + OwsUtils.property(object, "roles", Set.class);
-    }
+  public ConfirmRemovalDataAccessRulePanel(String id, DataAccessRule... roots) {
+    this(id, Arrays.asList(roots));
+  }
 
-
+  @Override
+  protected String getConfirmationMessage(DataAccessRule object) throws Exception {
+    return OwsUtils.property(object, "workspace", String.class)
+        + "."
+        + OwsUtils.property(object, "layer", String.class)
+        + "."
+        + OwsUtils.property(object, "accessMode", String.class)
+        + "="
+        + OwsUtils.property(object, "roles", Set.class);
+  }
 }

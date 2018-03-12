@@ -7,7 +7,6 @@ package org.geoserver.security.decorators;
 
 import java.util.List;
 import java.util.Set;
-
 import org.geoserver.catalog.AttributionInfo;
 import org.geoserver.catalog.AuthorityURLInfo;
 import org.geoserver.catalog.CatalogVisitor;
@@ -21,180 +20,182 @@ import org.geoserver.catalog.StyleInfo;
 import org.geoserver.catalog.impl.AbstractDecorator;
 
 /**
- * Delegates every method to the wrapped {@link LayerInfo}. Subclasses will
- * override selected methods to perform their "decoration" job
- * 
+ * Delegates every method to the wrapped {@link LayerInfo}. Subclasses will override selected
+ * methods to perform their "decoration" job
+ *
  * @author Andrea Aime
  */
 public class DecoratingLayerInfo extends AbstractDecorator<LayerInfo> implements LayerInfo {
 
-    public DecoratingLayerInfo(LayerInfo delegate) {
-        super(delegate);
-    }
+  public DecoratingLayerInfo(LayerInfo delegate) {
+    super(delegate);
+  }
 
-    public StyleInfo getDefaultStyle() {
-        return delegate.getDefaultStyle();
-    }
+  public StyleInfo getDefaultStyle() {
+    return delegate.getDefaultStyle();
+  }
 
-    public String getId() {
-        return delegate.getId();
-    }
+  public String getId() {
+    return delegate.getId();
+  }
 
-    public LegendInfo getLegend() {
-        return delegate.getLegend();
-    }
+  public LegendInfo getLegend() {
+    return delegate.getLegend();
+  }
 
-    public MetadataMap getMetadata() {
-        return delegate.getMetadata();
-    }
+  public MetadataMap getMetadata() {
+    return delegate.getMetadata();
+  }
 
-    public String getName() {
-        return delegate.getName();
-    }
+  public String getName() {
+    return delegate.getName();
+  }
 
-    public String prefixedName() {
-        return delegate.prefixedName();
-    }
+  public String prefixedName() {
+    return delegate.prefixedName();
+  }
 
-    public String getPath() {
-        return delegate.getPath();
-    }
+  public String getPath() {
+    return delegate.getPath();
+  }
 
-    public ResourceInfo getResource() {
-        return delegate.getResource();
-    }
+  public ResourceInfo getResource() {
+    return delegate.getResource();
+  }
 
-    public Set<StyleInfo> getStyles() {
-        return delegate.getStyles();
-    }
+  public Set<StyleInfo> getStyles() {
+    return delegate.getStyles();
+  }
 
-    public PublishedType getType() {
-        return delegate.getType();
-    }
+  public PublishedType getType() {
+    return delegate.getType();
+  }
 
-    public AttributionInfo getAttribution() {
-        return delegate.getAttribution();
-    }
+  public AttributionInfo getAttribution() {
+    return delegate.getAttribution();
+  }
 
-    public boolean isEnabled() {
-        return delegate.isEnabled();
-    }
+  public boolean isEnabled() {
+    return delegate.isEnabled();
+  }
 
-    public boolean enabled() {
-        return delegate.enabled();
-    }
+  public boolean enabled() {
+    return delegate.enabled();
+  }
 
-    public void setDefaultStyle(StyleInfo defaultStyle) {
-        delegate.setDefaultStyle(defaultStyle);
-    }
+  public void setDefaultStyle(StyleInfo defaultStyle) {
+    delegate.setDefaultStyle(defaultStyle);
+  }
 
-    public void setEnabled(boolean enabled) {
-        delegate.setEnabled(enabled);
-    }
+  public void setEnabled(boolean enabled) {
+    delegate.setEnabled(enabled);
+  }
 
-    public void setLegend(LegendInfo legend) {
-        delegate.setLegend(legend);
-    }
+  public void setLegend(LegendInfo legend) {
+    delegate.setLegend(legend);
+  }
 
-    public void setName(String name) {
-        delegate.setName(name);
-    }
+  public void setName(String name) {
+    delegate.setName(name);
+  }
 
-    public void setPath(String path) {
-        delegate.setPath(path);
-    }
+  public void setPath(String path) {
+    delegate.setPath(path);
+  }
 
-    public void setResource(ResourceInfo resource) {
-        delegate.setResource(resource);
-    }
+  public void setResource(ResourceInfo resource) {
+    delegate.setResource(resource);
+  }
 
-    public void setType(PublishedType type) {
-        delegate.setType(type);
-    }
+  public void setType(PublishedType type) {
+    delegate.setType(type);
+  }
 
-    public void setAttribution(AttributionInfo attr) {
-        delegate.setAttribution(attr);
-    }
-    
-    public void accept(CatalogVisitor visitor) {
-        delegate.accept(visitor);
-    }
+  public void setAttribution(AttributionInfo attr) {
+    delegate.setAttribution(attr);
+  }
 
-    @Override
-    public String toString() {
-        return new StringBuilder(getClass().getSimpleName()).append('[').append(delegate).append(
-                ']').toString();
-    }
+  public void accept(CatalogVisitor visitor) {
+    delegate.accept(visitor);
+  }
 
-    public void setQueryable(boolean _queryableEnabled) {
-        delegate.setQueryable(_queryableEnabled);
-    }
+  @Override
+  public String toString() {
+    return new StringBuilder(getClass().getSimpleName())
+        .append('[')
+        .append(delegate)
+        .append(']')
+        .toString();
+  }
 
-    public boolean isQueryable() {
-        return delegate.isQueryable();
-    }
+  public void setQueryable(boolean _queryableEnabled) {
+    delegate.setQueryable(_queryableEnabled);
+  }
 
-    public void setOpaque(boolean _opaqueEnabled) {
-        delegate.setOpaque(_opaqueEnabled);
-    }
+  public boolean isQueryable() {
+    return delegate.isQueryable();
+  }
 
-    public boolean isOpaque() {
-        return delegate.isOpaque();
-    }
+  public void setOpaque(boolean _opaqueEnabled) {
+    delegate.setOpaque(_opaqueEnabled);
+  }
 
-    @Override
-    public boolean isAdvertised() {
-        return delegate.isAdvertised();
-    }
+  public boolean isOpaque() {
+    return delegate.isOpaque();
+  }
 
-    @Override
-    public void setAdvertised(boolean advertised) {
-        delegate.setAdvertised(advertised);
-    }
+  @Override
+  public boolean isAdvertised() {
+    return delegate.isAdvertised();
+  }
 
-    @Override
-    public List<AuthorityURLInfo> getAuthorityURLs() {
-        return delegate.getAuthorityURLs();
-    }
+  @Override
+  public void setAdvertised(boolean advertised) {
+    delegate.setAdvertised(advertised);
+  }
 
-    @Override
-    public List<LayerIdentifierInfo> getIdentifiers() {
-        return delegate.getIdentifiers();
-    }
+  @Override
+  public List<AuthorityURLInfo> getAuthorityURLs() {
+    return delegate.getAuthorityURLs();
+  }
 
-    @Override
-    public String getTitle() {
-        return delegate.getTitle();
-    }
+  @Override
+  public List<LayerIdentifierInfo> getIdentifiers() {
+    return delegate.getIdentifiers();
+  }
 
-    @Override
-    public void setTitle(String title) {
-        delegate.setTitle(title);
-    }
+  @Override
+  public String getTitle() {
+    return delegate.getTitle();
+  }
 
-    @Override
-    public String getAbstract() {
-        return delegate.getAbstract();
-    }
+  @Override
+  public void setTitle(String title) {
+    delegate.setTitle(title);
+  }
 
-    @Override
-    public void setAbstract(String abstractTxt) {
-        delegate.setAbstract(abstractTxt);
-    }
+  @Override
+  public String getAbstract() {
+    return delegate.getAbstract();
+  }
 
-    @Override
-    public String getPrefixedName() {
-        return delegate.getPrefixedName();
-    }
-    
-    @Override
-    public WMSInterpolation getDefaultWMSInterpolationMethod() {
-        return delegate.getDefaultWMSInterpolationMethod();
-    }
-    
-    @Override
-    public void setDefaultWMSInterpolationMethod(WMSInterpolation interpolationMethod) {
-        delegate.setDefaultWMSInterpolationMethod(interpolationMethod);
-    }
-    
+  @Override
+  public void setAbstract(String abstractTxt) {
+    delegate.setAbstract(abstractTxt);
+  }
+
+  @Override
+  public String getPrefixedName() {
+    return delegate.getPrefixedName();
+  }
+
+  @Override
+  public WMSInterpolation getDefaultWMSInterpolationMethod() {
+    return delegate.getDefaultWMSInterpolationMethod();
+  }
+
+  @Override
+  public void setDefaultWMSInterpolationMethod(WMSInterpolation interpolationMethod) {
+    delegate.setDefaultWMSInterpolationMethod(interpolationMethod);
+  }
 }

@@ -9,62 +9,59 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Map;
 import java.util.logging.Logger;
-
 import org.geoserver.config.util.LegacyServicesReader;
 import org.geotools.util.Converters;
 import org.geotools.util.logging.Logging;
 
 /**
  * Imports logging configuration from the legacy services.xml file.
- * 
+ *
  * @author Justin Deoliveira, OpenGEO
- * 
  */
 public class LegacyLoggingImporter {
 
-    /** logger */
-    static Logger LOGGER = Logging.getLogger("org.geoserver.confg");
+  /** logger */
+  static Logger LOGGER = Logging.getLogger("org.geoserver.confg");
 
-    private String configFileName;
+  private String configFileName;
 
-    private String logFile;
+  private String logFile;
 
-    private Boolean suppressStdOutLogging;
+  private Boolean suppressStdOutLogging;
 
-    private LegacyServicesReader reader(File dir) throws Exception {
-        // services.xml
-        File servicesFile = new File(dir, "services.xml");
-        if (!servicesFile.exists()) {
-            throw new FileNotFoundException("Could not find services.xml under:"
-                    + dir.getAbsolutePath());
-        }
-
-        // create a services.xml reader
-        LegacyServicesReader reader = new LegacyServicesReader();
-        reader.read(servicesFile);
-
-        return reader;
+  private LegacyServicesReader reader(File dir) throws Exception {
+    // services.xml
+    File servicesFile = new File(dir, "services.xml");
+    if (!servicesFile.exists()) {
+      throw new FileNotFoundException("Could not find services.xml under:" + dir.getAbsolutePath());
     }
 
-    public void imprt(File dir) throws Exception {
-        LegacyServicesReader reader = reader(dir);
-        Map<String, Object> global = reader.global();
+    // create a services.xml reader
+    LegacyServicesReader reader = new LegacyServicesReader();
+    reader.read(servicesFile);
 
-        configFileName = (String) global.get("log4jConfigFile");
-        logFile = (String) global.get("logLocation");
+    return reader;
+  }
 
-        suppressStdOutLogging = Converters.convert(global.get("suppressStdOutLogging"), Boolean.class);
-    }
+  public void imprt(File dir) throws Exception {
+    LegacyServicesReader reader = reader(dir);
+    Map<String, Object> global = reader.global();
 
-    public String getConfigFileName() {
-        return configFileName;
-    }
+    configFileName = (String) global.get("log4jConfigFile");
+    logFile = (String) global.get("logLocation");
 
-    public String getLogFile() {
-        return logFile;
-    }
+    suppressStdOutLogging = Converters.convert(global.get("suppressStdOutLogging"), Boolean.class);
+  }
 
-    public Boolean getSuppressStdOutLogging() {
-        return suppressStdOutLogging;
-    }
+  public String getConfigFileName() {
+    return configFileName;
+  }
+
+  public String getLogFile() {
+    return logFile;
+  }
+
+  public Boolean getSuppressStdOutLogging() {
+    return suppressStdOutLogging;
+  }
 }

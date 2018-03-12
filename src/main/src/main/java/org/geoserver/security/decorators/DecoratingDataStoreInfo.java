@@ -8,7 +8,6 @@ package org.geoserver.security.decorators;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Map;
-
 import org.geoserver.catalog.Catalog;
 import org.geoserver.catalog.CatalogVisitor;
 import org.geoserver.catalog.DataStoreInfo;
@@ -21,94 +20,93 @@ import org.opengis.feature.type.FeatureType;
 import org.opengis.util.ProgressListener;
 
 /**
- * Delegates every method to the wrapped {@link DataStoreInfo}. Subclasses will
- * override selected methods to perform their "decoration" job
- * 
+ * Delegates every method to the wrapped {@link DataStoreInfo}. Subclasses will override selected
+ * methods to perform their "decoration" job
+ *
  * @author Andrea Aime
  */
 @SuppressWarnings("serial")
-public class DecoratingDataStoreInfo extends AbstractDecorator<DataStoreInfo> implements
-        DataStoreInfo {
+public class DecoratingDataStoreInfo extends AbstractDecorator<DataStoreInfo>
+    implements DataStoreInfo {
 
-    public DecoratingDataStoreInfo(DataStoreInfo delegate) {
-        super(delegate);
-    }
+  public DecoratingDataStoreInfo(DataStoreInfo delegate) {
+    super(delegate);
+  }
 
-    public Catalog getCatalog() {
-        return delegate.getCatalog();
-    }
+  public Catalog getCatalog() {
+    return delegate.getCatalog();
+  }
 
-    public Map<String, Serializable> getConnectionParameters() {
-        return delegate.getConnectionParameters();
-    }
+  public Map<String, Serializable> getConnectionParameters() {
+    return delegate.getConnectionParameters();
+  }
 
-    public DataAccess<? extends FeatureType, ? extends Feature> getDataStore(
-            ProgressListener listener) throws IOException {
-        return delegate.getDataStore(listener);
-    }
+  public DataAccess<? extends FeatureType, ? extends Feature> getDataStore(
+      ProgressListener listener) throws IOException {
+    return delegate.getDataStore(listener);
+  }
 
-    public String getDescription() {
-        return delegate.getDescription();
-    }
-    
-    public String getType() {
-        return delegate.getType();
-    }
+  public String getDescription() {
+    return delegate.getDescription();
+  }
 
-    public Throwable getError() {
-        return delegate.getError();
-    }
+  public String getType() {
+    return delegate.getType();
+  }
 
-    public String getId() {
-        return delegate.getId();
-    }
+  public Throwable getError() {
+    return delegate.getError();
+  }
 
-    public MetadataMap getMetadata() {
-        return delegate.getMetadata();
-    }
+  public String getId() {
+    return delegate.getId();
+  }
 
-    public String getName() {
-        return delegate.getName();
-    }
+  public MetadataMap getMetadata() {
+    return delegate.getMetadata();
+  }
 
-    public WorkspaceInfo getWorkspace() {
-        return delegate.getWorkspace();
-    }
+  public String getName() {
+    return delegate.getName();
+  }
 
-    public boolean isEnabled() {
-        return delegate.isEnabled();
-    }
+  public WorkspaceInfo getWorkspace() {
+    return delegate.getWorkspace();
+  }
 
-    public void setDescription(String description) {
-        delegate.setDescription(description);
-    }
+  public boolean isEnabled() {
+    return delegate.isEnabled();
+  }
 
-    public void setType(String type) {
-        delegate.setType(type);
-    }
-    
-    public void setEnabled(boolean enabled) {
-        delegate.setEnabled(enabled);
-    }
+  public void setDescription(String description) {
+    delegate.setDescription(description);
+  }
 
-    public void setError(Throwable t) {
-        delegate.setError(t);
-    }
+  public void setType(String type) {
+    delegate.setType(type);
+  }
 
-    public void setName(String name) {
-        delegate.setName(name);
-    }
+  public void setEnabled(boolean enabled) {
+    delegate.setEnabled(enabled);
+  }
 
-    public void setWorkspace(WorkspaceInfo workspace) {
-        delegate.setWorkspace(workspace);
-    }
+  public void setError(Throwable t) {
+    delegate.setError(t);
+  }
 
-    public void accept(CatalogVisitor visitor) {
-        delegate.accept(visitor);
-    }
-    
-    public <T> T getAdapter(Class<T> adapterClass, Map<?, ?> hints) {
-        return delegate.getAdapter(adapterClass, hints);
-    }
+  public void setName(String name) {
+    delegate.setName(name);
+  }
 
+  public void setWorkspace(WorkspaceInfo workspace) {
+    delegate.setWorkspace(workspace);
+  }
+
+  public void accept(CatalogVisitor visitor) {
+    delegate.accept(visitor);
+  }
+
+  public <T> T getAdapter(Class<T> adapterClass, Map<?, ?> hints) {
+    return delegate.getAdapter(adapterClass, hints);
+  }
 }

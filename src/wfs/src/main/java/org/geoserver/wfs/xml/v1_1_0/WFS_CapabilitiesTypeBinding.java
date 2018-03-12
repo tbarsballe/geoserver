@@ -6,19 +6,17 @@
 package org.geoserver.wfs.xml.v1_1_0;
 
 import javax.xml.namespace.QName;
-
 import net.opengis.wfs.WfsFactory;
-
 import org.geotools.xml.AbstractComplexBinding;
 import org.geotools.xml.ElementInstance;
 import org.geotools.xml.Node;
-
 
 /**
  * Binding object for the type http://www.opengis.net/wfs:WFS_CapabilitiesType.
  *
  * <p>
- *        <pre>
+ *
+ * <pre>
  *         <code>
  *  &lt;xsd:complexType name="WFS_CapabilitiesType"&gt;
  *      &lt;xsd:annotation&gt;
@@ -52,41 +50,41 @@ import org.geotools.xml.Node;
  *
  *          </code>
  *         </pre>
+ *
  * @generated
  */
 public class WFS_CapabilitiesTypeBinding extends AbstractComplexBinding {
-    WfsFactory wfsfactory;
+  WfsFactory wfsfactory;
 
-    public WFS_CapabilitiesTypeBinding(WfsFactory wfsfactory) {
-        this.wfsfactory = wfsfactory;
-    }
+  public WFS_CapabilitiesTypeBinding(WfsFactory wfsfactory) {
+    this.wfsfactory = wfsfactory;
+  }
 
-    /**
-     * @generated
-     */
-    public QName getTarget() {
-        return WFS.WFS_CAPABILITIESTYPE;
-    }
+  /** @generated */
+  public QName getTarget() {
+    return WFS.WFS_CAPABILITIESTYPE;
+  }
 
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     *
-     * @generated modifiable
-     */
-    public Class getType() {
-        return null;
-    }
+  /**
+   *
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   *
+   * @generated modifiable
+   */
+  public Class getType() {
+    return null;
+  }
 
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     *
-     * @generated modifiable
-     */
-    public Object parse(ElementInstance instance, Node node, Object value)
-        throws Exception {
-        //TODO: implement
-        return null;
-    }
+  /**
+   *
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   *
+   * @generated modifiable
+   */
+  public Object parse(ElementInstance instance, Node node, Object value) throws Exception {
+    // TODO: implement
+    return null;
+  }
 }

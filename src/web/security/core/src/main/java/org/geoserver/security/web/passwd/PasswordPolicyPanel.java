@@ -17,62 +17,60 @@ import org.geoserver.security.web.SecurityNamedServicePanel;
 
 /**
  * Configuration panel for {@link PasswordPolicy}.
- * 
- * @author Justin Deoliveira, OpenGeo
  *
+ * @author Justin Deoliveira, OpenGeo
  */
 public class PasswordPolicyPanel extends SecurityNamedServicePanel<PasswordPolicyConfig> {
 
-    MaxLengthPanel maxLengthPanel;
+  MaxLengthPanel maxLengthPanel;
 
-    public PasswordPolicyPanel(String id, IModel<PasswordPolicyConfig> model) {
-        super(id, model);
+  public PasswordPolicyPanel(String id, IModel<PasswordPolicyConfig> model) {
+    super(id, model);
 
-        PasswordPolicyConfig pwPolicy = model.getObject();
+    PasswordPolicyConfig pwPolicy = model.getObject();
 
-        //add(new TextField("name").setRequired(true));
-        add(new CheckBox("digitRequired"));
-        add(new CheckBox("uppercaseRequired"));
-        add(new CheckBox("lowercaseRequired"));
-        add(new TextField<Integer>("minLength"));
+    // add(new TextField("name").setRequired(true));
+    add(new CheckBox("digitRequired"));
+    add(new CheckBox("uppercaseRequired"));
+    add(new CheckBox("lowercaseRequired"));
+    add(new TextField<Integer>("minLength"));
 
-        boolean unlimited = pwPolicy.getMaxLength() == -1;
-        add(new AjaxCheckBox("unlimitedMaxLength", new Model(unlimited)) {
-            
-            @Override
-            protected void onUpdate(AjaxRequestTarget target) {
-                Boolean value = getModelObject();
-                maxLengthPanel.setVisible(!value);
-                if (value) {
-                    maxLengthPanel.setUnlimited();
-                }
-                target.add(maxLengthPanel.getParent());
+    boolean unlimited = pwPolicy.getMaxLength() == -1;
+    add(
+        new AjaxCheckBox("unlimitedMaxLength", new Model(unlimited)) {
+
+          @Override
+          protected void onUpdate(AjaxRequestTarget target) {
+            Boolean value = getModelObject();
+            maxLengthPanel.setVisible(!value);
+            if (value) {
+              maxLengthPanel.setUnlimited();
             }
+            target.add(maxLengthPanel.getParent());
+          }
         });
-        add(maxLengthPanel = 
-            (MaxLengthPanel) new MaxLengthPanel("maxLength").setVisible(!unlimited));
+    add(maxLengthPanel = (MaxLengthPanel) new MaxLengthPanel("maxLength").setVisible(!unlimited));
+  }
+
+  public void doSave(PasswordPolicyConfig config) throws Exception {
+    getSecurityManager().savePasswordPolicy(config);
+  }
+
+  @Override
+  public void doLoad(PasswordPolicyConfig config) throws Exception {
+    getSecurityManager().loadPasswordPolicyConfig(config.getName());
+  }
+
+  class MaxLengthPanel extends FormComponentPanel {
+
+    public MaxLengthPanel(String id) {
+      super(id, new Model());
+      add(new TextField<Integer>("maxLength"));
+      setOutputMarkupId(true);
     }
 
-    
-    public void doSave(PasswordPolicyConfig config) throws Exception {
-        getSecurityManager().savePasswordPolicy(config);
+    public void setUnlimited() {
+      get("maxLength").setDefaultModelObject(-1);
     }
-
-    @Override
-    public void doLoad(PasswordPolicyConfig config) throws Exception {
-        getSecurityManager().loadPasswordPolicyConfig(config.getName());
-    }
-
-    class MaxLengthPanel extends FormComponentPanel {
-
-        public MaxLengthPanel(String id) {
-            super(id, new Model());
-            add(new TextField<Integer>("maxLength"));
-            setOutputMarkupId(true);
-        }
-
-        public void setUnlimited() {
-            get("maxLength").setDefaultModelObject(-1);
-        }
-    }
+  }
 }

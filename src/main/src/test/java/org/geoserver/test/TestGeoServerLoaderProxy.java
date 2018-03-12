@@ -13,13 +13,12 @@ import org.springframework.context.ApplicationContext;
 
 public class TestGeoServerLoaderProxy extends GeoServerLoaderProxy {
 
-    public TestGeoServerLoaderProxy(GeoServerResourceLoader resourceLoader) {
-        super(resourceLoader);
-    }
+  public TestGeoServerLoaderProxy(GeoServerResourceLoader resourceLoader) {
+    super(resourceLoader);
+  }
 
-    @Override
-    protected GeoServerLoader lookupGeoServerLoader(ApplicationContext appContext) {
-        return new LegacyGeoServerLoader(resourceLoader);
-    }
-
+  @Override
+  protected GeoServerLoader lookupGeoServerLoader(ApplicationContext appContext) {
+    return new LegacyGeoServerLoader(resourceLoader);
+  }
 }

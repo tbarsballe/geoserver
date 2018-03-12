@@ -5,7 +5,6 @@
 package org.geoserver.wcs2_0;
 
 import java.io.InputStream;
-
 import org.geoserver.config.util.XStreamPersister;
 import org.geoserver.config.util.XStreamPersisterFactory;
 import org.geoserver.data.test.SystemTestData;
@@ -16,20 +15,19 @@ import org.junit.Test;
 
 public class WCSXStreamLoaderTest extends WCSTestSupport {
 
-    @Override
-    protected void setUpTestData(SystemTestData testData) throws Exception {
-        // no test data needed
-    }
+  @Override
+  protected void setUpTestData(SystemTestData testData) throws Exception {
+    // no test data needed
+  }
 
-    @Test
-    public void testLoadFromXML() throws Exception {
-        XStreamPersisterFactory factory = GeoServerExtensions.bean(XStreamPersisterFactory.class);
-        XStreamPersister xp = factory.createXMLPersister();
-        WCSXStreamLoader loader = GeoServerExtensions.bean(WCSXStreamLoader.class);
-        loader.initXStreamPersister(xp, getGeoServer());
-        try (InputStream is = getClass().getResourceAsStream("/wcs-test.xml")) {
-            xp.load(is, WCSInfo.class);
-        }
-
+  @Test
+  public void testLoadFromXML() throws Exception {
+    XStreamPersisterFactory factory = GeoServerExtensions.bean(XStreamPersisterFactory.class);
+    XStreamPersister xp = factory.createXMLPersister();
+    WCSXStreamLoader loader = GeoServerExtensions.bean(WCSXStreamLoader.class);
+    loader.initXStreamPersister(xp, getGeoServer());
+    try (InputStream is = getClass().getResourceAsStream("/wcs-test.xml")) {
+      xp.load(is, WCSInfo.class);
     }
+  }
 }

@@ -6,11 +6,10 @@
 package org.geoserver.wcs.web;
 
 import java.util.Arrays;
-
 import org.apache.wicket.markup.html.form.CheckBox;
+import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.IModel;
@@ -25,58 +24,62 @@ import org.geoserver.web.wicket.SRSListTextArea;
 import org.geotools.coverage.grid.io.OverviewPolicy;
 
 public class WCSAdminPage extends BaseServiceAdminPage<WCSInfo> {
-    
-    public WCSAdminPage() {
-        super();
+
+  public WCSAdminPage() {
+    super();
+  }
+
+  public WCSAdminPage(PageParameters pageParams) {
+    super(pageParams);
+  }
+
+  public WCSAdminPage(WCSInfo service) {
+    super(service);
+  }
+
+  protected Class<WCSInfo> getServiceClass() {
+    return WCSInfo.class;
+  }
+
+  protected void build(IModel info, Form form) {
+    // overview policy
+    form.add(
+        new DropDownChoice(
+            "overviewPolicy",
+            Arrays.asList(OverviewPolicy.values()),
+            new OverviewPolicyRenderer()));
+    form.add(new CheckBox("subsamplingEnabled"));
+
+    // limited srs list
+    TextArea srsList =
+        new SRSListTextArea("srs", LiveCollectionModel.list(new PropertyModel(info, "sRS")));
+    form.add(srsList);
+
+    // resource limits
+    TextField maxInputMemory = new TextField("maxInputMemory");
+    maxInputMemory.add(RangeValidator.minimum(0l));
+    form.add(maxInputMemory);
+    TextField maxOutputMemory = new TextField("maxOutputMemory");
+    maxOutputMemory.add(RangeValidator.minimum(0l));
+    form.add(maxOutputMemory);
+
+    // lat-lon VS lon-lat
+    form.add(new CheckBox("latLon"));
+  }
+
+  protected String getServiceName() {
+    return "WCS";
+  }
+
+  private class OverviewPolicyRenderer extends ChoiceRenderer {
+
+    public Object getDisplayValue(Object object) {
+      return new StringResourceModel(((OverviewPolicy) object).name(), WCSAdminPage.this, null)
+          .getString();
     }
 
-    public WCSAdminPage(PageParameters pageParams) {
-        super(pageParams);
+    public String getIdValue(Object object, int index) {
+      return ((OverviewPolicy) object).name();
     }
-
-    public WCSAdminPage(WCSInfo service) {
-        super(service);
-    }
-
-    protected Class<WCSInfo> getServiceClass() {
-        return WCSInfo.class;
-    }
-    
-    protected void build(IModel info, Form form) {
-        // overview policy
-        form.add(new DropDownChoice("overviewPolicy", Arrays.asList(OverviewPolicy.values()), new OverviewPolicyRenderer()));
-        form.add(new CheckBox("subsamplingEnabled"));
-        
-        // limited srs list
-        TextArea srsList = new SRSListTextArea("srs", LiveCollectionModel.list(new PropertyModel(info, "sRS")));
-        form.add(srsList);
-        
-        // resource limits
-        TextField maxInputMemory = new TextField("maxInputMemory");
-        maxInputMemory.add(RangeValidator.minimum(0l));
-        form.add(maxInputMemory);
-        TextField maxOutputMemory = new TextField("maxOutputMemory");
-        maxOutputMemory.add(RangeValidator.minimum(0l));
-        form.add(maxOutputMemory);
-        
-        // lat-lon VS lon-lat
-        form.add(new CheckBox("latLon"));
-        
-    }
-
-    protected String getServiceName(){
-        return "WCS";
-    }
-    
-    private class OverviewPolicyRenderer extends ChoiceRenderer {
-
-        public Object getDisplayValue(Object object) {
-            return new StringResourceModel(((OverviewPolicy) object).name(), WCSAdminPage.this, null).getString();
-        }
-
-        public String getIdValue(Object object, int index) {
-            return ((OverviewPolicy) object).name();
-        }
-    }
-        
+  }
 }

@@ -11,17 +11,16 @@ import org.junit.Test;
 
 public class SystemPropertiesStatusTest {
 
-    String KEY = "TESTTESTTEST";
+  String KEY = "TESTTESTTEST";
 
-    String VALUE = "ABCDEF_TEST_TEST_TEST";
+  String VALUE = "ABCDEF_TEST_TEST_TEST";
 
-    @Test
-    public void testSystemPropertiesStatus() {
-        System.setProperty(KEY, VALUE);
-        SystemPropertyStatus status = new SystemPropertyStatus();
-        assertTrue(status.getMessage().isPresent());
-        assertTrue(status.getMessage().get().contains(KEY));
-        assertTrue(status.getMessage().get().contains(VALUE));
-    }
-
+  @Test
+  public void testSystemPropertiesStatus() {
+    System.setProperty(KEY, VALUE);
+    SystemPropertyStatus status = new SystemPropertyStatus();
+    assertTrue(status.getMessage().isPresent());
+    assertTrue(status.getMessage().get().contains(KEY));
+    assertTrue(status.getMessage().get().contains(VALUE));
+  }
 }

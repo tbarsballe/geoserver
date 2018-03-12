@@ -14,17 +14,17 @@ import org.geoserver.security.web.usergroup.UserGroupServicePanel;
 
 /**
  * Configuration panel for {@link JDBCUserGroupService}.
- *  
+ *
  * @author Justin Deoliveira, OpenGeo
  */
 public class JDBCUserGroupServicePanel extends UserGroupServicePanel<JDBCUserGroupServiceConfig> {
 
-    public JDBCUserGroupServicePanel(String id, IModel<JDBCUserGroupServiceConfig> model) {
-        super(id, model);
+  public JDBCUserGroupServicePanel(String id, IModel<JDBCUserGroupServiceConfig> model) {
+    super(id, model);
 
-        add(new JDBCConnectionPanel("cx", model));
-        add(new CheckBox("creatingTables"));
-        add(new TextField("propertyFileNameDDL"));
-        add(new TextField("propertyFileNameDML"));
-    }
+    add(new JDBCConnectionPanel("cx", model));
+    add(new CheckBox("creatingTables"));
+    add(new TextField("propertyFileNameDDL"));
+    add(new TextField("propertyFileNameDML"));
+  }
 }

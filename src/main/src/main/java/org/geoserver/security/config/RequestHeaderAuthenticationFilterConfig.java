@@ -10,30 +10,24 @@ import org.geoserver.security.filter.GeoServerRequestHeaderAuthenticationFilter;
 
 /**
  * {@link GeoServerRequestHeaderAuthenticationFilter} configuration object.
- * 
- * <p>
- * {@link #getPrincipalHeaderAttribute()} is the name of the header 
- * containing the principal name.
- * </p>
- * 
+ *
+ * <p>{@link #getPrincipalHeaderAttribute()} is the name of the header containing the principal
+ * name.
+ *
  * @author christian
  */
-public class RequestHeaderAuthenticationFilterConfig extends PreAuthenticatedUserNameFilterConfig 
+public class RequestHeaderAuthenticationFilterConfig extends PreAuthenticatedUserNameFilterConfig
     implements SecurityAuthFilterConfig {
 
-    private String principalHeaderAttribute;
+  private String principalHeaderAttribute;
 
-    
-    
-    private static final long serialVersionUID = 1L;
-    
+  private static final long serialVersionUID = 1L;
 
-    public String getPrincipalHeaderAttribute() {
-        return principalHeaderAttribute;
-    }
+  public String getPrincipalHeaderAttribute() {
+    return principalHeaderAttribute;
+  }
 
-    public void setPrincipalHeaderAttribute(String principalHeaderAttribute) {
-        this.principalHeaderAttribute = principalHeaderAttribute;
-    }
-
+  public void setPrincipalHeaderAttribute(String principalHeaderAttribute) {
+    this.principalHeaderAttribute = principalHeaderAttribute;
+  }
 }

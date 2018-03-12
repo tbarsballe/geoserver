@@ -10,44 +10,42 @@ import java.awt.GraphicsEnvironment;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 import org.geoserver.web.wicket.GeoServerDataProvider;
 
 /**
  * Provides a filtered, sorted view over the fonts that are available to the JVM
- * 
+ *
  * @author Miles Jordan, Australian Antarctic Division
  */
-@SuppressWarnings( { "serial" })
+@SuppressWarnings({"serial"})
 public class PreviewFontProvider extends GeoServerDataProvider<PreviewFont> {
-    public static final Property<PreviewFont> NAME = new BeanProperty<PreviewFont>("name",
-            "fontName");
+  public static final Property<PreviewFont> NAME =
+      new BeanProperty<PreviewFont>("name", "fontName");
 
-    public static final Property<PreviewFont> PREVIEW_IMAGE = new BeanProperty<PreviewFont>(
-            "previewImage", "previewImage") {
+  public static final Property<PreviewFont> PREVIEW_IMAGE =
+      new BeanProperty<PreviewFont>("previewImage", "previewImage") {
         public boolean isSearchable() {
-            return false;
+          return false;
         }
-    };
+      };
 
-    public static final List<Property<PreviewFont>> PROPERTIES = Arrays.asList(NAME, PREVIEW_IMAGE);
+  public static final List<Property<PreviewFont>> PROPERTIES = Arrays.asList(NAME, PREVIEW_IMAGE);
 
-    @Override
-    protected List<PreviewFont> getItems() {
-        List<PreviewFont> result = new ArrayList<PreviewFont>();
+  @Override
+  protected List<PreviewFont> getItems() {
+    List<PreviewFont> result = new ArrayList<PreviewFont>();
 
-        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-        Font fonts[] = ge.getAllFonts();
-        for (Font font : fonts) {
-            result.add(new PreviewFont(font.deriveFont(12f)));
-        }
-
-        return result;
+    GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+    Font fonts[] = ge.getAllFonts();
+    for (Font font : fonts) {
+      result.add(new PreviewFont(font.deriveFont(12f)));
     }
 
-    @Override
-    protected List<Property<PreviewFont>> getProperties() {
-        return PROPERTIES;
-    }
+    return result;
+  }
 
+  @Override
+  protected List<Property<PreviewFont>> getProperties() {
+    return PROPERTIES;
+  }
 }

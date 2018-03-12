@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
-
 import org.geoserver.catalog.DataStoreInfo;
 import org.geoserver.catalog.FeatureTypeInfo;
 import org.geoserver.security.AccessLevel;
@@ -33,83 +32,81 @@ import org.opengis.filter.Filter;
 import org.opengis.util.ProgressListener;
 
 /**
- * Wraps a {@link FeatureTypeInfo} so that it will return a secured
- * FeatureSource
- * 
+ * Wraps a {@link FeatureTypeInfo} so that it will return a secured FeatureSource
+ *
  * @author Andrea Aime - TOPP
  */
 public class SecuredFeatureTypeInfo extends DecoratingFeatureTypeInfo {
 
-    WrapperPolicy policy;
+  WrapperPolicy policy;
 
-    public SecuredFeatureTypeInfo(FeatureTypeInfo info, WrapperPolicy policy) {
-        super(info);
-        this.policy = policy;
-    }
-    
-    @Override
-    public FeatureType getFeatureType() throws IOException {
-        
-        FeatureType ft = super.getFeatureType();
-        
-        if(policy.getLimits() == null) {
-            return ft;
-        } else if(policy.getLimits() instanceof VectorAccessLimits) {
-            VectorAccessLimits val = (VectorAccessLimits) policy.getLimits();
+  public SecuredFeatureTypeInfo(FeatureTypeInfo info, WrapperPolicy policy) {
+    super(info);
+    this.policy = policy;
+  }
 
-            // get what we can actually read (and it makes it easier to deal with property names) 
-            Query query = val.getReadQuery();
-            
-            // do we have any attribute filtering?
-            if(query.getPropertyNames() == Query.ALL_NAMES) {
-                return ft;
-            }
-            
-            if(ft instanceof SimpleFeatureType) {
-                SimpleFeatureType sft = (SimpleFeatureType) ft;
-                Set<String> properties = new HashSet<String>(Arrays.asList(query.getPropertyNames()));
-                SimpleFeatureTypeBuilder tb = new SimpleFeatureTypeBuilder();
-                tb.init(sft);
-                for (AttributeDescriptor at : sft.getAttributeDescriptors()) {
-                    String attName = at.getLocalName();
-                    if(!properties.contains(attName)) {
-                        tb.remove(attName);
-                    }
-                }
-                return tb.buildFeatureType();
-            } else {
-                // if it's a complex type, we don't have a type builder on all branches, so
-                // we'll run an empty query instead
+  @Override
+  public FeatureType getFeatureType() throws IOException {
 
-                query.setFilter(Filter.EXCLUDE);
-                FeatureSource fs = getFeatureSource(null, null);
-                FeatureCollection fc = fs.getFeatures(query);
-                return fc.getSchema();
-            }
-        } else {
-            throw new IllegalArgumentException("SecureFeatureSources has been fed " +
-                    "with unexpected AccessLimits class " + policy.getLimits().getClass());
+    FeatureType ft = super.getFeatureType();
+
+    if (policy.getLimits() == null) {
+      return ft;
+    } else if (policy.getLimits() instanceof VectorAccessLimits) {
+      VectorAccessLimits val = (VectorAccessLimits) policy.getLimits();
+
+      // get what we can actually read (and it makes it easier to deal with property names)
+      Query query = val.getReadQuery();
+
+      // do we have any attribute filtering?
+      if (query.getPropertyNames() == Query.ALL_NAMES) {
+        return ft;
+      }
+
+      if (ft instanceof SimpleFeatureType) {
+        SimpleFeatureType sft = (SimpleFeatureType) ft;
+        Set<String> properties = new HashSet<String>(Arrays.asList(query.getPropertyNames()));
+        SimpleFeatureTypeBuilder tb = new SimpleFeatureTypeBuilder();
+        tb.init(sft);
+        for (AttributeDescriptor at : sft.getAttributeDescriptors()) {
+          String attName = at.getLocalName();
+          if (!properties.contains(attName)) {
+            tb.remove(attName);
+          }
         }
-        
-    }
+        return tb.buildFeatureType();
+      } else {
+        // if it's a complex type, we don't have a type builder on all branches, so
+        // we'll run an empty query instead
 
-    //--------------------------------------------------------------------------
-    // WRAPPED METHODS TO ENFORCE SECURITY POLICY
-    //--------------------------------------------------------------------------
-
-    public FeatureSource getFeatureSource(ProgressListener listener, Hints hints)
-            throws IOException {
-        final FeatureSource fs = delegate.getFeatureSource(listener, hints);
-        
-        if(policy.level == AccessLevel.METADATA) {
-            throw SecureCatalogImpl.unauthorizedAccess(this.getName());
-        } else {
-            return (FeatureSource) SecuredObjects.secure(fs, policy);
-        }
+        query.setFilter(Filter.EXCLUDE);
+        FeatureSource fs = getFeatureSource(null, null);
+        FeatureCollection fc = fs.getFeatures(query);
+        return fc.getSchema();
+      }
+    } else {
+      throw new IllegalArgumentException(
+          "SecureFeatureSources has been fed "
+              + "with unexpected AccessLimits class "
+              + policy.getLimits().getClass());
     }
+  }
 
-    public DataStoreInfo getStore() {
-        return (DataStoreInfo) SecuredObjects.secure(delegate.getStore(), policy);
+  // --------------------------------------------------------------------------
+  // WRAPPED METHODS TO ENFORCE SECURITY POLICY
+  // --------------------------------------------------------------------------
+
+  public FeatureSource getFeatureSource(ProgressListener listener, Hints hints) throws IOException {
+    final FeatureSource fs = delegate.getFeatureSource(listener, hints);
+
+    if (policy.level == AccessLevel.METADATA) {
+      throw SecureCatalogImpl.unauthorizedAccess(this.getName());
+    } else {
+      return (FeatureSource) SecuredObjects.secure(fs, policy);
     }
-    
+  }
+
+  public DataStoreInfo getStore() {
+    return (DataStoreInfo) SecuredObjects.secure(delegate.getStore(), policy);
+  }
 }

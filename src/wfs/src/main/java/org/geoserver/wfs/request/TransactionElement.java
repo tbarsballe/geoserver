@@ -9,7 +9,7 @@ import org.eclipse.emf.ecore.EObject;
 
 public class TransactionElement extends RequestObject {
 
-    protected TransactionElement(EObject adaptee) {
-        super(adaptee);
-    }
+  protected TransactionElement(EObject adaptee) {
+    super(adaptee);
+  }
 }

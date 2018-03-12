@@ -4,10 +4,10 @@
  */
 package org.geoserver;
 
-import org.junit.Test;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+
+import org.junit.Test;
 
 public class GeoServerNodeDataTest {
 
@@ -16,5 +16,5 @@ public class GeoServerNodeDataTest {
     GeoServerNodeData data = GeoServerNodeData.createFromString("id:foo");
     assertEquals("foo", data.getId());
     assertNotNull(data.getIdStyle());
-  } 
+  }
 }

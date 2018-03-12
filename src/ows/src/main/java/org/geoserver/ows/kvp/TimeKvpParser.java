@@ -7,13 +7,11 @@ package org.geoserver.ows.kvp;
 
 import java.text.ParseException;
 import java.util.List;
-
 import org.geoserver.ows.KvpParser;
 
-
 /**
- * Parses the {@code time} parameter of the request. The date, time and period
- * are expected to be formatted according ISO-8601 standard.
+ * Parses the {@code time} parameter of the request. The date, time and period are expected to be
+ * formatted according ISO-8601 standard.
  *
  * @author Cedric Briancon
  * @author Martin Desruisseaux
@@ -22,21 +20,20 @@ import org.geoserver.ows.KvpParser;
  * @version $Id$
  */
 public class TimeKvpParser extends KvpParser {
-    
-    TimeParser parser = new TimeParser();
 
-    /**
-     * Creates the parser specifying the name of the key to latch to.
-     *
-     * @param key The key whose associated value to parse.
-     */
-    public TimeKvpParser(String key) {
-        super(key, List.class);
-    }
+  TimeParser parser = new TimeParser();
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
-    public Object parse(String value) throws ParseException {
-        return parser.parse(value);
-    }
+  /**
+   * Creates the parser specifying the name of the key to latch to.
+   *
+   * @param key The key whose associated value to parse.
+   */
+  public TimeKvpParser(String key) {
+    super(key, List.class);
+  }
 
+  @SuppressWarnings({"unchecked", "rawtypes"})
+  public Object parse(String value) throws ParseException {
+    return parser.parse(value);
+  }
 }

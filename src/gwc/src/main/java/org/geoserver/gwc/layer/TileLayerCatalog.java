@@ -9,31 +9,28 @@ import java.util.Set;
 
 public interface TileLayerCatalog {
 
-    public Set<String> getLayerIds();
+  public Set<String> getLayerIds();
 
-    public Set<String> getLayerNames();
+  public Set<String> getLayerNames();
 
-    public String getLayerId(final String layerName);
+  public String getLayerId(final String layerName);
 
-    public String getLayerName(final String layerId);
+  public String getLayerName(final String layerId);
 
-    public GeoServerTileLayerInfo getLayerById(String id);
+  public GeoServerTileLayerInfo getLayerById(String id);
 
-    public GeoServerTileLayerInfo getLayerByName(String layerName);
+  public GeoServerTileLayerInfo getLayerByName(String layerName);
 
-    public GeoServerTileLayerInfo delete(String tileLayerId);
+  public GeoServerTileLayerInfo delete(String tileLayerId);
 
-    public GeoServerTileLayerInfo save(GeoServerTileLayerInfo newValue);
+  public GeoServerTileLayerInfo save(GeoServerTileLayerInfo newValue);
 
-    public boolean exists(String layerId);
+  public boolean exists(String layerId);
 
-    public void initialize();
-    
-    public void reset();
+  public void initialize();
 
-    /**
-     * Used as a status/debugging aid.
-     */
-    public String getPersistenceLocation();
+  public void reset();
 
+  /** Used as a status/debugging aid. */
+  public String getPersistenceLocation();
 }

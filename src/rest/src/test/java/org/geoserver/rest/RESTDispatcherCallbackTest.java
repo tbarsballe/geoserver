@@ -20,48 +20,44 @@ import org.springframework.mock.web.MockHttpServletResponse;
 
 public class RESTDispatcherCallbackTest extends GeoServerSystemTestSupport {
 
-    DispatcherCallback callback;
+  DispatcherCallback callback;
 
-    @Before
-    public void prepareCallback() throws Exception {
-        callback = EasyMock.createMock(DispatcherCallback.class);
-        GeoServerExtensionsHelper.init(applicationContext);
-        GeoServerExtensionsHelper.singleton("testCallback", callback, DispatcherCallback.class);
-    }
+  @Before
+  public void prepareCallback() throws Exception {
+    callback = EasyMock.createMock(DispatcherCallback.class);
+    GeoServerExtensionsHelper.init(applicationContext);
+    GeoServerExtensionsHelper.singleton("testCallback", callback, DispatcherCallback.class);
+  }
 
-    @Test
-    public void testCallback() throws Exception {
-        callback.init(anyObject(), anyObject());
-        expectLastCall();
-        callback.dispatched(anyObject(), anyObject(),
-                anyObject());
-        expectLastCall();
-        callback.finished(anyObject(), anyObject());
-        expectLastCall();
-        replay(callback);
+  @Test
+  public void testCallback() throws Exception {
+    callback.init(anyObject(), anyObject());
+    expectLastCall();
+    callback.dispatched(anyObject(), anyObject(), anyObject());
+    expectLastCall();
+    callback.finished(anyObject(), anyObject());
+    expectLastCall();
+    replay(callback);
 
-        MockHttpServletResponse response = getAsServletResponse(RestBaseController.ROOT_PATH + "/index.html");
-        assertEquals(200, response.getStatus());
-        verify(callback);
-    }
+    MockHttpServletResponse response =
+        getAsServletResponse(RestBaseController.ROOT_PATH + "/index.html");
+    assertEquals(200, response.getStatus());
+    verify(callback);
+  }
 
-    @Test
-    public void testCallbackException() throws Exception {
-        callback.init(anyObject(), anyObject());
-        expectLastCall();
-        callback.dispatched(anyObject(), anyObject(),
-                anyObject());
-        expectLastCall();
-        callback.exception(anyObject(), anyObject(),
-                anyObject());
-        expectLastCall();
-        callback.finished(anyObject(), anyObject());
-        expectLastCall();
-        replay(callback);
+  @Test
+  public void testCallbackException() throws Exception {
+    callback.init(anyObject(), anyObject());
+    expectLastCall();
+    callback.dispatched(anyObject(), anyObject(), anyObject());
+    expectLastCall();
+    callback.exception(anyObject(), anyObject(), anyObject());
+    expectLastCall();
+    callback.finished(anyObject(), anyObject());
+    expectLastCall();
+    replay(callback);
 
-        getAsServletResponse(RestBaseController.ROOT_PATH + "/exception?code=400&message=error");
-        verify(callback);
-    }
-
-   
+    getAsServletResponse(RestBaseController.ROOT_PATH + "/exception?code=400&message=error");
+    verify(callback);
+  }
 }

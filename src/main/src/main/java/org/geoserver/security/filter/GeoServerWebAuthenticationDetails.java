@@ -4,35 +4,30 @@
  * application directory.
  */
 
-
 package org.geoserver.security.filter;
 
 import javax.servlet.http.HttpServletRequest;
-
-import org.springframework.security.web.authentication.WebAuthenticationDetails;;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
 
 /**
  * extension for adding additional authentication details
- * 
- * @author christian
  *
+ * @author christian
  */
 public class GeoServerWebAuthenticationDetails extends WebAuthenticationDetails {
 
-    private static final long serialVersionUID = 1L;
-    private String userGroupServiceName;
+  private static final long serialVersionUID = 1L;
+  private String userGroupServiceName;
 
-    public String getUserGroupServiceName() {
-        return userGroupServiceName;
-    }
+  public String getUserGroupServiceName() {
+    return userGroupServiceName;
+  }
 
-    public void setUserGroupServiceName(String userGroupServiceName) {
-        this.userGroupServiceName = userGroupServiceName;
-    }
+  public void setUserGroupServiceName(String userGroupServiceName) {
+    this.userGroupServiceName = userGroupServiceName;
+  }
 
-    public GeoServerWebAuthenticationDetails(HttpServletRequest request) {
-        super(request);
-        
-    }
-
+  public GeoServerWebAuthenticationDetails(HttpServletRequest request) {
+    super(request);
+  }
 }

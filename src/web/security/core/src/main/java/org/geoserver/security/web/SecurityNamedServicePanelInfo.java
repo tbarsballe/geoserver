@@ -11,51 +11,50 @@ import org.geoserver.web.ComponentInfo;
 
 /**
  * Extension point for configuration panels for named security service classes.
- *  
- * @author Justin Deoliveira, OpenGeo
  *
+ * @author Justin Deoliveira, OpenGeo
  * @param <C> The configuration class.
  * @param <T> The configuration panel class.
  */
-public class SecurityNamedServicePanelInfo
-    <C extends SecurityNamedServiceConfig, T extends SecurityNamedServicePanel<C>> 
+public class SecurityNamedServicePanelInfo<
+        C extends SecurityNamedServiceConfig, T extends SecurityNamedServicePanel<C>>
     extends ComponentInfo<T> implements ExtensionPriority {
 
-    String shortTitleKey;
-    Class serviceClass;
-    Class<C> serviceConfigClass;
-    int priority = 10;
-    
-    public String getShortTitleKey() {
-        return shortTitleKey;
-    }
-    
-    public void setShortTitleKey(String shortTitleKey) {
-        this.shortTitleKey = shortTitleKey;
-    }
+  String shortTitleKey;
+  Class serviceClass;
+  Class<C> serviceConfigClass;
+  int priority = 10;
 
-    public Class getServiceClass() {
-        return serviceClass;
-    }
+  public String getShortTitleKey() {
+    return shortTitleKey;
+  }
 
-    public void setServiceClass(Class serviceClass) {
-        this.serviceClass = serviceClass;
-    }
+  public void setShortTitleKey(String shortTitleKey) {
+    this.shortTitleKey = shortTitleKey;
+  }
 
-    public Class<C> getServiceConfigClass() {
-        return serviceConfigClass;
-    }
+  public Class getServiceClass() {
+    return serviceClass;
+  }
 
-    public void setServiceConfigClass(Class<C> serviceConfigClass) {
-        this.serviceConfigClass = serviceConfigClass;
-    }
+  public void setServiceClass(Class serviceClass) {
+    this.serviceClass = serviceClass;
+  }
 
-    @Override
-    public int getPriority() {
-        return priority;
-    }
-    
-    public void setPriority(int priority) {
-        this.priority = priority;
-    }
+  public Class<C> getServiceConfigClass() {
+    return serviceConfigClass;
+  }
+
+  public void setServiceConfigClass(Class<C> serviceConfigClass) {
+    this.serviceConfigClass = serviceConfigClass;
+  }
+
+  @Override
+  public int getPriority() {
+    return priority;
+  }
+
+  public void setPriority(int priority) {
+    this.priority = priority;
+  }
 }

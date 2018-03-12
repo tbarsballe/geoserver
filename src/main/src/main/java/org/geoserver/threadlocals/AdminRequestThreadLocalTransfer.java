@@ -6,34 +6,31 @@
 package org.geoserver.threadlocals;
 
 import java.util.Map;
-
 import org.geoserver.security.AdminRequest;
 
 /**
  * Transfers the {@link AdminRequest} management to another thread
- * 
+ *
  * @author Andrea Aime - GeoSolutions
- * 
  */
 public class AdminRequestThreadLocalTransfer implements ThreadLocalTransfer {
 
-    public static final String KEY = AdminRequest.class.getName() + "#threadLocal";
+  public static final String KEY = AdminRequest.class.getName() + "#threadLocal";
 
-    @Override
-    public void collect(Map<String, Object> storage) {
-        Object state = AdminRequest.get();
-        storage.put(KEY, state);
-    }
+  @Override
+  public void collect(Map<String, Object> storage) {
+    Object state = AdminRequest.get();
+    storage.put(KEY, state);
+  }
 
-    @Override
-    public void apply(Map<String, Object> storage) {
-        Object state = storage.get(KEY);
-        AdminRequest.start(state);
-    }
+  @Override
+  public void apply(Map<String, Object> storage) {
+    Object state = storage.get(KEY);
+    AdminRequest.start(state);
+  }
 
-    @Override
-    public void cleanup() {
-        AdminRequest.finish();
-    }
-
+  @Override
+  public void cleanup() {
+    AdminRequest.finish();
+  }
 }

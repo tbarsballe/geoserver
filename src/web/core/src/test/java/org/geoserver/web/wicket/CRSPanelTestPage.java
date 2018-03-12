@@ -14,31 +14,31 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 public class CRSPanelTestPage extends WebPage {
 
-    public CRSPanelTestPage() {
-        Form form = new Form("form" );
-        add(form);
-        
-        form.add( new CRSPanel("crs", new Model()) );
-    }
-    
-    public CRSPanelTestPage(Object o) {
-        Form form = new Form("form", new CompoundPropertyModel( o ) );
-        add(form);
-        
-        form.add( new CRSPanel("crs") );
-    }
-    
-    public CRSPanelTestPage(IModel model) {
-        Form form = new Form("form");
-        add(form);
-        
-        form.add( new CRSPanel("crs", model) );
-    }
-    
-    public CRSPanelTestPage(CoordinateReferenceSystem crs) {
-        Form form = new Form("form");
-        add(form);
-        
-        form.add( new CRSPanel( "crs", crs ) );
-    }
+  public CRSPanelTestPage() {
+    Form form = new Form("form");
+    add(form);
+
+    form.add(new CRSPanel("crs", new Model()));
+  }
+
+  public CRSPanelTestPage(Object o) {
+    Form form = new Form("form", new CompoundPropertyModel(o));
+    add(form);
+
+    form.add(new CRSPanel("crs"));
+  }
+
+  public CRSPanelTestPage(IModel model) {
+    Form form = new Form("form");
+    add(form);
+
+    form.add(new CRSPanel("crs", model));
+  }
+
+  public CRSPanelTestPage(CoordinateReferenceSystem crs) {
+    Form form = new Form("form");
+    add(form);
+
+    form.add(new CRSPanel("crs", crs));
+  }
 }

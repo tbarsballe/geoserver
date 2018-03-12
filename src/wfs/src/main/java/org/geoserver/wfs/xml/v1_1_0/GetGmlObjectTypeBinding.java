@@ -6,23 +6,20 @@
 package org.geoserver.wfs.xml.v1_1_0;
 
 import java.math.BigInteger;
-
 import javax.xml.namespace.QName;
-
 import net.opengis.wfs.GetGmlObjectType;
 import net.opengis.wfs.WfsFactory;
-
 import org.geotools.xml.AbstractComplexBinding;
 import org.geotools.xml.ElementInstance;
 import org.geotools.xml.Node;
 import org.opengis.filter.identity.GmlObjectId;
 
-
 /**
  * Binding object for the type http://www.opengis.net/wfs:GetGmlObjectType.
  *
  * <p>
- *        <pre>
+ *
+ * <pre>
  *         <code>
  *  &lt;xsd:complexType name="GetGmlObjectType"&gt;
  *      &lt;xsd:annotation&gt;
@@ -76,62 +73,63 @@ import org.opengis.filter.identity.GmlObjectId;
  *
  *          </code>
  *         </pre>
+ *
  * @generated
  */
 public class GetGmlObjectTypeBinding extends AbstractComplexBinding {
-    WfsFactory wfsfactory;
+  WfsFactory wfsfactory;
 
-    public GetGmlObjectTypeBinding(WfsFactory wfsfactory) {
-        this.wfsfactory = wfsfactory;
+  public GetGmlObjectTypeBinding(WfsFactory wfsfactory) {
+    this.wfsfactory = wfsfactory;
+  }
+
+  /** @generated */
+  public QName getTarget() {
+    return WFS.GETGMLOBJECTTYPE;
+  }
+
+  /**
+   *
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   *
+   * @generated modifiable
+   */
+  public Class getType() {
+    return GetGmlObjectType.class;
+  }
+
+  /**
+   *
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   *
+   * @generated modifiable
+   */
+  public Object parse(ElementInstance instance, Node node, Object value) throws Exception {
+
+    GetGmlObjectType getGmlObject = wfsfactory.createGetGmlObjectType();
+
+    // &lt;xsd:element ref="ogc:GmlObjectId"/&gt;
+    getGmlObject.setGmlObjectId((GmlObjectId) node.getChildValue(GmlObjectId.class));
+
+    // &lt;xsd:attribute default="GML3" name="outputFormat"
+    //    type="xsd:string" use="optional"/&gt;
+    if (node.hasAttribute("outputFormat")) {
+      getGmlObject.setOutputFormat((String) node.getAttributeValue("outputFormat"));
     }
 
-    /**
-     * @generated
-     */
-    public QName getTarget() {
-        return WFS.GETGMLOBJECTTYPE;
+    // &lt;xsd:attribute name="traverseXlinkDepth"
+    //    type="xsd:string" use="required"&gt;
+    getGmlObject.setTraverseXlinkDepth((String) node.getAttributeValue("traverseXlinkDepth"));
+
+    // &lt;xsd:attribute name="traverseXlinkExpiry"
+    //    type="xsd:positiveInteger" use="optional"&gt;
+    if (node.hasAttribute("traverseXlinkExpiry")) {
+      getGmlObject.setTraverseXlinkExpiry(
+          (BigInteger) node.getAttributeValue("traverseXlinkExpiry"));
     }
 
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     *
-     * @generated modifiable
-     */
-    public Class getType() {
-        return GetGmlObjectType.class;
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     *
-     * @generated modifiable
-     */
-    public Object parse(ElementInstance instance, Node node, Object value)
-        throws Exception {
-        
-        GetGmlObjectType getGmlObject = wfsfactory.createGetGmlObjectType();
-        
-        //&lt;xsd:element ref="ogc:GmlObjectId"/&gt;
-        getGmlObject.setGmlObjectId((GmlObjectId) node.getChildValue(GmlObjectId.class));
-        
-        //&lt;xsd:attribute default="GML3" name="outputFormat"
-        //    type="xsd:string" use="optional"/&gt;
-        if ( node.hasAttribute("outputFormat") ) {
-            getGmlObject.setOutputFormat((String)node.getAttributeValue("outputFormat") );
-        }
-
-        //&lt;xsd:attribute name="traverseXlinkDepth" 
-        //    type="xsd:string" use="required"&gt;
-        getGmlObject.setTraverseXlinkDepth( (String)node.getAttributeValue("traverseXlinkDepth") );
-        
-        //&lt;xsd:attribute name="traverseXlinkExpiry"
-        //    type="xsd:positiveInteger" use="optional"&gt;
-        if ( node.hasAttribute( "traverseXlinkExpiry" ) ) {
-            getGmlObject.setTraverseXlinkExpiry( (BigInteger) node.getAttributeValue("traverseXlinkExpiry"));
-        }
-        
-        return getGmlObject;
-    }
+    return getGmlObject;
+  }
 }

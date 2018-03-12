@@ -14,27 +14,29 @@ import org.geoserver.gwc.config.GWCConfig;
 
 public class GWCServicesPanel extends Panel {
 
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-    public GWCServicesPanel(final String id, final IModel<GWCConfig> gwcConfigModel) {
-        super(id, gwcConfigModel);
+  public GWCServicesPanel(final String id, final IModel<GWCConfig> gwcConfigModel) {
+    super(id, gwcConfigModel);
 
-        final IModel<Boolean> wmsIntegrationEnabledModel = new PropertyModel<Boolean>(
-                gwcConfigModel, "directWMSIntegrationEnabled");
+    final IModel<Boolean> wmsIntegrationEnabledModel =
+        new PropertyModel<Boolean>(gwcConfigModel, "directWMSIntegrationEnabled");
 
-        final IModel<Boolean> wmsCEnabledModel = new PropertyModel<Boolean>(gwcConfigModel,
-                "WMSCEnabled");
-        final IModel<Boolean> tmsEnabledModel = new PropertyModel<Boolean>(gwcConfigModel,
-                "TMSEnabled");
-        final IModel<Boolean> securityEnabledModel = new PropertyModel<Boolean>(gwcConfigModel,
-                "securityEnabled");
+    final IModel<Boolean> wmsCEnabledModel =
+        new PropertyModel<Boolean>(gwcConfigModel, "WMSCEnabled");
+    final IModel<Boolean> tmsEnabledModel =
+        new PropertyModel<Boolean>(gwcConfigModel, "TMSEnabled");
+    final IModel<Boolean> securityEnabledModel =
+        new PropertyModel<Boolean>(gwcConfigModel, "securityEnabled");
 
-        add(checkbox("enableWMSIntegration", wmsIntegrationEnabledModel,
-                "GWCSettingsPage.enableWMSIntegration.title"));
+    add(
+        checkbox(
+            "enableWMSIntegration",
+            wmsIntegrationEnabledModel,
+            "GWCSettingsPage.enableWMSIntegration.title"));
 
-        add(checkbox("enableWMSC", wmsCEnabledModel, "GWCSettingsPage.enableWMSC.title"));
-        add(checkbox("enableTMS", tmsEnabledModel, "GWCSettingsPage.enableTMS.title"));
-        add(checkbox("enableSecurity", securityEnabledModel, "GWCSettingsPage.enableSecurity.title"));
-
-    }
+    add(checkbox("enableWMSC", wmsCEnabledModel, "GWCSettingsPage.enableWMSC.title"));
+    add(checkbox("enableTMS", tmsEnabledModel, "GWCSettingsPage.enableTMS.title"));
+    add(checkbox("enableSecurity", securityEnabledModel, "GWCSettingsPage.enableSecurity.title"));
+  }
 }

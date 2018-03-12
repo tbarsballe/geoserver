@@ -23,76 +23,84 @@ import org.junit.Rule;
 import org.junit.Test;
 
 public class CachedLayersPageTest extends GeoServerWicketTestSupport {
-    
-    @Rule
-    public GeoServerExtensionsHelper.ExtensionsHelperRule extensions = new GeoServerExtensionsHelper.ExtensionsHelperRule();
-    
-    protected static final String NATURE_GROUP = "nature";
-    
-    @Override
-    protected void onSetUp(SystemTestData testData) throws Exception {
-        super.onSetUp(testData);
-        // setup a layer group
-        Catalog catalog = getCatalog();
-        LayerGroupInfo group = catalog.getFactory().createLayerGroup();
-        LayerInfo lakes = catalog.getLayerByName(getLayerId(MockData.LAKES));
-        LayerInfo forests = catalog.getLayerByName(getLayerId(MockData.FORESTS));
-        if(lakes != null && forests != null) {
-            group.setName(NATURE_GROUP);
-            group.getLayers().add(lakes);
-            group.getLayers().add(forests);
-            CatalogBuilder cb = new CatalogBuilder(catalog);
-            cb.calculateLayerGroupBounds(group);
-            catalog.add(group);
-        }
-    }
-    
-    @Test
-    public void testPageLoad() {
-        CachedLayersPage page = new CachedLayersPage();
 
-        tester.startPage(page);
-        tester.assertRenderedPage(CachedLayersPage.class);
+  @Rule
+  public GeoServerExtensionsHelper.ExtensionsHelperRule extensions =
+      new GeoServerExtensionsHelper.ExtensionsHelperRule();
 
-        // print(page, true, true);
+  protected static final String NATURE_GROUP = "nature";
+
+  @Override
+  protected void onSetUp(SystemTestData testData) throws Exception {
+    super.onSetUp(testData);
+    // setup a layer group
+    Catalog catalog = getCatalog();
+    LayerGroupInfo group = catalog.getFactory().createLayerGroup();
+    LayerInfo lakes = catalog.getLayerByName(getLayerId(MockData.LAKES));
+    LayerInfo forests = catalog.getLayerByName(getLayerId(MockData.FORESTS));
+    if (lakes != null && forests != null) {
+      group.setName(NATURE_GROUP);
+      group.getLayers().add(lakes);
+      group.getLayers().add(forests);
+      CatalogBuilder cb = new CatalogBuilder(catalog);
+      cb.calculateLayerGroupBounds(group);
+      catalog.add(group);
     }
-    
-    @Test
-    public void testLayerGroupLink() {
-        GWC gwc = GWC.get();
-        TileLayer tileLayer = gwc.getTileLayerByName(NATURE_GROUP);
-        assertNotNull(tileLayer);
-        
-        tester.startComponentInPage(new ConfigureCachedLayerAjaxLink("test", new TileLayerDetachableModel(tileLayer.getName()), null));
-        // tester.debugComponentTrees();
-        tester.executeAjaxEvent("test:link", "click");
-        tester.assertNoErrorMessage();
-        tester.assertRenderedPage(LayerGroupEditPage.class);
-    }
-    
-    @Test
-    public void testNoMangleSeedLink() {
-        
-        // Don't add a mangler
-        
-        CachedLayersPage page = new CachedLayersPage();
-        
-        tester.startPage(page);
-        tester.assertModelValue("table:listContainer:items:1:itemProperties:7:component:seedLink", "http://localhost:80/context/gwc/rest/seed/cgf:Polygons");
-    }
-    
-    @Test
-    public void testMangleSeedLink() {
-        // Mimic a Proxy URL mangler
-        URLMangler testMangler = (base, path, map, type) ->{
-            base.setLength(0);
-            base.append("http://rewrite/");
+  }
+
+  @Test
+  public void testPageLoad() {
+    CachedLayersPage page = new CachedLayersPage();
+
+    tester.startPage(page);
+    tester.assertRenderedPage(CachedLayersPage.class);
+
+    // print(page, true, true);
+  }
+
+  @Test
+  public void testLayerGroupLink() {
+    GWC gwc = GWC.get();
+    TileLayer tileLayer = gwc.getTileLayerByName(NATURE_GROUP);
+    assertNotNull(tileLayer);
+
+    tester.startComponentInPage(
+        new ConfigureCachedLayerAjaxLink(
+            "test", new TileLayerDetachableModel(tileLayer.getName()), null));
+    // tester.debugComponentTrees();
+    tester.executeAjaxEvent("test:link", "click");
+    tester.assertNoErrorMessage();
+    tester.assertRenderedPage(LayerGroupEditPage.class);
+  }
+
+  @Test
+  public void testNoMangleSeedLink() {
+
+    // Don't add a mangler
+
+    CachedLayersPage page = new CachedLayersPage();
+
+    tester.startPage(page);
+    tester.assertModelValue(
+        "table:listContainer:items:1:itemProperties:7:component:seedLink",
+        "http://localhost:80/context/gwc/rest/seed/cgf:Polygons");
+  }
+
+  @Test
+  public void testMangleSeedLink() {
+    // Mimic a Proxy URL mangler
+    URLMangler testMangler =
+        (base, path, map, type) -> {
+          base.setLength(0);
+          base.append("http://rewrite/");
         };
-        extensions.singleton("testMangler", testMangler, URLMangler.class);
-        
-        CachedLayersPage page = new CachedLayersPage();
-        
-        tester.startPage(page);
-        tester.assertModelValue("table:listContainer:items:1:itemProperties:7:component:seedLink", "http://rewrite/gwc/rest/seed/cgf:Polygons");
-    }
+    extensions.singleton("testMangler", testMangler, URLMangler.class);
+
+    CachedLayersPage page = new CachedLayersPage();
+
+    tester.startPage(page);
+    tester.assertModelValue(
+        "table:listContainer:items:1:itemProperties:7:component:seedLink",
+        "http://rewrite/gwc/rest/seed/cgf:Polygons");
+  }
 }

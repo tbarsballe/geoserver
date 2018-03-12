@@ -30,95 +30,95 @@ import org.geoserver.catalog.WorkspaceInfo;
 
 public class CatalogFactoryImpl implements CatalogFactory {
 
-    Catalog catalog;
-    
-    public CatalogFactoryImpl( Catalog catalog ) {
-        this.catalog = catalog;
-    }
-    
-    public CoverageInfo createCoverage() {
-        return new CoverageInfoImpl(catalog);
-    }
+  Catalog catalog;
 
-    public CoverageDimensionInfo createCoverageDimension() {
-        return new CoverageDimensionImpl();
-    }
+  public CatalogFactoryImpl(Catalog catalog) {
+    this.catalog = catalog;
+  }
 
-    public CoverageStoreInfo createCoverageStore() {
-        return new CoverageStoreInfoImpl(catalog);
-    }
+  public CoverageInfo createCoverage() {
+    return new CoverageInfoImpl(catalog);
+  }
 
-    public DataStoreInfo createDataStore() {
-        return new DataStoreInfoImpl(catalog);
-    }
-    
-    public WMSStoreInfo createWebMapServer() {
-        return new WMSStoreInfoImpl(catalog);
-    }
-    
-    @Override
-    public WMTSStoreInfo createWebMapTileServer() {
-        return (WMTSStoreInfo) new WMTSStoreInfoImpl(catalog);
-    }
+  public CoverageDimensionInfo createCoverageDimension() {
+    return new CoverageDimensionImpl();
+  }
 
-    public AttributeTypeInfo createAttribute() {
-        return new AttributeTypeInfoImpl();
-    }
+  public CoverageStoreInfo createCoverageStore() {
+    return new CoverageStoreInfoImpl(catalog);
+  }
 
-    public FeatureTypeInfo createFeatureType() {
-        return new FeatureTypeInfoImpl(catalog);
-    }
-    
-    public WMSLayerInfo createWMSLayer() {
-        return new WMSLayerInfoImpl(catalog);
-    }
+  public DataStoreInfo createDataStore() {
+    return new DataStoreInfoImpl(catalog);
+  }
 
-    @Override
-    public WMTSLayerInfo createWMTSLayer() {
-        return new WMTSLayerInfoImpl(catalog);
-    }
+  public WMSStoreInfo createWebMapServer() {
+    return new WMSStoreInfoImpl(catalog);
+  }
 
-    public AttributionInfo createAttribution() {
-        return new AttributionInfoImpl();
-    }
-    
-    public LayerInfo createLayer() {
-        return new LayerInfoImpl();
-    }
-    
-    public MapInfo createMap() {
-        return new MapInfoImpl();
-    }
-    
-    public LayerGroupInfo createLayerGroup() {
-        return new LayerGroupInfoImpl();
-    }
-    
-    public LegendInfo createLegend() {
-        return new LegendInfoImpl();
-    }
-    
-    public MetadataLinkInfo createMetadataLink() {
-        return new MetadataLinkInfoImpl();
-    }
+  @Override
+  public WMTSStoreInfo createWebMapTileServer() {
+    return (WMTSStoreInfo) new WMTSStoreInfoImpl(catalog);
+  }
 
-    public DataLinkInfo createDataLink() {
-        return new DataLinkInfoImpl();
-    }
+  public AttributeTypeInfo createAttribute() {
+    return new AttributeTypeInfoImpl();
+  }
 
-    public NamespaceInfo createNamespace() {
-        return new NamespaceInfoImpl();
-    }
-    
-    public WorkspaceInfo createWorkspace() {
-        return new WorkspaceInfoImpl();
-    }
+  public FeatureTypeInfo createFeatureType() {
+    return new FeatureTypeInfoImpl(catalog);
+  }
 
-    public StyleInfo createStyle() {
-        return new StyleInfoImpl(catalog);
-    }
+  public WMSLayerInfo createWMSLayer() {
+    return new WMSLayerInfoImpl(catalog);
+  }
 
-    public Object create(Class clazz) {
-        return null;
-    }
+  @Override
+  public WMTSLayerInfo createWMTSLayer() {
+    return new WMTSLayerInfoImpl(catalog);
+  }
+
+  public AttributionInfo createAttribution() {
+    return new AttributionInfoImpl();
+  }
+
+  public LayerInfo createLayer() {
+    return new LayerInfoImpl();
+  }
+
+  public MapInfo createMap() {
+    return new MapInfoImpl();
+  }
+
+  public LayerGroupInfo createLayerGroup() {
+    return new LayerGroupInfoImpl();
+  }
+
+  public LegendInfo createLegend() {
+    return new LegendInfoImpl();
+  }
+
+  public MetadataLinkInfo createMetadataLink() {
+    return new MetadataLinkInfoImpl();
+  }
+
+  public DataLinkInfo createDataLink() {
+    return new DataLinkInfoImpl();
+  }
+
+  public NamespaceInfo createNamespace() {
+    return new NamespaceInfoImpl();
+  }
+
+  public WorkspaceInfo createWorkspace() {
+    return new WorkspaceInfoImpl();
+  }
+
+  public StyleInfo createStyle() {
+    return new StyleInfoImpl(catalog);
+  }
+
+  public Object create(Class clazz) {
+    return null;
+  }
 }

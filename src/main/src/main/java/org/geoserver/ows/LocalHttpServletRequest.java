@@ -8,25 +8,23 @@ package org.geoserver.ows;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * A thread local variable for a {@link HttpServletRequest} that was specified as
- * part of an ows request.
+ * A thread local variable for a {@link HttpServletRequest} that was specified as part of an ows
+ * request.
  */
 public class LocalHttpServletRequest {
 
-    /**
-     * the request thread local
-     */
-    static ThreadLocal<HttpServletRequest> request = new ThreadLocal<>();
+  /** the request thread local */
+  static ThreadLocal<HttpServletRequest> request = new ThreadLocal<>();
 
-    public static void set(HttpServletRequest req) {
-        request.set(req);
-    }
+  public static void set(HttpServletRequest req) {
+    request.set(req);
+  }
 
-    public static HttpServletRequest get() {
-        return request.get();
-    }
+  public static HttpServletRequest get() {
+    return request.get();
+  }
 
-    public static void remove() {
-        request.remove();
-    }
+  public static void remove() {
+    request.remove();
+  }
 }

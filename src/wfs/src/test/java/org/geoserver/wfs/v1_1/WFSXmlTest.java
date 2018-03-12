@@ -17,27 +17,25 @@ import org.junit.Test;
 
 public class WFSXmlTest extends WFSTestSupport {
 
-    WFSConfiguration configuration() {
-        FeatureTypeSchemaBuilder sb = 
-            new FeatureTypeSchemaBuilder.GML3(getGeoServer());
-        return new WFSConfiguration(getGeoServer(),sb,new WFS(sb));
-    }
+  WFSConfiguration configuration() {
+    FeatureTypeSchemaBuilder sb = new FeatureTypeSchemaBuilder.GML3(getGeoServer());
+    return new WFSConfiguration(getGeoServer(), sb, new WFS(sb));
+  }
 
-    @Test
-    public void testValid() throws Exception {
-        Parser parser = new Parser(configuration());
-        parser.parse(getClass().getResourceAsStream("GetFeature.xml"));
+  @Test
+  public void testValid() throws Exception {
+    Parser parser = new Parser(configuration());
+    parser.parse(getClass().getResourceAsStream("GetFeature.xml"));
 
-        assertEquals(0, parser.getValidationErrors().size());
-    }
+    assertEquals(0, parser.getValidationErrors().size());
+  }
 
-    @Test
-    public void testInvalid() throws Exception {
-        Parser parser = new Parser(configuration());
-        parser.setValidating(true);
-        parser.parse(getClass().getResourceAsStream("GetFeature-invalid.xml"));
+  @Test
+  public void testInvalid() throws Exception {
+    Parser parser = new Parser(configuration());
+    parser.setValidating(true);
+    parser.parse(getClass().getResourceAsStream("GetFeature-invalid.xml"));
 
-        assertTrue(parser.getValidationErrors().size() > 0);
-    }
-
+    assertTrue(parser.getValidationErrors().size() > 0);
+  }
 }

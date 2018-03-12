@@ -7,15 +7,14 @@ package org.geoserver.wms;
 
 /**
  * Represents the different algorithms used to compute the scale denominator
- * 
+ *
  * @author Andrea Aime - GeoSolutions
- * 
  */
 public enum ScaleComputationMethod {
-    /** The OGC mandated way, for interoperability */
-    OGC,
-    /**
-     * Accurate, but not interoperable, not working against ill setup requests, but ideal for prints
-     */
-    Accurate
+  /** The OGC mandated way, for interoperability */
+  OGC,
+  /**
+   * Accurate, but not interoperable, not working against ill setup requests, but ideal for prints
+   */
+  Accurate
 }

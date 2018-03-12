@@ -10,11 +10,11 @@ import org.geotools.xml.XSDParserDelegate;
 
 /**
  * Parser delegate for WCS 1.0.0.
- * 
+ *
  * @author Chad Phillips
  */
 public class WCSParserDelegate extends XSDParserDelegate {
-    public WCSParserDelegate() {
-        super(new WCSConfiguration());
-    }
+  public WCSParserDelegate() {
+    super(new WCSConfiguration());
+  }
 }

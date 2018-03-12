@@ -11,7 +11,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
@@ -41,212 +40,213 @@ import org.geoserver.security.web.role.RuleRolesFormComponent;
 import org.geoserver.web.wicket.ParamResourceModel;
 import org.opengis.filter.Filter;
 
-/**
- * Abstract page binding a {@link DataAccessRule}
- */
+/** Abstract page binding a {@link DataAccessRule} */
 @SuppressWarnings("serial")
 public abstract class AbstractDataAccessRulePage extends AbstractSecurityPage {
 
-    public class RootLabelModel extends LoadableDetachableModel<String> {
+  public class RootLabelModel extends LoadableDetachableModel<String> {
 
-        @Override
-        protected String load() {
-            if(globalGroupRule.getModelObject()) {
-                return new ParamResourceModel("globalGroup", AbstractDataAccessRulePage.this).getString();
-            } else {
-                return new ParamResourceModel("workspace", AbstractDataAccessRulePage.this).getString();
-            }
-        }
+    @Override
+    protected String load() {
+      if (globalGroupRule.getModelObject()) {
+        return new ParamResourceModel("globalGroup", AbstractDataAccessRulePage.this).getString();
+      } else {
+        return new ParamResourceModel("workspace", AbstractDataAccessRulePage.this).getString();
+      }
+    }
+  }
 
+  public class RootsModel extends LoadableDetachableModel<List<String>> {
+
+    @Override
+    protected List<String> load() {
+      if (globalGroupRule.getModelObject()) {
+        return getGlobalLayerGroupNames();
+      } else {
+        return getWorkspaceNames();
+      }
     }
 
-    public class RootsModel extends LoadableDetachableModel<List<String>> {
-
-        @Override
-        protected List<String> load() {
-            if(globalGroupRule.getModelObject()) {
-                return getGlobalLayerGroupNames();
-            } else {
-                return getWorkspaceNames();
-            }
-        }
-        
-        /**
-         * Returns a sorted list of global layer group names
-         */
-        List<String> getGlobalLayerGroupNames() {
-            Stream<String> names = getCatalog().getLayerGroupsByWorkspace(CatalogFacade.NO_WORKSPACE).stream().map(lg -> lg.getName()).sorted();
-            return Stream.concat(Stream.of("*"), names).collect(Collectors.toList());
-        }
-
-        /**
-         * Returns a sorted list of workspace names
-         */
-        List<String> getWorkspaceNames() {
-            Stream<String> names = getCatalog().getWorkspaces().stream().map(ws -> ws.getName()).sorted();
-            return Stream.concat(Stream.of("*"), names).collect(Collectors.toList());
-        }
-
-        
+    /** Returns a sorted list of global layer group names */
+    List<String> getGlobalLayerGroupNames() {
+      Stream<String> names =
+          getCatalog()
+              .getLayerGroupsByWorkspace(CatalogFacade.NO_WORKSPACE)
+              .stream()
+              .map(lg -> lg.getName())
+              .sorted();
+      return Stream.concat(Stream.of("*"), names).collect(Collectors.toList());
     }
 
-    static List<AccessMode> MODES = Arrays.asList(AccessMode.READ, AccessMode.WRITE, AccessMode.ADMIN);
+    /** Returns a sorted list of workspace names */
+    List<String> getWorkspaceNames() {
+      Stream<String> names = getCatalog().getWorkspaces().stream().map(ws -> ws.getName()).sorted();
+      return Stream.concat(Stream.of("*"), names).collect(Collectors.toList());
+    }
+  }
 
-    DropDownChoice<String> rootChoice, layerChoice;
-    DropDownChoice<AccessMode> accessModeChoice;
-    RuleRolesFormComponent rolesFormComponent;
-    CheckBox globalGroupRule;
+  static List<AccessMode> MODES =
+      Arrays.asList(AccessMode.READ, AccessMode.WRITE, AccessMode.ADMIN);
 
-    WebMarkupContainer layerContainer;
+  DropDownChoice<String> rootChoice, layerChoice;
+  DropDownChoice<AccessMode> accessModeChoice;
+  RuleRolesFormComponent rolesFormComponent;
+  CheckBox globalGroupRule;
 
-    Label rootLabel;
+  WebMarkupContainer layerContainer;
 
-    WebMarkupContainer layerAndLabel;
+  Label rootLabel;
 
-    public AbstractDataAccessRulePage(final DataAccessRule rule) {
-        // build the form
-        Form form = new Form<DataAccessRule>("form", new CompoundPropertyModel(rule));
-        add(form);
-        form.add(new EmptyRolesValidator());
-        
-        form.add(globalGroupRule = new CheckBox("globalGroupRule"));
-        globalGroupRule.setOutputMarkupId(true);
-        globalGroupRule.add(new OnChangeAjaxBehavior() {
-            @Override
-            protected void onUpdate(AjaxRequestTarget target) {
-                rootChoice.getModel().detach();
-                target.add(rootChoice);
-                layerAndLabel.setVisible(!globalGroupRule.getModelObject());
-                target.add(layerContainer);
-                rootLabel.getDefaultModel().detach();
-                target.add(rootLabel);
-            }
-        });
-        
-        form.add(rootLabel = new Label("rootLabel", new RootLabelModel()));
-        rootLabel.setOutputMarkupId(true);
-        form.add(rootChoice = new DropDownChoice<String>("root", new RootsModel()));
-        rootChoice.setRequired(true);
-        rootChoice.setOutputMarkupId(true);
-        rootChoice.add(new AjaxFormComponentUpdatingBehavior("change") {
-            @Override
-            protected void onUpdate(AjaxRequestTarget target) {
-                layerChoice.setChoices(new Model<ArrayList<String>>(
-                    getLayerNames(rootChoice.getConvertedInput())));
-                layerChoice.modelChanged();
-                target.add(layerChoice);
-            }
+  WebMarkupContainer layerAndLabel;
+
+  public AbstractDataAccessRulePage(final DataAccessRule rule) {
+    // build the form
+    Form form = new Form<DataAccessRule>("form", new CompoundPropertyModel(rule));
+    add(form);
+    form.add(new EmptyRolesValidator());
+
+    form.add(globalGroupRule = new CheckBox("globalGroupRule"));
+    globalGroupRule.setOutputMarkupId(true);
+    globalGroupRule.add(
+        new OnChangeAjaxBehavior() {
+          @Override
+          protected void onUpdate(AjaxRequestTarget target) {
+            rootChoice.getModel().detach();
+            target.add(rootChoice);
+            layerAndLabel.setVisible(!globalGroupRule.getModelObject());
+            target.add(layerContainer);
+            rootLabel.getDefaultModel().detach();
+            target.add(rootLabel);
+          }
         });
 
-        form.add(layerContainer = new WebMarkupContainer("layerContainer"));
-        layerContainer.setOutputMarkupId(true);
-        layerContainer.add(layerAndLabel = new WebMarkupContainer("layerAndLabel"));
-        layerAndLabel.add(layerChoice = new DropDownChoice<String>("layer", getLayerNames(rule.getRoot())));
-        layerAndLabel.setVisible(!rule.isGlobalGroupRule());
-        layerChoice.setRequired(true);
-        layerChoice.setOutputMarkupId(true);
+    form.add(rootLabel = new Label("rootLabel", new RootLabelModel()));
+    rootLabel.setOutputMarkupId(true);
+    form.add(rootChoice = new DropDownChoice<String>("root", new RootsModel()));
+    rootChoice.setRequired(true);
+    rootChoice.setOutputMarkupId(true);
+    rootChoice.add(
+        new AjaxFormComponentUpdatingBehavior("change") {
+          @Override
+          protected void onUpdate(AjaxRequestTarget target) {
+            layerChoice.setChoices(
+                new Model<ArrayList<String>>(getLayerNames(rootChoice.getConvertedInput())));
+            layerChoice.modelChanged();
+            target.add(layerChoice);
+          }
+        });
 
-        form.add(accessModeChoice = 
+    form.add(layerContainer = new WebMarkupContainer("layerContainer"));
+    layerContainer.setOutputMarkupId(true);
+    layerContainer.add(layerAndLabel = new WebMarkupContainer("layerAndLabel"));
+    layerAndLabel.add(
+        layerChoice = new DropDownChoice<String>("layer", getLayerNames(rule.getRoot())));
+    layerAndLabel.setVisible(!rule.isGlobalGroupRule());
+    layerChoice.setRequired(true);
+    layerChoice.setOutputMarkupId(true);
+
+    form.add(
+        accessModeChoice =
             new DropDownChoice<AccessMode>("accessMode", MODES, new AccessModeRenderer()));
-        accessModeChoice.setRequired(true);
+    accessModeChoice.setRequired(true);
 
-        form.add(rolesFormComponent = new RuleRolesFormComponent("roles",
-            new PropertyModel(rule, "roles")).setHasAnyRole(
-                rule.getRoles().contains(GeoServerRole.ANY_ROLE.getAuthority())));
+    form.add(
+        rolesFormComponent =
+            new RuleRolesFormComponent("roles", new PropertyModel(rule, "roles"))
+                .setHasAnyRole(rule.getRoles().contains(GeoServerRole.ANY_ROLE.getAuthority())));
 
-        // build the submit/cancel
-        form.add(new SubmitLink("save") {
-            @Override
-            public void onSubmit() {
-                DataAccessRule rule = (DataAccessRule) getForm().getModelObject();
-                if (rolesFormComponent.isHasAnyRole()) {
-                    rule.getRoles().clear();
-                    rule.getRoles().add(GeoServerRole.ANY_ROLE.getAuthority());
-                }
-                if(globalGroupRule.getModelObject()) {
-                    // just to be on the safe side
-                    rule.setLayer(null);
-                }
-                onFormSubmit(rule);
+    // build the submit/cancel
+    form.add(
+        new SubmitLink("save") {
+          @Override
+          public void onSubmit() {
+            DataAccessRule rule = (DataAccessRule) getForm().getModelObject();
+            if (rolesFormComponent.isHasAnyRole()) {
+              rule.getRoles().clear();
+              rule.getRoles().add(GeoServerRole.ANY_ROLE.getAuthority());
             }
+            if (globalGroupRule.getModelObject()) {
+              // just to be on the safe side
+              rule.setLayer(null);
+            }
+            onFormSubmit(rule);
+          }
         });
-        form.add(new BookmarkablePageLink<DataAccessRule>("cancel", DataSecurityPage.class));
-    }
+    form.add(new BookmarkablePageLink<DataAccessRule>("cancel", DataSecurityPage.class));
+  }
 
-    /**
-     * Implements the actual save action
-     */
-    protected abstract void onFormSubmit(DataAccessRule rule);
-    
-    
-    
-    /**
-     * Returns a sorted list of layer names in the specified workspace (or * if the workspace is *)
-     */
-    ArrayList<String> getLayerNames(String rootName) {
-        ArrayList<String> result = new ArrayList<String>();
-        if (!rootName.equals("*")) {
-            Filter wsResources = Predicates.equal("store.workspace.name", rootName);
-            try(CloseableIterator<ResourceInfo> it = getCatalog().list(ResourceInfo.class, wsResources)) {
-                while(it.hasNext()) {
-                    result.add(it.next().getName());
+  /** Implements the actual save action */
+  protected abstract void onFormSubmit(DataAccessRule rule);
+
+  /**
+   * Returns a sorted list of layer names in the specified workspace (or * if the workspace is *)
+   */
+  ArrayList<String> getLayerNames(String rootName) {
+    ArrayList<String> result = new ArrayList<String>();
+    if (!rootName.equals("*")) {
+      Filter wsResources = Predicates.equal("store.workspace.name", rootName);
+      try (CloseableIterator<ResourceInfo> it =
+          getCatalog().list(ResourceInfo.class, wsResources)) {
+        while (it.hasNext()) {
+          result.add(it.next().getName());
+        }
+      }
+      // collect also layer groups
+      getCatalog()
+          .getLayerGroupsByWorkspace(rootName)
+          .stream()
+          .map(lg -> lg.getName())
+          .forEach(
+              name -> {
+                if (!result.contains(name)) {
+                  result.add(name);
                 }
-            }
-            // collect also layer groups
-            getCatalog().getLayerGroupsByWorkspace(rootName).stream().map(lg -> lg.getName()).forEach(name -> {
-                if(!result.contains(name)) {
-                    result.add(name);
-                }
-            });
-            Collections.sort(result);
-        }
-        result.add(0, "*");
-        return result;
+              });
+      Collections.sort(result);
+    }
+    result.add(0, "*");
+    return result;
+  }
+
+  /** Makes sure we see translated text, by the raw name is used for the model */
+  class AccessModeRenderer extends ChoiceRenderer<AccessMode> {
+
+    public Object getDisplayValue(AccessMode object) {
+      return (String) new ParamResourceModel(object.name(), getPage()).getObject();
     }
 
-    /**
-     * Makes sure we see translated text, by the raw name is used for the model
-     */
-    class AccessModeRenderer extends ChoiceRenderer<AccessMode> {
+    public String getIdValue(AccessMode object, int index) {
+      return object.name();
+    }
+  }
 
-        public Object getDisplayValue(AccessMode object) {
-            return (String) new ParamResourceModel( object.name(), getPage())
-                    .getObject();
-        }
+  class EmptyRolesValidator extends AbstractFormValidator {
 
-        public String getIdValue(AccessMode object, int index) {
-            return object.name();
-        }
-
+    @Override
+    public FormComponent<?>[] getDependentFormComponents() {
+      return new FormComponent[] {rootChoice, layerChoice, accessModeChoice, rolesFormComponent};
     }
 
-    class EmptyRolesValidator extends AbstractFormValidator {
+    @Override
+    public void validate(Form<?> form) {
+      // only validate on final submit
+      if (form.findSubmittingButton() != form.get("save")) {
+        return;
+      }
 
-        @Override
-        public FormComponent<?>[] getDependentFormComponents() {
-           return new FormComponent[] { 
-               rootChoice, layerChoice, accessModeChoice, rolesFormComponent };
-        }
-
-        @Override
-        public void validate(Form<?> form) {
-            // only validate on final submit
-            if (form.findSubmittingButton() != form.get("save")) { 
-                return;
-            }
-
-            updateModels();
-            String roleInputString = rolesFormComponent.getPalette().getRecorderComponent().getInput();
-            if ((roleInputString == null || roleInputString.trim().isEmpty()) && !rolesFormComponent.isHasAnyRole()) {
-                form.error(new ParamResourceModel("emptyRoles", getPage()).getString());
-            }
-        }
+      updateModels();
+      String roleInputString = rolesFormComponent.getPalette().getRecorderComponent().getInput();
+      if ((roleInputString == null || roleInputString.trim().isEmpty())
+          && !rolesFormComponent.isHasAnyRole()) {
+        form.error(new ParamResourceModel("emptyRoles", getPage()).getString());
+      }
     }
+  }
 
-    protected void updateModels() {
-        rootChoice.updateModel();
-        layerChoice.updateModel();
-        accessModeChoice.updateModel();
-        rolesFormComponent.updateModel();
-    }
+  protected void updateModels() {
+    rootChoice.updateModel();
+    layerChoice.updateModel();
+    accessModeChoice.updateModel();
+    rolesFormComponent.updateModel();
+  }
 }

@@ -9,16 +9,13 @@ import org.geoserver.test.GeoServerSystemTestSupport;
 
 /**
  * Test support class providing additional accessors for security related beans.
- *  
+ *
  * @author Justin Deoliveira, OpenGeo
  */
 public class GeoServerSecurityTestSupport extends GeoServerSystemTestSupport {
 
-    /**
-     * Accessor for the geoserver master password.
-     *
-     */
-    protected String getMasterPassword() {
-        return new String(getSecurityManager().getMasterPassword());
-    }
+  /** Accessor for the geoserver master password. */
+  protected String getMasterPassword() {
+    return new String(getSecurityManager().getMasterPassword());
+  }
 }

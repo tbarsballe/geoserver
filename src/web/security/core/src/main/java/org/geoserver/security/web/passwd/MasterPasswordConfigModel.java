@@ -11,14 +11,13 @@ import org.geoserver.web.GeoServerApplication;
 
 /**
  * Model for the main {@link MasterPasswordConfig} configuration.
- *  
+ *
  * @author Justin Deoliveira, OpenGeo
  */
 public class MasterPasswordConfigModel extends LoadableDetachableModel<MasterPasswordConfig> {
 
-    @Override
-    protected MasterPasswordConfig load() {
-        return GeoServerApplication.get().getSecurityManager().getMasterPasswordConfig();
-    }
-
+  @Override
+  protected MasterPasswordConfig load() {
+    return GeoServerApplication.get().getSecurityManager().getMasterPasswordConfig();
+  }
 }

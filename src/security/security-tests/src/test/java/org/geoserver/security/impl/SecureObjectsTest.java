@@ -14,16 +14,16 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public abstract class SecureObjectsTest {
 
-    @BeforeClass
-    public static void initAppContext() {
-        // setup extensions so that we can do extension point lookups
-        ApplicationContext ac = new ClassPathXmlApplicationContext(
-                new String[] { "classpath:/securedObjectsContext.xml"});
-        new GeoServerExtensions().setApplicationContext(ac);
-    }
+  @BeforeClass
+  public static void initAppContext() {
+    // setup extensions so that we can do extension point lookups
+    ApplicationContext ac =
+        new ClassPathXmlApplicationContext(new String[] {"classpath:/securedObjectsContext.xml"});
+    new GeoServerExtensions().setApplicationContext(ac);
+  }
 
-    @AfterClass
-    public static void destroyAppContext() {
-        GeoServerExtensionsHelper.init(null);
-    }
+  @AfterClass
+  public static void destroyAppContext() {
+    GeoServerExtensionsHelper.init(null);
+  }
 }

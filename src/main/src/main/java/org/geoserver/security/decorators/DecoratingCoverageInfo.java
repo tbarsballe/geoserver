@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
-
 import org.geoserver.catalog.Catalog;
 import org.geoserver.catalog.CatalogVisitor;
 import org.geoserver.catalog.CoverageDimensionInfo;
@@ -33,285 +32,279 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.util.ProgressListener;
 
 /**
- * Delegates all methods to the provided delegate. Suclasses will override
- * methods in order to perform their decoration work
- * 
+ * Delegates all methods to the provided delegate. Suclasses will override methods in order to
+ * perform their decoration work
+ *
  * @author Andrea Aime - TOPP
- * 
  * @param <T>
  * @param <F>
  */
 public class DecoratingCoverageInfo extends AbstractDecorator<CoverageInfo>
-        implements CoverageInfo {
+    implements CoverageInfo {
 
-    public DecoratingCoverageInfo(CoverageInfo delegate) {
-        super(delegate);
-    }
+  public DecoratingCoverageInfo(CoverageInfo delegate) {
+    super(delegate);
+  }
 
-    public String getAbstract() {
-        return delegate.getAbstract();
-    }
+  public String getAbstract() {
+    return delegate.getAbstract();
+  }
 
-    public <T> T getAdapter(Class<T> adapterClass, Map<?, ?> hints) {
-        return delegate.getAdapter(adapterClass, hints);
-    }
+  public <T> T getAdapter(Class<T> adapterClass, Map<?, ?> hints) {
+    return delegate.getAdapter(adapterClass, hints);
+  }
 
-    public List<String> getAlias() {
-        return delegate.getAlias();
-    }
+  public List<String> getAlias() {
+    return delegate.getAlias();
+  }
 
-    public ReferencedEnvelope boundingBox() throws Exception {
-        return delegate.boundingBox();
-    }
+  public ReferencedEnvelope boundingBox() throws Exception {
+    return delegate.boundingBox();
+  }
 
-    public Catalog getCatalog() {
-        return delegate.getCatalog();
-    }
-    
-    public void setCatalog(Catalog catalog) {
-        delegate.setCatalog( catalog );
-    }
+  public Catalog getCatalog() {
+    return delegate.getCatalog();
+  }
 
-    public CoordinateReferenceSystem getCRS() {
-        return delegate.getCRS();
-    }
+  public void setCatalog(Catalog catalog) {
+    delegate.setCatalog(catalog);
+  }
 
-    public String getDefaultInterpolationMethod() {
-        return delegate.getDefaultInterpolationMethod();
-    }
+  public CoordinateReferenceSystem getCRS() {
+    return delegate.getCRS();
+  }
 
-    public String getDescription() {
-        return delegate.getDescription();
-    }
+  public String getDefaultInterpolationMethod() {
+    return delegate.getDefaultInterpolationMethod();
+  }
 
-    public List<CoverageDimensionInfo> getDimensions() {
-        return delegate.getDimensions();
-    }
+  public String getDescription() {
+    return delegate.getDescription();
+  }
 
-    public GridGeometry getGrid() {
-        return delegate.getGrid();
-    }
+  public List<CoverageDimensionInfo> getDimensions() {
+    return delegate.getDimensions();
+  }
 
-    public GridCoverage getGridCoverage(ProgressListener listener, Hints hints)
-            throws IOException {
-        return delegate.getGridCoverage(listener, hints);
-    }
+  public GridGeometry getGrid() {
+    return delegate.getGrid();
+  }
 
-    public GridCoverage getGridCoverage(ProgressListener listener,
-            ReferencedEnvelope envelope, Hints hints) throws IOException {
-        return delegate.getGridCoverage(listener, envelope, hints);
-    }
+  public GridCoverage getGridCoverage(ProgressListener listener, Hints hints) throws IOException {
+    return delegate.getGridCoverage(listener, hints);
+  }
 
-    public GridCoverageReader getGridCoverageReader(ProgressListener listener,
-            Hints hints) throws IOException {
-        return delegate.getGridCoverageReader(listener, hints);
-    }
+  public GridCoverage getGridCoverage(
+      ProgressListener listener, ReferencedEnvelope envelope, Hints hints) throws IOException {
+    return delegate.getGridCoverage(listener, envelope, hints);
+  }
 
-    public String getId() {
-        return delegate.getId();
-    }
+  public GridCoverageReader getGridCoverageReader(ProgressListener listener, Hints hints)
+      throws IOException {
+    return delegate.getGridCoverageReader(listener, hints);
+  }
 
-    public List<String> getInterpolationMethods() {
-        return delegate.getInterpolationMethods();
-    }
+  public String getId() {
+    return delegate.getId();
+  }
 
-    @Override
-    public List<KeywordInfo> getKeywords() {
-        return delegate.getKeywords();
-    }
+  public List<String> getInterpolationMethods() {
+    return delegate.getInterpolationMethods();
+  }
 
-    public List<String> keywordValues() {
-        return delegate.keywordValues();
-    }
+  @Override
+  public List<KeywordInfo> getKeywords() {
+    return delegate.getKeywords();
+  }
 
-    public ReferencedEnvelope getLatLonBoundingBox() {
-        return delegate.getLatLonBoundingBox();
-    }
+  public List<String> keywordValues() {
+    return delegate.keywordValues();
+  }
 
-    public MetadataMap getMetadata() {
-        return delegate.getMetadata();
-    }
+  public ReferencedEnvelope getLatLonBoundingBox() {
+    return delegate.getLatLonBoundingBox();
+  }
 
-    public List<MetadataLinkInfo> getMetadataLinks() {
-        return delegate.getMetadataLinks();
-    }
+  public MetadataMap getMetadata() {
+    return delegate.getMetadata();
+  }
 
-    @Override
-    public List<DataLinkInfo> getDataLinks() {
-        return delegate.getDataLinks();
-    }
+  public List<MetadataLinkInfo> getMetadataLinks() {
+    return delegate.getMetadataLinks();
+  }
 
-    public String getName() {
-        return delegate.getName();
-    }
+  @Override
+  public List<DataLinkInfo> getDataLinks() {
+    return delegate.getDataLinks();
+  }
 
-    /**
-     * @see org.geoserver.catalog.ResourceInfo#getQualifiedName()
-     */
-    public Name getQualifiedName() {
-        return delegate.getQualifiedName();
-    }
+  public String getName() {
+    return delegate.getName();
+  }
 
-    public NamespaceInfo getNamespace() {
-        return delegate.getNamespace();
-    }
+  /** @see org.geoserver.catalog.ResourceInfo#getQualifiedName() */
+  public Name getQualifiedName() {
+    return delegate.getQualifiedName();
+  }
 
-    public ReferencedEnvelope getNativeBoundingBox() {
-        return delegate.getNativeBoundingBox();
-    }
+  public NamespaceInfo getNamespace() {
+    return delegate.getNamespace();
+  }
 
-    public CoordinateReferenceSystem getNativeCRS() {
-        return delegate.getNativeCRS();
-    }
+  public ReferencedEnvelope getNativeBoundingBox() {
+    return delegate.getNativeBoundingBox();
+  }
 
-    public String getNativeFormat() {
-        return delegate.getNativeFormat();
-    }
+  public CoordinateReferenceSystem getNativeCRS() {
+    return delegate.getNativeCRS();
+  }
 
-    public String getNativeName() {
-        return delegate.getNativeName();
-    }
+  public String getNativeFormat() {
+    return delegate.getNativeFormat();
+  }
 
-    /**
-     * @see org.geoserver.catalog.ResourceInfo#getQualifiedNativeName()
-     */
-    public Name getQualifiedNativeName() {
-        return delegate.getQualifiedNativeName();
-    }
+  public String getNativeName() {
+    return delegate.getNativeName();
+  }
 
-    public Map<String, Serializable> getParameters() {
-        return delegate.getParameters();
-    }
+  /** @see org.geoserver.catalog.ResourceInfo#getQualifiedNativeName() */
+  public Name getQualifiedNativeName() {
+    return delegate.getQualifiedNativeName();
+  }
 
-    public String getPrefixedName() {
-        return delegate.getPrefixedName();
-    }
+  public Map<String, Serializable> getParameters() {
+    return delegate.getParameters();
+  }
 
-    public String prefixedName() {
-        return delegate.prefixedName();
-    }
+  public String getPrefixedName() {
+    return delegate.getPrefixedName();
+  }
 
-    public ProjectionPolicy getProjectionPolicy() {
-        return delegate.getProjectionPolicy();
-    }
+  public String prefixedName() {
+    return delegate.prefixedName();
+  }
 
-    public List<String> getRequestSRS() {
-        return delegate.getRequestSRS();
-    }
+  public ProjectionPolicy getProjectionPolicy() {
+    return delegate.getProjectionPolicy();
+  }
 
-    public List<String> getResponseSRS() {
-        return delegate.getResponseSRS();
-    }
+  public List<String> getRequestSRS() {
+    return delegate.getRequestSRS();
+  }
 
-    public String getSRS() {
-        return delegate.getSRS();
-    }
+  public List<String> getResponseSRS() {
+    return delegate.getResponseSRS();
+  }
 
-    public CoverageStoreInfo getStore() {
-        return delegate.getStore();
-    }
+  public String getSRS() {
+    return delegate.getSRS();
+  }
 
-    public List<String> getSupportedFormats() {
-        return delegate.getSupportedFormats();
-    }
+  public CoverageStoreInfo getStore() {
+    return delegate.getStore();
+  }
 
-    public String getTitle() {
-        return delegate.getTitle();
-    }
+  public List<String> getSupportedFormats() {
+    return delegate.getSupportedFormats();
+  }
 
-    public boolean isEnabled() {
-        return delegate.isEnabled();
-    }
+  public String getTitle() {
+    return delegate.getTitle();
+  }
 
-    public boolean enabled() {
-        return delegate.enabled();
-    }
+  public boolean isEnabled() {
+    return delegate.isEnabled();
+  }
 
-    public void setAbstract(String _abstract) {
-        delegate.setAbstract(_abstract);
-    }
+  public boolean enabled() {
+    return delegate.enabled();
+  }
 
-    public void setDefaultInterpolationMethod(String defaultInterpolationMethod) {
-        delegate.setDefaultInterpolationMethod(defaultInterpolationMethod);
-    }
+  public void setAbstract(String _abstract) {
+    delegate.setAbstract(_abstract);
+  }
 
-    public void setDescription(String description) {
-        delegate.setDescription(description);
-    }
+  public void setDefaultInterpolationMethod(String defaultInterpolationMethod) {
+    delegate.setDefaultInterpolationMethod(defaultInterpolationMethod);
+  }
 
-    public void setEnabled(boolean enabled) {
-        delegate.setEnabled(enabled);
-    }
+  public void setDescription(String description) {
+    delegate.setDescription(description);
+  }
 
-    public void setGrid(GridGeometry grid) {
-        delegate.setGrid(grid);
-    }
+  public void setEnabled(boolean enabled) {
+    delegate.setEnabled(enabled);
+  }
 
-    public void setLatLonBoundingBox(ReferencedEnvelope box) {
-        delegate.setLatLonBoundingBox(box);
-    }
+  public void setGrid(GridGeometry grid) {
+    delegate.setGrid(grid);
+  }
 
-    public void setName(String name) {
-        delegate.setName(name);
-    }
+  public void setLatLonBoundingBox(ReferencedEnvelope box) {
+    delegate.setLatLonBoundingBox(box);
+  }
 
-    public void setNamespace(NamespaceInfo namespace) {
-        delegate.setNamespace(namespace);
-    }
+  public void setName(String name) {
+    delegate.setName(name);
+  }
 
-    public void setNativeBoundingBox(ReferencedEnvelope box) {
-        delegate.setNativeBoundingBox(box);
-    }
+  public void setNamespace(NamespaceInfo namespace) {
+    delegate.setNamespace(namespace);
+  }
 
-    public void setNativeCRS(CoordinateReferenceSystem nativeCRS) {
-        delegate.setNativeCRS(nativeCRS);
-    }
+  public void setNativeBoundingBox(ReferencedEnvelope box) {
+    delegate.setNativeBoundingBox(box);
+  }
 
-    public void setNativeFormat(String nativeFormat) {
-        delegate.setNativeFormat(nativeFormat);
-    }
+  public void setNativeCRS(CoordinateReferenceSystem nativeCRS) {
+    delegate.setNativeCRS(nativeCRS);
+  }
 
-    public void setNativeName(String nativeName) {
-        delegate.setNativeName(nativeName);
-    }
+  public void setNativeFormat(String nativeFormat) {
+    delegate.setNativeFormat(nativeFormat);
+  }
 
-    public void setProjectionPolicy(ProjectionPolicy policy) {
-        delegate.setProjectionPolicy(policy);
-    }
+  public void setNativeName(String nativeName) {
+    delegate.setNativeName(nativeName);
+  }
 
-    public void setSRS(String srs) {
-        delegate.setSRS(srs);
-    }
+  public void setProjectionPolicy(ProjectionPolicy policy) {
+    delegate.setProjectionPolicy(policy);
+  }
 
-    public void setStore(StoreInfo store) {
-        delegate.setStore(store);
-    }
+  public void setSRS(String srs) {
+    delegate.setSRS(srs);
+  }
 
-    public void setTitle(String title) {
-        delegate.setTitle(title);
-    }
-    
-    public void accept(CatalogVisitor visitor) {
-        delegate.accept(visitor);
-    }
-    
-    @Override
-    public boolean isAdvertised() {
-        return delegate.isAdvertised();
-    }
-    
-    @Override
-    public void setAdvertised(boolean advertised) {
-        delegate.setAdvertised(advertised);
-    }
+  public void setStore(StoreInfo store) {
+    delegate.setStore(store);
+  }
 
-    @Override
-    public String getNativeCoverageName() {
-        return delegate.getNativeCoverageName();
-    }
+  public void setTitle(String title) {
+    delegate.setTitle(title);
+  }
 
-    @Override
-    public void setNativeCoverageName(String nativeCoverageName) {
-        delegate.setNativeCoverageName(nativeCoverageName);
-    }
+  public void accept(CatalogVisitor visitor) {
+    delegate.accept(visitor);
+  }
+
+  @Override
+  public boolean isAdvertised() {
+    return delegate.isAdvertised();
+  }
+
+  @Override
+  public void setAdvertised(boolean advertised) {
+    delegate.setAdvertised(advertised);
+  }
+
+  @Override
+  public String getNativeCoverageName() {
+    return delegate.getNativeCoverageName();
+  }
+
+  @Override
+  public void setNativeCoverageName(String nativeCoverageName) {
+    delegate.setNativeCoverageName(nativeCoverageName);
+  }
 }

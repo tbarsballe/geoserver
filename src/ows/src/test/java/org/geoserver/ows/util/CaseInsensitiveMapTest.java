@@ -9,16 +9,15 @@ import static org.junit.Assert.*;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import org.junit.Test;
 
 public class CaseInsensitiveMapTest {
 
-    @Test
-    public void testWholeMap() {
-        Map source = new HashMap();
-        source.put("AbC", "test");
-        CaseInsensitiveMap cim = new CaseInsensitiveMap(source);
-        assertEquals("test", cim.get("abc"));
-    }
+  @Test
+  public void testWholeMap() {
+    Map source = new HashMap();
+    source.put("AbC", "test");
+    CaseInsensitiveMap cim = new CaseInsensitiveMap(source);
+    assertEquals("test", cim.get("abc"));
+  }
 }

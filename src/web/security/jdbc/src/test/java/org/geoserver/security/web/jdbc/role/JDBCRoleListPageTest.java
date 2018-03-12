@@ -12,30 +12,29 @@ import org.junit.Test;
 
 public class JDBCRoleListPageTest extends RoleListPageTest {
 
-    @Test
-    public void testRemove() throws Exception {
-        //insertValues();
-        addAdditonalData();
-        doRemove(getTabbedPanelPath()+":panel:header:removeSelected");
-    }
+  @Test
+  public void testRemove() throws Exception {
+    // insertValues();
+    addAdditonalData();
+    doRemove(getTabbedPanelPath() + ":panel:header:removeSelected");
+  }
 
-    @Override
-    protected void doInitialize() throws Exception {
-        initializeForJDBC();
-    }
+  @Override
+  protected void doInitialize() throws Exception {
+    initializeForJDBC();
+  }
 
-    void initializeForJDBC() throws Exception {
-        initialize(new H2UserGroupServiceTest(), new H2RoleServiceTest());
-    }
-    
-    @Override
-    public String getRoleServiceName() {
-        return "h2";
-    }
+  void initializeForJDBC() throws Exception {
+    initialize(new H2UserGroupServiceTest(), new H2RoleServiceTest());
+  }
 
-    @Override
-    public String getUserGroupServiceName() {
-        return "h2";
-    }
+  @Override
+  public String getRoleServiceName() {
+    return "h2";
+  }
 
+  @Override
+  public String getUserGroupServiceName() {
+    return "h2";
+  }
 }

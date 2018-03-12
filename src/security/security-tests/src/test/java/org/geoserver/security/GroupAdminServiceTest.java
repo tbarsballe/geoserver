@@ -5,6 +5,10 @@
  */
 package org.geoserver.security;
 
+import static org.junit.Assert.*;
+
+import java.io.IOException;
+import java.util.Collections;
 import org.geoserver.data.test.SystemTestData;
 import org.geoserver.security.impl.GeoServerRole;
 import org.geoserver.security.impl.GeoServerUser;
@@ -22,255 +26,250 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import java.io.IOException;
-import java.util.Collections;
-
-import static org.junit.Assert.*;
-
 public class GroupAdminServiceTest extends AbstractSecurityServiceTest {
 
-    protected GeoServerUserGroupStore ugStore;
-    protected GeoServerRoleStore roleStore;
+  protected GeoServerUserGroupStore ugStore;
+  protected GeoServerRoleStore roleStore;
 
-    GeoServerUser bob, alice;
-    GeoServerUserGroup users, admins;
+  GeoServerUser bob, alice;
+  GeoServerUserGroup users, admins;
 
-     @Override
-    protected void onSetUp(SystemTestData testData) throws Exception {
-        super.onSetUp(testData);
+  @Override
+  protected void onSetUp(SystemTestData testData) throws Exception {
+    super.onSetUp(testData);
 
-        //set up the services
-        GeoServerUserGroupService ugService = createUserGroupService("gaugs");
+    // set up the services
+    GeoServerUserGroupService ugService = createUserGroupService("gaugs");
 
-        GeoServerRoleService roleService = createRoleService("gars");
-        getSecurityManager().setActiveRoleService(roleService);
+    GeoServerRoleService roleService = createRoleService("gars");
+    getSecurityManager().setActiveRoleService(roleService);
 
-        //add the users
-        GeoServerUserGroupStore ugStore = createStore(ugService);
+    // add the users
+    GeoServerUserGroupStore ugStore = createStore(ugService);
 
-        GeoServerUser bob = ugStore.createUserObject("bob", "foobar", true);
-        GroupAdminProperty.set(bob.getProperties(), new String[]{"users"});
-        ugStore.addUser(bob);
+    GeoServerUser bob = ugStore.createUserObject("bob", "foobar", true);
+    GroupAdminProperty.set(bob.getProperties(), new String[] {"users"});
+    ugStore.addUser(bob);
 
-        GeoServerUser alice = ugStore.createUserObject("alice", "foobar", true);
-        ugStore.addUser(alice);
+    GeoServerUser alice = ugStore.createUserObject("alice", "foobar", true);
+    ugStore.addUser(alice);
 
-        GeoServerUserGroup users = ugStore.createGroupObject("users", true);
-        ugStore.addGroup(users);
+    GeoServerUserGroup users = ugStore.createGroupObject("users", true);
+    ugStore.addGroup(users);
 
-        GeoServerUserGroup admins = ugStore.createGroupObject("admins", true);
-        ugStore.addGroup(admins);
+    GeoServerUserGroup admins = ugStore.createGroupObject("admins", true);
+    ugStore.addGroup(admins);
 
-        ugStore.store();
+    ugStore.store();
 
-        //grant bob group admin privilege
-        GeoServerRole groupAdminRole = null;
-        GeoServerRoleStore roleStore = createStore(roleService);
-        roleStore.addRole(roleStore.createRoleObject("adminRole"));
-        roleStore.addRole(groupAdminRole=roleStore.createRoleObject("groupAdminRole"));
-        
-        roleStore.associateRoleToUser(groupAdminRole, bob.getUsername());
-        roleStore.store();
+    // grant bob group admin privilege
+    GeoServerRole groupAdminRole = null;
+    GeoServerRoleStore roleStore = createStore(roleService);
+    roleStore.addRole(roleStore.createRoleObject("adminRole"));
+    roleStore.addRole(groupAdminRole = roleStore.createRoleObject("groupAdminRole"));
+
+    roleStore.associateRoleToUser(groupAdminRole, bob.getUsername());
+    roleStore.store();
+  }
+
+  @Before
+  public void init() throws Exception {
+    GeoServerSecurityManager secMgr = getSecurityManager();
+    ugStore = secMgr.loadUserGroupService("gaugs").createStore();
+    roleStore = secMgr.loadRoleService("gars").createStore();
+
+    bob = ugStore.getUserByUsername("bob");
+    alice = ugStore.getUserByUsername("alice");
+    users = ugStore.getGroupByGroupname("users");
+    admins = ugStore.getGroupByGroupname("admins");
+  }
+
+  @Before
+  public void removeBill() throws Exception {
+    GeoServerUserGroupStore ugStore =
+        getSecurityManager().loadUserGroupService("gaugs").createStore();
+    GeoServerUser bill = ugStore.getUserByUsername("bill");
+    if (bill != null) {
+      ugStore.removeUser(bill);
+      ugStore.store();
+    } else {
+      ugStore.load();
     }
+  }
 
-    @Before
-    public void init() throws Exception {
-        GeoServerSecurityManager secMgr = getSecurityManager();
-        ugStore = secMgr.loadUserGroupService("gaugs").createStore();
-        roleStore = secMgr.loadRoleService("gars").createStore();
+  @After
+  public void clearAuth() {
+    SecurityContextHolder.getContext().setAuthentication(null);
+  }
 
-        bob = ugStore.getUserByUsername("bob");
-        alice = ugStore.getUserByUsername("alice");
-        users = ugStore.getGroupByGroupname("users");
-        admins = ugStore.getGroupByGroupname("admins");
-    }
+  @Override
+  public GeoServerRoleService createRoleService(String name) throws Exception {
+    XMLRoleServiceConfig config = new XMLRoleServiceConfig();
+    config.setName(name);
+    config.setAdminRoleName("adminRole");
+    config.setGroupAdminRoleName("groupAdminRole");
+    config.setClassName(XMLRoleService.class.getName());
+    config.setCheckInterval(1000);
+    config.setFileName("roles.xml");
+    getSecurityManager().saveRoleService(config);
+    return getSecurityManager().loadRoleService(config.getName());
+  }
 
-    @Before
-    public void removeBill() throws Exception {
-        GeoServerUserGroupStore ugStore = 
-                getSecurityManager().loadUserGroupService("gaugs").createStore();
-        GeoServerUser bill = ugStore.getUserByUsername("bill");
-        if (bill != null) {
-            ugStore.removeUser(bill);
-            ugStore.store();
-        } else {
-            ugStore.load();
-        }
-    }
+  @Override
+  public GeoServerUserGroupService createUserGroupService(String name) throws Exception {
+    XMLUserGroupServiceConfig config = new XMLUserGroupServiceConfig();
+    config.setName(name);
+    config.setClassName(XMLUserGroupService.class.getName());
+    config.setFileName("users.xml");
+    config.setCheckInterval(1000);
+    config.setPasswordEncoderName(getDigestPasswordEncoder().getName());
+    config.setPasswordPolicyName(PasswordValidator.DEFAULT_NAME);
 
-    @After
-    public void clearAuth() {
-        SecurityContextHolder.getContext().setAuthentication(null);
-    }
+    getSecurityManager().saveUserGroupService(config);
 
-    @Override
-    public GeoServerRoleService createRoleService(String name) throws Exception {
-        XMLRoleServiceConfig config = new XMLRoleServiceConfig();
-        config.setName(name);
-        config.setAdminRoleName("adminRole");
-        config.setGroupAdminRoleName("groupAdminRole");
-        config.setClassName(XMLRoleService.class.getName());
-        config.setCheckInterval(1000);   
-        config.setFileName("roles.xml");
-        getSecurityManager().saveRoleService(config);
-        return getSecurityManager().loadRoleService(config.getName());
-    }
+    return getSecurityManager().loadUserGroupService(name);
+  }
 
-    @Override
-    public GeoServerUserGroupService createUserGroupService(String name)
-            throws Exception {
-        XMLUserGroupServiceConfig config = new XMLUserGroupServiceConfig();
-        config.setName(name);
-        config.setClassName(XMLUserGroupService.class.getName());
-        config.setFileName("users.xml");
-        config.setCheckInterval(1000); 
-        config.setPasswordEncoderName(getDigestPasswordEncoder().getName());
-        config.setPasswordPolicyName(PasswordValidator.DEFAULT_NAME);
-        
-        getSecurityManager().saveUserGroupService(config);
-            
-        return getSecurityManager().loadUserGroupService(name);
-    }
-
-    void setAuth() {
-        Authentication auth = new UsernamePasswordAuthenticationToken(
+  void setAuth() {
+    Authentication auth =
+        new UsernamePasswordAuthenticationToken(
             bob, bob.getPassword(), Collections.singletonList(GeoServerRole.GROUP_ADMIN_ROLE));
-        SecurityContextHolder.getContext().setAuthentication(auth);
+    SecurityContextHolder.getContext().setAuthentication(auth);
+  }
+
+  @Test
+  public void testWrapRoleService() throws Exception {
+    GeoServerRoleService roleService = getSecurityManager().getActiveRoleService();
+    assertFalse(roleService instanceof GroupAdminRoleService);
+
+    setAuth();
+    roleService = getSecurityManager().getActiveRoleService();
+    assertTrue(roleService instanceof GroupAdminRoleService);
+  }
+
+  @Test
+  public void testWrapUserGroupService() throws Exception {
+    GeoServerUserGroupService ugService =
+        getSecurityManager().loadUserGroupService(ugStore.getName());
+    assertFalse(ugService instanceof GroupAdminUserGroupService);
+
+    setAuth();
+    ugService = getSecurityManager().loadUserGroupService(ugStore.getName());
+    assertTrue(ugService instanceof GroupAdminUserGroupService);
+  }
+
+  @Test
+  public void testHideAdminRole() throws Exception {
+    GeoServerRoleService roleService = getSecurityManager().getActiveRoleService();
+    GeoServerRole adminRole = roleService.createRoleObject("adminRole");
+    assertTrue(roleService.getRoles().contains(adminRole));
+    assertNotNull(roleService.getAdminRole());
+    assertNotNull(roleService.getRoleByName("adminRole"));
+
+    setAuth();
+    roleService = getSecurityManager().getActiveRoleService();
+    assertFalse(roleService.getRoles().contains(adminRole));
+    assertNull(roleService.getAdminRole());
+    assertNull(roleService.getRoleByName("adminRole"));
+  }
+
+  @Test
+  public void testHideGroups() throws Exception {
+    GeoServerUserGroupService ugService =
+        getSecurityManager().loadUserGroupService(ugStore.getName());
+    assertTrue(ugService.getUserGroups().contains(users));
+    assertNotNull(ugService.getGroupByGroupname("users"));
+    assertTrue(ugService.getUserGroups().contains(admins));
+    assertNotNull(ugService.getGroupByGroupname("admins"));
+
+    setAuth();
+    ugService = getSecurityManager().loadUserGroupService(ugStore.getName());
+    assertTrue(ugService.getUserGroups().contains(users));
+    assertNotNull(ugService.getGroupByGroupname("users"));
+    assertFalse(ugService.getUserGroups().contains(admins));
+    assertNull(ugService.getGroupByGroupname("admins"));
+  }
+
+  @Test
+  public void testRoleServiceReadOnly() throws Exception {
+    setAuth();
+    GeoServerRoleService roleService = getSecurityManager().getActiveRoleService();
+    assertFalse(roleService.canCreateStore());
+    assertNull(roleService.createStore());
+  }
+
+  @Test
+  public void testCreateNewUser() throws Exception {
+    setAuth();
+
+    GeoServerUserGroupService ugService =
+        getSecurityManager().loadUserGroupService(ugStore.getName());
+    GeoServerUserGroupStore ugStore = ugService.createStore();
+
+    GeoServerUser bill = ugStore.createUserObject("bill", "foobar", true);
+    ugStore.addUser(bill);
+    ugStore.store();
+
+    assertNotNull(ugService.getUserByUsername("bill"));
+  }
+
+  @Test
+  public void testAssignUserToGroup() throws Exception {
+    testCreateNewUser();
+
+    GeoServerUserGroupService ugService =
+        getSecurityManager().loadUserGroupService(ugStore.getName());
+    GeoServerUserGroupStore ugStore = ugService.createStore();
+
+    GeoServerUser bill = ugStore.getUserByUsername("bill");
+    ugStore.associateUserToGroup(bill, users);
+    ugStore.store();
+
+    assertEquals(1, ugStore.getGroupsForUser(bill).size());
+    assertTrue(ugStore.getGroupsForUser(bill).contains(users));
+
+    ugStore.associateUserToGroup(bill, admins);
+    ugStore.store();
+    assertEquals(1, ugStore.getGroupsForUser(bill).size());
+    assertTrue(ugStore.getGroupsForUser(bill).contains(users));
+    assertFalse(ugStore.getGroupsForUser(bill).contains(admins));
+  }
+
+  @Test
+  public void testRemoveUserInGroup() throws Exception {
+    testAssignUserToGroup();
+
+    GeoServerUserGroupService ugService =
+        getSecurityManager().loadUserGroupService(ugStore.getName());
+    GeoServerUserGroupStore ugStore = ugService.createStore();
+    GeoServerUser bill = ugStore.getUserByUsername("bill");
+
+    ugStore.removeUser(bill);
+    ugStore.store();
+
+    assertNull(ugStore.getUserByUsername("bill"));
+  }
+
+  @Test
+  public void testRemoveUserNotInGroup() throws Exception {
+    GeoServerUserGroupService ugService =
+        getSecurityManager().loadUserGroupService(ugStore.getName());
+    GeoServerUserGroupStore ugStore = ugService.createStore();
+
+    GeoServerUser sally = ugStore.createUserObject("sally", "foobar", true);
+    ugStore.addUser(sally);
+    ugStore.associateUserToGroup(sally, admins);
+    ugStore.store();
+
+    setAuth();
+    ugService = getSecurityManager().loadUserGroupService(ugStore.getName());
+    ugStore = ugService.createStore();
+    try {
+      ugStore.removeUser(sally);
+      fail();
+    } catch (IOException e) {
+      ugStore.load();
     }
-
-    @Test
-    public void testWrapRoleService() throws Exception {
-        GeoServerRoleService roleService = getSecurityManager().getActiveRoleService();
-        assertFalse(roleService instanceof GroupAdminRoleService);
-
-        setAuth();
-        roleService = getSecurityManager().getActiveRoleService();
-        assertTrue(roleService instanceof GroupAdminRoleService);
-    }
-
-    @Test
-    public void testWrapUserGroupService() throws Exception {
-        GeoServerUserGroupService ugService = 
-                getSecurityManager().loadUserGroupService(ugStore.getName());
-        assertFalse(ugService instanceof GroupAdminUserGroupService);
-
-        setAuth();
-        ugService = getSecurityManager().loadUserGroupService(ugStore.getName());
-        assertTrue(ugService instanceof GroupAdminUserGroupService);
-    }
-
-    @Test
-    public void testHideAdminRole() throws Exception {
-        GeoServerRoleService roleService = getSecurityManager().getActiveRoleService();
-        GeoServerRole adminRole = roleService.createRoleObject("adminRole");
-        assertTrue(roleService.getRoles().contains(adminRole));
-        assertNotNull(roleService.getAdminRole());
-        assertNotNull(roleService.getRoleByName("adminRole"));
-        
-        setAuth();
-        roleService = getSecurityManager().getActiveRoleService();
-        assertFalse(roleService.getRoles().contains(adminRole));
-        assertNull(roleService.getAdminRole());
-        assertNull(roleService.getRoleByName("adminRole"));
-    }
-
-    @Test
-    public void testHideGroups() throws Exception {
-        GeoServerUserGroupService ugService = 
-                getSecurityManager().loadUserGroupService(ugStore.getName());
-        assertTrue(ugService.getUserGroups().contains(users));
-        assertNotNull(ugService.getGroupByGroupname("users"));
-        assertTrue(ugService.getUserGroups().contains(admins));
-        assertNotNull(ugService.getGroupByGroupname("admins"));
-
-        setAuth();
-        ugService = getSecurityManager().loadUserGroupService(ugStore.getName());
-        assertTrue(ugService.getUserGroups().contains(users));
-        assertNotNull(ugService.getGroupByGroupname("users"));
-        assertFalse(ugService.getUserGroups().contains(admins));
-        assertNull(ugService.getGroupByGroupname("admins"));
-    }
-
-    @Test
-    public void testRoleServiceReadOnly() throws Exception {
-        setAuth();
-        GeoServerRoleService roleService = getSecurityManager().getActiveRoleService();
-        assertFalse(roleService.canCreateStore());
-        assertNull(roleService.createStore());
-    }
-
-    @Test
-    public void testCreateNewUser() throws Exception {
-        setAuth();
-
-        GeoServerUserGroupService ugService = 
-            getSecurityManager().loadUserGroupService(ugStore.getName());
-        GeoServerUserGroupStore ugStore = ugService.createStore();
-
-        GeoServerUser bill = ugStore.createUserObject("bill", "foobar", true);
-        ugStore.addUser(bill);
-        ugStore.store();
-
-        assertNotNull(ugService.getUserByUsername("bill"));
-    }
-
-    @Test
-    public void testAssignUserToGroup() throws Exception {
-        testCreateNewUser();
-
-        GeoServerUserGroupService ugService = 
-                getSecurityManager().loadUserGroupService(ugStore.getName());
-        GeoServerUserGroupStore ugStore = ugService.createStore();
-
-        GeoServerUser bill = ugStore.getUserByUsername("bill");
-        ugStore.associateUserToGroup(bill, users);
-        ugStore.store();
-
-        assertEquals(1, ugStore.getGroupsForUser(bill).size());
-        assertTrue(ugStore.getGroupsForUser(bill).contains(users));
-
-        ugStore.associateUserToGroup(bill, admins);
-        ugStore.store();
-        assertEquals(1, ugStore.getGroupsForUser(bill).size());
-        assertTrue(ugStore.getGroupsForUser(bill).contains(users));
-        assertFalse(ugStore.getGroupsForUser(bill).contains(admins));
-    }
-
-    @Test
-    public void testRemoveUserInGroup() throws Exception {
-        testAssignUserToGroup();
-
-        GeoServerUserGroupService ugService = 
-                getSecurityManager().loadUserGroupService(ugStore.getName());
-        GeoServerUserGroupStore ugStore = ugService.createStore();
-        GeoServerUser bill = ugStore.getUserByUsername("bill");
-
-        ugStore.removeUser(bill);
-        ugStore.store();
-
-        assertNull(ugStore.getUserByUsername("bill"));
-    }
-
-    @Test
-    public void testRemoveUserNotInGroup() throws Exception {
-        GeoServerUserGroupService ugService = 
-                getSecurityManager().loadUserGroupService(ugStore.getName());
-        GeoServerUserGroupStore ugStore = ugService.createStore();
-
-        GeoServerUser sally = ugStore.createUserObject("sally", "foobar", true);
-        ugStore.addUser(sally);
-        ugStore.associateUserToGroup(sally, admins);
-        ugStore.store();
-
-        setAuth();
-        ugService = getSecurityManager().loadUserGroupService(ugStore.getName());
-        ugStore = ugService.createStore();
-        try {
-            ugStore.removeUser(sally);
-            fail();
-        }
-        catch(IOException e) { ugStore.load();};
-
-
-    }
+    ;
+  }
 }

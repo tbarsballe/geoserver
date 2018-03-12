@@ -12,35 +12,35 @@ import org.geoserver.security.validation.CredentialsFromRequestHeaderFilterConfi
 import org.geoserver.security.validation.SecurityConfigValidator;
 
 /**
- * Security provider to extract user credentials (username and password)
- * from Request Headers in a configurable way.
- * 
+ * Security provider to extract user credentials (username and password) from Request Headers in a
+ * configurable way.
+ *
  * @author Lorenzo Natali, GeoSolutions
  * @author Mauro Bartolomeoli, GeoSolutions
- *
  */
-public class GeoServerCredentialsFromRequestHeaderProvider extends
-        AbstractFilterProvider {
-    @Override
-    public void configure(XStreamPersister xp) {
-        super.configure(xp);
-        xp.getXStream().alias("credentialsFromRequestHeaderAuthentication",
-                CredentialsFromRequestHeaderFilterConfig.class);
-    }
+public class GeoServerCredentialsFromRequestHeaderProvider extends AbstractFilterProvider {
+  @Override
+  public void configure(XStreamPersister xp) {
+    super.configure(xp);
+    xp.getXStream()
+        .alias(
+            "credentialsFromRequestHeaderAuthentication",
+            CredentialsFromRequestHeaderFilterConfig.class);
+  }
 
-    @Override
-    public Class<? extends GeoServerSecurityFilter> getFilterClass() {
-        return GeoServerCredentialsFromRequestHeaderFilter.class;
-    }
+  @Override
+  public Class<? extends GeoServerSecurityFilter> getFilterClass() {
+    return GeoServerCredentialsFromRequestHeaderFilter.class;
+  }
 
-    @Override
-    public GeoServerSecurityFilter createFilter(SecurityNamedServiceConfig config) {
-        return new GeoServerCredentialsFromRequestHeaderFilter();
-    }
+  @Override
+  public GeoServerSecurityFilter createFilter(SecurityNamedServiceConfig config) {
+    return new GeoServerCredentialsFromRequestHeaderFilter();
+  }
 
-    @Override
-    public SecurityConfigValidator createConfigurationValidator(
-            GeoServerSecurityManager securityManager) {
-        return new CredentialsFromRequestHeaderFilterConfigValidator(securityManager);
-    }
+  @Override
+  public SecurityConfigValidator createConfigurationValidator(
+      GeoServerSecurityManager securityManager) {
+    return new CredentialsFromRequestHeaderFilterConfigValidator(securityManager);
+  }
 }

@@ -17,13 +17,13 @@ import org.geoserver.web.MenuPageInfo;
 @SuppressWarnings("serial")
 public class ServiceMenuPageInfo<T extends GeoServerBasePage> extends MenuPageInfo<T> {
 
-    Class<? extends ServiceInfo> serviceClass;
+  Class<? extends ServiceInfo> serviceClass;
 
-    public Class<? extends ServiceInfo> getServiceClass() {
-        return serviceClass;
-    }
+  public Class<? extends ServiceInfo> getServiceClass() {
+    return serviceClass;
+  }
 
-    public void setServiceClass(Class<? extends ServiceInfo> serviceClass) {
-        this.serviceClass = serviceClass;
-    }
+  public void setServiceClass(Class<? extends ServiceInfo> serviceClass) {
+    this.serviceClass = serviceClass;
+  }
 }

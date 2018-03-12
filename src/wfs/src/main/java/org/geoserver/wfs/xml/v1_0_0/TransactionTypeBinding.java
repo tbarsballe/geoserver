@@ -6,9 +6,7 @@
 package org.geoserver.wfs.xml.v1_0_0;
 
 import java.util.Iterator;
-
 import javax.xml.namespace.QName;
-
 import net.opengis.wfs.AllSomeType;
 import net.opengis.wfs.DeleteElementType;
 import net.opengis.wfs.InsertElementType;
@@ -16,17 +14,16 @@ import net.opengis.wfs.NativeType;
 import net.opengis.wfs.TransactionType;
 import net.opengis.wfs.UpdateElementType;
 import net.opengis.wfs.WfsFactory;
-
 import org.geotools.xml.AbstractComplexEMFBinding;
 import org.geotools.xml.ElementInstance;
 import org.geotools.xml.Node;
-
 
 /**
  * Binding object for the type http://www.opengis.net/wfs:TransactionType.
  *
  * <p>
- *        <pre>
+ *
+ * <pre>
  *         <code>
  *  &lt;xsd:complexType name="TransactionType"&gt;
  *      &lt;xsd:annotation&gt;
@@ -98,78 +95,78 @@ import org.geotools.xml.Node;
  *
  *          </code>
  *         </pre>
+ *
  * @generated
  */
 public class TransactionTypeBinding extends AbstractComplexEMFBinding {
-    WfsFactory wfsfactory;
+  WfsFactory wfsfactory;
 
-    public TransactionTypeBinding(WfsFactory wfsfactory) {
-        super( wfsfactory );
-        this.wfsfactory = wfsfactory;
+  public TransactionTypeBinding(WfsFactory wfsfactory) {
+    super(wfsfactory);
+    this.wfsfactory = wfsfactory;
+  }
+
+  /** @generated */
+  public QName getTarget() {
+    return WFS.TRANSACTIONTYPE;
+  }
+
+  /**
+   *
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   *
+   * @generated modifiable
+   */
+  public Class getType() {
+    return TransactionType.class;
+  }
+
+  /**
+   *
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   *
+   * @generated modifiable
+   */
+  public Object parse(ElementInstance instance, Node node, Object value) throws Exception {
+    TransactionType transaction = wfsfactory.createTransactionType();
+
+    // lock id
+    if (node.hasChild("LockId")) {
+      transaction.setLockId((String) node.getChildValue("LockId"));
     }
 
-    /**
-     * @generated
-     */
-    public QName getTarget() {
-        return WFS.TRANSACTIONTYPE;
+    // transactions, need to maintain order
+    for (Iterator itr = node.getChildren().iterator(); itr.hasNext(); ) {
+      Node child = (Node) itr.next();
+      Object cv = child.getValue();
+
+      if (cv instanceof InsertElementType) {
+        transaction.getInsert().add(cv);
+      } else if (cv instanceof UpdateElementType) {
+        transaction.getUpdate().add(cv);
+      } else if (cv instanceof DeleteElementType) {
+        transaction.getDelete().add(cv);
+      } else if (cv instanceof NativeType) {
+        transaction.getNative().add(cv);
+      }
     }
 
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     *
-     * @generated modifiable
-     */
-    public Class getType() {
-        return TransactionType.class;
+    // service + version
+    WFSBindingUtils.service(transaction, node);
+    WFSBindingUtils.version(transaction, node);
+
+    // handle
+    if (node.hasAttribute("handle")) {
+      transaction.setHandle((String) node.getAttributeValue("handle"));
     }
 
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     *
-     * @generated modifiable
-     */
-    public Object parse(ElementInstance instance, Node node, Object value)
-        throws Exception {
-        TransactionType transaction = wfsfactory.createTransactionType();
-
-        //lock id
-        if (node.hasChild("LockId")) {
-            transaction.setLockId((String) node.getChildValue("LockId"));
-        }
-
-        //transactions, need to maintain order
-        for (Iterator itr = node.getChildren().iterator(); itr.hasNext();) {
-            Node child = (Node) itr.next();
-            Object cv = child.getValue();
-
-            if (cv instanceof InsertElementType) {
-                transaction.getInsert().add(cv);
-            } else if (cv instanceof UpdateElementType) {
-                transaction.getUpdate().add(cv);
-            } else if (cv instanceof DeleteElementType) {
-                transaction.getDelete().add(cv);
-            } else if (cv instanceof NativeType) {
-                transaction.getNative().add(cv);
-            }
-        }
-
-        //service + version
-        WFSBindingUtils.service(transaction, node);
-        WFSBindingUtils.version(transaction, node);
-
-        //handle
-        if (node.hasAttribute("handle")) {
-            transaction.setHandle((String) node.getAttributeValue("handle"));
-        }
-
-        //release action
-        if (node.hasAttribute(AllSomeType.class)) {
-            transaction.setReleaseAction((AllSomeType) node.getAttributeValue(AllSomeType.class));
-        }
-
-        return transaction;
+    // release action
+    if (node.hasAttribute(AllSomeType.class)) {
+      transaction.setReleaseAction((AllSomeType) node.getAttributeValue(AllSomeType.class));
     }
+
+    return transaction;
+  }
 }

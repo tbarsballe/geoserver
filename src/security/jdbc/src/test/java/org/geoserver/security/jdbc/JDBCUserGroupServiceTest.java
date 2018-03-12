@@ -12,7 +12,6 @@ import static org.junit.Assert.assertTrue;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.logging.Logger;
-
 import org.geoserver.data.test.SystemTestData;
 import org.geoserver.security.GeoServerUserGroupService;
 import org.geoserver.security.GeoServerUserGroupStore;
@@ -23,96 +22,87 @@ import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
 
-
 public abstract class JDBCUserGroupServiceTest extends AbstractUserGroupServiceTest {
 
-    static Logger LOGGER = org.geotools.util.logging.Logging.getLogger("org.geoserver.security.jdbc");
-    
-    protected abstract String getFixtureId();
+  static Logger LOGGER = org.geotools.util.logging.Logging.getLogger("org.geoserver.security.jdbc");
 
-    @Before
-    public void init() {
-        Assume.assumeTrue(getTestData().isTestDataAvailable());
+  protected abstract String getFixtureId();
+
+  @Before
+  public void init() {
+    Assume.assumeTrue(getTestData().isTestDataAvailable());
+  }
+
+  @After
+  public void dropExistingTables() throws Exception {
+    if (store != null) {
+      JDBCUserGroupStore jdbcStore = (JDBCUserGroupStore) store;
+      JDBCTestSupport.dropExistingTables(jdbcStore, jdbcStore.getConnection());
+      store.store();
     }
+  }
 
-    @After
-    public void dropExistingTables() throws Exception {
-        if (store!=null) {
-            JDBCUserGroupStore jdbcStore =(JDBCUserGroupStore)store;
-            JDBCTestSupport.dropExistingTables(jdbcStore,jdbcStore.getConnection());
-            store.store();
-        }
+  @Override
+  public void setServiceAndStore() throws Exception {
+    if (getTestData().isTestDataAvailable()) {
+      service = getSecurityManager().loadUserGroupService(getFixtureId());
+      store = createStore(service);
     }
+  }
 
-   
-    
-    @Override
-    public void setServiceAndStore() throws Exception {
-        if (getTestData().isTestDataAvailable()) {
-            service = getSecurityManager().loadUserGroupService(getFixtureId());
-            store = createStore(service);
-        }
+  @Override
+  protected SecurityUserGroupServiceConfig createConfigObject(String name) {
+
+    try {
+      return JDBCTestSupport.createConfigObject(
+          getFixtureId(), (LiveDbmsDataSecurity) getTestData(), getSecurityManager());
+
+    } catch (Exception e) {
+      throw new RuntimeException(e);
     }
+  }
 
- 
-    @Override
-    protected SecurityUserGroupServiceConfig createConfigObject(String name) {
+  public GeoServerUserGroupService createUserGroupService(String serviceName) throws Exception {
 
-        try {
-            return JDBCTestSupport.createConfigObject(getFixtureId(), 
-                (LiveDbmsDataSecurity)getTestData(), getSecurityManager());
+    return JDBCTestSupport.createUserGroupService(
+        getFixtureId(), (LiveDbmsDataSecurity) getTestData(), getSecurityManager());
+  }
 
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+  @Override
+  public GeoServerUserGroupStore createStore(GeoServerUserGroupService service) throws IOException {
+    JDBCUserGroupStore store = (JDBCUserGroupStore) super.createStore(service);
+    try {
+      JDBCTestSupport.dropExistingTables(store, store.getConnection());
+    } catch (SQLException e) {
+      throw new IOException(e);
     }
-        
-    public GeoServerUserGroupService createUserGroupService(String serviceName) throws Exception {
-        
-        return JDBCTestSupport.createUserGroupService(getFixtureId(), 
-            (LiveDbmsDataSecurity)getTestData(), getSecurityManager());
-    }
-        
-    @Override
-    public GeoServerUserGroupStore createStore(GeoServerUserGroupService service) throws IOException {
-        JDBCUserGroupStore store = 
-            (JDBCUserGroupStore) super.createStore(service);
-        try {
-            JDBCTestSupport.dropExistingTables(store,store.getConnection());
-        } catch (SQLException e) {
-            throw new IOException(e);
-        }
-        store.createTables();
-        store.store();
-        return store;        
-    }
-    @Test
-    public void testUserGroupDatabaseSetup() throws IOException {
+    store.createTables();
+    store.store();
+    return store;
+  }
 
-            JDBCUserGroupStore jdbcStore = 
-                (JDBCUserGroupStore) store;            
-            assertTrue(jdbcStore.tablesAlreadyCreated());
-            jdbcStore.checkDDLStatements();
-            jdbcStore.checkDMLStatements();
-            jdbcStore.clear();
-            jdbcStore.dropTables();
-            jdbcStore.store();
-            assertFalse(jdbcStore.tablesAlreadyCreated());
-            jdbcStore.load();
-    }
-        
+  @Test
+  public void testUserGroupDatabaseSetup() throws IOException {
 
-    @Override
-    protected SystemTestData createTestData() throws Exception {
-        if ("h2".equalsIgnoreCase(getFixtureId()))
-            return super.createTestData();
-        return new LiveDbmsDataSecurity(getFixtureId());
-    }
-    
-    @Override
-    protected boolean isJDBCTest() {
-        return true;
-    }
+    JDBCUserGroupStore jdbcStore = (JDBCUserGroupStore) store;
+    assertTrue(jdbcStore.tablesAlreadyCreated());
+    jdbcStore.checkDDLStatements();
+    jdbcStore.checkDMLStatements();
+    jdbcStore.clear();
+    jdbcStore.dropTables();
+    jdbcStore.store();
+    assertFalse(jdbcStore.tablesAlreadyCreated());
+    jdbcStore.load();
+  }
 
+  @Override
+  protected SystemTestData createTestData() throws Exception {
+    if ("h2".equalsIgnoreCase(getFixtureId())) return super.createTestData();
+    return new LiveDbmsDataSecurity(getFixtureId());
+  }
 
+  @Override
+  protected boolean isJDBCTest() {
+    return true;
+  }
 }

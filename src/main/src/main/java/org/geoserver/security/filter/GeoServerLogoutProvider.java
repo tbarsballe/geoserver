@@ -12,25 +12,24 @@ import org.geoserver.security.config.SecurityNamedServiceConfig;
 
 /**
  * Security provider for {@link GeoServerUserNamePasswordAuthenticationFilter}
- * 
+ *
  * @author mcr
  */
 public class GeoServerLogoutProvider extends AbstractFilterProvider {
 
-    @Override
-    public void configure(XStreamPersister xp) {
-        super.configure(xp);
-        xp.getXStream().alias("logoutFilter", LogoutFilterConfig.class);
-    }
+  @Override
+  public void configure(XStreamPersister xp) {
+    super.configure(xp);
+    xp.getXStream().alias("logoutFilter", LogoutFilterConfig.class);
+  }
 
-    @Override
-    public Class<? extends GeoServerSecurityFilter> getFilterClass() {
-        return GeoServerLogoutFilter.class;
-    }
+  @Override
+  public Class<? extends GeoServerSecurityFilter> getFilterClass() {
+    return GeoServerLogoutFilter.class;
+  }
 
-    @Override
-    public GeoServerSecurityFilter createFilter(SecurityNamedServiceConfig config) {
-        return new GeoServerLogoutFilter();
-    }
-
+  @Override
+  public GeoServerSecurityFilter createFilter(SecurityNamedServiceConfig config) {
+    return new GeoServerLogoutFilter();
+  }
 }

@@ -6,7 +6,6 @@
 package org.geoserver.security.decorators;
 
 import java.io.IOException;
-
 import org.geoserver.catalog.CoverageInfo;
 import org.geoserver.catalog.CoverageStoreInfo;
 import org.geoserver.ows.Dispatcher;
@@ -22,50 +21,48 @@ import org.opengis.util.ProgressListener;
 
 public class SecuredCoverageInfo extends DecoratingCoverageInfo {
 
-    WrapperPolicy policy;
+  WrapperPolicy policy;
 
-    public SecuredCoverageInfo(CoverageInfo delegate, WrapperPolicy policy) {
-        super(delegate);
-        this.policy = policy;
+  public SecuredCoverageInfo(CoverageInfo delegate, WrapperPolicy policy) {
+    super(delegate);
+    this.policy = policy;
+  }
+
+  @Override
+  public GridCoverage getGridCoverage(ProgressListener listener, Hints hints) throws IOException {
+    if (policy.level == AccessLevel.METADATA)
+      throw SecureCatalogImpl.unauthorizedAccess(this.getName());
+
+    // go through the secured reader
+    GridCoverageReader reader = getGridCoverageReader(listener, hints);
+    return getCatalog().getResourcePool().getGridCoverage(this, reader, null, hints);
+  }
+
+  @Override
+  public GridCoverage getGridCoverage(
+      ProgressListener listener, ReferencedEnvelope envelope, Hints hints) throws IOException {
+    if (policy.level == AccessLevel.METADATA)
+      throw SecureCatalogImpl.unauthorizedAccess(this.getName());
+
+    // go through the secured reader
+    GridCoverageReader reader = getGridCoverageReader(listener, hints);
+    return getCatalog().getResourcePool().getGridCoverage(this, reader, envelope, hints);
+  }
+
+  @Override
+  public GridCoverageReader getGridCoverageReader(ProgressListener listener, Hints hints)
+      throws IOException {
+    Request request = Dispatcher.REQUEST.get();
+    if (policy.level == AccessLevel.METADATA
+        && (request == null || !"GetCapabilities".equalsIgnoreCase(request.getRequest()))) {
+      throw SecureCatalogImpl.unauthorizedAccess(this.getName());
     }
+    GridCoverageReader reader = super.getGridCoverageReader(listener, hints);
+    return (GridCoverageReader) SecuredObjects.secure(reader, policy);
+  }
 
-    @Override
-    public GridCoverage getGridCoverage(ProgressListener listener, Hints hints)
-            throws IOException {
-        if(policy.level == AccessLevel.METADATA) 
-            throw SecureCatalogImpl.unauthorizedAccess(this.getName());
-        
-        // go through the secured reader
-        GridCoverageReader reader = getGridCoverageReader(listener, hints);
-        return getCatalog().getResourcePool().getGridCoverage(this, reader, null, hints);
-    }
-
-    @Override
-    public GridCoverage getGridCoverage(ProgressListener listener,
-            ReferencedEnvelope envelope, Hints hints) throws IOException {
-        if(policy.level == AccessLevel.METADATA) 
-            throw SecureCatalogImpl.unauthorizedAccess(this.getName());
-        
-        // go through the secured reader
-        GridCoverageReader reader = getGridCoverageReader(listener, hints);
-        return getCatalog().getResourcePool().getGridCoverage(this, reader, envelope, hints);
-    }
-
-    @Override
-    public GridCoverageReader getGridCoverageReader(ProgressListener listener,
-            Hints hints) throws IOException {
-        Request request = Dispatcher.REQUEST.get();
-        if(policy.level == AccessLevel.METADATA && 
-                (request == null || !"GetCapabilities".equalsIgnoreCase(request.getRequest()))) {
-            throw SecureCatalogImpl.unauthorizedAccess(this.getName());
-        }
-        GridCoverageReader reader = super.getGridCoverageReader(listener, hints);
-        return (GridCoverageReader) SecuredObjects.secure(reader, policy);
-    }
-
-    @Override
-    public CoverageStoreInfo getStore() {
-        return new SecuredCoverageStoreInfo(super.getStore(), policy);
-    }
-
+  @Override
+  public CoverageStoreInfo getStore() {
+    return new SecuredCoverageStoreInfo(super.getStore(), policy);
+  }
 }

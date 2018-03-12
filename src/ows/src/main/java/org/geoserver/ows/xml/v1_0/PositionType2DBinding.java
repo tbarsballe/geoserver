@@ -6,18 +6,16 @@
 package org.geoserver.ows.xml.v1_0;
 
 import javax.xml.namespace.QName;
-
 import net.opengis.ows10.Ows10Factory;
-
 import org.geotools.xml.AbstractSimpleBinding;
 import org.geotools.xml.InstanceComponent;
-
 
 /**
  * Binding object for the type http://www.opengis.net/ows:PositionType2D.
  *
  * <p>
- *        <pre>
+ *
+ * <pre>
  *         <code>
  *  &lt;simpleType name="PositionType2D"&gt;
  *      &lt;annotation&gt;
@@ -32,41 +30,41 @@ import org.geotools.xml.InstanceComponent;
  *
  *          </code>
  *         </pre>
+ *
  * @generated
  */
 public class PositionType2DBinding extends AbstractSimpleBinding {
-    Ows10Factory owsfactory;
+  Ows10Factory owsfactory;
 
-    public PositionType2DBinding(Ows10Factory owsfactory) {
-        this.owsfactory = owsfactory;
-    }
+  public PositionType2DBinding(Ows10Factory owsfactory) {
+    this.owsfactory = owsfactory;
+  }
 
-    /**
-     * @generated
-     */
-    public QName getTarget() {
-        return OWS.POSITIONTYPE2D;
-    }
+  /** @generated */
+  public QName getTarget() {
+    return OWS.POSITIONTYPE2D;
+  }
 
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     *
-     * @generated modifiable
-     */
-    public Class getType() {
-        return null;
-    }
+  /**
+   *
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   *
+   * @generated modifiable
+   */
+  public Class getType() {
+    return null;
+  }
 
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     *
-     * @generated modifiable
-     */
-    public Object parse(InstanceComponent instance, Object value)
-        throws Exception {
-        //TODO: implement
-        return null;
-    }
+  /**
+   *
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   *
+   * @generated modifiable
+   */
+  public Object parse(InstanceComponent instance, Object value) throws Exception {
+    // TODO: implement
+    return null;
+  }
 }

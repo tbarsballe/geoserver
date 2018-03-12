@@ -6,24 +6,21 @@
 package org.geoserver.ows.kvp;
 
 import java.nio.charset.Charset;
-
 import org.geoserver.ows.KvpParser;
 
 /**
  * Parses a charset name into a {@link Charset} object
- * 
+ *
  * @author Andrea Aime - OpenGeo
- * 
  */
 public class CharsetKVPParser extends KvpParser {
 
-    public CharsetKVPParser(String key) {
-        super(key, Charset.class);
-    }
+  public CharsetKVPParser(String key) {
+    super(key, Charset.class);
+  }
 
-    @Override
-    public Object parse(String value) throws Exception {
-        return Charset.forName(value);
-    }
-
+  @Override
+  public Object parse(String value) throws Exception {
+    return Charset.forName(value);
+  }
 }

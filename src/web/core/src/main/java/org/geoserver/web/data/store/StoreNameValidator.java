@@ -17,105 +17,101 @@ import org.geoserver.web.GeoServerApplication;
 
 /**
  * A Form validator that takes the workspace and store name form components and validates there is
- * not an existing {@link StoreInfo} in the selected workspace with the same name as the one assigned
- * through the store name form component.
- * 
+ * not an existing {@link StoreInfo} in the selected workspace with the same name as the one
+ * assigned through the store name form component.
+ *
  * @author Andrea Aime - OpenGeo
  * @author Gabriel Roldan - OpenGeo
  */
 @SuppressWarnings("serial")
 public class StoreNameValidator implements IFormValidator {
 
-    FormComponent workspaceComponent;
+  FormComponent workspaceComponent;
 
-    FormComponent storeNameComponent;
+  FormComponent storeNameComponent;
 
-    private String edittingStoreId;
+  private String edittingStoreId;
 
-    private boolean required;
+  private boolean required;
 
-    /**
-     * 
-     * @param workspaceFormComponent
-     *            the form component for the {@link WorkspaceInfo} assigned to the {@link StoreInfo}
-     *            being edited
-     * @param storeNameFormComponent
-     *            the form component for the name assigned to the {@link StoreInfo}
-     * @param edittingStoreId
-     *            the id for the store being edited. May be {@code null} if we're talking of a new
-     *            Store
-     */
-    public StoreNameValidator(final FormComponent workspaceFormComponent,
-            final FormComponent storeNameFormComponent, final String edittingStoreId) {
-        this(workspaceFormComponent, storeNameFormComponent, edittingStoreId, true);
-    }
-    
-    /**
-     * 
-     * @param workspaceFormComponent
-     *            the form component for the {@link WorkspaceInfo} assigned to the {@link StoreInfo}
-     *            being edited
-     * @param storeNameFormComponent
-     *            the form component for the name assigned to the {@link StoreInfo}
-     * @param edittingStoreId
-     *            the id for the store being edited. May be {@code null} if we're talking of a new
-     *            Store
-     * @param required
-     *            true if store name is required
-     */
-    public StoreNameValidator(final FormComponent workspaceFormComponent,
-            final FormComponent storeNameFormComponent, final String edittingStoreId, boolean required) {
-        this.workspaceComponent = workspaceFormComponent;
-        this.storeNameComponent = storeNameFormComponent;
-        this.edittingStoreId = edittingStoreId;
-        this.required = required;
-    }
+  /**
+   * @param workspaceFormComponent the form component for the {@link WorkspaceInfo} assigned to the
+   *     {@link StoreInfo} being edited
+   * @param storeNameFormComponent the form component for the name assigned to the {@link StoreInfo}
+   * @param edittingStoreId the id for the store being edited. May be {@code null} if we're talking
+   *     of a new Store
+   */
+  public StoreNameValidator(
+      final FormComponent workspaceFormComponent,
+      final FormComponent storeNameFormComponent,
+      final String edittingStoreId) {
+    this(workspaceFormComponent, storeNameFormComponent, edittingStoreId, true);
+  }
 
-    @Override
-    public FormComponent[] getDependentFormComponents() {
-        return new FormComponent[] { workspaceComponent, storeNameComponent };
-    }
+  /**
+   * @param workspaceFormComponent the form component for the {@link WorkspaceInfo} assigned to the
+   *     {@link StoreInfo} being edited
+   * @param storeNameFormComponent the form component for the name assigned to the {@link StoreInfo}
+   * @param edittingStoreId the id for the store being edited. May be {@code null} if we're talking
+   *     of a new Store
+   * @param required true if store name is required
+   */
+  public StoreNameValidator(
+      final FormComponent workspaceFormComponent,
+      final FormComponent storeNameFormComponent,
+      final String edittingStoreId,
+      boolean required) {
+    this.workspaceComponent = workspaceFormComponent;
+    this.storeNameComponent = storeNameFormComponent;
+    this.edittingStoreId = edittingStoreId;
+    this.required = required;
+  }
 
-    /**
-     * Performs the cross validation between the selected workspace and the assigned store name
-     * <p>
-     * If there's already a {@link StoreInfo} in the selected workspace with the same name as the
-     * chosen one, then the store name form component is set with a proper {@link IValidationError error
-     * message}
-     * </p>
-     * 
-     * @see IFormValidator#validate(Form)
-     */
-    @Override
-    public void validate(final Form form) {
-        final FormComponent[] components = getDependentFormComponents();
-        final FormComponent wsComponent = components[0];
-        final FormComponent nameComponent = components[1];
+  @Override
+  public FormComponent[] getDependentFormComponents() {
+    return new FormComponent[] {workspaceComponent, storeNameComponent};
+  }
 
-        WorkspaceInfo workspace = (WorkspaceInfo) wsComponent.getConvertedInput();
-        String name = (String) nameComponent.getConvertedInput();
-        
-        if(name == null) {
-            if(required) {
-                nameComponent.error(new ValidationError("StoreNameValidator.storeNameRequired")
-                        .addKey("StoreNameValidator.storeNameRequired"));
-            }
-            return;
-        }
+  /**
+   * Performs the cross validation between the selected workspace and the assigned store name
+   *
+   * <p>If there's already a {@link StoreInfo} in the selected workspace with the same name as the
+   * chosen one, then the store name form component is set with a proper {@link IValidationError
+   * error message}
+   *
+   * @see IFormValidator#validate(Form)
+   */
+  @Override
+  public void validate(final Form form) {
+    final FormComponent[] components = getDependentFormComponents();
+    final FormComponent wsComponent = components[0];
+    final FormComponent nameComponent = components[1];
 
-        Catalog catalog = GeoServerApplication.get().getCatalog();
+    WorkspaceInfo workspace = (WorkspaceInfo) wsComponent.getConvertedInput();
+    String name = (String) nameComponent.getConvertedInput();
 
-        final StoreInfo existing = catalog.getStoreByName(workspace, name, StoreInfo.class);
-        if (existing != null) {
-            final String existingId = existing.getId();
-            if (!existingId.equals(edittingStoreId)) {
-                IValidationError error = new ValidationError("StoreNameValidator.storeExistsInWorkspace")
-                        .addKey("StoreNameValidator.storeExistsInWorkspace")
-                        .setVariable("workspace", workspace.getName())
-                        .setVariable("storeName", name);
-                nameComponent.error(error);
-            }
-        }
+    if (name == null) {
+      if (required) {
+        nameComponent.error(
+            new ValidationError("StoreNameValidator.storeNameRequired")
+                .addKey("StoreNameValidator.storeNameRequired"));
+      }
+      return;
     }
 
+    Catalog catalog = GeoServerApplication.get().getCatalog();
+
+    final StoreInfo existing = catalog.getStoreByName(workspace, name, StoreInfo.class);
+    if (existing != null) {
+      final String existingId = existing.getId();
+      if (!existingId.equals(edittingStoreId)) {
+        IValidationError error =
+            new ValidationError("StoreNameValidator.storeExistsInWorkspace")
+                .addKey("StoreNameValidator.storeExistsInWorkspace")
+                .setVariable("workspace", workspace.getName())
+                .setVariable("storeName", name);
+        nameComponent.error(error);
+      }
+    }
+  }
 }

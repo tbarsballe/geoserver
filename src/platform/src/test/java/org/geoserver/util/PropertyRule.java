@@ -10,49 +10,47 @@ import java.util.Properties;
 
 /**
  * Rule which allows a property to be set, and will return it to its original value.
- * 
- * @author Kevin Smith, Boundless
  *
+ * @author Kevin Smith, Boundless
  */
 public class PropertyRule extends org.junit.rules.ExternalResource {
-    final Properties props;
-    final String name;
-    String oldValue;
-    
-    public static PropertyRule system(String name) {
-        return new PropertyRule(System.getProperties(), name);
-    }
-    
-    public PropertyRule(Properties props, String name) {
-        super();
-        this.props = props;
-        this.name = name;
-    }
+  final Properties props;
+  final String name;
+  String oldValue;
 
-    public Object getOldValue() {
-        return oldValue;
-    }
+  public static PropertyRule system(String name) {
+    return new PropertyRule(System.getProperties(), name);
+  }
 
-    public void setValue(String value) {
-        props.setProperty(name, value);
-    }
+  public PropertyRule(Properties props, String name) {
+    super();
+    this.props = props;
+    this.name = name;
+  }
 
-    public String getName() {
-        return name;
-    }
+  public Object getOldValue() {
+    return oldValue;
+  }
 
-    @Override
-    protected void before() throws Throwable {
-        this.oldValue = props.getProperty(name);
-    }
+  public void setValue(String value) {
+    props.setProperty(name, value);
+  }
 
-    @Override
-    protected void after() {
-        if(this.oldValue==null) {
-            props.remove(name);
-        } else {
-            props.setProperty(name, oldValue);
-        }
+  public String getName() {
+    return name;
+  }
+
+  @Override
+  protected void before() throws Throwable {
+    this.oldValue = props.getProperty(name);
+  }
+
+  @Override
+  protected void after() {
+    if (this.oldValue == null) {
+      props.remove(name);
+    } else {
+      props.setProperty(name, oldValue);
     }
-    
+  }
 }

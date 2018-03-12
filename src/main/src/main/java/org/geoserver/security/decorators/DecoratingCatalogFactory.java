@@ -29,122 +29,120 @@ import org.geoserver.catalog.WorkspaceInfo;
 import org.geoserver.catalog.impl.AbstractDecorator;
 
 /**
- * 
- * Delegates all methods to the provided delegate. Suclasses will override
- * methods in order to perform their decoration work
- * 
- * @author Niels Charlier
+ * Delegates all methods to the provided delegate. Suclasses will override methods in order to
+ * perform their decoration work
  *
+ * @author Niels Charlier
  */
-public class DecoratingCatalogFactory extends AbstractDecorator<CatalogFactory> implements CatalogFactory {
+public class DecoratingCatalogFactory extends AbstractDecorator<CatalogFactory>
+    implements CatalogFactory {
 
-    public DecoratingCatalogFactory(CatalogFactory delegate) {
-        super(delegate);
-    }
+  public DecoratingCatalogFactory(CatalogFactory delegate) {
+    super(delegate);
+  }
 
-    @Override
-    public DataStoreInfo createDataStore() {
-        return delegate.createDataStore();
-    }
+  @Override
+  public DataStoreInfo createDataStore() {
+    return delegate.createDataStore();
+  }
 
-    @Override
-    public WMSStoreInfo createWebMapServer() {
-        return delegate.createWebMapServer();
-    }
+  @Override
+  public WMSStoreInfo createWebMapServer() {
+    return delegate.createWebMapServer();
+  }
 
-    @Override
-    public WMTSStoreInfo createWebMapTileServer() {
-        return delegate.createWebMapTileServer();
-    }
+  @Override
+  public WMTSStoreInfo createWebMapTileServer() {
+    return delegate.createWebMapTileServer();
+  }
 
-    @Override
-    public MetadataLinkInfo createMetadataLink() {
-        return delegate.createMetadataLink();
-    }
+  @Override
+  public MetadataLinkInfo createMetadataLink() {
+    return delegate.createMetadataLink();
+  }
 
-    @Override
-    public DataLinkInfo createDataLink() {
-        return delegate.createDataLink();
-    }
+  @Override
+  public DataLinkInfo createDataLink() {
+    return delegate.createDataLink();
+  }
 
-    @Override
-    public CoverageStoreInfo createCoverageStore() {
-        return delegate.createCoverageStore();
-    }
+  @Override
+  public CoverageStoreInfo createCoverageStore() {
+    return delegate.createCoverageStore();
+  }
 
-    @Override
-    public AttributeTypeInfo createAttribute() {
-        return delegate.createAttribute();
-    }
+  @Override
+  public AttributeTypeInfo createAttribute() {
+    return delegate.createAttribute();
+  }
 
-    @Override
-    public FeatureTypeInfo createFeatureType() {
-        return delegate.createFeatureType();
-    }
+  @Override
+  public FeatureTypeInfo createFeatureType() {
+    return delegate.createFeatureType();
+  }
 
-    @Override
-    public CoverageInfo createCoverage() {
-        return delegate.createCoverage();
-    }
+  @Override
+  public CoverageInfo createCoverage() {
+    return delegate.createCoverage();
+  }
 
-    @Override
-    public WMSLayerInfo createWMSLayer() {
-        return delegate.createWMSLayer();
-    }
+  @Override
+  public WMSLayerInfo createWMSLayer() {
+    return delegate.createWMSLayer();
+  }
 
-    @Override
-    public WMTSLayerInfo createWMTSLayer() {
-        return delegate.createWMTSLayer();
-    }
+  @Override
+  public WMTSLayerInfo createWMTSLayer() {
+    return delegate.createWMTSLayer();
+  }
 
-    @Override
-    public CoverageDimensionInfo createCoverageDimension() {
-        return delegate.createCoverageDimension();
-    }
+  @Override
+  public CoverageDimensionInfo createCoverageDimension() {
+    return delegate.createCoverageDimension();
+  }
 
-    @Override
-    public LegendInfo createLegend() {
-        return delegate.createLegend();
-    }
+  @Override
+  public LegendInfo createLegend() {
+    return delegate.createLegend();
+  }
 
-    @Override
-    public AttributionInfo createAttribution() {
-        return delegate.createAttribution();
-    }
+  @Override
+  public AttributionInfo createAttribution() {
+    return delegate.createAttribution();
+  }
 
-    @Override
-    public LayerInfo createLayer() {
-        return delegate.createLayer();
-    }
+  @Override
+  public LayerInfo createLayer() {
+    return delegate.createLayer();
+  }
 
-    @Override
-    public MapInfo createMap() {
-        return delegate.createMap();
-    }
+  @Override
+  public MapInfo createMap() {
+    return delegate.createMap();
+  }
 
-    @Override
-    public LayerGroupInfo createLayerGroup() {
-        return delegate.createLayerGroup();
-    }
+  @Override
+  public LayerGroupInfo createLayerGroup() {
+    return delegate.createLayerGroup();
+  }
 
-    @Override
-    public StyleInfo createStyle() {
-        return delegate.createStyle();
-    }
+  @Override
+  public StyleInfo createStyle() {
+    return delegate.createStyle();
+  }
 
-    @Override
-    public NamespaceInfo createNamespace() {
-        return delegate.createNamespace();
-    }
+  @Override
+  public NamespaceInfo createNamespace() {
+    return delegate.createNamespace();
+  }
 
-    @Override
-    public WorkspaceInfo createWorkspace() {
-        return delegate.createWorkspace();
-    }
+  @Override
+  public WorkspaceInfo createWorkspace() {
+    return delegate.createWorkspace();
+  }
 
-    @Override
-    public <T> T create(Class<T> clazz) {
-        return delegate.create(clazz);
-    }
-
+  @Override
+  public <T> T create(Class<T> clazz) {
+    return delegate.create(clazz);
+  }
 }

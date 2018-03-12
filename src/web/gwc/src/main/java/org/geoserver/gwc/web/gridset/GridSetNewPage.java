@@ -13,33 +13,32 @@ import org.geowebcache.grid.GridSet;
 
 public class GridSetNewPage extends AbstractGridSetPage {
 
-    private static final long serialVersionUID = -3748376561268773207L;
+  private static final long serialVersionUID = -3748376561268773207L;
 
-    public GridSetNewPage(PageParameters parameters) {
-        super(parameters);
+  public GridSetNewPage(PageParameters parameters) {
+    super(parameters);
+  }
+
+  @Override
+  protected void onSave(AjaxRequestTarget target, Form<?> form) {
+    GridSetInfo info = (GridSetInfo) form.getModelObject();
+
+    GridSet gridset;
+    try {
+      gridset = GridSetBuilder.build(info);
+    } catch (IllegalStateException e) {
+      form.error(e.getMessage());
+      target.add(form);
+      return;
     }
 
-    @Override
-    protected void onSave(AjaxRequestTarget target, Form<?> form) {
-        GridSetInfo info = (GridSetInfo) form.getModelObject();
-
-        GridSet gridset;
-        try {
-            gridset = GridSetBuilder.build(info);
-        } catch (IllegalStateException e) {
-            form.error(e.getMessage());
-            target.add(form);
-            return;
-        }
-
-        try {
-            GWC gwc = GWC.get();
-            gwc.addGridSet(gridset);
-            doReturn(GridSetsPage.class);
-        } catch (Exception e) {
-            form.error(e.getMessage());
-            target.add(form);
-        }
+    try {
+      GWC gwc = GWC.get();
+      gwc.addGridSet(gridset);
+      doReturn(GridSetsPage.class);
+    } catch (Exception e) {
+      form.error(e.getMessage());
+      target.add(form);
     }
-
+  }
 }

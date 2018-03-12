@@ -6,6 +6,9 @@
 
 package org.geoserver.security.impl;
 
+import static org.junit.Assert.assertTrue;
+
+import java.io.IOException;
 import org.geoserver.security.GeoServerUserGroupService;
 import org.geoserver.security.config.SecurityUserGroupServiceConfig;
 import org.geoserver.security.config.impl.MemoryUserGroupServiceConfigImpl;
@@ -15,47 +18,41 @@ import org.junit.After;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
-import java.io.IOException;
-
-import static org.junit.Assert.assertTrue;
-
 @Category(SystemTest.class)
 public class MemoryUserGroupServiceTest extends AbstractUserGroupServiceTest {
 
-    @After
-    public void clearUserGroupService() throws IOException {
-        store.clear();
-        store.store();
+  @After
+  public void clearUserGroupService() throws IOException {
+    store.clear();
+    store.store();
+  }
+
+  @Override
+  public GeoServerUserGroupService createUserGroupService(String name) throws Exception {
+    MemoryUserGroupServiceConfigImpl config =
+        (MemoryUserGroupServiceConfigImpl) createConfigObject(name);
+    getSecurityManager().saveUserGroupService(config);
+    return getSecurityManager().loadUserGroupService(name);
+  }
+
+  @Override
+  protected SecurityUserGroupServiceConfig createConfigObject(String name) {
+    MemoryUserGroupServiceConfigImpl config = new MemoryUserGroupServiceConfigImpl();
+    config.setClassName(MemoryUserGroupService.class.getName());
+    config.setName(name);
+    config.setPasswordEncoderName(getPBEPasswordEncoder().getName());
+    config.setPasswordPolicyName(PasswordValidator.DEFAULT_NAME);
+    return config;
+  }
+
+  @Test
+  public void testInsert() throws Exception {
+    super.testInsert();
+    for (GeoServerUser user : store.getUsers()) {
+      assertTrue(user.getClass() == MemoryGeoserverUser.class);
     }
-
-    @Override
-    public GeoServerUserGroupService createUserGroupService(String name) throws Exception {
-        MemoryUserGroupServiceConfigImpl config = (MemoryUserGroupServiceConfigImpl ) createConfigObject(name);         
-        getSecurityManager().saveUserGroupService(config);
-        return getSecurityManager().loadUserGroupService(name);
-   }
-    
-    @Override
-    protected SecurityUserGroupServiceConfig createConfigObject( String name ) {
-        MemoryUserGroupServiceConfigImpl config = new MemoryUserGroupServiceConfigImpl();
-        config.setClassName(MemoryUserGroupService.class.getName());
-         config.setName(name);        
-         config.setPasswordEncoderName(getPBEPasswordEncoder().getName());
-         config.setPasswordPolicyName(PasswordValidator.DEFAULT_NAME);
-        return config;
-
-     }
-
-    @Test
-    public void testInsert() throws Exception {
-        super.testInsert();
-        for (GeoServerUser user : store.getUsers()) {
-            assertTrue(user.getClass() == MemoryGeoserverUser.class);
-        }
-        for (GeoServerUserGroup group : store.getUserGroups()) {
-            assertTrue(group.getClass() == MemoryGeoserverUserGroup.class);
-        }
+    for (GeoServerUserGroup group : store.getUserGroups()) {
+      assertTrue(group.getClass() == MemoryGeoserverUserGroup.class);
     }
-    
-
+  }
 }

@@ -6,24 +6,21 @@
 package org.geoserver.wfs.xml.v1_0_0;
 
 import java.math.BigInteger;
-
 import javax.xml.namespace.QName;
-
 import net.opengis.wfs.AllSomeType;
 import net.opengis.wfs.LockFeatureType;
 import net.opengis.wfs.LockType;
 import net.opengis.wfs.WfsFactory;
-
 import org.geotools.xml.AbstractComplexBinding;
 import org.geotools.xml.ElementInstance;
 import org.geotools.xml.Node;
-
 
 /**
  * Binding object for the type http://www.opengis.net/wfs:LockFeatureType.
  *
  * <p>
- *        <pre>
+ *
+ * <pre>
  *         <code>
  *  &lt;xsd:complexType name="LockFeatureType"&gt;
  *      &lt;xsd:annotation&gt;
@@ -74,61 +71,61 @@ import org.geotools.xml.Node;
  *
  *          </code>
  *         </pre>
+ *
  * @generated
  */
 public class LockFeatureTypeBinding extends AbstractComplexBinding {
-    WfsFactory wfsfactory;
+  WfsFactory wfsfactory;
 
-    public LockFeatureTypeBinding(WfsFactory wfsfactory) {
-        this.wfsfactory = wfsfactory;
+  public LockFeatureTypeBinding(WfsFactory wfsfactory) {
+    this.wfsfactory = wfsfactory;
+  }
+
+  /** @generated */
+  public QName getTarget() {
+    return WFS.LOCKFEATURETYPE;
+  }
+
+  /**
+   *
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   *
+   * @generated modifiable
+   */
+  public Class getType() {
+    return LockFeatureType.class;
+  }
+
+  /**
+   *
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   *
+   * @generated modifiable
+   */
+  public Object parse(ElementInstance instance, Node node, Object value) throws Exception {
+    LockFeatureType lockFeature = wfsfactory.createLockFeatureType();
+
+    // &lt;xsd:element maxOccurs="unbounded" name="Lock" type="wfs:LockType"&gt;
+    lockFeature.getLock().addAll(node.getChildValues(LockType.class));
+
+    // &lt;xsd:attribute fixed="1.0.0" name="version" type="xsd:string" use="required"/&gt;
+    // &lt;xsd:attribute fixed="WFS" name="service" type="xsd:string" use="required"/&gt;
+    WFSBindingUtils.version(lockFeature, node);
+    WFSBindingUtils.service(lockFeature, node);
+
+    // &lt;xsd:attribute name="expiry" type="xsd:positiveInteger" use="optional"/&gt;
+    if (node.hasAttribute("expiry")) {
+      lockFeature.setExpiry(
+          BigInteger.valueOf(((Number) node.getAttributeValue("expiry")).longValue()));
     }
 
-    /**
-     * @generated
-     */
-    public QName getTarget() {
-        return WFS.LOCKFEATURETYPE;
+    // &lt;xsd:attribute name="lockAction" type="wfs:AllSomeType" use="optional"&gt;
+    if (node.hasAttribute(AllSomeType.class)) {
+      lockFeature.setLockAction((AllSomeType) node.getAttributeValue(AllSomeType.class));
     }
 
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     *
-     * @generated modifiable
-     */
-    public Class getType() {
-        return LockFeatureType.class;
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     *
-     * @generated modifiable
-     */
-    public Object parse(ElementInstance instance, Node node, Object value)
-        throws Exception {
-        LockFeatureType lockFeature = wfsfactory.createLockFeatureType();
-
-        //&lt;xsd:element maxOccurs="unbounded" name="Lock" type="wfs:LockType"&gt;
-        lockFeature.getLock().addAll(node.getChildValues(LockType.class));
-
-        //&lt;xsd:attribute fixed="1.0.0" name="version" type="xsd:string" use="required"/&gt;
-        //&lt;xsd:attribute fixed="WFS" name="service" type="xsd:string" use="required"/&gt;
-        WFSBindingUtils.version(lockFeature, node);
-        WFSBindingUtils.service(lockFeature, node);
-
-        //&lt;xsd:attribute name="expiry" type="xsd:positiveInteger" use="optional"/&gt;
-        if (node.hasAttribute("expiry")) {
-            lockFeature.setExpiry(BigInteger.valueOf(
-                    ((Number) node.getAttributeValue("expiry")).longValue()));
-        }
-
-        //&lt;xsd:attribute name="lockAction" type="wfs:AllSomeType" use="optional"&gt;
-        if (node.hasAttribute(AllSomeType.class)) {
-            lockFeature.setLockAction((AllSomeType) node.getAttributeValue(AllSomeType.class));
-        }
-
-        return lockFeature;
-    }
+    return lockFeature;
+  }
 }

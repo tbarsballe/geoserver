@@ -6,7 +6,6 @@
 package org.geoserver.rest;
 
 import javax.servlet.http.HttpServletResponse;
-
 import org.geotools.factory.CommonFactoryFinder;
 import org.opengis.filter.FilterFactory;
 import org.opengis.filter.expression.Function;
@@ -19,13 +18,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(path = RestBaseController.ROOT_PATH + "/gsuser")
 public class GsUserController {
 
-    @GetMapping()
-    @ResponseBody
-    public String handleGet(HttpServletResponse response) {
-        FilterFactory ff = CommonFactoryFinder.getFilterFactory();
-        Function function = ff.function("env", ff.literal("GSUSER"), ff.literal("USER_NOT_FOUND"));
-        String result = function.evaluate(null, String.class);
-        response.setContentType("text/plain");
-        return result;
-    }
+  @GetMapping()
+  @ResponseBody
+  public String handleGet(HttpServletResponse response) {
+    FilterFactory ff = CommonFactoryFinder.getFilterFactory();
+    Function function = ff.function("env", ff.literal("GSUSER"), ff.literal("USER_NOT_FOUND"));
+    String result = function.evaluate(null, String.class);
+    response.setContentType("text/plain");
+    return result;
+  }
 }

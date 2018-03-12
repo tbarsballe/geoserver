@@ -9,51 +9,45 @@ import java.io.Serializable;
 
 /**
  * Setting for dimension default value selection.
- * 
- * @author Ilkka Rinne / Spatineo Inc. for Finnish Meteorological Institute
  *
+ * @author Ilkka Rinne / Spatineo Inc. for Finnish Meteorological Institute
  */
 public class DimensionDefaultValueSetting implements Serializable {
 
-    /** serialVersionUID */
-    private static final long serialVersionUID = 7964431537211881227L;
+  /** serialVersionUID */
+  private static final long serialVersionUID = 7964431537211881227L;
 
-    public static String TIME_CURRENT = "current";
-    
-    public enum Strategy {MINIMUM, MAXIMUM, NEAREST, FIXED, BUILTIN}
-    
-    Strategy strategy;
-    
-    String referenceValue;
+  public static String TIME_CURRENT = "current";
 
-    /**
-     * @return the strategyType
-     */
-    public Strategy getStrategyType() {
-        return strategy;
-    }
+  public enum Strategy {
+    MINIMUM,
+    MAXIMUM,
+    NEAREST,
+    FIXED,
+    BUILTIN
+  }
 
-    /**
-     * @param strategyType the strategyType to set
-     */
-    public void setStrategyType(Strategy strategyType) {
-        this.strategy = strategyType;
-    }
+  Strategy strategy;
 
-    /**
-     * @return the referenceValue
-     */
-    public String getReferenceValue() {
-        return referenceValue;
-    }
+  String referenceValue;
 
-    /**
-     * @param referenceValue the referenceValue to set
-     */
-    public void setReferenceValue(String referenceValue) {
-        this.referenceValue = referenceValue;
-    }
- 
-    
-    
+  /** @return the strategyType */
+  public Strategy getStrategyType() {
+    return strategy;
+  }
+
+  /** @param strategyType the strategyType to set */
+  public void setStrategyType(Strategy strategyType) {
+    this.strategy = strategyType;
+  }
+
+  /** @return the referenceValue */
+  public String getReferenceValue() {
+    return referenceValue;
+  }
+
+  /** @param referenceValue the referenceValue to set */
+  public void setReferenceValue(String referenceValue) {
+    this.referenceValue = referenceValue;
+  }
 }

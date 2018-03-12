@@ -6,19 +6,17 @@
 package org.geoserver.wfs.xml.v1_1_0;
 
 import javax.xml.namespace.QName;
-
 import net.opengis.wfs.IdentifierGenerationOptionType;
 import net.opengis.wfs.WfsFactory;
-
 import org.geotools.xml.AbstractSimpleBinding;
 import org.geotools.xml.InstanceComponent;
-
 
 /**
  * Binding object for the type http://www.opengis.net/wfs:IdentifierGenerationOptionType.
  *
  * <p>
- *        <pre>
+ *
+ * <pre>
  *         <code>
  *  &lt;xsd:simpleType name="IdentifierGenerationOptionType"&gt;
  *      &lt;xsd:restriction base="xsd:string"&gt;
@@ -61,52 +59,52 @@ import org.geotools.xml.InstanceComponent;
  *
  *          </code>
  *         </pre>
+ *
  * @generated
  */
 public class IdentifierGenerationOptionTypeBinding extends AbstractSimpleBinding {
-    WfsFactory wfsfactory;
+  WfsFactory wfsfactory;
 
-    public IdentifierGenerationOptionTypeBinding(WfsFactory wfsfactory) {
-        this.wfsfactory = wfsfactory;
+  public IdentifierGenerationOptionTypeBinding(WfsFactory wfsfactory) {
+    this.wfsfactory = wfsfactory;
+  }
+
+  /** @generated */
+  public QName getTarget() {
+    return WFS.IDENTIFIERGENERATIONOPTIONTYPE;
+  }
+
+  /**
+   *
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   *
+   * @generated modifiable
+   */
+  public Class getType() {
+    return IdentifierGenerationOptionType.class;
+  }
+
+  /**
+   *
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   *
+   * @generated modifiable
+   */
+  public Object parse(InstanceComponent instance, Object value) throws Exception {
+    if ("UseExisting".equals(value)) {
+      return IdentifierGenerationOptionType.USE_EXISTING_LITERAL;
     }
 
-    /**
-     * @generated
-     */
-    public QName getTarget() {
-        return WFS.IDENTIFIERGENERATIONOPTIONTYPE;
+    if ("ReplaceDuplicate".equals(value)) {
+      return IdentifierGenerationOptionType.REPLACE_DUPLICATE_LITERAL;
     }
 
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     *
-     * @generated modifiable
-     */
-    public Class getType() {
-        return IdentifierGenerationOptionType.class;
+    if ("GenerateNew".equals(value)) {
+      return IdentifierGenerationOptionType.GENERATE_NEW_LITERAL;
     }
 
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     *
-     * @generated modifiable
-     */
-    public Object parse(InstanceComponent instance, Object value)
-        throws Exception {
-        if ("UseExisting".equals(value)) {
-            return IdentifierGenerationOptionType.USE_EXISTING_LITERAL;
-        }
-
-        if ("ReplaceDuplicate".equals(value)) {
-            return IdentifierGenerationOptionType.REPLACE_DUPLICATE_LITERAL;
-        }
-
-        if ("GenerateNew".equals(value)) {
-            return IdentifierGenerationOptionType.GENERATE_NEW_LITERAL;
-        }
-
-        return null;
-    }
+    return null;
+  }
 }

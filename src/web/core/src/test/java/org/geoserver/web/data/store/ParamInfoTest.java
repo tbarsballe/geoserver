@@ -13,18 +13,27 @@ import org.junit.Test;
 
 public class ParamInfoTest {
 
-    @Test
-    public void testTitle() {
-        Param param = new Param("abc", String.class, new SimpleInternationalString("the title"),
-                new SimpleInternationalString("the description"), true, 1, 1, null, null);
-        ParamInfo pi = new ParamInfo(param);
-        assertEquals("the title", pi.getTitle());
-    }
+  @Test
+  public void testTitle() {
+    Param param =
+        new Param(
+            "abc",
+            String.class,
+            new SimpleInternationalString("the title"),
+            new SimpleInternationalString("the description"),
+            true,
+            1,
+            1,
+            null,
+            null);
+    ParamInfo pi = new ParamInfo(param);
+    assertEquals("the title", pi.getTitle());
+  }
 
-    @Test
-    public void testDescription() {
-        Param param = PropertyDataStoreFactory.DIRECTORY;
-        ParamInfo pi = new ParamInfo(param);
-        assertEquals(PropertyDataStoreFactory.DIRECTORY.description.toString(), pi.getTitle());
-    }
+  @Test
+  public void testDescription() {
+    Param param = PropertyDataStoreFactory.DIRECTORY;
+    ParamInfo pi = new ParamInfo(param);
+    assertEquals(PropertyDataStoreFactory.DIRECTORY.description.toString(), pi.getTitle());
+  }
 }

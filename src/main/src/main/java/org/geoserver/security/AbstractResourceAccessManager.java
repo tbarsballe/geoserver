@@ -18,52 +18,49 @@ import org.springframework.security.core.Authentication;
 
 /**
  * Abstract base class for {@link ResourceAccessManager} implementations.
- * <p>
- * This base class returns null from every method meaning no limits.
- * </p>
- * @author Justin Deoliveira, OpenGeo
  *
+ * <p>This base class returns null from every method meaning no limits.
+ *
+ * @author Justin Deoliveira, OpenGeo
  */
 public class AbstractResourceAccessManager implements ResourceAccessManager {
 
-    @Override
-    public WorkspaceAccessLimits getAccessLimits(Authentication user,
-            WorkspaceInfo workspace) {
-        return null;
-    }
+  @Override
+  public WorkspaceAccessLimits getAccessLimits(Authentication user, WorkspaceInfo workspace) {
+    return null;
+  }
 
-    @Override
-    public DataAccessLimits getAccessLimits(Authentication user, LayerInfo layer) {
-        return null;
-    }
+  @Override
+  public DataAccessLimits getAccessLimits(Authentication user, LayerInfo layer) {
+    return null;
+  }
 
-    @Override
-    public DataAccessLimits getAccessLimits(Authentication user, ResourceInfo resource) {
-        return null;
-    }
+  @Override
+  public DataAccessLimits getAccessLimits(Authentication user, ResourceInfo resource) {
+    return null;
+  }
 
-    @Override
-    public StyleAccessLimits getAccessLimits(Authentication user, StyleInfo style) {
-        return null;
-    }
+  @Override
+  public StyleAccessLimits getAccessLimits(Authentication user, StyleInfo style) {
+    return null;
+  }
 
-    @Override
-    public LayerGroupAccessLimits getAccessLimits(Authentication user, LayerGroupInfo layerGroup) {
-        return null;
-    }
-    
-    protected Catalog getCatalog() {
-        return (Catalog) GeoServerExtensions.bean("catalog");
-    }
+  @Override
+  public LayerGroupAccessLimits getAccessLimits(Authentication user, LayerGroupInfo layerGroup) {
+    return null;
+  }
 
-    protected SecureCatalogImpl getSecurityWrapper() {
-        return GeoServerExtensions.bean(SecureCatalogImpl.class);
-    }
-    
-    @Override
-    public Filter getSecurityFilter(final Authentication user,
-            final Class<? extends CatalogInfo> clazz) {
-        return InMemorySecurityFilter.buildUserAccessFilter(this, user);
-    }
+  protected Catalog getCatalog() {
+    return (Catalog) GeoServerExtensions.bean("catalog");
+  }
 
+  protected SecureCatalogImpl getSecurityWrapper() {
+    return GeoServerExtensions.bean(SecureCatalogImpl.class);
+  }
+
+  @Override
+  public Filter getSecurityFilter(
+      final Authentication user, final Class<? extends CatalogInfo> clazz) {
+    return InMemorySecurityFilter.buildUserAccessFilter(this, user);
+  }
 }

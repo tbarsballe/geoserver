@@ -24,50 +24,46 @@ import org.w3c.dom.NodeList;
 
 public class DescribeFeatureResponseTest extends WFSTestSupport {
 
-    Operation request() {
-        Service service = getServiceDescriptor10();
-        DescribeFeatureTypeType type = WfsFactory.eINSTANCE.createDescribeFeatureTypeType();
-        type.setBaseUrl("http://localhost:8080/geoserver");
-        
-        Operation request = new Operation("wfs", service, null, new Object[] { type });
-        return request;
-    }
-    
-    @Test
-    public void testSingle() throws Exception {
-        FeatureTypeInfo meta = getFeatureTypeInfo(CiteTestData.BASIC_POLYGONS);
+  Operation request() {
+    Service service = getServiceDescriptor10();
+    DescribeFeatureTypeType type = WfsFactory.eINSTANCE.createDescribeFeatureTypeType();
+    type.setBaseUrl("http://localhost:8080/geoserver");
 
-        ByteArrayOutputStream output = new ByteArrayOutputStream();
+    Operation request = new Operation("wfs", service, null, new Object[] {type});
+    return request;
+  }
 
-        XmlSchemaEncoder response = new XmlSchemaEncoder.V11(getGeoServer());
-        response.write(new FeatureTypeInfo[] { meta }, output, request());
+  @Test
+  public void testSingle() throws Exception {
+    FeatureTypeInfo meta = getFeatureTypeInfo(CiteTestData.BASIC_POLYGONS);
 
-        Element schema = ReaderUtils.parse(new StringReader(new String(output
-                .toByteArray())));
-        assertEquals("xsd:schema", schema.getNodeName());
+    ByteArrayOutputStream output = new ByteArrayOutputStream();
 
-        NodeList types = schema.getElementsByTagName("xsd:complexType");
-        assertEquals(1, types.getLength());
-    }
+    XmlSchemaEncoder response = new XmlSchemaEncoder.V11(getGeoServer());
+    response.write(new FeatureTypeInfo[] {meta}, output, request());
 
-	@Test
-    public void testWithDifferntNamespaces() throws Exception {
+    Element schema = ReaderUtils.parse(new StringReader(new String(output.toByteArray())));
+    assertEquals("xsd:schema", schema.getNodeName());
 
-        FeatureTypeInfo meta1 = getFeatureTypeInfo(CiteTestData.BASIC_POLYGONS);
-        FeatureTypeInfo meta2 = getFeatureTypeInfo(CiteTestData.POLYGONS);
-        
-        ByteArrayOutputStream output = new ByteArrayOutputStream();
+    NodeList types = schema.getElementsByTagName("xsd:complexType");
+    assertEquals(1, types.getLength());
+  }
 
-        XmlSchemaEncoder response = new XmlSchemaEncoder.V11(getGeoServer());
-        response.write(new FeatureTypeInfo[] { meta1, meta2 }, output, request());
+  @Test
+  public void testWithDifferntNamespaces() throws Exception {
 
-        Element schema = ReaderUtils.parse(new StringReader(new String(output
-                .toByteArray())));
-        assertEquals("xsd:schema", schema.getNodeName());
+    FeatureTypeInfo meta1 = getFeatureTypeInfo(CiteTestData.BASIC_POLYGONS);
+    FeatureTypeInfo meta2 = getFeatureTypeInfo(CiteTestData.POLYGONS);
 
-        NodeList imprts = schema.getElementsByTagName("xsd:import");
-        assertEquals(2, imprts.getLength());
+    ByteArrayOutputStream output = new ByteArrayOutputStream();
 
-    }
+    XmlSchemaEncoder response = new XmlSchemaEncoder.V11(getGeoServer());
+    response.write(new FeatureTypeInfo[] {meta1, meta2}, output, request());
 
+    Element schema = ReaderUtils.parse(new StringReader(new String(output.toByteArray())));
+    assertEquals("xsd:schema", schema.getNodeName());
+
+    NodeList imprts = schema.getElementsByTagName("xsd:import");
+    assertEquals(2, imprts.getLength());
+  }
 }

@@ -4,33 +4,28 @@
  * application directory.
  */
 
-
 package org.geoserver.security.password;
 
 import org.geoserver.security.impl.UserDetailsWrapper;
 import org.springframework.security.core.userdetails.UserDetails;
 
 /**
- * Wrapper class needed if the password is needed in
- * a modified form (plain text as an example) 
- *  
- * @author mcr
+ * Wrapper class needed if the password is needed in a modified form (plain text as an example)
  *
+ * @author mcr
  */
 public class UserDetailsPasswordWrapper extends UserDetailsWrapper {
 
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-    public UserDetailsPasswordWrapper(UserDetails details, String password) {
-        super(details);
-        this.password=password;
-    }
-    
-    private String password;
-    
+  public UserDetailsPasswordWrapper(UserDetails details, String password) {
+    super(details);
+    this.password = password;
+  }
 
-    public String getPassword() {
-        return password;
-    }
+  private String password;
 
+  public String getPassword() {
+    return password;
+  }
 }

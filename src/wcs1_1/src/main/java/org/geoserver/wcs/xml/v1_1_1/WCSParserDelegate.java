@@ -10,7 +10,7 @@ import org.geotools.xml.XSDParserDelegate;
 
 public class WCSParserDelegate extends XSDParserDelegate {
 
-    public WCSParserDelegate() {
-        super(new WCSConfiguration());
-    }
+  public WCSParserDelegate() {
+    super(new WCSConfiguration());
+  }
 }

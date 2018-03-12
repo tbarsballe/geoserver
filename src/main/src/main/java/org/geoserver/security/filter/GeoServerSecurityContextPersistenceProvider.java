@@ -12,25 +12,24 @@ import org.geoserver.security.config.SecurityNamedServiceConfig;
 
 /**
  * Security provider for basic auth
- * 
+ *
  * @author mcr
  */
 public class GeoServerSecurityContextPersistenceProvider extends AbstractFilterProvider {
 
-    @Override
-    public void configure(XStreamPersister xp) {
-        super.configure(xp);
-        xp.getXStream().alias("contextPersistence", SecurityContextPersistenceFilterConfig.class);
-    }
+  @Override
+  public void configure(XStreamPersister xp) {
+    super.configure(xp);
+    xp.getXStream().alias("contextPersistence", SecurityContextPersistenceFilterConfig.class);
+  }
 
-    @Override
-    public Class<? extends GeoServerSecurityFilter> getFilterClass() {
-        return GeoServerSecurityContextPersistenceFilter.class;
-    }
+  @Override
+  public Class<? extends GeoServerSecurityFilter> getFilterClass() {
+    return GeoServerSecurityContextPersistenceFilter.class;
+  }
 
-    @Override
-    public GeoServerSecurityFilter createFilter(SecurityNamedServiceConfig config) {
-        return new GeoServerSecurityContextPersistenceFilter();
-    }
-
+  @Override
+  public GeoServerSecurityFilter createFilter(SecurityNamedServiceConfig config) {
+    return new GeoServerSecurityContextPersistenceFilter();
+  }
 }

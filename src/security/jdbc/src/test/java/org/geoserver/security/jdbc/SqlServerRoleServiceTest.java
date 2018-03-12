@@ -8,9 +8,8 @@ package org.geoserver.security.jdbc;
 
 public class SqlServerRoleServiceTest extends JDBCRoleServiceTest {
 
-    @Override
-    protected String getFixtureId() {
-        return "sqlserver";
-    }
-
+  @Override
+  protected String getFixtureId() {
+    return "sqlserver";
+  }
 }

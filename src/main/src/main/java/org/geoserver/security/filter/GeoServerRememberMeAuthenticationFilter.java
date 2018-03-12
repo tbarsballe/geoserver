@@ -7,50 +7,43 @@
 package org.geoserver.security.filter;
 
 import java.io.IOException;
-
 import org.geoserver.security.GeoServerSecurityManager;
 import org.geoserver.security.config.SecurityNamedServiceConfig;
 import org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter;
 
 /**
  * Named RemeberMe Authentication Filter
- * 
- * @author mcr
  *
+ * @author mcr
  */
-public class GeoServerRememberMeAuthenticationFilter extends GeoServerCompositeFilter 
+public class GeoServerRememberMeAuthenticationFilter extends GeoServerCompositeFilter
     implements GeoServerAuthenticationFilter {
 
-    @Override
-    public void initializeFromConfig(SecurityNamedServiceConfig config) throws IOException {
-        super.initializeFromConfig(config);
-        
-//       not needed at the moment        
-//        RememberMeAuthenticationFilterConfig authConfig = 
-//                (RememberMeAuthenticationFilterConfig) config;
+  @Override
+  public void initializeFromConfig(SecurityNamedServiceConfig config) throws IOException {
+    super.initializeFromConfig(config);
 
-        GeoServerSecurityManager secMgr = getSecurityManager();
-        RememberMeAuthenticationFilter filter = new RememberMeAuthenticationFilter(
+    //       not needed at the moment
+    //        RememberMeAuthenticationFilterConfig authConfig =
+    //                (RememberMeAuthenticationFilterConfig) config;
+
+    GeoServerSecurityManager secMgr = getSecurityManager();
+    RememberMeAuthenticationFilter filter =
+        new RememberMeAuthenticationFilter(
             secMgr.authenticationManager(), secMgr.getRememberMeService());
-        filter.afterPropertiesSet();
-        getNestedFilters().add(filter);        
-    }
+    filter.afterPropertiesSet();
+    getNestedFilters().add(filter);
+  }
 
-    /**
-     * @see org.geoserver.security.filter.GeoServerAuthenticationFilter#applicableForHtml()
-     */
-    @Override
-    public boolean applicableForHtml() {
-        return true;
-    }
+  /** @see org.geoserver.security.filter.GeoServerAuthenticationFilter#applicableForHtml() */
+  @Override
+  public boolean applicableForHtml() {
+    return true;
+  }
 
-
-    /**
-     * @see org.geoserver.security.filter.GeoServerAuthenticationFilter#applicableForServices()
-     */
-    @Override
-    public boolean applicableForServices() {
-        return false;
-    }
-
+  /** @see org.geoserver.security.filter.GeoServerAuthenticationFilter#applicableForServices() */
+  @Override
+  public boolean applicableForServices() {
+    return false;
+  }
 }

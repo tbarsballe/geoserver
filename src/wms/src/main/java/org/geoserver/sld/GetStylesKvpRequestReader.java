@@ -10,16 +10,15 @@ import org.geoserver.wms.WMS;
 
 public class GetStylesKvpRequestReader extends KvpRequestReader {
 
-    WMS wms;
+  WMS wms;
 
-    public GetStylesKvpRequestReader(WMS wms) {
-        super(GetStylesRequest.class);
-        this.wms = wms;
-    }
+  public GetStylesKvpRequestReader(WMS wms) {
+    super(GetStylesRequest.class);
+    this.wms = wms;
+  }
 
-    
-    @Override
-    public Object createRequest() throws Exception {
-        return new GetStylesRequest();
-    }
+  @Override
+  public Object createRequest() throws Exception {
+    return new GetStylesRequest();
+  }
 }

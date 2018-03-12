@@ -6,19 +6,18 @@
 package org.geoserver.wcs.kvp.rangesubset;
 
 /**
- * Abstract node that add the concept of a node content 
- * @author Andrea Aime - TOPP
+ * Abstract node that add the concept of a node content
  *
+ * @author Andrea Aime - TOPP
  */
 public abstract class AbstractContentNode implements Node {
-    protected String content;
+  protected String content;
 
-    public String getContent() {
-        return content;
-    }
-    
-    public void setContent(String content) {
-        this.content = content;
-    }
+  public String getContent() {
+    return content;
+  }
 
+  public void setContent(String content) {
+    this.content = content;
+  }
 }

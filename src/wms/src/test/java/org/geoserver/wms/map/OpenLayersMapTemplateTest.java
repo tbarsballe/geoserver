@@ -8,6 +8,9 @@ package org.geoserver.wms.map;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import freemarker.ext.beans.BeansWrapper;
+import freemarker.template.Configuration;
+import freemarker.template.Template;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -15,10 +18,8 @@ import java.io.OutputStreamWriter;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashMap;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-
 import org.geoserver.data.test.MockData;
 import org.geoserver.wms.GetMapRequest;
 import org.geoserver.wms.WMSMapContent;
@@ -29,68 +30,61 @@ import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import freemarker.ext.beans.BeansWrapper;
-import freemarker.template.Configuration;
-import freemarker.template.Template;
-
-
 public class OpenLayersMapTemplateTest extends WMSTestSupport {
-    
-    
-    @Test
-    public void test() throws Exception {
-        Configuration cfg = new Configuration();
-        cfg.setClassForTemplateLoading(OpenLayersMapOutputFormat.class, "");
-        cfg.setObjectWrapper(new BeansWrapper());
 
-        Template template = cfg.getTemplate("OpenLayers2MapTemplate.ftl");
-        assertNotNull(template);
+  @Test
+  public void test() throws Exception {
+    Configuration cfg = new Configuration();
+    cfg.setClassForTemplateLoading(OpenLayersMapOutputFormat.class, "");
+    cfg.setObjectWrapper(new BeansWrapper());
 
-        GetMapRequest request = createGetMapRequest(MockData.BASIC_POLYGONS);
-        WMSMapContent mapContent = new WMSMapContent();
-        mapContent.addLayer(createMapLayer(MockData.BASIC_POLYGONS));
-        mapContent.setRequest(request);
-        mapContent.setMapWidth(256);
-        mapContent.setMapHeight(256);
+    Template template = cfg.getTemplate("OpenLayers2MapTemplate.ftl");
+    assertNotNull(template);
 
-        ByteArrayOutputStream output = new ByteArrayOutputStream();
-        HashMap map = new HashMap();
-        map.put("context", mapContent);
-        map.put("request", mapContent.getRequest());
-        map.put("maxResolution", new Double(0.0005)); // just a random number
-        map.put("baseUrl", "http://localhost:8080/geoserver/wms");
-        map.put("parameters", new ArrayList());
-        map.put("layerName", "layer");
-        map.put("units", "degrees");
-        map.put("pureCoverage", "false");
-        map.put("supportsFiltering", "true");
-        map.put("styles", new ArrayList());
-        map.put("servicePath", "wms");
-        map.put("yx", "false");
-        template.process(map, new OutputStreamWriter(output));
+    GetMapRequest request = createGetMapRequest(MockData.BASIC_POLYGONS);
+    WMSMapContent mapContent = new WMSMapContent();
+    mapContent.addLayer(createMapLayer(MockData.BASIC_POLYGONS));
+    mapContent.setRequest(request);
+    mapContent.setMapWidth(256);
+    mapContent.setMapHeight(256);
 
-        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        dbf.setValidating(false);
-        dbf.setExpandEntityReferences(false);
-        
-        DocumentBuilder docBuilder = dbf.newDocumentBuilder();
-        docBuilder.setEntityResolver(
-            new EntityResolver() {
+    ByteArrayOutputStream output = new ByteArrayOutputStream();
+    HashMap map = new HashMap();
+    map.put("context", mapContent);
+    map.put("request", mapContent.getRequest());
+    map.put("maxResolution", new Double(0.0005)); // just a random number
+    map.put("baseUrl", "http://localhost:8080/geoserver/wms");
+    map.put("parameters", new ArrayList());
+    map.put("layerName", "layer");
+    map.put("units", "degrees");
+    map.put("pureCoverage", "false");
+    map.put("supportsFiltering", "true");
+    map.put("styles", new ArrayList());
+    map.put("servicePath", "wms");
+    map.put("yx", "false");
+    template.process(map, new OutputStreamWriter(output));
 
-                public InputSource resolveEntity(String publicId,
-                    String systemId) throws SAXException, IOException {
-                    StringReader reader = new StringReader("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-                    InputSource source = new InputSource(reader);
-                    source.setPublicId(publicId); 
-                    source.setSystemId(systemId); 
-                    return source;
-                }
-            }
-        );
+    DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+    dbf.setValidating(false);
+    dbf.setExpandEntityReferences(false);
 
-        Document document = docBuilder.parse(new ByteArrayInputStream(output.toByteArray()));
-        assertNotNull(document);
+    DocumentBuilder docBuilder = dbf.newDocumentBuilder();
+    docBuilder.setEntityResolver(
+        new EntityResolver() {
 
-        assertEquals("html", document.getDocumentElement().getNodeName());
-    }
+          public InputSource resolveEntity(String publicId, String systemId)
+              throws SAXException, IOException {
+            StringReader reader = new StringReader("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+            InputSource source = new InputSource(reader);
+            source.setPublicId(publicId);
+            source.setSystemId(systemId);
+            return source;
+          }
+        });
+
+    Document document = docBuilder.parse(new ByteArrayInputStream(output.toByteArray()));
+    assertNotNull(document);
+
+    assertEquals("html", document.getDocumentElement().getNodeName());
+  }
 }

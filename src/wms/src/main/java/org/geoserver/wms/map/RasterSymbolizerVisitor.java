@@ -8,7 +8,6 @@ package org.geoserver.wms.map;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
 import org.geotools.coverage.grid.GridCoverage2D;
 import org.geotools.feature.FeatureTypes;
 import org.geotools.styling.AnchorPoint;
@@ -51,223 +50,215 @@ import org.opengis.filter.expression.Function;
 import org.opengis.parameter.Parameter;
 
 /**
- * Extracts the active raster symbolizers, as long as there are some, and only raster symbolizers 
- * are available, without rendering transformations in place.
- * In the case of mixed symbolizers it will return null
- * TODO: extend this class so that it handles the case of other symbolizers applied after a raster
- * symbolizer one (e.g., to draw a rectangle around a coverage)
- * 
- * @author Andrea Aime
+ * Extracts the active raster symbolizers, as long as there are some, and only raster symbolizers
+ * are available, without rendering transformations in place. In the case of mixed symbolizers it
+ * will return null TODO: extend this class so that it handles the case of other symbolizers applied
+ * after a raster symbolizer one (e.g., to draw a rectangle around a coverage)
  *
+ * @author Andrea Aime
  */
 public class RasterSymbolizerVisitor implements StyleVisitor {
 
-    double scaleDenominator;
+  double scaleDenominator;
 
-    FeatureType featureType;
+  FeatureType featureType;
 
-    List<RasterSymbolizer> symbolizers = new ArrayList<RasterSymbolizer>();
-    
-    boolean otherSymbolizers = false;
-    
-    Expression rasterTransformation = null;
-    
-    boolean otherRenderingTransformations = false;
+  List<RasterSymbolizer> symbolizers = new ArrayList<RasterSymbolizer>();
 
-    public RasterSymbolizerVisitor(double scaleDenominator, FeatureType featureType) {
-        this.scaleDenominator = scaleDenominator;
-        this.featureType = featureType;
-    }
-    
-    public void reset() {
-        symbolizers.clear();
-        otherSymbolizers = false;
-        rasterTransformation = null;
-        otherRenderingTransformations = false;
-    }
-    
-    public List<RasterSymbolizer> getRasterSymbolizers() {
-        if(otherSymbolizers || otherRenderingTransformations)
-            return Collections.emptyList();
-        else
-            return symbolizers;
-    }
-    
-    public Expression getRasterRenderingTransformation() {
-        return rasterTransformation;
-    }
+  boolean otherSymbolizers = false;
 
-    public void visit(StyledLayerDescriptor sld) {
-        for (StyledLayer sl : sld.getStyledLayers()) {
-            if (sl instanceof UserLayer) {
-                ((UserLayer) sl).accept(this);
-            } else if (sl instanceof NamedLayer) {
-                ((NamedLayer) sl).accept(this);
+  Expression rasterTransformation = null;
+
+  boolean otherRenderingTransformations = false;
+
+  public RasterSymbolizerVisitor(double scaleDenominator, FeatureType featureType) {
+    this.scaleDenominator = scaleDenominator;
+    this.featureType = featureType;
+  }
+
+  public void reset() {
+    symbolizers.clear();
+    otherSymbolizers = false;
+    rasterTransformation = null;
+    otherRenderingTransformations = false;
+  }
+
+  public List<RasterSymbolizer> getRasterSymbolizers() {
+    if (otherSymbolizers || otherRenderingTransformations) return Collections.emptyList();
+    else return symbolizers;
+  }
+
+  public Expression getRasterRenderingTransformation() {
+    return rasterTransformation;
+  }
+
+  public void visit(StyledLayerDescriptor sld) {
+    for (StyledLayer sl : sld.getStyledLayers()) {
+      if (sl instanceof UserLayer) {
+        ((UserLayer) sl).accept(this);
+      } else if (sl instanceof NamedLayer) {
+        ((NamedLayer) sl).accept(this);
+      }
+    }
+  }
+
+  public void visit(NamedLayer layer) {
+    for (Style s : layer.getStyles()) s.accept(this);
+  }
+
+  public void visit(UserLayer layer) {
+    for (Style s : layer.getUserStyles()) s.accept(this);
+  }
+
+  public void visit(FeatureTypeConstraint ftc) {
+    // nothing to do
+  }
+
+  public void visit(Style style) {
+    for (FeatureTypeStyle fts : style.featureTypeStyles()) {
+      fts.accept(this);
+    }
+  }
+
+  public void visit(Rule rule) {
+    if (rule.getMinScaleDenominator() < scaleDenominator
+        && rule.getMaxScaleDenominator() > scaleDenominator) {
+      for (Symbolizer s : rule.symbolizers()) s.accept(this);
+    }
+  }
+
+  public void visit(FeatureTypeStyle fts) {
+    // use the same logic as streaming renderer to decide if a fts is active
+    if (featureType == null
+        || (featureType.getName().getLocalPart() != null)
+            && (featureType.getName().getLocalPart().equalsIgnoreCase(fts.getFeatureTypeName())
+                || FeatureTypes.isDecendedFrom(featureType, null, fts.getFeatureTypeName()))) {
+      Expression tx = fts.getTransformation();
+      if (tx != null) {
+        boolean rasterTransformation = false;
+        if (tx instanceof Function) {
+          Function f = (Function) tx;
+          FunctionName name = f.getFunctionName();
+          if (name != null) {
+            Parameter<?> result = name.getReturn();
+            if (result != null) {
+              if (GridCoverage2D.class.isAssignableFrom(result.getType())) {
+                rasterTransformation = true;
+                this.rasterTransformation = tx;
+              }
             }
+          }
         }
+        otherRenderingTransformations |= !rasterTransformation;
+      }
+      for (Rule r : fts.rules()) {
+        r.accept(this);
+      }
     }
+  }
 
-    public void visit(NamedLayer layer) {
-        for (Style s : layer.getStyles())
-            s.accept(this);
+  public void visit(Fill fill) {
+    // nothing to do
+
+  }
+
+  public void visit(Stroke stroke) {
+    // nothing to do
+  }
+
+  public void visit(Symbolizer sym) {
+    if (sym instanceof RasterSymbolizer) {
+      visit((RasterSymbolizer) sym);
+    } else {
+      otherSymbolizers = true;
     }
+  }
 
-    public void visit(UserLayer layer) {
-        for (Style s : layer.getUserStyles())
-            s.accept(this);
-    }
+  public void visit(PointSymbolizer ps) {
+    otherSymbolizers = true;
+  }
 
-    public void visit(FeatureTypeConstraint ftc) {
-        // nothing to do
-    }
+  public void visit(LineSymbolizer line) {
+    otherSymbolizers = true;
+  }
 
-    public void visit(Style style) {
-        for (FeatureTypeStyle fts : style.featureTypeStyles()) {
-            fts.accept(this);
-        }
-    }
+  public void visit(PolygonSymbolizer poly) {
+    otherSymbolizers = true;
+  }
 
-    public void visit(Rule rule) {
-        if (rule.getMinScaleDenominator() < scaleDenominator
-                && rule.getMaxScaleDenominator() > scaleDenominator) {
-            for(Symbolizer s : rule.symbolizers())
-                s.accept(this);
-        }
-    }
+  public void visit(TextSymbolizer text) {
+    otherSymbolizers = true;
+  }
 
-    public void visit(FeatureTypeStyle fts) {
-        // use the same logic as streaming renderer to decide if a fts is active
-        if(featureType == null || (featureType.getName().getLocalPart() != null)
-                && (featureType.getName().getLocalPart().equalsIgnoreCase(fts.getFeatureTypeName()) || 
-                        FeatureTypes.isDecendedFrom(featureType, null, fts.getFeatureTypeName()))) {
-            Expression tx = fts.getTransformation();
-            if(tx != null) {
-                boolean rasterTransformation = false;
-                if(tx instanceof Function) {
-                    Function f = (Function) tx;
-                    FunctionName name = f.getFunctionName();
-                    if(name != null) {
-                        Parameter<?> result = name.getReturn();
-                        if(result != null) {
-                            if(GridCoverage2D.class.isAssignableFrom(result.getType())) {
-                                rasterTransformation = true;
-                                this.rasterTransformation = tx;
-                            }
-                        } 
-                    }
-                } 
-                otherRenderingTransformations |= !rasterTransformation;
-            }
-            for (Rule r : fts.rules()) {
-                r.accept(this);
-            }
-        }
-    }
+  public void visit(RasterSymbolizer raster) {
+    this.symbolizers.add(raster);
+  }
 
-    public void visit(Fill fill) {
-        // nothing to do
+  public void visit(Graphic gr) {
+    // nothing to do
 
-    }
+  }
 
-    public void visit(Stroke stroke) {
-        // nothing to do
-    }
+  public void visit(Mark mark) {
+    // nothing to do
 
-    public void visit(Symbolizer sym) {
-        if (sym instanceof RasterSymbolizer) {
-            visit((RasterSymbolizer) sym);
-        } else {
-            otherSymbolizers = true;
-        }
-    }
+  }
 
-    public void visit(PointSymbolizer ps) {
-        otherSymbolizers = true;
-    }
+  public void visit(ExternalGraphic exgr) {
+    // nothing to do
 
-    public void visit(LineSymbolizer line) {
-        otherSymbolizers = true;
+  }
 
-    }
+  public void visit(PointPlacement pp) {
+    // nothing to do
 
-    public void visit(PolygonSymbolizer poly) {
-        otherSymbolizers = true;
-    }
+  }
 
-    public void visit(TextSymbolizer text) {
-        otherSymbolizers = true;
-    }
+  public void visit(AnchorPoint ap) {
+    // nothing to do
+  }
 
-    public void visit(RasterSymbolizer raster) {
-        this.symbolizers.add(raster);
-    }
+  public void visit(Displacement dis) {
+    // nothing to do
+  }
 
-    public void visit(Graphic gr) {
-        // nothing to do
+  public void visit(LinePlacement lp) {
+    // nothing to do
+  }
 
-    }
+  public void visit(Halo halo) {
+    // nothing to do
+  }
 
-    public void visit(Mark mark) {
-        // nothing to do
+  public void visit(ColorMap colorMap) {
+    // nothing to do
+  }
 
-    }
+  public void visit(ColorMapEntry colorMapEntry) {
+    // nothing to do
+  }
 
-    public void visit(ExternalGraphic exgr) {
-        // nothing to do
+  public void visit(ContrastEnhancement contrastEnhancement) {
+    // nothing to do
+  }
 
-    }
+  public void visit(ImageOutline outline) {
+    // nothing to do
+  }
 
-    public void visit(PointPlacement pp) {
-        // nothing to do
+  public void visit(ChannelSelection cs) {
+    // nothing to do
+  }
 
-    }
+  public void visit(OverlapBehavior ob) {
+    // nothing to do
+  }
 
-    public void visit(AnchorPoint ap) {
-        // nothing to do
-    }
+  public void visit(SelectedChannelType sct) {
+    // nothing to do
+  }
 
-    public void visit(Displacement dis) {
-        // nothing to do
-    }
-
-    public void visit(LinePlacement lp) {
-        // nothing to do
-    }
-
-    public void visit(Halo halo) {
-        // nothing to do
-    }
-
-    public void visit(ColorMap colorMap) {
-        // nothing to do
-    }
-
-    public void visit(ColorMapEntry colorMapEntry) {
-        // nothing to do
-    }
-
-    public void visit(ContrastEnhancement contrastEnhancement) {
-        // nothing to do
-    }
-
-    public void visit(ImageOutline outline) {
-        // nothing to do
-    }
-
-    public void visit(ChannelSelection cs) {
-        // nothing to do
-    }
-
-    public void visit(OverlapBehavior ob) {
-        // nothing to do
-    }
-
-    public void visit(SelectedChannelType sct) {
-        // nothing to do
-    }
-
-    public void visit(ShadedRelief sr) {
-        // nothing to do
-    }
-
+  public void visit(ShadedRelief sr) {
+    // nothing to do
+  }
 }

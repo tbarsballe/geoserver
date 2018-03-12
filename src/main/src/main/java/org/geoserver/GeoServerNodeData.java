@@ -4,10 +4,6 @@
  */
 package org.geoserver;
 
-import org.geoserver.ows.util.KvpUtils;
-import org.geoserver.platform.GeoServerExtensions;
-import org.geotools.util.logging.Logging;
-
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.UnknownHostException;
@@ -17,23 +13,24 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.geoserver.ows.util.KvpUtils;
+import org.geoserver.platform.GeoServerExtensions;
+import org.geotools.util.logging.Logging;
 
 /**
  * Holds information about how to identify a geoserver node within a cluster.
- * <p>
- *   Contains both the node identifier itself, and information about how to style the id
- *   for UI purposes.
- * </p>
+ *
+ * <p>Contains both the node identifier itself, and information about how to style the id for UI
+ * purposes.
  */
 public class GeoServerNodeData {
 
-  /**
-   * System property, environment variable, etc... used to specify the node id. 
-   */
+  /** System property, environment variable, etc... used to specify the node id. */
   public static final String GEOSERVER_NODE_OPTS = "GEOSERVER_NODE_OPTS";
 
-  static final String DEFAULT_NODE_ID_TEMPLATE = "position:absolute; top:12px; left:12px; right:28px; width:auto; background:$background; padding: 1px; border: 1px solid #0076a1; color:$color; font-weight:bold";
-  
+  static final String DEFAULT_NODE_ID_TEMPLATE =
+      "position:absolute; top:12px; left:12px; right:28px; width:auto; background:$background; padding: 1px; border: 1px solid #0076a1; color:$color; font-weight:bold";
+
   static final Logger LOGGER = Logging.getLogger(GeoServerNodeData.class);
 
   final String nodeId;
@@ -44,9 +41,7 @@ public class GeoServerNodeData {
     this.nodeIdStyle = nodeIdStyle;
   }
 
-  /**
-   * Creates a node data from a format-options style string.
-   */
+  /** Creates a node data from a format-options style string. */
   public static GeoServerNodeData createFromString(String nodeOpts) {
     String nodeId = null;
     String nodeIdStyle = null;
@@ -80,9 +75,11 @@ public class GeoServerNodeData {
         }
         nodeIdStyle = style.replace("$color", color);
       } catch (Exception e) {
-        LOGGER.log(Level.SEVERE,
+        LOGGER.log(
+            Level.SEVERE,
             "Failed to parse GEOSERVER_NODE_OPTS, expected syntax is id:<nodeid>;color:<css_color>, but got "
-                + nodeOpts + " instead. Disabling NODE_ID GUI element");
+                + nodeOpts
+                + " instead. Disabling NODE_ID GUI element");
         nodeId = null;
         nodeIdStyle = null;
       }
@@ -92,7 +89,8 @@ public class GeoServerNodeData {
   }
 
   /**
-   * Creates the node data from environment variable, system property, etc... define by {@link #GEOSERVER_NODE_OPTS}
+   * Creates the node data from environment variable, system property, etc... define by {@link
+   * #GEOSERVER_NODE_OPTS}
    */
   public static GeoServerNodeData createFromEnvironment() {
     return createFromString(GeoServerExtensions.getProperty(GEOSERVER_NODE_OPTS));
@@ -102,11 +100,11 @@ public class GeoServerNodeData {
     try {
       InetAddress candidateAddress = null;
       // Iterate all NICs (network interface cards)...
-      for (Enumeration interfaces = NetworkInterface.getNetworkInterfaces(); interfaces
-          .hasMoreElements();) {
+      for (Enumeration interfaces = NetworkInterface.getNetworkInterfaces();
+          interfaces.hasMoreElements(); ) {
         NetworkInterface ni = (NetworkInterface) interfaces.nextElement();
         // each interface can have more than one address
-        for (Enumeration inetAddrs = ni.getInetAddresses(); inetAddrs.hasMoreElements();) {
+        for (Enumeration inetAddrs = ni.getInetAddresses(); inetAddrs.hasMoreElements(); ) {
           InetAddress inetAddr = (InetAddress) inetAddrs.nextElement();
           // we are not interested in loopback
           if (!inetAddr.isLoopbackAddress()) {
@@ -129,8 +127,8 @@ public class GeoServerNodeData {
       }
       return jdkSuppliedAddress;
     } catch (Exception e) {
-      UnknownHostException unknownHostException = new UnknownHostException(
-          "Failed to determine LAN address");
+      UnknownHostException unknownHostException =
+          new UnknownHostException("Failed to determine LAN address");
       unknownHostException.initCause(e);
       throw unknownHostException;
     }
@@ -154,16 +152,12 @@ public class GeoServerNodeData {
     return properties;
   }
 
-  /**
-   * The node id.
-   */
+  /** The node id. */
   public String getId() {
     return nodeId;
   }
 
-  /**
-   * The node id styling.
-   */
+  /** The node id styling. */
   public String getIdStyle() {
     return nodeIdStyle;
   }

@@ -13,16 +13,16 @@ import org.geoserver.security.xml.XMLRoleServiceConfig;
 
 /**
  * Configuration panel for {@link XMLRoleService}.
- *  
+ *
  * @author Justin Deoliveira, OpenGeo
  */
 public class XMLRoleServicePanel extends RoleServicePanel<XMLRoleServiceConfig> {
 
-    public XMLRoleServicePanel(String id, IModel<XMLRoleServiceConfig> model) {
-        super(id, model);
+  public XMLRoleServicePanel(String id, IModel<XMLRoleServiceConfig> model) {
+    super(id, model);
 
-        add(new TextField("fileName").setEnabled(isNew()));
-        add(new CheckBox("validating"));
-        add(new TextField("checkInterval"));
-    }
+    add(new TextField("fileName").setEnabled(isNew()));
+    add(new CheckBox("validating"));
+    add(new TextField("checkInterval"));
+  }
 }

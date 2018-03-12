@@ -16,7 +16,7 @@ import org.geoserver.web.publish.PublishedEditTabPanel;
 
 /**
  * A contribution to the layer edit page to set up the layer caching options on a separate tab.
- * 
+ *
  * @author groldan
  * @see GeoServerTileLayerEditor
  * @see PublishedEditTabPanelInfo
@@ -24,27 +24,29 @@ import org.geoserver.web.publish.PublishedEditTabPanel;
  */
 public class LayerCacheOptionsTabPanel extends PublishedEditTabPanel<PublishedInfo> {
 
-    private static final long serialVersionUID = -2995387155768727100L;
-	
-    private GeoServerTileLayerEditor editor;
+  private static final long serialVersionUID = -2995387155768727100L;
 
-    public LayerCacheOptionsTabPanel(String id, IModel<? extends PublishedInfo> layerModel,
-            IModel<GeoServerTileLayerInfo> tileLayerModel) {
-        super(id, layerModel);
+  private GeoServerTileLayerEditor editor;
 
-        if (!(layerModel.getObject() instanceof LayerInfo)
-            || CatalogConfiguration.isLayerExposable((LayerInfo) layerModel.getObject())) {
-            editor = new GeoServerTileLayerEditor("tileLayerEditor", layerModel, tileLayerModel);
-            add(editor);
-        } else {
-            add(new Label("tileLayerEditor", new ResourceModel("geometryLessLabel")));
-        }
+  public LayerCacheOptionsTabPanel(
+      String id,
+      IModel<? extends PublishedInfo> layerModel,
+      IModel<GeoServerTileLayerInfo> tileLayerModel) {
+    super(id, layerModel);
+
+    if (!(layerModel.getObject() instanceof LayerInfo)
+        || CatalogConfiguration.isLayerExposable((LayerInfo) layerModel.getObject())) {
+      editor = new GeoServerTileLayerEditor("tileLayerEditor", layerModel, tileLayerModel);
+      add(editor);
+    } else {
+      add(new Label("tileLayerEditor", new ResourceModel("geometryLessLabel")));
     }
+  }
 
-    @Override
-    public void save() {
-        if (editor != null) {
-            editor.save();
-        }
+  @Override
+  public void save() {
+    if (editor != null) {
+      editor.save();
     }
+  }
 }

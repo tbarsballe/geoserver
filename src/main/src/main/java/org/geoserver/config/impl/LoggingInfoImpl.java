@@ -14,79 +14,71 @@ import org.geoserver.config.LoggingInfo;
  */
 public class LoggingInfoImpl implements LoggingInfo {
 
-    String id;
-    
-    String level;
+  String id;
 
-    String location;
+  String level;
 
-    boolean stdOutLogging;
+  String location;
 
-    public String getId() {
-        return id;
-    }
-    
-    public void setId(String id) {
-        this.id = id;
-    }
-    
-    public String getLevel() {
-        return level;
-    }
+  boolean stdOutLogging;
 
-    public void setLevel(String level) {
-        this.level = level;
-    }
+  public String getId() {
+    return id;
+  }
 
-    public String getLocation() {
-        return location;
-    }
+  public void setId(String id) {
+    this.id = id;
+  }
 
-    public void setLocation(String location) {
-        this.location = location;
-    }
+  public String getLevel() {
+    return level;
+  }
 
-    public boolean isStdOutLogging() {
-        return stdOutLogging;
-    }
+  public void setLevel(String level) {
+    this.level = level;
+  }
 
-    public void setStdOutLogging(boolean stdOutLogging) {
-        this.stdOutLogging = stdOutLogging;
-    }
+  public String getLocation() {
+    return location;
+  }
 
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((level == null) ? 0 : level.hashCode());
-        result = prime * result + ((location == null) ? 0 : location.hashCode());
-        result = prime * result + (stdOutLogging ? 1231 : 1237);
-        return result;
-    }
+  public void setLocation(String location) {
+    this.location = location;
+  }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (!( obj instanceof LoggingInfo ) ) {
-            return false;
-        }
-        LoggingInfo other = (LoggingInfo) obj;
-        if (level == null) {
-            if (other.getLevel() != null)
-                return false;
-        } else if (!level.equals(other.getLevel()))
-            return false;
-        if (location == null) {
-            if (other.getLocation() != null)
-                return false;
-        } else if (!location.equals(other.getLocation()))
-            return false;
-        if (stdOutLogging != other.isStdOutLogging())
-            return false;
-        return true;
+  public boolean isStdOutLogging() {
+    return stdOutLogging;
+  }
+
+  public void setStdOutLogging(boolean stdOutLogging) {
+    this.stdOutLogging = stdOutLogging;
+  }
+
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((level == null) ? 0 : level.hashCode());
+    result = prime * result + ((location == null) ? 0 : location.hashCode());
+    result = prime * result + (stdOutLogging ? 1231 : 1237);
+    return result;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) return true;
+    if (obj == null) return false;
+    if (!(obj instanceof LoggingInfo)) {
+      return false;
     }
-    
+    LoggingInfo other = (LoggingInfo) obj;
+    if (level == null) {
+      if (other.getLevel() != null) return false;
+    } else if (!level.equals(other.getLevel())) return false;
+    if (location == null) {
+      if (other.getLocation() != null) return false;
+    } else if (!location.equals(other.getLocation())) return false;
+    if (stdOutLogging != other.isStdOutLogging()) return false;
+    return true;
+  }
 }

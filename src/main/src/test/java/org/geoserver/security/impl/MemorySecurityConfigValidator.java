@@ -10,8 +10,7 @@ import org.geoserver.security.validation.SecurityConfigValidator;
 
 public class MemorySecurityConfigValidator extends SecurityConfigValidator {
 
-    public MemorySecurityConfigValidator(GeoServerSecurityManager securityManager) {
-        super(securityManager);
-    }
-
+  public MemorySecurityConfigValidator(GeoServerSecurityManager securityManager) {
+    super(securityManager);
+  }
 }

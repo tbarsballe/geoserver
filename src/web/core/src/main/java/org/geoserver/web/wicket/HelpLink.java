@@ -12,11 +12,13 @@ import org.apache.wicket.model.StringResourceModel;
 
 /**
  * Link that pops up a dialog containing contextual help for a component.
- * <p>
- * Usage:
+ *
+ * <p>Usage:
+ *
  * <pre>
  *   new HelpLink("theHelpLinkId", getPage()).setDialog(thePopupDialog)
  * </pre>
+ *
  * <pre>
  *   &lt;fieldset>
  *     &lt;legend>
@@ -25,65 +27,62 @@ import org.apache.wicket.model.StringResourceModel;
  *       &lt;/legend>
  *   &lt;/fieldset>
  * </pre>
- * </p>
- * <p>
- * Help content of the dialog is looked up as a resource in the i18n GEoServerApplication.properties 
- * file. One key is looked up for the help title and one for the help content itself: 
+ *
+ * <p>Help content of the dialog is looked up as a resource in the i18n
+ * GEoServerApplication.properties file. One key is looked up for the help title and one for the
+ * help content itself:
+ *
  * <pre>
  * <containerName>.<id>.help.title=...
  * <containerName>.<id>.help=...
  * </pre>
- * </p>
- * @author Justin Deoliveira, OpenGeo
  *
+ * @author Justin Deoliveira, OpenGeo
  */
 @SuppressWarnings("serial")
 public class HelpLink extends AjaxLink<Void> {
 
-    GeoServerDialog dialog;
-    Component container;
+  GeoServerDialog dialog;
+  Component container;
 
-    /**
-     * Creates a new help link.
-     * 
-     * @param id The link id, this value is used to generate lookup keys.
-     */
-    public HelpLink(String id) {
-        this(id, null);
-    }
+  /**
+   * Creates a new help link.
+   *
+   * @param id The link id, this value is used to generate lookup keys.
+   */
+  public HelpLink(String id) {
+    this(id, null);
+  }
 
-    /**
-     * Creates a new help link.
-     * 
-     * @param id The link id, this value is used to generate lookup keys.
-     * @param container Explicit container element from which lookup keys should be relative to, if
-     *   not specified (ie null) then the containing page is used via getPage()  
-     *  
-     */
-    public HelpLink(String id, Component container) {
-        super(id);
-        this.container = container;
-    }
+  /**
+   * Creates a new help link.
+   *
+   * @param id The link id, this value is used to generate lookup keys.
+   * @param container Explicit container element from which lookup keys should be relative to, if
+   *     not specified (ie null) then the containing page is used via getPage()
+   */
+  public HelpLink(String id, Component container) {
+    super(id);
+    this.container = container;
+  }
 
-    /**
-     * Sets the dialog upon which to display the help.
-     */
-    public HelpLink setDialog(GeoServerDialog dialog) {
-        this.dialog = dialog;
-        return this;
-    }
+  /** Sets the dialog upon which to display the help. */
+  public HelpLink setDialog(GeoServerDialog dialog) {
+    this.dialog = dialog;
+    return this;
+  }
 
-    Component getContainer() {
-        return container != null ? container : getPage();
-    }
+  Component getContainer() {
+    return container != null ? container : getPage();
+  }
 
-    @SuppressWarnings("unchecked")
-    @Override
-    public void onClick(AjaxRequestTarget target) {
-        //load the help title
-        StringResourceModel heading = new StringResourceModel(getId() + ".title", getContainer(), null);
-        StringResourceModel content = new StringResourceModel(getId(), getContainer(), null);
-        
-        dialog.showInfo(target, heading, content);
-    }
+  @SuppressWarnings("unchecked")
+  @Override
+  public void onClick(AjaxRequestTarget target) {
+    // load the help title
+    StringResourceModel heading = new StringResourceModel(getId() + ".title", getContainer(), null);
+    StringResourceModel content = new StringResourceModel(getId(), getContainer(), null);
+
+    dialog.showInfo(target, heading, content);
+  }
 }

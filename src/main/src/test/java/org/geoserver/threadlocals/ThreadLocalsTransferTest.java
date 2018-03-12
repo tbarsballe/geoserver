@@ -16,7 +16,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-
 import org.geoserver.catalog.LayerInfo;
 import org.geoserver.catalog.WorkspaceInfo;
 import org.geoserver.catalog.impl.LayerInfoImpl;
@@ -37,57 +36,58 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 public class ThreadLocalsTransferTest extends GeoServerSystemTestSupport {
 
-    protected ExecutorService executor;
+  protected ExecutorService executor;
 
-    @Override
-    protected void setUpTestData(SystemTestData testData) throws Exception {
-        // no test data needed for this test, only the spring context
-        testData.setUpSecurity();
-    }
+  @Override
+  protected void setUpTestData(SystemTestData testData) throws Exception {
+    // no test data needed for this test, only the spring context
+    testData.setUpSecurity();
+  }
 
-    @Before
-    public void setupExecutor() {
-        executor = Executors.newCachedThreadPool();
-    }
+  @Before
+  public void setupExecutor() {
+    executor = Executors.newCachedThreadPool();
+  }
 
-    @After
-    public void stopExecutor() {
-        executor.shutdown();
-    }
-    
-    @After
-    public void cleanupThreadLocals() {
-        Dispatcher.REQUEST.remove();
-        AdminRequest.finish();
-        LocalPublished.remove();
-        LocalWorkspace.remove();
-        SecurityContextHolder.getContext().setAuthentication(null);
-    }
-    
+  @After
+  public void stopExecutor() {
+    executor.shutdown();
+  }
 
-    @Test
-    public void testThreadLocalTransfer() throws InterruptedException, ExecutionException {
-        final Request request = new Request();
-        Dispatcher.REQUEST.set(request);
-        final LayerInfo layer = new LayerInfoImpl();
-        LocalPublished.set(layer);
-        final WorkspaceInfo ws = new WorkspaceInfoImpl();
-        LocalWorkspace.set(ws);
-        final Object myState = new Object();
-        AdminRequest.start(myState);
-        final Authentication auth = new UsernamePasswordAuthenticationToken("user", "password");
-        SecurityContextHolder.getContext().setAuthentication(auth);
-        final ThreadLocalsTransfer transfer = new ThreadLocalsTransfer();
-        Future<Void> future = executor.submit(new Callable<Void>() {
+  @After
+  public void cleanupThreadLocals() {
+    Dispatcher.REQUEST.remove();
+    AdminRequest.finish();
+    LocalPublished.remove();
+    LocalWorkspace.remove();
+    SecurityContextHolder.getContext().setAuthentication(null);
+  }
 
-            @Override
-            public Void call() throws Exception {
+  @Test
+  public void testThreadLocalTransfer() throws InterruptedException, ExecutionException {
+    final Request request = new Request();
+    Dispatcher.REQUEST.set(request);
+    final LayerInfo layer = new LayerInfoImpl();
+    LocalPublished.set(layer);
+    final WorkspaceInfo ws = new WorkspaceInfoImpl();
+    LocalWorkspace.set(ws);
+    final Object myState = new Object();
+    AdminRequest.start(myState);
+    final Authentication auth = new UsernamePasswordAuthenticationToken("user", "password");
+    SecurityContextHolder.getContext().setAuthentication(auth);
+    final ThreadLocalsTransfer transfer = new ThreadLocalsTransfer();
+    Future<Void> future =
+        executor.submit(
+            new Callable<Void>() {
+
+              @Override
+              public Void call() throws Exception {
                 testApply();
                 testCleanup();
                 return null;
-            }
+              }
 
-            private void testApply() {
+              private void testApply() {
                 transfer.apply();
 
                 // check all thread locals have been applied to the current thread
@@ -96,9 +96,9 @@ public class ThreadLocalsTransferTest extends GeoServerSystemTestSupport {
                 assertSame(layer, LocalPublished.get());
                 assertSame(ws, LocalWorkspace.get());
                 assertSame(auth, SecurityContextHolder.getContext().getAuthentication());
-            }
+              }
 
-            private void testCleanup() {
+              private void testCleanup() {
                 transfer.cleanup();
 
                 // check all thread locals have been cleaned up from the current thread
@@ -107,45 +107,43 @@ public class ThreadLocalsTransferTest extends GeoServerSystemTestSupport {
                 assertNull(LocalPublished.get());
                 assertNull(LocalWorkspace.get());
                 assertNull(SecurityContextHolder.getContext().getAuthentication());
-            }
+              }
+            });
+    future.get();
+  }
 
-        });
-        future.get();
+  protected abstract static class ThreadLocalTransferCallable implements Callable<Void> {
+
+    Thread originalThread;
+
+    ThreadLocalTransfer transfer;
+
+    Map<String, Object> storage = new HashMap<String, Object>();
+
+    public ThreadLocalTransferCallable(ThreadLocalTransfer transfer) {
+      this.originalThread = Thread.currentThread();
+      this.transfer = transfer;
+      this.transfer.collect(storage);
     }
 
-    protected abstract static class ThreadLocalTransferCallable implements Callable<Void> {
+    @Override
+    public Void call() throws Exception {
+      // this is the the main thread, we are actually running inside the thread pool
+      assertNotEquals(originalThread, Thread.currentThread());
 
-        Thread originalThread;
+      // apply the thread local, check it has been applied correctly
+      transfer.apply(storage);
+      assertThreadLocalApplied();
 
-        ThreadLocalTransfer transfer;
+      // clean up, check the therad local is now empty
+      transfer.cleanup();
+      assertThreadLocalCleaned();
 
-        Map<String, Object> storage = new HashMap<String, Object>();
+      return null;
+    }
 
-        public ThreadLocalTransferCallable(ThreadLocalTransfer transfer) {
-            this.originalThread = Thread.currentThread();
-            this.transfer = transfer;
-            this.transfer.collect(storage);
-        }
+    abstract void assertThreadLocalCleaned();
 
-        @Override
-        public Void call() throws Exception {
-            // this is the the main thread, we are actually running inside the thread pool
-            assertNotEquals(originalThread, Thread.currentThread());
-
-            // apply the thread local, check it has been applied correctly
-            transfer.apply(storage);
-            assertThreadLocalApplied();
-
-            // clean up, check the therad local is now empty
-            transfer.cleanup();
-            assertThreadLocalCleaned();
-
-            return null;
-        }
-
-        abstract void assertThreadLocalCleaned();
-
-        abstract void assertThreadLocalApplied();
-
-    };
+    abstract void assertThreadLocalApplied();
+  };
 }

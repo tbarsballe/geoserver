@@ -9,69 +9,67 @@ import java.io.Serializable;
 
 /**
  * Contents of the css page data attribute table
- *  
+ *
  * @author Andrea Aime - GeoSolutions
  */
 class DataAttribute implements Serializable {
 
-    private static final long serialVersionUID = -6470442390382618241L;
+  private static final long serialVersionUID = -6470442390382618241L;
 
-    String name;
-    
-    String type;
-    
-    String sample;
-    
-    String min;
-    
-    String max;
+  String name;
 
-    public DataAttribute(String name, String type, String sample) {
-        super();
-        this.name = name;
-        this.type = type;
-        this.sample = sample;
-    }
+  String type;
 
-    public String getName() {
-        return name;
-    }
+  String sample;
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  String min;
 
-    public String getType() {
-        return type;
-    }
+  String max;
 
-    public void setType(String type) {
-        this.type = type;
-    }
+  public DataAttribute(String name, String type, String sample) {
+    super();
+    this.name = name;
+    this.type = type;
+    this.sample = sample;
+  }
 
-    public String getSample() {
-        return sample;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public void setSample(String sample) {
-        this.sample = sample;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public String getMin() {
-        return min;
-    }
+  public String getType() {
+    return type;
+  }
 
-    public void setMin(String min) {
-        this.min = min;
-    }
+  public void setType(String type) {
+    this.type = type;
+  }
 
-    public String getMax() {
-        return max;
-    }
+  public String getSample() {
+    return sample;
+  }
 
-    public void setMax(String max) {
-        this.max = max;
-    }
-    
-    
+  public void setSample(String sample) {
+    this.sample = sample;
+  }
+
+  public String getMin() {
+    return min;
+  }
+
+  public void setMin(String min) {
+    this.min = min;
+  }
+
+  public String getMax() {
+    return max;
+  }
+
+  public void setMax(String max) {
+    this.max = max;
+  }
 }

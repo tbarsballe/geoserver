@@ -6,7 +6,6 @@
 package org.geoserver.security.web;
 
 import java.util.logging.Logger;
-
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.FormComponentPanel;
@@ -22,60 +21,52 @@ import org.geotools.util.logging.Logging;
 
 /**
  * Base class for configuration panels of a specific class of named security service.
- * 
- * @author Justin Deoliveira, OpenGeo
  *
+ * @author Justin Deoliveira, OpenGeo
  */
-public abstract class SecurityNamedServicePanel<T extends SecurityNamedServiceConfig> 
+public abstract class SecurityNamedServicePanel<T extends SecurityNamedServiceConfig>
     extends FormComponentPanel {
 
-    /**
-     * logger
-     */
-    protected static Logger LOGGER = Logging.getLogger("org.geoserver.web.security");
+  /** logger */
+  protected static Logger LOGGER = Logging.getLogger("org.geoserver.web.security");
 
-    /**
-     * model for underlying config
-     */
-    protected IModel<T> configModel;
+  /** model for underlying config */
+  protected IModel<T> configModel;
 
-    /** 
-     * pop-up dialog
-     */
-    protected GeoServerDialog dialog;
+  /** pop-up dialog */
+  protected GeoServerDialog dialog;
 
-    public SecurityNamedServicePanel(String id, IModel<T> model) {
-        super(id, new Model());
-        this.configModel = model;
+  public SecurityNamedServicePanel(String id, IModel<T> model) {
+    super(id, new Model());
+    this.configModel = model;
 
-        //check for administrator, if not disable the panel and emit warning message
-        boolean isAdmin = getSecurityManager().checkAuthenticationForAdminRole();
-        setEnabled(isAdmin);
+    // check for administrator, if not disable the panel and emit warning message
+    boolean isAdmin = getSecurityManager().checkAuthenticationForAdminRole();
+    setEnabled(isAdmin);
 
-        add(new Label("message", 
-            isAdmin ? new Model() : new StringResourceModel("notAdmin", this, null)));
-        if (!isAdmin) {
-            get("message").add(new AttributeAppender("class", new Model("info-link"), " "));
-        }
-
-        setOutputMarkupId(true);
-        add(new TextField("name").setRequired(true).setEnabled(model.getObject().getId() == null));
-
-        add(dialog = new GeoServerDialog("dialog"));
+    add(
+        new Label(
+            "message", isAdmin ? new Model() : new StringResourceModel("notAdmin", this, null)));
+    if (!isAdmin) {
+      get("message").add(new AttributeAppender("class", new Model("info-link"), " "));
     }
 
-    protected GeoServerSecurityManager getSecurityManager() {
-        return GeoServerApplication.get().getSecurityManager();
-    }
+    setOutputMarkupId(true);
+    add(new TextField("name").setRequired(true).setEnabled(model.getObject().getId() == null));
 
-    /**
-     * Determines if the configuration object represents a new configuration, or an existing one. 
-     */
-    protected boolean isNew() {
-        return configModel.getObject().getId() == null;
-    }
+    add(dialog = new GeoServerDialog("dialog"));
+  }
 
-    public abstract void doSave(T config) throws Exception;
+  protected GeoServerSecurityManager getSecurityManager() {
+    return GeoServerApplication.get().getSecurityManager();
+  }
 
-    public abstract void doLoad(T config) throws Exception;
+  /** Determines if the configuration object represents a new configuration, or an existing one. */
+  protected boolean isNew() {
+    return configModel.getObject().getId() == null;
+  }
+
+  public abstract void doSave(T config) throws Exception;
+
+  public abstract void doLoad(T config) throws Exception;
 }

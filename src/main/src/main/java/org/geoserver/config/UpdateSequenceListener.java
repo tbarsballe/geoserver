@@ -6,7 +6,6 @@
 package org.geoserver.config;
 
 import java.util.List;
-
 import org.geoserver.catalog.CatalogException;
 import org.geoserver.catalog.event.CatalogAddEvent;
 import org.geoserver.catalog.event.CatalogListener;
@@ -14,108 +13,116 @@ import org.geoserver.catalog.event.CatalogModifyEvent;
 import org.geoserver.catalog.event.CatalogPostModifyEvent;
 import org.geoserver.catalog.event.CatalogRemoveEvent;
 
-/**
- * Updates the updateSequence on Catalog events.
- */
+/** Updates the updateSequence on Catalog events. */
 class UpdateSequenceListener implements CatalogListener, ConfigurationListener {
-    
-    GeoServer geoServer;
-    boolean updating = false;
-    
-    public UpdateSequenceListener(GeoServer geoServer) {
-        this.geoServer = geoServer;
-        
-        geoServer.getCatalog().addListener(this);
-        geoServer.addListener(this);
-    }
-    
-    synchronized void incrementSequence() {
-        // prevent infinite loop on configuration update
-        if(updating)
-            return;
-        
-        try { 
-            updating = true;
-            GeoServerInfo gsInfo = geoServer.getGlobal();
-            gsInfo.setUpdateSequence(gsInfo.getUpdateSequence() + 1);
-            geoServer.save(gsInfo);
-        } finally {
-            updating = false;
-        }
-    }
 
-    public void handleAddEvent(CatalogAddEvent event) throws CatalogException {
-        incrementSequence();
-    }
+  GeoServer geoServer;
+  boolean updating = false;
 
-    public void handleRemoveEvent(CatalogRemoveEvent event) throws CatalogException {
-        incrementSequence();
-    }
+  public UpdateSequenceListener(GeoServer geoServer) {
+    this.geoServer = geoServer;
 
-    public void handleModifyEvent(CatalogModifyEvent event) throws CatalogException {
-        // never mind: we need the Post event
-    }
+    geoServer.getCatalog().addListener(this);
+    geoServer.addListener(this);
+  }
 
-    public void handlePostModifyEvent(CatalogPostModifyEvent event) throws CatalogException {
-        incrementSequence();
-    }
+  synchronized void incrementSequence() {
+    // prevent infinite loop on configuration update
+    if (updating) return;
 
-    public void reloaded() {
-        // never mind
+    try {
+      updating = true;
+      GeoServerInfo gsInfo = geoServer.getGlobal();
+      gsInfo.setUpdateSequence(gsInfo.getUpdateSequence() + 1);
+      geoServer.save(gsInfo);
+    } finally {
+      updating = false;
     }
+  }
 
-    public void handleGlobalChange(GeoServerInfo global, List<String> propertyNames,
-            List<Object> oldValues, List<Object> newValues) {
-        // we use the post event
-        
-    }
+  public void handleAddEvent(CatalogAddEvent event) throws CatalogException {
+    incrementSequence();
+  }
 
-    @Override
-    public void handleSettingsAdded(SettingsInfo settings) {
-        incrementSequence();
-    }
+  public void handleRemoveEvent(CatalogRemoveEvent event) throws CatalogException {
+    incrementSequence();
+  }
 
-    @Override
-    public void handleSettingsModified(SettingsInfo settings, List<String> propertyNames,
-            List<Object> oldValues, List<Object> newValues) {
-        // we use post event
-    }
+  public void handleModifyEvent(CatalogModifyEvent event) throws CatalogException {
+    // never mind: we need the Post event
+  }
 
-    @Override
-    public void handleSettingsPostModified(SettingsInfo settings) {
-        incrementSequence();
-    }
+  public void handlePostModifyEvent(CatalogPostModifyEvent event) throws CatalogException {
+    incrementSequence();
+  }
 
-    @Override
-    public void handleSettingsRemoved(SettingsInfo settings) {
-        incrementSequence();
-    }
+  public void reloaded() {
+    // never mind
+  }
 
-    public void handleLoggingChange(LoggingInfo logging, List<String> propertyNames,
-            List<Object> oldValues, List<Object> newValues) {
-        // we don't update the sequence for a logging change, the client cannot notice it   
-    }
+  public void handleGlobalChange(
+      GeoServerInfo global,
+      List<String> propertyNames,
+      List<Object> oldValues,
+      List<Object> newValues) {
+    // we use the post event
 
-    public void handlePostGlobalChange(GeoServerInfo global) {
-        incrementSequence();
-    }
+  }
 
-    public void handlePostLoggingChange(LoggingInfo logging) {
-        // we don't update the sequence for a logging change, the client cannot notice it
-    }
+  @Override
+  public void handleSettingsAdded(SettingsInfo settings) {
+    incrementSequence();
+  }
 
-    public void handlePostServiceChange(ServiceInfo service) {
-        incrementSequence();
-    }
+  @Override
+  public void handleSettingsModified(
+      SettingsInfo settings,
+      List<String> propertyNames,
+      List<Object> oldValues,
+      List<Object> newValues) {
+    // we use post event
+  }
 
-    public void handleServiceChange(ServiceInfo service, List<String> propertyNames,
-            List<Object> oldValues, List<Object> newValues) {
-        // we use the post version        
-    }
+  @Override
+  public void handleSettingsPostModified(SettingsInfo settings) {
+    incrementSequence();
+  }
 
-    @Override
-    public void handleServiceRemove(ServiceInfo service) {
-        incrementSequence();
-    }
+  @Override
+  public void handleSettingsRemoved(SettingsInfo settings) {
+    incrementSequence();
+  }
 
+  public void handleLoggingChange(
+      LoggingInfo logging,
+      List<String> propertyNames,
+      List<Object> oldValues,
+      List<Object> newValues) {
+    // we don't update the sequence for a logging change, the client cannot notice it
+  }
+
+  public void handlePostGlobalChange(GeoServerInfo global) {
+    incrementSequence();
+  }
+
+  public void handlePostLoggingChange(LoggingInfo logging) {
+    // we don't update the sequence for a logging change, the client cannot notice it
+  }
+
+  public void handlePostServiceChange(ServiceInfo service) {
+    incrementSequence();
+  }
+
+  public void handleServiceChange(
+      ServiceInfo service,
+      List<String> propertyNames,
+      List<Object> oldValues,
+      List<Object> newValues) {
+    // we use the post version
+  }
+
+  @Override
+  public void handleServiceRemove(ServiceInfo service) {
+    incrementSequence();
+  }
 }

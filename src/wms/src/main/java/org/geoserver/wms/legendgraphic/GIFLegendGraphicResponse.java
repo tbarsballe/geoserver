@@ -9,7 +9,6 @@ import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
 import java.io.IOException;
 import java.io.OutputStream;
-
 import org.geoserver.ows.Response;
 import org.geoserver.platform.Operation;
 import org.geoserver.platform.ServiceException;
@@ -19,46 +18,41 @@ import org.springframework.util.Assert;
 
 /**
  * OWS {@link Response} that encodes a {@link BufferedImageLegendGraphic} to the image/gif MIME Type
- * 
+ *
  * @author groldan
- * 
  */
 public class GIFLegendGraphicResponse extends AbstractGetLegendGraphicResponse {
 
-    public GIFLegendGraphicResponse() {
-        super(BufferedImageLegendGraphic.class, GIFLegendOutputFormat.MIME_TYPE);
-    }
+  public GIFLegendGraphicResponse() {
+    super(BufferedImageLegendGraphic.class, GIFLegendOutputFormat.MIME_TYPE);
+  }
 
-    /**
-     * @return {@code image/gif}
-     * @see Response#getMimeType(Object, Operation)
-     */
-    @Override
-    public String getMimeType(Object value, Operation operation) throws ServiceException {
-        Assert.isInstanceOf(BufferedImageLegendGraphic.class, value);
-        return GIFLegendOutputFormat.MIME_TYPE;
-    }
-    
-    /**
-     * @param legend
-     *            a {@link BufferedImageLegendGraphic}
-     * @param output
-     *            image destination
-     * @param operation
-     *            Operation descriptor the {@code legend} was produced for
-     * @see Response#write(Object, OutputStream, Operation)
-     */
-    @Override
-    public void write(Object legend, OutputStream output, Operation operation) throws IOException,
-            ServiceException {
+  /**
+   * @return {@code image/gif}
+   * @see Response#getMimeType(Object, Operation)
+   */
+  @Override
+  public String getMimeType(Object value, Operation operation) throws ServiceException {
+    Assert.isInstanceOf(BufferedImageLegendGraphic.class, value);
+    return GIFLegendOutputFormat.MIME_TYPE;
+  }
 
-        Assert.isInstanceOf(BufferedImageLegendGraphic.class, legend);
+  /**
+   * @param legend a {@link BufferedImageLegendGraphic}
+   * @param output image destination
+   * @param operation Operation descriptor the {@code legend} was produced for
+   * @see Response#write(Object, OutputStream, Operation)
+   */
+  @Override
+  public void write(Object legend, OutputStream output, Operation operation)
+      throws IOException, ServiceException {
 
-        BufferedImage legendGraphic = ((BufferedImageLegendGraphic) legend).getLegend();
+    Assert.isInstanceOf(BufferedImageLegendGraphic.class, legend);
 
-        RenderedImage forcedIndexed8Bitmask = ImageUtils.forceIndexed8Bitmask(legendGraphic, null);
-        ImageWorker imageWorker = new ImageWorker(forcedIndexed8Bitmask);
-        imageWorker.writeGIF(output, "LZW", 0.75f);
-    }
+    BufferedImage legendGraphic = ((BufferedImageLegendGraphic) legend).getLegend();
 
+    RenderedImage forcedIndexed8Bitmask = ImageUtils.forceIndexed8Bitmask(legendGraphic, null);
+    ImageWorker imageWorker = new ImageWorker(forcedIndexed8Bitmask);
+    imageWorker.writeGIF(output, "LZW", 0.75f);
+  }
 }

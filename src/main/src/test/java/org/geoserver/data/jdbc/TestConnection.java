@@ -25,308 +25,307 @@ import java.util.concurrent.Executor;
 
 /** Placeholder connection for testing */
 class TestConnection implements Connection {
-    private int timeout;
+  private int timeout;
 
-    private String schema;
+  private String schema;
 
-    private Properties clientInfo;
+  private Properties clientInfo;
 
-    private int holdability;
+  private int holdability;
 
-    private Map<String, Class<?>> typeMap;
+  private Map<String, Class<?>> typeMap;
 
-    private int transactionIsolation;
+  private int transactionIsolation;
 
-    private String catalog;
+  private String catalog;
 
-    private boolean readOnly = false;
+  private boolean readOnly = false;
 
-    private boolean closed = false;
+  private boolean closed = false;
 
-    private boolean autoCommit = true;
+  private boolean autoCommit = true;
 
-    @Override
-    public <T> T unwrap(Class<T> iface) throws SQLException {
-        throw new SQLException("Not a wrapper for " + iface.getSimpleName());
+  @Override
+  public <T> T unwrap(Class<T> iface) throws SQLException {
+    throw new SQLException("Not a wrapper for " + iface.getSimpleName());
+  }
+
+  @Override
+  public boolean isWrapperFor(Class<?> iface) throws SQLException {
+    return false;
+  }
+
+  @Override
+  public Statement createStatement() throws SQLException {
+    throw new SQLException("Not implemented");
+  }
+
+  @Override
+  public PreparedStatement prepareStatement(String sql) throws SQLException {
+    throw new SQLException("Not implemented");
+  }
+
+  @Override
+  public CallableStatement prepareCall(String sql) throws SQLException {
+    throw new SQLException("Not implemented");
+  }
+
+  @Override
+  public String nativeSQL(String sql) throws SQLException {
+    return sql;
+  }
+
+  @Override
+  public void setAutoCommit(boolean autoCommit) throws SQLException {
+    this.autoCommit = autoCommit;
+  }
+
+  @Override
+  public boolean getAutoCommit() throws SQLException {
+    return autoCommit;
+  }
+
+  @Override
+  public void commit() throws SQLException {
+    throw new SQLException("Not implemented");
+  }
+
+  @Override
+  public void rollback() throws SQLException {
+    throw new SQLException("Not implemented");
+  }
+
+  @Override
+  public void close() throws SQLException {
+    this.closed = true;
+  }
+
+  @Override
+  public boolean isClosed() throws SQLException {
+    return closed;
+  }
+
+  @Override
+  public DatabaseMetaData getMetaData() throws SQLException {
+    throw new SQLException("Not implemented");
+  }
+
+  @Override
+  public void setReadOnly(boolean readOnly) throws SQLException {
+    this.readOnly = readOnly;
+  }
+
+  @Override
+  public boolean isReadOnly() throws SQLException {
+    return readOnly;
+  }
+
+  @Override
+  public void setCatalog(String catalog) throws SQLException {
+    this.catalog = catalog;
+  }
+
+  @Override
+  public String getCatalog() throws SQLException {
+    return catalog;
+  }
+
+  @Override
+  public void setTransactionIsolation(int level) throws SQLException {
+    this.transactionIsolation = level;
+  }
+
+  @Override
+  public int getTransactionIsolation() throws SQLException {
+    return transactionIsolation;
+  }
+
+  @Override
+  public SQLWarning getWarnings() throws SQLException {
+    return null;
+  }
+
+  @Override
+  public void clearWarnings() throws SQLException {}
+
+  @Override
+  public Statement createStatement(int resultSetType, int resultSetConcurrency)
+      throws SQLException {
+    throw new SQLException("Not implemented");
+  }
+
+  @Override
+  public PreparedStatement prepareStatement(String sql, int resultSetType, int resultSetConcurrency)
+      throws SQLException {
+    throw new SQLException("Not implemented");
+  }
+
+  @Override
+  public CallableStatement prepareCall(String sql, int resultSetType, int resultSetConcurrency)
+      throws SQLException {
+    throw new SQLException("Not implemented");
+  }
+
+  @Override
+  public Map<String, Class<?>> getTypeMap() throws SQLException {
+    return typeMap;
+  }
+
+  @Override
+  public void setTypeMap(Map<String, Class<?>> map) throws SQLException {
+    this.typeMap = map;
+  }
+
+  @Override
+  public void setHoldability(int holdability) throws SQLException {
+    this.holdability = holdability;
+  }
+
+  @Override
+  public int getHoldability() throws SQLException {
+    return holdability;
+  }
+
+  @Override
+  public Savepoint setSavepoint() throws SQLException {
+    throw new SQLException("Not implemented");
+  }
+
+  @Override
+  public Savepoint setSavepoint(String name) throws SQLException {
+    throw new SQLException("Not implemented");
+  }
+
+  @Override
+  public void rollback(Savepoint savepoint) throws SQLException {
+    throw new SQLException("Not implemented");
+  }
+
+  @Override
+  public void releaseSavepoint(Savepoint savepoint) throws SQLException {
+    throw new SQLException("Not implemented");
+  }
+
+  @Override
+  public Statement createStatement(
+      int resultSetType, int resultSetConcurrency, int resultSetHoldability) throws SQLException {
+    throw new SQLException("Not implemented");
+  }
+
+  @Override
+  public PreparedStatement prepareStatement(
+      String sql, int resultSetType, int resultSetConcurrency, int resultSetHoldability)
+      throws SQLException {
+    throw new SQLException("Not implemented");
+  }
+
+  @Override
+  public CallableStatement prepareCall(
+      String sql, int resultSetType, int resultSetConcurrency, int resultSetHoldability)
+      throws SQLException {
+    throw new SQLException("Not implemented");
+  }
+
+  @Override
+  public PreparedStatement prepareStatement(String sql, int autoGeneratedKeys) throws SQLException {
+    throw new SQLException("Not implemented");
+  }
+
+  @Override
+  public PreparedStatement prepareStatement(String sql, int[] columnIndexes) throws SQLException {
+    throw new SQLException("Not implemented");
+  }
+
+  @Override
+  public PreparedStatement prepareStatement(String sql, String[] columnNames) throws SQLException {
+    throw new SQLException("Not implemented");
+  }
+
+  @Override
+  public Clob createClob() throws SQLException {
+    throw new SQLException("Not implemented");
+  }
+
+  @Override
+  public Blob createBlob() throws SQLException {
+    throw new SQLException("Not implemented");
+  }
+
+  @Override
+  public NClob createNClob() throws SQLException {
+    throw new SQLException("Not implemented");
+  }
+
+  @Override
+  public SQLXML createSQLXML() throws SQLException {
+    throw new SQLException("Not implemented");
+  }
+
+  @Override
+  public boolean isValid(int timeout) throws SQLException {
+    throw new SQLException("Not implemented");
+  }
+
+  @Override
+  public void setClientInfo(String name, String value) throws SQLClientInfoException {
+    if (clientInfo == null) {
+      clientInfo = new Properties();
     }
+    this.clientInfo.put(name, value);
+  }
 
-    @Override
-    public boolean isWrapperFor(Class<?> iface) throws SQLException {
-        return false;
-    }
+  @Override
+  public void setClientInfo(Properties properties) throws SQLClientInfoException {
+    this.clientInfo = properties;
+  }
 
-    @Override
-    public Statement createStatement() throws SQLException {
-        throw new SQLException("Not implemented");
-    }
+  @Override
+  public String getClientInfo(String name) throws SQLException {
+    return clientInfo != null ? clientInfo.getProperty(name) : null;
+  }
 
-    @Override
-    public PreparedStatement prepareStatement(String sql) throws SQLException {
-        throw new SQLException("Not implemented");
-    }
+  @Override
+  public Properties getClientInfo() throws SQLException {
+    return clientInfo;
+  }
 
-    @Override
-    public CallableStatement prepareCall(String sql) throws SQLException {
-        throw new SQLException("Not implemented");
-    }
+  @Override
+  public Array createArrayOf(String typeName, Object[] elements) throws SQLException {
+    throw new SQLException("Not implemented");
+  }
 
-    @Override
-    public String nativeSQL(String sql) throws SQLException {
-        return sql;
-    }
+  @Override
+  public Struct createStruct(String typeName, Object[] attributes) throws SQLException {
+    throw new SQLException("Not implemented");
+  }
 
-    @Override
-    public void setAutoCommit(boolean autoCommit) throws SQLException {
-        this.autoCommit = autoCommit;
-    }
+  @Override
+  public void setSchema(String schema) throws SQLException {
+    this.schema = schema;
+  }
 
-    @Override
-    public boolean getAutoCommit() throws SQLException {
-        return autoCommit;
-    }
+  @Override
+  public String getSchema() throws SQLException {
+    return schema;
+  }
 
-    @Override
-    public void commit() throws SQLException {
-        throw new SQLException("Not implemented");
-    }
+  @Override
+  public void abort(Executor executor) throws SQLException {
+    throw new SQLException("Not implemented");
+  }
 
-    @Override
-    public void rollback() throws SQLException {
-        throw new SQLException("Not implemented");
-    }
+  @Override
+  public void setNetworkTimeout(Executor executor, int milliseconds) throws SQLException {
+    this.timeout = milliseconds;
+  }
 
-    @Override
-    public void close() throws SQLException {
-        this.closed = true;
-    }
+  @Override
+  public int getNetworkTimeout() throws SQLException {
+    return timeout;
+  }
 
-    @Override
-    public boolean isClosed() throws SQLException {
-        return closed;
-    }
-
-    @Override
-    public DatabaseMetaData getMetaData() throws SQLException {
-        throw new SQLException("Not implemented");
-    }
-
-    @Override
-    public void setReadOnly(boolean readOnly) throws SQLException {
-        this.readOnly = readOnly;
-    }
-
-    @Override
-    public boolean isReadOnly() throws SQLException {
-        return readOnly;
-    }
-
-    @Override
-    public void setCatalog(String catalog) throws SQLException {
-        this.catalog = catalog;
-    }
-
-    @Override
-    public String getCatalog() throws SQLException {
-        return catalog;
-    }
-
-    @Override
-    public void setTransactionIsolation(int level) throws SQLException {
-        this.transactionIsolation = level;
-    }
-
-    @Override
-    public int getTransactionIsolation() throws SQLException {
-        return transactionIsolation;
-    }
-
-    @Override
-    public SQLWarning getWarnings() throws SQLException {
-        return null;
-    }
-
-    @Override
-    public void clearWarnings() throws SQLException {
-    }
-
-    @Override
-    public Statement createStatement(int resultSetType, int resultSetConcurrency)
-            throws SQLException {
-        throw new SQLException("Not implemented");
-    }
-
-    @Override
-    public PreparedStatement prepareStatement(String sql, int resultSetType,
-            int resultSetConcurrency) throws SQLException {
-        throw new SQLException("Not implemented");
-    }
-
-    @Override
-    public CallableStatement prepareCall(String sql, int resultSetType, int resultSetConcurrency)
-            throws SQLException {
-        throw new SQLException("Not implemented");
-    }
-
-    @Override
-    public Map<String, Class<?>> getTypeMap() throws SQLException {
-        return typeMap;
-    }
-
-    @Override
-    public void setTypeMap(Map<String, Class<?>> map) throws SQLException {
-        this.typeMap = map;
-    }
-
-    @Override
-    public void setHoldability(int holdability) throws SQLException {
-        this.holdability = holdability;
-    }
-
-    @Override
-    public int getHoldability() throws SQLException {
-        return holdability;
-    }
-
-    @Override
-    public Savepoint setSavepoint() throws SQLException {
-        throw new SQLException("Not implemented");
-    }
-
-    @Override
-    public Savepoint setSavepoint(String name) throws SQLException {
-        throw new SQLException("Not implemented");
-    }
-
-    @Override
-    public void rollback(Savepoint savepoint) throws SQLException {
-        throw new SQLException("Not implemented");
-    }
-
-    @Override
-    public void releaseSavepoint(Savepoint savepoint) throws SQLException {
-        throw new SQLException("Not implemented");
-    }
-
-    @Override
-    public Statement createStatement(int resultSetType, int resultSetConcurrency,
-            int resultSetHoldability) throws SQLException {
-        throw new SQLException("Not implemented");
-    }
-
-    @Override
-    public PreparedStatement prepareStatement(String sql, int resultSetType,
-            int resultSetConcurrency, int resultSetHoldability) throws SQLException {
-        throw new SQLException("Not implemented");
-    }
-
-    @Override
-    public CallableStatement prepareCall(String sql, int resultSetType, int resultSetConcurrency,
-            int resultSetHoldability) throws SQLException {
-        throw new SQLException("Not implemented");
-    }
-
-    @Override
-    public PreparedStatement prepareStatement(String sql, int autoGeneratedKeys)
-            throws SQLException {
-        throw new SQLException("Not implemented");
-    }
-
-    @Override
-    public PreparedStatement prepareStatement(String sql, int[] columnIndexes) throws SQLException {
-        throw new SQLException("Not implemented");
-    }
-
-    @Override
-    public PreparedStatement prepareStatement(String sql, String[] columnNames) throws SQLException {
-        throw new SQLException("Not implemented");
-    }
-
-    @Override
-    public Clob createClob() throws SQLException {
-        throw new SQLException("Not implemented");
-    }
-
-    @Override
-    public Blob createBlob() throws SQLException {
-        throw new SQLException("Not implemented");
-    }
-
-    @Override
-    public NClob createNClob() throws SQLException {
-        throw new SQLException("Not implemented");
-    }
-
-    @Override
-    public SQLXML createSQLXML() throws SQLException {
-        throw new SQLException("Not implemented");
-    }
-
-    @Override
-    public boolean isValid(int timeout) throws SQLException {
-        throw new SQLException("Not implemented");
-    }
-
-    @Override
-    public void setClientInfo(String name, String value) throws SQLClientInfoException {
-        if (clientInfo == null) {
-            clientInfo = new Properties();
-        }
-        this.clientInfo.put(name, value);
-    }
-
-    @Override
-    public void setClientInfo(Properties properties) throws SQLClientInfoException {
-        this.clientInfo = properties;
-    }
-
-    @Override
-    public String getClientInfo(String name) throws SQLException {
-        return clientInfo != null ? clientInfo.getProperty(name) : null;
-    }
-
-    @Override
-    public Properties getClientInfo() throws SQLException {
-        return clientInfo;
-    }
-
-    @Override
-    public Array createArrayOf(String typeName, Object[] elements) throws SQLException {
-        throw new SQLException("Not implemented");
-    }
-
-    @Override
-    public Struct createStruct(String typeName, Object[] attributes) throws SQLException {
-        throw new SQLException("Not implemented");
-    }
-
-    @Override
-    public void setSchema(String schema) throws SQLException {
-        this.schema = schema;
-    }
-
-    @Override
-    public String getSchema() throws SQLException {
-        return schema;
-    }
-
-    @Override
-    public void abort(Executor executor) throws SQLException {
-        throw new SQLException("Not implemented");
-    }
-
-    @Override
-    public void setNetworkTimeout(Executor executor, int milliseconds) throws SQLException {
-        this.timeout = milliseconds;
-    }
-
-    @Override
-    public int getNetworkTimeout() throws SQLException {
-        return timeout;
-    }
-
-    @Override
-    public String toString() {
-        return getClass().getSimpleName();
-    }
-
+  @Override
+  public String toString() {
+    return getClass().getSimpleName();
+  }
 }

@@ -23,99 +23,95 @@ import org.opengis.coverage.grid.Format;
 
 public class CoverageStoreNewPageTest extends GeoServerWicketTestSupport {
 
-    /**
-     * print page structure?
-     */
-    private static final boolean debugMode = false;
+  /** print page structure? */
+  private static final boolean debugMode = false;
 
-    String formatType;
+  String formatType;
 
-    String formatDescription;
+  String formatDescription;
 
-    @Before
-    public void init() {
-        Format format = new GTopo30FormatFactory().createFormat();
-        formatType = format.getName();
-        formatDescription = format.getDescription();
+  @Before
+  public void init() {
+    Format format = new GTopo30FormatFactory().createFormat();
+    formatType = format.getName();
+    formatDescription = format.getDescription();
+  }
+
+  private CoverageStoreNewPage startPage() {
+
+    final CoverageStoreNewPage page = new CoverageStoreNewPage(formatType);
+    login();
+    tester.startPage(page);
+
+    if (debugMode) {
+      print(page, true, true);
     }
 
-    private CoverageStoreNewPage startPage() {
+    return page;
+  }
 
-        final CoverageStoreNewPage page = new CoverageStoreNewPage(formatType);
-        login();
-        tester.startPage(page);
+  @Test
+  public void testInitCreateNewCoverageStoreInvalidDataStoreFactoryName() {
 
-        if (debugMode) {
-            print(page, true, true);
-        }
-
-        return page;
+    final String formatName = "_invalid_";
+    try {
+      new CoverageStoreNewPage(formatName);
+      fail("Expected IAE on invalid format name");
+    } catch (IllegalArgumentException e) {
+      assertTrue(e.getMessage(), e.getMessage().startsWith("Can't obtain the factory"));
     }
+  }
 
-    @Test
-    public void testInitCreateNewCoverageStoreInvalidDataStoreFactoryName() {
+  /** A kind of smoke test that only asserts the page is rendered when first loaded */
+  @Test
+  public void testPageRendersOnLoad() {
 
-        final String formatName = "_invalid_";
-        try {
-            new CoverageStoreNewPage(formatName);
-            fail("Expected IAE on invalid format name");
-        } catch (IllegalArgumentException e) {
-            assertTrue(e.getMessage(), e.getMessage().startsWith("Can't obtain the factory"));
-        }
-    }
+    startPage();
 
-    /**
-     * A kind of smoke test that only asserts the page is rendered when first loaded
-     */
-    @Test
-    public void testPageRendersOnLoad() {
+    tester.assertLabel("rasterStoreForm:storeType", formatType);
+    tester.assertLabel("rasterStoreForm:storeTypeDescription", formatDescription);
 
-        startPage();
+    tester.assertComponent("rasterStoreForm:workspacePanel", WorkspacePanel.class);
+  }
 
-        tester.assertLabel("rasterStoreForm:storeType", formatType);
-        tester.assertLabel("rasterStoreForm:storeTypeDescription", formatDescription);
+  @Test
+  public void testInitialModelState() {
 
-        tester.assertComponent("rasterStoreForm:workspacePanel", WorkspacePanel.class);
-    }
+    CoverageStoreNewPage page = startPage();
+    // print(page, true, true);
 
-    @Test
-    public void testInitialModelState() {
+    assertNull(page.getDefaultModelObject());
 
-        CoverageStoreNewPage page = startPage();
-        // print(page, true, true);
+    tester.assertModelValue("rasterStoreForm:enabledPanel:paramValue", Boolean.TRUE);
+    tester.assertModelValue(
+        "rasterStoreForm:workspacePanel:border:border_body:paramValue",
+        getCatalog().getDefaultWorkspace());
+    tester.assertModelValue("rasterStoreForm:parametersPanel:url", "file:data/example.extension");
+  }
 
-        assertNull(page.getDefaultModelObject());
+  @Test
+  public void testMultipleResources() {
 
-        tester.assertModelValue("rasterStoreForm:enabledPanel:paramValue", Boolean.TRUE);
-        tester.assertModelValue("rasterStoreForm:workspacePanel:border:border_body:paramValue", getCatalog()
-                .getDefaultWorkspace());
-        tester.assertModelValue("rasterStoreForm:parametersPanel:url",
-                "file:data/example.extension");
-    }
+    CoverageStoreNewPage page = startPage();
 
-    @Test
-    public void testMultipleResources() {
+    assertNull(page.getDefaultModelObject());
 
-        CoverageStoreNewPage page = startPage();
+    tester.assertModelValue("rasterStoreForm:enabledPanel:paramValue", Boolean.TRUE);
+    tester.assertModelValue(
+        "rasterStoreForm:workspacePanel:border:border_body:paramValue",
+        getCatalog().getDefaultWorkspace());
+    tester.assertModelValue("rasterStoreForm:parametersPanel:url", "file:data/example.extension");
+  }
 
-        assertNull(page.getDefaultModelObject());
+  @Test
+  public void testGeoPackageRaster() {
+    formatType = new GeoPackageFormat().getName();
+    final CoverageStoreNewPage page = new CoverageStoreNewPage(formatType);
+    tester.startPage(page);
 
-        tester.assertModelValue("rasterStoreForm:enabledPanel:paramValue", Boolean.TRUE);
-        tester.assertModelValue("rasterStoreForm:workspacePanel:border:border_body:paramValue", getCatalog()
-                .getDefaultWorkspace());
-        tester.assertModelValue("rasterStoreForm:parametersPanel:url",
-                "file:data/example.extension");
-
-    }
-    
-    @Test
-    public void testGeoPackageRaster() {
-        formatType = new GeoPackageFormat().getName();
-        final CoverageStoreNewPage page = new CoverageStoreNewPage(formatType);
-        tester.startPage(page);
-        
-        tester.debugComponentTrees();
-        Component urlComponent = tester.getComponentFromLastRenderedPage("rasterStoreForm:parametersPanel:url");
-        assertThat(urlComponent, instanceOf(FileParamPanel.class));
-    }
+    tester.debugComponentTrees();
+    Component urlComponent =
+        tester.getComponentFromLastRenderedPage("rasterStoreForm:parametersPanel:url");
+    assertThat(urlComponent, instanceOf(FileParamPanel.class));
+  }
 }

@@ -6,21 +6,18 @@
 package org.geoserver.wfs.xml.v1_1_0;
 
 import java.util.List;
-
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.namespace.QName;
-
 import net.opengis.wfs.WfsFactory;
-
 import org.geotools.xml.AbstractSimpleBinding;
 import org.geotools.xml.InstanceComponent;
-
 
 /**
  * Binding object for the type http://www.opengis.net/wfs:TypeNameListType.
  *
  * <p>
- *        <pre>
+ *
+ * <pre>
  *         <code>
  *  &lt;xsd:simpleType name="TypeNameListType"&gt;
  *      &lt;xsd:restriction base="wfs:Base_TypeNameListType"&gt;
@@ -41,48 +38,48 @@ import org.geotools.xml.InstanceComponent;
  *
  *          </code>
  *         </pre>
+ *
  * @generated
  */
 public class TypeNameListTypeBinding extends AbstractSimpleBinding {
-    WfsFactory wfsfactory;
-    NamespaceContext namespaceContext;
+  WfsFactory wfsfactory;
+  NamespaceContext namespaceContext;
 
-    public TypeNameListTypeBinding(WfsFactory wfsfactory, NamespaceContext namespaceContext) {
-        this.wfsfactory = wfsfactory;
-        this.namespaceContext = namespaceContext;
-    }
+  public TypeNameListTypeBinding(WfsFactory wfsfactory, NamespaceContext namespaceContext) {
+    this.wfsfactory = wfsfactory;
+    this.namespaceContext = namespaceContext;
+  }
 
-    /**
-     * @generated
-     */
-    public QName getTarget() {
-        return WFS.TYPENAMELISTTYPE;
-    }
+  /** @generated */
+  public QName getTarget() {
+    return WFS.TYPENAMELISTTYPE;
+  }
 
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     *
-     * @generated modifiable
-     */
-    public Class getType() {
-        return List.class;
-    }
+  /**
+   *
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   *
+   * @generated modifiable
+   */
+  public Class getType() {
+    return List.class;
+  }
 
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     *
-     * @generated modifiable
-     */
-    public Object parse(InstanceComponent instance, Object value)
-        throws Exception {
-        //TODO: implement list support in parser so that passed in value is a list
-        //&lt;xsd:pattern value="((\w:)?\w(=\w)?){1,}"&gt;
+  /**
+   *
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   *
+   * @generated modifiable
+   */
+  public Object parse(InstanceComponent instance, Object value) throws Exception {
+    // TODO: implement list support in parser so that passed in value is a list
+    // &lt;xsd:pattern value="((\w:)?\w(=\w)?){1,}"&gt;
 
-        //GR: List support in parser implemented, casting to List directly
-        List qNames = (List) value;
+    // GR: List support in parser implemented, casting to List directly
+    List qNames = (List) value;
 
-        return qNames;
-    }
+    return qNames;
+  }
 }

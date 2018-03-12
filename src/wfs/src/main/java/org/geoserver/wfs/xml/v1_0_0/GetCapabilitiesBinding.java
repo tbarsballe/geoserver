@@ -6,17 +6,15 @@
 package org.geoserver.wfs.xml.v1_0_0;
 
 import javax.xml.namespace.QName;
-
 import net.opengis.wfs.WfsFactory;
-
 import org.geotools.xml.AbstractComplexEMFBinding;
-
 
 /**
  * Binding object for the element http://www.opengis.net/wfs:GetCapabilities.
  *
  * <p>
- *        <pre>
+ *
+ * <pre>
  *         <code>
  *  &lt;xsd:element name="GetCapabilities" type="wfs:GetCapabilitiesType"&gt;
  *          &lt;xsd:annotation&gt;          &lt;xsd:documentation&gt;             The
@@ -32,17 +30,16 @@ import org.geotools.xml.AbstractComplexEMFBinding;
  *
  *          </code>
  *         </pre>
+ *
  * @generated
  */
 public class GetCapabilitiesBinding extends AbstractComplexEMFBinding {
-    public GetCapabilitiesBinding(WfsFactory wfsfactory) {
-        super( wfsfactory );
-    }
+  public GetCapabilitiesBinding(WfsFactory wfsfactory) {
+    super(wfsfactory);
+  }
 
-    /**
-     * @generated
-     */
-    public QName getTarget() {
-        return WFS.GETCAPABILITIES;
-    }
+  /** @generated */
+  public QName getTarget() {
+    return WFS.GETCAPABILITIES;
+  }
 }

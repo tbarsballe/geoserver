@@ -8,8 +8,8 @@ package org.geoserver.security.jdbc;
 
 public class MySqlUserGroupServiceTest extends JDBCUserGroupServiceTest {
 
-    @Override
-    protected String getFixtureId() {
-        return "mysql";
-    }
+  @Override
+  protected String getFixtureId() {
+    return "mysql";
+  }
 }

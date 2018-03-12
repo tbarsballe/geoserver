@@ -10,13 +10,13 @@ import org.junit.Test;
 
 public class NewCachedLayerPageTest extends GeoServerWicketTestSupport {
 
-    @Test
-    public void testPageLoad() {
-        NewCachedLayerPage page = new NewCachedLayerPage();
+  @Test
+  public void testPageLoad() {
+    NewCachedLayerPage page = new NewCachedLayerPage();
 
-        tester.startPage(page);
-        tester.assertRenderedPage(NewCachedLayerPage.class);
+    tester.startPage(page);
+    tester.assertRenderedPage(NewCachedLayerPage.class);
 
-        // print(page, true, true);
-    }
+    // print(page, true, true);
+  }
 }

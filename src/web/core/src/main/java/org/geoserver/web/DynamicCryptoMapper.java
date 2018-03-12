@@ -14,52 +14,50 @@ import org.apache.wicket.request.mapper.IRequestMapperDelegate;
 import org.geoserver.security.GeoServerSecurityManager;
 
 /**
- * Switches between a normal mapper that does not add hash segments at the end of the url making bookmarkable
- * url actually stateless, and a crypto one that does it all
- * 
+ * Switches between a normal mapper that does not add hash segments at the end of the url making
+ * bookmarkable url actually stateless, and a crypto one that does it all
+ *
  * @author Andrea Aime - GeoSolutions
  */
 class DynamicCryptoMapper implements IRequestMapperDelegate {
 
-    private IRequestMapper plainMapper;
-    private CryptoMapper cryptoMapper;
-    private GeoServerSecurityManager securityManager;
+  private IRequestMapper plainMapper;
+  private CryptoMapper cryptoMapper;
+  private GeoServerSecurityManager securityManager;
 
-    public DynamicCryptoMapper(IRequestMapper plainMapper, GeoServerSecurityManager securityManager, GeoServerApplication application) {
-        this.securityManager = securityManager;
-        this.plainMapper = plainMapper;
-        this.securityManager = securityManager;
-        // GeoServerCryptProvider cryptProvider = new GeoServerCryptProvider(securityManager);
-        this.cryptoMapper = new CryptoMapper(plainMapper, application);
-    }
-    
-    IRequestMapper getMapper() {
-        if (securityManager.isEncryptingUrlParams()) {
-            return cryptoMapper;
-        } else {
-            return plainMapper;
-        }
-    }
-    
-    public IRequestHandler mapRequest(Request request) {
-        return getMapper().mapRequest(request);
-    }
+  public DynamicCryptoMapper(
+      IRequestMapper plainMapper,
+      GeoServerSecurityManager securityManager,
+      GeoServerApplication application) {
+    this.securityManager = securityManager;
+    this.plainMapper = plainMapper;
+    this.securityManager = securityManager;
+    // GeoServerCryptProvider cryptProvider = new GeoServerCryptProvider(securityManager);
+    this.cryptoMapper = new CryptoMapper(plainMapper, application);
+  }
 
-    public int getCompatibilityScore(Request request) {
-        return getMapper().getCompatibilityScore(request);
+  IRequestMapper getMapper() {
+    if (securityManager.isEncryptingUrlParams()) {
+      return cryptoMapper;
+    } else {
+      return plainMapper;
     }
+  }
 
-    public Url mapHandler(IRequestHandler requestHandler) {
-        return getMapper().mapHandler(requestHandler);
-    }
+  public IRequestHandler mapRequest(Request request) {
+    return getMapper().mapRequest(request);
+  }
 
-    @Override
-    public IRequestMapper getDelegateMapper() {
-        return getMapper();
-    }
-    
-    
+  public int getCompatibilityScore(Request request) {
+    return getMapper().getCompatibilityScore(request);
+  }
 
-    
-    
+  public Url mapHandler(IRequestHandler requestHandler) {
+    return getMapper().mapHandler(requestHandler);
+  }
+
+  @Override
+  public IRequestMapper getDelegateMapper() {
+    return getMapper();
+  }
 }

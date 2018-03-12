@@ -17,95 +17,76 @@ import java.awt.image.ImageObserver;
 import java.awt.image.RenderedImage;
 import java.awt.image.renderable.RenderableImage;
 import java.text.AttributedCharacterIterator;
-
 import org.apache.batik.ext.awt.g2d.AbstractGraphics2D;
 import org.apache.batik.ext.awt.g2d.GraphicContext;
 
 /**
  * Fake Graphics2D, pretends to draw but actually does nothing (Very dishonest!)
- * 
- * Implementation note, the base class provides a lot of state management ensuring clients
- * do not go NPE when asking for current clip, color, stroke and the like 
+ *
+ * <p>Implementation note, the base class provides a lot of state management ensuring clients do not
+ * go NPE when asking for current clip, color, stroke and the like
  *
  * @author Andrea Aime - GeoSolutions
  */
 class NoOpGraphics2D extends AbstractGraphics2D {
 
-    public NoOpGraphics2D() {
-        super(true);
-        this.gc = new GraphicContext();
-    }
+  public NoOpGraphics2D() {
+    super(true);
+    this.gc = new GraphicContext();
+  }
 
-    @Override
-    public void draw(Shape s) {
-    }
+  @Override
+  public void draw(Shape s) {}
 
-    @Override
-    public void drawRenderedImage(RenderedImage img, AffineTransform xform) {
-    }
+  @Override
+  public void drawRenderedImage(RenderedImage img, AffineTransform xform) {}
 
-    @Override
-    public void drawRenderableImage(RenderableImage img, AffineTransform xform) {
+  @Override
+  public void drawRenderableImage(RenderableImage img, AffineTransform xform) {}
 
-    }
+  @Override
+  public void drawString(String str, float x, float y) {}
 
-    @Override
-    public void drawString(String str, float x, float y) {
+  @Override
+  public void drawString(AttributedCharacterIterator iterator, float x, float y) {}
 
-    }
+  @Override
+  public void fill(Shape s) {}
 
-    @Override
-    public void drawString(AttributedCharacterIterator iterator, float x, float y) {
+  @Override
+  public GraphicsConfiguration getDeviceConfiguration() {
 
-    }
+    return null;
+  }
 
-    @Override
-    public void fill(Shape s) {
+  @Override
+  public Graphics create() {
 
-    }
+    return this;
+  }
 
-    @Override
-    public GraphicsConfiguration getDeviceConfiguration() {
+  @Override
+  public void setXORMode(Color c1) {}
 
-        return null;
-    }
+  @Override
+  public FontMetrics getFontMetrics(Font f) {
+    // works also in headless mode
+    return new Canvas().getFontMetrics(f);
+  }
 
-    @Override
-    public Graphics create() {
+  @Override
+  public void copyArea(int x, int y, int width, int height, int dx, int dy) {}
 
-        return this;
-    }
+  @Override
+  public boolean drawImage(Image img, int x, int y, ImageObserver observer) {
+    return false;
+  }
 
-    @Override
-    public void setXORMode(Color c1) {
+  @Override
+  public boolean drawImage(Image img, int x, int y, int width, int height, ImageObserver observer) {
+    return false;
+  }
 
-    }
-
-    @Override
-    public FontMetrics getFontMetrics(Font f) {
-        // works also in headless mode
-        return new Canvas().getFontMetrics(f);
-    }
-
-    @Override
-    public void copyArea(int x, int y, int width, int height, int dx, int dy) {
-
-    }
-
-    @Override
-    public boolean drawImage(Image img, int x, int y, ImageObserver observer) {
-        return false;
-    }
-
-    @Override
-    public boolean drawImage(Image img, int x, int y, int width, int height,
-            ImageObserver observer) {
-        return false;
-    }
-
-    @Override
-    public void dispose() {
-        
-    }
-
+  @Override
+  public void dispose() {}
 }

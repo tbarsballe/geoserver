@@ -12,29 +12,28 @@ import org.geoserver.web.services.BaseServiceAdminPage;
 
 public class WMTSAdminPage extends BaseServiceAdminPage<WMTSInfo> {
 
-    public WMTSAdminPage() {
-        this(new PageParameters());
-    }
+  public WMTSAdminPage() {
+    this(new PageParameters());
+  }
 
-    public WMTSAdminPage(PageParameters pageParams) {
-        super(pageParams);
-    }
+  public WMTSAdminPage(PageParameters pageParams) {
+    super(pageParams);
+  }
 
-    public WMTSAdminPage(WMTSInfo service) {
-        super(service);
-    }
+  public WMTSAdminPage(WMTSInfo service) {
+    super(service);
+  }
 
-    @Override
-    protected Class<WMTSInfo> getServiceClass() {
-        return WMTSInfo.class;
-    }
+  @Override
+  protected Class<WMTSInfo> getServiceClass() {
+    return WMTSInfo.class;
+  }
 
-    @Override
-    protected String getServiceName() {
-        return "WMTS";
-    }
+  @Override
+  protected String getServiceName() {
+    return "WMTS";
+  }
 
-    @Override
-    protected void build(IModel info, Form form) {
-    }
+  @Override
+  protected void build(IModel info, Form form) {}
 }

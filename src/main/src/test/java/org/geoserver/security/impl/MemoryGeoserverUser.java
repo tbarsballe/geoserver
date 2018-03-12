@@ -4,35 +4,34 @@
  * application directory.
  */
 
-
 package org.geoserver.security.impl;
+
 import org.geoserver.security.GeoServerUserGroupService;
 
 /**
  * Needed to test if subclassing works
- * 
- * @author christian
  *
+ * @author christian
  */
 public class MemoryGeoserverUser extends GeoServerUser {
 
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-    public MemoryGeoserverUser(String username, GeoServerUserGroupService service) {
-        super(username);
-    }
+  public MemoryGeoserverUser(String username, GeoServerUserGroupService service) {
+    super(username);
+  }
 
-    public MemoryGeoserverUser(MemoryGeoserverUser other) {
-        super(other);
-    }
+  public MemoryGeoserverUser(MemoryGeoserverUser other) {
+    super(other);
+  }
 
-    @Override
-    public GeoServerUser copy() {
-        return new MemoryGeoserverUser(this);
-    }
-    
-    @Override
-    public void eraseCredentials() {
-        // do nothing
-    }
+  @Override
+  public GeoServerUser copy() {
+    return new MemoryGeoserverUser(this);
+  }
+
+  @Override
+  public void eraseCredentials() {
+    // do nothing
+  }
 }

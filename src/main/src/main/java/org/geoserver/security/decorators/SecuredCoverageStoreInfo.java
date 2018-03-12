@@ -14,21 +14,20 @@ import org.geoserver.security.WrapperPolicy;
 import org.geotools.coverage.grid.io.AbstractGridFormat;
 
 public class SecuredCoverageStoreInfo extends DecoratingCoverageStoreInfo {
-    WrapperPolicy policy;
+  WrapperPolicy policy;
 
-    public SecuredCoverageStoreInfo(CoverageStoreInfo delegate, WrapperPolicy policy) {
-        super(delegate);
-        this.policy = policy;
+  public SecuredCoverageStoreInfo(CoverageStoreInfo delegate, WrapperPolicy policy) {
+    super(delegate);
+    this.policy = policy;
+  }
+
+  @Override
+  public AbstractGridFormat getFormat() {
+    Request request = Dispatcher.REQUEST.get();
+    if (policy.level == AccessLevel.METADATA
+        && (request == null || !"GetCapabilities".equalsIgnoreCase(request.getRequest()))) {
+      throw SecureCatalogImpl.unauthorizedAccess(this.getName());
     }
-
-    @Override
-    public AbstractGridFormat getFormat() {
-        Request request = Dispatcher.REQUEST.get();
-        if(policy.level == AccessLevel.METADATA && 
-                (request == null || !"GetCapabilities".equalsIgnoreCase(request.getRequest()))) {
-            throw SecureCatalogImpl.unauthorizedAccess(this.getName());
-        }
-        return super.getFormat();
-    }
-
+    return super.getFormat();
+  }
 }

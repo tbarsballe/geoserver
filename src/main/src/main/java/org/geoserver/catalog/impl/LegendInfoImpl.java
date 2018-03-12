@@ -9,60 +9,68 @@ import org.geoserver.catalog.LegendInfo;
 
 public class LegendInfoImpl implements LegendInfo {
 
-    String id;
+  String id;
 
-    int width;
+  int width;
 
-    int height;
+  int height;
 
-    String format;
+  String format;
 
-    String onlineResource;
-    
-    public String getId() {
-        return id;
-    }
+  String onlineResource;
 
-    public void setId(String id) {
-        this.id = id;
-    }
+  public String getId() {
+    return id;
+  }
 
-    public int getWidth() {
-        return width;
-    }
+  public void setId(String id) {
+    this.id = id;
+  }
 
-    public void setWidth(int width) {
-        this.width = width;
-    }
+  public int getWidth() {
+    return width;
+  }
 
-    public int getHeight() {
-        return height;
-    }
+  public void setWidth(int width) {
+    this.width = width;
+  }
 
-    public void setHeight(int height) {
-        this.height = height;
-    }
+  public int getHeight() {
+    return height;
+  }
 
-    public String getFormat() {
-        return format;
-    }
+  public void setHeight(int height) {
+    this.height = height;
+  }
 
-    public void setFormat(String format) {
-        this.format = format;
-    }
+  public String getFormat() {
+    return format;
+  }
 
-    public String getOnlineResource() {
-        return onlineResource;
-    }
+  public void setFormat(String format) {
+    this.format = format;
+  }
 
-    public void setOnlineResource(String onlineResource) {
-        this.onlineResource = onlineResource;
-    }
+  public String getOnlineResource() {
+    return onlineResource;
+  }
 
-    @Override
-    public String toString() {
-        return new StringBuilder(getClass().getSimpleName()).append("[width:").append(width)
-                .append(", height:").append(height).append(", format:").append(format).append(
-                        ", onlineResource:").append(onlineResource).append(']').toString();
-    }
+  public void setOnlineResource(String onlineResource) {
+    this.onlineResource = onlineResource;
+  }
+
+  @Override
+  public String toString() {
+    return new StringBuilder(getClass().getSimpleName())
+        .append("[width:")
+        .append(width)
+        .append(", height:")
+        .append(height)
+        .append(", format:")
+        .append(format)
+        .append(", onlineResource:")
+        .append(onlineResource)
+        .append(']')
+        .toString();
+  }
 }

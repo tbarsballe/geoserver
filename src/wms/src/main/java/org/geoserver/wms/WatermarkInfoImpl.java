@@ -7,46 +7,45 @@ package org.geoserver.wms;
 
 public class WatermarkInfoImpl implements WatermarkInfo {
 
-    private static final long serialVersionUID = -3306354572824960991L;
+  private static final long serialVersionUID = -3306354572824960991L;
 
-    boolean enabled;
+  boolean enabled;
 
-    Position position = Position.BOT_RIGHT;
+  Position position = Position.BOT_RIGHT;
 
-    int transparency = 100;
+  int transparency = 100;
 
-    String url;
+  String url;
 
-    public boolean isEnabled() {
-        return enabled;
-    }
+  public boolean isEnabled() {
+    return enabled;
+  }
 
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
+  public void setEnabled(boolean enabled) {
+    this.enabled = enabled;
+  }
 
-    public Position getPosition() {
-        return position;
-    }
+  public Position getPosition() {
+    return position;
+  }
 
-    public void setPosition(Position position) {
-        this.position = position;
-    }
+  public void setPosition(Position position) {
+    this.position = position;
+  }
 
-    public int getTransparency() {
-        return transparency;
-    }
+  public int getTransparency() {
+    return transparency;
+  }
 
-    public void setTransparency(int transparency) {
-        this.transparency = transparency;
-    }
+  public void setTransparency(int transparency) {
+    this.transparency = transparency;
+  }
 
-    public String getURL() {
-        return url;
-    }
+  public String getURL() {
+    return url;
+  }
 
-    public void setURL(String url) {
-        this.url = url;
-    }
-
+  public void setURL(String url) {
+    this.url = url;
+  }
 }

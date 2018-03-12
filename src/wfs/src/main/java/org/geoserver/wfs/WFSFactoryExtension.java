@@ -9,13 +9,12 @@ import org.geoserver.config.ServiceFactoryExtension;
 
 public class WFSFactoryExtension extends ServiceFactoryExtension<WFSInfo> {
 
-    protected WFSFactoryExtension() {
-        super(WFSInfo.class);
-    }
+  protected WFSFactoryExtension() {
+    super(WFSInfo.class);
+  }
 
-    @Override
-    public <T> T create(Class<T> clazz) {
-        return (T) new WFSInfoImpl();
-    }
-
+  @Override
+  public <T> T create(Class<T> clazz) {
+    return (T) new WFSInfoImpl();
+  }
 }

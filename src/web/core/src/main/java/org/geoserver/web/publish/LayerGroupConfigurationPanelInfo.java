@@ -7,19 +7,17 @@ package org.geoserver.web.publish;
 import org.geoserver.catalog.LayerGroupInfo;
 
 /**
- * 
  * Extension point for sections of the configuration pages for layergroups.
- * 
- * @author Niels Charlier
  *
+ * @author Niels Charlier
  */
-public class LayerGroupConfigurationPanelInfo extends PublishedConfigurationPanelInfo<LayerGroupInfo> {
+public class LayerGroupConfigurationPanelInfo
+    extends PublishedConfigurationPanelInfo<LayerGroupInfo> {
 
-    private static final long serialVersionUID = 8382295309912226673L;
+  private static final long serialVersionUID = 8382295309912226673L;
 
-    @Override
-    public Class<LayerGroupInfo> getPublishedInfoClass() {
-        return LayerGroupInfo.class;
-    }
-
+  @Override
+  public Class<LayerGroupInfo> getPublishedInfoClass() {
+    return LayerGroupInfo.class;
+  }
 }

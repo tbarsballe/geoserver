@@ -12,14 +12,13 @@ import org.geoserver.web.GeoServerApplication;
 
 /**
  * Model for the main {@link GeoServerSecurityManager} configuration.
- *  
+ *
  * @author Justin Deoliveira, OpenGeo
  */
 public class SecurityManagerConfigModel extends LoadableDetachableModel<SecurityManagerConfig> {
 
-    @Override
-    protected SecurityManagerConfig load() {
-        return GeoServerApplication.get().getSecurityManager().getSecurityConfig();
-    }
-
+  @Override
+  protected SecurityManagerConfig load() {
+    return GeoServerApplication.get().getSecurityManager().getSecurityConfig();
+  }
 }

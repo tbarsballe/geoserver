@@ -9,7 +9,6 @@ package org.geoserver.security.password;
 import java.io.IOException;
 import java.security.Security;
 import java.util.logging.Logger;
-
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.geoserver.security.GeoServerSecurityManager;
 import org.geoserver.security.GeoServerUserGroupService;
@@ -18,200 +17,178 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.security.authentication.encoding.PasswordEncoder;
 
 /**
- * Abstract base implementation, delegating the encoding 
- * to third party encoders implementing {@link PasswordEncoder}
- * 
- * @author christian
+ * Abstract base implementation, delegating the encoding to third party encoders implementing {@link
+ * PasswordEncoder}
  *
+ * @author christian
  */
 public abstract class AbstractGeoserverPasswordEncoder implements GeoServerPasswordEncoder {
 
-    static protected Logger LOGGER = Logging.getLogger("org.geoserver.security");
+  protected static Logger LOGGER = Logging.getLogger("org.geoserver.security");
 
-    protected volatile PasswordEncoder stringEncoder;
-    protected volatile CharArrayPasswordEncoder charEncoder;
+  protected volatile PasswordEncoder stringEncoder;
+  protected volatile CharArrayPasswordEncoder charEncoder;
 
-    protected String name;
+  protected String name;
 
-    private boolean availableWithoutStrongCryptogaphy;
-    private boolean reversible = true;
-    private String prefix;
+  private boolean availableWithoutStrongCryptogaphy;
+  private boolean reversible = true;
+  private String prefix;
 
-    static {
-        Security.addProvider(new BouncyCastleProvider());
-    }
-    
-    
-    public String getName() {
-        return name;
-    }
+  static {
+    Security.addProvider(new BouncyCastleProvider());
+  }
 
-    public void setBeanName(String beanName) {
-        this.name = beanName;
-    }
+  public String getName() {
+    return name;
+  }
 
-    /**
-     * Does nothing, subclases may override.
-     */
-    public void initialize(GeoServerSecurityManager securityManager) throws IOException {
-        
-    }
+  public void setBeanName(String beanName) {
+    this.name = beanName;
+  }
 
-    /**
-     * Does nothing, subclases may override.
-     */
-    public void initializeFor(GeoServerUserGroupService service) throws IOException {
-    }
+  /** Does nothing, subclases may override. */
+  public void initialize(GeoServerSecurityManager securityManager) throws IOException {}
 
-    public AbstractGeoserverPasswordEncoder() {
-        setAvailableWithoutStrongCryptogaphy(true);
-    }
+  /** Does nothing, subclases may override. */
+  public void initializeFor(GeoServerUserGroupService service) throws IOException {}
 
-    protected PasswordEncoder getStringEncoder() {
+  public AbstractGeoserverPasswordEncoder() {
+    setAvailableWithoutStrongCryptogaphy(true);
+  }
+
+  protected PasswordEncoder getStringEncoder() {
+    if (stringEncoder == null) {
+      synchronized (this) {
         if (stringEncoder == null) {
-            synchronized (this) {
-                if (stringEncoder == null) {
-                    stringEncoder = createStringEncoder();
-                }
-            }
+          stringEncoder = createStringEncoder();
         }
-        return stringEncoder;
+      }
     }
+    return stringEncoder;
+  }
 
-    /**
-     * Creates the encoder instance used when source is a string. 
-     */
-    protected abstract PasswordEncoder createStringEncoder();
+  /** Creates the encoder instance used when source is a string. */
+  protected abstract PasswordEncoder createStringEncoder();
 
-    protected CharArrayPasswordEncoder getCharEncoder() {
+  protected CharArrayPasswordEncoder getCharEncoder() {
+    if (charEncoder == null) {
+      synchronized (this) {
         if (charEncoder == null) {
-            synchronized (this) {
-                if (charEncoder == null) {
-                    charEncoder = createCharEncoder();
-                }
-            }
+          charEncoder = createCharEncoder();
         }
-        return charEncoder;
+      }
+    }
+    return charEncoder;
+  }
+
+  /** Creates the encoder instance used when source is a char array. */
+  protected abstract CharArrayPasswordEncoder createCharEncoder();
+
+  /** @return the concrete {@link PasswordEncoder} object */
+  protected final PasswordEncoder getActualEncoder() {
+    return null;
+  }
+
+  @Override
+  public String encodePassword(String rawPass, Object salt) throws DataAccessException {
+    return doEncodePassword(getStringEncoder().encodePassword(rawPass, salt));
+  }
+
+  @Override
+  public String encodePassword(char[] rawPass, Object salt) throws DataAccessException {
+    return doEncodePassword(getCharEncoder().encodePassword(rawPass, salt));
+  }
+
+  String doEncodePassword(String encPass) {
+    if (encPass == null) {
+      return encPass;
     }
 
-    /**
-     * Creates the encoder instance used when source is a char array. 
-     */
-    protected abstract CharArrayPasswordEncoder createCharEncoder();
+    StringBuffer buff = initPasswordBuffer();
+    buff.append(encPass);
+    return buff.toString();
+  }
 
-    /**
-     * @return the concrete {@link PasswordEncoder} object
-     */
-    protected final PasswordEncoder getActualEncoder() {
-        return null;
+  StringBuffer initPasswordBuffer() {
+    StringBuffer buff = new StringBuffer();
+    if (getPrefix() != null) {
+      buff.append(getPrefix()).append(GeoServerPasswordEncoder.PREFIX_DELIMTER);
     }
-    
-    @Override
-    public String encodePassword(String rawPass, Object salt) throws DataAccessException {
-        return doEncodePassword(getStringEncoder().encodePassword(rawPass, salt));
-    }
+    return buff;
+  }
 
-    @Override
-    public String encodePassword(char[] rawPass, Object salt)
-            throws DataAccessException {
-        return doEncodePassword(getCharEncoder().encodePassword(rawPass, salt));
-    }
+  @Override
+  public boolean isPasswordValid(String encPass, String rawPass, Object salt)
+      throws DataAccessException {
+    if (encPass == null) return false;
+    return getStringEncoder().isPasswordValid(stripPrefix(encPass), rawPass, salt);
+  }
 
-    String doEncodePassword(String encPass) {
-        if (encPass == null) {
-            return encPass;
-        }
+  @Override
+  public boolean isPasswordValid(String encPass, char[] rawPass, Object salt) {
+    if (encPass == null) return false;
+    return getCharEncoder().isPasswordValid(stripPrefix(encPass), rawPass, salt);
+  }
 
-        StringBuffer buff = initPasswordBuffer();
-        buff.append(encPass);
-        return buff.toString();
-    }
+  String stripPrefix(String encPass) {
+    return getPrefix() != null ? removePrefix(encPass) : encPass;
+  }
 
-    StringBuffer initPasswordBuffer() {
-        StringBuffer buff = new StringBuffer();
-        if (getPrefix() != null) {
-            buff.append(getPrefix()).append(GeoServerPasswordEncoder.PREFIX_DELIMTER);
-        }
-        return buff;
-    }
+  protected String removePrefix(String encPass) {
+    return encPass.replaceFirst(getPrefix() + GeoServerPasswordEncoder.PREFIX_DELIMTER, "");
+  }
 
-    @Override
-    public boolean isPasswordValid(String encPass, String rawPass, Object salt)
-            throws DataAccessException {
-        if (encPass==null) return false;
-        return getStringEncoder().isPasswordValid(stripPrefix(encPass), rawPass, salt);
-    }
+  @Override
+  public abstract PasswordEncodingType getEncodingType();
 
-    @Override
-    public boolean isPasswordValid(String encPass, char[] rawPass, Object salt) {
-        if (encPass==null) return false;
-        return getCharEncoder().isPasswordValid(stripPrefix(encPass), rawPass, salt);
-    }
+  /**
+   * @param encPass
+   * @return true if this encoder has encoded encPass
+   */
+  public boolean isResponsibleForEncoding(String encPass) {
+    if (encPass == null) return false;
+    return encPass.startsWith(getPrefix() + GeoServerPasswordEncoder.PREFIX_DELIMTER);
+  }
 
-    String stripPrefix(String encPass) {
-        return getPrefix() != null ? removePrefix(encPass) : encPass;
-    }
+  public String decode(String encPass) throws UnsupportedOperationException {
+    throw new UnsupportedOperationException("decoding passwords not supported");
+  }
 
-    protected String removePrefix(String encPass) {
-        return encPass.replaceFirst(getPrefix()+GeoServerPasswordEncoder.PREFIX_DELIMTER, "");
-    }
+  @Override
+  public char[] decodeToCharArray(String encPass) throws UnsupportedOperationException {
+    throw new UnsupportedOperationException("decoding passwords not supported");
+  }
 
-    @Override
-    public abstract PasswordEncodingType getEncodingType();
+  public String getPrefix() {
+    return prefix;
+  }
 
-    /**
-     * @param encPass
-     * @return true if this encoder has encoded encPass
-     */
-    public boolean isResponsibleForEncoding(String encPass) {
-        if (encPass==null) return false;        
-        return encPass.startsWith(getPrefix()+GeoServerPasswordEncoder.PREFIX_DELIMTER);
-    }
-    
-    
-    public String decode(String encPass) throws UnsupportedOperationException {
-        throw new UnsupportedOperationException("decoding passwords not supported");
-    }
+  public void setPrefix(String prefix) {
+    this.prefix = prefix;
+  }
 
-    @Override
-    public char[] decodeToCharArray(String encPass)
-            throws UnsupportedOperationException {
-        throw new UnsupportedOperationException("decoding passwords not supported");
-    }
+  public boolean isAvailableWithoutStrongCryptogaphy() {
+    return availableWithoutStrongCryptogaphy;
+  }
 
-    public String getPrefix() {
-        return prefix;
-    }
+  public void setAvailableWithoutStrongCryptogaphy(boolean availableWithoutStrongCryptogaphy) {
+    this.availableWithoutStrongCryptogaphy = availableWithoutStrongCryptogaphy;
+  }
 
+  public boolean isReversible() {
+    return reversible;
+  }
 
-    public void setPrefix(String prefix) {
-        this.prefix = prefix;
-    }
+  public void setReversible(boolean reversible) {
+    this.reversible = reversible;
+  }
 
-    public boolean isAvailableWithoutStrongCryptogaphy() {
-        return availableWithoutStrongCryptogaphy;
-    }
+  /** Interface for password encoding when source password is specified as char array. */
+  protected static interface CharArrayPasswordEncoder {
 
+    String encodePassword(char[] rawPass, Object salt);
 
-    public void setAvailableWithoutStrongCryptogaphy(boolean availableWithoutStrongCryptogaphy) {
-        this.availableWithoutStrongCryptogaphy = availableWithoutStrongCryptogaphy;
-    }
-
-    public boolean isReversible() {
-        return reversible;
-    }
-
-    public void setReversible(boolean reversible) {
-        this.reversible = reversible;
-    }
-
-    /**
-     * Interface for password encoding when source password is specified as char array.
-     */
-    protected static interface CharArrayPasswordEncoder {
-
-        String encodePassword(char[] rawPass, Object salt);
-
-        boolean isPasswordValid(String encPass, char[] rawPass, Object salt);
-    }
+    boolean isPasswordValid(String encPass, char[] rawPass, Object salt);
+  }
 }

@@ -19,35 +19,32 @@ import org.w3c.dom.NodeList;
 
 public class WfsXmlWriterTest extends WFSTestSupport {
 
-	@Test
-    public void test() throws Exception {
-        File tmp = File.createTempFile("wfs", "xml");
-        tmp.deleteOnExit();
+  @Test
+  public void test() throws Exception {
+    File tmp = File.createTempFile("wfs", "xml");
+    tmp.deleteOnExit();
 
-        WfsXmlWriter writer = new WfsXmlWriter.WFS1_0(getWFS(),
-                new FileOutputStream(tmp));
-        writer.openTag("wfs", "FeatureCollection");
-        writer.openTag("gml", "Feature", new String[] { "id", "foo", "srs",
-                "4326" });
-        writer.text("some text");
-        writer.closeTag("gml", "Feature");
-        writer.closeTag("wfs", "FeatureCollection");
-        writer.close();
+    WfsXmlWriter writer = new WfsXmlWriter.WFS1_0(getWFS(), new FileOutputStream(tmp));
+    writer.openTag("wfs", "FeatureCollection");
+    writer.openTag("gml", "Feature", new String[] {"id", "foo", "srs", "4326"});
+    writer.text("some text");
+    writer.closeTag("gml", "Feature");
+    writer.closeTag("wfs", "FeatureCollection");
+    writer.close();
 
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        factory.setNamespaceAware(true);
+    DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+    factory.setNamespaceAware(true);
 
-        Document doc = factory.newDocumentBuilder().parse(tmp);
+    Document doc = factory.newDocumentBuilder().parse(tmp);
 
-        assertNotNull(doc);
+    assertNotNull(doc);
 
-        assertEquals("wfs:FeatureCollection", doc.getDocumentElement()
-                .getNodeName());
-        NodeList features = doc.getElementsByTagName("gml:Feature");
-        assertEquals(1, features.getLength());
+    assertEquals("wfs:FeatureCollection", doc.getDocumentElement().getNodeName());
+    NodeList features = doc.getElementsByTagName("gml:Feature");
+    assertEquals(1, features.getLength());
 
-        Element feature = (Element) features.item(0);
-        assertEquals("foo", feature.getAttribute("id"));
-        assertEquals("4326", feature.getAttribute("srs"));
-    }
+    Element feature = (Element) features.item(0);
+    assertEquals("foo", feature.getAttribute("id"));
+    assertEquals("4326", feature.getAttribute("srs"));
+  }
 }

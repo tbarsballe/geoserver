@@ -7,7 +7,6 @@ package org.geoserver.security.decorators;
 
 import java.io.IOException;
 import java.util.logging.Level;
-
 import org.geotools.data.ResourceInfo;
 import org.geotools.data.ServiceInfo;
 import org.geotools.data.ows.GetCapabilitiesRequest;
@@ -33,114 +32,114 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 /**
  * Applies security around the web map server
- * @author Andrea Aime - GeoSolutions
  *
+ * @author Andrea Aime - GeoSolutions
  */
 public class SecuredWebMapServer extends WebMapServer {
 
-    WebMapServer delegate;
+  WebMapServer delegate;
 
-    public SecuredWebMapServer(WebMapServer delegate) throws IOException, ServiceException {
-        super(delegate.getCapabilities());
-        this.delegate = delegate;
-    }
-    
-    public GetFeatureInfoRequest createGetFeatureInfoRequest(GetMapRequest getMapRequest) {
-        return new SecuredGetFeatureInfoRequest(delegate.createGetFeatureInfoRequest(getMapRequest), getMapRequest);
-    }
-    
-    public GetMapRequest createGetMapRequest() {
-        return new SecuredGetMapRequest(delegate.createGetMapRequest());
-    }
-    
-    // -------------------------------------------------------------------------------------------
-    //
-    // Purely delegated methods
-    //
-    // -------------------------------------------------------------------------------------------
+  public SecuredWebMapServer(WebMapServer delegate) throws IOException, ServiceException {
+    super(delegate.getCapabilities());
+    this.delegate = delegate;
+  }
 
-    public GetStylesResponse issueRequest(GetStylesRequest request) throws IOException,
-            ServiceException {
-        return delegate.issueRequest(request);
-    }
+  public GetFeatureInfoRequest createGetFeatureInfoRequest(GetMapRequest getMapRequest) {
+    return new SecuredGetFeatureInfoRequest(
+        delegate.createGetFeatureInfoRequest(getMapRequest), getMapRequest);
+  }
 
-    public PutStylesResponse issueRequest(PutStylesRequest request) throws IOException,
-            ServiceException {
-        return delegate.issueRequest(request);
-    }
+  public GetMapRequest createGetMapRequest() {
+    return new SecuredGetMapRequest(delegate.createGetMapRequest());
+  }
 
-    public GetLegendGraphicResponse issueRequest(GetLegendGraphicRequest request)
-            throws IOException, ServiceException {
+  // -------------------------------------------------------------------------------------------
+  //
+  // Purely delegated methods
+  //
+  // -------------------------------------------------------------------------------------------
 
-        return delegate.issueRequest(request);
-    }
+  public GetStylesResponse issueRequest(GetStylesRequest request)
+      throws IOException, ServiceException {
+    return delegate.issueRequest(request);
+  }
 
-    public DescribeLayerResponse issueRequest(DescribeLayerRequest request) throws IOException,
-            ServiceException {
-        return delegate.issueRequest(request);
-    }
+  public PutStylesResponse issueRequest(PutStylesRequest request)
+      throws IOException, ServiceException {
+    return delegate.issueRequest(request);
+  }
 
-    public GetCapabilitiesResponse issueRequest(GetCapabilitiesRequest request) throws IOException,
-            ServiceException {
-        return delegate.issueRequest(request);
-    }
+  public GetLegendGraphicResponse issueRequest(GetLegendGraphicRequest request)
+      throws IOException, ServiceException {
 
-    public GetFeatureInfoResponse issueRequest(GetFeatureInfoRequest request) throws IOException,
-            ServiceException {
-        return delegate.issueRequest(request);
-    }
+    return delegate.issueRequest(request);
+  }
 
-    public GetMapResponse issueRequest(GetMapRequest request) throws IOException, ServiceException {
-        return delegate.issueRequest(request);
-    }
+  public DescribeLayerResponse issueRequest(DescribeLayerRequest request)
+      throws IOException, ServiceException {
+    return delegate.issueRequest(request);
+  }
 
-    public DescribeLayerRequest createDescribeLayerRequest() throws UnsupportedOperationException {
-        return delegate.createDescribeLayerRequest();
-    }
+  public GetCapabilitiesResponse issueRequest(GetCapabilitiesRequest request)
+      throws IOException, ServiceException {
+    return delegate.issueRequest(request);
+  }
 
-    public GetLegendGraphicRequest createGetLegendGraphicRequest()
-            throws UnsupportedOperationException {
-        return delegate.createGetLegendGraphicRequest();
-    }
+  public GetFeatureInfoResponse issueRequest(GetFeatureInfoRequest request)
+      throws IOException, ServiceException {
+    return delegate.issueRequest(request);
+  }
 
-    public GetStylesRequest createGetStylesRequest() throws UnsupportedOperationException {
-        return delegate.createGetStylesRequest();
-    }
+  public GetMapResponse issueRequest(GetMapRequest request) throws IOException, ServiceException {
+    return delegate.issueRequest(request);
+  }
 
-    public PutStylesRequest createPutStylesRequest() throws UnsupportedOperationException {
-        return delegate.createPutStylesRequest();
-    }
+  public DescribeLayerRequest createDescribeLayerRequest() throws UnsupportedOperationException {
+    return delegate.createDescribeLayerRequest();
+  }
 
-    public boolean equals(Object obj) {
-        return delegate.equals(obj);
-    }
+  public GetLegendGraphicRequest createGetLegendGraphicRequest()
+      throws UnsupportedOperationException {
+    return delegate.createGetLegendGraphicRequest();
+  }
 
-    public WMSCapabilities getCapabilities() {
-        return delegate.getCapabilities();
-    }
+  public GetStylesRequest createGetStylesRequest() throws UnsupportedOperationException {
+    return delegate.createGetStylesRequest();
+  }
 
-    public GeneralEnvelope getEnvelope(Layer layer, CoordinateReferenceSystem crs) {
-        return delegate.getEnvelope(layer, crs);
-    }
+  public PutStylesRequest createPutStylesRequest() throws UnsupportedOperationException {
+    return delegate.createPutStylesRequest();
+  }
 
-    public ServiceInfo getInfo() {
-        return delegate.getInfo();
-    }
+  public boolean equals(Object obj) {
+    return delegate.equals(obj);
+  }
 
-    public ResourceInfo getInfo(Layer resource) {
-        return delegate.getInfo(resource);
-    }
+  public WMSCapabilities getCapabilities() {
+    return delegate.getCapabilities();
+  }
 
-    public int hashCode() {
-        return delegate.hashCode();
-    }
+  public GeneralEnvelope getEnvelope(Layer layer, CoordinateReferenceSystem crs) {
+    return delegate.getEnvelope(layer, crs);
+  }
 
-    public void setLoggingLevel(Level newLevel) {
-        delegate.setLoggingLevel(newLevel);
-    }
+  public ServiceInfo getInfo() {
+    return delegate.getInfo();
+  }
 
-    public String toString() {
-        return "SecuredWebMapServer " + delegate.toString();
-    }
+  public ResourceInfo getInfo(Layer resource) {
+    return delegate.getInfo(resource);
+  }
 
+  public int hashCode() {
+    return delegate.hashCode();
+  }
+
+  public void setLoggingLevel(Level newLevel) {
+    delegate.setLoggingLevel(newLevel);
+  }
+
+  public String toString() {
+    return "SecuredWebMapServer " + delegate.toString();
+  }
 }

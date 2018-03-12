@@ -13,29 +13,31 @@ import org.geoserver.security.web.SecurityNamedServicesPanel;
 
 /**
  * Panel for providing list of user group service configurations.
- * 
+ *
  * @author Justin Deoliveira, OpenGeo
  */
-public class UserGroupServicesPanel extends SecurityNamedServicesPanel<SecurityUserGroupServiceConfig> {
+public class UserGroupServicesPanel
+    extends SecurityNamedServicesPanel<SecurityUserGroupServiceConfig> {
 
-    public UserGroupServicesPanel(String id) {
-        super(id, new UserGroupServiceProvider());
-    }
+  public UserGroupServicesPanel(String id) {
+    super(id, new UserGroupServiceProvider());
+  }
 
-    @Override
-    protected Class getServiceClass() {
-        return GeoServerUserGroupService.class;
-    }
+  @Override
+  protected Class getServiceClass() {
+    return GeoServerUserGroupService.class;
+  }
 
-    @Override
-    protected void validateRemoveConfig(SecurityUserGroupServiceConfig config)
-            throws SecurityConfigException {
-        SecurityConfigValidator.getConfigurationValiator(GeoServerUserGroupService.class, 
-            config.getClassName()).validateRemoveUserGroupService(config);
-    }
+  @Override
+  protected void validateRemoveConfig(SecurityUserGroupServiceConfig config)
+      throws SecurityConfigException {
+    SecurityConfigValidator.getConfigurationValiator(
+            GeoServerUserGroupService.class, config.getClassName())
+        .validateRemoveUserGroupService(config);
+  }
 
-    @Override
-    protected void removeConfig(SecurityUserGroupServiceConfig config) throws Exception {
-        getSecurityManager().removeUserGroupService(config);
-    }
+  @Override
+  protected void removeConfig(SecurityUserGroupServiceConfig config) throws Exception {
+    getSecurityManager().removeUserGroupService(config);
+  }
 }

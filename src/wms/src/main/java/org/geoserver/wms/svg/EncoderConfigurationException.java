@@ -7,21 +7,20 @@ package org.geoserver.wms.svg;
 
 import org.geoserver.platform.ServiceException;
 
-
 /**
  * @author Gabriel Rold?n
  * @version $Id$
  */
 public class EncoderConfigurationException extends ServiceException {
-    public EncoderConfigurationException(String message) {
-        super(message);
-    }
+  public EncoderConfigurationException(String message) {
+    super(message);
+  }
 
-    public EncoderConfigurationException(String message, String locator) {
-        super(message, locator);
-    }
+  public EncoderConfigurationException(String message, String locator) {
+    super(message, locator);
+  }
 
-    public EncoderConfigurationException(Throwable e, String message, String locator) {
-        super(e, message, locator);
-    }
+  public EncoderConfigurationException(Throwable e, String message, String locator) {
+    super(e, message, locator);
+  }
 }

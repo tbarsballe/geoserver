@@ -4,16 +4,13 @@
  */
 package org.geoserver.gwc.layer;
 
-
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasProperty;
-import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-
 import org.easymock.classextension.EasyMock;
 import org.geoserver.catalog.Catalog;
 import org.geoserver.catalog.LayerGroupInfo;
@@ -41,190 +38,193 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
-/**
- * GeoServer integration test for {@link TileLayerConfiguration}
- */
+/** GeoServer integration test for {@link TileLayerConfiguration} */
 public class CatalogConfigurationLayerConformanceTest extends LayerConfigurationTest {
-    
-    @Rule 
-    public MockWepAppContextRule context = new MockWepAppContextRule();
-    
-    @Rule
-    public TemporaryFolder temp = new TemporaryFolder();
 
-    private GWCConfig gwcConfig;
+  @Rule public MockWepAppContextRule context = new MockWepAppContextRule();
 
-    private GridSetBroker gsBroker;
+  @Rule public TemporaryFolder temp = new TemporaryFolder();
 
-    @Override
-    protected void doModifyInfo(TileLayer info, int rand) throws Exception {
-        info.setBlobStoreId(Integer.toString(rand));
-    }
+  private GWCConfig gwcConfig;
 
-    @Override
-    protected TileLayer getGoodInfo(String id, int rand) throws Exception {
-        PublishedInfo pinfo = layerCatalog.computeIfAbsent(id, (name)->{
-            LayerGroupInfo info = EasyMock.createMock("TestPublished_"+id,LayerGroupInfo.class);
-            MetadataMap mMap = new MetadataMap();
-            
-            EasyMock.expect(info.getMetadata()).andStubReturn(mMap);
-            EasyMock.expect(info.prefixedName()).andStubReturn(id);
-            EasyMock.expect(info.getId()).andStubReturn(id);
-            EasyMock.replay(info);
-            return info;
-        });
-        
-        GeoServerTileLayer layer = new GeoServerTileLayer(pinfo, gwcConfig, gsBroker);
-        doModifyInfo(layer, rand);
-        return layer;
-    }
+  private GridSetBroker gsBroker;
 
-    @Override
-    protected TileLayer getBadInfo(String id, int rand) throws Exception {
-        return new AbstractTileLayer() {
-            
-            @Override
-            public String getName() {
-                return id;
-            }
+  @Override
+  protected void doModifyInfo(TileLayer info, int rand) throws Exception {
+    info.setBlobStoreId(Integer.toString(rand));
+  }
 
-            @Override
-            protected boolean initializeInternal(GridSetBroker gridSetBroker) {
-                return false;
-            }
+  @Override
+  protected TileLayer getGoodInfo(String id, int rand) throws Exception {
+    PublishedInfo pinfo =
+        layerCatalog.computeIfAbsent(
+            id,
+            (name) -> {
+              LayerGroupInfo info =
+                  EasyMock.createMock("TestPublished_" + id, LayerGroupInfo.class);
+              MetadataMap mMap = new MetadataMap();
 
-            @Override
-            public String getStyles() {
-                return null;
-            }
+              EasyMock.expect(info.getMetadata()).andStubReturn(mMap);
+              EasyMock.expect(info.prefixedName()).andStubReturn(id);
+              EasyMock.expect(info.getId()).andStubReturn(id);
+              EasyMock.replay(info);
+              return info;
+            });
 
-            @Override
-            public ConveyorTile getTile(ConveyorTile tile)
-                    throws GeoWebCacheException, IOException, OutsideCoverageException {
-                return null;
-            }
+    GeoServerTileLayer layer = new GeoServerTileLayer(pinfo, gwcConfig, gsBroker);
+    doModifyInfo(layer, rand);
+    return layer;
+  }
 
-            @Override
-            public ConveyorTile getNoncachedTile(ConveyorTile tile) throws GeoWebCacheException {
-                return null;
-            }
+  @Override
+  protected TileLayer getBadInfo(String id, int rand) throws Exception {
+    return new AbstractTileLayer() {
 
-            @Override
-            public void seedTile(ConveyorTile tile, boolean tryCache)
-                    throws GeoWebCacheException, IOException {
-                return;
-            }
+      @Override
+      public String getName() {
+        return id;
+      }
 
-            @Override
-            public ConveyorTile doNonMetatilingRequest(ConveyorTile tile)
-                    throws GeoWebCacheException {
-                return null;
-            }
-            
-        };
-    }
+      @Override
+      protected boolean initializeInternal(GridSetBroker gridSetBroker) {
+        return false;
+      }
 
-    @Override
-    protected String getExistingInfo() {
-        // The tests that add their own layers provide enough coverage.
-        Assume.assumeTrue(false);
+      @Override
+      public String getStyles() {
         return null;
-    }
-    
-    Map<String, PublishedInfo> layerCatalog = new HashMap<>();
+      }
 
-    private GWC mediator;
+      @Override
+      public ConveyorTile getTile(ConveyorTile tile)
+          throws GeoWebCacheException, IOException, OutsideCoverageException {
+        return null;
+      }
 
-    private Catalog catalog;
+      @Override
+      public ConveyorTile getNoncachedTile(ConveyorTile tile) throws GeoWebCacheException {
+        return null;
+      }
 
-    private File dataDir;
-    
-    @Override
-    protected TileLayerConfiguration getConfig() throws Exception {
-        catalog = EasyMock.createMock("catalog", Catalog.class);
-        gsBroker = EasyMock.createMock("gsBroker", GridSetBroker.class);
-        mediator = EasyMock.createMock("mediator", GWC.class);
-        
-        mediator.syncEnv();EasyMock.expectLastCall().anyTimes();
-        mediator.layerAdded(EasyMock.anyObject(String.class));EasyMock.expectLastCall().anyTimes();
-        EasyMock.expect(mediator.layerRemoved(EasyMock.anyObject(String.class))).andStubReturn(true);
-        mediator.layerRenamed(EasyMock.anyObject(String.class),EasyMock.anyObject(String.class));EasyMock.expectLastCall().anyTimes();
-        
-        EasyMock.replay(catalog, gsBroker, mediator);
-        context.addBean("mediator", mediator, GWC.class);
-        GWC.set(mediator);
-        
-        gwcConfig = new GWCConfig();
-        dataDir = temp.newFolder();
-        GeoServerResourceLoader resourceLoader = new GeoServerResourceLoader(dataDir);
-        XMLConfiguration xmlConfig = new XMLConfiguration(context.getContextProvider(), (ConfigurationResourceProvider)null);
-        TileLayerCatalog tlCatalog = new DefaultTileLayerCatalog(resourceLoader, xmlConfig);
-        
-        return new CatalogConfiguration(catalog, tlCatalog, gsBroker);
-    }
-    
-    @After
-    public void removeMediator() throws Exception {
-        GWC.set(null);
-    }
-    
-    @Override
-    protected TileLayerConfiguration getSecondConfig() throws Exception {
-        gwcConfig = new GWCConfig();
-        GeoServerResourceLoader resourceLoader = new GeoServerResourceLoader(dataDir);
-        XMLConfiguration xmlConfig = new XMLConfiguration(context.getContextProvider(), (ConfigurationResourceProvider)null);
-        TileLayerCatalog tlCatalog = new DefaultTileLayerCatalog(resourceLoader, xmlConfig);
-        
-        return new CatalogConfiguration(catalog, tlCatalog, gsBroker);
-    }
+      @Override
+      public void seedTile(ConveyorTile tile, boolean tryCache)
+          throws GeoWebCacheException, IOException {
+        return;
+      }
 
-    @Override
-    protected Matcher<TileLayer> infoEquals(TileLayer expected) {
-        return hasProperty("blobStoreId", equalTo(expected.getBlobStoreId()));
-    }
+      @Override
+      public ConveyorTile doNonMetatilingRequest(ConveyorTile tile) throws GeoWebCacheException {
+        return null;
+      }
+    };
+  }
 
-    @Override
-    protected Matcher<TileLayer> infoEquals(int rand) {
-        return hasProperty("blobStoreId", equalTo(rand));
-    }
+  @Override
+  protected String getExistingInfo() {
+    // The tests that add their own layers provide enough coverage.
+    Assume.assumeTrue(false);
+    return null;
+  }
 
-    @Override
-    public void failNextRead() {
-        // TODO come up with a good way of testing IO failures for this
-        Assume.assumeTrue(false);
-    }
+  Map<String, PublishedInfo> layerCatalog = new HashMap<>();
 
-    @Override
-    public void failNextWrite() {
-        // TODO come up with a good way of testing IO failures for this
-        Assume.assumeTrue(false);
-    }
+  private GWC mediator;
 
-    @Override 
-    @Ignore // TODO Need to implement a clone/deep copy/modification proxy to make this safe.
-    @Test
-    public void testModifyCallRequiredToChangeInfoFromGetInfo() throws Exception {
-        super.testModifyCallRequiredToChangeInfoFromGetInfo();
-    }
+  private Catalog catalog;
 
-    @Override
-    @Ignore // TODO Need to implement a clone/deep copy/modification proxy to make this safe.
-    @Test
-    public void testModifyCallRequiredToChangeInfoFromGetInfos() throws Exception {
-        super.testModifyCallRequiredToChangeInfoFromGetInfos();
-    }
+  private File dataDir;
 
-    @Override
-    @Ignore // TODO Need to implement a clone/deep copy/modification proxy to make this safe.
-    @Test
-    public void testModifyCallRequiredToChangeExistingInfoFromGetInfo() throws Exception {
-        super.testModifyCallRequiredToChangeExistingInfoFromGetInfo();
-    }
+  @Override
+  protected TileLayerConfiguration getConfig() throws Exception {
+    catalog = EasyMock.createMock("catalog", Catalog.class);
+    gsBroker = EasyMock.createMock("gsBroker", GridSetBroker.class);
+    mediator = EasyMock.createMock("mediator", GWC.class);
 
-    @Override
-    @Ignore // TODO Need to implement a clone/deep copy/modification proxy to make this safe.
-    @Test
-    public void testModifyCallRequiredToChangeExistingInfoFromGetInfos() throws Exception {
-        super.testModifyCallRequiredToChangeExistingInfoFromGetInfos();
-    }
+    mediator.syncEnv();
+    EasyMock.expectLastCall().anyTimes();
+    mediator.layerAdded(EasyMock.anyObject(String.class));
+    EasyMock.expectLastCall().anyTimes();
+    EasyMock.expect(mediator.layerRemoved(EasyMock.anyObject(String.class))).andStubReturn(true);
+    mediator.layerRenamed(EasyMock.anyObject(String.class), EasyMock.anyObject(String.class));
+    EasyMock.expectLastCall().anyTimes();
+
+    EasyMock.replay(catalog, gsBroker, mediator);
+    context.addBean("mediator", mediator, GWC.class);
+    GWC.set(mediator);
+
+    gwcConfig = new GWCConfig();
+    dataDir = temp.newFolder();
+    GeoServerResourceLoader resourceLoader = new GeoServerResourceLoader(dataDir);
+    XMLConfiguration xmlConfig =
+        new XMLConfiguration(context.getContextProvider(), (ConfigurationResourceProvider) null);
+    TileLayerCatalog tlCatalog = new DefaultTileLayerCatalog(resourceLoader, xmlConfig);
+
+    return new CatalogConfiguration(catalog, tlCatalog, gsBroker);
+  }
+
+  @After
+  public void removeMediator() throws Exception {
+    GWC.set(null);
+  }
+
+  @Override
+  protected TileLayerConfiguration getSecondConfig() throws Exception {
+    gwcConfig = new GWCConfig();
+    GeoServerResourceLoader resourceLoader = new GeoServerResourceLoader(dataDir);
+    XMLConfiguration xmlConfig =
+        new XMLConfiguration(context.getContextProvider(), (ConfigurationResourceProvider) null);
+    TileLayerCatalog tlCatalog = new DefaultTileLayerCatalog(resourceLoader, xmlConfig);
+
+    return new CatalogConfiguration(catalog, tlCatalog, gsBroker);
+  }
+
+  @Override
+  protected Matcher<TileLayer> infoEquals(TileLayer expected) {
+    return hasProperty("blobStoreId", equalTo(expected.getBlobStoreId()));
+  }
+
+  @Override
+  protected Matcher<TileLayer> infoEquals(int rand) {
+    return hasProperty("blobStoreId", equalTo(rand));
+  }
+
+  @Override
+  public void failNextRead() {
+    // TODO come up with a good way of testing IO failures for this
+    Assume.assumeTrue(false);
+  }
+
+  @Override
+  public void failNextWrite() {
+    // TODO come up with a good way of testing IO failures for this
+    Assume.assumeTrue(false);
+  }
+
+  @Override
+  @Ignore // TODO Need to implement a clone/deep copy/modification proxy to make this safe.
+  @Test
+  public void testModifyCallRequiredToChangeInfoFromGetInfo() throws Exception {
+    super.testModifyCallRequiredToChangeInfoFromGetInfo();
+  }
+
+  @Override
+  @Ignore // TODO Need to implement a clone/deep copy/modification proxy to make this safe.
+  @Test
+  public void testModifyCallRequiredToChangeInfoFromGetInfos() throws Exception {
+    super.testModifyCallRequiredToChangeInfoFromGetInfos();
+  }
+
+  @Override
+  @Ignore // TODO Need to implement a clone/deep copy/modification proxy to make this safe.
+  @Test
+  public void testModifyCallRequiredToChangeExistingInfoFromGetInfo() throws Exception {
+    super.testModifyCallRequiredToChangeExistingInfoFromGetInfo();
+  }
+
+  @Override
+  @Ignore // TODO Need to implement a clone/deep copy/modification proxy to make this safe.
+  @Test
+  public void testModifyCallRequiredToChangeExistingInfoFromGetInfos() throws Exception {
+    super.testModifyCallRequiredToChangeExistingInfoFromGetInfos();
+  }
 }

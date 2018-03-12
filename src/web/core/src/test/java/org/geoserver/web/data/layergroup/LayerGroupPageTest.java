@@ -14,22 +14,24 @@ import org.junit.Test;
 
 public class LayerGroupPageTest extends LayerGroupBaseTest {
 
-    @Override
-    protected void onSetUp(SystemTestData testData) throws Exception {
-        super.onSetUp(testData);
-        login();
-        tester.startPage(LayerGroupPage.class);
-    }
+  @Override
+  protected void onSetUp(SystemTestData testData) throws Exception {
+    super.onSetUp(testData);
+    login();
+    tester.startPage(LayerGroupPage.class);
+  }
 
-    @Test
-    public void testLoad() {
-        tester.assertRenderedPage(LayerGroupPage.class);
-        tester.assertNoErrorMessage();
-        
-        @SuppressWarnings("unchecked")
-		DataView<LayerGroupInfo> dv = (DataView<LayerGroupInfo>) tester.getComponentFromLastRenderedPage("table:listContainer:items");
-        assertEquals(getCatalog().getLayerGroups().size(), dv.size());
-        LayerGroupInfo lg = (LayerGroupInfo) dv.getDataProvider().iterator(0, 1).next();
-        assertEquals(getCatalog().getLayerGroups().get(0), lg);
-    }
+  @Test
+  public void testLoad() {
+    tester.assertRenderedPage(LayerGroupPage.class);
+    tester.assertNoErrorMessage();
+
+    @SuppressWarnings("unchecked")
+    DataView<LayerGroupInfo> dv =
+        (DataView<LayerGroupInfo>)
+            tester.getComponentFromLastRenderedPage("table:listContainer:items");
+    assertEquals(getCatalog().getLayerGroups().size(), dv.size());
+    LayerGroupInfo lg = (LayerGroupInfo) dv.getDataProvider().iterator(0, 1).next();
+    assertEquals(getCatalog().getLayerGroups().get(0), lg);
+  }
 }

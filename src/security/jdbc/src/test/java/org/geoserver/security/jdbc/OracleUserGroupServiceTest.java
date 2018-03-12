@@ -8,8 +8,8 @@ package org.geoserver.security.jdbc;
 
 public class OracleUserGroupServiceTest extends JDBCUserGroupServiceTest {
 
-    @Override
-    protected String getFixtureId() {
-        return "oracle";
-    }
+  @Override
+  protected String getFixtureId() {
+    return "oracle";
+  }
 }

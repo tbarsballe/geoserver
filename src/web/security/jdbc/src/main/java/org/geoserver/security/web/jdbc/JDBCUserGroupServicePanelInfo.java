@@ -11,15 +11,15 @@ import org.geoserver.security.web.usergroup.UserGroupServicePanelInfo;
 
 /**
  * Configuration panel extension for {@link JDBCUserGroupService}.
- *  
+ *
  * @author Justin Deoliveira, OpenGeo
  */
-public class JDBCUserGroupServicePanelInfo 
+public class JDBCUserGroupServicePanelInfo
     extends UserGroupServicePanelInfo<JDBCUserGroupServiceConfig, JDBCUserGroupServicePanel> {
 
-    public JDBCUserGroupServicePanelInfo() {
-        setComponentClass(JDBCUserGroupServicePanel.class);
-        setServiceClass(JDBCUserGroupService.class);
-        setServiceConfigClass(JDBCUserGroupServiceConfig.class);
-    }
+  public JDBCUserGroupServicePanelInfo() {
+    setComponentClass(JDBCUserGroupServicePanel.class);
+    setServiceClass(JDBCUserGroupService.class);
+    setServiceConfigClass(JDBCUserGroupServiceConfig.class);
+  }
 }

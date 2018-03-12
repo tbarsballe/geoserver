@@ -8,9 +8,8 @@ package org.geoserver.security.jdbc;
 
 public class MySqlRoleServiceTest extends JDBCRoleServiceTest {
 
-    @Override
-    protected String getFixtureId() {
-        return "mysql";
-    }
-
+  @Override
+  protected String getFixtureId() {
+    return "mysql";
+  }
 }

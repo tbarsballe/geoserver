@@ -7,7 +7,6 @@ package org.geoserver.security.web.group;
 
 import java.util.List;
 import java.util.SortedSet;
-
 import org.apache.wicket.model.Model;
 import org.geoserver.ows.util.OwsUtils;
 import org.geoserver.security.impl.GeoServerRole;
@@ -17,35 +16,34 @@ import org.geoserver.web.GeoServerApplication;
 
 public class ConfirmRemovalGroupPanel extends AbstractConfirmRemovalPanel<GeoServerUserGroup> {
 
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-    
-    public ConfirmRemovalGroupPanel(String id, Model<Boolean> model,List<GeoServerUserGroup> roots) {
-        super(id, model,roots);                
-    }
-    
-    public ConfirmRemovalGroupPanel(String id, Model<Boolean> model,GeoServerUserGroup... roots) {
-        super(id, model,roots);                
-    }
+  public ConfirmRemovalGroupPanel(String id, Model<Boolean> model, List<GeoServerUserGroup> roots) {
+    super(id, model, roots);
+  }
 
-    
-    @Override
-    protected String getConfirmationMessage(GeoServerUserGroup object) throws Exception{
-        StringBuffer buffer = new StringBuffer(OwsUtils.property(object, "groupname", String.class));
-        if ((Boolean) getDefaultModelObject()) {
-            SortedSet<GeoServerRole> roles =
-                GeoServerApplication.get().getSecurityManager()
-                    .getActiveRoleService().getRolesForGroup(object.getGroupname());
-            buffer.append(" [");
-            for (GeoServerRole role: roles) {
-                buffer.append(role.getAuthority()).append(" ");
-            }
-            if (roles.size()>0) { // remove last delimiter
-                buffer.setLength(buffer.length()-1);
-            }
-            buffer.append("]");
-        }
-        return buffer.toString();
+  public ConfirmRemovalGroupPanel(String id, Model<Boolean> model, GeoServerUserGroup... roots) {
+    super(id, model, roots);
+  }
+
+  @Override
+  protected String getConfirmationMessage(GeoServerUserGroup object) throws Exception {
+    StringBuffer buffer = new StringBuffer(OwsUtils.property(object, "groupname", String.class));
+    if ((Boolean) getDefaultModelObject()) {
+      SortedSet<GeoServerRole> roles =
+          GeoServerApplication.get()
+              .getSecurityManager()
+              .getActiveRoleService()
+              .getRolesForGroup(object.getGroupname());
+      buffer.append(" [");
+      for (GeoServerRole role : roles) {
+        buffer.append(role.getAuthority()).append(" ");
+      }
+      if (roles.size() > 0) { // remove last delimiter
+        buffer.setLength(buffer.length() - 1);
+      }
+      buffer.append("]");
     }
- 
+    return buffer.toString();
+  }
 }

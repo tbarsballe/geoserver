@@ -7,8 +7,6 @@ package org.geoserver.security;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import org.geoserver.catalog.Catalog;
 import org.geoserver.catalog.CatalogInfo;
 import org.geoserver.catalog.CoverageInfo;
 import org.geoserver.catalog.FeatureTypeInfo;
@@ -25,169 +23,164 @@ import org.springframework.security.core.Authentication;
 
 /**
  * Filters viewable layers based on the registered CatalogFilter
- * 
+ *
  * @author Justin Deoliveira, OpenGeo
  * @author David Winslow, OpenGeo
  * @author Andrea Aime, GeoSolutions
  */
 public class CatalogFilterAccessManager extends ResourceAccessManagerWrapper {
 
-    private List<? extends CatalogFilter> filters;
+  private List<? extends CatalogFilter> filters;
 
-    private DataAccessLimits hide(ResourceInfo info) {
-        if (info instanceof FeatureTypeInfo) {
-            return new VectorAccessLimits(CatalogMode.HIDE, null, Filter.EXCLUDE, null,
-                    Filter.EXCLUDE);
-        } else if (info instanceof CoverageInfo) {
-            return new CoverageAccessLimits(CatalogMode.HIDE, Filter.EXCLUDE, null, null);
-        } else if (info instanceof WMSLayerInfo) {
-            return new WMSAccessLimits(CatalogMode.HIDE, Filter.EXCLUDE, null, false);
-        } else {
-            // TODO: Log warning about unknown resource type
-            return new DataAccessLimits(CatalogMode.HIDE, Filter.EXCLUDE);
-        }
+  private DataAccessLimits hide(ResourceInfo info) {
+    if (info instanceof FeatureTypeInfo) {
+      return new VectorAccessLimits(CatalogMode.HIDE, null, Filter.EXCLUDE, null, Filter.EXCLUDE);
+    } else if (info instanceof CoverageInfo) {
+      return new CoverageAccessLimits(CatalogMode.HIDE, Filter.EXCLUDE, null, null);
+    } else if (info instanceof WMSLayerInfo) {
+      return new WMSAccessLimits(CatalogMode.HIDE, Filter.EXCLUDE, null, false);
+    } else {
+      // TODO: Log warning about unknown resource type
+      return new DataAccessLimits(CatalogMode.HIDE, Filter.EXCLUDE);
     }
+  }
 
-    @Override
-    public DataAccessLimits getAccessLimits(Authentication user, LayerInfo layer) {
-        if (hideLayer(layer) || hideResource(layer.getResource())) {
-            return hide(layer.getResource());
-        }
-        return super.getAccessLimits(user, layer);
+  @Override
+  public DataAccessLimits getAccessLimits(Authentication user, LayerInfo layer) {
+    if (hideLayer(layer) || hideResource(layer.getResource())) {
+      return hide(layer.getResource());
     }
-    
-    @Override
-    public DataAccessLimits getAccessLimits(Authentication user, LayerInfo layer, List<LayerGroupInfo> containers) {
-        if (hideLayer(layer) || hideResource(layer.getResource())) {
-            return hide(layer.getResource());
-        }
-        return super.getAccessLimits(user, layer, containers);
-    }
+    return super.getAccessLimits(user, layer);
+  }
 
-    @Override
-    public DataAccessLimits getAccessLimits(Authentication user, ResourceInfo resource) {
-        if (hideResource(resource)) {
-            return hide(resource);
-        } else {
-            return super.getAccessLimits(user, resource);
-        }
+  @Override
+  public DataAccessLimits getAccessLimits(
+      Authentication user, LayerInfo layer, List<LayerGroupInfo> containers) {
+    if (hideLayer(layer) || hideResource(layer.getResource())) {
+      return hide(layer.getResource());
     }
+    return super.getAccessLimits(user, layer, containers);
+  }
 
-    @Override
-    public WorkspaceAccessLimits getAccessLimits(Authentication user, WorkspaceInfo workspace) {
-        if (hideWorkspace(workspace)) {
-            return new WorkspaceAccessLimits(CatalogMode.HIDE, false, false, false);
-        } else {
-            return super.getAccessLimits(user, workspace);
-        }
+  @Override
+  public DataAccessLimits getAccessLimits(Authentication user, ResourceInfo resource) {
+    if (hideResource(resource)) {
+      return hide(resource);
+    } else {
+      return super.getAccessLimits(user, resource);
     }
+  }
 
-    @Override
-    public StyleAccessLimits getAccessLimits(Authentication user, StyleInfo style) {
-        if (hideStyle(style)) {
-            return new StyleAccessLimits(CatalogMode.HIDE);
-        }
-        else {
-            return super.getAccessLimits(user, style);
-        }
+  @Override
+  public WorkspaceAccessLimits getAccessLimits(Authentication user, WorkspaceInfo workspace) {
+    if (hideWorkspace(workspace)) {
+      return new WorkspaceAccessLimits(CatalogMode.HIDE, false, false, false);
+    } else {
+      return super.getAccessLimits(user, workspace);
     }
+  }
 
-    @Override
-    public LayerGroupAccessLimits getAccessLimits(Authentication user, LayerGroupInfo layerGroup) {
-        if (hideLayerGroup(layerGroup)) {
-            return new LayerGroupAccessLimits(CatalogMode.HIDE);
-        }
-        return super.getAccessLimits(user, layerGroup);
+  @Override
+  public StyleAccessLimits getAccessLimits(Authentication user, StyleInfo style) {
+    if (hideStyle(style)) {
+      return new StyleAccessLimits(CatalogMode.HIDE);
+    } else {
+      return super.getAccessLimits(user, style);
     }
-    
-    @Override
-    public LayerGroupAccessLimits getAccessLimits(Authentication user, LayerGroupInfo layerGroup, List<LayerGroupInfo> containers) {
-        if (hideLayerGroup(layerGroup)) {
-            return new LayerGroupAccessLimits(CatalogMode.HIDE);
-        }
-        else {
-            return super.getAccessLimits(user, layerGroup, containers);
-        }
-    }
-    
-    private boolean hideResource(ResourceInfo resource) {
-        for (CatalogFilter filter : getCatalogFilters()) {
-            if (filter.hideResource(resource)) {
-                return true;
-            }
-        }
-        return false;
-    }
+  }
 
-    private boolean hideLayer(LayerInfo layer) {
-        for (CatalogFilter filter : getCatalogFilters()) {
-            if (filter.hideLayer(layer)) {
-                return true;
-            }
-        }
-        return false;
-
+  @Override
+  public LayerGroupAccessLimits getAccessLimits(Authentication user, LayerGroupInfo layerGroup) {
+    if (hideLayerGroup(layerGroup)) {
+      return new LayerGroupAccessLimits(CatalogMode.HIDE);
     }
+    return super.getAccessLimits(user, layerGroup);
+  }
 
-    private boolean hideWorkspace(WorkspaceInfo workspace) {
-        for (CatalogFilter filter : getCatalogFilters()) {
-            if (filter.hideWorkspace(workspace)) {
-                return true;
-            }
-        }
-        return false;
+  @Override
+  public LayerGroupAccessLimits getAccessLimits(
+      Authentication user, LayerGroupInfo layerGroup, List<LayerGroupInfo> containers) {
+    if (hideLayerGroup(layerGroup)) {
+      return new LayerGroupAccessLimits(CatalogMode.HIDE);
+    } else {
+      return super.getAccessLimits(user, layerGroup, containers);
+    }
+  }
 
+  private boolean hideResource(ResourceInfo resource) {
+    for (CatalogFilter filter : getCatalogFilters()) {
+      if (filter.hideResource(resource)) {
+        return true;
+      }
     }
+    return false;
+  }
 
-    private boolean hideStyle(StyleInfo style) {
-        for (CatalogFilter filter : getCatalogFilters()) {
-            if (filter.hideStyle(style)) {
-                return true;
-            }
-        }
-        return false;
+  private boolean hideLayer(LayerInfo layer) {
+    for (CatalogFilter filter : getCatalogFilters()) {
+      if (filter.hideLayer(layer)) {
+        return true;
+      }
     }
+    return false;
+  }
 
-    private boolean hideLayerGroup(LayerGroupInfo layerGroup) {
-        for (CatalogFilter filter : getCatalogFilters()) {
-            if (filter.hideLayerGroup(layerGroup)) {
-                return true;
-            }
-        }
-        return false;
+  private boolean hideWorkspace(WorkspaceInfo workspace) {
+    for (CatalogFilter filter : getCatalogFilters()) {
+      if (filter.hideWorkspace(workspace)) {
+        return true;
+      }
     }
-    
-    private List<? extends CatalogFilter> getCatalogFilters() {
-        if (filters == null) {
-            filters = GeoServerExtensions.extensions(CatalogFilter.class);
-        }
-        return filters;
-    }
-    
-    /**
-     * Designed for testing, allows to manually configure the catalog filters bypassing
-     * the Spring context lookup
-     * @param filters
-     */
-    public void setCatalogFilters(List<? extends CatalogFilter> filters) {
-        this.filters = filters;
-    }
+    return false;
+  }
 
-    @Override
-    public Filter getSecurityFilter(Authentication user,
-            Class<? extends CatalogInfo> clazz) {
-        // If there are no CatalogFilters, just get the delegate's filter
-        if(filters==null || filters.isEmpty())
-            return delegate.getSecurityFilter(user, clazz);
-        
-        // Result is the conjunction of delegate's filter, and those of all the CatalogFilters
-        ArrayList<Filter> convertedFilters = new ArrayList<Filter>(this.filters.size()+1);
-        convertedFilters.add(delegate.getSecurityFilter(user, clazz));  // Delegate's filter
-        
-        for (CatalogFilter filter : getCatalogFilters()) {
-            convertedFilters.add(filter.getSecurityFilter(clazz)); // Each CatalogFilter's filter
-        }
-        return Predicates.and(convertedFilters.toArray(new Filter[convertedFilters.size()]));
+  private boolean hideStyle(StyleInfo style) {
+    for (CatalogFilter filter : getCatalogFilters()) {
+      if (filter.hideStyle(style)) {
+        return true;
+      }
     }
+    return false;
+  }
 
+  private boolean hideLayerGroup(LayerGroupInfo layerGroup) {
+    for (CatalogFilter filter : getCatalogFilters()) {
+      if (filter.hideLayerGroup(layerGroup)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  private List<? extends CatalogFilter> getCatalogFilters() {
+    if (filters == null) {
+      filters = GeoServerExtensions.extensions(CatalogFilter.class);
+    }
+    return filters;
+  }
+
+  /**
+   * Designed for testing, allows to manually configure the catalog filters bypassing the Spring
+   * context lookup
+   *
+   * @param filters
+   */
+  public void setCatalogFilters(List<? extends CatalogFilter> filters) {
+    this.filters = filters;
+  }
+
+  @Override
+  public Filter getSecurityFilter(Authentication user, Class<? extends CatalogInfo> clazz) {
+    // If there are no CatalogFilters, just get the delegate's filter
+    if (filters == null || filters.isEmpty()) return delegate.getSecurityFilter(user, clazz);
+
+    // Result is the conjunction of delegate's filter, and those of all the CatalogFilters
+    ArrayList<Filter> convertedFilters = new ArrayList<Filter>(this.filters.size() + 1);
+    convertedFilters.add(delegate.getSecurityFilter(user, clazz)); // Delegate's filter
+
+    for (CatalogFilter filter : getCatalogFilters()) {
+      convertedFilters.add(filter.getSecurityFilter(clazz)); // Each CatalogFilter's filter
+    }
+    return Predicates.and(convertedFilters.toArray(new Filter[convertedFilters.size()]));
+  }
 }

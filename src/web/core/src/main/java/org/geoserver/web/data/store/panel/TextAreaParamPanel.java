@@ -15,56 +15,55 @@ import org.apache.wicket.validation.IValidator;
 
 /**
  * A label with a text field. Can receive custom validators for the text field.
- * 
+ *
  * @author Andrea Aime
  */
 @SuppressWarnings("serial")
 public class TextAreaParamPanel extends Panel implements ParamPanel {
 
-    private TextArea<String> textArea;
-    
-    /**
-     * 
-     * @param id
-     * @param paramsMap
-     * @param paramName
-     * @param paramLabelModel
-     * @param required
-     * @param validators
-     *            any extra validator that should be added to the input field, or {@code null}
-     */
-    public TextAreaParamPanel(final String id, final IModel paramValue, final IModel paramLabelModel,
-            final boolean required, IValidator... validators) {
-        // make the value of the text field the model of this panel, for easy value retrieval
-        super(id, paramValue);
+  private TextArea<String> textArea;
 
-        // the label
-        String requiredMark = required ? " *" : ""; 
-        Label label = new Label("paramName", paramLabelModel.getObject() + requiredMark);
-        add(label);
+  /**
+   * @param id
+   * @param paramsMap
+   * @param paramName
+   * @param paramLabelModel
+   * @param required
+   * @param validators any extra validator that should be added to the input field, or {@code null}
+   */
+  public TextAreaParamPanel(
+      final String id,
+      final IModel paramValue,
+      final IModel paramLabelModel,
+      final boolean required,
+      IValidator... validators) {
+    // make the value of the text field the model of this panel, for easy value retrieval
+    super(id, paramValue);
 
-        // the text field, with a decorator for validations
-        textArea = new TextArea("paramValue", paramValue);
-        textArea.setRequired(required);
-        // set the label to be the paramLabelModel otherwise a validation error would look like
-        // "Parameter 'paramValue' is required"
-        textArea.setLabel(paramLabelModel);
+    // the label
+    String requiredMark = required ? " *" : "";
+    Label label = new Label("paramName", paramLabelModel.getObject() + requiredMark);
+    add(label);
 
-        if (validators != null) {
-            for (IValidator validator : validators) {
-                textArea.add(validator);
-            }
-        }
-        FormComponentFeedbackBorder feedback = new FormComponentFeedbackBorder("border");
-        feedback.add(textArea);
-        add(feedback);
+    // the text field, with a decorator for validations
+    textArea = new TextArea("paramValue", paramValue);
+    textArea.setRequired(required);
+    // set the label to be the paramLabelModel otherwise a validation error would look like
+    // "Parameter 'paramValue' is required"
+    textArea.setLabel(paramLabelModel);
+
+    if (validators != null) {
+      for (IValidator validator : validators) {
+        textArea.add(validator);
+      }
     }
-    
-    /**
-     * The text field stored inside the panel. 
-     *
-     */
-    public FormComponent getFormComponent() {
-        return textArea;
-    }
+    FormComponentFeedbackBorder feedback = new FormComponentFeedbackBorder("border");
+    feedback.add(textArea);
+    add(feedback);
+  }
+
+  /** The text field stored inside the panel. */
+  public FormComponent getFormComponent() {
+    return textArea;
+  }
 }

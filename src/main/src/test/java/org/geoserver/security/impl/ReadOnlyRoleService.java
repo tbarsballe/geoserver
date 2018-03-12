@@ -5,15 +5,14 @@
  */
 package org.geoserver.security.impl;
 
-
 public class ReadOnlyRoleService extends MemoryRoleService {
 
-    public ReadOnlyRoleService() {
-        super();            
-    }
+  public ReadOnlyRoleService() {
+    super();
+  }
 
-    @Override
-    public boolean canCreateStore() {
-        return false;
-    }
+  @Override
+  public boolean canCreateStore() {
+    return false;
+  }
 }

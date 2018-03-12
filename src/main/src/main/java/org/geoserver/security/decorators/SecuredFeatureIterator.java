@@ -6,34 +6,32 @@
 package org.geoserver.security.decorators;
 
 import java.util.NoSuchElementException;
-
 import org.geotools.feature.FeatureIterator;
 import org.opengis.feature.Feature;
 
 /**
  * Feature iterators are read only by design, but just to make extra sure there are no write enabled
  * subclasses floating around we make the wrapping anyways, this will make instanceof
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class SecuredFeatureIterator implements FeatureIterator {
 
-    FeatureIterator wrapped;
+  FeatureIterator wrapped;
 
-    public SecuredFeatureIterator(FeatureIterator wrapped) {
-        this.wrapped = wrapped;
-    }
+  public SecuredFeatureIterator(FeatureIterator wrapped) {
+    this.wrapped = wrapped;
+  }
 
-    public void close() {
-        wrapped.close();
-    }
+  public void close() {
+    wrapped.close();
+  }
 
-    public boolean hasNext() {
-        return wrapped.hasNext();
-    }
+  public boolean hasNext() {
+    return wrapped.hasNext();
+  }
 
-    public Feature next() throws NoSuchElementException {
-        return wrapped.next();
-    }
-
+  public Feature next() throws NoSuchElementException {
+    return wrapped.next();
+  }
 }

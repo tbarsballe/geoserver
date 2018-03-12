@@ -8,7 +8,6 @@ package org.geoserver.security.decorators;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-
 import org.geoserver.catalog.AttributeTypeInfo;
 import org.geoserver.catalog.Catalog;
 import org.geoserver.catalog.CatalogVisitor;
@@ -33,300 +32,295 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.util.ProgressListener;
 
 /**
- * Delegates every method to the delegate feature type info. Subclasses will
- * override selected methods to perform their "decoration" job
- * 
+ * Delegates every method to the delegate feature type info. Subclasses will override selected
+ * methods to perform their "decoration" job
+ *
  * @author Andrea Aime
  */
-public abstract class DecoratingFeatureTypeInfo extends AbstractDecorator<FeatureTypeInfo> implements FeatureTypeInfo {
+public abstract class DecoratingFeatureTypeInfo extends AbstractDecorator<FeatureTypeInfo>
+    implements FeatureTypeInfo {
 
-    public DecoratingFeatureTypeInfo(FeatureTypeInfo info) {
-        super(info);
-    }
+  public DecoratingFeatureTypeInfo(FeatureTypeInfo info) {
+    super(info);
+  }
 
-    public FeatureSource getFeatureSource(ProgressListener listener, Hints hints)
-            throws IOException {
-        return delegate.getFeatureSource(listener, hints);
-    }
+  public FeatureSource getFeatureSource(ProgressListener listener, Hints hints) throws IOException {
+    return delegate.getFeatureSource(listener, hints);
+  }
 
-    public DataStoreInfo getStore() {
-        return delegate.getStore();
-    }
+  public DataStoreInfo getStore() {
+    return delegate.getStore();
+  }
 
-    public String getAbstract() {
-        return delegate.getAbstract();
-    }
+  public String getAbstract() {
+    return delegate.getAbstract();
+  }
 
-    public <T> T getAdapter(Class<T> adapterClass, Map<?, ?> hints) {
-        return delegate.getAdapter(adapterClass, hints);
-    }
+  public <T> T getAdapter(Class<T> adapterClass, Map<?, ?> hints) {
+    return delegate.getAdapter(adapterClass, hints);
+  }
 
-    public List<String> getAlias() {
-        return delegate.getAlias();
-    }
+  public List<String> getAlias() {
+    return delegate.getAlias();
+  }
 
-    public List<AttributeTypeInfo> getAttributes() {
-        return delegate.getAttributes();
-    }
+  public List<AttributeTypeInfo> getAttributes() {
+    return delegate.getAttributes();
+  }
 
-    public ReferencedEnvelope boundingBox() throws Exception {
-        return delegate.boundingBox();
-    }
+  public ReferencedEnvelope boundingBox() throws Exception {
+    return delegate.boundingBox();
+  }
 
-    public Catalog getCatalog() {
-        return delegate.getCatalog();
-    }
-    
-    public void setCatalog(Catalog catalog) {
-        delegate.setCatalog( catalog );
-    }
+  public Catalog getCatalog() {
+    return delegate.getCatalog();
+  }
 
-    public CoordinateReferenceSystem getCRS() {
-        return delegate.getCRS();
-    }
+  public void setCatalog(Catalog catalog) {
+    delegate.setCatalog(catalog);
+  }
 
-    public String getDescription() {
-        return delegate.getDescription();
-    }
+  public CoordinateReferenceSystem getCRS() {
+    return delegate.getCRS();
+  }
 
-    public List<AttributeTypeInfo> attributes() throws IOException {
-        return delegate.attributes();
-    }
-    
-    public FeatureType getFeatureType() throws IOException {
-        return delegate.getFeatureType();
-    }
+  public String getDescription() {
+    return delegate.getDescription();
+  }
 
-    public Filter filter() {
-        return delegate.filter();
-    }
+  public List<AttributeTypeInfo> attributes() throws IOException {
+    return delegate.attributes();
+  }
 
-    public String getId() {
-        return delegate.getId();
-    }
+  public FeatureType getFeatureType() throws IOException {
+    return delegate.getFeatureType();
+  }
 
-    @Override
-    public List<KeywordInfo> getKeywords() {
-        return delegate.getKeywords();
-    }
+  public Filter filter() {
+    return delegate.filter();
+  }
 
-    public List<String> keywordValues() {
-        return delegate.keywordValues();
-    }
+  public String getId() {
+    return delegate.getId();
+  }
 
-    public ReferencedEnvelope getLatLonBoundingBox() {
-        return delegate.getLatLonBoundingBox();
-    }
+  @Override
+  public List<KeywordInfo> getKeywords() {
+    return delegate.getKeywords();
+  }
 
-    public int getMaxFeatures() {
-        return delegate.getMaxFeatures();
-    }
+  public List<String> keywordValues() {
+    return delegate.keywordValues();
+  }
 
-    public MetadataMap getMetadata() {
-        return delegate.getMetadata();
-    }
+  public ReferencedEnvelope getLatLonBoundingBox() {
+    return delegate.getLatLonBoundingBox();
+  }
 
-    public List<MetadataLinkInfo> getMetadataLinks() {
-        return delegate.getMetadataLinks();
-    }
+  public int getMaxFeatures() {
+    return delegate.getMaxFeatures();
+  }
 
-    public List<DataLinkInfo> getDataLinks() {
-        return delegate.getDataLinks();
-    }
+  public MetadataMap getMetadata() {
+    return delegate.getMetadata();
+  }
 
-    public String getName() {
-        return delegate.getName();
-    }
-    
-    /**
-     * @see org.geoserver.catalog.ResourceInfo#getQualifiedName()
-     */
-    public Name getQualifiedName() {
-        return delegate.getQualifiedName();
-    }
+  public List<MetadataLinkInfo> getMetadataLinks() {
+    return delegate.getMetadataLinks();
+  }
 
-    public NamespaceInfo getNamespace() {
-        return delegate.getNamespace();
-    }
+  public List<DataLinkInfo> getDataLinks() {
+    return delegate.getDataLinks();
+  }
 
-    public ReferencedEnvelope getNativeBoundingBox() {
-        return delegate.getNativeBoundingBox();
-    }
+  public String getName() {
+    return delegate.getName();
+  }
 
-    public CoordinateReferenceSystem getNativeCRS() {
-        return delegate.getNativeCRS();
-    }
+  /** @see org.geoserver.catalog.ResourceInfo#getQualifiedName() */
+  public Name getQualifiedName() {
+    return delegate.getQualifiedName();
+  }
 
-    public String getNativeName() {
-        return delegate.getNativeName();
-    }
+  public NamespaceInfo getNamespace() {
+    return delegate.getNamespace();
+  }
 
-    /**
-     * @see org.geoserver.catalog.ResourceInfo#getQualifiedNativeName()
-     */
-    public Name getQualifiedNativeName() {
-        return delegate.getQualifiedNativeName();
-    }
+  public ReferencedEnvelope getNativeBoundingBox() {
+    return delegate.getNativeBoundingBox();
+  }
 
-    public int getNumDecimals() {
-        return delegate.getNumDecimals();
-    }
+  public CoordinateReferenceSystem getNativeCRS() {
+    return delegate.getNativeCRS();
+  }
 
-    public String getPrefixedName() {
-        return delegate.getPrefixedName();
-    }
+  public String getNativeName() {
+    return delegate.getNativeName();
+  }
 
-    public String prefixedName() {
-        return delegate.prefixedName();
-    }
+  /** @see org.geoserver.catalog.ResourceInfo#getQualifiedNativeName() */
+  public Name getQualifiedNativeName() {
+    return delegate.getQualifiedNativeName();
+  }
 
-    public ProjectionPolicy getProjectionPolicy() {
-        return delegate.getProjectionPolicy();
-    }
+  public int getNumDecimals() {
+    return delegate.getNumDecimals();
+  }
 
-    public String getSRS() {
-        return delegate.getSRS();
-    }
+  public String getPrefixedName() {
+    return delegate.getPrefixedName();
+  }
 
-    public String getTitle() {
-        return delegate.getTitle();
-    }
+  public String prefixedName() {
+    return delegate.prefixedName();
+  }
 
-    public boolean isEnabled() {
-        return delegate.isEnabled();
-    }
+  public ProjectionPolicy getProjectionPolicy() {
+    return delegate.getProjectionPolicy();
+  }
 
-    public boolean enabled() {
-        return delegate.enabled();
-    }
+  public String getSRS() {
+    return delegate.getSRS();
+  }
 
-    public void setAbstract(String _abstract) {
-        delegate.setAbstract(_abstract);
-    }
+  public String getTitle() {
+    return delegate.getTitle();
+  }
 
-    public void setDescription(String description) {
-        delegate.setDescription(description);
-    }
+  public boolean isEnabled() {
+    return delegate.isEnabled();
+  }
 
-    public void setEnabled(boolean enabled) {
-        delegate.setEnabled(enabled);
-    }
+  public boolean enabled() {
+    return delegate.enabled();
+  }
 
-    public void setLatLonBoundingBox(ReferencedEnvelope box) {
-        delegate.setLatLonBoundingBox(box);
-    }
+  public void setAbstract(String _abstract) {
+    delegate.setAbstract(_abstract);
+  }
 
-    public void setMaxFeatures(int maxFeatures) {
-        delegate.setMaxFeatures(maxFeatures);
-    }
+  public void setDescription(String description) {
+    delegate.setDescription(description);
+  }
 
-    public void setName(String name) {
-        delegate.setName(name);
-    }
+  public void setEnabled(boolean enabled) {
+    delegate.setEnabled(enabled);
+  }
 
-    public void setNamespace(NamespaceInfo namespace) {
-        delegate.setNamespace(namespace);
-    }
+  public void setLatLonBoundingBox(ReferencedEnvelope box) {
+    delegate.setLatLonBoundingBox(box);
+  }
 
-    public void setNativeBoundingBox(ReferencedEnvelope box) {
-        delegate.setNativeBoundingBox(box);
-    }
+  public void setMaxFeatures(int maxFeatures) {
+    delegate.setMaxFeatures(maxFeatures);
+  }
 
-    public void setNativeCRS(CoordinateReferenceSystem nativeCRS) {
-        delegate.setNativeCRS(nativeCRS);
-    }
+  public void setName(String name) {
+    delegate.setName(name);
+  }
 
-    public void setNativeName(String nativeName) {
-        delegate.setNativeName(nativeName);
-    }
+  public void setNamespace(NamespaceInfo namespace) {
+    delegate.setNamespace(namespace);
+  }
 
-    public void setNumDecimals(int numDecimals) {
-        delegate.setNumDecimals(numDecimals);
-    }
+  public void setNativeBoundingBox(ReferencedEnvelope box) {
+    delegate.setNativeBoundingBox(box);
+  }
 
-    public void setProjectionPolicy(ProjectionPolicy policy) {
-        delegate.setProjectionPolicy(policy);
-    }
+  public void setNativeCRS(CoordinateReferenceSystem nativeCRS) {
+    delegate.setNativeCRS(nativeCRS);
+  }
 
-    public void setSRS(String srs) {
-        delegate.setSRS(srs);
-    }
+  public void setNativeName(String nativeName) {
+    delegate.setNativeName(nativeName);
+  }
 
-    public void setStore(StoreInfo store) {
-        delegate.setStore(store);
-    }
+  public void setNumDecimals(int numDecimals) {
+    delegate.setNumDecimals(numDecimals);
+  }
 
-    public void setTitle(String title) {
-        delegate.setTitle(title);
-    }
-   
-    public void accept(CatalogVisitor visitor) {
-        delegate.accept(visitor);
-    }
-    
-    @Override
-    public boolean isAdvertised() {
-        return delegate.isAdvertised();
-    }
-    
-    @Override
-    public void setAdvertised(boolean advertised) {
-        delegate.setAdvertised(advertised);
-    }
+  public void setProjectionPolicy(ProjectionPolicy policy) {
+    delegate.setProjectionPolicy(policy);
+  }
 
-    @Override
-    public List<String> getResponseSRS() {
-        return delegate.getResponseSRS();
-    }
-    
-    @Override
-    public boolean isOverridingServiceSRS() {
-        return delegate.isOverridingServiceSRS();
-    }
-    
-    @Override
-    public void setOverridingServiceSRS(boolean overridingServiceSRS) {
-        delegate.setOverridingServiceSRS(overridingServiceSRS);
-    }
+  public void setSRS(String srs) {
+    delegate.setSRS(srs);
+  }
 
-    @Override
-    public boolean getSkipNumberMatched() {
-        return delegate.getSkipNumberMatched();
-    }
+  public void setStore(StoreInfo store) {
+    delegate.setStore(store);
+  }
 
-    @Override
-    public void setSkipNumberMatched(boolean skipNumberMatched) {
-        delegate.setSkipNumberMatched(skipNumberMatched);
-    }
+  public void setTitle(String title) {
+    delegate.setTitle(title);
+  }
 
-    @Override
-    public Measure getLinearizationTolerance() {
-        return delegate.getLinearizationTolerance();
-    }
+  public void accept(CatalogVisitor visitor) {
+    delegate.accept(visitor);
+  }
 
-    @Override
-    public void setLinearizationTolerance(Measure tolerance) {
-        delegate.setLinearizationTolerance(tolerance);
-    }
-    
-    @Override
-    public boolean isCircularArcPresent() {
-    	return delegate.isCircularArcPresent();
-    }
-    
-    @Override
-    public void setCircularArcPresent(boolean enabled) {
-    	delegate.setCircularArcPresent(enabled);
-    }
-    
-    @Override
-    public String getCqlFilter() {
-        return delegate.getCqlFilter();
-    }
+  @Override
+  public boolean isAdvertised() {
+    return delegate.isAdvertised();
+  }
 
-    @Override
-    public void setCqlFilter(String cqlFilter) {
-        delegate.setCqlFilter(cqlFilter);
-    }
+  @Override
+  public void setAdvertised(boolean advertised) {
+    delegate.setAdvertised(advertised);
+  }
 
+  @Override
+  public List<String> getResponseSRS() {
+    return delegate.getResponseSRS();
+  }
+
+  @Override
+  public boolean isOverridingServiceSRS() {
+    return delegate.isOverridingServiceSRS();
+  }
+
+  @Override
+  public void setOverridingServiceSRS(boolean overridingServiceSRS) {
+    delegate.setOverridingServiceSRS(overridingServiceSRS);
+  }
+
+  @Override
+  public boolean getSkipNumberMatched() {
+    return delegate.getSkipNumberMatched();
+  }
+
+  @Override
+  public void setSkipNumberMatched(boolean skipNumberMatched) {
+    delegate.setSkipNumberMatched(skipNumberMatched);
+  }
+
+  @Override
+  public Measure getLinearizationTolerance() {
+    return delegate.getLinearizationTolerance();
+  }
+
+  @Override
+  public void setLinearizationTolerance(Measure tolerance) {
+    delegate.setLinearizationTolerance(tolerance);
+  }
+
+  @Override
+  public boolean isCircularArcPresent() {
+    return delegate.isCircularArcPresent();
+  }
+
+  @Override
+  public void setCircularArcPresent(boolean enabled) {
+    delegate.setCircularArcPresent(enabled);
+  }
+
+  @Override
+  public String getCqlFilter() {
+    return delegate.getCqlFilter();
+  }
+
+  @Override
+  public void setCqlFilter(String cqlFilter) {
+    delegate.setCqlFilter(cqlFilter);
+  }
 }

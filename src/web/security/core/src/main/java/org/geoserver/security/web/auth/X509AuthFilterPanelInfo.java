@@ -10,15 +10,16 @@ import org.geoserver.security.filter.GeoServerX509CertificateAuthenticationFilte
 
 /**
  * Configuration panel extension for {@link GeoServerX509CertificateAuthenticationFilter}.
- * 
+ *
  * @author Justin Deoliveira, OpenGeo
  */
-public class X509AuthFilterPanelInfo 
-    extends AuthenticationFilterPanelInfo<X509CertificateAuthenticationFilterConfig, X509AuthFilterPanel> {
+public class X509AuthFilterPanelInfo
+    extends AuthenticationFilterPanelInfo<
+        X509CertificateAuthenticationFilterConfig, X509AuthFilterPanel> {
 
-    public X509AuthFilterPanelInfo() {
-        setComponentClass(X509AuthFilterPanel.class);
-        setServiceClass(GeoServerX509CertificateAuthenticationFilter.class);
-        setServiceConfigClass(X509CertificateAuthenticationFilterConfig.class);
-    }
+  public X509AuthFilterPanelInfo() {
+    setComponentClass(X509AuthFilterPanel.class);
+    setServiceClass(GeoServerX509CertificateAuthenticationFilter.class);
+    setServiceConfigClass(X509CertificateAuthenticationFilterConfig.class);
+  }
 }

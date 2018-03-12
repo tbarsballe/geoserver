@@ -5,24 +5,22 @@
  */
 package org.geoserver.security.impl;
 
+import java.util.Properties;
 import org.geoserver.catalog.Catalog;
 import org.vfny.geoserver.global.ConfigurationException;
 
-import java.util.Properties;
-
-/**
- * A {@link DataAccessRuleDAO} variant that lives in memory
- */
+/** A {@link DataAccessRuleDAO} variant that lives in memory */
 class MemoryDataAccessRuleDAO extends DataAccessRuleDAO {
-    
-    public MemoryDataAccessRuleDAO(Catalog rawCatalog, Properties props) throws ConfigurationException {
-        super(rawCatalog, null);
-        loadRules(props);
-    }
-    
-    @Override
-    protected void checkPropertyFile(boolean force) {
-        // skip checking
-        lastModified = Long.MAX_VALUE;
-    }
+
+  public MemoryDataAccessRuleDAO(Catalog rawCatalog, Properties props)
+      throws ConfigurationException {
+    super(rawCatalog, null);
+    loadRules(props);
+  }
+
+  @Override
+  protected void checkPropertyFile(boolean force) {
+    // skip checking
+    lastModified = Long.MAX_VALUE;
+  }
 }

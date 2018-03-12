@@ -14,85 +14,85 @@ import java.util.stream.Stream;
 
 /**
  * A named collection of strings, for output.
- * 
+ *
  * @author Kevin Smith (Boundless)
  */
 // TODO: This is a duplicate of StringsList
 public class AvailableResources extends AbstractCollection<String> {
-    final Collection<String> delegate;
-    final String name; 
-    
-    public AvailableResources(Collection<String> delegate, String name) {
-        super();
-        this.delegate = Collections.unmodifiableCollection(delegate);
-        this.name = name;
-    }
-    
-    /** Name of collection */
-    public String getName() {
-        return name;
-    }
+  final Collection<String> delegate;
+  final String name;
 
-    @Override
-    public Iterator<String> iterator() {
-        return delegate.iterator();
-    }
-    
-    @Override
-    public int size() {
-        return delegate.size();
-    }
+  public AvailableResources(Collection<String> delegate, String name) {
+    super();
+    this.delegate = Collections.unmodifiableCollection(delegate);
+    this.name = name;
+  }
 
-    public void forEach(Consumer<? super String> action) {
-        delegate.forEach(action);
-    }
+  /** Name of collection */
+  public String getName() {
+    return name;
+  }
 
-    public boolean isEmpty() {
-        return delegate.isEmpty();
-    }
+  @Override
+  public Iterator<String> iterator() {
+    return delegate.iterator();
+  }
 
-    public boolean contains(Object o) {
-        return delegate.contains(o);
-    }
+  @Override
+  public int size() {
+    return delegate.size();
+  }
 
-    public Object[] toArray() {
-        return delegate.toArray();
-    }
+  public void forEach(Consumer<? super String> action) {
+    delegate.forEach(action);
+  }
 
-    public <T> T[] toArray(T[] a) {
-        return delegate.toArray(a);
-    }
+  public boolean isEmpty() {
+    return delegate.isEmpty();
+  }
 
-    public boolean containsAll(Collection<?> c) {
-        return delegate.containsAll(c);
-    }
+  public boolean contains(Object o) {
+    return delegate.contains(o);
+  }
 
-    public void clear() {
-        delegate.clear();
-    }
+  public Object[] toArray() {
+    return delegate.toArray();
+  }
 
-    public boolean equals(Object o) {
-        return delegate.equals(o);
-    }
+  public <T> T[] toArray(T[] a) {
+    return delegate.toArray(a);
+  }
 
-    public int hashCode() {
-        return delegate.hashCode();
-    }
+  public boolean containsAll(Collection<?> c) {
+    return delegate.containsAll(c);
+  }
 
-    public Spliterator<String> spliterator() {
-        return delegate.spliterator();
-    }
+  public void clear() {
+    delegate.clear();
+  }
 
-    public Stream<String> stream() {
-        return delegate.stream();
-    }
+  public boolean equals(Object o) {
+    return delegate.equals(o);
+  }
 
-    public Stream<String> parallelStream() {
-        return delegate.parallelStream();
-    }
-    
-    @Override
-    public String toString() {
-        return "AvailableResources name='"+name+"' "+delegate.toString();
-    }
+  public int hashCode() {
+    return delegate.hashCode();
+  }
+
+  public Spliterator<String> spliterator() {
+    return delegate.spliterator();
+  }
+
+  public Stream<String> stream() {
+    return delegate.stream();
+  }
+
+  public Stream<String> parallelStream() {
+    return delegate.parallelStream();
+  }
+
+  @Override
+  public String toString() {
+    return "AvailableResources name='" + name + "' " + delegate.toString();
+  }
 }

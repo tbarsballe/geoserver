@@ -6,47 +6,43 @@ package org.geoserver.security.ldap;
 
 import org.geoserver.security.config.SecurityUserGroupServiceConfig;
 
-/**
- * 
- * @author Niels Charlier
- *
- */
-public class LDAPUserGroupServiceConfig extends LDAPBaseSecurityServiceConfig implements SecurityUserGroupServiceConfig {
+/** @author Niels Charlier */
+public class LDAPUserGroupServiceConfig extends LDAPBaseSecurityServiceConfig
+    implements SecurityUserGroupServiceConfig {
 
-    private static final long serialVersionUID = 4699211240178341515L;
-    
-    String passwordEncoderName;
-    
-    String passwordPolicyName;
-    
-    String populatedAttributes;
+  private static final long serialVersionUID = 4699211240178341515L;
 
-    @Override
-    public String getPasswordEncoderName() {
-        return passwordEncoderName;
-    }
+  String passwordEncoderName;
 
-    @Override
-    public void setPasswordEncoderName(String passwordEncoderName) {
-        this.passwordEncoderName = passwordEncoderName;
-    }
+  String passwordPolicyName;
 
-    @Override
-    public String getPasswordPolicyName() {
-        return passwordPolicyName;
-    }
+  String populatedAttributes;
 
-    @Override
-    public void setPasswordPolicyName(String passwordPolicyName) {
-        this.passwordPolicyName = passwordPolicyName;
-    }
+  @Override
+  public String getPasswordEncoderName() {
+    return passwordEncoderName;
+  }
 
-    public String getPopulatedAttributes() {
-        return populatedAttributes;
-    }
+  @Override
+  public void setPasswordEncoderName(String passwordEncoderName) {
+    this.passwordEncoderName = passwordEncoderName;
+  }
 
-    public void setPopulatedAttributes(String populatedAttributes) {
-        this.populatedAttributes = populatedAttributes;
-    }
+  @Override
+  public String getPasswordPolicyName() {
+    return passwordPolicyName;
+  }
 
+  @Override
+  public void setPasswordPolicyName(String passwordPolicyName) {
+    this.passwordPolicyName = passwordPolicyName;
+  }
+
+  public String getPopulatedAttributes() {
+    return populatedAttributes;
+  }
+
+  public void setPopulatedAttributes(String populatedAttributes) {
+    this.populatedAttributes = populatedAttributes;
+  }
 }

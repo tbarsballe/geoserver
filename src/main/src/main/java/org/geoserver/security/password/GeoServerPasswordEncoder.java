@@ -6,7 +6,6 @@
 package org.geoserver.security.password;
 
 import java.io.IOException;
-
 import org.geoserver.security.GeoServerSecurityManager;
 import org.geoserver.security.GeoServerUserGroupService;
 import org.springframework.beans.factory.BeanNameAware;
@@ -14,100 +13,81 @@ import org.springframework.security.authentication.encoding.PasswordEncoder;
 
 /**
  * General Geoserver password encoding interface
- * 
- * @author christian
  *
+ * @author christian
  */
-public interface GeoServerPasswordEncoder extends PasswordEncoder,BeanNameAware {
+public interface GeoServerPasswordEncoder extends PasswordEncoder, BeanNameAware {
 
-    public final static String PREFIX_DELIMTER=":";
+  public static final String PREFIX_DELIMTER = ":";
 
-    /**
-     * Initialize this encoder.
-     */
-    void initialize(GeoServerSecurityManager securityManager) throws IOException;
+  /** Initialize this encoder. */
+  void initialize(GeoServerSecurityManager securityManager) throws IOException;
 
-    /**
-     * Initialize this encoder for a {@link GeoServerUserGroupService} object.
-     */
-    void initializeFor(GeoServerUserGroupService service) throws IOException;
+  /** Initialize this encoder for a {@link GeoServerUserGroupService} object. */
+  void initializeFor(GeoServerUserGroupService service) throws IOException;
 
-    /**
-     * @return the {@link PasswordEncodingType} 
-     */
-    PasswordEncodingType getEncodingType();
+  /** @return the {@link PasswordEncodingType} */
+  PasswordEncodingType getEncodingType();
 
-    /**
-     * The name of the password encoder.
-     */
-    String getName();
-    
-    /**
-     * @param encPass
-     * @return true if this encoder has encoded encPass
-     */
-    boolean isResponsibleForEncoding(String encPass);
+  /** The name of the password encoder. */
+  String getName();
 
-    /**
-     * Decodes an encoded password. Only supported for {@link PasswordEncodingType#ENCRYPT} and 
-     * {@link PasswordEncodingType#PLAIN} encoders, ie those that return <code>true</code> from
-     * {@link #isReversible()}. 
-     * 
-     * @param encPass The encoded password.
-     * @throws UnsupportedOperationException
-     */
-    String decode(String encPass) throws UnsupportedOperationException;
+  /**
+   * @param encPass
+   * @return true if this encoder has encoded encPass
+   */
+  boolean isResponsibleForEncoding(String encPass);
 
-    /**
-     * Decodes an encoded password to a char array.
-     * 
-     * @see #decode(String)
-     */
-    char[] decodeToCharArray(String encPass) throws UnsupportedOperationException;
+  /**
+   * Decodes an encoded password. Only supported for {@link PasswordEncodingType#ENCRYPT} and {@link
+   * PasswordEncodingType#PLAIN} encoders, ie those that return <code>true</code> from {@link
+   * #isReversible()}.
+   *
+   * @param encPass The encoded password.
+   * @throws UnsupportedOperationException
+   */
+  String decode(String encPass) throws UnsupportedOperationException;
 
-    /**
-     * Encodes a raw password from a char array.
-     *
-     * @see #encodePassword(String, Object)
-     */
-    String encodePassword(char[] password, Object salt);
+  /**
+   * Decodes an encoded password to a char array.
+   *
+   * @see #decode(String)
+   */
+  char[] decodeToCharArray(String encPass) throws UnsupportedOperationException;
 
-    /**
-     * Validates a specified "raw" password (as char array) against an encoded password.
-     * 
-     * @see {@link #isPasswordValid(String, String, Object)}
-     */
-    boolean isPasswordValid(String encPass, char[] rawPass, Object salt);
+  /**
+   * Encodes a raw password from a char array.
+   *
+   * @see #encodePassword(String, Object)
+   */
+  String encodePassword(char[] password, Object salt);
 
-    /**
-     * @return a prefix which is stored with the password.
-     * This prefix must be unique within all {@link GeoServerPasswordEncoder}
-     * implementations.
-     * 
-     * Reserved:
-     * 
-     * plain
-     * digest1
-     * crypt1
-     * 
-     * A plain text password is stored as
-     * 
-     * plain:password
-     */
-    String getPrefix();
-    
-    /**
-     * Is this encoder available without installing
-     * the unrestricted policy files of the java
-     * cryptographic extension 
-     * 
-     *
-     */
-    boolean isAvailableWithoutStrongCryptogaphy();
+  /**
+   * Validates a specified "raw" password (as char array) against an encoded password.
+   *
+   * @see {@link #isPasswordValid(String, String, Object)}
+   */
+  boolean isPasswordValid(String encPass, char[] rawPass, Object salt);
 
-    /**
-     * Flag indicating if the encoder can decode an encrypted password back into its original 
-     * plain text form.
-     */
-    boolean isReversible();
+  /**
+   * @return a prefix which is stored with the password. This prefix must be unique within all
+   *     {@link GeoServerPasswordEncoder} implementations.
+   *     <p>Reserved:
+   *     <p>plain digest1 crypt1
+   *     <p>A plain text password is stored as
+   *     <p>plain:password
+   */
+  String getPrefix();
+
+  /**
+   * Is this encoder available without installing the unrestricted policy files of the java
+   * cryptographic extension
+   */
+  boolean isAvailableWithoutStrongCryptogaphy();
+
+  /**
+   * Flag indicating if the encoder can decode an encrypted password back into its original plain
+   * text form.
+   */
+  boolean isReversible();
 }

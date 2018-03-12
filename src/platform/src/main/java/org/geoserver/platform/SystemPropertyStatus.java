@@ -11,50 +11,49 @@ import java.util.Optional;
 
 public class SystemPropertyStatus implements ModuleStatus {
 
-    @Override
-    public String getModule() {
-        return "system-properties";
-    }
+  @Override
+  public String getModule() {
+    return "system-properties";
+  }
 
-    @Override
-    public Optional<String> getComponent() {
-        return Optional.ofNullable("system-properties");
-    }
+  @Override
+  public Optional<String> getComponent() {
+    return Optional.ofNullable("system-properties");
+  }
 
-    @Override
-    public String getName() {
-        return "system-properties";
-    }
+  @Override
+  public String getName() {
+    return "system-properties";
+  }
 
-    @Override
-    public Optional<String> getVersion() {
-        return Optional.ofNullable(null);
-    }
+  @Override
+  public Optional<String> getVersion() {
+    return Optional.ofNullable(null);
+  }
 
-    @Override
-    public boolean isAvailable() {
-        return true;
-    }
+  @Override
+  public boolean isAvailable() {
+    return true;
+  }
 
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
+  @Override
+  public boolean isEnabled() {
+    return true;
+  }
 
-    @Override
-    public Optional<String> getMessage() {
-        StringBuffer result = new StringBuffer();
-        for (Iterator<Entry<Object, Object>> it = System.getProperties().entrySet().iterator(); it
-                .hasNext();) {
-            Entry<Object, Object> entry = it.next();
-            result.append(entry.getKey().toString() + "=" + entry.getValue().toString() + "\n");
-        }
-        return Optional.ofNullable(result.toString());
+  @Override
+  public Optional<String> getMessage() {
+    StringBuffer result = new StringBuffer();
+    for (Iterator<Entry<Object, Object>> it = System.getProperties().entrySet().iterator();
+        it.hasNext(); ) {
+      Entry<Object, Object> entry = it.next();
+      result.append(entry.getKey().toString() + "=" + entry.getValue().toString() + "\n");
     }
+    return Optional.ofNullable(result.toString());
+  }
 
-    @Override
-    public Optional<String> getDocumentation() {
-        return Optional.empty();
-    }
-
+  @Override
+  public Optional<String> getDocumentation() {
+    return Optional.empty();
+  }
 }

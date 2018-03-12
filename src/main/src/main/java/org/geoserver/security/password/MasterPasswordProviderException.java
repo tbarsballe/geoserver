@@ -9,19 +9,19 @@ import org.geoserver.security.validation.SecurityConfigException;
 
 /**
  * Base class for master password provider config exceptions.
- * 
+ *
  * @author Justin Deoliveira, OpenGeo
  */
 public class MasterPasswordProviderException extends SecurityConfigException {
 
-    /** serialVersionUID */
-    private static final long serialVersionUID = 1L;
+  /** serialVersionUID */
+  private static final long serialVersionUID = 1L;
 
-    public MasterPasswordProviderException(String errorId, Object... args) {
-        super(errorId, args);
-    }
+  public MasterPasswordProviderException(String errorId, Object... args) {
+    super(errorId, args);
+  }
 
-    public MasterPasswordProviderException(String errorId, String message, Object... args) {
-        super(errorId, message, args);
-    }
+  public MasterPasswordProviderException(String errorId, String message, Object... args) {
+    super(errorId, message, args);
+  }
 }

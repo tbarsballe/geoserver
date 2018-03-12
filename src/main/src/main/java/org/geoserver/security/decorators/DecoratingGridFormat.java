@@ -14,74 +14,72 @@ import org.opengis.coverage.grid.GridCoverageWriter;
 import org.opengis.parameter.ParameterValueGroup;
 
 /**
- * Delegates every method to the delegate grid format. Subclasses will
- * override selected methods to perform their "decoration" job
- * 
+ * Delegates every method to the delegate grid format. Subclasses will override selected methods to
+ * perform their "decoration" job
+ *
  * @author Andrea Aime
  */
 public abstract class DecoratingGridFormat implements Format {
 
-    AbstractGridFormat delegate;
-    
-    public DecoratingGridFormat(AbstractGridFormat delegate) {
-        this.delegate = delegate;
-    }
+  AbstractGridFormat delegate;
 
-    public boolean accepts(Object source, Hints hints) {
-        return delegate.accepts(source, hints);
-    }
+  public DecoratingGridFormat(AbstractGridFormat delegate) {
+    this.delegate = delegate;
+  }
 
-    public boolean accepts(Object source) {
-        return delegate.accepts(source);
-    }
+  public boolean accepts(Object source, Hints hints) {
+    return delegate.accepts(source, hints);
+  }
 
-    public GeoToolsWriteParams getDefaultImageIOWriteParameters() {
-        return delegate.getDefaultImageIOWriteParameters();
-    }
+  public boolean accepts(Object source) {
+    return delegate.accepts(source);
+  }
 
-    public String getDescription() {
-        return delegate.getDescription();
-    }
+  public GeoToolsWriteParams getDefaultImageIOWriteParameters() {
+    return delegate.getDefaultImageIOWriteParameters();
+  }
 
-    public String getDocURL() {
-        return delegate.getDocURL();
-    }
+  public String getDescription() {
+    return delegate.getDescription();
+  }
 
-    public String getName() {
-        return delegate.getName();
-    }
+  public String getDocURL() {
+    return delegate.getDocURL();
+  }
 
-    public GridCoverage2DReader getReader(Object source, Hints hints) {
-        return delegate.getReader(source, hints);
-    }
+  public String getName() {
+    return delegate.getName();
+  }
 
-    public GridCoverage2DReader getReader(Object source) {
-        return delegate.getReader(source);
-    }
+  public GridCoverage2DReader getReader(Object source, Hints hints) {
+    return delegate.getReader(source, hints);
+  }
 
-    public ParameterValueGroup getReadParameters() {
-        return delegate.getReadParameters();
-    }
+  public GridCoverage2DReader getReader(Object source) {
+    return delegate.getReader(source);
+  }
 
-    public String getVendor() {
-        return delegate.getVendor();
-    }
+  public ParameterValueGroup getReadParameters() {
+    return delegate.getReadParameters();
+  }
 
-    public String getVersion() {
-        return delegate.getVersion();
-    }
+  public String getVendor() {
+    return delegate.getVendor();
+  }
 
-    public ParameterValueGroup getWriteParameters() {
-        return delegate.getWriteParameters();
-    }
+  public String getVersion() {
+    return delegate.getVersion();
+  }
 
-    public GridCoverageWriter getWriter(Object destination, Hints hints) {
-        return delegate.getWriter(destination, hints);
-    }
+  public ParameterValueGroup getWriteParameters() {
+    return delegate.getWriteParameters();
+  }
 
-    public GridCoverageWriter getWriter(Object destination) {
-        return delegate.getWriter(destination);
-    }
-    
-    
+  public GridCoverageWriter getWriter(Object destination, Hints hints) {
+    return delegate.getWriter(destination, hints);
+  }
+
+  public GridCoverageWriter getWriter(Object destination) {
+    return delegate.getWriter(destination);
+  }
 }

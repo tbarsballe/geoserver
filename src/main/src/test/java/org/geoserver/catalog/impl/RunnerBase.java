@@ -10,65 +10,64 @@ import java.util.concurrent.CountDownLatch;
 
 public abstract class RunnerBase implements Runnable {
 
-    private CountDownLatch ready;
-    private CountDownLatch done;
-    private Exception problem;
+  private CountDownLatch ready;
+  private CountDownLatch done;
+  private Exception problem;
 
-    protected RunnerBase(CountDownLatch ready, CountDownLatch done) {
-        this.ready = ready;
-        this.done = done;
-    }
+  protected RunnerBase(CountDownLatch ready, CountDownLatch done) {
+    this.ready = ready;
+    this.done = done;
+  }
 
-    public void run() {
-        boolean readied = false;
+  public void run() {
+    boolean readied = false;
+    try {
+      doBeforeReady();
+      if (ready != null) {
+        ready.countDown();
+        readied = true;
+        ready.await();
+      }
+      runInternal();
+    } catch (Exception e) {
+      if (ready != null && !readied) {
         try {
-            doBeforeReady();
-            if (ready != null) {
-                ready.countDown();
-                readied = true;
-                ready.await();
-            }
-            runInternal();
-        } catch (Exception e) {
-            if (ready != null && !readied) {
-                try {
-                    ready.countDown();
-                } catch (Exception e2) {
-                    e2.printStackTrace();
-                }
-            }
-            setProblem(e);
+          ready.countDown();
+        } catch (Exception e2) {
+          e2.printStackTrace();
         }
-        if (done != null) {
-            done.countDown();
-        }
+      }
+      setProblem(e);
     }
-
-    protected abstract void runInternal() throws Exception;
-
-    protected void doBeforeReady() {
-        ;
+    if (done != null) {
+      done.countDown();
     }
+  }
 
-    private synchronized void setProblem(Exception problem) {
-        this.problem = problem;
+  protected abstract void runInternal() throws Exception;
+
+  protected void doBeforeReady() {
+    ;
+  }
+
+  private synchronized void setProblem(Exception problem) {
+    this.problem = problem;
+  }
+
+  public synchronized Exception getProblem() {
+    return problem;
+  }
+
+  public static void checkForRunnerException(RunnerBase runner) throws Exception {
+    Exception problem = runner.getProblem();
+    if (problem != null) {
+      throw problem;
     }
+  }
 
-    public synchronized Exception getProblem() {
-        return problem;
+  public static void checkForRunnerExceptions(List<? extends RunnerBase> runners) throws Exception {
+    for (RunnerBase runner : runners) {
+      checkForRunnerException(runner);
     }
-
-    public static void checkForRunnerException(RunnerBase runner) throws Exception {
-        Exception problem = runner.getProblem();
-        if (problem != null) {
-            throw problem;
-        }
-    }
-
-    public static void checkForRunnerExceptions(List<? extends RunnerBase> runners) throws Exception {
-        for (RunnerBase runner : runners) {
-            checkForRunnerException(runner);
-        }
-    }
-
+  }
 }

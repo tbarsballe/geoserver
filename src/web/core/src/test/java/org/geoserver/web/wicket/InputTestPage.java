@@ -10,13 +10,12 @@ import org.apache.wicket.markup.html.form.Form;
 
 public abstract class InputTestPage extends WebPage {
 
-    public InputTestPage() {
-        Form form = new Form("form" );
-        add(form);
-        
-        form.add( newTextInput("input"));
-    }
+  public InputTestPage() {
+    Form form = new Form("form");
+    add(form);
 
-    protected abstract Component newTextInput(String id);
-    
+    form.add(newTextInput("input"));
+  }
+
+  protected abstract Component newTextInput(String id);
 }

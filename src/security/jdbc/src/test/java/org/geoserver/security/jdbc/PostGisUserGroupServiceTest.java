@@ -8,8 +8,8 @@ package org.geoserver.security.jdbc;
 
 public class PostGisUserGroupServiceTest extends JDBCUserGroupServiceTest {
 
-    @Override
-    protected String getFixtureId() {
-        return "postgis";
-    }
+  @Override
+  protected String getFixtureId() {
+    return "postgis";
+  }
 }

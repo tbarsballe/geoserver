@@ -5,36 +5,34 @@
  */
 package org.geoserver.kml;
 
+import de.micromata.opengis.kml.v_2_2_0.Kml;
 import org.geoserver.wms.WMSMapContent;
 import org.geoserver.wms.WebMap;
 
-import de.micromata.opengis.kml.v_2_2_0.Kml;
-
 /**
  * A WebMap containing a KML document
- * 
+ *
  * @author Andrea Aime - GeoSolutions
- * 
  */
 public class KMLMap extends WebMap {
 
-    Kml kml;
+  Kml kml;
 
-    KmlEncodingContext kmlEncodingContext;
+  KmlEncodingContext kmlEncodingContext;
 
-    public KMLMap(WMSMapContent map, KmlEncodingContext kmlEncodingContext, Kml kml, String mimeType) {
-        super(map);
-        this.kml = kml;
-        this.kmlEncodingContext = kmlEncodingContext;
-        super.setMimeType(mimeType);
-    }
+  public KMLMap(
+      WMSMapContent map, KmlEncodingContext kmlEncodingContext, Kml kml, String mimeType) {
+    super(map);
+    this.kml = kml;
+    this.kmlEncodingContext = kmlEncodingContext;
+    super.setMimeType(mimeType);
+  }
 
-    public Kml getKml() {
-        return kml;
-    }
+  public Kml getKml() {
+    return kml;
+  }
 
-    public KmlEncodingContext getKmlEncodingContext() {
-        return kmlEncodingContext;
-    }
-
+  public KmlEncodingContext getKmlEncodingContext() {
+    return kmlEncodingContext;
+  }
 }

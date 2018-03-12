@@ -10,47 +10,45 @@ import org.geoserver.security.config.BaseSecurityNamedServiceConfig;
 import org.geoserver.security.config.SecurityRoleServiceConfig;
 
 public class MemoryRoleServiceConfigImpl extends BaseSecurityNamedServiceConfig
-        implements SecurityRoleServiceConfig {
-    private static final long serialVersionUID = 1L;
-    protected String adminRoleName;
-    protected String groupAdminRoleName;
+    implements SecurityRoleServiceConfig {
+  private static final long serialVersionUID = 1L;
+  protected String adminRoleName;
+  protected String groupAdminRoleName;
 
-    protected String toBeEncrypted;
+  protected String toBeEncrypted;
 
-    public MemoryRoleServiceConfigImpl() {
-    }
+  public MemoryRoleServiceConfigImpl() {}
 
-    public MemoryRoleServiceConfigImpl(MemoryRoleServiceConfigImpl other) {
-        super(other);
-        adminRoleName = other.getAdminRoleName();
-        groupAdminRoleName = other.getGroupAdminRoleName();
-        toBeEncrypted = other.getToBeEncrypted();
-    }
+  public MemoryRoleServiceConfigImpl(MemoryRoleServiceConfigImpl other) {
+    super(other);
+    adminRoleName = other.getAdminRoleName();
+    groupAdminRoleName = other.getGroupAdminRoleName();
+    toBeEncrypted = other.getToBeEncrypted();
+  }
 
-    public String getToBeEncrypted() {
-        return toBeEncrypted;
-    }
+  public String getToBeEncrypted() {
+    return toBeEncrypted;
+  }
 
-    public void setToBeEncrypted(String toBeEncrypted) {
-        this.toBeEncrypted = toBeEncrypted;
-    }
+  public void setToBeEncrypted(String toBeEncrypted) {
+    this.toBeEncrypted = toBeEncrypted;
+  }
 
-    @Override
-    public String getAdminRoleName() {
-        return adminRoleName;
-    }
+  @Override
+  public String getAdminRoleName() {
+    return adminRoleName;
+  }
 
-    @Override
-    public void setAdminRoleName(String name) {
-        adminRoleName=name;
-    }
+  @Override
+  public void setAdminRoleName(String name) {
+    adminRoleName = name;
+  }
 
-    public String getGroupAdminRoleName() {
-        return groupAdminRoleName;
-    }
+  public String getGroupAdminRoleName() {
+    return groupAdminRoleName;
+  }
 
-    public void setGroupAdminRoleName(String groupAdminRoleName) {
-        this.groupAdminRoleName = groupAdminRoleName;
-    }
-
+  public void setGroupAdminRoleName(String groupAdminRoleName) {
+    this.groupAdminRoleName = groupAdminRoleName;
+  }
 }

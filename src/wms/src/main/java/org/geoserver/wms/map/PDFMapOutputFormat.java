@@ -6,14 +6,13 @@
 package org.geoserver.wms.map;
 
 import java.io.IOException;
-
 import org.geoserver.platform.ServiceException;
 import org.geoserver.wms.MapProducerCapabilities;
 import org.geoserver.wms.WMSMapContent;
 
 /**
  * Handles a GetMap request that spects a map in PDF format.
- * 
+ *
  * @author Pierre-Emmanuel Balageas, ALCER (http://www.alcer.com)
  * @author Simone Giannecchini - GeoSolutions
  * @author Gabriel Roldan
@@ -21,50 +20,49 @@ import org.geoserver.wms.WMSMapContent;
  */
 public class PDFMapOutputFormat extends AbstractMapOutputFormat {
 
-    /** the only MIME type this map producer supports */
-    static final String MIME_TYPE = "application/pdf";
-    
-    /** 
-     * Default capabilities for OpenLayers format.
-     * 
-     * <p>
-     * <ol>
-     *         <li>tiled = unsupported</li>
-     *         <li>multipleValues = unsupported</li>
-     *         <li>paletteSupported = unsupported</li>
-     *         <li>transparency = supported</li>
-     * </ol>
-     */
-    private static MapProducerCapabilities CAPABILITIES = new MapProducerCapabilities(false, false, false, true, null);
+  /** the only MIME type this map producer supports */
+  static final String MIME_TYPE = "application/pdf";
 
-    public static class PDFMap extends org.geoserver.wms.WebMap {
+  /**
+   * Default capabilities for OpenLayers format.
+   *
+   * <p>
+   *
+   * <ol>
+   *   <li>tiled = unsupported
+   *   <li>multipleValues = unsupported
+   *   <li>paletteSupported = unsupported
+   *   <li>transparency = supported
+   * </ol>
+   */
+  private static MapProducerCapabilities CAPABILITIES =
+      new MapProducerCapabilities(false, false, false, true, null);
 
-        public PDFMap(final WMSMapContent mapContent) {
-            super(mapContent);
-        }
+  public static class PDFMap extends org.geoserver.wms.WebMap {
 
-        public WMSMapContent getContext() {
-            return mapContent;
-        }
+    public PDFMap(final WMSMapContent mapContent) {
+      super(mapContent);
     }
 
-    public PDFMapOutputFormat() {
-        super(MIME_TYPE);
+    public WMSMapContent getContext() {
+      return mapContent;
     }
+  }
 
-    /**
-     * @see org.geoserver.wms.GetMapOutputFormat#produceMap(org.geoserver.wms.WMSMapContent)
-     */
-    public PDFMap produceMap(final WMSMapContent mapContent) throws ServiceException, IOException {
+  public PDFMapOutputFormat() {
+    super(MIME_TYPE);
+  }
 
-        PDFMap result = new PDFMap(mapContent);
-        result.setContentDispositionHeader(mapContent, ".pdf");
-        result.setMimeType(MIME_TYPE);
-        return result;
-    }
+  /** @see org.geoserver.wms.GetMapOutputFormat#produceMap(org.geoserver.wms.WMSMapContent) */
+  public PDFMap produceMap(final WMSMapContent mapContent) throws ServiceException, IOException {
 
-    public MapProducerCapabilities getCapabilities(String format) {
-        return CAPABILITIES;
-    }
+    PDFMap result = new PDFMap(mapContent);
+    result.setContentDispositionHeader(mapContent, ".pdf");
+    result.setMimeType(MIME_TYPE);
+    return result;
+  }
 
+  public MapProducerCapabilities getCapabilities(String format) {
+    return CAPABILITIES;
+  }
 }

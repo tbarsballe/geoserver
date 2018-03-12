@@ -10,23 +10,22 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.geoserver.web.GeoServerBasePage;
 import org.geoserver.web.wicket.SRSListPanel;
 
-/**
- * Lists all the SRS available in GeoServer
- */
+/** Lists all the SRS available in GeoServer */
 @SuppressWarnings("serial")
 public class SRSListPage extends GeoServerBasePage {
 
-    public SRSListPage() {
-        add(srsListPanel());
-    }
+  public SRSListPage() {
+    add(srsListPanel());
+  }
 
-    SRSListPanel srsListPanel() {
-        return new SRSListPanel("srsListPanel") {
+  SRSListPanel srsListPanel() {
+    return new SRSListPanel("srsListPanel") {
 
-            @Override
-            protected void onCodeClicked(AjaxRequestTarget target, String epsgCode) {
-                setResponsePage(SRSDescriptionPage.class, new PageParameters().add("code", "EPSG:" + epsgCode));
-            }
-        };
-    }
+      @Override
+      protected void onCodeClicked(AjaxRequestTarget target, String epsgCode) {
+        setResponsePage(
+            SRSDescriptionPage.class, new PageParameters().add("code", "EPSG:" + epsgCode));
+      }
+    };
+  }
 }

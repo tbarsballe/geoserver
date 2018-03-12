@@ -9,7 +9,6 @@ import static org.junit.Assert.assertNull;
 
 import java.net.URL;
 import java.util.logging.Level;
-
 import org.apache.wicket.Component;
 import org.apache.wicket.util.tester.FormTester;
 import org.geoserver.catalog.Catalog;
@@ -23,133 +22,130 @@ import org.junit.Test;
 
 public class WMTSStoreNewPageTest extends GeoServerWicketTestSupport {
 
-    /**
-     * print page structure?
-     */
-    private static final boolean debugMode = true;
+  /** print page structure? */
+  private static final boolean debugMode = true;
 
-    @Before
-    public void init() {
-        Logging.getLogger("org.geoserver").setLevel(Level.FINE);
-        Logging.getLogger("org.vfny.geoserver").setLevel(Level.FINE);
-        Logging.getLogger("org.geotools").setLevel(Level.FINE);
+  @Before
+  public void init() {
+    Logging.getLogger("org.geoserver").setLevel(Level.FINE);
+    Logging.getLogger("org.vfny.geoserver").setLevel(Level.FINE);
+    Logging.getLogger("org.geotools").setLevel(Level.FINE);
+  }
 
+  private WMTSStoreNewPage startPage() {
+
+    final WMTSStoreNewPage page = new WMTSStoreNewPage();
+    login();
+    tester.startPage(page);
+
+    if (debugMode) {
+      print(page, true, true);
     }
 
-    private WMTSStoreNewPage startPage() {
+    return page;
+  }
 
-        final WMTSStoreNewPage page = new WMTSStoreNewPage();
-        login();
-        tester.startPage(page);
+  /** A kind of smoke test that only asserts the page is rendered when first loaded */
+  @Test
+  public void testPageRendersOnLoad() {
 
-        if (debugMode) {
-            print(page, true, true);
-        }
+    startPage();
 
-        return page;
-    }
+    tester.assertComponent("form:workspacePanel", WorkspacePanel.class);
+  }
 
-    /**
-     * A kind of smoke test that only asserts the page is rendered when first loaded
-     */
-    @Test
-    public void testPageRendersOnLoad() {
+  @Test
+  public void testInitialModelState() {
 
-        startPage();
+    WMTSStoreNewPage page = startPage();
+    // print(page, true, true);
 
-        tester.assertComponent("form:workspacePanel", WorkspacePanel.class);
-    }
+    assertNull(page.getDefaultModelObject());
 
-    @Test
-    public void testInitialModelState() {
+    tester.assertModelValue("form:enabledPanel:paramValue", Boolean.TRUE);
+    tester.assertModelValue(
+        "form:workspacePanel:border:border_body:paramValue", getCatalog().getDefaultWorkspace());
+  }
 
-        WMTSStoreNewPage page = startPage();
-        // print(page, true, true);
+  @Test
+  public void testSaveNewStore() {
 
-        assertNull(page.getDefaultModelObject());
+    WMTSStoreNewPage page = startPage();
+    // print(page, true, true);
 
-        tester.assertModelValue("form:enabledPanel:paramValue", Boolean.TRUE);
-        tester.assertModelValue("form:workspacePanel:border:border_body:paramValue",
-                getCatalog().getDefaultWorkspace());
-    }
+    assertNull(page.getDefaultModelObject());
 
-    @Test
-    public void testSaveNewStore() {
+    final Catalog catalog = getCatalog();
+    WMTSStoreInfo info = catalog.getFactory().createWebMapTileServer();
+    info.setName("foo");
 
-        WMTSStoreNewPage page = startPage();
-        // print(page, true, true);
+    tester.assertNoErrorMessage();
 
-        assertNull(page.getDefaultModelObject());
+    FormTester form = tester.newFormTester("form");
+    form.select("workspacePanel:border:border_body:paramValue", 4);
+    Component wsDropDown =
+        tester.getComponentFromLastRenderedPage(
+            "form:workspacePanel:border:border_body:paramValue");
+    tester.executeAjaxEvent(wsDropDown, "change");
+    form.setValue("namePanel:border:border_body:paramValue", "foo");
+    form.setValue("capabilitiesURL:border:border_body:paramValue", "http://foo");
 
-        final Catalog catalog = getCatalog();
-        WMTSStoreInfo info = catalog.getFactory().createWebMapTileServer();
-        info.setName("foo");
+    tester.clickLink("form:save", true);
+    tester.assertErrorMessages("WMTS Connection test failed: foo");
+    catalog.save(info);
 
-        tester.assertNoErrorMessage();
+    assertNotNull(info.getId());
 
-        FormTester form = tester.newFormTester("form");
-        form.select("workspacePanel:border:border_body:paramValue", 4);
-        Component wsDropDown = tester.getComponentFromLastRenderedPage(
-                "form:workspacePanel:border:border_body:paramValue");
-        tester.executeAjaxEvent(wsDropDown, "change");
-        form.setValue("namePanel:border:border_body:paramValue", "foo");
-        form.setValue("capabilitiesURL:border:border_body:paramValue", "http://foo");
+    WMTSStoreInfo expandedStore = catalog.getResourcePool().clone(info, true);
 
-        tester.clickLink("form:save", true);
-        tester.assertErrorMessages("WMTS Connection test failed: foo");
-        catalog.save(info);
+    assertNotNull(expandedStore.getId());
+    assertNotNull(expandedStore.getCatalog());
 
-        assertNotNull(info.getId());
+    catalog.validate(expandedStore, false).throwIfInvalid();
+  }
 
-        WMTSStoreInfo expandedStore = catalog.getResourcePool().clone(info, true);
+  @Test
+  @Ignore
+  public void testSaveNewStoreEntityExpansion() throws Exception {
 
-        assertNotNull(expandedStore.getId());
-        assertNotNull(expandedStore.getCatalog());
+    WMTSStoreNewPage page = startPage();
 
-        catalog.validate(expandedStore, false).throwIfInvalid();
-    }
+    assertNull(page.getDefaultModelObject());
 
-    @Test
-    @Ignore
-    public void testSaveNewStoreEntityExpansion() throws Exception {
+    final Catalog catalog = getCatalog();
+    WMTSStoreInfo info = (WMTSStoreInfo) getCatalog().getFactory().createWebMapTileServer();
+    URL url = getClass().getResource("WMTSGetCapabilities.xml");
+    assertNotNull(url);
+    info.setName("bar");
 
-        WMTSStoreNewPage page = startPage();
+    tester.assertNoErrorMessage();
 
-        assertNull(page.getDefaultModelObject());
+    FormTester form = tester.newFormTester("form");
+    form.select("workspacePanel:border:border_body:paramValue", 4);
+    Component wsDropDown =
+        tester.getComponentFromLastRenderedPage(
+            "form:workspacePanel:border:border_body:paramValue");
+    tester.executeAjaxEvent(wsDropDown, "change");
+    form.setValue("namePanel:border:border_body:paramValue", "bar");
+    form.setValue("capabilitiesURL:border:border_body:paramValue", url.toExternalForm());
 
-        final Catalog catalog = getCatalog();
-        WMTSStoreInfo info = (WMTSStoreInfo) getCatalog().getFactory().createWebMapTileServer();
-        URL url = getClass().getResource("WMTSGetCapabilities.xml");
-        assertNotNull(url);
-        info.setName("bar");
+    tester.clickLink("form:save", true);
+    tester.assertErrorMessages("Connection test failed: Error while parsing XML.");
 
-        tester.assertNoErrorMessage();
+    // make sure clearing the catalog does not clear the EntityResolver
+    getGeoServer().reload();
+    tester.clickLink("form:save", true);
+    tester.assertErrorMessages("Connection test failed: Error while parsing XML.");
 
-        FormTester form = tester.newFormTester("form");
-        form.select("workspacePanel:border:border_body:paramValue", 4);
-        Component wsDropDown = tester.getComponentFromLastRenderedPage(
-                "form:workspacePanel:border:border_body:paramValue");
-        tester.executeAjaxEvent(wsDropDown, "change");
-        form.setValue("namePanel:border:border_body:paramValue", "bar");
-        form.setValue("capabilitiesURL:border:border_body:paramValue", url.toExternalForm());
+    catalog.save(info);
 
-        tester.clickLink("form:save", true);
-        tester.assertErrorMessages("Connection test failed: Error while parsing XML.");
+    assertNotNull(info.getId());
 
-        //make sure clearing the catalog does not clear the EntityResolver
-        getGeoServer().reload();
-        tester.clickLink("form:save", true);
-        tester.assertErrorMessages("Connection test failed: Error while parsing XML.");
+    WMTSStoreInfo expandedStore = (WMTSStoreInfo) catalog.getResourcePool().clone(info, true);
 
-        catalog.save(info);
+    assertNotNull(expandedStore.getId());
+    assertNotNull(expandedStore.getCatalog());
 
-        assertNotNull(info.getId());
-
-        WMTSStoreInfo expandedStore = (WMTSStoreInfo) catalog.getResourcePool().clone(info, true);
-
-        assertNotNull(expandedStore.getId());
-        assertNotNull(expandedStore.getCatalog());
-
-        catalog.validate(expandedStore, false).throwIfInvalid();
-    }
+    catalog.validate(expandedStore, false).throwIfInvalid();
+  }
 }

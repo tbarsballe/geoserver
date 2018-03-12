@@ -4,25 +4,21 @@
  */
 package org.geoserver.wms.featureinfo;
 
-import org.geoserver.platform.GeoServerExtensions;
-
 import freemarker.template.SimpleScalar;
 import freemarker.template.TemplateHashModel;
 import freemarker.template.TemplateModel;
 import freemarker.template.TemplateModelException;
+import org.geoserver.platform.GeoServerExtensions;
 
 public class EnvironmentVariablesTemplateModel implements TemplateHashModel {
 
-    @Override
-    public TemplateModel get(String propertyName) throws TemplateModelException {
-        return new SimpleScalar(GeoServerExtensions.getProperty(propertyName));
-    }
+  @Override
+  public TemplateModel get(String propertyName) throws TemplateModelException {
+    return new SimpleScalar(GeoServerExtensions.getProperty(propertyName));
+  }
 
-    @Override
-    public boolean isEmpty() throws TemplateModelException {
-        return false;
-    }
-
-    
-
+  @Override
+  public boolean isEmpty() throws TemplateModelException {
+    return false;
+  }
 }

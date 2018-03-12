@@ -13,23 +13,23 @@ import org.w3c.dom.Document;
 
 public class WCSDisabledTest extends WCSTestSupport {
 
-    @Test
-    public void testDisabledServiceResponse() throws Exception {
-        WCSInfo wcs = getGeoServer().getService(WCSInfo.class);
-        wcs.setEnabled(false);
-        getGeoServer().save(wcs);
+  @Test
+  public void testDisabledServiceResponse() throws Exception {
+    WCSInfo wcs = getGeoServer().getService(WCSInfo.class);
+    wcs.setEnabled(false);
+    getGeoServer().save(wcs);
 
-        Document doc = getAsDOM("wcs?service=WCS&request=getCapabilities");
-        assertEquals("ows:ExceptionReport", doc.getDocumentElement().getNodeName());
-    }
+    Document doc = getAsDOM("wcs?service=WCS&request=getCapabilities");
+    assertEquals("ows:ExceptionReport", doc.getDocumentElement().getNodeName());
+  }
 
-    @Test
-    public void testEnabledServiceResponse() throws Exception {
-        WCSInfo wcs = getGeoServer().getService(WCSInfo.class);
-        wcs.setEnabled(true);
-        getGeoServer().save(wcs);
+  @Test
+  public void testEnabledServiceResponse() throws Exception {
+    WCSInfo wcs = getGeoServer().getService(WCSInfo.class);
+    wcs.setEnabled(true);
+    getGeoServer().save(wcs);
 
-        Document doc = getAsDOM("wcs?service=WCS&request=getCapabilities");
-        assertEquals("wcs:WCS_Capabilities", doc.getDocumentElement().getNodeName());
-    }
+    Document doc = getAsDOM("wcs?service=WCS&request=getCapabilities");
+    assertEquals("wcs:WCS_Capabilities", doc.getDocumentElement().getNodeName());
+  }
 }

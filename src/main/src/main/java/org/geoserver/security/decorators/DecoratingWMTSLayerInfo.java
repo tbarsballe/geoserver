@@ -7,7 +7,6 @@ package org.geoserver.security.decorators;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-
 import org.geoserver.catalog.Catalog;
 import org.geoserver.catalog.CatalogVisitor;
 import org.geoserver.catalog.DataLinkInfo;
@@ -29,207 +28,206 @@ import org.opengis.util.ProgressListener;
 /**
  * Delegates every method to the delegate wmts layer info.
  *
- * Subclasses will override selected methods to perform their "decoration" job
- * 
+ * <p>Subclasses will override selected methods to perform their "decoration" job
+ *
  * @author Emanuele Tajariol (etj at geo-solutions dot it)
  */
-public class DecoratingWMTSLayerInfo extends AbstractDecorator<WMTSLayerInfo> implements WMTSLayerInfo {
-    
-    public DecoratingWMTSLayerInfo(WMTSLayerInfo delegate) {
-        super(delegate);
-    }
+public class DecoratingWMTSLayerInfo extends AbstractDecorator<WMTSLayerInfo>
+    implements WMTSLayerInfo {
 
-    public void accept(CatalogVisitor visitor) {
-        delegate.accept(visitor);
-    }
+  public DecoratingWMTSLayerInfo(WMTSLayerInfo delegate) {
+    super(delegate);
+  }
 
-    public ReferencedEnvelope boundingBox() throws Exception {
-        return delegate.boundingBox();
-    }
+  public void accept(CatalogVisitor visitor) {
+    delegate.accept(visitor);
+  }
 
-    public boolean enabled() {
-        return delegate.enabled();
-    }
+  public ReferencedEnvelope boundingBox() throws Exception {
+    return delegate.boundingBox();
+  }
 
-    public String getAbstract() {
-        return delegate.getAbstract();
-    }
+  public boolean enabled() {
+    return delegate.enabled();
+  }
 
-    public <T> T getAdapter(Class<T> adapterClass, Map<?, ?> hints) {
-        return delegate.getAdapter(adapterClass, hints);
-    }
+  public String getAbstract() {
+    return delegate.getAbstract();
+  }
 
-    public List<String> getAlias() {
-        return delegate.getAlias();
-    }
+  public <T> T getAdapter(Class<T> adapterClass, Map<?, ?> hints) {
+    return delegate.getAdapter(adapterClass, hints);
+  }
 
-    public Catalog getCatalog() {
-        return delegate.getCatalog();
-    }
+  public List<String> getAlias() {
+    return delegate.getAlias();
+  }
 
-    public CoordinateReferenceSystem getCRS() {
-        return delegate.getCRS();
-    }
+  public Catalog getCatalog() {
+    return delegate.getCatalog();
+  }
 
-    public String getDescription() {
-        return delegate.getDescription();
-    }
+  public CoordinateReferenceSystem getCRS() {
+    return delegate.getCRS();
+  }
 
-    public String getId() {
-        return delegate.getId();
-    }
+  public String getDescription() {
+    return delegate.getDescription();
+  }
 
-    @Override
-    public List<KeywordInfo> getKeywords() {
-        return delegate.getKeywords();
-    }
+  public String getId() {
+    return delegate.getId();
+  }
 
-    public List<String> keywordValues() {
-        return delegate.keywordValues();
-    }
+  @Override
+  public List<KeywordInfo> getKeywords() {
+    return delegate.getKeywords();
+  }
 
-    public ReferencedEnvelope getLatLonBoundingBox() {
-        return delegate.getLatLonBoundingBox();
-    }
+  public List<String> keywordValues() {
+    return delegate.keywordValues();
+  }
 
-    public MetadataMap getMetadata() {
-        return delegate.getMetadata();
-    }
+  public ReferencedEnvelope getLatLonBoundingBox() {
+    return delegate.getLatLonBoundingBox();
+  }
 
-    public List<MetadataLinkInfo> getMetadataLinks() {
-        return delegate.getMetadataLinks();
-    }
+  public MetadataMap getMetadata() {
+    return delegate.getMetadata();
+  }
 
-    @Override
-    public List<DataLinkInfo> getDataLinks() {
-        return delegate.getDataLinks();
-    }
+  public List<MetadataLinkInfo> getMetadataLinks() {
+    return delegate.getMetadataLinks();
+  }
 
-    public String getName() {
-        return delegate.getName();
-    }
+  @Override
+  public List<DataLinkInfo> getDataLinks() {
+    return delegate.getDataLinks();
+  }
 
-    public NamespaceInfo getNamespace() {
-        return delegate.getNamespace();
-    }
+  public String getName() {
+    return delegate.getName();
+  }
 
-    public ReferencedEnvelope getNativeBoundingBox() {
-        return delegate.getNativeBoundingBox();
-    }
+  public NamespaceInfo getNamespace() {
+    return delegate.getNamespace();
+  }
 
-    public CoordinateReferenceSystem getNativeCRS() {
-        return delegate.getNativeCRS();
-    }
+  public ReferencedEnvelope getNativeBoundingBox() {
+    return delegate.getNativeBoundingBox();
+  }
 
-    public String getNativeName() {
-        return delegate.getNativeName();
-    }
+  public CoordinateReferenceSystem getNativeCRS() {
+    return delegate.getNativeCRS();
+  }
 
-    public String getPrefixedName() {
-        return delegate.getPrefixedName();
-    }
+  public String getNativeName() {
+    return delegate.getNativeName();
+  }
 
-    public String prefixedName() {
-        return delegate.prefixedName();
-    }
+  public String getPrefixedName() {
+    return delegate.getPrefixedName();
+  }
 
-    public ProjectionPolicy getProjectionPolicy() {
-        return delegate.getProjectionPolicy();
-    }
+  public String prefixedName() {
+    return delegate.prefixedName();
+  }
 
-    public Name getQualifiedName() {
-        return delegate.getQualifiedName();
-    }
+  public ProjectionPolicy getProjectionPolicy() {
+    return delegate.getProjectionPolicy();
+  }
 
-    public Name getQualifiedNativeName() {
-        return delegate.getQualifiedNativeName();
-    }
+  public Name getQualifiedName() {
+    return delegate.getQualifiedName();
+  }
 
-    public String getSRS() {
-        return delegate.getSRS();
-    }
+  public Name getQualifiedNativeName() {
+    return delegate.getQualifiedNativeName();
+  }
 
-    public WMTSStoreInfo getStore() {
-        return delegate.getStore();
-    }
+  public String getSRS() {
+    return delegate.getSRS();
+  }
 
-    public String getTitle() {
-        return delegate.getTitle();
-    }
+  public WMTSStoreInfo getStore() {
+    return delegate.getStore();
+  }
 
-    public Layer getWMTSLayer(ProgressListener listener) throws IOException {
-        return delegate.getWMTSLayer(listener);
-    }
+  public String getTitle() {
+    return delegate.getTitle();
+  }
 
-    public boolean isEnabled() {
-        return delegate.isEnabled();
-    }
+  public Layer getWMTSLayer(ProgressListener listener) throws IOException {
+    return delegate.getWMTSLayer(listener);
+  }
 
-    public void setAbstract(String abstract1) {
-        delegate.setAbstract(abstract1);
-    }
+  public boolean isEnabled() {
+    return delegate.isEnabled();
+  }
 
-    public void setCatalog(Catalog catalog) {
-        delegate.setCatalog(catalog);
-    }
+  public void setAbstract(String abstract1) {
+    delegate.setAbstract(abstract1);
+  }
 
-    public void setDescription(String description) {
-        delegate.setDescription(description);
-    }
+  public void setCatalog(Catalog catalog) {
+    delegate.setCatalog(catalog);
+  }
 
-    public void setEnabled(boolean enabled) {
-        delegate.setEnabled(enabled);
-    }
+  public void setDescription(String description) {
+    delegate.setDescription(description);
+  }
 
-    public void setLatLonBoundingBox(ReferencedEnvelope box) {
-        delegate.setLatLonBoundingBox(box);
-    }
+  public void setEnabled(boolean enabled) {
+    delegate.setEnabled(enabled);
+  }
 
-    public void setName(String name) {
-        delegate.setName(name);
-    }
+  public void setLatLonBoundingBox(ReferencedEnvelope box) {
+    delegate.setLatLonBoundingBox(box);
+  }
 
-    public void setNamespace(NamespaceInfo namespace) {
-        delegate.setNamespace(namespace);
-    }
+  public void setName(String name) {
+    delegate.setName(name);
+  }
 
-    public void setNativeBoundingBox(ReferencedEnvelope box) {
-        delegate.setNativeBoundingBox(box);
-    }
+  public void setNamespace(NamespaceInfo namespace) {
+    delegate.setNamespace(namespace);
+  }
 
-    public void setNativeCRS(CoordinateReferenceSystem nativeCRS) {
-        delegate.setNativeCRS(nativeCRS);
-    }
+  public void setNativeBoundingBox(ReferencedEnvelope box) {
+    delegate.setNativeBoundingBox(box);
+  }
 
-    public void setNativeName(String nativeName) {
-        delegate.setNativeName(nativeName);
-    }
+  public void setNativeCRS(CoordinateReferenceSystem nativeCRS) {
+    delegate.setNativeCRS(nativeCRS);
+  }
 
-    public void setProjectionPolicy(ProjectionPolicy policy) {
-        delegate.setProjectionPolicy(policy);
-    }
+  public void setNativeName(String nativeName) {
+    delegate.setNativeName(nativeName);
+  }
 
-    public void setSRS(String srs) {
-        delegate.setSRS(srs);
-    }
+  public void setProjectionPolicy(ProjectionPolicy policy) {
+    delegate.setProjectionPolicy(policy);
+  }
 
-    public void setStore(StoreInfo store) {
-        delegate.setStore(store);
-    }
+  public void setSRS(String srs) {
+    delegate.setSRS(srs);
+  }
 
-    public void setTitle(String title) {
-        delegate.setTitle(title);
-    }
+  public void setStore(StoreInfo store) {
+    delegate.setStore(store);
+  }
 
-    @Override
-    public boolean isAdvertised() {
-        return delegate.isAdvertised();
-    }
-    
-    @Override
-    public void setAdvertised(boolean advertised) {
-        delegate.setAdvertised(advertised);
-    }
+  public void setTitle(String title) {
+    delegate.setTitle(title);
+  }
 
+  @Override
+  public boolean isAdvertised() {
+    return delegate.isAdvertised();
+  }
 
+  @Override
+  public void setAdvertised(boolean advertised) {
+    delegate.setAdvertised(advertised);
+  }
 }

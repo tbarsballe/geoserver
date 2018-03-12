@@ -8,17 +8,15 @@ package org.geoserver.web.data.store;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.geoserver.catalog.StoreInfo;
 
-/**
- * Simple choice renderer for {@link StoreInfo}
- */
+/** Simple choice renderer for {@link StoreInfo} */
 @SuppressWarnings("serial")
-public class StoreChoiceRenderer extends ChoiceRenderer {       
+public class StoreChoiceRenderer extends ChoiceRenderer {
 
-    public Object getDisplayValue(Object object) {
-        return ((StoreInfo) object).getName();
-    }
+  public Object getDisplayValue(Object object) {
+    return ((StoreInfo) object).getName();
+  }
 
-    public String getIdValue(Object object, int index) {
-        return ((StoreInfo) object).getId();
-    }
+  public String getIdValue(Object object, int index) {
+    return ((StoreInfo) object).getId();
+  }
 }

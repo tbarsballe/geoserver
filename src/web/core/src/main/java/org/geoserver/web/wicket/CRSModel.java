@@ -11,47 +11,45 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 /**
  * Model wrapper for {@link CoordinateReferenceSystem} instances.
- * <p>
- * This model operates by persisting the wkt ({@link CoordinateReferenceSystem#toWKT()}) for
- * a crs.
- * </p>
- * @author Justin Deoliveira, OpenGeo
  *
+ * <p>This model operates by persisting the wkt ({@link CoordinateReferenceSystem#toWKT()}) for a
+ * crs.
+ *
+ * @author Justin Deoliveira, OpenGeo
  */
 @SuppressWarnings("serial")
 public class CRSModel implements IModel<CoordinateReferenceSystem> {
 
-    transient CoordinateReferenceSystem crs;
-    String wkt;
-    
-    public CRSModel(CoordinateReferenceSystem crs) {
-        setObject(crs);
+  transient CoordinateReferenceSystem crs;
+  String wkt;
+
+  public CRSModel(CoordinateReferenceSystem crs) {
+    setObject(crs);
+  }
+
+  public CoordinateReferenceSystem getObject() {
+    if (crs != null) {
+      return crs;
     }
 
-    public CoordinateReferenceSystem getObject() {
-        if ( crs != null ) {
-            return crs;
-        }
-        
-        if(wkt == null) {
-            return null;
-        }
-        
-        try {
-            crs = CRS.parseWKT( wkt );
-            return crs;
-        } 
-        catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    if (wkt == null) {
+      return null;
     }
 
-    public void setObject(CoordinateReferenceSystem object) {
-        this.crs = object;
-        this.wkt = crs != null ? crs.toWKT() : null;
+    try {
+      crs = CRS.parseWKT(wkt);
+      return crs;
+    } catch (Exception e) {
+      throw new RuntimeException(e);
     }
+  }
 
-    public void detach() {
-        crs = null;
-    }
+  public void setObject(CoordinateReferenceSystem object) {
+    this.crs = object;
+    this.wkt = crs != null ? crs.toWKT() : null;
+  }
+
+  public void detach() {
+    crs = null;
+  }
 }

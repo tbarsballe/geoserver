@@ -7,7 +7,6 @@ package org.geoserver.web.data.layer;
 
 import java.io.IOException;
 import java.util.logging.Level;
-
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.geoserver.catalog.CatalogBuilder;
 import org.geoserver.catalog.DataStoreInfo;
@@ -20,36 +19,34 @@ import org.geotools.jdbc.VirtualTable;
 
 public class SQLViewNewPage extends SQLViewAbstractPage {
 
-    /** serialVersionUID */
-    private static final long serialVersionUID = 3670565306101168775L;
+  /** serialVersionUID */
+  private static final long serialVersionUID = 3670565306101168775L;
 
-    public SQLViewNewPage(PageParameters params) throws IOException {
-        super(params);
+  public SQLViewNewPage(PageParameters params) throws IOException {
+    super(params);
+  }
+
+  @Override
+  protected void onSave() {
+    try {
+      VirtualTable vt = buildVirtualTable();
+      DataStoreInfo dsInfo = getCatalog().getStore(storeId, DataStoreInfo.class);
+      JDBCDataStore ds = (JDBCDataStore) dsInfo.getDataStore(null);
+      ds.createVirtualTable(vt);
+
+      CatalogBuilder builder = new CatalogBuilder(getCatalog());
+      builder.setStore(dsInfo);
+      FeatureTypeInfo fti = builder.buildFeatureType(ds.getFeatureSource(vt.getName()));
+      fti.getMetadata().put(FeatureTypeInfo.JDBC_VIRTUAL_TABLE, vt);
+      LayerInfo layerInfo = builder.buildLayer(fti);
+      setResponsePage(new ResourceConfigurationPage(layerInfo, true));
+    } catch (Exception e) {
+      LOGGER.log(Level.SEVERE, "Failed to create feature type", e);
+      error(new ParamResourceModel("creationFailure", this, getFirstErrorMessage(e)).getString());
     }
+  }
 
-    @Override
-    protected void onSave() {
-        try {
-            VirtualTable vt = buildVirtualTable();
-            DataStoreInfo dsInfo = getCatalog().getStore(storeId, DataStoreInfo.class);
-            JDBCDataStore ds = (JDBCDataStore) dsInfo.getDataStore(null);
-            ds.createVirtualTable(vt);
-
-            CatalogBuilder builder = new CatalogBuilder(getCatalog());
-            builder.setStore(dsInfo);
-            FeatureTypeInfo fti = builder.buildFeatureType(ds.getFeatureSource(vt.getName()));
-            fti.getMetadata().put(FeatureTypeInfo.JDBC_VIRTUAL_TABLE, vt);
-            LayerInfo layerInfo = builder.buildLayer(fti);
-            setResponsePage(new ResourceConfigurationPage(layerInfo, true));
-        } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, "Failed to create feature type", e);
-            error(new ParamResourceModel("creationFailure", this, getFirstErrorMessage(e))
-                    .getString());
-        }
-    }
-    
-    protected void onCancel() {
-        doReturn(LayerPage.class);
-    }
-
+  protected void onCancel() {
+    doReturn(LayerPage.class);
+  }
 }

@@ -13,27 +13,26 @@ import org.geoserver.web.wicket.HelpLink;
 
 /**
  * Base class for master password provider panels.
- * 
- * @author Justin Deoliveira, OpenGeo
  *
+ * @author Justin Deoliveira, OpenGeo
  */
-public class MasterPasswordProviderPanel<T extends MasterPasswordProviderConfig> 
+public class MasterPasswordProviderPanel<T extends MasterPasswordProviderConfig>
     extends SecurityNamedServicePanel<T> {
 
-    public MasterPasswordProviderPanel(String id, IModel<T> model) {
-        super(id, model);
+  public MasterPasswordProviderPanel(String id, IModel<T> model) {
+    super(id, model);
 
-        add(new CheckBox("readOnly"));
-        add(new HelpLink("settingsHelp", this).setDialog(dialog));
-    }
+    add(new CheckBox("readOnly"));
+    add(new HelpLink("settingsHelp", this).setDialog(dialog));
+  }
 
-    @Override
-    public void doSave(T config) throws Exception {
-        getSecurityManager().saveMasterPasswordProviderConfig(config);
-    }
+  @Override
+  public void doSave(T config) throws Exception {
+    getSecurityManager().saveMasterPasswordProviderConfig(config);
+  }
 
-    @Override
-    public void doLoad(T config) throws Exception {
-        getSecurityManager().loadMasterPassswordProviderConfig(config.getName());
-    }
+  @Override
+  public void doLoad(T config) throws Exception {
+    getSecurityManager().loadMasterPassswordProviderConfig(config.getName());
+  }
 }

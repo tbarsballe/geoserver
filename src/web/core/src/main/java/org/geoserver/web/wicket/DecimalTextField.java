@@ -12,31 +12,30 @@ import org.apache.wicket.util.convert.IConverter;
 /**
  * A TextField for {@code java.lang.Double} representations that allows for arbitrary number of
  * decimal places, since the default TextField rounds up doubles to three decimals.
- * 
+ *
  * @author groldan
  */
 public class DecimalTextField extends TextField<Double> {
 
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-        private DecimalConverter decimalConverter;
+  private DecimalConverter decimalConverter;
 
-    public DecimalTextField(String id, IModel<Double> model) {
-        super(id, model, Double.class);
-        decimalConverter = new DecimalConverter();
+  public DecimalTextField(String id, IModel<Double> model) {
+    super(id, model, Double.class);
+    decimalConverter = new DecimalConverter();
+  }
+
+  public void setMaximumFractionDigits(int maximumFractionDigits) {
+    decimalConverter.setMaximumFractionDigits(maximumFractionDigits);
+  }
+
+  @SuppressWarnings("unchecked")
+  @Override
+  public <C> IConverter<C> getConverter(Class<C> type) {
+    if (Double.class.isAssignableFrom(type)) {
+      return (IConverter<C>) decimalConverter;
     }
-
-    public void setMaximumFractionDigits(int maximumFractionDigits) {
-        decimalConverter.setMaximumFractionDigits(maximumFractionDigits);
-    }
-
-    
-    @SuppressWarnings("unchecked")
-    @Override
-    public <C> IConverter<C> getConverter(Class<C> type) {
-        if( Double.class.isAssignableFrom(type)){
-            return (IConverter<C>) decimalConverter;
-        }
-        return super.getConverter(type);
-    }
+    return super.getConverter(type);
+  }
 }

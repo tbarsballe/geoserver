@@ -15,9 +15,8 @@ import org.apache.wicket.model.StringResourceModel;
 @SuppressWarnings("serial")
 public class ParamResourceModel extends org.apache.wicket.model.StringResourceModel {
 
-    public ParamResourceModel(String resourceKey, Component component, Object... resources) {
-        super(resourceKey, component);
-        setParameters(resources);
-    }
-
+  public ParamResourceModel(String resourceKey, Component component, Object... resources) {
+    super(resourceKey, component);
+    setParameters(resources);
+  }
 }

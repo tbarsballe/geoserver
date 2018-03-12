@@ -13,16 +13,16 @@ import org.geoserver.security.xml.XMLUserGroupServiceConfig;
 
 /**
  * Configuration panel for {@link XMLUserGroupService}.
- *  
+ *
  * @author Justin Deoliveira, OpenGeo
  */
 public class XMLUserGroupServicePanel extends UserGroupServicePanel<XMLUserGroupServiceConfig> {
 
-    public XMLUserGroupServicePanel(String id, IModel<XMLUserGroupServiceConfig> model) {
-        super(id, model);
+  public XMLUserGroupServicePanel(String id, IModel<XMLUserGroupServiceConfig> model) {
+    super(id, model);
 
-        add(new TextField("fileName").setEnabled(isNew()));
-        add(new CheckBox("validating"));
-        add(new TextField("checkInterval"));
-    }
+    add(new TextField("fileName").setEnabled(isNew()));
+    add(new CheckBox("validating"));
+    add(new TextField("checkInterval"));
+  }
 }

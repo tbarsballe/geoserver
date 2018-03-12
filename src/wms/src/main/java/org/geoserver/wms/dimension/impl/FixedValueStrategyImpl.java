@@ -13,52 +13,53 @@ import org.geotools.util.Range;
 
 /**
  * A default value strategy which always return the same fixed value.
- *  
+ *
  * @author Ilkka Rinne / Spatineo Inc for the Finnish Meteorological Institute
  */
 public class FixedValueStrategyImpl extends AbstractDefaultValueSelectionStrategy {
 
-    private Object value;
-    private String fixedCapabilitiesValue;
-    
-    /**
-     * Constructs a 
-     * @param value
-     * @param fixedCapabilitiesValue 
-     */
-    public FixedValueStrategyImpl(Object value) {
-        this.value = value;
-    }
+  private Object value;
+  private String fixedCapabilitiesValue;
 
-    public FixedValueStrategyImpl(Object value, String fixedCapabilitiesValue) {
-        this.value = value;
-        this.fixedCapabilitiesValue = fixedCapabilitiesValue;
-    }
+  /**
+   * Constructs a
+   *
+   * @param value
+   * @param fixedCapabilitiesValue
+   */
+  public FixedValueStrategyImpl(Object value) {
+    this.value = value;
+  }
 
-    @Override
-    public Object getDefaultValue(ResourceInfo resource, String dimensionName,
-            DimensionInfo dimension, Class clz) {
-        if(value instanceof Range) {
-            Range r = (Range) value;
-            if(clz.isAssignableFrom(r.getElementClass())) {
-                return r;
-            } else {
-                Comparable min = (Comparable) Converters.convert(r.getMinValue(), clz);
-                Comparable max = (Comparable) Converters.convert(r.getMaxValue(), clz);
-                return new Range(clz, min, max);
-            }
-        } else {
-            return Converters.convert(this.value, clz);
-        }
-    }
-    
-    @Override
-    public String getCapabilitiesRepresentation(ResourceInfo resource, String dimensionName, DimensionInfo dimensionInfo) {
-        if (fixedCapabilitiesValue != null){
-            return this.fixedCapabilitiesValue;
-        } else {
-            return super.getCapabilitiesRepresentation(resource, dimensionName, dimensionInfo);
-        }
-    }
+  public FixedValueStrategyImpl(Object value, String fixedCapabilitiesValue) {
+    this.value = value;
+    this.fixedCapabilitiesValue = fixedCapabilitiesValue;
+  }
 
+  @Override
+  public Object getDefaultValue(
+      ResourceInfo resource, String dimensionName, DimensionInfo dimension, Class clz) {
+    if (value instanceof Range) {
+      Range r = (Range) value;
+      if (clz.isAssignableFrom(r.getElementClass())) {
+        return r;
+      } else {
+        Comparable min = (Comparable) Converters.convert(r.getMinValue(), clz);
+        Comparable max = (Comparable) Converters.convert(r.getMaxValue(), clz);
+        return new Range(clz, min, max);
+      }
+    } else {
+      return Converters.convert(this.value, clz);
+    }
+  }
+
+  @Override
+  public String getCapabilitiesRepresentation(
+      ResourceInfo resource, String dimensionName, DimensionInfo dimensionInfo) {
+    if (fixedCapabilitiesValue != null) {
+      return this.fixedCapabilitiesValue;
+    } else {
+      return super.getCapabilitiesRepresentation(resource, dimensionName, dimensionInfo);
+    }
+  }
 }

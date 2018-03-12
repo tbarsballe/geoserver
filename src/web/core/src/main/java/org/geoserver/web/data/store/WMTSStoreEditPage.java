@@ -14,113 +14,108 @@ import org.geotools.data.wmts.WebMapTileServer;
 
 @SuppressWarnings("serial")
 public class WMTSStoreEditPage extends AbstractWMTSStorePage {
-    
-    public static final String STORE_NAME = "storeName";
-    public static final String WS_NAME = "wsName";
-    
-    /**
-     * Uses a "name" parameter to locate the datastore
-     * @param parameters
-     */
-    public WMTSStoreEditPage(PageParameters parameters) {
-        String wsName = parameters.get(WS_NAME).toOptionalString();
-        String storeName = parameters.get(STORE_NAME).toString();
-        WMTSStoreInfo store = getCatalog().getStoreByName(wsName, storeName, WMTSStoreInfo.class);
-        initUI(store);
-    }
 
-    /**
-     * Creates a new edit page directly from a store object.
-     */
-    public WMTSStoreEditPage(WMTSStoreInfo store) {
-        initUI(store);
-    }
+  public static final String STORE_NAME = "storeName";
+  public static final String WS_NAME = "wsName";
 
-    @Override
-    protected void onSave(WMTSStoreInfo info, AjaxRequestTarget target)
-            throws IllegalArgumentException {
-        if(!info.isEnabled()) {
-            doSaveStore(info);
-        } else {
-            try {
-                // try to see if we can connect
-                getCatalog().getResourcePool().clear(info);
-                // do not call info.getWebMapServer cause it ends up calling
-                // resourcepool.getWebMapServer with the unproxied instance (old values)
-                //info.getWebMapServer(null).getCapabilities();
-                WebMapTileServer wmts = getCatalog().getResourcePool().getWebMapTileServer(info);
-                wmts.getCapabilities();
-                doSaveStore(info);
-            } catch(Exception e) {
-                confirmSaveOnConnectionFailure(info, target, e);
-            }
-        }
+  /**
+   * Uses a "name" parameter to locate the datastore
+   *
+   * @param parameters
+   */
+  public WMTSStoreEditPage(PageParameters parameters) {
+    String wsName = parameters.get(WS_NAME).toOptionalString();
+    String storeName = parameters.get(STORE_NAME).toString();
+    WMTSStoreInfo store = getCatalog().getStoreByName(wsName, storeName, WMTSStoreInfo.class);
+    initUI(store);
+  }
 
-    }
+  /** Creates a new edit page directly from a store object. */
+  public WMTSStoreEditPage(WMTSStoreInfo store) {
+    initUI(store);
+  }
 
-    /**
-     * Performs the save of the store.
-     * <p>
-     * This method may be subclasses to provide custom save functionality.
-     * </p>
-     */
-    protected void doSaveStore(WMTSStoreInfo info) {
-        Catalog catalog = getCatalog();
-
-        // Cloning into "expandedStore" through the super class "clone" method
-        WMTSStoreInfo expandedStore = (WMTSStoreInfo) catalog.getResourcePool().clone(info, true); 
-        
-        getCatalog().validate(expandedStore, false).throwIfInvalid();
-        
-        getCatalog().save(info);
-        doReturn(StorePage.class);
-    }
-
-    private void confirmSaveOnConnectionFailure(final WMTSStoreInfo info,
-            final AjaxRequestTarget requestTarget, final Exception error) {
-
+  @Override
+  protected void onSave(WMTSStoreInfo info, AjaxRequestTarget target)
+      throws IllegalArgumentException {
+    if (!info.isEnabled()) {
+      doSaveStore(info);
+    } else {
+      try {
+        // try to see if we can connect
         getCatalog().getResourcePool().clear(info);
+        // do not call info.getWebMapServer cause it ends up calling
+        // resourcepool.getWebMapServer with the unproxied instance (old values)
+        // info.getWebMapServer(null).getCapabilities();
+        WebMapTileServer wmts = getCatalog().getResourcePool().getWebMapTileServer(info);
+        wmts.getCapabilities();
+        doSaveStore(info);
+      } catch (Exception e) {
+        confirmSaveOnConnectionFailure(info, target, e);
+      }
+    }
+  }
 
-        final String exceptionMessage;
-        {
-            String message = error.getMessage();
-            if (message == null && error.getCause() != null) {
-                message = error.getCause().getMessage();
-            }
-            exceptionMessage = message;
-        }
+  /**
+   * Performs the save of the store.
+   *
+   * <p>This method may be subclasses to provide custom save functionality.
+   */
+  protected void doSaveStore(WMTSStoreInfo info) {
+    Catalog catalog = getCatalog();
 
-        dialog.showOkCancel(requestTarget, new GeoServerDialog.DialogDelegate() {
+    // Cloning into "expandedStore" through the super class "clone" method
+    WMTSStoreInfo expandedStore = (WMTSStoreInfo) catalog.getResourcePool().clone(info, true);
 
-            boolean accepted = false;
+    getCatalog().validate(expandedStore, false).throwIfInvalid();
 
-            @Override
-            protected Component getContents(String id) {
-                return new StoreConnectionFailedInformationPanel(id, info.getName(),
-                        exceptionMessage);
-            }
+    getCatalog().save(info);
+    doReturn(StorePage.class);
+  }
 
-            @Override
-            protected boolean onSubmit(AjaxRequestTarget target, Component contents) {
-                doSaveStore(info);
-                accepted = true;
-                return true;
-            }
+  private void confirmSaveOnConnectionFailure(
+      final WMTSStoreInfo info, final AjaxRequestTarget requestTarget, final Exception error) {
 
-            @Override
-            protected boolean onCancel(AjaxRequestTarget target) {
-                return true;
-            }
+    getCatalog().getResourcePool().clear(info);
 
-            @Override
-            public void onClose(AjaxRequestTarget target) {
-                if (accepted) {
-                    doReturn(StorePage.class);
-                }
-            }
-        });
+    final String exceptionMessage;
+    {
+      String message = error.getMessage();
+      if (message == null && error.getCause() != null) {
+        message = error.getCause().getMessage();
+      }
+      exceptionMessage = message;
     }
 
-  
+    dialog.showOkCancel(
+        requestTarget,
+        new GeoServerDialog.DialogDelegate() {
 
+          boolean accepted = false;
+
+          @Override
+          protected Component getContents(String id) {
+            return new StoreConnectionFailedInformationPanel(id, info.getName(), exceptionMessage);
+          }
+
+          @Override
+          protected boolean onSubmit(AjaxRequestTarget target, Component contents) {
+            doSaveStore(info);
+            accepted = true;
+            return true;
+          }
+
+          @Override
+          protected boolean onCancel(AjaxRequestTarget target) {
+            return true;
+          }
+
+          @Override
+          public void onClose(AjaxRequestTarget target) {
+            if (accepted) {
+              doReturn(StorePage.class);
+            }
+          }
+        });
+  }
 }

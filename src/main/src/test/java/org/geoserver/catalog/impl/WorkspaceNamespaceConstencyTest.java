@@ -10,7 +10,6 @@ import static org.easymock.classextension.EasyMock.*;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-
 import org.easymock.EasyMock;
 import org.easymock.IArgumentMatcher;
 import org.geoserver.catalog.Catalog;
@@ -26,173 +25,173 @@ import org.junit.Test;
 
 public class WorkspaceNamespaceConstencyTest {
 
-    @Test
-    public void testChangeWorkspace() {
-        Catalog cat = createMock(Catalog.class);
-        cat.addListener((CatalogListener) anyObject());
-        expectLastCall();
-        
-        NamespaceInfo ns = createMock(NamespaceInfo.class);
-        ns.setPrefix("abcd");
-        expectLastCall();
+  @Test
+  public void testChangeWorkspace() {
+    Catalog cat = createMock(Catalog.class);
+    cat.addListener((CatalogListener) anyObject());
+    expectLastCall();
 
-        expect(cat.getNamespaceByPrefix("gs")).andReturn(ns);
+    NamespaceInfo ns = createMock(NamespaceInfo.class);
+    ns.setPrefix("abcd");
+    expectLastCall();
 
-        cat.save(ns);
-        expectLastCall();
+    expect(cat.getNamespaceByPrefix("gs")).andReturn(ns);
 
-        WorkspaceInfo ws = createNiceMock(WorkspaceInfo.class);
-        
-        CatalogModifyEvent e = createNiceMock(CatalogModifyEvent.class);
-        expect(e.getSource()).andReturn(ws).anyTimes();
-        expect(e.getPropertyNames()).andReturn(Arrays.asList("name"));
-        expect(e.getOldValues()).andReturn((List)Arrays.asList("gs"));
-        expect(e.getNewValues()).andReturn((List)Arrays.asList("abcd"));
+    cat.save(ns);
+    expectLastCall();
 
-        replay(e, ws, ns, cat);
+    WorkspaceInfo ws = createNiceMock(WorkspaceInfo.class);
 
-        new NamespaceWorkspaceConsistencyListener(cat).handleModifyEvent(e);
-        verify(ns, cat);
-    }
+    CatalogModifyEvent e = createNiceMock(CatalogModifyEvent.class);
+    expect(e.getSource()).andReturn(ws).anyTimes();
+    expect(e.getPropertyNames()).andReturn(Arrays.asList("name"));
+    expect(e.getOldValues()).andReturn((List) Arrays.asList("gs"));
+    expect(e.getNewValues()).andReturn((List) Arrays.asList("abcd"));
 
-    @Test
-    public void testChangeNamespace() {
-        Catalog cat = createMock(Catalog.class);
-        cat.addListener((CatalogListener) anyObject());
-        expectLastCall();
+    replay(e, ws, ns, cat);
 
-        WorkspaceInfo ws = createMock(WorkspaceInfo.class);
-        ws.setName("abcd");
-        expectLastCall();
+    new NamespaceWorkspaceConsistencyListener(cat).handleModifyEvent(e);
+    verify(ns, cat);
+  }
 
-        expect(cat.getWorkspaceByName("gs")).andReturn(ws);
+  @Test
+  public void testChangeNamespace() {
+    Catalog cat = createMock(Catalog.class);
+    cat.addListener((CatalogListener) anyObject());
+    expectLastCall();
 
-        cat.save(ws);
-        expectLastCall();
+    WorkspaceInfo ws = createMock(WorkspaceInfo.class);
+    ws.setName("abcd");
+    expectLastCall();
 
-        NamespaceInfo ns = createNiceMock(NamespaceInfo.class);
+    expect(cat.getWorkspaceByName("gs")).andReturn(ws);
 
-        CatalogModifyEvent e = createNiceMock(CatalogModifyEvent.class);
-        expect(e.getSource()).andReturn(ns).anyTimes();
-        expect(e.getPropertyNames()).andReturn(Arrays.asList("prefix"));
-        expect(e.getOldValues()).andReturn((List)Arrays.asList("gs"));
-        expect(e.getNewValues()).andReturn((List)Arrays.asList("abcd"));
+    cat.save(ws);
+    expectLastCall();
 
-        replay(e, ws, ns, cat);
+    NamespaceInfo ns = createNiceMock(NamespaceInfo.class);
 
-        new NamespaceWorkspaceConsistencyListener(cat).handleModifyEvent(e);
-        verify(ws, cat);
-    }
+    CatalogModifyEvent e = createNiceMock(CatalogModifyEvent.class);
+    expect(e.getSource()).andReturn(ns).anyTimes();
+    expect(e.getPropertyNames()).andReturn(Arrays.asList("prefix"));
+    expect(e.getOldValues()).andReturn((List) Arrays.asList("gs"));
+    expect(e.getNewValues()).andReturn((List) Arrays.asList("abcd"));
 
-    @Test
-    public void testChangeDefaultWorkspace() {
-        Catalog cat = createMock(Catalog.class);
-        cat.addListener((CatalogListener) anyObject());
-        expectLastCall();
+    replay(e, ws, ns, cat);
 
-        NamespaceInfo def = createNiceMock(NamespaceInfo.class);
-        expect(cat.getDefaultNamespace()).andReturn(def);
+    new NamespaceWorkspaceConsistencyListener(cat).handleModifyEvent(e);
+    verify(ws, cat);
+  }
 
-        NamespaceInfo ns = createNiceMock(NamespaceInfo.class);
-        expect(cat.getNamespaceByPrefix("abcd")).andReturn(ns);
-        
-        cat.setDefaultNamespace(ns);
-        expectLastCall();
+  @Test
+  public void testChangeDefaultWorkspace() {
+    Catalog cat = createMock(Catalog.class);
+    cat.addListener((CatalogListener) anyObject());
+    expectLastCall();
 
-        WorkspaceInfo ws = createNiceMock(WorkspaceInfo.class);
-        expect(ws.getName()).andReturn("abcd");
+    NamespaceInfo def = createNiceMock(NamespaceInfo.class);
+    expect(cat.getDefaultNamespace()).andReturn(def);
 
-        CatalogModifyEvent e = createNiceMock(CatalogModifyEvent.class);
-        expect(e.getSource()).andReturn(cat).anyTimes();
-        expect(e.getPropertyNames()).andReturn(Arrays.asList("defaultWorkspace"));
-        expect(e.getNewValues()).andReturn((List)Arrays.asList(ws));
-        
-        replay(ns, ws, e, cat);
+    NamespaceInfo ns = createNiceMock(NamespaceInfo.class);
+    expect(cat.getNamespaceByPrefix("abcd")).andReturn(ns);
 
-        new NamespaceWorkspaceConsistencyListener(cat).handleModifyEvent(e);
+    cat.setDefaultNamespace(ns);
+    expectLastCall();
 
-        verify(ns, ws, cat);
-    }
+    WorkspaceInfo ws = createNiceMock(WorkspaceInfo.class);
+    expect(ws.getName()).andReturn("abcd");
 
-    @Test
-    public void testChangeDefaultNamespace() {
-        Catalog cat = createMock(Catalog.class);
-        cat.addListener((CatalogListener) anyObject());
-        expectLastCall();
+    CatalogModifyEvent e = createNiceMock(CatalogModifyEvent.class);
+    expect(e.getSource()).andReturn(cat).anyTimes();
+    expect(e.getPropertyNames()).andReturn(Arrays.asList("defaultWorkspace"));
+    expect(e.getNewValues()).andReturn((List) Arrays.asList(ws));
 
-        WorkspaceInfo def = createNiceMock(WorkspaceInfo.class);
-        expect(cat.getDefaultWorkspace()).andReturn(def);
+    replay(ns, ws, e, cat);
 
-        WorkspaceInfo ws = createNiceMock(WorkspaceInfo.class);
-        expect(cat.getWorkspaceByName("abcd")).andReturn(ws);
+    new NamespaceWorkspaceConsistencyListener(cat).handleModifyEvent(e);
 
-        cat.setDefaultWorkspace(ws);
-        expectLastCall();
+    verify(ns, ws, cat);
+  }
 
-        NamespaceInfo ns = createNiceMock(NamespaceInfo.class);
-        expect(ns.getPrefix()).andReturn("abcd");
+  @Test
+  public void testChangeDefaultNamespace() {
+    Catalog cat = createMock(Catalog.class);
+    cat.addListener((CatalogListener) anyObject());
+    expectLastCall();
 
-        CatalogModifyEvent e = createNiceMock(CatalogModifyEvent.class);
-        expect(e.getSource()).andReturn(cat).anyTimes();
-        expect(e.getPropertyNames()).andReturn(Arrays.asList("defaultNamespace"));
-        expect(e.getNewValues()).andReturn((List)Arrays.asList(ns));
-        
-        replay(ns, ws, e, cat);
+    WorkspaceInfo def = createNiceMock(WorkspaceInfo.class);
+    expect(cat.getDefaultWorkspace()).andReturn(def);
 
-        new NamespaceWorkspaceConsistencyListener(cat).handleModifyEvent(e);
+    WorkspaceInfo ws = createNiceMock(WorkspaceInfo.class);
+    expect(cat.getWorkspaceByName("abcd")).andReturn(ws);
 
-        verify(ns, ws, cat);
-    }
+    cat.setDefaultWorkspace(ws);
+    expectLastCall();
 
-    @Test
-    public void testChangeNamespaceURI() {
-        Catalog cat = createMock(Catalog.class);
-        cat.addListener((CatalogListener) anyObject());
-        expectLastCall();
+    NamespaceInfo ns = createNiceMock(NamespaceInfo.class);
+    expect(ns.getPrefix()).andReturn("abcd");
 
-        NamespaceInfo ns = createNiceMock(NamespaceInfo.class);
-        expect(ns.getPrefix()).andReturn("foo");
-        expect(ns.getURI()).andReturn("http://foo.org");
+    CatalogModifyEvent e = createNiceMock(CatalogModifyEvent.class);
+    expect(e.getSource()).andReturn(cat).anyTimes();
+    expect(e.getPropertyNames()).andReturn(Arrays.asList("defaultNamespace"));
+    expect(e.getNewValues()).andReturn((List) Arrays.asList(ns));
 
-        WorkspaceInfo ws = createNiceMock(WorkspaceInfo.class);
-        expect(cat.getWorkspaceByName("foo")).andReturn(ws);
+    replay(ns, ws, e, cat);
 
-        DataStoreInfo ds = createNiceMock(DataStoreInfo.class);
+    new NamespaceWorkspaceConsistencyListener(cat).handleModifyEvent(e);
 
-        expect(cat.getDataStoresByWorkspace(ws)).andReturn(Arrays.asList(ds));
+    verify(ns, ws, cat);
+  }
 
-        HashMap params = new HashMap();
-        params.put("namespace", "http://bar.org");
-        expect(ds.getConnectionParameters()).andReturn(params).anyTimes();
+  @Test
+  public void testChangeNamespaceURI() {
+    Catalog cat = createMock(Catalog.class);
+    cat.addListener((CatalogListener) anyObject());
+    expectLastCall();
 
-        cat.save(hasNamespace("http://foo.org"));
-        expectLastCall();
+    NamespaceInfo ns = createNiceMock(NamespaceInfo.class);
+    expect(ns.getPrefix()).andReturn("foo");
+    expect(ns.getURI()).andReturn("http://foo.org");
 
-        CatalogPostModifyEvent e = createNiceMock(CatalogPostModifyEvent.class);
-        expect(e.getSource()).andReturn(ns).anyTimes();
-        expect(ns.getPrefix()).andReturn("foo");
-        expect(cat.getWorkspaceByName("foo")).andReturn(ws);
+    WorkspaceInfo ws = createNiceMock(WorkspaceInfo.class);
+    expect(cat.getWorkspaceByName("foo")).andReturn(ws);
 
-        replay(ds, ws, ns, e, cat);
+    DataStoreInfo ds = createNiceMock(DataStoreInfo.class);
 
+    expect(cat.getDataStoresByWorkspace(ws)).andReturn(Arrays.asList(ds));
 
-        new NamespaceWorkspaceConsistencyListener(cat).handlePostModifyEvent(e);
-        verify(cat);
-    }
+    HashMap params = new HashMap();
+    params.put("namespace", "http://bar.org");
+    expect(ds.getConnectionParameters()).andReturn(params).anyTimes();
 
-    protected StoreInfo hasNamespace(final String namespace) {
-        EasyMock.reportMatcher(new IArgumentMatcher() {
-            @Override
-            public boolean matches(Object argument) {
-                return namespace.equals(((StoreInfo)argument).getConnectionParameters().get("namespace"));
-            }
+    cat.save(hasNamespace("http://foo.org"));
+    expectLastCall();
 
-            @Override
-            public void appendTo(StringBuffer buffer) {
-                buffer.append("hasNamespace '").append(namespace).append("'");
-            }
-            
+    CatalogPostModifyEvent e = createNiceMock(CatalogPostModifyEvent.class);
+    expect(e.getSource()).andReturn(ns).anyTimes();
+    expect(ns.getPrefix()).andReturn("foo");
+    expect(cat.getWorkspaceByName("foo")).andReturn(ws);
+
+    replay(ds, ws, ns, e, cat);
+
+    new NamespaceWorkspaceConsistencyListener(cat).handlePostModifyEvent(e);
+    verify(cat);
+  }
+
+  protected StoreInfo hasNamespace(final String namespace) {
+    EasyMock.reportMatcher(
+        new IArgumentMatcher() {
+          @Override
+          public boolean matches(Object argument) {
+            return namespace.equals(
+                ((StoreInfo) argument).getConnectionParameters().get("namespace"));
+          }
+
+          @Override
+          public void appendTo(StringBuffer buffer) {
+            buffer.append("hasNamespace '").append(namespace).append("'");
+          }
         });
-        return null;
-    }
+    return null;
+  }
 }

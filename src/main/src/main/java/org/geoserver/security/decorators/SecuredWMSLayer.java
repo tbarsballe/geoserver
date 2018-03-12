@@ -9,7 +9,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import org.geoserver.security.WMSAccessLimits;
 import org.geoserver.security.WrapperPolicy;
 import org.geotools.data.ows.CRSEnvelope;
@@ -23,264 +22,254 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 /**
  * A {@link Layer} wrapper carrying around the wrapper policy so that {@link SecuredWebMapServer}
  * can apply it while performing the requests
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class SecuredWMSLayer extends Layer {
-    Layer delegate;
+  Layer delegate;
 
-    WrapperPolicy policy;
-    
-    public SecuredWMSLayer(Layer delegate, WrapperPolicy policy) {
-        this.delegate = delegate;
-        this.policy = policy;
-    }
+  WrapperPolicy policy;
 
-    public WrapperPolicy getPolicy() {
-        return policy;
-    }
-    
-    public boolean isQueryable() {
-        if(policy.getLimits() instanceof WMSAccessLimits) {
-            WMSAccessLimits wl = (WMSAccessLimits) policy.getLimits();
-            if(!wl.isAllowFeatureInfo()) {
-                return false;
-            }
-        }
-        return delegate.isQueryable();
-    }
-    
-    public String toString() {
-        return "SecuredLayer - " + delegate.toString();
-    }
+  public SecuredWMSLayer(Layer delegate, WrapperPolicy policy) {
+    this.delegate = delegate;
+    this.policy = policy;
+  }
 
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((delegate == null) ? 0 : delegate.hashCode());
-        result = prime * result + ((policy == null) ? 0 : policy.hashCode());
-        return result;
+  public WrapperPolicy getPolicy() {
+    return policy;
+  }
+
+  public boolean isQueryable() {
+    if (policy.getLimits() instanceof WMSAccessLimits) {
+      WMSAccessLimits wl = (WMSAccessLimits) policy.getLimits();
+      if (!wl.isAllowFeatureInfo()) {
+        return false;
+      }
     }
+    return delegate.isQueryable();
+  }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        SecuredWMSLayer other = (SecuredWMSLayer) obj;
-        if (delegate == null) {
-            if (other.delegate != null)
-                return false;
-        } else if (!delegate.equals(other.delegate))
-            return false;
-        if (policy == null) {
-            if (other.policy != null)
-                return false;
-        } else if (!policy.equals(other.policy))
-            return false;
-        return true;
-    }
-    
-    // --------------------------------------------------------------------------------------
-    // Purely delegated methods
-    // --------------------------------------------------------------------------------------
+  public String toString() {
+    return "SecuredLayer - " + delegate.toString();
+  }
 
-    public void addChildren(Layer child) {
-        delegate.addChildren(child);
-    }
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((delegate == null) ? 0 : delegate.hashCode());
+    result = prime * result + ((policy == null) ? 0 : policy.hashCode());
+    return result;
+  }
 
-    public void clearCache() {
-        delegate.clearCache();
-    }
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) return true;
+    if (obj == null) return false;
+    if (getClass() != obj.getClass()) return false;
+    SecuredWMSLayer other = (SecuredWMSLayer) obj;
+    if (delegate == null) {
+      if (other.delegate != null) return false;
+    } else if (!delegate.equals(other.delegate)) return false;
+    if (policy == null) {
+      if (other.policy != null) return false;
+    } else if (!policy.equals(other.policy)) return false;
+    return true;
+  }
 
-    public int compareTo(Layer layer) {
-        return delegate.compareTo(layer);
-    }
+  // --------------------------------------------------------------------------------------
+  // Purely delegated methods
+  // --------------------------------------------------------------------------------------
 
-    public String get_abstract() {
-        return delegate.get_abstract();
-    }
+  public void addChildren(Layer child) {
+    delegate.addChildren(child);
+  }
 
-    public Map<String, CRSEnvelope> getBoundingBoxes() {
-        return delegate.getBoundingBoxes();
-    }
+  public void clearCache() {
+    delegate.clearCache();
+  }
 
-    public Layer[] getChildren() {
-        return delegate.getChildren();
-    }
+  public int compareTo(Layer layer) {
+    return delegate.compareTo(layer);
+  }
 
-    public Dimension getDimension(String name) {
-        return delegate.getDimension(name);
-    }
+  public String get_abstract() {
+    return delegate.get_abstract();
+  }
 
-    public Map<String, Dimension> getDimensions() {
-        return delegate.getDimensions();
-    }
+  public Map<String, CRSEnvelope> getBoundingBoxes() {
+    return delegate.getBoundingBoxes();
+  }
 
-    public GeneralEnvelope getEnvelope(CoordinateReferenceSystem crs) {
-        return delegate.getEnvelope(crs);
-    }
+  public Layer[] getChildren() {
+    return delegate.getChildren();
+  }
 
-    public Extent getExtent(String name) {
-        return delegate.getExtent(name);
-    }
+  public Dimension getDimension(String name) {
+    return delegate.getDimension(name);
+  }
 
-    public Map<String, Extent> getExtents() {
-        return delegate.getExtents();
-    }
+  public Map<String, Dimension> getDimensions() {
+    return delegate.getDimensions();
+  }
 
-    public String[] getKeywords() {
-        return delegate.getKeywords();
-    }
+  public GeneralEnvelope getEnvelope(CoordinateReferenceSystem crs) {
+    return delegate.getEnvelope(crs);
+  }
 
-    public CRSEnvelope getLatLonBoundingBox() {
-        return delegate.getLatLonBoundingBox();
-    }
+  public Extent getExtent(String name) {
+    return delegate.getExtent(name);
+  }
 
-    public List<CRSEnvelope> getLayerBoundingBoxes() {
-        return delegate.getLayerBoundingBoxes();
-    }
+  public Map<String, Extent> getExtents() {
+    return delegate.getExtents();
+  }
 
-    public List<Layer> getLayerChildren() {
-        return delegate.getLayerChildren();
-    }
+  public String[] getKeywords() {
+    return delegate.getKeywords();
+  }
 
-    public List<Dimension> getLayerDimensions() {
-        return delegate.getLayerDimensions();
-    }
+  public CRSEnvelope getLatLonBoundingBox() {
+    return delegate.getLatLonBoundingBox();
+  }
 
-    public List<Extent> getLayerExtents() {
-        return delegate.getLayerExtents();
-    }
+  public List<CRSEnvelope> getLayerBoundingBoxes() {
+    return delegate.getLayerBoundingBoxes();
+  }
 
-    public String getName() {
-        return delegate.getName();
-    }
+  public List<Layer> getLayerChildren() {
+    return delegate.getLayerChildren();
+  }
 
-    public Layer getParent() {
-        return delegate.getParent();
-    }
+  public List<Dimension> getLayerDimensions() {
+    return delegate.getLayerDimensions();
+  }
 
-    public double getScaleDenominatorMax() {
-        return delegate.getScaleDenominatorMax();
-    }
+  public List<Extent> getLayerExtents() {
+    return delegate.getLayerExtents();
+  }
 
-    public double getScaleDenominatorMin() {
-        return delegate.getScaleDenominatorMin();
-    }
+  public String getName() {
+    return delegate.getName();
+  }
 
-    public double getScaleHintMax() {
-        return delegate.getScaleHintMax();
-    }
+  public Layer getParent() {
+    return delegate.getParent();
+  }
 
-    public double getScaleHintMin() {
-        return delegate.getScaleHintMin();
-    }
+  public double getScaleDenominatorMax() {
+    return delegate.getScaleDenominatorMax();
+  }
 
-    public Set<String> getSrs() {
-        return delegate.getSrs();
-    }
+  public double getScaleDenominatorMin() {
+    return delegate.getScaleDenominatorMin();
+  }
 
-    public List<StyleImpl> getStyles() {
-        return delegate.getStyles();
-    }
+  public double getScaleHintMax() {
+    return delegate.getScaleHintMax();
+  }
 
-    public String getTitle() {
-        return delegate.getTitle();
-    }
+  public double getScaleHintMin() {
+    return delegate.getScaleHintMin();
+  }
 
-    public void set_abstract(String abstract1) {
-        delegate.set_abstract(abstract1);
-    }
+  public Set<String> getSrs() {
+    return delegate.getSrs();
+  }
 
-    public void setBoundingBoxes(CRSEnvelope boundingBox) {
-        delegate.setBoundingBoxes(boundingBox);
-    }
+  public List<StyleImpl> getStyles() {
+    return delegate.getStyles();
+  }
 
-    public void setBoundingBoxes(Map<String, CRSEnvelope> boundingBoxes) {
-        delegate.setBoundingBoxes(boundingBoxes);
-    }
+  public String getTitle() {
+    return delegate.getTitle();
+  }
 
-    public void setChildren(Layer[] childrenArray) {
-        delegate.setChildren(childrenArray);
-    }
+  public void set_abstract(String abstract1) {
+    delegate.set_abstract(abstract1);
+  }
 
-    public void setDimensions(Collection<Dimension> dimensionList) {
-        delegate.setDimensions(dimensionList);
-    }
+  public void setBoundingBoxes(CRSEnvelope boundingBox) {
+    delegate.setBoundingBoxes(boundingBox);
+  }
 
-    public void setDimensions(Dimension dimension) {
-        delegate.setDimensions(dimension);
-    }
+  public void setBoundingBoxes(Map<String, CRSEnvelope> boundingBoxes) {
+    delegate.setBoundingBoxes(boundingBoxes);
+  }
 
-    public void setDimensions(Map<String, Dimension> dimensionMap) {
-        delegate.setDimensions(dimensionMap);
-    }
+  public void setChildren(Layer[] childrenArray) {
+    delegate.setChildren(childrenArray);
+  }
 
-    public void setExtents(Collection<Extent> extentList) {
-        delegate.setExtents(extentList);
-    }
+  public void setDimensions(Collection<Dimension> dimensionList) {
+    delegate.setDimensions(dimensionList);
+  }
 
-    public void setExtents(Extent extent) {
-        delegate.setExtents(extent);
-    }
+  public void setDimensions(Dimension dimension) {
+    delegate.setDimensions(dimension);
+  }
 
-    public void setExtents(Map<String, Extent> extentMap) {
-        delegate.setExtents(extentMap);
-    }
+  public void setDimensions(Map<String, Dimension> dimensionMap) {
+    delegate.setDimensions(dimensionMap);
+  }
 
-    public void setKeywords(String[] keywords) {
-        delegate.setKeywords(keywords);
-    }
+  public void setExtents(Collection<Extent> extentList) {
+    delegate.setExtents(extentList);
+  }
 
-    public void setLatLonBoundingBox(CRSEnvelope latLonBoundingBox) {
-        delegate.setLatLonBoundingBox(latLonBoundingBox);
-    }
+  public void setExtents(Extent extent) {
+    delegate.setExtents(extent);
+  }
 
-    public void setName(String name) {
-        delegate.setName(name);
-    }
+  public void setExtents(Map<String, Extent> extentMap) {
+    delegate.setExtents(extentMap);
+  }
 
-    public void setParent(Layer parentLayer) {
-        delegate.setParent(parentLayer);
-    }
+  public void setKeywords(String[] keywords) {
+    delegate.setKeywords(keywords);
+  }
 
-    public void setQueryable(boolean queryable) {
-        delegate.setQueryable(queryable);
-    }
+  public void setLatLonBoundingBox(CRSEnvelope latLonBoundingBox) {
+    delegate.setLatLonBoundingBox(latLonBoundingBox);
+  }
 
-    public void setScaleDenominatorMax(double scaleDenominatorMax) {
-        delegate.setScaleDenominatorMax(scaleDenominatorMax);
-    }
+  public void setName(String name) {
+    delegate.setName(name);
+  }
 
-    public void setScaleDenominatorMin(double scaleDenominatorMin) {
-        delegate.setScaleDenominatorMin(scaleDenominatorMin);
-    }
+  public void setParent(Layer parentLayer) {
+    delegate.setParent(parentLayer);
+  }
 
-    public void setScaleHintMax(double scaleHintMax) {
-        delegate.setScaleHintMax(scaleHintMax);
-    }
+  public void setQueryable(boolean queryable) {
+    delegate.setQueryable(queryable);
+  }
 
-    public void setScaleHintMin(double scaleHintMin) {
-        delegate.setScaleHintMin(scaleHintMin);
-    }
+  public void setScaleDenominatorMax(double scaleDenominatorMax) {
+    delegate.setScaleDenominatorMax(scaleDenominatorMax);
+  }
 
-    public void setSrs(Set<String> srs) {
-        delegate.setSrs(srs);
-    }
+  public void setScaleDenominatorMin(double scaleDenominatorMin) {
+    delegate.setScaleDenominatorMin(scaleDenominatorMin);
+  }
 
-    public void setStyles(List<StyleImpl> styles) {
-        delegate.setStyles(styles);
-    }
+  public void setScaleHintMax(double scaleHintMax) {
+    delegate.setScaleHintMax(scaleHintMax);
+  }
 
-    public void setTitle(String title) {
-        delegate.setTitle(title);
-    }
+  public void setScaleHintMin(double scaleHintMin) {
+    delegate.setScaleHintMin(scaleHintMin);
+  }
 
-    
+  public void setSrs(Set<String> srs) {
+    delegate.setSrs(srs);
+  }
 
+  public void setStyles(List<StyleImpl> styles) {
+    delegate.setStyles(styles);
+  }
+
+  public void setTitle(String title) {
+    delegate.setTitle(title);
+  }
 }

@@ -9,13 +9,12 @@ import org.geoserver.config.ServiceFactoryExtension;
 
 public class WCSFactoryExtension extends ServiceFactoryExtension<WCSInfo> {
 
-    public WCSFactoryExtension() {
-        super(WCSInfo.class);
-    }
+  public WCSFactoryExtension() {
+    super(WCSInfo.class);
+  }
 
-    @Override
-    public <T> T create(Class<T> clazz) {
-        return (T) new WCSInfoImpl();
-    }
-
+  @Override
+  public <T> T create(Class<T> clazz) {
+    return (T) new WCSInfoImpl();
+  }
 }

@@ -7,59 +7,51 @@ package org.geoserver.security.ldap;
 
 import org.geoserver.security.config.SecurityAuthProviderConfig;
 
-public class LDAPSecurityServiceConfig extends LDAPBaseSecurityServiceConfig 
+public class LDAPSecurityServiceConfig extends LDAPBaseSecurityServiceConfig
     implements SecurityAuthProviderConfig {
 
-    private static final long serialVersionUID = 6093735229286602599L;
+  private static final long serialVersionUID = 6093735229286602599L;
 
-    // extract user data using a distinguished name
-    String userDnPattern;
-    
-    String userGroupServiceName;
-    
-    
-     
-    // format username before doing authentication using the given format
-    String userFormat; 
+  // extract user data using a distinguished name
+  String userDnPattern;
 
-    public LDAPSecurityServiceConfig() {
-    }
+  String userGroupServiceName;
 
-    public LDAPSecurityServiceConfig(LDAPSecurityServiceConfig other) {
-        super(other);        
-        userDnPattern = other.getUserDnPattern();        
-        userGroupServiceName = other.getUserGroupServiceName();        
-        userFormat = other.getUserFormat();
-    }
-    
+  // format username before doing authentication using the given format
+  String userFormat;
 
-    public String getUserFormat() {
-        return userFormat;
-    }
+  public LDAPSecurityServiceConfig() {}
 
-    public void setUserFormat(String userFormat) {
-        this.userFormat = userFormat;
-    }
+  public LDAPSecurityServiceConfig(LDAPSecurityServiceConfig other) {
+    super(other);
+    userDnPattern = other.getUserDnPattern();
+    userGroupServiceName = other.getUserGroupServiceName();
+    userFormat = other.getUserFormat();
+  }
 
-    
+  public String getUserFormat() {
+    return userFormat;
+  }
 
-    public String getUserDnPattern() {
-        return userDnPattern;
-    }
-    public void setUserDnPattern(String userDnPattern) {
-        this.userDnPattern = userDnPattern;
-    }
+  public void setUserFormat(String userFormat) {
+    this.userFormat = userFormat;
+  }
 
+  public String getUserDnPattern() {
+    return userDnPattern;
+  }
 
-    @Override
-    public String getUserGroupServiceName() {
-        return userGroupServiceName;
-    }
+  public void setUserDnPattern(String userDnPattern) {
+    this.userDnPattern = userDnPattern;
+  }
 
-    @Override
-    public void setUserGroupServiceName(String userGroupServiceName) {
-        this.userGroupServiceName = userGroupServiceName;
-    }
+  @Override
+  public String getUserGroupServiceName() {
+    return userGroupServiceName;
+  }
 
-
+  @Override
+  public void setUserGroupServiceName(String userGroupServiceName) {
+    this.userGroupServiceName = userGroupServiceName;
+  }
 }

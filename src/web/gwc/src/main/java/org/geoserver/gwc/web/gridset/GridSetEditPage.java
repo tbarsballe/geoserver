@@ -14,55 +14,54 @@ import org.geowebcache.grid.GridSet;
 
 public class GridSetEditPage extends AbstractGridSetPage {
 
-    private static final long serialVersionUID = 1748616637023642755L;
-	
-    private String originalName;
+  private static final long serialVersionUID = 1748616637023642755L;
 
-    public GridSetEditPage(PageParameters parameters) {
-        super(parameters);
+  private String originalName;
 
-        GridSetInfo info = form.getModelObject();
-        originalName = info.getName();
+  public GridSetEditPage(PageParameters parameters) {
+    super(parameters);
 
-        if (info.isInternal()) {
-            form.info(new ResourceModel("GridSetEditPage.internalGridSetMessage").getObject());
-            name.getFormComponent().setEnabled(false);
-            description.setEnabled(false);
-            crs.setEnabled(false);
-            tileWidth.getFormComponent().setEnabled(false);
-            tileHeight.getFormComponent().setEnabled(false);
-            bounds.setEnabled(false);
-            computeBoundsLink.setEnabled(false);
-            tileMatrixSetEditor.setEnabled(false);
-            saveLink.setVisible(false);
-            addLevelLink.setVisible(false);
-        }
+    GridSetInfo info = form.getModelObject();
+    originalName = info.getName();
+
+    if (info.isInternal()) {
+      form.info(new ResourceModel("GridSetEditPage.internalGridSetMessage").getObject());
+      name.getFormComponent().setEnabled(false);
+      description.setEnabled(false);
+      crs.setEnabled(false);
+      tileWidth.getFormComponent().setEnabled(false);
+      tileHeight.getFormComponent().setEnabled(false);
+      bounds.setEnabled(false);
+      computeBoundsLink.setEnabled(false);
+      tileMatrixSetEditor.setEnabled(false);
+      saveLink.setVisible(false);
+      addLevelLink.setVisible(false);
+    }
+  }
+
+  @Override
+  protected void onSave(AjaxRequestTarget target, Form<?> form) {
+    GridSetInfo info = (GridSetInfo) form.getModelObject();
+
+    GWC gwc = GWC.get();
+
+    final GridSet newGridset;
+    try {
+      newGridset = GridSetBuilder.build(info);
+    } catch (IllegalStateException e) {
+      form.error(e.getMessage());
+      target.add(form);
+      return;
     }
 
-    @Override
-    protected void onSave(AjaxRequestTarget target, Form<?> form) {
-        GridSetInfo info = (GridSetInfo) form.getModelObject();
-
-        GWC gwc = GWC.get();
-
-        final GridSet newGridset;
-        try {
-            newGridset = GridSetBuilder.build(info);
-        } catch (IllegalStateException e) {
-            form.error(e.getMessage());
-            target.add(form);
-            return;
-        }
-
-        try {
-            // TODO: warn and eliminate caches
-            gwc.modifyGridSet(originalName, newGridset);
-            doReturn(GridSetsPage.class);
-        } catch (Exception e) {
-            e.printStackTrace();
-            form.error("Error saving gridset: " + e.getMessage());
-            target.add(form);
-        }
+    try {
+      // TODO: warn and eliminate caches
+      gwc.modifyGridSet(originalName, newGridset);
+      doReturn(GridSetsPage.class);
+    } catch (Exception e) {
+      e.printStackTrace();
+      form.error("Error saving gridset: " + e.getMessage());
+      target.add(form);
     }
-
+  }
 }

@@ -12,25 +12,24 @@ import org.geoserver.security.config.SecurityNamedServiceConfig;
 
 /**
  * Security provider for remember me
- * 
+ *
  * @author mcr
  */
 public class GeoServerRememberMeAuthenticationProvider extends AbstractFilterProvider {
 
-    @Override
-    public void configure(XStreamPersister xp) {
-        super.configure(xp);
-        xp.getXStream().alias("rememberMeAuthentication", RememberMeAuthenticationFilterConfig.class);
-    }
+  @Override
+  public void configure(XStreamPersister xp) {
+    super.configure(xp);
+    xp.getXStream().alias("rememberMeAuthentication", RememberMeAuthenticationFilterConfig.class);
+  }
 
-    @Override
-    public Class<? extends GeoServerSecurityFilter> getFilterClass() {
-        return GeoServerRememberMeAuthenticationFilter.class;
-    }
+  @Override
+  public Class<? extends GeoServerSecurityFilter> getFilterClass() {
+    return GeoServerRememberMeAuthenticationFilter.class;
+  }
 
-    @Override
-    public GeoServerSecurityFilter createFilter(SecurityNamedServiceConfig config) {
-        return new GeoServerRememberMeAuthenticationFilter();
-    }
-
+  @Override
+  public GeoServerSecurityFilter createFilter(SecurityNamedServiceConfig config) {
+    return new GeoServerRememberMeAuthenticationFilter();
+  }
 }

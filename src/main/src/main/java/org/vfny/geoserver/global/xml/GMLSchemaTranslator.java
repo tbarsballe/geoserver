@@ -5,11 +5,6 @@
  */
 package org.vfny.geoserver.global.xml;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import org.geotools.feature.FeatureCollection;
-
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryCollection;
 import com.vividsolutions.jts.geom.LineString;
@@ -18,238 +13,231 @@ import com.vividsolutions.jts.geom.MultiPoint;
 import com.vividsolutions.jts.geom.MultiPolygon;
 import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.geom.Polygon;
-
+import java.util.HashSet;
+import java.util.Set;
+import org.geotools.feature.FeatureCollection;
 
 /**
  * XMLSchemaTranslator purpose.
- * <p>
- * This instance of the NameSpaceTranslator should be used with http://www.opengis.net/gml namespace.
- * </p>
- * <p>
- * Instances of this object should always be retrieved through the NameSpaceTranslatorFactory.
- * </p>
- * @see NameSpaceTranslatorFactory
  *
+ * <p>This instance of the NameSpaceTranslator should be used with http://www.opengis.net/gml
+ * namespace.
+ *
+ * <p>Instances of this object should always be retrieved through the NameSpaceTranslatorFactory.
+ *
+ * @see NameSpaceTranslatorFactory
  * @author dzwiers, Refractions Research, Inc.
  * @author $Author: dmzwiers $ (last modification)
  * @version $Id$
  */
 public class GMLSchemaTranslator extends NameSpaceTranslator {
-    private HashSet elements;
+  private HashSet elements;
 
-    /**
-     * XMLSchemaTranslator constructor.
-     * <p>
-     * Description
-     * </p>
-     * @param prefix
-     */
-    public GMLSchemaTranslator(String prefix) {
-        super(prefix);
-        elements = new HashSet();
-        /*elements.add(new PointElement(prefix));
-        elements.add(new LineStringElement(prefix));
-        elements.add(new LinearRingElement(prefix));
-        elements.add(new BoxElement(prefix));
-        elements.add(new PolygonElement(prefix));
-        elements.add(new GeometryCollectionElement(prefix));
-        elements.add(new MultiPointElement(prefix));
-        elements.add(new MultiLineStringElement(prefix));
-        elements.add(new MultiPolygonElement(prefix));
-        elements.add(new CoordElement(prefix));
-        elements.add(new CoordinatesElement(prefix));*/
-        elements.add(new PointPropertyElement(prefix));
-        elements.add(new PolygonPropertyElement(prefix));
-        elements.add(new LineStringPropertyElement(prefix));
-        elements.add(new MultiPointPropertyElement(prefix));
-        elements.add(new MultiLineStringPropertyElement(prefix));
-        elements.add(new MultiPolygonPropertyElement(prefix));
-        elements.add(new MultiGeometryPropertyElement(prefix));
-        elements.add(new NullElement(prefix));
-        elements.add(new AbstractFeatureElement(prefix));
-        elements.add(new AbstractFeatureCollectionBaseElement(prefix));
-        elements.add(new AbstractFeatureCollectionElement(prefix));
-        elements.add(new GeometryPropertyElement(prefix));
+  /**
+   * XMLSchemaTranslator constructor.
+   *
+   * <p>Description
+   *
+   * @param prefix
+   */
+  public GMLSchemaTranslator(String prefix) {
+    super(prefix);
+    elements = new HashSet();
+    /*elements.add(new PointElement(prefix));
+    elements.add(new LineStringElement(prefix));
+    elements.add(new LinearRingElement(prefix));
+    elements.add(new BoxElement(prefix));
+    elements.add(new PolygonElement(prefix));
+    elements.add(new GeometryCollectionElement(prefix));
+    elements.add(new MultiPointElement(prefix));
+    elements.add(new MultiLineStringElement(prefix));
+    elements.add(new MultiPolygonElement(prefix));
+    elements.add(new CoordElement(prefix));
+    elements.add(new CoordinatesElement(prefix));*/
+    elements.add(new PointPropertyElement(prefix));
+    elements.add(new PolygonPropertyElement(prefix));
+    elements.add(new LineStringPropertyElement(prefix));
+    elements.add(new MultiPointPropertyElement(prefix));
+    elements.add(new MultiLineStringPropertyElement(prefix));
+    elements.add(new MultiPolygonPropertyElement(prefix));
+    elements.add(new MultiGeometryPropertyElement(prefix));
+    elements.add(new NullElement(prefix));
+    elements.add(new AbstractFeatureElement(prefix));
+    elements.add(new AbstractFeatureCollectionBaseElement(prefix));
+    elements.add(new AbstractFeatureCollectionElement(prefix));
+    elements.add(new GeometryPropertyElement(prefix));
 
-        /*elements.add(new GeometryPropertyElement(prefix));
-        elements.add(new FeatureAssociationElement(prefix));
-        elements.add(new BoundingShapeElement(prefix));
-        elements.add(new AbstractGeometryElement(prefix));
-        elements.add(new AbstractGeometryCollectionBaseElement(prefix));
-        elements.add(new AssociationAttributeGroupElement(prefix));
-        elements.add(new GeometryAssociationElement(prefix));
-        elements.add(new PointMemberElement(prefix));
-        elements.add(new LineStringMemberElement(prefix));
-        elements.add(new PolygonMemberElement(prefix));
-        elements.add(new LinearRingMemberElement(prefix));*/
-    }
+    /*elements.add(new GeometryPropertyElement(prefix));
+    elements.add(new FeatureAssociationElement(prefix));
+    elements.add(new BoundingShapeElement(prefix));
+    elements.add(new AbstractGeometryElement(prefix));
+    elements.add(new AbstractGeometryCollectionBaseElement(prefix));
+    elements.add(new AssociationAttributeGroupElement(prefix));
+    elements.add(new GeometryAssociationElement(prefix));
+    elements.add(new PointMemberElement(prefix));
+    elements.add(new LineStringMemberElement(prefix));
+    elements.add(new PolygonMemberElement(prefix));
+    elements.add(new LinearRingMemberElement(prefix));*/
+  }
 
-    /**
-     * Implementation of getElements.
-     *
-     * @see org.vfny.geoserver.global.xml.NameSpaceTranslator#getElements()
-     *
-     *
-     */
-    public Set getElements() {
-        return elements;
-    }
+  /**
+   * Implementation of getElements.
+   *
+   * @see org.vfny.geoserver.global.xml.NameSpaceTranslator#getElements()
+   */
+  public Set getElements() {
+    return elements;
+  }
 
-    /**
-     * Implementation of getNameSpace.
-     *
-     * @see org.vfny.geoserver.global.xml.NameSpaceTranslator#getNameSpace()
-     *
-     *
-     */
-    public String getNameSpace() {
-        return "http://www.opengis.net/gml";
-    }
+  /**
+   * Implementation of getNameSpace.
+   *
+   * @see org.vfny.geoserver.global.xml.NameSpaceTranslator#getNameSpace()
+   */
+  public String getNameSpace() {
+    return "http://www.opengis.net/gml";
+  }
 }
-
 
 class AbstractFeatureElement extends NameSpaceElement {
-    public AbstractFeatureElement(String prefix) {
-        super(prefix);
+  public AbstractFeatureElement(String prefix) {
+    super(prefix);
+  }
+
+  public String getTypeDefName() {
+    return "AbstractFeatureType";
+  }
+
+  public String getTypeRefName() {
+    return null;
+  }
+
+  public String getQualifiedTypeDefName() {
+    return prefix + ":AbstractFeatureType";
+  }
+
+  public String getQualifiedTypeRefName() {
+    return null;
+  }
+
+  public String getQualifiedTypeDefName(String prefix) {
+    if (prefix != null) {
+      return prefix + ":AbstractFeatureType";
     }
 
-    public String getTypeDefName() {
-        return "AbstractFeatureType";
+    if (this.prefix != null) {
+      return this.prefix + ":AbstractFeatureType";
     }
 
-    public String getTypeRefName() {
-        return null;
-    }
+    return null;
+  }
 
-    public String getQualifiedTypeDefName() {
-        return prefix + ":AbstractFeatureType";
-    }
+  public String getQualifiedTypeRefName(String prefix) {
+    return null;
+  }
 
-    public String getQualifiedTypeRefName() {
-        return null;
-    }
+  public Class getJavaClass() {
+    return Object.class;
+  }
 
-    public String getQualifiedTypeDefName(String prefix) {
-        if (prefix != null) {
-            return prefix + ":AbstractFeatureType";
-        }
-
-        if (this.prefix != null) {
-            return this.prefix + ":AbstractFeatureType";
-        }
-
-        return null;
-    }
-
-    public String getQualifiedTypeRefName(String prefix) {
-        return null;
-    }
-
-    public Class getJavaClass() {
-        return Object.class;
-    }
-
-    public boolean isAbstract() {
-        return true;
-    }
+  public boolean isAbstract() {
+    return true;
+  }
 }
-
 
 class AbstractFeatureCollectionBaseElement extends NameSpaceElement {
-    public AbstractFeatureCollectionBaseElement(String prefix) {
-        super(prefix);
+  public AbstractFeatureCollectionBaseElement(String prefix) {
+    super(prefix);
+  }
+
+  public String getTypeDefName() {
+    return "AbstractFeatureCollectionBaseType";
+  }
+
+  public String getTypeRefName() {
+    return null;
+  }
+
+  public String getQualifiedTypeDefName() {
+    return prefix + ":AbstractFeatureCollectionBaseType";
+  }
+
+  public String getQualifiedTypeRefName() {
+    return null;
+  }
+
+  public String getQualifiedTypeDefName(String prefix) {
+    if (prefix != null) {
+      return prefix + ":AbstractFeatureCollectionBaseType";
     }
 
-    public String getTypeDefName() {
-        return "AbstractFeatureCollectionBaseType";
+    if (this.prefix != null) {
+      return this.prefix + ":AbstractFeatureCollectionBaseType";
     }
 
-    public String getTypeRefName() {
-        return null;
-    }
+    return null;
+  }
 
-    public String getQualifiedTypeDefName() {
-        return prefix + ":AbstractFeatureCollectionBaseType";
-    }
+  public String getQualifiedTypeRefName(String prefix) {
+    return null;
+  }
 
-    public String getQualifiedTypeRefName() {
-        return null;
-    }
+  public Class getJavaClass() {
+    return FeatureCollection.class;
+  }
 
-    public String getQualifiedTypeDefName(String prefix) {
-        if (prefix != null) {
-            return prefix + ":AbstractFeatureCollectionBaseType";
-        }
-
-        if (this.prefix != null) {
-            return this.prefix + ":AbstractFeatureCollectionBaseType";
-        }
-
-        return null;
-    }
-
-    public String getQualifiedTypeRefName(String prefix) {
-        return null;
-    }
-
-    public Class getJavaClass() {
-        return FeatureCollection.class;
-    }
-
-    public boolean isAbstract() {
-        return true;
-    }
+  public boolean isAbstract() {
+    return true;
+  }
 }
-
 
 class AbstractFeatureCollectionElement extends NameSpaceElement {
-    public AbstractFeatureCollectionElement(String prefix) {
-        super(prefix);
+  public AbstractFeatureCollectionElement(String prefix) {
+    super(prefix);
+  }
+
+  public String getTypeDefName() {
+    return "AbstractFeatureCollectionType";
+  }
+
+  public String getTypeRefName() {
+    return null;
+  }
+
+  public String getQualifiedTypeDefName() {
+    return prefix + ":AbstractFeatureCollectionType";
+  }
+
+  public String getQualifiedTypeRefName() {
+    return null;
+  }
+
+  public String getQualifiedTypeDefName(String prefix) {
+    if (prefix != null) {
+      return prefix + ":AbstractFeatureCollectionType";
     }
 
-    public String getTypeDefName() {
-        return "AbstractFeatureCollectionType";
+    if (this.prefix != null) {
+      return this.prefix + ":AbstractFeatureCollectionType";
     }
 
-    public String getTypeRefName() {
-        return null;
-    }
+    return null;
+  }
 
-    public String getQualifiedTypeDefName() {
-        return prefix + ":AbstractFeatureCollectionType";
-    }
+  public String getQualifiedTypeRefName(String prefix) {
+    return null;
+  }
 
-    public String getQualifiedTypeRefName() {
-        return null;
-    }
+  public Class getJavaClass() {
+    return FeatureCollection.class;
+  }
 
-    public String getQualifiedTypeDefName(String prefix) {
-        if (prefix != null) {
-            return prefix + ":AbstractFeatureCollectionType";
-        }
-
-        if (this.prefix != null) {
-            return this.prefix + ":AbstractFeatureCollectionType";
-        }
-
-        return null;
-    }
-
-    public String getQualifiedTypeRefName(String prefix) {
-        return null;
-    }
-
-    public Class getJavaClass() {
-        return FeatureCollection.class;
-    }
-
-    public boolean isAbstract() {
-        return true;
-    }
+  public boolean isAbstract() {
+    return true;
+  }
 }
 
-
-// I don't think this big chunk of junk is useful, as I don't think you're 
+// I don't think this big chunk of junk is useful, as I don't think you're
 // going to define a schema with it, unless you do something more complicated
 // then what we are doing.  We only want the GeometryPropertyType stuff, which
 // allows us to name the element as we will.  The rest is only useful if you
@@ -259,51 +247,50 @@ class AbstractFeatureCollectionElement extends NameSpaceElement {
 // I think perhaps it may just need better objects, that can actually use
 // these?  Since the geometry objects they are given can't use them.
 class GeometryPropertyElement extends NameSpaceElement {
-    public GeometryPropertyElement(String prefix) {
-        super(prefix);
+  public GeometryPropertyElement(String prefix) {
+    super(prefix);
+  }
+
+  public String getTypeDefName() {
+    return "GeometryPropertyType";
+  }
+
+  public String getTypeRefName() {
+    return null;
+  }
+
+  public String getQualifiedTypeDefName() {
+    return prefix + ":GeometryPropertyType";
+  }
+
+  public String getQualifiedTypeRefName() {
+    return null;
+  }
+
+  public String getQualifiedTypeDefName(String prefix) {
+    if (prefix != null) {
+      return prefix + ":GeometryPropertyType";
     }
 
-    public String getTypeDefName() {
-        return "GeometryPropertyType";
+    if (this.prefix != null) {
+      return this.prefix + ":GeometryPropertyType";
     }
 
-    public String getTypeRefName() {
-        return null;
-    }
+    return null;
+  }
 
-    public String getQualifiedTypeDefName() {
-        return prefix + ":GeometryPropertyType";
-    }
+  public String getQualifiedTypeRefName(String prefix) {
+    return null;
+  }
 
-    public String getQualifiedTypeRefName() {
-        return null;
-    }
+  public Class getJavaClass() {
+    return Geometry.class;
+  }
 
-    public String getQualifiedTypeDefName(String prefix) {
-        if (prefix != null) {
-            return prefix + ":GeometryPropertyType";
-        }
-
-        if (this.prefix != null) {
-            return this.prefix + ":GeometryPropertyType";
-        }
-
-        return null;
-    }
-
-    public String getQualifiedTypeRefName(String prefix) {
-        return null;
-    }
-
-    public Class getJavaClass() {
-        return Geometry.class;
-    }
-
-    public boolean isAbstract() {
-        return true;
-    }
+  public boolean isAbstract() {
+    return true;
+  }
 }
-
 
 /*
 class FeatureAssociationElement extends NameSpaceElement{
@@ -750,468 +737,461 @@ class CoordinatesElement extends NameSpaceElement{
         public boolean isAbstract(){return false;}
         }*/
 class PointPropertyElement extends NameSpaceElement {
-    public PointPropertyElement(String prefix) {
-        super(prefix);
+  public PointPropertyElement(String prefix) {
+    super(prefix);
+  }
+
+  public String getTypeDefName() {
+    return "PointPropertyType";
+  }
+
+  public String getTypeRefName() {
+    return "pointProperty";
+  }
+
+  public String getQualifiedTypeDefName() {
+    return prefix + ":PointPropertyType";
+  }
+
+  public String getQualifiedTypeRefName() {
+    return prefix + ":pointProperty";
+  }
+
+  public String getQualifiedTypeDefName(String prefix) {
+    if (prefix != null) {
+      return prefix + ":PointPropertyType";
     }
 
-    public String getTypeDefName() {
-        return "PointPropertyType";
+    if (this.prefix != null) {
+      return this.prefix + ":PointPropertyType";
     }
 
-    public String getTypeRefName() {
-        return "pointProperty";
+    return null;
+  }
+
+  public String getQualifiedTypeRefName(String prefix) {
+    if (prefix != null) {
+      return prefix + ":pointProperty";
     }
 
-    public String getQualifiedTypeDefName() {
-        return prefix + ":PointPropertyType";
+    if (this.prefix != null) {
+      return this.prefix + ":pointProperty";
     }
 
-    public String getQualifiedTypeRefName() {
-        return prefix + ":pointProperty";
-    }
+    return null;
+  }
 
-    public String getQualifiedTypeDefName(String prefix) {
-        if (prefix != null) {
-            return prefix + ":PointPropertyType";
-        }
+  public Class getJavaClass() {
+    return Point.class;
+  }
 
-        if (this.prefix != null) {
-            return this.prefix + ":PointPropertyType";
-        }
+  public boolean isAbstract() {
+    return false;
+  }
 
-        return null;
-    }
-
-    public String getQualifiedTypeRefName(String prefix) {
-        if (prefix != null) {
-            return prefix + ":pointProperty";
-        }
-
-        if (this.prefix != null) {
-            return this.prefix + ":pointProperty";
-        }
-
-        return null;
-    }
-
-    public Class getJavaClass() {
-        return Point.class;
-    }
-
-    public boolean isAbstract() {
-        return false;
-    }
-
-    public boolean isDefault() {
-        return true;
-    }
+  public boolean isDefault() {
+    return true;
+  }
 }
-
 
 class PolygonPropertyElement extends NameSpaceElement {
-    public PolygonPropertyElement(String prefix) {
-        super(prefix);
+  public PolygonPropertyElement(String prefix) {
+    super(prefix);
+  }
+
+  public String getTypeDefName() {
+    return "PolygonPropertyType";
+  }
+
+  public String getTypeRefName() {
+    return "polygonProperty";
+  }
+
+  public String getQualifiedTypeDefName() {
+    return prefix + ":PolygonPropertyType";
+  }
+
+  public String getQualifiedTypeRefName() {
+    return prefix + ":polygonProperty";
+  }
+
+  public String getQualifiedTypeDefName(String prefix) {
+    if (prefix != null) {
+      return prefix + ":PolygonPropertyType";
     }
 
-    public String getTypeDefName() {
-        return "PolygonPropertyType";
+    if (this.prefix != null) {
+      return this.prefix + ":PolygonPropertyType";
     }
 
-    public String getTypeRefName() {
-        return "polygonProperty";
+    return null;
+  }
+
+  public String getQualifiedTypeRefName(String prefix) {
+    if (prefix != null) {
+      return prefix + ":polygonProperty";
     }
 
-    public String getQualifiedTypeDefName() {
-        return prefix + ":PolygonPropertyType";
+    if (this.prefix != null) {
+      return this.prefix + ":polygonProperty";
     }
 
-    public String getQualifiedTypeRefName() {
-        return prefix + ":polygonProperty";
-    }
+    return null;
+  }
 
-    public String getQualifiedTypeDefName(String prefix) {
-        if (prefix != null) {
-            return prefix + ":PolygonPropertyType";
-        }
+  public boolean isAbstract() {
+    return false;
+  }
 
-        if (this.prefix != null) {
-            return this.prefix + ":PolygonPropertyType";
-        }
+  public Class getJavaClass() {
+    return Polygon.class;
+  }
 
-        return null;
-    }
-
-    public String getQualifiedTypeRefName(String prefix) {
-        if (prefix != null) {
-            return prefix + ":polygonProperty";
-        }
-
-        if (this.prefix != null) {
-            return this.prefix + ":polygonProperty";
-        }
-
-        return null;
-    }
-
-    public boolean isAbstract() {
-        return false;
-    }
-
-    public Class getJavaClass() {
-        return Polygon.class;
-    }
-
-    public boolean isDefault() {
-        return true;
-    }
+  public boolean isDefault() {
+    return true;
+  }
 }
-
 
 class LineStringPropertyElement extends NameSpaceElement {
-    public LineStringPropertyElement(String prefix) {
-        super(prefix);
+  public LineStringPropertyElement(String prefix) {
+    super(prefix);
+  }
+
+  public String getTypeDefName() {
+    return "LineStringPropertyType";
+  }
+
+  public String getTypeRefName() {
+    return "lineStringProperty";
+  }
+
+  public String getQualifiedTypeDefName() {
+    return prefix + ":LineStringPropertyType";
+  }
+
+  public String getQualifiedTypeRefName() {
+    return prefix + ":lineStringProperty";
+  }
+
+  public String getQualifiedTypeDefName(String prefix) {
+    if (prefix != null) {
+      return prefix + ":LineStringPropertyType";
     }
 
-    public String getTypeDefName() {
-        return "LineStringPropertyType";
+    if (this.prefix != null) {
+      return this.prefix + ":LineStringPropertyType";
     }
 
-    public String getTypeRefName() {
-        return "lineStringProperty";
+    return null;
+  }
+
+  public String getQualifiedTypeRefName(String prefix) {
+    if (prefix != null) {
+      return prefix + ":lineStringProperty";
     }
 
-    public String getQualifiedTypeDefName() {
-        return prefix + ":LineStringPropertyType";
+    if (this.prefix != null) {
+      return this.prefix + ":lineStringProperty";
     }
 
-    public String getQualifiedTypeRefName() {
-        return prefix + ":lineStringProperty";
-    }
+    return null;
+  }
 
-    public String getQualifiedTypeDefName(String prefix) {
-        if (prefix != null) {
-            return prefix + ":LineStringPropertyType";
-        }
+  public Class getJavaClass() {
+    return LineString.class;
+  }
 
-        if (this.prefix != null) {
-            return this.prefix + ":LineStringPropertyType";
-        }
+  public boolean isAbstract() {
+    return false;
+  }
 
-        return null;
-    }
-
-    public String getQualifiedTypeRefName(String prefix) {
-        if (prefix != null) {
-            return prefix + ":lineStringProperty";
-        }
-
-        if (this.prefix != null) {
-            return this.prefix + ":lineStringProperty";
-        }
-
-        return null;
-    }
-
-    public Class getJavaClass() {
-        return LineString.class;
-    }
-
-    public boolean isAbstract() {
-        return false;
-    }
-
-    public boolean isDefault() {
-        return true;
-    }
+  public boolean isDefault() {
+    return true;
+  }
 }
-
 
 class MultiPointPropertyElement extends NameSpaceElement {
-    public MultiPointPropertyElement(String prefix) {
-        super(prefix);
+  public MultiPointPropertyElement(String prefix) {
+    super(prefix);
+  }
+
+  public String getTypeDefName() {
+    return "MultiPointPropertyType";
+  }
+
+  public String getTypeRefName() {
+    return "multiPointProperty";
+  }
+
+  public String getQualifiedTypeDefName() {
+    return prefix + ":MultiPointPropertyType";
+  }
+
+  public String getQualifiedTypeRefName() {
+    return prefix + ":multiPointProperty";
+  }
+
+  public String getQualifiedTypeDefName(String prefix) {
+    if (prefix != null) {
+      return prefix + ":MultiPointPropertyType";
     }
 
-    public String getTypeDefName() {
-        return "MultiPointPropertyType";
+    if (this.prefix != null) {
+      return this.prefix + ":MultiPointPropertyType";
     }
 
-    public String getTypeRefName() {
-        return "multiPointProperty";
+    return null;
+  }
+
+  public String getQualifiedTypeRefName(String prefix) {
+    if (prefix != null) {
+      return prefix + ":multiPointProperty";
     }
 
-    public String getQualifiedTypeDefName() {
-        return prefix + ":MultiPointPropertyType";
+    if (this.prefix != null) {
+      return this.prefix + ":multiPointProperty";
     }
 
-    public String getQualifiedTypeRefName() {
-        return prefix + ":multiPointProperty";
-    }
+    return null;
+  }
 
-    public String getQualifiedTypeDefName(String prefix) {
-        if (prefix != null) {
-            return prefix + ":MultiPointPropertyType";
-        }
+  public Class getJavaClass() {
+    return MultiPoint.class;
+  }
 
-        if (this.prefix != null) {
-            return this.prefix + ":MultiPointPropertyType";
-        }
+  public boolean isAbstract() {
+    return false;
+  }
 
-        return null;
-    }
-
-    public String getQualifiedTypeRefName(String prefix) {
-        if (prefix != null) {
-            return prefix + ":multiPointProperty";
-        }
-
-        if (this.prefix != null) {
-            return this.prefix + ":multiPointProperty";
-        }
-
-        return null;
-    }
-
-    public Class getJavaClass() {
-        return MultiPoint.class;
-    }
-
-    public boolean isAbstract() {
-        return false;
-    }
-
-    public boolean isDefault() {
-        return true;
-    }
+  public boolean isDefault() {
+    return true;
+  }
 }
-
 
 class MultiLineStringPropertyElement extends NameSpaceElement {
-    public MultiLineStringPropertyElement(String prefix) {
-        super(prefix);
+  public MultiLineStringPropertyElement(String prefix) {
+    super(prefix);
+  }
+
+  public String getTypeDefName() {
+    return "MultiLineStringPropertyType";
+  }
+
+  public String getTypeRefName() {
+    return "multiLineStringProperty";
+  }
+
+  public String getQualifiedTypeDefName() {
+    return prefix + ":MultiLineStringPropertyType";
+  }
+
+  public String getQualifiedTypeRefName() {
+    return prefix + ":multiLineStringProperty";
+  }
+
+  public String getQualifiedTypeDefName(String prefix) {
+    if (prefix != null) {
+      return prefix + ":MultiLineStringPropertyType";
     }
 
-    public String getTypeDefName() {
-        return "MultiLineStringPropertyType";
+    if (this.prefix != null) {
+      return this.prefix + ":MultiLineStringPropertyType";
     }
 
-    public String getTypeRefName() {
-        return "multiLineStringProperty";
+    return null;
+  }
+
+  public String getQualifiedTypeRefName(String prefix) {
+    if (prefix != null) {
+      return prefix + ":multiLineStringProperty";
     }
 
-    public String getQualifiedTypeDefName() {
-        return prefix + ":MultiLineStringPropertyType";
+    if (this.prefix != null) {
+      return this.prefix + ":multiLineStringProperty";
     }
 
-    public String getQualifiedTypeRefName() {
-        return prefix + ":multiLineStringProperty";
-    }
+    return null;
+  }
 
-    public String getQualifiedTypeDefName(String prefix) {
-        if (prefix != null) {
-            return prefix + ":MultiLineStringPropertyType";
-        }
+  public Class getJavaClass() {
+    return MultiLineString.class;
+  }
 
-        if (this.prefix != null) {
-            return this.prefix + ":MultiLineStringPropertyType";
-        }
+  public boolean isAbstract() {
+    return false;
+  }
 
-        return null;
-    }
-
-    public String getQualifiedTypeRefName(String prefix) {
-        if (prefix != null) {
-            return prefix + ":multiLineStringProperty";
-        }
-
-        if (this.prefix != null) {
-            return this.prefix + ":multiLineStringProperty";
-        }
-
-        return null;
-    }
-
-    public Class getJavaClass() {
-        return MultiLineString.class;
-    }
-
-    public boolean isAbstract() {
-        return false;
-    }
-
-    public boolean isDefault() {
-        return true;
-    }
+  public boolean isDefault() {
+    return true;
+  }
 }
-
 
 class MultiPolygonPropertyElement extends NameSpaceElement {
-    public MultiPolygonPropertyElement(String prefix) {
-        super(prefix);
+  public MultiPolygonPropertyElement(String prefix) {
+    super(prefix);
+  }
+
+  public String getTypeDefName() {
+    return "MultiPolygonPropertyType";
+  }
+
+  public String getTypeRefName() {
+    return "multiPolygonProperty";
+  }
+
+  public String getQualifiedTypeDefName() {
+    return prefix + ":MultiPolygonPropertyType";
+  }
+
+  public String getQualifiedTypeRefName() {
+    return prefix + ":multiPolygonProperty";
+  }
+
+  public String getQualifiedTypeDefName(String prefix) {
+    if (prefix != null) {
+      return prefix + ":MultiPolygonPropertyType";
     }
 
-    public String getTypeDefName() {
-        return "MultiPolygonPropertyType";
+    if (this.prefix != null) {
+      return this.prefix + ":MultiPolygonPropertyType";
     }
 
-    public String getTypeRefName() {
-        return "multiPolygonProperty";
+    return null;
+  }
+
+  public String getQualifiedTypeRefName(String prefix) {
+    if (prefix != null) {
+      return prefix + ":multiPolygonProperty";
     }
 
-    public String getQualifiedTypeDefName() {
-        return prefix + ":MultiPolygonPropertyType";
+    if (this.prefix != null) {
+      return this.prefix + ":multiPolygonProperty";
     }
 
-    public String getQualifiedTypeRefName() {
-        return prefix + ":multiPolygonProperty";
-    }
+    return null;
+  }
 
-    public String getQualifiedTypeDefName(String prefix) {
-        if (prefix != null) {
-            return prefix + ":MultiPolygonPropertyType";
-        }
+  public Class getJavaClass() {
+    return MultiPolygon.class;
+  }
 
-        if (this.prefix != null) {
-            return this.prefix + ":MultiPolygonPropertyType";
-        }
+  public boolean isAbstract() {
+    return false;
+  }
 
-        return null;
-    }
-
-    public String getQualifiedTypeRefName(String prefix) {
-        if (prefix != null) {
-            return prefix + ":multiPolygonProperty";
-        }
-
-        if (this.prefix != null) {
-            return this.prefix + ":multiPolygonProperty";
-        }
-
-        return null;
-    }
-
-    public Class getJavaClass() {
-        return MultiPolygon.class;
-    }
-
-    public boolean isAbstract() {
-        return false;
-    }
-
-    public boolean isDefault() {
-        return true;
-    }
+  public boolean isDefault() {
+    return true;
+  }
 }
-
 
 class MultiGeometryPropertyElement extends NameSpaceElement {
-    public MultiGeometryPropertyElement(String prefix) {
-        super(prefix);
+  public MultiGeometryPropertyElement(String prefix) {
+    super(prefix);
+  }
+
+  public String getTypeDefName() {
+    return "MultiGeometryPropertyType";
+  }
+
+  public String getTypeRefName() {
+    return "multiGeometryProperty";
+  }
+
+  public String getQualifiedTypeDefName() {
+    return prefix + ":MultiGeometryPropertyType";
+  }
+
+  public String getQualifiedTypeRefName() {
+    return prefix + ":multiGeometryProperty";
+  }
+
+  public String getQualifiedTypeDefName(String prefix) {
+    if (prefix != null) {
+      return prefix + ":MultiGeometryPropertyType";
     }
 
-    public String getTypeDefName() {
-        return "MultiGeometryPropertyType";
+    if (this.prefix != null) {
+      return this.prefix + ":MultiGeometryPropertyType";
     }
 
-    public String getTypeRefName() {
-        return "multiGeometryProperty";
+    return null;
+  }
+
+  public String getQualifiedTypeRefName(String prefix) {
+    if (prefix != null) {
+      return prefix + ":multiGeometryProperty";
     }
 
-    public String getQualifiedTypeDefName() {
-        return prefix + ":MultiGeometryPropertyType";
+    if (this.prefix != null) {
+      return this.prefix + ":multiGeometryProperty";
     }
 
-    public String getQualifiedTypeRefName() {
-        return prefix + ":multiGeometryProperty";
-    }
+    return null;
+  }
 
-    public String getQualifiedTypeDefName(String prefix) {
-        if (prefix != null) {
-            return prefix + ":MultiGeometryPropertyType";
-        }
+  public Class getJavaClass() {
+    return GeometryCollection.class;
+  }
 
-        if (this.prefix != null) {
-            return this.prefix + ":MultiGeometryPropertyType";
-        }
+  public boolean isAbstract() {
+    return false;
+  }
 
-        return null;
-    }
-
-    public String getQualifiedTypeRefName(String prefix) {
-        if (prefix != null) {
-            return prefix + ":multiGeometryProperty";
-        }
-
-        if (this.prefix != null) {
-            return this.prefix + ":multiGeometryProperty";
-        }
-
-        return null;
-    }
-
-    public Class getJavaClass() {
-        return GeometryCollection.class;
-    }
-
-    public boolean isAbstract() {
-        return false;
-    }
-
-    public boolean isDefault() {
-        return true;
-    }
+  public boolean isDefault() {
+    return true;
+  }
 }
 
-
 class NullElement extends NameSpaceElement {
-    public NullElement(String prefix) {
-        super(prefix);
+  public NullElement(String prefix) {
+    super(prefix);
+  }
+
+  public String getTypeDefName() {
+    return "NullType";
+  }
+
+  public String getTypeRefName() {
+    return "null";
+  }
+
+  public String getQualifiedTypeDefName() {
+    return prefix + ":NullType";
+  }
+
+  public String getQualifiedTypeRefName() {
+    return prefix + ":null";
+  }
+
+  public String getQualifiedTypeDefName(String prefix) {
+    if (prefix != null) {
+      return prefix + ":NullType";
     }
 
-    public String getTypeDefName() {
-        return "NullType";
+    if (this.prefix != null) {
+      return this.prefix + ":NullType";
     }
 
-    public String getTypeRefName() {
-        return "null";
+    return null;
+  }
+
+  public String getQualifiedTypeRefName(String prefix) {
+    if (prefix != null) {
+      return prefix + ":null";
     }
 
-    public String getQualifiedTypeDefName() {
-        return prefix + ":NullType";
+    if (this.prefix != null) {
+      return this.prefix + ":null";
     }
 
-    public String getQualifiedTypeRefName() {
-        return prefix + ":null";
-    }
+    return null;
+  }
 
-    public String getQualifiedTypeDefName(String prefix) {
-        if (prefix != null) {
-            return prefix + ":NullType";
-        }
+  public boolean isAbstract() {
+    return false;
+  }
 
-        if (this.prefix != null) {
-            return this.prefix + ":NullType";
-        }
-
-        return null;
-    }
-
-    public String getQualifiedTypeRefName(String prefix) {
-        if (prefix != null) {
-            return prefix + ":null";
-        }
-
-        if (this.prefix != null) {
-            return this.prefix + ":null";
-        }
-
-        return null;
-    }
-
-    public boolean isAbstract() {
-        return false;
-    }
-
-    public Class getJavaClass() {
-        return null;
-    }
+  public Class getJavaClass() {
+    return null;
+  }
 }

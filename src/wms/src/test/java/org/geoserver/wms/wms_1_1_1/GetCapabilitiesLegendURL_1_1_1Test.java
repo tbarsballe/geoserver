@@ -11,19 +11,18 @@ import org.geotools.xml.transform.TransformerBase;
 
 public class GetCapabilitiesLegendURL_1_1_1Test extends GetCapabilitiesLegendURLTest {
 
-    @Override
-    protected TransformerBase createTransformer() {
-        return new GetCapabilitiesTransformer(wmsConfig, baseUrl, mapFormats, legendFormats, null);
-    }
+  @Override
+  protected TransformerBase createTransformer() {
+    return new GetCapabilitiesTransformer(wmsConfig, baseUrl, mapFormats, legendFormats, null);
+  }
 
-    @Override
-    protected String getRootElement() {
-        return "WMT_MS_Capabilities";
-    }
+  @Override
+  protected String getRootElement() {
+    return "WMT_MS_Capabilities";
+  }
 
-    @Override
-    protected String getElementPrefix() {
-        return "";
-    }
-
+  @Override
+  protected String getElementPrefix() {
+    return "";
+  }
 }

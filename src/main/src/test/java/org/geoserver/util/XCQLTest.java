@@ -16,34 +16,32 @@ import org.opengis.filter.Filter;
 
 public class XCQLTest {
 
-    @Test
-    public void testToFilter() throws Exception {
-        String filter = "IN('foo','bar')";
-        try {
-            CQL.toFilter(filter);
-            fail("filter should have thrown exception");
-        }
-        catch(CQLException e) {}
-        
-        Filter f1 = ECQL.toFilter(filter);
-        Filter f2 = XCQL.toFilter(filter);
-        assertEquals(f1, f2);
+  @Test
+  public void testToFilter() throws Exception {
+    String filter = "IN('foo','bar')";
+    try {
+      CQL.toFilter(filter);
+      fail("filter should have thrown exception");
+    } catch (CQLException e) {
     }
 
-    @Test
-    public void testToFilterFallback() throws Exception {
-        String filter = "id = 2";
-        
-        try {
-            ECQL.toFilter(filter);
-            fail("filter should have thrown exception");
-        }
-        catch(CQLException e) {
-        }
-        
-        Filter f1 = CQL.toFilter(filter);
-        Filter f2 = XCQL.toFilter(filter);
-        assertEquals(f1, f2);
-        
+    Filter f1 = ECQL.toFilter(filter);
+    Filter f2 = XCQL.toFilter(filter);
+    assertEquals(f1, f2);
+  }
+
+  @Test
+  public void testToFilterFallback() throws Exception {
+    String filter = "id = 2";
+
+    try {
+      ECQL.toFilter(filter);
+      fail("filter should have thrown exception");
+    } catch (CQLException e) {
     }
+
+    Filter f1 = CQL.toFilter(filter);
+    Filter f2 = XCQL.toFilter(filter);
+    assertEquals(f1, f2);
+  }
 }

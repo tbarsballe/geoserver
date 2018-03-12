@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Future;
 import java.util.logging.Logger;
-
 import org.geotools.util.logging.Logging;
 import org.geowebcache.diskquota.QuotaStore;
 import org.geowebcache.diskquota.storage.PageStats;
@@ -23,103 +22,103 @@ import org.geowebcache.diskquota.storage.TileSetVisitor;
 /**
  * A {@link QuotaStore} delegating to another instance of {@link QuotaStore}, and allowing the
  * delegate to be changed at runtime.
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class ConfigurableQuotaStore implements QuotaStore {
 
-    static final Logger LOGGER = Logging.getLogger(ConfigurableQuotaStore.class);
+  static final Logger LOGGER = Logging.getLogger(ConfigurableQuotaStore.class);
 
-    private QuotaStore delegate;
+  private QuotaStore delegate;
 
-    public void setStore(QuotaStore delegate) {
-        this.delegate = delegate;
-    }
-    
-    public QuotaStore getStore() {
-        return delegate;
-    }
+  public void setStore(QuotaStore delegate) {
+    this.delegate = delegate;
+  }
 
-    public ConfigurableQuotaStore(QuotaStore delegate) {
-        this.delegate = delegate;
-    }
+  public QuotaStore getStore() {
+    return delegate;
+  }
 
-    public TilePageCalculator getTilePageCalculator() {
-        return delegate.getTilePageCalculator();
-    }
+  public ConfigurableQuotaStore(QuotaStore delegate) {
+    this.delegate = delegate;
+  }
 
-    public void createLayer(String layerName) throws InterruptedException {
-        delegate.createLayer(layerName);
-    }
+  public TilePageCalculator getTilePageCalculator() {
+    return delegate.getTilePageCalculator();
+  }
 
-    public Quota getGloballyUsedQuota() throws InterruptedException {
-        return delegate.getGloballyUsedQuota();
-    }
+  public void createLayer(String layerName) throws InterruptedException {
+    delegate.createLayer(layerName);
+  }
 
-    public Quota getUsedQuotaByTileSetId(String tileSetId) throws InterruptedException {
-        return delegate.getUsedQuotaByTileSetId(tileSetId);
-    }
+  public Quota getGloballyUsedQuota() throws InterruptedException {
+    return delegate.getGloballyUsedQuota();
+  }
 
-    public void deleteLayer(String layerName) {
-        delegate.deleteLayer(layerName);
-    }
+  public Quota getUsedQuotaByTileSetId(String tileSetId) throws InterruptedException {
+    return delegate.getUsedQuotaByTileSetId(tileSetId);
+  }
 
-    public void renameLayer(String oldLayerName, String newLayerName) throws InterruptedException {
-        delegate.renameLayer(oldLayerName, newLayerName);
-    }
+  public void deleteLayer(String layerName) {
+    delegate.deleteLayer(layerName);
+  }
 
-    public Quota getUsedQuotaByLayerName(String layerName) throws InterruptedException {
-        return delegate.getUsedQuotaByLayerName(layerName);
-    }
+  public void renameLayer(String oldLayerName, String newLayerName) throws InterruptedException {
+    delegate.renameLayer(oldLayerName, newLayerName);
+  }
 
-    public long[][] getTilesForPage(TilePage page) throws InterruptedException {
-        return delegate.getTilesForPage(page);
-    }
+  public Quota getUsedQuotaByLayerName(String layerName) throws InterruptedException {
+    return delegate.getUsedQuotaByLayerName(layerName);
+  }
 
-    public Set<TileSet> getTileSets() {
-        return delegate.getTileSets();
-    }
+  public long[][] getTilesForPage(TilePage page) throws InterruptedException {
+    return delegate.getTilesForPage(page);
+  }
 
-    public TileSet getTileSetById(String tileSetId) throws InterruptedException {
-        return delegate.getTileSetById(tileSetId);
-    }
+  public Set<TileSet> getTileSets() {
+    return delegate.getTileSets();
+  }
 
-    public void accept(TileSetVisitor visitor) {
-        delegate.accept(visitor);
-    }
+  public TileSet getTileSetById(String tileSetId) throws InterruptedException {
+    return delegate.getTileSetById(tileSetId);
+  }
 
-    public void addToQuotaAndTileCounts(TileSet tileSet, Quota quotaDiff,
-            Collection<PageStatsPayload> tileCountDiffs) throws InterruptedException {
-        delegate.addToQuotaAndTileCounts(tileSet, quotaDiff, tileCountDiffs);
-    }
+  public void accept(TileSetVisitor visitor) {
+    delegate.accept(visitor);
+  }
 
-    public Future<List<PageStats>> addHitsAndSetAccesTime(Collection<PageStatsPayload> statsUpdates) {
-        return delegate.addHitsAndSetAccesTime(statsUpdates);
-    }
+  public void addToQuotaAndTileCounts(
+      TileSet tileSet, Quota quotaDiff, Collection<PageStatsPayload> tileCountDiffs)
+      throws InterruptedException {
+    delegate.addToQuotaAndTileCounts(tileSet, quotaDiff, tileCountDiffs);
+  }
 
-    public TilePage getLeastFrequentlyUsedPage(Set<String> layerNames) throws InterruptedException {
-        return delegate.getLeastFrequentlyUsedPage(layerNames);
-    }
+  public Future<List<PageStats>> addHitsAndSetAccesTime(Collection<PageStatsPayload> statsUpdates) {
+    return delegate.addHitsAndSetAccesTime(statsUpdates);
+  }
 
-    public TilePage getLeastRecentlyUsedPage(Set<String> layerNames) throws InterruptedException {
-        return delegate.getLeastRecentlyUsedPage(layerNames);
-    }
+  public TilePage getLeastFrequentlyUsedPage(Set<String> layerNames) throws InterruptedException {
+    return delegate.getLeastFrequentlyUsedPage(layerNames);
+  }
 
-    public PageStats setTruncated(TilePage tilePage) throws InterruptedException {
-        return delegate.setTruncated(tilePage);
-    }
+  public TilePage getLeastRecentlyUsedPage(Set<String> layerNames) throws InterruptedException {
+    return delegate.getLeastRecentlyUsedPage(layerNames);
+  }
 
-    public void deleteGridSubset(String layerName, String gridSetId) {
-        delegate.deleteGridSubset(layerName, gridSetId);
-    }
+  public PageStats setTruncated(TilePage tilePage) throws InterruptedException {
+    return delegate.setTruncated(tilePage);
+  }
 
-    public void close() throws Exception {
-        delegate.close();
-    }
+  public void deleteGridSubset(String layerName, String gridSetId) {
+    delegate.deleteGridSubset(layerName, gridSetId);
+  }
 
-    @Override
-    public void deleteParameters(String layerName, String parametersId) {
-        delegate.deleteParameters(layerName, parametersId);
-    }
+  public void close() throws Exception {
+    delegate.close();
+  }
 
+  @Override
+  public void deleteParameters(String layerName, String parametersId) {
+    delegate.deleteParameters(layerName, parametersId);
+  }
 }

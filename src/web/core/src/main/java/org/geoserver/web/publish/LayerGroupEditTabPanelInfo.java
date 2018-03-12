@@ -8,17 +8,15 @@ import org.geoserver.catalog.LayerGroupInfo;
 
 /**
  * Information about panels plugged into additional tabs on layergroup edit page.
- * 
- * @author Niels Charlier
  *
+ * @author Niels Charlier
  */
 public class LayerGroupEditTabPanelInfo extends PublishedEditTabPanelInfo<LayerGroupInfo> {
 
-    private static final long serialVersionUID = -388475157541960108L;
+  private static final long serialVersionUID = -388475157541960108L;
 
-    @Override
-    public Class<LayerGroupInfo> getPublishedInfoClass() {
-        return LayerGroupInfo.class;
-    }
-
+  @Override
+  public Class<LayerGroupInfo> getPublishedInfoClass() {
+    return LayerGroupInfo.class;
+  }
 }

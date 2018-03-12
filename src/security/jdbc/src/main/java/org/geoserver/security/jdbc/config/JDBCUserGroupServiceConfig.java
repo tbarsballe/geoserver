@@ -8,58 +8,58 @@ package org.geoserver.security.jdbc.config;
 
 import org.geoserver.security.config.SecurityUserGroupServiceConfig;
 
-public class JDBCUserGroupServiceConfig extends JDBCSecurityServiceConfig 
+public class JDBCUserGroupServiceConfig extends JDBCSecurityServiceConfig
     implements SecurityUserGroupServiceConfig {
 
-    private static final long serialVersionUID = 1L;
-    protected String passwordEncoderName;
-    protected String passwordPolicyName;
+  private static final long serialVersionUID = 1L;
+  protected String passwordEncoderName;
+  protected String passwordPolicyName;
 
-    public JDBCUserGroupServiceConfig() {
-        super();
-    }
-    
-    public JDBCUserGroupServiceConfig(JDBCUserGroupServiceConfig other) {
-        super(other);
-        passwordEncoderName = other.getPasswordEncoderName();
-        passwordPolicyName = other.getPasswordPolicyName();
-    }
+  public JDBCUserGroupServiceConfig() {
+    super();
+  }
 
-    public String getPasswordPolicyName() {
-        return passwordPolicyName;
-    }
+  public JDBCUserGroupServiceConfig(JDBCUserGroupServiceConfig other) {
+    super(other);
+    passwordEncoderName = other.getPasswordEncoderName();
+    passwordPolicyName = other.getPasswordPolicyName();
+  }
 
-    public void setPasswordPolicyName(String passwordPolicyName) {
-        this.passwordPolicyName = passwordPolicyName;
-    }
+  public String getPasswordPolicyName() {
+    return passwordPolicyName;
+  }
 
-    @Override
-    public String getPasswordEncoderName() {
-        return passwordEncoderName;
-    }
+  public void setPasswordPolicyName(String passwordPolicyName) {
+    this.passwordPolicyName = passwordPolicyName;
+  }
 
-    @Override
-    public void setPasswordEncoderName(String name) {
-        passwordEncoderName=name;
-    }
+  @Override
+  public String getPasswordEncoderName() {
+    return passwordEncoderName;
+  }
 
-    @Override
-    protected String defaultDDLFilename() {
-        return "usersddl.xml";
-    }
+  @Override
+  public void setPasswordEncoderName(String name) {
+    passwordEncoderName = name;
+  }
 
-    @Override
-    protected String defaultDDLFilenameMySQL() {
-        return "usersddl.mysql.xml";
-    }
+  @Override
+  protected String defaultDDLFilename() {
+    return "usersddl.xml";
+  }
 
-    @Override
-    protected String defaultDMLFilename() {
-        return "usersdml.xml";
-    }
+  @Override
+  protected String defaultDDLFilenameMySQL() {
+    return "usersddl.mysql.xml";
+  }
 
-    @Override
-    protected String defaultDMLFilenameMySQL() {
-        return defaultDMLFilename();
-    }
+  @Override
+  protected String defaultDMLFilename() {
+    return "usersdml.xml";
+  }
+
+  @Override
+  protected String defaultDMLFilenameMySQL() {
+    return defaultDMLFilename();
+  }
 }

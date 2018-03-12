@@ -20,73 +20,72 @@ import org.junit.Test;
 import org.opengis.filter.Filter;
 
 public class StylePageTest extends GeoServerWicketTestSupport {
-    
-    @Test
-    public void testPageLoad() {
-        login();
-        tester.startPage(StylePage.class);
-        tester.assertRenderedPage(StylePage.class);
-    }
-    
-    @Test
-    public void testStyleProvider() {
-        login();
-        tester.startPage(StylePage.class);
-        tester.assertRenderedPage(StylePage.class);
 
-        // Get the StyleProvider
+  @Test
+  public void testPageLoad() {
+    login();
+    tester.startPage(StylePage.class);
+    tester.assertRenderedPage(StylePage.class);
+  }
 
-        DataView dv = (DataView) tester
-                .getComponentFromLastRenderedPage("table:listContainer:items");
-        Catalog catalog = getCatalog();
-        assertEquals(dv.size(), catalog.getStyles().size());
-        IDataProvider dataProvider = dv.getDataProvider();
+  @Test
+  public void testStyleProvider() {
+    login();
+    tester.startPage(StylePage.class);
+    tester.assertRenderedPage(StylePage.class);
 
-        // Ensure the data provider is an instance of StoreProvider
-        assertTrue(dataProvider instanceof StyleProvider);
+    // Get the StyleProvider
 
-        // Cast to StoreProvider
-        StyleProvider provider = (StyleProvider) dataProvider;
+    DataView dv = (DataView) tester.getComponentFromLastRenderedPage("table:listContainer:items");
+    Catalog catalog = getCatalog();
+    assertEquals(dv.size(), catalog.getStyles().size());
+    IDataProvider dataProvider = dv.getDataProvider();
 
-        // Ensure that an unsupportedException is thrown when requesting the Items directly
-        boolean catchedException = false;
-        try {
-            provider.getItems();
-        } catch (UnsupportedOperationException e) {
-            catchedException = true;
-        }
+    // Ensure the data provider is an instance of StoreProvider
+    assertTrue(dataProvider instanceof StyleProvider);
 
-        // Ensure the exception is cacthed
-        assertTrue(catchedException);
+    // Cast to StoreProvider
+    StyleProvider provider = (StyleProvider) dataProvider;
 
-        StyleInfo actual = provider.iterator(0, 1).next();
-        CloseableIterator<StyleInfo> list = catalog.list(StyleInfo.class, Filter.INCLUDE, 0, 1,
-                Predicates.sortBy("name", true));
-        assertTrue(list.hasNext());
-        StyleInfo expected = list.next();
-
-        // Close the iterator
-        try {
-            if (list != null) {
-                list.close();
-            }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-        // Ensure equality
-        assertEquals(expected, actual);
+    // Ensure that an unsupportedException is thrown when requesting the Items directly
+    boolean catchedException = false;
+    try {
+      provider.getItems();
+    } catch (UnsupportedOperationException e) {
+      catchedException = true;
     }
 
-    @Test
-    public void testIsDefaultStyle() {
-        Catalog cat = getCatalog();
-        assertTrue(StylePage.isDefaultStyle(cat.getStyleByName("line")));
+    // Ensure the exception is cacthed
+    assertTrue(catchedException);
 
-        StyleInfo s = cat.getFactory().createStyle();
-        s.setName("line");
-        s.setFilename("line.sld");
-        s.setWorkspace(cat.getDefaultWorkspace());
+    StyleInfo actual = provider.iterator(0, 1).next();
+    CloseableIterator<StyleInfo> list =
+        catalog.list(StyleInfo.class, Filter.INCLUDE, 0, 1, Predicates.sortBy("name", true));
+    assertTrue(list.hasNext());
+    StyleInfo expected = list.next();
 
-        assertFalse(StylePage.isDefaultStyle(s));
+    // Close the iterator
+    try {
+      if (list != null) {
+        list.close();
+      }
+    } catch (Exception e) {
+      throw new RuntimeException(e);
     }
+    // Ensure equality
+    assertEquals(expected, actual);
+  }
+
+  @Test
+  public void testIsDefaultStyle() {
+    Catalog cat = getCatalog();
+    assertTrue(StylePage.isDefaultStyle(cat.getStyleByName("line")));
+
+    StyleInfo s = cat.getFactory().createStyle();
+    s.setName("line");
+    s.setFilename("line.sld");
+    s.setWorkspace(cat.getDefaultWorkspace());
+
+    assertFalse(StylePage.isDefaultStyle(s));
+  }
 }

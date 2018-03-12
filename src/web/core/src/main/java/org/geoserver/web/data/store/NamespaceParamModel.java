@@ -13,25 +13,23 @@ import org.geoserver.web.util.MapModel;
 /**
  * Model to wrap and unwrap a {@link NamespaceInfo} to and from a String for the Datastore's
  * "namespace" parameter
- * 
  */
 public class NamespaceParamModel extends MapModel {
-    public NamespaceParamModel(IModel model, String expression) {
-        super(model, expression);
-    }
+  public NamespaceParamModel(IModel model, String expression) {
+    super(model, expression);
+  }
 
-    @Override
-    public Object getObject() {
-        String nsUri = (String) super.getObject();
-        NamespaceInfo namespaceInfo = GeoServerApplication.get().getCatalog()
-                .getNamespaceByURI(nsUri);
-        return namespaceInfo;
-    }
+  @Override
+  public Object getObject() {
+    String nsUri = (String) super.getObject();
+    NamespaceInfo namespaceInfo = GeoServerApplication.get().getCatalog().getNamespaceByURI(nsUri);
+    return namespaceInfo;
+  }
 
-    @Override
-    public void setObject(Object object) {
-        NamespaceInfo namespaceInfo = (NamespaceInfo) object;
-        String nsUri = namespaceInfo.getURI();
-        super.setObject(nsUri);
-    }
+  @Override
+  public void setObject(Object object) {
+    NamespaceInfo namespaceInfo = (NamespaceInfo) object;
+    String nsUri = namespaceInfo.getURI();
+    super.setObject(nsUri);
+  }
 }

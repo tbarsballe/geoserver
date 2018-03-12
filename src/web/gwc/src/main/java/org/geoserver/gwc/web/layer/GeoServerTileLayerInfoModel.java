@@ -9,26 +9,26 @@ import org.apache.wicket.model.Model;
 import org.geoserver.gwc.layer.GeoServerTileLayerInfo;
 
 public class GeoServerTileLayerInfoModel extends Model<GeoServerTileLayerInfo> {
-    private static final long serialVersionUID = 2246174669786551903L;
+  private static final long serialVersionUID = 2246174669786551903L;
 
-    private Boolean enabled;
+  private Boolean enabled;
 
-    private final boolean isNew;
+  private final boolean isNew;
 
-    public GeoServerTileLayerInfoModel(GeoServerTileLayerInfo info, boolean isNew) {
-        super(info);
-        this.isNew = isNew;
-    }
+  public GeoServerTileLayerInfoModel(GeoServerTileLayerInfo info, boolean isNew) {
+    super(info);
+    this.isNew = isNew;
+  }
 
-    public boolean isNew() {
-        return isNew;
-    }
+  public boolean isNew() {
+    return isNew;
+  }
 
-    public Boolean getEnabled() {
-        return enabled;
-    }
+  public Boolean getEnabled() {
+    return enabled;
+  }
 
-    public void setEnabled(Boolean enabled) {
-        this.enabled = enabled;
-    }
+  public void setEnabled(Boolean enabled) {
+    this.enabled = enabled;
+  }
 }

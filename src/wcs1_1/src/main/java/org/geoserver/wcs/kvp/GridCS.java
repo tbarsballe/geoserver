@@ -7,19 +7,19 @@ package org.geoserver.wcs.kvp;
 
 /**
  * The only GridCS the WCS 1.1 specification talks about...
- * @author Andrea Aime
  *
+ * @author Andrea Aime
  */
 public enum GridCS {
-    GCSGrid2dSquare("urn:ogc:def:cs:OGC:0.0:Grid2dSquareCS");
-    
-    private String xmlConstant;
+  GCSGrid2dSquare("urn:ogc:def:cs:OGC:0.0:Grid2dSquareCS");
 
-    GridCS(String xmlConstant) {
-        this.xmlConstant = xmlConstant;
-    }
+  private String xmlConstant;
 
-    public String getXmlConstant() {
-        return xmlConstant;
-    }
+  GridCS(String xmlConstant) {
+    this.xmlConstant = xmlConstant;
+  }
+
+  public String getXmlConstant() {
+    return xmlConstant;
+  }
 }

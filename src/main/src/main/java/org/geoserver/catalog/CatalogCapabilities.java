@@ -11,23 +11,24 @@ package org.geoserver.catalog;
  */
 public final class CatalogCapabilities {
 
-    private boolean supportsIsolatedWorkspaces = false;
+  private boolean supportsIsolatedWorkspaces = false;
 
-    /**
-     * If this method returns TRUE it means that isolated workspaces are supported.
-     *
-     * @return TRUE or FALSE depending on if isolated workspaces are supported or not
-     */
-    public boolean supportsIsolatedWorkspaces() {
-        return supportsIsolatedWorkspaces;
-    }
+  /**
+   * If this method returns TRUE it means that isolated workspaces are supported.
+   *
+   * @return TRUE or FALSE depending on if isolated workspaces are supported or not
+   */
+  public boolean supportsIsolatedWorkspaces() {
+    return supportsIsolatedWorkspaces;
+  }
 
-    /**
-     * Specifies if isolated workspaces are supported or not.
-     *
-     * @param supportsIsolatedWorkspaces TRUE or FALSE, specifying if isolated workspaces are supported
-     */
-    public void setIsolatedWorkspacesSupport(boolean supportsIsolatedWorkspaces) {
-        this.supportsIsolatedWorkspaces = supportsIsolatedWorkspaces;
-    }
+  /**
+   * Specifies if isolated workspaces are supported or not.
+   *
+   * @param supportsIsolatedWorkspaces TRUE or FALSE, specifying if isolated workspaces are
+   *     supported
+   */
+  public void setIsolatedWorkspacesSupport(boolean supportsIsolatedWorkspaces) {
+    this.supportsIsolatedWorkspaces = supportsIsolatedWorkspaces;
+  }
 }

@@ -10,16 +10,16 @@ import org.geoserver.security.xml.XMLUserGroupServiceConfig;
 
 /**
  * Configuration panel extension for {@link XMLUserGroupService}.
- *  
+ *
  * @author Justin Deoliveira, OpenGeo
  */
-public class XMLUserGroupServicePanelInfo 
+public class XMLUserGroupServicePanelInfo
     extends UserGroupServicePanelInfo<XMLUserGroupServiceConfig, XMLUserGroupServicePanel> {
 
-    public XMLUserGroupServicePanelInfo() {
-        setComponentClass(XMLUserGroupServicePanel.class);
-        setServiceClass(XMLUserGroupService.class);
-        setServiceConfigClass(XMLUserGroupServiceConfig.class);
-        setPriority(0);
-    }
+  public XMLUserGroupServicePanelInfo() {
+    setComponentClass(XMLUserGroupServicePanel.class);
+    setServiceClass(XMLUserGroupService.class);
+    setServiceConfigClass(XMLUserGroupServiceConfig.class);
+    setPriority(0);
+  }
 }

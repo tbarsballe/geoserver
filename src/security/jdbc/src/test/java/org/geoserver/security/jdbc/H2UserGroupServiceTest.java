@@ -11,20 +11,17 @@ import org.geoserver.security.jdbc.config.JDBCUserGroupServiceConfig;
 
 public class H2UserGroupServiceTest extends JDBCUserGroupServiceTest {
 
-    @Override
-    protected String getFixtureId() {
-        return "h2";
-    }
+  @Override
+  protected String getFixtureId() {
+    return "h2";
+  }
 
-    @Override
+  @Override
+  protected JDBCUserGroupServiceConfig createConfigObject(String serviceName) {
+    return JDBCTestSupport.createConfigObjectH2(serviceName, getSecurityManager());
+  }
 
-    protected JDBCUserGroupServiceConfig createConfigObject(String serviceName) {
-        return JDBCTestSupport.createConfigObjectH2(serviceName, getSecurityManager());
-
-    }
-    
-    public GeoServerUserGroupService createUserGroupService(String serviceName) throws Exception {        
-        return JDBCTestSupport.createH2UserGroupService(getFixtureId(), getSecurityManager());
-    }
-
+  public GeoServerUserGroupService createUserGroupService(String serviceName) throws Exception {
+    return JDBCTestSupport.createH2UserGroupService(getFixtureId(), getSecurityManager());
+  }
 }

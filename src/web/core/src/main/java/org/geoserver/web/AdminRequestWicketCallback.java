@@ -11,39 +11,37 @@ import org.geoserver.security.AdminRequest;
 
 /**
  * Wicket callback that sets the {@link AdminRequest} thread local.
- * 
- * @author Justin Deoliveira, OpenGeo
  *
+ * @author Justin Deoliveira, OpenGeo
  */
 public class AdminRequestWicketCallback implements WicketCallback {
 
-    @Override
-    public void onBeginRequest() {
-        AdminRequest.start(this);
-    }
+  @Override
+  public void onBeginRequest() {
+    AdminRequest.start(this);
+  }
 
-    @Override
-    public void onEndRequest() {
-        AdminRequest.finish();
-    }
+  @Override
+  public void onEndRequest() {
+    AdminRequest.finish();
+  }
 
-    @Override
-    public void onAfterTargetsDetached() {
-    }
+  @Override
+  public void onAfterTargetsDetached() {}
 
-    @Override
-    public void onRequestTargetSet(Class<? extends IRequestablePage> requestTarget) {
-        // for non secured page requests we abort the admin request since they are meant to be 
-        // accessible anonymously, so we don't consider this an admin request
-        if (requestTarget == null || !(GeoServerSecuredPage.class.isAssignableFrom(requestTarget) || 
-            GeoServerHomePage.class.isAssignableFrom(requestTarget))) {
-            AdminRequest.abort();
-        }
+  @Override
+  public void onRequestTargetSet(Class<? extends IRequestablePage> requestTarget) {
+    // for non secured page requests we abort the admin request since they are meant to be
+    // accessible anonymously, so we don't consider this an admin request
+    if (requestTarget == null
+        || !(GeoServerSecuredPage.class.isAssignableFrom(requestTarget)
+            || GeoServerHomePage.class.isAssignableFrom(requestTarget))) {
+      AdminRequest.abort();
     }
+  }
 
-    @Override
-    public void onRuntimeException(RequestCycle cycle, Exception ex) {
-        // nothing to do
-    }
-
+  @Override
+  public void onRuntimeException(RequestCycle cycle, Exception ex) {
+    // nothing to do
+  }
 }

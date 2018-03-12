@@ -10,25 +10,26 @@ import org.geoserver.web.GeoServerApplication;
 
 /**
  * A detachable model for the {@link PreviewLayer}
+ *
  * @author Andrea Aime - OpenGeo
  */
 @SuppressWarnings("serial")
 class PreviewLayerModel extends LoadableDetachableModel {
-    String id;
-    boolean group;
-    
-    public PreviewLayerModel(PreviewLayer pl) {
-        super(pl);
-        id = pl.layerInfo != null ? pl.layerInfo.getId() : pl.groupInfo.getId();
-        group = pl.groupInfo != null;
-    }
+  String id;
+  boolean group;
 
-    @Override
-    protected Object load() {
-        if(group) {
-            return new PreviewLayer(GeoServerApplication.get().getCatalog().getLayerGroup(id));
-        } else {
-            return new PreviewLayer(GeoServerApplication.get().getCatalog().getLayer(id));
-        }
+  public PreviewLayerModel(PreviewLayer pl) {
+    super(pl);
+    id = pl.layerInfo != null ? pl.layerInfo.getId() : pl.groupInfo.getId();
+    group = pl.groupInfo != null;
+  }
+
+  @Override
+  protected Object load() {
+    if (group) {
+      return new PreviewLayer(GeoServerApplication.get().getCatalog().getLayerGroup(id));
+    } else {
+      return new PreviewLayer(GeoServerApplication.get().getCatalog().getLayer(id));
     }
+  }
 }

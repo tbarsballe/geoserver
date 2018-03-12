@@ -28,72 +28,72 @@ import org.junit.Test;
 
 public class LayerEditCacheOptionsTabPanelInfoTest {
 
-    LayerEditCacheOptionsTabPanelInfo panelInfo;
+  LayerEditCacheOptionsTabPanelInfo panelInfo;
 
-    GWCConfig defaults;
+  GWCConfig defaults;
 
-    GWC gwc;
+  GWC gwc;
 
-    IModel<? extends ResourceInfo> resourceModel;
+  IModel<? extends ResourceInfo> resourceModel;
 
-    LayerInfo layer;
+  LayerInfo layer;
 
-    IModel<LayerInfo> layerModel;
+  IModel<LayerInfo> layerModel;
 
-    @Before
-    public void setUpInternal() throws Exception {
-        panelInfo = new LayerEditCacheOptionsTabPanelInfo();
-        gwc = mock(GWC.class);
-        GWC.set(gwc);
+  @Before
+  public void setUpInternal() throws Exception {
+    panelInfo = new LayerEditCacheOptionsTabPanelInfo();
+    gwc = mock(GWC.class);
+    GWC.set(gwc);
 
-        defaults = GWCConfig.getOldDefaults();
-        when(gwc.getConfig()).thenReturn(defaults);
+    defaults = GWCConfig.getOldDefaults();
+    when(gwc.getConfig()).thenReturn(defaults);
 
-        FeatureTypeInfo resource = mock(FeatureTypeInfo.class);
-        when(resource.getPrefixedName()).thenReturn("topp:states");
+    FeatureTypeInfo resource = mock(FeatureTypeInfo.class);
+    when(resource.getPrefixedName()).thenReturn("topp:states");
 
-        layer = mock(LayerInfo.class);
-        when(layer.getResource()).thenReturn(resource);
-        MetadataMap mdm = new MetadataMap();
-        when(layer.getMetadata()).thenReturn(mdm);
-        resourceModel = new Model<ResourceInfo>(resource);
-        layerModel = new Model<LayerInfo>(layer);
-    }
+    layer = mock(LayerInfo.class);
+    when(layer.getResource()).thenReturn(resource);
+    MetadataMap mdm = new MetadataMap();
+    when(layer.getMetadata()).thenReturn(mdm);
+    resourceModel = new Model<ResourceInfo>(resource);
+    layerModel = new Model<LayerInfo>(layer);
+  }
 
-    @After
-    public void tearDown() {
-        GWC.set(null);
-    }
+  @After
+  public void tearDown() {
+    GWC.set(null);
+  }
 
-    @Test
-    public void testCreateOwnModelNew() {
-        final boolean isNew = true;
+  @Test
+  public void testCreateOwnModelNew() {
+    final boolean isNew = true;
 
-        IModel<GeoServerTileLayerInfo> ownModel;
-        ownModel = panelInfo.createOwnModel(layerModel, isNew);
-        assertNotNull(ownModel);
-        GeoServerTileLayerInfoImpl expected = TileLayerInfoUtil.loadOrCreate(layer, defaults);
-        assertEquals(expected, ownModel.getObject());
-    }
+    IModel<GeoServerTileLayerInfo> ownModel;
+    ownModel = panelInfo.createOwnModel(layerModel, isNew);
+    assertNotNull(ownModel);
+    GeoServerTileLayerInfoImpl expected = TileLayerInfoUtil.loadOrCreate(layer, defaults);
+    assertEquals(expected, ownModel.getObject());
+  }
 
-    @Test
-    public void testCreateOwnModelExisting() {
+  @Test
+  public void testCreateOwnModelExisting() {
 
-        final boolean isNew = false;
+    final boolean isNew = false;
 
-        IModel<GeoServerTileLayerInfo> ownModel;
-        ownModel = panelInfo.createOwnModel(layerModel, isNew);
-        assertNotNull(ownModel);
-        GeoServerTileLayerInfo expected = TileLayerInfoUtil.loadOrCreate(layer, defaults);
-        assertEquals(expected, ownModel.getObject());
+    IModel<GeoServerTileLayerInfo> ownModel;
+    ownModel = panelInfo.createOwnModel(layerModel, isNew);
+    assertNotNull(ownModel);
+    GeoServerTileLayerInfo expected = TileLayerInfoUtil.loadOrCreate(layer, defaults);
+    assertEquals(expected, ownModel.getObject());
 
-        GeoServerTileLayer tileLayer = mock(GeoServerTileLayer.class);
-        expected = new GeoServerTileLayerInfoImpl();
-        expected.setEnabled(true);
-        when(tileLayer.getInfo()).thenReturn(expected);
-        when(gwc.getTileLayer(same(layer))).thenReturn(tileLayer);
+    GeoServerTileLayer tileLayer = mock(GeoServerTileLayer.class);
+    expected = new GeoServerTileLayerInfoImpl();
+    expected.setEnabled(true);
+    when(tileLayer.getInfo()).thenReturn(expected);
+    when(gwc.getTileLayer(same(layer))).thenReturn(tileLayer);
 
-        ownModel = panelInfo.createOwnModel(layerModel, isNew);
-        assertEquals(expected, ownModel.getObject());
-    }
+    ownModel = panelInfo.createOwnModel(layerModel, isNew);
+    assertEquals(expected, ownModel.getObject());
+  }
 }

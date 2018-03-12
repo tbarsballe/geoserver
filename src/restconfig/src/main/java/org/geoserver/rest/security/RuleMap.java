@@ -16,12 +16,11 @@ import java.util.Map;
 @SuppressWarnings("serial")
 public class RuleMap<K, V> extends LinkedHashMap<K, V> {
 
-    public RuleMap() {
-        super();
-    }
-    
-    public RuleMap(Map<K, V> source) {
-        super(source);
-    }
+  public RuleMap() {
+    super();
+  }
 
+  public RuleMap(Map<K, V> source) {
+    super(source);
+  }
 }

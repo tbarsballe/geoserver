@@ -10,18 +10,16 @@ import org.geoserver.catalog.StoreInfo;
 
 /**
  * Renders a StoreInfo into a public name
- * 
+ *
  * @author Andrea Aime - GeoSolutions
- * 
  */
 public class StoreListChoiceRenderer extends ChoiceRenderer<StoreInfo> {
 
-    public Object getDisplayValue(StoreInfo info) {
-        return new StringBuilder(info.getWorkspace().getName()).append(':').append(info.getName());
-    }
+  public Object getDisplayValue(StoreInfo info) {
+    return new StringBuilder(info.getWorkspace().getName()).append(':').append(info.getName());
+  }
 
-    public String getIdValue(StoreInfo store, int arg1) {
-        return store.getId();
-    }
-
+  public String getIdValue(StoreInfo store, int arg1) {
+    return store.getId();
+  }
 }

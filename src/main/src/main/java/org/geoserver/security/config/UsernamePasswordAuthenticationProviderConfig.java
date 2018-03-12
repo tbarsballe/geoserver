@@ -9,29 +9,29 @@ import org.geoserver.security.auth.UsernamePasswordAuthenticationProvider;
 
 /**
  * Config object for {@link UsernamePasswordAuthenticationProvider}.
- * 
+ *
  * @author Justin Deoliveira, OpenGeo
  */
-public class UsernamePasswordAuthenticationProviderConfig extends BaseSecurityNamedServiceConfig 
+public class UsernamePasswordAuthenticationProviderConfig extends BaseSecurityNamedServiceConfig
     implements SecurityAuthProviderConfig {
 
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-    String userGroupServiceName;
+  String userGroupServiceName;
 
-    public UsernamePasswordAuthenticationProviderConfig() {
-    }
+  public UsernamePasswordAuthenticationProviderConfig() {}
 
-    public UsernamePasswordAuthenticationProviderConfig(UsernamePasswordAuthenticationProviderConfig other) {
-        super(other);
-        userGroupServiceName = other.getUserGroupServiceName();
-    }
+  public UsernamePasswordAuthenticationProviderConfig(
+      UsernamePasswordAuthenticationProviderConfig other) {
+    super(other);
+    userGroupServiceName = other.getUserGroupServiceName();
+  }
 
-    public String getUserGroupServiceName() {
-        return userGroupServiceName;
-    }
+  public String getUserGroupServiceName() {
+    return userGroupServiceName;
+  }
 
-    public void setUserGroupServiceName(String userGroupServiceName) {
-        this.userGroupServiceName = userGroupServiceName;
-    }
+  public void setUserGroupServiceName(String userGroupServiceName) {
+    this.userGroupServiceName = userGroupServiceName;
+  }
 }

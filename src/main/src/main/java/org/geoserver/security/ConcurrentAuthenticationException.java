@@ -13,25 +13,26 @@ import org.springframework.security.core.AuthenticationException;
  */
 public class ConcurrentAuthenticationException extends AuthenticationException {
 
-    private static final long serialVersionUID = 6692144768515314827L;
+  private static final long serialVersionUID = 6692144768515314827L;
 
-    private String user;
+  private String user;
 
-    private int count;
+  private int count;
 
-    public ConcurrentAuthenticationException(String user, int count) {
-        super("Concurrent login attempts during delay period not allowed, stopped " + count
-                + " attempts. If you see a large number of blocked attempts, a brute force attack to crack this user's password may be underway.");
-        this.user = user;
-        this.count = count;
-    }
+  public ConcurrentAuthenticationException(String user, int count) {
+    super(
+        "Concurrent login attempts during delay period not allowed, stopped "
+            + count
+            + " attempts. If you see a large number of blocked attempts, a brute force attack to crack this user's password may be underway.");
+    this.user = user;
+    this.count = count;
+  }
 
-    public String getUser() {
-        return user;
-    }
+  public String getUser() {
+    return user;
+  }
 
-    public int getCount() {
-        return count;
-    }
-
+  public int getCount() {
+    return count;
+  }
 }

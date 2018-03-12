@@ -5,7 +5,6 @@
 package org.geoserver.rest.converters;
 
 import java.io.IOException;
-
 import org.geoserver.catalog.StyleHandler;
 import org.geoserver.catalog.Styles;
 import org.geotools.styling.Style;
@@ -16,46 +15,44 @@ import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.xml.sax.EntityResolver;
 
-/**
- * Read {@link Style} using provided mimeType and handler.
- */
+/** Read {@link Style} using provided mimeType and handler. */
 public class StyleReaderConverter extends BaseMessageConverter<Style> {
 
-    private final Version version;
+  private final Version version;
 
-    private final StyleHandler handler;
+  private final StyleHandler handler;
 
-    private final EntityResolver entityResolver;
+  private final EntityResolver entityResolver;
 
-    public StyleReaderConverter(String mimeType, Version version, StyleHandler handler,
-            EntityResolver entityResolver) {
-        super(MediaType.valueOf(mimeType));
-        this.handler = handler;
-        this.version = version;
-        this.entityResolver = entityResolver;
-    }
+  public StyleReaderConverter(
+      String mimeType, Version version, StyleHandler handler, EntityResolver entityResolver) {
+    super(MediaType.valueOf(mimeType));
+    this.handler = handler;
+    this.version = version;
+    this.entityResolver = entityResolver;
+  }
 
-    @Override
-    protected boolean supports(Class<?> clazz) {
-        return Style.class.isAssignableFrom(clazz);
-    }
+  @Override
+  protected boolean supports(Class<?> clazz) {
+    return Style.class.isAssignableFrom(clazz);
+  }
 
-    //
-    // reading
-    //
-    @Override
-    public Style readInternal(Class<? extends Style> clazz, HttpInputMessage inputMessage)
-            throws IOException, HttpMessageNotReadableException {
-        StyledLayerDescriptor sld = handler.parse(inputMessage.getBody(), version, null,
-                entityResolver);
-        return Styles.style(sld);
-    }
+  //
+  // reading
+  //
+  @Override
+  public Style readInternal(Class<? extends Style> clazz, HttpInputMessage inputMessage)
+      throws IOException, HttpMessageNotReadableException {
+    StyledLayerDescriptor sld =
+        handler.parse(inputMessage.getBody(), version, null, entityResolver);
+    return Styles.style(sld);
+  }
 
-    //
-    // writing
-    //
-    @Override
-    protected boolean canWrite(MediaType mediaType) {
-        return false;
-    }
+  //
+  // writing
+  //
+  @Override
+  protected boolean canWrite(MediaType mediaType) {
+    return false;
+  }
 }

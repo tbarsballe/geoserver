@@ -12,33 +12,32 @@ import org.junit.Test;
 
 public class JDBCEditRolePageTest extends EditRolePageTest {
 
-    @Override
-    protected void doInitialize() throws Exception {
-        initializeForJDBC();
-    }
+  @Override
+  protected void doInitialize() throws Exception {
+    initializeForJDBC();
+  }
 
-    @Test
-    public void testFill() throws Exception{
-        doTestFill();
-    }
+  @Test
+  public void testFill() throws Exception {
+    doTestFill();
+  }
 
-    @Test
-    public void testFill2() throws Exception{
-        doTestFill2();
-    }
+  @Test
+  public void testFill2() throws Exception {
+    doTestFill2();
+  }
 
-    void initializeForJDBC() throws Exception {
-        initialize(new H2UserGroupServiceTest(), new H2RoleServiceTest());
-    }
-    
-    @Override
-    public String getRoleServiceName() {
-        return "h2";
-    }
+  void initializeForJDBC() throws Exception {
+    initialize(new H2UserGroupServiceTest(), new H2RoleServiceTest());
+  }
 
-    @Override
-    public String getUserGroupServiceName() {
-        return "h2";
-    }
+  @Override
+  public String getRoleServiceName() {
+    return "h2";
+  }
 
+  @Override
+  public String getUserGroupServiceName() {
+    return "h2";
+  }
 }

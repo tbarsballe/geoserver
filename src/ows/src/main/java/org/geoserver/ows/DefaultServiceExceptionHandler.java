@@ -8,22 +8,22 @@ package org.geoserver.ows;
 import java.util.List;
 
 /**
- * A default implementation of {@link ServiceExceptionHandler} which outputs as service exception in a <code>ows:ExceptionReport</code> document.
- * <p>
- * This service exception handler will generate an OWS exception report, see
- * <a href="http://schemas.opengis.net/ows/1.0.0/owsExceptionReport.xsd">owsExceptionReport.xsd</a> .
- * </p>
+ * A default implementation of {@link ServiceExceptionHandler} which outputs as service exception in
+ * a <code>ows:ExceptionReport</code> document.
+ *
+ * <p>This service exception handler will generate an OWS exception report, see <a
+ * href="http://schemas.opengis.net/ows/1.0.0/owsExceptionReport.xsd">owsExceptionReport.xsd</a> .
  *
  * @author Justin Deoliveira, The Open Planning Project
  * @deprecated use {@link OWS10ServiceExceptionHandler}
  */
 public class DefaultServiceExceptionHandler extends OWS10ServiceExceptionHandler {
 
-    public DefaultServiceExceptionHandler() {
-        super();
-    }
+  public DefaultServiceExceptionHandler() {
+    super();
+  }
 
-    public DefaultServiceExceptionHandler(List services) {
-        super(services);
-    }
+  public DefaultServiceExceptionHandler(List services) {
+    super(services);
+  }
 }

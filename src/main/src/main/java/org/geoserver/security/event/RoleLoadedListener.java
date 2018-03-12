@@ -8,12 +8,11 @@ package org.geoserver.security.event;
 import java.util.EventListener;
 
 /**
- * Classes implementing this interfaces may register 
- * for notifications on a successful load from backend 
- * 
- * @author christian
+ * Classes implementing this interfaces may register for notifications on a successful load from
+ * backend
  *
+ * @author christian
  */
 public interface RoleLoadedListener extends EventListener {
-    public void rolesChanged(RoleLoadedEvent event);
+  public void rolesChanged(RoleLoadedEvent event);
 }

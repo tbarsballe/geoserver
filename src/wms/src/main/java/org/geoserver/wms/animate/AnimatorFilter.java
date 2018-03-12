@@ -24,112 +24,111 @@ import org.geotools.util.logging.Logging;
 
 /**
  * GIF Animated reflecting service request filter.
- * <p>
- * Modifies requests against the WMS animate reflector service endpoints
- * in order to address <a href="https://osgeo-org.atlassian.net/browse/GEOS-6006">GEOS-6006</a>
- * </p>
- * 
+ *
+ * <p>Modifies requests against the WMS animate reflector service endpoints in order to address <a
+ * href="https://osgeo-org.atlassian.net/browse/GEOS-6006">GEOS-6006</a>
+ *
  * @author Tom Kunicki, Boundless
  */
 public class AnimatorFilter implements GeoServerFilter {
-    
-    private static final Logger LOGGER = Logging.getLogger(AnimatorFilter.class);
 
-    private final static String ENDPOINT = "animate";
-    private final static String REQUEST = "Request";
-    private final static String GETMAP = "GetMap";
+  private static final Logger LOGGER = Logging.getLogger(AnimatorFilter.class);
 
-    /**
-     *
-     * @param config
-     * @throws ServletException
-     */
+  private static final String ENDPOINT = "animate";
+  private static final String REQUEST = "Request";
+  private static final String GETMAP = "GetMap";
+
+  /**
+   * @param config
+   * @throws ServletException
+   */
+  @Override
+  public void init(FilterConfig config) throws ServletException {
+    // nothing to do
+  }
+
+  /**
+   * Removes KVP argument <code>Request=GetMap</code> <i>(case independent)</i> if present for calls
+   * against <code>.../animate</code> service endpoints.
+   *
+   * @param request current HTTP request
+   * @param response current HTTP response
+   * @param chain currently executing filter chain
+   * @throws java.io.IOException
+   * @throws javax.servlet.ServletException
+   */
+  @Override
+  public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+      throws IOException, ServletException {
+    if (request instanceof HttpServletRequest) {
+      HttpServletRequest requestHTTP = (HttpServletRequest) request;
+      if (requestNeedsWrapper(requestHTTP)) {
+        LOGGER.log(
+            Level.FINER,
+            "Modified request to {0}, removed \"Request\" KVP argument (GEOS-6006)",
+            requestHTTP.getRequestURI());
+        request = new RequestWrapper(requestHTTP);
+      }
+    }
+    chain.doFilter(request, response);
+  }
+
+  /** */
+  @Override
+  public void destroy() {
+    // nothing to do...
+  }
+
+  private boolean requestNeedsWrapper(HttpServletRequest request) {
+    if (request.getRequestURI().endsWith(ENDPOINT)) {
+      Enumeration<String> names = request.getParameterNames();
+      while (names.hasMoreElements()) {
+        String name = names.nextElement();
+        if (REQUEST.equalsIgnoreCase(name) && GETMAP.equalsIgnoreCase(request.getParameter(name))) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  private static class RequestWrapper extends HttpServletRequestWrapper {
+    private RequestWrapper(HttpServletRequest wrapped) {
+      super(wrapped);
+    }
+
     @Override
-    public void init(FilterConfig config) throws ServletException {
-        // nothing to do
+    public Enumeration getParameterNames() {
+      return Collections.enumeration(getParameterMap().keySet());
     }
 
-    /**
-     * Removes KVP argument <code>Request=GetMap</code> <i>(case independent)</i> if present
-     * for calls against <code>.../animate</code> service endpoints.
-     * 
-     * @param request   current HTTP request
-     * @param response  current HTTP response
-     * @param chain     currently executing filter chain
-     * @throws java.io.IOException 
-     * @throws javax.servlet.ServletException 
-     */
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        if (request instanceof HttpServletRequest) {
-            HttpServletRequest requestHTTP = (HttpServletRequest)request;
-            if (requestNeedsWrapper(requestHTTP)) {
-                LOGGER.log(Level.FINER, "Modified request to {0}, removed \"Request\" KVP argument (GEOS-6006)", requestHTTP.getRequestURI());
-                request = new RequestWrapper(requestHTTP);
-            }
+    public Map<String, String[]> getParameterMap() {
+      Map<String, String[]> original = super.getParameterMap();
+      Map filtered = new HashMap<String, String[]>();
+      for (Map.Entry<String, String[]> entry : original.entrySet()) {
+        String key = entry.getKey();
+        if (!REQUEST.equalsIgnoreCase(key)) {
+          filtered.put(key, entry.getValue());
         }
-        chain.doFilter(request, response);
+      }
+      return filtered;
     }
 
-    /**
-     *
-     */
     @Override
-    public void destroy() {
-        // nothing to do...
+    public String[] getParameterValues(String name) {
+      if (REQUEST.equalsIgnoreCase(name)) {
+        return null;
+      }
+      return super.getParameterValues(name);
     }
-    
-    private boolean requestNeedsWrapper(HttpServletRequest request) {
-        if (request.getRequestURI().endsWith(ENDPOINT)) {
-            Enumeration<String> names = request.getParameterNames();
-            while (names.hasMoreElements()) {
-                String name = names.nextElement();
-                if (REQUEST.equalsIgnoreCase(name) &&
-                    GETMAP.equalsIgnoreCase(request.getParameter(name))) {
-                    return true;
-                }
-            }
-        }
-        return false;
+
+    @Override
+    public String getParameter(String name) {
+      if (REQUEST.equalsIgnoreCase(name)) {
+        return null;
+      }
+      return super.getParameter(name);
     }
-    
-    private static class RequestWrapper extends HttpServletRequestWrapper {        
-        private RequestWrapper(HttpServletRequest wrapped) {
-            super(wrapped);
-        }
-
-        @Override
-        public Enumeration getParameterNames() {
-            return Collections.enumeration(getParameterMap().keySet());
-        }
-
-        @Override
-        public Map<String,String[]> getParameterMap() {
-            Map<String, String[]> original = super.getParameterMap();
-            Map filtered = new HashMap<String, String[]>();
-            for (Map.Entry<String, String[]> entry : original.entrySet()) {
-                String key = entry.getKey();
-                if (!REQUEST.equalsIgnoreCase(key)) {
-                    filtered.put(key, entry.getValue());
-                }
-            }
-            return filtered;
-        }
-
-        @Override
-        public String[] getParameterValues(String name) {
-            if (REQUEST.equalsIgnoreCase(name)) {
-                return null;
-            }
-            return super.getParameterValues(name);
-        }
-
-        @Override
-        public String getParameter(String name) {
-            if (REQUEST.equalsIgnoreCase(name)) {
-                return null;
-            }
-            return super.getParameter(name);
-        }
-    }
+  }
 }

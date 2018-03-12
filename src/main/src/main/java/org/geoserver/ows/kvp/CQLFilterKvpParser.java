@@ -6,28 +6,26 @@
 package org.geoserver.ows.kvp;
 
 import java.util.List;
-
 import org.geoserver.ows.KvpParser;
 import org.geoserver.platform.ServiceException;
 import org.geoserver.util.XCQL;
 import org.geotools.filter.text.cql2.CQLException;
 
-
 /**
  * Parses the CQL_FILTER parameter into a list of filters
- * @author Andrea Aime - TOPP
  *
+ * @author Andrea Aime - TOPP
  */
 public class CQLFilterKvpParser extends KvpParser {
-    public CQLFilterKvpParser() {
-        super("cql_filter", List.class);
-    }
+  public CQLFilterKvpParser() {
+    super("cql_filter", List.class);
+  }
 
-    public Object parse(String value) throws Exception {
-        try {
-            return XCQL.toFilterList(value);
-        } catch (CQLException pe) {
-            throw new ServiceException("Could not parse CQL filter list.", pe);
-        }
+  public Object parse(String value) throws Exception {
+    try {
+      return XCQL.toFilterList(value);
+    } catch (CQLException pe) {
+      throw new ServiceException("Could not parse CQL filter list.", pe);
     }
+  }
 }

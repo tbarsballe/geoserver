@@ -9,31 +9,29 @@ import org.geoserver.security.config.BaseSecurityNamedServiceConfig;
 
 /**
  * Configuration object for remember me services.
- * 
+ *
  * @author Justin Deoliveira, OpenGeo
  */
 public class RememberMeServicesConfig extends BaseSecurityNamedServiceConfig {
 
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-    public static final String DEFAULT_KEY = "geoserver";
+  public static final String DEFAULT_KEY = "geoserver";
 
-    String key = DEFAULT_KEY;
+  String key = DEFAULT_KEY;
 
-    public RememberMeServicesConfig() {
-    }
+  public RememberMeServicesConfig() {}
 
-    public RememberMeServicesConfig(RememberMeServicesConfig other) {
-        super(other);
-        setKey(other.getKey());
-    }
+  public RememberMeServicesConfig(RememberMeServicesConfig other) {
+    super(other);
+    setKey(other.getKey());
+  }
 
-    public String getKey() {
-        return key;
-    }
+  public String getKey() {
+    return key;
+  }
 
-    public void setKey(String key) {
-        this.key = key;
-    }
-
+  public void setKey(String key) {
+    this.key = key;
+  }
 }

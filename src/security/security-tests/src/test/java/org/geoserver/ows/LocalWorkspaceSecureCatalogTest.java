@@ -5,7 +5,11 @@
  */
 package org.geoserver.ows;
 
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.*;
+
 import com.google.common.collect.Iterators;
+import java.util.Collections;
 import org.geoserver.catalog.ResourceInfo;
 import org.geoserver.catalog.StyleInfo;
 import org.geoserver.catalog.WorkspaceInfo;
@@ -23,145 +27,147 @@ import org.junit.Test;
 import org.opengis.filter.Filter;
 import org.springframework.security.core.Authentication;
 
-import java.util.Collections;
-
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
-
 public class LocalWorkspaceSecureCatalogTest extends AbstractAuthorizationTest {
-    
-    @Rule
-    public PropertyRule inheritance = PropertyRule.system("GEOSERVER_GLOBAL_LAYER_GROUP_INHERIT");
-    
-    @Before
-    public void setUp() throws Exception {
-        LocalWorkspaceCatalogFilter.groupInherit = null;
-        super.setUp();
-        populateCatalog();
-    }
 
-    CatalogFilterAccessManager setupAccessManager() throws Exception {
-        ResourceAccessManager defAsResourceManager = buildAccessManager("wideOpen.properties");
-        CatalogFilterAccessManager mgr = new CatalogFilterAccessManager();
-        mgr.setCatalogFilters(Collections.singletonList(new LocalWorkspaceCatalogFilter(catalog)));
-        mgr.setDelegate(defAsResourceManager);
-        return mgr;
-    }
-    @Test
-    public void testAccessToLayer() throws Exception {
-        CatalogFilterAccessManager mgr = setupAccessManager();
-        
-        SecureCatalogImpl sc = new SecureCatalogImpl(catalog, mgr) {};
-        assertNotNull(sc.getLayerByName("topp:states"));
-        
-        WorkspaceInfo ws = sc.getWorkspaceByName("nurc");
-        LocalWorkspace.set(ws);
-        assertNull(sc.getWorkspaceByName("topp"));
-        assertNull(sc.getResourceByName("topp:states", ResourceInfo.class));
-        assertNull(sc.getLayerByName("topp:states"));
-    }
+  @Rule
+  public PropertyRule inheritance = PropertyRule.system("GEOSERVER_GLOBAL_LAYER_GROUP_INHERIT");
 
-    @Test
-    public void testAccessToStyle() throws Exception {
-        CatalogFilterAccessManager mgr = setupAccessManager();
+  @Before
+  public void setUp() throws Exception {
+    LocalWorkspaceCatalogFilter.groupInherit = null;
+    super.setUp();
+    populateCatalog();
+  }
 
-        SecureCatalogImpl sc = new SecureCatalogImpl(catalog, mgr) {};
-        assertEquals(2, sc.getStyles().size());
+  CatalogFilterAccessManager setupAccessManager() throws Exception {
+    ResourceAccessManager defAsResourceManager = buildAccessManager("wideOpen.properties");
+    CatalogFilterAccessManager mgr = new CatalogFilterAccessManager();
+    mgr.setCatalogFilters(Collections.singletonList(new LocalWorkspaceCatalogFilter(catalog)));
+    mgr.setDelegate(defAsResourceManager);
+    return mgr;
+  }
 
-        WorkspaceInfo ws = sc.getWorkspaceByName("topp");
-        LocalWorkspace.set(ws);
-        assertEquals(2, sc.getStyles().size());
-        LocalWorkspace.remove();
+  @Test
+  public void testAccessToLayer() throws Exception {
+    CatalogFilterAccessManager mgr = setupAccessManager();
 
-        ws = sc.getWorkspaceByName("nurc");
-        LocalWorkspace.set(ws);
-        assertEquals(1, sc.getStyles().size());
-    }
+    SecureCatalogImpl sc = new SecureCatalogImpl(catalog, mgr) {};
+    assertNotNull(sc.getLayerByName("topp:states"));
 
-    @SuppressWarnings({ "unchecked" })
-    @Test
-    public void testAccessToLayerGroup() throws Exception {
-        CatalogFilterAccessManager mgr = setupAccessManager();
+    WorkspaceInfo ws = sc.getWorkspaceByName("nurc");
+    LocalWorkspace.set(ws);
+    assertNull(sc.getWorkspaceByName("topp"));
+    assertNull(sc.getResourceByName("topp:states", ResourceInfo.class));
+    assertNull(sc.getLayerByName("topp:states"));
+  }
 
-        SecureCatalogImpl sc = new SecureCatalogImpl(catalog, mgr) {};
-        assertEquals(catalog.getLayerGroups().size(), sc.getLayerGroups().size());
+  @Test
+  public void testAccessToStyle() throws Exception {
+    CatalogFilterAccessManager mgr = setupAccessManager();
 
-        // all groups in this one or global
-        WorkspaceInfo ws = sc.getWorkspaceByName("topp");
-        LocalWorkspace.set(ws);
-        assertEquals(getWorkspaceAccessibleGroupSize("topp"), sc.getLayerGroups().size());
-        LocalWorkspace.remove();
+    SecureCatalogImpl sc = new SecureCatalogImpl(catalog, mgr) {};
+    assertEquals(2, sc.getStyles().size());
 
-        ws = sc.getWorkspaceByName("nurc");
-        LocalWorkspace.set(ws);
-        assertEquals(getWorkspaceAccessibleGroupSize("nurc"), sc.getLayerGroups().size());
-        assertEquals("layerGroup", sc.getLayerGroups().get(0).getName());
-        LocalWorkspace.remove();
-    }
+    WorkspaceInfo ws = sc.getWorkspaceByName("topp");
+    LocalWorkspace.set(ws);
+    assertEquals(2, sc.getStyles().size());
+    LocalWorkspace.remove();
 
-    private long getWorkspaceAccessibleGroupSize(String workspaceName) {
-        return catalog.getLayerGroups().stream().filter(lg -> lg.getWorkspace() == null || workspaceName.equals(lg.getWorkspace().getName())).count();
-    }
+    ws = sc.getWorkspaceByName("nurc");
+    LocalWorkspace.set(ws);
+    assertEquals(1, sc.getStyles().size());
+  }
 
-    @Test
-    public void testAccessToLayerGroupNoInheritance() throws Exception {
-        CatalogFilterAccessManager mgr = setupAccessManager();
-        inheritance.setValue("false");
+  @SuppressWarnings({"unchecked"})
+  @Test
+  public void testAccessToLayerGroup() throws Exception {
+    CatalogFilterAccessManager mgr = setupAccessManager();
 
-        SecureCatalogImpl sc = new SecureCatalogImpl(catalog, mgr) {};
-        assertThat(sc.getLayerGroups(), hasItem(equalTo(layerGroupGlobal)));
-        assertThat(sc.getLayerGroups(), hasItem(equalTo(layerGroupTopp)));
-        WorkspaceInfo ws = sc.getWorkspaceByName("topp");
-        LocalWorkspace.set(ws);
-        assertThat(sc.getLayerGroups(), not(hasItem(equalTo(layerGroupGlobal))));
-        assertThat(sc.getLayerGroups(), hasItem(equalTo(layerGroupTopp)));
-        LocalWorkspace.remove();
+    SecureCatalogImpl sc = new SecureCatalogImpl(catalog, mgr) {};
+    assertEquals(catalog.getLayerGroups().size(), sc.getLayerGroups().size());
 
-        ws = sc.getWorkspaceByName("nurc");
-        LocalWorkspace.set(ws);
-        assertThat(sc.getLayerGroups(), not(hasItem(equalTo(layerGroupGlobal))));
-        assertThat(sc.getLayerGroups(), not(hasItem(equalTo(layerGroupTopp))));
-        LocalWorkspace.remove();
-    }
+    // all groups in this one or global
+    WorkspaceInfo ws = sc.getWorkspaceByName("topp");
+    LocalWorkspace.set(ws);
+    assertEquals(getWorkspaceAccessibleGroupSize("topp"), sc.getLayerGroups().size());
+    LocalWorkspace.remove();
 
-    @Test
-    public void testAccessToStyleAsIterator() throws Exception {
-        // Getting the access manager
-        CatalogFilterAccessManager mgr = setupAccessManager();
+    ws = sc.getWorkspaceByName("nurc");
+    LocalWorkspace.set(ws);
+    assertEquals(getWorkspaceAccessibleGroupSize("nurc"), sc.getLayerGroups().size());
+    assertEquals("layerGroup", sc.getLayerGroups().get(0).getName());
+    LocalWorkspace.remove();
+  }
 
-        // Defining a SecureCatalog with a user which is not admin
-        SecureCatalogImpl sc = new SecureCatalogImpl(catalog, mgr) {
-            @Override
-            protected boolean isAdmin(Authentication authentication) {
-                return false;
-            }
+  private long getWorkspaceAccessibleGroupSize(String workspaceName) {
+    return catalog
+        .getLayerGroups()
+        .stream()
+        .filter(
+            lg -> lg.getWorkspace() == null || workspaceName.equals(lg.getWorkspace().getName()))
+        .count();
+  }
+
+  @Test
+  public void testAccessToLayerGroupNoInheritance() throws Exception {
+    CatalogFilterAccessManager mgr = setupAccessManager();
+    inheritance.setValue("false");
+
+    SecureCatalogImpl sc = new SecureCatalogImpl(catalog, mgr) {};
+    assertThat(sc.getLayerGroups(), hasItem(equalTo(layerGroupGlobal)));
+    assertThat(sc.getLayerGroups(), hasItem(equalTo(layerGroupTopp)));
+    WorkspaceInfo ws = sc.getWorkspaceByName("topp");
+    LocalWorkspace.set(ws);
+    assertThat(sc.getLayerGroups(), not(hasItem(equalTo(layerGroupGlobal))));
+    assertThat(sc.getLayerGroups(), hasItem(equalTo(layerGroupTopp)));
+    LocalWorkspace.remove();
+
+    ws = sc.getWorkspaceByName("nurc");
+    LocalWorkspace.set(ws);
+    assertThat(sc.getLayerGroups(), not(hasItem(equalTo(layerGroupGlobal))));
+    assertThat(sc.getLayerGroups(), not(hasItem(equalTo(layerGroupTopp))));
+    LocalWorkspace.remove();
+  }
+
+  @Test
+  public void testAccessToStyleAsIterator() throws Exception {
+    // Getting the access manager
+    CatalogFilterAccessManager mgr = setupAccessManager();
+
+    // Defining a SecureCatalog with a user which is not admin
+    SecureCatalogImpl sc =
+        new SecureCatalogImpl(catalog, mgr) {
+          @Override
+          protected boolean isAdmin(Authentication authentication) {
+            return false;
+          }
         };
-        GeoServerExtensionsHelper.singleton("secureCatalog", sc, SecureCatalogImpl.class);
+    GeoServerExtensionsHelper.singleton("secureCatalog", sc, SecureCatalogImpl.class);
 
-        // Get the iterator on the styles
-        CloseableIterator<StyleInfo> styles = sc.list(StyleInfo.class, Filter.INCLUDE);
-        int size = Iterators.size(styles);
-        assertEquals(2, size);
+    // Get the iterator on the styles
+    CloseableIterator<StyleInfo> styles = sc.list(StyleInfo.class, Filter.INCLUDE);
+    int size = Iterators.size(styles);
+    assertEquals(2, size);
 
-        // Setting the workspace "topp" and repeating the test
-        WorkspaceInfo ws = sc.getWorkspaceByName("topp");
-        LocalWorkspace.set(ws);
+    // Setting the workspace "topp" and repeating the test
+    WorkspaceInfo ws = sc.getWorkspaceByName("topp");
+    LocalWorkspace.set(ws);
 
-        styles = sc.list(StyleInfo.class, Filter.INCLUDE);
-        size = Iterators.size(styles);
-        assertEquals(2, size);
-        LocalWorkspace.remove();
+    styles = sc.list(StyleInfo.class, Filter.INCLUDE);
+    size = Iterators.size(styles);
+    assertEquals(2, size);
+    LocalWorkspace.remove();
 
-        // Setting the workspace "nurc" and repeating the test
-        ws = sc.getWorkspaceByName("nurc");
-        LocalWorkspace.set(ws);
-        styles = sc.list(StyleInfo.class, Filter.INCLUDE);
-        size = Iterators.size(styles);
-        assertEquals(1, size);
-    }
+    // Setting the workspace "nurc" and repeating the test
+    ws = sc.getWorkspaceByName("nurc");
+    LocalWorkspace.set(ws);
+    styles = sc.list(StyleInfo.class, Filter.INCLUDE);
+    size = Iterators.size(styles);
+    assertEquals(1, size);
+  }
 
-    @After
-    public void tearDown() throws Exception {
-        LocalWorkspace.remove();
-    }
+  @After
+  public void tearDown() throws Exception {
+    LocalWorkspace.remove();
+  }
 }

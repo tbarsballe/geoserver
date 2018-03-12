@@ -7,12 +7,12 @@ package org.geoserver.web.data.store;
 
 import static org.geoserver.catalog.Predicates.sortBy;
 
+import com.google.common.collect.Lists;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
-
 import org.apache.wicket.extensions.markup.html.repeater.util.SortParam;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
@@ -35,201 +35,193 @@ import org.opengis.filter.Filter;
 import org.opengis.filter.FilterFactory2;
 import org.opengis.filter.sort.SortBy;
 
-import com.google.common.collect.Lists;
-
-/**
- * Data providers for the {@link StorePanel}
- */
+/** Data providers for the {@link StorePanel} */
 @SuppressWarnings("serial")
 public class StoreProvider extends GeoServerDataProvider<StoreInfo> {
-    
-    static final Property<StoreInfo> DATA_TYPE = new AbstractProperty<StoreInfo>("datatype") {
+
+  static final Property<StoreInfo> DATA_TYPE =
+      new AbstractProperty<StoreInfo>("datatype") {
 
         public IModel getModel(final IModel itemModel) {
-            return new Model(itemModel) {
-                
-                @Override
-                public Serializable getObject() {
-                    StoreInfo si = (StoreInfo) itemModel.getObject();
-                    return (String) getPropertyValue(si);
-                }
-            };
+          return new Model(itemModel) {
+
+            @Override
+            public Serializable getObject() {
+              StoreInfo si = (StoreInfo) itemModel.getObject();
+              return (String) getPropertyValue(si);
+            }
+          };
         }
 
         public Object getPropertyValue(StoreInfo item) {
-            if (item instanceof DataStoreInfo)
-                return "vector";
-            else
-                return "raster";
+          if (item instanceof DataStoreInfo) return "vector";
+          else return "raster";
         }
-    };
+      };
 
-    static final Property<StoreInfo> WORKSPACE = new BeanProperty<StoreInfo>(
-            "workspace", "workspace.name");
+  static final Property<StoreInfo> WORKSPACE =
+      new BeanProperty<StoreInfo>("workspace", "workspace.name");
 
-    static final Property<StoreInfo> NAME = new BeanProperty<StoreInfo>("name",
-            "name");
+  static final Property<StoreInfo> NAME = new BeanProperty<StoreInfo>("name", "name");
 
-    final Property<StoreInfo> TYPE = new AbstractProperty<StoreInfo>("type") {
-        
+  final Property<StoreInfo> TYPE =
+      new AbstractProperty<StoreInfo>("type") {
+
         public Object getPropertyValue(StoreInfo item) {
-            String type = item.getType();
-            if(type != null) {
-                return type;
+          String type = item.getType();
+          if (type != null) {
+            return type;
+          }
+          try {
+            ResourcePool resourcePool = getCatalog().getResourcePool();
+            if (item instanceof DataStoreInfo) {
+              DataStoreInfo dsInfo = (DataStoreInfo) item;
+              DataAccessFactory factory = resourcePool.getDataStoreFactory(dsInfo);
+              if (factory != null) {
+                return factory.getDisplayName();
+              }
+            } else if (item instanceof CoverageStoreInfo) {
+              Format format = resourcePool.getGridCoverageFormat((CoverageStoreInfo) item);
+              if (format != null) {
+                return format.getName();
+              }
             }
-            try {
-                ResourcePool resourcePool = getCatalog().getResourcePool();
-                if(item instanceof DataStoreInfo) {
-                    DataStoreInfo dsInfo = (DataStoreInfo) item;
-                    DataAccessFactory factory = resourcePool.getDataStoreFactory(dsInfo);
-                    if(factory != null) {
-                        return factory.getDisplayName();
-                    }
-                } else if(item instanceof CoverageStoreInfo) {
-                    Format format = resourcePool.getGridCoverageFormat((CoverageStoreInfo) item);
-                    if(format != null) {
-                        return format.getName();
-                    }
-                } 
-            } catch(Exception e) {
-                // fine, we tried
-            }
-            return "?";
+          } catch (Exception e) {
+            // fine, we tried
+          }
+          return "?";
         }
-    };
-    
-    static final Property<StoreInfo> ENABLED = new BeanProperty<StoreInfo>(
-            "enabled", "enabled");
-    
-    final List<Property<StoreInfo>> PROPERTIES = Arrays.asList(DATA_TYPE,
-            WORKSPACE, NAME, TYPE, ENABLED);
+      };
 
-    WorkspaceInfo workspace;
-    
-    public StoreProvider() {
-        this(null);
-    }
-    
-    public StoreProvider(WorkspaceInfo workspace) {
-        this.workspace = workspace;
-    }
-    
-    @Override
-    protected List<StoreInfo> getItems() {
-        throw new UnsupportedOperationException(
-                "This method should not be being called! "
-                        + "We use the catalog streaming API");
-    }
+  static final Property<StoreInfo> ENABLED = new BeanProperty<StoreInfo>("enabled", "enabled");
 
-    @Override
-    protected List<Property<StoreInfo>> getProperties() {
-        return PROPERTIES;
-    }
+  final List<Property<StoreInfo>> PROPERTIES =
+      Arrays.asList(DATA_TYPE, WORKSPACE, NAME, TYPE, ENABLED);
 
-    @Override
-    protected Comparator<StoreInfo> getComparator(SortParam sort) {
-        return super.getComparator(sort);
-    }
-    
-    public IModel newModel(StoreInfo object) {
-        return new StoreInfoDetachableModel((StoreInfo) object);
-    }
+  WorkspaceInfo workspace;
 
+  public StoreProvider() {
+    this(null);
+  }
 
-    /**
-     * A StoreInfo detachable model that holds the store id to retrieve it on demand from the
-     * catalog
-     */
-    static class StoreInfoDetachableModel extends LoadableDetachableModel {
+  public StoreProvider(WorkspaceInfo workspace) {
+    this.workspace = workspace;
+  }
 
-        private static final long serialVersionUID = -6829878983583733186L;
+  @Override
+  protected List<StoreInfo> getItems() {
+    throw new UnsupportedOperationException(
+        "This method should not be being called! " + "We use the catalog streaming API");
+  }
 
-        String id;
+  @Override
+  protected List<Property<StoreInfo>> getProperties() {
+    return PROPERTIES;
+  }
 
-        public StoreInfoDetachableModel(StoreInfo store) {
-            super(store);
-            this.id = store.getId();
-        }
+  @Override
+  protected Comparator<StoreInfo> getComparator(SortParam sort) {
+    return super.getComparator(sort);
+  }
 
-        @Override
-        protected Object load() {
-            Catalog catalog = GeoServerApplication.get().getCatalog();
-            StoreInfo storeInfo = catalog.getStore(id, StoreInfo.class);
-            return storeInfo;
-        }
-    }
-    
-    @Override
-    public long size() {
-        Filter filter = getFilter();
-        filter = getWorkspaceFilter(filter);
-        int count = getCatalog().count(StoreInfo.class, filter);
-        return count;
+  public IModel newModel(StoreInfo object) {
+    return new StoreInfoDetachableModel((StoreInfo) object);
+  }
+
+  /**
+   * A StoreInfo detachable model that holds the store id to retrieve it on demand from the catalog
+   */
+  static class StoreInfoDetachableModel extends LoadableDetachableModel {
+
+    private static final long serialVersionUID = -6829878983583733186L;
+
+    String id;
+
+    public StoreInfoDetachableModel(StoreInfo store) {
+      super(store);
+      this.id = store.getId();
     }
 
     @Override
-    public int fullSize() {
-        Filter filter = Predicates.acceptAll();
-        filter = getWorkspaceFilter(filter);
-        int count = getCatalog().count(StoreInfo.class, filter);
-        return count;
+    protected Object load() {
+      Catalog catalog = GeoServerApplication.get().getCatalog();
+      StoreInfo storeInfo = catalog.getStore(id, StoreInfo.class);
+      return storeInfo;
     }
-    
-    @Override
-    public Iterator<StoreInfo> iterator(final long first, final long count) {
-        Iterator<StoreInfo> iterator = filteredItems(first, count);
-        if (iterator instanceof CloseableIterator) {
-            // don't know how to force wicket to close the iterator, lets return
-            // a copy. Shouldn't be much overhead as we're paging
-            try {
-                return Lists.newArrayList(iterator).iterator();
-            } finally {
-                CloseableIteratorAdapter.close(iterator);
-            }
-        } else {
-            return iterator;
-        }
+  }
+
+  @Override
+  public long size() {
+    Filter filter = getFilter();
+    filter = getWorkspaceFilter(filter);
+    int count = getCatalog().count(StoreInfo.class, filter);
+    return count;
+  }
+
+  @Override
+  public int fullSize() {
+    Filter filter = Predicates.acceptAll();
+    filter = getWorkspaceFilter(filter);
+    int count = getCatalog().count(StoreInfo.class, filter);
+    return count;
+  }
+
+  @Override
+  public Iterator<StoreInfo> iterator(final long first, final long count) {
+    Iterator<StoreInfo> iterator = filteredItems(first, count);
+    if (iterator instanceof CloseableIterator) {
+      // don't know how to force wicket to close the iterator, lets return
+      // a copy. Shouldn't be much overhead as we're paging
+      try {
+        return Lists.newArrayList(iterator).iterator();
+      } finally {
+        CloseableIteratorAdapter.close(iterator);
+      }
+    } else {
+      return iterator;
+    }
+  }
+
+  /**
+   * Returns the requested page of layer objects after applying any keyword filtering set on the
+   * page
+   */
+  private Iterator<StoreInfo> filteredItems(long first, long count) {
+    final Catalog catalog = getCatalog();
+
+    // global sorting
+    final SortParam sort = getSort();
+    final Property<StoreInfo> property = getProperty(sort);
+
+    SortBy sortOrder = null;
+    if (sort != null) {
+      if (property instanceof BeanProperty) {
+        final String sortProperty = ((BeanProperty<StoreInfo>) property).getPropertyPath();
+        sortOrder = sortBy(sortProperty, sort.isAscending());
+      } else if (property == ENABLED) {
+        sortOrder = sortBy("enabled", sort.isAscending());
+      } else if (property == TYPE) {
+        sortOrder = sortBy("type", sort.isAscending());
+      }
+    } else {
+      sortOrder = sortBy("name", true);
     }
 
-    /**
-     * Returns the requested page of layer objects after applying any keyword
-     * filtering set on the page
-     */
-    private Iterator<StoreInfo> filteredItems(long first, long count) {
-        final Catalog catalog = getCatalog();
+    final Filter filter = getWorkspaceFilter(getFilter());
+    // our already filtered and closeable iterator
+    Iterator<StoreInfo> items =
+        catalog.list(StoreInfo.class, filter, (int) first, (int) count, sortOrder);
 
-        // global sorting
-        final SortParam sort = getSort();
-        final Property<StoreInfo> property = getProperty(sort);
+    return items;
+  }
 
-        SortBy sortOrder = null;
-        if (sort != null) {
-            if (property instanceof BeanProperty) {
-                final String sortProperty = ((BeanProperty<StoreInfo>) property).getPropertyPath();
-                sortOrder = sortBy(sortProperty, sort.isAscending());
-            } else if (property == ENABLED) {
-                sortOrder = sortBy("enabled", sort.isAscending());
-            } else if (property == TYPE) {
-                sortOrder = sortBy("type", sort.isAscending());
-            }
-        } else {
-            sortOrder = sortBy("name", true);
-        }
-
-        final Filter filter = getWorkspaceFilter(getFilter());
-        //our already filtered and closeable iterator
-        Iterator<StoreInfo> items = catalog.list(StoreInfo.class, filter, (int)first, (int)count, sortOrder);
-
-        return items;
+  private Filter getWorkspaceFilter(Filter filter) {
+    // Filter by workspace if present
+    if (workspace != null) {
+      FilterFactory2 ff = CommonFactoryFinder.getFilterFactory2();
+      Filter workspaceFilter = ff.equal(ff.property("workspace.id"), ff.literal(workspace.getId()));
+      filter = ff.and(filter, workspaceFilter);
     }
-    
-    private Filter getWorkspaceFilter(Filter filter){
-        // Filter by workspace if present
-        if(workspace != null){
-            FilterFactory2 ff = CommonFactoryFinder.getFilterFactory2();
-            Filter workspaceFilter = ff.equal(ff.property("workspace.id"), ff.literal(workspace.getId()));
-            filter = ff.and(filter, workspaceFilter);
-        }
-        return filter;
-    }
+    return filter;
+  }
 }

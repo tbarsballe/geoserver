@@ -10,14 +10,14 @@ import org.geoserver.security.config.J2eeRoleServiceConfig;
 
 /**
  * Configuration panel for {@link J2eeRoleServiceConfig}.
- *  
+ *
  * @author christian
  */
 public class J2eeRoleServicePanel extends RoleServicePanel<J2eeRoleServiceConfig> {
 
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-    public J2eeRoleServicePanel(String id, IModel<J2eeRoleServiceConfig> model) {
-        super(id, model);
-    }
+  public J2eeRoleServicePanel(String id, IModel<J2eeRoleServiceConfig> model) {
+    super(id, model);
+  }
 }

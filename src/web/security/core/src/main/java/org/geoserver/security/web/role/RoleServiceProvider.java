@@ -8,38 +8,36 @@ package org.geoserver.security.web.role;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.geoserver.security.config.SecurityRoleServiceConfig;
 import org.geoserver.security.web.SecurityNamedServiceProvider;
 
 /**
  * Data provider for role service configurations.
- * 
- * @author Justin Deoliveira, OpenGeo
  *
+ * @author Justin Deoliveira, OpenGeo
  */
 public class RoleServiceProvider extends SecurityNamedServiceProvider<SecurityRoleServiceConfig> {
 
-    public static final Property<SecurityRoleServiceConfig> ADMIN_ROLE = 
-            new BeanProperty("adminRoleName", "adminRoleName");
-    
-    @Override
-    protected List<SecurityRoleServiceConfig> getItems() {
-        List <SecurityRoleServiceConfig> result = new ArrayList<SecurityRoleServiceConfig>();
-        try {
-            for (String name : getSecurityManager().listRoleServices()) {
-                result.add(getSecurityManager().loadRoleServiceConfig(name));
-            }
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
-        }
-        return result;
-    }
+  public static final Property<SecurityRoleServiceConfig> ADMIN_ROLE =
+      new BeanProperty("adminRoleName", "adminRoleName");
 
-    @Override
-    protected List<Property<SecurityRoleServiceConfig>> getProperties() {
-        List props = new ArrayList(super.getProperties());
-        props.add(ADMIN_ROLE);
-        return props;
+  @Override
+  protected List<SecurityRoleServiceConfig> getItems() {
+    List<SecurityRoleServiceConfig> result = new ArrayList<SecurityRoleServiceConfig>();
+    try {
+      for (String name : getSecurityManager().listRoleServices()) {
+        result.add(getSecurityManager().loadRoleServiceConfig(name));
+      }
+    } catch (IOException ex) {
+      throw new RuntimeException(ex);
     }
+    return result;
+  }
+
+  @Override
+  protected List<Property<SecurityRoleServiceConfig>> getProperties() {
+    List props = new ArrayList(super.getProperties());
+    props.add(ADMIN_ROLE);
+    return props;
+  }
 }

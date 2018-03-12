@@ -9,232 +9,226 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import org.geoserver.catalog.AuthorityURLInfo;
 import org.geoserver.catalog.LayerIdentifierInfo;
 import org.geoserver.config.impl.ServiceInfoImpl;
 
 public class WMSInfoImpl extends ServiceInfoImpl implements WMSInfo {
 
-    List<String> srs = new ArrayList<String>();
+  List<String> srs = new ArrayList<String>();
 
-    Boolean bboxForEachCRS;
+  Boolean bboxForEachCRS;
 
-    WatermarkInfo watermark = new WatermarkInfoImpl();
+  WatermarkInfo watermark = new WatermarkInfoImpl();
 
-    WMSInterpolation interpolation = WMSInterpolation.Nearest;
-    
-    
-    boolean getFeatureInfoMimeTypeCheckingEnabled;
-    Set<String> getFeatureInfoMimeTypes = new HashSet<String>();
-    
-    boolean getMapMimeTypeCheckingEnabled;
-    Set<String> getMapMimeTypes = new HashSet<String>();
-    
-    boolean dynamicStylingDisabled;
+  WMSInterpolation interpolation = WMSInterpolation.Nearest;
 
-    // GetFeatureInfo result are reprojected by default
-    private boolean featuresReprojectionDisabled = false;
+  boolean getFeatureInfoMimeTypeCheckingEnabled;
+  Set<String> getFeatureInfoMimeTypes = new HashSet<String>();
 
-    /**
-     * This property is transient in 2.1.x series and stored under the metadata map with key
-     * "authorityURLs", and a not transient in the 2.2.x series.
-     * 
-     * @since 2.1.3
-     */
-    protected List<AuthorityURLInfo> authorityURLs = new ArrayList<AuthorityURLInfo>(2);
-    
+  boolean getMapMimeTypeCheckingEnabled;
+  Set<String> getMapMimeTypes = new HashSet<String>();
 
-    /**
-     * This property is transient in 2.1.x series and stored under the metadata map with key
-     * "identifiers", and a not transient in the 2.2.x series.
-     * 
-     * @since 2.1.3
-     */
-    protected List<LayerIdentifierInfo> identifiers = new ArrayList<LayerIdentifierInfo>(2);
+  boolean dynamicStylingDisabled;
 
-    int maxBuffer;
+  // GetFeatureInfo result are reprojected by default
+  private boolean featuresReprojectionDisabled = false;
 
-    int maxRequestMemory;
+  /**
+   * This property is transient in 2.1.x series and stored under the metadata map with key
+   * "authorityURLs", and a not transient in the 2.2.x series.
+   *
+   * @since 2.1.3
+   */
+  protected List<AuthorityURLInfo> authorityURLs = new ArrayList<AuthorityURLInfo>(2);
 
-    int maxRenderingTime;
+  /**
+   * This property is transient in 2.1.x series and stored under the metadata map with key
+   * "identifiers", and a not transient in the 2.2.x series.
+   *
+   * @since 2.1.3
+   */
+  protected List<LayerIdentifierInfo> identifiers = new ArrayList<LayerIdentifierInfo>(2);
 
-    int maxRenderingErrors;
+  int maxBuffer;
 
-    private String capabilitiesErrorHandling;    
-    
-    private String rootLayerTitle;
-    
-    private String rootLayerAbstract;
+  int maxRequestMemory;
 
-    public WMSInfoImpl() {
-        authorityURLs = new ArrayList<AuthorityURLInfo>(2);
-        identifiers = new ArrayList<LayerIdentifierInfo>(2);
+  int maxRenderingTime;
+
+  int maxRenderingErrors;
+
+  private String capabilitiesErrorHandling;
+
+  private String rootLayerTitle;
+
+  private String rootLayerAbstract;
+
+  public WMSInfoImpl() {
+    authorityURLs = new ArrayList<AuthorityURLInfo>(2);
+    identifiers = new ArrayList<LayerIdentifierInfo>(2);
+  }
+
+  public int getMaxRequestMemory() {
+    return maxRequestMemory;
+  }
+
+  public void setMaxRequestMemory(int maxRequestMemory) {
+    this.maxRequestMemory = maxRequestMemory;
+  }
+
+  public WatermarkInfo getWatermark() {
+    return watermark;
+  }
+
+  public void setWatermark(WatermarkInfo watermark) {
+    this.watermark = watermark;
+  }
+
+  public void setInterpolation(WMSInterpolation interpolation) {
+    this.interpolation = interpolation;
+  }
+
+  public WMSInterpolation getInterpolation() {
+    return interpolation;
+  }
+
+  public List<String> getSRS() {
+    return srs;
+  }
+
+  public void setSRS(List<String> srs) {
+    this.srs = srs;
+  }
+
+  public Boolean isBBOXForEachCRS() {
+    if (bboxForEachCRS != null) {
+      return bboxForEachCRS;
     }
 
-    public int getMaxRequestMemory() {
-        return maxRequestMemory;
-    }
+    // check the metadata map if upgrading from 2.1.x
+    Boolean bool = getMetadata().get("bboxForEachCRS", Boolean.class);
+    return bool != null && bool;
+  }
 
-    public void setMaxRequestMemory(int maxRequestMemory) {
-        this.maxRequestMemory = maxRequestMemory;
-    }
+  public void setBBOXForEachCRS(Boolean bboxForEachCRS) {
+    this.bboxForEachCRS = bboxForEachCRS;
+  }
 
-    public WatermarkInfo getWatermark() {
-        return watermark;
-    }
+  public int getMaxBuffer() {
+    return maxBuffer;
+  }
 
-    public void setWatermark(WatermarkInfo watermark) {
-        this.watermark = watermark;
-    }
+  public void setMaxBuffer(int maxBuffer) {
+    this.maxBuffer = maxBuffer;
+  }
 
-    public void setInterpolation(WMSInterpolation interpolation) {
-        this.interpolation = interpolation;
-    }
+  public int getMaxRenderingTime() {
+    return maxRenderingTime;
+  }
 
-    public WMSInterpolation getInterpolation() {
-        return interpolation;
-    }
+  public void setMaxRenderingTime(int maxRenderingTime) {
+    this.maxRenderingTime = maxRenderingTime;
+  }
 
-    public List<String> getSRS() {
-        return srs;
-    }
+  public int getMaxRenderingErrors() {
+    return maxRenderingErrors;
+  }
 
-    public void setSRS(List<String> srs) {
-        this.srs = srs;
-    }
+  public void setMaxRenderingErrors(int maxRenderingErrors) {
+    this.maxRenderingErrors = maxRenderingErrors;
+  }
 
-    public Boolean isBBOXForEachCRS() {
-        if (bboxForEachCRS != null) {
-            return bboxForEachCRS;
-        }
-        
-        //check the metadata map if upgrading from 2.1.x
-        Boolean bool = getMetadata().get("bboxForEachCRS", Boolean.class);
-        return bool != null && bool;
-    }
+  @Override
+  public List<AuthorityURLInfo> getAuthorityURLs() {
+    return authorityURLs;
+  }
 
-    public void setBBOXForEachCRS(Boolean bboxForEachCRS) {
-        this.bboxForEachCRS = bboxForEachCRS;
-    }
+  public void setAuthorityURLs(List<AuthorityURLInfo> urls) {
+    this.authorityURLs = urls;
+  }
 
-    public int getMaxBuffer() {
-        return maxBuffer;
-    }
+  @Override
+  public List<LayerIdentifierInfo> getIdentifiers() {
+    return identifiers;
+  }
 
-    public void setMaxBuffer(int maxBuffer) {
-        this.maxBuffer = maxBuffer;
-    }
+  public void setIdentifiers(List<LayerIdentifierInfo> identifiers) {
+    this.identifiers = identifiers;
+  }
 
-    public int getMaxRenderingTime() {
-        return maxRenderingTime;
-    }
+  public Set<String> getGetFeatureInfoMimeTypes() {
+    return getFeatureInfoMimeTypes;
+  }
 
-    public void setMaxRenderingTime(int maxRenderingTime) {
-        this.maxRenderingTime = maxRenderingTime;
-    }
+  public void setGetFeatureInfoMimeTypes(Set<String> getFeatureInfoMimeTypes) {
+    this.getFeatureInfoMimeTypes = getFeatureInfoMimeTypes;
+  }
 
-    public int getMaxRenderingErrors() {
-        return maxRenderingErrors;
-    }
+  public Set<String> getGetMapMimeTypes() {
+    return getMapMimeTypes;
+  }
 
-    public void setMaxRenderingErrors(int maxRenderingErrors) {
-        this.maxRenderingErrors = maxRenderingErrors;
-    }
+  public void setGetMapMimeTypes(Set<String> getMapMimeTypes) {
+    this.getMapMimeTypes = getMapMimeTypes;
+  }
 
-    @Override
-    public List<AuthorityURLInfo> getAuthorityURLs() {
-        return authorityURLs;
-    }
+  public boolean isGetFeatureInfoMimeTypeCheckingEnabled() {
+    return getFeatureInfoMimeTypeCheckingEnabled;
+  }
 
-    public void setAuthorityURLs(List<AuthorityURLInfo> urls) {
-        this.authorityURLs = urls;
-    }
+  public void setGetFeatureInfoMimeTypeCheckingEnabled(
+      boolean getFeatureInfoMimeTypeCheckingEnabled) {
+    this.getFeatureInfoMimeTypeCheckingEnabled = getFeatureInfoMimeTypeCheckingEnabled;
+  }
 
-    @Override
-    public List<LayerIdentifierInfo> getIdentifiers() {
-        return identifiers;
-    }
+  public boolean isGetMapMimeTypeCheckingEnabled() {
+    return getMapMimeTypeCheckingEnabled;
+  }
 
-    public void setIdentifiers(List<LayerIdentifierInfo> identifiers) {
-        this.identifiers = identifiers;
-    }
+  public void setGetMapMimeTypeCheckingEnabled(boolean getMapMimeTypeCheckingEnabled) {
+    this.getMapMimeTypeCheckingEnabled = getMapMimeTypeCheckingEnabled;
+  }
 
-    public Set<String> getGetFeatureInfoMimeTypes() {
-        return getFeatureInfoMimeTypes;
-    }
+  public String getRootLayerTitle() {
+    return rootLayerTitle;
+  }
 
-    public void setGetFeatureInfoMimeTypes(Set<String> getFeatureInfoMimeTypes) {
-        this.getFeatureInfoMimeTypes = getFeatureInfoMimeTypes;
-    }
+  public void setRootLayerTitle(String rootLayerTitle) {
+    this.rootLayerTitle = rootLayerTitle;
+  }
 
-    public Set<String> getGetMapMimeTypes() {
-        return getMapMimeTypes;
-    }
+  public String getRootLayerAbstract() {
+    return rootLayerAbstract;
+  }
 
-    public void setGetMapMimeTypes(Set<String> getMapMimeTypes) {
-        this.getMapMimeTypes = getMapMimeTypes;
-    }
+  public void setRootLayerAbstract(String rootLayerAbstract) {
+    this.rootLayerAbstract = rootLayerAbstract;
+  }
 
-    public boolean isGetFeatureInfoMimeTypeCheckingEnabled() {
-        return getFeatureInfoMimeTypeCheckingEnabled;
-    }
+  /**
+   * Sets the status of dynamic styling (SLD and SLD_BODY params) allowance
+   *
+   * @param dynamicStylingDisabled
+   */
+  @Override
+  public void setDynamicStylingDisabled(Boolean dynamicStylingDisabled) {
+    this.dynamicStylingDisabled = dynamicStylingDisabled;
+  }
 
-    public void setGetFeatureInfoMimeTypeCheckingEnabled(boolean getFeatureInfoMimeTypeCheckingEnabled) {
-        this.getFeatureInfoMimeTypeCheckingEnabled = getFeatureInfoMimeTypeCheckingEnabled;
-    }
+  /** @return the status of dynamic styling (SLD and SLD_BODY params) allowance */
+  @Override
+  public Boolean isDynamicStylingDisabled() {
+    return dynamicStylingDisabled;
+  }
 
-    public boolean isGetMapMimeTypeCheckingEnabled() {
-        return getMapMimeTypeCheckingEnabled;
-    }
+  @Override
+  public boolean isFeaturesReprojectionDisabled() {
+    return featuresReprojectionDisabled;
+  }
 
-    public void setGetMapMimeTypeCheckingEnabled(boolean getMapMimeTypeCheckingEnabled) {
-        this.getMapMimeTypeCheckingEnabled = getMapMimeTypeCheckingEnabled;
-    }
-
-	public String getRootLayerTitle() {
-		return rootLayerTitle;
-	}
-
-	public void setRootLayerTitle(String rootLayerTitle) {
-		this.rootLayerTitle = rootLayerTitle;
-	}
-
-	public String getRootLayerAbstract() {
-		return rootLayerAbstract;
-	}
-
-	public void setRootLayerAbstract(String rootLayerAbstract) {
-		this.rootLayerAbstract = rootLayerAbstract;
-	}
-    
-    /**
-     * Sets the status of dynamic styling (SLD and SLD_BODY params) allowance
-     *
-     * @param dynamicStylingDisabled
-     */
-    @Override
-    public void setDynamicStylingDisabled(Boolean dynamicStylingDisabled) {
-        this.dynamicStylingDisabled= dynamicStylingDisabled;
-    }
-
-    /**
-     * @return the status of dynamic styling (SLD and SLD_BODY params) allowance
-     */
-    @Override
-    public Boolean isDynamicStylingDisabled() {
-        return dynamicStylingDisabled;
-    }
-
-
-    @Override
-    public boolean isFeaturesReprojectionDisabled() {
-        return featuresReprojectionDisabled;
-    }
-
-    @Override
-    public void setFeaturesReprojectionDisabled(boolean featuresReprojectionDisabled) {
-        this.featuresReprojectionDisabled = featuresReprojectionDisabled;
-    }
-
+  @Override
+  public void setFeaturesReprojectionDisabled(boolean featuresReprojectionDisabled) {
+    this.featuresReprojectionDisabled = featuresReprojectionDisabled;
+  }
 }

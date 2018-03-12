@@ -14,7 +14,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-
 import org.geowebcache.diskquota.QuotaStore;
 import org.geowebcache.diskquota.storage.PageStats;
 import org.geowebcache.diskquota.storage.PageStatsPayload;
@@ -25,131 +24,122 @@ import org.geowebcache.diskquota.storage.TileSet;
 import org.geowebcache.diskquota.storage.TileSetVisitor;
 
 public class DummyQuotaStore implements QuotaStore {
-    
-    private static final Quota EMPTY_QUOTA = new Quota(new BigInteger("0"));
-    
-    TilePageCalculator calculator;
-    
-    public DummyQuotaStore(TilePageCalculator calculator) {
-        this.calculator = calculator;
-    }
 
-    @Override
-    public void createLayer(String layerName) throws InterruptedException {
-        
-    }
+  private static final Quota EMPTY_QUOTA = new Quota(new BigInteger("0"));
 
-    @Override
-    public Quota getGloballyUsedQuota() throws InterruptedException {
-        return EMPTY_QUOTA;
-    }
+  TilePageCalculator calculator;
 
-    @Override
-    public Quota getUsedQuotaByTileSetId(String tileSetId) throws InterruptedException {
-        return EMPTY_QUOTA;
-    }
+  public DummyQuotaStore(TilePageCalculator calculator) {
+    this.calculator = calculator;
+  }
 
-    @Override
-    public void deleteLayer(String layerName) {
-    }
+  @Override
+  public void createLayer(String layerName) throws InterruptedException {}
 
-    @Override
-    public void renameLayer(String oldLayerName, String newLayerName) throws InterruptedException {
-    }
+  @Override
+  public Quota getGloballyUsedQuota() throws InterruptedException {
+    return EMPTY_QUOTA;
+  }
 
-    @Override
-    public Quota getUsedQuotaByLayerName(String layerName) throws InterruptedException {
-        return EMPTY_QUOTA;
-    }
+  @Override
+  public Quota getUsedQuotaByTileSetId(String tileSetId) throws InterruptedException {
+    return EMPTY_QUOTA;
+  }
 
-    @Override
-    public long[][] getTilesForPage(TilePage page) throws InterruptedException {
-        TileSet tileSet = getTileSetById(page.getTileSetId());
-        long[][] gridCoverage = calculator.toGridCoverage(tileSet, page);
-        return gridCoverage;
-    }
+  @Override
+  public void deleteLayer(String layerName) {}
 
-    @Override
-    public Set<TileSet> getTileSets() {
-        return Collections.emptySet();
-    }
+  @Override
+  public void renameLayer(String oldLayerName, String newLayerName) throws InterruptedException {}
 
-    @Override
-    public TileSet getTileSetById(String tileSetId) throws InterruptedException {
-        return null;
-    }
+  @Override
+  public Quota getUsedQuotaByLayerName(String layerName) throws InterruptedException {
+    return EMPTY_QUOTA;
+  }
 
-    @Override
-    public void accept(TileSetVisitor visitor) {
-    }
+  @Override
+  public long[][] getTilesForPage(TilePage page) throws InterruptedException {
+    TileSet tileSet = getTileSetById(page.getTileSetId());
+    long[][] gridCoverage = calculator.toGridCoverage(tileSet, page);
+    return gridCoverage;
+  }
 
-    @Override
-    public TilePageCalculator getTilePageCalculator() {
-        return calculator;
-    }
+  @Override
+  public Set<TileSet> getTileSets() {
+    return Collections.emptySet();
+  }
 
-    @Override
-    public void addToQuotaAndTileCounts(TileSet tileSet, Quota quotaDiff,
-            Collection<PageStatsPayload> tileCountDiffs) throws InterruptedException {
-    }
+  @Override
+  public TileSet getTileSetById(String tileSetId) throws InterruptedException {
+    return null;
+  }
 
-    @Override
-    public Future<List<PageStats>> addHitsAndSetAccesTime(Collection<PageStatsPayload> statsUpdates) {
-        return new Future<List<PageStats>>() {
+  @Override
+  public void accept(TileSetVisitor visitor) {}
 
-            @Override
-            public boolean cancel(boolean mayInterruptIfRunning) {
-                return true;
-            }
+  @Override
+  public TilePageCalculator getTilePageCalculator() {
+    return calculator;
+  }
 
-            @Override
-            public boolean isCancelled() {
-                return true;
-            }
+  @Override
+  public void addToQuotaAndTileCounts(
+      TileSet tileSet, Quota quotaDiff, Collection<PageStatsPayload> tileCountDiffs)
+      throws InterruptedException {}
 
-            @Override
-            public boolean isDone() {
-                return true;
-            }
+  @Override
+  public Future<List<PageStats>> addHitsAndSetAccesTime(Collection<PageStatsPayload> statsUpdates) {
+    return new Future<List<PageStats>>() {
 
-            @Override
-            public List<PageStats> get() throws InterruptedException, ExecutionException {
-                return Collections.emptyList();
-            }
+      @Override
+      public boolean cancel(boolean mayInterruptIfRunning) {
+        return true;
+      }
 
-            @Override
-            public List<PageStats> get(long timeout, TimeUnit unit) throws InterruptedException,
-                    ExecutionException, TimeoutException {
-                return Collections.emptyList();
-            }
-        };
-    }
+      @Override
+      public boolean isCancelled() {
+        return true;
+      }
 
-    @Override
-    public TilePage getLeastFrequentlyUsedPage(Set<String> layerNames) throws InterruptedException {
-        return null;
-    }
+      @Override
+      public boolean isDone() {
+        return true;
+      }
 
-    @Override
-    public TilePage getLeastRecentlyUsedPage(Set<String> layerNames) throws InterruptedException {
-        return null;
-    }
+      @Override
+      public List<PageStats> get() throws InterruptedException, ExecutionException {
+        return Collections.emptyList();
+      }
 
-    @Override
-    public PageStats setTruncated(TilePage tilePage) throws InterruptedException {
-        return null;
-    }
+      @Override
+      public List<PageStats> get(long timeout, TimeUnit unit)
+          throws InterruptedException, ExecutionException, TimeoutException {
+        return Collections.emptyList();
+      }
+    };
+  }
 
-    @Override
-    public void deleteGridSubset(String layerName, String gridSetId) {
-    }
+  @Override
+  public TilePage getLeastFrequentlyUsedPage(Set<String> layerNames) throws InterruptedException {
+    return null;
+  }
 
-    @Override
-    public void close() throws Exception {
-    }
+  @Override
+  public TilePage getLeastRecentlyUsedPage(Set<String> layerNames) throws InterruptedException {
+    return null;
+  }
 
-    @Override
-    public void deleteParameters(String layerName, String parametersId) {
-    }
+  @Override
+  public PageStats setTruncated(TilePage tilePage) throws InterruptedException {
+    return null;
+  }
 
+  @Override
+  public void deleteGridSubset(String layerName, String gridSetId) {}
+
+  @Override
+  public void close() throws Exception {}
+
+  @Override
+  public void deleteParameters(String layerName, String parametersId) {}
 }

@@ -12,27 +12,27 @@ import org.junit.Test;
 
 public class JDBCNewRolePageTest extends NewRolePageTest {
 
-    @Test
-    public void testFill() throws Exception{
-        doTestFill();
-    }
+  @Test
+  public void testFill() throws Exception {
+    doTestFill();
+  }
 
-    @Override
-    protected void doInitialize() throws Exception {
-        initializeForJDBC();
-    }
-    
-    void initializeForJDBC() throws Exception {
-        initialize(new H2UserGroupServiceTest(), new H2RoleServiceTest());
-    }
+  @Override
+  protected void doInitialize() throws Exception {
+    initializeForJDBC();
+  }
 
-    @Override
-    public String getRoleServiceName() {
-        return "h2";
-    }
+  void initializeForJDBC() throws Exception {
+    initialize(new H2UserGroupServiceTest(), new H2RoleServiceTest());
+  }
 
-    @Override
-    public String getUserGroupServiceName() {
-        return "h2";
-    }
+  @Override
+  public String getRoleServiceName() {
+    return "h2";
+  }
+
+  @Override
+  public String getUserGroupServiceName() {
+    return "h2";
+  }
 }

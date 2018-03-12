@@ -11,100 +11,70 @@ import java.util.Map;
 
 /**
  * GeoServer imaging configuration.
- * 
+ *
  * @author Justin Deoliveira, The Open Planning Project
- * 
  */
 public interface ImagingInfo {
 
-    /**
-     * Identifer.
-     */
-    String getId();
+  /** Identifer. */
+  String getId();
 
-    /**
-     * @return Returns the imageFormats.
-     * @uml.property name="imageFormats"
-     * @uml.associationEnd multiplicity="(0 -1)"
-     *                     inverse="imagingInfo:org.geoserver.config.ImageFormatInfo"
-     */
-    Collection<ImageFormatInfo> getImageFormats();
-    
-    /**
-     * Returns the image format corresponding to the specified mime type, 
-     * or <code>null</code> if it does exist.
-     */
-    ImageFormatInfo getImageFormatByMimeType( String mimeType );
+  /**
+   * @return Returns the imageFormats.
+   * @uml.property name="imageFormats"
+   * @uml.associationEnd multiplicity="(0 -1)"
+   *     inverse="imagingInfo:org.geoserver.config.ImageFormatInfo"
+   */
+  Collection<ImageFormatInfo> getImageFormats();
 
-    /**
-     * @uml.property name="allowInterpolation"
-     */
-    boolean getAllowInterpolation();
+  /**
+   * Returns the image format corresponding to the specified mime type, or <code>null</code> if it
+   * does exist.
+   */
+  ImageFormatInfo getImageFormatByMimeType(String mimeType);
 
-    /**
-     * @uml.property name="allowInterpolation"
-     */
-    void setAllowInterpolation(boolean allowInterpolation);
+  /** @uml.property name="allowInterpolation" */
+  boolean getAllowInterpolation();
 
-    /**
-     * @uml.property name="recycling"
-     */
-    boolean getRecycling();
+  /** @uml.property name="allowInterpolation" */
+  void setAllowInterpolation(boolean allowInterpolation);
 
-    /**
-     * @uml.property name="recycling"
-     */
-    void setRecycling(boolean recycling);
+  /** @uml.property name="recycling" */
+  boolean getRecycling();
 
-    /**
-     * @uml.property name="tilePriority"
-     */
-    int getTilePriority();
+  /** @uml.property name="recycling" */
+  void setRecycling(boolean recycling);
 
-    /**
-     * @uml.property name="tilePriority"
-     */
-    void setTilePriority(int tilePriority);
+  /** @uml.property name="tilePriority" */
+  int getTilePriority();
 
-    /**
-     * @uml.property name="tileThreads"
-     */
-    int getTileThreads();
+  /** @uml.property name="tilePriority" */
+  void setTilePriority(int tilePriority);
 
-    /**
-     * @uml.property name="tileThreads"
-     */
-    void setTileThreads(int tileThreads);
+  /** @uml.property name="tileThreads" */
+  int getTileThreads();
 
-    String getTileCache();
-    
-    void setTileCache( String tileCache );
-        
-    /**
-     * @uml.property name="memoryCapacity"
-     */
-    double getMemoryCapacity();
+  /** @uml.property name="tileThreads" */
+  void setTileThreads(int tileThreads);
 
-    /**
-     * @uml.property name="memoryCapacity"
-     */
-    void setMemoryCapacity(double memoryCapacity);
+  String getTileCache();
 
-    /**
-     * @uml.property name="memoryThreshold"
-     */
-    double getMemoryThreshold();
+  void setTileCache(String tileCache);
 
-    /**
-     * @uml.property name="memoryThreshold"
-     */
-    void setMemoryThreshold(double memoryThreshold);
-    
-    /**
-     * @uml.property name="metadata"
-     */
-    Map<String,Serializable> getMetadata();
+  /** @uml.property name="memoryCapacity" */
+  double getMemoryCapacity();
 
-    Map<Object,Object> getClientProperties();
+  /** @uml.property name="memoryCapacity" */
+  void setMemoryCapacity(double memoryCapacity);
 
+  /** @uml.property name="memoryThreshold" */
+  double getMemoryThreshold();
+
+  /** @uml.property name="memoryThreshold" */
+  void setMemoryThreshold(double memoryThreshold);
+
+  /** @uml.property name="metadata" */
+  Map<String, Serializable> getMetadata();
+
+  Map<Object, Object> getClientProperties();
 }

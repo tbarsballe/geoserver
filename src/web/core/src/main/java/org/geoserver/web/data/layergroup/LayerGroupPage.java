@@ -22,111 +22,114 @@ import org.geoserver.web.wicket.GeoServerDialog;
 import org.geoserver.web.wicket.GeoServerTablePanel;
 import org.geoserver.web.wicket.SimpleBookmarkableLink;
 
-/**
- * Lists layer groups, allows removal and editing
- */
+/** Lists layer groups, allows removal and editing */
 public class LayerGroupPage extends GeoServerSecuredPage {
-    
-    private static final long serialVersionUID = 5039809655908312633L;
-	
-    GeoServerTablePanel<LayerGroupInfo> table;
-    GeoServerDialog dialog;
-    SelectionRemovalLink removal;
 
-    public LayerGroupPage() {
-        LayerGroupProvider provider = new LayerGroupProvider();
-        add(table = new GeoServerTablePanel<LayerGroupInfo>( "table", provider, true ) {
+  private static final long serialVersionUID = 5039809655908312633L;
 
-            private static final long serialVersionUID = 714777934301159139L;
+  GeoServerTablePanel<LayerGroupInfo> table;
+  GeoServerDialog dialog;
+  SelectionRemovalLink removal;
 
-            @Override
-            protected Component getComponentForProperty(String id, IModel<LayerGroupInfo> itemModel,
-                    Property<LayerGroupInfo> property) {
-                
-                if ( property == LayerGroupProvider.NAME ) {
-                    return layerGroupLink( id, itemModel ); 
+  public LayerGroupPage() {
+    LayerGroupProvider provider = new LayerGroupProvider();
+    add(
+        table =
+            new GeoServerTablePanel<LayerGroupInfo>("table", provider, true) {
+
+              private static final long serialVersionUID = 714777934301159139L;
+
+              @Override
+              protected Component getComponentForProperty(
+                  String id, IModel<LayerGroupInfo> itemModel, Property<LayerGroupInfo> property) {
+
+                if (property == LayerGroupProvider.NAME) {
+                  return layerGroupLink(id, itemModel);
                 }
                 if (property == LayerGroupProvider.WORKSPACE) {
-                    return workspaceLink(id, itemModel);
+                  return workspaceLink(id, itemModel);
                 }
                 return null;
-            }
+              }
 
-            @Override
-            protected void onSelectionUpdate(AjaxRequestTarget target) {
+              @Override
+              protected void onSelectionUpdate(AjaxRequestTarget target) {
                 if (!table.getSelection().isEmpty()) {
-                    boolean canRemove = true;
-                    if (!isAuthenticatedAsAdmin()) {
-                        //if any global layer groups are selected, don't allow delete
-                        for (LayerGroupInfo lg : table.getSelection()) {
-                            if (lg.getWorkspace() == null) {
-                                canRemove = false;
-                                break;
-                            }
-                        }
+                  boolean canRemove = true;
+                  if (!isAuthenticatedAsAdmin()) {
+                    // if any global layer groups are selected, don't allow delete
+                    for (LayerGroupInfo lg : table.getSelection()) {
+                      if (lg.getWorkspace() == null) {
+                        canRemove = false;
+                        break;
+                      }
                     }
+                  }
 
-                    removal.setEnabled(canRemove);
-                }
-                else {
-                    removal.setEnabled(false);
+                  removal.setEnabled(canRemove);
+                } else {
+                  removal.setEnabled(false);
                 }
                 target.add(removal);
-            }  
-        });
-        table.setOutputMarkupId(true);
-        add(table);
-        
-        // the confirm dialog
-        add(dialog = new GeoServerDialog("dialog"));
-        setHeaderPanel(headerPanel());
-    }
-    
-    protected Component headerPanel() {
-        Fragment header = new Fragment(HEADER_PANEL, "header", this);
-        
-        // the add button
-        header.add(new BookmarkablePageLink<LayerGroupEditPage>("addNew", LayerGroupEditPage.class));
-        
-        // the removal button
-        header.add(removal = new SelectionRemovalLink("removeSelected", table, dialog));
-        removal.setOutputMarkupId(true);
-        removal.setEnabled(false);
-        
-        return header;
-    }
-    
-    Component layerGroupLink(String id, IModel<LayerGroupInfo> itemModel) {
-        IModel<?> groupNameModel = LayerGroupProvider.NAME.getModel(itemModel);
-        IModel<?> wsModel = LayerGroupProvider.WORKSPACE.getModel(itemModel);
-        
-        String groupName = (String) groupNameModel.getObject();
-        String wsName = (String) wsModel.getObject();
-        
-        if (wsName == null) {
-        	return new SimpleBookmarkableLink(id, LayerGroupEditPage.class, groupNameModel, 
-        			LayerGroupEditPage.GROUP, groupName);
-        } else {
-        	return new SimpleBookmarkableLink(id, LayerGroupEditPage.class, groupNameModel, 
-        			LayerGroupEditPage.GROUP, groupName, LayerGroupEditPage.WORKSPACE, wsName);
-        }
-    }
-   
+              }
+            });
+    table.setOutputMarkupId(true);
+    add(table);
 
-    Component workspaceLink(String id, IModel<LayerGroupInfo> itemModel) {
-        IModel<?> wsNameModel = LayerGroupProvider.WORKSPACE.getModel(itemModel);
-        String wsName = (String) wsNameModel.getObject();
-        if (wsName != null) {
-            return new SimpleBookmarkableLink(
-                id, WorkspaceEditPage.class, new Model<String>(wsName), "name", wsName);
-        }
-        else {
-            return new WebMarkupContainer(id);
-        }
-    }
+    // the confirm dialog
+    add(dialog = new GeoServerDialog("dialog"));
+    setHeaderPanel(headerPanel());
+  }
 
-    @Override
-    protected ComponentAuthorizer getPageAuthorizer() {
-        return ComponentAuthorizer.WORKSPACE_ADMIN;
+  protected Component headerPanel() {
+    Fragment header = new Fragment(HEADER_PANEL, "header", this);
+
+    // the add button
+    header.add(new BookmarkablePageLink<LayerGroupEditPage>("addNew", LayerGroupEditPage.class));
+
+    // the removal button
+    header.add(removal = new SelectionRemovalLink("removeSelected", table, dialog));
+    removal.setOutputMarkupId(true);
+    removal.setEnabled(false);
+
+    return header;
+  }
+
+  Component layerGroupLink(String id, IModel<LayerGroupInfo> itemModel) {
+    IModel<?> groupNameModel = LayerGroupProvider.NAME.getModel(itemModel);
+    IModel<?> wsModel = LayerGroupProvider.WORKSPACE.getModel(itemModel);
+
+    String groupName = (String) groupNameModel.getObject();
+    String wsName = (String) wsModel.getObject();
+
+    if (wsName == null) {
+      return new SimpleBookmarkableLink(
+          id, LayerGroupEditPage.class, groupNameModel, LayerGroupEditPage.GROUP, groupName);
+    } else {
+      return new SimpleBookmarkableLink(
+          id,
+          LayerGroupEditPage.class,
+          groupNameModel,
+          LayerGroupEditPage.GROUP,
+          groupName,
+          LayerGroupEditPage.WORKSPACE,
+          wsName);
     }
+  }
+
+  Component workspaceLink(String id, IModel<LayerGroupInfo> itemModel) {
+    IModel<?> wsNameModel = LayerGroupProvider.WORKSPACE.getModel(itemModel);
+    String wsName = (String) wsNameModel.getObject();
+    if (wsName != null) {
+      return new SimpleBookmarkableLink(
+          id, WorkspaceEditPage.class, new Model<String>(wsName), "name", wsName);
+    } else {
+      return new WebMarkupContainer(id);
+    }
+  }
+
+  @Override
+  protected ComponentAuthorizer getPageAuthorizer() {
+    return ComponentAuthorizer.WORKSPACE_ADMIN;
+  }
 }

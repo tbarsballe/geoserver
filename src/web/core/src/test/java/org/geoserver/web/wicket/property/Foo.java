@@ -10,9 +10,9 @@ import java.util.Properties;
 
 public class Foo implements Serializable {
 
-    Properties props = new Properties();
+  Properties props = new Properties();
 
-    public Properties getProps() {
-        return props;
-    }
+  public Properties getProps() {
+    return props;
+  }
 }

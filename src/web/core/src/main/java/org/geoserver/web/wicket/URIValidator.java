@@ -6,27 +6,26 @@
 package org.geoserver.web.wicket;
 
 import java.net.URI;
-
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
 
 /**
  * Validates a URI syntax by building a {@link URI} object around it
+ *
  * @author Andrea Aime - OpenGeo
  */
 @SuppressWarnings("serial")
 public class URIValidator implements IValidator<String> {
 
-    @Override
-    public void validate(IValidatable<String> validatable) {
-        String uri = (String) validatable.getValue();
-        try {
-            new URI(uri);
-        } catch(Exception e) {
-            validatable.error(new ValidationError("invalidURI")
-                    .addKey("invalidURI").setVariable("uri", uri));
-        }
+  @Override
+  public void validate(IValidatable<String> validatable) {
+    String uri = (String) validatable.getValue();
+    try {
+      new URI(uri);
+    } catch (Exception e) {
+      validatable.error(
+          new ValidationError("invalidURI").addKey("invalidURI").setVariable("uri", uri));
     }
-
+  }
 }

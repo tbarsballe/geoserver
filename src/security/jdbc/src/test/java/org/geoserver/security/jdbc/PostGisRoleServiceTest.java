@@ -8,9 +8,8 @@ package org.geoserver.security.jdbc;
 
 public class PostGisRoleServiceTest extends JDBCRoleServiceTest {
 
-    @Override
-    protected String getFixtureId() {
-        return "postgis";
-    }
-
+  @Override
+  protected String getFixtureId() {
+    return "postgis";
+  }
 }

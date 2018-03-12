@@ -6,22 +6,20 @@
 package org.geoserver.wfs.xml.v1_0_0;
 
 import javax.xml.namespace.QName;
-
 import net.opengis.wfs.PropertyType;
 import net.opengis.wfs.UpdateElementType;
 import net.opengis.wfs.WfsFactory;
-
 import org.geotools.xml.AbstractComplexEMFBinding;
 import org.geotools.xml.ElementInstance;
 import org.geotools.xml.Node;
 import org.opengis.filter.Filter;
 
-
 /**
  * Binding object for the type http://www.opengis.net/wfs:UpdateElementType.
  *
  * <p>
- *        <pre>
+ *
+ * <pre>
  *         <code>
  *  &lt;xsd:complexType name="UpdateElementType"&gt;
  *      &lt;xsd:sequence&gt;
@@ -48,62 +46,62 @@ import org.opengis.filter.Filter;
  *
  *          </code>
  *         </pre>
+ *
  * @generated
  */
 public class UpdateElementTypeBinding extends AbstractComplexEMFBinding {
-    WfsFactory wfsfactory;
+  WfsFactory wfsfactory;
 
-    public UpdateElementTypeBinding(WfsFactory wfsfactory) {
-        super(wfsfactory);
-        this.wfsfactory = wfsfactory;
+  public UpdateElementTypeBinding(WfsFactory wfsfactory) {
+    super(wfsfactory);
+    this.wfsfactory = wfsfactory;
+  }
+
+  /** @generated */
+  public QName getTarget() {
+    return WFS.UPDATEELEMENTTYPE;
+  }
+
+  /**
+   *
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   *
+   * @generated modifiable
+   */
+  public Class getType() {
+    return UpdateElementType.class;
+  }
+
+  /**
+   *
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   *
+   * @generated modifiable
+   */
+  public Object parse(ElementInstance instance, Node node, Object value) throws Exception {
+    UpdateElementType updateElement = wfsfactory.createUpdateElementType();
+
+    // &lt;xsd:element maxOccurs="unbounded" ref="wfs:Property"/&gt;
+    updateElement.getProperty().addAll(node.getChildValues(PropertyType.class));
+
+    // &lt;xsd:element maxOccurs="1" minOccurs="0" ref="ogc:Filter"&gt;
+    updateElement.setFilter((Filter) node.getChildValue(Filter.class));
+
+    // &lt;xsd:attribute name="handle" type="xsd:string" use="optional"/&gt;
+    if (node.hasAttribute("handle")) {
+      updateElement.setHandle((String) node.getAttributeValue("handle"));
     }
 
-    /**
-     * @generated
-     */
-    public QName getTarget() {
-        return WFS.UPDATEELEMENTTYPE;
-    }
+    // &lt;xsd:attribute name="typeName" type="xsd:QName" use="required"/&gt;
+    updateElement.setTypeName((QName) node.getAttributeValue("typeName"));
 
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     *
-     * @generated modifiable
-     */
-    public Class getType() {
-        return UpdateElementType.class;
-    }
+    return updateElement;
+  }
 
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     *
-     * @generated modifiable
-     */
-    public Object parse(ElementInstance instance, Node node, Object value)
-        throws Exception {
-        UpdateElementType updateElement = wfsfactory.createUpdateElementType();
-
-        //&lt;xsd:element maxOccurs="unbounded" ref="wfs:Property"/&gt;
-        updateElement.getProperty().addAll(node.getChildValues(PropertyType.class));
-
-        //&lt;xsd:element maxOccurs="1" minOccurs="0" ref="ogc:Filter"&gt;
-        updateElement.setFilter((Filter) node.getChildValue(Filter.class));
-
-        //&lt;xsd:attribute name="handle" type="xsd:string" use="optional"/&gt;
-        if (node.hasAttribute("handle")) {
-            updateElement.setHandle((String) node.getAttributeValue("handle"));
-        }
-
-        //&lt;xsd:attribute name="typeName" type="xsd:QName" use="required"/&gt;
-        updateElement.setTypeName((QName) node.getAttributeValue("typeName"));
-
-        return updateElement;
-    }
-    
-    @Override
-    public Object getProperty(Object object, QName name) throws Exception {
-        return super.getProperty(object, name);
-    }
+  @Override
+  public Object getProperty(Object object, QName name) throws Exception {
+    return super.getProperty(object, name);
+  }
 }

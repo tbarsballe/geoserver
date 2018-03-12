@@ -14,29 +14,31 @@ import org.geoserver.config.GeoServer;
 import org.geoserver.config.GeoServerInfo;
 
 public class ContactPage extends ServerAdminPage {
-    public ContactPage(){
-        final IModel geoServerModel = getGeoServerModel();
-        final IModel contactModel = getContactInfoModel();
+  public ContactPage() {
+    final IModel geoServerModel = getGeoServerModel();
+    final IModel contactModel = getContactInfoModel();
 
-        Form form = new Form("form", new CompoundPropertyModel(contactModel));
-        add(form);
+    Form form = new Form("form", new CompoundPropertyModel(contactModel));
+    add(form);
 
-        form.add(new ContactPanel("contact", contactModel));
-        form.add(new Button("submit") {
-            @Override
-            public void onSubmit() {
-                GeoServer gs = (GeoServer)geoServerModel.getObject();
-                GeoServerInfo global = gs.getGlobal();
-                global.setContact((ContactInfo)contactModel.getObject());
-                gs.save(global);
-                doReturn();
-            }
+    form.add(new ContactPanel("contact", contactModel));
+    form.add(
+        new Button("submit") {
+          @Override
+          public void onSubmit() {
+            GeoServer gs = (GeoServer) geoServerModel.getObject();
+            GeoServerInfo global = gs.getGlobal();
+            global.setContact((ContactInfo) contactModel.getObject());
+            gs.save(global);
+            doReturn();
+          }
         });
-        form.add(new Button("cancel") {
-            @Override
-            public void onSubmit() {
-                doReturn();
-            }
+    form.add(
+        new Button("cancel") {
+          @Override
+          public void onSubmit() {
+            doReturn();
+          }
         });
-    }
+  }
 }

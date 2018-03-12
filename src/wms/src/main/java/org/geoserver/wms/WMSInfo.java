@@ -7,201 +7,177 @@ package org.geoserver.wms;
 
 import java.util.List;
 import java.util.Set;
-
 import org.geoserver.catalog.AuthorityURLInfo;
 import org.geoserver.catalog.LayerIdentifierInfo;
 import org.geoserver.config.ServiceInfo;
 
 /**
  * Configuration object for Web Map Service.
- * 
+ *
  * @author Justin Deoliveira, The Open Planning Project
- * 
  */
 public interface WMSInfo extends ServiceInfo {
 
-    enum WMSInterpolation {
-        Nearest, Bilinear, Bicubic
-    }
+  enum WMSInterpolation {
+    Nearest,
+    Bilinear,
+    Bicubic
+  }
 
-    /**
-     * The watermarking configuration.
-     */
-    WatermarkInfo getWatermark();
+  /** The watermarking configuration. */
+  WatermarkInfo getWatermark();
 
-    /**
-     * Sets the watermarking configuration.
-     */
-    void setWatermark(WatermarkInfo watermark);
+  /** Sets the watermarking configuration. */
+  void setWatermark(WatermarkInfo watermark);
 
-    WMSInterpolation getInterpolation();
+  WMSInterpolation getInterpolation();
 
-    void setInterpolation(WMSInterpolation interpolation);
+  void setInterpolation(WMSInterpolation interpolation);
 
-    /**
-     * The srs's that the wms service supports.
-     */
-    List<String> getSRS();
-    
-    /**
-     * A set of mime types allowed for a getMap request. Active
-     * if {@link #isGetMapMimeTypeCheckingEnabled()} returns <code>true</code>
-     * 
-     */
-    Set<String> getGetMapMimeTypes();
+  /** The srs's that the wms service supports. */
+  List<String> getSRS();
 
-    boolean isGetMapMimeTypeCheckingEnabled();
+  /**
+   * A set of mime types allowed for a getMap request. Active if {@link
+   * #isGetMapMimeTypeCheckingEnabled()} returns <code>true</code>
+   */
+  Set<String> getGetMapMimeTypes();
 
-    void setGetMapMimeTypeCheckingEnabled(boolean getMapMimeTypeCheckingEnabled);
-    
-            
-    /**
-     * A set of mime types allowed for a getFeatureInfo request. Active
-     * if {@link #isGetFeatureInfoMimeTypeCheckingEnabled()} returns <code>true</code>
-     * 
-     */
-    Set<String> getGetFeatureInfoMimeTypes();
-    
-    boolean isGetFeatureInfoMimeTypeCheckingEnabled();
-    
-    void setGetFeatureInfoMimeTypeCheckingEnabled(boolean getFeatureInfoMimeTypeCheckingEnabled);
-    
-    /**
-     * Flag controlling whether the WMS service, for each layer, should declare a bounding box 
-     * for every CRS supported, in it's capabilities document. 
-     * <p>
-     * By default the number of CRS's supported is huge which does not make this option practical.
-     * This flag is only respected in cases there {@link #getSRS()} is non empty.
-     * </p>
-     */
-    Boolean isBBOXForEachCRS();
+  boolean isGetMapMimeTypeCheckingEnabled();
 
-    /**
-     * Sets flag controlling whether the WMS service, for each layer, should declare a bounding box 
-     * for every CRS supported.
-     * 
-     * @see #isBBOXForEachCRS()
-     */
-    void setBBOXForEachCRS(Boolean bboxForEachCRS);
+  void setGetMapMimeTypeCheckingEnabled(boolean getMapMimeTypeCheckingEnabled);
 
-    /**
-     * The maximum search radius for GetFeatureInfo
-     */
-    int getMaxBuffer();
+  /**
+   * A set of mime types allowed for a getFeatureInfo request. Active if {@link
+   * #isGetFeatureInfoMimeTypeCheckingEnabled()} returns <code>true</code>
+   */
+  Set<String> getGetFeatureInfoMimeTypes();
 
-    /**
-     * Sets the maximum search radius for GetFeatureInfo (if 0 or negative no maximum is enforced)
-     */
-    void setMaxBuffer(int buffer);
+  boolean isGetFeatureInfoMimeTypeCheckingEnabled();
 
-    /**
-     * Returns the max amount of memory, in kilobytes, that each WMS request can allocate (each
-     * output format will make a best effort attempt to respect it, but there are no guarantees)
-     * 
-     * @return the limit, or 0 if no limit
-     */
-    int getMaxRequestMemory();
+  void setGetFeatureInfoMimeTypeCheckingEnabled(boolean getFeatureInfoMimeTypeCheckingEnabled);
 
-    /**
-     * Sets the max amount of memory, in kilobytes, that each WMS request can allocate. Set it to 0
-     * if no limit is desired.
-     */
-    void setMaxRequestMemory(int max);
+  /**
+   * Flag controlling whether the WMS service, for each layer, should declare a bounding box for
+   * every CRS supported, in it's capabilities document.
+   *
+   * <p>By default the number of CRS's supported is huge which does not make this option practical.
+   * This flag is only respected in cases there {@link #getSRS()} is non empty.
+   */
+  Boolean isBBOXForEachCRS();
 
-    /**
-     * The max time, in seconds, a WMS request is allowed to spend rendering the map. Various output
-     * formats will do a best effort to respect it (raster formats, for example, will account just
-     * rendering time, but not image encoding time)
-     */
-    int getMaxRenderingTime();
+  /**
+   * Sets flag controlling whether the WMS service, for each layer, should declare a bounding box
+   * for every CRS supported.
+   *
+   * @see #isBBOXForEachCRS()
+   */
+  void setBBOXForEachCRS(Boolean bboxForEachCRS);
 
-    /**
-     * Sets the max allowed rendering time, in seconds
-     * 
-     * @param maxRenderingTime
-     */
-    void setMaxRenderingTime(int maxRenderingTime);
+  /** The maximum search radius for GetFeatureInfo */
+  int getMaxBuffer();
 
-    /**
-     * The max number of rendering errors that will be tolerated before stating the rendering
-     * operation failed by throwing a service exception back to the client
-     */
-    int getMaxRenderingErrors();
+  /** Sets the maximum search radius for GetFeatureInfo (if 0 or negative no maximum is enforced) */
+  void setMaxBuffer(int buffer);
 
-    /**
-     * Sets the max number of rendering errors tolerated
-     * 
-     * @param maxRenderingTime
-     */
-    void setMaxRenderingErrors(int maxRenderingTime);
-    
-    /**
-     * Defines the list of authority URLs for the root WMS layer
-     * 
-     * @return the list of WMS root layer's authority URLs
-     */
-    List<AuthorityURLInfo> getAuthorityURLs();
+  /**
+   * Returns the max amount of memory, in kilobytes, that each WMS request can allocate (each output
+   * format will make a best effort attempt to respect it, but there are no guarantees)
+   *
+   * @return the limit, or 0 if no limit
+   */
+  int getMaxRequestMemory();
 
-    /**
-     * @return the list of identifiers for the WMS root layer
-     */
-    List<LayerIdentifierInfo> getIdentifiers();
-    
-    /**
-     * 
-     * @return the title of the root layer
-     */
-    String getRootLayerTitle();
+  /**
+   * Sets the max amount of memory, in kilobytes, that each WMS request can allocate. Set it to 0 if
+   * no limit is desired.
+   */
+  void setMaxRequestMemory(int max);
 
-    /**
-     * Sets the title of the root layer
-     * @param rootLayerTitle
-     */
-    void setRootLayerTitle(String rootLayerTitle);
-    
-    /**
-     * 
-     * @return the abstract of the root layer
-     */
-	public String getRootLayerAbstract();
+  /**
+   * The max time, in seconds, a WMS request is allowed to spend rendering the map. Various output
+   * formats will do a best effort to respect it (raster formats, for example, will account just
+   * rendering time, but not image encoding time)
+   */
+  int getMaxRenderingTime();
 
-	/**
-	 * Sets the abstract of the root layer
-     * @param rootLayerAbstract
-	 */
-	public void setRootLayerAbstract(String rootLayerAbstract);
-    
+  /**
+   * Sets the max allowed rendering time, in seconds
+   *
+   * @param maxRenderingTime
+   */
+  void setMaxRenderingTime(int maxRenderingTime);
 
-    /**
-     * Sets the status of dynamic styling (SLD and SLD_BODY params) allowance
-     *
-     * @param dynamicStylesEnabled
-     */
-    void setDynamicStylingDisabled(Boolean dynamicStylesDisabled);
+  /**
+   * The max number of rendering errors that will be tolerated before stating the rendering
+   * operation failed by throwing a service exception back to the client
+   */
+  int getMaxRenderingErrors();
 
-    /**
-     * @return the status of dynamic styling (SLD and SLD_BODY params) allowance
-     */
-    Boolean isDynamicStylingDisabled();
+  /**
+   * Sets the max number of rendering errors tolerated
+   *
+   * @param maxRenderingTime
+   */
+  void setMaxRenderingErrors(int maxRenderingTime);
 
+  /**
+   * Defines the list of authority URLs for the root WMS layer
+   *
+   * @return the list of WMS root layer's authority URLs
+   */
+  List<AuthorityURLInfo> getAuthorityURLs();
 
-    /**
-     * If set to TRUE GetFeatureInfo results will NOT be reprojected.
-     *
-     * @param featuresReprojectionDisabled features reprojection allowance
-     */
-    default void setFeaturesReprojectionDisabled(boolean featuresReprojectionDisabled) {
-        // if not implemented nothing is done
-    }
+  /** @return the list of identifiers for the WMS root layer */
+  List<LayerIdentifierInfo> getIdentifiers();
 
-    /**
-     * Flag that controls if GetFeatureInfo results should NOT be reprojected to the map
-     * coordinate reference system.
-     *
-     * @return GetFeatureInfo features reprojection allowance
-     */
-    default boolean isFeaturesReprojectionDisabled() {
-        // deactivate features reprojection by default
-        return true;
-    }
+  /** @return the title of the root layer */
+  String getRootLayerTitle();
+
+  /**
+   * Sets the title of the root layer
+   *
+   * @param rootLayerTitle
+   */
+  void setRootLayerTitle(String rootLayerTitle);
+
+  /** @return the abstract of the root layer */
+  public String getRootLayerAbstract();
+
+  /**
+   * Sets the abstract of the root layer
+   *
+   * @param rootLayerAbstract
+   */
+  public void setRootLayerAbstract(String rootLayerAbstract);
+
+  /**
+   * Sets the status of dynamic styling (SLD and SLD_BODY params) allowance
+   *
+   * @param dynamicStylesEnabled
+   */
+  void setDynamicStylingDisabled(Boolean dynamicStylesDisabled);
+
+  /** @return the status of dynamic styling (SLD and SLD_BODY params) allowance */
+  Boolean isDynamicStylingDisabled();
+
+  /**
+   * If set to TRUE GetFeatureInfo results will NOT be reprojected.
+   *
+   * @param featuresReprojectionDisabled features reprojection allowance
+   */
+  default void setFeaturesReprojectionDisabled(boolean featuresReprojectionDisabled) {
+    // if not implemented nothing is done
+  }
+
+  /**
+   * Flag that controls if GetFeatureInfo results should NOT be reprojected to the map coordinate
+   * reference system.
+   *
+   * @return GetFeatureInfo features reprojection allowance
+   */
+  default boolean isFeaturesReprojectionDisabled() {
+    // deactivate features reprojection by default
+    return true;
+  }
 }

@@ -10,18 +10,18 @@ import org.geoserver.security.impl.GeoServerUserGroup;
 
 /**
  * Choice renderer for {@link GeoServerUserGroup}.
- * 
+ *
  * @author Justin Deoliveira, OpenGeo
  */
 public class UserGroupRenderer extends ChoiceRenderer<GeoServerUserGroup> {
 
-    @Override
-    public String getIdValue(GeoServerUserGroup object, int index) {
-        return object.getGroupname();
-    }
+  @Override
+  public String getIdValue(GeoServerUserGroup object, int index) {
+    return object.getGroupname();
+  }
 
-     @Override
-    public Object getDisplayValue(GeoServerUserGroup object) {
-         return getIdValue(object, -1);
-    }
+  @Override
+  public Object getDisplayValue(GeoServerUserGroup object) {
+    return getIdValue(object, -1);
+  }
 }

@@ -16,44 +16,38 @@ import org.geoserver.security.WrapperPolicy;
 
 public class SecuredLayerInfo extends DecoratingLayerInfo {
 
-    WrapperPolicy policy;
+  WrapperPolicy policy;
 
-    public SecuredLayerInfo(LayerInfo delegate, WrapperPolicy  policy) {
-        super(delegate);
-        this.policy = policy;
+  public SecuredLayerInfo(LayerInfo delegate, WrapperPolicy policy) {
+    super(delegate);
+    this.policy = policy;
+  }
+
+  public WrapperPolicy getWrapperPolicy() {
+    return policy;
+  }
+
+  @Override
+  public ResourceInfo getResource() {
+    ResourceInfo r = super.getResource();
+    if (r == null) return null;
+    else if (r instanceof FeatureTypeInfo)
+      return new SecuredFeatureTypeInfo((FeatureTypeInfo) r, policy);
+    else if (r instanceof CoverageInfo) return new SecuredCoverageInfo((CoverageInfo) r, policy);
+    else if (r instanceof WMSLayerInfo) return new SecuredWMSLayerInfo((WMSLayerInfo) r, policy);
+    else if (r instanceof WMTSLayerInfo) return new SecuredWMTSLayerInfo((WMTSLayerInfo) r, policy);
+    else throw new RuntimeException("Don't know how to make resource of type " + r.getClass());
+  }
+
+  @Override
+  public void setResource(ResourceInfo resource) {
+    if (resource instanceof SecuredFeatureTypeInfo
+        || resource instanceof SecuredCoverageInfo
+        || resource instanceof SecuredWMSLayerInfo
+        || resource instanceof SecuredWMTSLayerInfo) {
+      resource = (ResourceInfo) SecureCatalogImpl.unwrap(resource);
     }
-    
-    public WrapperPolicy getWrapperPolicy() {
-        return policy;
-    }
 
-    @Override
-    public ResourceInfo getResource() {
-        ResourceInfo r = super.getResource();
-        if (r == null)
-            return null;
-        else if (r instanceof FeatureTypeInfo)
-            return new SecuredFeatureTypeInfo((FeatureTypeInfo) r, policy);
-        else if (r instanceof CoverageInfo)
-            return new SecuredCoverageInfo((CoverageInfo) r, policy);
-        else if (r instanceof WMSLayerInfo)
-            return new SecuredWMSLayerInfo((WMSLayerInfo) r, policy);
-        else if (r instanceof WMTSLayerInfo)
-            return new SecuredWMTSLayerInfo((WMTSLayerInfo) r, policy);
-        else
-            throw new RuntimeException("Don't know how to make resource of type " + r.getClass());
-    }
-
-
-    @Override
-    public void setResource(ResourceInfo resource) {
-        if (resource instanceof SecuredFeatureTypeInfo
-                || resource instanceof SecuredCoverageInfo
-                || resource instanceof SecuredWMSLayerInfo
-                || resource instanceof SecuredWMTSLayerInfo) {
-            resource = (ResourceInfo) SecureCatalogImpl.unwrap(resource);
-        }
-
-        delegate.setResource(resource);
-    }
+    delegate.setResource(resource);
+  }
 }

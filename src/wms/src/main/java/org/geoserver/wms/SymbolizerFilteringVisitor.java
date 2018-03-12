@@ -7,9 +7,7 @@ package org.geoserver.wms;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.geotools.styling.Graphic;
-import org.geotools.styling.PointSymbolizer;
 import org.geotools.styling.Rule;
 import org.geotools.styling.StyleFactoryImpl;
 import org.geotools.styling.Symbolizer;
@@ -19,46 +17,52 @@ import org.opengis.style.Description;
 
 /**
  * Base class for style visitors that copies styles but removes certain symbolizers
- * 
+ *
  * @author Andrea Aime - OpenGeo
  */
 public abstract class SymbolizerFilteringVisitor extends DuplicatingStyleVisitor {
 
-    public void visit(Rule rule) {
-        Rule copy = null;
+  public void visit(Rule rule) {
+    Rule copy = null;
 
-        Filter filterCopy = null;
+    Filter filterCopy = null;
 
-        if (rule.getFilter() != null) {
-            Filter filter = rule.getFilter();
-            filterCopy = copy(filter);
-        }
-
-        // modified to deal with null copies that should be skipped
-        List<Symbolizer> symArray = new ArrayList<Symbolizer>();
-        for (Symbolizer sym : rule.symbolizers()) {
-            Symbolizer symcopy = copy(sym);
-            if (symcopy != null)
-                symArray.add(symcopy);
-        }
-        Symbolizer[] symsCopy = (Symbolizer[]) symArray.toArray(new Symbolizer[symArray.size()]);
-
-        Graphic[] legendCopy = rule.getLegendGraphic();
-        for (int i = 0; i < legendCopy.length; i++) {
-            legendCopy[i] = copy(legendCopy[i]);
-        }
-
-        Description descCopy = rule.getDescription();
-        descCopy = copy(descCopy);
-
-        copy = new StyleFactoryImpl().createRule(symsCopy, descCopy, legendCopy, rule.getName(),
-                filterCopy, rule.isElseFilter(), rule.getMaxScaleDenominator(), rule
-                        .getMinScaleDenominator());
-
-        if (STRICT && !copy.equals(rule)) {
-            throw new IllegalStateException("Was unable to duplicate provided Rule:" + rule);
-        }
-        pages.push(copy);
+    if (rule.getFilter() != null) {
+      Filter filter = rule.getFilter();
+      filterCopy = copy(filter);
     }
 
+    // modified to deal with null copies that should be skipped
+    List<Symbolizer> symArray = new ArrayList<Symbolizer>();
+    for (Symbolizer sym : rule.symbolizers()) {
+      Symbolizer symcopy = copy(sym);
+      if (symcopy != null) symArray.add(symcopy);
+    }
+    Symbolizer[] symsCopy = (Symbolizer[]) symArray.toArray(new Symbolizer[symArray.size()]);
+
+    Graphic[] legendCopy = rule.getLegendGraphic();
+    for (int i = 0; i < legendCopy.length; i++) {
+      legendCopy[i] = copy(legendCopy[i]);
+    }
+
+    Description descCopy = rule.getDescription();
+    descCopy = copy(descCopy);
+
+    copy =
+        new StyleFactoryImpl()
+            .createRule(
+                symsCopy,
+                descCopy,
+                legendCopy,
+                rule.getName(),
+                filterCopy,
+                rule.isElseFilter(),
+                rule.getMaxScaleDenominator(),
+                rule.getMinScaleDenominator());
+
+    if (STRICT && !copy.equals(rule)) {
+      throw new IllegalStateException("Was unable to duplicate provided Rule:" + rule);
+    }
+    pages.push(copy);
+  }
 }

@@ -6,7 +6,6 @@
 package org.geoserver.catalog.impl;
 
 import java.io.IOException;
-
 import org.geoserver.catalog.Catalog;
 import org.geoserver.catalog.CatalogVisitor;
 import org.geoserver.catalog.WMSLayerInfo;
@@ -17,25 +16,22 @@ import org.opengis.util.ProgressListener;
 @SuppressWarnings("serial")
 public class WMSLayerInfoImpl extends ResourceInfoImpl implements WMSLayerInfo {
 
-    
-    protected WMSLayerInfoImpl() {
-    }
-    
-    public WMSLayerInfoImpl(Catalog catalog) {
-        super(catalog);
-    }
+  protected WMSLayerInfoImpl() {}
 
-    public Layer getWMSLayer(ProgressListener listener) throws IOException {
-        return catalog.getResourcePool().getWMSLayer(this);
-    }
+  public WMSLayerInfoImpl(Catalog catalog) {
+    super(catalog);
+  }
 
-    public void accept(CatalogVisitor visitor) {
-        visitor.visit(this);
-    }
+  public Layer getWMSLayer(ProgressListener listener) throws IOException {
+    return catalog.getResourcePool().getWMSLayer(this);
+  }
 
-    @Override
-    public WMSStoreInfo getStore() {
-        return (WMSStoreInfo) super.getStore();
-    }
+  public void accept(CatalogVisitor visitor) {
+    visitor.visit(this);
+  }
 
+  @Override
+  public WMSStoreInfo getStore() {
+    return (WMSStoreInfo) super.getStore();
+  }
 }

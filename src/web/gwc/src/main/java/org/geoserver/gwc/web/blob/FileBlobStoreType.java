@@ -9,29 +9,28 @@ import org.apache.wicket.model.IModel;
 import org.geowebcache.config.FileBlobStoreInfo;
 
 public class FileBlobStoreType implements BlobStoreType<FileBlobStoreInfo> {
-    private static final long serialVersionUID = 6825505034831901062L;
+  private static final long serialVersionUID = 6825505034831901062L;
 
-    @Override
-    public String toString(){
-        return "File BlobStore";
-    }
-    
-    @Override
-    public FileBlobStoreInfo newConfigObject() {
-        FileBlobStoreInfo config = new FileBlobStoreInfo();
-        config.setEnabled(true);
-        config.setFileSystemBlockSize(4096);
-        return config;
-    }
+  @Override
+  public String toString() {
+    return "File BlobStore";
+  }
 
-    @Override
-    public Class<FileBlobStoreInfo> getConfigClass() {
-        return FileBlobStoreInfo.class;
-    }
+  @Override
+  public FileBlobStoreInfo newConfigObject() {
+    FileBlobStoreInfo config = new FileBlobStoreInfo();
+    config.setEnabled(true);
+    config.setFileSystemBlockSize(4096);
+    return config;
+  }
 
-    @Override
-    public Panel createPanel(String id, IModel<FileBlobStoreInfo> model) {
-        return new FileBlobStorePanel(id, model);
-    }
+  @Override
+  public Class<FileBlobStoreInfo> getConfigClass() {
+    return FileBlobStoreInfo.class;
+  }
 
+  @Override
+  public Panel createPanel(String id, IModel<FileBlobStoreInfo> model) {
+    return new FileBlobStorePanel(id, model);
+  }
 }

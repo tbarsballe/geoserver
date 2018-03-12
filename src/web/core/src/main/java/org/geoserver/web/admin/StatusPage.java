@@ -7,15 +7,14 @@ package org.geoserver.web.admin;
 
 public class StatusPage extends AbstractStatusPage {
 
-    /** serialVersionUID */
-    private static final long serialVersionUID = -5811282543852926742L;
+  /** serialVersionUID */
+  private static final long serialVersionUID = -5811282543852926742L;
 
-    public void StatusNewPage() {
-        initUI();
-    }
+  public void StatusNewPage() {
+    initUI();
+  }
 
-    protected void initUI() {
-        super.initUI();
-
-    }
+  protected void initUI() {
+    super.initUI();
+  }
 }

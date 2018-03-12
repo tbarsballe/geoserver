@@ -11,24 +11,22 @@ import org.geoserver.security.config.RoleSource;
 
 /**
  * ChoiceRenderer for RoleSource enums
- * 
+ *
  * @author Mauro Bartolomeoli (mauro.bartolomeoli@geo-solutions.it)
  */
 public class RoleSourceChoiceRenderer extends ChoiceRenderer<RoleSource> {
 
-    /** serialVersionUID */
-    private static final long serialVersionUID = 1L;
+  /** serialVersionUID */
+  private static final long serialVersionUID = 1L;
 
-    @Override
-    public Object getDisplayValue(RoleSource rs) {
-        String key = "RoleSource." + rs.toString();
-        return Application.get().getResourceSettings().getLocalizer()
-                .getString(key, null);
-    }
+  @Override
+  public Object getDisplayValue(RoleSource rs) {
+    String key = "RoleSource." + rs.toString();
+    return Application.get().getResourceSettings().getLocalizer().getString(key, null);
+  }
 
-    @Override
-    public String getIdValue(RoleSource rs, int index) {
-        return rs.toString();
-    }
-
+  @Override
+  public String getIdValue(RoleSource rs, int index) {
+    return rs.toString();
+  }
 }

@@ -5,6 +5,9 @@
  */
 package org.geoserver.web.wicket;
 
+import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.GeometryFactory;
+import com.vividsolutions.jts.geom.Point;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.FormComponentPanel;
 import org.apache.wicket.markup.html.form.TextField;
@@ -13,10 +16,6 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
 
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.GeometryFactory;
-import com.vividsolutions.jts.geom.Point;
-
 /**
  * A form component for a {@link Point} object.
  *
@@ -24,101 +23,104 @@ import com.vividsolutions.jts.geom.Point;
  * @author Andrea Aime, GeoSolutions
  */
 public class PointPanel extends FormComponentPanel<Point> {
-    private static final long serialVersionUID = -1046819530873258172L;
+  private static final long serialVersionUID = -1046819530873258172L;
 
-    GeometryFactory gf = new GeometryFactory();
+  GeometryFactory gf = new GeometryFactory();
 
-    protected Label xLabel, yLabel;
+  protected Label xLabel, yLabel;
+  protected Double x, y;
+  protected DecimalTextField xInput, yInput;
 
-    protected Double x, y;
+  public PointPanel(String id) {
+    super(id, new Model<Point>(null));
 
-    protected DecimalTextField xInput, yInput;
+    initComponents();
+  }
 
-    public PointPanel(String id ) {
-        super(id, new Model<Point>(null));
+  public PointPanel(String id, Point p) {
+    this(id, new Model<Point>(p));
+  }
 
-        initComponents();
+  public PointPanel(String id, IModel<Point> model) {
+    super(id, model);
+
+    initComponents();
+  }
+
+  public void setLabelsVisibility(boolean visible) {
+    xLabel.setVisible(visible);
+    yLabel.setVisible(visible);
+  }
+
+  void initComponents() {
+    updateFields();
+
+    add(xLabel = new Label("xL", new ResourceModel("x")));
+    add(yLabel = new Label("yL", new ResourceModel("y")));
+
+    add(xInput = new DecimalTextField("x", new PropertyModel<Double>(this, "x")));
+    add(yInput = new DecimalTextField("y", new PropertyModel<Double>(this, "y")));
+  }
+
+  @Override
+  protected void onBeforeRender() {
+    updateFields();
+    super.onBeforeRender();
+  }
+
+  private void updateFields() {
+    Point p = (Point) getModelObject();
+    if (p != null) {
+      this.x = p.getX();
+      this.y = p.getY();
     }
+  }
 
-    public PointPanel(String id, Point p) {
-        this(id, new Model<Point>(p));
-    }
-
-    public PointPanel(String id, IModel<Point> model) {
-        super(id, model);
-
-        initComponents();
-    }
-
-    public void setLabelsVisibility(boolean visible) {
-        xLabel.setVisible(visible);
-        yLabel.setVisible(visible);
-    }
-
-    void initComponents() {
-        updateFields();
-
-        add(xLabel = new Label("xL", new ResourceModel("x")));
-        add(yLabel = new Label("yL", new ResourceModel("y")));
-
-        add( xInput = new DecimalTextField( "x", new PropertyModel<Double>(this, "x")) );
-        add( yInput = new DecimalTextField( "y", new PropertyModel<Double>(this, "y")) );
-    }
-
-    @Override
-    protected void onBeforeRender() {
-        updateFields();
-        super.onBeforeRender();
-    }
-
-    private void updateFields() {
-        Point p = (Point) getModelObject();
-        if(p != null) {
-            this.x = p.getX();
-            this.y = p.getY();
-        }
-    }
-
-    public PointPanel setReadOnly( final boolean readOnly ) {
-        visitChildren(TextField.class, (component, visit) -> {
-            component.setEnabled(!readOnly);
+  public PointPanel setReadOnly(final boolean readOnly) {
+    visitChildren(
+        TextField.class,
+        (component, visit) -> {
+          component.setEnabled(!readOnly);
         });
 
-        return this;
-    }
+    return this;
+  }
 
-    @Override
-    public void convertInput() {
-        visitChildren(TextField.class, (component, visit) -> {
-            ((TextField<?>) component).processInput();
+  @Override
+  public void convertInput() {
+    visitChildren(
+        TextField.class,
+        (component, visit) -> {
+          ((TextField<?>) component).processInput();
         });
 
-        // update the point model
-        if(x != null && y != null) {
-            setConvertedInput(gf.createPoint(new Coordinate(x, y)));
-        } else {
-            setConvertedInput(null);
-        }
+    // update the point model
+    if (x != null && y != null) {
+      setConvertedInput(gf.createPoint(new Coordinate(x, y)));
+    } else {
+      setConvertedInput(null);
     }
+  }
 
-    @Override
-    protected void onModelChanged() {
-        // when the client programmatically changed the model, update the fields
-        // so that the textfields will change too
-        updateFields();
-        visitChildren(TextField.class, (component, visit) -> {
-            ((TextField<?>) component).clearInput();
+  @Override
+  protected void onModelChanged() {
+    // when the client programmatically changed the model, update the fields
+    // so that the textfields will change too
+    updateFields();
+    visitChildren(
+        TextField.class,
+        (component, visit) -> {
+          ((TextField<?>) component).clearInput();
         });
-    }
+  }
 
-    /**
-     * Sets the max number of digits for the
-     * @param maximumFractionDigits
-     */
-    public void setMaximumFractionDigits(int maximumFractionDigits) {
-        xInput.setMaximumFractionDigits(maximumFractionDigits);
-        yInput.setMaximumFractionDigits(maximumFractionDigits);
-    }
-
-
+  /**
+   * Sets the max number of digits for the
+   *
+   * @param maximumFractionDigits
+   */
+  public void setMaximumFractionDigits(int maximumFractionDigits) {
+    xInput.setMaximumFractionDigits(maximumFractionDigits);
+    yInput.setMaximumFractionDigits(maximumFractionDigits);
+  }
 }

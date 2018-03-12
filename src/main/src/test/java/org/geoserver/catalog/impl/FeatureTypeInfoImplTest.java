@@ -4,48 +4,46 @@
  */
 package org.geoserver.catalog.impl;
 
+import static org.junit.Assert.assertEquals;
+
+import java.util.Collections;
 import org.geoserver.catalog.AttributeTypeInfo;
 import org.geoserver.catalog.Catalog;
 import org.geoserver.catalog.CatalogFactory;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Collections;
-
-import static org.junit.Assert.assertEquals;
-
 public class FeatureTypeInfoImplTest {
 
-    Catalog catalog;
+  Catalog catalog;
 
+  @Before
+  public void setUp() throws Exception {
+    catalog = new CatalogImpl();
+  }
 
-    @Before
-    public void setUp() throws Exception {
-        catalog = new CatalogImpl();
-    }
+  @Test
+  public void testEqualsWithAttributes() {
+    CatalogFactory factory = catalog.getFactory();
 
-    @Test
-    public void testEqualsWithAttributes() {
-        CatalogFactory factory = catalog.getFactory();
+    FeatureTypeInfoImpl ft1 = (FeatureTypeInfoImpl) factory.createFeatureType();
+    FeatureTypeInfoImpl ft2 = (FeatureTypeInfoImpl) factory.createFeatureType();
 
-        FeatureTypeInfoImpl ft1 = (FeatureTypeInfoImpl) factory.createFeatureType();
-        FeatureTypeInfoImpl ft2 = (FeatureTypeInfoImpl) factory.createFeatureType();
+    ft1.setName("featureType");
+    ft2.setName("featureType");
 
-        ft1.setName("featureType");
-        ft2.setName("featureType");
+    AttributeTypeInfo at1 = factory.createAttribute();
+    AttributeTypeInfo at2 = factory.createAttribute();
 
-        AttributeTypeInfo at1 = factory.createAttribute();
-        AttributeTypeInfo at2 = factory.createAttribute();
+    at1.setName("attribute");
+    at2.setName("attribute");
 
-        at1.setName("attribute");
-        at2.setName("attribute");
+    at1.setFeatureType(ft1);
+    at2.setFeatureType(ft2);
 
-        at1.setFeatureType(ft1);
-        at2.setFeatureType(ft2);
+    ft1.setAttributes(Collections.singletonList(at1));
+    ft2.setAttributes(Collections.singletonList(at2));
 
-        ft1.setAttributes(Collections.singletonList(at1));
-        ft2.setAttributes(Collections.singletonList(at2));
-
-        assertEquals(ft1, ft2);
-    }
+    assertEquals(ft1, ft2);
+  }
 }

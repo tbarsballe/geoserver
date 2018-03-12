@@ -8,8 +8,8 @@ package org.geoserver.security.jdbc;
 
 public class DB2UserGroupServiceTest extends JDBCUserGroupServiceTest {
 
-    @Override
-    protected String getFixtureId() {
-        return "db2";
-    }
+  @Override
+  protected String getFixtureId() {
+    return "db2";
+  }
 }

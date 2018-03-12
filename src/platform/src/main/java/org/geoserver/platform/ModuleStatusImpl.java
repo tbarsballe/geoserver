@@ -9,149 +9,139 @@ import java.util.Optional;
 
 /**
  * Bean used to register module installation in applicationContext.xml.
- * <p>
- * Bean completly defined by applicationContext.xml - no dynamic content.
- * 
+ *
+ * <p>Bean completly defined by applicationContext.xml - no dynamic content.
+ *
  * <pre>
  * &lt!-- code example needed --&gt;>
  * </pre>
- * 
+ *
  * @author Morgan Thompson - Boundless
  */
 public class ModuleStatusImpl implements ModuleStatus, Serializable {
 
-    /** serialVersionUID */
-    private static final long serialVersionUID = -5759469520194940051L;
+  /** serialVersionUID */
+  private static final long serialVersionUID = -5759469520194940051L;
 
-    private String module;
+  private String module;
 
-    private String name;
+  private String name;
 
-    private String component;
+  private String component;
 
-    private String version;
+  private String version;
 
-    private String documentation;
+  private String documentation;
 
-    private String message;
+  private String message;
 
-    private boolean isEnabled;
+  private boolean isEnabled;
 
-    private boolean isAvailable;
+  private boolean isAvailable;
 
-    public ModuleStatusImpl() {
-    }
+  public ModuleStatusImpl() {}
 
-    public ModuleStatusImpl(ModuleStatus status) {
-        this.module = status.getModule();
-        this.name = status.getName();
-        this.component = status.getComponent().orElse(null);
-        this.version = status.getVersion().orElse(null);
-        this.documentation = status.getDocumentation().orElse(null);
-        this.message = status.getMessage().orElse(null);
-        this.isEnabled = status.isEnabled();
-        this.isAvailable = status.isAvailable();
-    }
+  public ModuleStatusImpl(ModuleStatus status) {
+    this.module = status.getModule();
+    this.name = status.getName();
+    this.component = status.getComponent().orElse(null);
+    this.version = status.getVersion().orElse(null);
+    this.documentation = status.getDocumentation().orElse(null);
+    this.message = status.getMessage().orElse(null);
+    this.isEnabled = status.isEnabled();
+    this.isAvailable = status.isAvailable();
+  }
 
-    public ModuleStatusImpl(String module, String name) {
-        this.module = module;
-        this.name = name;
-        this.isAvailable = true;
-        this.isEnabled = true;
-    }
+  public ModuleStatusImpl(String module, String name) {
+    this.module = module;
+    this.name = name;
+    this.isAvailable = true;
+    this.isEnabled = true;
+  }
 
-    /**
-     * @return the machine readable name
-     */
-    public String getModule() {
-        return module;
-    }
+  /** @return the machine readable name */
+  public String getModule() {
+    return module;
+  }
 
-    /**
-     * @param module the module name to set
-     */
-    public void setModule(String module) {
-        this.module = module;
-    }
+  /** @param module the module name to set */
+  public void setModule(String module) {
+    this.module = module;
+  }
 
-    public Optional<String> getComponent() {
-        return Optional.ofNullable(component);
-    }
+  public Optional<String> getComponent() {
+    return Optional.ofNullable(component);
+  }
 
-    /**
-     * @param component the component to set
-     */
-    public void setComponent(String component) {
-        this.component = component;
-    }
+  /** @param component the component to set */
+  public void setComponent(String component) {
+    this.component = component;
+  }
 
-    /**
-     * @return the name
-     */
-    public String getName() {
-        return name;
-    }
+  /** @return the name */
+  public String getName() {
+    return name;
+  }
 
-    /**
-     * @param name the name to set
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
+  /** @param name the name to set */
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    /**
-     * @return the version
-     */
-    public Optional<String> getVersion() {
-        return Optional.ofNullable(version);
-    }
+  /** @return the version */
+  public Optional<String> getVersion() {
+    return Optional.ofNullable(version);
+  }
 
-    /**
-     * @param version the version to set
-     */
-    public void setVersion(String version) {
-        this.version = version;
-    }
+  /** @param version the version to set */
+  public void setVersion(String version) {
+    this.version = version;
+  }
 
-    @Override
-    public boolean isAvailable() {
-        return this.isAvailable;
-    }
+  @Override
+  public boolean isAvailable() {
+    return this.isAvailable;
+  }
 
-    public void setAvailable(boolean isAvailable) {
-        this.isAvailable = isAvailable;
-    }
+  public void setAvailable(boolean isAvailable) {
+    this.isAvailable = isAvailable;
+  }
 
-    @Override
-    public boolean isEnabled() {
-        return this.isEnabled;
-    }
+  @Override
+  public boolean isEnabled() {
+    return this.isEnabled;
+  }
 
-    public void setEnabled(boolean isEnabled) {
-        this.isEnabled = isEnabled;
-    }
+  public void setEnabled(boolean isEnabled) {
+    this.isEnabled = isEnabled;
+  }
 
-    @Override
-    public Optional<String> getMessage() {
-        return Optional.ofNullable(message);
-    }
+  @Override
+  public Optional<String> getMessage() {
+    return Optional.ofNullable(message);
+  }
 
-    public void setMessage(String message) {
-        this.message = message;
-    }
+  public void setMessage(String message) {
+    this.message = message;
+  }
 
-    @Override
-    public Optional<String> getDocumentation() {
-        return Optional.ofNullable(documentation);
-    }
+  @Override
+  public Optional<String> getDocumentation() {
+    return Optional.ofNullable(documentation);
+  }
 
-    public void setDocumentation(String documentation) {
-        this.documentation = documentation;
-    }
+  public void setDocumentation(String documentation) {
+    this.documentation = documentation;
+  }
 
-    @Override
-    public String toString() {
-        return "ModuleStatusImpl [module=" + module + ", component=" + component + ", version="
-                + version + "]";
-    }
+  @Override
+  public String toString() {
+    return "ModuleStatusImpl [module="
+        + module
+        + ", component="
+        + component
+        + ", version="
+        + version
+        + "]";
+  }
 }

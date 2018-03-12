@@ -12,25 +12,24 @@ import org.geoserver.security.config.SecurityNamedServiceConfig;
 
 /**
  * Security provider for a security interceptor fitler
- * 
+ *
  * @author mcr
  */
 public class GeoServerSecurityInterceptorProvider extends AbstractFilterProvider {
 
-    @Override
-    public void configure(XStreamPersister xp) {
-        super.configure(xp);
-        xp.getXStream().alias("securityInterceptor", SecurityInterceptorFilterConfig.class);
-    }
+  @Override
+  public void configure(XStreamPersister xp) {
+    super.configure(xp);
+    xp.getXStream().alias("securityInterceptor", SecurityInterceptorFilterConfig.class);
+  }
 
-    @Override
-    public Class<? extends GeoServerSecurityFilter> getFilterClass() {
-        return GeoServerSecurityInterceptorFilter.class;
-    }
+  @Override
+  public Class<? extends GeoServerSecurityFilter> getFilterClass() {
+    return GeoServerSecurityInterceptorFilter.class;
+  }
 
-    @Override
-    public GeoServerSecurityFilter createFilter(SecurityNamedServiceConfig config) {
-        return new GeoServerSecurityInterceptorFilter();
-    }
-
+  @Override
+  public GeoServerSecurityFilter createFilter(SecurityNamedServiceConfig config) {
+    return new GeoServerSecurityInterceptorFilter();
+  }
 }

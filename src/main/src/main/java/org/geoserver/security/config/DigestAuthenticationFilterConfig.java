@@ -9,40 +9,38 @@ import org.geoserver.security.filter.GeoServerDigestAuthenticationFilter;
 
 /**
  * {@link GeoServerDigestAuthenticationFilter} configuration object.
- * 
- * <p>
- * The user group service must have a plain text or an encrypting password encoder.
- * </p>
- * <p>
- * The default value for {@link #nonceValiditySeconds} is 300 
- * </p>
- * @author mcr
  *
+ * <p>The user group service must have a plain text or an encrypting password encoder.
+ *
+ * <p>The default value for {@link #nonceValiditySeconds} is 300
+ *
+ * @author mcr
  */
-public class DigestAuthenticationFilterConfig extends SecurityFilterConfig 
-    implements SecurityAuthFilterConfig{
+public class DigestAuthenticationFilterConfig extends SecurityFilterConfig
+    implements SecurityAuthFilterConfig {
 
-    private static final long serialVersionUID = 1L;
-    private String userGroupServiceName;
-    private int nonceValiditySeconds =300;
+  private static final long serialVersionUID = 1L;
+  private String userGroupServiceName;
+  private int nonceValiditySeconds = 300;
 
-    public int getNonceValiditySeconds() {
-        return nonceValiditySeconds;
-    }
-    public void setNonceValiditySeconds(int nonceValiditySeconds) {
-        this.nonceValiditySeconds = nonceValiditySeconds;
-    }
+  public int getNonceValiditySeconds() {
+    return nonceValiditySeconds;
+  }
 
-    public String getUserGroupServiceName() {
-        return userGroupServiceName;
-    }
-    public void setUserGroupServiceName(String userGroupServiceName) {
-        this.userGroupServiceName = userGroupServiceName;
-    }
+  public void setNonceValiditySeconds(int nonceValiditySeconds) {
+    this.nonceValiditySeconds = nonceValiditySeconds;
+  }
 
-    @Override
-    public boolean providesAuthenticationEntryPoint() {
-        return true;
-    }
+  public String getUserGroupServiceName() {
+    return userGroupServiceName;
+  }
 
+  public void setUserGroupServiceName(String userGroupServiceName) {
+    this.userGroupServiceName = userGroupServiceName;
+  }
+
+  @Override
+  public boolean providesAuthenticationEntryPoint() {
+    return true;
+  }
 }

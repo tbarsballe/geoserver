@@ -12,60 +12,54 @@ import org.opengis.feature.simple.SimpleFeature;
 /**
  * Attaches itself to the renderer and ensures no more than a certain amount of errors occur, if
  * they do, the rendering process is stopped
+ *
  * @author Andrea Aime - OpenGeo
  */
 public class MaxErrorEnforcer {
 
-    GTRenderer renderer;
+  GTRenderer renderer;
 
-    int maxErrors;
+  int maxErrors;
 
-    int errors;
-    
-    Exception lastException;
+  int errors;
 
-    /**
-     * Builds a new max errors enforcer. If maxErrors is not positive the enforcer will do nothing
-     * 
-     * @param renderer
-     * @param maxErrors
-     */
-    public MaxErrorEnforcer(GTRenderer renderer, int maxErrors) {
-        this.renderer = renderer;
-        this.maxErrors = maxErrors;
-        this.errors = 0;
+  Exception lastException;
 
-        if (maxErrors > 0) {
-            renderer.addRenderListener(new RenderListener() {
+  /**
+   * Builds a new max errors enforcer. If maxErrors is not positive the enforcer will do nothing
+   *
+   * @param renderer
+   * @param maxErrors
+   */
+  public MaxErrorEnforcer(GTRenderer renderer, int maxErrors) {
+    this.renderer = renderer;
+    this.maxErrors = maxErrors;
+    this.errors = 0;
 
-                public void featureRenderer(SimpleFeature feature) {
-                }
+    if (maxErrors > 0) {
+      renderer.addRenderListener(
+          new RenderListener() {
 
-                public void errorOccurred(Exception e) {
-                    errors++;
-                    lastException = e;
-                    if (errors > MaxErrorEnforcer.this.maxErrors) {
-                        MaxErrorEnforcer.this.renderer.stopRendering();
-                    }
-                }
-            });
-        }
+            public void featureRenderer(SimpleFeature feature) {}
+
+            public void errorOccurred(Exception e) {
+              errors++;
+              lastException = e;
+              if (errors > MaxErrorEnforcer.this.maxErrors) {
+                MaxErrorEnforcer.this.renderer.stopRendering();
+              }
+            }
+          });
     }
+  }
 
-    /**
-     * True if the max error threshold was exceeded
-     *
-     */
-    public boolean exceedsMaxErrors() {
-        return maxErrors > 0 && errors > maxErrors;
-    }
-    
-    /**
-     * Returns the last exception occurred (or null if none happened)
-     *
-     */
-    public Exception getLastException() {
-        return lastException;
-    }
+  /** True if the max error threshold was exceeded */
+  public boolean exceedsMaxErrors() {
+    return maxErrors > 0 && errors > maxErrors;
+  }
 
+  /** Returns the last exception occurred (or null if none happened) */
+  public Exception getLastException() {
+    return lastException;
+  }
 }

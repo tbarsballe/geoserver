@@ -6,7 +6,6 @@
 package org.geoserver.config;
 
 import java.util.Map;
-
 import org.geoserver.catalog.Info;
 import org.geoserver.catalog.MetadataMap;
 import org.geoserver.catalog.WorkspaceInfo;
@@ -18,150 +17,119 @@ import org.geoserver.catalog.WorkspaceInfo;
  */
 public interface SettingsInfo extends Info {
 
-    /**
-     * The workspace the settings are specific to.
-     * <p>
-     * Will be null for global settings: {@link GeoServerInfo#getSettings()} 
-     * </p>
-     * @return A workspace, or <code>null</code>.
-     */
-    WorkspaceInfo getWorkspace();
+  /**
+   * The workspace the settings are specific to.
+   *
+   * <p>Will be null for global settings: {@link GeoServerInfo#getSettings()}
+   *
+   * @return A workspace, or <code>null</code>.
+   */
+  WorkspaceInfo getWorkspace();
 
-    /**
-     * Sets the workspace the settings are specific to.
-     */
-    void setWorkspace(WorkspaceInfo workspace);
+  /** Sets the workspace the settings are specific to. */
+  void setWorkspace(WorkspaceInfo workspace);
 
-    /**
-     * The title of the settings instance.
-     * 
-     */
-    String getTitle();
+  /** The title of the settings instance. */
+  String getTitle();
 
-    /**
-     * Sets the title of the settings instance.
-     */
-    void setTitle(String title);
-    
-    /**
-     * The contact information.
-     */
-    ContactInfo getContact();
+  /** Sets the title of the settings instance. */
+  void setTitle(String title);
 
-    /**
-     * Sets the contact information.
-     */
-    void setContact(ContactInfo contactInfo);
+  /** The contact information. */
+  ContactInfo getContact();
 
-    /**
-     * The default character set.
-     */
-    String getCharset();
+  /** Sets the contact information. */
+  void setContact(ContactInfo contactInfo);
 
-    /**
-     * Sets the default character set.
-     * 
-     */
-    void setCharset(String charset);
-    
-    /**
-     * A cap on the number of decimals to use when encoding floating point numbers.
-     */
-    int getNumDecimals();
+  /** The default character set. */
+  String getCharset();
 
-    /**
-     * Sets the cap on the number of decimals to use when encoding floating point numbers.
-     */
-    void setNumDecimals(int numDecimals);
+  /** Sets the default character set. */
+  void setCharset(String charset);
 
-    /**
-     * Provider web site (used for default contact information, or service provider information if user has not filled in contact details.
-     */
-    String getOnlineResource();
-    
-    /**
-     * Provider web site (used for default contact information, or service provider information if user has not filled in contact details.
-     * 
-     * @param onlineResource Provider website
-     */
-    void setOnlineResource(String onlineResource);
+  /** A cap on the number of decimals to use when encoding floating point numbers. */
+  int getNumDecimals();
 
-    /**
-     * The url of a proxy in front of the GeoServer instance.
-     * <p>
-     * This value is used when a reference back to the GeoServer instance must 
-     * be made in a response.
-     * </p>
-     */
-    String getProxyBaseUrl();
+  /** Sets the cap on the number of decimals to use when encoding floating point numbers. */
+  void setNumDecimals(int numDecimals);
 
-    /**
-     * Sets The url of a proxy in front of the GeoServer instance.
-     */
-    void setProxyBaseUrl(String proxyBaseUrl);
+  /**
+   * Provider web site (used for default contact information, or service provider information if
+   * user has not filled in contact details.
+   */
+  String getOnlineResource();
 
-    /**
-     * The base url to use when including a reference to an xml schema document in a response.
-     */
-    String getSchemaBaseUrl();
+  /**
+   * Provider web site (used for default contact information, or service provider information if
+   * user has not filled in contact details.
+   *
+   * @param onlineResource Provider website
+   */
+  void setOnlineResource(String onlineResource);
 
-    /**
-     * Sets the base url to use when including a reference to an xml schema document in a response.
-     */
-    void setSchemaBaseUrl(String schemaBaseUrl);
+  /**
+   * The url of a proxy in front of the GeoServer instance.
+   *
+   * <p>This value is used when a reference back to the GeoServer instance must be made in a
+   * response.
+   */
+  String getProxyBaseUrl();
 
-    /**
-     * Sets indent level for XML output, causing output to be more verbose.
-     * <p>
-     * Then set to false GeoServer will also take step so to strip out some formating and produce more condensed output.
-     */
-    boolean isVerbose();
+  /** Sets The url of a proxy in front of the GeoServer instance. */
+  void setProxyBaseUrl(String proxyBaseUrl);
 
-    /**
-     * Sets indent level for XML output, causing output to be more verbose.
-     * <p>
-     * Then set to false GeoServer will also take step so to strip out some formating and produce more condensed output.
-     */
-    void setVerbose(boolean verbose);
+  /** The base url to use when including a reference to an xml schema document in a response. */
+  String getSchemaBaseUrl();
 
-    /**
-     * Verbosity flag for exceptions.
-     * <p>
-     * When set GeoServer will include full stack traces for exceptions.
-     * </p>
-     */
-    boolean isVerboseExceptions();
+  /**
+   * Sets the base url to use when including a reference to an xml schema document in a response.
+   */
+  void setSchemaBaseUrl(String schemaBaseUrl);
 
-    /**
-     * Sets verbosity flag for exceptions.
-     */
-    void setVerboseExceptions(boolean verboseExceptions);
-    
-    /**
-     * A map of metadata for services.
-     */
-    MetadataMap getMetadata();
+  /**
+   * Sets indent level for XML output, causing output to be more verbose.
+   *
+   * <p>Then set to false GeoServer will also take step so to strip out some formating and produce
+   * more condensed output.
+   */
+  boolean isVerbose();
 
-    /**
-     * Client properties for services.
-     * <p>
-     * These values are transient, and not persistent.
-     * </p>
-     */
-    Map<Object, Object> getClientProperties();
+  /**
+   * Sets indent level for XML output, causing output to be more verbose.
+   *
+   * <p>Then set to false GeoServer will also take step so to strip out some formating and produce
+   * more condensed output.
+   */
+  void setVerbose(boolean verbose);
 
-    /**
-     * If true local workspace should keep the namespace prefixes in
-     * getCapabilities etc...
-     */
-    boolean isLocalWorkspaceIncludesPrefix();
+  /**
+   * Verbosity flag for exceptions.
+   *
+   * <p>When set GeoServer will include full stack traces for exceptions.
+   */
+  boolean isVerboseExceptions();
 
-    /**
-     * Set whether or not a local workspace should keep namespace prefixes in
-     * the getCapabilities etc...
-     *
-     * @param includePrefix
-     *            if true then the prefixes will be kept, default behaviour is to remove it.
-     */
-    void setLocalWorkspaceIncludesPrefix(boolean includePrefix);
+  /** Sets verbosity flag for exceptions. */
+  void setVerboseExceptions(boolean verboseExceptions);
+
+  /** A map of metadata for services. */
+  MetadataMap getMetadata();
+
+  /**
+   * Client properties for services.
+   *
+   * <p>These values are transient, and not persistent.
+   */
+  Map<Object, Object> getClientProperties();
+
+  /** If true local workspace should keep the namespace prefixes in getCapabilities etc... */
+  boolean isLocalWorkspaceIncludesPrefix();
+
+  /**
+   * Set whether or not a local workspace should keep namespace prefixes in the getCapabilities
+   * etc...
+   *
+   * @param includePrefix if true then the prefixes will be kept, default behaviour is to remove it.
+   */
+  void setLocalWorkspaceIncludesPrefix(boolean includePrefix);
 }

@@ -6,24 +6,21 @@
 package org.geoserver.wfs.xml.v1_1_0;
 
 import java.math.BigInteger;
-
 import javax.xml.namespace.QName;
-
 import net.opengis.wfs.GetFeatureWithLockType;
 import net.opengis.wfs.QueryType;
 import net.opengis.wfs.ResultTypeType;
 import net.opengis.wfs.WfsFactory;
-
 import org.geotools.xml.AbstractComplexBinding;
 import org.geotools.xml.ElementInstance;
 import org.geotools.xml.Node;
-
 
 /**
  * Binding object for the type http://www.opengis.net/wfs:GetFeatureWithLockType.
  *
  * <p>
- *        <pre>
+ *
+ * <pre>
  *         <code>
  *  &lt;xsd:complexType name="GetFeatureWithLockType"&gt;
  *      &lt;xsd:annotation&gt;
@@ -100,80 +97,80 @@ import org.geotools.xml.Node;
  *
  *          </code>
  *         </pre>
+ *
  * @generated
  */
 public class GetFeatureWithLockTypeBinding extends AbstractComplexBinding {
-    WfsFactory wfsfactory;
+  WfsFactory wfsfactory;
 
-    public GetFeatureWithLockTypeBinding(WfsFactory wfsfactory) {
-        this.wfsfactory = wfsfactory;
+  public GetFeatureWithLockTypeBinding(WfsFactory wfsfactory) {
+    this.wfsfactory = wfsfactory;
+  }
+
+  /** @generated */
+  public QName getTarget() {
+    return WFS.GETFEATUREWITHLOCKTYPE;
+  }
+
+  /**
+   *
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   *
+   * @generated modifiable
+   */
+  public Class getType() {
+    return GetFeatureWithLockType.class;
+  }
+
+  /**
+   *
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   *
+   * @generated modifiable
+   */
+  public Object parse(ElementInstance instance, Node node, Object value) throws Exception {
+    GetFeatureWithLockType getFeatureWithLock = wfsfactory.createGetFeatureWithLockType();
+
+    // &lt;xsd:element maxOccurs="unbounded" ref="wfs:Query"/&gt;
+    getFeatureWithLock.getQuery().addAll(node.getChildValues(QueryType.class));
+
+    // &lt;xsd:attribute default="5" name="expiry" type="xsd:positiveInteger" use="optional"&gt;
+    if (node.hasAttribute("expiry")) {
+      getFeatureWithLock.setExpiry((BigInteger) node.getAttributeValue("expiry"));
     }
 
-    /**
-     * @generated
-     */
-    public QName getTarget() {
-        return WFS.GETFEATUREWITHLOCKTYPE;
+    // &lt;xsd:attribute default="results" name="resultType" type="wfs:ResultTypeType"
+    // use="optional"&gt;
+    if (node.hasAttribute("resultType")) {
+      getFeatureWithLock.setResultType((ResultTypeType) node.getAttributeValue("resultType"));
     }
 
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     *
-     * @generated modifiable
-     */
-    public Class getType() {
-        return GetFeatureWithLockType.class;
+    // &lt;xsd:attribute default="text/xml; subtype=gml/3.1.1"
+    //		name="outputFormat" type="xsd:string" use="optional"&gt;
+    if (node.hasAttribute("outputFormat")) {
+      getFeatureWithLock.setOutputFormat((String) node.getAttributeValue("outputFormat"));
     }
 
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     *
-     * @generated modifiable
-     */
-    public Object parse(ElementInstance instance, Node node, Object value)
-        throws Exception {
-        GetFeatureWithLockType getFeatureWithLock = wfsfactory
-            .createGetFeatureWithLockType();
-
-        //&lt;xsd:element maxOccurs="unbounded" ref="wfs:Query"/&gt;
-        getFeatureWithLock.getQuery().addAll(node.getChildValues(QueryType.class));
-
-        //&lt;xsd:attribute default="5" name="expiry" type="xsd:positiveInteger" use="optional"&gt;
-        if (node.hasAttribute("expiry")) {
-            getFeatureWithLock.setExpiry((BigInteger) node.getAttributeValue("expiry"));
-        }
-
-        //&lt;xsd:attribute default="results" name="resultType" type="wfs:ResultTypeType" use="optional"&gt;
-        if (node.hasAttribute("resultType")) {
-            getFeatureWithLock.setResultType((ResultTypeType) node.getAttributeValue("resultType"));
-        }
-
-        //&lt;xsd:attribute default="text/xml; subtype=gml/3.1.1"
-        //		name="outputFormat" type="xsd:string" use="optional"&gt;
-        if (node.hasAttribute("outputFormat")) {
-            getFeatureWithLock.setOutputFormat((String) node.getAttributeValue("outputFormat"));
-        }
-
-        //&lt;xsd:attribute name="maxFeatures" type="xsd:positiveInteger" use="optional"&gt;
-        if (node.hasAttribute("maxFeatures")) {
-            getFeatureWithLock.setMaxFeatures((BigInteger) node.getAttributeValue("maxFeatures"));
-        }
-
-        //&lt;xsd:attribute name="traverseXlinkDepth" type="xsd:string" use="optional"&gt;
-        if (node.hasAttribute("traverseXlinkDepth")) {
-            getFeatureWithLock.setTraverseXlinkDepth((String) node.getAttributeValue(
-                    "traverseXlinkDepth"));
-        }
-
-        //&lt;xsd:attribute name="traverseXlinkExpiry"
-        //		type="xsd:positiveInteger" use="optional"&gt;
-        if (node.hasAttribute("traverseXlinkExpiry")) {
-            getFeatureWithLock.setTraverseXlinkExpiry((BigInteger) node.getAttributeValue(
-                    "traverseXlinkExpiry"));
-        }
-
-        return getFeatureWithLock;
+    // &lt;xsd:attribute name="maxFeatures" type="xsd:positiveInteger" use="optional"&gt;
+    if (node.hasAttribute("maxFeatures")) {
+      getFeatureWithLock.setMaxFeatures((BigInteger) node.getAttributeValue("maxFeatures"));
     }
+
+    // &lt;xsd:attribute name="traverseXlinkDepth" type="xsd:string" use="optional"&gt;
+    if (node.hasAttribute("traverseXlinkDepth")) {
+      getFeatureWithLock.setTraverseXlinkDepth(
+          (String) node.getAttributeValue("traverseXlinkDepth"));
+    }
+
+    // &lt;xsd:attribute name="traverseXlinkExpiry"
+    //		type="xsd:positiveInteger" use="optional"&gt;
+    if (node.hasAttribute("traverseXlinkExpiry")) {
+      getFeatureWithLock.setTraverseXlinkExpiry(
+          (BigInteger) node.getAttributeValue("traverseXlinkExpiry"));
+    }
+
+    return getFeatureWithLock;
+  }
 }

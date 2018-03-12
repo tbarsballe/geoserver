@@ -12,86 +12,85 @@ import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 
 /**
- * A support class containing the old feature type name, the new one, the old
- * feature type, and the new one
- * 
+ * A support class containing the old feature type name, the new one, the old feature type, and the
+ * new one
+ *
  * @author Andrea Aime
  */
 class FeatureTypeMap {
-    String originalName;
+  String originalName;
 
-    String name;
+  String name;
 
-    SimpleFeatureType originalFeatureType;
+  SimpleFeatureType originalFeatureType;
 
-    SimpleFeatureType featureType;
+  SimpleFeatureType featureType;
 
-    public FeatureTypeMap(String originalName, String name) {
-        this.originalName = originalName;
-        this.name = name;
+  public FeatureTypeMap(String originalName, String name) {
+    this.originalName = originalName;
+    this.name = name;
+  }
+
+  public FeatureTypeMap(SimpleFeatureType originalFeatureType, SimpleFeatureType featureType) {
+    this.originalFeatureType = originalFeatureType;
+    this.featureType = featureType;
+    this.originalName = originalFeatureType.getTypeName();
+    this.name = featureType.getTypeName();
+  }
+
+  public String getOriginalName() {
+    return originalName;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public SimpleFeatureType getOriginalFeatureType() {
+    return originalFeatureType;
+  }
+
+  public SimpleFeatureType getFeatureType() {
+    return featureType;
+  }
+
+  /**
+   * * Takes into account eventual joins
+   *
+   * @param query
+   * @return
+   */
+  public SimpleFeatureType getFeatureType(Query query) {
+    SimpleFeatureType result;
+    if (query.getPropertyNames() != Query.ALL_NAMES) {
+      result = SimpleFeatureTypeBuilder.retype(featureType, query.getPropertyNames());
+    } else {
+      result = featureType;
     }
-    
-    public FeatureTypeMap(SimpleFeatureType originalFeatureType, SimpleFeatureType featureType) {
-        this.originalFeatureType = originalFeatureType;
-        this.featureType = featureType;
-        this.originalName = originalFeatureType.getTypeName();
-        this.name = featureType.getTypeName();
-    }
 
-    public String getOriginalName() {
-        return originalName;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public SimpleFeatureType getOriginalFeatureType() {
-        return originalFeatureType;
-    }
-
-    public SimpleFeatureType getFeatureType() {
-        return featureType;
-    }
-    
-    /***
-     * Takes into account eventual joins
-     * 
-     * @param query
-     * @return
-     */
-    public SimpleFeatureType getFeatureType(Query query) {
-        SimpleFeatureType result;
-        if ( query.getPropertyNames() != Query.ALL_NAMES ) {
-            result = SimpleFeatureTypeBuilder.retype(featureType, query.getPropertyNames());
-        } else {
-            result = featureType;
+    // add back the joined features in case of join
+    if (!query.getJoins().isEmpty()) {
+      SimpleFeatureTypeBuilder tb = new SimpleFeatureTypeBuilder();
+      tb.init(result);
+      for (Join join : query.getJoins()) {
+        String joinedFeatureAttribute = join.getAlias();
+        if (joinedFeatureAttribute == null) {
+          joinedFeatureAttribute = join.getTypeName();
         }
-
-        // add back the joined features in case of join
-        if(!query.getJoins().isEmpty()) {
-            SimpleFeatureTypeBuilder tb = new SimpleFeatureTypeBuilder();
-            tb.init(result);
-            for (Join join : query.getJoins()) {
-                String joinedFeatureAttribute = join.getAlias();
-                if(joinedFeatureAttribute == null) {
-                    joinedFeatureAttribute = join.getTypeName();
-                }
-                tb.add(joinedFeatureAttribute, SimpleFeature.class);
-            }
-            result = tb.buildFeatureType();
-        }
-        
-        return result;
+        tb.add(joinedFeatureAttribute, SimpleFeature.class);
+      }
+      result = tb.buildFeatureType();
     }
 
-    public boolean isUnchanged() {
-        return originalName.equals(name);
-    }
+    return result;
+  }
 
-    public void setFeatureTypes(SimpleFeatureType original, SimpleFeatureType transformed) {
-        this.originalFeatureType = original;
-        this.featureType = transformed;
-    }
+  public boolean isUnchanged() {
+    return originalName.equals(name);
+  }
 
+  public void setFeatureTypes(SimpleFeatureType original, SimpleFeatureType transformed) {
+    this.originalFeatureType = original;
+    this.featureType = transformed;
+  }
 }

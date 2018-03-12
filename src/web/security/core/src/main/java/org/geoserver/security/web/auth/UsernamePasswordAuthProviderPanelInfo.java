@@ -10,16 +10,17 @@ import org.geoserver.security.config.UsernamePasswordAuthenticationProviderConfi
 
 /**
  * Configuration panel extension for {@link UsernamePasswordAuthenticationProvider}.
- * 
+ *
  * @author Justin Deoliveira, OpenGeo
  */
-public class UsernamePasswordAuthProviderPanelInfo extends AuthenticationProviderPanelInfo
-    <UsernamePasswordAuthenticationProviderConfig,UsernamePasswordAuthProviderPanel> {
+public class UsernamePasswordAuthProviderPanelInfo
+    extends AuthenticationProviderPanelInfo<
+        UsernamePasswordAuthenticationProviderConfig, UsernamePasswordAuthProviderPanel> {
 
-    public UsernamePasswordAuthProviderPanelInfo() {
-        setComponentClass(UsernamePasswordAuthProviderPanel.class);
-        setServiceClass(UsernamePasswordAuthenticationProvider.class);
-        setServiceConfigClass(UsernamePasswordAuthenticationProviderConfig.class);
-        setPriority(0);
-    }
+  public UsernamePasswordAuthProviderPanelInfo() {
+    setComponentClass(UsernamePasswordAuthProviderPanel.class);
+    setServiceClass(UsernamePasswordAuthenticationProvider.class);
+    setServiceConfigClass(UsernamePasswordAuthenticationProviderConfig.class);
+    setPriority(0);
+  }
 }

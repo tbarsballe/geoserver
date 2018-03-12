@@ -10,16 +10,16 @@ import org.geoserver.security.xml.XMLRoleServiceConfig;
 
 /**
  * Configuration panel extension for {@link XMLRoleService}.
- *  
+ *
  * @author Justin Deoliveira, OpenGeo
  */
-public class XMLRoleServicePanelInfo 
+public class XMLRoleServicePanelInfo
     extends RoleServicePanelInfo<XMLRoleServiceConfig, XMLRoleServicePanel> {
 
-    public XMLRoleServicePanelInfo() {
-        setComponentClass(XMLRoleServicePanel.class);
-        setServiceClass(XMLRoleService.class);
-        setServiceConfigClass(XMLRoleServiceConfig.class);
-        setPriority(0);
-    }
+  public XMLRoleServicePanelInfo() {
+    setComponentClass(XMLRoleServicePanel.class);
+    setServiceClass(XMLRoleService.class);
+    setServiceConfigClass(XMLRoleServiceConfig.class);
+    setPriority(0);
+  }
 }

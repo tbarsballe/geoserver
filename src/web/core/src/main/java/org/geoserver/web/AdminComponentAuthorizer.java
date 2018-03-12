@@ -10,16 +10,16 @@ import org.springframework.security.core.Authentication;
 
 /**
  * Authorizer that only allows access to the admin.
- * 
+ *
  * @author Justin Deoliveira, OpenGeo
  */
 public class AdminComponentAuthorizer implements ComponentAuthorizer {
 
-    public boolean isAccessAllowed(Class<?> componentClass, Authentication authentication) {
-        return getSecurityManager().checkAuthenticationForAdminRole(authentication);
-    }
+  public boolean isAccessAllowed(Class<?> componentClass, Authentication authentication) {
+    return getSecurityManager().checkAuthenticationForAdminRole(authentication);
+  }
 
-    protected GeoServerSecurityManager getSecurityManager() {
-        return GeoServerApplication.get().getSecurityManager();
-    }
+  protected GeoServerSecurityManager getSecurityManager() {
+    return GeoServerApplication.get().getSecurityManager();
+  }
 }

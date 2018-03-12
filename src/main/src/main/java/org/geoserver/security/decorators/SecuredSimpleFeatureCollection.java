@@ -8,7 +8,6 @@ package org.geoserver.security.decorators;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.geoserver.security.VectorAccessLimits;
 import org.geoserver.security.WrapperPolicy;
 import org.geotools.data.DataUtilities;
@@ -26,65 +25,65 @@ import org.opengis.filter.sort.SortBy;
 
 /**
  * Simple version of {@link SecuredFeatureCollection}
- * @author Andrea Aime - GeoSolutions
  *
+ * @author Andrea Aime - GeoSolutions
  */
-public class SecuredSimpleFeatureCollection extends
-        SecuredFeatureCollection<SimpleFeatureType, SimpleFeature> implements
-        SimpleFeatureCollection {
-    
-    SimpleFeatureType readSchema;
+public class SecuredSimpleFeatureCollection
+    extends SecuredFeatureCollection<SimpleFeatureType, SimpleFeature>
+    implements SimpleFeatureCollection {
 
-    SecuredSimpleFeatureCollection(FeatureCollection<SimpleFeatureType, SimpleFeature> delegate,
-            WrapperPolicy policy) {
-        super(delegate, policy);
-        if(policy.getLimits() instanceof VectorAccessLimits) {
-            List<PropertyName> properties = ((VectorAccessLimits) policy.getLimits()).getReadAttributes();
-            if(properties == null) {
-                this.readSchema = getSchema();
-            } else {
-                List<String> names = new ArrayList<String>();
-                for (PropertyName property : properties) {
-                    names.add(property.getPropertyName());
-                }
-                String[] nameArray = (String[]) names.toArray(new String[names.size()]);
-                try {
-                    this.readSchema = DataUtilities.createSubType(getSchema(), nameArray);
-                } catch (SchemaException e) {
-                    // should just not happen
-                    throw new RuntimeException(e);
-                }
-            }
-        } else {
-            this.readSchema = getSchema();
+  SimpleFeatureType readSchema;
+
+  SecuredSimpleFeatureCollection(
+      FeatureCollection<SimpleFeatureType, SimpleFeature> delegate, WrapperPolicy policy) {
+    super(delegate, policy);
+    if (policy.getLimits() instanceof VectorAccessLimits) {
+      List<PropertyName> properties = ((VectorAccessLimits) policy.getLimits()).getReadAttributes();
+      if (properties == null) {
+        this.readSchema = getSchema();
+      } else {
+        List<String> names = new ArrayList<String>();
+        for (PropertyName property : properties) {
+          names.add(property.getPropertyName());
         }
-    }
-
-    public SimpleFeatureCollection sort(SortBy order) {
-        return (SimpleFeatureCollection) super.sort(order);
-    }
-
-    @Override
-    public SimpleFeatureCollection subCollection(Filter filter) {
-        return (SimpleFeatureCollection) super.subCollection(filter);
-    }
-    
-    @Override
-    public SimpleFeatureIterator features() {
-        return (SimpleFeatureIterator) super.features();
-    }
-    
-    public void accepts(org.opengis.feature.FeatureVisitor visitor,
-            org.opengis.util.ProgressListener progress) throws IOException {
-        if (canDelegate(visitor)) {
-            delegate.accepts(visitor, progress);
-        } else {
-            super.accepts(visitor, progress);
+        String[] nameArray = (String[]) names.toArray(new String[names.size()]);
+        try {
+          this.readSchema = DataUtilities.createSubType(getSchema(), nameArray);
+        } catch (SchemaException e) {
+          // should just not happen
+          throw new RuntimeException(e);
         }
+      }
+    } else {
+      this.readSchema = getSchema();
     }
-    
-    protected boolean canDelegate(FeatureVisitor visitor) {
-        return ReTypingFeatureCollection.isTypeCompatible(visitor, readSchema);
-    }
+  }
 
+  public SimpleFeatureCollection sort(SortBy order) {
+    return (SimpleFeatureCollection) super.sort(order);
+  }
+
+  @Override
+  public SimpleFeatureCollection subCollection(Filter filter) {
+    return (SimpleFeatureCollection) super.subCollection(filter);
+  }
+
+  @Override
+  public SimpleFeatureIterator features() {
+    return (SimpleFeatureIterator) super.features();
+  }
+
+  public void accepts(
+      org.opengis.feature.FeatureVisitor visitor, org.opengis.util.ProgressListener progress)
+      throws IOException {
+    if (canDelegate(visitor)) {
+      delegate.accepts(visitor, progress);
+    } else {
+      super.accepts(visitor, progress);
+    }
+  }
+
+  protected boolean canDelegate(FeatureVisitor visitor) {
+    return ReTypingFeatureCollection.isTypeCompatible(visitor, readSchema);
+  }
 }

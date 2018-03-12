@@ -10,15 +10,16 @@ import org.geoserver.security.filter.GeoServerRequestHeaderAuthenticationFilter;
 
 /**
  * Configuration panel extension for {@link GeoServerRequestHeaderAuthenticationFilter}.
- * 
+ *
  * @author Justin Deoliveira, OpenGeo
  */
-public class HeaderAuthFilterPanelInfo 
-    extends AuthenticationFilterPanelInfo<RequestHeaderAuthenticationFilterConfig, HeaderAuthFilterPanel> {
+public class HeaderAuthFilterPanelInfo
+    extends AuthenticationFilterPanelInfo<
+        RequestHeaderAuthenticationFilterConfig, HeaderAuthFilterPanel> {
 
-    public HeaderAuthFilterPanelInfo() {
-        setComponentClass(HeaderAuthFilterPanel.class);
-        setServiceClass(GeoServerRequestHeaderAuthenticationFilter.class);
-        setServiceConfigClass(RequestHeaderAuthenticationFilterConfig.class);
-    }
+  public HeaderAuthFilterPanelInfo() {
+    setComponentClass(HeaderAuthFilterPanel.class);
+    setServiceClass(GeoServerRequestHeaderAuthenticationFilter.class);
+    setServiceConfigClass(RequestHeaderAuthenticationFilterConfig.class);
+  }
 }

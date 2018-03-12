@@ -8,8 +8,8 @@ package org.geoserver.sld;
 import org.geoserver.platform.ServiceException;
 
 public class SldException extends ServiceException {
-    
-    public SldException(String error) {
-        super(error);
-    }
+
+  public SldException(String error) {
+    super(error);
+  }
 }

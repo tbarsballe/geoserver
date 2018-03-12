@@ -8,112 +8,94 @@ package org.geoserver.security.concurrent;
 
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
-
 import org.geoserver.security.GeoServerSecurityManager;
 import org.geoserver.security.GeoServerSecurityService;
 
 /**
  * Abstract base class for locking support.
- * 
- * @author christian
  *
+ * @author christian
  */
 public abstract class AbstractLockingService implements GeoServerSecurityService {
 
-    protected final ReentrantReadWriteLock readWriteLock = new ReentrantReadWriteLock(true);
-    protected final Lock readLock = readWriteLock.readLock();
-    protected final Lock writeLock = readWriteLock.writeLock();
+  protected final ReentrantReadWriteLock readWriteLock = new ReentrantReadWriteLock(true);
+  protected final Lock readLock = readWriteLock.readLock();
+  protected final Lock writeLock = readWriteLock.writeLock();
 
-    protected GeoServerSecurityService service;
+  protected GeoServerSecurityService service;
 
-    protected AbstractLockingService(GeoServerSecurityService service) {
-        this.service = service;
+  protected AbstractLockingService(GeoServerSecurityService service) {
+    this.service = service;
+  }
+
+  /** @return the wrapped service */
+  public GeoServerSecurityService getService() {
+    return service;
+  }
+
+  /**
+   * NO_LOCK
+   *
+   * @see org.geoserver.security.GeoServerRoleService#getName()
+   */
+  public String getName() {
+    return getService().getName();
+  }
+
+  @Override
+  public void setName(String name) {
+    writeLock();
+    try {
+      getService().setName(name);
+    } finally {
+      writeUnLock();
     }
+  }
 
-    /**
-     * @return the wrapped service
-     */
-    public GeoServerSecurityService getService() {
-        return service;
+  @Override
+  public void setSecurityManager(GeoServerSecurityManager securityManager) {
+    writeLock();
+    try {
+      getService().setSecurityManager(securityManager);
+    } finally {
+      writeUnLock();
     }
+  }
 
-    
-    /**
-     * NO_LOCK
-     * @see org.geoserver.security.GeoServerRoleService#getName()
-     */
-    public String getName() {
-        return getService().getName();
-    }
+  /** NO_LOCK */
+  @Override
+  public GeoServerSecurityManager getSecurityManager() {
+    return getService().getSecurityManager();
+  }
 
-    @Override
-    public void setName(String name) {
-        writeLock();
-        try {
-            getService().setName(name);
-        } finally {
-            writeUnLock();
-        }
-    }
+  /** NO_LOCK */
+  @Override
+  public boolean canCreateStore() {
+    return getService().canCreateStore();
+  }
 
-    @Override
-    public void setSecurityManager(GeoServerSecurityManager securityManager) {
-        writeLock();
-        try {
-            getService().setSecurityManager(securityManager);
-        } finally {
-            writeUnLock();
-        }
-    }
+  @Override
+  public String toString() {
+    return "Locking " + getName();
+  }
 
-    /**
-     * NO_LOCK
-     */
-    @Override
-    public GeoServerSecurityManager getSecurityManager() {
-        return getService().getSecurityManager();
-    }
+  /** get a read lock */
+  protected void readLock() {
+    readLock.lock();
+  }
 
-    /**
-     * NO_LOCK
-     */
-    @Override
-    public boolean canCreateStore() {
-        return getService().canCreateStore();
-    }
+  /** free read lock */
+  protected void readUnLock() {
+    readLock.unlock();
+  }
 
-   @Override
-    public String toString() {
-        return "Locking "+ getName();
-    }
+  /** get a write lock */
+  protected void writeLock() {
+    writeLock.lock();
+  }
 
-    /**
-     *  get a read lock
-     */
-    protected void  readLock() {
-        readLock.lock();
-    }
-
-    /**
-     *  free read lock
-     */
-    protected void  readUnLock() {
-        readLock.unlock();
-    }
-
-    /**
-     *  get a write lock
-     */
-    protected void  writeLock() {
-        writeLock.lock();
-    }
-
-    /**
-     *  free write lock
-     */
-    protected void  writeUnLock() {
-        writeLock.unlock();
-    }
-
-    
+  /** free write lock */
+  protected void writeUnLock() {
+    writeLock.unlock();
+  }
 }

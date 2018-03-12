@@ -11,24 +11,29 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-/**
- * Catalog reload controller
- */
+/** Catalog reload controller */
 @RestController
 @RequestMapping(path = RestBaseController.ROOT_PATH)
 public class CatalogReloadController extends AbstractGeoServerController {
 
-    @Autowired
-    public CatalogReloadController(@Qualifier("geoServer") GeoServer geoServer) {
-        super(geoServer);
-    }
+  @Autowired
+  public CatalogReloadController(@Qualifier("geoServer") GeoServer geoServer) {
+    super(geoServer);
+  }
 
-    @RequestMapping(value = "/reload", method = {RequestMethod.POST, RequestMethod.PUT})
-    public void reload() throws Exception {
-        geoServer.reload();
-    }
-    @RequestMapping(value = "/reset", method = {RequestMethod.POST, RequestMethod.PUT})
-    public void reset() {
-        geoServer.reset();
-    }
+  @RequestMapping(
+    value = "/reload",
+    method = {RequestMethod.POST, RequestMethod.PUT}
+  )
+  public void reload() throws Exception {
+    geoServer.reload();
+  }
+
+  @RequestMapping(
+    value = "/reset",
+    method = {RequestMethod.POST, RequestMethod.PUT}
+  )
+  public void reset() {
+    geoServer.reset();
+  }
 }

@@ -5,6 +5,10 @@
  */
 package org.geoserver.security.decorators;
 
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
 import org.geoserver.security.CatalogMode;
 import org.geoserver.security.SecurityUtils;
 import org.geoserver.security.WorkspaceAccessLimits;
@@ -23,129 +27,129 @@ import org.junit.Test;
 import org.opengis.feature.type.Name;
 import org.opengis.filter.Filter;
 
-import static org.easymock.EasyMock.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
 public class ReadOnlyDataStoreTest extends SecureObjectsTest {
 
-    private DataStore ds;
+  private DataStore ds;
 
-    @Before
-    public void setUp() throws Exception {
-        SimpleFeatureStore fs = createNiceMock(SimpleFeatureStore.class);
-        expect(fs.getSchema()).andReturn(DataUtilities.createType("test", "g:Polygon,name:String")).anyTimes();
-        expect(fs.getFeatures(Query.ALL)).andReturn(new DefaultFeatureCollection());
-        replay(fs);
-        ds = createNiceMock(DataStore.class);
-        expect(ds.getFeatureSource("blah")).andReturn(fs);
-        replay(ds);
+  @Before
+  public void setUp() throws Exception {
+    SimpleFeatureStore fs = createNiceMock(SimpleFeatureStore.class);
+    expect(fs.getSchema())
+        .andReturn(DataUtilities.createType("test", "g:Polygon,name:String"))
+        .anyTimes();
+    expect(fs.getFeatures(Query.ALL)).andReturn(new DefaultFeatureCollection());
+    replay(fs);
+    ds = createNiceMock(DataStore.class);
+    expect(ds.getFeatureSource("blah")).andReturn(fs);
+    replay(ds);
+  }
+
+  @Test
+  public void testDisallowedAPI() throws Exception {
+    ReadOnlyDataStore ro = new ReadOnlyDataStore(ds, WrapperPolicy.hide(null));
+
+    try {
+      ro.createSchema(null);
+      fail("Should have failed with an unsupported operation exception");
+    } catch (UnsupportedOperationException e) {
+      //
+    }
+    try {
+      ro.updateSchema((String) null, null);
+      fail("Should have failed with an unsupported operation exception");
+    } catch (UnsupportedOperationException e) {
+      //
     }
 
-    @Test
-    public void testDisallowedAPI() throws Exception {
-        ReadOnlyDataStore ro = new ReadOnlyDataStore(ds, WrapperPolicy.hide(null));
-
-        try {
-            ro.createSchema(null);
-            fail("Should have failed with an unsupported operation exception");
-        } catch (UnsupportedOperationException e) {
-            //
-        }
-        try {
-            ro.updateSchema((String) null, null);
-            fail("Should have failed with an unsupported operation exception");
-        } catch (UnsupportedOperationException e) {
-            //
-        }
-
-        try {
-            ro.updateSchema((Name) null, null);
-            fail("Should have failed with an unsupported operation exception");
-        } catch (UnsupportedOperationException e) {
-            //
-        }
-        try {
-            ro.getFeatureWriter("states", Transaction.AUTO_COMMIT);
-            fail("Should have failed with an unsupported operation exception");
-        } catch (UnsupportedOperationException e) {
-            //
-        }
-        try {
-            ro.getFeatureWriter("states", Filter.INCLUDE,
-                    Transaction.AUTO_COMMIT);
-            fail("Should have failed with an unsupported operation exception");
-        } catch (UnsupportedOperationException e) {
-            //
-        }
-        try {
-            ro.getFeatureWriterAppend("states", Transaction.AUTO_COMMIT);
-            fail("Should have failed with an unsupported operation exception");
-        } catch (UnsupportedOperationException e) {
-            //
-        }
+    try {
+      ro.updateSchema((Name) null, null);
+      fail("Should have failed with an unsupported operation exception");
+    } catch (UnsupportedOperationException e) {
+      //
     }
-    
-    @Test
-    public void testChallenge() throws Exception {
-        ReadOnlyDataStore ro = new ReadOnlyDataStore(ds, WrapperPolicy.readOnlyChallenge(null));
+    try {
+      ro.getFeatureWriter("states", Transaction.AUTO_COMMIT);
+      fail("Should have failed with an unsupported operation exception");
+    } catch (UnsupportedOperationException e) {
+      //
+    }
+    try {
+      ro.getFeatureWriter("states", Filter.INCLUDE, Transaction.AUTO_COMMIT);
+      fail("Should have failed with an unsupported operation exception");
+    } catch (UnsupportedOperationException e) {
+      //
+    }
+    try {
+      ro.getFeatureWriterAppend("states", Transaction.AUTO_COMMIT);
+      fail("Should have failed with an unsupported operation exception");
+    } catch (UnsupportedOperationException e) {
+      //
+    }
+  }
 
-        try {
-            ro.createSchema(null);
-            fail("Should have failed with a security exception");
-        } catch (Exception e) {
-            if (ReadOnlyDataStoreTest.isSpringSecurityException(e)==false)
-                fail("Should have failed with a security exception");
-        }
-        try {
-            ro.updateSchema((String) null, null);
-            fail("Should have failed with a security exception");
-        } catch (Exception e) {
-            if (ReadOnlyDataStoreTest.isSpringSecurityException(e)==false)
-                fail("Should have failed with a security exception");
-        }
+  @Test
+  public void testChallenge() throws Exception {
+    ReadOnlyDataStore ro = new ReadOnlyDataStore(ds, WrapperPolicy.readOnlyChallenge(null));
 
-        try {
-            ro.updateSchema((Name) null, null);
-            fail("Should have failed with a security exception");
-        } catch (Exception e) {
-            if (ReadOnlyDataStoreTest.isSpringSecurityException(e)==false)
-                fail("Should have failed with a security exception");
-        }
-        try {
-            ro.getFeatureWriter("states", Transaction.AUTO_COMMIT);
-            fail("Should have failed with a security exception");
-        } catch (Exception e) {
-            if (ReadOnlyDataStoreTest.isSpringSecurityException(e)==false)
-                fail("Should have failed with a security exception");
-        }
-        try {
-            ro.getFeatureWriter("states", Filter.INCLUDE,
-                    Transaction.AUTO_COMMIT);
-            fail("Should have failed with a security exception");
-        } catch (Exception e) {
-            if (ReadOnlyDataStoreTest.isSpringSecurityException(e)==false)
-                fail("Should have failed with a security exception");
-        }
-        try {
-            ro.getFeatureWriterAppend("states", Transaction.AUTO_COMMIT);
-            fail("Should have failed with a security exception");
-        } catch (Exception e) {
-            if (ReadOnlyDataStoreTest.isSpringSecurityException(e)==false)
-                fail("Should have failed with a security exception");
-        }
+    try {
+      ro.createSchema(null);
+      fail("Should have failed with a security exception");
+    } catch (Exception e) {
+      if (ReadOnlyDataStoreTest.isSpringSecurityException(e) == false)
+        fail("Should have failed with a security exception");
     }
-    
-    @Test
-    public void testReadOnlySource() throws Exception {
-        ReadOnlyDataStore ro = new ReadOnlyDataStore(ds, WrapperPolicy.readOnlyHide(new WorkspaceAccessLimits(CatalogMode.HIDE, true, false, false)));
-        SimpleFeatureSource fs = ro.getFeatureSource("blah");
-        // used to go boom here
-        SimpleFeatureCollection fc = fs.getFeatures(Query.ALL);
-        assertEquals(0, fc.size());
+    try {
+      ro.updateSchema((String) null, null);
+      fail("Should have failed with a security exception");
+    } catch (Exception e) {
+      if (ReadOnlyDataStoreTest.isSpringSecurityException(e) == false)
+        fail("Should have failed with a security exception");
     }
-    
-    static public boolean isSpringSecurityException (Exception ex) {
-        return SecurityUtils.isSecurityException(ex);
+
+    try {
+      ro.updateSchema((Name) null, null);
+      fail("Should have failed with a security exception");
+    } catch (Exception e) {
+      if (ReadOnlyDataStoreTest.isSpringSecurityException(e) == false)
+        fail("Should have failed with a security exception");
     }
+    try {
+      ro.getFeatureWriter("states", Transaction.AUTO_COMMIT);
+      fail("Should have failed with a security exception");
+    } catch (Exception e) {
+      if (ReadOnlyDataStoreTest.isSpringSecurityException(e) == false)
+        fail("Should have failed with a security exception");
+    }
+    try {
+      ro.getFeatureWriter("states", Filter.INCLUDE, Transaction.AUTO_COMMIT);
+      fail("Should have failed with a security exception");
+    } catch (Exception e) {
+      if (ReadOnlyDataStoreTest.isSpringSecurityException(e) == false)
+        fail("Should have failed with a security exception");
+    }
+    try {
+      ro.getFeatureWriterAppend("states", Transaction.AUTO_COMMIT);
+      fail("Should have failed with a security exception");
+    } catch (Exception e) {
+      if (ReadOnlyDataStoreTest.isSpringSecurityException(e) == false)
+        fail("Should have failed with a security exception");
+    }
+  }
+
+  @Test
+  public void testReadOnlySource() throws Exception {
+    ReadOnlyDataStore ro =
+        new ReadOnlyDataStore(
+            ds,
+            WrapperPolicy.readOnlyHide(
+                new WorkspaceAccessLimits(CatalogMode.HIDE, true, false, false)));
+    SimpleFeatureSource fs = ro.getFeatureSource("blah");
+    // used to go boom here
+    SimpleFeatureCollection fc = fs.getFeatures(Query.ALL);
+    assertEquals(0, fc.size());
+  }
+
+  public static boolean isSpringSecurityException(Exception ex) {
+    return SecurityUtils.isSecurityException(ex);
+  }
 }

@@ -9,29 +9,27 @@ import javax.xml.namespace.NamespaceContext;
 import javax.xml.namespace.QName;
 import net.opengis.wfs20.Wfs20Factory;
 import org.geoserver.wfs.xml.SqlViewParamsExtractor;
-import org.geotools.xml.ElementInstance;
-import org.geotools.xml.Node;
 import org.geotools.wfs.v2_0.WFS;
 import org.geotools.xml.ComplexEMFBinding;
+import org.geotools.xml.ElementInstance;
+import org.geotools.xml.Node;
 
-/**
- * Custom binding class to support viewParams attribute in GetFeatureType requests
- */
+/** Custom binding class to support viewParams attribute in GetFeatureType requests */
 public class GetFeatureTypeBinding extends ComplexEMFBinding {
 
-    NamespaceContext namespaceContext;
+  NamespaceContext namespaceContext;
 
-    public GetFeatureTypeBinding(NamespaceContext namespaceContext) {
-        super(Wfs20Factory.eINSTANCE, WFS.QueryType);
-        this.namespaceContext = namespaceContext;
-    }
+  public GetFeatureTypeBinding(NamespaceContext namespaceContext) {
+    super(Wfs20Factory.eINSTANCE, WFS.QueryType);
+    this.namespaceContext = namespaceContext;
+  }
 
-    public QName getTarget() {
-        return WFS.GetFeatureType;
-    }
+  public QName getTarget() {
+    return WFS.GetFeatureType;
+  }
 
-    public Object parse(ElementInstance instance, Node node, Object value) throws Exception {
-        SqlViewParamsExtractor.fixNodeObject(node);
-        return super.parse(instance, node, value);
-    }
+  public Object parse(ElementInstance instance, Node node, Object value) throws Exception {
+    SqlViewParamsExtractor.fixNodeObject(node);
+    return super.parse(instance, node, value);
+  }
 }
