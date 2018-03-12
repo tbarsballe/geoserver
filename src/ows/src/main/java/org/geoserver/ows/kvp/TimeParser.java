@@ -41,7 +41,7 @@ import org.geotools.util.logging.Logging;
  */
 public class TimeParser {
     static final Logger LOGGER = Logging.getLogger(TimeParser.class);
-    
+
     private static enum FormatAndPrecision {
         MILLISECOND("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Calendar.MILLISECOND),
         SECOND("yyyy-MM-dd'T'HH:mm:ss'Z'", Calendar.SECOND),
@@ -82,12 +82,12 @@ public class TimeParser {
     /**
      * pattern used to match back parameter
      */
-	private static final Pattern pattern = Pattern.compile("(back)(\\d+)([hdw])");
-    
+    private static final Pattern pattern = Pattern.compile("(back)(\\d+)([hdw])");
+
     /**
      * Amount of milliseconds in a day.
      */
-    static final long MILLIS_IN_DAY = 24*60*60*1000;
+    static final long MILLIS_IN_DAY = 24 * 60 * 60 * 1000;
 
 
     /**
@@ -112,7 +112,7 @@ public class TimeParser {
             MAX_ELEMENTS_TIMES_KVP = iVal;
         }
     }
-    
+
     /**
      * Parses the date given in parameter. The date format should comply to
      * ISO-8601 standard. The string may contains either a single date, or
@@ -124,10 +124,10 @@ public class TimeParser {
      *
      * @param value The date, time and period to parse.
      * @return A list of dates, or an empty list of the {@code value} string
-     *         is null or empty.
+     * is null or empty.
      * @throws ParseException if the string can not be parsed.
      */
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings({"unchecked", "rawtypes"})
     public Collection parse(String value) throws ParseException {
         if (value == null) {
             return Collections.emptyList();
@@ -136,47 +136,47 @@ public class TimeParser {
         if (value.length() == 0) {
             return Collections.emptyList();
         }
-        
+
         final Set result = new TreeSet(new Comparator() {
 
             public int compare(Object o1, Object o2) {
-                final boolean o1Date= o1 instanceof Date;
-                final boolean o2Date= o2 instanceof Date;
-                
-                if(o1 == o2) {
+                final boolean o1Date = o1 instanceof Date;
+                final boolean o2Date = o2 instanceof Date;
+
+                if (o1 == o2) {
                     return 0;
                 }
-                
+
                 // o1 date
-                if(o1Date){
-                    final Date dateLeft=(Date) o1;
-                    if(o2Date){
+                if (o1Date) {
+                    final Date dateLeft = (Date) o1;
+                    if (o2Date) {
                         // o2 date
                         return dateLeft.compareTo((Date) o2);
-                    } 
+                    }
                     // o2 daterange
-                    return dateLeft.compareTo(((DateRange)o2).getMinValue());
+                    return dateLeft.compareTo(((DateRange) o2).getMinValue());
                 }
-                
+
                 // o1 date range
-                final DateRange left= (DateRange) o1;
-                if(o2Date){
+                final DateRange left = (DateRange) o1;
+                if (o2Date) {
                     // o2 date
                     return left.getMinValue().compareTo(((Date) o2));
-                } 
+                }
                 // o2 daterange
-                return left.getMinValue().compareTo(((DateRange)o2).getMinValue());
+                return left.getMinValue().compareTo(((DateRange) o2).getMinValue());
             }
         });
         String[] listDates = value.split(",");
-        for(String date: listDates){
+        for (String date : listDates) {
             // is it a date or a period?
-            if(date.indexOf("/")<=0){
+            if (date.indexOf("/") <= 0) {
                 Object o = getFuzzyDate(date);
                 if (o instanceof Date) {
-                    addDate(result, (Date)o);
+                    addDate(result, (Date) o);
                 } else {
-                    addPeriod(result, (DateRange)o);
+                    addPeriod(result, (DateRange) o);
                 }
             } else {
                 // period
@@ -193,7 +193,7 @@ public class TimeParser {
                 //
                 if (period.length == 3) {
                     Date[] range = parseTimeDuration(period);
-                    
+
                     final long millisIncrement = parsePeriod(period[2]);
                     final long startTime = range[0].getTime();
                     final long endTime = range[1].getTime();
@@ -204,15 +204,15 @@ public class TimeParser {
                         calendar.setTimeInMillis(time);
                         addDate(result, calendar.getTime());
                         j++;
-                        
+
                         // limiting number of elements we can create
-                        if(j>= MAX_ELEMENTS_TIMES_KVP){
-                            if(LOGGER.isLoggable(Level.INFO))
-                                LOGGER.info("Lmiting number of elements in this periodo to "+MAX_ELEMENTS_TIMES_KVP);
-                            break;                  
+                        if (j >= MAX_ELEMENTS_TIMES_KVP) {
+                            if (LOGGER.isLoggable(Level.INFO))
+                                LOGGER.info("Lmiting number of elements in this periodo to " + MAX_ELEMENTS_TIMES_KVP);
+                            break;
                         }
                     }
-                } 
+                }
                 // Period like : yyyy-MM-ddTHH:mm:ssZ/yyyy-MM-ddTHH:mm:ssZ, it is an extension 
                 // of WMS that works with continuos period [Tb, Te].
                 // May be one of the following possible ISO 8601 Time Interval formats, as in ECQL Time Period:
@@ -220,14 +220,14 @@ public class TimeParser {
                 // DURATION/TIME
                 // TIME/TIME
                 else if (period.length == 2) {
-                        Date[] range = parseTimeDuration(period);
-                        addPeriod(result, new DateRange(range[0], range[1]));
+                    Date[] range = parseTimeDuration(period);
+                    addPeriod(result, new DateRange(range[0], range[1]));
                 } else {
                     throw new ParseException("Invalid time period: " + Arrays.toString(period), 0);
                 }
             }
         }
-        
+
         return new ArrayList(result);
     }
 
@@ -299,7 +299,7 @@ public class TimeParser {
             return (Date) dateOrDateRange;
         }
     }
-    
+
     private static Date end(Object dateOrDateRange) {
         if (dateOrDateRange instanceof DateRange) {
             return ((DateRange) dateOrDateRange).getMaxValue();
@@ -307,34 +307,34 @@ public class TimeParser {
             return (Date) dateOrDateRange;
         }
     }
-    
+
     /**
      * Tries to avoid insertion of multiple time values.
-     * 
+     *
      * @param result
      * @param newRange
      */
     private static void addPeriod(Collection result, DateRange newRange) {
-        for(Iterator it=result.iterator();it.hasNext();){
-            final Object element=it.next();
-            if(element instanceof Date){
+        for (Iterator it = result.iterator(); it.hasNext(); ) {
+            final Object element = it.next();
+            if (element instanceof Date) {
                 // convert
-                final Date local= (Date) element;
-                if(newRange.contains(local)){
+                final Date local = (Date) element;
+                if (newRange.contains(local)) {
                     it.remove();
                 }
             } else {
                 // convert
-                final DateRange local= (DateRange) element;
-                if(local.contains(newRange))
+                final DateRange local = (DateRange) element;
+                if (local.contains(newRange))
                     return;
-                if(newRange.contains(local))
+                if (newRange.contains(local))
                     it.remove();
             }
         }
         result.add(newRange);
     }
-    
+
     private static void addDate(Collection result, Date newDate) {
         for (Iterator<?> it = result.iterator(); it.hasNext(); ) {
             final Object element = it.next();
@@ -348,7 +348,7 @@ public class TimeParser {
     }
 
     /**
-     * Parses date given in parameter according the ISO-8601 standard. This parameter should follow 
+     * Parses date given in parameter according the ISO-8601 standard. This parameter should follow
      * a syntax defined in the {@link #PATTERNS} array to be validated.
      *
      * @param value The date to parse.
@@ -390,13 +390,13 @@ public class TimeParser {
      * Parses the increment part of a period and returns it in milliseconds.
      *
      * @param period A string representation of the time increment according the ISO-8601:1988(E)
-     *        standard. For example: {@code "P1D"} = one day.
+     *               standard. For example: {@code "P1D"} = one day.
      * @return The increment value converted in milliseconds.
      * @throws ParseException if the string can not be parsed.
      */
     public static long parsePeriod(final String period) throws ParseException {
         final int length = period.length();
-        if (length!=0 && Character.toUpperCase(period.charAt(0)) != 'P') {
+        if (length != 0 && Character.toUpperCase(period.charAt(0)) != 'P') {
             throw new ParseException("Invalid period increment given: " + period, 0);
         }
         long millis = 0;
@@ -423,19 +423,35 @@ public class TimeParser {
             final double factor;
             if (time) {
                 switch (letter) {
-                    case 'S': factor =       1000; break;
-                    case 'M': factor =    60*1000; break;
-                    case 'H': factor = 60*60*1000; break;
-                    default: throw new ParseException("Unknown time symbol: " + letter, upper);
+                    case 'S':
+                        factor = 1000;
+                        break;
+                    case 'M':
+                        factor = 60 * 1000;
+                        break;
+                    case 'H':
+                        factor = 60 * 60 * 1000;
+                        break;
+                    default:
+                        throw new ParseException("Unknown time symbol: " + letter, upper);
                 }
             } else {
                 switch (letter) {
-                    case 'D': factor =               MILLIS_IN_DAY; break;
-                    case 'W': factor =           7 * MILLIS_IN_DAY; break;
+                    case 'D':
+                        factor = MILLIS_IN_DAY;
+                        break;
+                    case 'W':
+                        factor = 7 * MILLIS_IN_DAY;
+                        break;
                     // TODO: handle months in a better way than just taking the average length.
-                    case 'M': factor =          30 * MILLIS_IN_DAY; break;
-                    case 'Y': factor =      365.25 * MILLIS_IN_DAY; break;
-                    default: throw new ParseException("Unknown period symbol: " + letter, upper);
+                    case 'M':
+                        factor = 30 * MILLIS_IN_DAY;
+                        break;
+                    case 'Y':
+                        factor = 365.25 * MILLIS_IN_DAY;
+                        break;
+                    default:
+                        throw new ParseException("Unknown period symbol: " + letter, upper);
                 }
             }
             millis += Math.round(value * factor);

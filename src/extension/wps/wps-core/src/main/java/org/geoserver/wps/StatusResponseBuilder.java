@@ -17,7 +17,7 @@ import org.springframework.context.ApplicationContext;
 
 /**
  * Helper building a {@link ExecuteResponseType} for a given {@link ExecutionStatus}
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 class StatusResponseBuilder {

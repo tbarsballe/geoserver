@@ -21,9 +21,8 @@ import org.geoserver.security.GeoServerSecurityManager;
 /**
  * Import data that will be fetched from a remote location during the init phase, similar to an
  * upload, but operated by GeoServer, and turned into another type of import data
- * 
- * @author Andrea Aime - GeoSolutions
  *
+ * @author Andrea Aime - GeoSolutions
  */
 public class RemoteData extends ImportData {
 
@@ -57,7 +56,7 @@ public class RemoteData extends ImportData {
 
     /**
      * The location from which to fetch the data
-     * 
+     *
      * @return the location
      */
     public String getLocation() {

@@ -7,13 +7,11 @@
 package org.geoserver.test;
 
 /**
- * 
  * @author Niels Charlier, Curtin University Of Technology
- * 
  */
 
 public class SameNameDiffNamespaceMockData extends AbstractAppSchemaMockData {
-    
+
     /**
      * Prefix for ex namespace.
      */
@@ -23,8 +21,7 @@ public class SameNameDiffNamespaceMockData extends AbstractAppSchemaMockData {
      * URI for ex namespace.
      */
     protected static final String EX_URI = "http://example.com";
-    
-    
+
 
     /**
      * @see org.geoserver.test.AbstractAppSchemaMockData#addContent()
@@ -32,8 +29,8 @@ public class SameNameDiffNamespaceMockData extends AbstractAppSchemaMockData {
     @Override
     public void addContent() {
         putNamespace(EX_PREFIX, EX_URI);
-        
-       addFeatureType(EX_PREFIX, "MyTestFeature", "SameNameDiffNamespace.xml", "SameNameDiffNamespace.properties",
+
+        addFeatureType(EX_PREFIX, "MyTestFeature", "SameNameDiffNamespace.xml", "SameNameDiffNamespace.properties",
                 "SameNameDiffNamespace.xsd");
 
     }

@@ -6,6 +6,7 @@ package org.geoserver.platform;
 /**
  * @author Morgan Thompson - Boundless
  */
+
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
@@ -19,7 +20,7 @@ import org.springframework.context.ApplicationContext;
 
 /**
  * Unit tests for {@link ModuleStatusImpl}
- * 
+ *
  * @author Morgan Thompson - Boundless
  */
 
@@ -40,7 +41,7 @@ public class ModuleStatusTest {
         gse.setApplicationContext(appContext);
         expect(appContext.getBeanNamesForType(ExtensionFilter.class)).andReturn(new String[0]);
         expect(appContext.getBeanNamesForType(ModuleStatus.class))
-                .andStubReturn(new String[] { "testStatus", "defaultStatus" });
+                .andStubReturn(new String[]{"testStatus", "defaultStatus"});
         expect(appContext.isSingleton((String) anyObject())).andReturn(true).anyTimes();
         expect(appContext.getBeanNamesForType(ExtensionProvider.class)).andReturn(new String[0]);
         EasyMock.replay(status, appContext);
@@ -48,9 +49,9 @@ public class ModuleStatusTest {
         List<ModuleStatus> list = gse.extensions(ModuleStatus.class);
         assertEquals("test interfact mock", "test", status.getName());
         assertEquals("found module status", 2, list.size());
-        
-        for( ModuleStatus s : list ){
-            System.out.println( s.getName() );
+
+        for (ModuleStatus s : list) {
+            System.out.println(s.getName());
         }
         EasyMock.verify(status);
     }

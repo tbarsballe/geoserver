@@ -33,10 +33,9 @@ import wicketdnd.theme.WebTheme;
 
 /**
  * Base class for tables that have up/down modifiers
- * 
- * @author Andrea Aime - GeoSolutions
- * 
+ *
  * @param <T>
+ * @author Andrea Aime - GeoSolutions
  */
 public abstract class ReorderableTablePanel<T> extends GeoServerTablePanel<T> {
 
@@ -64,9 +63,9 @@ public abstract class ReorderableTablePanel<T> extends GeoServerTablePanel<T> {
                     result.add(0, (Property<T>) RENDERING_ORDER);
                     return result;
                 }
-                
+
             };
-            
+
         }
 
         @Override
@@ -88,9 +87,9 @@ public abstract class ReorderableTablePanel<T> extends GeoServerTablePanel<T> {
     static Property<?> POSITION = new PropertyPlaceholder<Object>("position");
 
     static Property<?> RENDERING_ORDER = new PropertyPlaceholder<Object>("order");
-    
+
     /**
-     * Deprecated, provide a loadable model for properties instead which ensures always the 
+     * Deprecated, provide a loadable model for properties instead which ensures always the
      * same exact property objects are returned (or use equality by name in the getComponentForProperty method)
      */
     @SuppressWarnings("serial")
@@ -118,7 +117,7 @@ public abstract class ReorderableTablePanel<T> extends GeoServerTablePanel<T> {
                 }
                 items.remove(movedItem);
                 int idx = items.indexOf(targetItem);
-                if(idx < (items.size() - 1)) {
+                if (idx < (items.size() - 1)) {
                     items.add(idx, movedItem);
                 } else {
                     items.add(movedItem);
@@ -126,7 +125,7 @@ public abstract class ReorderableTablePanel<T> extends GeoServerTablePanel<T> {
                 target.add(ReorderableTablePanel.this);
             }
         }.dropCenter("tr"));
-        
+
     }
 
     @Override
@@ -198,6 +197,8 @@ public abstract class ReorderableTablePanel<T> extends GeoServerTablePanel<T> {
                 }
             });
         }
-    };
+    }
+
+    ;
 
 }

@@ -11,9 +11,8 @@ import org.geoserver.security.AdminRequest;
 
 /**
  * Transfers the {@link AdminRequest} management to another thread
- * 
+ *
  * @author Andrea Aime - GeoSolutions
- * 
  */
 public class AdminRequestThreadLocalTransfer implements ThreadLocalTransfer {
 

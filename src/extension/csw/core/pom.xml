@@ -5,57 +5,57 @@
  application directory.
  -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  
-  <modelVersion>4.0.0</modelVersion>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
-  <parent>
-    <groupId>org.geoserver</groupId>		
-	<artifactId>gs-csw</artifactId>
-	<version>2.14-SNAPSHOT</version>
-  </parent>
+    <modelVersion>4.0.0</modelVersion>
 
-  <groupId>org.geoserver.csw</groupId>
-  <artifactId>gs-csw-core</artifactId>
-  <packaging>jar</packaging>
-  <name>Catalog Services for the Web core module</name>
+    <parent>
+        <groupId>org.geoserver</groupId>
+        <artifactId>gs-csw</artifactId>
+        <version>2.14-SNAPSHOT</version>
+    </parent>
 
-  <dependencies>
-    <dependency>
-      <groupId>org.geoserver.csw</groupId>
-      <artifactId>gs-csw-api</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>xalan</groupId>
-      <artifactId>serializer</artifactId>
-      <version>2.7.1</version>
-    </dependency>
+    <groupId>org.geoserver.csw</groupId>
+    <artifactId>gs-csw-core</artifactId>
+    <packaging>jar</packaging>
+    <name>Catalog Services for the Web core module</name>
 
-    <!-- test dependencies -->
-    <dependency>
-       <groupId>xmlunit</groupId>
-       <artifactId>xmlunit</artifactId>
-       <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.geoserver.csw</groupId>
-      <artifactId>gs-csw-simple-store</artifactId>
-      <version>${project.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-       <groupId>org.springframework</groupId>
-       <artifactId>spring-test</artifactId>
-       <scope>test</scope>
-    </dependency>
-    <dependency>
-       <groupId>org.geoserver</groupId>
-       <artifactId>gs-main</artifactId>
-       <version>${gs.version}</version>
-       <classifier>tests</classifier>
-       <scope>test</scope>
-    </dependency>
-  </dependencies>
+    <dependencies>
+        <dependency>
+            <groupId>org.geoserver.csw</groupId>
+            <artifactId>gs-csw-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>xalan</groupId>
+            <artifactId>serializer</artifactId>
+            <version>2.7.1</version>
+        </dependency>
+
+        <!-- test dependencies -->
+        <dependency>
+            <groupId>xmlunit</groupId>
+            <artifactId>xmlunit</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.geoserver.csw</groupId>
+            <artifactId>gs-csw-simple-store</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.geoserver</groupId>
+            <artifactId>gs-main</artifactId>
+            <version>${gs.version}</version>
+            <classifier>tests</classifier>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
 </project>

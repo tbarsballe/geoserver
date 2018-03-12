@@ -17,12 +17,11 @@ import org.geoserver.ogr.core.OutputType;
  *
  * @author Andrea Aime - OpenGeo
  * @author Stefano Costa - GeoSolutions
- *
  */
 public class OgrFormat extends Format {
-    
+
     public OgrFormat(String ogrFormat, String formatName, String fileExtension, boolean singleFile,
-            String mimeType, OutputType type, String... options) {
+                     String mimeType, OutputType type, String... options) {
         this.ogrFormat = ogrFormat;
         this.formatName = formatName;
         setFileExtension(fileExtension);
@@ -38,7 +37,7 @@ public class OgrFormat extends Format {
     }
 
     public OgrFormat(String toolFormat, String formatName, String fileExtension, boolean singleFile,
-            String mimeType, String... options) {
+                     String mimeType, String... options) {
         this(toolFormat, formatName, fileExtension, singleFile, mimeType, OutputType.BINARY, options);
     }
 

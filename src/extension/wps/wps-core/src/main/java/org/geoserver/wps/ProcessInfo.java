@@ -17,29 +17,25 @@ import com.google.common.collect.Multimap;
 /**
  * Configuration for a specific process to configure enable/disable and roles informations (backed
  * by a {@link SecurityProcessFactory})
- * 
+ *
  * @used {@link ProcessGroupInfo#getFilteredProcesses()}
  */
 public interface ProcessInfo extends Info, Cloneable {
 
     /**
      * The name of the process
-     * 
-     *
      */
     Name getName();
 
     /**
      * Sets the name of the process
-     * 
+     *
      * @param name
      */
     void setName(Name name);
 
     /**
      * Whether the process is enabled or disabled
-     * 
-     *
      */
     boolean isEnabled();
 
@@ -63,8 +59,6 @@ public interface ProcessInfo extends Info, Cloneable {
     /**
      * The metadata map, can contain any sort of information that non core plugins might use to
      * handle information related to this factory
-     * 
-     *
      */
     MetadataMap getMetadata();
 }

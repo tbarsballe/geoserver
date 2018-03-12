@@ -31,10 +31,9 @@ import org.springframework.context.ApplicationContextAware;
 /**
  * Loads/save and tests the JDBC configuration in the GeoServer environment, adding support for the
  * GUI and password encryption
- * 
+ *
  * @author Andrea Aime - GeoSolutions
- * 
- */     
+ */
 class JDBCConfigurationStorage implements ApplicationContextAware, SecurityManagerListener {
 
     static final Logger LOGGER = Logging.getLogger(JDBCConfigurationStorage.class);
@@ -46,7 +45,7 @@ class JDBCConfigurationStorage implements ApplicationContextAware, SecurityManag
     private Resource configDir;
 
     public JDBCConfigurationStorage(ResourceStore store,
-            GeoServerSecurityManager securityManager) {
+                                    GeoServerSecurityManager securityManager) {
         GeoserverXMLResourceProvider configProvider = (GeoserverXMLResourceProvider)
                 GeoServerExtensions.bean("jdbcDiskQuotaConfigResourceProvider");
         this.configDir = configProvider.getConfigDirectory();
@@ -55,7 +54,7 @@ class JDBCConfigurationStorage implements ApplicationContextAware, SecurityManag
     }
 
     public synchronized void saveDiskQuotaConfig(DiskQuotaConfig config,
-            JDBCConfiguration jdbcConfig) throws ConfigurationException, IOException,
+                                                 JDBCConfiguration jdbcConfig) throws ConfigurationException, IOException,
             InterruptedException {
         Resource configFile = configDir.get("geowebcache-diskquota-jdbc.xml");
         if ("JDBC".equals(config.getQuotaStore())) {
@@ -81,7 +80,7 @@ class JDBCConfigurationStorage implements ApplicationContextAware, SecurityManag
             JDBCConfiguration configuration;
             try (InputStream is = configFile.in()) {
                 configuration = JDBCConfiguration.load(is);
-            } 
+            }
             return passwordHelper.unencryptPassword(configuration);
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Failed to load geowebcache-diskquota-jdbc.xml", e);
@@ -91,7 +90,7 @@ class JDBCConfigurationStorage implements ApplicationContextAware, SecurityManag
 
     /**
      * Checks the JDBC quota store can be instantiated
-     * 
+     *
      * @param jdbcConfiguration the GWC diskquota JDBC configuration
      * @throws ConfigurationException
      */
@@ -123,26 +122,26 @@ class JDBCConfigurationStorage implements ApplicationContextAware, SecurityManag
         // (unfortunately some password encoders change the encrypted password every time they are called...) 
         try {
             JDBCConfiguration config = getJDBCDiskQuotaConfig();
-            if(config != null) {
+            if (config != null) {
                 Resource configFile = configDir.get("geowebcache-diskquota-jdbc.xml");
-                if(!Resources.exists(configFile)) {
+                if (!Resources.exists(configFile)) {
                     return;
                 }
                 JDBCConfiguration c1;
                 try (InputStream is = configFile.in()) {
                     c1 = JDBCConfiguration.load(is);
                 }
-                if(c1 == null || c1.getConnectionPool() == null) {
+                if (c1 == null || c1.getConnectionPool() == null) {
                     return;
                 }
                 String originalEncrypted = c1.getConnectionPool().getPassword();
-                if(originalEncrypted == null) {
+                if (originalEncrypted == null) {
                     return;
                 }
                 JDBCConfiguration c2 = passwordHelper.unencryptPassword(c1);
                 JDBCConfiguration c3 = passwordHelper.encryptPassword(c2);
                 String newEncrypted = c3.getConnectionPool().getPassword();
-                if(!originalEncrypted.equals(newEncrypted)) { 
+                if (!originalEncrypted.equals(newEncrypted)) {
                     try (OutputStream os = configFile.out()) {
                         JDBCConfiguration.store(c3, os);
                     }

@@ -12,7 +12,7 @@ import org.geotools.geometry.Envelope2D;
 import org.geoserver.importer.SpatialFile;
 
 /**
- * A tile of a mosaic. 
+ * A tile of a mosaic.
  */
 public class Granule extends SpatialFile {
 
@@ -48,5 +48,5 @@ public class Granule extends SpatialFile {
         this.timestamp = timestamp;
     }
 
-    
+
 }

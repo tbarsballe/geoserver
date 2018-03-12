@@ -76,7 +76,7 @@ public class SearchRequestKvpReaderTest extends OSEOTestSupport {
     private SearchRequest parseSearchRequest(Map<String, String> map) throws Exception {
         return (SearchRequest) reader.read(reader.createRequest(), map, map);
     }
-    
+
     @Test
     public void testGetAll() throws Exception {
         SearchRequest request = parseSearchRequest(Collections.emptyMap());
@@ -114,7 +114,7 @@ public class SearchRequestKvpReaderTest extends OSEOTestSupport {
         final Query query = request.getQuery();
         assertEquals(Filter.INCLUDE, query.getFilter());
     }
-    
+
     @Test
     public void testParseGeoUid() throws Exception {
         Map<String, String> map = toMap(GEO_UID.key, "abcd");
@@ -128,7 +128,7 @@ public class SearchRequestKvpReaderTest extends OSEOTestSupport {
         assertEquals(1, searchParameters.size());
         assertThat(searchParameters, hasEntry(OpenSearchParameters.GEO_UID, "abcd"));
     }
-    
+
     @Test
     public void testParseTimeBox() throws Exception {
         Map<String, String> map = toMap(GEO_BOX.key, "10,20,30,40");
@@ -142,7 +142,7 @@ public class SearchRequestKvpReaderTest extends OSEOTestSupport {
         assertEquals(1, searchParameters.size());
         assertThat(searchParameters, hasEntry(OpenSearchParameters.GEO_BOX, "10,20,30,40"));
     }
-    
+
     @Test
     public void testParseBBoxWholeWorld() throws Exception {
         Map<String, String> map = toMap(GEO_BOX.key, "-180,-90,180,90");
@@ -153,7 +153,7 @@ public class SearchRequestKvpReaderTest extends OSEOTestSupport {
         final String expectedCql = "BBOX(, -180.0,-90.0,180.0,90.0)";
         assertEquals(expectedCql, ECQL.toCQL(query.getFilter()));
     }
-    
+
     @Test
     public void testParseBBoxDatelineCrossing() throws Exception {
         Map<String, String> map = toMap(GEO_BOX.key, "170,-90,-170,90");
@@ -175,7 +175,7 @@ public class SearchRequestKvpReaderTest extends OSEOTestSupport {
         assertEquals(Filter.INCLUDE, query.getFilter());
         assertEquals(9, (int) query.getStartIndex()); // from 1 based to 0 based
         assertEquals(5, query.getMaxFeatures());
-        
+
         Map<Parameter, String> searchParameters = request.getSearchParameters();
         assertEquals(2, searchParameters.size());
         assertThat(searchParameters, hasEntry(OpenSearchParameters.START_INDEX, "10"));
@@ -232,7 +232,7 @@ public class SearchRequestKvpReaderTest extends OSEOTestSupport {
             assertEquals("InvalidParameterValue", e.getCode());
         }
     }
-    
+
     @Test
     public void testCountTooBig() throws Exception {
         try {
@@ -252,7 +252,7 @@ public class SearchRequestKvpReaderTest extends OSEOTestSupport {
             assertEquals("InvalidParameterValue", e.getCode());
         }
     }
-    
+
     @Test
     public void testParentId() throws Exception {
         Map<String, String> map = toMap(PARENT_ID_KEY, "SENTINEL2");
@@ -263,7 +263,7 @@ public class SearchRequestKvpReaderTest extends OSEOTestSupport {
         // no filter here, the parent id needs to be translate to an internal identifier
         assertEquals(Filter.INCLUDE, query.getFilter());
     }
-    
+
     @Test
     public void testDistanceFromPoint() throws Exception {
         Map<String, String> map = toMap(GEO_LON.key, "12", GEO_LAT.key, "45", GEO_RADIUS.key, "20000");
@@ -273,7 +273,7 @@ public class SearchRequestKvpReaderTest extends OSEOTestSupport {
         final String expectedCql = "DWITHIN(\"\", POINT (12 45), 20000.0, m)";
         assertEquals(expectedCql, ECQL.toCQL(query.getFilter()));
     }
-    
+
     @Test
     public void testNegativeDistanceFromPoint() throws Exception {
         try {
@@ -284,7 +284,7 @@ public class SearchRequestKvpReaderTest extends OSEOTestSupport {
             assertEquals("InvalidParameterValue", e.getCode());
         }
     }
-    
+
     @Test
     public void testTimeRelationInvalid() throws Exception {
         try {
@@ -296,7 +296,7 @@ public class SearchRequestKvpReaderTest extends OSEOTestSupport {
             assertEquals("timeRelation", e.getLocator());
         }
     }
-    
+
     @Test
     public void testTimeRelationAlone() throws Exception {
         try {
@@ -308,7 +308,7 @@ public class SearchRequestKvpReaderTest extends OSEOTestSupport {
             assertEquals("timeRelation", e.getLocator());
         }
     }
-    
+
     @Test
     public void testTimeStartInvalid() throws Exception {
         try {
@@ -320,7 +320,7 @@ public class SearchRequestKvpReaderTest extends OSEOTestSupport {
             assertEquals(TIME_START.key, e.getLocator());
         }
     }
-    
+
     @Test
     public void testTimeEndInvalid() throws Exception {
         try {
@@ -332,7 +332,7 @@ public class SearchRequestKvpReaderTest extends OSEOTestSupport {
             assertEquals(TIME_END.key, e.getLocator());
         }
     }
-    
+
     @Test
     public void testTimeFilterStartOnly() throws Exception {
         Map<String, String> map;
@@ -355,7 +355,7 @@ public class SearchRequestKvpReaderTest extends OSEOTestSupport {
         map = toMap(TIME_START.key, "2010-09-01T00:00:00Z", TIME_RELATION.key, "equals");
         assertEquals(ECQL.toFilter("timeStart = 2010-09-01T00:00:00Z and timeEnd IS NULL"), parseAndGetFilter(map));
     }
-    
+
     @Test
     public void testTimeFilterEndOnly() throws Exception {
         Map<String, String> map;
@@ -378,7 +378,7 @@ public class SearchRequestKvpReaderTest extends OSEOTestSupport {
         map = toMap(TIME_END.key, "2010-09-01T00:00:00Z", TIME_RELATION.key, "equals");
         assertEquals(ECQL.toFilter("timeEnd = 2010-09-01T00:00:00Z and timeStart IS NULL"), parseAndGetFilter(map));
     }
-    
+
     @Test
     public void testTimeFilterStartEndOnly() throws Exception {
         Map<String, String> map;
@@ -401,7 +401,7 @@ public class SearchRequestKvpReaderTest extends OSEOTestSupport {
         map = toMap(TIME_START.key, "2010-08-01T00:00:00Z", TIME_END.key, "2010-09-01T00:00:00Z", TIME_RELATION.key, "equals");
         assertEquals(ECQL.toFilter("timeStart = 2010-08-01T00:00:00Z and timeEnd = 2010-09-01T00:00:00Z"), parseAndGetFilter(map));
     }
-    
+
     @Test
     public void testTimeStartOnlyDate() throws Exception {
         Map<String, String> map;
@@ -409,7 +409,7 @@ public class SearchRequestKvpReaderTest extends OSEOTestSupport {
         map = toMap(TIME_START.key, "2010-09-01");
         assertEquals(ECQL.toFilter("timeEnd >= 2010-09-01T00:00:00Z OR timeEnd IS NULL"), parseAndGetFilter(map));
     }
-    
+
     @Test
     public void testCollectionSensorTypeSingle() throws Exception {
         Map<String, String> map = toMap("sensorType", "OPTICAL");
@@ -427,7 +427,7 @@ public class SearchRequestKvpReaderTest extends OSEOTestSupport {
         assertThat(bce.getExpression2(), instanceOf(Literal.class));
         assertEquals(expectedValue, bce.getExpression2().evaluate(null));
     }
-    
+
     @Test
     public void testCollectionSensorTypeList() throws Exception {
         Map<String, String> map = toMap("sensorType", "OPTICAL,RADAR,ALTIMETRIC");
@@ -440,30 +440,30 @@ public class SearchRequestKvpReaderTest extends OSEOTestSupport {
         assertBinaryFilter(children.get(1), OpenSearchAccess.EO_NAMESPACE, "sensorType", "RADAR");
         assertBinaryFilter(children.get(2), OpenSearchAccess.EO_NAMESPACE, "sensorType", "ALTIMETRIC");
     }
-    
+
     @Test
     public void testCloudCoverEmpty() throws Exception {
         Map<String, String> map = toMap("parentId", "SENTINEL2", "cloudCover", "");
         Filter filter = parseAndGetFilter(map);
         assertThat(filter, equalTo(Filter.INCLUDE));
     }
-    
+
     @Test
     public void testCloudCoverGreater() throws Exception {
         Map<String, String> map = toMap("parentId", "SENTINEL2", "cloudCover", "[30");
         Filter filter = parseAndGetFilter(map);
         assertThat(filter, instanceOf(PropertyIsGreaterThanOrEqualTo.class));
-        assertBinaryFilter(filter, OpenSearchAccess.ProductClass.OPTICAL.getNamespace(), "cloudCover", 30);        
+        assertBinaryFilter(filter, OpenSearchAccess.ProductClass.OPTICAL.getNamespace(), "cloudCover", 30);
     }
-    
+
     @Test
     public void testCloudCoverSmaller() throws Exception {
         Map<String, String> map = toMap("parentId", "SENTINEL2", "cloudCover", "20]");
         Filter filter = parseAndGetFilter(map);
         assertThat(filter, instanceOf(PropertyIsLessThanOrEqualTo.class));
-        assertBinaryFilter(filter, OpenSearchAccess.ProductClass.OPTICAL.getNamespace(), "cloudCover", 20);        
+        assertBinaryFilter(filter, OpenSearchAccess.ProductClass.OPTICAL.getNamespace(), "cloudCover", 20);
     }
-    
+
     @Test
     public void testCloudCoverClosedRange() throws Exception {
         Map<String, String> map = toMap("parentId", "SENTINEL2", "cloudCover", "[20,40]");
@@ -474,12 +474,12 @@ public class SearchRequestKvpReaderTest extends OSEOTestSupport {
         assertEquals(2, children.size());
         BinaryComparisonOperator op1 = (BinaryComparisonOperator) children.get(0);
         assertThat(op1, instanceOf(PropertyIsGreaterThanOrEqualTo.class));
-        assertBinaryFilter(op1, OpenSearchAccess.ProductClass.OPTICAL.getNamespace(), "cloudCover", 20);        
+        assertBinaryFilter(op1, OpenSearchAccess.ProductClass.OPTICAL.getNamespace(), "cloudCover", 20);
         BinaryComparisonOperator op2 = (BinaryComparisonOperator) children.get(1);
         assertThat(op2, instanceOf(PropertyIsLessThanOrEqualTo.class));
         assertBinaryFilter(op2, OpenSearchAccess.ProductClass.OPTICAL.getNamespace(), "cloudCover", 40);
     }
-    
+
     @Test
     public void testCloudCoverOpenRange() throws Exception {
         Map<String, String> map = toMap("parentId", "SENTINEL2", "cloudCover", "]20,40[");
@@ -490,27 +490,27 @@ public class SearchRequestKvpReaderTest extends OSEOTestSupport {
         assertEquals(2, children.size());
         BinaryComparisonOperator op1 = (BinaryComparisonOperator) children.get(0);
         assertThat(op1, instanceOf(PropertyIsGreaterThan.class));
-        assertBinaryFilter(op1, OpenSearchAccess.ProductClass.OPTICAL.getNamespace(), "cloudCover", 20);        
+        assertBinaryFilter(op1, OpenSearchAccess.ProductClass.OPTICAL.getNamespace(), "cloudCover", 20);
         BinaryComparisonOperator op2 = (BinaryComparisonOperator) children.get(1);
         assertThat(op2, instanceOf(PropertyIsLessThan.class));
         assertBinaryFilter(op2, OpenSearchAccess.ProductClass.OPTICAL.getNamespace(), "cloudCover", 40);
     }
-    
+
     @Test
     public void testGeometryFilter() throws Exception {
         String wkt = "POINT(0 0)";
         Geometry point = new WKTReader().read(wkt);
         // implicit relation
         Filter filter = parseAndGetFilter(toMap("geometry", wkt));
-        assertThat(filter,  instanceOf(Intersects.class));
+        assertThat(filter, instanceOf(Intersects.class));
         assertBinarySpatialFilter(filter, "", point);
         // explicit intersects
         filter = parseAndGetFilter(toMap("geometry", wkt, "geoRelation", "intersects"));
-        assertThat(filter,  instanceOf(Intersects.class));
+        assertThat(filter, instanceOf(Intersects.class));
         assertBinarySpatialFilter(filter, "", point);
         // explicit contains
         filter = parseAndGetFilter(toMap("geometry", wkt, "geoRelation", "contains"));
-        assertThat(filter,  instanceOf(Contains.class));
+        assertThat(filter, instanceOf(Contains.class));
         // ... expressions are inverted here, the attribute is contained in the search area
         Contains bso = (Contains) filter;
         assertThat(bso.getExpression2(), instanceOf(PropertyName.class));
@@ -520,10 +520,10 @@ public class SearchRequestKvpReaderTest extends OSEOTestSupport {
         assertEquals(point, bso.getExpression1().evaluate(null));
         // explict disjoint
         filter = parseAndGetFilter(toMap("geometry", wkt, "geoRelation", "disjoint"));
-        assertThat(filter,  instanceOf(Disjoint.class));
+        assertThat(filter, instanceOf(Disjoint.class));
         assertBinarySpatialFilter(filter, "", point);
     }
-    
+
     private void assertBinarySpatialFilter(Filter filter, String expectedName, Object expectedValue) {
         BinarySpatialOperator bso = (BinarySpatialOperator) filter;
         assertThat(bso.getExpression1(), instanceOf(PropertyName.class));
@@ -533,14 +533,14 @@ public class SearchRequestKvpReaderTest extends OSEOTestSupport {
         assertEquals(expectedValue, bso.getExpression2().evaluate(null));
     }
 
-    
+
     @Test
     public void testEopCreationDate() throws Exception {
         Map<String, String> map = toMap("parentId", "SENTINEL2", "creationDate", "]2016-01-01");
         Filter filter = parseAndGetFilter(map);
         BinaryComparisonOperator op = (BinaryComparisonOperator) filter;
         assertThat(op, instanceOf(PropertyIsGreaterThan.class));
-        assertBinaryFilter(op, OpenSearchAccess.ProductClass.EOP_GENERIC.getNamespace(), "creationDate", Converters.convert("2016-01-01", Date.class));        
+        assertBinaryFilter(op, OpenSearchAccess.ProductClass.EOP_GENERIC.getNamespace(), "creationDate", Converters.convert("2016-01-01", Date.class));
     }
 
     private Filter parseAndGetFilter(Map<String, String> map) throws Exception {
@@ -550,5 +550,5 @@ public class SearchRequestKvpReaderTest extends OSEOTestSupport {
         Filter filter = query.getFilter();
         return filter;
     }
-    
+
 }

@@ -26,9 +26,8 @@ import org.opengis.feature.type.Name;
  * An implementation of {@link SchemaComponentDelegate} using a fixed file in the classpath to build
  * the SchemaComponent representation, with a simple templating mechanism for the root of the schema
  * locations (local vs schemas.opengis.net)
- * 
+ *
  * @author Andrea Aime - GeoSolutions
- * 
  */
 public class TemplatedSchemaComponentDelegate implements SchemaComponentDelegate {
 
@@ -51,16 +50,16 @@ public class TemplatedSchemaComponentDelegate implements SchemaComponentDelegate
 
     @Override
     public void writeSchemaComponent(DescribeRecordType request, Writer bw, AttributeDescriptor descriptor) throws IOException {
-        if(!canHandle(descriptor)) {
+        if (!canHandle(descriptor)) {
             throw new IllegalArgumentException("Cannot handle schema " + descriptor.getName());
         }
-        
+
         //FeatureType schema = (FeatureType) descriptor.getType();
-        
+
         // find the root of the schema location
         CSWInfo csw = gs.getService(CSWInfo.class);
         String schemaLocationRoot;
-        if(csw.isCanonicalSchemaLocation()) {
+        if (csw.isCanonicalSchemaLocation()) {
             schemaLocationRoot = "http://schemas.opengis.net";
         } else {
             schemaLocationRoot = buildSchemaURL(request.getBaseUrl(), "");
@@ -68,12 +67,12 @@ public class TemplatedSchemaComponentDelegate implements SchemaComponentDelegate
             schemaLocationRoot = schemaLocationRoot.substring(0, schemaLocationRoot.length() - 1);
         }
 
-        
+
         BufferedReader reader = null;
         try {
             reader = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream(schemaPath), Charset.forName("UTF-8")));
             String line;
-            while((line = reader.readLine()) != null) {
+            while ((line = reader.readLine()) != null) {
                 line = line.replace("%SCHEMAS_ROOT%", schemaLocationRoot);
                 bw.write(line);
                 bw.write("\n");

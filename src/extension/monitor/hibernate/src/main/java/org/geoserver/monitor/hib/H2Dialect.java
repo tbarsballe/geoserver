@@ -20,9 +20,8 @@ import org.hibernate.util.ReflectHelper;
 
 /**
  * A dialect compatible with the H2 database.
- * 
+ *
  * @author Thomas Mueller
- * 
  */
 public class H2Dialect extends Dialect {
 
@@ -215,11 +214,11 @@ public class H2Dialect extends Dialect {
     }
 
     public String[] getCreateSequenceStrings(String sequenceName) {
-        return new String[] { "create sequence " + sequenceName };
+        return new String[]{"create sequence " + sequenceName};
     }
 
     public String[] getDropSequenceStrings(String sequenceName) {
-        return new String[] { "drop sequence " + sequenceName };
+        return new String[]{"drop sequence " + sequenceName};
     }
 
     public String getSelectSequenceNextValString(String sequenceName) {
@@ -246,7 +245,7 @@ public class H2Dialect extends Dialect {
 
         /**
          * Extract the name of the violated constraint from the given SQLException.
-         * 
+         *
          * @param e
          *            The exception that was the result of the constraint violation.
          * @return The extracted constraint name.

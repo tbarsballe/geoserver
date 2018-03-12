@@ -15,12 +15,12 @@ import org.geoserver.web.wicket.ParamResourceModel;
  * Edits an existing rule
  */
 public class EditServiceAccessRulePage extends AbstractServiceAccessRulePage {
-    
+
     ServiceAccessRule orig;
-    
+
     public EditServiceAccessRulePage(ServiceAccessRule rule) {
         super(new ServiceAccessRule(rule));
-        
+
         //save the original 
         this.orig = rule;
 
@@ -40,7 +40,7 @@ public class EditServiceAccessRulePage extends AbstractServiceAccessRulePage {
 
             dao.storeRules();
             doReturn(ServiceAccessRulePage.class);
-        } catch(Exception e) {
+        } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Error occurred while saving rule ", e);
             error(new ParamResourceModel("saveError", getPage(), e.getMessage()));
         }

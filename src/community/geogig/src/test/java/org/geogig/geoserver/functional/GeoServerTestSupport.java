@@ -79,10 +79,9 @@ class GeoServerTestSupport extends GeoServerSystemTestSupport {
     /**
      * Issue a POST request to the provided URL with the given file passed as form data.
      *
-     * @param resourceUri the url to issue the request to
+     * @param resourceUri   the url to issue the request to
      * @param formFieldName the form field name for the file to be posted
-     * @param file the file to post
-     *
+     * @param file          the file to post
      * @return the response to the request
      */
     public MockHttpServletResponse postFile(String resourceUri, String formFieldName, File file)
@@ -139,7 +138,7 @@ class GeoServerTestSupport extends GeoServerSystemTestSupport {
 
     /**
      * Copied from parent class to do the same work on MockMultipartHttpServletRequest.
-     * 
+     *
      * @param request
      * @param path
      */
@@ -163,11 +162,10 @@ class GeoServerTestSupport extends GeoServerSystemTestSupport {
      * @param contentType the content type of the data
      * @param resourceUri the url to issue the request to
      * @param postContent the content to be posted
-     *
      * @return the response to the request
      */
     public MockHttpServletResponse postContent(String contentType, String resourceUri,
-            String postContent) throws Exception {
+                                               String postContent) throws Exception {
 
         MockHttpServletRequest req = createRequest(resourceUri);
 
@@ -182,9 +180,8 @@ class GeoServerTestSupport extends GeoServerSystemTestSupport {
     /**
      * Issue a request with the given {@link HttpMethod} to the provided resource URI.
      *
-     * @param method the http method to use
+     * @param method      the http method to use
      * @param resourceUri the uri to issue the request to
-     *
      * @return the response to the request
      */
     public MockHttpServletResponse callInternal(HttpMethod method, String resourceUri)
@@ -197,7 +194,7 @@ class GeoServerTestSupport extends GeoServerSystemTestSupport {
     }
 
     public MockHttpServletResponse callWithContentTypeInternal(HttpMethod method,
-            String resourceUri, String payload, String contentType) throws Exception {
+                                                               String resourceUri, String payload, String contentType) throws Exception {
         MockHttpServletRequest request = super.createRequest(resourceUri);
         request.setMethod(method.name());
         // set the JSON payload
@@ -211,9 +208,7 @@ class GeoServerTestSupport extends GeoServerSystemTestSupport {
      * Provide access to the helper function that turns the response into a {@link Document}.
      *
      * @param stream the stream to read as a document
-     *
      * @return the {@link Document}
-     *
      * @throws Exception
      */
     public Document getDom(InputStream stream) throws Exception {

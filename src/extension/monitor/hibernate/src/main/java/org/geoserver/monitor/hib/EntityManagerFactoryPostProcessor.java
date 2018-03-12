@@ -27,21 +27,21 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 public class EntityManagerFactoryPostProcessor implements BeanPostProcessor {
 
     static Logger LOGGER = Logging.getLogger("org.geoserver.monitor");
-    
+
     GeoServerDataDirectory data;
-    
+
     public EntityManagerFactoryPostProcessor(GeoServerDataDirectory data) {
         this.data = data;
     }
-    
+
     public Object postProcessBeforeInitialization(Object bean, String beanName)
-        throws BeansException {
+            throws BeansException {
         if (bean instanceof AbstractEntityManagerFactoryBean) {
-            init((AbstractEntityManagerFactoryBean)bean);
+            init((AbstractEntityManagerFactoryBean) bean);
         }
         return bean;
     }
-    
+
     void init(AbstractEntityManagerFactoryBean factory) {
         try {
             Resource f = data.get(Paths.path("monitoring", "hibernate.properties"));
@@ -50,16 +50,15 @@ public class EntityManagerFactoryPostProcessor implements BeanPostProcessor {
                 Properties props = new Properties();
                 props.putAll(factory.getJpaVendorAdapter().getJpaPropertyMap());
                 props.putAll(factory.getJpaPropertyMap());
-                
+
                 Resource monitoring = data.get("monitoring");
-                Resource file =  monitoring.get("hibernate.properties");
+                Resource file = monitoring.get("hibernate.properties");
                 OutputStream fout = file.out();
-                
+
                 props.store(fout, "hibernate configuration");
                 fout.flush();
                 fout.close();
-            }
-            else {
+            } else {
                 //use config to overide
                 Properties props = new Properties();
                 InputStream fin = f.in();
@@ -67,31 +66,29 @@ public class EntityManagerFactoryPostProcessor implements BeanPostProcessor {
                 fin.close();
 
                 HibernateJpaVendorAdapter adapter = (HibernateJpaVendorAdapter) factory.getJpaVendorAdapter();
-                adapter.setDatabase(Database.valueOf((String)props.get("database")));
-                adapter.setDatabasePlatform((String)props.get("databasePlatform"));
-                adapter.setShowSql(Boolean.valueOf((String)props.getProperty("showSql")));
-                adapter.setGenerateDdl(Boolean.valueOf((String)props.getProperty("generateDdl")));
-                
+                adapter.setDatabase(Database.valueOf((String) props.get("database")));
+                adapter.setDatabasePlatform((String) props.get("databasePlatform"));
+                adapter.setShowSql(Boolean.valueOf((String) props.getProperty("showSql")));
+                adapter.setGenerateDdl(Boolean.valueOf((String) props.getProperty("generateDdl")));
+
                 for (Map.Entry e : props.entrySet()) {
-                    if (((String)e.getKey()).startsWith("hibernate")) {
-                        factory.getJpaPropertyMap().put((String)e.getKey(), e.getValue());
+                    if (((String) e.getKey()).startsWith("hibernate")) {
+                        factory.getJpaPropertyMap().put((String) e.getKey(), e.getValue());
                     }
                 }
             }
-        } 
-        catch (IOException e) {
+        } catch (IOException e) {
             LOGGER.log(Level.WARNING, e.getLocalizedMessage(), e);
         }
     }
-    
+
     public Object postProcessAfterInitialization(Object bean, String beanName)
             throws BeansException {
         if (bean instanceof AbstractEntityManagerFactoryBean) {
-            init((AbstractEntityManagerFactoryBean)bean);
+            init((AbstractEntityManagerFactoryBean) bean);
         }
         return bean;
     }
 
-    
 
 }

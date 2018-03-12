@@ -27,6 +27,7 @@ import org.apache.wicket.markup.html.basic.MultiLineLabel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
+
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -34,19 +35,19 @@ import java.util.logging.Logger;
 public class AbstractConfigurationsPage extends GeoServerSecuredPage {
 
     private static final long serialVersionUID = -6780935404517755471L;
-    
+
     private static final Logger LOGGER = Logging.getLogger(AbstractConfigurationsPage.class);
-       
+
     private boolean templates;
 
     private AjaxLink<Object> remove;
 
     private AjaxLink<Object> copy;
-    
+
     private GeoServerDialog dialog;
-    
+
     private GeoServerTablePanel<Configuration> configurationsPanel;
-    
+
     public AbstractConfigurationsPage(boolean templates) {
         this.templates = templates;
     }
@@ -54,14 +55,14 @@ public class AbstractConfigurationsPage extends GeoServerSecuredPage {
     protected ComponentAuthorizer getPageAuthorizer() {
         return ComponentAuthorizer.AUTHENTICATED;
     }
-    
+
     @Override
     public void onInitialize() {
         super.onInitialize();
-        
+
         add(dialog = new GeoServerDialog("dialog"));
-        dialog.setInitialHeight(100); 
-        ((ModalWindow) dialog.get("dialog")).showUnloadConfirmation(false); 
+        dialog.setInitialHeight(100);
+        ((ModalWindow) dialog.get("dialog")).showUnloadConfirmation(false);
 
         add(new AjaxLink<Object>("addNew") {
             private static final long serialVersionUID = 3581476968062788921L;
@@ -92,7 +93,7 @@ public class AbstractConfigurationsPage extends GeoServerSecuredPage {
                             }
                             panel = new DropDownPanel(id, new Model<String>(),
                                     new Model<ArrayList<String>>(list), new ParamResourceModel(
-                                            "addNewDialog.chooseTemplate", getPage()));
+                                    "addNewDialog.chooseTemplate", getPage()));
                             return panel;
                         }
 
@@ -104,7 +105,7 @@ public class AbstractConfigurationsPage extends GeoServerSecuredPage {
                                 configuration = TaskManagerBeans.get().getFac().createConfiguration();
                             } else {
                                 configuration = TaskManagerBeans.get().getDao()
-                                    .copyConfiguration(choice);
+                                        .copyConfiguration(choice);
                                 configuration.setTemplate(false);
                                 configuration.setName(null);
                             }
@@ -119,7 +120,7 @@ public class AbstractConfigurationsPage extends GeoServerSecuredPage {
                 }
             }
         });
-        
+
         // the removal button
         add(remove = new AjaxLink<Object>("removeSelected") {
             private static final long serialVersionUID = 3581476968062788921L;
@@ -130,7 +131,7 @@ public class AbstractConfigurationsPage extends GeoServerSecuredPage {
                 dialog.showOkCancel(target, new GeoServerDialog.DialogDelegate() {
 
                     private static final long serialVersionUID = -5552087037163833563L;
-                    
+
                     private String error = null;
 
                     @Override
@@ -157,12 +158,12 @@ public class AbstractConfigurationsPage extends GeoServerSecuredPage {
                         } catch (Exception e) {
                             LOGGER.log(Level.WARNING, e.getMessage(), e);
                             Throwable rootCause = ExceptionUtils.getRootCause(e);
-                            error = rootCause == null ? e.getLocalizedMessage() : 
-                                rootCause.getLocalizedMessage();
+                            error = rootCause == null ? e.getLocalizedMessage() :
+                                    rootCause.getLocalizedMessage();
                         }
                         return true;
                     }
-                    
+
                     @Override
                     public void onClose(AjaxRequestTarget target) {
                         if (error != null) {
@@ -173,12 +174,12 @@ public class AbstractConfigurationsPage extends GeoServerSecuredPage {
                         target.add(remove);
                     }
                 });
-                
-            }  
+
+            }
         });
         remove.setOutputMarkupId(true);
         remove.setEnabled(false);
-        
+
         // the removal button
         add(copy = new AjaxLink<Object>("copySelected") {
             private static final long serialVersionUID = 3581476968062788921L;
@@ -187,15 +188,15 @@ public class AbstractConfigurationsPage extends GeoServerSecuredPage {
             public void onClick(AjaxRequestTarget target) {
                 Configuration copy = TaskManagerBeans.get().getDao().copyConfiguration(
                         configurationsPanel.getSelection().get(0).getName());
-                
+
                 setResponsePage(new ConfigurationPage(new Model<Configuration>(copy)));
             }
         });
         copy.setOutputMarkupId(true);
         copy.setEnabled(false);
-                
+
         //the panel
-        add(configurationsPanel =  new GeoServerTablePanel<Configuration>("configurationsPanel", 
+        add(configurationsPanel = new GeoServerTablePanel<Configuration>("configurationsPanel",
                 new ConfigurationsModel(templates), true) {
 
             private static final long serialVersionUID = -8943273843044917552L;
@@ -211,16 +212,16 @@ public class AbstractConfigurationsPage extends GeoServerSecuredPage {
             @SuppressWarnings("unchecked")
             @Override
             protected Component getComponentForProperty(String id, IModel<Configuration> itemModel,
-                    Property<Configuration> property) {
+                                                        Property<Configuration> property) {
                 if (property.equals(ConfigurationsModel.NAME)) {
                     return new SimpleAjaxLink<String>(id, (IModel<String>) property.getModel(itemModel)) {
                         private static final long serialVersionUID = -9184383036056499856L;
-                        
+
                         @Override
                         protected void onClick(AjaxRequestTarget target) {
                             setResponsePage(new ConfigurationPage(itemModel));
                         }
-                    };                    
+                    };
                 }
                 return null;
             }

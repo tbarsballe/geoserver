@@ -23,15 +23,14 @@ import org.opengis.util.ProgressListener;
 /**
  * Delegates all methods to the provided delegate. Suclasses will override
  * methods in order to perform their decoration work
- * 
- * @author Andrea Aime - TOPP
- * 
+ *
  * @param <T>
  * @param <F>
+ * @author Andrea Aime - TOPP
  */
 public class DecoratingCoverageStoreInfo extends
         AbstractDecorator<CoverageStoreInfo> implements CoverageStoreInfo {
-    
+
     public DecoratingCoverageStoreInfo(CoverageStoreInfo delegate) {
         super(delegate);
     }
@@ -115,7 +114,7 @@ public class DecoratingCoverageStoreInfo extends
     public void accept(CatalogVisitor visitor) {
         delegate.accept(visitor);
     }
-    
+
     public <T> T getAdapter(Class<T> adapterClass, Map<?, ?> hints) {
         return delegate.getAdapter(adapterClass, hints);
     }

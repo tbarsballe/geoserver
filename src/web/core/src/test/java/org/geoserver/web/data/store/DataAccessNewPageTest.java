@@ -25,7 +25,7 @@ import org.junit.Test;
 
 /**
  * Test suite for {@link DataAccessNewPage}
- * 
+ *
  * @author Gabriel Roldan
  */
 public class DataAccessNewPageTest extends GeoServerWicketTestSupport {
@@ -119,7 +119,7 @@ public class DataAccessNewPageTest extends GeoServerWicketTestSupport {
     @Test
     public void testDataStoreParametersAreCreated() {
         startPage();
-        List parametersListViewValues = Arrays.asList(new Object[] { "directory", "namespace" });
+        List parametersListViewValues = Arrays.asList(new Object[]{"directory", "namespace"});
         tester.assertListView("dataStoreForm:parametersPanel:parameters", parametersListViewValues);
     }
 
@@ -141,13 +141,13 @@ public class DataAccessNewPageTest extends GeoServerWicketTestSupport {
         // assertEquals(expectedNamespace, assignedNamespace);
 
     }
-    
+
     @Test
     public void testGeoPackagePage() {
         final String displayName = new GeoPkgDataStoreFactory().getDisplayName();
         final AbstractDataAccessPage page = new DataAccessNewPage(displayName);
         tester.startPage(page);
-        
+
         tester.debugComponentTrees();
         // the "database" key is the second, should be a file panel
         Component component = tester.getComponentFromLastRenderedPage("dataStoreForm:parametersPanel:parameters:1:parameterPanel");

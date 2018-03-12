@@ -47,8 +47,6 @@ public enum ProcessState {
     /**
      * True if this state represents a process whose execution is completed (either succesfully, or
      * not)
-     * 
-     *
      */
     public boolean isExecutionCompleted() {
         return executionCompleted;
@@ -56,9 +54,8 @@ public enum ProcessState {
 
     /**
      * Checks if a certain state comes before this one in the status workflow
-     * 
-     * @param predecessor
      *
+     * @param predecessor
      */
     public boolean isValidSuccessor(ProcessState predecessor) {
         return predecessor == this || predecessors.contains(predecessor);

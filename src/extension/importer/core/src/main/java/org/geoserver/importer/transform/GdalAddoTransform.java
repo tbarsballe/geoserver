@@ -18,7 +18,7 @@ import org.geoserver.importer.ValidationException;
 
 /**
  * Runs gdaladdo on a input raster file
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 
@@ -27,7 +27,6 @@ public class GdalAddoTransform extends AbstractCommandLineTransform implements R
 
     /**
      * Checks if gdaladdo is available
-     * 
      *
      * @throws IOException
      */

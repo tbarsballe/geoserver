@@ -30,16 +30,15 @@ import org.opengis.filter.sort.SortBy;
  * or field names (such conflicts might cause issues down the road). In case of conflicts, the class
  * will create/alter the aliases to avoid them, and modify filters and property name selection
  * accordingly
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 class AliasedQuery extends Query {
 
     /**
      * Renames property names following an alias rename map
-     * 
-     * @author Andrea Aime - GeoSolutions
      *
+     * @author Andrea Aime - GeoSolutions
      */
     class AliasRenameVisitor extends DuplicatingFilterVisitor {
 
@@ -62,10 +61,9 @@ class AliasedQuery extends Query {
      * Checks the aliases in the query are present, and not in conflict with feature type names or
      * field names (such conflicts might cause issues down the road). In case of conflicts a new
      * Query object will be returned in which the conflicts have been resolved.
-     * 
+     *
      * @param metas
      * @param query
-     *
      * @throws IOException
      */
     static Query fixAliases(List<FeatureTypeInfo> metas, Query query) throws IOException {

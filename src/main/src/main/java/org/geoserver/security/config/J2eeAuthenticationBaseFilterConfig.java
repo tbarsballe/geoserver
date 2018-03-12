@@ -14,31 +14,33 @@ import org.geoserver.security.filter.GeoServerX509CertificateAuthenticationFilte
 /**
  * Base config for J2EE based filters ({@link GeoServerJ2eeAuthenticationFilter}
  * and {@link GeoServerX509CertificateAuthenticationFilter})
- * 
+ * <p>
  * * {@link #getRoleSource()} determines how to calculate the roles:
  * <ol>
  * <li>{@link J2EERoleSource#UserGroupService} - Roles are calculated using the named user group service
- *     {@link #getUserGroupServiceName()}</li>
+ * {@link #getUserGroupServiceName()}</li>
  * <li>{@link J2EERoleSource#RoleService} - Roles are calculated using the named role service
- *     {@link #getRoleServiceName()}. If no role service is given, the default is 
- *     {@link GeoServerSecurityManager#getActiveRoleService()}</li>
- * <li>{@link J2EERoleSource#Header} - Roles are calculated using the content of 
- *     {@link #getRolesHeaderAttribute()} parsed by {@link #getRoleConverterName()}. if no converter 
- *     is given, roles are parsed by the default converter {@link GeoServerRoleConverter}</li>
- * <li>{@link J2EERoleSource#J2EE} - Roles are fetched from J2EE container 
- *     </li>
- * 
+ * {@link #getRoleServiceName()}. If no role service is given, the default is
+ * {@link GeoServerSecurityManager#getActiveRoleService()}</li>
+ * <li>{@link J2EERoleSource#Header} - Roles are calculated using the content of
+ * {@link #getRolesHeaderAttribute()} parsed by {@link #getRoleConverterName()}. if no converter
+ * is given, roles are parsed by the default converter {@link GeoServerRoleConverter}</li>
+ * <li>{@link J2EERoleSource#J2EE} - Roles are fetched from J2EE container
+ * </li>
+ *
  * @author Mauro Bartolomeoli (mauro.bartolomeoli@geo-solutions.it)
  */
 public class J2eeAuthenticationBaseFilterConfig extends
         PreAuthenticatedUserNameFilterConfig {
 
-    /** serialVersionUID */
+    /**
+     * serialVersionUID
+     */
     private static final long serialVersionUID = 1L;
-    
+
     /**
      * RoleSource list values extended for filters supporting J2EE RoleSource.
-     * 
+     *
      * @author Mauro Bartolomeoli (mauro.bartolomeoli@geo-solutions.it)
      */
     public static enum J2EERoleSource implements RoleSource {
@@ -49,7 +51,9 @@ public class J2eeAuthenticationBaseFilterConfig extends
             return other != null && other.toString().equals(toString());
         }
 
-    };
-    
-    
+    }
+
+    ;
+
+
 }

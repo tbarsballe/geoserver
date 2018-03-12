@@ -16,10 +16,11 @@ import org.geotools.xml.transform.TransformerBase;
 
 /**
  * Runs the transformer and outputs the describe coverage response.
-
  */
 public class WCS20DescribeCoverageResponse extends Response {
-    /** MIME_TYPE */
+    /**
+     * MIME_TYPE
+     */
     private static final String MIME_TYPE = "application/xml";
 
     public WCS20DescribeCoverageResponse() {
@@ -31,7 +32,7 @@ public class WCS20DescribeCoverageResponse extends Response {
     }
 
     public void write(Object value, OutputStream output, Operation operation)
-        throws IOException {
+            throws IOException {
         TransformerBase tx = (TransformerBase) value;
 
         try {

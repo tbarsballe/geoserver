@@ -21,7 +21,7 @@ import org.junit.Test;
  */
 public class NetCDFGetFeatureInfoTest extends WMSTestSupport {
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @SuppressWarnings({"rawtypes", "unchecked"})
     @Override
     protected void onSetUp(SystemTestData testData) throws Exception {
         testData.addRasterLayer(new QName(MockData.SF_URI, "analyzed_sst", MockData.SF_PREFIX),
@@ -35,9 +35,9 @@ public class NetCDFGetFeatureInfoTest extends WMSTestSupport {
 
     /**
      * Test that an XML GetFeatureInfo response contains a property whose name has been normalised to a valid NCName.
-     * 
      * <p>
-     * 
+     * <p>
+     * <p>
      * The NetCDF source has <code>analyzed_sst:long_name ="Analyzed Sea Surface Temperature"</code>, which must be converted to a valid NCName before
      * it can be used in an XML response. The implementation converts spaces to underscores to achieve this.
      */

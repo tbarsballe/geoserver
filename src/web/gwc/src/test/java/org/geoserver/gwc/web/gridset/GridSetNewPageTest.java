@@ -139,9 +139,9 @@ public class GridSetNewPageTest extends GeoServerWicketTestSupport {
         }
 
         ft.setValue("tileWidth:border:border_body:paramValue", "512");
-        
+
         ft.setValue("tileHeight:border:border_body:paramValue", "512");
-        
+
         // add zoom levels
         final int numLevels = 6;
         for (int i = 0; i < numLevels; i++) {
@@ -153,7 +153,7 @@ public class GridSetNewPageTest extends GeoServerWicketTestSupport {
         }
 
         // print(page, true, true);
-        
+
         ft.setValue("name:border:border_body:paramValue", gridsetName);
         ft.setValue("description", "sample description");
         // submit

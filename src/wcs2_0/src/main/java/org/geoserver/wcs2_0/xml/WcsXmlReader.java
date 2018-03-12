@@ -20,7 +20,7 @@ import org.vfny.geoserver.wcs.WcsException;
 
 /**
  * Xml reader for wcs 2.0.1 xml requests.
- * 
+ *
  * @author Andrea Aime, GeoSolutions
  */
 public class WcsXmlReader extends XmlRequestReader {
@@ -29,7 +29,7 @@ public class WcsXmlReader extends XmlRequestReader {
     private EntityResolverProvider resolverProvider;
 
     public WcsXmlReader(String element, String version, WCSConfiguration configuration,
-            EntityResolverProvider resolverProvider) {
+                        EntityResolverProvider resolverProvider) {
         super(new QName(WCS.NAMESPACE, element), new Version(version), "wcs");
         this.configuration = configuration;
         this.resolverProvider = resolverProvider;
@@ -40,7 +40,7 @@ public class WcsXmlReader extends XmlRequestReader {
         // create the parser instance
         Parser parser = new Parser(configuration);
         parser.setEntityResolver(resolverProvider.getEntityResolver());
-        
+
         // uncomment this once we have a working validator (now it fails due to
         // xlink issues)
         //        parser.setValidating(true);

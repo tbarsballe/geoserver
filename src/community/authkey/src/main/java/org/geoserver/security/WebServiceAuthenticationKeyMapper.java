@@ -29,13 +29,13 @@ import org.springframework.util.StringUtils;
 /**
  * AuthenticationMapper using an external REST webservice to get username for a given authkey. The web service URL can be configured using a template
  * in the form:
- * 
+ * <p>
  * http://<server>:<port>/<webservice>?<key>={key}
- * 
+ * <p>
  * where {key} will be replaced by the received authkey.
- * 
+ * <p>
  * A regular expression can be configured to extract the username from the web service response.
- * 
+ *
  * @author Mauro Bartolomeoli
  */
 public class WebServiceAuthenticationKeyMapper extends AbstractAuthenticationKeyMapper {
@@ -83,7 +83,6 @@ public class WebServiceAuthenticationKeyMapper extends AbstractAuthenticationKey
 
     /**
      * Returns the connection timeout to the mapper web service (in seconds).
-     *
      */
     public int getConnectTimeout() {
         return connectTimeout;
@@ -91,7 +90,7 @@ public class WebServiceAuthenticationKeyMapper extends AbstractAuthenticationKey
 
     /**
      * Sets the connection timeout to the mapper web service (in seconds).
-     * 
+     *
      * @param connectTimeout timeout in seconds
      */
     public void setConnectTimeout(int connectTimeout) {
@@ -100,7 +99,6 @@ public class WebServiceAuthenticationKeyMapper extends AbstractAuthenticationKey
 
     /**
      * Returns the read timeout to the mapper web service (in seconds).
-     *
      */
     public int getReadTimeout() {
         return readTimeout;
@@ -108,7 +106,7 @@ public class WebServiceAuthenticationKeyMapper extends AbstractAuthenticationKey
 
     /**
      * Sets the read timeout to the mapper web service (in seconds).
-     * 
+     *
      * @param readTimeout read timeout in seconds
      */
     public void setReadTimeout(int readTimeout) {
@@ -117,7 +115,6 @@ public class WebServiceAuthenticationKeyMapper extends AbstractAuthenticationKey
 
     /**
      * Returns the web service url
-     *
      */
     public String getWebServiceUrl() {
         return webServiceUrl;
@@ -125,7 +122,7 @@ public class WebServiceAuthenticationKeyMapper extends AbstractAuthenticationKey
 
     /**
      * Sets the web service url (must contain the {key} placeholder for the authkey parameter).
-     * 
+     *
      * @param webServiceUrl service url (must contain {key} placeholder for authkey)
      */
     public void setWebServiceUrl(String webServiceUrl) {
@@ -134,7 +131,6 @@ public class WebServiceAuthenticationKeyMapper extends AbstractAuthenticationKey
 
     /**
      * Returns the regular expression used to extract the user name from the webservice response.
-     *
      */
     public String getSearchUser() {
         return searchUser;
@@ -142,7 +138,7 @@ public class WebServiceAuthenticationKeyMapper extends AbstractAuthenticationKey
 
     /**
      * Sets the regular expression used to extract the user name from the webservice response.
-     * 
+     *
      * @param searchUser search user
      */
     public void setSearchUser(String searchUser) {
@@ -216,9 +212,8 @@ public class WebServiceAuthenticationKeyMapper extends AbstractAuthenticationKey
 
     /**
      * Calls the external web service with the given key and parses the result to extract the userName.
-     * 
-     * @param key
      *
+     * @param key
      */
     private String callWebService(String key) {
         String url = webServiceUrl.replace("{key}", key);

@@ -15,9 +15,8 @@ import org.geoserver.security.WrapperPolicy;
 /**
  * Utility class that provides easy and fast access to the registered
  * {@link SecuredObjectFactory} implementations
- * 
+ *
  * @author Andrea Aime - TOPP
- * 
  */
 public class SecuredObjects {
     /**
@@ -30,15 +29,12 @@ public class SecuredObjects {
      * points for a factory that can do the proper wrapping and invokes it, or
      * simply gives up and throws an {@link IllegalArgumentException} if no
      * factory can deal with securing the specified object.
-     * 
+     *
      * @param <T>
-     * @param object
-     *            the raw object to be secured
-     * @param policy
-     *            the wrapping policy (how the secured wrapper should behave)
+     * @param object the raw object to be secured
+     * @param policy the wrapping policy (how the secured wrapper should behave)
      * @return the secured object, or null if the input is null.
-     * @throws IllegalArgumentException
-     *             if the factory is not able to wrap the object
+     * @throws IllegalArgumentException if the factory is not able to wrap the object
      */
     public static Object secure(Object object, WrapperPolicy policy) {
         // null safety

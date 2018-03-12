@@ -56,7 +56,7 @@ import com.vividsolutions.jts.io.WKTReader;
 
 /**
  * Performs integration tests using a mock {@link ResourceAccessManager}
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class ResourceAccessManagerWMSTest extends WMSTestSupport {
@@ -88,12 +88,13 @@ public class ResourceAccessManagerWMSTest extends WMSTestSupport {
     /**
      * Add the test resource access manager in the spring context
      */
-   
+
     @Override
     protected void setUpSpring(List<String> springContextLocations) {
         super.setUpSpring(springContextLocations);
         springContextLocations.add("classpath:/org/geoserver/wms/ResourceAccessManagerContext.xml");
     }
+
     /**
      * Enable the Spring Security auth filters
      */
@@ -106,16 +107,16 @@ public class ResourceAccessManagerWMSTest extends WMSTestSupport {
     @Override
     protected void onSetUp(SystemTestData testData) throws Exception {
         super.onSetUp(testData);
-        testData.addStyle("raster","raster.sld",SystemTestData.class,getCatalog());
+        testData.addStyle("raster", "raster.sld", SystemTestData.class, getCatalog());
         Map properties = new HashMap();
         properties.put(LayerProperty.STYLE, "raster");
         testData.addRasterLayer(new QName(MockData.SF_URI, "mosaic", MockData.SF_PREFIX),
-                "raster-filter-test.zip",null, properties, SystemTestData.class, getCatalog());
-        
-        
-        GeoServerUserGroupStore ugStore= getSecurityManager().
+                "raster-filter-test.zip", null, properties, SystemTestData.class, getCatalog());
+
+
+        GeoServerUserGroupStore ugStore = getSecurityManager().
                 loadUserGroupService(AbstractUserGroupService.DEFAULT_NAME).createStore();
-        
+
         ugStore.addUser(ugStore.createUserObject("cite", "cite", true));
         ugStore.addUser(ugStore.createUserObject("cite_noinfo", "cite", true));
         ugStore.addUser(ugStore.createUserObject("cite_nostates", "cite", true));
@@ -123,8 +124,8 @@ public class ResourceAccessManagerWMSTest extends WMSTestSupport {
         ugStore.addUser(ugStore.createUserObject("cite_mosaic1", "cite", true));
         ugStore.addUser(ugStore.createUserObject("cite_mosaic2", "cite", true));
         ugStore.store();
-        
-        GeoServerRoleStore roleStore= getSecurityManager().getActiveRoleService().createStore();
+
+        GeoServerRoleStore roleStore = getSecurityManager().getActiveRoleService().createStore();
         GeoServerRole role = roleStore.createRoleObject("ROLE_DUMMY");
         roleStore.addRole(role);
         roleStore.associateRoleToUser(role, "cite");
@@ -134,24 +135,24 @@ public class ResourceAccessManagerWMSTest extends WMSTestSupport {
         roleStore.associateRoleToUser(role, "cite_mosaic1");
         roleStore.associateRoleToUser(role, "cite_mosaic2");
         roleStore.store();
-        
+
         prepare();
     }
 
-    
+
     public void prepare() throws Exception {
-        
-        
+
+
         // populate the access manager
         Catalog catalog = getCatalog();
         TestResourceAccessManager tam = (TestResourceAccessManager) applicationContext
                 .getBean("testResourceAccessManager");
-        
+
         // tile filtering setup
         CoverageInfo coverage = catalog.getCoverageByName("sf:mosaic");
         Filter green = CQL.toFilter("location like 'green%'");
         tam.putLimits("cite_mosaic1", coverage, new CoverageAccessLimits(CatalogMode.HIDE, green, null, null));
-        
+
         // image cropping setup
         WKTReader wkt = new WKTReader();
         MultiPolygon cropper = (MultiPolygon) wkt.read("MULTIPOLYGON(((0 0, 0.5 0, 0.5 0.5, 0 0.5, 0 0)))");
@@ -196,7 +197,7 @@ public class ResourceAccessManagerWMSTest extends WMSTestSupport {
         }
 
 
-        setRequestAuth("cite","cite");
+        setRequestAuth("cite", "cite");
         MockHttpServletResponse response = getAsServletResponse(GET_MAP);
 
         assertEquals("image/png", response.getContentType());
@@ -275,7 +276,7 @@ public class ResourceAccessManagerWMSTest extends WMSTestSupport {
         String california = getAsString(GET_FEATURE_INFO_CALIFORNIA);
         assertTrue(california.contains("STATE_NAME = California"));
     }
-    
+
     @Test
     public void testGetFeatureInfoDisallowedLayer() throws Exception {
         if (!RemoteOWSTestSupport.isRemoteWMSStatesAvailable(LOGGER)) {
@@ -290,7 +291,7 @@ public class ResourceAccessManagerWMSTest extends WMSTestSupport {
         Document dom = dom(getBinaryInputStream(response));
         assertXpathEvaluatesTo("LayerNotDefined", "//ServiceException/@code", dom);
     }
-    
+
     @Test
     public void testGetFeatureInfoDisallowedInfo() throws Exception {
         if (!RemoteOWSTestSupport.isRemoteWMSStatesAvailable(LOGGER)) {
@@ -305,7 +306,7 @@ public class ResourceAccessManagerWMSTest extends WMSTestSupport {
         Document dom = dom(getBinaryInputStream(response));
         assertXpathEvaluatesTo("OperationNotSupported", "//ServiceException/@code", dom);
     }
-    
+
     @Test
     public void testGetFeatureInfoFiltered() throws Exception {
         if (!RemoteOWSTestSupport.isRemoteWMSStatesAvailable(LOGGER)) {
@@ -319,28 +320,28 @@ public class ResourceAccessManagerWMSTest extends WMSTestSupport {
         String california = getAsString(GET_FEATURE_INFO_CALIFORNIA);
         assertTrue(california.contains("no features were found"));
     }
-    
+
     @Test
     public void testDoubleMosaic() throws Exception {
         setRequestAuth("cite_mosaic1", "cite");
         String path = "wms?bgcolor=0x000000&LAYERS=sf:mosaic&STYLES=&FORMAT=image/png&SERVICE=WMS&VERSION=1.1.1" +
-        "&REQUEST=GetMap&SRS=EPSG:4326&BBOX=0,0,1,1&WIDTH=150&HEIGHT=150&transparent=false";
+                "&REQUEST=GetMap&SRS=EPSG:4326&BBOX=0,0,1,1&WIDTH=150&HEIGHT=150&transparent=false";
         MockHttpServletResponse response = getAsServletResponse(path);
         assertEquals("image/png", response.getContentType());
         // this one would fail due to the wrapper finalizer dispose of the coverage reader 
         response = getAsServletResponse(path);
         assertEquals("image/png", response.getContentType());
     }
-    
+
     @Test
     public void testRasterFilterGreen() throws Exception {
         // no cql filter, the security one should do
         setRequestAuth("cite_mosaic1", "cite");
         MockHttpServletResponse response = getAsServletResponse("wms?bgcolor=0x000000&LAYERS=sf:mosaic&STYLES=&FORMAT=image/png&SERVICE=WMS&VERSION=1.1.1" +
-        "&REQUEST=GetMap&SRS=EPSG:4326&BBOX=0,0,1,1&WIDTH=150&HEIGHT=150&transparent=false");
-        
+                "&REQUEST=GetMap&SRS=EPSG:4326&BBOX=0,0,1,1&WIDTH=150&HEIGHT=150&transparent=false");
+
         assertEquals("image/png", response.getContentType());
-        
+
         RenderedImage image = ImageIO.read(getBinaryInputStream(response));
         int[] pixel = new int[3];
         image.getData().getPixel(0, 0, pixel);
@@ -348,25 +349,25 @@ public class ResourceAccessManagerWMSTest extends WMSTestSupport {
         assertEquals(255, pixel[1]);
         assertEquals(0, pixel[2]);
     }
-    
+
     @Test
     public void testRasterCrop() throws Exception {
         // this time we should get a cropped image
         setRequestAuth("cite_mosaic2", "cite");
         MockHttpServletResponse response = getAsServletResponse("wms?bgcolor=0x000000&LAYERS=sf:mosaic&STYLES=&FORMAT=image/png&SERVICE=WMS&VERSION=1.1.1" +
-        "&REQUEST=GetMap&SRS=EPSG:4326&BBOX=0,0,1,1&WIDTH=150&HEIGHT=150&transparent=false");
-        
+                "&REQUEST=GetMap&SRS=EPSG:4326&BBOX=0,0,1,1&WIDTH=150&HEIGHT=150&transparent=false");
+
         assertEquals("image/png", response.getContentType());
-        
+
         RenderedImage image = ImageIO.read(getBinaryInputStream(response));
-        
+
         // bottom right pixel, should be green (inside the crop area)
         int[] pixel = new int[3];
         image.getData().getPixel(0, 149, pixel);
         assertEquals(0, pixel[0]);
         assertEquals(255, pixel[1]);
         assertEquals(0, pixel[2]);
-        
+
         // bottom left, out of the crop area should be black (bgcolor)
         image.getData().getPixel(149, 149, pixel);
         assertEquals(0, pixel[0]);

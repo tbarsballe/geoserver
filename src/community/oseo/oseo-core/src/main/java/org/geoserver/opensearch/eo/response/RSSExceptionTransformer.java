@@ -22,23 +22,23 @@ import org.xml.sax.ContentHandler;
 /**
  * Based on the indications at http://www.opensearch.org/Documentation/Developer_how_to_guide#How_to_indicate_errors encodes the exception into a RSS
  * document, e.g.
- * 
+ * <p>
  * <pre>
  * {@code
  * <rss version="2.0" xmlns:openSearch="http://a9.com/-/spec/opensearch/1.1/">
-   <channel>
-     <title>title</title>
-     <link>link</link>
-     <description>description</description>
-     <openSearch:totalResults>1</openSearch:totalResults>
-     <openSearch:startIndex>1</openSearch:startIndex>
-     <openSearch:itemsPerPage>1</openSearch:itemsPerPage>
-     <item>
-       <title>Error</title>
-       <description>error message</description>
-     </item>
-   </channel>
-}
+ * <channel>
+ * <title>title</title>
+ * <link>link</link>
+ * <description>description</description>
+ * <openSearch:totalResults>1</openSearch:totalResults>
+ * <openSearch:startIndex>1</openSearch:startIndex>
+ * <openSearch:itemsPerPage>1</openSearch:itemsPerPage>
+ * <item>
+ * <title>Error</title>
+ * <description>error message</description>
+ * </item>
+ * </channel>
+ * }
  * </pre>
  *
  * @author Andrea Aime - GeoSolutions
@@ -58,7 +58,7 @@ public class RSSExceptionTransformer extends LambdaTransformerBase {
     public Translator createTranslator(ContentHandler handler) {
         return new ExceptionTranslator(handler);
     }
-    
+
     public static String getDescription(GeoServerInfo geoServer, ServiceException e) {
         StringBuffer sb = new StringBuffer();
         OwsUtils.dumpExceptionMessages(e, sb, true);

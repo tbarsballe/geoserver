@@ -26,7 +26,6 @@ import java.util.function.Function;
  * Wraps multiple feature collections into a single.
  *
  * @author Justin Deoliveira, The Open Planning Project
- *
  */
 public class CompositeFeatureCollection extends DataFeatureCollection {
     /**
@@ -128,10 +127,10 @@ public class CompositeFeatureCollection extends DataFeatureCollection {
         List list = new ArrayList();
 
         Iterator it = collections.iterator();
-        while(it.hasNext()){
-            FeatureCollection col = (FeatureCollection)it.next();
+        while (it.hasNext()) {
+            FeatureCollection col = (FeatureCollection) it.next();
             FeatureIterator it2 = col.features();
-            while (it2.hasNext()){
+            while (it2.hasNext()) {
                 list.add(it.next());
             }
             it2.close();

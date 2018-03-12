@@ -15,9 +15,9 @@ import org.geotools.xml.InstanceComponent;
 
 /**
  * Binding object for the type http://www.opengis.net/ows:PositionType2D.
- *
  * <p>
- *        <pre>
+ * <p>
+ * <pre>
  *         <code>
  *  &lt;simpleType name="PositionType2D"&gt;
  *      &lt;annotation&gt;
@@ -32,6 +32,7 @@ import org.geotools.xml.InstanceComponent;
  *
  *          </code>
  *         </pre>
+ *
  * @generated
  */
 public class PositionType2DBinding extends AbstractSimpleBinding {
@@ -65,7 +66,7 @@ public class PositionType2DBinding extends AbstractSimpleBinding {
      * @generated modifiable
      */
     public Object parse(InstanceComponent instance, Object value)
-        throws Exception {
+            throws Exception {
         //TODO: implement
         return null;
     }

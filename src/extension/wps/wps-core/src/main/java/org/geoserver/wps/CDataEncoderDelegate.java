@@ -19,7 +19,7 @@ import org.xml.sax.ext.LexicalHandler;
 
 /**
  * Encodes objects as text sections within CDATA markers
- * 
+ *
  * @author Andrea Aime - OpenGeo
  */
 public class CDataEncoderDelegate implements EncoderDelegate {

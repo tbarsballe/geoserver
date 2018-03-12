@@ -39,28 +39,38 @@ import org.mockito.Mockito;
 
 /**
  * This class tests the functionalities of the {@link ConfigurableBlobStore} class.
- * 
+ *
  * @author Nicola Lagomarsini Geosolutions
  */
 public class ConfigurableBlobStoreTest extends GeoServerSystemTestSupport {
 
-    /** {@link Logger} used for reporting exceptions */
+    /**
+     * {@link Logger} used for reporting exceptions
+     */
     private static final Logger LOGGER = Logging.getLogger(ConfigurableBlobStoreTest.class);
 
-    /** Name of the test directory */
+    /**
+     * Name of the test directory
+     */
     public static final String TEST_BLOB_DIR_NAME = "gwcTestBlobs";
 
-    /** {@link CacheProvider} object used for testing purposes */
+    /**
+     * {@link CacheProvider} object used for testing purposes
+     */
     private static CacheProvider cache;
 
     private BlobStore defaultStore;
 
-    /** {@link ConfigurableBlobStore} object to test */
+    /**
+     * {@link ConfigurableBlobStore} object to test
+     */
     private static ConfigurableBlobStore blobStore;
 
-    /** Directory containing files for the {@link FileBlobStore} */
+    /**
+     * Directory containing files for the {@link FileBlobStore}
+     */
     private File directory;
-    
+
     @BeforeClass
     public static void initialSetup() {
         cache = new GuavaCacheProvider(new CacheConfiguration());
@@ -109,7 +119,7 @@ public class ConfigurableBlobStoreTest extends GeoServerSystemTestSupport {
 
         // Put a TileObject
         Resource bytes = new ByteArrayResource("1 2 3 4 5 6 test".getBytes());
-        long[] xyz = { 1L, 2L, 3L };
+        long[] xyz = {1L, 2L, 3L};
         Map<String, String> parameters = new HashMap<String, String>();
         parameters.put("a", "x");
         parameters.put("b", "ø");
@@ -156,7 +166,7 @@ public class ConfigurableBlobStoreTest extends GeoServerSystemTestSupport {
 
         // Put a TileObject
         Resource bytes = new ByteArrayResource("1 2 3 4 5 6 test".getBytes());
-        long[] xyz = { 1L, 2L, 3L };
+        long[] xyz = {1L, 2L, 3L};
         Map<String, String> parameters = new HashMap<String, String>();
         parameters.put("a", "x");
         parameters.put("b", "ø");
@@ -202,7 +212,7 @@ public class ConfigurableBlobStoreTest extends GeoServerSystemTestSupport {
 
         // Put a TileObject
         Resource bytes = new ByteArrayResource("1 2 3 4 5 6 test".getBytes());
-        long[] xyz = { 5L, 6L, 7L };
+        long[] xyz = {5L, 6L, 7L};
         TileObject to = TileObject.createCompleteTileObject("test:123123 112", xyz, "EPSG:4326",
                 "image/jpeg", parameters, bytes);
 
@@ -235,10 +245,10 @@ public class ConfigurableBlobStoreTest extends GeoServerSystemTestSupport {
         gwcConfig.setInnerCachingEnabled(true);
         gwcConfig.setEnabledPersistence(true);
         blobStore.setChanged(gwcConfig, false);
-        
+
         BlobStoreListener l1 = Mockito.mock(BlobStoreListener.class);
         BlobStoreListener l2 = Mockito.mock(BlobStoreListener.class);
-        
+
         assertTrue(blobStore.getDelegate() instanceof MemoryBlobStore);
 
         blobStore.addListener(l1);
@@ -246,7 +256,7 @@ public class ConfigurableBlobStoreTest extends GeoServerSystemTestSupport {
 
         Mockito.verify(defaultStore, Mockito.times(2)).addListener(Mockito.any(BlobStoreListener.class));
         Mockito.reset(defaultStore);
-        
+
         // change the configuration
         GWCConfig newConfig = new GWCConfig();
         newConfig.setInnerCachingEnabled(false);

@@ -43,9 +43,9 @@ import org.geowebcache.grid.GridSet;
  * <li>which in turn uses a {@link GridSetDetachableModel} to get each gridset out of
  * {@link GWC#getGridSetBroker()}
  * </ul>
- * 
+ * <p>
  * -->
- * 
+ *
  * @see StorePanel
  */
 @SuppressWarnings("serial")
@@ -123,7 +123,7 @@ public class GridSetsPage extends GeoServerSecuredPage {
         setHeaderPanel(headerPanel());
     }
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @SuppressWarnings({"rawtypes", "unchecked"})
     protected Component headerPanel() {
         Fragment header = new Fragment(HEADER_PANEL, "header", this);
 
@@ -148,7 +148,7 @@ public class GridSetsPage extends GeoServerSecuredPage {
         GeoServerDialog dialog;
 
         public SelectionRemovalLink(final String id, final GeoServerTablePanel<GridSet> gridsets,
-                final GeoServerDialog dialog) {
+                                    final GeoServerDialog dialog) {
             super(id);
             this.gridsets = gridsets;
             this.dialog = dialog;
@@ -193,7 +193,7 @@ public class GridSetsPage extends GeoServerSecuredPage {
 
                     IModel<String> confirmModel = new ParamResourceModel(
                             "GridSetsPage.confirmGridsetsDelete", GridSetsPage.this, String
-                                    .valueOf(count), String.valueOf(affectedLayers.size()),
+                            .valueOf(count), String.valueOf(affectedLayers.size()),
                             totalQuota.toNiceString());
 
                     Label confirmMessage = new Label(id, confirmModel);

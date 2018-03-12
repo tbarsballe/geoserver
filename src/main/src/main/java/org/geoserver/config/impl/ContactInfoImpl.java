@@ -41,7 +41,7 @@ public class ContactInfoImpl implements ContactInfo {
     String contactVoice;
 
     String onlineResource;
-    
+
     public String getId() {
         return id;
     }
@@ -86,7 +86,7 @@ public class ContactInfoImpl implements ContactInfo {
 
     @Override
     public String getAddressElectronicMailAddress() {
-        if( this.contactEmail != null && !this.contactEmail.isEmpty() ){
+        if (this.contactEmail != null && !this.contactEmail.isEmpty()) {
             // this field is deprecate use contactEmail if available
             return contactEmail;
         }
@@ -95,8 +95,8 @@ public class ContactInfoImpl implements ContactInfo {
 
     @Override
     public void setAddressElectronicMailAddress(String addressElectronicMailAddress) {
-        if( this.contactEmail == null || this.contactEmail.isEmpty() ){
-         // this field is deprecate - migrate value to contactEmail if available
+        if (this.contactEmail == null || this.contactEmail.isEmpty()) {
+            // this field is deprecate - migrate value to contactEmail if available
             this.contactEmail = addressElectronicMailAddress;
         }
         this.addressElectronicMailAddress = addressElectronicMailAddress;
@@ -174,11 +174,11 @@ public class ContactInfoImpl implements ContactInfo {
     public void setContactVoice(String contactVoice) {
         this.contactVoice = contactVoice;
     }
-    
+
     public String getOnlineResource() {
         return onlineResource;
     }
-    
+
     public void setOnlineResource(String onlineResource) {
         this.onlineResource = onlineResource;
     }
@@ -269,7 +269,7 @@ public class ContactInfoImpl implements ContactInfo {
         } else if (!contactPosition.equals(other.getContactPosition()))
             return false;
         if (contactVoice == null) {
-            if (other.getContactVoice()!= null)
+            if (other.getContactVoice() != null)
                 return false;
         } else if (!contactVoice.equals(other.getContactVoice()))
             return false;

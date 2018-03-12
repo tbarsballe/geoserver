@@ -23,8 +23,8 @@ import org.geotools.coverage.io.netcdf.NetCDFFormat;
 import org.junit.Test;
 
 public class NetCDFRasterEditPanelTest extends GeoServerWicketTestSupport {
-    
-    
+
+
     protected static QName SAMPLE_NETCDF = new QName(MockData.SF_URI, "sampleNetCDF",
             MockData.SF_PREFIX);
 
@@ -33,7 +33,7 @@ public class NetCDFRasterEditPanelTest extends GeoServerWicketTestSupport {
         super.setUpTestData(testData);
         testData.setUpRasterLayer(SAMPLE_NETCDF, "test-data/2DLatLonCoverage.nc", null, null, NetCDFDataTest.class);
     }
-    
+
     @Test
     public void testNetCDFCreate() throws Exception {
         Page page = tester.startPage(new CoverageStoreNewPage(new NetCDFFormat().getName()));
@@ -42,7 +42,7 @@ public class NetCDFRasterEditPanelTest extends GeoServerWicketTestSupport {
         Component editor = tester.getComponentFromLastRenderedPage("rasterStoreForm:parametersPanel");
         assertThat(editor, instanceOf(NetCDFRasterEditPanel.class));
     }
-    
+
     @Test
     public void testNetCDFEdit() throws Exception {
         CoverageStoreInfo store = getCatalog().getCoverageStoreByName(SAMPLE_NETCDF.getPrefix(), SAMPLE_NETCDF.getLocalPart());

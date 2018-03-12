@@ -19,13 +19,13 @@ import org.opengis.filter.Filter;
 
 /**
  * GeoServer wrapper for backend Geotools2 DataStore.
- *
+ * <p>
  * <p>
  * Support FeatureSource decorator for FeatureTypeInfo that takes care of
  * mapping the FeatureTypeInfo's FeatureSource with the schema and definition
  * query configured for it.
  * </p>
- *
+ * <p>
  * <p>
  * Because GeoServer requires that attributes always be returned in the same
  * order we need a way to smoothly inforce this. Could we use this class to do
@@ -39,7 +39,7 @@ public class GeoServerFeatureLocking extends GeoServerFeatureStore implements Si
     /**
      * Creates a new DEFQueryFeatureLocking object.
      *
-     * @param locking GeoTools2 FeatureSource
+     * @param locking  GeoTools2 FeatureSource
      * @param settings Settings for this store
      */
     GeoServerFeatureLocking(FeatureLocking<SimpleFeatureType, SimpleFeature> locking, Settings settings) {
@@ -56,9 +56,7 @@ public class GeoServerFeatureLocking extends GeoServerFeatureStore implements Si
      * </p>
      *
      * @param lock
-     *
      * @throws UnsupportedOperationException DOCUMENT ME!
-     *
      * @see org.vfny.geoserver.global.GeoServerFeatureStore#setFeatureLock(org.geotools.data.FeatureLock)
      */
     public void setFeatureLock(FeatureLock lock) {
@@ -73,10 +71,8 @@ public class GeoServerFeatureLocking extends GeoServerFeatureStore implements Si
      * DOCUMENT ME!
      *
      * @param query DOCUMENT ME!
-     *
      * @return DOCUMENT ME!
-     *
-     * @throws IOException DOCUMENT ME!
+     * @throws IOException         DOCUMENT ME!
      * @throws DataSourceException DOCUMENT ME!
      */
     public int lockFeatures(Query query) throws IOException {
@@ -108,9 +104,7 @@ public class GeoServerFeatureLocking extends GeoServerFeatureStore implements Si
      * DOCUMENT ME!
      *
      * @param filter DOCUMENT ME!
-     *
      * @return DOCUMENT ME!
-     *
      * @throws IOException DOCUMENT ME!
      */
     public int lockFeatures(Filter filter) throws IOException {
@@ -123,7 +117,6 @@ public class GeoServerFeatureLocking extends GeoServerFeatureStore implements Si
      * DOCUMENT ME!
      *
      * @return DOCUMENT ME!
-     *
      * @throws IOException DOCUMENT ME!
      */
     public int lockFeatures() throws IOException {
@@ -143,7 +136,6 @@ public class GeoServerFeatureLocking extends GeoServerFeatureStore implements Si
      * DOCUMENT ME!
      *
      * @param filter DOCUMENT ME!
-     *
      * @throws IOException DOCUMENT ME!
      */
     public void unLockFeatures(Filter filter) throws IOException {

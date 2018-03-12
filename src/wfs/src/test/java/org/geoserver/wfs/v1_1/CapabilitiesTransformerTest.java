@@ -41,7 +41,7 @@ public class CapabilitiesTransformerTest extends WFSTestSupport {
 
     @Test
     public void test() throws Exception {
-    	GetCapabilitiesType request = request();
+        GetCapabilitiesType request = request();
         CapabilitiesTransformer tx = new CapabilitiesTransformer.WFS1_1(getWFS(), request.getBaseUrl(), getCatalog(), Collections.<WFSExtendedCapabilitiesProvider>emptyList());
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         tx.transform(request, output);
@@ -49,11 +49,11 @@ public class CapabilitiesTransformerTest extends WFSTestSupport {
         InputStreamReader reader = new InputStreamReader(new ByteArrayInputStream(output
                 .toByteArray()));
 
-        File f = new File("../web/src/main/webapp/schemas/wfs/1.1.0/wfs.xsd" );
-        if ( !f.exists() ) {
+        File f = new File("../web/src/main/webapp/schemas/wfs/1.1.0/wfs.xsd");
+        if (!f.exists()) {
             return;
         }
-        
+
         ErrorHandler handler = new ErrorHandler(logger, Level.WARNING);
         // use the schema embedded in the web module
         ReaderUtils.validate(reader, handler, WFS.NAMESPACE,
@@ -68,7 +68,7 @@ public class CapabilitiesTransformerTest extends WFSTestSupport {
      */
     @Test
     public void testDefaultOutputFormat() throws Exception {
-    	GetCapabilitiesType request = request();
+        GetCapabilitiesType request = request();
         CapabilitiesTransformer tx = new CapabilitiesTransformer.WFS1_1(getWFS(), request.getBaseUrl(), getCatalog(), Collections.<WFSExtendedCapabilitiesProvider>emptyList());
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         tx.transform(request, output);

@@ -18,11 +18,11 @@ public class SecuredLayerInfo extends DecoratingLayerInfo {
 
     WrapperPolicy policy;
 
-    public SecuredLayerInfo(LayerInfo delegate, WrapperPolicy  policy) {
+    public SecuredLayerInfo(LayerInfo delegate, WrapperPolicy policy) {
         super(delegate);
         this.policy = policy;
     }
-    
+
     public WrapperPolicy getWrapperPolicy() {
         return policy;
     }

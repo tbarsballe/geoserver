@@ -23,25 +23,30 @@ import org.vfny.geoserver.wcs.WcsException;
 
 /**
  * Encoding a {@link GridCoverage2D} as per WCS 2.0 GML format.
- * 
+ *
  * @author Simone Giannecchini, GeoSolutions SAS
- * 
  */
 public class GMLCoverageResponseDelegate extends BaseCoverageResponseDelegate implements
         CoverageResponseDelegate {
 
-    /** FILE_EXTENSION */
+    /**
+     * FILE_EXTENSION
+     */
     private static final String FILE_EXTENSION = "gml";
 
-    /** MIME_TYPE */
+    /**
+     * MIME_TYPE
+     */
     private static final String MIME_TYPE = "application/gml+xml";
 
-    /** Can be used to map dimensions name to indexes */
+    /**
+     * Can be used to map dimensions name to indexes
+     */
     private EnvelopeAxesLabelsMapper envelopeDimensionsMapper;
 
     @SuppressWarnings("serial")
     public GMLCoverageResponseDelegate(EnvelopeAxesLabelsMapper envelopeDimensionsMapper,
-            GeoServer geoserver) {
+                                       GeoServer geoserver) {
         super(geoserver, Arrays.asList(FILE_EXTENSION, MIME_TYPE), // output formats
                 new HashMap<String, String>() { // file extensions
                     {
@@ -59,7 +64,7 @@ public class GMLCoverageResponseDelegate extends BaseCoverageResponseDelegate im
 
     @Override
     public void encode(GridCoverage2D coverage, String outputFormat,
-            Map<String, String> econdingParameters, OutputStream output) throws ServiceException,
+                       Map<String, String> econdingParameters, OutputStream output) throws ServiceException,
             IOException {
         final GMLTransformer transformer = new GMLTransformer(envelopeDimensionsMapper);
         transformer.setIndentation(4);

@@ -67,12 +67,12 @@ public class MapPPIOTest {
 
     Document dom(InputStream input) throws Exception {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        
-        factory.setNamespaceAware( true );
-        factory.setValidating( false );
-       
+
+        factory.setNamespaceAware(true);
+        factory.setValidating(false);
+
         DocumentBuilder builder = factory.newDocumentBuilder();
-        return builder.parse( input );
+        return builder.parse(input);
     }
 
     void print(Document document, OutputStream output) {

@@ -54,7 +54,7 @@ public class MapPreviewPageTest extends GeoServerWicketTestSupport {
         System.out.println(table.getDataProvider().size());
         tester.clickLink("table:navigatorBottom:navigator:next", true);
 
-        DataView data = 
+        DataView data =
                 (DataView) tester.getComponentFromLastRenderedPage("table:listContainer:items");
 
         boolean exists = false;
@@ -69,14 +69,14 @@ public class MapPreviewPageTest extends GeoServerWicketTestSupport {
 
         assertTrue(exists);
     }
-    
+
     @Test
     @Ignore
     public void testLayerNamesPrefixed() throws Exception {
         Catalog cat = getCatalog();
 
         LayerInfo ly = cat.getLayerByName(getLayerId(MockData.STREAMS));
-        
+
         assertNotNull(ly);
 
         tester.startPage(MapPreviewPage.class);
@@ -85,7 +85,7 @@ public class MapPreviewPageTest extends GeoServerWicketTestSupport {
         //move to next page
         tester.clickLink("table:navigatorBottom:navigator:next", true);
 
-        DataView data = 
+        DataView data =
                 (DataView) tester.getComponentFromLastRenderedPage("table:listContainer:items");
 
         boolean exists = false;
@@ -99,36 +99,36 @@ public class MapPreviewPageTest extends GeoServerWicketTestSupport {
 
         assertTrue(exists);
     }
-    
+
     @Test
     public void testMaxNumberOfFeaturesForPreview() throws Exception {
 
         GeoServer geoserver = getGeoServer();
         WFSInfo wfsInfo = geoserver.getService(WFSInfo.class);
-        
+
         int maxFeatures = 100;
         wfsInfo.setMaxNumberOfFeaturesForPreview(maxFeatures);
         geoserver.save(wfsInfo);
-        
+
         tester.startPage(MapPreviewPage.class);
         tester.assertRenderedPage(MapPreviewPage.class);
-        
+
         assertMaxFeaturesInData(
                 (DataView) tester.getComponentFromLastRenderedPage("table:listContainer:items"),
                 maxFeatures);
-        
+
         maxFeatures = 0;
         wfsInfo.setMaxNumberOfFeaturesForPreview(maxFeatures);
         geoserver.save(wfsInfo);
-        
+
         tester.startPage(MapPreviewPage.class);
         tester.assertRenderedPage(MapPreviewPage.class);
-        
+
         assertMaxFeaturesInData(
                 (DataView) tester.getComponentFromLastRenderedPage("table:listContainer:items"),
                 maxFeatures);
     }
-    
+
     @Test
     public void testWfsOutputFormatValueUrlEncoding() {
         tester.startPage(MapPreviewPage.class);
@@ -136,10 +136,10 @@ public class MapPreviewPageTest extends GeoServerWicketTestSupport {
 
         Label optionLabel = (Label) tester.getComponentFromLastRenderedPage("table:listContainer:items:4:itemProperties:4:component:menu:wfs:wfsFormats:3");
         assertTrue(optionLabel.getDefaultModelObjectAsString().equals("GML3.2"));
-        for (Iterator<? extends Behavior> itBehaviors = optionLabel.getBehaviors().iterator(); itBehaviors.hasNext();) {
+        for (Iterator<? extends Behavior> itBehaviors = optionLabel.getBehaviors().iterator(); itBehaviors.hasNext(); ) {
             Behavior b = itBehaviors.next();
             if (b instanceof AttributeModifier) {
-                AttributeModifier am = (AttributeModifier)b;
+                AttributeModifier am = (AttributeModifier) b;
                 String url = am.toString();
                 assertTrue(!url.contains("gml+xml"));
                 assertTrue(url.contains("gml%2Bxml"));
@@ -152,18 +152,18 @@ public class MapPreviewPageTest extends GeoServerWicketTestSupport {
         for (Iterator it = data.iterator(); it.hasNext(); ) {
             MarkupContainer c = (MarkupContainer) it.next();
             MarkupContainer list = (MarkupContainer) c.get("itemProperties:4:component:menu");
-            for (Iterator<? extends Behavior> itBehaviors = list.getBehaviors().iterator(); itBehaviors.hasNext();) {
+            for (Iterator<? extends Behavior> itBehaviors = list.getBehaviors().iterator(); itBehaviors.hasNext(); ) {
                 Behavior b = itBehaviors.next();
                 if (b instanceof AttributeModifier) {
-                    AttributeModifier am = (AttributeModifier)b;
+                    AttributeModifier am = (AttributeModifier) b;
                     String url = am.toString();
                     if (maxFeatures > 0) {
-                        assertTrue(url.contains("&maxFeatures="+maxFeatures));
+                        assertTrue(url.contains("&maxFeatures=" + maxFeatures));
                     } else {
                         assertTrue(!url.contains("&maxFeatures="));
                     }
                 }
-                
+
             }
         }
     }

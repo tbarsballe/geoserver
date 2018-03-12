@@ -9,14 +9,15 @@ import org.geoserver.security.config.SecurityAuthProviderConfig;
 
 /**
  * Configuration for {@linkplain WebServiceBodyResponseSecurityProvider} class.
- * 
- * @author Alessio Fabiani, GeoSolutions S.A.S.
  *
+ * @author Alessio Fabiani, GeoSolutions S.A.S.
  */
 public class WebServiceBodyResponseSecurityProviderConfig extends BaseSecurityNamedServiceConfig
         implements SecurityAuthProviderConfig {
 
-    /** serialVersionUID */
+    /**
+     * serialVersionUID
+     */
     private static final long serialVersionUID = -784422971183238680L;
 
     String userGroupServiceName;

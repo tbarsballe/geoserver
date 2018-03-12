@@ -26,11 +26,12 @@ import org.xml.sax.helpers.NamespaceSupport;
 public class DescribeFeatureTypeKvpRequestReader extends WFSKvpRequestReader {
 
     private final Catalog catalog;
-    
+
     public DescribeFeatureTypeKvpRequestReader(final Catalog catalog) {
         super(DescribeFeatureTypeType.class, WfsFactory.eINSTANCE);
         this.catalog = catalog;
     }
+
     public DescribeFeatureTypeKvpRequestReader(final Catalog catalog, Class requestBean, EFactory factory) {
         super(requestBean, factory);
         this.catalog = catalog;
@@ -44,13 +45,15 @@ public class DescribeFeatureTypeKvpRequestReader extends WFSKvpRequestReader {
         //do an additional check for outputFormat, because the default 
         // in wfs 1.1 is not the default for wfs 1.0
         DescribeFeatureTypeRequest req = DescribeFeatureTypeRequest.adapt(request);
-        
+
         if (!req.isSetOutputFormat()) {
-            switch(WFSInfo.Version.negotiate(req.getVersion())) {
+            switch (WFSInfo.Version.negotiate(req.getVersion())) {
                 case V_10:
-                    req.setOutputFormat("XMLSCHEMA"); break;
+                    req.setOutputFormat("XMLSCHEMA");
+                    break;
                 case V_11:
-                    req.setOutputFormat("text/xml; subtype=gml/3.1.1"); break;
+                    req.setOutputFormat("text/xml; subtype=gml/3.1.1");
+                    break;
                 case V_20:
                 default:
                     req.setOutputFormat("application/gml+xml; version=3.2");
@@ -73,7 +76,7 @@ public class DescribeFeatureTypeKvpRequestReader extends WFSKvpRequestReader {
             if (kvp.get("NAMESPACE") instanceof NamespaceSupport) {
                 namespaces = (NamespaceSupport) kvp.get("namespace");
             } else if (kvp.get("NAMESPACES") instanceof NamespaceSupport) {
-                    namespaces = (NamespaceSupport) kvp.get("namespaces");
+                namespaces = (NamespaceSupport) kvp.get("namespaces");
             } else {
                 LOGGER.warning("There's a namespace parameter but it seems it wasn't parsed to a "
                         + NamespaceSupport.class.getName() + ": " + kvp.get("namespace"));
@@ -82,7 +85,7 @@ public class DescribeFeatureTypeKvpRequestReader extends WFSKvpRequestReader {
         if (namespaces != null) {
             List<QName> typeNames = req.getTypeNames();
             List<QName> newList = new ArrayList<QName>(typeNames.size());
-            for(QName name : typeNames){
+            for (QName name : typeNames) {
                 String localPart = name.getLocalPart();
                 String prefix = name.getPrefix();
                 String namespaceURI = name.getNamespaceURI();
@@ -91,11 +94,11 @@ public class DescribeFeatureTypeKvpRequestReader extends WFSKvpRequestReader {
                     namespaceURI = namespaces.getURI(XMLConstants.DEFAULT_NS_PREFIX);
                 } else if (XMLConstants.NULL_NS_URI.equals(namespaceURI)) {
                     //prefix specified, does a namespace mapping were declared for it?
-                    if(namespaces.getURI(prefix) != null){
+                    if (namespaces.getURI(prefix) != null) {
                         namespaceURI = namespaces.getURI(prefix);
                     }
                 }
-                if(catalog.getNamespaceByURI(namespaceURI) != null){
+                if (catalog.getNamespaceByURI(namespaceURI) != null) {
                     prefix = catalog.getNamespaceByURI(namespaceURI).getPrefix();
                 }
                 newList.add(new QName(namespaceURI, localPart, prefix));

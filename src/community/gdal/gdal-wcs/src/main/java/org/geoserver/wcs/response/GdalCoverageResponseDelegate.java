@@ -41,7 +41,7 @@ import org.vfny.geoserver.wcs.WcsException;
 /**
  * Implementation of {@link CoverageResponseDelegate} that leverages the gdal_translate utility to encode coverages in any output format supported by the
  * GDAL library available on the system where GeoServer is running.
- * 
+ * <p>
  * <p>
  * The encoding process involves two steps:
  * <ol>
@@ -49,11 +49,11 @@ import org.vfny.geoserver.wcs.WcsException;
  * <li>the <code>gdal_translate</code> command is invoked with the provided options to convert the dumped GeoTIFF file to the desired format</li>
  * </ol>
  * </p>
- * 
+ * <p>
  * <p>
  * Configuration for the supported output formats must be passed to the class via its {@link #addFormat(GdalFormat)} method.
  * </p>
- * 
+ *
  * @author Stefano Costa, GeoSolutions
  */
 public class GdalCoverageResponseDelegate implements CoverageResponseDelegate, FormatConverter {
@@ -111,8 +111,6 @@ public class GdalCoverageResponseDelegate implements CoverageResponseDelegate, F
 
     /**
      * Returns the gdal_translate executable full path.
-     * 
-     *
      */
     @Override
     public String getExecutable() {
@@ -121,7 +119,7 @@ public class GdalCoverageResponseDelegate implements CoverageResponseDelegate, F
 
     /**
      * Sets the gdal_translate executable full path. The default value is simply "gdal_translate", which will work if gdal_translate is in the path.
-     * 
+     *
      * @param gdalTranslate
      */
     @Override
@@ -131,8 +129,6 @@ public class GdalCoverageResponseDelegate implements CoverageResponseDelegate, F
 
     /**
      * Returns the environment variables that are set prior to invoking gdal_translate.
-     * 
-     *
      */
     @Override
     public Map<String, String> getEnvironment() {
@@ -142,7 +138,7 @@ public class GdalCoverageResponseDelegate implements CoverageResponseDelegate, F
     /**
      * Provides the environment variables that are set prior to invoking gdal_translate (notably the GDAL_DATA variable, specifying the location of
      * GDAL's data directory).
-     * 
+     *
      * @param environment
      */
     @Override
@@ -155,7 +151,7 @@ public class GdalCoverageResponseDelegate implements CoverageResponseDelegate, F
 
     /**
      * Adds a GDAL format among the supported ones
-     * 
+     *
      * @param format
      */
     @Override
@@ -214,7 +210,7 @@ public class GdalCoverageResponseDelegate implements CoverageResponseDelegate, F
 
     /**
      * Replaces currently supported formats with the provided list.
-     *  
+     *
      * @param formats
      */
     @Override
@@ -226,7 +222,7 @@ public class GdalCoverageResponseDelegate implements CoverageResponseDelegate, F
         formatsLock.writeLock().lock();
         try {
             clearFormatsInternal();
-            for (Format format: formats) {
+            for (Format format : formats) {
                 if (format != null) {
                     addFormatInternal(format);
                 }
@@ -312,14 +308,14 @@ public class GdalCoverageResponseDelegate implements CoverageResponseDelegate, F
 
     @Override
     public void encode(GridCoverage2D coverage, String outputFormat,
-            Map<String, String> econdingParameters, OutputStream output) throws ServiceException,
+                       Map<String, String> econdingParameters, OutputStream output) throws ServiceException,
             IOException {
         Utilities.ensureNonNull("sourceCoverage", coverage);
 
         // figure out which output format we're going to generate
         Format format = getGdalFormat(outputFormat);
-        
-        for (FormatAdapter adapter: format.getFormatAdapters()) {
+
+        for (FormatAdapter adapter : format.getFormatAdapters()) {
             coverage = (GridCoverage2D) adapter.adapt(coverage);
         }
 
@@ -347,7 +343,7 @@ public class GdalCoverageResponseDelegate implements CoverageResponseDelegate, F
             IOUtils.emptyDirectory(tempGS);
 
             // was it a single file output?
-            if(format.isSingleFile()) {
+            if (format.isSingleFile()) {
                 try (FileInputStream fis = new FileInputStream(outputFile)) {
                     org.apache.commons.io.IOUtils.copy(fis, output);
                 }
@@ -369,10 +365,9 @@ public class GdalCoverageResponseDelegate implements CoverageResponseDelegate, F
 
     /**
      * Writes to disk using GeoTIFF format.
-     *  
+     *
      * @param tempDir
      * @param coverage
-     *
      */
     private File writeToDisk(File tempDir, GridCoverage2D coverage) throws Exception {
         // create the temp file for this output
@@ -391,7 +386,7 @@ public class GdalCoverageResponseDelegate implements CoverageResponseDelegate, F
             writerParams.parameter(AbstractGridFormat.GEOTOOLS_WRITE_PARAMS.getName().toString()).setValue(wp);
 
             WCSInfo wcsService = geoServer.getService(WCSInfo.class);
-            if(wcsService != null && wcsService.isLatLon()){
+            if (wcsService != null && wcsService.isLatLon()) {
                 writerParams.parameter(GeoTiffFormat.RETAIN_AXES_ORDER.getName().toString()).setValue(true);
             }
 

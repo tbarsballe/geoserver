@@ -23,7 +23,7 @@ import org.opengis.feature.type.AttributeDescriptor;
 
 /**
  * Makes sure all the non writable attributes have null value
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 class CheckAttributesFeatureCollection extends DecoratingSimpleFeatureCollection {
@@ -33,7 +33,7 @@ class CheckAttributesFeatureCollection extends DecoratingSimpleFeatureCollection
     Response response;
 
     protected CheckAttributesFeatureCollection(SimpleFeatureCollection delegate,
-            Collection<String> writableAttributes, Response response) {
+                                               Collection<String> writableAttributes, Response response) {
         super(delegate);
         this.writableAttributes = new HashSet<String>(writableAttributes);
         this.response = response;
@@ -49,7 +49,7 @@ class CheckAttributesFeatureCollection extends DecoratingSimpleFeatureCollection
         SimpleFeatureIterator delegate;
 
         public CheckAttributesFeatureIterator(SimpleFeatureIterator delegate,
-                Set<String> writableAttributes) {
+                                              Set<String> writableAttributes) {
             this.delegate = delegate;
         }
 

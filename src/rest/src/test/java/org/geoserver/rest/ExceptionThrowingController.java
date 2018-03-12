@@ -17,7 +17,7 @@ public class ExceptionThrowingController {
 
     @GetMapping
     public void handleGet(@RequestParam(name = "message", required = false) String message,
-            @RequestParam(name = "code", required = false) Integer code) {
+                          @RequestParam(name = "code", required = false) Integer code) {
 
         throw new RestException(message != null ? message : "Unknown error",
                 code != null ? HttpStatus.valueOf(code) : HttpStatus.INTERNAL_SERVER_ERROR);

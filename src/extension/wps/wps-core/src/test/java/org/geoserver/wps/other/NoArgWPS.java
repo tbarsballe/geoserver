@@ -12,11 +12,11 @@ import org.geoserver.wps.gs.GeoServerProcess;
 /**
  * No argument process, used for the sake of testing
  */
-@DescribeProcess(title="NoArgWPS", description="NoArgWPS - test case for no argument process")
+@DescribeProcess(title = "NoArgWPS", description = "NoArgWPS - test case for no argument process")
 public class NoArgWPS implements GeoServerProcess {
 
-   @DescribeResult(name="result", description="output result")
-   public String execute( ) {
-        return "Completed!"  ;
-   }
+    @DescribeResult(name = "result", description = "output result")
+    public String execute() {
+        return "Completed!";
+    }
 }

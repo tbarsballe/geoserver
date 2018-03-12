@@ -20,7 +20,7 @@ import org.geoserver.platform.ServiceException;
 
 /**
  * Encodes Repository Item stream
- * 
+ *
  * @author Alessio Fabiani - GeoSolutions
  */
 public class CSWGetRepositoryItemResponse extends Response {
@@ -66,7 +66,7 @@ public class CSWGetRepositoryItemResponse extends Response {
             IOUtils.closeQuietly(input);
             output.flush();
         }
-        
+
     }
 
 }

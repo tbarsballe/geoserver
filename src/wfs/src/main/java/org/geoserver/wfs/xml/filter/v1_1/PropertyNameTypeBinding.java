@@ -22,24 +22,27 @@ import org.xml.sax.helpers.NamespaceSupport;
  * property name and adds namespace support.
  *
  * @author Justin Deoliveira, The Open Planning Project
- *
  */
 public class PropertyNameTypeBinding extends OGCPropertyNameTypeBinding {
-    /** the geoserver catalog */
+    /**
+     * the geoserver catalog
+     */
     Catalog catalog;
 
-    /** parser namespace mappings */
+    /**
+     * parser namespace mappings
+     */
     NamespaceSupport namespaceSupport;
 
     public PropertyNameTypeBinding(FilterFactory filterFactory, NamespaceSupport namespaceSupport,
-        Catalog catalog) {
+                                   Catalog catalog) {
         super(filterFactory);
         this.namespaceSupport = namespaceSupport;
         this.catalog = catalog;
     }
 
     public Object parse(ElementInstance instance, Node node, Object value)
-        throws Exception {
+            throws Exception {
         PropertyName propertyName = (PropertyName) super.parse(instance, node, value);
 
         //JD: temporary hack, this should be carried out at evaluation time
@@ -56,7 +59,7 @@ public class PropertyNameTypeBinding extends OGCPropertyNameTypeBinding {
                 throw new WFSException("Illegal attribute namespace: " + namespaceURI);
             }
         }
-        
+
         if (factory instanceof FilterFactory2) {
             return ((FilterFactory2) factory).property(propertyName.getPropertyName(), namespaceSupport);
         }

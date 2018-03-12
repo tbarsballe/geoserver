@@ -33,7 +33,7 @@ import org.opengis.filter.spatial.BBOX;
 
 /**
  * This test class simply ensures that the vector to raster transform is given a BBOX within its query filter
- * 
+ *
  * @author Rich Fecher
  */
 public class VectorToRasterTransformTest extends WMSTestSupport {

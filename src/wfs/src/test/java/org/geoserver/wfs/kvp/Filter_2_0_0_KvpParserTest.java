@@ -16,20 +16,20 @@ import org.opengis.filter.expression.PropertyName;
 
 /**
  * Tests for {@link Filter_2_0_0_KvpParser}, the parser for Filter 2.0 in KVP requests.
- * 
+ *
  * @author Ben Caradoc-Davies (Transient Software Limited)
  */
 public class Filter_2_0_0_KvpParserTest {
 
     /**
      * Test that Filter 2.0 {@code fes:PropertyIsLike} can be parsed from percent-encoded form into a {@link PropertyIsLike} object.
-     * 
+     *
      * @param expectedLiteral expected decoded filter literal
-     * @param encodedLiteral percent-encoded filter literal
-     * @param matchCase value of {@code matchCase} filter attribute or {@code null} if none
+     * @param encodedLiteral  percent-encoded filter literal
+     * @param matchCase       value of {@code matchCase} filter attribute or {@code null} if none
      */
     private static void parsePropertyIsLike(String expectedLiteral, String encodedLiteral,
-            Boolean matchCase) throws Exception {
+                                            Boolean matchCase) throws Exception {
         String encodedXml = "%3Cfes:Filter" //
                 + "%20xmlns:fes=%22http://www.opengis.net/fes/2.0%22%3E" //
                 + "%3Cfes:PropertyIsLike" //

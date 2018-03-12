@@ -23,9 +23,9 @@ import org.locationtech.geogig.repository.IndexInfo.IndexType;
 
 public class IndexListPanel extends GeoServerTablePanel<IndexInfoEntry> {
 
-	private static final long serialVersionUID = -8379525803311741485L;
+    private static final long serialVersionUID = -8379525803311741485L;
 
-	private final IndexInfoProvider provider;
+    private final IndexInfoProvider provider;
 
     private final FeedbackPanel pingFeedbackPanel;
 
@@ -51,7 +51,7 @@ public class IndexListPanel extends GeoServerTablePanel<IndexInfoEntry> {
 
     @Override
     protected Component getComponentForProperty(String id, IModel<IndexInfoEntry> itemModel,
-            Property<IndexInfoEntry> property) {
+                                                Property<IndexInfoEntry> property) {
 
         if (property == IndexInfoProvider.LAYER) {
             String value = (String) IndexInfoProvider.LAYER.getModel(itemModel).getObject();
@@ -62,12 +62,12 @@ public class IndexListPanel extends GeoServerTablePanel<IndexInfoEntry> {
             Label label = new Label(id, value);
             return label;
         } else if (property == IndexInfoProvider.INDEX_TYPE) {
-        	IndexType value = (IndexType) IndexInfoProvider.INDEX_TYPE.getModel(itemModel).getObject();
+            IndexType value = (IndexType) IndexInfoProvider.INDEX_TYPE.getModel(itemModel).getObject();
             Label label = new Label(id, value.toString());
             return label;
         } else if (property == IndexInfoProvider.EXTRA_ATTRIBUTES) {
             @SuppressWarnings("unchecked")
-			List<String> value = (List<String>) IndexInfoProvider.EXTRA_ATTRIBUTES.getModel(itemModel).getObject();
+            List<String> value = (List<String>) IndexInfoProvider.EXTRA_ATTRIBUTES.getModel(itemModel).getObject();
             Label label = new Label(id, value.toString());
             return label;
         }
@@ -76,14 +76,14 @@ public class IndexListPanel extends GeoServerTablePanel<IndexInfoEntry> {
 
     static class IndexInfoProvider extends GeoServerDataProvider<IndexInfoEntry> {
 
-		private static final long serialVersionUID = -3628151089545613032L;
+        private static final long serialVersionUID = -3628151089545613032L;
 
-		static final Property<IndexInfoEntry> LAYER = new BeanProperty<>("layer", "layer");
+        static final Property<IndexInfoEntry> LAYER = new BeanProperty<>("layer", "layer");
 
         static final Property<IndexInfoEntry> INDEXED_ATTRIBUTE = new BeanProperty<>("indexedAttribute", "indexedAttribute");
-        
+
         static final Property<IndexInfoEntry> INDEX_TYPE = new BeanProperty<>("indexType", "indexType");
-        
+
         static final Property<IndexInfoEntry> EXTRA_ATTRIBUTES = new BeanProperty<>("extraAttributes", "extraAttributes");
 
         final List<Property<IndexInfoEntry>> PROPERTIES = Arrays
@@ -92,7 +92,7 @@ public class IndexListPanel extends GeoServerTablePanel<IndexInfoEntry> {
         private final List<IndexInfoEntry> indexInfoEntries;
 
         public IndexInfoProvider(final List<IndexInfo> indexInfos) {
-        	this.indexInfoEntries = IndexInfoEntry.fromIndexInfos(indexInfos);
+            this.indexInfoEntries = IndexInfoEntry.fromIndexInfos(indexInfos);
         }
 
         @Override

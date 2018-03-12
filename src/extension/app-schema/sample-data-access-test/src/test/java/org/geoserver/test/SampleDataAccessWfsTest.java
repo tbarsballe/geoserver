@@ -32,7 +32,7 @@ import org.w3c.dom.NodeList;
 
 /**
  * WFS GetFeature to test integration of {@link SampleDataAccess} with GeoServer.
- * 
+ *
  * @author Ben Caradoc-Davies, CSIRO Exploration and Mining
  */
 public class SampleDataAccessWfsTest extends SampleDataAccessTestSupport {
@@ -51,14 +51,13 @@ public class SampleDataAccessWfsTest extends SampleDataAccessTestSupport {
         namespaces.put(SampleDataAccessData.NAMESPACE_PREFIX, SampleDataAccessData.NAMESPACE_URI);
         XMLUnit.setXpathNamespaceContext(new SimpleNamespaceContext(namespaces));
     }
-    
+
     @Override
     protected void onTearDown(SystemTestData testData) throws Exception {
     }
 
     /**
      * Test whether GetCapabilities returns wfs:WFS_Capabilities.
-     * 
      */
     @Test
     public void testGetCapabilities() throws Exception {
@@ -69,7 +68,6 @@ public class SampleDataAccessWfsTest extends SampleDataAccessTestSupport {
 
     /**
      * Test whether DescribeFeatureType returns xsd:schema.
-     * 
      */
     @Test
     public void testDescribeFeatureType() throws Exception {
@@ -80,7 +78,6 @@ public class SampleDataAccessWfsTest extends SampleDataAccessTestSupport {
 
     /**
      * Test whether GetFeature returns wfs:FeatureCollection.
-     * 
      */
     @Test
     public void testGetFeature() throws Exception {
@@ -91,7 +88,6 @@ public class SampleDataAccessWfsTest extends SampleDataAccessTestSupport {
 
     /**
      * Test content of GetFeature response.
-     * 
      */
     @Test
     public void testGetFeatureContent() throws Exception {
@@ -127,13 +123,10 @@ public class SampleDataAccessWfsTest extends SampleDataAccessTestSupport {
 
     /**
      * Assert that there are count matches of xpath in doc.
-     * 
-     * @param count
-     *            expected number of matches
-     * @param xpath
-     *            xpath expression
-     * @param doc
-     *            document under test
+     *
+     * @param count expected number of matches
+     * @param xpath xpath expression
+     * @param doc   document under test
      */
     public void assertXpathCount(int count, String xpath, Document doc) throws Exception {
         XpathEngine engine = XMLUnit.newXpathEngine();
@@ -143,9 +136,8 @@ public class SampleDataAccessWfsTest extends SampleDataAccessTestSupport {
 
     /**
      * Return {@link Document} as a pretty-printed string.
-     * 
-     * @param doc
      *
+     * @param doc
      */
     public String prettyString(Document doc) throws Exception {
         OutputStream out = new ByteArrayOutputStream();
@@ -155,7 +147,7 @@ public class SampleDataAccessWfsTest extends SampleDataAccessTestSupport {
 
     /**
      * Pretty-print a {@link Document} to an {@link OutputStream}.
-     * 
+     *
      * @param doc
      * @param out
      */

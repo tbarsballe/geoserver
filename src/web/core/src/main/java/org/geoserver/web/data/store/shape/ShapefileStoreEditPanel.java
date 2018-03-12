@@ -29,9 +29,8 @@ import org.geotools.util.logging.Logging;
 
 /**
  * Provides the form components for the shapefile datastore
- * 
+ *
  * @author Andrea Aime - GeoSolution
- * 
  */
 @SuppressWarnings("serial")
 public class ShapefileStoreEditPanel extends StoreEditPanel {

@@ -31,7 +31,7 @@ import org.geotools.util.URLs;
 
 /**
  * Handles input and output of feature collections as zipped shapefiles
- * 
+ *
  * @author Andrea Aime - OpenGeo
  */
 public class ShapeZipPPIO extends BinaryPPIO {
@@ -117,7 +117,7 @@ public class ShapeZipPPIO extends BinaryPPIO {
         }
 
     }
-    
+
     @Override
     public String getFileExtension() {
         return "zip";

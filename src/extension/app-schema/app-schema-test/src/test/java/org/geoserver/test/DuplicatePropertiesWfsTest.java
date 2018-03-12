@@ -15,7 +15,7 @@ import org.w3c.dom.Document;
 
 /**
  * WFS GetFeature to test duplicate properties with GeoServer.
- * 
+ *
  * @author Florence Tan, CSIRO Earth Science and Resource Engineering
  */
 public class DuplicatePropertiesWfsTest extends AbstractAppSchemaTestSupport {

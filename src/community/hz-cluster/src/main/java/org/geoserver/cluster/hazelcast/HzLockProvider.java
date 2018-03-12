@@ -51,7 +51,7 @@ public class HzLockProvider implements LockProvider, InitializingBean {
      * <p>
      * {@code path} is used as the key to acquire the distributed lock from
      * {@link HazelcastInstance#getLock(String)}.
-     * 
+     *
      * @see org.geoserver.platform.resource.LockProvider#acquire(java.lang.String)
      */
     @Override
@@ -69,7 +69,7 @@ public class HzLockProvider implements LockProvider, InitializingBean {
         // }
         ILock lock = clusterInstance.getLock(path);
         lock.lock();
-        
+
         // if (LOGGER.isLoggable(Level.FINE)) {
         LOGGER.info(format("%s - Successfully acquired distributed lock '%s' (Thread %s)",
                 nodeId(cluster), path, Thread.currentThread().getName()));

@@ -36,9 +36,9 @@ import com.vividsolutions.jts.geom.Envelope;
  * <li>An "aparam" animation parameter</li>
  * <li>An "avalues" list of values for the animation parameter</li>
  * </ul>
- * 
+ * <p>
  * </p>
- * 
+ *
  * @author Alessio Fabiani, GeoSolutions S.A.S., alessio.fabiani@geo-solutions.it
  * @author Andrea Aime, GeoSolutions S.A.S., andrea.aime@geo-solutions.it
  */
@@ -47,7 +47,7 @@ public class Animator {
     private static Logger LOGGER = org.geotools.util.logging.Logging
             .getLogger("org.vfny.geoserver.wms.responses.map.anim");
 
-    /** 
+    /**
      * default 'format' value
      * - used if no output format has been found on the GetMap request
      **/
@@ -65,7 +65,7 @@ public class Animator {
 
     /**
      * The prototype Constructor
-     * 
+     *
      * @param wms
      * @param wmsConfiguration
      */
@@ -75,16 +75,15 @@ public class Animator {
     }
 
     /**
-     * Produce method. 
+     * Produce method.
      * Returns the full animation WebMap request.
-     * 
+     *
      * @param request
      * @param wms
      * @param wmsConfiguration
-     *
      */
     public static org.geoserver.wms.WebMap produce(GetMapRequest request, WebMapService wms,
-            WMS wmsConfiguration) throws Exception {
+                                                   WMS wmsConfiguration) throws Exception {
 
         // initializing the catalog of frames. The method analyzes the main request looking for
         // 'aparam' and 'avalues' and initializes the list of frames to be produced.
@@ -93,29 +92,29 @@ public class Animator {
         if (frameCatalog == null) {
             throw new RuntimeException("Animator initialization error!");
         }
-        
+
         // Setup AnimGifOUTputFormat as default if not specified
         if (request.getFormat() == null) {
             request.setFormat(GIF_ANIMATED_FORMAT);
         }
-        
+
         // if we have a case of layers being the param, stick the first value into the request
-        if(frameCatalog.getParameter().equalsIgnoreCase("LAYERS")) {
+        if (frameCatalog.getParameter().equalsIgnoreCase("LAYERS")) {
             List<String> layers0 = Arrays.asList(frameCatalog.getValues()[0].replaceAll("\\\\,", ",").split("\\s*,\\s*"));
             LayerParser parser = new LayerParser(wmsConfiguration);
-            List<MapLayerInfo> layers = parser.parseLayerInfos(layers0, 
+            List<MapLayerInfo> layers = parser.parseLayerInfos(layers0,
                     request.getRemoteOwsURL(), request.getRemoteOwsType());
             request.setLayers(layers);
         }
-        
+
         // set rest of the wms defaults
         request = DefaultWebMapService.autoSetMissingProperties(request);
-        
+
         // if we have a case of layers being the param, we should also try to get uniform
         // width and height and bbox
-        if(frameCatalog.getParameter().equalsIgnoreCase("LAYERS")) {
+        if (frameCatalog.getParameter().equalsIgnoreCase("LAYERS")) {
             Envelope bbox = request.getBbox();
-            request.getRawKvp().put("BBOX", bbox.getMinX() + "," + request.getBbox().getMinY() + "," 
+            request.getRawKvp().put("BBOX", bbox.getMinX() + "," + request.getBbox().getMinY() + ","
                     + request.getBbox().getMaxX() + "," + request.getBbox().getMaxY());
             request.getRawKvp().put("WIDTH", String.valueOf(request.getWidth()));
             request.getRawKvp().put("HEIGHT", String.valueOf(request.getHeight()));
@@ -136,17 +135,17 @@ public class Animator {
 
     /**
      * Initializes the Animator engine.
-     * 
-     * @param request
-     * @param wmsConfiguration 
      *
+     * @param request
+     * @param wmsConfiguration
      */
     private static FrameCatalog initRequestManager(GetMapRequest request, WebMapService wms, WMS wmsConfiguration) {
         return new FrameCatalog(request, wms, wmsConfiguration);
     }
-    
+
     /**
      * A helper that avoids duplicating the code to parse a layer
+     *
      * @author Andrea Aime - GeoSolutions
      */
     static class LayerParser extends GetMapKvpRequestReader {
@@ -156,9 +155,9 @@ public class Animator {
         }
 
         public List<MapLayerInfo> parseLayerInfos(List<String> requestedLayerNames, URL remoteOwsUrl,
-                String remoteOwsType) throws Exception {
+                                                  String remoteOwsType) throws Exception {
             List requestedLayerInfos = super.parseLayers(requestedLayerNames, remoteOwsUrl, remoteOwsType);
-            
+
             List<MapLayerInfo> layers = new ArrayList<MapLayerInfo>();
             for (Object o : requestedLayerInfos) {
                 if (o instanceof LayerInfo) {
@@ -172,12 +171,11 @@ public class Animator {
                     layers.add((MapLayerInfo) o);
                 }
             }
-            
+
             return layers;
         }
-        
+
     }
 
-    
 
 }

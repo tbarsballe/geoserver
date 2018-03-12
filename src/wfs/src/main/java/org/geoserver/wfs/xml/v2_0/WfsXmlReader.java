@@ -25,46 +25,44 @@ import org.geotools.xml.Parser;
 
 /**
  * Xml reader for wfs 2.0 xml requests.
- * 
- * @author Justin Deoliveira, OpenGeo
  *
+ * @author Justin Deoliveira, OpenGeo
  */
 public class WfsXmlReader extends XmlRequestReader {
 
     GeoServer gs;
     EntityResolverProvider entityResolverProvider;
-    
+
     public WfsXmlReader(String element, GeoServer gs) {
         super(new QName(WFS.NAMESPACE, element), new Version("2.0.0"), "wfs");
         this.gs = gs;
         this.entityResolverProvider = new EntityResolverProvider(gs);
-    }  
-    
+    }
+
     @Override
     public Object read(Object request, Reader reader, Map kvp) throws Exception {
         WFSConfiguration config = new WFSConfiguration();
         WFSXmlUtils.initWfsConfiguration(config, gs, new FeatureTypeSchemaBuilder.GML32(gs));
-        
+
         Parser parser = new Parser(config);
         parser.setEntityResolver(entityResolverProvider.getEntityResolver());
-        
+
         WFSInfo wfs = wfs();
-        
+
         WFSXmlUtils.initRequestParser(parser, wfs, gs, kvp);
         Object parsed = null;
         try {
-            parsed = WFSXmlUtils.parseRequest(parser, reader, wfs);    
-        }
-        catch(Exception e) {
+            parsed = WFSXmlUtils.parseRequest(parser, reader, wfs);
+        } catch (Exception e) {
             //check the exception, and set code to OperationParsingFailed if code not set
-            if (!(e instanceof ServiceException) || ((ServiceException)e).getCode() == null) {
+            if (!(e instanceof ServiceException) || ((ServiceException) e).getCode() == null) {
                 e = new WFSException("Request parsing failed", e, "OperationParsingFailed");
             }
             throw e;
         }
 
         WFSXmlUtils.checkValidationErrors(parser, this);
-        
+
         return parsed;
     }
 

@@ -27,11 +27,11 @@ public class SelectionServiceRemovalLink extends AjaxLink {
     ConfirmRemovalServicePanel removePanel;
 
     public SelectionServiceRemovalLink(String id, GeoServerTablePanel<ServiceAccessRule> services,
-            GeoServerDialog dialog) {
+                                       GeoServerDialog dialog) {
         super(id);
         this.services = services;
         this.dialog = dialog;
-        
+
     }
 
     @Override
@@ -47,7 +47,7 @@ public class SelectionServiceRemovalLink extends AjaxLink {
         dialog.showOkCancel(target, delegate = new GeoServerDialog.DialogDelegate() {
             protected Component getContents(String id) {
                 // show a confirmation panel for all the objects we have to remove
-                return removePanel=new ConfirmRemovalServicePanel(id, selection) {
+                return removePanel = new ConfirmRemovalServicePanel(id, selection) {
                     @Override
                     protected IModel<String> canRemove(ServiceAccessRule service) {
                         return SelectionServiceRemovalLink.this.canRemove(service);

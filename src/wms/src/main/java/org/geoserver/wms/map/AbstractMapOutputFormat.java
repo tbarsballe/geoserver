@@ -18,7 +18,7 @@ import org.springframework.util.Assert;
 
 /**
  * Base class for formats that do actually draw a map
- * 
+ *
  * @author Simone Giannecchini, GeoSolutions
  * @author Gabriel Roldan
  */
@@ -29,7 +29,7 @@ public abstract class AbstractMapOutputFormat implements GetMapOutputFormat {
     private final Set<String> outputFormatNames;
 
     protected AbstractMapOutputFormat(final String mime) {
-        this(mime, new String[] { mime });
+        this(mime, new String[]{mime});
     }
 
     @SuppressWarnings("unchecked")
@@ -73,7 +73,6 @@ public abstract class AbstractMapOutputFormat implements GetMapOutputFormat {
     public Set<String> getOutputFormatNames() {
         return outputFormatNames;
     }
-    
-    
+
 
 }

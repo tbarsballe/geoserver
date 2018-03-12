@@ -27,9 +27,9 @@ import org.geotools.util.logging.Logging;
 /**
  * Helper class for encryption of passwords in connection parameters for {@link StoreInfo} objects.
  * <p>
- * This class will encrypt any password parameter from {@link StoreInfo#getConnectionParameters()}. 
- * </p> 
- * 
+ * This class will encrypt any password parameter from {@link StoreInfo#getConnectionParameters()}.
+ * </p>
+ *
  * @author christian
  */
 public class ConfigurationPasswordEncryptionHelper {
@@ -39,7 +39,7 @@ public class ConfigurationPasswordEncryptionHelper {
     /**
      * cache of datastore factory class to fields to encrypt
      */
-    static protected Map<Class<? extends DataAccessFactory>, Set<String>> CACHE = 
+    static protected Map<Class<? extends DataAccessFactory>, Set<String>> CACHE =
             new HashMap<Class<? extends DataAccessFactory>, Set<String>>();
 
     GeoServerSecurityManager securityManager;
@@ -73,13 +73,13 @@ public class ConfigurationPasswordEncryptionHelper {
             factory = getCatalog().getResourcePool().getDataStoreFactory((DataStoreInfo) info);
         } catch (IOException e) {
             LOGGER.log(Level.WARNING, "Error looking up factory for store : " + info + ". Unable to " +
-                "encrypt connection parameters.", e);
+                    "encrypt connection parameters.", e);
             return Collections.emptySet();
         }
 
         if (factory == null) {
             LOGGER.warning("Could not find factory for store : " + info + ". Unable to encrypt " +
-                "connection parameters.");
+                    "connection parameters.");
             return Collections.emptySet();
         }
 
@@ -89,16 +89,16 @@ public class ConfigurationPasswordEncryptionHelper {
         }
 
         Set<String> toEncrypt = CACHE.get(factory.getClass());
-        if (toEncrypt!=null) {
+        if (toEncrypt != null) {
             return toEncrypt;
         }
 
         synchronized (CACHE) {
             toEncrypt = CACHE.get(info.getClass());
-            if (toEncrypt!=null) {
+            if (toEncrypt != null) {
                 return toEncrypt;
             }
-            
+
             toEncrypt = Collections.emptySet();
             if (info != null && info.getConnectionParameters() != null) {
                 toEncrypt = new HashSet<String>(3);
@@ -124,15 +124,14 @@ public class ConfigurationPasswordEncryptionHelper {
         if (encoderName != null) {
             GeoServerPasswordEncoder pwEncoder = securityManager.loadPasswordEncoder(encoderName);
             if (pwEncoder != null) {
-                String prefix = pwEncoder.getPrefix(); 
-                if (value.startsWith(prefix+GeoServerPasswordEncoder.PREFIX_DELIMTER)) {
-                    throw new RuntimeException("Cannot encode a password with prefix: "+
-                        prefix+GeoServerPasswordEncoder.PREFIX_DELIMTER);
+                String prefix = pwEncoder.getPrefix();
+                if (value.startsWith(prefix + GeoServerPasswordEncoder.PREFIX_DELIMTER)) {
+                    throw new RuntimeException("Cannot encode a password with prefix: " +
+                            prefix + GeoServerPasswordEncoder.PREFIX_DELIMTER);
                 }
                 value = pwEncoder.encodePassword(value, null);
             }
-        }
-        else {
+        } else {
             LOGGER.warning("Encryption disabled, no password encoder set");
         }
         return value;
@@ -143,14 +142,14 @@ public class ConfigurationPasswordEncryptionHelper {
      */
     public void decode(StoreInfo info) {
         List<GeoServerPasswordEncoder> encoders =
-            securityManager.loadPasswordEncoders(null,true,null);
+                securityManager.loadPasswordEncoders(null, true, null);
 
         Set<String> encryptedFields = getEncryptedFields(info);
-        if (info.getConnectionParameters() !=null) {
+        if (info.getConnectionParameters() != null) {
             for (String key : info.getConnectionParameters().keySet()) {
                 if (encryptedFields.contains(key)) {
-                    String value = (String)info.getConnectionParameters().get(key);
-                    if (value!=null) {
+                    String value = (String) info.getConnectionParameters().get(key);
+                    if (value != null) {
                         info.getConnectionParameters().put(key, decode(value, encoders));
                     }
                 }
@@ -162,13 +161,13 @@ public class ConfigurationPasswordEncryptionHelper {
      * Decrypts a previously encrypted value.
      */
     public String decode(String value) {
-        return decode(value, 
-            securityManager.loadPasswordEncoders(null,true,null));
+        return decode(value,
+                securityManager.loadPasswordEncoders(null, true, null));
     }
 
     String decode(String value, List<GeoServerPasswordEncoder> encoders) {
         for (GeoServerPasswordEncoder encoder : encoders) {
-            if (encoder.isReversible()==false)
+            if (encoder.isReversible() == false)
                 continue; // should not happen
             if (encoder.isResponsibleForEncoding(value)) {
                 return encoder.decode(value);

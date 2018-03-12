@@ -26,9 +26,8 @@ import org.geotools.util.logging.Logging;
 /**
  * Basic property file based {@link RemoteProcessFactoryConfigurationGenerator} implementation with ability to reload config when the file changes. If
  * property file is not present, a new one will be created.
- * 
+ *
  * @author Alessio Fabiani, GeoSolutions
- * 
  */
 public class RemoteProcessFactoryConfigurationWatcher extends TimerTask
         implements RemoteProcessFactoryConfigurationGenerator {
@@ -40,7 +39,9 @@ public class RemoteProcessFactoryConfigurationWatcher extends TimerTask
     public final static String DEFAULT_PROPERTY_PATH = REMOTE_PROCESS_DIR + File.separator
             + PROPERTYFILENAME;
 
-    /** The LOGGER */
+    /**
+     * The LOGGER
+     */
     public final static Logger LOGGER = Logging
             .getLogger(RemoteProcessFactoryConfigurationWatcher.class);
 
@@ -69,7 +70,9 @@ public class RemoteProcessFactoryConfigurationWatcher extends TimerTask
      */
     private Timer timer;
 
-    /** Default watches remoteProcess.properties */
+    /**
+     * Default watches remoteProcess.properties
+     */
     public RemoteProcessFactoryConfigurationWatcher() {
         // Get the Resource loader
         GeoServerResourceLoader loader = GeoServerExtensions.bean(GeoServerResourceLoader.class);
@@ -123,7 +126,7 @@ public class RemoteProcessFactoryConfigurationWatcher extends TimerTask
 
     /**
      * Initialization method for loading the {@link RemoteProcessFactoryConfiguration}.
-     * 
+     *
      * @param propertyFileWatcher Watcher of the property file
      */
     private void init(PropertyFileWatcher propertyFileWatcher) {
@@ -145,7 +148,7 @@ public class RemoteProcessFactoryConfigurationWatcher extends TimerTask
 
     /**
      * Loads the configuration from disk.
-     * 
+     *
      * @return an instance of {@link RemoteProcessFactoryConfiguration}.
      */
     private RemoteProcessFactoryConfiguration loadConfiguration() {
@@ -183,7 +186,7 @@ public class RemoteProcessFactoryConfigurationWatcher extends TimerTask
 
     /**
      * Parses the properties file for the remote process factory configuration. When it runs into problems it uses default values
-     * 
+     *
      * @param remoteProcessFactoryProperties the {@link Properties} file to parse. Cannot be null.
      * @return an instance of {@link RemoteProcessFactoryConfiguration}.
      */

@@ -38,17 +38,17 @@ public class GdalPPIOFactory implements PPIOFactory {
                 ppio = new GdalBinaryPPIO(of.getGeoserverFormat(), delegate, computedMimeType);
             } else {
                 switch (of.getType()) {
-                case BINARY:
-                    ppio = new GdalBinaryPPIO(of.getGeoserverFormat(), delegate, computedMimeType);
-                    break;
-                case TEXT:
-                    ppio = new GdalCDataPPIO(of.getGeoserverFormat(), delegate, computedMimeType);
-                    break;
-                case XML:
-                    ppio = new GdalXMLPPIO(of.getGeoserverFormat(), delegate);
-                    break;
-                default:
-                    break;
+                    case BINARY:
+                        ppio = new GdalBinaryPPIO(of.getGeoserverFormat(), delegate, computedMimeType);
+                        break;
+                    case TEXT:
+                        ppio = new GdalCDataPPIO(of.getGeoserverFormat(), delegate, computedMimeType);
+                        break;
+                    case XML:
+                        ppio = new GdalXMLPPIO(of.getGeoserverFormat(), delegate);
+                        break;
+                    default:
+                        break;
                 }
             }
             if (ppio != null) {

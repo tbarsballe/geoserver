@@ -82,60 +82,81 @@ public abstract class AbstractNetCDFEncoder implements NetCDFEncoder {
         }
     };
 
-    /** Bean related to the {@link NetCDFCFParser} */
+    /**
+     * Bean related to the {@link NetCDFCFParser}
+     */
     protected static NetCDFParserBean parserBean = GeoServerExtensions.bean(NetCDFParserBean.class);
 
     /**
      * A dimension mapping between dimension names and dimension manager instances
-     * We use a Linked map to preserve the dimension order 
+     * We use a Linked map to preserve the dimension order
      */
     protected NetCDFDimensionsManager dimensionsManager = new NetCDFDimensionsManager();
 
 
-    /** A sample reference granule to get basic properties. */
+    /**
+     * A sample reference granule to get basic properties.
+     */
     protected GridCoverage2D sampleGranule;
 
-    /** The stack of granules containing all the GridCoverage2D to be written. */
+    /**
+     * The stack of granules containing all the GridCoverage2D to be written.
+     */
     protected GranuleStack granuleStack;
 
-    /** The global attributes to be added to the output NetCDF */
+    /**
+     * The global attributes to be added to the output NetCDF
+     */
     protected List<NetCDFSettingsContainer.GlobalAttribute> globalAttributes;
 
-    /** The variable attributes to be added to the output variable */
+    /**
+     * The variable attributes to be added to the output variable
+     */
     protected List<NetCDFSettingsContainer.VariableAttribute> variableAttributes;
 
-    /** The extra variables to be copied from the source to output NetCDF */
+    /**
+     * The extra variables to be copied from the source to output NetCDF
+     */
     protected List<NetCDFSettingsContainer.ExtraVariable> extraVariables;
 
     protected boolean shuffle = NetCDFSettingsContainer.DEFAULT_SHUFFLE;
 
-    /** Whether to copy attributes from NetCDF source variable to output variable */
+    /**
+     * Whether to copy attributes from NetCDF source variable to output variable
+     */
     protected boolean copyAttributes = NetCDFSettingsContainer.DEFAULT_COPY_ATTRIBUTES;
 
-    /** Weather to copy global attributes from NetCDF source to output */
+    /**
+     * Weather to copy global attributes from NetCDF source to output
+     */
     protected boolean copyGlobalAttributes = NetCDFSettingsContainer.DEFAULT_COPY_GLOBAL_ATTRIBUTES;
 
     protected int compressionLevel = NetCDFSettingsContainer.DEFAULT_COMPRESSION;
 
     protected DataPacking dataPacking = DataPacking.getDefault();
 
-    /** The underlying {@link NetcdfFileWriter} which will be used to write down data. */
+    /**
+     * The underlying {@link NetcdfFileWriter} which will be used to write down data.
+     */
     protected NetcdfFileWriter writer;
 
     protected NetcdfFileWriter.Version version;
 
-    /** The instance of the class delegated to do proper NetCDF coordinates setup*/
+    /**
+     * The instance of the class delegated to do proper NetCDF coordinates setup
+     */
     protected NetCDFCRSWriter crsWriter;
 
     /**
      * {@link DefaultNetCDFEncoder} constructor.
-     * @param granuleStack the granule stack to be written
-     * @param file an output file
+     *
+     * @param granuleStack       the granule stack to be written
+     * @param file               an output file
      * @param encodingParameters customized encoding params
      * @throws IOException
      */
     public AbstractNetCDFEncoder(GranuleStack granuleStack, File file,
-                                Map<String, String> encodingParameters, String outputFormat) throws IOException {
+                                 Map<String, String> encodingParameters, String outputFormat) throws IOException {
         this.granuleStack = granuleStack;
         this.sampleGranule = granuleStack.getGranules().get(0);
         NetCDFLayerSettingsContainer settings = getSettings(encodingParameters);
@@ -159,7 +180,7 @@ public abstract class AbstractNetCDFEncoder implements NetCDFEncoder {
     }
 
     /**
-     * Basic NetCDF Initialization 
+     * Basic NetCDF Initialization
      */
     protected void initializeNetCDF() {
         // Initialize the coordinates writer
@@ -284,8 +305,8 @@ public abstract class AbstractNetCDFEncoder implements NetCDFEncoder {
      * Collects stats for future dataPacking from the provided coverage and update
      * the statistics.
      *
-     * @param coverage The coverage on which the statistics will be collected
-     * @param statsList The list of statistic beans, one per image band 
+     * @param coverage  The coverage on which the statistics will be collected
+     * @param statsList The list of statistic beans, one per image band
      */
     protected void collectStats(GridCoverage2D coverage, List<DataPacking.DataStats> statsList) {
         // It will internally take care of noData
@@ -327,10 +348,10 @@ public abstract class AbstractNetCDFEncoder implements NetCDFEncoder {
                 }
             }
         }
-        
+
         return null;
     }
-    
+
     protected int checkLevel(Integer level) {
         if (level == null || (level < 0 || level > 9)) {
             if (LOGGER.isLoggable(Level.WARNING)) {
@@ -432,13 +453,14 @@ public abstract class AbstractNetCDFEncoder implements NetCDFEncoder {
 
     /**
      * Write the NetCDF file
+     *
      * @throws IOException
      * @throws InvalidRangeException
      */
     public void write() throws IOException, ucar.ma2.InvalidRangeException {
         // end of define mode
         writer.create();
- 
+
         try {
             // Setting values
             for (NetCDFDimensionsManager.NetCDFDimensionMapping mapper : dimensionsManager.getDimensions()) {
@@ -462,7 +484,7 @@ public abstract class AbstractNetCDFEncoder implements NetCDFEncoder {
      */
     public void close() {
         // release resources
-        for (NetCDFDimensionsManager.NetCDFDimensionMapping mapper: dimensionsManager.getDimensions()){
+        for (NetCDFDimensionsManager.NetCDFDimensionMapping mapper : dimensionsManager.getDimensions()) {
             mapper.dispose();
         }
         dimensionsManager.dispose();
@@ -486,7 +508,7 @@ public abstract class AbstractNetCDFEncoder implements NetCDFEncoder {
             // Variable is not present
             return false;
         }
-        
+
         // Check the unit is defined
         Attribute unit = var.findAttribute(NetCDFUtilities.UNITS);
         if (unit == null) {
@@ -584,8 +606,8 @@ public abstract class AbstractNetCDFEncoder implements NetCDFEncoder {
      * @param matrixIndex
      */
     protected void setPixel(int x, int y, DataType imageDataType,
-                          DataType netCDFDataType, RandomIter data, Array matrix, Index matrixIndex, DataPacking
-                                  .DataPacker dataPacker, Double noDataValue, UnitConverter unitConverter, int bandIdx) {
+                            DataType netCDFDataType, RandomIter data, Array matrix, Index matrixIndex, DataPacking
+                                    .DataPacker dataPacker, Double noDataValue, UnitConverter unitConverter, int bandIdx) {
 
         // Read the data, check if nodata and convert it if needed
         int sample;
@@ -711,6 +733,7 @@ public abstract class AbstractNetCDFEncoder implements NetCDFEncoder {
 
     /**
      * Writes out all non scalar extra variable configured
+     *
      * @param numDimensions
      * @param dimName
      * @throws IOException
@@ -745,7 +768,7 @@ public abstract class AbstractNetCDFEncoder implements NetCDFEncoder {
                 }
             }
         }
-        
+
         return nonscalarExtraVariables;
     }
 }

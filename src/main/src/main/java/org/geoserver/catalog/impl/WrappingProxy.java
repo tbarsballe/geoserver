@@ -9,9 +9,8 @@ import java.lang.reflect.InvocationHandler;
 
 /**
  * Interface which exposes an underlying object being proxied.
- * 
- * @author Justin Deoliveira, OpenGeo
  *
+ * @author Justin Deoliveira, OpenGeo
  */
 public interface WrappingProxy extends InvocationHandler {
 

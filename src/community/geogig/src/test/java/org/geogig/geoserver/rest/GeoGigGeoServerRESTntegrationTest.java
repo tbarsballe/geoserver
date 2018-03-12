@@ -38,7 +38,6 @@ import org.springframework.mock.web.MockHttpServletResponse;
 
 /**
  * Integration test suite with GeoServer's REST API
- *
  */
 public class GeoGigGeoServerRESTntegrationTest extends CatalogRESTTestSupport {
 
@@ -72,11 +71,11 @@ public class GeoGigGeoServerRESTntegrationTest extends CatalogRESTTestSupport {
         CatalogBuilder catalogBuilder = geogigData.newCatalogBuilder(catalog);
         catalogBuilder.setUpWorkspace("gigws");
     }
-   
+
     @After
     public void after() {
-		RepositoryManager.close();
-		getCatalog().dispose();
+        RepositoryManager.close();
+        getCatalog().dispose();
     }
 
     /**

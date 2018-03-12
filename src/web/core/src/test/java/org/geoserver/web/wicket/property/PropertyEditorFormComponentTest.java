@@ -43,18 +43,18 @@ public class PropertyEditorFormComponentTest extends GeoServerWicketTestSupport 
         // so unable to test the case of adding multiple key/value pairs since it involves 
         // intermixing of the two
         startPage();
-        
+
         tester.clickLink("form:props:add", true);
-        tester.assertComponent("form:props:container:list:0:key",TextField.class);
-        tester.assertComponent("form:props:container:list:0:value",TextField.class);
-        tester.assertComponent("form:props:container:list:0:remove",AjaxLink.class);
+        tester.assertComponent("form:props:container:list:0:key", TextField.class);
+        tester.assertComponent("form:props:container:list:0:value", TextField.class);
+        tester.assertComponent("form:props:container:list:0:remove", AjaxLink.class);
 
         FormTester form = tester.newFormTester("form");
         form.setValue("props:container:list:0:key", "foo");
         form.setValue("props:container:list:0:value", "bar");
         form.submit();
 
-        
+
         assertEquals(1, foo.getProps().size());
         assertEquals("bar", foo.getProps().get("foo"));
     }
@@ -66,16 +66,17 @@ public class PropertyEditorFormComponentTest extends GeoServerWicketTestSupport 
         foo.getProps().put("baz", "foo");
         startPage();
 
-        tester.assertComponent("form:props:container:list:0:remove",AjaxLink.class);
-        tester.assertComponent("form:props:container:list:1:remove",AjaxLink.class);
-        tester.assertComponent("form:props:container:list:2:remove",AjaxLink.class);
+        tester.assertComponent("form:props:container:list:0:remove", AjaxLink.class);
+        tester.assertComponent("form:props:container:list:1:remove", AjaxLink.class);
+        tester.assertComponent("form:props:container:list:2:remove", AjaxLink.class);
         try {
-            tester.assertComponent("form:props:container:list:3:remove",AjaxLink.class);
+            tester.assertComponent("form:props:container:list:3:remove", AjaxLink.class);
             fail();
-        } catch(AssertionError e) {}
+        } catch (AssertionError e) {
+        }
 
-        ListView list = 
-            (ListView) tester.getComponentFromLastRenderedPage("form:props:container:list");
+        ListView list =
+                (ListView) tester.getComponentFromLastRenderedPage("form:props:container:list");
         assertNotNull(list);
 
         int i = 0;
@@ -86,7 +87,7 @@ public class PropertyEditorFormComponentTest extends GeoServerWicketTestSupport 
         }
         assertFalse(i == 3);
 
-        tester.clickLink("form:props:container:list:"+i+":remove", true);
+        tester.clickLink("form:props:container:list:" + i + ":remove", true);
         tester.newFormTester("form").submit();
 
         assertEquals(2, foo.getProps().size());
@@ -99,9 +100,9 @@ public class PropertyEditorFormComponentTest extends GeoServerWicketTestSupport 
     public void testAddRemove() {
         startPage();
         tester.clickLink("form:props:add", true);
-        tester.assertComponent("form:props:container:list:0:key",TextField.class);
-        tester.assertComponent("form:props:container:list:0:value",TextField.class);
-        tester.assertComponent("form:props:container:list:0:remove",AjaxLink.class);
+        tester.assertComponent("form:props:container:list:0:key", TextField.class);
+        tester.assertComponent("form:props:container:list:0:value", TextField.class);
+        tester.assertComponent("form:props:container:list:0:remove", AjaxLink.class);
 
         FormTester form = tester.newFormTester("form");
         form.setValue("props:container:list:0:key", "foo");

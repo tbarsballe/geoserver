@@ -25,7 +25,6 @@ import org.apache.commons.lang.builder.ToStringStyle;
 
 /**
  * @author groldan
- * 
  */
 public class PropertyType implements Comparable<PropertyType> {
 
@@ -42,19 +41,19 @@ public class PropertyType implements Comparable<PropertyType> {
     private final boolean text;
 
     /**
-     * @param oid the pk of this property type
-     * @param targetPropertyOid the pk of the related property type, or {@code null} if this
-     *        property type is a "self" property (i.e. does not relate to a property of another
-     *        type)
-     * @param objectTypeOid the type of object this property belongs to
-     * @param propertyName the name of the property (e.g. {@code name},
-     *        {@code resource.store.workspace.id}, etc)
+     * @param oid                the pk of this property type
+     * @param targetPropertyOid  the pk of the related property type, or {@code null} if this
+     *                           property type is a "self" property (i.e. does not relate to a property of another
+     *                           type)
+     * @param objectTypeOid      the type of object this property belongs to
+     * @param propertyName       the name of the property (e.g. {@code name},
+     *                           {@code resource.store.workspace.id}, etc)
      * @param collectionProperty {@code true} if this is a multi-valued property
-     * @param isText whether this property is subject for a full text search
+     * @param isText             whether this property is subject for a full text search
      */
     public PropertyType(final Integer oid, @Nullable final Integer targetPropertyOid,
-            final Integer objectTypeOid, final String propertyName, boolean collectionProperty,
-            final boolean isText) {
+                        final Integer objectTypeOid, final String propertyName, boolean collectionProperty,
+                        final boolean isText) {
         if (targetPropertyOid != null && targetPropertyOid == 0) {
             throw new IllegalArgumentException("oid cannot be zero");
         }
@@ -111,7 +110,7 @@ public class PropertyType implements Comparable<PropertyType> {
         if (comparison == 0) {
             comparison = targetPropertyOid == null && o.targetPropertyOid != null ? -1
                     : (o.targetPropertyOid == null ? 1 : targetPropertyOid
-                            .compareTo(o.targetPropertyOid));
+                    .compareTo(o.targetPropertyOid));
             if (comparison == 0) {
                 comparison = objectTypeOid.compareTo(o.objectTypeOid);
                 if (comparison == 0) {

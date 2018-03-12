@@ -24,11 +24,11 @@ public class MetadataLinkInfoImpl implements MetadataLinkInfo {
     String metadataType;
 
     String content;
-    
+
     public MetadataLinkInfoImpl() {
         // nothing to do
     }
-    
+
     public MetadataLinkInfoImpl(MetadataLinkInfoImpl other) {
         this.id = other.id;
         this.type = other.type;
@@ -75,12 +75,13 @@ public class MetadataLinkInfoImpl implements MetadataLinkInfo {
     }
 
     static final List<String> protocols = Arrays.asList("http", "https", "ftp");
+
     /**
-     * @throws IllegalArgumentException if the url is invalid for use as a Metadata Link
      * @param url
+     * @throws IllegalArgumentException if the url is invalid for use as a Metadata Link
      */
     public static void validate(String url) {
-        if (url==null) return;
+        if (url == null) return;
         URL dummy;
         try {
             dummy = new URL("http://dummy/");
@@ -90,31 +91,32 @@ public class MetadataLinkInfoImpl implements MetadataLinkInfo {
         try {
             // Doing this with exceptions isn't ideal but it works, and we're throwing an
             // exception anyway
-            
+
             // The dummy context will allow it to parse relative URLs, which should be allowed.
             URL parsed = new URL(dummy, url);
             String protocol = parsed.getProtocol();
-            
+
             // Converting to URI forces validation
             parsed.toURI();
-            
-            if(!protocols.contains(protocol)){
-                throw new IllegalArgumentException("Protocol "+protocol+" is not supported in url "+url);
+
+            if (!protocols.contains(protocol)) {
+                throw new IllegalArgumentException("Protocol " + protocol + " is not supported in url " + url);
             }
         } catch (MalformedURLException | URISyntaxException ex) {
-            throw new IllegalArgumentException("Not a valid URL: "+url, ex);
+            throw new IllegalArgumentException("Not a valid URL: " + url, ex);
         }
     }
-    
+
     public void setContent(String content) {
         validate(content);
         this.content = content;
     }
-    
+
     private Object readResolve() {
         validate(content);
         return this;
     }
+
     @Override
     public int hashCode() {
         final int PRIME = 31;
@@ -135,7 +137,7 @@ public class MetadataLinkInfoImpl implements MetadataLinkInfo {
         if (!(obj instanceof MetadataLinkInfo)) {
             return false;
         }
-            
+
         final MetadataLinkInfo other = (MetadataLinkInfo) obj;
         if (about == null) {
             if (other.getAbout() != null)
@@ -159,14 +161,13 @@ public class MetadataLinkInfoImpl implements MetadataLinkInfo {
             return false;
         return true;
     }
-    
+
     @Override
     public String toString() {
         return new StringBuilder(getClass().getSimpleName()).append("[type:").append(type).append(
                 ", metadataType:").append(metadataType).append(", content:").append(content)
                 .append(']').toString();
     }
-    
-    
+
 
 }

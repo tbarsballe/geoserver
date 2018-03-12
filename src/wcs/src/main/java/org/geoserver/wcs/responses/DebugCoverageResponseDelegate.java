@@ -22,34 +22,33 @@ import org.geotools.coverage.grid.GridCoverage2D;
 /**
  * A basic text based output format designed to ease debugging GetCoverage calls (and actually read
  * the contents of a coverage without getting mad...)
- * 
+ *
  * @author Andrea Aime - TOPP
- * 
  */
 public class DebugCoverageResponseDelegate extends BaseCoverageResponseDelegate implements CoverageResponseDelegate {
 
-    
+
     @SuppressWarnings("serial")
     public DebugCoverageResponseDelegate(GeoServer geoserver) {
         super(
                 geoserver,
-                Arrays.asList("DEBUG","text/debug"), //output formats
-                new HashMap<String, String>(){ // file extensions
+                Arrays.asList("DEBUG", "text/debug"), //output formats
+                new HashMap<String, String>() { // file extensions
                     {
                         put("DEBUG", "txt");
                         put("text/debug", "txt");
                         put("text/plain", "txt");
                     }
                 },
-                new HashMap<String, String>(){ //mime types
+                new HashMap<String, String>() { //mime types
                     {
                         put("DEBUG", "text/plain");
                         put("text/debug", "text/plain");
                     }
-                });  
-    }    
+                });
+    }
 
-    public void encode(GridCoverage2D coverage, String outputFormat,  Map<String,String> econdingParameters,OutputStream output) throws ServiceException, IOException {
+    public void encode(GridCoverage2D coverage, String outputFormat, Map<String, String> econdingParameters, OutputStream output) throws ServiceException, IOException {
         PrintStream ps = new PrintStream(output);
         ps.println("Grid bounds: " + coverage.getEnvelope());
         ps.println("Grid CRS: " + coverage.getCoordinateReferenceSystem());
@@ -77,7 +76,7 @@ public class DebugCoverageResponseDelegate extends BaseCoverageResponseDelegate 
 
         }
         ps.flush();
-        
+
         coverage.dispose(false);
     }
 

@@ -24,15 +24,15 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class MasterPasswordProviderPanelTest extends AbstractSecurityNamedServicePanelTest {
-	
-	@Before
-	public void clearSecurityStuff() throws Exception {
-		Set<String> mpProviders = getSecurityManager().listMasterPasswordProviders();
-		if (mpProviders.contains("default2")) {
-			MasterPasswordProviderConfig default2 = getSecurityManager().loadMasterPassswordProviderConfig("default2");
-			getSecurityManager().removeMasterPasswordProvder(default2);
-		}
-	}
+
+    @Before
+    public void clearSecurityStuff() throws Exception {
+        Set<String> mpProviders = getSecurityManager().listMasterPasswordProviders();
+        if (mpProviders.contains("default2")) {
+            MasterPasswordProviderConfig default2 = getSecurityManager().loadMasterPassswordProviderConfig("default2");
+            getSecurityManager().removeMasterPasswordProvder(default2);
+        }
+    }
 
     @Override
     protected AbstractSecurityPage getBasePage() {
@@ -60,18 +60,18 @@ public class MasterPasswordProviderPanelTest extends AbstractSecurityNamedServic
         // TODO Auto-generated method stub
         return null;
     }
-    
+
     @Test
-    public void testAddModify() throws Exception{
+    public void testAddModify() throws Exception {
         initializeForXML();
-        
+
         activatePanel();
-        
+
         assertEquals(1, countItems());
         assertNotNull(getSecurityNamedServiceConfig("default"));
-        
+
         assertNull(getSecurityNamedServiceConfig("xxxxxxxx"));
-        
+
         // Test simple add
         clickAddNew();
         tester.assertRenderedPage(SecurityNamedServiceNewPage.class);
@@ -79,10 +79,10 @@ public class MasterPasswordProviderPanelTest extends AbstractSecurityNamedServic
 
         setSecurityConfigClassName(URLMasterPasswordProviderPanelInfo.class);
         newFormTester();
-        
+
         setSecurityConfigName("default2");
         clickCancel();
-        
+
         tester.assertRenderedPage(basePage.getClass());
         assertEquals(1, countItems());
         assertNotNull(getSecurityNamedServiceConfig("default"));
@@ -100,22 +100,22 @@ public class MasterPasswordProviderPanelTest extends AbstractSecurityNamedServic
         assertEquals(2, countItems());
         assertNotNull(getSecurityNamedServiceConfig("default"));
         assertNotNull(getSecurityNamedServiceConfig("default2"));
-        
+
         // test add with name clash        
-        clickAddNew();        
+        clickAddNew();
         setSecurityConfigClassName(URLMasterPasswordProviderPanelInfo.class);
         newFormTester();
         setSecurityConfigName("default2");
         formTester.setValue("panel:content:uRL", "file:passwd");
         clickSave(); // should not work
-        
+
         tester.assertRenderedPage(SecurityNamedServiceNewPage.class);
         testErrorMessagesWithRegExp(".*default2.*");
         clickCancel();
         tester.assertRenderedPage(basePage.getClass());
         // end test add with name clash        
 
-          // start test modify        
+        // start test modify
         clickNamedServiceConfig("default2");
         tester.assertRenderedPage(SecurityNamedServiceEditPage.class);
         tester.debugComponentTrees();
@@ -124,23 +124,23 @@ public class MasterPasswordProviderPanelTest extends AbstractSecurityNamedServic
         clickCancel();
         tester.assertRenderedPage(basePage.getClass());
 
-        URLMasterPasswordProviderConfig config = 
+        URLMasterPasswordProviderConfig config =
                 (URLMasterPasswordProviderConfig) getSecurityNamedServiceConfig("default2");
-        assertEquals(new URL("file:passwd"),config.getURL());
+        assertEquals(new URL("file:passwd"), config.getURL());
 
         clickNamedServiceConfig("default2");
 
         newFormTester("panel:panel:form");
         formTester.setValue("panel:uRL", "file:passwd2");
         clickSave();
-        
+
         tester.assertRenderedPage(basePage.getClass());
 
-        config = 
+        config =
                 (URLMasterPasswordProviderConfig) getSecurityNamedServiceConfig("default2");
-        assertEquals(new URL("file:passwd2"),config.getURL());
+        assertEquals(new URL("file:passwd2"), config.getURL());
     }
-    
+
     @Test
     public void testRemove() throws Exception {
         initializeForXML();
@@ -148,12 +148,12 @@ public class MasterPasswordProviderPanelTest extends AbstractSecurityNamedServic
         config.setName("default2");
         config.setClassName(URLMasterPasswordProvider.class.getCanonicalName());
         config.setURL(new URL("file:passwd"));
-        
+
         getSecurityManager().saveMasterPasswordProviderConfig(config);
         activatePanel();
 
         assertEquals(2, countItems());
-        
+
         doRemove(null, "default2");
         assertNull(getSecurityManager().loadMasterPassswordProviderConfig("default2"));
         assertEquals(1, countItems());

@@ -10,12 +10,11 @@ import org.opengis.feature.type.Name;
 
 /**
  * Base class describing the remote requests.
- * 
+ * <p>
  * If a load-balancing strategy is implemented by the concrete RemoteProcessClient, there is the possibility to use a queue of pending requests to be
  * executed as soon as a new remote processing node becomes available.
- * 
+ *
  * @author Alessio Fabiani, GeoSolutions
- * 
  */
 public class RemoteRequestDescriptor {
 
@@ -37,7 +36,7 @@ public class RemoteRequestDescriptor {
      * @param baseURL
      */
     public RemoteRequestDescriptor(Name servicename, Map<String, Object> input,
-            Map<String, Object> metadata, String pid, String baseURL) {
+                                   Map<String, Object> metadata, String pid, String baseURL) {
         super();
         this.servicename = servicename;
         this.input = input;
@@ -115,5 +114,5 @@ public class RemoteRequestDescriptor {
     public void setBaseURL(String baseURL) {
         this.baseURL = baseURL;
     }
-    
+
 }

@@ -114,46 +114,46 @@ public class CatalogBuilderTest extends GeoServerMockTestSupport {
         assertNull(fti.getNativeBoundingBox().getCoordinateReferenceSystem());
         assertNotNull(fti.getLatLonBoundingBox());
     }
-    
+
     @Test
     public void testGetBoundsFromCRS() throws Exception {
         Catalog cat = getCatalog();
         CatalogBuilder cb = new CatalogBuilder(cat);
         cb.setStore(cat.getDataStoreByName(MockData.LINES.getPrefix()));
         FeatureTypeInfo fti = cb.buildFeatureType(toName(MockData.LINES));
-        
+
         CoordinateReferenceSystem resourceCRS = fti.getCRS();
         assertNotNull(resourceCRS);
-        
+
         //make sure the srs is as expected, otherwise the rest of the tests don't make sense
         assertEquals("EPSG:32615", fti.getSRS());
         ReferencedEnvelope crsBounds = cb.getBoundsFromCRS(fti);
         assertNotNull(crsBounds);
-        
+
         CoordinateReferenceSystem exptectedCRS = CRS.decode("EPSG:32615");
         assertEquals(new ReferencedEnvelope(CRS.getEnvelope(exptectedCRS)), crsBounds);
-        
+
         //if we change the srs when there's no reproject policy, should still be the same bounding
         //box
         fti.setSRS("EPSG:4326");
         fti.setProjectionPolicy(ProjectionPolicy.NONE);
         crsBounds = cb.getBoundsFromCRS(fti);
         assertEquals(new ReferencedEnvelope(CRS.getEnvelope(exptectedCRS)), crsBounds);
-        
+
         //if we use reproject policy, bounds should now be different
         fti.setProjectionPolicy(ProjectionPolicy.FORCE_DECLARED);
         crsBounds = cb.getBoundsFromCRS(fti);
         assertNotEquals(new ReferencedEnvelope(CRS.getEnvelope(exptectedCRS)), crsBounds);
-        
+
         //should now be 4326 bounds
         CoordinateReferenceSystem crs4326 = CRS.decode("EPSG:4326");
         assertEquals(new ReferencedEnvelope(CRS.getEnvelope(crs4326)), crsBounds);
-        
+
         fti.setProjectionPolicy(ProjectionPolicy.REPROJECT_TO_DECLARED);
         assertEquals(new ReferencedEnvelope(CRS.getEnvelope(crs4326)), crsBounds);
     }
 
-    
+
     @Test
     public void testFeatureType() throws Exception {
         // build a feature type (it's already in the catalog, but we just want to
@@ -226,7 +226,7 @@ public class CatalogBuilderTest extends GeoServerMockTestSupport {
         assertNotNull(ci.getNativeCRS());
         assertNotNull(ci.getNativeBoundingBox());
         assertNotNull(ci.getLatLonBoundingBox());
-        
+
         // check the coverage dimensions
         List<CoverageDimensionInfo> dimensions = ci.getDimensions();
         assertEquals(1, dimensions.size());
@@ -239,23 +239,23 @@ public class CatalogBuilderTest extends GeoServerMockTestSupport {
         // assertEquals(9999, dimension.getRange().getMaximum(), 0d);
         assertNull(dimension.getUnit());
     }
-    
+
     @Test
     public void testNativeBoundsDefensiveCopy() throws Exception {
         Catalog cat = getCatalog();
         CatalogBuilder cb = new CatalogBuilder(cat);
         cb.setStore(cat.getCoverageStoreByName(MockData.TASMANIA_DEM.getLocalPart()));
         CoverageInfo ci = cb.buildCoverage();
-        
+
         // setup the reproject to declared policy, the issue happens only under this condition
         ReferencedEnvelope nativeBounds = ci.getNativeBoundingBox();
-        for(ProjectionPolicy pp : ProjectionPolicy.values()) {
+        for (ProjectionPolicy pp : ProjectionPolicy.values()) {
             ci.setProjectionPolicy(pp);
             ReferencedEnvelope bbox = ci.boundingBox();
             assertNotSame(nativeBounds, bbox);
         }
     }
-    
+
     @Test
     public void testSingleBandedCoverage_GEOS7311() throws Exception {
         Locale defaultLocale = Locale.getDefault();
@@ -265,7 +265,7 @@ public class CatalogBuilderTest extends GeoServerMockTestSupport {
         testSingleBandedCoverage();
         Locale.setDefault(defaultLocale);
     }
- 
+
     @Test
     public void testMultiBandCoverage() throws Exception {
         Catalog cat = getCatalog();
@@ -279,7 +279,7 @@ public class CatalogBuilderTest extends GeoServerMockTestSupport {
         assertNotNull(ci.getNativeCRS());
         assertNotNull(ci.getNativeBoundingBox());
         assertNotNull(ci.getLatLonBoundingBox());
-        
+
         // check the coverage dimensions
         List<CoverageDimensionInfo> dimensions = ci.getDimensions();
         assertEquals(3, dimensions.size());
@@ -311,81 +311,80 @@ public class CatalogBuilderTest extends GeoServerMockTestSupport {
 
     @Test
     public void testEmptyLayerGroupBounds() throws Exception {
-        Catalog cat = getCatalog();        
-        
+        Catalog cat = getCatalog();
+
         LayerGroupInfo group = cat.getFactory().createLayerGroup();
         group.setName("empty_group");
-        
+
         assertNull(group.getBounds());
 
         // force bounds computation
-        CatalogBuilder cb = new CatalogBuilder(cat);        
+        CatalogBuilder cb = new CatalogBuilder(cat);
         cb.calculateLayerGroupBounds(group);
-        
-        assertNull(group.getBounds());        
+
+        assertNull(group.getBounds());
     }
-    
+
     @Test
     public void testLayerGroupBounds() throws Exception {
         Catalog cat = getCatalog();
-        
+
         CatalogBuilder cb = new CatalogBuilder(cat);
-        
+
         cb.setStore(cat.getDataStoreByName(MockData.LINES.getPrefix()));
-        FeatureTypeInfo fti = cb.buildFeatureType(toName(MockData.LINES));        
+        FeatureTypeInfo fti = cb.buildFeatureType(toName(MockData.LINES));
         cb.setupBounds(fti);
-        
+
         LayerInfo layer = cat.getFactory().createLayer();
         layer.setResource(fti);
         layer.setName(fti.getName());
         layer.setEnabled(true);
         layer.setType(PublishedType.VECTOR);
-        
+
         LayerGroupInfo group = cat.getFactory().createLayerGroup();
         group.setName("group");
         group.getLayers().add(layer);
         group.getStyles().add(null);
-        
+
         assertNull(group.getBounds());
 
         // force bounds computation
         cb.calculateLayerGroupBounds(group);
-        
+
         assertNotNull(group.getBounds());
         assertEquals(fti.getNativeBoundingBox(), group.getBounds());
     }
 
     public void testLayerGroupEoBounds() throws Exception {
         Catalog cat = getCatalog();
-        
+
         CatalogBuilder cb = new CatalogBuilder(cat);
-        
+
         cb.setStore(cat.getDataStoreByName(MockData.LINES.getPrefix()));
-        FeatureTypeInfo fti = cb.buildFeatureType(toName(MockData.LINES));        
+        FeatureTypeInfo fti = cb.buildFeatureType(toName(MockData.LINES));
         cb.setupBounds(fti);
-        
+
         LayerInfo layer = cat.getFactory().createLayer();
         layer.setResource(fti);
         layer.setName(fti.getName());
         layer.setEnabled(true);
         layer.setType(PublishedType.VECTOR);
-        
+
         LayerGroupInfo group = cat.getFactory().createLayerGroup();
         group.setName("group_EO");
         group.setRootLayer(layer);
-        
+
         assertNull(group.getBounds());
 
         // force bounds computation
         cb.calculateLayerGroupBounds(group);
-        
+
         assertNotNull(group.getBounds());
         assertEquals(fti.getNativeBoundingBox(), group.getBounds());
     }
-    
+
     /**
      * Tests we can build properly the WMS store and the WMS layer
-     * 
      */
     @Test
     public void testWMS() throws Exception {
@@ -404,7 +403,7 @@ public class CatalogBuilderTest extends GeoServerMockTestSupport {
         cb.setStore(wms);
         WMSLayerInfo wmsLayer = cb.buildWMSLayer("topp:states");
         assertWMSLayer(wmsLayer);
-        
+
         LayerInfo layer = cb.buildLayer(wmsLayer);
         assertEquals(PublishedType.WMS, layer.getType());
 
@@ -421,13 +420,13 @@ public class CatalogBuilderTest extends GeoServerMockTestSupport {
         assertEquals("EPSG:4326", wmsLayer.getSRS());
         assertEquals("USA Population", wmsLayer.getTitle());
         assertEquals("2000 census data for United States.", wmsLayer.getAbstract());
-        
+
         assertEquals(CRS.decode("EPSG:4326"), wmsLayer.getNativeCRS());
         assertNotNull(wmsLayer.getNativeBoundingBox());
         assertNotNull(wmsLayer.getLatLonBoundingBox());
         assertFalse(wmsLayer.getKeywords().isEmpty());
     }
-    
+
     @Test
     public void testLookupSRSDetached() throws Exception {
         Catalog cat = getCatalog();
@@ -435,7 +434,7 @@ public class CatalogBuilderTest extends GeoServerMockTestSupport {
 
         DataStoreInfo sf = cat.getDataStoreByName("sf");
 
-        FeatureSource fs =  
+        FeatureSource fs =
                 sf.getDataStore(null).getFeatureSource(toName(MockData.PRIMITIVEGEOFEATURE));
         FeatureTypeInfo ft = cat.getFactory().createFeatureType();
         ft.setNativeName("PrimitiveGeoFeature");
@@ -452,10 +451,10 @@ public class CatalogBuilderTest extends GeoServerMockTestSupport {
     public void testSetupBoundsDetached() throws Exception {
         Catalog cat = getCatalog();
         CatalogBuilder cb = new CatalogBuilder(cat);
-        
+
         DataStoreInfo sf = cat.getDataStoreByName("sf");
 
-        FeatureSource fs =  
+        FeatureSource fs =
                 sf.getDataStore(null).getFeatureSource(toName(MockData.PRIMITIVEGEOFEATURE));
         FeatureTypeInfo ft = cat.getFactory().createFeatureType();
         ft.setNativeName("PrimitiveGeoFeature");
@@ -484,15 +483,15 @@ public class CatalogBuilderTest extends GeoServerMockTestSupport {
         expect(rInfo.getTitle()).andReturn("foo title");
         expect(rInfo.getDescription()).andReturn("foo description");
         expect(rInfo.getKeywords()).andReturn(
-            new LinkedHashSet<String>(Arrays.asList("foo", "bar", "baz", ""))).anyTimes();
+                new LinkedHashSet<String>(Arrays.asList("foo", "bar", "baz", ""))).anyTimes();
         replay(rInfo);
-        
+
         FeatureSource fs = createMock(FeatureSource.class);
         expect(fs.getSchema()).andReturn(ft).anyTimes();
         expect(fs.getInfo()).andReturn(rInfo).anyTimes();
         expect(fs.getName()).andReturn(ft.getName()).anyTimes();
         replay(fs);
-            
+
         FeatureTypeInfo ftInfo = cb.buildFeatureType(fs);
         assertEquals("foo title", ftInfo.getTitle());
         assertEquals("foo description", ftInfo.getDescription());
@@ -515,7 +514,7 @@ public class CatalogBuilderTest extends GeoServerMockTestSupport {
         CatalogBuilder cb = new CatalogBuilder(getCatalog());
         cb.setupMetadata(ftInfo, fs);
     }
-    
+
     @Test
     public void testLatLonBounds() throws Exception {
         ReferencedEnvelope nativeBounds = new ReferencedEnvelope(700000, 800000, 4000000, 4100000, null);
@@ -526,7 +525,7 @@ public class CatalogBuilderTest extends GeoServerMockTestSupport {
         assertEquals(11.22, re.getMinX(), 0.01);
         assertEquals(36.1, re.getMinY(), 0.01);
     }
-    
+
     @Test
     public void testWMSLayer111() throws Exception {
         TestHttpClientProvider.startTest();
@@ -534,16 +533,16 @@ public class CatalogBuilderTest extends GeoServerMockTestSupport {
             String baseURL = TestHttpClientProvider.MOCKSERVER + "/wms11";
             MockHttpClient client = new MockHttpClient();
             URL capsURL = new URL(baseURL + "?service=WMS&request=GetCapabilities&version=1.1.0");
-            client.expectGet(capsURL, 
+            client.expectGet(capsURL,
                     new MockHttpResponse(getClass().getResource("caps111.xml"), "text/xml"));
             TestHttpClientProvider.bind(client, capsURL);
-            
+
             CatalogBuilder cb = new CatalogBuilder(getCatalog());
             WMSStoreInfo store = cb.buildWMSStore("test-store");
             store.setCapabilitiesURL(capsURL.toExternalForm());
             cb.setStore(store);
             WMSLayerInfo layer = cb.buildWMSLayer("world4326");
-            
+
             // check the bbox has the proper axis order
             assertEquals("EPSG:4326", layer.getSRS());
             ReferencedEnvelope bbox = layer.getLatLonBoundingBox();
@@ -555,7 +554,7 @@ public class CatalogBuilderTest extends GeoServerMockTestSupport {
             TestHttpClientProvider.endTest();
         }
     }
-    
+
     @Test
     public void testWMSLayer130() throws Exception {
         TestHttpClientProvider.startTest();
@@ -563,16 +562,16 @@ public class CatalogBuilderTest extends GeoServerMockTestSupport {
             String baseURL = TestHttpClientProvider.MOCKSERVER + "/wms13";
             MockHttpClient client = new MockHttpClient();
             URL capsURL = new URL(baseURL + "?service=WMS&request=GetCapabilities&version=1.3.0");
-            client.expectGet(capsURL, 
+            client.expectGet(capsURL,
                     new MockHttpResponse(getClass().getResource("caps130.xml"), "text/xml"));
             TestHttpClientProvider.bind(client, capsURL);
-            
+
             CatalogBuilder cb = new CatalogBuilder(getCatalog());
             WMSStoreInfo store = cb.buildWMSStore("test-store");
             store.setCapabilitiesURL(capsURL.toExternalForm());
             cb.setStore(store);
             WMSLayerInfo layer = cb.buildWMSLayer("world4326");
-            
+
             // check the bbox has the proper axis order
             assertEquals("EPSG:4326", layer.getSRS());
             ReferencedEnvelope bbox = layer.getLatLonBoundingBox();
@@ -584,7 +583,7 @@ public class CatalogBuilderTest extends GeoServerMockTestSupport {
             TestHttpClientProvider.endTest();
         }
     }
-    
+
     @Test
     public void testWMSLayer130crs84() throws Exception {
         TestHttpClientProvider.startTest();
@@ -592,16 +591,16 @@ public class CatalogBuilderTest extends GeoServerMockTestSupport {
             String baseURL = TestHttpClientProvider.MOCKSERVER + "/wms13";
             MockHttpClient client = new MockHttpClient();
             URL capsURL = new URL(baseURL + "?service=WMS&request=GetCapabilities&version=1.3.0");
-            client.expectGet(capsURL, 
+            client.expectGet(capsURL,
                     new MockHttpResponse(getClass().getResource("caps130_crs84.xml"), "text/xml"));
             TestHttpClientProvider.bind(client, capsURL);
-            
+
             CatalogBuilder cb = new CatalogBuilder(getCatalog());
             WMSStoreInfo store = cb.buildWMSStore("test-store");
             store.setCapabilitiesURL(capsURL.toExternalForm());
             cb.setStore(store);
             WMSLayerInfo layer = cb.buildWMSLayer("world4326");
-            
+
             // check the bbox has the proper axis order
             assertEquals("EPSG:4326", layer.getSRS());
             ReferencedEnvelope bbox = layer.getLatLonBoundingBox();
@@ -659,7 +658,7 @@ public class CatalogBuilderTest extends GeoServerMockTestSupport {
             MapProjection.SKIP_SANITY_CHECKS = false;
         }
     }
-    
+
     @Test
     public void testSetupCoverageOnEmptyRead() throws Exception {
         // fake coverage info
@@ -669,13 +668,13 @@ public class CatalogBuilderTest extends GeoServerMockTestSupport {
         GridEnvelope2D gridRange = new GridEnvelope2D(0, 0, 360, 180);
         GridToEnvelopeMapper mapper = new GridToEnvelopeMapper(gridRange, envelope);
         AffineTransform gridToWorld = mapper.createAffineTransform();
-                
-        
+
+
         final String rasterSource = "http://www.geoserver.org/foo";
         // setup the format and the reader
         AbstractGridCoverage2DReader reader = createMock(AbstractGridCoverage2DReader.class);
         AbstractGridFormat format = createMock(AbstractGridFormat.class);
-        
+
         expect(reader.getOriginalEnvelope()).andReturn(new GeneralEnvelope(envelope)).anyTimes();
         expect(reader.getCoordinateReferenceSystem()).andReturn(envelope.getCoordinateReferenceSystem()).anyTimes();
         expect(reader.getOriginalGridRange()).andReturn(gridRange).anyTimes();
@@ -684,13 +683,13 @@ public class CatalogBuilderTest extends GeoServerMockTestSupport {
         expect(reader.getGridCoverageCount()).andReturn(1);
         expect(reader.getOriginalGridToWorld(EasyMock.anyObject(PixelInCell.class))).andReturn(new AffineTransform2D(gridToWorld)).anyTimes();
         expect(reader.read(EasyMock.anyObject(GeneralParameterValue[].class))).andReturn(null);
-        expect(reader.getGridCoverageNames()).andReturn(new String[] {"TheCoverage"});
+        expect(reader.getGridCoverageNames()).andReturn(new String[]{"TheCoverage"});
         replay(reader);
         expect(format.getReader(EasyMock.eq(rasterSource), EasyMock.anyObject(Hints.class))).andReturn(reader).anyTimes();
         expect(format.getName()).andReturn("TheFormat").anyTimes();
         expect(format.getReadParameters()).andReturn(new CustomFormat().getReadParameters()).anyTimes();
         replay(format);
-        
+
         CoverageStoreInfo csi = createMock(CoverageStoreInfo.class);
         expect(csi.getURL()).andReturn(rasterSource).anyTimes();
         expect(csi.getFormat()).andReturn(format).anyTimes();
@@ -698,21 +697,23 @@ public class CatalogBuilderTest extends GeoServerMockTestSupport {
         expect(csi.getName()).andReturn("ThisIsMe").anyTimes();
         expect(csi.getWorkspace()).andReturn(getCatalog().getDefaultWorkspace()).anyTimes();
         replay(csi);
-        
+
         // setup a non cloning resource pool and catalog
         Catalog cat = new CatalogImpl();
         ResourcePool rp = new ResourcePool(cat) {
             public CoverageStoreInfo clone(CoverageStoreInfo source, boolean allowEnvParametrization) {
                 return source;
-            };
+            }
+
+            ;
         };
         cat.setResourcePool(rp);
-        
+
         // make it build the coverage info without access to a grid coverage 2d
         CatalogBuilder cb = new CatalogBuilder(cat);
         cb.setStore(csi);
         CoverageInfo ci = cb.buildCoverage();
-        
+
         assertEquals("TheCoverage", ci.getName());
         List<CoverageDimensionInfo> dimensions = ci.getDimensions();
         assertEquals(3, dimensions.size());

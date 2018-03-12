@@ -8,14 +8,13 @@ import org.opengis.feature.type.Name;
 
 /**
  * Just a utility class to store info associated to the remote processing machines
- * 
+ *
  * @author Alessio Fabiani, GeoSolutions
- * 
  */
 public class RemoteMachineDescriptor {
 
     private String nodeJID;
-    
+
     private Name serviceName;
 
     private Boolean available;
@@ -25,14 +24,13 @@ public class RemoteMachineDescriptor {
     private Double loadAverage;
 
     /**
-     * 
      * @param name
      * @param available
      * @param memPercUsed
      * @param loadAverage
      */
     public RemoteMachineDescriptor(String nodeJID, Name serviceName, Boolean available, Double memPercUsed,
-            Double loadAverage) {
+                                   Double loadAverage) {
         super();
         this.nodeJID = nodeJID;
         this.serviceName = serviceName;

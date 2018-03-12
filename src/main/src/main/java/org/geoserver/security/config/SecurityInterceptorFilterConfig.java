@@ -8,11 +8,8 @@ package org.geoserver.security.config;
 
 /**
  * Configuration for security interceptor filters
- * 
  *
- * 
  * @author mcr
- *
  */
 
 /*
@@ -40,18 +37,21 @@ public class SecurityInterceptorFilterConfig extends SecurityFilterConfig {
     private static final long serialVersionUID = 1L;
     private boolean allowIfAllAbstainDecisions;
     private String securityMetadataSource;
-    
+
     public boolean isAllowIfAllAbstainDecisions() {
         return allowIfAllAbstainDecisions;
     }
+
     public void setAllowIfAllAbstainDecisions(boolean allowIfAllAbstainDecisions) {
         this.allowIfAllAbstainDecisions = allowIfAllAbstainDecisions;
     }
+
     public String getSecurityMetadataSource() {
         return securityMetadataSource;
     }
+
     public void setSecurityMetadataSource(String securityMetadataSource) {
         this.securityMetadataSource = securityMetadataSource;
     }
-        
+
 }

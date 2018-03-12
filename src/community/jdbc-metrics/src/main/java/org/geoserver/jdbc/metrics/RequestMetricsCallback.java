@@ -16,57 +16,56 @@ import java.util.Map;
 /**
  * JDBC reader callback that tracks metrics on a request by request basis.
  * <p>
- *   Metrics are stored in a thread local variable. See {@link RequestMetricsFilter}.
+ * Metrics are stored in a thread local variable. See {@link RequestMetricsFilter}.
  * </p>
  */
 public class RequestMetricsCallback implements JDBCReaderCallback {
 
-  static ThreadLocal<Map<String,Object>> metrics = new ThreadLocal<>();
+    static ThreadLocal<Map<String, Object>> metrics = new ThreadLocal<>();
 
-  long start;
-  long count;
+    long start;
+    long count;
 
-  @Override
-  public void init(JDBCFeatureReader reader) {
-    metrics.set(new HashMap<>());
-    count = 0;
-  }
-
-  @Override
-  public void beforeQuery(Statement st) {
-    start = System.currentTimeMillis();
-    metrics.get().put("start", start);
-  }
-
-  @Override
-  public void afterQuery(Statement st) {
-    metrics.get().put("query", System.currentTimeMillis()- start);
-  }
-
-  @Override
-  public void queryError(Exception e) {
-  }
-
-  @Override
-  public void beforeNext(ResultSet rs) {
-  }
-
-  @Override
-  public void afterNext(ResultSet rs, boolean hasMore) {
-    if (hasMore) {
-      count++;
+    @Override
+    public void init(JDBCFeatureReader reader) {
+        metrics.set(new HashMap<>());
+        count = 0;
     }
-    else {
-      metrics.get().put("total", System.currentTimeMillis()- start);
-      metrics.get().put("count", count);
+
+    @Override
+    public void beforeQuery(Statement st) {
+        start = System.currentTimeMillis();
+        metrics.get().put("start", start);
     }
-  }
 
-  @Override
-  public void rowError(Exception e) {
-  }
+    @Override
+    public void afterQuery(Statement st) {
+        metrics.get().put("query", System.currentTimeMillis() - start);
+    }
 
-  @Override
-  public void finish(JDBCFeatureReader reader) {
-  }
+    @Override
+    public void queryError(Exception e) {
+    }
+
+    @Override
+    public void beforeNext(ResultSet rs) {
+    }
+
+    @Override
+    public void afterNext(ResultSet rs, boolean hasMore) {
+        if (hasMore) {
+            count++;
+        } else {
+            metrics.get().put("total", System.currentTimeMillis() - start);
+            metrics.get().put("count", count);
+        }
+    }
+
+    @Override
+    public void rowError(Exception e) {
+    }
+
+    @Override
+    public void finish(JDBCFeatureReader reader) {
+    }
 }

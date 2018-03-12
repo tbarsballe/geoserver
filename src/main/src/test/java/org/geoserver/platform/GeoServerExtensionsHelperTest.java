@@ -31,7 +31,7 @@ public class GeoServerExtensionsHelperTest {
         System.clearProperty("TEST_PROPERTY");
         GeoServerExtensionsHelper.init(null);
     }
-    
+
 
     @Test
     public void helperProperty() {
@@ -39,7 +39,7 @@ public class GeoServerExtensionsHelperTest {
 
         GeoServerExtensionsHelper.property("TEST_PROPERTY", "abc");
         assertEquals("abc", GeoServerExtensions.getProperty("TEST_PROPERTY"));
-        
+
         GeoServerExtensionsHelper.clear();
         assertEquals("ABC", GeoServerExtensions.getProperty("TEST_PROPERTY"));
     }
@@ -54,10 +54,11 @@ public class GeoServerExtensionsHelperTest {
         assertNull(GeoServerExtensions.bean("bean"));
         assertNull(GeoServerExtensions.bean(GeoServerExtensionsHelperTest.class));
     }
-    
+
     class TestClass {
-        
+
     }
+
     @SuppressWarnings("unchecked")
     @Test
     public void helperMultipleSingleton() {
@@ -65,17 +66,17 @@ public class GeoServerExtensionsHelperTest {
         TestClass o2 = new TestClass();
         GeoServerExtensionsHelper.singleton("o1", o1, TestClass.class);
         GeoServerExtensionsHelper.singleton("o2", o2, TestClass.class);
-        
-        assertThat(GeoServerExtensions.extensions(TestClass.class), 
+
+        assertThat(GeoServerExtensions.extensions(TestClass.class),
                 containsInAnyOrder(sameInstance(o1), sameInstance(o2)));
-    }  
-    
+    }
+
     @Test
-    public void helperFile(){
+    public void helperFile() {
         File webxml = new File("web.xml"); // we are not touching the file so anywhere is fine
-        
-        GeoServerExtensionsHelper.file("WEB-INF/web.xml",  webxml );
-        assertSame( webxml, GeoServerExtensions.file("WEB-INF/web.xml") );
-        
+
+        GeoServerExtensionsHelper.file("WEB-INF/web.xml", webxml);
+        assertSame(webxml, GeoServerExtensions.file("WEB-INF/web.xml"));
+
     }
 }

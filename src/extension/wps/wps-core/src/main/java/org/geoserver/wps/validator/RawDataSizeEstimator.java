@@ -10,7 +10,7 @@ import org.geoserver.wps.process.StringRawData;
 
 /**
  * Estimates non stream oriented raw data implementations
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class RawDataSizeEstimator implements ObjectSizeEstimator {

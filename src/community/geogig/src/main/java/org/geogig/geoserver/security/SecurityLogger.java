@@ -42,6 +42,7 @@ import com.google.common.collect.ImmutableMap.Builder;
 public class SecurityLogger implements InitializingBean {
 
     private static final Map<Class<? extends AbstractGeoGigOp<?>>, MessageBuilder<?>> WATCHED_COMMANDS;
+
     static {
         Builder<Class<? extends AbstractGeoGigOp<?>>, MessageBuilder<?>> builder = ImmutableMap
                 .builder();
@@ -81,7 +82,7 @@ public class SecurityLogger implements InitializingBean {
     }
 
     public static void logPost(AbstractGeoGigOp<?> command, @Nullable Object retVal,
-            @Nullable RuntimeException exception) {
+                               @Nullable RuntimeException exception) {
 
         if (INSTANCE == null) {
             return;// not yet initialized
@@ -93,21 +94,21 @@ public class SecurityLogger implements InitializingBean {
         }
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings({"unchecked", "rawtypes"})
     private void error(AbstractGeoGigOp<?> command, RuntimeException exception) {
         MessageBuilder builder = builderFor(command);
         String repoUrl = repoUrl(command);
         logStore.error(repoUrl, builder.buildError(command, exception), exception);
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings({"unchecked", "rawtypes"})
     private void post(AbstractGeoGigOp<?> command, Object commandResult) {
         MessageBuilder builder = builderFor(command);
         String repoUrl = repoUrl(command);
         logStore.info(repoUrl, builder.buildPost(command, commandResult));
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings({"unchecked", "rawtypes"})
     private void pre(AbstractGeoGigOp<?> command) {
         MessageBuilder builder = builderFor(command);
         String repoUrl = repoUrl(command);
@@ -270,7 +271,7 @@ public class SecurityLogger implements InitializingBean {
             sb.append("already up to date");
         } else {
             for (Iterator<Entry<String, Collection<RefDiff>>> it = refs.entrySet().iterator(); it
-                    .hasNext();) {
+                    .hasNext(); ) {
                 Entry<String, Collection<RefDiff>> entry = it.next();
                 String remoteUrl = entry.getKey();
                 Collection<RefDiff> changedRefs = entry.getValue();
@@ -287,7 +288,7 @@ public class SecurityLogger implements InitializingBean {
     }
 
     private static void print(Collection<RefDiff> changedRefs, StringBuilder sb) {
-        for (Iterator<RefDiff> it = changedRefs.iterator(); it.hasNext();) {
+        for (Iterator<RefDiff> it = changedRefs.iterator(); it.hasNext(); ) {
             RefDiff ref = it.next();
             Ref oldRef = ref.getOldRef();
             Ref newRef = ref.getNewRef();

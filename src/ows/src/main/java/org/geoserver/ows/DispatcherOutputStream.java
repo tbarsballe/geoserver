@@ -13,7 +13,7 @@ import java.io.OutputStream;
  * {@link IOException}s thrown while writing to the underlying destination as
  * ignorable for OWS exception reporting, by throwing a
  * {@link ClientStreamAbortedException}.
- * 
+ *
  * @author Gabriel Roldan (TOPP)
  * @version $Id$
  * @since 1.6.x

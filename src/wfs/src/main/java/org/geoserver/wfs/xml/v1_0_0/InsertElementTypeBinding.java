@@ -25,9 +25,9 @@ import org.picocontainer.MutablePicoContainer;
 
 /**
  * Binding object for the type http://www.opengis.net/wfs:InsertElementType.
- *
  * <p>
- *        <pre>
+ * <p>
+ * <pre>
  *         <code>
  *  &lt;xsd:complexType name="InsertElementType"&gt;
  *      &lt;xsd:sequence&gt;
@@ -38,13 +38,14 @@ import org.picocontainer.MutablePicoContainer;
  *
  *          </code>
  *         </pre>
+ *
  * @generated
  */
 public class InsertElementTypeBinding extends AbstractComplexEMFBinding {
     WfsFactory wfsfactory;
 
     public InsertElementTypeBinding(WfsFactory wfsfactory) {
-        super( wfsfactory );
+        super(wfsfactory);
         this.wfsfactory = wfsfactory;
     }
 
@@ -66,21 +67,21 @@ public class InsertElementTypeBinding extends AbstractComplexEMFBinding {
     }
 
     public void initializeChildContext(ElementInstance childInstance,
-            Node node, MutablePicoContainer context) {
+                                       Node node, MutablePicoContainer context) {
         //if an srsName is set for this geometry, put it in the context for 
         // children, so they can use it as well
-        if ( node.hasAttribute("srsName") ) {
+        if (node.hasAttribute("srsName")) {
             try {
                 CoordinateReferenceSystem crs = GML2ParsingUtils.crs(node);
-                if ( crs != null ) {
+                if (crs != null) {
                     context.registerComponentInstance(CoordinateReferenceSystem.class, crs);
                 }
-            } catch(Exception e) {
+            } catch (Exception e) {
                 throw new WFSException(e, "InvalidParameterValue");
             }
         }
     }
-    
+
     /**
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -88,7 +89,7 @@ public class InsertElementTypeBinding extends AbstractComplexEMFBinding {
      * @generated modifiable
      */
     public Object parse(ElementInstance instance, Node node, Object value)
-        throws Exception {
+            throws Exception {
         InsertElementType insertElement = wfsfactory.createInsertElementType();
 
         //features
@@ -109,15 +110,15 @@ public class InsertElementTypeBinding extends AbstractComplexEMFBinding {
         }
         return insertElement;
     }
-    
+
     public Object getProperty(Object object, QName name)
-        throws Exception {
+            throws Exception {
         InsertElementType insert = (InsertElementType) object;
-    
+
         if (GML._Feature.equals(name)) {
             return insert.getFeature();
         }
-    
+
         return super.getProperty(object, name);
     }
 }

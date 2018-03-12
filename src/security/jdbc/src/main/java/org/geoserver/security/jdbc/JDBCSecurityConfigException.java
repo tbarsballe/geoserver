@@ -10,10 +10,10 @@ import org.geoserver.security.validation.SecurityConfigException;
 public class JDBCSecurityConfigException extends SecurityConfigException {
 
     private static final long serialVersionUID = 1L;
-    
+
     public static final String DRIVER_CLASSNAME_REQUIRED = "DRIVER_CLASSNAME_REQUIRED";
     //return MessageFormat.format("Driver name is mandatory",args);
-    
+
     public static final String USERNAME_REQUIRED = "USERNAME_REQUIRED";
     //return MessageFormat.format("Username is mandatory",args);
 

@@ -43,7 +43,7 @@ public class WCSEOLayerConfig extends PublishedConfigurationPanel<LayerInfo> {
             CoverageInfo ci = (CoverageInfo) model.getObject().getResource();
             boolean result = ci.getGridCoverageReader(null, null) instanceof StructuredGridCoverage2DReader;
             return result;
-        } catch(IOException e) {
+        } catch (IOException e) {
             throw new RuntimeException("Faied to load reader to determine if it's WCS EO Dataset worthy", e);
         }
     }

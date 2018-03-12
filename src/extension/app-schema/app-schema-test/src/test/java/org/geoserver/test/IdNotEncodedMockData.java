@@ -8,7 +8,6 @@ package org.geoserver.test;
 
 /**
  * @author Niels Charlier (Curtin University Of Technology)
- * 
  */
 public class IdNotEncodedMockData extends AbstractAppSchemaMockData {
 
@@ -28,7 +27,7 @@ public class IdNotEncodedMockData extends AbstractAppSchemaMockData {
     @Override
     public void addContent() {
         putNamespace(GWML_PREFIX, GWML_URI);
-        addFeatureType(GSML_PREFIX, "MappedInterval", "MappedInterval.xml",  "HydrostratigraphicUnit.xml",
+        addFeatureType(GSML_PREFIX, "MappedInterval", "MappedInterval.xml", "HydrostratigraphicUnit.xml",
                 "mappedinterval.properties", "HydrogeologicUnit.xsd");
     }
 

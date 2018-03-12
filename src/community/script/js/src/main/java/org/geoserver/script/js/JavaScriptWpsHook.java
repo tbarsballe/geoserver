@@ -41,7 +41,7 @@ public class JavaScriptWpsHook extends WpsHook {
         }
         return title;
     }
-    
+
     @Override
     public String getDescription(ScriptEngine engine) throws ScriptException {
         return getProcess(engine).getDescription();

@@ -12,7 +12,7 @@ import org.geoserver.security.config.SecurityNamedServiceConfig;
 
 /**
  * Security provider for basic auth
- * 
+ *
  * @author mcr
  */
 public class GeoServerDigestAuthenticationProvider extends AbstractFilterProvider {

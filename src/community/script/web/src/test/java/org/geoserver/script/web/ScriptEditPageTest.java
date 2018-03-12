@@ -74,6 +74,6 @@ public class ScriptEditPageTest extends GeoServerWicketTestSupport {
         form.setValue("contents:editorContainer:editorParent:editor", "");
         form.submit();
         tester.assertRenderedPage(ScriptEditPage.class);
-        tester.assertErrorMessages(new String[] { "Field 'contents' is required." });
+        tester.assertErrorMessages(new String[]{"Field 'contents' is required."});
     }
 }

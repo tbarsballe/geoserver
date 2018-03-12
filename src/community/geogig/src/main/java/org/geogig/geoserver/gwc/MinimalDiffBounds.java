@@ -38,7 +38,6 @@ import com.vividsolutions.jts.geom.Geometry;
  * <p>
  * The tree-ish at the right side of the comparison is set through {@link #setNewVersion(String)},
  * and defaults to {@link Ref#WORK_HEAD} if not set.
- * 
  */
 public class MinimalDiffBounds extends AbstractGeoGigOp<Geometry> {
 

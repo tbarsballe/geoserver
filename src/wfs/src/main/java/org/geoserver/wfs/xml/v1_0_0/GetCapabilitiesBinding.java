@@ -14,9 +14,9 @@ import org.geotools.xml.AbstractComplexEMFBinding;
 
 /**
  * Binding object for the element http://www.opengis.net/wfs:GetCapabilities.
- *
  * <p>
- *        <pre>
+ * <p>
+ * <pre>
  *         <code>
  *  &lt;xsd:element name="GetCapabilities" type="wfs:GetCapabilitiesType"&gt;
  *          &lt;xsd:annotation&gt;          &lt;xsd:documentation&gt;             The
@@ -32,11 +32,12 @@ import org.geotools.xml.AbstractComplexEMFBinding;
  *
  *          </code>
  *         </pre>
+ *
  * @generated
  */
 public class GetCapabilitiesBinding extends AbstractComplexEMFBinding {
     public GetCapabilitiesBinding(WfsFactory wfsfactory) {
-        super( wfsfactory );
+        super(wfsfactory);
     }
 
     /**

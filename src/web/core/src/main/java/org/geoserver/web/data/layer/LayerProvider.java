@@ -41,7 +41,7 @@ import static org.geoserver.catalog.Predicates.sortBy;
  * the above it should not be called
  * </ul>
  * -->
- * 
+ *
  * @author Andrea Aime - OpenGeo
  */
 @SuppressWarnings("serial")
@@ -91,7 +91,7 @@ public class LayerProvider extends GeoServerDataProvider<LayerInfo> {
                             // in case of same authority, compare numbers
                             return new Integer(srs1[1]).compareTo(new Integer(
                                     srs2[1]));
-                        } catch(NumberFormatException e) {
+                        } catch (NumberFormatException e) {
                             // a handful of codes are not numeric,
                             // handle the general case as well
                             return srs1[1].compareTo(srs2[1]);
@@ -106,7 +106,7 @@ public class LayerProvider extends GeoServerDataProvider<LayerInfo> {
 
         }
     };
-    
+
     static final List<Property<LayerInfo>> PROPERTIES = Arrays.asList(TYPE, TITLE,
             NAME, STORE, ENABLED, SRS);
 
@@ -122,7 +122,7 @@ public class LayerProvider extends GeoServerDataProvider<LayerInfo> {
     protected List<Property<LayerInfo>> getProperties() {
         return PROPERTIES;
     }
-    
+
     @Override
     public IModel<LayerInfo> newModel(LayerInfo object) {
         return new LayerDetachableModel(object);
@@ -146,7 +146,7 @@ public class LayerProvider extends GeoServerDataProvider<LayerInfo> {
         int count = getCatalog().count(LayerInfo.class, filter);
         return count;
     }
-    
+
     @Override
     public Iterator<LayerInfo> iterator(final long first, final long count) {
         Iterator<LayerInfo> iterator = filteredItems(first, count);
@@ -176,18 +176,18 @@ public class LayerProvider extends GeoServerDataProvider<LayerInfo> {
 
         SortBy sortOrder = null;
         if (sort != null) {
-            if(property instanceof BeanProperty){
-                final String sortProperty = ((BeanProperty<LayerInfo>)property).getPropertyPath();
+            if (property instanceof BeanProperty) {
+                final String sortProperty = ((BeanProperty<LayerInfo>) property).getPropertyPath();
                 sortOrder = sortBy(sortProperty, sort.isAscending());
-            }else if(property == ENABLED){
+            } else if (property == ENABLED) {
                 sortOrder = sortBy("enabled", sort.isAscending());
             }
         }
-        if(first>Integer.MAX_VALUE || first<Integer.MIN_VALUE || 
-                count>Integer.MAX_VALUE || count<Integer.MIN_VALUE) {
+        if (first > Integer.MAX_VALUE || first < Integer.MIN_VALUE ||
+                count > Integer.MAX_VALUE || count < Integer.MIN_VALUE) {
             throw new IllegalArgumentException(); // TODO Possibly change catalog API to use long
         }
-        
+
         final Filter filter = getFilter();
         //our already filtered and closeable iterator
         Iterator<LayerInfo> items = catalog.list(LayerInfo.class, filter, first.intValue(), count.intValue(), sortOrder);

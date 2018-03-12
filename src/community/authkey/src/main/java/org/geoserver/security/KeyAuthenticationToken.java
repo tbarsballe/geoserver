@@ -19,18 +19,18 @@ public class KeyAuthenticationToken extends AbstractAuthenticationToken {
 
     public static final String DEFAULT_URL_PARAM = "authkey";
 
-    private String key,authKeyParamName;
+    private String key, authKeyParamName;
 
     public KeyAuthenticationToken(String key, String authKeyParamName, UserDetails user) {
-        this(key,authKeyParamName,user,user.getAuthorities());
+        this(key, authKeyParamName, user, user.getAuthorities());
     }
-    
-    public KeyAuthenticationToken(String key, String authKeyParamName,UserDetails user, 
-            Collection<? extends GrantedAuthority> authorities) {
+
+    public KeyAuthenticationToken(String key, String authKeyParamName, UserDetails user,
+                                  Collection<? extends GrantedAuthority> authorities) {
         super(authorities);
         this.key = key;
         setDetails(user);
-        this.authKeyParamName=authKeyParamName;
+        this.authKeyParamName = authKeyParamName;
         setAuthenticated(true);
     }
 
@@ -39,7 +39,7 @@ public class KeyAuthenticationToken extends AbstractAuthenticationToken {
     }
 
     public Object getPrincipal() {
-        return ((UserDetails)getDetails()).getUsername();
+        return ((UserDetails) getDetails()).getUsername();
     }
 
     public String getAuthKeyParamName() {

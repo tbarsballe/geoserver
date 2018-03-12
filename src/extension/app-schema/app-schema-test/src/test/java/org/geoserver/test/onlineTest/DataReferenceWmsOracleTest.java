@@ -9,19 +9,17 @@ import org.geoserver.data.test.SystemTestData;
 import org.geotools.data.complex.AppSchemaDataAccessRegistry;
 
 /**
- * 
  * @author Niels Charlier
- * 
  */
 public class DataReferenceWmsOracleTest extends DataReferenceWmsOracleWithJoiningTest {
 
     public DataReferenceWmsOracleTest() throws Exception {
         super();
     }
-    
+
     @Override
     protected void setUpTestData(SystemTestData testData) throws Exception {
-    	AppSchemaDataAccessRegistry.getAppSchemaProperties().setProperty ("app-schema.joining", "false");                
+        AppSchemaDataAccessRegistry.getAppSchemaProperties().setProperty("app-schema.joining", "false");
         super.setUpTestData(testData);
     }
 }

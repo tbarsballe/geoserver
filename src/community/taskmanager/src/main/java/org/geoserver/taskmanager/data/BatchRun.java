@@ -11,13 +11,13 @@ import java.util.List;
 import org.geoserver.taskmanager.data.Run.Status;
 
 public interface BatchRun extends Serializable, Identifiable {
-    
+
     Batch getBatch();
-    
+
     void setBatch(Batch batch);
-    
+
     List<Run> getRuns();
-    
+
     default Date getStart() {
         return getRuns().isEmpty() ? null : getRuns().get(0).getStart();
     }
@@ -35,7 +35,7 @@ public interface BatchRun extends Serializable, Identifiable {
                     return getRuns().get(i).getStatus();
                 }
             }
-            return Status.COMMITTED;            
+            return Status.COMMITTED;
         }
     }
 
@@ -48,7 +48,7 @@ public interface BatchRun extends Serializable, Identifiable {
                     return getRuns().get(i).getMessage();
                 }
             }
-            return null;            
+            return null;
         }
     }
 

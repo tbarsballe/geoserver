@@ -27,7 +27,7 @@ import org.junit.Test;
 public class NetCDFDataTest extends TestCase {
 
     @Test
-    public void testFormatSupported() throws FileNotFoundException, IOException{
+    public void testFormatSupported() throws FileNotFoundException, IOException {
 
         // Selection of the input file
         File file = TestData.file(this, "2DLatLonCoverage.nc");
@@ -38,7 +38,7 @@ public class NetCDFDataTest extends TestCase {
         ImageReaderSpi spi = new NetCDFImageReaderSpi();
         Assert.assertTrue(spi.canDecodeInput(file));
     }
-    
+
     @Test
     public void testImage() throws FileNotFoundException, IOException {
         // Selection of the input file

@@ -30,7 +30,7 @@ import org.opengis.filter.expression.PropertyName;
 import org.xml.sax.helpers.NamespaceSupport;
 
 public class GetPropertyValue {
-    
+
     Pattern FEATURE_ID_PATTERN = Pattern.compile("@(\\w+:)?id");
 
     GetFeature delegate;
@@ -65,7 +65,7 @@ public class GetPropertyValue {
         if (request.getValueReference() == null) {
             throw new WFSException(request, "No valueReference specified", "MissingParameterValue")
                     .locator("valueReference");
-        } else if("".equals(request.getValueReference().trim())) {
+        } else if ("".equals(request.getValueReference().trim())) {
             throw new WFSException(request, "ValueReference cannot be empty", ServiceException.INVALID_PARAMETER_VALUE)
                     .locator("valueReference");
         }

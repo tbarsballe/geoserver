@@ -14,9 +14,8 @@ import org.geotools.util.Version;
 
 /**
  * Configuration loader for Web Coverage Service.
- * 
+ *
  * @author Justin Deoliveira, The Open Planning Project
- * 
  */
 public class WCSLoader extends LegacyServiceLoader<WCSInfo> {
 

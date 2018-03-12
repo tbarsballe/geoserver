@@ -55,14 +55,14 @@ public class WFSConfiguration extends Configuration {
     /**
      * logger
      */
-    static Logger LOGGER = Logging.getLogger( "org.geoserver.wfs");
+    static Logger LOGGER = Logging.getLogger("org.geoserver.wfs");
 
-    
+
     Catalog catalog;
     FeatureTypeSchemaBuilder schemaBuilder;
 
     public WFSConfiguration(Catalog catalog, FeatureTypeSchemaBuilder schemaBuilder, final WFS wfs) {
-        super( wfs );
+        super(wfs);
 
         this.catalog = catalog;
         this.schemaBuilder = schemaBuilder;
@@ -77,8 +77,8 @@ public class WFSConfiguration extends Configuration {
 
             public void handleModifyEvent(CatalogModifyEvent event) {
                 if (event.getSource() instanceof DataStoreInfo ||
-                    event.getSource() instanceof FeatureTypeInfo || 
-                    event.getSource() instanceof NamespaceInfo) {
+                        event.getSource() instanceof FeatureTypeInfo ||
+                        event.getSource() instanceof NamespaceInfo) {
                     reloaded();
                 }
             }
@@ -92,52 +92,52 @@ public class WFSConfiguration extends Configuration {
             public void reloaded() {
                 wfs.dispose();
             }
-                
+
         });
         catalog.getResourcePool().addListener(new ResourcePool.Listener() {
-            
+
             public void disposed(FeatureTypeInfo featureType, FeatureType ft) {
             }
-            
+
             public void disposed(CoverageStoreInfo coverageStore, GridCoverageReader gcr) {
             }
-            
+
             public void disposed(DataStoreInfo dataStore, DataAccess da) {
                 wfs.dispose();
             }
         });
-        
+
         addDependency(new OGCConfiguration());
         addDependency(new GMLConfiguration());
     }
 
     public Catalog getCatalog() {
-      return catalog;
+        return catalog;
     }
 
     protected void registerBindings(MutablePicoContainer container) {
-      //Types
+        //Types
         container.registerComponentImplementation(WFS.ALLSOMETYPE, AllSomeTypeBinding.class);
         container.registerComponentImplementation(WFS.DELETEELEMENTTYPE,
-            DeleteElementTypeBinding.class);
+                DeleteElementTypeBinding.class);
         container.registerComponentImplementation(WFS.DESCRIBEFEATURETYPETYPE,
-            DescribeFeatureTypeTypeBinding.class);
+                DescribeFeatureTypeTypeBinding.class);
         container.registerComponentImplementation(WFS.EMPTYTYPE, EmptyTypeBinding.class);
         container.registerComponentImplementation(WFS.FEATURECOLLECTIONTYPE,
-            FeatureCollectionTypeBinding.class);
+                FeatureCollectionTypeBinding.class);
         container.registerComponentImplementation(WFS.FEATURESLOCKEDTYPE,
-            FeaturesLockedTypeBinding.class);
+                FeaturesLockedTypeBinding.class);
         container.registerComponentImplementation(WFS.FEATURESNOTLOCKEDTYPE,
-            FeaturesNotLockedTypeBinding.class);
+                FeaturesNotLockedTypeBinding.class);
         container.registerComponentImplementation(WFS.GETCAPABILITIESTYPE,
-            GetCapabilitiesTypeBinding.class);
+                GetCapabilitiesTypeBinding.class);
         container.registerComponentImplementation(WFS.GETFEATURETYPE, GetFeatureTypeBinding.class);
         container.registerComponentImplementation(WFS.GETFEATUREWITHLOCKTYPE,
-            GetFeatureWithLockTypeBinding.class);
+                GetFeatureWithLockTypeBinding.class);
         container.registerComponentImplementation(WFS.INSERTELEMENTTYPE,
-            InsertElementTypeBinding.class);
+                InsertElementTypeBinding.class);
         container.registerComponentImplementation(WFS.INSERTRESULTTYPE,
-            InsertResultTypeBinding.class);
+                InsertResultTypeBinding.class);
         container.registerComponentImplementation(WFS.LOCKFEATURETYPE, LockFeatureTypeBinding.class);
         container.registerComponentImplementation(WFS.LOCKTYPE, LockTypeBinding.class);
         container.registerComponentImplementation(WFS.NATIVETYPE, NativeTypeBinding.class);
@@ -145,16 +145,16 @@ public class WFSConfiguration extends Configuration {
         container.registerComponentImplementation(WFS.QUERYTYPE, QueryTypeBinding.class);
         container.registerComponentImplementation(WFS.STATUSTYPE, StatusTypeBinding.class);
         container.registerComponentImplementation(WFS.TRANSACTIONRESULTTYPE,
-            TransactionResultTypeBinding.class);
+                TransactionResultTypeBinding.class);
         container.registerComponentImplementation(WFS.TRANSACTIONTYPE, TransactionTypeBinding.class);
         container.registerComponentImplementation(WFS.UPDATEELEMENTTYPE,
-            UpdateElementTypeBinding.class);
+                UpdateElementTypeBinding.class);
         container.registerComponentImplementation(WFS.WFS_LOCKFEATURERESPONSETYPE,
-            WFS_LockFeatureResponseTypeBinding.class);
+                WFS_LockFeatureResponseTypeBinding.class);
         container.registerComponentImplementation(WFS.WFS_TRANSACTIONRESPONSETYPE,
-            WFS_TransactionResponseTypeBinding.class);
+                WFS_TransactionResponseTypeBinding.class);
     }
-    
+
     public void configureContext(MutablePicoContainer context) {
         super.configureContext(context);
 
@@ -163,7 +163,7 @@ public class WFSConfiguration extends Configuration {
         context.registerComponentInstance(new WFSHandlerFactory(catalog, schemaBuilder));
         context.registerComponentInstance(catalog);
         context.registerComponentImplementation(PropertyTypePropertyExtractor.class);
-        
+
         //TODO: this code is copied from the 1.1 configuration, FACTOR IT OUT!!!
         //seed the cache with entries from the catalog
         context.registerComponentInstance(FeatureTypeCache.class, new CatalogFeatureTypeCache(getCatalog()));
@@ -172,30 +172,30 @@ public class WFSConfiguration extends Configuration {
     @SuppressWarnings("unchecked")
     @Override
     protected void configureBindings(Map bindings) {
-      //override the GMLAbstractFeatureTypeBinding
+        //override the GMLAbstractFeatureTypeBinding
         bindings.put(GML.AbstractFeatureType,
-            GMLAbstractFeatureTypeBinding.class);
-        
+                GMLAbstractFeatureTypeBinding.class);
+
         WFSXmlUtils.registerAbstractGeometryTypeBinding(this, bindings, GML.AbstractGeometryType);
-        
+
         bindings.put(
                 GML.BoxType,
-            new SetterInjectionComponentAdapter( 
-                GML.BoxType, GMLBoxTypeBinding.class, 
-                new Parameter[]{ new OptionalComponentParameter(CoordinateReferenceSystem.class)} 
-            )
+                new SetterInjectionComponentAdapter(
+                        GML.BoxType, GMLBoxTypeBinding.class,
+                        new Parameter[]{new OptionalComponentParameter(CoordinateReferenceSystem.class)}
+                )
         );
-        
+
         // use setter injection for OGCBBoxTypeBinding to allow an 
         // optional crs to be set in teh binding context for parsing, this crs
         // is set by the binding of a parent element.
         // note: it is important that this component adapter is non-caching so 
         // that the setter property gets updated properly every time
         bindings.put(
-            OGC.BBOXType,
-            new SetterInjectionComponentAdapter(OGC.BBOXType,
-                OGCBBOXTypeBinding.class,
-                new Parameter[] { new OptionalComponentParameter(CoordinateReferenceSystem.class) }));
-        
+                OGC.BBOXType,
+                new SetterInjectionComponentAdapter(OGC.BBOXType,
+                        OGCBBOXTypeBinding.class,
+                        new Parameter[]{new OptionalComponentParameter(CoordinateReferenceSystem.class)}));
+
     }
 }

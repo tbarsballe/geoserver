@@ -13,9 +13,8 @@ import org.vfny.geoserver.wcs.WcsException;
 /**
  * Not really a parser, but a validity checker instead (ensures the specified type
  * is among the values foreseen by the standard and supported by GeoServer)
- * 
+ *
  * @author Andrea Aime
- * 
  */
 public class GridTypeKvpParser extends KvpParser {
     public GridTypeKvpParser() {

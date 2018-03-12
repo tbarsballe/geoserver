@@ -34,7 +34,7 @@ import org.geotools.util.logging.Logging;
  * A custom resource stream locator which supports loading i18n properties files on a single file
  * per module basis. It also works around https://issues.apache.org/jira/browse/WICKET-2534.
  * <p>
- * This class also tries to optimize resource lookups (which are slower with the wicket 7 upgrade) by skipping the 
+ * This class also tries to optimize resource lookups (which are slower with the wicket 7 upgrade) by skipping the
  * mechanism that looks up static files (markup, css, etc...) with the locale specific prefixes.
  * </p>
  */
@@ -45,7 +45,7 @@ public class GeoServerResourceStreamLocator extends ResourceStreamLocator {
 
     static Pattern GS_LOCAL_I18N = Pattern.compile("org/geoserver/.*(\\.properties|\\.xml)]");
 
-    @SuppressWarnings( { "serial" })
+    @SuppressWarnings({"serial"})
     @Override
     public IResourceStream locate(Class<?> clazz, String path) {
         int i = path.lastIndexOf("/");
@@ -93,20 +93,21 @@ public class GeoServerResourceStreamLocator extends ResourceStreamLocator {
         return super.locate(clazz, path);
     }
 
-    
-    static Map<String,List<String>> PREFIXES = new HashMap<>();
+
+    static Map<String, List<String>> PREFIXES = new HashMap<>();
+
     static {
         PREFIXES.put("html", Arrays.asList("html"));
         PREFIXES.put("css", Arrays.asList("css"));
         PREFIXES.put("png", Arrays.asList("png"));
         PREFIXES.put("js", Arrays.asList("js"));
-        PREFIXES.put("ico", Arrays.asList("ico"));    
+        PREFIXES.put("ico", Arrays.asList("ico"));
     }
 
     @Override
     public IResourceNameIterator newResourceNameIterator(
-        String path, Locale locale, String style, String variation, String extension, boolean strict) {
-        
+            String path, Locale locale, String style, String variation, String extension, boolean strict) {
+
         Iterable<String> extensions = null;
 
         // if the resource under the geoserver or wicket namespace?

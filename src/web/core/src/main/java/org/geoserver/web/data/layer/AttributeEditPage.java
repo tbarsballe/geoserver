@@ -47,12 +47,12 @@ public class AttributeEditPage extends GeoServerSecuredPage {
     private CRSPanel crsField;
 
     public AttributeEditPage(final AttributeDescription attribute,
-            final NewFeatureTypePage previousPage) {
+                             final NewFeatureTypePage previousPage) {
         this(attribute, previousPage, false);
     }
 
     AttributeEditPage(final AttributeDescription attribute, final NewFeatureTypePage previousPage,
-            final boolean newAttribute) {
+                      final boolean newAttribute) {
         this.previousPage = previousPage;
         this.newAttribute = newAttribute;
         this.attribute = attribute;

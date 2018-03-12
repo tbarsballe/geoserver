@@ -165,7 +165,7 @@ class CollectionLayerManager {
     }
 
     private void configureSeparateBandsMosaic(String collection, CollectionLayer layerConfiguration,
-            String relativePath, Resource mosaicDirectory) throws Exception {
+                                              String relativePath, Resource mosaicDirectory) throws Exception {
         // get the namespace URI for the store
         final FeatureSource<FeatureType, Feature> collectionSource = this.accessProvider.getOpenSearchAccess()
                 .getCollectionSource();
@@ -275,7 +275,7 @@ class CollectionLayerManager {
     }
 
     private double[][] getResolutionLevelsInCRS(GridCoverage2DReader reader,
-            CoordinateReferenceSystem targetCRS)
+                                                CoordinateReferenceSystem targetCRS)
             throws FactoryException, TransformException, IOException {
 
         double[][] resolutionLevels = reader.getResolutionLevels();
@@ -334,7 +334,7 @@ class CollectionLayerManager {
     }
 
     private File getSampleGranule(String collection, final String nsURI, String band,
-            final String mosaicName) throws IOException {
+                                  final String mosaicName) throws IOException {
         // make sure there is at least one granule to grab resolution, sample/color model,
         // and preferred SPI
         SimpleFeatureSource granuleSource = DataUtilities
@@ -358,7 +358,7 @@ class CollectionLayerManager {
     }
 
     private void configureSimpleMosaic(String collection, CollectionLayer layerConfiguration,
-            final String relativePath, Resource mosaic) throws IOException, Exception {
+                                       final String relativePath, Resource mosaic) throws IOException, Exception {
         // make sure there is at least one granule
         final FeatureSource<FeatureType, Feature> collectionSource = this.accessProvider.getOpenSearchAccess()
                 .getCollectionSource();
@@ -473,12 +473,12 @@ class CollectionLayerManager {
     private int getBandIndex(String band, String[] bands, String[] defaultBands) {
         // using all native bands in a non split-multiband case
         String[] lookup = bands;
-        if(bands == null || bands.length == 0) {
+        if (bands == null || bands.length == 0) {
             lookup = defaultBands;
         }
         // lookup the band order in the split multiband case
         for (int i = 0; i < lookup.length; i++) {
-            if(band.equals(lookup[i])) {
+            if (band.equals(lookup[i])) {
                 return i + 1;
             }
         }
@@ -498,7 +498,7 @@ class CollectionLayerManager {
     }
 
     private CoverageStoreInfo createMosaicStore(CatalogBuilder cb, String collection,
-            CollectionLayer layer, final String relativePath) {
+                                                CollectionLayer layer, final String relativePath) {
         // good to go, create the store
         cb.setWorkspace(catalog.getWorkspaceByName(layer.getWorkspace()));
         CoverageStoreInfo mosaicStore = cb.buildCoverageStore(layer.getLayer());

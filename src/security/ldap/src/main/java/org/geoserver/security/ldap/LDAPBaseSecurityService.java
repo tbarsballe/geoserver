@@ -23,53 +23,51 @@ import org.springframework.security.ldap.SpringSecurityLdapTemplate;
 import org.springframework.ldap.core.LdapEntryIdentification;
 
 /**
- * 
  * @author Niels Charlier
- *
  */
 public abstract class LDAPBaseSecurityService extends AbstractGeoServerSecurityService {
-    
+
     /**
      * regex to find membership attribute in expression
-     */    
+     */
     protected static final Pattern lookForMembershipAttribute = Pattern.compile(
             "^\\(*([a-z]+)=(.*?)\\{([01])\\}(.*?)\\)*$", Pattern.CASE_INSENSITIVE);
-    
+
     /**
      * regex to extract the username from the user info
-     */    
+     */
     protected Pattern userNamePattern = Pattern.compile("^(.*)$");
 
     /**
-     *  regex to extract username from membership info
+     * regex to extract username from membership info
      */
     protected Pattern userMembershipPattern = Pattern.compile("^(.*)$");
-    
+
     /**
      * LDAP context
      */
     protected LdapContextSource ldapContext;
-    
+
     /**
      * LDAP template
      */
     protected SpringSecurityLdapTemplate template;
-    
+
     /**
      * User (if authenticating)
      */
     protected String user;
-    
+
     /**
      * Pasdword (if authenticating)
      */
     protected String password;
-    
+
     /**
      * Search base for ldap groups that are to be mapped to GeoServer groups/roles
      */
     protected String groupSearchBase = "ou=groups";
-    
+
     /**
      * Standard filter for getting all roles bounded to a user
      */
@@ -84,22 +82,22 @@ public abstract class LDAPBaseSecurityService extends AbstractGeoServerSecurityS
      * The ID of the attribute which contains the role name for a group
      */
     protected String groupNameAttribute = "cn";
-    
+
     /**
      * Standard filter for getting all roles bounded to a user
      */
-    protected String groupMembershipFilter = "member={0}";    
+    protected String groupMembershipFilter = "member={0}";
 
     /**
      * attribute of a group containing the membership info
      */
     protected String groupMembershipAttribute = "member";
-            
+
     /**
      * Search base for ldap users that are to be mapped to GeoServer roles
      */
     protected String userSearchBase = "ou=people";
-   
+
     /**
      * Standard filter for getting all groups bounded to a user
      */
@@ -109,28 +107,27 @@ public abstract class LDAPBaseSecurityService extends AbstractGeoServerSecurityS
      * Standard filter for getting all groups bounded to a user
      */
     protected String allUsersSearchFilter = "uid=*";
-    
+
     /**
      * attribute of a user containing the username (used if userFilter is defined)
      */
     protected String userNameAttribute = "uid";
-    
-    
+
+
     /**
      * lookup user for dn
      */
     protected boolean lookupUserForDn = false;
-        
 
-    
+
     @Override
     public void initializeFromConfig(SecurityNamedServiceConfig config)
             throws IOException {
         super.initializeFromConfig(config);
         LDAPBaseSecurityServiceConfig ldapConfig = (LDAPBaseSecurityServiceConfig) config;
-    
+
         ldapContext = LDAPUtils.createLdapContext(ldapConfig);
-    
+
         if (ldapConfig.isBindBeforeGroupSearch()) {
             // authenticate before LDAP searches
             user = ldapConfig.getUser();
@@ -139,14 +136,14 @@ public abstract class LDAPBaseSecurityService extends AbstractGeoServerSecurityS
         } else {
             template = new SpringSecurityLdapTemplate(ldapContext);
         }
-        
+
         if (!isEmpty(ldapConfig.getGroupSearchBase())) {
             groupSearchBase = ldapConfig.getGroupSearchBase();
         }
         if (!isEmpty(ldapConfig.getUserSearchBase())) {
             userSearchBase = ldapConfig.getUserSearchBase();
-        }               
-       
+        }
+
         if (!isEmpty(ldapConfig.getGroupSearchFilter())) {
             groupMembershipFilter = ldapConfig.getGroupSearchFilter();
             Matcher m = lookForMembershipAttribute.matcher(groupMembershipFilter);
@@ -217,7 +214,7 @@ public abstract class LDAPBaseSecurityService extends AbstractGeoServerSecurityS
      * Execute authentication, if configured to do so, and then
      * call the given callback on authenticated context, or simply
      * call the given callback if no authentication is needed.
-     * 
+     *
      * @param callback
      */
     protected void authenticateIfNeeded(AuthenticatedLdapEntryContextCallback callback) {
@@ -227,28 +224,28 @@ public abstract class LDAPBaseSecurityService extends AbstractGeoServerSecurityS
         } else {
             callback.executeWithContext(null, null);
         }
-    
+
     }
 
     protected static boolean isEmpty(String property) {
         return property == null || property.isEmpty();
     }
-    
+
     protected String getUserNameFromMembership(final String user) {
         final AtomicReference<String> userName = new AtomicReference<String>(user);
-        
+
         if (lookupUserForDn) {
             authenticateIfNeeded(new AuthenticatedLdapEntryContextCallback() {
-                
+
                 @Override
                 public void executeWithContext(DirContext ctx,
-                        LdapEntryIdentification ldapEntryIdentification) {
-                    DirContextOperations obj = (DirContextOperations)LDAPUtils
+                                               LdapEntryIdentification ldapEntryIdentification) {
+                    DirContextOperations obj = (DirContextOperations) LDAPUtils
                             .getLdapTemplateInContext(ctx, template)
                             .lookup(user);
                     String name = obj.getObjectAttribute(userNameAttribute).toString();
                     Matcher m = userNamePattern.matcher(name);
-                    if(m.matches()) {
+                    if (m.matches()) {
                         name = m.group(1);
                     }
                     userName.set(name);
@@ -257,30 +254,33 @@ public abstract class LDAPBaseSecurityService extends AbstractGeoServerSecurityS
         }
         return userName.get();
     }
-    
+
     protected String lookupDn(String username) {
         final AtomicReference<String> dn = new AtomicReference<String>(username);
         if (lookupUserForDn) {
             authenticateIfNeeded(new AuthenticatedLdapEntryContextCallback() {
-    
+
                 @Override
                 public void executeWithContext(DirContext ctx,
-                        LdapEntryIdentification ldapEntryIdentification) {
+                                               LdapEntryIdentification ldapEntryIdentification) {
                     try {
                         dn.set(LDAPUtils.getLdapTemplateInContext(ctx, template)
-                                .searchForSingleEntry("", userNameFilter, new String[] { username }).getDn().toString());
+                                .searchForSingleEntry("", userNameFilter, new String[]{username}).getDn().toString());
                     } catch (Exception e) {
                         // not found, let's use username instead
                     }
                 }
             });
         }
-        
+
         return dn.get();
     }
-    
+
     protected ContextMapper counter(AtomicInteger count) {
-        return ctx -> { count.set(count.get() + 1); return null; };
+        return ctx -> {
+            count.set(count.get() + 1);
+            return null;
+        };
     }
-    
+
 }

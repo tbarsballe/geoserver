@@ -31,7 +31,7 @@ public class EncoderXStreamInitializer implements NotificationXStreamInitializer
      * Define an alias for the {@link DefaultNotificationProcessor#encoder encoder}<br>
      * Define a class for the {@link NotificationEncoder}<br>
      * An example of encoder configuration section in notifier.xml is:
-     *
+     * <p>
      * <pre>
      *  {@code
      *  <genericProcessor>
@@ -43,7 +43,6 @@ public class EncoderXStreamInitializer implements NotificationXStreamInitializer
      * </pre>
      *
      * @param xs XStream object
-     *
      */
     public EncoderXStreamInitializer(String name, Class<? extends NotificationEncoder> clazz) {
         super();
@@ -59,9 +58,7 @@ public class EncoderXStreamInitializer implements NotificationXStreamInitializer
     }
 
     /**
-     *
      * @author Alessio Fabiani, GeoSolutions S.A.S.
-     *
      */
     static public class EncoderConverter extends ReflectionConverter {
 
@@ -73,12 +70,12 @@ public class EncoderXStreamInitializer implements NotificationXStreamInitializer
          * @param senderXStreamInitializer
          */
         public EncoderConverter(Mapper mapper, ReflectionProvider reflectionProvider,
-                EncoderXStreamInitializer encoderXStreamInitializer) {
+                                EncoderXStreamInitializer encoderXStreamInitializer) {
             super(mapper, reflectionProvider);
             this.encoderXStreamInitializer = encoderXStreamInitializer;
         }
 
-        @SuppressWarnings({ "rawtypes", "unchecked" })
+        @SuppressWarnings({"rawtypes", "unchecked"})
         @Override
         public boolean canConvert(Class clazz) {
             return clazz.isAssignableFrom(encoderXStreamInitializer.clazz);
@@ -91,7 +88,7 @@ public class EncoderXStreamInitializer implements NotificationXStreamInitializer
 
             List<EncoderXStreamInitializer> serializers = GeoServerExtensions.extensions(EncoderXStreamInitializer.class);
 
-            for(EncoderXStreamInitializer serializer : serializers) {
+            for (EncoderXStreamInitializer serializer : serializers) {
                 if (serializer.name.equals(nodeName)) {
                     try {
                         encoder = serializer.clazz.newInstance();

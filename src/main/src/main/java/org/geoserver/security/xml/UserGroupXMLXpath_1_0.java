@@ -9,23 +9,21 @@ package org.geoserver.security.xml;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathFactory;
+
 import static org.geoserver.security.xml.XMLConstants.*;
 
 /**
  * This class provides precompiled XPath Expressions
- * 
- * 
- * @author christian
  *
+ * @author christian
  */
-public class UserGroupXMLXpath_1_0  extends UserGroupXMLXpath {
+public class UserGroupXMLXpath_1_0 extends UserGroupXMLXpath {
 
     /**
-     * 
      * Singleton, the implementation is stateless
      */
     public final static UserGroupXMLXpath_1_0 Singleton = new UserGroupXMLXpath_1_0();
-    
+
     /**
      * XML name space context for user/group store
      */
@@ -41,44 +39,42 @@ public class UserGroupXMLXpath_1_0  extends UserGroupXMLXpath {
     protected XPathExpression groupEnabledExpression;
     protected XPathExpression groupMemberListExpression;
     protected XPathExpression groupMemberNameExpression;
-    
-    
-    
+
+
     /**
      * Constructor is protected, use the static Singleton instance
      */
     protected UserGroupXMLXpath_1_0() {
-        
-                           
-        XPathFactory factory = XPathFactory.newInstance();        
-        XPath xpath= factory.newXPath();
+
+
+        XPathFactory factory = XPathFactory.newInstance();
+        XPath xpath = factory.newXPath();
         xpath.setNamespaceContext(this.urContext);
-        
-        
-        
+
+
         //compile(xpath,"/"+E_USERREGISTRY+"["+A_VERSION_UR + "]");
-        
-        userListExpression=compile(xpath,"/"+NSP_UR+":" +E_USERREGISTRY_UR+
-                                         "/"+NSP_UR+":" +E_USERS_UR+
-                                         "/"+NSP_UR+":" +E_USER_UR);        
-        userEnabledExpression=compileRelativeAttribute(xpath, A_USER_ENABLED_UR,NSP_UR);
-        userNameExpression=compileRelativeAttribute(xpath,A_USER_NAME_UR,NSP_UR);
-        userPasswordExpression=compileRelativeAttribute(xpath,A_USER_PASSWORD_UR,NSP_UR);
-        
-        userPropertiesExpression=compile(xpath,NSP_UR+":"+ E_PROPERTY_UR);
-        propertyNameExpression=compileRelativeAttribute(xpath, A_PROPERTY_NAME_UR,NSP_UR);
-        propertyValueExpression=compile(xpath,"text()");
-        
-        groupListExpression =compile(xpath,"/"+NSP_UR+":"+E_USERREGISTRY_UR+
-                                           "/"+NSP_UR+":"+E_GROUPS_UR+
-                                           "/"+NSP_UR+":"+E_GROUP_UR);
-        
-        groupNameExpression=compileRelativeAttribute(xpath, A_GROUP_NAME_UR,NSP_UR);
-        groupEnabledExpression=compileRelativeAttribute(xpath, A_GROUP_ENABLED_UR,NSP_UR);
-        
-        groupMemberListExpression = compile(xpath,NSP_UR+":"+E_MEMBER_UR);
-        groupMemberNameExpression=compileRelativeAttribute(xpath,A_MEMBER_NAME_UR,NSP_UR);
-        
+
+        userListExpression = compile(xpath, "/" + NSP_UR + ":" + E_USERREGISTRY_UR +
+                "/" + NSP_UR + ":" + E_USERS_UR +
+                "/" + NSP_UR + ":" + E_USER_UR);
+        userEnabledExpression = compileRelativeAttribute(xpath, A_USER_ENABLED_UR, NSP_UR);
+        userNameExpression = compileRelativeAttribute(xpath, A_USER_NAME_UR, NSP_UR);
+        userPasswordExpression = compileRelativeAttribute(xpath, A_USER_PASSWORD_UR, NSP_UR);
+
+        userPropertiesExpression = compile(xpath, NSP_UR + ":" + E_PROPERTY_UR);
+        propertyNameExpression = compileRelativeAttribute(xpath, A_PROPERTY_NAME_UR, NSP_UR);
+        propertyValueExpression = compile(xpath, "text()");
+
+        groupListExpression = compile(xpath, "/" + NSP_UR + ":" + E_USERREGISTRY_UR +
+                "/" + NSP_UR + ":" + E_GROUPS_UR +
+                "/" + NSP_UR + ":" + E_GROUP_UR);
+
+        groupNameExpression = compileRelativeAttribute(xpath, A_GROUP_NAME_UR, NSP_UR);
+        groupEnabledExpression = compileRelativeAttribute(xpath, A_GROUP_ENABLED_UR, NSP_UR);
+
+        groupMemberListExpression = compile(xpath, NSP_UR + ":" + E_MEMBER_UR);
+        groupMemberNameExpression = compileRelativeAttribute(xpath, A_MEMBER_NAME_UR, NSP_UR);
+
     }
 
     @Override
@@ -152,5 +148,5 @@ public class UserGroupXMLXpath_1_0  extends UserGroupXMLXpath {
         return groupMemberNameExpression;
     }
 
-    
+
 }

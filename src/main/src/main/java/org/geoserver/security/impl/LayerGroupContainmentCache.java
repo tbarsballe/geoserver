@@ -134,7 +134,7 @@ class LayerGroupContainmentCache {
 
     /**
      * Returns all groups containing directly or indirectly containing the resource
-     * 
+     *
      * @param resource
      * @return
      */
@@ -154,7 +154,7 @@ class LayerGroupContainmentCache {
     /**
      * Returns all groups containing directly or indirectly the specified group, and relevant for security (e.g., anything but
      * {@link LayerGroupInfo.Mode#SINGLE} ones
-     * 
+     *
      * @param lg
      * @return
      */
@@ -177,7 +177,7 @@ class LayerGroupContainmentCache {
 
     /**
      * Recursively collects the group and all its containers in the <data>groups</data> collection
-     * 
+     *
      * @param lg
      * @param groups
      */
@@ -263,9 +263,9 @@ class LayerGroupContainmentCache {
 
         public String[] getPath() {
             if (workspace == null) {
-                return new String[] { name };
+                return new String[]{name};
             } else {
-                return new String[] { workspace, name };
+                return new String[]{workspace, name};
             }
         }
 
@@ -334,7 +334,7 @@ class LayerGroupContainmentCache {
                     updateContainedLayers(groupCache.get(lg.getId()), oldLayers, newLayers);
                 }
                 int modeIdx = event.getPropertyNames().indexOf("mode");
-                if(modeIdx != -1) {
+                if (modeIdx != -1) {
                     Mode newMode = (Mode) event.getNewValues().get(modeIdx);
                     updateGroupMode(lg.getId(), newMode);
                 }
@@ -354,7 +354,7 @@ class LayerGroupContainmentCache {
         }
 
         private void updateContainedLayers(LayerGroupSummary groupSummary,
-                List<PublishedInfo> oldLayers, List<PublishedInfo> newLayers) {
+                                           List<PublishedInfo> oldLayers, List<PublishedInfo> newLayers) {
 
             // process layers that are no more contained
             final HashSet<PublishedInfo> removedLayers = new HashSet<>(oldLayers);

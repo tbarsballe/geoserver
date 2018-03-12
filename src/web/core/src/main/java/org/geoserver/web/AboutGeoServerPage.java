@@ -12,9 +12,8 @@ import org.geotools.factory.GeoTools;
 
 /**
  * An about GeoServer page providing various bits of information.
- * 
- * @author Justin Deoliveira, OpenGeo
  *
+ * @author Justin Deoliveira, OpenGeo
  */
 public class AboutGeoServerPage extends GeoServerBasePage {
 
@@ -38,8 +37,7 @@ public class AboutGeoServerPage extends GeoServerBasePage {
     Package lookupGwcPackage() {
         try {
             return Package.getPackage("org.geowebcache");
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             //be safe
             LOGGER.log(Level.FINE, "Error looking up org.geowebcache package", e);
         }

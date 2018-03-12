@@ -25,7 +25,7 @@ import org.geoserver.security.validation.SecurityConfigValidator;
 
 /**
  * Provider for JDBC based security services.
- * 
+ *
  * @author Justin Deoliveira, OpenGeo
  */
 public class JDBCSecurityProvider extends GeoServerSecurityProvider {
@@ -39,14 +39,14 @@ public class JDBCSecurityProvider extends GeoServerSecurityProvider {
 
     @Override
     public Map<Class<?>, Set<String>> getFieldsForEncryption() {
-        Map<Class<?>, Set<String>> map = new HashMap <Class<?>, Set<String>>();
-        
-        Set<String> fields= new HashSet<String>();
-        fields.add("password");        
-        map.put(JDBCSecurityServiceConfig.class,fields);
+        Map<Class<?>, Set<String>> map = new HashMap<Class<?>, Set<String>>();
+
+        Set<String> fields = new HashSet<String>();
+        fields.add("password");
+        map.put(JDBCSecurityServiceConfig.class, fields);
         return map;
     }
-    
+
 
     @Override
     public Class<? extends GeoServerUserGroupService> getUserGroupServiceClass() {
@@ -55,13 +55,13 @@ public class JDBCSecurityProvider extends GeoServerSecurityProvider {
 
     @Override
     public GeoServerUserGroupService createUserGroupService(SecurityNamedServiceConfig config)
-        throws IOException {
+            throws IOException {
         return new JDBCUserGroupService();
     }
 
     @Override
     public Class<? extends GeoServerRoleService> getRoleServiceClass() {
-        return JDBCRoleService.class; 
+        return JDBCRoleService.class;
     }
 
     @Override
@@ -72,8 +72,8 @@ public class JDBCSecurityProvider extends GeoServerSecurityProvider {
 
     @Override
     public SecurityConfigValidator createConfigurationValidator(GeoServerSecurityManager securityManager) {
-        return new JdbcSecurityConfigValidator(securityManager); 
-     }
+        return new JdbcSecurityConfigValidator(securityManager);
+    }
 
     @Override
     public Class<JDBCConnectAuthProvider> getAuthenticationProviderClass() {

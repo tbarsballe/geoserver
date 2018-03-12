@@ -241,5 +241,4 @@ public class TransactionCallbackWFS11Test extends WFSTestSupport {
     }
 
 
-
 }

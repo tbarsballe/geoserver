@@ -18,7 +18,7 @@ import org.geotools.gce.imagemosaic.ImageMosaicFormat;
 /**
  * A model that returns the layer group entries backed by an image mosaic, suitable for creating
  * a vector outline layer
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class OutlineSourceModel implements IModel<List<? extends EoLayerGroupEntry>> {

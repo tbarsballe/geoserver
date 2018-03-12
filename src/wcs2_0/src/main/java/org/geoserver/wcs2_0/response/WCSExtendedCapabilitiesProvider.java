@@ -24,7 +24,7 @@ public abstract class WCSExtendedCapabilitiesProvider implements
 
     @Override
     public void encode(org.geoserver.ExtendedCapabilitiesProvider.Translator tx, WCSInfo wcs,
-            GetCapabilitiesRequest request) throws IOException {
+                       GetCapabilitiesRequest request) throws IOException {
         // nothing to do here
     }
 

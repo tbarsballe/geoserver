@@ -25,18 +25,18 @@ import org.geowebcache.diskquota.storage.TileSet;
 import org.geowebcache.diskquota.storage.TileSetVisitor;
 
 public class DummyQuotaStore implements QuotaStore {
-    
+
     private static final Quota EMPTY_QUOTA = new Quota(new BigInteger("0"));
-    
+
     TilePageCalculator calculator;
-    
+
     public DummyQuotaStore(TilePageCalculator calculator) {
         this.calculator = calculator;
     }
 
     @Override
     public void createLayer(String layerName) throws InterruptedException {
-        
+
     }
 
     @Override
@@ -90,7 +90,7 @@ public class DummyQuotaStore implements QuotaStore {
 
     @Override
     public void addToQuotaAndTileCounts(TileSet tileSet, Quota quotaDiff,
-            Collection<PageStatsPayload> tileCountDiffs) throws InterruptedException {
+                                        Collection<PageStatsPayload> tileCountDiffs) throws InterruptedException {
     }
 
     @Override

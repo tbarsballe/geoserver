@@ -71,11 +71,11 @@ public class SpringBeanProcessFactory extends org.geotools.process.factory.Annot
                 }
             }
         };
-        
+
         // register the new process and make the process function factory lookup again the processes
         Processors.addProcessFactory(this);
-        for(FunctionFactory ff : CommonFactoryFinder.getFunctionFactories(null)) {
-            if(ff instanceof ProcessFunctionFactory) {
+        for (FunctionFactory ff : CommonFactoryFinder.getFunctionFactories(null)) {
+            if (ff instanceof ProcessFunctionFactory) {
                 ProcessFunctionFactory pff = (ProcessFunctionFactory) ff;
                 pff.clear();
             }
@@ -119,15 +119,15 @@ public class SpringBeanProcessFactory extends org.geotools.process.factory.Annot
         Method lastExecute = null;
         if (c != null) {
             for (Method m : c.getMethods()) {
-                if(m.getName().equals("execute")) {
-                    if(lastExecute != null) {
+                if (m.getName().equals("execute")) {
+                    if (lastExecute != null) {
                         lastExecute = m;
                     }
                     // if annotated return immediately, otherwise keep it aside
-                    if(m.getAnnotation(DescribeResult.class) != null 
+                    if (m.getAnnotation(DescribeResult.class) != null
                             || m.getAnnotation(DescribeResults.class) != null) {
                         return m;
-                    } 
+                    }
                 }
             }
         }

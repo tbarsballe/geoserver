@@ -26,16 +26,16 @@ import org.geoserver.web.wicket.browser.GeoServerFileChooser;
 @SuppressWarnings("serial")
 public class ResourceFilePanel extends Panel {
 
-    private static final String[] FILE_EXTENSIONS = new String[] {".zip", ".gz", ".tar", ".tgz", ".bz"};
+    private static final String[] FILE_EXTENSIONS = new String[]{".zip", ".gz", ".tar", ".tgz", ".bz"};
 
     String file;
-    
+
     TextField fileField;
     GeoServerDialog dialog;
 
     public ResourceFilePanel(String id) {
         super(id);
-        
+
         add(dialog = new GeoServerDialog("dialog"));
 
         Form form = new Form("form", new CompoundPropertyModel(this));
@@ -44,14 +44,14 @@ public class ResourceFilePanel extends Panel {
         fileField = new TextField("file");
         fileField.setRequired(true);
         fileField.setOutputMarkupId(true);
-        fileField.add(new OnChangeAjaxBehavior(){
-            
+        fileField.add(new OnChangeAjaxBehavior() {
+
             @Override
-            protected void onUpdate(final AjaxRequestTarget target){
+            protected void onUpdate(final AjaxRequestTarget target) {
                 // Access the updated model value:
                 final String valueAsString =
-                    ((TextField<String>) getComponent()).getModelObject();
-                
+                        ((TextField<String>) getComponent()).getModelObject();
+
                 // use what the user currently typed
                 File file = null;
                 if (!valueAsString.trim().equals("")) {
@@ -61,15 +61,17 @@ public class ResourceFilePanel extends Panel {
                 }
             }
         });
-        
+
         form.add(fileField);
         form.add(chooserButton(form));
     }
 
     public Resource getResource() {
         return Files.asResource(new File(this.file));
-    };
-    
+    }
+
+    ;
+
     Component chooserButton(Form form) {
         AjaxSubmitLink link = new AjaxSubmitLink("chooser") {
             @Override
@@ -91,7 +93,7 @@ public class ResourceFilePanel extends Panel {
                             @Override
                             protected void fileClicked(File file, AjaxRequestTarget target) {
                                 ResourceFilePanel.this.file = file.getAbsolutePath();
-                                
+
                                 fileField.clearInput();
                                 fileField.setModelObject(file.getAbsolutePath());
 
@@ -112,7 +114,7 @@ public class ResourceFilePanel extends Panel {
                         // clear the raw input of the field won't show the new model value
                         fileField.clearInput();
                         //fileField.setModelObject(file);
-                        
+
                         target.add(fileField);
                         return true;
                     }

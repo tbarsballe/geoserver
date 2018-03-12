@@ -17,13 +17,12 @@ import org.apache.wicket.request.resource.PackageResourceReference;
 
 /**
  * A panel with two arrows, up and down, supposed to reorder items in a container (a table)
- * 
- * @author Andrea Aime - GeoSolutions
- * 
+ *
  * @param <T>
+ * @author Andrea Aime - GeoSolutions
  */
 public class UpDownPanel<T extends Object> extends Panel {
-    
+
     private static final long serialVersionUID = -5964561496724645286L;
     T entry;
     private ImageAjaxLink<?> upLink;
@@ -31,33 +30,33 @@ public class UpDownPanel<T extends Object> extends Panel {
     private ImageAjaxLink<?> downLink;
 
     private Component container;
-    
+
     public UpDownPanel(String id, final T entry, final List<T> items, Component container,
-            final StringResourceModel upTitle, final StringResourceModel downTitle) {
-        super( id );
+                       final StringResourceModel upTitle, final StringResourceModel downTitle) {
+        super(id);
         this.entry = entry;
         this.setOutputMarkupId(true);
         this.container = container;
-        
+
         upLink = new ImageAjaxLink<Void>("up", new PackageResourceReference(getClass(),
                 "../img/icons/silk/arrow_up.png")) {
             private static final long serialVersionUID = 2377129539852597050L;
 
             @Override
             protected void onClick(AjaxRequestTarget target) {
-                int index = items.indexOf( UpDownPanel.this.entry );
-                items.remove( index );
+                int index = items.indexOf(UpDownPanel.this.entry);
+                items.remove(index);
                 items.add(Math.max(0, index - 1), UpDownPanel.this.entry);
                 target.add(UpDownPanel.this.container);
                 target.add(this);
-                target.add(downLink);   
-                target.add(upLink);                    
+                target.add(downLink);
+                target.add(upLink);
             }
-            
+
             @Override
             protected void onComponentTag(ComponentTag tag) {
                 tag.put("title", upTitle.getString());
-                if ( items.indexOf( entry ) == 0 ) {
+                if (items.indexOf(entry) == 0) {
                     tag.put("style", "visibility:hidden");
                 } else {
                     tag.put("style", "visibility:visible");
@@ -66,7 +65,7 @@ public class UpDownPanel<T extends Object> extends Panel {
         };
         upLink.getImage().add(new AttributeModifier("alt", new ParamResourceModel("up", upLink)));
         upLink.setOutputMarkupId(true);
-        add( upLink);            
+        add(upLink);
 
         downLink = new ImageAjaxLink<Void>("down", new PackageResourceReference(getClass(),
                 "../img/icons/silk/arrow_down.png")) {
@@ -74,19 +73,19 @@ public class UpDownPanel<T extends Object> extends Panel {
 
             @Override
             protected void onClick(AjaxRequestTarget target) {
-                int index = items.indexOf( UpDownPanel.this.entry );
-                items.remove( index );
+                int index = items.indexOf(UpDownPanel.this.entry);
+                items.remove(index);
                 items.add(Math.min(items.size(), index + 1), UpDownPanel.this.entry);
                 target.add(UpDownPanel.this.container);
-                target.add(this);                    
-                target.add(downLink);   
-                target.add(upLink);                    
+                target.add(this);
+                target.add(downLink);
+                target.add(upLink);
             }
-            
+
             @Override
             protected void onComponentTag(ComponentTag tag) {
                 tag.put("title", downTitle.getString());
-                if ( items.indexOf( entry ) == items.size() - 1) {
+                if (items.indexOf(entry) == items.size() - 1) {
                     tag.put("style", "visibility:hidden");
                 } else {
                     tag.put("style", "visibility:visible");
@@ -95,6 +94,6 @@ public class UpDownPanel<T extends Object> extends Panel {
         };
         downLink.getImage().add(new AttributeModifier("alt", new ParamResourceModel("down", downLink)));
         downLink.setOutputMarkupId(true);
-        add( downLink);
+        add(downLink);
     }
 }

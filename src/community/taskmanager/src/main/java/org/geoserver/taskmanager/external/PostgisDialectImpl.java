@@ -17,7 +17,7 @@ import java.util.logging.Logger;
 
 /**
  * Postgis Dialect.
- * 
+ *
  * @author Timothy De Bock
  */
 public class PostgisDialectImpl extends DefaultDialectImpl {

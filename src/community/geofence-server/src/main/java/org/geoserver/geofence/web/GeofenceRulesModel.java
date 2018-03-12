@@ -27,11 +27,9 @@ import org.geoserver.web.GeoServerApplication;
 import org.geoserver.web.wicket.GeoServerDataProvider;
 
 /**
- * 
  * Functions as between webgui and internal geofence db
- * 
- * @author Niels Charlier
  *
+ * @author Niels Charlier
  */
 public class GeofenceRulesModel extends GeoServerDataProvider<ShortRule> {
 
@@ -39,7 +37,6 @@ public class GeofenceRulesModel extends GeoServerDataProvider<ShortRule> {
 
     /**
      * Makes columns that are unsortable and display "*" instead of empty when null
-     * 
      */
     public static class RuleBeanProperty<T> extends BeanProperty<T> {
         private static final long serialVersionUID = 483799722644223445L;
@@ -53,7 +50,7 @@ public class GeofenceRulesModel extends GeoServerDataProvider<ShortRule> {
             return null;
         }
 
-        @SuppressWarnings({ "unchecked", "rawtypes" })
+        @SuppressWarnings({"unchecked", "rawtypes"})
         public IModel getModel(IModel<T> itemModel) { // replace null by *
             return new PropertyModel<Object>(itemModel, getPropertyPath()) {
                 private static final long serialVersionUID = 1L;
@@ -251,7 +248,7 @@ public class GeofenceRulesModel extends GeoServerDataProvider<ShortRule> {
         ruleLimits.setCatalogMode(catalogMode);
         adminService().setLimits(ruleId, ruleLimits);
     }
-    
+
     public void save(Long ruleId, LayerDetails layerDetails) {
         adminService().setDetails(ruleId, layerDetails);
     }

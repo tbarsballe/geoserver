@@ -25,20 +25,20 @@ import org.opengis.feature.type.AttributeDescriptor;
 
 /**
  * Runs the DescribeRecord request
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class DescribeRecord {
 
     static final Logger LOGGER = Logging.getLogger(DescribeRecord.class);
-    
+
     /**
      * In case we make the schema languages pluggable we'll have to check what we actually
      * support, for the moment here is a set of different ways to refer to XML schema
      */
     static final Set<String> SUPPORTED_SCHEMA_LANGUAGES = new HashSet<String>() {
         /**
-         * 
+         *
          */
         private static final long serialVersionUID = -7972590028331744087L;
 
@@ -57,10 +57,10 @@ public class DescribeRecord {
         this.csw = csw;
         this.store = store;
     }
-    
+
     public static AttributeDescriptor[] getFeatureDescriptors(RecordDescriptor[] rds) {
         AttributeDescriptor[] attds = new AttributeDescriptor[rds.length];
-        for (int i=0; i<rds.length; i++) {
+        for (int i = 0; i < rds.length; i++) {
             attds[i] = rds[i].getFeatureDescriptor();
         }
         return attds;
@@ -72,12 +72,12 @@ public class DescribeRecord {
     public AttributeDescriptor[] run(DescribeRecordType request) {
         try {
             // check we are not asked for a schema language we do not support
-            if(request.getSchemaLanguage() != null 
+            if (request.getSchemaLanguage() != null
                     && !SUPPORTED_SCHEMA_LANGUAGES.contains(request.getSchemaLanguage())) {
-                throw new ServiceException("Unsupported schema language " + request.getSchemaLanguage(), 
+                throw new ServiceException("Unsupported schema language " + request.getSchemaLanguage(),
                         ServiceException.INVALID_PARAMETER_VALUE, "schemaLanguage");
             }
-            
+
             if (request.getTypeName() == null || request.getTypeName().isEmpty()) {
                 // return all the ones we have
                 return getFeatureDescriptors(store.getRecordDescriptors());
@@ -101,7 +101,7 @@ public class DescribeRecord {
                 if (requested.size() != 0) {
                     LOGGER.log(Level.FINE, "Failed to locate feature types " + requested + ", ignoring them");
                 }
-                
+
                 return result.toArray(new AttributeDescriptor[result.size()]);
             }
         } catch (IOException e) {

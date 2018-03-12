@@ -22,13 +22,14 @@ import freemarker.template.Template;
 
 /**
  * @author Alessio Fabiani, GeoSolutions S.A.S.
- *
  */
 public class LoginFormHTMLInclude extends Include {
 
     protected static final Logger LOGGER = Logging.getLogger(LoginFormHTMLInclude.class);
 
-    /** serialVersionUID */
+    /**
+     * serialVersionUID
+     */
     private static final long serialVersionUID = 2413413223248385722L;
 
     private static final String DEFAULT_AUTOCOMPLETE_VALUE = "on";
@@ -57,7 +58,7 @@ public class LoginFormHTMLInclude extends Include {
 
     /**
      * Imports the contents of the url of the model object.
-     * 
+     *
      * @return the imported contents
      */
     @Override

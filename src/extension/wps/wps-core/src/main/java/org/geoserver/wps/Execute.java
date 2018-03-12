@@ -20,7 +20,7 @@ import org.springframework.context.ApplicationContext;
 
 /**
  * Main class used to handle Execute requests
- * 
+ *
  * @author Lucas Reed, Refractions Research Inc
  * @author Andrea Aime, OpenGeo
  */
@@ -43,7 +43,7 @@ public class Execute {
 
     /**
      * Main method for performing decoding, execution, and response
-     * 
+     *
      * @param object
      * @param output
      * @throws IllegalArgumentException

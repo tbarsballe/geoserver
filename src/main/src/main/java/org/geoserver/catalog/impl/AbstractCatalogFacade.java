@@ -39,7 +39,7 @@ public abstract class AbstractCatalogFacade implements CatalogFacade {
 
     /**
      * @deprecated use {@link #beforeSaved(CatalogInfo, List, List, List)} and {@link #afterSaved(CatalogInfo, List, List, List)} as
-     *             appropriate
+     * appropriate
      */
     @Deprecated
     protected void saved(CatalogInfo object) {
@@ -63,7 +63,7 @@ public abstract class AbstractCatalogFacade implements CatalogFacade {
         getCatalog().fireModified(real, propertyNames, oldValues, newValues);
     }
 
-    protected <T extends CatalogInfo> T commitProxy(T object){
+    protected <T extends CatalogInfo> T commitProxy(T object) {
         // this object is a proxy
         ModificationProxy h = (ModificationProxy) Proxy.getInvocationHandler(object);
 
@@ -72,10 +72,10 @@ public abstract class AbstractCatalogFacade implements CatalogFacade {
 
         // commit to the original object
         h.commit();
-        
+
         return real;
     }
-    
+
     protected void afterSaved(CatalogInfo object, List propertyNames, List oldValues, List newValues) {
         CatalogInfo real = ModificationProxy.unwrap(object);
 
@@ -158,7 +158,7 @@ public abstract class AbstractCatalogFacade implements CatalogFacade {
                 resolved = unwrap(resolved);
                 style.setWorkspace(resolved);
             } else {
-                LOGGER.log(Level.INFO, "Failed to resolve workspace for style \""+style.getName()+
+                LOGGER.log(Level.INFO, "Failed to resolve workspace for style \"" + style.getName() +
                         "\". This means the workspace has not yet been added to the catalog, keep the proxy around");
             }
         }
@@ -186,7 +186,7 @@ public abstract class AbstractCatalogFacade implements CatalogFacade {
             resolved = unwrap(resolved);
             s.setWorkspace(resolved);
         } else {
-            LOGGER.log(Level.INFO, "Failed to resolve workspace for store \""+store.getName()+
+            LOGGER.log(Level.INFO, "Failed to resolve workspace for store \"" + store.getName() +
                     "\". This means the workspace has not yet been added to the catalog, keep the proxy around");
         }
     }

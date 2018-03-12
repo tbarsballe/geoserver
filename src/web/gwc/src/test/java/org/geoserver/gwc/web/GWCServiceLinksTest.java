@@ -14,13 +14,15 @@ import org.apache.wicket.markup.html.link.ExternalLink;
 import org.geoserver.ows.util.KvpUtils;
 import org.geoserver.web.GeoServerHomePage;
 import org.geoserver.web.GeoServerWicketTestSupport;
+
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+
 import org.junit.Test;
 
 public class GWCServiceLinksTest extends GeoServerWicketTestSupport {
 
-    
+
     @Test
     public void testCapabilitiesLinks() {
         GeoServerHomePage page = new GeoServerHomePage();
@@ -32,28 +34,28 @@ public class GWCServiceLinksTest extends GeoServerWicketTestSupport {
         final List<String> services = new ArrayList<String>();
         lastPage.visitChildren(ExternalLink.class, (component, visit) -> {
             String url = (String) component.getDefaultModelObject();
-            if(url != null) {
-                if(url.startsWith("../gwc/service/")) {
+            if (url != null) {
+                if (url.startsWith("../gwc/service/")) {
                     int idx = url.indexOf("?");
                     String service;
-                    if(idx > 0) {
+                    if (idx > 0) {
                         service = url.substring("./gwc/service/".length() + 1, idx);
                     } else {
                         service = url.substring("./gwc/service/".length() + 1);
                     }
-                    if(service != null) {
+                    if (service != null) {
                         services.add(service);
                     }
-                } else if(url.contains("GetCapabilities")){
+                } else if (url.contains("GetCapabilities")) {
                     Map<String, Object> params = KvpUtils.parseQueryString(url);
                     String service = (String) params.get("service");
-                    if(service != null) {
+                    if (service != null) {
                         services.add(service);
                     }
                 }
             }
         });
-        
+
         // GEOS-5886
         assertFalse(services.contains("gwc"));
         // these come from the custom provider

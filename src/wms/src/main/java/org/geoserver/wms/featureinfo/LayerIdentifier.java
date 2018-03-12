@@ -14,26 +14,25 @@ import org.geotools.feature.FeatureCollection;
 
 /**
  * Extension point that helps run GetFeatureInfo on a specific layer
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public interface LayerIdentifier {
 
     /**
      * Returns true if the identifier can handle this layer, false otherwise
-     * 
-     * @param layer
      *
+     * @param layer
      */
     boolean canHandle(MapLayerInfo layer);
 
     /**
      * Returns a feature collection identifying the "features" found at the specified location
-     * 
-     * @param params The request parameters
+     *
+     * @param params      The request parameters
      * @param maxFeatures Max number of features to be returned for this identify
      * @return A list of FeatureCollection objects, each feature in them represent an item the user
-     *         clicked on
+     * clicked on
      */
     List<FeatureCollection> identify(FeatureInfoRequestParameters params, int maxFeatures)
             throws Exception;

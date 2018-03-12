@@ -26,9 +26,8 @@ import com.thoughtworks.xstream.XStream;
 
 /**
  * Loads and saves the integrated GWC configuration at {@code <data dir>/gwc-gs.xml}
- * 
+ *
  * @author groldan
- * 
  */
 public class GWCConfigPersister {
 
@@ -43,7 +42,7 @@ public class GWCConfigPersister {
     private GWCConfig config;
 
     public GWCConfigPersister(final XStreamPersisterFactory xspf,
-            final GeoServerResourceLoader resourceLoader) {
+                              final GeoServerResourceLoader resourceLoader) {
         this.persisterFactory = xspf;
         this.resourceLoader = resourceLoader;
     }
@@ -91,9 +90,8 @@ public class GWCConfigPersister {
     /**
      * Saves and applies the integrated GWC's GeoServer specific configuration to the
      * {@code <data dir>/gwc-gs.xml} file.
-     * 
+     *
      * @param config
-     * 
      * @throws IOException
      */
     public void save(final GWCConfig config) throws IOException {
@@ -120,7 +118,7 @@ public class GWCConfigPersister {
         xs.alias("defaultVectorCacheFormats", HashSet.class);
         xs.alias("defaultOtherCacheFormats", HashSet.class);
         xs.alias("InnerCacheConfiguration", CacheConfiguration.class);
-        xs.allowTypes(new Class[] { GWCConfig.class, CacheConfiguration.class });
+        xs.allowTypes(new Class[]{GWCConfig.class, CacheConfiguration.class});
     }
 
     private Resource getConfigRoot() {

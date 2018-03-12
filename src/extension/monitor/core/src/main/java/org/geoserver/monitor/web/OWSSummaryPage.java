@@ -52,6 +52,6 @@ public class OWSSummaryPage extends MonitorBasePage {
             }
         });
         add(new TabbedPanel<AbstractTab>("charts", tabs));
-        
+
     }
 }

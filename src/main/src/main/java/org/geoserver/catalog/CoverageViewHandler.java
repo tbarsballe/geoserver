@@ -77,8 +77,8 @@ class CoverageViewHandler {
         protected abstract boolean compare(double scaleX, double scaleY, double[] resolution);
     }
 
-        /**
-     * Visit the reader for a coverage composing the view 
+    /**
+     * Visit the reader for a coverage composing the view
      * and compute the resolution levels
      */
     interface ReaderResolutionComposer {
@@ -175,7 +175,9 @@ class CoverageViewHandler {
         void visit(GridCoverage2DReader reader);
 
         GeneralEnvelope getOriginalEnvelope();
-    };
+    }
+
+    ;
 
     abstract class AbstractEnvelopeComposer implements EnvelopeComposer {
         GeneralEnvelope env = null;
@@ -225,7 +227,7 @@ class CoverageViewHandler {
      * <LI>same data type</LI>
      * <LI>same dimensions (same number of dimension, same type, and same name)</LI>
      * </UL>
-     * 
+     * <p>
      * When JAI-EXT BandMerge is available, constraints on resolution and bbox can be excluded.
      */
     static class CoveragesConsistencyChecker {
@@ -258,7 +260,7 @@ class CoverageViewHandler {
 
         /**
          * Check whether the coverages associated to the provided reader is consistent with the reference coverage.
-         * 
+         *
          * @param reader
          * @throws IOException
          */
@@ -297,13 +299,13 @@ class CoverageViewHandler {
             }
 
             // Checking dimensions
-            if(metadataNames == null) {
-                if(this.metadataNames != null && this.metadataNames.length > 0) {
+            if (metadataNames == null) {
+                if (this.metadataNames != null && this.metadataNames.length > 0) {
                     throw new IllegalArgumentException(
                             "The coverage metadataNames should have the same size");
                 }
-            } else if(this.metadataNames == null) {
-                if(metadataNames != null && metadataNames.length > 0) {
+            } else if (this.metadataNames == null) {
+                if (metadataNames != null && metadataNames.length > 0) {
                     throw new IllegalArgumentException(
                             "The coverage metadataNames should have the same size");
                 }
@@ -349,27 +351,33 @@ class CoverageViewHandler {
 
     private GridCoverage2DReader delegate;
 
-    /** 
-     * The coverageName to be used as reference. 
+    /**
+     * The coverageName to be used as reference.
      * It is used for homogeneous coverages case, to extract shared properties.
-     * It is used for heterogeneous coverages case, to access a specific coverage in order to 
-     * get the resolutions  
-     * */
+     * It is used for heterogeneous coverages case, to access a specific coverage in order to
+     * get the resolutions
+     */
     private String referenceName;
 
-    /** specifying whether this view is made of homogeneous coverages or not */
+    /**
+     * specifying whether this view is made of homogeneous coverages or not
+     */
     private boolean homogeneousCoverages = true;
 
-    /** 
-     * specifying whether we can support heterogeneous coverages 
+    /**
+     * specifying whether we can support heterogeneous coverages
      * (JAI-EXT's BandMerge is required to support heterogeneous composition)
      */
     boolean supportHeterogeneousCoverages;
 
-    /** Checker used to verify constraints are respected */
+    /**
+     * Checker used to verify constraints are respected
+     */
     private CoveragesConsistencyChecker checker;
 
-    /** The coverageView definition */
+    /**
+     * The coverageView definition
+     */
     private CoverageView coverageView;
 
     private ReaderResolutionComposer resolutionComposer;
@@ -377,7 +385,7 @@ class CoverageViewHandler {
     private EnvelopeComposer envelopeComposer;
 
     public CoverageViewHandler(boolean supportHeterogeneousCoverages, GridCoverage2DReader delegate,
-                                     String referenceName, CoverageView coverageView) {
+                               String referenceName, CoverageView coverageView) {
         this.supportHeterogeneousCoverages = supportHeterogeneousCoverages;
         this.delegate = delegate;
         this.referenceName = referenceName;
@@ -473,24 +481,24 @@ class CoverageViewHandler {
     private ReaderResolutionComposer initResolutionComposer() {
         SelectedResolution selectedResolution = coverageView.getSelectedResolution();
         switch (selectedResolution) {
-        case WORST:
-            return new WorstReaderResolutionComposer();
-        case BEST:
-            return new BestReaderResolutionComposer();
-        default:
-            return new BestReaderResolutionComposer();
+            case WORST:
+                return new WorstReaderResolutionComposer();
+            case BEST:
+                return new BestReaderResolutionComposer();
+            default:
+                return new BestReaderResolutionComposer();
         }
     }
 
     private EnvelopeComposer initEnvelopeComposer() {
         EnvelopeCompositionType envelopeCompositionType = coverageView.getEnvelopeCompositionType();
         switch (envelopeCompositionType) {
-        case INTERSECTION:
-            return new IntersectionEnvelopeComposer();
-        case UNION:
-            return new UnionEnvelopeComposer();
-        default:
-            return new UnionEnvelopeComposer();
+            case INTERSECTION:
+                return new IntersectionEnvelopeComposer();
+            case UNION:
+                return new UnionEnvelopeComposer();
+            default:
+                return new UnionEnvelopeComposer();
         }
     }
 
@@ -498,7 +506,7 @@ class CoverageViewHandler {
             throws IOException {
         return delegate.getReadingResolutions(referenceName, policy, requestedResolution);
     }
-    
+
     EnvelopeCompositionType getEnvelopeCompositionType() {
         return coverageView.getEnvelopeCompositionType();
     }

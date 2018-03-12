@@ -19,12 +19,12 @@ import org.geotools.util.logging.Logging;
 /**
  * Base class for GetFeatureInfo delegates responsible of creating GetFeatureInfo responses in
  * different formats.
- * 
+ * <p>
  * <p>
  * Subclasses should implement one or more output formats, wich will be returned in a list of mime
  * type strings in <code>getSupportedFormats</code>. For example, a subclass can be created to write
  * one of the following output formats:
- * 
+ * <p>
  * <ul>
  * <li>
  * text/plain</li>
@@ -32,7 +32,7 @@ import org.geotools.util.logging.Logging;
  * text/html</li>
  * </ul>
  * </p>
- * 
+ * <p>
  * <p>
  * This abstract class takes care of executing the request in the sense of taking the GetFeatureInfo
  * request parameters such as query_layers, bbox, x, y, etc., create the gt2 query objects for each
@@ -41,11 +41,11 @@ import org.geotools.util.logging.Logging;
  * FeatureResults[])</code> method, that a subclass should implement as a matter of setting up any
  * resource/state it needs to later encoding.
  * </p>
- * 
+ * <p>
  * <p>
  * So, it should be enough to a subclass to implement the following methods in order to produce the
  * requested output format:
- * 
+ * <p>
  * <ul>
  * <li>
  * execute(FeatureTypeInfo[], FeatureResults[], int, int)</li>
@@ -57,14 +57,16 @@ import org.geotools.util.logging.Logging;
  * writeTo(OutputStream)</li>
  * </ul>
  * </p>
- * 
+ *
  * @author Gabriel Roldan
  * @author Chris Holmes
  * @version $Id$
  */
 public abstract class GetFeatureInfoOutputFormat {
 
-    /** A logger for this class. */
+    /**
+     * A logger for this class.
+     */
     protected static final Logger LOGGER = Logging.getLogger(GetFeatureInfoOutputFormat.class);
 
     private final String contentType;
@@ -74,16 +76,14 @@ public abstract class GetFeatureInfoOutputFormat {
     }
 
     public abstract void write(FeatureCollectionType results, GetFeatureInfoRequest request,
-            OutputStream out) throws ServiceException, IOException;
+                               OutputStream out) throws ServiceException, IOException;
 
     /**
      * Evaluates if this GetFeatureInfo producer can generate the map format specified by
      * <code>mapFormat</code>, where <code>mapFormat</code> is the MIME type of the requested
      * response.
-     * 
-     * @param mapFormat
-     *            the MIME type of the required output format, might be {@code null}
-     * 
+     *
+     * @param mapFormat the MIME type of the required output format, might be {@code null}
      * @return true if class can produce a map in the passed format
      */
     public boolean canProduce(String mapFormat) {
@@ -93,14 +93,14 @@ public abstract class GetFeatureInfoOutputFormat {
     public String getContentType() {
         return contentType;
     }
-    
+
     /**
      * Returns the charset for this outputFormat.
      * The default implementation returns <code>null</code>, in this case no encoding should be set.
      * Subclasses returning text documents (CSV,HTML,JSON) should override taking into account SettingsInfo.getCharset()
      * as well as the specific encoding requirements of the returned format.
      */
-    public String getCharset(){ 
-       return null;
+    public String getCharset() {
+        return null;
     }
 }

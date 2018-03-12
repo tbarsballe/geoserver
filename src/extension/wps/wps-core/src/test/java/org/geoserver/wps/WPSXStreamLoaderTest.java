@@ -163,7 +163,7 @@ public class WPSXStreamLoaderTest extends WPSTestSupport {
             return DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(is);
         }
     }
-    
+
     @Test
     public void testLoadFromXML() throws Exception {
         WPSInfo wpsInfo = loadFromXml("wps-test.xml");

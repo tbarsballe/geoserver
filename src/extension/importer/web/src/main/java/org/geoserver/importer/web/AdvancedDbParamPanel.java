@@ -19,7 +19,7 @@ import org.apache.wicket.model.PropertyModel;
 
 /**
  * Other params form for databases: schema, loose bbox, pk metadata lookup table
- *  
+ *
  * @author Andrea Aime - OpenGeo
  */
 @SuppressWarnings("serial")
@@ -29,10 +29,10 @@ class AdvancedDbParamPanel extends Panel {
     String pkMetadata;
     WebMarkupContainer advancedContainer;
     private WebMarkupContainer advancedPanel;
-    
+
     public AdvancedDbParamPanel(String id, boolean showLooseBBox) {
         super(id);
-        
+
         // we create a global container in order to update the visibility of the various items
         // at runtime
 //        final WebMarkupContainer basicParams = new WebMarkupContainer("basicParams");
@@ -66,7 +66,7 @@ class AdvancedDbParamPanel extends Panel {
 
     Component toggleAdvanced() {
         final AjaxLink advanced = new AjaxLink("advancedLink") {
-            
+
             @Override
             public void onClick(AjaxRequestTarget target) {
                 advancedPanel.setVisible(!advancedPanel.isVisible());
@@ -75,7 +75,7 @@ class AdvancedDbParamPanel extends Panel {
             }
         };
         advanced.add(new AttributeModifier("class", new AbstractReadOnlyModel() {
-            
+
             @Override
             public Object getObject() {
                 return advancedPanel.isVisible() ? "expanded" : "collapsed";
@@ -84,5 +84,5 @@ class AdvancedDbParamPanel extends Panel {
         advanced.setOutputMarkupId(true);
         return advanced;
     }
-    
+
 }

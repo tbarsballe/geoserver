@@ -22,7 +22,7 @@ public class ConfigurationsModel extends GeoServerDataProvider<Configuration> {
     public static final Property<Configuration> DESCRIPTION = new BeanProperty<Configuration>("description", "description");
 
     private Boolean templates;
-    
+
     public ConfigurationsModel(Boolean templates) {
         this.templates = templates;
     }

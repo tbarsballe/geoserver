@@ -23,7 +23,7 @@ import org.geoserver.wps.executor.WPSExecutionManager;
 
 /**
  * Shows the status of currently running, and recently completed, processes
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 @SuppressWarnings("serial")
@@ -42,7 +42,7 @@ public class ProcessStatusPage extends GeoServerSecuredPage {
 
             @Override
             protected Component getComponentForProperty(String id, IModel<ExecutionStatus> itemModel,
-                    Property<ExecutionStatus> property) {
+                                                        Property<ExecutionStatus> property) {
                 // have the base class create a label for us
                 return null;
             }
@@ -75,7 +75,7 @@ public class ProcessStatusPage extends GeoServerSecuredPage {
     }
 
     protected final class ProcessDismissLink extends AjaxLink<Void> {
-        
+
         protected ProcessDismissLink(String id) {
             super(id);
         }
@@ -84,9 +84,9 @@ public class ProcessStatusPage extends GeoServerSecuredPage {
         public void onClick(AjaxRequestTarget target) {
             // see if the user selected anything
             final List<ExecutionStatus> selection = table.getSelection();
-            if(selection.size() == 0)
+            if (selection.size() == 0)
                 return;
-            
+
             dialog.setTitle(new ParamResourceModel("confirmDismissal", this));
 
             // if there is something to cancel, let's warn the user about what
@@ -97,7 +97,7 @@ public class ProcessStatusPage extends GeoServerSecuredPage {
                     // show a confirmation panel for all the objects we have to remove
                     return new Label(id, new ParamResourceModel("confirmDismissProcesses", ProcessStatusPage.this));
                 }
-                
+
                 protected boolean onSubmit(AjaxRequestTarget target, Component contents) {
                     // issue deletion on the specified processes
                     WPSExecutionManager executor = GeoServerApplication.get().getBeanOfType(
@@ -114,7 +114,7 @@ public class ProcessStatusPage extends GeoServerSecuredPage {
 
                     return true;
                 }
-                
+
                 @Override
                 public void onClose(AjaxRequestTarget target) {
                     // if the selection has been cleared out it's sign a deletion
@@ -125,9 +125,9 @@ public class ProcessStatusPage extends GeoServerSecuredPage {
                     target.add(ProcessDismissLink.this);
                     target.add(table);
                 }
-                
+
             });
-            
+
         }
     }
 

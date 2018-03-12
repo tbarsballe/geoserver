@@ -19,24 +19,23 @@ import org.geotools.data.postgis.PostgisNGDataStoreFactory;
 
 /**
  * DbSource for Postgres.
- * 
- * @author Niels Charlier
  *
+ * @author Niels Charlier
  */
 public class PostgisDbSourceImpl extends NamedImpl implements DbSource {
-    
+
     private String host;
-    
+
     private int port = 5432;
-    
+
     private String db;
-    
+
     private boolean ssl = false;
-    
+
     private String schema;
-    
+
     private String username;
-    
+
     private String password;
 
     public String getHost() {
@@ -124,7 +123,7 @@ public class PostgisDbSourceImpl extends NamedImpl implements DbSource {
         encoder.setPassword(password);
         return encoder;
     }
-    
+
     @Override
     public Map<String, Object> getParameters() {
         Map<String, Object> params = new HashMap<String, Object>();

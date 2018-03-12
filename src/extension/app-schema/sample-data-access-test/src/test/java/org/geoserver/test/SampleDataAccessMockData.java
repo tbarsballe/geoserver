@@ -28,7 +28,7 @@ import com.vividsolutions.jts.geom.Envelope;
 
 /**
  * Mock data for testing integration of {@link SampleDataAccess} with GeoServer.
- * 
+ * <p>
  * Inspired by {@link MockData}.
  */
 public class SampleDataAccessMockData extends SystemTestData {
@@ -67,12 +67,14 @@ public class SampleDataAccessMockData extends SystemTestData {
 
     static final Envelope DEFAULT_ENVELOPE = new Envelope(-180, 180, -90, 90);
 
-    /** the 'featureTypes' directory, under 'data' */
+    /**
+     * the 'featureTypes' directory, under 'data'
+     */
     File featureTypes;
 
     /**
      * Constructor. Creates empty mock data directory.
-     * 
+     *
      * @throws IOException
      */
     public SampleDataAccessMockData() throws IOException {
@@ -94,7 +96,7 @@ public class SampleDataAccessMockData extends SystemTestData {
 
     /**
      * Returns the root of the mock data directory,
-     * 
+     *
      * @see org.geoserver.data.test.TestData#getDataDirectoryRoot()
      */
     public File getDataDirectoryRoot() {
@@ -103,7 +105,7 @@ public class SampleDataAccessMockData extends SystemTestData {
 
     /**
      * Returns true.
-     * 
+     *
      * @see org.geoserver.data.test.TestData#isTestDataAvailable()
      */
     public boolean isTestDataAvailable() {
@@ -112,7 +114,7 @@ public class SampleDataAccessMockData extends SystemTestData {
 
     /**
      * Configures mock data directory.
-     * 
+     *
      * @see org.geoserver.data.test.TestData#setUp()
      */
     public void setUp() throws Exception {
@@ -127,7 +129,7 @@ public class SampleDataAccessMockData extends SystemTestData {
 
     /**
      * Removes the mock data directory.
-     * 
+     *
      * @see org.geoserver.data.test.TestData#tearDown()
      */
     public void tearDown() throws Exception {
@@ -137,7 +139,7 @@ public class SampleDataAccessMockData extends SystemTestData {
 
     /**
      * Writes catalog.xml to the data directory.
-     * 
+     *
      * @throws IOException
      */
     @SuppressWarnings("serial")
@@ -151,25 +153,23 @@ public class SampleDataAccessMockData extends SystemTestData {
             {
                 put(DATASTORE_NAME, SampleDataAccessData.NAMESPACE_PREFIX);
             }
-        }, Collections.<String> emptySet());
+        }, Collections.<String>emptySet());
         writer.coverageStores(new HashMap<String, Map<String, String>>(),
-                new HashMap<String, String>(), Collections.<String> emptySet());
+                new HashMap<String, String>(), Collections.<String>emptySet());
         writer.namespaces(new HashMap<String, String>() {
             {
                 put(SampleDataAccessData.NAMESPACE_PREFIX, SampleDataAccessData.NAMESPACE_URI);
             }
         });
-        writer.styles(Collections.<String, String> emptyMap());
+        writer.styles(Collections.<String, String>emptyMap());
         writer.write(new File(data, "catalog.xml"));
     }
 
     /**
      * Copies from an {@link InputStream} to path under the mock data directory.
-     * 
-     * @param input
-     *            source from which file content is copied
-     * @param location
-     *            path relative to mock data directory
+     *
+     * @param input    source from which file content is copied
+     * @param location path relative to mock data directory
      */
     public void copyTo(InputStream input, String location) throws IOException {
         IOUtils.copy(input, new File(getDataDirectoryRoot(), location));
@@ -177,7 +177,7 @@ public class SampleDataAccessMockData extends SystemTestData {
 
     /**
      * Stolen from {@link MockData}.
-     * 
+     *
      * @param name
      * @param extraParams
      * @throws IOException

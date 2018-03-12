@@ -31,9 +31,9 @@ public class DataSourceFactoryBean implements FactoryBean<DataSource>, Disposabl
     JDBCLoaderProperties config;
     Context jndiCtx;
     DataSource dataSource;
-    
+
     private static Context getJNDI(JDBCLoaderProperties config) {
-        if(config.isEnabled() && config.getJndiName().isPresent()) {
+        if (config.isEnabled() && config.getJndiName().isPresent()) {
             try {
                 return GeoTools.getInitialContext(GeoTools.getDefaultHints());
             } catch (NamingException ex) {
@@ -45,12 +45,12 @@ public class DataSourceFactoryBean implements FactoryBean<DataSource>, Disposabl
             return null;
         }
     }
-    
+
     public DataSourceFactoryBean(JDBCLoaderProperties config) {
         this(config, getJNDI(config));
     }
 
-    
+
     public DataSourceFactoryBean(JDBCLoaderProperties config, Context jndiCtx) {
         this.config = config;
         this.jndiCtx = jndiCtx;
@@ -58,15 +58,14 @@ public class DataSourceFactoryBean implements FactoryBean<DataSource>, Disposabl
 
     @Override
     public DataSource getObject() throws Exception {
-        
+
         if (dataSource == null) {
             if (!config.isEnabled()) {
                 //hack, create a stub database so that other beans in the context like the 
                 // transaction manager can function, despite the fact that the plugin is
                 // disabled
                 dataSource = createDataSourceStub();
-            }
-            else {
+            } else {
                 dataSource = lookupOrCreateDataSource();
             }
         }
@@ -74,37 +73,36 @@ public class DataSourceFactoryBean implements FactoryBean<DataSource>, Disposabl
     }
 
     protected DataSource createDataSourceStub() {
-        return (DataSource) Proxy.newProxyInstance(getClass().getClassLoader(), 
-            new Class[]{DataSource.class}, new InvocationHandler() {
-                @Override
-                public Object invoke(Object proxy, Method method, Object[] args)
-                        throws Throwable {
-                    return null;
-                }
-            });
+        return (DataSource) Proxy.newProxyInstance(getClass().getClassLoader(),
+                new Class[]{DataSource.class}, new InvocationHandler() {
+                    @Override
+                    public Object invoke(Object proxy, Method method, Object[] args)
+                            throws Throwable {
+                        return null;
+                    }
+                });
     }
 
     /**
      * Look up or create a DataSource
-     *
      */
     protected DataSource lookupOrCreateDataSource() throws Exception {
         DataSource ds = null;
-        
+
         boolean jndi = true;
         ds = getJNDIDataSource(config.getJndiName()).orNull();
-        
-        if(ds==null) {
-            jndi=false;
+
+        if (ds == null) {
+            jndi = false;
             ds = createDataSource();
         }
-        
+
         // Open and close a connection to verify the datasource works.
         try {
             ds.getConnection().close();
         } catch (Exception ex) {
             // Provide a useful error message that won't get lost in the stack trace.
-            if(jndi) {
+            if (jndi) {
                 LOGGER.severe("Error connecting to JDBC database. Verify the settings of your JNDI data source and that the database is available.");
             } else {
                 LOGGER.severe("Error connecting to JDBC database. Verify the settings in your properties file and that the database is available.");
@@ -116,45 +114,43 @@ public class DataSourceFactoryBean implements FactoryBean<DataSource>, Disposabl
 
     /**
      * Get an unconfigured BasicDataSource to set up
-     *
      */
     protected BasicDataSource createBasicDataSource() {
         return new BasicDataSource();
     }
-    
+
     /**
      * Try to lookup a configured DataSource using JNDI.
      *
-     * @throws NamingException 
+     * @throws NamingException
      */
     protected Optional<DataSource> getJNDIDataSource(Optional<String> name) {
-        if(jndiCtx==null) return Optional.absent();
-        
-        if(name.isPresent()) {
+        if (jndiCtx == null) return Optional.absent();
+
+        if (name.isPresent()) {
             try {
-                Optional<DataSource> ds =  Optional.of((DataSource)jndiCtx.lookup(name.get()));
-                if(LOGGER.isLoggable(Level.INFO)) {
+                Optional<DataSource> ds = Optional.of((DataSource) jndiCtx.lookup(name.get()));
+                if (LOGGER.isLoggable(Level.INFO)) {
                     LOGGER.log(Level.INFO, "JDBCLoader using JNDI DataSource {0}", name.get());
                 }
                 config.setDatasourceId(name.get());
                 return ds;
             } catch (NamingException ex) {
-                if(LOGGER.isLoggable(Level.WARNING)) {
-                    LOGGER.log(Level.WARNING, "Could not resolve JNDI name "+name.get()+" for JDBCLoader Database", ex);
+                if (LOGGER.isLoggable(Level.WARNING)) {
+                    LOGGER.log(Level.WARNING, "Could not resolve JNDI name " + name.get() + " for JDBCLoader Database", ex);
                 }
                 return Optional.absent();
             }
         } else {
-            if(LOGGER.isLoggable(Level.FINE)) {
+            if (LOGGER.isLoggable(Level.FINE)) {
                 LOGGER.fine("No JNDI name given for JDBCLoader DB.");
             }
             return Optional.absent();
         }
     }
-    
+
     /**
      * Create and configure a DataSource based on the JDBCLoaderProperties
-     *
      */
     protected DataSource createDataSource() throws Exception {
         BasicDataSource dataSource = createBasicDataSource();
@@ -164,11 +160,10 @@ public class DataSourceFactoryBean implements FactoryBean<DataSource>, Disposabl
         Optional<String> driverClassName = get(config, "driverClassName", String.class, true);
         try {
             Class.forName(driverClassName.get());
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             throw new RuntimeException("Error loading jdbc driver class: " + driverClassName, e);
         }
-        
+
         dataSource.setDriverClassName(driverClassName.get());
         dataSource.setUsername(get(config, "username", String.class, false).orNull());
         dataSource.setPassword(get(config, "password", String.class, false).orNull());
@@ -176,10 +171,10 @@ public class DataSourceFactoryBean implements FactoryBean<DataSource>, Disposabl
         dataSource.setMinIdle(get(config, "pool.minIdle", Integer.class, false).or(1));
         dataSource.setMaxActive(get(config, "pool.maxActive", Integer.class, false).or(10));
         dataSource.setPoolPreparedStatements(
-            get(config, "pool.poolPreparedStatements", Boolean.class, false).or(true));
+                get(config, "pool.poolPreparedStatements", Boolean.class, false).or(true));
         dataSource.setMaxOpenPreparedStatements(
-            get(config, "pool.maxOpenPreparedStatements", Integer.class, false).or(50));
-        
+                get(config, "pool.maxOpenPreparedStatements", Integer.class, false).or(50));
+
         boolean testOnBorrow = get(config, "pool.testOnBorrow", Boolean.class, false).or(false);
         if (testOnBorrow) {
             String validateQuery = get(config, "pool.validationQuery", String.class, true).get();
@@ -187,7 +182,7 @@ public class DataSourceFactoryBean implements FactoryBean<DataSource>, Disposabl
             dataSource.setValidationQuery(validateQuery);
         }
 
-        if(LOGGER.isLoggable(Level.INFO)) {
+        if (LOGGER.isLoggable(Level.INFO)) {
             LOGGER.log(Level.INFO, "JDBCConfig using JDBC DataSource {0}", config.getJdbcUrl());
         }
 
@@ -212,14 +207,14 @@ public class DataSourceFactoryBean implements FactoryBean<DataSource>, Disposabl
 
     @Override
     public boolean isSingleton() {
-        return true; 
+        return true;
     }
 
     @Override
     public void destroy() throws Exception {
         if (dataSource != null && dataSource instanceof BasicDataSource) {
-            ((BasicDataSource)dataSource).close();
+            ((BasicDataSource) dataSource).close();
         }
         dataSource = null;
-    } 
+    }
 }

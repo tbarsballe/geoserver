@@ -18,11 +18,10 @@ import com.thoughtworks.xstream.XStream;
  * The broker connection parameters are populated by {@link XStream} deserialization, using the configuration provided by
  * {@link NotificationXStreamDefaultInitializer}
  * <p>
- * 
- * @param exchangeName the name of exchange to publish the message to
- * @param routingKey identify the queue to publish the message to (ignored by fanout type)
- * @author Xandros
  *
+ * @param exchangeName the name of exchange to publish the message to
+ * @param routingKey   identify the queue to publish the message to (ignored by fanout type)
+ * @author Xandros
  */
 
 public class FanoutRabbitMQSender extends RabbitMQSender {

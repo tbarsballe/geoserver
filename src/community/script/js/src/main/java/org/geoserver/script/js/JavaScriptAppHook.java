@@ -24,13 +24,13 @@ import java.util.logging.Logger;
 public class JavaScriptAppHook extends AppHook {
 
     static Logger LOGGER = Logging.getLogger("org.geoserver.script.js");
-    
+
     OutputStream out;
 
     public JavaScriptAppHook(ScriptPlugin plugin) {
         super(plugin);
     }
-    
+
     @Override
     public void run(HttpServletRequest request, HttpServletResponse response, ScriptEngine engine)
             throws ScriptException, IOException {

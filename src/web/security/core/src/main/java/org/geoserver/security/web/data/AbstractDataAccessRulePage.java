@@ -51,7 +51,7 @@ public abstract class AbstractDataAccessRulePage extends AbstractSecurityPage {
 
         @Override
         protected String load() {
-            if(globalGroupRule.getModelObject()) {
+            if (globalGroupRule.getModelObject()) {
                 return new ParamResourceModel("globalGroup", AbstractDataAccessRulePage.this).getString();
             } else {
                 return new ParamResourceModel("workspace", AbstractDataAccessRulePage.this).getString();
@@ -64,13 +64,13 @@ public abstract class AbstractDataAccessRulePage extends AbstractSecurityPage {
 
         @Override
         protected List<String> load() {
-            if(globalGroupRule.getModelObject()) {
+            if (globalGroupRule.getModelObject()) {
                 return getGlobalLayerGroupNames();
             } else {
                 return getWorkspaceNames();
             }
         }
-        
+
         /**
          * Returns a sorted list of global layer group names
          */
@@ -87,7 +87,7 @@ public abstract class AbstractDataAccessRulePage extends AbstractSecurityPage {
             return Stream.concat(Stream.of("*"), names).collect(Collectors.toList());
         }
 
-        
+
     }
 
     static List<AccessMode> MODES = Arrays.asList(AccessMode.READ, AccessMode.WRITE, AccessMode.ADMIN);
@@ -108,7 +108,7 @@ public abstract class AbstractDataAccessRulePage extends AbstractSecurityPage {
         Form form = new Form<DataAccessRule>("form", new CompoundPropertyModel(rule));
         add(form);
         form.add(new EmptyRolesValidator());
-        
+
         form.add(globalGroupRule = new CheckBox("globalGroupRule"));
         globalGroupRule.setOutputMarkupId(true);
         globalGroupRule.add(new OnChangeAjaxBehavior() {
@@ -122,7 +122,7 @@ public abstract class AbstractDataAccessRulePage extends AbstractSecurityPage {
                 target.add(rootLabel);
             }
         });
-        
+
         form.add(rootLabel = new Label("rootLabel", new RootLabelModel()));
         rootLabel.setOutputMarkupId(true);
         form.add(rootChoice = new DropDownChoice<String>("root", new RootsModel()));
@@ -132,7 +132,7 @@ public abstract class AbstractDataAccessRulePage extends AbstractSecurityPage {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
                 layerChoice.setChoices(new Model<ArrayList<String>>(
-                    getLayerNames(rootChoice.getConvertedInput())));
+                        getLayerNames(rootChoice.getConvertedInput())));
                 layerChoice.modelChanged();
                 target.add(layerChoice);
             }
@@ -146,12 +146,12 @@ public abstract class AbstractDataAccessRulePage extends AbstractSecurityPage {
         layerChoice.setRequired(true);
         layerChoice.setOutputMarkupId(true);
 
-        form.add(accessModeChoice = 
-            new DropDownChoice<AccessMode>("accessMode", MODES, new AccessModeRenderer()));
+        form.add(accessModeChoice =
+                new DropDownChoice<AccessMode>("accessMode", MODES, new AccessModeRenderer()));
         accessModeChoice.setRequired(true);
 
         form.add(rolesFormComponent = new RuleRolesFormComponent("roles",
-            new PropertyModel(rule, "roles")).setHasAnyRole(
+                new PropertyModel(rule, "roles")).setHasAnyRole(
                 rule.getRoles().contains(GeoServerRole.ANY_ROLE.getAuthority())));
 
         // build the submit/cancel
@@ -163,7 +163,7 @@ public abstract class AbstractDataAccessRulePage extends AbstractSecurityPage {
                     rule.getRoles().clear();
                     rule.getRoles().add(GeoServerRole.ANY_ROLE.getAuthority());
                 }
-                if(globalGroupRule.getModelObject()) {
+                if (globalGroupRule.getModelObject()) {
                     // just to be on the safe side
                     rule.setLayer(null);
                 }
@@ -177,9 +177,8 @@ public abstract class AbstractDataAccessRulePage extends AbstractSecurityPage {
      * Implements the actual save action
      */
     protected abstract void onFormSubmit(DataAccessRule rule);
-    
-    
-    
+
+
     /**
      * Returns a sorted list of layer names in the specified workspace (or * if the workspace is *)
      */
@@ -187,14 +186,14 @@ public abstract class AbstractDataAccessRulePage extends AbstractSecurityPage {
         ArrayList<String> result = new ArrayList<String>();
         if (!rootName.equals("*")) {
             Filter wsResources = Predicates.equal("store.workspace.name", rootName);
-            try(CloseableIterator<ResourceInfo> it = getCatalog().list(ResourceInfo.class, wsResources)) {
-                while(it.hasNext()) {
+            try (CloseableIterator<ResourceInfo> it = getCatalog().list(ResourceInfo.class, wsResources)) {
+                while (it.hasNext()) {
                     result.add(it.next().getName());
                 }
             }
             // collect also layer groups
             getCatalog().getLayerGroupsByWorkspace(rootName).stream().map(lg -> lg.getName()).forEach(name -> {
-                if(!result.contains(name)) {
+                if (!result.contains(name)) {
                     result.add(name);
                 }
             });
@@ -210,7 +209,7 @@ public abstract class AbstractDataAccessRulePage extends AbstractSecurityPage {
     class AccessModeRenderer extends ChoiceRenderer<AccessMode> {
 
         public Object getDisplayValue(AccessMode object) {
-            return (String) new ParamResourceModel( object.name(), getPage())
+            return (String) new ParamResourceModel(object.name(), getPage())
                     .getObject();
         }
 
@@ -224,14 +223,14 @@ public abstract class AbstractDataAccessRulePage extends AbstractSecurityPage {
 
         @Override
         public FormComponent<?>[] getDependentFormComponents() {
-           return new FormComponent[] { 
-               rootChoice, layerChoice, accessModeChoice, rolesFormComponent };
+            return new FormComponent[]{
+                    rootChoice, layerChoice, accessModeChoice, rolesFormComponent};
         }
 
         @Override
         public void validate(Form<?> form) {
             // only validate on final submit
-            if (form.findSubmittingButton() != form.get("save")) { 
+            if (form.findSubmittingButton() != form.get("save")) {
                 return;
             }
 

@@ -29,19 +29,18 @@ import org.springframework.util.Assert;
 
 /**
  * Anonymous authentication filter
- * 
- * @author mcr
  *
+ * @author mcr
  */
 public class GeoServerAnonymousAuthenticationFilter extends GeoServerSecurityFilter
-    implements GeoServerAuthenticationFilter {
+        implements GeoServerAuthenticationFilter {
 
     public void initializeFromConfig(SecurityNamedServiceConfig config) throws IOException {
         super.initializeFromConfig(config);
     }
-       
-    private AuthenticationDetailsSource<HttpServletRequest, WebAuthenticationDetails> 
-        authenticationDetailsSource = new WebAuthenticationDetailsSource();
+
+    private AuthenticationDetailsSource<HttpServletRequest, WebAuthenticationDetails>
+            authenticationDetailsSource = new WebAuthenticationDetailsSource();
 
 
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
@@ -59,8 +58,8 @@ public class GeoServerAnonymousAuthenticationFilter extends GeoServerSecurityFil
         GeoServerUser anonymous = GeoServerUser.createAnonymous();
         List<GrantedAuthority> roles = new ArrayList<GrantedAuthority>();
         roles.addAll(anonymous.getAuthorities());
-        AnonymousAuthenticationToken auth = new AnonymousAuthenticationToken("geoserver", 
-                anonymous.getUsername(),roles);
+        AnonymousAuthenticationToken auth = new AnonymousAuthenticationToken("geoserver",
+                anonymous.getUsername(), roles);
         auth.setDetails(authenticationDetailsSource.buildDetails(request));
         return auth;
     }

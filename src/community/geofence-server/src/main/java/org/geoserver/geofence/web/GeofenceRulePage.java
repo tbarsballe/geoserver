@@ -73,32 +73,30 @@ import org.opengis.filter.FilterFactory2;
 import org.springframework.dao.DuplicateKeyException;
 
 /**
- * 
  * Internal Geofence Rule Page
- * 
- * @author Niels Charlier
  *
+ * @author Niels Charlier
  */
 public class GeofenceRulePage extends GeoServerSecuredPage {
 
     private static final long serialVersionUID = -3986495664060319256L;
-    
+
     private class LayerDetailsFormData implements Serializable {
 
         private static final long serialVersionUID = 3045099348340468123L;
 
         LayerType layerType;
-        
+
         String defaultStyle;
-        
+
         String cqlFilterRead;
 
         String cqlFilterWrite;
-        
+
         String allowedArea;
-        
+
         CatalogMode catalogMode;
-        
+
         Set<String> allowedStyles = new HashSet<String>();
 
         List<LayerAttribute> attributes = new ArrayList<LayerAttribute>();
@@ -111,20 +109,20 @@ public class GeofenceRulePage extends GeoServerSecuredPage {
         ShortRule rule;
 
         String allowedArea;
-        
+
         CatalogMode catalogMode;
-        
+
         boolean layerDetailsCheck;
-        
+
         LayerDetailsFormData layerDetails = new LayerDetailsFormData();
-        
+
     }
-    
+
     final CompoundPropertyModel<RuleFormData> ruleFormModel;
 
     // build the form
     final Form<RuleFormData> form;
-    
+
     final TabbedPanel<AbstractTab> tabbedPanel;
 
     public GeofenceRulePage(final ShortRule rule, final GeofenceRulesModel rules) {
@@ -155,7 +153,7 @@ public class GeofenceRulePage extends GeoServerSecuredPage {
         // build the form
         form = new Form<RuleFormData>("form", ruleFormModel);
         add(form);
-        
+
         List<AbstractTab> tabs = new ArrayList<>();
         tabs.add(new AbstractTab(new ResourceModel("general")) {
             private static final long serialVersionUID = 446471321863431295L;
@@ -198,7 +196,7 @@ public class GeofenceRulePage extends GeoServerSecuredPage {
                     rules.save(ruleFormData.rule);
                     if (ruleFormData.rule.getAccess().equals(GrantType.LIMIT)) {
                         rules.save(ruleFormData.rule.getId(),
-                                parseAllowedArea(ruleFormData.allowedArea), 
+                                parseAllowedArea(ruleFormData.allowedArea),
                                 ruleFormData.catalogMode);
                     }
                     if (ruleFormData.layerDetailsCheck) {
@@ -265,7 +263,7 @@ public class GeofenceRulePage extends GeoServerSecuredPage {
             return (MultiPolygon) geometry;
         }
         if (geometry instanceof Polygon) {
-            return new MultiPolygon(new Polygon[] { (Polygon) geometry }, new GeometryFactory());
+            return new MultiPolygon(new Polygon[]{(Polygon) geometry}, new GeometryFactory());
         }
         throw new GeoServerRuntimException(
                 String.format("Invalid geometry of type '%s' expect a Polygon or MultiPolygon.",
@@ -375,16 +373,16 @@ public class GeofenceRulePage extends GeoServerSecuredPage {
     protected GeoServerSecurityManager securityManager() {
         return GeoServerApplication.get().getSecurityManager();
     }
-    
+
     protected class GeneralPanel extends Panel {
-        
+
         private static final long serialVersionUID = 8124810941260273620L;
 
         protected DropDownChoice<String> userChoice, roleChoice, serviceChoice, requestChoice,
                 workspaceChoice, layerChoice, accessChoice;
 
         protected DropDownChoice<GrantType> grantTypeChoice;
-        
+
         protected DropDownChoice<CatalogMode> catalogModeChoice;
 
         protected TextArea<String> allowedArea;
@@ -392,10 +390,10 @@ public class GeofenceRulePage extends GeoServerSecuredPage {
         protected Label allowedAreaLabel;
 
         protected Label catalogModeChoiceLabel;
-        
+
         public GeneralPanel(String id) {
             super(id);
-            
+
             add(new TextField<>("priority", ruleFormModel.bind("rule.priority")).setRequired(true));
             add(roleChoice = new DropDownChoice<>("roleName", ruleFormModel.bind("rule.roleName"),
                     getRoleNames()));
@@ -462,27 +460,30 @@ public class GeofenceRulePage extends GeoServerSecuredPage {
 
                 @Override
                 protected void onUpdate(AjaxRequestTarget target) {
-                    ruleFormModel.getObject().layerDetailsCheck = 
-                            ruleFormModel.getObject().layerDetailsCheck 
-                            && GrantType.ALLOW.equals(grantTypeChoice.getConvertedInput())
-                            && layerChoice.getConvertedInput() != null; 
-                    
+                    ruleFormModel.getObject().layerDetailsCheck =
+                            ruleFormModel.getObject().layerDetailsCheck
+                                    && GrantType.ALLOW.equals(grantTypeChoice.getConvertedInput())
+                                    && layerChoice.getConvertedInput() != null;
+
 
                     ruleFormModel.getObject().layerDetails.attributes.clear();
                     if (layerChoice.getConvertedInput() != null) {
                         LayerInfo li = getCatalog().getLayerByName(layerChoice.getConvertedInput());
                         switch (li.getType()) {
-                        case VECTOR: case REMOTE:
-                            ruleFormModel.getObject().layerDetails.layerType = LayerType.VECTOR;
-                            break;
-                        case RASTER: case WMS: case WMTS: 
-                            ruleFormModel.getObject().layerDetails.layerType = LayerType.VECTOR;
-                            break;
-                        case GROUP:
-                            ruleFormModel.getObject().layerDetails.layerType = LayerType.LAYERGROUP;
-                            break;
+                            case VECTOR:
+                            case REMOTE:
+                                ruleFormModel.getObject().layerDetails.layerType = LayerType.VECTOR;
+                                break;
+                            case RASTER:
+                            case WMS:
+                            case WMTS:
+                                ruleFormModel.getObject().layerDetails.layerType = LayerType.VECTOR;
+                                break;
+                            case GROUP:
+                                ruleFormModel.getObject().layerDetails.layerType = LayerType.LAYERGROUP;
+                                break;
                         }
-                        
+
                         if (li.getResource() instanceof FeatureTypeInfo) {
                             FeatureTypeInfo fti = (FeatureTypeInfo) li.getResource();
                             try {
@@ -491,7 +492,7 @@ public class GeofenceRulePage extends GeoServerSecuredPage {
                                             new LayerAttribute(ati.getName(),
                                                     ati.getBinding() == null ? null : ati.getBinding().getName(),
                                                     AccessType.NONE));
-                                    
+
                                 }
                             } catch (IOException e) {
                                 LOGGER.log(Level.WARNING, "Could not fetch attributes.", e);
@@ -499,7 +500,7 @@ public class GeofenceRulePage extends GeoServerSecuredPage {
                         }
                     }
                 }
-                
+
             });
 
             add(grantTypeChoice = new DropDownChoice<>("access", ruleFormModel.bind("rule.access"),
@@ -517,17 +518,17 @@ public class GeofenceRulePage extends GeoServerSecuredPage {
                     allowedArea.setVisible(isLimit);
                     catalogModeChoice.setVisible(isLimit);
                     catalogModeChoiceLabel.setVisible(isLimit);
-                    
+
                     target.add(allowedAreaLabel);
                     target.add(allowedArea);
                     target.add(catalogModeChoice);
                     target.add(catalogModeChoiceLabel);
-                    
-                    ruleFormModel.getObject().layerDetailsCheck = 
-                            ruleFormModel.getObject().layerDetailsCheck 
-                            && grantTypeChoice.getConvertedInput().equals(GrantType.ALLOW)
-                            && !layerChoice.getConvertedInput().isEmpty();
-                    
+
+                    ruleFormModel.getObject().layerDetailsCheck =
+                            ruleFormModel.getObject().layerDetailsCheck
+                                    && grantTypeChoice.getConvertedInput().equals(GrantType.ALLOW)
+                                    && !layerChoice.getConvertedInput().isEmpty();
+
                 }
             });
 
@@ -543,14 +544,14 @@ public class GeofenceRulePage extends GeoServerSecuredPage {
                     && form.getModelObject().rule.getAccess().equals(GrantType.LIMIT));
             allowedArea.setOutputMarkupId(true);
             allowedArea.setOutputMarkupPlaceholderTag(true);
-            
+
             add(catalogModeChoiceLabel = new Label("catalogModeLabel",
                     new ResourceModel("catalogMode", "Catalog Mode")));
             catalogModeChoiceLabel.setVisible(form.getModelObject().rule.getAccess() != null
                     && form.getModelObject().rule.getAccess().equals(GrantType.LIMIT));
             catalogModeChoiceLabel.setOutputMarkupId(true);
             catalogModeChoiceLabel.setOutputMarkupPlaceholderTag(true);
-            
+
             add(catalogModeChoice = new DropDownChoice<>("catalogMode", ruleFormModel.bind("catalogMode"),
                     Arrays.asList(CatalogMode.values()), new CatalogModeRenderer()));
             catalogModeChoice.setVisible(form.getModelObject().rule.getAccess() != null
@@ -558,33 +559,33 @@ public class GeofenceRulePage extends GeoServerSecuredPage {
             catalogModeChoice.setOutputMarkupId(true);
             catalogModeChoice.setOutputMarkupPlaceholderTag(true);
         }
-        
+
     }
-    
+
     protected class LayerDetailsPanel extends Panel {
-        
+
         private static final long serialVersionUID = 2996490022169801394L;
-        
+
         //private AjaxSubmitLink remove;
 
         public LayerDetailsPanel(String id) {
             super(id);
-            
+
             final CheckBox layerDetailsCheck = new CheckBox("layerDetailsCheck", ruleFormModel.bind("layerDetailsCheck"));
             layerDetailsCheck.setOutputMarkupId(true);
             layerDetailsCheck.setEnabled(
                     ruleFormModel.getObject().rule.getLayer() != null
-                    && ruleFormModel.getObject().rule.getAccess().equals(GrantType.ALLOW));
+                            && ruleFormModel.getObject().rule.getAccess().equals(GrantType.ALLOW));
             add(layerDetailsCheck);
-            
+
             final WebMarkupContainer container = new WebMarkupContainer("layerDetailsContainer");
             add(container);
             container.setVisible(ruleFormModel.getObject().layerDetailsCheck);
             container.setOutputMarkupId(true);
             container.setOutputMarkupPlaceholderTag(true);
-            
+
             layerDetailsCheck.add(new OnChangeAjaxBehavior() {
-                                private static final long serialVersionUID = 8280700310745922486L;
+                private static final long serialVersionUID = 8280700310745922486L;
 
                 @Override
                 protected void onUpdate(AjaxRequestTarget target) {
@@ -592,20 +593,20 @@ public class GeofenceRulePage extends GeoServerSecuredPage {
                     target.add(container);
                 }
             });
-            
-            DropDownChoice<LayerType> layerType = 
+
+            DropDownChoice<LayerType> layerType =
                     new DropDownChoice<>("layerType", ruleFormModel.bind("layerDetails.layerType"),
-                    Arrays.asList(LayerType.values()), new LayerTypeRenderer());
+                            Arrays.asList(LayerType.values()), new LayerTypeRenderer());
             layerType.setEnabled(false);
             container.add(layerType);
 
-            DropDownChoice<String> defaultStyle = 
+            DropDownChoice<String> defaultStyle =
                     new DropDownChoice<>("defaultStyle", ruleFormModel.bind("layerDetails.defaultStyle"),
-                    getStyles());
+                            getStyles());
             container.add(defaultStyle);
-            
-            Palette<String> allowedStyles = new Palette<String>("allowedStyles", 
-                    ruleFormModel.bind("layerDetails.allowedStyles"), 
+
+            Palette<String> allowedStyles = new Palette<String>("allowedStyles",
+                    ruleFormModel.bind("layerDetails.allowedStyles"),
                     new Model<ArrayList<String>>(getStyles()),
                     new SimpleChoiceRenderer<String>(), 10, false) {
 
@@ -631,54 +632,54 @@ public class GeofenceRulePage extends GeoServerSecuredPage {
             };
             container.add(allowedStyles);
             allowedStyles.add(new DefaultTheme());
-            
+
             TextArea<String> cqlFilterRead = new TextArea<>("cqlFilterRead", ruleFormModel.bind("layerDetails.cqlFilterRead"));
             container.add(cqlFilterRead);
-            
+
             TextArea<String> cqlFilterWrite = new TextArea<>("cqlFilterWrite", ruleFormModel.bind("layerDetails.cqlFilterWrite"));
             container.add(cqlFilterWrite);
-            
+
             TextArea<String> allowedArea = new TextArea<>("allowedArea", ruleFormModel.bind("layerDetails.allowedArea"));
             container.add(allowedArea);
-            
+
             container.add(new DropDownChoice<>("catalogMode", ruleFormModel.bind("layerDetails.catalogMode"),
-                    Arrays.asList(CatalogMode.values()), new CatalogModeRenderer()));    
-            
+                    Arrays.asList(CatalogMode.values()), new CatalogModeRenderer()));
+
             Label layerAttsLabel = new Label("layerAttributesLabel",
                     new ResourceModel("layerAttributes", "Layer Attributes"));
             container.add(layerAttsLabel);
-            
-            GeoServerTablePanel<LayerAttribute> layerAttsTable;            
-            container.add(layerAttsTable = new GeoServerTablePanel<LayerAttribute>("layerAttributes", 
+
+            GeoServerTablePanel<LayerAttribute> layerAttsTable;
+            container.add(layerAttsTable = new GeoServerTablePanel<LayerAttribute>("layerAttributes",
                     new LayerAttributeModel(ruleFormModel.getObject().layerDetails.attributes), true) {
                 private static final long serialVersionUID = -2001227609501100452L;
 
                 @SuppressWarnings("unchecked")
                 @Override
                 protected Component getComponentForProperty(String id, IModel<LayerAttribute> itemModel,
-                        Property<LayerAttribute> property) {
+                                                            Property<LayerAttribute> property) {
                     if (LayerAttributeModel.ACCESS.equals(property)) {
-                        return new DropDownChoiceWrapperPanel<AccessType>(id, 
-                                        (IModel<AccessType>) property.getModel(itemModel),
-                                        Arrays.asList(AccessType.values()), new AccessTypeRenderer());
+                        return new DropDownChoiceWrapperPanel<AccessType>(id,
+                                (IModel<AccessType>) property.getModel(itemModel),
+                                Arrays.asList(AccessType.values()), new AccessTypeRenderer());
                     }
                     return null;
                 }
-                
+
             });
             layerAttsTable.setFilterVisible(false);
             layerAttsTable.setPageable(false);
             layerAttsTable.setSortable(false);
             layerAttsTable.setSelectable(false);
             layerAttsTable.setOutputMarkupId(true);
-            
+
             layerAttsLabel.setVisible(!ruleFormModel.getObject().layerDetails.attributes.isEmpty());
             layerAttsTable.setVisible(!ruleFormModel.getObject().layerDetails.attributes.isEmpty());
-            
+
         }
-        
-        
-    }   
+
+
+    }
 
 
     private ArrayList<String> getStyles() {
@@ -688,7 +689,7 @@ public class GeofenceRulePage extends GeoServerSecuredPage {
         }
         return styleNames;
     }
-    
+
     /**
      * Makes sure we see translated text, by the raw name is used for the model
      */
@@ -718,21 +719,21 @@ public class GeofenceRulePage extends GeoServerSecuredPage {
             return object.name();
         }
     }
-    
-   /**
-    * Makes sure we see translated text, by the raw name is used for the model
-    */
-   protected class AccessTypeRenderer extends ChoiceRenderer<AccessType> {
-       private static final long serialVersionUID = -7478943956804313995L;
 
-       public Object getDisplayValue(AccessType object) {
-           return (String) new ParamResourceModel(object.name(), getPage()).getObject();
-       }
+    /**
+     * Makes sure we see translated text, by the raw name is used for the model
+     */
+    protected class AccessTypeRenderer extends ChoiceRenderer<AccessType> {
+        private static final long serialVersionUID = -7478943956804313995L;
 
-       public String getIdValue(AccessType object, int index) {
-           return object.name();
-       }
-   }
+        public Object getDisplayValue(AccessType object) {
+            return (String) new ParamResourceModel(object.name(), getPage()).getObject();
+        }
+
+        public String getIdValue(AccessType object, int index) {
+            return object.name();
+        }
+    }
 
     /**
      * Makes sure we see translated text, by the raw name is used for the model
@@ -763,18 +764,18 @@ public class GeofenceRulePage extends GeoServerSecuredPage {
             return object.toUpperCase();
         }
     }
-        
+
     protected class DropDownChoiceWrapperPanel<T> extends Panel {
 
         private static final long serialVersionUID = 5677425055959281304L;
 
-        public DropDownChoiceWrapperPanel(String id, IModel<T> model, List<? extends T> list, 
-                ChoiceRenderer<T> renderer) {
+        public DropDownChoiceWrapperPanel(String id, IModel<T> model, List<? extends T> list,
+                                          ChoiceRenderer<T> renderer) {
             super(id, model);
             add(new DropDownChoice<T>("innerComponent", model, list, renderer).setRequired(true));
         }
 
     }
-    
+
 
 }

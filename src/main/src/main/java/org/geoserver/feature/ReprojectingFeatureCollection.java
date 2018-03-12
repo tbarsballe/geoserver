@@ -54,13 +54,12 @@ import com.vividsolutions.jts.geom.Geometry;
  * itself. Leaving the property null specifies that the geometry will not be
  * transformed.
  * </p>
- * 
+ *
  * @author Justin Deoliveira, The Open Planning Project
- * 
  */
 public class ReprojectingFeatureCollection extends DecoratingSimpleFeatureCollection {
     static final FilterFactory2 FF = CommonFactoryFinder.getFilterFactory2(null);
-    
+
     /**
      * The schema of reprojected features
      */
@@ -114,8 +113,8 @@ public class ReprojectingFeatureCollection extends DecoratingSimpleFeatureCollec
             throw new RuntimeException("Source was null in trying to create a reprojected feature collection!");
         }
     }
-    
-   @Override
+
+    @Override
     public void accepts(FeatureVisitor visitor, ProgressListener progress) {
         SimpleFeatureIterator it = features();
         try {
@@ -147,15 +146,15 @@ public class ReprojectingFeatureCollection extends DecoratingSimpleFeatureCollec
         // reproject the filter to the delegate native crs
         CoordinateReferenceSystem crs = getSchema().getCoordinateReferenceSystem();
         CoordinateReferenceSystem crsDelegate = delegate.getSchema().getCoordinateReferenceSystem();
-        if(crs != null) {
+        if (crs != null) {
             DefaultCRSFilterVisitor defaulter = new DefaultCRSFilterVisitor(FF, crs);
             filter = (Filter) filter.accept(defaulter, null);
-            if(crsDelegate != null && !CRS.equalsIgnoreMetadata(crs, crsDelegate)) {
+            if (crsDelegate != null && !CRS.equalsIgnoreMetadata(crs, crsDelegate)) {
                 ReprojectingFilterVisitor reprojector = new ReprojectingFilterVisitor(FF, delegate.getSchema());
                 filter = (Filter) filter.accept(reprojector, null);
             }
         }
-        
+
         SimpleFeatureCollection sub = delegate.subCollection(filter);
 
         if (sub != null) {
@@ -215,7 +214,7 @@ public class ReprojectingFeatureCollection extends DecoratingSimpleFeatureCollec
                 bounds = new ReferencedEnvelope(first.getBounds());
             }
 
-            for (; i.hasNext();) {
+            for (; i.hasNext(); ) {
                 SimpleFeature f = (SimpleFeature) i.next();
                 bounds.include(f.getBounds());
             }

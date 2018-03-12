@@ -7,13 +7,11 @@
 package org.geoserver.test;
 
 /**
- * 
  * @author Niels Charlier, Curtin University Of Technology
- * 
  */
 
 public class NestedIdSupportTestData extends AbstractAppSchemaMockData {
-    
+
     /**
      * @see org.geoserver.test.AbstractAppSchemaMockData#addContent()
      */

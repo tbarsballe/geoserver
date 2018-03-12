@@ -6,6 +6,7 @@
 package org.geoserver.wcs.kvp;
 
 import static org.vfny.geoserver.wcs.WcsException.WcsExceptionCode.InvalidParameterValue;
+
 import net.opengis.wcs10.CapabilitiesSectionType;
 
 import org.geoserver.ows.KvpParser;
@@ -13,7 +14,7 @@ import org.vfny.geoserver.wcs.WcsException;
 
 /**
  * Parses the "sections" GetCapabilities kvp argument
- * 
+ *
  * @author Andrea Aime - TOPP
  * @author Alessio Fabiani, GeoSolutions
  */

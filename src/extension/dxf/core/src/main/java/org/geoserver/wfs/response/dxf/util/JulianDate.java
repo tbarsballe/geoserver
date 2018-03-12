@@ -12,20 +12,19 @@ import java.util.GregorianCalendar;
 /**
  * Julian Date Converter.
  * Formulas got from http://en.wikipedia.org/wiki/Julian_day
- * 
+ *
  * @author Mauro Bartolomeoli, mbarto@infosia.it
- * 
  */
 public class JulianDate {
     /**
      * Converts a Date to JD format.
-     * @param dt
      *
+     * @param dt
      */
     public static double toJulian(Date dt) {
         Calendar calendar = new GregorianCalendar();
         calendar.setTime(dt);
-        int month = calendar.get(Calendar.MONTH)+1;
+        int month = calendar.get(Calendar.MONTH) + 1;
         int year = calendar.get(Calendar.YEAR);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
 

@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @Component
 @RestController
-@RequestMapping(path="${gwc.context.suffix:}")
+@RequestMapping(path = "${gwc.context.suffix:}")
 public class GeoServerGWCDispatcherController extends GeoWebCacheDispatcherController {
 
     //Let the GeoServer dispatcher handle "/service/**"

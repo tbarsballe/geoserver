@@ -37,6 +37,7 @@ public class MBStyleHandler extends StyleHandler {
     public static final String MIME_TYPE = "application/vnd.geoserver.mbstyle+json";
 
     static final Map<StyleType, String> TEMPLATES = new HashMap<StyleType, String>();
+
     static {
         try {
             TEMPLATES.put(StyleType.GENERIC, IOUtils.toString(MBStyleHandler.class
@@ -63,7 +64,7 @@ public class MBStyleHandler extends StyleHandler {
 
     @Override
     public StyledLayerDescriptor parse(Object input, Version version,
-            ResourceLocator resourceLocator, EntityResolver entityResolver) throws IOException {
+                                       ResourceLocator resourceLocator, EntityResolver entityResolver) throws IOException {
         // see if we can use the style cache, some conversions are expensive.
         if (input instanceof File) {
             // convert to resource, to avoid code duplication
@@ -109,13 +110,13 @@ public class MBStyleHandler extends StyleHandler {
 
     @Override
     public void encode(StyledLayerDescriptor sld, Version version, boolean pretty,
-            OutputStream output) throws IOException {
+                       OutputStream output) throws IOException {
         throw new UnsupportedOperationException();
     }
 
     @Override
     public List<Exception> validate(Object input, Version version, EntityResolver entityResolver)
-            throws IOException {        
+            throws IOException {
         return MapBoxStyle.validate(toReader(input));
     }
 

@@ -29,8 +29,7 @@ public class GroupsModel extends LoadableDetachableModel<List<GeoServerUserGroup
         GeoServerSecurityManager secMgr = GeoServerApplication.get().getSecurityManager();
         try {
             return new ArrayList(secMgr.loadUserGroupService(userGroupServiceName).getUserGroups());
-        }
-        catch(IOException e) {
+        } catch (IOException e) {
             throw new WicketRuntimeException(e);
         }
     }

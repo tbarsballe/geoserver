@@ -44,13 +44,13 @@ public class KMLSuperOverlayTest extends WMSTestSupport {
     public void setupXPath() {
         xpath = XMLUnit.newXpathEngine();
     }
-    
+
     @Override
     protected void setUpTestData(SystemTestData testData) throws Exception {
         super.setUpTestData(testData);
         testData.setUpWcs10RasterLayers();
     }
-    
+
     @Override
     protected void onSetUp(SystemTestData testData) throws Exception {
         super.onSetUp(testData);
@@ -67,7 +67,7 @@ public class KMLSuperOverlayTest extends WMSTestSupport {
         properties.put(LayerProperty.ENVELOPE, new ReferencedEnvelope(3045967, 3108482, 1206627, 1285209, CRS.decode("EPSG:2876")));
         properties.put(LayerProperty.SRS, 2876);
         testData.addVectorLayer(BOULDER, properties, "boulder.properties", getClass(), catalog);
-        
+
         // set a low regionation limit so that superoverlays actually have something to do
         FeatureTypeInfo ft = getCatalog().getFeatureTypeByName(getLayerId(MockData.BASIC_POLYGONS));
         ft.getMetadata().put("kml.regionateFeatureLimit", 1);
@@ -92,18 +92,18 @@ public class KMLSuperOverlayTest extends WMSTestSupport {
         assertEquals("8", xpath.evaluate("count(//kml:NetworkLink)", document));
         // no ground overlays, direct links to contents instead
         assertEquals("0", xpath.evaluate("count(//kml:GroundOverlay)", document));
-        
+
         // overall bbox
         assertXpathEvaluatesTo("90.0", "//kml:Region/kml:LatLonAltBox/kml:north", document);
         assertXpathEvaluatesTo("-90.0", "//kml:Region/kml:LatLonAltBox/kml:south", document);
         assertXpathEvaluatesTo("180.0", "//kml:Region/kml:LatLonAltBox/kml:east", document);
         assertXpathEvaluatesTo("-180.0", "//kml:Region/kml:LatLonAltBox/kml:west", document);
-        
+
         // check we have contents starting from the top
         assertXpathExists("//kml:NetworkLink[kml:name='contents-0']", document);
         assertXpathExists("//kml:NetworkLink[kml:name='contents-1']", document);
     }
-    
+
     /**
      * Checks what happens when the data bbox is at the crossing of a parent tile
      * that is two levels above the bbox itself
@@ -112,29 +112,29 @@ public class KMLSuperOverlayTest extends WMSTestSupport {
     public void testCrossingSuperoverlay() throws Exception {
         Document document = getAsDOM("wms/kml?layers=" + getLayerId(BOULDER) + "&mode=superoverlay");
         // print(document);
-        
+
         // check the overall bbox (the top-most tile that contains all data)
         assertXpathEvaluatesTo("40.78125", "//kml:Region/kml:LatLonAltBox/kml:north", document);
         assertXpathEvaluatesTo("39.375", "//kml:Region/kml:LatLonAltBox/kml:south", document);
         assertXpathEvaluatesTo("-104.0625", "//kml:Region/kml:LatLonAltBox/kml:east", document);
         assertXpathEvaluatesTo("-105.46875", "//kml:Region/kml:LatLonAltBox/kml:west", document);
-        
+
         // however the lookats are pointing to the center of the data set
         assertXpathEvaluatesTo("-105.22419118401743", "//kml:Document/kml:LookAt/kml:longitude", document);
         assertXpathEvaluatesTo("40.008056082289826", "//kml:Document/kml:LookAt/kml:latitude", document);
 
         assertEquals(-105.2243,
-            Double.parseDouble(xpath.evaluate("//kml:Document/kml:Folder/kml:LookAt/kml:longitude", document)), 1E-4);
+                Double.parseDouble(xpath.evaluate("//kml:Document/kml:Folder/kml:LookAt/kml:longitude", document)), 1E-4);
         assertEquals(40.0081,
-            Double.parseDouble(xpath.evaluate("//kml:Document/kml:Folder/kml:LookAt/kml:latitude", document)), 1E-4);
+                Double.parseDouble(xpath.evaluate("//kml:Document/kml:Folder/kml:LookAt/kml:latitude", document)), 1E-4);
     }
-    
+
     /**
      * Check the link contents a bit
      */
     @Test
     public void testSuperOverlayLinkContents() throws Exception {
-        
+
         Document document = getAsDOM("wms/kml?layers=" + getLayerId(MockData.BASIC_POLYGONS) + "&mode=superoverlay");
         // print(document);
 
@@ -147,13 +147,13 @@ public class KMLSuperOverlayTest extends WMSTestSupport {
         assertEquals("4", xpath.evaluate("count(//kml:NetworkLink)", document));
         // no ground overlays, direct links to contents instead
         assertEquals("0", xpath.evaluate("count(//kml:GroundOverlay)", document));
-        
+
         // check sub-link 0, it should still got to the network link builder
         String link0 = xpath.evaluate("//kml:NetworkLink[kml:name='0']/kml:Link/kml:href", document);
         Map<String, Object> kvp0 = KvpUtils.parseQueryString(link0);
         assertEquals(NetworkLinkMapOutputFormat.KML_MIME_TYPE, kvp0.get("format"));
         assertEquals("-180.0,-90.0,0.0,90.0", kvp0.get("bbox"));
-        
+
         // check sub-link 1, the other side of the world
         String link1 = xpath.evaluate("//kml:NetworkLink[kml:name='1']/kml:Link/kml:href", document);
         Map<String, Object> kvp1 = KvpUtils.parseQueryString(link1);
@@ -180,10 +180,10 @@ public class KMLSuperOverlayTest extends WMSTestSupport {
         // no ground overlays
         assertEquals(0, document.getElementsByTagName("GroundOverlay").getLength());
     }
-    
+
     @Test
     public void testGWCIntegration() throws Exception {
-        Document document = getAsDOM("wms/kml?layers=" + getLayerId(MockData.USA_WORLDIMG) 
+        Document document = getAsDOM("wms/kml?layers=" + getLayerId(MockData.USA_WORLDIMG)
                 + "&mode=superoverlay&superoverlay_mode=cached");
         // print(document);
 
@@ -194,18 +194,18 @@ public class KMLSuperOverlayTest extends WMSTestSupport {
         assertEquals(1, document.getElementsByTagName("NetworkLink").getLength());
         // no ground overlays
         assertEquals(0, document.getElementsByTagName("GroundOverlay").getLength());
-        
+
         // check we have a direct link to GWC
-        assertEquals("http://localhost:8080/geoserver/gwc/service/kml/cdf:usa.png.kml", 
+        assertEquals("http://localhost:8080/geoserver/gwc/service/kml/cdf:usa.png.kml",
                 xpath.evaluate("//kml:NetworkLink/kml:Link/kml:href", document));
-        assertEquals("never", 
+        assertEquals("never",
                 xpath.evaluate("//kml:NetworkLink/kml:Link/kml:viewRefreshMode", document));
     }
-    
+
     @Test
     public void testGWCIntegrationFailing() throws Exception {
         // force placemarks, this prevents usage of gwc
-        Document document = getAsDOM("wms/kml?layers=" + getLayerId(MockData.USA_WORLDIMG) 
+        Document document = getAsDOM("wms/kml?layers=" + getLayerId(MockData.USA_WORLDIMG)
                 + "&mode=superoverlay&superoverlay_mode=cached&kmplacemark=true");
         // print(document);
 
@@ -214,13 +214,13 @@ public class KMLSuperOverlayTest extends WMSTestSupport {
         assertEquals(4, document.getElementsByTagName("NetworkLink").getLength());
         // no ground overlays
         assertEquals(1, document.getElementsByTagName("GroundOverlay").getLength());
-        
+
         // check we do not have a direct link to GWC, but back to the wms
-        assertTrue("http://localhost:8080/geoserver/gwc/service/kml/cdf:usa.png.kml", 
+        assertTrue("http://localhost:8080/geoserver/gwc/service/kml/cdf:usa.png.kml",
                 xpath.evaluate("//kml:NetworkLink/kml:Link/kml:href", document).contains("geoserver/wms"));
     }
 
-    
+
     @Test
     public void testKmlTitleFormatOption() throws Exception {
         Document document = getAsDOM("wms/kml?layers=" + getLayerId(MockData.BASIC_POLYGONS) + ","

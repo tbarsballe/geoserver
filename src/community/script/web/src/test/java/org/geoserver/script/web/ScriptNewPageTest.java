@@ -31,21 +31,21 @@ public class ScriptNewPageTest extends GeoServerWicketTestSupport {
     public void init() {
         login();
         tester.startPage(ScriptNewPage.class);
-        
+
         // print(tester.getLastRenderedPage(), true, true);
     }
-    
+
     @Test
     public void testLoad() {
         tester.assertRenderedPage(ScriptNewPage.class);
         tester.assertNoErrorMessage();
-        
+
         tester.assertComponent("form:name", TextField.class);
         tester.assertComponent("form:type", DropDownChoice.class);
         tester.assertComponent("form:extension", DropDownChoice.class);
         tester.assertComponent("form:contents", CodeMirrorEditor.class);
     }
-    
+
     @Test
     public void testValid() throws IOException {
         FormTester form = tester.newFormTester("form");
@@ -66,55 +66,55 @@ public class ScriptNewPageTest extends GeoServerWicketTestSupport {
 
         assertEquals("console.log('Hi');", FileUtils.readFileToString(file));
     }
-    
+
     @Test
     public void testNameRequired() {
         FormTester form = tester.newFormTester("form");
         form.select("type", 0);
-        ((DropDownChoice)form.getForm().get("extension")).setChoices(Lists.newArrayList("py","js","groovy"));
+        ((DropDownChoice) form.getForm().get("extension")).setChoices(Lists.newArrayList("py", "js", "groovy"));
         form.select("extension", 0);
-        form.setValue("contents:editorContainer:editorParent:editor","console.log('Hi');");
+        form.setValue("contents:editorContainer:editorParent:editor", "console.log('Hi');");
         form.submit();
-        
+
         tester.assertRenderedPage(ScriptNewPage.class);
-        tester.assertErrorMessages(new String[] {"Field 'Name' is required."});
+        tester.assertErrorMessages(new String[]{"Field 'Name' is required."});
     }
-    
+
     @Test
     public void testTypeRequired() {
         FormTester form = tester.newFormTester("form");
         form.setValue("name", "hello");
-        ((DropDownChoice)form.getForm().get("extension")).setChoices(Lists.newArrayList("py","js","groovy"));
+        ((DropDownChoice) form.getForm().get("extension")).setChoices(Lists.newArrayList("py", "js", "groovy"));
         form.select("extension", 0);
-        form.setValue("contents:editorContainer:editorParent:editor","console.log('Hi');");
+        form.setValue("contents:editorContainer:editorParent:editor", "console.log('Hi');");
         form.submit();
-        
+
         tester.assertRenderedPage(ScriptNewPage.class);
-        tester.assertErrorMessages(new String[] {"Field 'type' is required."});
+        tester.assertErrorMessages(new String[]{"Field 'type' is required."});
     }
-    
+
     @Test
     public void testExtensionRequired() {
         FormTester form = tester.newFormTester("form");
         form.setValue("name", "hello");
         form.select("type", 0);
-        form.setValue("contents:editorContainer:editorParent:editor","console.log('Hi');");
+        form.setValue("contents:editorContainer:editorParent:editor", "console.log('Hi');");
         form.submit();
-        
+
         tester.assertRenderedPage(ScriptNewPage.class);
-        tester.assertErrorMessages(new String[] {"Field 'extension' is required."});
+        tester.assertErrorMessages(new String[]{"Field 'extension' is required."});
     }
-    
+
     @Test
     public void testContentsRequired() {
         FormTester form = tester.newFormTester("form");
         form.setValue("name", "hello");
         form.select("type", 0);
-        ((DropDownChoice)form.getForm().get("extension")).setChoices(Lists.newArrayList("py","js","groovy"));
+        ((DropDownChoice) form.getForm().get("extension")).setChoices(Lists.newArrayList("py", "js", "groovy"));
         form.select("extension", 0);
         form.submit();
-        
+
         tester.assertRenderedPage(ScriptNewPage.class);
-        tester.assertErrorMessages(new String[] {"Field 'contents' is required."});
+        tester.assertErrorMessages(new String[]{"Field 'contents' is required."});
     }
 }

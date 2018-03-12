@@ -60,6 +60,7 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import freemarker.template.ObjectWrapper;
 import freemarker.template.SimpleHash;
 import freemarker.template.TemplateModelException;
+
 import java.util.logging.Level;
 
 
@@ -70,7 +71,7 @@ import java.util.logging.Level;
  */
 @RestController
 @ControllerAdvice
-@RequestMapping(path = RestBaseController.ROOT_PATH+"/workspaces/{workspaceName}/wmtsstores")
+@RequestMapping(path = RestBaseController.ROOT_PATH + "/workspaces/{workspaceName}/wmtsstores")
 public class WMTSStoreController extends AbstractCatalogController {
 
     private static final Logger LOGGER = Logging.getLogger(WMTSStoreController.class);
@@ -83,7 +84,7 @@ public class WMTSStoreController extends AbstractCatalogController {
     @GetMapping(produces = {
             MediaType.APPLICATION_JSON_VALUE,
             MediaType.APPLICATION_XML_VALUE,
-            MediaType.TEXT_HTML_VALUE })
+            MediaType.TEXT_HTML_VALUE})
     public RestWrapper<WMTSStoreInfo> getStores(@PathVariable String workspaceName) {
 
         List<WMTSStoreInfo> stores = catalog
@@ -94,7 +95,7 @@ public class WMTSStoreController extends AbstractCatalogController {
     @GetMapping(path = "/{storeName}", produces = {
             MediaType.APPLICATION_JSON_VALUE,
             MediaType.APPLICATION_XML_VALUE,
-            MediaType.TEXT_HTML_VALUE })
+            MediaType.TEXT_HTML_VALUE})
     public RestWrapper<WMTSStoreInfo> getStore(
             @PathVariable String workspaceName,
             @PathVariable String storeName) {
@@ -107,31 +108,31 @@ public class WMTSStoreController extends AbstractCatalogController {
             MediaType.APPLICATION_JSON_VALUE,
             MediaTypeExtensions.TEXT_JSON_VALUE,
             MediaType.APPLICATION_XML_VALUE,
-            MediaType.TEXT_XML_VALUE })
+            MediaType.TEXT_XML_VALUE})
     public ResponseEntity<String> postStore(
             @RequestBody WMTSStoreInfo store,
             @PathVariable String workspaceName,
             UriComponentsBuilder builder) {
 
-        if ( store.getWorkspace() != null ) {
-             //ensure the specified workspace matches the one dictated by the uri
-             WorkspaceInfo ws = store.getWorkspace();
-             if ( !workspaceName.equals( ws.getName() ) ) {
-                 throw new RestException( "Expected workspace " + workspaceName +
-                     " but client specified " + ws.getName(), HttpStatus.FORBIDDEN );
-             }
+        if (store.getWorkspace() != null) {
+            //ensure the specified workspace matches the one dictated by the uri
+            WorkspaceInfo ws = store.getWorkspace();
+            if (!workspaceName.equals(ws.getName())) {
+                throw new RestException("Expected workspace " + workspaceName +
+                        " but client specified " + ws.getName(), HttpStatus.FORBIDDEN);
+            }
         } else {
-            store.setWorkspace( catalog.getWorkspaceByName( workspaceName ) );
+            store.setWorkspace(catalog.getWorkspaceByName(workspaceName));
         }
         store.setEnabled(true);
 
         catalog.validate(store, false).throwIfInvalid();
-        catalog.add( store );
+        catalog.add(store);
 
         String storeName = store.getName();
         LOGGER.info("POST wmts store " + storeName);
         UriComponents uriComponents = builder.path("/workspaces/{workspaceName}/wmtsstores/{storeName}")
-            .buildAndExpand(workspaceName, storeName);
+                .buildAndExpand(workspaceName, storeName);
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(uriComponents.toUri());
         return new ResponseEntity<>(storeName, headers, HttpStatus.CREATED);
@@ -142,18 +143,18 @@ public class WMTSStoreController extends AbstractCatalogController {
             MediaType.APPLICATION_JSON_VALUE,
             MediaTypeExtensions.TEXT_JSON_VALUE,
             MediaType.APPLICATION_XML_VALUE,
-            MediaType.TEXT_XML_VALUE })
+            MediaType.TEXT_XML_VALUE})
     public void putStore(
             @RequestBody WMTSStoreInfo info,
             @PathVariable String workspaceName,
             @PathVariable String storeName) {
 
         WMTSStoreInfo original = getExistingWMTSStore(workspaceName, storeName);
-        if(info.getWorkspace() != null && !original.getWorkspace().equals(info.getWorkspace())) {
-            throw new RestException("Attempting to move "+storeName+" from "+original.getWorkspace().getName()+" to "+info.getWorkspace().getName()+" via PUT", HttpStatus.FORBIDDEN);
+        if (info.getWorkspace() != null && !original.getWorkspace().equals(info.getWorkspace())) {
+            throw new RestException("Attempting to move " + storeName + " from " + original.getWorkspace().getName() + " to " + info.getWorkspace().getName() + " via PUT", HttpStatus.FORBIDDEN);
         }
-        if(!original.getName().equals(info.getName())) {
-            throw new RestException("Attempting to rename "+storeName+" to "+info.getName()+" via PUT", HttpStatus.FORBIDDEN);
+        if (!original.getName().equals(info.getName())) {
+            throw new RestException("Attempting to rename " + storeName + " to " + info.getName() + " via PUT", HttpStatus.FORBIDDEN);
         }
         new CatalogBuilder(catalog).updateWMTSStore(original, info);
         catalog.validate(original, false).throwIfInvalid();
@@ -165,7 +166,7 @@ public class WMTSStoreController extends AbstractCatalogController {
 
     private WMTSStoreInfo getExistingWMTSStore(String workspaceName, String storeName) {
         WMTSStoreInfo original = catalog.getStoreByName(workspaceName, storeName, WMTSStoreInfo.class);
-        if(original == null) {
+        if (original == null) {
             throw new ResourceNotFoundException(
                     "No such wmts store: " + workspaceName + "," + storeName);
         }
@@ -217,7 +218,7 @@ public class WMTSStoreController extends AbstractCatalogController {
                 String workspace = uriTemplateVars.get("workspaceName");
                 String store = uriTemplateVars.get("storeName");
 
-                if(workspace == null || store == null) {
+                if (workspace == null || store == null) {
                     return null;
                 }
 
@@ -226,7 +227,7 @@ public class WMTSStoreController extends AbstractCatalogController {
 
             @Override
             protected void postEncodeWMTSStore(WMTSStoreInfo cs,
-                    HierarchicalStreamWriter writer, MarshallingContext context) {
+                                               HierarchicalStreamWriter writer, MarshallingContext context) {
                 // add a link to the wmtslayers
                 writer.startNode("layers");
                 converter.encodeCollectionLink("layers", writer);
@@ -235,7 +236,7 @@ public class WMTSStoreController extends AbstractCatalogController {
 
             @Override
             protected void postEncodeReference(Object obj, String ref, String prefix,
-                    HierarchicalStreamWriter writer, MarshallingContext context) {
+                                               HierarchicalStreamWriter writer, MarshallingContext context) {
                 if (obj instanceof WorkspaceInfo) {
                     converter.encodeLink("/workspaces/" + converter.encode(ref), writer);
                 }
@@ -260,7 +261,7 @@ public class WMTSStoreController extends AbstractCatalogController {
                 List<Map<String, Map<String, String>>> dsProps = new ArrayList<>();
 
                 List<WMTSLayerInfo> resources = catalog.getResourcesByStore(store, WMTSLayerInfo.class);
-                for (WMTSLayerInfo resource : resources){
+                for (WMTSLayerInfo resource : resources) {
                     Map<String, String> names = new HashMap<>();
                     names.put("name", resource.getName());
                     dsProps.add(Collections.singletonMap("properties", names));

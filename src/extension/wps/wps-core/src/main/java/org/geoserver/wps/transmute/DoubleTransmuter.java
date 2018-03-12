@@ -22,7 +22,7 @@ public class DoubleTransmuter implements LiteralTransmuter {
 
         try {
             decoded = Double.valueOf(encoded);
-        } catch(NumberFormatException e) {
+        } catch (NumberFormatException e) {
             throw new WPSException("InvalidParameterType", "Could not convert paramter to object.");
         }
 
@@ -40,7 +40,7 @@ public class DoubleTransmuter implements LiteralTransmuter {
      * @see LiteralTransmuter#encode(Object)
      */
     public String encode(Object value) {
-        return ((Double)value).toString();
+        return ((Double) value).toString();
     }
 
     /**

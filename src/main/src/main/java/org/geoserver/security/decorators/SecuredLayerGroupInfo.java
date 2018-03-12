@@ -24,7 +24,7 @@ public class SecuredLayerGroupInfo extends DecoratingLayerGroupInfo {
      * Overrides the layer group layer list with the one provided (which is
      * supposed to have been wrapped so that each layer can be accessed only
      * accordingly to the current user privileges)
-     * 
+     *
      * @param delegate
      * @param layers
      */
@@ -39,14 +39,14 @@ public class SecuredLayerGroupInfo extends DecoratingLayerGroupInfo {
     public LayerInfo getRootLayer() {
         return rootLayer;
     }
-    
-    @Override 
+
+    @Override
     public void setRootLayer(LayerInfo rootLayer) {
         //keep synchronised
         this.rootLayer = rootLayer;
         delegate.setRootLayer((LayerInfo) unwrap(rootLayer));
     }
-    
+
     @Override
     public List<PublishedInfo> getLayers() {
         return new FilteredList<PublishedInfo>(layers, delegate.getLayers()) {
@@ -56,12 +56,12 @@ public class SecuredLayerGroupInfo extends DecoratingLayerGroupInfo {
             }
         };
     }
-    
+
     @Override
     public List<StyleInfo> getStyles() {
         return new FilteredList<StyleInfo>(styles, delegate.getStyles());
     }
-    
+
     private static PublishedInfo unwrap(PublishedInfo pi) {
         if (pi instanceof SecuredLayerInfo || pi instanceof SecuredLayerGroupInfo) {
             @SuppressWarnings("unchecked")

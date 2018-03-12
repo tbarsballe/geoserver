@@ -14,10 +14,10 @@ package org.geoserver.security.password;
  * <li>{@link #PLAIN} -  plain text</li>
  * <li>{@link #ENCRYPT} - symmetric encryption</li>
  * <li>{@link #DIGEST} - password hashing (recommended)</li>
- *</p>
- * @author christian
+ * </p>
  *
+ * @author christian
  */
 public enum PasswordEncodingType {
-    EMPTY,PLAIN,ENCRYPT,DIGEST;
+    EMPTY, PLAIN, ENCRYPT, DIGEST;
 }

@@ -15,10 +15,8 @@ import com.thoughtworks.xstream.XStream;
 
 /**
  * JMS Handler is used to synchronize
- * 
- * 
+ *
  * @author Carlo Cancellieri - carlo.cancellieri@geo-solutions.it
- * 
  */
 public class JMSLoggingHandler extends JMSConfigurationHandler<LoggingInfo> {
     private final GeoServer geoServer;

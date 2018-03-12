@@ -73,13 +73,12 @@ public abstract class SolrConfigurationPage extends Panel {
     /**
      * Constructs the dialog to set SOLR attributes with the follow components: <li>The checkbox to
      * hide/show the empty attributes <li>The table with SOLR attributes and configuration options
-     * 
+     *
      * @see {@link SolrAttributeProvider}
      * @see {@link SolrAttribute}
-     * 
      */
     public SolrConfigurationPage(String panelId,
-            final IModel<?> model) {
+                                 final IModel<?> model) {
         super(panelId, model);
 
         ResourceInfo ri = (ResourceInfo) model.getObject();
@@ -102,11 +101,11 @@ public abstract class SolrConfigurationPage extends Panel {
 
         AjaxCheckBox checkBox = new AjaxCheckBox("hideEmpty", Model.of(Boolean.TRUE)) {
             /**
-			 * 
-			 */
-			private static final long serialVersionUID = 8715377219204904531L;
+             *
+             */
+            private static final long serialVersionUID = 8715377219204904531L;
 
-			@Override
+            @Override
             protected void onUpdate(AjaxRequestTarget target) {
                 attProvider.reload((Boolean) this.getDefaultModelObject());
                 target.add(solrAttributePanel);
@@ -118,11 +117,11 @@ public abstract class SolrConfigurationPage extends Panel {
 
         solr_form.add(new AjaxButton("solr_save") {
             /**
-			 * 
-			 */
-			private static final long serialVersionUID = 819555072210390051L;
+             *
+             */
+            private static final long serialVersionUID = 819555072210390051L;
 
-			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 onSave(target);
             }
         });
@@ -145,7 +144,7 @@ public abstract class SolrConfigurationPage extends Panel {
      * type metadata as {@link SolrLayerConfiguration#KEY} <br>
      * Validation include the follow rules <li>One attribute must be a PK <li>One attribute must be
      * a GEOMETRY <li>GEOMETRY attribute must have a SRID
-     * 
+     *
      * @see {@link SolrLayerConfiguration}
      * @see {@link FeatureTypeInfo#getMetadata}
      */
@@ -185,7 +184,7 @@ public abstract class SolrConfigurationPage extends Panel {
                 return;
             }
             ri.getMetadata().put(SolrLayerConfiguration.KEY, layerConfiguration);
-            
+
             done(target, ri);
 
         } catch (Exception e) {
@@ -243,13 +242,13 @@ public abstract class SolrConfigurationPage extends Panel {
         GeoServerTablePanel<SolrAttribute> atts = new GeoServerTablePanel<SolrAttribute>(
                 "solrAttributes", attProvider) {
             /**
-					 * 
-					 */
-					private static final long serialVersionUID = 7306412054935816724L;
+             *
+             */
+            private static final long serialVersionUID = 7306412054935816724L;
 
-			@Override
+            @Override
             protected Component getComponentForProperty(String id, IModel<SolrAttribute> itemModel,
-                    Property<SolrAttribute> property) {
+                                                        Property<SolrAttribute> property) {
                 SolrAttribute att = (SolrAttribute) itemModel.getObject();
                 boolean isGeometry = att.getType() != null
                         && Geometry.class.isAssignableFrom(att.getType());
@@ -271,8 +270,8 @@ public abstract class SolrConfigurationPage extends Panel {
 
                 } else if (property == SolrAttributeProvider.TYPE && isGeometry) {
                     Fragment f = new Fragment(id, "geometry", SolrConfigurationPage.this);
-                    f.add(new DropDownChoice("geometry", 
-                    		new PropertyModel(itemModel, "type"),
+                    f.add(new DropDownChoice("geometry",
+                            new PropertyModel(itemModel, "type"),
                             GEOMETRY_TYPES, new GeometryTypeRenderer()));
                     return f;
                 } else if (property == SolrAttributeProvider.USE) {
@@ -323,9 +322,9 @@ public abstract class SolrConfigurationPage extends Panel {
      */
     private static class GeometryTypeRenderer extends ChoiceRenderer<Class<?>> {
 
-		private static final long serialVersionUID = -6371918467884222834L;
+        private static final long serialVersionUID = -6371918467884222834L;
 
-		public Object getDisplayValue(Class<?> object) {
+        public Object getDisplayValue(Class<?> object) {
             return ((Class<?>) object).getSimpleName();
         }
 
@@ -338,15 +337,13 @@ public abstract class SolrConfigurationPage extends Panel {
     /**
      * Abstract method to implements in panel that opens the dialog to close the dialog itself <br>
      * This method is called after modal executes its operation
-     * 
-     * @param target ajax response target
+     *
+     * @param target    ajax response target
      * @param layerInfo contains attribute configuration
-     * @param isNew used to communicate to parent if the attributes configuration if for new or for
-     *        existing layer
-     * 
+     * @param isNew     used to communicate to parent if the attributes configuration if for new or for
+     *                  existing layer
      * @see {@link #onSave}
      * @see {@link #onCancel}
-     * 
      */
     abstract void done(AjaxRequestTarget target, ResourceInfo layerInfo);
 

@@ -49,7 +49,7 @@ public class BruteForceAttackTest extends GeoServerSystemTestSupport {
         return Arrays.asList((Filter) applicationContext
                 .getBean(GeoServerSecurityFilterChainProxy.class));
     }
-    
+
     @Before
     public void resetAuthentication() {
         setRequestAuth(null, null);
@@ -87,7 +87,7 @@ public class BruteForceAttackTest extends GeoServerSystemTestSupport {
     public void testParallelLogin() throws Exception {
         testParallelLogin("Concurrent login attempts during delay period not allowed", i -> "foo");
     }
-    
+
     @Test
     public void testTooManyBlockedThreads() throws Exception {
         // configure it to allow only one thread in the wait list
@@ -97,7 +97,7 @@ public class BruteForceAttackTest extends GeoServerSystemTestSupport {
         BruteForcePreventionConfig bruteForceConfig = securityConfig.getBruteForcePrevention();
         bruteForceConfig.setMaxBlockedThreads(1);
         manager.saveSecurityConfig(securityConfig);
-        
+
         // hit with many different users
         testParallelLogin("Too many failed logins waiting on delay", i -> "foo" + i);
     }
@@ -111,22 +111,22 @@ public class BruteForceAttackTest extends GeoServerSystemTestSupport {
         AtomicInteger concurrentLoginsPrevented = new AtomicInteger(0);
         List<Future<?>> futures = new ArrayList<>();
         long start = System.currentTimeMillis();
-        for(int i = 0; i < NTHREADS; i++) {
+        for (int i = 0; i < NTHREADS; i++) {
             final int idx = i;
             Future<?> future = service.submit(() -> {
                 // mark and ready and wait for others
                 latch.countDown();
                 latch.await();
-                
+
                 // execute request timing how long it took
-                MockHttpServletRequest request = createRequest(HELLO_GET_REQUEST); 
-                request.setMethod( "GET" );
+                MockHttpServletRequest request = createRequest(HELLO_GET_REQUEST);
+                request.setMethod("GET");
                 request.setContent(new byte[]{});
                 String userName = userNameGenerator.apply(idx);
                 String token = userName + ":foobar";
-                request.addHeader("Authorization",  "Basic " + new String(Base64.encodeBase64(token.getBytes())));
-                MockHttpServletResponse response = dispatch( request, "UTF-8" );
-                
+                request.addHeader("Authorization", "Basic " + new String(Base64.encodeBase64(token.getBytes())));
+                MockHttpServletResponse response = dispatch(request, "UTF-8");
+
                 // check the response and see the error message
                 assertEquals(401, response.getStatus());
                 final String message = response.getErrorMessage();
@@ -134,12 +134,12 @@ public class BruteForceAttackTest extends GeoServerSystemTestSupport {
                 if (message.contains(expectedMessage)) {
                     concurrentLoginsPrevented.incrementAndGet();
                 }
-    
+
                 return null;
             });
             futures.add(future);
         }
-        
+
         // wait for termination
         for (Future<?> future : futures) {
             future.get();
@@ -147,12 +147,12 @@ public class BruteForceAttackTest extends GeoServerSystemTestSupport {
         long awaitTime = System.currentTimeMillis() - start;
         service.shutdown();
 
-        
+
         // now, either the threads all serialized and waited (extremely unlikely, but
         // not impossible) or at least one got bumped immediately with a concurrent login message
         assertTrue(awaitTime > NTHREADS * 1000 || concurrentLoginsPrevented.get() > 0);
-        
+
     }
-    
+
     // "Too many failed logins waiting on delay already";
 }

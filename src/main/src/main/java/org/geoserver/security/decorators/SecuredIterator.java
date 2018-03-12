@@ -18,12 +18,12 @@ import org.opengis.filter.Filter;
 
 /**
  * Applies the write policy to removals
- * @author Andrea Aime - GeoSolutions
  *
- * @deprecated This class is not longer used, {@link SecuredFeatureIterator} and 
- *      {@link SecuredSimpleFeatureIterator} are used instead.
+ * @author Andrea Aime - GeoSolutions
+ * @deprecated This class is not longer used, {@link SecuredFeatureIterator} and
+ * {@link SecuredSimpleFeatureIterator} are used instead.
  */
-public class SecuredIterator extends AbstractDecorator<Iterator> implements Iterator,FeatureIterator {
+public class SecuredIterator extends AbstractDecorator<Iterator> implements Iterator, FeatureIterator {
     WrapperPolicy policy;
     Object current;
     Filter writeFilter;
@@ -40,11 +40,11 @@ public class SecuredIterator extends AbstractDecorator<Iterator> implements Iter
 
     public Feature next() {
         this.current = delegate.next();
-        return (Feature)current;
+        return (Feature) current;
     }
 
     public void remove() {
-        if(writeFilter.evaluate(current)) {
+        if (writeFilter.evaluate(current)) {
             delegate.remove();
         } else {
             throw unsupportedOperation();

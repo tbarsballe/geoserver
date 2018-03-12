@@ -19,20 +19,20 @@ import org.geotools.xml.Encoder;
 
 /**
  * A response designed to encode a specific object into XML
- * @author Andrea Aime - TOPP
  *
+ * @author Andrea Aime - TOPP
  */
 public class XmlObjectEncodingResponse extends Response {
 
     protected String elementName;
     protected Class<?> xmlConfiguration;
-    
+
     public XmlObjectEncodingResponse(Class<?> binding, String elementName, Class<?> xmlConfiguration) {
-        super( binding );
+        super(binding);
         this.elementName = elementName;
         this.xmlConfiguration = xmlConfiguration;
     }
-    
+
     @Override
     public String getMimeType(Object value, Operation operation)
             throws ServiceException {
@@ -43,26 +43,25 @@ public class XmlObjectEncodingResponse extends Response {
     public void write(Object value, OutputStream output, Operation operation)
             throws IOException, ServiceException {
         try {
-            Configuration c = (Configuration) xmlConfiguration.newInstance(); 
-            Encoder e = new Encoder( c );
+            Configuration c = (Configuration) xmlConfiguration.newInstance();
+            Encoder e = new Encoder(c);
             for (Map.Entry<String, String> entry : getSchemaLocations().entrySet()) {
                 e.setSchemaLocation(entry.getKey(), entry.getValue());
             }
             configureEncoder(e, elementName, xmlConfiguration);
-            
-            e.encode( value, new QName( c.getXSD().getNamespaceURI(), elementName ), output );
-        } 
-        catch (Exception e) {
-            throw (IOException) new IOException().initCause( e );
+
+            e.encode(value, new QName(c.getXSD().getNamespaceURI(), elementName), output);
+        } catch (Exception e) {
+            throw (IOException) new IOException().initCause(e);
         }
     }
-    
-    
+
+
     /**
      * Allows subclasses to further configure the encoder
-     * 
-     * @param encoder encoder used for output
-     * @param elementName Element being configured
+     *
+     * @param encoder          encoder used for output
+     * @param elementName      Element being configured
      * @param xmlConfiguration Configuration
      */
     protected void configureEncoder(Encoder encoder, String elementName, Class<?> xmlConfiguration) {
@@ -71,7 +70,6 @@ public class XmlObjectEncodingResponse extends Response {
 
     /**
      * Subclasses can override this method to return the necessary schema location declarations
-     *
      */
     protected Map<String, String> getSchemaLocations() {
         return Collections.emptyMap();

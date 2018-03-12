@@ -16,9 +16,9 @@ import org.geotools.xml.Node;
 
 /**
  * Binding object for the type http://www.opengis.net/wfs:GMLObjectTypeListType.
- *
  * <p>
- *        <pre>
+ * <p>
+ * <pre>
  *         <code>
  *  &lt;xsd:complexType name="GMLObjectTypeListType"&gt;
  *      &lt;xsd:sequence&gt;
@@ -34,6 +34,7 @@ import org.geotools.xml.Node;
  *
  *          </code>
  *         </pre>
+ *
  * @generated
  */
 public class GMLObjectTypeListTypeBinding extends AbstractComplexBinding {
@@ -67,7 +68,7 @@ public class GMLObjectTypeListTypeBinding extends AbstractComplexBinding {
      * @generated modifiable
      */
     public Object parse(ElementInstance instance, Node node, Object value)
-        throws Exception {
+            throws Exception {
         //TODO: implement
         return null;
     }

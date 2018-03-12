@@ -23,7 +23,7 @@ public class EoLayerGroupEntry implements Serializable {
     String styleId;
 
     String layerId;
-    
+
     String layerSubName;
 
     EoLayerType layerType;
@@ -55,15 +55,15 @@ public class EoLayerGroupEntry implements Serializable {
         layerId = layer.getId();
         MetadataMap metadata = layer.getMetadata();
         layerType = metadata.get(EoLayerType.KEY, EoLayerType.class);
-        if(layerType == EoLayerType.BAND_COVERAGE) {
+        if (layerType == EoLayerType.BAND_COVERAGE) {
             layerSubName = "bands";
-        } else if(layerType == EoLayerType.BROWSE_IMAGE) {
+        } else if (layerType == EoLayerType.BROWSE_IMAGE) {
             layerSubName = "browse";
         } else {
             layerSubName = layer.getName();
-            if(layerGroupName != null) {
+            if (layerGroupName != null) {
                 String prefix = layerGroupName + "_";
-                if(layerSubName.startsWith(prefix)) {
+                if (layerSubName.startsWith(prefix)) {
                     layerSubName = layerSubName.substring(prefix.length());
                 }
             }
@@ -73,14 +73,14 @@ public class EoLayerGroupEntry implements Serializable {
     public EoLayerType getLayerType() {
         return layerType;
     }
-    
+
     public String getLayerSubName() {
         return layerSubName;
     }
-    
+
     @Override
     public String toString() {
-        return "[LayerGroupEntry: " + getLayer().prefixedName() + ", " + getStyle().getName() + "]"; 
+        return "[LayerGroupEntry: " + getLayer().prefixedName() + ", " + getStyle().getName() + "]";
     }
 
     @Override

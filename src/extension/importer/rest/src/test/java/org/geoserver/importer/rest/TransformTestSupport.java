@@ -30,7 +30,6 @@ import org.springframework.web.context.request.RequestContextHolder;
 import junit.framework.TestCase;
 
 /**
- *
  * @author Ian Schneider <ischneider@opengeo.org>
  */
 public abstract class TransformTestSupport extends DataTestCase {
@@ -44,7 +43,7 @@ public abstract class TransformTestSupport extends DataTestCase {
 
         Importer im = createNiceMock(Importer.class);
         RequestInfo ri = createNiceMock(RequestInfo.class);
-        
+
         replay(im, ri);
 
         RequestAttributes oldAttributes = RequestContextHolder.getRequestAttributes();
@@ -58,7 +57,7 @@ public abstract class TransformTestSupport extends DataTestCase {
         ImportContext c = new ImportContext(0);
         c.addTask(new ImportTask());
 
-        jsonio.transform(builder,transform, 0, c.task(0), true, 1);
+        jsonio.transform(builder, transform, 0, c.task(0), true, 1);
 
         ImportJSONReader reader = new ImportJSONReader(im);
         ImportTransform transform2 = reader.transform(buffer.toString());
@@ -96,18 +95,26 @@ public abstract class TransformTestSupport extends DataTestCase {
         }
 
         @Override
-        protected void updateAccessedSessionAttributes() { }
+        protected void updateAccessedSessionAttributes() {
+        }
 
         @Override
-        public void registerDestructionCallback(String name, Runnable callback, int scope) { }
+        public void registerDestructionCallback(String name, Runnable callback, int scope) {
+        }
 
         @Override
-        public Object resolveReference(String key) { return null; }
+        public Object resolveReference(String key) {
+            return null;
+        }
 
         @Override
-        public String getSessionId() { return null; }
+        public String getSessionId() {
+            return null;
+        }
 
         @Override
-        public Object getSessionMutex() { return null; }
+        public Object getSessionMutex() {
+            return null;
+        }
     }
 }

@@ -117,16 +117,16 @@ public class DefaultControlFlowConfigurationTest {
 
         // store the properties into a temp folder and relaod
         assertTrue(configurator.getFileLocations().isEmpty());
-        
+
         File tmpDir = createTempDir();
         GeoServerResourceLoader resourceLoader = new GeoServerResourceLoader(tmpDir);
-        
+
         configurator.saveConfiguration(resourceLoader);
         Resource controlFlowProps = Files.asResource(resourceLoader.find("controlflow.properties"));
         assertTrue(Resources.exists(controlFlowProps));
-        
+
         PropertyFileWatcher savedProps = new PropertyFileWatcher(controlFlowProps);
-        
+
         assertEquals(savedProps.getProperties(), p);
     }
 
@@ -136,7 +136,7 @@ public class DefaultControlFlowConfigurationTest {
         Properties properties;
 
         public FixedWatcher(Properties properties) {
-            super((Resource)null);
+            super((Resource) null);
             this.properties = properties;
         }
 
@@ -155,7 +155,7 @@ public class DefaultControlFlowConfigurationTest {
             return properties;
         }
     }
-    
+
     static File createTempDir() throws IOException {
         File f = File.createTempFile("controlFlow", "data", new File("target"));
         f.delete();

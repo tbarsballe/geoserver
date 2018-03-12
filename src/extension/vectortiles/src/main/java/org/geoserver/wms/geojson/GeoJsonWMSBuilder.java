@@ -71,7 +71,7 @@ public class GeoJsonWMSBuilder implements VectorTileBuilder {
 
     @Override
     public void addFeature(String layerName, String featureId, String geometryName, Geometry aGeom,
-            Map<String, Object> properties) {
+                           Map<String, Object> properties) {
 
         if (precisionReducerFilter != null) {
             aGeom.apply(precisionReducerFilter);

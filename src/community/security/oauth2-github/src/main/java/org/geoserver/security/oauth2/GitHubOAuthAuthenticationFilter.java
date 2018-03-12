@@ -15,14 +15,13 @@ import org.springframework.security.oauth2.provider.token.RemoteTokenServices;
 
 /**
  * @author Alessio Fabiani, GeoSolutions S.A.S.
- *
  */
 public class GitHubOAuthAuthenticationFilter extends GeoServerOAuthAuthenticationFilter {
 
     public GitHubOAuthAuthenticationFilter(SecurityNamedServiceConfig config,
-            RemoteTokenServices tokenServices,
-            GeoServerOAuth2SecurityConfiguration oauth2SecurityConfiguration,
-            OAuth2RestOperations oauth2RestTemplate) {
+                                           RemoteTokenServices tokenServices,
+                                           GeoServerOAuth2SecurityConfiguration oauth2SecurityConfiguration,
+                                           OAuth2RestOperations oauth2RestTemplate) {
         super(config, tokenServices, oauth2SecurityConfiguration, oauth2RestTemplate);
     }
 

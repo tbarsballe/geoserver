@@ -19,15 +19,15 @@ import org.geoserver.wfs.WFSException;
  * This parser will parse strings of the above format into a list of
  * {@link javax.xml.namespace.QName}
  * </p>
- * @author Justin Deoliveira, The Open Planning Project
  *
+ * @author Justin Deoliveira, The Open Planning Project
  */
 public class QNameKvpParser extends FlatKvpParser {
     /**
      * catalog for namespace lookups.
      */
     protected Catalog catalog;
-    
+
     private final boolean strict;
 
     public QNameKvpParser(String key, Catalog catalog) {
@@ -35,16 +35,12 @@ public class QNameKvpParser extends FlatKvpParser {
     }
 
     /**
-     * 
-     * @param key
-     *            the key this kvp parser parses the value for
-     * @param catalog
-     *            the catalog where to check if the namespace given by the qualified name prefix
-     *            exists
-     * @param strict
-     *            if {@code true} and the qname being parsed contains a namespace prefix that does
-     *            not match a namespace from {@code catalog}, an exception will be thrown, otherwise a {@code QName}
-     *            with prefix and localName but without namespace will be returned.
+     * @param key     the key this kvp parser parses the value for
+     * @param catalog the catalog where to check if the namespace given by the qualified name prefix
+     *                exists
+     * @param strict  if {@code true} and the qname being parsed contains a namespace prefix that does
+     *                not match a namespace from {@code catalog}, an exception will be thrown, otherwise a {@code QName}
+     *                with prefix and localName but without namespace will be returned.
      */
     protected QNameKvpParser(String key, Catalog catalog, boolean strict) {
         super(key, QName.class);
@@ -66,14 +62,14 @@ public class QNameKvpParser extends FlatKvpParser {
         if (i != -1) {
             String prefix = token.substring(0, i);
             String local = token.substring(i + 1);
-     
+
             String uri = null;
-            if(prefix != null && !"".equals(prefix)) {
+            if (prefix != null && !"".equals(prefix)) {
                 final NamespaceInfo namespace = catalog.getNamespaceByPrefix(prefix);
-                if(strict && namespace == null){
+                if (strict && namespace == null) {
                     throw new WFSException("Unknown namespace [" + prefix + "]");
                 }
-                uri = namespace == null? null : namespace.getURI();
+                uri = namespace == null ? null : namespace.getURI();
             }
 
             return new QName(uri, local, prefix);
@@ -88,6 +84,6 @@ public class QNameKvpParser extends FlatKvpParser {
             return new QName(token);
         }
     }
-    
-  
+
+
 }

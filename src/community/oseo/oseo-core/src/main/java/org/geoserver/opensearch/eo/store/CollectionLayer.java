@@ -17,7 +17,7 @@ public class CollectionLayer {
     boolean separateBands;
 
     String[] bands;
-    
+
     String[] browseBands;
 
     boolean heterogeneousCRS;
@@ -30,7 +30,7 @@ public class CollectionLayer {
     }
 
     public CollectionLayer(String workspace, String layer, boolean separateBands, String[] bands,
-            String[] browseBands, boolean heterogeneousCRS, String targetCRS) {
+                           String[] browseBands, boolean heterogeneousCRS, String targetCRS) {
         super();
         this.workspace = workspace;
         this.layer = layer;
@@ -96,7 +96,7 @@ public class CollectionLayer {
     public void setMosaicCRS(String targetCRS) {
         this.mosaicCRS = targetCRS;
     }
-    
+
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this);
@@ -104,7 +104,8 @@ public class CollectionLayer {
 
     /**
      * Builds a CollectionLayer bean from the {@link OpenSearchAccess#LAYER} property of a Collection
-     * feature. 
+     * feature.
+     *
      * @param feature
      * @return The layer, or null if the property was not found
      */

@@ -18,9 +18,9 @@ import org.junit.Test;
 public class WFSXmlTest extends WFSTestSupport {
 
     WFSConfiguration configuration() {
-        FeatureTypeSchemaBuilder sb = 
-            new FeatureTypeSchemaBuilder.GML3(getGeoServer());
-        return new WFSConfiguration(getGeoServer(),sb,new WFS(sb));
+        FeatureTypeSchemaBuilder sb =
+                new FeatureTypeSchemaBuilder.GML3(getGeoServer());
+        return new WFSConfiguration(getGeoServer(), sb, new WFS(sb));
     }
 
     @Test

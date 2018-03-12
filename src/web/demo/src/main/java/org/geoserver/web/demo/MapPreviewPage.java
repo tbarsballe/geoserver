@@ -48,20 +48,22 @@ import org.geoserver.wms.GetMapOutputFormat;
 
 /**
  * Shows a paged list of the available layers and points to previews
- * in various formats 
+ * in various formats
  */
 public class MapPreviewPage extends GeoServerBasePage {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	PreviewLayerProvider provider = new PreviewLayerProvider();
+    PreviewLayerProvider provider = new PreviewLayerProvider();
 
     GeoServerTablePanel<PreviewLayer> table;
-    
+
     private transient List<String> availableWMSFormats;
     //private transient List<String> availableWFSFormats;
 
-    /** GML output params computation may be expensive, results are cached in this map */
+    /**
+     * GML output params computation may be expensive, results are cached in this map
+     */
     private transient Map<String, GMLOutputParams> gmlParamsCache = new HashMap<String, GMLOutputParams>();
 
     public MapPreviewPage() {
@@ -72,9 +74,9 @@ public class MapPreviewPage extends GeoServerBasePage {
         // build the table
         table = new GeoServerTablePanel<PreviewLayer>("table", provider) {
 
-			private static final long serialVersionUID = 1L;
+            private static final long serialVersionUID = 1L;
 
-			@Override
+            @Override
             protected Component getComponentForProperty(String id, IModel<PreviewLayer> itemModel, Property<PreviewLayer> property) {
                 PreviewLayer layer = itemModel.getObject();
 
@@ -99,11 +101,11 @@ public class MapPreviewPage extends GeoServerBasePage {
                     Component gmlLink = new ExternalLink("gml", gmlUrl, "GML");
                     f.add(gmlLink);
                     gmlLink.setVisible(layer.getType() == PreviewLayerType.Vector);
-                    
+
                     return f;
                 } else if (property == ALL) {
                     return buildJSWMSSelect(id, wmsOutputFormats, wfsOutputFormats, layer);
-                } 
+                }
                 throw new IllegalArgumentException(
                         "Don't know a property named " + property.getName());
             }
@@ -112,18 +114,19 @@ public class MapPreviewPage extends GeoServerBasePage {
         table.setOutputMarkupId(true);
         add(table);
     }
-    
+
     /**
-     * Generates the maxFeatures element of the WFS request using the value of 
+     * Generates the maxFeatures element of the WFS request using the value of
      * maxNumberOfFeaturesForPreview. Values <= 0 give no limit.
-     * @return "&maxFeatures=${maxNumberOfFeaturesForPreview}" or "" if 
+     *
+     * @return "&maxFeatures=${maxNumberOfFeaturesForPreview}" or "" if
      * maxNumberOfFeaturesForPreview <= 0"
      */
     private String getMaxFeatures() {
         GeoServer geoserver = getGeoServer();
         WFSInfo service = geoserver.getService(WFSInfo.class);
         if (service.getMaxNumberOfFeaturesForPreview() > 0) {
-            return "&maxFeatures="+service.getMaxNumberOfFeaturesForPreview();
+            return "&maxFeatures=" + service.getMaxNumberOfFeaturesForPreview();
         }
         return "";
     }
@@ -137,9 +140,9 @@ public class MapPreviewPage extends GeoServerBasePage {
      * If one of them is found to have a translation, that'll be used, otherwise the MIME-Type will
      * be used as default.
      * </p>
-     * 
+     *
      * @return the list of available WMS GetMap output formats, giving precedence to the ones for
-     *         which there is a translation.
+     * which there is a translation.
      */
     private List<String> getAvailableWMSFormats() {
         List<String> formats = this.availableWMSFormats;
@@ -181,29 +184,29 @@ public class MapPreviewPage extends GeoServerBasePage {
             }
         }
         prepareFormatList(formats, new FormatComparator("format.wfs."));
-        
+
         return formats;
     }
-    
+
     private void prepareFormatList(List<String> formats, FormatComparator comparator) {
         Collections.sort(formats, comparator);
         String prev = null;
-        for (Iterator<String> it = formats.iterator(); it.hasNext();) {
+        for (Iterator<String> it = formats.iterator(); it.hasNext(); ) {
             String format = it.next();
-            if(prev != null && comparator.compare(format, prev) == 0)
+            if (prev != null && comparator.compare(format, prev) == 0)
                 it.remove();
             prev = format;
         }
     }
 
     /**
-     * Builds a select that reacts like a menu, fully javascript based, for wms outputs 
+     * Builds a select that reacts like a menu, fully javascript based, for wms outputs
      */
     private Component buildJSWMSSelect(String id,
-            List<String> wmsOutputFormats, List<String> wfsOutputFormats, PreviewLayer layer) {
+                                       List<String> wmsOutputFormats, List<String> wfsOutputFormats, PreviewLayer layer) {
         Fragment f = new Fragment(id, "menuFragment", MapPreviewPage.this);
         WebMarkupContainer menu = new WebMarkupContainer("menu");
-        
+
         RepeatingView wmsFormats = new RepeatingView("wmsFormats");
         for (int i = 0; i < wmsOutputFormats.size(); i++) {
             String wmsOutputFormat = wmsOutputFormats.get(i);
@@ -214,13 +217,13 @@ public class MapPreviewPage extends GeoServerBasePage {
             wmsFormats.add(format);
         }
         menu.add(wmsFormats);
-        
+
         // the vector ones, it depends, we might have to hide them
-        boolean vector = layer.groupInfo == null && (layer.layerInfo.getType() == PublishedType.VECTOR 
+        boolean vector = layer.groupInfo == null && (layer.layerInfo.getType() == PublishedType.VECTOR
                 || layer.layerInfo.getType() == PublishedType.REMOTE);
         WebMarkupContainer wfsFormatsGroup = new WebMarkupContainer("wfs");
         RepeatingView wfsFormats = new RepeatingView("wfsFormats");
-        if(vector) {
+        if (vector) {
             for (int i = 0; i < wfsOutputFormats.size(); i++) {
                 String wfsOutputFormat = wfsOutputFormats.get(i);
                 String label = translateFormat("format.wfs.", wfsOutputFormat);
@@ -232,39 +235,39 @@ public class MapPreviewPage extends GeoServerBasePage {
         }
         wfsFormatsGroup.add(wfsFormats);
         menu.add(wfsFormatsGroup);
-        
+
         // build the wms request, redirect to it in a new window, reset the selection
         String wmsUrl = "'" + layer.getWmsLink()
                 + "&format=' + this.options[this.selectedIndex].value";
         String wfsUrl = "'" + layer.getBaseUrl("ows") + "?service=WFS&version=1.0.0&request=GetFeature&typeName="
-          + layer.getName()
-          + getMaxFeatures()
-          + "&outputFormat=' + this.options[this.selectedIndex].value";
+                + layer.getName()
+                + getMaxFeatures()
+                + "&outputFormat=' + this.options[this.selectedIndex].value";
         String choice = "(this.options[this.selectedIndex].parentNode.label == 'WMS') ? " + wmsUrl + " : " + wfsUrl;
         menu.add(new AttributeAppender("onchange", new Model<String>("window.open("
                 + choice + ");this.selectedIndex=0"), ";"));
         f.add(menu);
         return f;
     }
-    
+
     private String translateFormat(String prefix, String format) {
         try {
             return getLocalizer().getString(prefix + format, this);
-        } catch(Exception e) {
+        } catch (Exception e) {
             LOGGER.log(Level.WARNING, e.getMessage());
             return format;
         }
     }
-    
+
     /**
      * Sorts the formats using the i18n translated name
-     * @author aaime
      *
+     * @author aaime
      */
     private class FormatComparator implements Comparator<String> {
-        
+
         String prefix;
-        
+
         public FormatComparator(String prefix) {
             this.prefix = prefix;
         }
@@ -274,6 +277,6 @@ public class MapPreviewPage extends GeoServerBasePage {
             String t2 = translateFormat(prefix, f2);
             return t1.compareTo(t2);
         }
-        
+
     }
 }

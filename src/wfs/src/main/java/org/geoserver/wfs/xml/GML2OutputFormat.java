@@ -51,7 +51,7 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 /**
  * Encodes features in Geographic Markup Language (GML) version 2.
- *
+ * <p>
  * <p>
  * GML2-GZIP format is just GML2 with gzip compression. If GML2-GZIP format was
  * requested, <code>getContentEncoding()</code> will retutn
@@ -70,14 +70,14 @@ public class GML2OutputFormat extends WFSGetFeatureOutputFormat {
     /**
      * This is a "magic" class provided by Geotools that writes out GML for an
      * array of FeatureResults.
-     *
+     * <p>
      * <p>
      * This class seems to do all the work, if you have a problem with GML you
      * will need to hunt it down. We supply all of the header information in
      * the execute method, and work through the featureList in the writeTo
      * method.
      * </p>
-     *
+     * <p>
      * <p>
      * This value will be <code>null</code> until execute is called.
      * </p>
@@ -99,32 +99,31 @@ public class GML2OutputFormat extends WFSGetFeatureOutputFormat {
      * using it.
      */
     public GML2OutputFormat(GeoServer geoServer) {
-        super(geoServer, new HashSet(Arrays.asList(new String[] { "GML2", MIME_TYPE })));
+        super(geoServer, new HashSet(Arrays.asList(new String[]{"GML2", MIME_TYPE})));
 
         this.geoServer = geoServer;
         this.catalog = geoServer.getCatalog();
     }
-    
+
     @Override
     public String getMimeType(Object value, Operation operation) throws ServiceException {
         return MIME_TYPE;
     }
-    
+
     public String getCapabilitiesElementName() {
         return "GML2";
     }
 
     /**
-    * prepares for encoding into GML2 format
-    *
-    * @param outputFormat DOCUMENT ME!
-    * @param results DOCUMENT ME!
-    *
-    * @throws IOException DOCUMENT ME!
-    */
+     * prepares for encoding into GML2 format
+     *
+     * @param outputFormat DOCUMENT ME!
+     * @param results      DOCUMENT ME!
+     * @throws IOException DOCUMENT ME!
+     */
     @SuppressWarnings("unchecked")
     public void prepare(String outputFormat, FeatureCollectionResponse results, GetFeatureRequest request)
-        throws IOException {
+            throws IOException {
         transformer = createTransformer();
 
         FeatureTypeNamespaces ftNames = transformer.getFeatureTypeNamespaces();
@@ -152,7 +151,7 @@ public class GML2OutputFormat extends WFSGetFeatureOutputFormat {
             } else {
                 // don't blindly assume it's a feature type, this class is used also by WMS FeatureInfo
                 // meaning it might be a coverage or a remote wms layer
-                if(meta instanceof FeatureTypeInfo) {
+                if (meta instanceof FeatureTypeInfo) {
                     String location = typeSchemaLocation(geoServer.getGlobal(), (FeatureTypeInfo) meta, request.getBaseUrl());
                     ftNamespaces.put(uri, location);
                 }
@@ -164,39 +163,38 @@ public class GML2OutputFormat extends WFSGetFeatureOutputFormat {
             Query query = request.getQueries().get(i);
             try {
                 String srsName = query.getSrsName() != null ? query.getSrsName().toString() : null;
-                if ( srsName == null ) {
+                if (srsName == null) {
                     //no SRS in query...asking for the default?
                     srsName = meta.getSRS();
                 }
-                if ( srsName != null ) {
+                if (srsName != null) {
                     CoordinateReferenceSystem crs = CRS.decode(srsName);
                     String epsgCode = GML2EncodingUtils.epsgCode(crs);
                     srs = Integer.parseInt(epsgCode);
                 }
-            }
-            catch( Exception e ) {
+            } catch (Exception e) {
                 LOGGER.log(Level.WARNING, "Problem encoding:" + query.getSrsName(), e);
-                
+
             }
-            
+
             //track num decimals, in cases where the query has multiple types we choose the max
             // of all the values (same deal as above, might not be a vector due to GetFeatureInfo reusing this)
             if (meta instanceof FeatureTypeInfo) {
                 int ftiDecimals = ((FeatureTypeInfo) meta).getNumDecimals();
-                if(ftiDecimals > 0) {
+                if (ftiDecimals > 0) {
                     numDecimals = numDecimals == -1 ? ftiDecimals : Math.max(numDecimals, ftiDecimals);
                 }
             }
         }
 
         SettingsInfo settings = geoServer.getSettings();
-        
+
         if (numDecimals == -1) {
             numDecimals = settings.getNumDecimals();
         }
-        
+
         WFSInfo wfs = getInfo();
-        
+
         transformer.setIndentation(wfs.isVerbose() ? INDENT_SIZE : (NO_FORMATTING));
         transformer.setNumDecimals(numDecimals);
         transformer.setFeatureBounding(wfs.isFeatureBounding());
@@ -210,7 +208,7 @@ public class GML2OutputFormat extends WFSGetFeatureOutputFormat {
             transformer.addSchemaLocation(WFS.NAMESPACE, wfsSchemaloc);
         }
 
-        for (Iterator it = ftNamespaces.keySet().iterator(); it.hasNext();) {
+        for (Iterator it = ftNamespaces.keySet().iterator(); it.hasNext(); ) {
             String uri = (String) it.next();
             transformer.addSchemaLocation(uri, (String) ftNamespaces.get(uri));
         }
@@ -231,16 +229,15 @@ public class GML2OutputFormat extends WFSGetFeatureOutputFormat {
      * DOCUMENT ME!
      *
      * @param output DOCUMENT ME!
-     *
-     * @throws ServiceException DOCUMENT ME!
-     * @throws IOException DOCUMENT ME!
+     * @throws ServiceException      DOCUMENT ME!
+     * @throws IOException           DOCUMENT ME!
      * @throws IllegalStateException DOCUMENT ME!
      */
     public void encode(OutputStream output, FeatureCollectionResponse results, GetFeatureRequest request)
-        throws ServiceException, IOException {
+            throws ServiceException, IOException {
         if (results == null) {
             throw new IllegalStateException("It seems prepare() has not been called"
-                + " or has not succeed");
+                    + " or has not succeed");
         }
 
         GZIPOutputStream gzipOut = null;
@@ -269,11 +266,11 @@ public class GML2OutputFormat extends WFSGetFeatureOutputFormat {
     }
 
     protected void write(FeatureCollectionResponse featureCollection, OutputStream output,
-        Operation getFeature) throws IOException, ServiceException {
+                         Operation getFeature) throws IOException, ServiceException {
         GetFeatureRequest request = GetFeatureRequest.adapt(getFeature.getParameters()[0]);
-        
+
         prepare(request.getOutputFormat(), featureCollection, request);
-        encode(output, featureCollection, request );
+        encode(output, featureCollection, request);
     }
 
     protected FeatureTransformer createTransformer() {
@@ -287,9 +284,9 @@ public class GML2OutputFormat extends WFSGetFeatureOutputFormat {
     protected String wfsCanonicalSchemaLocation() {
         return org.geoserver.wfs.xml.v1_0_0.WFS.CANONICAL_SCHEMA_LOCATION_BASIC;
     }
-    
+
     protected String typeSchemaLocation(GeoServerInfo global, FeatureTypeInfo meta, String baseUrl) {
-        Map<String, String> params = params("service", "WFS", "version", "1.0.0", 
+        Map<String, String> params = params("service", "WFS", "version", "1.0.0",
                 "request", "DescribeFeatureType", "typeName", meta.getPrefixedName());
         return buildURL(baseUrl, "wfs", params, URLType.SERVICE);
     }

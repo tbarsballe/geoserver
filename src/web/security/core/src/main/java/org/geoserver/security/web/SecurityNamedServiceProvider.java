@@ -20,28 +20,33 @@ import org.geoserver.web.wicket.GeoServerDataProvider;
  * This class is responsible for loading all configuration objects for a certain class of named
  * security service.
  * </p>
+ *
  * @author Christian Mueller
  * @author Justin Deoliveira, OpenGeo
  */
-public abstract class SecurityNamedServiceProvider<T extends SecurityNamedServiceConfig> 
-    extends GeoServerDataProvider<T> {
+public abstract class SecurityNamedServiceProvider<T extends SecurityNamedServiceConfig>
+        extends GeoServerDataProvider<T> {
 
     private static final long serialVersionUID = 1L;
 
-    /** name of the config */
-    public static final Property<SecurityNamedServiceConfig> NAME = 
+    /**
+     * name of the config
+     */
+    public static final Property<SecurityNamedServiceConfig> NAME =
             new BeanProperty<SecurityNamedServiceConfig>("name", "name");
 
-    /** type/implementation of the config */
-    public static final Property<SecurityNamedServiceConfig> TYPE = 
-        new AbstractProperty<SecurityNamedServiceConfig>("type") {
+    /**
+     * type/implementation of the config
+     */
+    public static final Property<SecurityNamedServiceConfig> TYPE =
+            new AbstractProperty<SecurityNamedServiceConfig>("type") {
 
-        @Override
-        public Object getPropertyValue(SecurityNamedServiceConfig item) {
-            //do a resource lookup
-            return new ResourceModel(item.getClassName() + ".title", item.getClassName()).getObject();
-        }
-    };
+                @Override
+                public Object getPropertyValue(SecurityNamedServiceConfig item) {
+                    //do a resource lookup
+                    return new ResourceModel(item.getClassName() + ".title", item.getClassName()).getObject();
+                }
+            };
 
     @Override
     protected List<Property<T>> getProperties() {
@@ -57,10 +62,9 @@ public abstract class SecurityNamedServiceProvider<T extends SecurityNamedServic
 
     /**
      * Bean property in which the value is looked up as resource key in the i18n file.
-     * 
      */
-    public static class ResourceBeanProperty<T extends SecurityNamedServiceConfig> 
-        extends BeanProperty<T> {
+    public static class ResourceBeanProperty<T extends SecurityNamedServiceConfig>
+            extends BeanProperty<T> {
 
         public ResourceBeanProperty(String key, String propertyPath) {
             super(key, propertyPath);

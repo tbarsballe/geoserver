@@ -23,7 +23,7 @@ public class NewDataAccessRulePage extends AbstractDataAccessRulePage {
     public NewDataAccessRulePage() {
         super(new DataAccessRule());
 
-        ((Form)get("form")).add(new DuplicateRuleValidator());
+        ((Form) get("form")).add(new DuplicateRuleValidator());
     }
 
     @Override
@@ -45,14 +45,13 @@ public class NewDataAccessRulePage extends AbstractDataAccessRulePage {
 
     /**
      * Checks the same rule has not been entered before
-     * 
+     *
      * @author aaime
-     * 
      */
     class DuplicateRuleValidator extends AbstractFormValidator {
         public FormComponent<?>[] getDependentFormComponents() {
-            return new FormComponent[] { 
-                rootChoice, layerChoice, accessModeChoice, rolesFormComponent };
+            return new FormComponent[]{
+                    rootChoice, layerChoice, accessModeChoice, rolesFormComponent};
         }
 
         public void validate(Form<?> form) {
@@ -64,7 +63,7 @@ public class NewDataAccessRulePage extends AbstractDataAccessRulePage {
             DataAccessRule rule = (DataAccessRule) form.getModelObject();
             //DataAccessRule rule = new DataAccessRule(model.getWorkspace(),
             //        model.getLayer(),model.getAccessMode(),
-             //       rolesFormComponent.getRolesNamesForStoring());
+            //       rolesFormComponent.getRolesNamesForStoring());
             if (DataAccessRuleDAO.get().getRules().contains(rule)) {
                 form.error(new ParamResourceModel("duplicateRule", getPage(), rule.getKey())
                         .getString());

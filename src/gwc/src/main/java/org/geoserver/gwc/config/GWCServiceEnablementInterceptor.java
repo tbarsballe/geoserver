@@ -16,7 +16,7 @@ import org.geowebcache.service.Service;
  * Intercepts calls to {@link Service org.geowebcache.service.Service} and checks whether the
  * service is enabled, throwing a 404 http error code exception if it's not, and proceeding normaly
  * if the service is enabled.
- * 
+ *
  * @author Gabriel Roldan
  */
 public class GWCServiceEnablementInterceptor implements MethodInterceptor {
@@ -25,8 +25,7 @@ public class GWCServiceEnablementInterceptor implements MethodInterceptor {
     private final GeoServer geoServer;
 
     /**
-     * @param gwc
-     *            provides access to the {@link GWCConfig configuration} to check whether a service
+     * @param gwc provides access to the {@link GWCConfig configuration} to check whether a service
      *            is {@link GWC#isServiceEnabled(Service) enabled}.
      */
     public GWCServiceEnablementInterceptor(final GWC gwc, GeoServer geoServer) {
@@ -37,7 +36,7 @@ public class GWCServiceEnablementInterceptor implements MethodInterceptor {
     /**
      * Intercepts the {@code getConveyor} and {@code handleRequest} calls to a {@link Service}
      * instance and checks whether the service is enabled.
-     * 
+     *
      * @see org.aopalliance.intercept.MethodInterceptor#invoke(org.aopalliance.intercept.MethodInvocation)
      */
     public Object invoke(final MethodInvocation invocation) throws Throwable {

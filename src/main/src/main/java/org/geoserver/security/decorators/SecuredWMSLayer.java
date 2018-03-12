@@ -23,14 +23,14 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 /**
  * A {@link Layer} wrapper carrying around the wrapper policy so that {@link SecuredWebMapServer}
  * can apply it while performing the requests
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class SecuredWMSLayer extends Layer {
     Layer delegate;
 
     WrapperPolicy policy;
-    
+
     public SecuredWMSLayer(Layer delegate, WrapperPolicy policy) {
         this.delegate = delegate;
         this.policy = policy;
@@ -39,17 +39,17 @@ public class SecuredWMSLayer extends Layer {
     public WrapperPolicy getPolicy() {
         return policy;
     }
-    
+
     public boolean isQueryable() {
-        if(policy.getLimits() instanceof WMSAccessLimits) {
+        if (policy.getLimits() instanceof WMSAccessLimits) {
             WMSAccessLimits wl = (WMSAccessLimits) policy.getLimits();
-            if(!wl.isAllowFeatureInfo()) {
+            if (!wl.isAllowFeatureInfo()) {
                 return false;
             }
         }
         return delegate.isQueryable();
     }
-    
+
     public String toString() {
         return "SecuredLayer - " + delegate.toString();
     }
@@ -84,7 +84,7 @@ public class SecuredWMSLayer extends Layer {
             return false;
         return true;
     }
-    
+
     // --------------------------------------------------------------------------------------
     // Purely delegated methods
     // --------------------------------------------------------------------------------------
@@ -281,6 +281,5 @@ public class SecuredWMSLayer extends Layer {
         delegate.setTitle(title);
     }
 
-    
 
 }

@@ -39,32 +39,32 @@ import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.*;
 
 public class SecureCatalogImplTest extends AbstractAuthorizationTest {
-    
+
     public final static Logger LOGGER = Logging.getLogger(SecureCatalogImplTest.class);
-    
+
     @Rule
-    public GeoServerExtensionsHelper.ExtensionsHelperRule extensions = 
-        new GeoServerExtensionsHelper.ExtensionsHelperRule();
+    public GeoServerExtensionsHelper.ExtensionsHelperRule extensions =
+            new GeoServerExtensionsHelper.ExtensionsHelperRule();
 
     @Before
     public void setUp() throws Exception {
         super.setUp();
 
         populateCatalog();
-        
+
         SecurityContextHolder.getContext().setAuthentication(null);
         Dispatcher.REQUEST.remove();
     }
-    
+
     @After
     public void cleanup() {
         SecurityContextHolder.getContext().setAuthentication(null);
     }
-    
-    @Test 
+
+    @Test
     public void testWideOpen() throws Exception {
         buildManager("wideOpen.properties");
-        
+
         // use no user at all
         SecurityContextHolder.getContext().setAuthentication(anonymous);
         assertSame(states, sc.getFeatureTypeByName("topp:states"));
@@ -77,7 +77,7 @@ public class SecureCatalogImplTest extends AbstractAuthorizationTest {
         assertSame(statesStore, sc.getDataStoreByName("states"));
         assertSame(roadsStore, sc.getDataStoreByName("roads"));
         assertSame(arcGridStore, sc.getCoverageStoreByName("arcGrid"));
-        
+
         assertThatBoth(
                 sc.getFeatureTypes(),
                 sc.list(FeatureTypeInfo.class, Predicates.acceptAll()),
@@ -94,9 +94,9 @@ public class SecureCatalogImplTest extends AbstractAuthorizationTest {
 
     @Test
     public void testLockedDown() throws Exception {
-        
+
         buildManager("lockedDown.properties");
-        
+
         // try with read only user
         SecurityContextHolder.getContext().setAuthentication(roUser);
         assertNull(sc.getFeatureTypeByName("topp:states"));
@@ -107,7 +107,7 @@ public class SecureCatalogImplTest extends AbstractAuthorizationTest {
         assertNull(sc.getDataStoreByName("states"));
         assertNull(sc.getDataStoreByName("roads"));
         assertNull(sc.getCoverageStoreByName("arcGrid"));
-        
+
         assertThatBoth(
                 sc.getFeatureTypes(),
                 sc.list(FeatureTypeInfo.class, Predicates.acceptAll()),
@@ -131,7 +131,7 @@ public class SecureCatalogImplTest extends AbstractAuthorizationTest {
         assertSame(statesStore, sc.getDataStoreByName("states"));
         assertSame(roadsStore, sc.getDataStoreByName("roads"));
         assertSame(arcGridStore, sc.getCoverageStoreByName("arcGrid"));
-        
+
         assertThatBoth(
                 sc.getFeatureTypes(),
                 sc.list(FeatureTypeInfo.class, Predicates.acceptAll()),
@@ -145,7 +145,7 @@ public class SecureCatalogImplTest extends AbstractAuthorizationTest {
                 sc.list(WorkspaceInfo.class, Predicates.acceptAll()),
                 equalTo(workspaces));
     }
-    
+
     @Test
     public void testLockedChallenge() throws Exception {
 
@@ -158,75 +158,75 @@ public class SecureCatalogImplTest extends AbstractAuthorizationTest {
         try {
             sc.getFeatureTypeByName("topp:states").getFeatureSource(null, null);
             fail("Should have failed with a security exception");
-        } catch(Exception e) {
-            if (ReadOnlyDataStoreTest.isSpringSecurityException(e)==false)
+        } catch (Exception e) {
+            if (ReadOnlyDataStoreTest.isSpringSecurityException(e) == false)
                 fail("Should have failed with a security exception");
         }
         try {
             sc.getCoverageByName("nurc:arcgrid").getGridCoverage(null, null);
             fail("Should have failed with a security exception");
-        } catch(Exception e) {
-            if (ReadOnlyDataStoreTest.isSpringSecurityException(e)==false)
+        } catch (Exception e) {
+            if (ReadOnlyDataStoreTest.isSpringSecurityException(e) == false)
                 fail("Should have failed with a security exception");
 
         }
         try {
             sc.getResourceByName("topp:states", FeatureTypeInfo.class).getFeatureSource(null, null);
             fail("Should have failed with a security exception");
-        } catch(Exception e) {
-            if (ReadOnlyDataStoreTest.isSpringSecurityException(e)==false)
+        } catch (Exception e) {
+            if (ReadOnlyDataStoreTest.isSpringSecurityException(e) == false)
                 fail("Should have failed with a security exception");
         }
         try {
             sc.getResourceByName("nurc:arcgrid", CoverageInfo.class).getGridCoverage(null, null);
             fail("Should have failed with a security exception");
-        } catch(Exception e) {
-            if (ReadOnlyDataStoreTest.isSpringSecurityException(e)==false)
+        } catch (Exception e) {
+            if (ReadOnlyDataStoreTest.isSpringSecurityException(e) == false)
                 fail("Should have failed with a security exception");
         }
         sc.getWorkspaceByName("topp");
         try {
             sc.getDataStoreByName("states").getDataStore(null);
             fail("Should have failed with a security exception");
-        } catch(Exception e) {
-            if (ReadOnlyDataStoreTest.isSpringSecurityException(e)==false)
+        } catch (Exception e) {
+            if (ReadOnlyDataStoreTest.isSpringSecurityException(e) == false)
                 fail("Should have failed with a security exception");
         }
         try {
             sc.getDataStoreByName("roads").getDataStore(null);
             fail("Should have failed with a security exception");
-        } catch(Exception e) {
-            if (ReadOnlyDataStoreTest.isSpringSecurityException(e)==false)
+        } catch (Exception e) {
+            if (ReadOnlyDataStoreTest.isSpringSecurityException(e) == false)
                 fail("Should have failed with a security exception");
         }
         try {
             sc.getCoverageStoreByName("arcGrid").getFormat();
             fail("Should have failed with a security exception");
-        } catch(Exception e) {
-            if (ReadOnlyDataStoreTest.isSpringSecurityException(e)==false)
+        } catch (Exception e) {
+            if (ReadOnlyDataStoreTest.isSpringSecurityException(e) == false)
                 fail("Should have failed with a security exception");
         }
-        
+
         // check we still get the lists out so that capabilities can be built
-        
+
         assertThatBoth(
                 sc.getFeatureTypes(),
                 sc.list(FeatureTypeInfo.class, Predicates.acceptAll()),
-                
-                allOf((Matcher)hasSize(featureTypes.size()),
-                  (Matcher)everyItem(Matchers.<FeatureTypeInfo>instanceOf(SecuredFeatureTypeInfo.class))));
+
+                allOf((Matcher) hasSize(featureTypes.size()),
+                        (Matcher) everyItem(Matchers.<FeatureTypeInfo>instanceOf(SecuredFeatureTypeInfo.class))));
 
         assertThatBoth(
                 sc.getCoverages(),
                 sc.list(CoverageInfo.class, Predicates.acceptAll()),
-               
-                allOf((Matcher)hasSize(coverages.size()),
-                  (Matcher)everyItem(Matchers.<CoverageInfo>instanceOf(SecuredCoverageInfo.class))));
+
+                allOf((Matcher) hasSize(coverages.size()),
+                        (Matcher) everyItem(Matchers.<CoverageInfo>instanceOf(SecuredCoverageInfo.class))));
 
         assertThatBoth(
                 sc.getWorkspaces(),
                 sc.list(WorkspaceInfo.class, Predicates.acceptAll()),
-                
+
                 equalTo(workspaces));
 
         // try with write enabled user
@@ -239,7 +239,7 @@ public class SecureCatalogImplTest extends AbstractAuthorizationTest {
         assertSame(statesStore, sc.getDataStoreByName("states"));
         assertSame(roadsStore, sc.getDataStoreByName("roads"));
         assertSame(arcGridStore, sc.getCoverageStoreByName("arcGrid"));
-        
+
         assertThatBoth(
                 sc.getFeatureTypes(),
                 sc.list(FeatureTypeInfo.class, Predicates.acceptAll()),
@@ -253,10 +253,10 @@ public class SecureCatalogImplTest extends AbstractAuthorizationTest {
                 sc.list(WorkspaceInfo.class, Predicates.acceptAll()),
                 equalTo(workspaces));
     }
-    
+
     @Test
     public void testLockedMixed() throws Exception {
-        
+
         buildManager("lockedDownMixed.properties");
 
         // try with read only user and GetFeatures request
@@ -270,66 +270,66 @@ public class SecureCatalogImplTest extends AbstractAuthorizationTest {
         try {
             sc.getFeatureTypeByName("topp:states");
             fail("Should have failed with a security exception");
-        } catch(Exception e) {
-            if (ReadOnlyDataStoreTest.isSpringSecurityException(e)==false)
+        } catch (Exception e) {
+            if (ReadOnlyDataStoreTest.isSpringSecurityException(e) == false)
                 fail("Should have failed with a security exception");
         }
         try {
             sc.getCoverageByName("nurc:arcgrid");
             fail("Should have failed with a security exception");
-        } catch(Exception e) {
-            if (ReadOnlyDataStoreTest.isSpringSecurityException(e)==false)
+        } catch (Exception e) {
+            if (ReadOnlyDataStoreTest.isSpringSecurityException(e) == false)
                 fail("Should have failed with a security exception");
         }
         try {
             sc.getResourceByName("topp:states", FeatureTypeInfo.class);
             fail("Should have failed with a security exception");
-        } catch(Exception e) {
-            if (ReadOnlyDataStoreTest.isSpringSecurityException(e)==false)
+        } catch (Exception e) {
+            if (ReadOnlyDataStoreTest.isSpringSecurityException(e) == false)
                 fail("Should have failed with a security exception");
         }
         try {
             sc.getResourceByName("nurc:arcgrid", CoverageInfo.class);
             fail("Should have failed with a security exception");
-        } catch(Exception e) {
-            if (ReadOnlyDataStoreTest.isSpringSecurityException(e)==false)
+        } catch (Exception e) {
+            if (ReadOnlyDataStoreTest.isSpringSecurityException(e) == false)
                 fail("Should have failed with a security exception");
         }
         try {
             sc.getWorkspaceByName("topp");
             fail("Should have failed with a security exception");
-        } catch(Exception e) {
-            if (ReadOnlyDataStoreTest.isSpringSecurityException(e)==false)
+        } catch (Exception e) {
+            if (ReadOnlyDataStoreTest.isSpringSecurityException(e) == false)
                 fail("Should have failed with a security exception");
         }
         try {
             sc.getDataStoreByName("states");
             fail("Should have failed with a security exception");
-        } catch(Exception e) {
-            if (ReadOnlyDataStoreTest.isSpringSecurityException(e)==false)
+        } catch (Exception e) {
+            if (ReadOnlyDataStoreTest.isSpringSecurityException(e) == false)
                 fail("Should have failed with a security exception");
         }
         try {
             sc.getDataStoreByName("roads");
             fail("Should have failed with a security exception");
-        } catch(Exception e) {
-            if (ReadOnlyDataStoreTest.isSpringSecurityException(e)==false)
+        } catch (Exception e) {
+            if (ReadOnlyDataStoreTest.isSpringSecurityException(e) == false)
                 fail("Should have failed with a security exception");
         }
         try {
             sc.getCoverageStoreByName("arcGrid");
             fail("Should have failed with a security exception");
-        } catch(Exception e) {
-            if (ReadOnlyDataStoreTest.isSpringSecurityException(e)==false)
+        } catch (Exception e) {
+            if (ReadOnlyDataStoreTest.isSpringSecurityException(e) == false)
                 fail("Should have failed with a security exception");
         }
-        
+
         // try with a getCapabilities, make sure the lists are empty
         request = org.easymock.classextension.EasyMock.createNiceMock(Request.class);
         org.easymock.classextension.EasyMock.expect(request.getRequest()).andReturn("GetCapabilities").anyTimes();
         org.easymock.classextension.EasyMock.replay(request);
         Dispatcher.REQUEST.set(request);
-        
+
         // check the lists used to build capabilities are empty
         assertThatBoth(
                 sc.getFeatureTypes(),
@@ -343,8 +343,7 @@ public class SecureCatalogImplTest extends AbstractAuthorizationTest {
                 sc.getWorkspaces(),
                 sc.list(WorkspaceInfo.class, Predicates.acceptAll()),
                 empty());
-        
-        
+
 
         // try with write enabled user
         SecurityContextHolder.getContext().setAuthentication(rwUser);
@@ -356,7 +355,7 @@ public class SecureCatalogImplTest extends AbstractAuthorizationTest {
         assertSame(statesStore, sc.getDataStoreByName("states"));
         assertSame(roadsStore, sc.getDataStoreByName("roads"));
         assertSame(arcGridStore, sc.getCoverageStoreByName("arcGrid"));
-        
+
         assertThatBoth(
                 sc.getFeatureTypes(),
                 sc.list(FeatureTypeInfo.class, Predicates.acceptAll()),
@@ -373,7 +372,7 @@ public class SecureCatalogImplTest extends AbstractAuthorizationTest {
 
     @Test
     public void testPublicRead() throws Exception {
-        
+
         buildManager("publicRead.properties");
 
         // try with read only user
@@ -386,18 +385,18 @@ public class SecureCatalogImplTest extends AbstractAuthorizationTest {
         assertNotNull(sc.getFeatureTypeByName("topp:states"));
         assertTrue(sc.getFeatureTypeByName("topp:states") instanceof SecuredFeatureTypeInfo);
         assertTrue(sc.getResourceByName("topp:states", FeatureTypeInfo.class) instanceof SecuredFeatureTypeInfo);
-        
+
         assertThatBoth(sc.getFeatureTypes(),
-              sc.list(FeatureTypeInfo.class, Predicates.acceptAll()),
-              allOf((Matcher)hasSize(featureTypes.size()),
-                (Matcher)everyItem(Matchers.<FeatureTypeInfo>instanceOf(SecuredFeatureTypeInfo.class))));
+                sc.list(FeatureTypeInfo.class, Predicates.acceptAll()),
+                allOf((Matcher) hasSize(featureTypes.size()),
+                        (Matcher) everyItem(Matchers.<FeatureTypeInfo>instanceOf(SecuredFeatureTypeInfo.class))));
         assertThatBoth(sc.getCoverages(),
-              sc.list(CoverageInfo.class, Predicates.acceptAll()),
-              equalTo(coverages));
+                sc.list(CoverageInfo.class, Predicates.acceptAll()),
+                equalTo(coverages));
         assertThatBoth(sc.getWorkspaces(),
-              sc.list(WorkspaceInfo.class, Predicates.acceptAll()),
-              equalTo(workspaces));
-       
+                sc.list(WorkspaceInfo.class, Predicates.acceptAll()),
+                equalTo(workspaces));
+
         assertNotNull(sc.getLayerByName("topp:states"));
         assertTrue(sc.getLayerByName("topp:states") instanceof SecuredLayerInfo);
         assertTrue(sc.getDataStoreByName("states") instanceof SecuredDataStoreInfo);
@@ -492,7 +491,7 @@ public class SecureCatalogImplTest extends AbstractAuthorizationTest {
 
     @Test
     public void testComplex() throws Exception {
-        
+
         buildManager("complex.properties");
 
         // try with anonymous user
@@ -539,59 +538,59 @@ public class SecureCatalogImplTest extends AbstractAuthorizationTest {
     }
 
     @Test
-    public void testLockedLayerInGroupMustNotHideGroup() throws Exception {        
-        
+    public void testLockedLayerInGroupMustNotHideGroup() throws Exception {
+
         buildManager("lockedLayerInLayerGroup.properties");
-        
-        
+
+
         SecurityContextHolder.getContext().setAuthentication(rwUser);
         assertSame(states, sc.getFeatureTypeByName("topp:states"));
         assertSame(roads, sc.getFeatureTypeByName("topp:roads"));
-        LayerGroupInfo layerGroup = sc.getLayerGroupByName("topp", "layerGroupWithSomeLockedLayer");        
+        LayerGroupInfo layerGroup = sc.getLayerGroupByName("topp", "layerGroupWithSomeLockedLayer");
         assertEquals(2, layerGroup.getLayers().size());
-        
+
         // try with read-only user, not empty LayerGroup should be returned
         SecurityContextHolder.getContext().setAuthentication(roUser);
         assertNull(sc.getFeatureTypeByName("topp:states"));
         assertSame(roads, sc.getFeatureTypeByName("topp:roads"));
-        layerGroup = sc.getLayerGroupByName("topp", "layerGroupWithSomeLockedLayer");                
+        layerGroup = sc.getLayerGroupByName("topp", "layerGroupWithSomeLockedLayer");
         assertNotNull(layerGroup);
         assertTrue(layerGroup instanceof SecuredLayerGroupInfo);
         assertEquals(1, layerGroup.getLayers().size());
-        
+
         // try with anonymous user, empty LayerGroup should be returned
         SecurityContextHolder.getContext().setAuthentication(anonymous);
         assertNull(sc.getFeatureTypeByName("topp:states"));
         assertNull(sc.getFeatureTypeByName("topp:roads"));
-        layerGroup = sc.getLayerGroupByName("topp", "layerGroupWithSomeLockedLayer");                
+        layerGroup = sc.getLayerGroupByName("topp", "layerGroupWithSomeLockedLayer");
         assertNotNull(layerGroup);
         assertTrue(layerGroup instanceof SecuredLayerGroupInfo);
         assertEquals(0, layerGroup.getLayers().size());
-    }        
-    
+    }
+
     @Test
     public void testEoLayerGroupMustBeHiddenIfItsRootLayerIsHidden() throws Exception {
         LayerGroupInfo eoRoadsLayerGroup = buildEOLayerGroup("eoRoadsLayerGroup", roadsLayer, lineStyle, toppWs, statesLayer);
         LayerGroupInfo eoStatesLayerGroup = buildEOLayerGroup("eoStatesLayerGroup", statesLayer, lineStyle, toppWs, roadsLayer);
-        
+
         Catalog eoCatalog = createNiceMock(Catalog.class);
         expect(eoCatalog.getLayerGroupByName("topp", eoRoadsLayerGroup.getName())).andReturn(eoRoadsLayerGroup).anyTimes();
         expect(eoCatalog.getLayerGroupByName("topp", eoStatesLayerGroup.getName())).andReturn(eoStatesLayerGroup).anyTimes();
         expect(eoCatalog.getLayerGroups()).andReturn(Arrays.asList(eoRoadsLayerGroup, eoStatesLayerGroup));
         expect(eoCatalog.list(eq(LayerGroupInfo.class), anyObject(Filter.class))).
-        	andReturn(new CloseableIteratorAdapter<LayerGroupInfo>(Collections.emptyIterator())).anyTimes();
+                andReturn(new CloseableIteratorAdapter<LayerGroupInfo>(Collections.emptyIterator())).anyTimes();
         replay(eoCatalog);
         this.catalog = eoCatalog;
         extensions.singleton("catalog", eoCatalog, Catalog.class);
-        
+
         buildManager("lockedLayerInLayerGroup.properties");
         SecurityContextHolder.getContext().setAuthentication(roUser);
-        
+
         // if root layer is not hidden
         LayerGroupInfo layerGroup = sc.getLayerGroupByName("topp", "eoRoadsLayerGroup");
         assertNotNull(layerGroup);
         assertNotNull(layerGroup.getRootLayer());
-        
+
         // if root layer is hidden
         layerGroup = sc.getLayerGroupByName("topp", "eoStatesLayerGroup");
         assertNull(layerGroup);
@@ -1288,17 +1287,17 @@ public class SecureCatalogImplTest extends AbstractAuthorizationTest {
         }
         return resourceManager;
     }
-    
+
     static <T> void assertThatBoth(List<T> result1, CloseableIterator<T> result2, Matcher<?> expected) throws IOException {
-        assertThat(result1, (Matcher<List<T>>)expected);
-        assertThat(collectAndClose(result2), (Matcher<List<T>>)expected);
+        assertThat(result1, (Matcher<List<T>>) expected);
+        assertThat(collectAndClose(result2), (Matcher<List<T>>) expected);
     }
-    
+
     static <T> List<T> collectAndClose(CloseableIterator<T> it) throws IOException {
-        if(it==null) return null;
+        if (it == null) return null;
         try {
             LinkedList<T> list = new LinkedList<T>();
-            while(it.hasNext()) {
+            while (it.hasNext()) {
                 list.add(it.next());
             }
             return list;
@@ -1307,17 +1306,17 @@ public class SecureCatalogImplTest extends AbstractAuthorizationTest {
         }
     }
 
-    static class PredicateFilter implements Predicate<CatalogInfo>{
-        
+    static class PredicateFilter implements Predicate<CatalogInfo> {
+
         private Filter f;
-        
-        public PredicateFilter(Filter f){
+
+        public PredicateFilter(Filter f) {
             this.f = f;
         }
 
         @Override
         public boolean apply(@Nullable CatalogInfo input) {
-            if(input != null){
+            if (input != null) {
                 return f.evaluate(input);
             }
             return false;
@@ -1367,7 +1366,7 @@ public class SecureCatalogImplTest extends AbstractAuthorizationTest {
         assertThat(wmtsLayerInfo.getResource(), not(instanceOf(SecuredWMTSLayerInfo.class)));
         assertThat(wmtsLayerInfo.getResource(), instanceOf(WMTSLayerInfo.class));
     }
-    
+
     @Test
     public void testWmsNamedTreeAMilitaryOnly() throws Exception {
         // prepare the stage
@@ -1408,7 +1407,7 @@ public class SecureCatalogImplTest extends AbstractAuthorizationTest {
         assertEquals(statesLayer.prefixedName(), securedSingleGroup.layers().get(0).prefixedName());
         assertEquals(basesLayer.prefixedName(), securedSingleGroup.layers().get(1).prefixedName());
     }
-    
+
     @Test
     public void testWmsNamedTreeAMilitaryOnlyGroupContents() throws Exception {
         // prepare the stage
@@ -1431,7 +1430,7 @@ public class SecureCatalogImplTest extends AbstractAuthorizationTest {
         assertEquals("nurc-cities-style", styles.get(1).getName());
 
     }
-    
+
     @Test
     public void testWfsNamedTreeAMilitaryOnly() throws Exception {
         // prepare the stage, this time for a WFS test, the containment rules won't apply anymore
@@ -1474,7 +1473,7 @@ public class SecureCatalogImplTest extends AbstractAuthorizationTest {
         assertEquals(statesLayer.prefixedName(), securedSingleGroup.layers().get(0).prefixedName());
         assertEquals(basesLayer.prefixedName(), securedSingleGroup.layers().get(1).prefixedName());
     }
-    
+
     @Test
     public void testWmsContainerTreeBMilitaryOnly() throws Exception {
         // prepare the stage
@@ -1514,7 +1513,7 @@ public class SecureCatalogImplTest extends AbstractAuthorizationTest {
         assertEquals(statesLayer.prefixedName(), securedSingleGroup.layers().get(0).prefixedName());
         assertEquals(basesLayer.prefixedName(), securedSingleGroup.layers().get(1).prefixedName());
     }
-    
+
     @Test
     public void testWmsBothGroupABMilitaryOnlyMilitaryOnly() throws Exception {
         // prepare the stage
@@ -1554,7 +1553,7 @@ public class SecureCatalogImplTest extends AbstractAuthorizationTest {
         assertEquals(statesLayer.prefixedName(), securedSingleGroup.layers().get(0).prefixedName());
         assertEquals(basesLayer.prefixedName(), securedSingleGroup.layers().get(1).prefixedName());
     }
-    
+
     @Test
     public void testWmsSingleGroupCMilitaryOnly() throws Exception {
         // prepare the stage
@@ -1573,7 +1572,7 @@ public class SecureCatalogImplTest extends AbstractAuthorizationTest {
         // check the single group is not available, but its extra layer is
         assertNull(sc.getLayerGroupByName(singleGroupC.prefixedName()));
         assertNotNull(sc.getLayerByName(basesLayer.prefixedName()));
-        
+
         // check the mil user sees everything instead
         SecurityContextHolder.getContext().setAuthentication(milUser);
         assertNotNull(sc.getFeatureTypeByName("topp:states"));
@@ -1587,7 +1586,7 @@ public class SecureCatalogImplTest extends AbstractAuthorizationTest {
         assertEquals(statesLayer.prefixedName(), securedSingleGroup.layers().get(0).prefixedName());
         assertEquals(basesLayer.prefixedName(), securedSingleGroup.layers().get(1).prefixedName());
     }
-    
+
     @Test
     public void testWmsWsContainerGroupDMilitaryOnly() throws Exception {
         // prepare the stage
@@ -1609,7 +1608,7 @@ public class SecureCatalogImplTest extends AbstractAuthorizationTest {
         // the ws specific group is not available instead, nor its contained layers
         assertNull(sc.getLayerGroupByName("nurc", "wsContainerD"));
         assertNull(sc.getLayerByName(arcGridLayer.prefixedName()));
-        
+
         // check the mil user sees everything instead
         SecurityContextHolder.getContext().setAuthentication(milUser);
         assertNotNull(sc.getFeatureTypeByName("topp:states"));
@@ -1627,7 +1626,7 @@ public class SecureCatalogImplTest extends AbstractAuthorizationTest {
         assertEquals(1, wsSpecificGroup.getLayers().size());
         assertNotNull(sc.getLayerByName(arcGridLayer.prefixedName()));
     }
-    
+
     @Test
     public void testWMSLayerGroupAllowsAccess() throws Exception {
         // prepare the stage
@@ -1650,7 +1649,7 @@ public class SecureCatalogImplTest extends AbstractAuthorizationTest {
         assertNull(sc.getLayerGroupByName("nurc", "wsContainerD"));
         assertNull(sc.getLayerByName(arcGridLayer.prefixedName()));
     }
-    
+
     @Test
     public void testWMSLayerGroupAllowLayerOverride() throws Exception {
         // prepare the stage
@@ -1674,7 +1673,7 @@ public class SecureCatalogImplTest extends AbstractAuthorizationTest {
         assertNull(sc.getLayerGroupByName("nurc", "wsContainerD"));
         assertNull(sc.getLayerByName(arcGridLayer.prefixedName()));
     }
-    
+
     @Test
     public void testWMSLayerGroupAllowWorkspaceOverride() throws Exception {
         // prepare the stage
@@ -1697,7 +1696,7 @@ public class SecureCatalogImplTest extends AbstractAuthorizationTest {
         assertNull(sc.getLayerGroupByName("nurc", "wsContainerD"));
         assertNull(sc.getLayerByName(arcGridLayer.prefixedName()));
     }
-    
+
     @Test
     public void testWMSLayerGroupDenyWSAllow() throws Exception {
         // prepare the stage
@@ -1721,5 +1720,5 @@ public class SecureCatalogImplTest extends AbstractAuthorizationTest {
         assertNotNull(sc.getLayerGroupByName("nurc", "wsContainerD"));
         assertNotNull(sc.getLayerByName(arcGridLayer.prefixedName()));
     }
-        
+
 }

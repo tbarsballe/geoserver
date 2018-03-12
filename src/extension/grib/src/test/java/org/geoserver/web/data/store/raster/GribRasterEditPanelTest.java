@@ -23,8 +23,8 @@ import org.geotools.coverage.io.grib.GRIBFormat;
 import org.junit.Test;
 
 public class GribRasterEditPanelTest extends GeoServerWicketTestSupport {
-    
-    
+
+
     protected static QName SAMPLE_GRIB = new QName(MockData.SF_URI, "sampleGrib",
             MockData.SF_PREFIX);
 
@@ -33,7 +33,7 @@ public class GribRasterEditPanelTest extends GeoServerWicketTestSupport {
         super.setUpTestData(testData);
         testData.setUpRasterLayer(SAMPLE_GRIB, "test-data/sampleGrib.grb2", null, null, GribDataTest.class);
     }
-    
+
     @Test
     public void testGribCreate() throws Exception {
         Page page = tester.startPage(new CoverageStoreNewPage(new GRIBFormat().getName()));
@@ -42,7 +42,7 @@ public class GribRasterEditPanelTest extends GeoServerWicketTestSupport {
         Component editor = tester.getComponentFromLastRenderedPage("rasterStoreForm:parametersPanel");
         assertThat(editor, instanceOf(GribRasterEditPanel.class));
     }
-    
+
     @Test
     public void testGribEdit() throws Exception {
         CoverageStoreInfo store = getCatalog().getCoverageStoreByName(SAMPLE_GRIB.getPrefix(), SAMPLE_GRIB.getLocalPart());

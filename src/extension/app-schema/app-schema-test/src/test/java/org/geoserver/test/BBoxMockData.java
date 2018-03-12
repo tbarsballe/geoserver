@@ -10,9 +10,9 @@ import org.geoserver.data.test.MockData;
 
 /**
  * Mock data for testing SRS encoding in app-schema {@link SRSWfsTest}
- * 
+ * <p>
  * Inspired by {@link MockData}.
- * 
+ *
  * @author Derrick Wong, Curtin University of Technology
  */
 public class BBoxMockData extends AbstractAppSchemaMockData {

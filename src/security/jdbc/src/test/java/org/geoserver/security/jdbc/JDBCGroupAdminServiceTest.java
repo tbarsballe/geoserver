@@ -34,13 +34,13 @@ public class JDBCGroupAdminServiceTest extends GroupAdminServiceTest {
 //        ugStore.store();
 //        roleStore.store();
 //    }
-    
+
     @After
     public void rollback() throws Exception {
-        if (ugStore!=null) ugStore.load();
-        if (roleStore!=null) roleStore.load();
+        if (ugStore != null) ugStore.load();
+        if (roleStore != null) roleStore.load();
     }
-    
+
 //    @AfterClass
 //    public void dropTables() throws Exception {
 //       
@@ -55,7 +55,7 @@ public class JDBCGroupAdminServiceTest extends GroupAdminServiceTest {
 
     @Override
     public GeoServerUserGroupService createUserGroupService(String name) throws Exception {
-        JDBCUserGroupService service = (JDBCUserGroupService) 
+        JDBCUserGroupService service = (JDBCUserGroupService)
                 JDBCTestSupport.createH2UserGroupService(name, getSecurityManager());
         if (!service.tablesAlreadyCreated()) {
             service.createTables();
@@ -66,8 +66,8 @@ public class JDBCGroupAdminServiceTest extends GroupAdminServiceTest {
 
     @Override
     public GeoServerRoleService createRoleService(String name) throws Exception {
-        JDBCRoleService service = 
-            (JDBCRoleService) JDBCTestSupport.createH2RoleService(name, getSecurityManager());
+        JDBCRoleService service =
+                (JDBCRoleService) JDBCTestSupport.createH2RoleService(name, getSecurityManager());
         if (!service.tablesAlreadyCreated()) {
             service.createTables();
         }
@@ -77,34 +77,34 @@ public class JDBCGroupAdminServiceTest extends GroupAdminServiceTest {
         getSecurityManager().saveRoleService(gaConfig);
         return getSecurityManager().loadRoleService(name);
     }
-    
+
     @Override
     public GeoServerRoleStore createStore(GeoServerRoleService service) throws IOException {
-        JDBCRoleStore store = 
-            (JDBCRoleStore) super.createStore(service);
+        JDBCRoleStore store =
+                (JDBCRoleStore) super.createStore(service);
         try {
-            JDBCTestSupport.dropExistingTables(store,store.getConnection());
+            JDBCTestSupport.dropExistingTables(store, store.getConnection());
         } catch (SQLException e) {
             throw new IOException(e);
         }
         store.createTables();
         store.store();
-        
-        return store;        
+
+        return store;
     }
 
     @Override
     public GeoServerUserGroupStore createStore(GeoServerUserGroupService service) throws IOException {
-        JDBCUserGroupStore store = 
-            (JDBCUserGroupStore) super.createStore(service);
+        JDBCUserGroupStore store =
+                (JDBCUserGroupStore) super.createStore(service);
         try {
-            JDBCTestSupport.dropExistingTables(store,store.getConnection());
+            JDBCTestSupport.dropExistingTables(store, store.getConnection());
         } catch (SQLException e) {
             throw new IOException(e);
         }
         store.createTables();
         store.store();
-        return store;        
+        return store;
     }
 
 }

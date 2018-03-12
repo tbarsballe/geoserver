@@ -19,9 +19,12 @@ import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 
 import junit.framework.TestCase;
+
 import static org.easymock.EasyMock.*;
+
 import org.geoserver.catalog.DataLinkInfo;
 import org.geoserver.catalog.impl.DataLinkInfoImpl;
+
 import static org.junit.Assert.*;
 
 public class ResponseUtilsTest {
@@ -30,11 +33,11 @@ public class ResponseUtilsTest {
         SettingsInfo settings = createNiceMock(SettingsInfo.class);
         expect(settings.getProxyBaseUrl()).andReturn(proxyBaseUrl).anyTimes();
         replay(settings);
-        
+
         GeoServer geoServer = createNiceMock(GeoServer.class);
         expect(geoServer.getSettings()).andReturn(settings).anyTimes();
         replay(geoServer);
-        
+
         ProxifyingURLMangler mangler = new ProxifyingURLMangler(geoServer);
         ApplicationContext appContext = createNiceMock(ApplicationContext.class);
         expect(appContext.getBeanNamesForType(URLMangler.class)).andReturn(new String[]{"mangler"});

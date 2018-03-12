@@ -14,9 +14,8 @@ import org.apache.commons.lang.StringUtils;
 
 /**
  * Class storing a linetype description.
- * 
- * @author Mauro Bartolomeoli, mbarto@infosia.it
  *
+ * @author Mauro Bartolomeoli, mbarto@infosia.it
  */
 public class LineType {
     String name = "";
@@ -33,7 +32,6 @@ public class LineType {
 
     /**
      * Gets the DXF name of the line type.
-     *
      */
     public String getName() {
         return name;
@@ -41,6 +39,7 @@ public class LineType {
 
     /**
      * Sets DXF name of the line type.
+     *
      * @param name
      */
     public void setName(String name) {
@@ -49,7 +48,6 @@ public class LineType {
 
     /**
      * Gets the pattern description for the line type.
-     *
      */
     public String getDescription() {
         return description;
@@ -57,6 +55,7 @@ public class LineType {
 
     /**
      * Sets the pattern description for the line type.
+     *
      * @param description
      */
     public void setDescription(String description) {
@@ -65,7 +64,6 @@ public class LineType {
 
     /**
      * Gets the pattern items.
-     *
      */
     public LineTypeItem[] getItems() {
         return items;
@@ -73,6 +71,7 @@ public class LineType {
 
     /**
      * Sets the pattern items.
+     *
      * @param items
      */
     public void setItems(LineTypeItem[] items) {
@@ -81,7 +80,6 @@ public class LineType {
 
     /**
      * Gets the complete length of the pattern.
-     *
      */
     public double getLength() {
         double len = 0.0;
@@ -93,14 +91,14 @@ public class LineType {
     /**
      * Parse a line type descriptor and returns
      * a fully configured LineType object.
-     * A descriptor has the following format: <name>!<repeatable pattern>[!<base length>], where 
- *    <name> is the name assigned to the line type, <base length> (optional) 
- *    is a real number that tells how long is each part of the line pattern 
- *    (defaults to 0.125), and <repeatable pattern> is a visual description
- *    of the repeatable part of the line pattern, as a sequence of - (solid line),
- *    * (dot) and _ (empty space).
-     * @param ltype 
+     * A descriptor has the following format: <name>!<repeatable pattern>[!<base length>], where
+     * <name> is the name assigned to the line type, <base length> (optional)
+     * is a real number that tells how long is each part of the line pattern
+     * (defaults to 0.125), and <repeatable pattern> is a visual description
+     * of the repeatable part of the line pattern, as a sequence of - (solid line),
+     * * (dot) and _ (empty space).
      *
+     * @param ltype
      */
     public static LineType parse(String ltype) {
         // split the descriptor in 2/3 parts
@@ -131,7 +129,7 @@ public class LineType {
             }
         }
         LineType result = new LineType(name, description);
-        result.setItems(items.toArray(new LineTypeItem[] {}));
+        result.setItems(items.toArray(new LineTypeItem[]{}));
         return result;
     }
 

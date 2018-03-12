@@ -39,14 +39,14 @@ public class StyleEditPage extends AbstractStylePage {
         String workspace = parameters.get(WORKSPACE).toOptionalString();
 
         StyleInfo si = workspace != null ? getCatalog().getStyleByName(workspace, name) :
-            getCatalog().getStyleByName(name);
+                getCatalog().getStyleByName(name);
 
-        if(si == null) {
+        if (si == null) {
             error(new ParamResourceModel("StyleEditPage.notFound", this, name).getString());
             doReturn(StylePage.class);
             return;
         }
-        
+
         recoverCssStyle(si);
         initPreviewLayer(si);
         initUI(si);
@@ -75,18 +75,18 @@ public class StyleEditPage extends AbstractStylePage {
             }
         }
     }
-    
+
     public StyleEditPage(StyleInfo style) {
         super(style);
     }
-    
+
     @Override
     protected String getTitle() {
         StyleInfo style = styleModel.getObject();
         String styleName = "";
-        if(style != null) {
+        if (style != null) {
             styleName = (style.getWorkspace() == null ? "" : style.getWorkspace().getName() + ":")
-            + style.getName();
+                    + style.getName();
         }
 
         return new ParamResourceModel("title", this, styleName).getString();
@@ -125,11 +125,11 @@ public class StyleEditPage extends AbstractStylePage {
             styleForm.info("Style saved");
             // retrieve sld style for non-sld formatted styles on update
             if ((!SLDHandler.FORMAT.equals(format))) {
-              getCatalog().getResourcePool().getStyle(stylePath);
+                getCatalog().getResourcePool().getStyle(stylePath);
             }
-        } catch( Exception e ) {
+        } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Error occurred saving the style", e);
-            styleForm.error( e );
+            styleForm.error(e);
         }
     }
 }

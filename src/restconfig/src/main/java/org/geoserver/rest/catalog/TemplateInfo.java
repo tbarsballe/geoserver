@@ -18,7 +18,9 @@ public class TemplateInfo {
         name = resource.name();
     }
 
-    /** Resource name of Freemarker Template. */
+    /**
+     * Resource name of Freemarker Template.
+     */
     public String getName() {
         return name;
     }

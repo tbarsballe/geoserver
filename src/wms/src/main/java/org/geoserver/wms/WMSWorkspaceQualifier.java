@@ -53,13 +53,15 @@ public class WMSWorkspaceQualifier extends WorkspaceQualifyingCallback {
     }
 
     protected void qualifyRequest(WorkspaceInfo ws, PublishedInfo l, Operation operation,
-            Request request) {
+                                  Request request) {
         GetCapabilitiesRequest gc = parameter(operation, GetCapabilitiesRequest.class);
         if (gc != null) {
             gc.setNamespace(ws.getName());
             return;
         }
-    };
+    }
+
+    ;
 
     String qualifyLayerNamesKVP(String layers, WorkspaceInfo ws) {
         List<String> list = KvpUtils.readFlat(layers);
@@ -67,7 +69,7 @@ public class WMSWorkspaceQualifier extends WorkspaceQualifyingCallback {
 
         return toCommaSeparatedList(list);
     }
-    
+
     /**
      * Overriding the base class behavior as we want to avoid qualifying global layer group names
      */

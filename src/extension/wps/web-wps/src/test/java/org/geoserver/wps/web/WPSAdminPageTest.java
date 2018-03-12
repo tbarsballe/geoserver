@@ -34,7 +34,7 @@ public class WPSAdminPageTest extends WPSPagesTestSupport {
     @Test
     public void test() throws Exception {
         login();
-        
+
         // start the page
         tester.startPage(new WPSAdminPage());
         // print(tester.getLastRenderedPage(), true, true);
@@ -59,7 +59,7 @@ public class WPSAdminPageTest extends WPSPagesTestSupport {
     @Test
     public void testUpgrade() throws Exception {
         login();
-        
+
         // start the page
         tester.startPage(new WPSAdminPage());
 

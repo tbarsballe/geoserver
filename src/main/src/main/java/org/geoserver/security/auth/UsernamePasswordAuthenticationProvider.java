@@ -29,38 +29,40 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 /**
  * Authentication provider that delegates to a {@link GeoServerUserGroupService}.
- * 
+ *
  * @author Justin Deoliveira, OpenGeo
  */
 public class UsernamePasswordAuthenticationProvider extends GeoServerAuthenticationProvider {
 
-    /** auth provider to delegate to */
+    /**
+     * auth provider to delegate to
+     */
     DaoAuthenticationProvider authProvider;
     String userGroupServiceName;
-    
+
     @Override
     public void initializeFromConfig(SecurityNamedServiceConfig config) throws IOException {
-        UsernamePasswordAuthenticationProviderConfig upAuthConfig = 
+        UsernamePasswordAuthenticationProviderConfig upAuthConfig =
                 (UsernamePasswordAuthenticationProviderConfig) config;
 
-        GeoServerUserGroupService ugService = 
-            getSecurityManager().loadUserGroupService(upAuthConfig.getUserGroupServiceName());
+        GeoServerUserGroupService ugService =
+                getSecurityManager().loadUserGroupService(upAuthConfig.getUserGroupServiceName());
         if (ugService == null) {
-            throw new IllegalArgumentException("Unable to load user group service " 
-                + upAuthConfig.getUserGroupServiceName());
+            throw new IllegalArgumentException("Unable to load user group service "
+                    + upAuthConfig.getUserGroupServiceName());
         }
         userGroupServiceName = upAuthConfig.getUserGroupServiceName();
-        
+
         //create delegate auth provider
         authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(ugService);
-        
+
         //set up the password encoder
         // multiplex password encoder actually allows us to handle all types of passwords for 
         // decoding purposes, regardless of whatever the current one used by the user group service
         // is
         authProvider.setPasswordEncoder(
-            new GeoServerMultiplexingPasswordEncoder(getSecurityManager(),ugService));
+                new GeoServerMultiplexingPasswordEncoder(getSecurityManager(), ugService));
 
         try {
             authProvider.afterPropertiesSet();
@@ -77,7 +79,7 @@ public class UsernamePasswordAuthenticationProvider extends GeoServerAuthenticat
     @Override
     public Authentication authenticate(Authentication authentication, HttpServletRequest request)
             throws AuthenticationException {
-        UsernamePasswordAuthenticationToken  auth = null;
+        UsernamePasswordAuthenticationToken auth = null;
         try {
             auth = (UsernamePasswordAuthenticationToken) authProvider.authenticate(authentication);
         } catch (AuthenticationException ex) {
@@ -87,16 +89,16 @@ public class UsernamePasswordAuthenticationProvider extends GeoServerAuthenticat
         if (auth == null) {
             return null;
         }
-        
+
         if (auth.getDetails() instanceof GeoServerWebAuthenticationDetails) {
             ((GeoServerWebAuthenticationDetails) auth.getDetails()).setUserGroupServiceName(userGroupServiceName);
         }
-        if (auth.getAuthorities().contains(GeoServerRole.AUTHENTICATED_ROLE)==false) {
-            List<GrantedAuthority> roles= new ArrayList<GrantedAuthority>();
+        if (auth.getAuthorities().contains(GeoServerRole.AUTHENTICATED_ROLE) == false) {
+            List<GrantedAuthority> roles = new ArrayList<GrantedAuthority>();
             roles.addAll(auth.getAuthorities());
             roles.add(GeoServerRole.AUTHENTICATED_ROLE);
             UsernamePasswordAuthenticationToken newAuth = new UsernamePasswordAuthenticationToken(
-                    auth.getPrincipal(), auth.getCredentials(),roles);
+                    auth.getPrincipal(), auth.getCredentials(), roles);
             newAuth.setDetails(auth.getDetails());
             return newAuth;
         }

@@ -30,9 +30,8 @@ import org.opengis.filter.expression.Expression;
 
 /**
  * Simple Panel which adds a TextField for setting the ECQL expression for the WorkSpace or Global Settings.
- * 
+ *
  * @author Nicola Lagomarsini Geosolutions S.A.S.
- * 
  */
 public class RESTECQLSettingsPanel extends SettingsPluginPanel {
 
@@ -48,7 +47,7 @@ public class RESTECQLSettingsPanel extends SettingsPluginPanel {
 
         // TextField associated to the root directory to map
         TextArea ecqlexp = new TextArea("ecqlexp", new MetadataMapModel(metadata,
-                RESTUploadECQLPathMapper.EXPRESSION_KEY,String.class));
+                RESTUploadECQLPathMapper.EXPRESSION_KEY, String.class));
         // Addition of the validator
         ecqlexp.add(new IValidator<String>() {
 
@@ -75,28 +74,28 @@ public class RESTECQLSettingsPanel extends SettingsPluginPanel {
                     // Invalid Attributes
                     List<String> invalid = new ArrayList<String>();
                     // Check on the attributes
-                    for(String attribute : attributes){
-                        if(!(attribute.equalsIgnoreCase(RESTUploadECQLPathMapper.PATH) || 
-                                attribute.equalsIgnoreCase(RESTUploadECQLPathMapper.NAME))){
+                    for (String attribute : attributes) {
+                        if (!(attribute.equalsIgnoreCase(RESTUploadECQLPathMapper.PATH) ||
+                                attribute.equalsIgnoreCase(RESTUploadECQLPathMapper.NAME))) {
                             invalid.add(attribute);
                         }
                     }
-                    
-                    //If and only if an invalid attribute is present
-                    if(!invalid.isEmpty()){
-                        
-                      StringBuilder string = new StringBuilder("Invalid Attributes: ");
 
-                        for(String attribute : invalid){
+                    //If and only if an invalid attribute is present
+                    if (!invalid.isEmpty()) {
+
+                        StringBuilder string = new StringBuilder("Invalid Attributes: ");
+
+                        for (String attribute : invalid) {
                             string.append(attribute);
                             string.append(", ");
                         }
-                        
+
                         // Removal of the last 2 characters
                         string.setLength(string.length() - 2);
-                        
+
                         // If invalid attributes have been found, they are reported
-                        error(invalid.toString());  
+                        error(invalid.toString());
                     }
                 }
             }

@@ -17,9 +17,8 @@ import org.vfny.geoserver.wcs.WcsException.WcsExceptionCode;
 
 /**
  * Describe coverage kvp reader TODO: check if this reader class is really necessary
- * 
+ *
  * @author Alessio Fabiani, GeoSolutions
- * 
  */
 public class Wcs10DescribeCoverageKvpRequestReader extends EMFKvpRequestReader {
     private Catalog catalog;

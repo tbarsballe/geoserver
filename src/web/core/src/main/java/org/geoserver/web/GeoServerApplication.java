@@ -65,7 +65,7 @@ import org.springframework.security.authentication.event.InteractiveAuthenticati
  * The GeoServer application, the main entry point for any Wicket application. In particular, this one sets up, among the others, custom resource
  * loader, custom localizers, and custom converters (wrapping the GeoTools ones), as well as providing some convenience methods to access the
  * GeoServer Spring context and principal GeoServer objects.
- * 
+ *
  * @author Andrea Aaime, The Open Planning Project
  * @author Justin Deoliveira, The Open Planning Project
  */
@@ -88,7 +88,7 @@ public class GeoServerApplication extends WebApplication implements ApplicationC
 
     /**
      * Get default redirect mode.
-     * 
+     *
      * @return default redirect mode.
      */
     public boolean isDefaultIsRedirect() {
@@ -96,9 +96,9 @@ public class GeoServerApplication extends WebApplication implements ApplicationC
     }
 
     /**
-     * Set default redirect mode. 
+     * Set default redirect mode.
      * (must be called before init method, usually by Spring PropertyOverriderConfigurer)
-     * 
+     *
      * @param defaultIsRedirect
      */
     public void setDefaultIsRedirect(boolean defaultIsRedirect) {
@@ -156,7 +156,7 @@ public class GeoServerApplication extends WebApplication implements ApplicationC
      * <p>
      * If there are multiple beans of the specfied type in the context an exception is thrown.
      * </p>
-     * 
+     *
      * @param type The class of the bean to return.
      */
     public <T> T getBeanOfType(Class<T> type) {
@@ -165,7 +165,7 @@ public class GeoServerApplication extends WebApplication implements ApplicationC
 
     /**
      * Loads a bean from the spring application context with a specific name.
-     * 
+     *
      * @param type The class of the bean to return.
      */
     public Object getBean(String name) {
@@ -174,9 +174,8 @@ public class GeoServerApplication extends WebApplication implements ApplicationC
 
     /**
      * Loads beans from the spring application context of a specific type.
-     * 
+     *
      * @param type The type of beans to return.
-     * 
      * @return A list of objects of the specified type, possibly empty.
      * @see {@link GeoServerExtensions#extensions(Class, ApplicationContext)}
      */
@@ -224,7 +223,7 @@ public class GeoServerApplication extends WebApplication implements ApplicationC
         // by making the URLs encrypted at will
         GeoServerSecurityManager securityManager = getBeanOfType(GeoServerSecurityManager.class);
         setRootRequestMapper(new DynamicCryptoMapper(getRootRequestMapper(), securityManager, this));
-        
+
         getRequestCycleListeners().add(new CallbackRequestCycleListener(this));
 
         WebUIMode webUIMode = getGeoServer().getGlobal().getWebUIMode();
@@ -232,15 +231,15 @@ public class GeoServerApplication extends WebApplication implements ApplicationC
             webUIMode = WebUIMode.DEFAULT;
         }
         switch (webUIMode) {
-        case DO_NOT_REDIRECT:
-            getRequestCycleSettings().setRenderStrategy(RenderStrategy.ONE_PASS_RENDER);
-            break;
-        case REDIRECT:
-            getRequestCycleSettings().setRenderStrategy(RenderStrategy.REDIRECT_TO_BUFFER);
-            break;
-        case DEFAULT:
-            getRequestCycleSettings().setRenderStrategy(defaultIsRedirect ?
-                    RenderStrategy.REDIRECT_TO_BUFFER : RenderStrategy.ONE_PASS_RENDER);
+            case DO_NOT_REDIRECT:
+                getRequestCycleSettings().setRenderStrategy(RenderStrategy.ONE_PASS_RENDER);
+                break;
+            case REDIRECT:
+                getRequestCycleSettings().setRenderStrategy(RenderStrategy.REDIRECT_TO_BUFFER);
+                break;
+            case DEFAULT:
+                getRequestCycleSettings().setRenderStrategy(defaultIsRedirect ?
+                        RenderStrategy.REDIRECT_TO_BUFFER : RenderStrategy.ONE_PASS_RENDER);
         }
     }
 
@@ -250,7 +249,7 @@ public class GeoServerApplication extends WebApplication implements ApplicationC
         return () -> new DefaultExceptionMapper() {
             @Override
             protected IRequestHandler mapUnexpectedExceptions(Exception e,
-                    Application application) {
+                                                              Application application) {
 
                 return createPageRequestHandler(new PageProvider(new GeoServerErrorPage(e)));
             }
@@ -343,35 +342,35 @@ public class GeoServerApplication extends WebApplication implements ApplicationC
                 callback.onAfterTargetsDetached();
             }
         }
-        
+
         @Override
         public void onRequestHandlerScheduled(RequestCycle cycle, IRequestHandler handler) {
             processHandler(cycle, handler);
         }
 
         private void processHandler(RequestCycle cycle, IRequestHandler handler) {
-            if(handler instanceof IPageRequestHandler) {
+            if (handler instanceof IPageRequestHandler) {
                 IPageRequestHandler pageHandler = (IPageRequestHandler) handler;
                 Class<? extends IRequestablePage> pageClass = pageHandler.getPageClass();
                 for (WicketCallback callback : callbacks) {
                     callback.onRequestTargetSet(cycle, pageClass);
                 }
-            } else if(handler instanceof IRequestHandlerDelegate) {
+            } else if (handler instanceof IRequestHandlerDelegate) {
                 IRequestHandlerDelegate delegator = (IRequestHandlerDelegate) handler;
                 processHandler(cycle, delegator.getDelegateHandler());
             }
-            
+
         }
 
         @Override
         public void onRequestHandlerResolved(org.apache.wicket.request.cycle.RequestCycle cycle,
-                IRequestHandler handler) {
+                                             IRequestHandler handler) {
             processHandler(cycle, handler);
         }
 
         @Override
         public IRequestHandler onException(org.apache.wicket.request.cycle.RequestCycle cycle,
-                Exception ex) {
+                                           Exception ex) {
             for (WicketCallback callback : callbacks) {
                 callback.onRuntimeException(cycle, ex);
             }
@@ -388,7 +387,7 @@ public class GeoServerApplication extends WebApplication implements ApplicationC
     /**
      * Convenience method to get the underlying servlet request backing the current wicket request.
      * <p>
-     *     The request is obtained from the current RequestCycle.
+     * The request is obtained from the current RequestCycle.
      * </p>
      */
     public HttpServletRequest servletRequest() {
@@ -412,11 +411,11 @@ public class GeoServerApplication extends WebApplication implements ApplicationC
     }
 
     public void onApplicationEvent(ApplicationEvent event) {
-        if(event instanceof AuthenticationSuccessEvent || event instanceof InteractiveAuthenticationSuccessEvent) {
-            if(Session.exists()) {
+        if (event instanceof AuthenticationSuccessEvent || event instanceof InteractiveAuthenticationSuccessEvent) {
+            if (Session.exists()) {
                 WebSession.get().replaceSession();
             }
         }
-        
+
     }
 }

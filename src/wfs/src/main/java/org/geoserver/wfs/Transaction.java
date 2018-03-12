@@ -46,7 +46,6 @@ import org.springframework.security.core.userdetails.UserDetails;
  * Web Feature Service Transaction operation.
  *
  * @author Justin Deoliveira, The Open Planning Project
- *
  */
 public class Transaction {
     /**
@@ -69,17 +68,19 @@ public class Transaction {
      */
     protected FilterFactory filterFactory;
 
-    /** Geotools2 transaction used for this opperations */
+    /**
+     * Geotools2 transaction used for this opperations
+     */
     protected org.geotools.data.Transaction transaction;
     protected List<TransactionElementHandler> transactionElementHandlers = new ArrayList<>();
     protected List<TransactionListener> transactionListeners = new ArrayList<>();
     protected List<TransactionPlugin> transactionPlugins = new ArrayList<>();
     protected List<TransactionCallback> transactionPlugins2 = new ArrayList<>();
-    
+
     public Transaction(WFSInfo wfs, Catalog catalog, ApplicationContext context) {
         this.wfs = wfs;
         this.catalog = catalog;
-        
+
         // register element handlers, listeners and plugins
         transactionElementHandlers.addAll(GeoServerExtensions.extensions(TransactionElementHandler.class));
         transactionListeners.addAll(GeoServerExtensions.extensions(TransactionListener.class));
@@ -99,9 +100,9 @@ public class Transaction {
     }
 
     public TransactionResponse transaction(TransactionRequest request)
-        throws WFSException {
+            throws WFSException {
         // make sure server is supporting transactions
-        if (!wfs.getServiceLevel().contains(WFSInfo.ServiceLevel.TRANSACTIONAL) ) {
+        if (!wfs.getServiceLevel().contains(WFSInfo.ServiceLevel.TRANSACTIONAL)) {
             throw new WFSException(request, "Transaction support is not enabled");
         }
 
@@ -118,10 +119,10 @@ public class Transaction {
 
     /**
      * Execute Transaction request.
-     *
+     * <p>
      * <p>
      * The results of this opperation are stored for use by writeTo:
-     *
+     * <p>
      * <ul>
      * <li> transaction: used by abort & writeTo to commit/rollback </li>
      * <li> request: used for users getHandle information to report errors </li>
@@ -129,13 +130,13 @@ public class Transaction {
      * <li> failures: List of failures produced </li>
      * </ul>
      * </p>
-     *
+     * <p>
      * <p>
      * Because we are using geotools2 locking facilities our modification will
      * simply fail with IOException if we have not provided proper
      * authorization.
      * </p>
-     *
+     * <p>
      * <p>
      * The specification allows a WFS to implement PARTIAL sucess if it is
      * unable to rollback all the requested changes. This implementation is able
@@ -144,15 +145,12 @@ public class Transaction {
      * </p>
      *
      * @param transactionRequest
-     *
-     * @throws ServiceException
-     *             DOCUMENT ME!
+     * @throws ServiceException        DOCUMENT ME!
      * @throws WfsException
-     * @throws WfsTransactionException
-     *             DOCUMENT ME!
+     * @throws WfsTransactionException DOCUMENT ME!
      */
     protected TransactionResponse execute(TransactionRequest request)
-        throws Exception {
+            throws Exception {
         // some defaults
         if (request.getReleaseAction() == null) {
             request.setReleaseActionAll();
@@ -192,13 +190,13 @@ public class Transaction {
         //
         // (I am using element rather than transaction sub request
         // to agree with the spec docs)
-        for (Iterator it = elementHandlers.entrySet().iterator(); it.hasNext();) {
+        for (Iterator it = elementHandlers.entrySet().iterator(); it.hasNext(); ) {
             Map.Entry entry = (Map.Entry) it.next();
             TransactionElement element = (TransactionElement) entry.getKey();
             TransactionElementHandler handler = (TransactionElementHandler) entry.getValue();
             Map featureTypeInfos = new HashMap();
 
-            
+
             QName[] typeNames = handler.getTypeNames(request, element);
 
             for (int i = 0; i < typeNames.length; i++) {
@@ -229,7 +227,7 @@ public class Transaction {
 
             // go through all feature type infos data objects, and load feature
             // stores
-            for (Iterator m = featureTypeInfos.values().iterator(); m.hasNext();) {
+            for (Iterator m = featureTypeInfos.values().iterator(); m.hasNext(); ) {
                 FeatureTypeInfo meta = (FeatureTypeInfo) m.next();
                 String typeRef = meta.getStore().getName() + ":" + meta.getName();
 
@@ -243,7 +241,7 @@ public class Transaction {
                 }
 
                 LOGGER.fine("located FeatureType w/ typeRef '" + typeRef + "' and elementName '"
-                    + elementName + "'");
+                        + elementName + "'");
 
                 if (stores.containsKey(elementName)) {
                     // typeName already loaded
@@ -251,7 +249,7 @@ public class Transaction {
                 }
 
                 try {
-                    FeatureSource<? extends FeatureType, ? extends Feature> source = meta.getFeatureSource(null,null);
+                    FeatureSource<? extends FeatureType, ? extends Feature> source = meta.getFeatureSource(null, null);
 
                     if (source instanceof FeatureStore) {
                         FeatureStore<? extends FeatureType, ? extends Feature> store;
@@ -270,7 +268,7 @@ public class Transaction {
                     }
                 } catch (IOException ioException) {
                     String msg = elementName + " is not available: "
-                        + ioException.getLocalizedMessage();
+                            + ioException.getLocalizedMessage();
                     throw new WFSTransactionException(msg, ioException, element.getHandle());
                 }
             }
@@ -281,7 +279,7 @@ public class Transaction {
         String authorizationID = request.getLockId();
 
         if (authorizationID != null) {
-            if (!wfs.getServiceLevel().getOps().contains( WFSInfo.Operation.LOCKFEATURE)) {
+            if (!wfs.getServiceLevel().getOps().contains(WFSInfo.Operation.LOCKFEATURE)) {
                 throw new WFSException(request, "Lock support is not enabled");
             }
 
@@ -289,7 +287,7 @@ public class Transaction {
 
             if (!lockExists(authorizationID)) {
                 String mesg = "Attempting to use a lockID that does not exist"
-                    + ", it has either expired or was entered wrong.";
+                        + ", it has either expired or was entered wrong.";
                 throw new WFSException(request, mesg, "InvalidParameterValue");
             }
 
@@ -299,14 +297,14 @@ public class Transaction {
                 // This is a real failure - not associated with a element
                 //
                 throw new WFSException(request, "Authorization ID '" + authorizationID + "' not useable",
-                    ioException);
+                        ioException);
             }
         }
 
         // result
         TransactionResponse result = request.createResponse();
         result.setHandle(request.getHandle());
-        
+
         // execute elements in order, recording results as we go
         // I will need to record the damaged area for pre commit validation
         // checks
@@ -314,7 +312,7 @@ public class Transaction {
         Exception exception = null;
 
         try {
-            for (Iterator it = elementHandlers.entrySet().iterator(); it.hasNext();) {
+            for (Iterator it = elementHandlers.entrySet().iterator(); it.hasNext(); ) {
                 Map.Entry entry = (Map.Entry) it.next();
                 TransactionElement element = (TransactionElement) entry.getKey();
                 TransactionElementHandler handler = (TransactionElementHandler) entry.getValue();
@@ -329,12 +327,12 @@ public class Transaction {
             //another wfs 2.0 hack, but in the case no lock is specified in the request and the tx
             // is trying to update locked features, we need to use the MissingParameterValue
             if (request.getVersion().startsWith("2") && e.getCause() instanceof FeatureLockException
-                && request.getLockId() == null) {
+                    && request.getLockId() == null) {
                 exception = new WFSTransactionException(e.getMessage(), e, "MissingParameterValue");
             }
 
-            result.addAction(e.getCode() != null ? e.getCode() : "InvalidParameterValue", 
-                e.getLocator(), e.getMessage());
+            result.addAction(e.getCode() != null ? e.getCode() : "InvalidParameterValue",
+                    e.getLocator(), e.getMessage());
         }
 
         // commit
@@ -413,7 +411,7 @@ public class Transaction {
         if (exception != null) {
             //WFS 2.0 wants us to throw the exception
             if (request.getVersion() != null && request.getVersion().startsWith("2")) {
-                if (!(exception instanceof WFSException && ((WFSException)exception).getCode() != null)) {
+                if (!(exception instanceof WFSException && ((WFSException) exception).getCode() != null)) {
                     //wrap to get the default code
                     exception = new WFSException(request, exception);
                 }
@@ -485,10 +483,9 @@ public class Transaction {
      * Looks up the element handlers to be used for each element
      *
      * @param group
-     *
      */
     private Map gatherElementHandlers(TransactionRequest request)
-        throws WFSTransactionException {
+            throws WFSTransactionException {
         //JD: use a linked hashmap since the order of elements in a transaction
         // must be respected
         Map map = new LinkedHashMap();
@@ -506,13 +503,12 @@ public class Transaction {
      * (the one matching the most specialized superclass of type)
      *
      * @param type
-     *
      */
     protected final TransactionElementHandler findElementHandler(Class type)
-        throws WFSTransactionException {
+            throws WFSTransactionException {
         List matches = new ArrayList();
 
-        for (Iterator it = transactionElementHandlers.iterator(); it.hasNext();) {
+        for (Iterator it = transactionElementHandlers.iterator(); it.hasNext(); ) {
             TransactionElementHandler handler = (TransactionElementHandler) it.next();
 
             if (handler.getElementClass().isAssignableFrom(type)) {
@@ -529,17 +525,17 @@ public class Transaction {
         if (matches.size() > 1) {
             // sort by class hierarchy
             Comparator comparator = new Comparator() {
-                    public int compare(Object o1, Object o2) {
-                        TransactionElementHandler h1 = (TransactionElementHandler) o1;
-                        TransactionElementHandler h2 = (TransactionElementHandler) o2;
+                public int compare(Object o1, Object o2) {
+                    TransactionElementHandler h1 = (TransactionElementHandler) o1;
+                    TransactionElementHandler h2 = (TransactionElementHandler) o2;
 
-                        if (h2.getElementClass().isAssignableFrom(h1.getElementClass())) {
-                            return -1;
-                        }
-
-                        return 1;
+                    if (h2.getElementClass().isAssignableFrom(h1.getElementClass())) {
+                        return -1;
                     }
-                };
+
+                    return 1;
+                }
+            };
 
             Collections.sort(matches, comparator);
         }
@@ -559,29 +555,29 @@ public class Transaction {
      * example is a custom authentication module providing extra user information that upon
      * transaction commit can be used by versioning geotools datastore to complete the information
      * required for its records (such as committer full name, email, etc)
-     * 
+     *
      * @return a new geotools transaction
      */
     protected DefaultTransaction getDatastoreTransaction(TransactionRequest request)
-    throws IOException {
+            throws IOException {
         DefaultTransaction transaction = new DefaultTransaction();
         // use handle as the log messages
         String username = "anonymous";
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if(authentication != null) {
+        if (authentication != null) {
             Object principal = authentication.getPrincipal();
-            if(principal instanceof UserDetails) {
-                username = ((UserDetails) principal).getUsername(); 
-            } else if(principal instanceof String) { // OAuth
-            	username = principal.toString();
+            if (principal instanceof UserDetails) {
+                username = ((UserDetails) principal).getUsername();
+            } else if (principal instanceof String) { // OAuth
+                username = principal.toString();
             }
         }
-        
+
         // Ok, this is a hack. We assume there is only one versioning datastore, the postgis one,
         // and that we can the following properties won't hurt transactio processing anyways...
         transaction.putProperty("VersioningCommitAuthor", username);
         transaction.putProperty("VersioningCommitMessage", request.getHandle());
-        
+
         // transfer any tx extended property down to the geotools transaction.
         // TransactionPlugins can contribute such info in their beforeTransaction()
         // implementation
@@ -593,7 +589,7 @@ public class Transaction {
                 transaction.putProperty(propKey, propValue);
             }
         }
-        
+
         return transaction;
     }
 
@@ -642,9 +638,7 @@ public class Transaction {
      * Implement lockExists.
      *
      * @param lockID
-     *
      * @return true if lockID exists
-     *
      * @see org.geotools.data.Data#lockExists(java.lang.String)
      */
     private boolean lockExists(String lockId) throws Exception {
@@ -655,7 +649,7 @@ public class Transaction {
 
     /**
      * Refresh lock by authorization
-     *
+     * <p>
      * <p>
      * Should use your own transaction?
      * </p>
@@ -672,19 +666,18 @@ public class Transaction {
      * registered listeners
      *
      * @author Andrea Aime - TOPP
-     *
      */
     private class TransactionListenerMux implements TransactionListener {
         public void dataStoreChange(List listeners, TransactionEvent event)
-            throws WFSException {
-            for (Iterator it = listeners.iterator(); it.hasNext();) {
+                throws WFSException {
+            for (Iterator it = listeners.iterator(); it.hasNext(); ) {
                 TransactionListener listener = (TransactionListener) it.next();
                 listener.dataStoreChange(event);
             }
         }
 
         public void dataStoreChange(TransactionEvent event)
-            throws WFSException {
+                throws WFSException {
             dataStoreChange(transactionPlugins, event);
             dataStoreChange(transactionListeners, event);
         }

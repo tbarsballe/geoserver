@@ -23,8 +23,8 @@ public class WCSNetCDFBaseTest extends WCSKVPTestSupport {
             FileUtils.deleteDirectory(projectionFileDir);
             assertTrue("Unable to create projection dir: " + projectionFileDir, projectionFileDir.mkdir());
         }
-        testData.copyTo(getClass().getResourceAsStream(netcdfProjectionsDefinition), 
-            "user_projections/" + netcdfProjectionsDefinition);
+        testData.copyTo(getClass().getResourceAsStream(netcdfProjectionsDefinition),
+                "user_projections/" + netcdfProjectionsDefinition);
         final File projectionFile = new File(projectionFileDir, netcdfProjectionsDefinition);
         System.setProperty(NetCDFCRSAuthorityFactory.SYSTEM_DEFAULT_USER_PROJ_FILE, projectionFile.getCanonicalPath());
         testData.copyTo(getClass().getResourceAsStream("reduced-cf-standard-name-table.xml"), "cf-standard-name-table.xml");

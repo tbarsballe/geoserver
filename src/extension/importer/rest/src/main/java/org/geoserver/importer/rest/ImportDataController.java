@@ -32,7 +32,7 @@ public class ImportDataController extends ImportBaseController {
 
     protected ImportJSONWriter converterWriter;
 
-    @GetMapping(value = { "/data", "/tasks/{taskId}/data", })
+    @GetMapping(value = {"/data", "/tasks/{taskId}/data",})
     public ImportData getData(
             @PathVariable Long importId,
             @PathVariable(required = false) Integer taskId) throws Exception {
@@ -57,7 +57,7 @@ public class ImportDataController extends ImportBaseController {
     //We need to force spring to ignore the .shp here (we don't want a .shp encoded response!
     @GetMapping(value = {
             "/data/files", "/tasks/{taskId}/data/files",
-            "/data/files/{fileName:.+}", "/tasks/{taskId}/data/files/{fileName:\\.+}" })
+            "/data/files/{fileName:.+}", "/tasks/{taskId}/data/files/{fileName:\\.+}"})
     public ImportData getDirectory(
             @PathVariable Long importId,
             @PathVariable(required = false) Integer taskId,
@@ -65,15 +65,15 @@ public class ImportDataController extends ImportBaseController {
 
         return getDataImport(importId, fileName);
     }
-            
-    
+
+
     //We need to force spring to ignore the .shp here (we don't want a .shp encoded response!
-    @DeleteMapping(value = {"/data/files/{fileName:.+}", "/tasks/{taskId}/data/files/{fileName:\\.+}" })
+    @DeleteMapping(value = {"/data/files/{fileName:.+}", "/tasks/{taskId}/data/files/{fileName:\\.+}"})
     public ResponseEntity deleteDirectory(
             @PathVariable Long importId,
             @PathVariable(required = false) Integer taskId,
             @PathVariable(required = false) String fileName) throws Exception {
-        
+
         Directory dir = lookupDirectory(importId);
         ImportData file = lookupFile(fileName, dir);
 

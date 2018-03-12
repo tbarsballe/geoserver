@@ -13,7 +13,7 @@ import com.thoughtworks.xstream.XStream;
 /**
  * Initializes the XStream persister to treat the {@link DefaultValueConfigurations} values in the
  * ResourceInfo metadata map
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class DynamicDefaultXStreamInitializer implements XStreamPersisterInitializer {

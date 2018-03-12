@@ -20,16 +20,15 @@ import org.geoserver.wps.WPSInfo;
 
 /**
  * Configure the WPS service global informations
- * 
+ *
  * @author Andrea Aime - GeoSolutions
- * 
  */
 public class WPSAdminPage extends BaseServiceAdminPage<WPSInfo> {
 
     public WPSAdminPage() {
         super();
     }
-    
+
     public WPSAdminPage(WPSInfo service) {
         super(service);
     }
@@ -51,11 +50,11 @@ public class WPSAdminPage extends BaseServiceAdminPage<WPSInfo> {
         TextField<Integer> connectionTimeout = new TextField<Integer>("connectionTimeout", Integer.class);
         connectionTimeout.add(RangeValidator.minimum(-1));
         form.add(connectionTimeout);
-        
+
         TextField<Integer> maxSynchProcesses = new TextField<Integer>("maxSynchronousProcesses", Integer.class);
         maxSynchProcesses.add(RangeValidator.minimum(1));
         form.add(maxSynchProcesses);
-        
+
         TextField<Integer> maxSynchExecutionTime = new TextField<Integer>("maxSynchronousExecutionTime", Integer.class);
         maxSynchExecutionTime.add(RangeValidator.minimum(-1));
         form.add(maxSynchExecutionTime);
@@ -67,7 +66,7 @@ public class WPSAdminPage extends BaseServiceAdminPage<WPSInfo> {
         TextField<Integer> maxAsynchProcesses = new TextField<Integer>("maxAsynchronousProcesses", Integer.class);
         maxAsynchProcesses.add(RangeValidator.minimum(1));
         form.add(maxAsynchProcesses);
-        
+
         TextField<Integer> maxAsynchExecutionTime = new TextField<Integer>("maxAsynchronousExecutionTime", Integer.class);
         maxAsynchExecutionTime.add(RangeValidator.minimum(-1));
         form.add(maxAsynchExecutionTime);
@@ -79,12 +78,12 @@ public class WPSAdminPage extends BaseServiceAdminPage<WPSInfo> {
         TextField<Integer> resourceExpirationTimeout = new TextField<Integer>("resourceExpirationTimeout", Integer.class);
         resourceExpirationTimeout.add(RangeValidator.minimum(0));
         form.add(resourceExpirationTimeout);
-        
+
         // GeoServerFileChooser chooser = new GeoServerFileChooser("storageDirectory",
         // new PropertyModel<String>(info, "storageDirectory"));
         DirectoryParamPanel chooser = new DirectoryParamPanel("storageDirectory",
                 new PropertyModel<String>(
-                info, "storageDirectory"), new ParamResourceModel("storageDirectory", this), false);
+                        info, "storageDirectory"), new ParamResourceModel("storageDirectory", this), false);
         form.add(chooser);
 
         form.add(new TotalTimeValidator(maxSynchTotalTime, maxSynchExecutionTime));
@@ -107,24 +106,24 @@ public class WPSAdminPage extends BaseServiceAdminPage<WPSInfo> {
         private FormComponent<Integer> executionTime;
 
         public TotalTimeValidator(FormComponent<Integer> totalTime,
-                FormComponent<Integer> executionTime) {
+                                  FormComponent<Integer> executionTime) {
             this.totalTime = totalTime;
             this.executionTime = executionTime;
         }
 
         @Override
         public FormComponent<?>[] getDependentFormComponents() {
-            return new FormComponent[] {totalTime, executionTime};
+            return new FormComponent[]{totalTime, executionTime};
         }
 
         @Override
         public void validate(Form<?> form) {
-            if (executionTime.getConvertedInput() != null 
-             && totalTime.getConvertedInput() != null
-             && totalTime.getConvertedInput() != 0
-             && totalTime.getConvertedInput() < executionTime.getConvertedInput()) {
+            if (executionTime.getConvertedInput() != null
+                    && totalTime.getConvertedInput() != null
+                    && totalTime.getConvertedInput() != 0
+                    && totalTime.getConvertedInput() < executionTime.getConvertedInput()) {
                 form.error(new ParamResourceModel("totalTimeError", getPage())
-                .getString());
+                        .getString());
             }
         }
     }

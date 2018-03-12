@@ -49,7 +49,7 @@ import org.geoserver.wms.dimension.DefaultValueConfigurations;
 
 /**
  * Adds a tab to the layer editor to allow editing the dynamic dimension default values
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class DynamicDimensionsTabPanel extends PublishedEditTabPanel<LayerInfo> {
@@ -84,7 +84,7 @@ public class DynamicDimensionsTabPanel extends PublishedEditTabPanel<LayerInfo> 
     }
 
     private List<DefaultValueConfiguration> getConfigurations(IModel<LayerInfo> layerModel,
-            IModel<DefaultValueConfigurations> configModel) {
+                                                              IModel<DefaultValueConfigurations> configModel) {
         ArrayList<DefaultValueConfiguration> result = new ArrayList<DefaultValueConfiguration>();
 
         // see if we have configs already
@@ -102,7 +102,7 @@ public class DynamicDimensionsTabPanel extends PublishedEditTabPanel<LayerInfo> 
         }
 
         // remove unknown ones
-        for (Iterator<DefaultValueConfiguration> it = result.iterator(); it.hasNext();) {
+        for (Iterator<DefaultValueConfiguration> it = result.iterator(); it.hasNext(); ) {
             DefaultValueConfiguration config = it.next();
             if (!dimensionNames.contains(config.getDimension())) {
                 it.remove();
@@ -157,7 +157,7 @@ public class DynamicDimensionsTabPanel extends PublishedEditTabPanel<LayerInfo> 
         private static final long serialVersionUID = -1339941470144600565L;
 
         public Editor(String id, final Collection<String> enabledDimensionNames,
-                IModel<DefaultValueConfigurations> model) {
+                      IModel<DefaultValueConfigurations> model) {
             super(id, model);
             IModel<List<Property<DefaultValueConfiguration>>> properties = new LoadableDetachableModel<List<Property<DefaultValueConfiguration>>>() {
 
@@ -174,7 +174,7 @@ public class DynamicDimensionsTabPanel extends PublishedEditTabPanel<LayerInfo> 
 
                 @Override
                 protected Component getComponentForProperty(String id, final IModel<DefaultValueConfiguration> itemModel,
-                        Property<DefaultValueConfiguration> property) {
+                                                            Property<DefaultValueConfiguration> property) {
                     if (DEFAULT_VALUE_EXPRESSION.equals(property)) {
                         Fragment f = new Fragment(id, "ecqlEditor", DynamicDimensionsTabPanel.this);
                         TextArea<String> ta = new TextArea<String>("editor");
@@ -203,11 +203,11 @@ public class DynamicDimensionsTabPanel extends PublishedEditTabPanel<LayerInfo> 
 
                     return null;
                 }
-                
+
 
                 @Override
                 protected void onPopulateItem(final Property<DefaultValueConfiguration> property,
-                        final ListItem<Property<DefaultValueConfiguration>> item) {
+                                              final ListItem<Property<DefaultValueConfiguration>> item) {
                     super.onPopulateItem(property, item);
 
                     // assuming that if we got here, everything before it has been populated
@@ -217,7 +217,7 @@ public class DynamicDimensionsTabPanel extends PublishedEditTabPanel<LayerInfo> 
                         final DropDownChoice<?> dd = (DropDownChoice<?>) ((Fragment) ((ListItem<?>) parent
                                 .get(3))
                                 .get(0)).get(0);
-                        final TextArea<?> ta = (TextArea<?>)((Fragment) ((ListItem<?>) parent.get(4)).get(0)).get(0);
+                        final TextArea<?> ta = (TextArea<?>) ((Fragment) ((ListItem<?>) parent.get(4)).get(0)).get(0);
                         dd.add(new OnChangeAjaxBehavior() {
 
                             private static final long serialVersionUID = -6159626785706793328L;
@@ -288,6 +288,8 @@ public class DynamicDimensionsTabPanel extends PublishedEditTabPanel<LayerInfo> 
             setConvertedInput(new DefaultValueConfigurations(configurations));
         }
 
-    };
+    }
+
+    ;
 
 }

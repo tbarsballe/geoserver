@@ -58,20 +58,20 @@ public class WCSMultipartResponse extends Response {
     public String getPreferredDisposition(Object value, Operation operation) {
         return DISPOSITION_ATTACH;
     }
-    
+
     public String getAttachmentFileName(Object value, Operation operation) {
         final GetCoverageType request = (GetCoverageType) operation.getParameters()[0];
         final String identifier = request.getIdentifier().getValue();
         return identifier.replace(':', '_') + ".eml";
-        
+
     }
-    
+
     @Override
     public boolean canHandle(Operation operation) {
         // this one can handle GetCoverage responses where store = false
-        if(!(operation.getParameters()[0] instanceof GetCoverageType))
+        if (!(operation.getParameters()[0] instanceof GetCoverageType))
             return false;
-        
+
         GetCoverageType getCoverage = (GetCoverageType) operation.getParameters()[0];
         return !getCoverage.getOutput().isStore();
     }
@@ -128,7 +128,7 @@ public class WCSMultipartResponse extends Response {
     /**
      * A special mime message that does not set any header other than the
      * content type
-     * 
+     *
      * @author Andrea Aime - TOPP
      */
     private static class GeoServerMimeMessage extends MimeMessage {

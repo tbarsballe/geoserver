@@ -42,7 +42,7 @@ public class GroupPanel extends Panel {
     protected Link<?> add;
     protected String serviceName;
 
-    
+
     protected GeoServerUserGroupService getService() {
         try {
             return GeoServerApplication.get().getSecurityManager().
@@ -51,32 +51,33 @@ public class GroupPanel extends Panel {
             throw new RuntimeException(e);
         }
     }
+
     public GroupPanel(String id, String serviceName) {
         super(id);
-        
-        this.serviceName=serviceName;
+
+        this.serviceName = serviceName;
         GroupListProvider provider = new GroupListProvider(serviceName);
         add(groups = new GeoServerTablePanel<GeoServerUserGroup>("table", provider, true) {
 
             @Override
             protected Component getComponentForProperty(String id, IModel<GeoServerUserGroup> itemModel,
-                    Property<GeoServerUserGroup> property) {
+                                                        Property<GeoServerUserGroup> property) {
                 if (property == GroupListProvider.GROUPNAME) {
                     return editGroupLink(id, itemModel, property);
                 } else if (property == GroupListProvider.ENABLED) {
-                    if((Boolean) property.getModel(itemModel).getObject())
+                    if ((Boolean) property.getModel(itemModel).getObject())
                         return new Icon(id, CatalogIconFactory.ENABLED_ICON);
                     else
                         return new Label(id, "");
-                } 
+                }
                 throw new RuntimeException("Uknown property " + property);
             }
-            
+
             @Override
             protected void onSelectionUpdate(AjaxRequestTarget target) {
-                removal.setEnabled(groups.getSelection().size() > 0);               
+                removal.setEnabled(groups.getSelection().size() > 0);
                 target.add(removal);
-                removalWithRoles.setEnabled(groups.getSelection().size() > 0);               
+                removalWithRoles.setEnabled(groups.getSelection().size() > 0);
                 target.add(removalWithRoles);
 
             }
@@ -87,7 +88,7 @@ public class GroupPanel extends Panel {
         add(dialog = new GeoServerDialog("dialog"));
         headerComponents();
     }
-    
+
     public GroupPanel setHeaderVisible(boolean visible) {
         get("header").setVisible(visible);
         return this;
@@ -101,38 +102,37 @@ public class GroupPanel extends Panel {
 
     protected void headerComponents() {
 
-        boolean canCreateStore=getService().canCreateStore();
+        boolean canCreateStore = getService().canCreateStore();
         // the add button
-        
+
         WebMarkupContainer h = new WebMarkupContainer("header");
         add(h);
         if (!canCreateStore) {
             h.add(new Label("message", new StringResourceModel("noCreateStore", this, null))
                     .add(new AttributeAppender("class", new Model("info-link"), " ")));
-        }
-        else {
+        } else {
             h.add(new Label("message", new Model()));
         }
-        
+
         h.add(add = new Link("addNew") {
             @Override
             public void onClick() {
                 setResponsePage(new NewGroupPage(serviceName).setReturnPage(getPage()));
-            }            
+            }
         });
         add.setVisible(canCreateStore);
 
         // the removal button
-        h.add(removal = new SelectionGroupRemovalLink(serviceName,"removeSelected", groups, dialog,false));
+        h.add(removal = new SelectionGroupRemovalLink(serviceName, "removeSelected", groups, dialog, false));
         removal.setOutputMarkupId(true);
         removal.setEnabled(false);
         removal.setVisibilityAllowed(canCreateStore);
 
         // the removal button
-        h.add(removalWithRoles  = new SelectionGroupRemovalLink(serviceName,"removeSelectedWithRoles", groups, dialog,true));
+        h.add(removalWithRoles = new SelectionGroupRemovalLink(serviceName, "removeSelectedWithRoles", groups, dialog, true));
         removalWithRoles.setOutputMarkupId(true);
         removalWithRoles.setEnabled(false);
-        removalWithRoles.setVisibilityAllowed(canCreateStore&& 
+        removalWithRoles.setVisibilityAllowed(canCreateStore &&
                 GeoServerApplication.get().getSecurityManager().getActiveRoleService().canCreateStore());
 
         //enable header only for full admin
@@ -144,8 +144,8 @@ public class GroupPanel extends Panel {
         return new SimpleAjaxLink(id, itemModel, property.getModel(itemModel)) {
             @Override
             protected void onClick(AjaxRequestTarget target) {
-                setResponsePage(new EditGroupPage(serviceName,(GeoServerUserGroup) getDefaultModelObject())
-                    .setReturnPage(getPage()));
+                setResponsePage(new EditGroupPage(serviceName, (GeoServerUserGroup) getDefaultModelObject())
+                        .setReturnPage(getPage()));
             }
         };
     }

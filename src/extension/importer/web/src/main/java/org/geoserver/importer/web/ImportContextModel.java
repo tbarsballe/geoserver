@@ -17,7 +17,7 @@ public class ImportContextModel extends LoadableDetachableModel<ImportContext> {
     static Logger LOGGER = Logging.getLogger(ImportContextModel.class);
 
     long id;
-    
+
     public ImportContextModel(ImportContext imp) {
         this(imp.getId());
     }
@@ -25,13 +25,12 @@ public class ImportContextModel extends LoadableDetachableModel<ImportContext> {
     public ImportContextModel(long id) {
         this.id = id;
     }
-    
+
     @Override
     protected ImportContext load() {
         try {
             return ImporterWebUtils.importer().getContext(id);
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             LOGGER.log(Level.WARNING, "Unable to load import " + id, e);
             return null;
         }

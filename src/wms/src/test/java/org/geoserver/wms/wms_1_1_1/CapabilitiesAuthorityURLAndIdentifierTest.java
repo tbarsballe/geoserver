@@ -31,7 +31,7 @@ public class CapabilitiesAuthorityURLAndIdentifierTest extends WMSTestSupport {
     }
 
     private void addIdentifier(final String authName, final String id,
-            List<LayerIdentifierInfo> target) {
+                               List<LayerIdentifierInfo> target) {
         LayerIdentifierInfo identifier = new LayerIdentifier();
         identifier.setAuthority(authName);
         identifier.setIdentifier(id);
@@ -73,6 +73,7 @@ public class CapabilitiesAuthorityURLAndIdentifierTest extends WMSTestSupport {
         assertXpathEvaluatesTo("rootId2",
                 "/WMT_MS_Capabilities/Capability/Layer/Identifier[@authority = 'rootAuth2']", doc);
     }
+
     @Test
     public void testLayer() throws Exception {
 
@@ -94,7 +95,7 @@ public class CapabilitiesAuthorityURLAndIdentifierTest extends WMSTestSupport {
 
         assertXpathExists(
                 "//Layer[Name='" + layerName + "']/Identifier[@authority = 'layerAuth1']", doc);
-        assertXpathEvaluatesTo("layerId1", "//Layer[Name='" + layerName 
+        assertXpathEvaluatesTo("layerId1", "//Layer[Name='" + layerName
                 + "']/Identifier[@authority = 'layerAuth1']", doc);
     }
 

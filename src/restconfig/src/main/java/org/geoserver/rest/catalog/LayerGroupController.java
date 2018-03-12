@@ -77,7 +77,7 @@ public class LayerGroupController extends AbstractCatalogController {
     @GetMapping
     public RestWrapper<?> getLayerGroups(@PathVariable(required = false) String workspaceName) {
 
-        if(workspaceName != null && catalog.getWorkspaceByName(workspaceName) == null) {
+        if (workspaceName != null && catalog.getWorkspaceByName(workspaceName) == null) {
             throw new ResourceNotFoundException("Workspace " + workspaceName + " not found");
         }
         List<LayerGroupInfo> layerGroupInfos = workspaceName != null ?
@@ -90,12 +90,12 @@ public class LayerGroupController extends AbstractCatalogController {
             @PathVariable String layerGroupName,
             @PathVariable(required = false) String workspaceName) {
 
-        if(workspaceName != null && catalog.getWorkspaceByName(workspaceName) == null) {
+        if (workspaceName != null && catalog.getWorkspaceByName(workspaceName) == null) {
             throw new ResourceNotFoundException("Workspace " + workspaceName + " not found");
         }
 
         LayerGroupInfo layerGroupInfo = workspaceName != null ?
-            catalog.getLayerGroupByName(workspaceName, layerGroupName) : catalog.getLayerGroupByName(layerGroupName);
+                catalog.getLayerGroupByName(workspaceName, layerGroupName) : catalog.getLayerGroupByName(layerGroupName);
 
         if (layerGroupInfo == null) {
             throw new ResourceNotFoundException("No such layer group " + layerGroupName +
@@ -114,18 +114,18 @@ public class LayerGroupController extends AbstractCatalogController {
             @PathVariable(required = false) String workspaceName,
             UriComponentsBuilder builder) throws Exception {
 
-        if(workspaceName != null && catalog.getWorkspaceByName(workspaceName) == null) {
+        if (workspaceName != null && catalog.getWorkspaceByName(workspaceName) == null) {
             throw new ResourceNotFoundException("Workspace " + workspaceName + " not found");
         }
         checkFullAdminRequired(workspaceName);
-        
-        if ( lg.getLayers().isEmpty() ) {
-            throw new  RestException( "layer group must not be empty", HttpStatus.BAD_REQUEST );
+
+        if (lg.getLayers().isEmpty()) {
+            throw new RestException("layer group must not be empty", HttpStatus.BAD_REQUEST);
         }
 
-        if ( lg.getBounds() == null ) {
-            LOGGER.fine( "Auto calculating layer group bounds");
-            new CatalogBuilder( catalog ).calculateLayerGroupBounds(lg);
+        if (lg.getBounds() == null) {
+            LOGGER.fine("Auto calculating layer group bounds");
+            new CatalogBuilder(catalog).calculateLayerGroupBounds(lg);
         }
 
         if (workspaceName != null) {
@@ -160,31 +160,31 @@ public class LayerGroupController extends AbstractCatalogController {
             @PathVariable(required = false) String workspaceName,
             @PathVariable String layerGroupName) throws Exception {
 
-        if(workspaceName != null && catalog.getWorkspaceByName(workspaceName) == null) {
+        if (workspaceName != null && catalog.getWorkspaceByName(workspaceName) == null) {
             throw new ResourceNotFoundException("Workspace " + workspaceName + " not found");
         }
         checkFullAdminRequired(workspaceName);
-        
-        LOGGER.info( "PUT layer group " + layerGroupName
+
+        LOGGER.info("PUT layer group " + layerGroupName
                 + (workspaceName != null ? ", workspace " + workspaceName : ""));
         LayerGroupInfo original = workspaceName != null ?
                 catalog.getLayerGroupByName(workspaceName, layerGroupName) : catalog.getLayerGroupByName(layerGroupName);
 
         //ensure not a name change
-        if ( lg.getName() != null && !lg.getName().equals( original.getName() ) ) {
-            throw new RestException( "Can't change name of a layer group", HttpStatus.FORBIDDEN );
+        if (lg.getName() != null && !lg.getName().equals(original.getName())) {
+            throw new RestException("Can't change name of a layer group", HttpStatus.FORBIDDEN);
         }
 
         //ensure not a workspace change
         if (lg.getWorkspace() != null) {
             if (!lg.getWorkspace().equals(original.getWorkspace())) {
-                throw new RestException( "Can't change the workspace of a layer group, instead " +
-                        "DELETE from existing workspace and POST to new workspace", HttpStatus.FORBIDDEN );
+                throw new RestException("Can't change the workspace of a layer group, instead " +
+                        "DELETE from existing workspace and POST to new workspace", HttpStatus.FORBIDDEN);
             }
         }
 
-        new CatalogBuilder( catalog ).updateLayerGroup( original, lg );
-        catalog.save( original );
+        new CatalogBuilder(catalog).updateLayerGroup(original, lg);
+        catalog.save(original);
     }
 
     @DeleteMapping(value = "{layerGroupName}")
@@ -192,14 +192,14 @@ public class LayerGroupController extends AbstractCatalogController {
             @PathVariable(required = false) String workspaceName,
             @PathVariable String layerGroupName) {
 
-        if(workspaceName != null && catalog.getWorkspaceByName(workspaceName) == null) {
+        if (workspaceName != null && catalog.getWorkspaceByName(workspaceName) == null) {
             throw new ResourceNotFoundException("Workspace " + workspaceName + " not found");
         }
-        
-        LOGGER.info( "DELETE layer group " + layerGroupName );
-        LayerGroupInfo lg = workspaceName == null ? catalog.getLayerGroupByName( layerGroupName ) :
+
+        LOGGER.info("DELETE layer group " + layerGroupName);
+        LayerGroupInfo lg = workspaceName == null ? catalog.getLayerGroupByName(layerGroupName) :
                 catalog.getLayerGroupByName(workspaceName, layerGroupName);
-        catalog.remove( lg );
+        catalog.remove(lg);
     }
 
     @Override
@@ -226,11 +226,11 @@ public class LayerGroupController extends AbstractCatalogController {
                 }
                 return catalog.getLayerGroupByName(workspace, layerGroup);
             }
-            
+
             @Override
             protected void postEncodeReference(Object obj, String ref, String prefix,
-                    HierarchicalStreamWriter writer, MarshallingContext context) {
-                if ( obj instanceof StyleInfo ) {
+                                               HierarchicalStreamWriter writer, MarshallingContext context) {
+                if (obj instanceof StyleInfo) {
                     StringBuilder link = new StringBuilder();
                     if (prefix != null) {
                         link.append("/workspaces/").append(converter.encode(prefix));
@@ -238,12 +238,12 @@ public class LayerGroupController extends AbstractCatalogController {
                     link.append("/styles/").append(converter.encode(ref));
                     converter.encodeLink(link.toString(), writer);
                 }
-                if ( obj instanceof LayerInfo ) {
-                    converter.encodeLink("/workspaces/"+prefix+"/layers/" + converter.encode(ref), writer);
-                } else if ( obj instanceof LayerGroupInfo) {
+                if (obj instanceof LayerInfo) {
+                    converter.encodeLink("/workspaces/" + prefix + "/layers/" + converter.encode(ref), writer);
+                } else if (obj instanceof LayerGroupInfo) {
                     LayerGroupInfo lg = (LayerGroupInfo) obj;
                     if (lg.getWorkspace() != null) {
-                        converter.encodeLink("/workspaces/"+lg.getWorkspace().getName()+"/layergroups/" + converter.encode(ref), writer);
+                        converter.encodeLink("/workspaces/" + lg.getWorkspace().getName() + "/layergroups/" + converter.encode(ref), writer);
                     } else {
                         converter.encodeLink("/layergroups/" + converter.encode(ref), writer);
                     }

@@ -29,7 +29,6 @@ import org.geotools.util.MapEntry;
 import org.junit.Test;
 
 /**
- *
  * @author ETj (etj at geo-solutions.it)
  */
 public class CoverageIdConverterTest {

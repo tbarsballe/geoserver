@@ -13,17 +13,16 @@ package org.geoserver.wps.ppio.gpx;
 import java.util.Calendar;
 
 /**
- * 
  * Information about the copyright holder and any license governing use of this file. By linking to an appropriate license, you may place your data
  * into the public domain or grant additional usage rights.
- * 
- * 
+ * <p>
+ * <p>
  * <p>
  * Java class for copyrightType complex type.
- * 
+ * <p>
  * <p>
  * The following schema fragment specifies the expected content contained within this class.
- * 
+ * <p>
  * <pre>
  * &lt;complexType name="copyrightType">
  *   &lt;complexContent>
@@ -37,8 +36,6 @@ import java.util.Calendar;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 public class CopyrightType {
     protected Calendar year;
@@ -49,9 +46,8 @@ public class CopyrightType {
 
     /**
      * Gets the value of the year property.
-     * 
+     *
      * @return possible object is {@link XMLGregorianCalendar }
-     * 
      */
     public Calendar getYear() {
         return year;
@@ -59,9 +55,8 @@ public class CopyrightType {
 
     /**
      * Sets the value of the year property.
-     * 
+     *
      * @param value allowed object is {@link XMLGregorianCalendar }
-     * 
      */
     public void setYear(Calendar value) {
         this.year = value;
@@ -69,9 +64,8 @@ public class CopyrightType {
 
     /**
      * Gets the value of the license property.
-     * 
+     *
      * @return possible object is {@link String }
-     * 
      */
     public String getLicense() {
         return license;
@@ -79,9 +73,8 @@ public class CopyrightType {
 
     /**
      * Sets the value of the license property.
-     * 
+     *
      * @param value allowed object is {@link String }
-     * 
      */
     public void setLicense(String value) {
         this.license = value;
@@ -89,9 +82,8 @@ public class CopyrightType {
 
     /**
      * Gets the value of the author property.
-     * 
+     *
      * @return possible object is {@link String }
-     * 
      */
     public String getAuthor() {
         return author;
@@ -99,9 +91,8 @@ public class CopyrightType {
 
     /**
      * Sets the value of the author property.
-     * 
+     *
      * @param value allowed object is {@link String }
-     * 
      */
     public void setAuthor(String value) {
         this.author = value;

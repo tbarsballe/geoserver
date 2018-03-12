@@ -54,6 +54,7 @@ public class RestWrapperAdapter<T> implements RestWrapper<T> {
     /**
      * Default implementation.
      * Subclasses should override this to implement custom functionality
+     *
      * @return freemarker template
      */
     @Override
@@ -71,5 +72,5 @@ public class RestWrapperAdapter<T> implements RestWrapper<T> {
         controller.configureFreemarker(converter, getTemplate());
     }
 
-   
+
 }

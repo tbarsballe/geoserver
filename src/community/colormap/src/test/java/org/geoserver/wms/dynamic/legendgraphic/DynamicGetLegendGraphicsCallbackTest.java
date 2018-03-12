@@ -66,7 +66,7 @@ public class DynamicGetLegendGraphicsCallbackTest extends GeoServerSystemTestSup
         // setup to call the callback
         Service wmsService = (Service) GeoServerExtensions.bean("wms-1_1_1-ServiceDescriptor");
         Operation op = new Operation("getLegendGraphic", wmsService, null,
-                new Object[] { getLegendGraphics });
+                new Object[]{getLegendGraphics});
         Request request = new Request();
         request.setKvp(params);
         request.setRawKvp(params);

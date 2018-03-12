@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  * Interface for publishable entities contained in a Layer Group.
- * 
+ *
  * @author Davide Savazzi - geo-solutions.it
  */
 public interface PublishedInfo extends CatalogInfo {
@@ -18,10 +18,10 @@ public interface PublishedInfo extends CatalogInfo {
      * Returns the name.
      */
     String getName();
-    
+
     /**
      * Sets the name.
-     */    
+     */
     void setName(String name);
 
     /**
@@ -46,7 +46,7 @@ public interface PublishedInfo extends CatalogInfo {
      * Returns the title.
      */
     String getTitle();
-    
+
     /**
      * Sets the title.
      */
@@ -56,7 +56,7 @@ public interface PublishedInfo extends CatalogInfo {
      * Returns the abstract.
      */
     String getAbstract();
-    
+
     /**
      * Sets the abstract.
      */
@@ -76,26 +76,24 @@ public interface PublishedInfo extends CatalogInfo {
      * Returns the list of identifiers
      */
     List<LayerIdentifierInfo> getIdentifiers();
-    
+
     /**
      * The type of the layer.
      */
     PublishedType getType();
-    
+
     /**
-     * Gets the attribution information for this layer.  
+     * Gets the attribution information for this layer.
      *
      * @return an AttributionInfo instance with the layer's attribution information.
-     *
      * @see AttributionInfo
      */
     AttributionInfo getAttribution();
 
     /**
-     * Sets the attribution information for this layer.  
+     * Sets the attribution information for this layer.
      *
      * @param attribution an AttributionInfo instance with the new attribution information.
-     *
      * @see AttributionInfo
      */
     void setAttribution(AttributionInfo attribution);

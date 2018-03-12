@@ -32,25 +32,26 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 /**
  * A base implementation for {@link GeoServerUserGroupStore}
- * 
- * @author christian
  *
+ * @author christian
  */
-public abstract class AbstractUserGroupStore  implements GeoServerUserGroupStore{
+public abstract class AbstractUserGroupStore implements GeoServerUserGroupStore {
 
-    /** logger */
+    /**
+     * logger
+     */
     static Logger LOGGER = org.geotools.util.logging.Logging.getLogger("org.geoserver.security");
-    
-    private boolean modified=false;
+
+    private boolean modified = false;
     protected AbstractUserGroupService service;
 
     protected UserGroupStoreHelper helper;
-    
+
     protected AbstractUserGroupStore() {
-        helper=new UserGroupStoreHelper();
+        helper = new UserGroupStoreHelper();
     }
 
-    
+
     public String getName() {
         return service.getName();
     }
@@ -94,7 +95,7 @@ public abstract class AbstractUserGroupStore  implements GeoServerUserGroupStore
     }
 
     public GeoServerUser getUserByUsername(String username) throws IOException {
-        return  helper.getUserByUsername(username);
+        return helper.getUserByUsername(username);
     }
 
     public GeoServerUserGroup getGroupByGroupname(String groupname) throws IOException {
@@ -132,13 +133,12 @@ public abstract class AbstractUserGroupStore  implements GeoServerUserGroupStore
     }
 
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException,
-            DataAccessException {        
+            DataAccessException {
         // this is only need at runtime
         return service.loadUserByUsername(username);
     }
 
 
-    
     /* (non-Javadoc)
      * @see org.geoserver.security.GeoserverUserGroupStore#isModified()
      */
@@ -148,78 +148,79 @@ public abstract class AbstractUserGroupStore  implements GeoServerUserGroupStore
 
     /**
      * Setter for modified flag
+     *
      * @param value
      */
     public void setModified(Boolean value) {
-        modified=value;
+        modified = value;
     }
-    
+
     /**
      * validates and encodes the password. Do nothing
      * for a not changed password of an existing user
-     * 
+     *
      * @param user
      * @throws IOException
      */
-    protected void preparePassword(GeoServerUser user) throws IOException,PasswordPolicyException {
-        
-        char []passwordArray = user.getPassword() != null ? user.getPassword().toCharArray() : null; 
-        
-        if (PasswordValidatorImpl.passwordStartsWithEncoderPrefix(passwordArray)!=null)
+    protected void preparePassword(GeoServerUser user) throws IOException, PasswordPolicyException {
+
+        char[] passwordArray = user.getPassword() != null ? user.getPassword().toCharArray() : null;
+
+        if (PasswordValidatorImpl.passwordStartsWithEncoderPrefix(passwordArray) != null)
             return; // do nothing, password already encoded
-            
+
         // we have a plain text password
         // validate it
         getSecurityManager().loadPasswordValidator(getPasswordValidatorName()).
-            validatePassword(passwordArray);
+                validatePassword(passwordArray);
 
         // validation ok, initializer encoder and set encoded password
-        GeoServerPasswordEncoder enc = 
+        GeoServerPasswordEncoder enc =
                 getSecurityManager().loadPasswordEncoder(getPasswordEncoderName());
 
         enc.initializeFor(this);
         user.setPassword(enc.encodePassword(user.getPassword(), null));
-        
+
     }
-    
+
     /* (non-Javadoc)
      * @see org.geoserver.security.GeoserverUserGroupStore#addUser(org.geoserver.security.impl.GeoserverUser)
      */
-    public void addUser(GeoServerUser user) throws IOException, PasswordPolicyException{
-        
-        if(helper.userMap.containsKey(user.getUsername()))
+    public void addUser(GeoServerUser user) throws IOException, PasswordPolicyException {
+
+        if (helper.userMap.containsKey(user.getUsername()))
             throw new IllegalArgumentException("The user " + user.getUsername() + " already exists");
-        
+
         preparePassword(user);
         helper.userMap.put(user.getUsername(), user);
         addUserToPropertyMap(user);
         setModified(true);
     }
-    
+
     protected void addUserToPropertyMap(GeoServerUser user) {
-        for (Object key : user.getProperties().keySet()) {            
+        for (Object key : user.getProperties().keySet()) {
             SortedSet<GeoServerUser> users = helper.propertyMap.get(key);
-            if (users==null) {
+            if (users == null) {
                 users = new TreeSet<GeoServerUser>();
                 helper.propertyMap.put((String) key, users);
             }
             users.add(user);
-        }        
+        }
     }
-    
+
     protected void removeUserFromPropertyMap(GeoServerUser user) {
         for (SortedSet<GeoServerUser> users : helper.propertyMap.values()) {
             users.remove(user);
         }
     }
 
-    
+
     /* (non-Javadoc)
      * @see org.geoserver.security.GeoserverUserGroupStore#addGroup(org.geoserver.security.impl.GeoserverUserGroup)
      */
-    public void addGroup(GeoServerUserGroup group) throws IOException{
-                
-        if(helper.groupMap.containsKey(group.getGroupname()))
+    public void addGroup(GeoServerUserGroup group) throws IOException {
+
+        if (helper.groupMap.containsKey(group.getGroupname()))
             throw new IllegalArgumentException("The group " + group.getGroupname() + " already exists");
         else {
             helper.groupMap.put(group.getGroupname(), group);
@@ -227,50 +228,49 @@ public abstract class AbstractUserGroupStore  implements GeoServerUserGroupStore
         }
     }
 
-    
+
     /* (non-Javadoc)
      * @see org.geoserver.security.GeoserverUserGroupStore#updateUser(org.geoserver.security.impl.GeoserverUser)
      */
-    public void updateUser(GeoServerUser user) throws IOException, PasswordPolicyException{
-        
-       if(helper.userMap.containsKey(user.getUsername())==false) {
+    public void updateUser(GeoServerUser user) throws IOException, PasswordPolicyException {
+
+        if (helper.userMap.containsKey(user.getUsername()) == false) {
             throw new IllegalArgumentException("The user " + user.getUsername() + " does not exist");
-       }
-       preparePassword(user);     
-       helper.userMap.put(user.getUsername(), user);
-       removeUserFromPropertyMap(user);
-       addUserToPropertyMap(user);
-       setModified(true);
+        }
+        preparePassword(user);
+        helper.userMap.put(user.getUsername(), user);
+        removeUserFromPropertyMap(user);
+        addUserToPropertyMap(user);
+        setModified(true);
     }
-    
+
     /* (non-Javadoc)
      * @see org.geoserver.security.GeoserverUserGroupStore#updateGroup(org.geoserver.security.impl.GeoserverUserGroup)
      */
-    public void updateGroup(GeoServerUserGroup group) throws IOException{
-        
-        if(helper.groupMap.containsKey(group.getGroupname())) {
+    public void updateGroup(GeoServerUserGroup group) throws IOException {
+
+        if (helper.groupMap.containsKey(group.getGroupname())) {
             helper.groupMap.put(group.getGroupname(), group);
             setModified(true);
-        }
-        else
+        } else
             throw new IllegalArgumentException("The group " + group.getGroupname() + " does not exist");
     }
 
-    
+
     /* (non-Javadoc)
      * @see org.geoserver.security.GeoserverUserGroupStore#removeUser(org.geoserver.security.impl.GeoserverUser)
      */
-    public boolean removeUser(GeoServerUser user) throws IOException{
-        
-        Collection<GeoServerUserGroup> groups = helper.user_groupMap.get(user);        
-        if (groups!=null) {
+    public boolean removeUser(GeoServerUser user) throws IOException {
+
+        Collection<GeoServerUserGroup> groups = helper.user_groupMap.get(user);
+        if (groups != null) {
             Collection<GeoServerUserGroup> toBeRemoved = new ArrayList<GeoServerUserGroup>();
             toBeRemoved.addAll(groups);
             for (GeoServerUserGroup group : toBeRemoved) {
                 disAssociateUserFromGroup(user, group);
             }
         }
-        
+
         boolean retValue = helper.userMap.remove(user.getUsername()) != null;
         if (retValue) {
             setModified(true);
@@ -278,24 +278,25 @@ public abstract class AbstractUserGroupStore  implements GeoServerUserGroupStore
         }
         return retValue;
     }
-    
+
     /* (non-Javadoc)
      * @see org.geoserver.security.GeoserverUserGroupStore#removeGroup(org.geoserver.security.impl.GeoserverUserGroup)
      */
-    public boolean removeGroup(GeoServerUserGroup group) throws IOException{
-        Collection<GeoServerUser> users = helper.group_userMap.get(group);;
-        if (users !=null) {
+    public boolean removeGroup(GeoServerUserGroup group) throws IOException {
+        Collection<GeoServerUser> users = helper.group_userMap.get(group);
+        ;
+        if (users != null) {
             Collection<GeoServerUser> toBeRemoved = new ArrayList<GeoServerUser>();
             toBeRemoved.addAll(users);
             for (GeoServerUser user : toBeRemoved) {
                 disAssociateUserFromGroup(user, group);
             }
         }
-        
+
         boolean retval = helper.groupMap.remove(group.getGroupname()) != null;
-        if (retval) { 
+        if (retval) {
             setModified(true);
-        }    
+        }
         return retval;
     }
 
@@ -306,16 +307,16 @@ public abstract class AbstractUserGroupStore  implements GeoServerUserGroupStore
      */
     public void store() throws IOException {
         if (isModified()) {
-            LOGGER.info("Start storing user/groups for service named "+getName());
+            LOGGER.info("Start storing user/groups for service named " + getName());
             // prevent concurrent write from store and
             // read from service
-            synchronized (service) { 
+            synchronized (service) {
                 serialize();
             }
             setModified(false);
-            LOGGER.info("Storing user/groups successful for service named "+getName());
+            LOGGER.info("Storing user/groups successful for service named " + getName());
             service.load(); // service must reload
-        }  else {
+        } else {
             LOGGER.info("Storing unnecessary, no change for user and groups");
         }
     }
@@ -323,54 +324,54 @@ public abstract class AbstractUserGroupStore  implements GeoServerUserGroupStore
     /* (non-Javadoc)
      * @see org.geoserver.security.GeoserverUserGroupStore#associateUserToGroup(org.geoserver.security.impl.GeoserverUser, org.geoserver.security.impl.GeoserverUserGroup)
      */
-    public void associateUserToGroup(GeoServerUser user, GeoServerUserGroup group) throws IOException{
+    public void associateUserToGroup(GeoServerUser user, GeoServerUserGroup group) throws IOException {
         checkUser(user);
         checkGroup(group);
-        
+
         boolean changed = false;
-        
-        
+
+
         SortedSet<GeoServerUser> users = helper.group_userMap.get(group);
         if (users == null) {
             users = new TreeSet<GeoServerUser>();
-            helper.group_userMap.put(group,users);
+            helper.group_userMap.put(group, users);
         }
-        if (users.contains(user)==false) {
+        if (users.contains(user) == false) {
             users.add(user);
-            changed=true;
+            changed = true;
         }
-        
+
         SortedSet<GeoServerUserGroup> groups = helper.user_groupMap.get(user);
         if (groups == null) {
             groups = new TreeSet<GeoServerUserGroup>();
-            helper.user_groupMap.put(user,groups);
+            helper.user_groupMap.put(user, groups);
         }
-        if (groups.contains(group)==false) {            
+        if (groups.contains(group) == false) {
             groups.add(group);
-            changed=true;            
+            changed = true;
         }
         if (changed) {
             setModified(true);
         }
     }
-    
+
     /* (non-Javadoc)
      * @see org.geoserver.security.GeoserverUserDetailsService#disAssociateUserFromGroup(org.geoserver.security.impl.GeoserverUser, org.geoserver.security.UserGroup)
      */
-    public void disAssociateUserFromGroup(GeoServerUser user, GeoServerUserGroup group) throws IOException{
+    public void disAssociateUserFromGroup(GeoServerUser user, GeoServerUserGroup group) throws IOException {
         checkUser(user);
         checkGroup(group);
         boolean changed = false;
-        
-        SortedSet<GeoServerUser> users = helper.group_userMap.get(group);        
-        if (users!=null) {
-            changed |=users.remove(user);
+
+        SortedSet<GeoServerUser> users = helper.group_userMap.get(group);
+        if (users != null) {
+            changed |= users.remove(user);
             if (users.isEmpty()) {
                 helper.group_userMap.remove(group);
-            }                
+            }
         }
         SortedSet<GeoServerUserGroup> groups = helper.user_groupMap.get(user);
-        if (groups!=null) {
+        if (groups != null) {
             changed |= groups.remove(group);
             if (groups.isEmpty())
                 helper.user_groupMap.remove(user);
@@ -379,9 +380,9 @@ public abstract class AbstractUserGroupStore  implements GeoServerUserGroupStore
             setModified(true);
         }
     }
-    
+
     /**
-     * Subclasses must implement this method 
+     * Subclasses must implement this method
      * Save user/groups  to backend
      */
     protected abstract void serialize() throws IOException;
@@ -397,7 +398,7 @@ public abstract class AbstractUserGroupStore  implements GeoServerUserGroupStore
     @Override
     public void initializeFromService(GeoServerUserGroupService service)
             throws IOException {
-        this.service=(AbstractUserGroupService)service;        
+        this.service = (AbstractUserGroupService) service;
         load();
     }
 
@@ -411,11 +412,11 @@ public abstract class AbstractUserGroupStore  implements GeoServerUserGroupStore
     /**
      * Make a deep copy (using serialization) from the
      * service to the store.
-    */    
+     */
     @SuppressWarnings("unchecked")
     protected void deserialize() throws IOException {
         // deepcopy from service, using serialization 
-        
+
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         ObjectOutputStream oout = new ObjectOutputStream(out);
         oout.writeObject(service.helper.userMap);
@@ -423,24 +424,24 @@ public abstract class AbstractUserGroupStore  implements GeoServerUserGroupStore
         oout.writeObject(service.helper.user_groupMap);
         oout.writeObject(service.helper.group_userMap);
         oout.writeObject(service.helper.propertyMap);
-        byte[] bytes =out.toByteArray();
-        oout.close();            
+        byte[] bytes = out.toByteArray();
+        oout.close();
 
         clearMaps();
         ByteArrayInputStream in = new ByteArrayInputStream(bytes);
         ObjectInputStream oin = new ObjectInputStream(in);
         try {
-            helper.userMap = (TreeMap<String,GeoServerUser>) oin.readObject();
-            helper.groupMap =(TreeMap<String,GeoServerUserGroup>) oin.readObject();
-            helper.user_groupMap = (TreeMap<GeoServerUser,SortedSet<GeoServerUserGroup>>)oin.readObject();
-            helper.group_userMap = (TreeMap<GeoServerUserGroup,SortedSet<GeoServerUser>>)oin.readObject();
-            helper.propertyMap = (TreeMap<String,SortedSet<GeoServerUser>>)oin.readObject();
+            helper.userMap = (TreeMap<String, GeoServerUser>) oin.readObject();
+            helper.groupMap = (TreeMap<String, GeoServerUserGroup>) oin.readObject();
+            helper.user_groupMap = (TreeMap<GeoServerUser, SortedSet<GeoServerUserGroup>>) oin.readObject();
+            helper.group_userMap = (TreeMap<GeoServerUserGroup, SortedSet<GeoServerUser>>) oin.readObject();
+            helper.propertyMap = (TreeMap<String, SortedSet<GeoServerUser>>) oin.readObject();
         } catch (ClassNotFoundException e) {
             throw new IOException(e);
         }
         setModified(false);
     }
-    
+
     /* (non-Javadoc)
      * @see org.geoserver.security.GeoserverUserGroupService#initializeFromConfig(org.geoserver.security.config.SecurityNamedServiceConfig)
      */
@@ -448,23 +449,23 @@ public abstract class AbstractUserGroupStore  implements GeoServerUserGroupStore
     public void initializeFromConfig(SecurityNamedServiceConfig config) throws IOException {
         service.initializeFromConfig(config);
     }
-    
-    /** 
+
+    /**
      * Delegates to the {@link GeoServerUserGroupService} backend
      */
     @Override
-    public GeoServerUser createUserObject(String username,String password, boolean isEnabled) throws IOException{        
+    public GeoServerUser createUserObject(String username, String password, boolean isEnabled) throws IOException {
         return service.createUserObject(username, password, isEnabled);
-     }
-
-    protected void checkUser(GeoServerUser user) throws IOException{
-        if (helper.userMap.containsKey(user.getUsername())==false)
-            throw new IOException("User: " +  user.getUsername()+ " does not exist");
     }
-    
-    protected void checkGroup(GeoServerUserGroup group) throws IOException{
-        if (helper.groupMap.containsKey(group.getGroupname())==false)
-            throw new IOException("Group: " +  group.getGroupname()+ " does not exist");
+
+    protected void checkUser(GeoServerUser user) throws IOException {
+        if (helper.userMap.containsKey(user.getUsername()) == false)
+            throw new IOException("User: " + user.getUsername() + " does not exist");
+    }
+
+    protected void checkGroup(GeoServerUserGroup group) throws IOException {
+        if (helper.groupMap.containsKey(group.getGroupname()) == false)
+            throw new IOException("Group: " + group.getGroupname() + " does not exist");
     }
 
     public int getUserCount() throws IOException {
@@ -477,34 +478,34 @@ public abstract class AbstractUserGroupStore  implements GeoServerUserGroupStore
 
     @Override
     public SortedSet<GeoServerUser> getUsersHavingProperty(String propname) throws IOException {
-         return helper.getUsersHavingProperty(propname);
+        return helper.getUsersHavingProperty(propname);
     }
-    
+
     @Override
     public int getUserCountHavingProperty(String propname) throws IOException {
-          return helper.getUserCountHavingProperty(propname);
+        return helper.getUserCountHavingProperty(propname);
     }
 
     @Override
     public SortedSet<GeoServerUser> getUsersNotHavingProperty(String propname) throws IOException {
-         return helper.getUsersNotHavingProperty(propname);
+        return helper.getUsersNotHavingProperty(propname);
     }
 
     @Override
     public int getUserCountNotHavingProperty(String propname) throws IOException {
-         return helper.getUserCountNotHavingProperty(propname);
+        return helper.getUserCountNotHavingProperty(propname);
     }
 
     @Override
     public SortedSet<GeoServerUser> getUsersHavingPropertyValue(String propname, String propvalue)
             throws IOException {
-         return helper.getUsersHavingPropertyValue(propname, propvalue);
+        return helper.getUsersHavingPropertyValue(propname, propvalue);
     }
 
     @Override
     public int getUserCountHavingPropertyValue(String propname, String propvalue)
             throws IOException {
-         return helper.getUserCountHavingPropertyValue(propname, propvalue);
+        return helper.getUserCountHavingPropertyValue(propname, propvalue);
     }
 
 }

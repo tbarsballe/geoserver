@@ -24,7 +24,7 @@ import org.springframework.mock.web.MockHttpServletResponse;
 
 /**
  * Test for SF0 CSV outputFormat in App-schema {@link BoreholeViewMockData}
- * 
+ *
  * @author Rini Angreani (CSIRO Earth Science and Resource Engineering)
  */
 public class CSVOutputFormatTest extends AbstractAppSchemaTestSupport {
@@ -36,7 +36,6 @@ public class CSVOutputFormatTest extends AbstractAppSchemaTestSupport {
 
     /**
      * Tests full request with CSV outputFormat.
-     * 
      */
     @Test
     public void testFullRequest() throws Exception {
@@ -53,17 +52,17 @@ public class CSVOutputFormatTest extends AbstractAppSchemaTestSupport {
         List<String[]> lines = readLines(resp.getContentAsString());
 
         // we should have one header line and then all the features in that feature type
-        assertEquals(3, lines.size());        
+        assertEquals(3, lines.size());
 
         // check the header
-        String[] header = new String[] { "gml:id", "gsmlp:identifier", "gsmlp:name",
+        String[] header = new String[]{"gml:id", "gsmlp:identifier", "gsmlp:name",
                 "gsmlp:drillingMethod", "gsmlp:driller", "gsmlp:drillStartDate",
                 "gsmlp:startPoint", "gsmlp:inclinationType", "gsmlp:boreholeMaterialCustodian",
                 "gsmlp:boreholeLength_m", "gsmlp:elevation_m", "gsmlp:elevation_srs",
-                "gsmlp:specification_uri", "gsmlp:metadata_uri", "gsmlp:shape" };        
-        
+                "gsmlp:specification_uri", "gsmlp:metadata_uri", "gsmlp:shape"};
+
         assertTrue(Arrays.asList(lines.get(0)).containsAll(Arrays.asList(header)));
-        
+
         // check each line has the expected number of elements (num of att + 1 for the id)
         int headerCount = lines.get(0).length;
         assertEquals(headerCount, lines.get(1).length);
@@ -72,12 +71,11 @@ public class CSVOutputFormatTest extends AbstractAppSchemaTestSupport {
 
     /**
      * Tests CSV outputFormat with filters.
-     * 
      */
     @Test
     public void testFilter() throws Exception {
         String IDENTIFIER = "borehole.GA.17338";
-        
+
         String xml = "<wfs:GetFeature service=\"WFS\" " //
                 + "version=\"1.1.0\" " //
                 + "xmlns:ogc=\"http://www.opengis.net/ogc\" " //
@@ -106,16 +104,16 @@ public class CSVOutputFormatTest extends AbstractAppSchemaTestSupport {
 
         int identifierIndex = Arrays.asList(lines.get(0)).indexOf("gsmlp:identifier");
         assertEquals(IDENTIFIER, lines.get(1)[identifierIndex]);
-        
+
         // check the header
-        String[] header = new String[] { "gml:id", "gsmlp:identifier", "gsmlp:name",
+        String[] header = new String[]{"gml:id", "gsmlp:identifier", "gsmlp:name",
                 "gsmlp:drillingMethod", "gsmlp:driller", "gsmlp:drillStartDate",
                 "gsmlp:startPoint", "gsmlp:inclinationType", "gsmlp:boreholeMaterialCustodian",
                 "gsmlp:boreholeLength_m", "gsmlp:elevation_m", "gsmlp:elevation_srs",
-                "gsmlp:specification_uri", "gsmlp:metadata_uri", "gsmlp:shape" };        
-        
+                "gsmlp:specification_uri", "gsmlp:metadata_uri", "gsmlp:shape"};
+
         assertTrue(Arrays.asList(lines.get(0)).containsAll(Arrays.asList(header)));
-        
+
         // check each line has the expected number of elements (num of att + 1 for the id)
         int headerCount = lines.get(0).length;
         assertEquals(headerCount, lines.get(1).length);
@@ -154,9 +152,8 @@ public class CSVOutputFormatTest extends AbstractAppSchemaTestSupport {
 
     /**
      * Convenience to read the csv content . Copied from {@link org.geoserver.wfs.response.CSVOutputFormatTest}
-     * 
-     * @param csvContent
      *
+     * @param csvContent
      * @throws IOException
      */
     static List<String[]> readLines(String csvContent) throws IOException {

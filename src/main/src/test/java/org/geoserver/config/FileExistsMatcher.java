@@ -16,8 +16,7 @@ public class FileExistsMatcher extends BaseMatcher<File> {
     /**
      * Creates a matcher that matches files that exist
      *
-     * @param target
-     *     the target instance against which others should be assessed
+     * @param target the target instance against which others should be assessed
      */
     @Factory
     public static Matcher<File> fileExists() {

@@ -22,7 +22,7 @@ import org.geotools.util.Version;
 /**
  * Default component for a {@link CapabilitiesHomePageLinkProvider} implementation to provide a list
  * of getcapabilities links discriminated by service name and version.
- * 
+ *
  * @author Gabriel Roldan
  */
 public class CapabilitiesHomePagePanel extends Panel {
@@ -71,11 +71,8 @@ public class CapabilitiesHomePagePanel extends Panel {
     }
 
     /**
-     * 
-     * @param id
-     *            this component's wicket id
-     * @param capsLinks
-     *            the list of getcapabilities link to create the component for
+     * @param id        this component's wicket id
+     * @param capsLinks the list of getcapabilities link to create the component for
      */
     public CapabilitiesHomePagePanel(final String id, final List<CapsInfo> capsLinks) {
 
@@ -83,7 +80,7 @@ public class CapabilitiesHomePagePanel extends Panel {
 
         final Map<String, List<CapsInfo>> byService = new HashMap<String, List<CapsInfo>>();
         for (CapsInfo c : capsLinks) {
-            final String key=c.getService().toLowerCase();// to avoid problems with uppercase definitions
+            final String key = c.getService().toLowerCase();// to avoid problems with uppercase definitions
             List<CapsInfo> serviceLinks = byService.get(key);
             if (serviceLinks == null) {
                 serviceLinks = new ArrayList<CapsInfo>();
@@ -94,7 +91,7 @@ public class CapabilitiesHomePagePanel extends Panel {
 
         ArrayList<String> services = new ArrayList<String>(byService.keySet());
         Collections.sort(services);
-        
+
         ListView<String> view = new ListView<String>("services", services) {
 
             private static final long serialVersionUID = 1L;

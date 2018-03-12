@@ -14,13 +14,14 @@ import org.jivesoftware.smack.packet.Packet;
 
 /**
  * Listens for "PROGRESS" messages from XMPP service channels and takes action accordingly.
- * 
+ *
  * @author Alessio Fabiani, GeoSolutions
- * 
  */
 public class XMPPProgressMessage implements XMPPMessage {
 
-    /** The LOGGER */
+    /**
+     * The LOGGER
+     */
     public static final Logger LOGGER = Logging.getLogger(XMPPMessage.class.getPackage().getName());
 
     @Override
@@ -32,7 +33,7 @@ public class XMPPProgressMessage implements XMPPMessage {
 
     @Override
     public void handleSignal(XMPPClient xmppClient, Packet packet, Message message,
-            Map<String, String> signalArgs) {
+                             Map<String, String> signalArgs) {
 
         final String pID = signalArgs.get("id");
         final Double progress = Double.parseDouble(signalArgs.get("message"));

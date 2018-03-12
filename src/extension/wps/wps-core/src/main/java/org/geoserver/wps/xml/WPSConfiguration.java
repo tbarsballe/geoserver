@@ -31,11 +31,11 @@ public class WPSConfiguration extends org.geotools.wps.WPSConfiguration {
 
     protected void registerBindings(Map bindings) {
         super.registerBindings(bindings);
-        
+
         //binding overrides
-        bindings.put( WPS.ComplexDataType, ComplexDataTypeBinding.class );
+        bindings.put(WPS.ComplexDataType, ComplexDataTypeBinding.class);
     }
-    
+
     @Override
     protected void configureContext(MutablePicoContainer container) {
         super.configureContext(container);
@@ -55,11 +55,11 @@ public class WPSConfiguration extends org.geotools.wps.WPSConfiguration {
                 super.configureBindings(container);
                 container.registerComponentImplementation(WFS.GetFeatureType, GetFeatureTypeBinding.class);
             }
-            
+
         }));
         container.registerComponentImplementation(ComplexDataHandler.class);
     }
-    
+
     public static class ComplexDataHandler extends CopyingHandler implements ParserDelegate, ParserDelegate2 {
 
         private List<ParserDelegate> delegates;
@@ -84,23 +84,23 @@ public class WPSConfiguration extends org.geotools.wps.WPSConfiguration {
 
         @Override
         public boolean canHandle(QName elementName, Attributes attributes, Handler handler, Handler parent) {
-            if(parent == null || !("ComplexData".equals(parent.getComponent().getName()))) {
+            if (parent == null || !("ComplexData".equals(parent.getComponent().getName()))) {
                 return false;
             }
-            
+
             // make sure we're not going over the toes of any other delegate
             for (ParserDelegate delegate : getDelegates()) {
                 // skip copies of self
-                if(delegate instanceof ComplexDataHandler) {
+                if (delegate instanceof ComplexDataHandler) {
                     continue;
                 }
-                if(delegate instanceof ParserDelegate2 && ((ParserDelegate2) delegate).canHandle(elementName, attributes, handler, parent)) {
+                if (delegate instanceof ParserDelegate2 && ((ParserDelegate2) delegate).canHandle(elementName, attributes, handler, parent)) {
                     return false;
-                } else if(delegate.canHandle(elementName)) {
+                } else if (delegate.canHandle(elementName)) {
                     return false;
                 }
             }
-            
+
             return true;
         }
 
@@ -126,5 +126,5 @@ public class WPSConfiguration extends org.geotools.wps.WPSConfiguration {
             }
             return this.delegates;
         }
-    } 
+    }
 }

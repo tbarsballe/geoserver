@@ -21,16 +21,16 @@ import org.apache.wicket.model.IModel;
 public class StyleEditTabPanel extends Panel {
 
     private static final long serialVersionUID = 8044055895040826418L;
-    
+
     protected AbstractStylePage stylePage;
 
     /**
-     * @param id The id given to the panel.
+     * @param id    The id given to the panel.
      * @param model The model for the panel which wraps a {@link LayerInfo} instance.
      */
     public StyleEditTabPanel(String id, AbstractStylePage parent) {
         super(id);
-        
+
         this.stylePage = parent;
     }
 
@@ -45,6 +45,7 @@ public class StyleEditTabPanel extends Panel {
     protected void onStyleFormSubmit() {
         //do nothing by default
     }
+
     protected void configurationChanged() {
         //do nothing by default
     }

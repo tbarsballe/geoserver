@@ -24,11 +24,11 @@ import org.opengis.filter.Filter;
 import org.opengis.util.ProgressListener;
 
 public class RetypingFeatureCollectionTest {
-    
+
     FeatureVisitor lastVisitor = null;
     private ListFeatureCollection collection;
     private SimpleFeatureType renamedSchema;
-    
+
     @Before
     public void setup() throws SchemaException {
         SimpleFeatureType originalSchema = DataUtilities.createType("BasicPolygons", "the_geom:MultiPolygon:srid=4326,ID:String,value:int");
@@ -36,11 +36,13 @@ public class RetypingFeatureCollectionTest {
         tb.init(originalSchema);
         tb.setName("BasicPolygons2");
         renamedSchema = tb.buildFeatureType();
-        
+
         collection = new ListFeatureCollection(originalSchema) {
             public void accepts(FeatureVisitor visitor, ProgressListener progress) throws java.io.IOException {
-                lastVisitor = visitor; 
-            };
+                lastVisitor = visitor;
+            }
+
+            ;
         };
     }
 
@@ -49,7 +51,7 @@ public class RetypingFeatureCollectionTest {
         MaxVisitor visitor = new MaxVisitor(CommonFactoryFinder.getFilterFactory2().property("value"));
         assertOptimalVisit(visitor);
     }
-    
+
     @Test
     public void testCountVisitorDelegation() throws SchemaException, IOException {
         FeatureVisitor visitor = new CountVisitor();
@@ -62,12 +64,12 @@ public class RetypingFeatureCollectionTest {
         retypedCollection.accepts(visitor, null);
         assertSame(lastVisitor, visitor);
     }
-    
+
     /**
      * TEST for GEOS-8176 [https://osgeo-org.atlassian.net/browse/GEOS-8176].
-     * 
+     * <p>
      * Make sure that the subCollection returned is retyped.
-     * 
+     *
      * @author Ian Turton
      */
     @Test

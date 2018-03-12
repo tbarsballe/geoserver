@@ -22,9 +22,8 @@ import org.opengis.filter.expression.PropertyName;
 
 /**
  * Basic attribute shaver, works properly only against {@link CSWRecordDescriptor#RECORD}
- * 
+ *
  * @author Andrea Aime - GeoSolutions
- * 
  */
 class RetypingIterator implements Iterator<Feature>, Closeable {
 
@@ -35,7 +34,7 @@ class RetypingIterator implements Iterator<Feature>, Closeable {
     ComplexFeatureBuilder builder;
 
     public RetypingIterator(FeatureIterator<Feature> delegate, FeatureType schema,
-            List<PropertyName> properties) {
+                            List<PropertyName> properties) {
         this.delegate = delegate;
         this.builder = new ComplexFeatureBuilder(schema);
         this.names = buildNames(properties);
@@ -92,7 +91,7 @@ class RetypingIterator implements Iterator<Feature>, Closeable {
 //                }
 //            }
 //        }
-        
+
         for (Property p : original.getProperties()) {
             if (names.contains(p.getName()) || names.contains(p.getName().getLocalPart())) {
                 // this makes the thing type specific, but at least it works for the record case
@@ -107,7 +106,7 @@ class RetypingIterator implements Iterator<Feature>, Closeable {
 
         return builder.buildFeature(original.getIdentifier().getID());
     }
-    
+
     @Override
     public void remove() {
         throw new UnsupportedOperationException();

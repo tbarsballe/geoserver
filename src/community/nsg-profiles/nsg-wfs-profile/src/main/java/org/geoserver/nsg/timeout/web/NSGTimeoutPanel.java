@@ -25,7 +25,7 @@ public class NSGTimeoutPanel extends AdminPagePanel {
 
         PropertyModel<MetadataMap> metadata = new PropertyModel<>(model, "metadata");
         MapModel timeoutModel = new MapModel(metadata, TimeoutCallback.TIMEOUT_CONFIG_KEY);
-        if(timeoutModel.getObject() == null) {
+        if (timeoutModel.getObject() == null) {
             timeoutModel.setObject(TimeoutCallback.TIMEOUT_CONFIG_DEFAULT);
         }
         TextField<Integer> timeoutField = new TextField<>("timeoutSeconds", timeoutModel, Integer.class);

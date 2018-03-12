@@ -27,10 +27,10 @@ public class WMSValidatorTest extends GeoServerMockTestSupport {
     protected MockTestData createTestData() throws Exception {
         MockTestData td = new MockTestData();
         td.setMockCreator(new MockCreator() {
-           
+
             @Override
             public void onResource(String name, ResourceInfo r, StoreInfo s, MockCatalogBuilder b) {
-                if(name.equals("Buildings")) {
+                if (name.equals("Buildings")) {
                     FeatureTypeInfo info = (FeatureTypeInfo) r;
                     AttributeTypeInfoImpl geom1 = new AttributeTypeInfoImpl();
                     geom1.setName("geom");
@@ -47,10 +47,10 @@ public class WMSValidatorTest extends GeoServerMockTestSupport {
                 super.onResource(name, r, s, b);
             }
         });
-        
+
         return td;
     }
-    
+
     @Test
     public void testGeometryCheckLegacyDataDir() {
         // used to NPE

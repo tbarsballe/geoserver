@@ -25,7 +25,6 @@ import org.geoserver.platform.resource.Resource;
 public interface WebProcessingService {
     /**
      * Generates a XML object for the return of the getCapabilities request
-     *
      */
     WPSCapabilitiesType getCapabilities(GetCapabilitiesType request) throws WPSException;
 
@@ -38,12 +37,12 @@ public interface WebProcessingService {
      * Executes a execute request and writes output to the Servlet response
      */
     ExecuteResponseType execute(ExecuteType request) throws WPSException;
-    
+
     /**
      * Returns the status of a given process execution, either as a {@link ExecuteResponseType} or
      * as a stored response File
-     * @param request
      *
+     * @param request
      * @throws WPSException
      */
     Object getExecutionStatus(GetExecutionStatusType request) throws WPSException;
@@ -59,18 +58,16 @@ public interface WebProcessingService {
 
     /**
      * Returns a output stored as a reference in the specified execution
-     * 
-     * @param request
      *
+     * @param request
      * @throws WPSException
      */
     Resource getExecutionResult(GetExecutionResultType request) throws WPSException;
 
     /**
      * Dismisses the execution of a currently running process
-     * 
-     * @param request
      *
+     * @param request
      * @throws WPSException
      */
     ExecuteResponseType dismiss(DismissType request) throws WPSException;

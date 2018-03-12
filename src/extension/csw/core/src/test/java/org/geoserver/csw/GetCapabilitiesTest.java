@@ -54,7 +54,7 @@ public class GetCapabilitiesTest extends CSWSimpleTestSupport {
         xpath.setNamespaceContext(nameSpaceContext);
     }
 
-    @Test 
+    @Test
     public void testKVPReader() throws Exception {
         Map<String, Object> raw = new HashMap<String, Object>();
         raw.put("service", "CSW");
@@ -89,7 +89,7 @@ public class GetCapabilitiesTest extends CSWSimpleTestSupport {
         assertEquals("text/plain", outputFormats.get(1));
     }
 
-    @Test 
+    @Test
     public void testXMLReader() throws Exception {
         CSWXmlReader reader = new CSWXmlReader("GetCapabilities", "2.0.2", new CSWConfiguration(),
                 EntityResolverProvider.RESOLVE_DISABLED_PROVIDER);
@@ -98,7 +98,7 @@ public class GetCapabilitiesTest extends CSWSimpleTestSupport {
         assertReturnedCapabilitiesComplete(caps);
     }
 
-    @Test 
+    @Test
     public void testXMLReaderInvalid() throws Exception {
         // create a schema invalid request
         String capRequest = getResourceAsString("GetCapabilities.xml");
@@ -116,7 +116,7 @@ public class GetCapabilitiesTest extends CSWSimpleTestSupport {
         }
     }
 
-    @Test 
+    @Test
     public void testGetBasic() throws Exception {
         Document dom = getAsDOM(BASEPATH + "?service=csw&version=2.0.2&request=GetCapabilities");
         //print(dom);
@@ -139,15 +139,15 @@ public class GetCapabilitiesTest extends CSWSimpleTestSupport {
                 xpath.evaluate(
                         "//ows:OperationsMetadata/ows:Operation[@name=\"GetCapabilities\"]/ows:Constraint/ows:Value",
                         dom));
-        
+
         // check we have csw:AnyText among the queriables
         assertXpathEvaluatesTo("1", "count(//ows:Operation[@name='GetRecords']/ows:Constraint[@name='SupportedDublinCoreQueryables' and ows:Value = 'csw:AnyText'])", dom);
-        
+
         // check we have dc:subject among the domain property names
         assertXpathEvaluatesTo("1", "count(//ows:Operation[@name='GetDomain']/ows:Parameter[@name='PropertyName' and ows:Value = 'dc:title'])", dom);
     }
 
-    @Test 
+    @Test
     public void testPostBasic() throws Exception {
         Document dom = postAsDOM(BASEPATH + "?service=csw&version=2.0.2&request=GetCapabilities");
         //print(dom);
@@ -201,7 +201,7 @@ public class GetCapabilitiesTest extends CSWSimpleTestSupport {
         assertEquals("Local CSW", xpath.evaluate("//ows:ServiceIdentification/ows:Abstract", dom));
     }
 
-    @Test 
+    @Test
     public void testSections() throws Exception {
         Document dom = getAsDOM(BASEPATH + "?service=csw&version=2.0.2&request=GetCapabilities&sections=ServiceIdentification,ServiceProvider");
         // print(dom);
@@ -222,14 +222,14 @@ public class GetCapabilitiesTest extends CSWSimpleTestSupport {
         assertTrue(xpath.getMatchingNodes("//ows:OperationsMetadata/ows:Operation", dom).getLength() == 0);
         assertEquals("0", xpath.evaluate("count(//ows:Operation)", dom));
     }
-    
-    @Test 
+
+    @Test
     public void testCiteCompliance() throws Exception {
         CSWInfo csw = getGeoServer().getService(CSWInfo.class);
         try {
             csw.setCiteCompliant(true);
             getGeoServer().save(csw);
-            
+
             Document dom = getAsDOM(BASEPATH + "?request=GetCapabilities");
             checkOws10Exception(dom, ServiceException.MISSING_PARAMETER_VALUE, "service");
         } finally {

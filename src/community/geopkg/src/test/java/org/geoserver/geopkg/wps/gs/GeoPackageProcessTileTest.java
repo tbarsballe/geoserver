@@ -6,6 +6,7 @@ package org.geoserver.geopkg.wps.gs;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
+
 import static org.junit.Assert.*;
 
 import java.io.File;
@@ -31,7 +32,7 @@ public class GeoPackageProcessTileTest extends WPSTestSupport {
     }
 
     @Test
-    public void testGeoPackageProcessTilesTopLeftTile() throws Exception{
+    public void testGeoPackageProcessTilesTopLeftTile() throws Exception {
         String urlPath = string(post("wps", getXmlTilesWorld())).trim();
         String resourceUrl = urlPath.substring("http://localhost:8080/geoserver/".length());
         MockHttpServletResponse response = getAsServletResponse(resourceUrl);
@@ -49,37 +50,37 @@ public class GeoPackageProcessTileTest extends WPSTestSupport {
         gpkg.close();
     }
 
-    private String getXmlTilesWorld(){
+    private String getXmlTilesWorld() {
         return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
-        "<wps:Execute version=\"1.0.0\" service=\"WPS\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://www.opengis.net/wps/1.0.0\" xmlns:wfs=\"http://www.opengis.net/wfs\" xmlns:wps=\"http://www.opengis.net/wps/1.0.0\" xmlns:ows=\"http://www.opengis.net/ows/1.1\" xmlns:gml=\"http://www.opengis.net/gml\" xmlns:ogc=\"http://www.opengis.net/ogc\" xmlns:wcs=\"http://www.opengis.net/wcs/1.1.1\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xsi:schemaLocation=\"http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsAll.xsd\">" +
-        "  <ows:Identifier>gs:GeoPackage</ows:Identifier>" +
-        "  <wps:DataInputs>" +
-        "    <wps:Input>" +
-        "      <ows:Identifier>contents</ows:Identifier>" +
-        "      <wps:Data>" +
-        "        <wps:ComplexData mimeType=\"text/xml; subtype=geoserver/geopackage\"><![CDATA[" +
-        "<geopackage name=\"worldtest\" xmlns=\"http://www.opengis.net/gpkg\">" +
-        "  <tiles name=\"world\" identifier=\"wl1\">" +
-        "    <description>world overlay</description>  " +
-        "    <srs>EPSG:4326</srs>" +
-        "    <bbox>" +
-        "      <minx>-180</minx>" +
-        "      <maxx>180</maxx>" +
-        "      <miny>-90</miny>" +
-        "      <maxy>90</maxy>" +
-        "    </bbox>" +
-        "    <layers>wcs:World</layers>" +
-        "  </tiles>" +
-        "</geopackage>" +
-        "]]></wps:ComplexData>" +
-        "      </wps:Data>" +
-        "    </wps:Input>" +
-        "  </wps:DataInputs>" +
-        "  <wps:ResponseForm>" +
-        "    <wps:RawDataOutput>" +
-        "      <ows:Identifier>geopackage</ows:Identifier>" +
-        "    </wps:RawDataOutput>" +
-        "  </wps:ResponseForm>" +
-        "</wps:Execute>";
+                "<wps:Execute version=\"1.0.0\" service=\"WPS\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://www.opengis.net/wps/1.0.0\" xmlns:wfs=\"http://www.opengis.net/wfs\" xmlns:wps=\"http://www.opengis.net/wps/1.0.0\" xmlns:ows=\"http://www.opengis.net/ows/1.1\" xmlns:gml=\"http://www.opengis.net/gml\" xmlns:ogc=\"http://www.opengis.net/ogc\" xmlns:wcs=\"http://www.opengis.net/wcs/1.1.1\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xsi:schemaLocation=\"http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsAll.xsd\">" +
+                "  <ows:Identifier>gs:GeoPackage</ows:Identifier>" +
+                "  <wps:DataInputs>" +
+                "    <wps:Input>" +
+                "      <ows:Identifier>contents</ows:Identifier>" +
+                "      <wps:Data>" +
+                "        <wps:ComplexData mimeType=\"text/xml; subtype=geoserver/geopackage\"><![CDATA[" +
+                "<geopackage name=\"worldtest\" xmlns=\"http://www.opengis.net/gpkg\">" +
+                "  <tiles name=\"world\" identifier=\"wl1\">" +
+                "    <description>world overlay</description>  " +
+                "    <srs>EPSG:4326</srs>" +
+                "    <bbox>" +
+                "      <minx>-180</minx>" +
+                "      <maxx>180</maxx>" +
+                "      <miny>-90</miny>" +
+                "      <maxy>90</maxy>" +
+                "    </bbox>" +
+                "    <layers>wcs:World</layers>" +
+                "  </tiles>" +
+                "</geopackage>" +
+                "]]></wps:ComplexData>" +
+                "      </wps:Data>" +
+                "    </wps:Input>" +
+                "  </wps:DataInputs>" +
+                "  <wps:ResponseForm>" +
+                "    <wps:RawDataOutput>" +
+                "      <ows:Identifier>geopackage</ows:Identifier>" +
+                "    </wps:RawDataOutput>" +
+                "  </wps:ResponseForm>" +
+                "</wps:Execute>";
     }
 }

@@ -17,9 +17,9 @@ import org.geotools.xml.Node;
 
 /**
  * Binding object for the type http://www.opengis.net/wfs:DescribeFeatureTypeType.
- *
  * <p>
- *        <pre>
+ * <p>
+ * <pre>
  *         <code>
  *  &lt;xsd:complexType name="DescribeFeatureTypeType"&gt;
  *      &lt;xsd:annotation&gt;
@@ -83,6 +83,7 @@ import org.geotools.xml.Node;
  *
  *          </code>
  *         </pre>
+ *
  * @generated
  */
 public class DescribeFeatureTypeTypeBinding extends AbstractComplexBinding {
@@ -120,9 +121,9 @@ public class DescribeFeatureTypeTypeBinding extends AbstractComplexBinding {
      * @generated modifiable
      */
     public Object parse(ElementInstance instance, Node node, Object value)
-        throws Exception {
+            throws Exception {
         DescribeFeatureTypeType describeFeatureType = wfsfactory
-            .createDescribeFeatureTypeType();
+                .createDescribeFeatureTypeType();
 
         //&lt;xsd:element maxOccurs="unbounded" minOccurs="0"
         //   name="TypeName" type="xsd:QName"&gt;

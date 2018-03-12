@@ -23,12 +23,10 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 /**
  * Inputs and outputs feature collections in GPX format using gt-gpx
- * 
- * 
  */
 public class GPXPPIO extends CDataPPIO {
     private static final Logger LOGGER = Logging.getLogger(GPXPPIO.class);
-    
+
     private GeoServer geoServer;
 
     protected GPXPPIO(GeoServer geoServer) {
@@ -48,7 +46,7 @@ public class GPXPPIO extends CDataPPIO {
             SimpleFeatureCollection fc = (SimpleFeatureCollection) input;
             CoordinateReferenceSystem crs = fc.getSchema().getCoordinateReferenceSystem();
             // gpx is defined only in wgs84
-            if(crs != null && !CRS.equalsIgnoreMetadata(crs, DefaultGeographicCRS.WGS84)) {
+            if (crs != null && !CRS.equalsIgnoreMetadata(crs, DefaultGeographicCRS.WGS84)) {
                 fc = new ReprojectingFeatureCollection(fc, DefaultGeographicCRS.WGS84);
             }
             encoder.encode(os, fc);

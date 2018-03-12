@@ -68,8 +68,8 @@ public final class ExtraFileHandler implements GenericTaskletHandler {
         if (outputDirectory.exists() && outputDirectory.isDirectory()) {
             File outputFile = new File(outputDirectory, outputFileName);
             try (InputStream input = new FileInputStream(inputFile);
-                    // copy the file to is destination
-                    OutputStream output = new FileOutputStream(outputFile)) {
+                 // copy the file to is destination
+                 OutputStream output = new FileOutputStream(outputFile)) {
                 IOUtils.copy(input, output);
             } catch (Exception exception) {
                 throw new RuntimeException(String.format("Error copying file '%s' to file '%s'.",

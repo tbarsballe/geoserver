@@ -35,12 +35,12 @@ import org.springframework.util.Assert;
 /**
  * Abstract base class for GetMapProducers that relies in LiteRenderer for creating the raster map
  * and then outputs it in the format they specializes in.
- * 
+ * <p>
  * <p>
  * This class does the job of producing a BufferedImage using geotools LiteRenderer, so it should be
  * enough for a subclass to implement {@linkplain #formatImageOutputStream}
  * </p>
- * 
+ * <p>
  * <p>
  * Generates a map using the geotools jai rendering classes. Uses the Lite renderer, loading the
  * data on the fly, which is quite nice. Thanks Andrea and Gabriel. The word is that we should
@@ -48,32 +48,35 @@ import org.springframework.util.Assert;
  * think we are a ways off with its maturity to try that yet. So Lite treats us quite well, as it is
  * stateless and therefore loads up nice and fast.
  * </p>
- * 
+ * <p>
  * <p>
  * </p>
- * 
+ *
  * @author Chris Holmes, TOPP
  * @author Simone Giannecchini, GeoSolutions
  * @version $Id$
  */
 public abstract class RenderedImageMapResponse extends AbstractMapResponse {
 
-    /** Which format to encode the image in if one is not supplied */
+    /**
+     * Which format to encode the image in if one is not supplied
+     */
     private static final String DEFAULT_MAP_FORMAT = "image/png";
 
-    /** WMS Service configuration * */
+    /**
+     * WMS Service configuration *
+     */
     protected final WMS wms;
 
     /**
-     * 
+     *
      */
     public RenderedImageMapResponse(WMS wms) {
         this(DEFAULT_MAP_FORMAT, wms);
     }
 
     /**
-     * @param the
-     *            mime type to be written down as an HTTP header when a map of this format is
+     * @param the mime type to be written down as an HTTP header when a map of this format is
      *            generated
      */
     public RenderedImageMapResponse(String mime, WMS wms) {
@@ -88,23 +91,19 @@ public abstract class RenderedImageMapResponse extends AbstractMapResponse {
 
     /**
      * Transforms a rendered image into the appropriate format, streaming to the output stream.
-     * 
-     * @param image
-     *            The image to be formatted.
-     * @param outStream
-     *            The stream to write to.
-     * 
+     *
+     * @param image     The image to be formatted.
+     * @param outStream The stream to write to.
      * @throws ServiceException
      * @throws IOException
      */
     public abstract void formatImageOutputStream(RenderedImage image, OutputStream outStream,
-            WMSMapContent mapContent) throws ServiceException, IOException;
+                                                 WMSMapContent mapContent) throws ServiceException, IOException;
 
     /**
      * Writes the image to the given destination.
-     * 
-     * @param value
-     *            must be a {@link RenderedImageMap}
+     *
+     * @param value must be a {@link RenderedImageMap}
      * @see GetMapOutputFormat#write(org.geoserver.wms.WebMap, OutputStream)
      * @see #formatImageOutputStream(RenderedImage, OutputStream, WMSMapContent)
      */
@@ -133,20 +132,19 @@ public abstract class RenderedImageMapResponse extends AbstractMapResponse {
             imageMap.dispose();
         }
     }
-    
+
     /**
      * Applies a transformation to 8 bits + palette in case the user requested a specific palette or
      * the palette format has been requested, applying a bitmask or translucent palette inverter
      * according to the user request and the image structure
-
+     *
      * @param image
      * @param mapContent
      * @param palettedFormatName
      * @param supportsTranslucency If false the code will always apply the bitmask transformer
-     *
      */
     protected RenderedImage applyPalette(RenderedImage image, WMSMapContent mapContent,
-            String palettedFormatName, boolean supportsTranslucency) {
+                                         String palettedFormatName, boolean supportsTranslucency) {
         // check to see if we have to see a translucent or bitmask quantizer
         GetMapRequest request = mapContent.getRequest();
         QuantizeMethod method = (QuantizeMethod) request.getFormatOptions().get(
@@ -174,7 +172,7 @@ public abstract class RenderedImageMapResponse extends AbstractMapResponse {
                 image = new ImageWorker(image).rescaleToBytes().forceComponentColorModel()
                         .getRenderedImage();
                 ColorIndexer indexer = null;
-                
+
                 // user provided palette?
                 if (mapContent.getPalette() != null) {
                     indexer = new CachingColorIndexer(new LRUColorIndexer(icm, 1024));
@@ -192,26 +190,25 @@ public abstract class RenderedImageMapResponse extends AbstractMapResponse {
 
         return image;
     }
-    
+
     /**
      * @param originalImage
-     *
      */
     protected RenderedImage forceIndexed8Bitmask(RenderedImage originalImage,
-            InverseColorMapOp paletteInverter) {
+                                                 InverseColorMapOp paletteInverter) {
         return ImageUtils.forceIndexed8Bitmask(originalImage, paletteInverter);
     }
 
     /**
-     * Returns the capabilities for this output format 
-     * @param outputFormat
+     * Returns the capabilities for this output format
      *
+     * @param outputFormat
      */
     public abstract MapProducerCapabilities getCapabilities(String outputFormat);
 
     /**
-     * Returns a three letter extension for clients needing to name return files 
-     * 
+     * Returns a three letter extension for clients needing to name return files
+     *
      * @return
      */
     public String getExtension(RenderedImage image, WMSMapContent mapContent) {

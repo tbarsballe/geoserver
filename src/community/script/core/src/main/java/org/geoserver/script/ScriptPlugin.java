@@ -20,8 +20,8 @@ import java.io.Serializable;
  * <p>
  * Instances of this class must be registered in the application context.
  * </p>
- * @author Justin Deoliveira, OpenGeo
  *
+ * @author Justin Deoliveira, OpenGeo
  */
 @Component
 public abstract class ScriptPlugin implements Serializable {
@@ -31,8 +31,8 @@ public abstract class ScriptPlugin implements Serializable {
 
     /**
      * Constructor.
-     * 
-     * @param extension The associated extension for the plugin. 
+     *
+     * @param extension    The associated extension for the plugin.
      * @param factoryClass The associated jsr-223 script engine factory class.
      */
     protected ScriptPlugin(String extension, Class<? extends ScriptEngineFactory> factoryClass) {
@@ -44,7 +44,7 @@ public abstract class ScriptPlugin implements Serializable {
     }
 
     /**
-     * The associated extension for the script plugin, examples: "py", "js", "rb", etc... 
+     * The associated extension for the script plugin, examples: "py", "js", "rb", etc...
      */
     public String getExtension() {
         return extension;
@@ -56,7 +56,7 @@ public abstract class ScriptPlugin implements Serializable {
     public abstract String getId();
 
     /**
-     * The id of the script plugin, meant for display, examples: "Python", "JavaScript", "Ruby", 
+     * The id of the script plugin, meant for display, examples: "Python", "JavaScript", "Ruby",
      * etc...
      */
     public abstract String getDisplayName();
@@ -81,8 +81,8 @@ public abstract class ScriptPlugin implements Serializable {
     /**
      * Callback to initialize a new script engine.
      * <p>
-     * This method is called whenever a new script engine is created and before any scripts are 
-     * created. Plugins may use this method to set up any context they wish to make avialable to 
+     * This method is called whenever a new script engine is created and before any scripts are
+     * created. Plugins may use this method to set up any context they wish to make avialable to
      * scripts running in the engine. This default implementation does nothing.
      * </p>
      */
@@ -92,7 +92,7 @@ public abstract class ScriptPlugin implements Serializable {
     /**
      * Creates the hook for "app" requests.
      * <p>
-     * This default implementation returns <code>null</code>, subclass should override in order to 
+     * This default implementation returns <code>null</code>, subclass should override in order to
      * implement a custom app hook.
      * </p>
      */
@@ -103,7 +103,7 @@ public abstract class ScriptPlugin implements Serializable {
     /**
      * Creates the hook for wps processes.
      * <p>
-     * This default implementation returns <code>null</code>, subclass should override in order to 
+     * This default implementation returns <code>null</code>, subclass should override in order to
      * implement a custom hook.
      * </p>
      */
@@ -114,7 +114,7 @@ public abstract class ScriptPlugin implements Serializable {
     /**
      * Creates the hook for functions.
      * <p>
-     * This default implementation returns <code>null</code>, subclass should override in order to 
+     * This default implementation returns <code>null</code>, subclass should override in order to
      * implement a custom hook.
      * </p>
      */
@@ -125,7 +125,7 @@ public abstract class ScriptPlugin implements Serializable {
     /**
      * Creates the hook for WFS transactions.
      * <p>
-     * This default implementation returns a default implementation, subclass should override in 
+     * This default implementation returns a default implementation, subclass should override in
      * order to implement a custom hook.
      * </p>
      */

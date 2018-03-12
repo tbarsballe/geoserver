@@ -18,15 +18,15 @@ import org.geotools.util.Version;
  * <p>
  * Instances need to be declared in a spring context like the following:
  * </p>
- * 
+ * <p>
  * <pre>
  *         <code>
  *  &lt;bean id="myKvpParser" class="org.xzy.MyKvpParser"/&gt;
  *         </code>
  * </pre>
- * 
+ * <p>
  * Where <code>com.xzy.MyKvpParser</code> could be something like:
- * 
+ * <p>
  * <pre>
  *         <code>
  *  public class MyKvpParser extends KvpParser {
@@ -67,7 +67,7 @@ import org.geotools.util.Version;
  *  &lt;bean&gt;
  *         </code>
  * </pre>
- * 
+ *
  * @author Justin Deoliveira, The Open Planning Project, jdeolive@openplans.org
  */
 public abstract class KvpParser {
@@ -90,17 +90,17 @@ public abstract class KvpParser {
      * The service to bind to
      */
     String service;
-    
+
     /**
      * The version of the service to bind to
      */
     Version version;
-    
+
     /**
      * The request to bind to
      */
     String request;
-    
+
     public KvpParser(String key, Class binding) {
         this.key = key;
         this.binding = binding;
@@ -119,42 +119,42 @@ public abstract class KvpParser {
     protected Class getBinding() {
         return binding;
     }
-    
+
     /**
      * @return The service to bind to, may be <code>null</code>.
      */
     public final String getService() {
         return service;
     }
-    
+
     /**
      * Sets the service to bind to.
      */
-    public final void setService( String service ) {
+    public final void setService(String service) {
         this.service = service;
     }
-    
+
     /**
      * @return The version to bind to, or <code>null</code>.
      */
     public final Version getVersion() {
         return version;
     }
-    
+
     /**
      * Sets the version to bind to.
      */
-    public final void setVersion( Version version ) {
+    public final void setVersion(Version version) {
         this.version = version;
     }
-    
+
     /**
      * Sets the request to bind to.
      */
     public final void setRequest(String request) {
         this.request = request;
     }
-    
+
     /**
      * @return The request to bind to, or <code>null</code>.
      */
@@ -166,9 +166,7 @@ public abstract class KvpParser {
      * Parses the string representation into the object representation.
      *
      * @param value The string value.
-     *
      * @return The parsed object, or null if it could not be parsed.
-     *
      * @throws Exception In the event of an unsuccesful parse.
      */
     public abstract Object parse(String value) throws Exception;

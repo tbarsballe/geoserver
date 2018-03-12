@@ -42,9 +42,9 @@ public class WMSStoreNewPage extends AbstractWMSStorePage {
             WMSStoreInfo store = builder.buildWMSStore(null);
 
             initUI(store);
-            
+
             final GeoServerEnvironment gsEnvironment = GeoServerExtensions.bean(GeoServerEnvironment.class);
-            
+
             // AF: Disable Binding if GeoServer Env Parametrization is enabled!
             if (gsEnvironment == null || !GeoServerEnvironment.ALLOW_ENV_PARAMETRIZATION) {
                 capabilitiesURL.getFormComponent().add(new WMSCapabilitiesURLValidator());
@@ -70,7 +70,7 @@ public class WMSStoreNewPage extends AbstractWMSStorePage {
         try {
             // GeoServer Env substitution; validate first
             getCatalog().validate(expandedStore, false).throwIfInvalid();
-            
+
             // GeoServer Env substitution; force to *AVOID* resolving env placeholders...
             savedStore = getCatalog().getResourcePool().clone(info, false);
             // ... and save
@@ -102,7 +102,7 @@ public class WMSStoreNewPage extends AbstractWMSStorePage {
 
         setResponsePage(layerChooserPage);
     }
-    
+
     final class WMSCapabilitiesURLValidator implements IValidator {
 
         @Override
@@ -122,23 +122,23 @@ public class WMSStoreNewPage extends AbstractWMSStorePage {
                 hints.put(DocumentHandler.DEFAULT_NAMESPACE_HINT_KEY, WMSSchema.getInstance());
                 hints.put(DocumentFactory.VALIDATION_HINT, Boolean.FALSE);
                 EntityResolverProvider provider = getCatalog().getResourcePool().getEntityResolverProvider();
-                if(provider != null) {
+                if (provider != null) {
                     EntityResolver entityResolver = provider.getEntityResolver();
-                    if(entityResolver != null) {
+                    if (entityResolver != null) {
                         hints.put(XMLHandlerHints.ENTITY_RESOLVER, entityResolver);
                     }
                 }
-                
+
                 WebMapServer server = new WebMapServer(new URL(url), client, hints);
                 server.getCapabilities();
-            } catch(IOException | ServiceException e) {
+            } catch (IOException | ServiceException e) {
                 IValidationError err = new ValidationError("WMSCapabilitiesValidator.connectionFailure")
                         .addKey("WMSCapabilitiesValidator.connectionFailure")
                         .setVariable("error", e.getMessage());
                 validatable.error(err);
             }
         }
-        
+
     }
 
 }

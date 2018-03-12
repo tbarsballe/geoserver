@@ -56,19 +56,18 @@ public abstract class XmlRequestReader {
      * Creates the xml reader for the specified element.
      *
      * @param namespace The namespace of the element
-     * @param local The local name of the element
+     * @param local     The local name of the element
      */
     public XmlRequestReader(String namespace, String local) {
         this(new QName(namespace, local));
     }
 
     /**
-     *
      * Creates the xml reader for the specified element of a particular version.
      *
      * @param element The qualified name of the element the reader reads.
      * @param version The version of the element in which the reader supports,
-     * may be <code>null</code>.
+     *                may be <code>null</code>.
      */
     public XmlRequestReader(QName element, Version version, String serviceId) {
         this.element = element;
@@ -80,7 +79,7 @@ public abstract class XmlRequestReader {
         }
     }
 
-      /**
+    /**
      * @return The qualified name of the element that this reader reads.
      */
     public QName getElement() {
@@ -99,21 +98,21 @@ public abstract class XmlRequestReader {
      * Reads the xml and initializes the request object.
      * <p>
      * The <tt>request</tt> parameter may be <code>null</code>, so in this case
-     * the request reader would be responsible for creating the request object, 
-     * or throwing an exception if this is not supported. 
+     * the request reader would be responsible for creating the request object,
+     * or throwing an exception if this is not supported.
      * </p>
      * <p>
-     * In the case of the <tt>request</tt> being non <code>null</code>, the 
+     * In the case of the <tt>request</tt> being non <code>null</code>, the
      * request reader may chose to modify and return <tt>request</tt>, or create
      * a new request object and return it.
      * </p>
      * <p>
-     * The <tt>kvp</tt> is used to support mixed style reading of the request 
-     * object from xml and from a set of key value pairs. This map is often empty. 
+     * The <tt>kvp</tt> is used to support mixed style reading of the request
+     * object from xml and from a set of key value pairs. This map is often empty.
      * </p>
      */
     public abstract Object read(Object request, Reader reader, Map kvp) throws Exception;
-    
+
     /**
      * Two XmlReaders considered equal if namespace,element, and version properties
      * are the same.
@@ -126,9 +125,9 @@ public abstract class XmlRequestReader {
         XmlRequestReader other = (XmlRequestReader) obj;
 
         return new EqualsBuilder().append(element, other.element).append(version, other.version)
-                                  .append(serviceId, other.serviceId).isEquals();
+                .append(serviceId, other.serviceId).isEquals();
     }
-    
+
     @Override
     public String toString() {
         return getClass().getName() + "(" + element + ", " + serviceId + ", " + version + ")";

@@ -14,9 +14,8 @@ import org.apache.wicket.validation.ValidationError;
 /**
  * Checks a string conforms to the XML Name production as declared at {@link http
  * ://www.w3.org/TR/REC-xml/#NT-Name}
- * 
+ *
  * @author aaime
- * 
  */
 @SuppressWarnings("serial")
 public class XMLNameValidator implements IValidator<String> {

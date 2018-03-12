@@ -27,7 +27,7 @@ public class SimpleFeatureCollectionConverter
 
     /**
      * Access features, unwrapping if necessary.
-     * 
+     *
      * @return features
      */
     protected SimpleFeatureCollection getFeatures(SimpleFeatureCollection content) {

@@ -56,6 +56,7 @@ public class ExternalSortRegionatingStrategy extends
      * Java type to H2 type map (covers only types that do not have a size)
      */
     static Map<Class<?>, String> CLASS_MAPPINGS = new LinkedHashMap<Class<?>, String>();
+
     static {
         CLASS_MAPPINGS.put(Boolean.class, "BOOLEAN");
         CLASS_MAPPINGS.put(Byte.class, "TINYINT");
@@ -71,7 +72,7 @@ public class ExternalSortRegionatingStrategy extends
         CLASS_MAPPINGS.put(java.sql.Date.class, "DATE");
         CLASS_MAPPINGS.put(java.sql.Time.class, "TIME");
         CLASS_MAPPINGS.put(java.sql.Timestamp.class, "TIMESTAMP");
-        
+
         SimpleFeatureTypeBuilder tb = new SimpleFeatureTypeBuilder();
         tb.crs(Tile.WGS84);
         tb.add("point", Point.class);
@@ -86,9 +87,9 @@ public class ExternalSortRegionatingStrategy extends
     String h2Type;
 
     public ExternalSortRegionatingStrategy(GeoServer gs) {
-        super( gs );
+        super(gs);
     }
-    
+
     @Override
     protected final String getDatabaseName(WMSMapContent con, Layer layer)
             throws Exception {
@@ -103,7 +104,7 @@ public class ExternalSortRegionatingStrategy extends
 
     @Override
     protected final String getDatabaseName(FeatureTypeInfo cfg)
-            throws Exception { 
+            throws Exception {
         return super.getDatabaseName(cfg) + "_" + checkAttribute(cfg);
     }
 
@@ -132,14 +133,14 @@ public class ExternalSortRegionatingStrategy extends
                     + featureType.getName() + "#" + attribute);
     }
 
-    protected String checkAttribute(FeatureTypeInfo cfg){
-        return MapLayerInfo.getRegionateAttribute(cfg); 
+    protected String checkAttribute(FeatureTypeInfo cfg) {
+        return MapLayerInfo.getRegionateAttribute(cfg);
     }
 
     @Override
-    public FeatureIterator getSortedFeatures(GeometryDescriptor geom, 
-            ReferencedEnvelope latLongEnvelope, ReferencedEnvelope nativeEnvelope, 
-            Connection cacheConn) throws Exception {
+    public FeatureIterator getSortedFeatures(GeometryDescriptor geom,
+                                             ReferencedEnvelope latLongEnvelope, ReferencedEnvelope nativeEnvelope,
+                                             Connection cacheConn) throws Exception {
         // first of all, let's check if the geometry index table is there
         Statement st = null;
         try {
@@ -155,7 +156,7 @@ public class ExternalSortRegionatingStrategy extends
 
         return new IndexFeatureIterator(cacheConn, latLongEnvelope);
     }
-    
+
     protected String getH2DataType(AttributeDescriptor ad) {
         if (String.class.equals(ad.getType().getBinding())) {
             int length = FeatureTypes.getFieldLength(ad);
@@ -166,7 +167,7 @@ public class ExternalSortRegionatingStrategy extends
             return CLASS_MAPPINGS.get(ad.getType().getBinding());
         }
     }
-    
+
     void buildIndex(Connection conn) throws Exception {
         Statement st = null;
         PreparedStatement ps = null;
@@ -192,13 +193,13 @@ public class ExternalSortRegionatingStrategy extends
             CoordinateReferenceSystem nativeCrs = geom
                     .getCoordinateReferenceSystem();
             Query q = new Query();
-            
+
             if (geom.getLocalName().equals(attribute)) {
-                q.setPropertyNames(new String[] { geom.getLocalName() });
+                q.setPropertyNames(new String[]{geom.getLocalName()});
             } else {
-                q.setPropertyNames(new String[] { attribute, geom.getLocalName() });
+                q.setPropertyNames(new String[]{attribute, geom.getLocalName()});
             }
-            
+
             // setup the eventual transform
             MathTransform tx = null;
             double[] coords = new double[2];
@@ -215,17 +216,17 @@ public class ExternalSortRegionatingStrategy extends
                 // grab the centroid and transform it in 4326 if necessary
                 SimpleFeature f = (SimpleFeature) fi.next();
                 Geometry g = (Geometry) f.getDefaultGeometry();
-                if(g.isEmpty()) {
+                if (g.isEmpty()) {
                     continue;
                 }
                 Point centroid = g.getCentroid();
-                
+
                 //robustness check for bad geometries
-                if ( Double.isNaN( centroid.getX() ) || Double.isNaN( centroid.getY() ) ) {
-                    LOGGER.warning( "Could not calculate centroid for feature " + f.getID() + "; g =  " + g.toText() );
+                if (Double.isNaN(centroid.getX()) || Double.isNaN(centroid.getY())) {
+                    LOGGER.warning("Could not calculate centroid for feature " + f.getID() + "; g =  " + g.toText());
                     continue;
                 }
-                
+
                 coords[0] = centroid.getX();
                 coords[1] = centroid.getY();
                 if (tx != null)
@@ -241,7 +242,7 @@ public class ExternalSortRegionatingStrategy extends
             // todo: commit every 1000 features or so. No transaction is
             // slower, but too big transaction imposes a big overhead on the db
             conn.commit();
-            
+
             // hum, shall we kick H2 so that it updates the statistics?
         } finally {
             conn.setAutoCommit(true);
@@ -254,13 +255,13 @@ public class ExternalSortRegionatingStrategy extends
 
     /**
      * Returns the value that will be inserted into the H2 index as the sorting field
-     * @param f
      *
+     * @param f
      */
     protected Object getSortAttributeValue(SimpleFeature f) {
         return f.getAttribute(attribute);
     }
-    
+
     public static class IndexFeatureIterator implements FeatureIterator {
         SimpleFeatureBuilder builder;
 
@@ -275,7 +276,7 @@ public class ExternalSortRegionatingStrategy extends
         boolean next;
 
         public IndexFeatureIterator(Connection cacheConn,
-                ReferencedEnvelope envelope) throws Exception {
+                                    ReferencedEnvelope envelope) throws Exception {
             // grab all of the geometries sitting inside the envelope
 
             try {

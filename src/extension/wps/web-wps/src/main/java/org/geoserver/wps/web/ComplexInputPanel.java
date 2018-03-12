@@ -40,7 +40,7 @@ import org.geotools.util.logging.Logging;
 /**
  * Allows the user to edit a complex input parameter providing a variety of different editors
  * depending on the parameter type
- * 
+ *
  * @author Andrea Aime - OpenGeo
  */
 @SuppressWarnings("serial")

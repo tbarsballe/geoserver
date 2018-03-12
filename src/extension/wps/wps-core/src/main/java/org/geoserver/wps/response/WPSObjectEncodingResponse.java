@@ -12,7 +12,7 @@ import org.geoserver.ows.XmlObjectEncodingResponse;
 
 /**
  * A response designed to encode a specific object into XML
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class WPSObjectEncodingResponse extends XmlObjectEncodingResponse {
@@ -20,7 +20,7 @@ public class WPSObjectEncodingResponse extends XmlObjectEncodingResponse {
     public WPSObjectEncodingResponse(Class binding, String elementName, Class xmlConfiguration) {
         super(binding, elementName, xmlConfiguration);
     }
-    
+
     @Override
     protected Map<String, String> getSchemaLocations() {
         Map<String, String> locations = new HashMap<String, String>();

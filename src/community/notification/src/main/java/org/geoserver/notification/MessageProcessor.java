@@ -22,9 +22,7 @@ import org.geotools.util.logging.Logging;
 import org.opengis.filter.Filter;
 
 /**
- * 
  * @author Xandros
- *
  */
 public class MessageProcessor {
 
@@ -43,7 +41,7 @@ public class MessageProcessor {
     }
 
     public MessageProcessor(int queueSize, int processorThreads, String filter,
-            NotificationProcessor processor) {
+                            NotificationProcessor processor) {
         try {
             if (filter != null && !filter.isEmpty()) {
                 this.filter = CQL.toFilter(filter);

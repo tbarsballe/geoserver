@@ -65,7 +65,7 @@ public class CloseableIteratorAdapter<T> implements CloseableIterator<T> {
     /**
      * Closes the wrapped iterator if its an instance of {@code CloseableIterator}, does nothing
      * otherwise; override if needed.
-     * 
+     *
      * @see java.io.Closeable#close()
      */
     @Override
@@ -94,11 +94,11 @@ public class CloseableIteratorAdapter<T> implements CloseableIterator<T> {
 
         Predicate<T> predicate = filterAdapter(filter);
         return filter(iterator, predicate);
-        
+
     }
-    
+
     public static <T> CloseableIterator<T> filter(final Iterator<T> iterator, final Predicate<T> predicate) {
-        
+
         UnmodifiableIterator<T> filteredNotCloseable = Iterators.filter(iterator, predicate);
         Closeable closeable = iterator instanceof Closeable ? (Closeable) iterator : null;
 
@@ -107,7 +107,7 @@ public class CloseableIteratorAdapter<T> implements CloseableIterator<T> {
     }
 
     public static <F, T> CloseableIterator<T> transform(Iterator<F> iterator,
-            Function<? super F, ? extends T> function) {
+                                                        Function<? super F, ? extends T> function) {
 
         Iterator<T> transformedNotCloseable = Iterators.transform(iterator, function);
         Closeable closeable = (Closeable) (iterator instanceof CloseableIterator ? iterator : null);

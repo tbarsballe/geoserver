@@ -13,27 +13,26 @@ import org.geoserver.security.filter.GeoServerAuthenticationFilter;
 
 /**
  * Filter chain for  services ( NO GUI)
- * 
- * @author christian
  *
+ * @author christian
  */
 public class ServiceLoginFilterChain extends VariableFilterChain {
-    
+
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 1L;
 
     public ServiceLoginFilterChain(String... patterns) {
-        super(patterns);       
+        super(patterns);
     }
 
     public SortedSet<String> listFilterCandidates(GeoServerSecurityManager m) throws IOException {
         SortedSet<String> result = new TreeSet<String>();
         for (String filterName : m.listFilters(GeoServerAuthenticationFilter.class)) {
-            GeoServerAuthenticationFilter filter = (GeoServerAuthenticationFilter)m.loadFilter(filterName);
+            GeoServerAuthenticationFilter filter = (GeoServerAuthenticationFilter) m.loadFilter(filterName);
             if (filter.applicableForServices())
-                result.add(filterName);            
+                result.add(filterName);
         }
         return result;
     }

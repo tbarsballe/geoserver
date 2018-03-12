@@ -9,7 +9,7 @@ package org.geoserver.test;
 /**
  * Mock data for {@link DuplicateTypeTest}, which tests two WFS feature types (XSD elements) with
  * the same XSD type.
- * 
+ *
  * @author Ben Caradoc-Davies, CSIRO Earth Science and Resource Engineering
  */
 public class DuplicateTypeMockData extends AbstractAppSchemaMockData {

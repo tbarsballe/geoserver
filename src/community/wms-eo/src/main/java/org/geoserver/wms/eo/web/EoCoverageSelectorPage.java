@@ -64,10 +64,10 @@ public class EoCoverageSelectorPage extends GeoServerSecuredPage {
     private List<EoLayerGroupEntry> layerGroupEntries;
 
     private String groupName;
-    
+
     public EoCoverageSelectorPage(EoLayerGroupAbstractPage owner, String layerGroupName, String coverageStoreId) {
         this(owner, layerGroupName);
-        
+
         this.groupName = layerGroupName;
         CoverageStoreInfo store = getCatalog().getStore(coverageStoreId, CoverageStoreInfo.class);
         stores.setDefaultModelObject(store);
@@ -100,7 +100,7 @@ public class EoCoverageSelectorPage extends GeoServerSecuredPage {
 
             @Override
             protected Component getComponentForProperty(String id, IModel<EoCoverageSelection> itemModel,
-                    Property<EoCoverageSelection> property) {
+                                                        Property<EoCoverageSelection> property) {
                 if ("type".equals(property.getName())) {
                     DropDownChoice<EoLayerType> layerTypes = new DropDownChoice<EoLayerType>(
                             "type", (IModel<EoLayerType>) property.getModel(itemModel), EoLayerType.getRasterTypes(true), new EoLayerTypeRenderer());
@@ -131,7 +131,7 @@ public class EoCoverageSelectorPage extends GeoServerSecuredPage {
         form.add(addToLayerGroupLink());
         form.add(cancelLink());
     }
-    
+
     protected void updateCoveragesList(boolean reportSkippedLayers) {
         selections.clear();
         if (stores.getModelObject() != null) {
@@ -142,9 +142,9 @@ public class EoCoverageSelectorPage extends GeoServerSecuredPage {
                 Arrays.sort(names);
                 for (String name : names) {
                     LayerInfo li = getPreExistingLayer(name, store);
-                    if(li == null) {
+                    if (li == null) {
                         selections.add(new EoCoverageSelection(name, EoLayerType.IGNORE));
-                    } else if(reportSkippedLayers) {
+                    } else if (reportSkippedLayers) {
                         info("Skipping coverage " + name + " as it's already part of the group as " + li.getName());
                     }
                 }
@@ -156,22 +156,22 @@ public class EoCoverageSelectorPage extends GeoServerSecuredPage {
         }
     }
 
-    private LayerInfo getPreExistingLayer(String coverageName,StoreInfo si) {
+    private LayerInfo getPreExistingLayer(String coverageName, StoreInfo si) {
         for (EoLayerGroupEntry entry : layerGroupEntries) {
-            if(entry.getLayer() instanceof LayerInfo) {
+            if (entry.getLayer() instanceof LayerInfo) {
                 LayerInfo li = (LayerInfo) entry.getLayer();
-                if(li.getResource() instanceof CoverageInfo) {
+                if (li.getResource() instanceof CoverageInfo) {
                     CoverageInfo ci = (CoverageInfo) li.getResource();
                     // if same store, check the native name
-                    if(ci.getStore().getId().equals(si.getId())) {
-                        if(ci.getNativeName().equals(coverageName)) {
+                    if (ci.getStore().getId().equals(si.getId())) {
+                        if (ci.getNativeName().equals(coverageName)) {
                             return li;
                         }
                     }
                 }
             }
         }
-        
+
         return null;
     }
 
@@ -198,21 +198,21 @@ public class EoCoverageSelectorPage extends GeoServerSecuredPage {
                     if (item.getType() != EoLayerType.IGNORE) {
                         try {
                             LayerInfo layer = createLayer(groupName, item, builder);
-                            if(layer == null) {
+                            if (layer == null) {
                                 error = true;
                             } else {
                                 items.add(new EoLayerGroupEntry(layer, layer.getDefaultStyle(),
                                         layerGroupPage.lgModel.getObject().getName()));
                                 info("Layer " + layer.getName() + " successfully created and added to the EO layer group");
                             }
-                        } catch(Exception e) {
+                        } catch (Exception e) {
                             error = true;
                             error("Failed to create layer from covearge " + item.getCoverageName() + ": " + e.getMessage());
                         }
                     }
                 }
-                
-                if(!error) {
+
+                if (!error) {
                     setResponsePage(returnPage);
                 } else {
                     updateCoveragesList(true);
@@ -226,22 +226,22 @@ public class EoCoverageSelectorPage extends GeoServerSecuredPage {
         String coverageName = selection.getCoverageName();
         EoLayerType layerType = selection.getType();
         String name = coverageName;
-        if(groupName != null) {
-            name = groupName + "_" + name; 
+        if (groupName != null) {
+            name = groupName + "_" + name;
         }
         try {
             // build the coverage and enable its dimensions
             CoverageInfo resource = builder.buildCoverage(coverageName);
             boolean dimensionsPresent = enableDimensions(resource, layerType);
             if (!dimensionsPresent) {
-                if(layerType == EoLayerType.BAND_COVERAGE) {
+                if (layerType == EoLayerType.BAND_COVERAGE) {
                     error(new ParamResourceModel("EoLayerGroupError.invalidBandCoverage", null, coverageName).getString());
                 } else {
                     error(new ParamResourceModel("EoLayerGroupError.invalidLayer", null, coverageName).getString());
                 }
                 return null;
             }
-            
+
             // update the name and save the coverage
             resource.setName(name);
             resource.setTitle(name);
@@ -249,22 +249,22 @@ public class EoCoverageSelectorPage extends GeoServerSecuredPage {
 
             // save the layer too
             LayerInfo layer = builder.buildLayer(resource);
-                        layer.setName(name);
+            layer.setName(name);
             layer.setTitle(name);
             layer.setEnabled(true);
             layer.setQueryable(true);
             layer.setType(PublishedType.RASTER);
             layer.getMetadata().put(EoLayerType.KEY, layerType.name());
-            if(layerType == EoLayerType.BITMASK) {
+            if (layerType == EoLayerType.BITMASK) {
                 StyleInfo red = getCatalog().getStyleByName("red");
-                if(red != null) {
+                if (red != null) {
                     layer.setDefaultStyle(red);
                 } else {
                     warn("Default style for bitmask layers 'red' was not found, the default 'raster' layer got assigned instead. Please fix");
                 }
             }
             getCatalog().add(layer);
-            
+
             return layer;
         } catch (Exception e) {
             throw new IllegalArgumentException("The layer '" + name
@@ -287,7 +287,7 @@ public class EoCoverageSelectorPage extends GeoServerSecuredPage {
                 throw new RuntimeException("Unable to acquire reader for this coverageinfo: "
                         + ci.getName());
             }
-            if(ci.getNativeCoverageName() != null) {
+            if (ci.getNativeCoverageName() != null) {
                 reader = SingleGridCoverage2DReader.wrap(reader, ci.getNativeCoverageName());
             }
 
@@ -341,12 +341,12 @@ public class EoCoverageSelectorPage extends GeoServerSecuredPage {
 
         }
 
-        if(type == EoLayerType.BAND_COVERAGE) {
+        if (type == EoLayerType.BAND_COVERAGE) {
             return timeDimension && customDimension;
         } else {
             return timeDimension;
         }
-        
+
     }
 
     static class EoCoverageSelection implements Serializable {

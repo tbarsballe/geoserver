@@ -18,9 +18,7 @@ import org.junit.Test;
 import org.w3c.dom.Document;
 
 /**
- * 
  * @author Niels Charlier
- * 
  */
 public class WmsGetMapTest extends AbstractAppSchemaTestSupport {
 
@@ -80,7 +78,7 @@ public class WmsGetMapTest extends AbstractAppSchemaTestSupport {
                 URLs.urlToFile(getClass().getResource("/test-data/img/outcrop.png")),
                 imageBuffer, 10);
     }
-    
+
     @Test
     public void testGetMapWithCount() throws Exception {
         Document doc = getAsDOM("wfs?version=1.1.0&request=getFeature&typeName=gsml:MappedFeature");
@@ -91,7 +89,7 @@ public class WmsGetMapTest extends AbstractAppSchemaTestSupport {
         ImageAssert.assertEquals(
                 URLs.urlToFile(getClass().getResource("/test-data/img/occurrence.png")),
                 imageBuffer, 10);
-        
+
     }
 
 }

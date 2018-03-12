@@ -8,17 +8,17 @@ import org.springframework.mock.web.MockFilterChain;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 /**
- *
  * @author tw
  */
 public class AdvancedDispatchFilterTest {
-    
+
     public AdvancedDispatchFilterTest() {
     }
-  
+
     /**
      * Test of destroy method, of class AdvancedDispatchFilter.
      */
@@ -28,15 +28,15 @@ public class AdvancedDispatchFilterTest {
         request.setServerName("localhost");
         MockHttpServletResponse response = new MockHttpServletResponse();
         MockFilterChain filterChain = new MockFilterChain();
-        
+
         AdvancedDispatchFilter instance = new AdvancedDispatchFilter();
         try {
             instance.doFilter(request, response, filterChain);
         } catch (Exception ex) {
             fail("should work");
-        } 
+        }
     }
-    
+
     /**
      * Need to handle a null result from getPathInfo.
      */
@@ -72,7 +72,7 @@ public class AdvancedDispatchFilterTest {
         public MyMockRequest(String method, String requestURI) {
             super(method, requestURI);
         }
-        
-        
+
+
     }
 }

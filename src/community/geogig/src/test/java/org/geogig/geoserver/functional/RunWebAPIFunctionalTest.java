@@ -21,16 +21,18 @@ import cucumber.api.junit.Cucumber;
         features = {"classpath:features/commands/", "classpath:features/repo/", "classpath:features/webCommand"},
         tags = {"~@HttpTest", "~@RenameRepository", "~@Console"},
         glue = {"org.geogig.web.functional", "org.geogig.geoserver.functional"},
-        plugin = {"pretty", "html:cucumber-report","json:cucumber-report/cucumber.json"})
+        plugin = {"pretty", "html:cucumber-report", "json:cucumber-report/cucumber.json"})
 public class RunWebAPIFunctionalTest {
 
-    public static @BeforeClass void setUpGeoServer() throws Exception {
+    public static @BeforeClass
+    void setUpGeoServer() throws Exception {
         GeoServerTestSupport helper = new GeoServerTestSupport();
         helper.setUpGeoServer();
         GeoServerFunctionalTestContext.helper = helper;
     }
 
-    public static @AfterClass void shutDownUpGeoServer() throws Exception {
+    public static @AfterClass
+    void shutDownUpGeoServer() throws Exception {
         GeoServerFunctionalTestContext.helper.shutDownUpGeoServer();
     }
 

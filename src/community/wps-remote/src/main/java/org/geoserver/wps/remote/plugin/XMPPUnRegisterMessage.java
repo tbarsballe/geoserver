@@ -16,13 +16,14 @@ import org.jivesoftware.smack.packet.Packet;
 
 /**
  * Listens for "UNREGISTER" messages from XMPP service channels and takes action accordingly.
- * 
+ *
  * @author Alessio Fabiani, GeoSolutions
- * 
  */
 public class XMPPUnRegisterMessage implements XMPPMessage {
 
-    /** The LOGGER */
+    /**
+     * The LOGGER
+     */
     public static final Logger LOGGER = Logging.getLogger(XMPPMessage.class.getPackage().getName());
 
     @Override
@@ -34,7 +35,7 @@ public class XMPPUnRegisterMessage implements XMPPMessage {
 
     @Override
     public void handleSignal(XMPPClient xmppClient, Packet packet, Message message,
-            Map<String, String> signalArgs) {
+                             Map<String, String> signalArgs) {
 
         try {
             xmppClient.handleMemberLeave(packet);

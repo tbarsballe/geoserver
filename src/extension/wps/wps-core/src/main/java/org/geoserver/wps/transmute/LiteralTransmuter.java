@@ -14,8 +14,6 @@ package org.geoserver.wps.transmute;
 public interface LiteralTransmuter extends Transmuter {
     /**
      * Returns string identifier for encoded value type
-     *
-     *
      */
     String getEncodedType();
 
@@ -23,7 +21,6 @@ public interface LiteralTransmuter extends Transmuter {
      * Decode string value into Java type
      *
      * @param str
-     *
      */
     Object decode(String str);
 
@@ -31,7 +28,6 @@ public interface LiteralTransmuter extends Transmuter {
      * Encode from Java type to String
      *
      * @param obj
-     *
      */
     String encode(Object obj);
 }

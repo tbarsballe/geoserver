@@ -57,7 +57,7 @@ class GridSubsetsEditor extends FormComponentPanel<Set<XMLGridSubset>> {
     private class GridSubsetListValidator implements IValidator<Set<XMLGridSubset>> {
 
         private static final long serialVersionUID = -2646310164736911748L;
-		
+
         private boolean validate;
 
         public GridSubsetListValidator() {
@@ -115,7 +115,7 @@ class GridSubsetsEditor extends FormComponentPanel<Set<XMLGridSubset>> {
         }
 
         private void error(IValidatable<Set<XMLGridSubset>> validatable, final String resourceKey,
-                final String... params) {
+                           final String... params) {
 
             ValidationError error = new ValidationError();
             String message;
@@ -187,7 +187,7 @@ class GridSubsetsEditor extends FormComponentPanel<Set<XMLGridSubset>> {
 
                 gridSetLabel = new Label("gridSet", new PropertyModel<String>(item.getModel(),
                         "gridSetName"));
-                if(!gridsetExists){
+                if (!gridsetExists) {
                     gridSetLabel.add(new AttributeModifier("style", new Model<String>("color:red;text-decoration:line-through;")));
                     getPage().warn("GridSet " + gridSubset.getGridSetName() + " does not exist");
                 }
@@ -225,8 +225,7 @@ class GridSubsetsEditor extends FormComponentPanel<Set<XMLGridSubset>> {
                 minCachedLevelModel = new PropertyModel<Integer>(item.getModel(), "minCachedLevel");
                 maxCachedLevelModel = new PropertyModel<Integer>(item.getModel(), "maxCachedLevel");
 
-                @SuppressWarnings({ "rawtypes", "unchecked" })
-                final IModel<List<Integer>> allLevels = new Model(zoomLevels);
+                @SuppressWarnings({"rawtypes", "unchecked"}) final IModel<List<Integer>> allLevels = new Model(zoomLevels);
 
                 zoomStart = new ZoomLevelDropDownChoice("zoomStart", zoomStartModel, allLevels);
                 zoomStart.setEnabled(gridsetExists);
@@ -375,7 +374,7 @@ class GridSubsetsEditor extends FormComponentPanel<Set<XMLGridSubset>> {
         private static final long serialVersionUID = -1312406093015271637L;
 
         public ZoomLevelDropDownChoice(final String id, IModel<Integer> model,
-                IModel<List<Integer>> allChoices) {
+                                       IModel<List<Integer>> allChoices) {
             super(id, model, allChoices);
             setNullValid(true);// show null option even if model value isn't null
             setOutputMarkupId(true);
@@ -415,8 +414,8 @@ class GridSubsetsEditor extends FormComponentPanel<Set<XMLGridSubset>> {
     }
 
     private void updateValidZoomRanges(final ZoomLevelDropDownChoice zoomStart,
-            final ZoomLevelDropDownChoice zoomStop, final ZoomLevelDropDownChoice minCachedLevel,
-            final ZoomLevelDropDownChoice maxCachedLevel, AjaxRequestTarget target) {
+                                       final ZoomLevelDropDownChoice zoomStop, final ZoomLevelDropDownChoice minCachedLevel,
+                                       final ZoomLevelDropDownChoice maxCachedLevel, AjaxRequestTarget target) {
 
         // zoomStart.processInput();
         Integer min = zoomStart.getModelObject();

@@ -1,4 +1,5 @@
-/** (c) 2014 Open Source Geospatial Foundation - all rights reserved
+/**
+ * (c) 2014 Open Source Geospatial Foundation - all rights reserved
  * (c) 2001 - 2013 OpenPlans
  * This code is licensed under the GPL 2.0 license, available at the root
  * application directory.
@@ -30,15 +31,15 @@ public class AppController extends RestBaseController {
     @GetMapping(path = "/apps", produces = {
             MediaType.TEXT_HTML_VALUE,
             MediaType.APPLICATION_JSON_VALUE,
-            MediaType.APPLICATION_XML_VALUE })
+            MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> getAppList(HttpServletRequest request) {
         return appService.getAppList();
     }
 
     @GetMapping(path = "/apps/{appName}/{fileName:.+}")
     public void getAppMain(HttpServletRequest request, HttpServletResponse response,
-                                   @PathVariable String appName,
-                                   @PathVariable String fileName) {
+                           @PathVariable String appName,
+                           @PathVariable String fileName) {
         appService.getApp(request, response, appName);
     }
 }

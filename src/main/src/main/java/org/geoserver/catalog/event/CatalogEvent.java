@@ -9,7 +9,7 @@ import org.geoserver.catalog.CatalogInfo;
 
 /**
  * Catalog event.
- * 
+ *
  * @author Justin Deoliveira, The Open Planning Project
  */
 public interface CatalogEvent {

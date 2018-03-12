@@ -25,10 +25,10 @@ import org.opengis.feature.type.Name;
 
 /**
  * Holds the parsed parameters for a GetLegendGraphic WMS request.
- * 
+ * <p>
  * <p>
  * The GET parameters of the GetLegendGraphic operation are defined as follows (from SLD 1.0 spec, ch.12):<br>
- * 
+ * <p>
  * <pre>
  * <table>
  *  <tr><td><b>Parameter</b></td><td><b>Required</b></td><td><b>Description</b></td></tr>
@@ -49,8 +49,8 @@ import org.opengis.feature.type.Name;
  *  <tr><td>TRANSPARENT </td><td>Optional </td><td><code>true</code> if the legend image background should be transparent. Defaults to <code>false</code>.</td></tr>
  *  </table>
  * </pre>
- * 
- * 
+ * <p>
+ * <p>
  * </p>
  * <p>
  * There's also a custom {@code STRICT} parameter that defaults to {@code true} and controls whether the mandatory parameters are to be checked. This
@@ -69,17 +69,17 @@ import org.opengis.feature.type.Name;
  * Finally as a data structure {@link GetLegendGraphic} is used to collect additional context. Rendering environment {@link #getEnv()} and
  * {@link #locale}. LayerInfo configuration settings are available using methods like {@link #getTitle(Name)}.
  * </p>
- * 
+ *
  * @author Gabriel Roldan
  * @version $Id$
  */
 public class GetLegendGraphicRequest extends WMSRequest {
-    
+
     /**
      * Legend option to enable feature count matching
      */
     public static final String COUNT_MATCHED_KEY = "countMatched";
-    
+
     /**
      * Details collected for an individual LegendGraphic including
      * layer, title, style and optional legend graphic.
@@ -92,7 +92,7 @@ public class GetLegendGraphicRequest extends WMSRequest {
      * LegendRequest acts as simple data object with equality derived from layer name (enought to allow it to behave well in a List).
      * Note that LegendRequest is specific to a single {@link GetLegendGraphicRequest} and should not be cached. It represents
      * the state of the system at the time of parsing.
-     * 
+     *
      * @author Jody Garnett (Boundless)
      */
     public class LegendRequest {
@@ -101,117 +101,143 @@ public class GetLegendGraphicRequest extends WMSRequest {
         private FeatureType featureType;
         private String styleName;
         private String title;
-        
-        /** Optional rule used to refine presentation of style */
+
+        /**
+         * Optional rule used to refine presentation of style
+         */
         private String rule;
-        
-        /** Style deterimed from a review of request parameters */
+
+        /**
+         * Style deterimed from a review of request parameters
+         */
         private Style style;
-        
-        /** Optional legend info (from layer info or style info) */
+
+        /**
+         * Optional legend info (from layer info or style info)
+         */
         private LegendInfo legendInfo;
 
-        /** Optional layer info (if available) */
+        /**
+         * Optional layer info (if available)
+         */
         private LayerInfo layerInfo;
 
-        /** Optional layer group info (if available ) */
+        /**
+         * Optional layer group info (if available )
+         */
         private LayerGroupInfo layerGroupInfo;
 
         /**
          * LegendRequest for a style, no associated featureType.
          */
-        public LegendRequest(){
+        public LegendRequest() {
             this.layer = "";
             this.featureType = null;
             this.layerName = new NameImpl("");
         }
-        
+
         /**
          * LegendRequest for a feature type, additional details (title and legend graphic) provided by MapLayerInfo.
-         * 
+         *
          * @param featureType
          */
-        public LegendRequest(FeatureType featureType ){
-            if( featureType == null ){
+        public LegendRequest(FeatureType featureType) {
+            if (featureType == null) {
                 throw new NullPointerException("FeatureType required for LegendRequest");
             }
             this.featureType = featureType;
             this.layerName = featureType.getName();
         }
+
         public String getLayer() {
             return layer;
         }
+
         public void setLayer(String layerName) {
             this.layer = layerName;
         }
-        public Name getLayerName(){
+
+        public Name getLayerName() {
             return layerName;
         }
+
         public FeatureType getFeatureType() {
             return featureType;
         }
+
         public void setFeatureType(FeatureType featureType) {
             this.featureType = featureType;
         }
+
         public LayerGroupInfo getLayerGroupInfo() {
             return layerGroupInfo;
         }
+
         public void setLayerGroupInfo(LayerGroupInfo layerGroupInfo) {
             this.layerGroupInfo = layerGroupInfo;
         }
+
         public LayerInfo getLayerInfo() {
             return layerInfo;
         }
+
         public void setLayerInfo(LayerInfo layerInfo) {
             this.layerInfo = layerInfo;
         }
+
         /**
          * Optional rule name used when rendering this legend.
-         * 
+         *
          * @return rule name, or null if empty
          */
         public String getRule() {
-            if("".equals(rule)) {
+            if ("".equals(rule)) {
                 return null;
             }
             return rule;
         }
+
         public void setRule(String rule) {
             this.rule = rule;
         }
+
         public String getStyleName() {
             return styleName;
         }
+
         public void setStyleName(String styleName) {
             this.styleName = styleName;
         }
 
         /**
          * Provided layer title, or layer name if not provided.
-         * 
+         * <p>
          * We choose a title with the following priority:
          * <ul>
          * <li>Layer Title</li>
          * <li>Layer Name - often obtained from native resource name</li>
          * </ul>
+         *
          * @return layer title if provided, or layer name as a default
          */
         public String getTitle() {
             if (title == null || "".equals(title)) {
-                title=getLayerName().getLocalPart();
+                title = getLayerName().getLocalPart();
             }
             return title;
         }
+
         /**
          * Used to provide a legend title (from MapLayerInfo).
          * <p>
          * If the title is empty or null the layer name will be used.
-         * 
+         *
          * @param title
          */
         public void setTitle(String title) {
             this.title = title;
         }
+
         /**
          * The Style object(s) for styling the legend graphic, or layer's default if not provided. This
          * style can be acquired by evaluating the STYLE parameter, which provides one of the layer's
@@ -221,23 +247,27 @@ public class GetLegendGraphicRequest extends WMSRequest {
         public Style getStyle() {
             return style;
         }
+
         public void setStyle(Style style) {
             this.style = style;
         }
+
         public LegendInfo getLegendInfo() {
             return legendInfo;
         }
+
         public void setLegendInfo(LegendInfo legendInfo) {
             this.legendInfo = legendInfo;
         }
 
         @Override
         public String toString() {
-            return "LegendRequest [layer=" + layer + ", name="+layerName+" styleName=" + styleName + ", title="
+            return "LegendRequest [layer=" + layer + ", name=" + layerName + " styleName=" + styleName + ", title="
                     + title + ", legendInfo=" + legendInfo + "]";
         }
-        
+
     }
+
     public static final String SLD_VERSION = "1.0.0";
 
     /**
@@ -256,10 +286,12 @@ public class GetLegendGraphicRequest extends WMSRequest {
      * default for expressing LegendURL layer attribute in GetCapabilities.
      */
     public static final String DEFAULT_FORMAT = "image/png";
-    
-    /** The featuretype(s) of the requested LAYER(s) */
-    private List<LegendRequest> legends=new ArrayList<LegendRequest>();
-    
+
+    /**
+     * The featuretype(s) of the requested LAYER(s)
+     */
+    private List<LegendRequest> legends = new ArrayList<LegendRequest>();
+
     /**
      * should hold FEATURETYPE parameter value, though not used by now, since GeoServer WMS still
      * does not supports nested layers and layers has only a single feature type. This should change
@@ -289,14 +321,16 @@ public class GetLegendGraphicRequest extends WMSRequest {
      */
     private int height = DEFAULT_HEIGHT;
 
-    /** mime type of the format in which to return exceptions information. */
+    /**
+     * mime type of the format in which to return exceptions information.
+     */
     private String exceptionsFormat = GetMapRequest.SE_XML;
 
     /**
      * holds the geoserver-specific getLegendGraphic options for controlling things like the label
      * font, label font style, label font antialiasing, etc.
      */
-    private Map<String,Object> legendOptions;
+    private Map<String, Object> legendOptions;
 
     /**
      * Whether the legend graphic background shall be transparent or not.
@@ -304,25 +338,23 @@ public class GetLegendGraphicRequest extends WMSRequest {
     private boolean transparent;
 
     private boolean strict = true;
-    
+
     /**
      * Optional locale to be used for text in output.
-     * 
      */
     private Locale locale;
-    
+
     /**
      * Contains the parsed kvp items
      */
     private Map<String, Object> kvp;
-    
+
     private WMS wms;
 
     /**
      * Creates a new GetLegendGraphicRequest object.
-     * 
-     * @param wms
-     *            The WMS configuration object.
+     *
+     * @param wms The WMS configuration object.
      */
     public GetLegendGraphicRequest() {
         super("GetLegendGraphic");
@@ -359,60 +391,63 @@ public class GetLegendGraphicRequest extends WMSRequest {
     public void setHeight(int height) {
         this.height = height;
     }
-    
+
     /**
      * Legend details in order requested.
-     * 
+     *
      * @return legend in order requested
      */
     public List<LegendRequest> getLegends() {
         return legends;
     }
+
     /**
      * List of layer FeatureType in order requested.
+     *
      * @return layer FeatureType in order requested
      * @deprecated Use {@link #getLegends()}
      */
     public List<FeatureType> getLayers() {
-        List<FeatureType> types = new ArrayList<FeatureType>( legends.size());
-        for( LegendRequest layer : legends ){
-            types.add( layer.getFeatureType() );
+        List<FeatureType> types = new ArrayList<FeatureType>(legends.size());
+        for (LegendRequest layer : legends) {
+            types.add(layer.getFeatureType());
         }
         return Collections.unmodifiableList(types);
     }
-    
+
     /**
      * Initialize {@link GetLegendGraphicRequest} with list of layers to draw.
-     * 
+     *
      * @param layers
      * @deprecated Use {@link #getLegends()}
      */
     public void setLayers(List<FeatureType> layers) {
         List<LegendRequest> list = new ArrayList<LegendRequest>(layers.size());
-        for( FeatureType type : layers ){
-            LegendRequest legendRequest = new LegendRequest( type );
-            list.add(legendRequest );
+        for (FeatureType type : layers) {
+            LegendRequest legendRequest = new LegendRequest(type);
+            list.add(legendRequest);
         }
         this.legends = list;
     }
-    
-    
+
+
     /**
      * Set optional layer title (from MapLayerInfo).
      * <p>
      * Note {@link #legends}  entry must all ready be added.
-     * 
+     *
      * @param featureTypeName
-     * @param title Layer title from MapLayerInfo
+     * @param title           Layer title from MapLayerInfo
      * @deprecated Use getLegendRequest(name).setTitle(title);
      */
-    public void setTitle(Name featureTypeName,String title) {
+    public void setTitle(Name featureTypeName, String title) {
         getLegend(featureTypeName).setTitle(title);
     }
-    
-    
+
+
     /**
      * Layer title.
+     *
      * @param featureTypeName
      * @return Title of layer (if provided)
      * @deprecated Use getLegendRequest(name).getTitle();
@@ -420,72 +455,75 @@ public class GetLegendGraphicRequest extends WMSRequest {
     public String getTitle(Name featureTypeName) {
         return getLegend(featureTypeName).getTitle();
     }
-    
+
     /**
-     * Lookup LegendRequest by native FeatureType name. 
-     * 
+     * Lookup LegendRequest by native FeatureType name.
+     *
      * @param featureTypeName
      * @return Matching LegendRequest
      */
     public LegendRequest getLegend(Name featureTypeName) {
-        for( LegendRequest legend : legends ){
-            if( featureTypeName.equals( legend.getLayerName() ) ){
+        for (LegendRequest legend : legends) {
+            if (featureTypeName.equals(legend.getLayerName())) {
                 return legend;
             }
         }
         return null; // not found!
     }
-    
+
     /**
      * Used to clear {@link #legends} and configure with a feature type.
+     *
      * @param layer
      */
     public void setLayer(FeatureType layer) {
         this.legends.clear();
-        if(layer==null) {
+        if (layer == null) {
             this.legends.add(new LegendRequest());
         } else {
             this.legends.add(new LegendRequest(layer));
         }
     }
-    
+
     /**
      * Access to rules in the same order as {@link #legends}.
-     * 
+     *
      * @return rules in the same order as layers
      * @deprecated Use getLegendRequest(name).getRule()
      */
     public List<String> getRules() {
-        List<String> rules = new ArrayList<String>( legends.size());
-        for( LegendRequest layer : legends ){
-            rules.add( layer.getRule() );
+        List<String> rules = new ArrayList<String>(legends.size());
+        for (LegendRequest layer : legends) {
+            rules.add(layer.getRule());
         }
         return Collections.unmodifiableList(rules);
     }
+
     /**
      * Set rules in the same order as {@link #legends}.
-     * 
+     *
      * @param rules rules in the same order as layers
      * @deprecated Use getLegendRequest(name).setRule(rule)
      */
     public void setRules(List<String> rules) {
         Iterator<String> s = rules.iterator();
-        for( LegendRequest legend : legends ){
-            if( !s.hasNext() ){
+        for (LegendRequest legend : legends) {
+            if (!s.hasNext()) {
                 break; // no more styles
             }
             String rule = s.next();
-            legend.setRule( rule );
+            legend.setRule(rule);
         }
     }
-    
+
     /**
      * Shortcut used to set the rule for the first layer.
+     *
      * @param rule
      */
     public void setRule(String rule) {
         // Will set rule for first LegendRequest
-        setRules( Collections.singletonList(rule));
+        setRules(Collections.singletonList(rule));
     }
 
     public double getScale() {
@@ -495,49 +533,50 @@ public class GetLegendGraphicRequest extends WMSRequest {
     public void setScale(double scale) {
         this.scale = scale;
     }
-    
+
     /**
      * Access to styles in the same order as {@link #legends}.
-     * 
+     *
      * @return stules in the same order as layers
      * @deprecated Use getLegendRequest(name).getStyle()
      */
     public List<Style> getStyles() {
-        List<Style> styles = new ArrayList<Style>( legends.size());
-        for( LegendRequest layer : legends ){
-            styles.add( layer.getStyle() );
+        List<Style> styles = new ArrayList<Style>(legends.size());
+        for (LegendRequest layer : legends) {
+            styles.add(layer.getStyle());
         }
         return Collections.unmodifiableList(styles);
     }
-    
+
     /**
      * Assign resolved style information to {@link #legends}.
      * <p>
      * Styles must be provided in the same order as the layers list.
-     * 
+     *
      * @param styles
      * @deprecated Use getLegendGraphic(name).setStyle(style)
      */
     public void setStyles(List<Style> styles) {
         Iterator<Style> s = styles.iterator();
-        for( LegendRequest legend : legends ){
-            if( !s.hasNext() ){
+        for (LegendRequest legend : legends) {
+            if (!s.hasNext()) {
                 break; // no more styles
             }
             Style style = s.next();
-            legend.setStyle( style );
+            legend.setStyle(style);
         }
     }
-    
+
     /**
      * Shortcut used to set the style for the first layer.
+     *
      * @param style
      */
     public void setStyle(Style style) {
         // this will set only the first LegendRequest
-        setStyles( Collections.singletonList(style));
+        setStyles(Collections.singletonList(style));
     }
-    
+
     public int getWidth() {
         return width;
     }
@@ -570,27 +609,26 @@ public class GetLegendGraphicRequest extends WMSRequest {
      * is available. "off" means labels will never be drawn, even if multiple rules are available.
      * <li><code>forceTitles</code>: "off" means titles will never be drawn, even if multiple layers
      * are available.
-     * <li><code>minSymbolSize</code>: a number defining the minimum size to be rendered for a 
+     * <li><code>minSymbolSize</code>: a number defining the minimum size to be rendered for a
      * symbol (defaults to 3).
-     * 
+     * <p>
      * </ul>
      * </p>
-     * 
+     *
      * @return Map<String,Object>
      */
     @SuppressWarnings("unchecked")
-    public Map<String,Object> getLegendOptions() {
+    public Map<String, Object> getLegendOptions() {
         return (Map<String, Object>) (legendOptions == null ? Collections.emptyMap() : legendOptions);
     }
 
     /**
      * Sets the legend options parameters.
-     * 
-     * @param legendOptions
-     *            the key/value pair of legend options strings
+     *
+     * @param legendOptions the key/value pair of legend options strings
      * @see #getLegendOptions()
      */
-    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @SuppressWarnings({"rawtypes", "unchecked"})
     public void setLegendOptions(Map legendOptions) {
         this.legendOptions = legendOptions;
     }
@@ -598,9 +636,8 @@ public class GetLegendGraphicRequest extends WMSRequest {
     /**
      * Sets the value of the background transparency flag depending on the value of the
      * <code>TRANSPARENT</code> request parameter.
-     * 
-     * @param transparentBackground
-     *            whether the legend graphic background shall be transparent or not
+     *
+     * @param transparentBackground whether the legend graphic background shall be transparent or not
      */
     public void setTransparent(boolean transparentBackground) {
         this.transparent = transparentBackground;
@@ -614,7 +651,7 @@ public class GetLegendGraphicRequest extends WMSRequest {
      * If the <code>TRANSPARENT</code> parameter is not specified, this property defaults to
      * <code>false</code>.
      * </p>
-     * 
+     *
      * @return whether the legend graphic background shall be transparent or not
      */
     public boolean isTransparent() {
@@ -624,7 +661,7 @@ public class GetLegendGraphicRequest extends WMSRequest {
     /**
      * Returns the value for the legacy {@code STRICT} parameter that controls whether LAYER is
      * actually required (if not, STYLE shall be provided)
-     * 
+     *
      * @return {@code true} by default, the value set thru {@link #setStrict(boolean)} otherwise
      */
     public boolean isStrict() {
@@ -635,17 +672,18 @@ public class GetLegendGraphicRequest extends WMSRequest {
         this.strict = strict;
     }
 
-    /** SLD replacement */
+    /**
+     * SLD replacement
+     */
     private Map<String, Object> env = new HashMap<String, Object>();
 
-    
 
     /**
      * Map of strings that make up the SLD enviroment for variable substitution
      *
      * @return Map<String,Object>
      */
-    public Map<String,Object> getEnv() {
+    public Map<String, Object> getEnv() {
         return env;
     }
 
@@ -654,24 +692,23 @@ public class GetLegendGraphicRequest extends WMSRequest {
      *
      * @param enviroment
      */
-    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @SuppressWarnings({"rawtypes", "unchecked"})
     public void setEnv(Map enviroment) {
         this.env = enviroment;
     }
 
     /**
      * Sets the optional Locale to be used for text in legend output.
-     * 
+     *
      * @param locale
      */
     public void setLocale(Locale locale) {
         this.locale = locale;
     }
-    
+
     /**
      * Gets the locale to be used for text in output
      * (null to use default locale).
-     *
      */
     public Locale getLocale() {
         return this.locale;
@@ -682,25 +719,26 @@ public class GetLegendGraphicRequest extends WMSRequest {
      * converted to the target type an exception will be thrown
      */
     public <T> T getLegendOption(String key, Class<T> optionClass) {
-        if(legendOptions == null) {
+        if (legendOptions == null) {
             return null;
         }
-        
+
         Object value = legendOptions.get(key);
-        if(value == null) {
+        if (value == null) {
             return null;
         }
-        
+
         T converted = Converters.convert(value, optionClass);
-        if(converted == null) {
-            throw new ServiceException("Invalid syntax for option " 
+        if (converted == null) {
+            throw new ServiceException("Invalid syntax for option "
                     + key + ", cannot be convered to a " + optionClass.getSimpleName());
         }
         return converted;
     }
-    
+
     /**
      * The parsed KVP map
+     *
      * @return
      */
     public Map<String, Object> getKvp() {
@@ -709,6 +747,7 @@ public class GetLegendGraphicRequest extends WMSRequest {
 
     /**
      * Sets the parsed KVP map
+     *
      * @param kvp
      */
     public void setKvp(Map<String, Object> kvp) {
@@ -722,5 +761,5 @@ public class GetLegendGraphicRequest extends WMSRequest {
     public void setWms(WMS wms) {
         this.wms = wms;
     }
-    
+
 }

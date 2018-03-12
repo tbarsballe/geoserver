@@ -3,7 +3,7 @@
  * application directory.
  */
 package org.geoserver.rest.resources;
- 
+
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
@@ -58,10 +58,11 @@ import static org.geoserver.rest.RestBaseController.ROOT_PATH;
 public class ResourceController extends RestBaseController {
     private ResourceStore resources;
     static Logger LOGGER = Logging.getLogger("org.geoserver.catalog.rest");
-    
+
     private final DateFormat FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S z");
     //TODO: Should we actually be doing this?
     private final DateFormat FORMAT_HEADER = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss z", Locale.ENGLISH);
+
     {
         FORMAT.setTimeZone(TimeZone.getTimeZone("UTC"));
         FORMAT_HEADER.setTimeZone(TimeZone.getTimeZone("GMT"));
@@ -94,12 +95,12 @@ public class ResourceController extends RestBaseController {
             };
         }
     }
-    
+
     @Override
     protected String getTemplateName(Object object) {
-        if(object instanceof ResourceDirectoryInfo) {
+        if (object instanceof ResourceDirectoryInfo) {
             return "resourceDirectoryInfo.ftl";
-        } else if(object instanceof ResourceMetadataInfo) {
+        } else if (object instanceof ResourceMetadataInfo) {
             return "resourceMetadataInfo.ftl";
         } else {
             return super.getTemplateName(object);
@@ -108,6 +109,7 @@ public class ResourceController extends RestBaseController {
 
     /**
      * Extract expected media type from supplied resource
+     *
      * @param resource
      * @param request
      * @return Content type requested
@@ -133,7 +135,7 @@ public class ResourceController extends RestBaseController {
 
     /**
      * Access resource requested, note this may be UNDEFINED
-     * 
+     *
      * @param request
      * @return Resource requested, may be UNDEFINED if not found.
      */
@@ -149,9 +151,10 @@ public class ResourceController extends RestBaseController {
         }
         return resources.get(path);
     }
-    
+
     /**
      * Look up operation query string value, defaults to {@link Operation#DEFAULT} if not provided.
+     *
      * @param operation
      * @return operation defined by query string, or {@link Operation#DEFAULT} if not provided
      */
@@ -161,10 +164,9 @@ public class ResourceController extends RestBaseController {
             try {
                 return Operation.valueOf(operation);
             } catch (IllegalArgumentException e) {
-                throw new IllegalStateException("Unknown operation '"+operation+"' requested");
+                throw new IllegalStateException("Unknown operation '" + operation + "' requested");
             }
-        }
-        else {
+        } else {
             return Operation.DEFAULT;
         }
     }
@@ -187,6 +189,7 @@ public class ResourceController extends RestBaseController {
         return ResponseUtils.buildURL(RequestInfo.get().servletURI("resource/"),
                 ResponseUtils.urlEncode(path, '/'), null, URLMangler.URLType.RESOURCE);
     }
+
     protected static String formatHtmlLink(String link) {
         return link.replaceAll("&", "&amp;");
     }
@@ -204,8 +207,8 @@ public class ResourceController extends RestBaseController {
      * <li>Resource-Parent: Link to parent DIRECTORY
      * <li>Last-Modified: Last modifed date (this is a standard header).
      * </ul>
-     * 
-     * @param request Request indicating resource, parameters indicating {@link ResourceController.Operation} and {@link MediaType}.
+     *
+     * @param request  Request indicating resource, parameters indicating {@link ResourceController.Operation} and {@link MediaType}.
      * @param response Response provided allowing us to set headers (content type, content length, Resource-Parent, Resource-Type).
      * @return Returns wrapped info object, or direct access to resource contents depending on requested operation
      */
@@ -219,7 +222,7 @@ public class ResourceController extends RestBaseController {
         response.setContentType(getFormat(format).toString());
 
         if (operation == Operation.METADATA) {
-            result =  wrapObject(new ResourceMetadataInfo(resource, request), ResourceMetadataInfo.class);
+            result = wrapObject(new ResourceMetadataInfo(resource, request), ResourceMetadataInfo.class);
         } else {
             if (resource.getType() == Resource.Type.UNDEFINED) {
                 throw new ResourceNotFoundException("Undefined resource path.");
@@ -246,6 +249,7 @@ public class ResourceController extends RestBaseController {
         }
         return result;
     }
+
     /**
      * Upload or modify resource contents:
      * <ul>
@@ -253,57 +257,56 @@ public class ResourceController extends RestBaseController {
      * <li>{@link Operation#MOVE}: moves a resource, indicated by request body, to this location.</li>
      * <li>{@link Operation#COPY}: duplicates a resource, indicated by request body, to this location</li>
      * </ul>
-     * @paarm request
+     *
      * @param response {@link HttpStatus#CREATED} for a new resource, or {@link HttpStatus#OK} when updating existing resource
+     * @paarm request
      */
     @PutMapping(consumes = {MediaType.ALL_VALUE})
     @ResponseStatus(HttpStatus.CREATED)
-    public void resourcePut(HttpServletRequest request,HttpServletResponse response,
-                            @RequestParam(name = "operation", required = false, defaultValue = "default") String operationName){
+    public void resourcePut(HttpServletRequest request, HttpServletResponse response,
+                            @RequestParam(name = "operation", required = false, defaultValue = "default") String operationName) {
         Resource resource = resource(request);
-        
+
         if (resource.getType() == Type.DIRECTORY) {
-            throw new RestException("Attempting to write data to a directory.",  HttpStatus.METHOD_NOT_ALLOWED );
+            throw new RestException("Attempting to write data to a directory.", HttpStatus.METHOD_NOT_ALLOWED);
         }
         Operation operation = operation(operationName);
-        if (operation == Operation.METADATA ){
-            throw new RestException("Attempting to write data to metadata.",  HttpStatus.METHOD_NOT_ALLOWED );
+        if (operation == Operation.METADATA) {
+            throw new RestException("Attempting to write data to metadata.", HttpStatus.METHOD_NOT_ALLOWED);
         }
-        
+
         boolean isNew = resource.getType() == Type.UNDEFINED;
         if (operation == Operation.COPY || operation == Operation.MOVE) {
             String path;
             try {
-                path = IOUtils.toString( request.getInputStream());
+                path = IOUtils.toString(request.getInputStream());
             } catch (IOException e) {
                 throw new RestException("Unable to read content:" + e.getMessage(),
                         HttpStatus.INTERNAL_SERVER_ERROR, e);
             }
             Resource source = resources.get(path);
-            if( source.getType() == Type.UNDEFINED){
+            if (source.getType() == Type.UNDEFINED) {
                 throw new RestException("Unable to locate '" + path + "'.", HttpStatus.NOT_FOUND);
             }
-            if ( operation == Operation.MOVE){
+            if (operation == Operation.MOVE) {
                 boolean moved = source.renameTo(resource);
-                if(!moved){
+                if (!moved) {
                     throw new RestException("Rename operation failed.", HttpStatus.INTERNAL_SERVER_ERROR);
                 }
-            }
-            else { // COPY
-                if( source.getType() == Type.DIRECTORY){
+            } else { // COPY
+                if (source.getType() == Type.DIRECTORY) {
                     throw new RestException("Cannot copy directory.", HttpStatus.METHOD_NOT_ALLOWED);
                 }
                 try {
-                    IOUtils.copy( source.in(), resource.out());
+                    IOUtils.copy(source.in(), resource.out());
                 } catch (IOException e) {
-                    throw new RestException("Copy operation failed:"+e, HttpStatus.INTERNAL_SERVER_ERROR,e);
+                    throw new RestException("Copy operation failed:" + e, HttpStatus.INTERNAL_SERVER_ERROR, e);
                 }
-                
+
             }
-        }
-        else if (operation == Operation.DEFAULT){
+        } else if (operation == Operation.DEFAULT) {
             try {
-                IOUtils.copy( request.getInputStream(), resource.out());
+                IOUtils.copy(request.getInputStream(), resource.out());
                 if (LOGGER.isLoggable(Level.INFO)) {
                     LOGGER.fine("PUT resource: " + resource.path());
                 }
@@ -312,13 +315,12 @@ public class ResourceController extends RestBaseController {
                         "Unable to read content to '" + resource.path() + "':" + e.getMessage(),
                         HttpStatus.INTERNAL_SERVER_ERROR, e);
             }
+        } else {
+            throw new IllegalStateException("Unexpected operation '" + operation + "'");
         }
-        else {
-            throw new IllegalStateException("Unexpected operation '"+operation+"'");
-        }
-        
+
         // fill in correct status / header details
-        if(isNew){
+        if (isNew) {
             response.setStatus(HttpStatus.CREATED.value());
         }
     }
@@ -337,9 +339,10 @@ public class ResourceController extends RestBaseController {
             throw new RestException("Resource '" + resource.path() + "' not removed", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    
+
     /**
      * Verifies mime type and use {@link RESTUtils}
+     *
      * @param directory
      * @param filename
      * @param request
@@ -383,26 +386,35 @@ public class ResourceController extends RestBaseController {
         return new ObjectToMapWrapper<>(clazz, Arrays.asList(AtomLink.class,
                 ResourceDirectoryInfo.class, ResourceMetadataInfo.class, ResourceParentInfo.class, ResourceChildInfo.class));
     }
+
     /**
      * Operation requested from the REST endpoint.
      */
     public enum Operation {
-        /** Depends on context (different functionality for directory, resource, undefined) */
+        /**
+         * Depends on context (different functionality for directory, resource, undefined)
+         */
         DEFAULT,
-        /** Requests metadata summary of resource */
+        /**
+         * Requests metadata summary of resource
+         */
         METADATA,
-        /** Moves resource to new location */
+        /**
+         * Moves resource to new location
+         */
         MOVE,
-        /** Duplicate resource to a new location */
+        /**
+         * Duplicate resource to a new location
+         */
         COPY
     }
 
     /**
      * Used for parent reference (to indicate directory containing resource).
-     * 
+     * <p>
      * XML/Json object for resource reference.
      */
-    protected static class ResourceParentInfo { 
+    protected static class ResourceParentInfo {
 
         private String path;
 
@@ -458,7 +470,7 @@ public class ResourceController extends RestBaseController {
         private String type;
 
         public ResourceMetadataInfo(String name, ResourceParentInfo parent,
-                                Date lastModified, String type) {
+                                    Date lastModified, String type) {
             this.name = name;
             this.parent = parent;
             this.lastModified = lastModified;
@@ -503,7 +515,7 @@ public class ResourceController extends RestBaseController {
 
     /**
      * Extends ResourceMetadataInfo to list contents.
-     * 
+     *
      * @author Niels Charlier
      */
     @XStreamAlias("ResourceDirectory")

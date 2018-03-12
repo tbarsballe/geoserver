@@ -12,7 +12,7 @@ import org.apache.wicket.model.IModel;
 
 /**
  * A simple external link with a label inside. This is a utility component,
- * avoid some boilerplate code in case the link is really just a link with 
+ * avoid some boilerplate code in case the link is really just a link with
  * a label inside
  */
 public class SimpleExternalLink extends Panel {
@@ -32,14 +32,14 @@ public class SimpleExternalLink extends Panel {
     public SimpleExternalLink(String id) {
         this(id, null);
     }
-    
+
     public SimpleExternalLink(String id, IModel<String> model) {
         this(id, model, model);
     }
 
     public SimpleExternalLink(String id, IModel<String> linkModel, IModel<?> labelModel) {
         super(id, linkModel);
-        
+
         add(link = new ExternalLink("link", linkModel));
         link.add(label = new Label("label", labelModel));
     }

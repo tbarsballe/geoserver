@@ -30,75 +30,73 @@ import com.vividsolutions.jts.io.WKTWriter;
 
 /**
  * Postgis data setup for app-schema-test with online mode.
- * 
+ *
  * @author Rini Angreani (CSIRO Earth Science and Resource Engineering)
  */
-public class AppSchemaTestPostgisSetup extends ReferenceDataPostgisSetup {   
+public class AppSchemaTestPostgisSetup extends ReferenceDataPostgisSetup {
     /**
      * Database schema to be used for postgis test database so they are isolated.
      */
     public static final String ONLINE_DB_SCHEMA = "appschematest";
-    
+
     /**
      * Mapping file database parameters
      */
     public static String DB_PARAMS = "<parameters>" //
-        + "\n<Parameter>\n" //
-        + "<name>dbtype</name>\n" //
-        + "<value>postgis</value>" //
-        + "\n</Parameter>" //
-        + "\n<Parameter>\n" //
-        + "<name>host</name>\n" //
-        + "<value>${host}</value>" //
-        + "\n</Parameter>" //
-        + "\n<Parameter>\n" //
-        + "<name>port</name>\n" //
-        + "<value>${port}</value>" //
-        + "\n</Parameter>" //
-        + "\n<Parameter>\n" //
-        + "<name>database</name>\n" //
-        + "<value>${database}</value>" //
-        + "\n</Parameter>" //
-        + "\n<Parameter>\n" //
-        + "<name>user</name>\n" //
-        + "<value>${user}</value>" //
-        + "\n</Parameter>" //
-        + "\n<Parameter>\n" //
-        + "<name>passwd</name>\n" //
-        + "<value>${passwd}</value>" //
-        + "\n</Parameter>" //
-        + "\n<Parameter>\n"
-        + "<name>Expose primary keys</name>"
-        + "<value>true</value>"
-        + "\n</Parameter>" //
-        // only for postgis because it's just the public schema for oracle
-        // because you have to have sys dba rights to create schemas in oracle
-        + "\n<Parameter>\n" //
-        + "<name>schema</name>\n" //
-        + "<value>" //
-        + ONLINE_DB_SCHEMA //
-        + "</value>" //
-        + "\n</Parameter>" //
-        + "\n</parameters>"; //
+            + "\n<Parameter>\n" //
+            + "<name>dbtype</name>\n" //
+            + "<value>postgis</value>" //
+            + "\n</Parameter>" //
+            + "\n<Parameter>\n" //
+            + "<name>host</name>\n" //
+            + "<value>${host}</value>" //
+            + "\n</Parameter>" //
+            + "\n<Parameter>\n" //
+            + "<name>port</name>\n" //
+            + "<value>${port}</value>" //
+            + "\n</Parameter>" //
+            + "\n<Parameter>\n" //
+            + "<name>database</name>\n" //
+            + "<value>${database}</value>" //
+            + "\n</Parameter>" //
+            + "\n<Parameter>\n" //
+            + "<name>user</name>\n" //
+            + "<value>${user}</value>" //
+            + "\n</Parameter>" //
+            + "\n<Parameter>\n" //
+            + "<name>passwd</name>\n" //
+            + "<value>${passwd}</value>" //
+            + "\n</Parameter>" //
+            + "\n<Parameter>\n"
+            + "<name>Expose primary keys</name>"
+            + "<value>true</value>"
+            + "\n</Parameter>" //
+            // only for postgis because it's just the public schema for oracle
+            // because you have to have sys dba rights to create schemas in oracle
+            + "\n<Parameter>\n" //
+            + "<name>schema</name>\n" //
+            + "<value>" //
+            + ONLINE_DB_SCHEMA //
+            + "</value>" //
+            + "\n</Parameter>" //
+            + "\n</parameters>"; //
 
     private String sql;
 
     /**
      * Ensure the app-schema properties file is loaded with the database parameters. Also create
      * corresponding tables on the database based on data from properties files.
-     * 
-     * @param propertyFiles
-     *            Property file name and its feature type directory map
+     *
+     * @param propertyFiles Property file name and its feature type directory map
      */
     public static AppSchemaTestPostgisSetup getInstance(Map<String, File> propertyFiles) throws Exception {
         return new AppSchemaTestPostgisSetup(propertyFiles);
     }
-    
+
     /**
      * Factory method.
-     * 
-     * @param propertyFiles
-     *            Property file name and its parent directory map
+     *
+     * @param propertyFiles Property file name and its parent directory map
      */
     public AppSchemaTestPostgisSetup(Map<String, File> propertyFiles) throws Exception {
         configureFixture();
@@ -107,9 +105,8 @@ public class AppSchemaTestPostgisSetup extends ReferenceDataPostgisSetup {
 
     /**
      * Write SQL string to create tables in the test database based on the property files.
-     * 
-     * @param propertyFiles
-     *            Property files from app-schema-test suite.
+     *
+     * @param propertyFiles Property files from app-schema-test suite.
      * @throws IllegalAttributeException
      * @throws NoSuchElementException
      * @throws IOException
@@ -122,8 +119,8 @@ public class AppSchemaTestPostgisSetup extends ReferenceDataPostgisSetup {
         buf.append("CREATE SCHEMA ").append(ONLINE_DB_SCHEMA).append(";\n");
         for (String fileName : propertyFiles.keySet()) {
             File file = new File(propertyFiles.get(fileName), fileName);
-            
-            try (PropertyFeatureReader reader = new PropertyFeatureReader("test", file ) ){
+
+            try (PropertyFeatureReader reader = new PropertyFeatureReader("test", file)) {
                 SimpleFeatureType schema = reader.getFeatureType();
                 String tableName = schema.getName().getLocalPart().toUpperCase();
                 // create the table
@@ -160,7 +157,7 @@ public class AppSchemaTestPostgisSetup extends ReferenceDataPostgisSetup {
                 buf.append(StringUtils.join(createParams.iterator(), ", "));
                 buf.append(");\n");
                 buf.append("ALTER TABLE " + ONLINE_DB_SCHEMA + ".\"" + tableName + "\" ADD CONSTRAINT " + tableName + "_PK PRIMARY KEY (\"PKEY\")\n");
-    
+
                 // add geometry columns
                 for (GeometryDescriptor geom : geoms) {
                     buf.append("SELECT AddGeometryColumn ('").append(ONLINE_DB_SCHEMA).append("', ");
@@ -171,10 +168,10 @@ public class AppSchemaTestPostgisSetup extends ReferenceDataPostgisSetup {
                     // TODO: should read the properties file header to see if they're more specific
                     buf.append("'GEOMETRY'").append(", ");
                     // TODO: how to work this out properly?
-                    buf.append(geom.getType().getCoordinateReferenceSystem()==null? 2: geom.getType().getCoordinateReferenceSystem().getCoordinateSystem().getDimension());
+                    buf.append(geom.getType().getCoordinateReferenceSystem() == null ? 2 : geom.getType().getCoordinateReferenceSystem().getCoordinateSystem().getDimension());
                     buf.append(");\n");
                 }
-    
+
                 // then insert rows
                 SimpleFeature feature;
                 FeatureId id;
@@ -191,9 +188,9 @@ public class AppSchemaTestPostgisSetup extends ReferenceDataPostgisSetup {
                     for (Property prop : properties) {
                         Object value = prop.getValue();
                         if (value instanceof Geometry) {
-                        	//use wkt writer to convert geometry to string, so third dimension can be supported if present.
-                        	Geometry geom = (Geometry) value;
-                        	value = new WKTWriter(geom.getCoordinate().z == Double.NaN? 2 : 3).write(geom);
+                            //use wkt writer to convert geometry to string, so third dimension can be supported if present.
+                            Geometry geom = (Geometry) value;
+                            value = new WKTWriter(geom.getCoordinate().z == Double.NaN ? 2 : 3).write(geom);
                         }
                         if (value == null || value.toString().equalsIgnoreCase("null")) {
                             values[valueIndex] = "null";
@@ -210,7 +207,7 @@ public class AppSchemaTestPostgisSetup extends ReferenceDataPostgisSetup {
                         }
                         valueIndex++;
                     }
-    
+
                     id = feature.getIdentifier();
                     // insert primary key
                     values[valueIndex] = "'" + id.toString() + "'";

@@ -58,9 +58,8 @@ public class CSWLayerConfig extends PublishedConfigurationPanel<LayerInfo> {
 
     /**
      * Get DefaultSettings from {@link CSWInfo} config or default value.
-     * 
-     * @param cswInfo
      *
+     * @param cswInfo
      */
     private DirectDownloadSettings setDefaultSettings(CSWInfo info) {
         if (info != null) {

@@ -32,11 +32,9 @@ import org.geowebcache.config.ConfigurationException;
 import org.geowebcache.layer.TileLayer;
 
 /**
- * 
  * Panel with table of all blobstores.
  *
  * @author Niels Charlier
- *
  */
 public class BlobStoresPage extends GeoServerSecuredPage {
 
@@ -160,7 +158,7 @@ public class BlobStoresPage extends GeoServerSecuredPage {
 
             @Override
             protected Component getComponentForProperty(String id, IModel<BlobStoreInfo> itemModel,
-                    Property<BlobStoreInfo> property) {
+                                                        Property<BlobStoreInfo> property) {
                 final BlobStoreInfo blobStore = (BlobStoreInfo) itemModel.getObject();
                 if (property == BlobStoresProvider.ID) {
                     return new SimpleAjaxLink<BlobStoreInfo>(id, itemModel, property.getModel(itemModel)) {

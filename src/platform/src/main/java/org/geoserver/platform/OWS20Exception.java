@@ -18,7 +18,7 @@ import java.util.logging.Logger;
  * @author Emanuele Tajariol - GeoSolutions
  */
 public class OWS20Exception extends ServiceException {
-    
+
     private static final Logger LOGGER = org.geotools.util.logging.Logging.getLogger(OWS20Exception.class);
 
     /**
@@ -58,7 +58,7 @@ public class OWS20Exception extends ServiceException {
 
             OWSExceptionCode old = codes.put(exceptionCode, this);
 
-            if(old != null) {
+            if (old != null) {
                 LOGGER.warning("Replacing exception code " + old + " with " + this);
             }
         }
@@ -83,13 +83,14 @@ public class OWS20Exception extends ServiceException {
         public String toString() {
             final StringBuilder builder = new StringBuilder();
             builder.append(getClass().getSimpleName()).append("[exCode:").append(exceptionCode).append(" httpCode=").append(httpCode);
-            if(httpMessage!=null){
+            if (httpMessage != null) {
                 builder.append(" httpMessage=").append(httpMessage);
             }
             builder.append(']');
-            return builder.toString() ;
+            return builder.toString();
         }
     }
+
     /**
      * HTTP response code. May be null when not specified.
      */
@@ -108,7 +109,7 @@ public class OWS20Exception extends ServiceException {
      * Constructs the exception from a message and causing exception.
      *
      * @param message The message describing the exception.
-     * @param cause The case of the exception.
+     * @param cause   The case of the exception.
      */
     public OWS20Exception(String message, Throwable cause) {
         super(message, cause);
@@ -118,8 +119,8 @@ public class OWS20Exception extends ServiceException {
      * Constructs the exception from a message, causing exception, and code.
      *
      * @param message The message describing the exception.
-     * @param cause The case of the exception.
-     * @param code The application specific exception code for the exception.
+     * @param cause   The case of the exception.
+     * @param code    The application specific exception code for the exception.
      */
     public OWS20Exception(String message, Throwable cause, String code) {
         this(message, cause);
@@ -129,8 +130,8 @@ public class OWS20Exception extends ServiceException {
      * Constructs the exception from a message, causing exception, code, and locator.
      *
      * @param message The message describing the exception.
-     * @param cause The case of the exception.
-     * @param code The application specific exception code for the exception.
+     * @param cause   The case of the exception.
+     * @param code    The application specific exception code for the exception.
      * @param locator The application specific locator for the exception.
      */
     protected OWS20Exception(String message, Throwable cause, String code, String locator) {
@@ -146,7 +147,7 @@ public class OWS20Exception extends ServiceException {
      * Constructs the exception from a message, and code.
      *
      * @param message The message describing the exception.
-     * @param code The application specific exception code for the exception.
+     * @param code    The application specific exception code for the exception.
      */
     protected OWS20Exception(String message, String code) {
         super(message);
@@ -161,7 +162,7 @@ public class OWS20Exception extends ServiceException {
      * Constructs the exception from a message,code, and locator.
      *
      * @param message The message describing the exception.
-     * @param code The application specific exception code for the exception.
+     * @param code    The application specific exception code for the exception.
      * @param locator The application specific locator for the exception.
      */
     protected OWS20Exception(String message, String code, String locator) {
@@ -186,7 +187,7 @@ public class OWS20Exception extends ServiceException {
      * Constructs the exception from causing exception, and code.
      *
      * @param cause The case of the exception.
-     * @param code The application specific exception code for the exception.
+     * @param code  The application specific exception code for the exception.
      */
     protected OWS20Exception(Throwable cause, String code) {
         super(cause);
@@ -195,8 +196,8 @@ public class OWS20Exception extends ServiceException {
     /**
      * Constructs the exception from a causing exception, code, and locator.
      *
-     * @param cause The case of the exception.
-     * @param code The application specific exception code for the exception.
+     * @param cause   The case of the exception.
+     * @param code    The application specific exception code for the exception.
      * @param locator The application specific locator for the exception.
      */
     protected OWS20Exception(Throwable cause, String code, String locator) {

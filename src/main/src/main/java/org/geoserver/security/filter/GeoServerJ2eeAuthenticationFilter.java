@@ -10,9 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 
 /**
  * J2EE Authentication Filter
- * 
- * @author mcr
  *
+ * @author mcr
  */
 public class GeoServerJ2eeAuthenticationFilter extends GeoServerJ2eeBaseAuthenticationFilter {
     @Override

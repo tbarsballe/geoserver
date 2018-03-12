@@ -12,7 +12,7 @@ import org.eclipse.emf.ecore.EObject;
 
 /**
  * Parses the "sections" GetCapabilities kvp argument
- * 
+ *
  * @author Andrea Aime - TOPP
  */
 public class SectionsKvpParser extends org.geoserver.ows.kvp.SectionsKvpParser {

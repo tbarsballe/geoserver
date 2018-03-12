@@ -25,19 +25,17 @@ import org.geoserver.status.monitoring.collector.Metrics;
 import org.geoserver.status.monitoring.collector.SystemInfoCollector;
 
 /**
- * 
  * Panel to visualize system informations
  * <p>
  * Retrieves and updates system information metrics every second
- * 
- * @author sandr
  *
+ * @author sandr
  */
 
 public class SystemStatusMonitorPanel extends Panel {
 
     private static final long serialVersionUID = -5616622546856772557L;
-    
+
     public static final String datePattern = "yyyy-MM-dd HH:mm:ss.SSS";
 
     public SystemStatusMonitorPanel(String id) {
@@ -97,7 +95,7 @@ public class SystemStatusMonitorPanel extends Panel {
                 metricMdl.setObject(metrics.getMetrics());
                 timeMdl.setObject(new Date());
             }
-            
+
         });
     }
 

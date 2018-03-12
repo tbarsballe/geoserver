@@ -18,27 +18,27 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 public class CatalogProxiesTest extends GeoServerSystemTestSupport {
-    
+
     @Override
     protected void setUpTestData(SystemTestData testData) throws Exception {
         testData.setUpVectorLayer(SystemTestData.BUILDINGS);
     }
-    
+
     @Override
     protected void onSetUp(SystemTestData testData) throws Exception {
         super.onSetUp(testData);
-        
+
         LayerInfo li = getCatalog().getLayerByName(getLayerId(SystemTestData.BUILDINGS));
         Resource resource = getDataDirectory().config(li);
         Document dom;
-        try(InputStream is = resource.in()) {
+        try (InputStream is = resource.in()) {
             dom = dom(resource.in());
         }
         Element defaultStyle = (Element) dom.getElementsByTagName("defaultStyle").item(0);
         Element defaultStyleId = (Element) defaultStyle.getElementsByTagName("id").item(0);
         defaultStyleId.setTextContent("danglingReference");
-        try(OutputStream os = resource.out()) {
-            print(dom, os);            
+        try (OutputStream os = resource.out()) {
+            print(dom, os);
         }
         getGeoServer().reload();
     }
@@ -48,7 +48,7 @@ public class CatalogProxiesTest extends GeoServerSystemTestSupport {
         LayerInfo li = getCatalog().getLayerByName(getLayerId(SystemTestData.BUILDINGS));
         assertNull(li.getDefaultStyle());
     }
-    
+
     @Test
     public void testDanglingReferenceEqualsHashcode() {
         LayerInfo li = getCatalog().getLayerByName(getLayerId(SystemTestData.BUILDINGS));
@@ -57,5 +57,5 @@ public class CatalogProxiesTest extends GeoServerSystemTestSupport {
         // despite the dangling reference, the layer is equal to itself
         assertTrue(li.equals(li));
     }
-    
+
 }

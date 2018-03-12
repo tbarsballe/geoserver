@@ -13,9 +13,10 @@ import javax.servlet.ServletInputStream;
 
 /**
  * Wrap a String up as a ServletInputStream so we can read it multiple times.
+ *
  * @author David Winslow <dwinslow@openplans.org>
  */
-public class BufferedRequestStream extends ServletInputStream{
+public class BufferedRequestStream extends ServletInputStream {
     InputStream myInputStream;
 
     public BufferedRequestStream(byte[] buff) throws IOException {
@@ -25,16 +26,16 @@ public class BufferedRequestStream extends ServletInputStream{
         myInputStream.reset();
     }
 
-    public int readLine(byte[] b, int off, int len) throws IOException{
-        int read; 
+    public int readLine(byte[] b, int off, int len) throws IOException {
+        int read;
         int index = off;
         int end = off + len;
 
-        while (index < end && 
-                (read = myInputStream.read()) != -1){
-            b[index] = (byte)read; 
+        while (index < end &&
+                (read = myInputStream.read()) != -1) {
+            b[index] = (byte) read;
             index++;
-            if (((char)read)== '\n'){
+            if (((char) read) == '\n') {
                 break;
             }
         }
@@ -42,7 +43,7 @@ public class BufferedRequestStream extends ServletInputStream{
         return index - off;
     }
 
-    public int read() throws IOException{
+    public int read() throws IOException {
         return myInputStream.read();
     }
 

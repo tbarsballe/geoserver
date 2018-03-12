@@ -85,7 +85,7 @@ public class ReadOnlyDataStoreTest extends SecureObjectsTest {
             //
         }
     }
-    
+
     @Test
     public void testChallenge() throws Exception {
         ReadOnlyDataStore ro = new ReadOnlyDataStore(ds, WrapperPolicy.readOnlyChallenge(null));
@@ -94,14 +94,14 @@ public class ReadOnlyDataStoreTest extends SecureObjectsTest {
             ro.createSchema(null);
             fail("Should have failed with a security exception");
         } catch (Exception e) {
-            if (ReadOnlyDataStoreTest.isSpringSecurityException(e)==false)
+            if (ReadOnlyDataStoreTest.isSpringSecurityException(e) == false)
                 fail("Should have failed with a security exception");
         }
         try {
             ro.updateSchema((String) null, null);
             fail("Should have failed with a security exception");
         } catch (Exception e) {
-            if (ReadOnlyDataStoreTest.isSpringSecurityException(e)==false)
+            if (ReadOnlyDataStoreTest.isSpringSecurityException(e) == false)
                 fail("Should have failed with a security exception");
         }
 
@@ -109,14 +109,14 @@ public class ReadOnlyDataStoreTest extends SecureObjectsTest {
             ro.updateSchema((Name) null, null);
             fail("Should have failed with a security exception");
         } catch (Exception e) {
-            if (ReadOnlyDataStoreTest.isSpringSecurityException(e)==false)
+            if (ReadOnlyDataStoreTest.isSpringSecurityException(e) == false)
                 fail("Should have failed with a security exception");
         }
         try {
             ro.getFeatureWriter("states", Transaction.AUTO_COMMIT);
             fail("Should have failed with a security exception");
         } catch (Exception e) {
-            if (ReadOnlyDataStoreTest.isSpringSecurityException(e)==false)
+            if (ReadOnlyDataStoreTest.isSpringSecurityException(e) == false)
                 fail("Should have failed with a security exception");
         }
         try {
@@ -124,18 +124,18 @@ public class ReadOnlyDataStoreTest extends SecureObjectsTest {
                     Transaction.AUTO_COMMIT);
             fail("Should have failed with a security exception");
         } catch (Exception e) {
-            if (ReadOnlyDataStoreTest.isSpringSecurityException(e)==false)
+            if (ReadOnlyDataStoreTest.isSpringSecurityException(e) == false)
                 fail("Should have failed with a security exception");
         }
         try {
             ro.getFeatureWriterAppend("states", Transaction.AUTO_COMMIT);
             fail("Should have failed with a security exception");
         } catch (Exception e) {
-            if (ReadOnlyDataStoreTest.isSpringSecurityException(e)==false)
+            if (ReadOnlyDataStoreTest.isSpringSecurityException(e) == false)
                 fail("Should have failed with a security exception");
         }
     }
-    
+
     @Test
     public void testReadOnlySource() throws Exception {
         ReadOnlyDataStore ro = new ReadOnlyDataStore(ds, WrapperPolicy.readOnlyHide(new WorkspaceAccessLimits(CatalogMode.HIDE, true, false, false)));
@@ -144,8 +144,8 @@ public class ReadOnlyDataStoreTest extends SecureObjectsTest {
         SimpleFeatureCollection fc = fs.getFeatures(Query.ALL);
         assertEquals(0, fc.size());
     }
-    
-    static public boolean isSpringSecurityException (Exception ex) {
+
+    static public boolean isSpringSecurityException(Exception ex) {
         return SecurityUtils.isSecurityException(ex);
     }
 }

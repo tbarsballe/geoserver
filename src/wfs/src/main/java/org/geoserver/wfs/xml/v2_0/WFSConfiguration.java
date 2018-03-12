@@ -31,6 +31,6 @@ public class WFSConfiguration extends org.geotools.wfs.v2_0.WFSConfiguration {
     @Override
     protected void registerBindings(Map bindings) {
         super.registerBindings(bindings);
-        bindings.put(WFS.GetFeatureType,org.geoserver.wfs.xml.v2_0.GetFeatureTypeBinding.class);
+        bindings.put(WFS.GetFeatureType, org.geoserver.wfs.xml.v2_0.GetFeatureTypeBinding.class);
     }
 }

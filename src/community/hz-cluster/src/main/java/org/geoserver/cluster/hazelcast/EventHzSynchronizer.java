@@ -62,7 +62,7 @@ import com.yammer.metrics.Metrics;
  * <p>
  * This synchronizer assumes a shared data directory among nodes in the cluster.
  * </p>
- * 
+ *
  * @author Justin Deoliveira, OpenGeo
  */
 public class EventHzSynchronizer extends HzSynchronizer {
@@ -196,33 +196,33 @@ public class EventHzSynchronizer extends HzSynchronizer {
         final Catalog cat = cluster.getRawCatalog();
 
         switch (t) {
-        case ADD:
-            subj = getCatalogInfo(cat, id, clazz);
-            notifyMethod = CatalogListener.class.getMethod("handleAddEvent", CatalogAddEvent.class);
-            evt = new CatalogAddEventImpl();
-            break;
-        case MODIFY:
-            subj = getCatalogInfo(cat, id, clazz);
-            notifyMethod = CatalogListener.class.getMethod("handlePostModifyEvent",
-                    CatalogPostModifyEvent.class);
-            evt = new CatalogPostModifyEventImpl();
-            break;
-        case REMOVE:
-            notifyMethod = CatalogListener.class.getMethod("handleRemoveEvent",
-                    CatalogRemoveEvent.class);
-            evt = new CatalogRemoveEventImpl();
-            RemovedObjectProxy proxy = new RemovedObjectProxy(id, name, clazz, nativeName);
+            case ADD:
+                subj = getCatalogInfo(cat, id, clazz);
+                notifyMethod = CatalogListener.class.getMethod("handleAddEvent", CatalogAddEvent.class);
+                evt = new CatalogAddEventImpl();
+                break;
+            case MODIFY:
+                subj = getCatalogInfo(cat, id, clazz);
+                notifyMethod = CatalogListener.class.getMethod("handlePostModifyEvent",
+                        CatalogPostModifyEvent.class);
+                evt = new CatalogPostModifyEventImpl();
+                break;
+            case REMOVE:
+                notifyMethod = CatalogListener.class.getMethod("handleRemoveEvent",
+                        CatalogRemoveEvent.class);
+                evt = new CatalogRemoveEventImpl();
+                RemovedObjectProxy proxy = new RemovedObjectProxy(id, name, clazz, nativeName);
 
-            if (ResourceInfo.class.isAssignableFrom(clazz) && event.getStoreId() != null) {
-                proxy.addCatalogCollaborator("store",
-                        cat.getStore(event.getStoreId(), StoreInfo.class));
-            }
-            subj = (CatalogInfo) Proxy.newProxyInstance(getClass().getClassLoader(),
-                    new Class[] { clazz }, proxy);
+                if (ResourceInfo.class.isAssignableFrom(clazz) && event.getStoreId() != null) {
+                    proxy.addCatalogCollaborator("store",
+                            cat.getStore(event.getStoreId(), StoreInfo.class));
+                }
+                subj = (CatalogInfo) Proxy.newProxyInstance(getClass().getClassLoader(),
+                        new Class[]{clazz}, proxy);
 
-            break;
-        default:
-            throw new IllegalStateException("Should not happen");
+                break;
+            default:
+                throw new IllegalStateException("Should not happen");
         }
 
         if (subj == null) {// can't happen if type == DELETE

@@ -30,13 +30,13 @@ import de.micromata.opengis.kml.v_2_2_0.Placemark;
 
 /**
  * Creates a sequence of Placemark objects mapping the vector contents of a layer
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class FeatureSequenceFactory implements SequenceFactory<Feature> {
-    
+
     static final String OUTPUT_MODE = "kmlOutputMode";
-    
+
     static final String VECTOR_MODE = "vector";
 
     private SimpleFeatureCollection features;
@@ -46,7 +46,7 @@ public class FeatureSequenceFactory implements SequenceFactory<Feature> {
     private Style simplified;
 
     private KmlEncodingContext context;
-    
+
     private boolean hasActiveRules;
 
     public FeatureSequenceFactory(KmlEncodingContext context, FeatureLayer layer) {
@@ -56,16 +56,16 @@ public class FeatureSequenceFactory implements SequenceFactory<Feature> {
 
         // prepare the encoding context
         context.setCurrentLayer(layer);
-        
+
 
         // prepare the callbacks
         callbacks = context.getDecoratorsForClass(Placemark.class);
 
         // prepare the style for this layer
         simplified = getSimplifiedStyle(mapContent, layer);
-        
+
         AtomicBoolean rulesFound = new AtomicBoolean(false);
-        if(simplified != null) {
+        if (simplified != null) {
             simplified.accept(new AbstractStyleVisitor() {
                 public void visit(org.geotools.styling.Rule rule) {
                     rulesFound.set(true);
@@ -78,7 +78,7 @@ public class FeatureSequenceFactory implements SequenceFactory<Feature> {
 
     private Style getSimplifiedStyle(WMSMapContent mc, Layer layer) {
         final double scaleDenominator = mc.getScaleDenominator();
-        ScaleStyleVisitor visitor = new ScaleStyleVisitor(scaleDenominator, 
+        ScaleStyleVisitor visitor = new ScaleStyleVisitor(scaleDenominator,
                 (SimpleFeatureType) layer.getFeatureSource().getSchema());
         try {
             layer.getStyle().accept(visitor);
@@ -98,7 +98,7 @@ public class FeatureSequenceFactory implements SequenceFactory<Feature> {
         private FeatureIterator fi;
 
         public FeatureGenerator(FeatureIterator fi) {
-            if(fi != null) {
+            if (fi != null) {
                 // until we are scrolling this generator we are in vector mode
                 EnvFunction.setLocalValue(OUTPUT_MODE, VECTOR_MODE);
                 this.fi = fi;

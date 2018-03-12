@@ -21,14 +21,16 @@ public interface NetCDFEncoderFactory {
 
     /**
      * Attempts to build an encoder for the given parameters (see {@link CoverageResponseDelegate#encode(GridCoverage2D, String, Map, OutputStream)}
+     *
      * @return A {@link NetCDFEncoder}, or null if this factory could not generate one
      * @throws IOException
      */
     NetCDFEncoder getEncoderFor(GranuleStack granuleStack, File file,
-                                       Map<String, String> encodingParameters, String outputFormat) throws IOException;
+                                Map<String, String> encodingParameters, String outputFormat) throws IOException;
 
     /**
      * Builds a file name from the object to be encoded, or returns null
+     *
      * @param granuleStack
      * @param id
      * @return

@@ -23,7 +23,7 @@ import org.xml.sax.helpers.AttributesImpl;
  * Based on the <code>org.geotools.xml.transform</code> framework, does the
  * job of encoding a WCS 1.1.1 Coverages document (for a single coverage with no
  * metadata)
- * 
+ *
  * @author Andrea Aime, TOPP
  */
 public class CoveragesTransformer extends TransformerBase {
@@ -63,9 +63,8 @@ public class CoveragesTransformer extends TransformerBase {
     private class CoveragesTranslator extends TranslatorSupport {
         /**
          * Creates a new WFSCapsTranslator object.
-         * 
-         * @param handler
-         *            DOCUMENT ME!
+         *
+         * @param handler DOCUMENT ME!
          */
         public CoveragesTranslator(ContentHandler handler) {
             super(handler, null, null);
@@ -73,12 +72,9 @@ public class CoveragesTransformer extends TransformerBase {
 
         /**
          * Encode the object.
-         * 
-         * @param o
-         *            The Object to encode.
-         * 
-         * @throws IllegalArgumentException
-         *             if the Object is not encodeable.
+         *
+         * @param o The Object to encode.
+         * @throws IllegalArgumentException if the Object is not encodeable.
          */
         public void encode(Object o) throws IllegalArgumentException {
             try {
@@ -108,7 +104,7 @@ public class CoveragesTransformer extends TransformerBase {
                         .toString();
 
                 final String locationDef = buildSchemaURL(request.getBaseUrl(), "wcs/1.1.1/wcsCoverages.xsd");
-                
+
                 attributes.addAttribute("", locationAtt, locationAtt, "", locationDef);
 
                 start("wcs:Coverages", attributes);

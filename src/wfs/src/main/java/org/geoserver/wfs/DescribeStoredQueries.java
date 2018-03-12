@@ -18,31 +18,34 @@ import java.util.List;
  * Web Feature Service DescribeStoredQueries operation.
  *
  * @author Justin Deoliveira, OpenGeo
- *
  * @version $Id$
  */
 public class DescribeStoredQueries {
 
-    /** service config */
+    /**
+     * service config
+     */
     WFSInfo wfs;
-    
-    /** stored query provider */
+
+    /**
+     * stored query provider
+     */
     StoredQueryProvider storedQueryProvider;
-    
+
     public DescribeStoredQueries(WFSInfo wfs, StoredQueryProvider storedQueryProvider) {
         this.wfs = wfs;
         this.storedQueryProvider = storedQueryProvider;
     }
-    
+
     public DescribeStoredQueriesResponseType run(DescribeStoredQueriesType request) throws WFSException {
-        
+
         Wfs20Factory factory = Wfs20Factory.eINSTANCE;
-        DescribeStoredQueriesResponseType response = 
-            factory.createDescribeStoredQueriesResponseType();
-        
-        List<StoredQueryProvider> providers = 
-            GeoServerExtensions.extensions(StoredQueryProvider.class);
-        
+        DescribeStoredQueriesResponseType response =
+                factory.createDescribeStoredQueriesResponseType();
+
+        List<StoredQueryProvider> providers =
+                GeoServerExtensions.extensions(StoredQueryProvider.class);
+
         if (request.getStoredQueryId().isEmpty()) {
             for (StoredQuery query : storedQueryProvider.listStoredQueries()) {
                 describeStoredQuery(query, response);
@@ -51,7 +54,7 @@ public class DescribeStoredQueries {
             for (URI id : request.getStoredQueryId()) {
                 StoredQuery query = storedQueryProvider.getStoredQuery(id.toString());
                 if (query == null) {
-                    WFSException exception = new WFSException(request, "No such stored query: " + id, 
+                    WFSException exception = new WFSException(request, "No such stored query: " + id,
                             ServiceException.INVALID_PARAMETER_VALUE);
                     exception.setLocator("STOREDQUERY_ID");
                     throw exception;
@@ -63,7 +66,7 @@ public class DescribeStoredQueries {
 
         return response;
     }
-    
+
     void describeStoredQuery(StoredQuery query, DescribeStoredQueriesResponseType response) {
         response.getStoredQueryDescription().add(query.getQuery());
     }

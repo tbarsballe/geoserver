@@ -17,7 +17,7 @@ import org.geoserver.platform.resource.ResourceStore;
  * Default implementation that will store the artifacts on the file system inside
  * $GEOSEVER_DATA_DIR/temp/wps, or if otherwise configured, in the folder setup in
  * WPSINfo.outputStorageDirectory
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class DefaultProcessArtifactsStore implements ProcessArtifactsStore {
@@ -31,7 +31,7 @@ public class DefaultProcessArtifactsStore implements ProcessArtifactsStore {
     @Override
     public Resource getArtifact(String executionId, ArtifactType type, String name) {
         Resource result = null;
-        if(type == ArtifactType.Request) {
+        if (type == ArtifactType.Request) {
             result = store.get(Paths.path(executionId, "request.dat"));
         } else if (type == ArtifactType.Response) {
             result = store.get(Paths.path(executionId, "response.xml"));

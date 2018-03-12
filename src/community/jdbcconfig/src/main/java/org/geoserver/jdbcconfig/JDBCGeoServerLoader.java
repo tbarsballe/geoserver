@@ -54,7 +54,7 @@ public class JDBCGeoServerLoader extends DefaultGeoServerLoader {
         }
 
         ConfigDatabase configDatabase = ((JDBCCatalogFacade) catalogFacade).getConfigDatabase();
-        
+
         Resource initScript = config.isInitDb() ? config.getInitScript() : null;
         configDatabase.initDb(initScript);
 
@@ -90,7 +90,7 @@ public class JDBCGeoServerLoader extends DefaultGeoServerLoader {
         }
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings({"unchecked", "rawtypes"})
     @Override
     protected void loadGeoServer(GeoServer geoServer, XStreamPersister xp) throws Exception {
         if (!config.isEnabled()) {
@@ -118,8 +118,8 @@ public class JDBCGeoServerLoader extends DefaultGeoServerLoader {
         }
 
         //also ensure we have a service configuration for every service we know about
-        final List<XStreamServiceLoader> loaders = 
-            GeoServerExtensions.extensions( XStreamServiceLoader.class );
+        final List<XStreamServiceLoader> loaders =
+                GeoServerExtensions.extensions(XStreamServiceLoader.class);
         for (XStreamServiceLoader l : loaders) {
             ServiceInfo s = geoServer.getService(l.getServiceClass());
             if (s == null) {

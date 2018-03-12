@@ -21,7 +21,7 @@ import org.geoserver.platform.Service;
  * {@link Dispatcher} while doing its dispatching work. In case of dispatching
  * exceptions some fields may be left blank, depending how far the dispatching
  * went.
- * 
+ *
  * @author Justin DeOliveira
  * @author Andrea Aime
  */
@@ -73,17 +73,17 @@ public class Request {
     protected String version;
 
     /**
-     * xml namespace used in request body, only relevant for post requests and when request body 
+     * xml namespace used in request body, only relevant for post requests and when request body
      * content is namespace qualified
      */
     protected String namespace;
 
     /**
-     * The ows service descriptor of the service/version that was actually dispatched  
+     * The ows service descriptor of the service/version that was actually dispatched
      */
     protected Service serviceDescriptor;
 
-    
+
     /**
      * Pre context of the url path
      */
@@ -91,8 +91,8 @@ public class Request {
     /**
      * Remaining path without context
      */
-    protected String path; 
-    
+    protected String path;
+
     /**
      * The output format of hte request
      */
@@ -102,12 +102,12 @@ public class Request {
      * Any errors that occur trying to determine the service
      */
     protected Throwable error;
-    
+
     /**
      * Time when the request hit the server
      */
     protected Date timestamp;
-    
+
     /**
      * The Operation used to call the service code. Available only after dispatching is done, it
      * will give access to the current service object, and the parsed request
@@ -125,12 +125,13 @@ public class Request {
     private String soapNamespace;
 
     public Request() {
-        timestamp = new Date(); 
+        timestamp = new Date();
         identifier = UUID.randomUUID();
     }
-    
+
     /**
      * Copy constructor
+     *
      * @param other request to copy
      */
     public Request(Request other) {
@@ -158,7 +159,6 @@ public class Request {
 
     /**
      * Returns the raw http request being handled by the {@link Dispatcher}
-     *
      */
     public HttpServletRequest getHttpRequest() {
         return httpRequest;
@@ -166,7 +166,6 @@ public class Request {
 
     /**
      * Returns the raw http response being handled by the {@link Dispatcher}
-     *
      */
     public HttpServletResponse getHttpResponse() {
         return httpResponse;
@@ -174,7 +173,6 @@ public class Request {
 
     /**
      * True if the request is a GET one
-     *
      */
     public boolean isGet() {
         return get;
@@ -210,8 +208,7 @@ public class Request {
     }
 
     /**
-     * The service requested 
-     *
+     * The service requested
      */
     public String getService() {
         return service;
@@ -219,7 +216,6 @@ public class Request {
 
     /**
      * The operation requested against the service
-     *
      */
     public String getRequest() {
         return request;
@@ -227,7 +223,6 @@ public class Request {
 
     /**
      * The service version
-     *
      */
     public String getVersion() {
         return version;
@@ -246,10 +241,9 @@ public class Request {
     public Service getServiceDescriptor() {
         return serviceDescriptor;
     }
-    
+
     /**
      * The output format
-     *
      */
     public String getOutputFormat() {
         return outputFormat;
@@ -258,8 +252,6 @@ public class Request {
     /**
      * The Operation used to call the service code. Available only after dispatching is done, it
      * provides access to the current service object, and the parsed request
-     * 
-     *
      */
     public Operation getOperation() {
         return operation;
@@ -267,7 +259,6 @@ public class Request {
 
     /**
      * The eventual error thrown during request parsing, execution or output writing
-     *
      */
     public Throwable getError() {
         return error;
@@ -279,6 +270,7 @@ public class Request {
 
     /**
      * Allows callbacks to override the http request
+     *
      * @param httpRequest http request override
      */
     public void setHttpRequest(HttpServletRequest httpRequest) {
@@ -287,6 +279,7 @@ public class Request {
 
     /**
      * Allows call backs to override the http response
+     *
      * @param httpResponse http response override
      */
     public void setHttpResponse(HttpServletResponse httpResponse) {
@@ -295,6 +288,7 @@ public class Request {
 
     /**
      * Allows call backs to change the GET status
+     *
      * @param get true for iHTTP GET Request
      */
     public void setGet(boolean get) {
@@ -303,6 +297,7 @@ public class Request {
 
     /**
      * Flags/unflags the request as a SOAP request.
+     *
      * @param soap true for SOAP request
      */
     public void setSOAP(boolean soap) {
@@ -315,6 +310,7 @@ public class Request {
      * Clients should consider calling {@link #setOrAppendKvp(java.util.Map)} to retain the
      * existing kvp map.
      * </p>
+     *
      * @param kvp Parsed kvp values.
      */
     public void setKvp(Map kvp) {
@@ -329,14 +325,14 @@ public class Request {
     public void setOrAppendKvp(Map kvp) {
         if (this.kvp == null) {
             setKvp(kvp);
-        }
-        else {
+        } else {
             this.kvp.putAll(kvp);
         }
     }
 
     /**
      * Allows callbacks to override the parsed kvp map
+     *
      * @param rawKvp key value pair map override
      */
     public void setRawKvp(Map rawKvp) {
@@ -345,14 +341,16 @@ public class Request {
 
     /**
      * Allows callbacks to override/wrap the input reader
+     *
      * @param input input reader override
      */
     public void setInput(BufferedReader input) {
         this.input = input;
     }
-    
+
     /**
      * Allows call backs to override the service
+     *
      * @param service OWS service
      */
     public void setService(String service) {
@@ -361,6 +359,7 @@ public class Request {
 
     /**
      * Allows call backs to override the requested operation
+     *
      * @param request OWS Request (ie operation)
      */
     public void setRequest(String request) {
@@ -369,6 +368,7 @@ public class Request {
 
     /**
      * Allows callbacks to override the version
+     *
      * @param version OWS version
      */
     public void setVersion(String version) {
@@ -384,6 +384,7 @@ public class Request {
 
     /**
      * Allows callbacks to override the service descriptor (id, name and version).
+     *
      * @param serviceDescriptor service descriptor
      */
     public void setServiceDescriptor(Service serviceDescriptor) {
@@ -392,6 +393,7 @@ public class Request {
 
     /**
      * Allows call backs to override the output format
+     *
      * @param outputFormat Output format override
      */
     public void setOutputFormat(String outputFormat) {
@@ -400,7 +402,7 @@ public class Request {
 
     /**
      * Sets the operation in use
-     * 
+     *
      * @param operation OWS Operation
      */
     public void setOperation(Operation operation) {
@@ -411,7 +413,7 @@ public class Request {
      * The context of the url path of the request.
      * <p>
      * The context is anything before the part that matches an ows service. For instance in:
-     * 
+     * <p>
      * <pre>
      *   /foo/bar/wfs?...
      * </pre>
@@ -422,54 +424,54 @@ public class Request {
     public String getContext() {
         return context;
     }
-    
+
     /**
      * Sets the context.
-     * 
+     *
      * @see #getContext()
      */
     public void setContext(String context) {
         this.context = context;
     }
-    
+
     /**
      * The remainder part of the url path after the context.
      * <p>
      * In the following:
      * </p>
-     * 
+     * <p>
      * <pre>
      *   /foo/bar/wfs?...
      * </pre>
-     * 
+     * <p>
      * The path would be "/wfs".
-     * 
+     *
      * @see #getContext()
      */
     public String getPath() {
         return path;
     }
-    
+
     /**
      * Sets the patch.
-     * 
+     *
      * @see #getPath()
      */
     public void setPath(String path) {
         this.path = path;
     }
-    
+
     /**
      * Allows callbacks to override the operation execution error
+     *
      * @param error Throwable indication operation failure
      */
     public void setError(Throwable error) {
         this.error = error;
     }
-    
+
     /**
      * The timestamp when the request hit the server
-     *
      */
     public Date getTimestamp() {
         return timestamp;
@@ -477,12 +479,13 @@ public class Request {
 
     /**
      * Sets the request timestamp
+     *
      * @param timestamp request timestamp (represented as a Date)
      */
     public void setTimestamp(Date timestamp) {
         this.timestamp = timestamp;
     }
-    
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -510,6 +513,7 @@ public class Request {
 
     /**
      * Sets the SOAP namespace used in the request
+     *
      * @param soapNamespace
      */
     public void setSOAPNamespace(String soapNamespace) {
@@ -518,6 +522,7 @@ public class Request {
 
     /**
      * Returns the SOAP namespace used in the request, or null if the request was not a SOAP one
+     *
      * @return
      */
     public String getSOAPNamespace() {

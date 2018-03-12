@@ -16,7 +16,7 @@ import org.geotools.util.logging.Logging;
 
 /**
  * Adapts a paletted coverage to RGB(A) for formats that cannot take paletted as an input
- *  
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class PalettedToRGB implements FormatAdapter<GridCoverage2D> {
@@ -26,17 +26,17 @@ public class PalettedToRGB implements FormatAdapter<GridCoverage2D> {
     @Override
     public GridCoverage2D adapt(GridCoverage2D input) {
         RenderedImage image = input.getRenderedImage();
-        if(image.getSampleModel().getNumBands() == 1 && image.getColorModel() instanceof IndexColorModel) {
+        if (image.getSampleModel().getNumBands() == 1 && image.getColorModel() instanceof IndexColorModel) {
             LOGGER.fine("Expanding image from indexed to rgb(a)");
 
             ImageWorker iw = new ImageWorker(image);
             iw.forceComponentColorModel();
             RenderedImage converted = iw.getRenderedImage();
-            GridCoverage2D adapted = CoverageFactoryFinder.getGridCoverageFactory(null).create(input.getName(), 
-                    converted, input.getGridGeometry(), null, new GridCoverage2D[] {input}, input.getProperties());
+            GridCoverage2D adapted = CoverageFactoryFinder.getGridCoverageFactory(null).create(input.getName(),
+                    converted, input.getGridGeometry(), null, new GridCoverage2D[]{input}, input.getProperties());
             return adapted;
         }
-        
+
         return input;
     }
 

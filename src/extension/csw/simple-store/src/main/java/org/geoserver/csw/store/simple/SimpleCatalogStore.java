@@ -32,22 +32,21 @@ import org.opengis.feature.type.Name;
 import org.opengis.filter.Filter;
 
 /**
- * A simple implementation of {@link CatalogStore} geared towards test support. 
- * The store reads CSW records from xml files located in the root folder, it is not meant to 
+ * A simple implementation of {@link CatalogStore} geared towards test support.
+ * The store reads CSW records from xml files located in the root folder, it is not meant to
  * be fast or scalable, on the contrary, to keep its implementation as simple as possible it
- * is actually slow and occasionally memory bound. 
- * <p>Do not use it for production purposes. 
- * 
- * @author Andrea Aime - GeoSolutions
+ * is actually slow and occasionally memory bound.
+ * <p>Do not use it for production purposes.
  *
+ * @author Andrea Aime - GeoSolutions
  */
 public class SimpleCatalogStore extends AbstractCatalogStore {
 
     private Resource root;
-    
+
     public SimpleCatalogStore(Resource root) {
-    	support(CSWRecordDescriptor.getInstance());
-    	
+        support(CSWRecordDescriptor.getInstance());
+
         this.root = root;
 
         if (root.getType() == Type.RESOURCE) {
@@ -56,14 +55,14 @@ public class SimpleCatalogStore extends AbstractCatalogStore {
                             + root.path());
         }
     }
-    
+
     public FeatureCollection getRecords(Query q, Transaction t) throws IOException {
-    	return getRecords(q,t,null);
+        return getRecords(q, t, null);
     }
 
     @Override
     public FeatureCollection getRecordsInternal(RecordDescriptor rd, RecordDescriptor outputRd, Query q, Transaction t) throws IOException {
-       
+
         int startIndex = 0;
         if (q.getStartIndex() != null) {
             startIndex = q.getStartIndex();
@@ -75,7 +74,7 @@ public class SimpleCatalogStore extends AbstractCatalogStore {
             Filter filter = q.getFilter();
             CSWAnyExpander expander = new CSWAnyExpander();
             Filter expanded = (Filter) filter.accept(expander, null);
-            
+
             records = new FilteringFeatureCollection<FeatureType, Feature>(records, expanded);
         }
 
@@ -84,7 +83,7 @@ public class SimpleCatalogStore extends AbstractCatalogStore {
             Feature[] features = (Feature[]) records.toArray(new Feature[records.size()]);
             Comparator<Feature> comparator = ComplexComparatorFactory.buildComparator(q.getSortBy());
             Arrays.sort(features, comparator);
-            
+
             records = new MemoryFeatureCollection(records.getSchema(), Arrays.asList(features));
         }
 
@@ -93,9 +92,9 @@ public class SimpleCatalogStore extends AbstractCatalogStore {
             records = new MaxFeaturesFeatureCollection<FeatureType, Feature>(records,
                     q.getMaxFeatures());
         }
-        
+
         // reducing attributes
-        if(q.getProperties() != null && q.getProperties().size() > 0) {
+        if (q.getProperties() != null && q.getProperties().size() > 0) {
             records = new RetypingFeatureCollection(records, q.getProperties());
         }
 
@@ -105,12 +104,12 @@ public class SimpleCatalogStore extends AbstractCatalogStore {
     @Override
     public CatalogStoreCapabilities getCapabilities() {
         return new CatalogStoreCapabilities(descriptorByType) {
-          
+
             @Override
             public boolean supportsGetRepositoryItem(Name typeName) {
                 return CSWRecordDescriptor.RECORD_DESCRIPTOR.getName().equals(typeName);
-            }            
-            
+            }
+
         };
     }
 
@@ -120,17 +119,17 @@ public class SimpleCatalogStore extends AbstractCatalogStore {
     @Override
     public RepositoryItem getRepositoryItem(String recordId) {
         SimpleRecordIterator it = new SimpleRecordIterator(root, 0);
-        while(it.hasNext()) {
+        while (it.hasNext()) {
             Feature f = it.next();
-            if(recordId.equals(f.getIdentifier().getID())) {
+            if (recordId.equals(f.getIdentifier().getID())) {
                 final Resource resource = it.getLastFile();
                 return new RepositoryItem() {
-                    
+
                     @Override
                     public String getMime() {
                         return "application/xml";
                     }
-                    
+
                     @Override
                     public InputStream getContents() throws IOException {
                         return resource.in();
@@ -138,7 +137,7 @@ public class SimpleCatalogStore extends AbstractCatalogStore {
                 };
             }
         }
-        
+
         // not found
         return null;
     }

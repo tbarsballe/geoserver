@@ -34,13 +34,12 @@ import org.springframework.context.event.ContextRefreshedEvent;
 
 /**
  * Process factory that maintains backward compatibility for deprecated process names.
- * 
- * @author Justin Deoliveira, OpenGeo
  *
+ * @author Justin Deoliveira, OpenGeo
  */
 public class DeprecatedProcessFactory implements ProcessFactory, DisposableBean, ApplicationListener<ApplicationEvent> {
 
-    volatile Map<Name,Name> map;
+    volatile Map<Name, Name> map;
 
     GeoServer geoServer;
     ConfigurationListener listener;
@@ -52,7 +51,7 @@ public class DeprecatedProcessFactory implements ProcessFactory, DisposableBean,
     @Override
     public void destroy() throws Exception {
         if (geoServer != null) {
-            geoServer.removeListener(listener);    
+            geoServer.removeListener(listener);
         }
     }
 
@@ -70,12 +69,12 @@ public class DeprecatedProcessFactory implements ProcessFactory, DisposableBean,
     public InternationalString getTitle() {
         return Text.text("Deprecated processes");
     }
-    
+
     @Override
     public Set<Name> getNames() {
         return getProcessMappings().keySet();
     }
-    
+
     @Override
     public InternationalString getTitle(Name name) {
         return doAction(name, new Action<InternationalString>() {
@@ -85,7 +84,7 @@ public class DeprecatedProcessFactory implements ProcessFactory, DisposableBean,
             }
         });
     }
-    
+
     @Override
     public InternationalString getDescription(Name name) {
         return doAction(name, new Action<InternationalString>() {
@@ -108,20 +107,20 @@ public class DeprecatedProcessFactory implements ProcessFactory, DisposableBean,
 
     @Override
     public Map<String, Parameter<?>> getParameterInfo(Name name) {
-        return doAction(name, new Action< Map<String, Parameter<?>>>() {
+        return doAction(name, new Action<Map<String, Parameter<?>>>() {
             @Override
             public Map<String, Parameter<?>> perform(ProcessFactory f, Name oldName, Name newName, Object... args) {
                 return f.getParameterInfo(newName);
             }
         });
     }
-    
+
     @Override
     public Map<String, Parameter<?>> getResultInfo(Name name,
-            Map<String, Object> parameters) throws IllegalArgumentException {
+                                                   Map<String, Object> parameters) throws IllegalArgumentException {
         return doAction(name, new Action<Map<String, Parameter<?>>>() {
             @Override
-            public Map<String, Parameter<?>> perform(ProcessFactory f, Name oldName, Name newName, Object... args ) {
+            public Map<String, Parameter<?>> perform(ProcessFactory f, Name oldName, Name newName, Object... args) {
                 return f.getResultInfo(newName, (Map<String, Object>) args[0]);
             }
         }, parameters);
@@ -153,7 +152,7 @@ public class DeprecatedProcessFactory implements ProcessFactory, DisposableBean,
     }
 
     <T> T doAction(Name oldName, Action<T> a, Object... args) {
-        Map<Name,Name> map = getProcessMappings();
+        Map<Name, Name> map = getProcessMappings();
         if (map.containsKey(oldName)) {
             Name newName = map.get(oldName);
             ProcessFactory pf = GeoServerProcessors.createProcessFactory(newName, false);
@@ -164,62 +163,62 @@ public class DeprecatedProcessFactory implements ProcessFactory, DisposableBean,
         return null;
     }
 
-    Map<Name,Name> getProcessMappings() {
+    Map<Name, Name> getProcessMappings() {
         if (map == null) {
             synchronized (DeprecatedProcessFactory.class) {
                 if (map == null) {
                     map = new LinkedHashMap();
 
                     //JTS namespace
-                    registerProcessMapping(new NameImpl("JTS", "length"), new NameImpl("geo","length"), map);
-                    registerProcessMapping(new NameImpl("JTS", "isEmpty"), new NameImpl("geo","isEmpty"), map);
-                    registerProcessMapping(new NameImpl("JTS", "contains"), new NameImpl("geo","contains"), map);
-                    registerProcessMapping(new NameImpl("JTS", "disjoint"), new NameImpl("geo","disjoint"), map);
-                    registerProcessMapping(new NameImpl("JTS", "intersects"), new NameImpl("geo","intersects"), map);
-                    registerProcessMapping(new NameImpl("JTS", "isClosed"), new NameImpl("geo","isClosed"), map);
-                    registerProcessMapping(new NameImpl("JTS", "isValid"), new NameImpl("geo","isValid"), map);
-                    registerProcessMapping(new NameImpl("JTS", "buffer"), new NameImpl("geo","buffer"), map);
-                    registerProcessMapping(new NameImpl("JTS", "getY"), new NameImpl("geo","getY"), map);
-                    registerProcessMapping(new NameImpl("JTS", "getX"), new NameImpl("geo","getX"), map);
-                    registerProcessMapping(new NameImpl("JTS", "union"), new NameImpl("geo","union"), map);
-                    registerProcessMapping(new NameImpl("JTS", "intersection"), new NameImpl("geo","intersection"), map);
-                    registerProcessMapping(new NameImpl("JTS", "difference"), new NameImpl("geo","difference"), map);
-                    registerProcessMapping(new NameImpl("JTS", "distance"), new NameImpl("geo","distance"), map);
-                    registerProcessMapping(new NameImpl("JTS", "envelope"), new NameImpl("geo","envelope"), map);
-                    registerProcessMapping(new NameImpl("JTS", "dimension"), new NameImpl("geo","dimension"), map);
-                    registerProcessMapping(new NameImpl("JTS", "overlaps"), new NameImpl("geo","overlaps"), map);
-                    registerProcessMapping(new NameImpl("JTS", "reproject"), new NameImpl("geo","reproject"), map);
-                    registerProcessMapping(new NameImpl("JTS", "simplify"), new NameImpl("geo","simplify"), map);
-                    registerProcessMapping(new NameImpl("JTS", "isSimple"), new NameImpl("geo","isSimple"), map);
-                    registerProcessMapping(new NameImpl("JTS", "equalsExact"), new NameImpl("geo","equalsExact"), map);
-                    registerProcessMapping(new NameImpl("JTS", "getGeometryN"), new NameImpl("geo","getGeometryN"), map);
-                    registerProcessMapping(new NameImpl("JTS", "isWithinDistance"), new NameImpl("geo","isWithinDistance"), map);
-                    registerProcessMapping(new NameImpl("JTS", "touches"), new NameImpl("geo","touches"), map);
-                    registerProcessMapping(new NameImpl("JTS", "crosses"), new NameImpl("geo","crosses"), map);
-                    registerProcessMapping(new NameImpl("JTS", "within"), new NameImpl("geo","within"), map);
-                    registerProcessMapping(new NameImpl("JTS", "relate"), new NameImpl("geo","relate"), map);
-                    registerProcessMapping(new NameImpl("JTS", "convexHull"), new NameImpl("geo","convexHull"), map);
-                    registerProcessMapping(new NameImpl("JTS", "symDifference"), new NameImpl("geo","symDifference"), map);
-                    registerProcessMapping(new NameImpl("JTS", "centroid"), new NameImpl("geo","centroid"), map);
-                    registerProcessMapping(new NameImpl("JTS", "interiorPoint"), new NameImpl("geo","interiorPoint"), map);
-                    registerProcessMapping(new NameImpl("JTS", "numPoints"), new NameImpl("geo","numPoints"), map);
-                    registerProcessMapping(new NameImpl("JTS", "area"), new NameImpl("geo","area"), map);
-                    registerProcessMapping(new NameImpl("JTS", "isRing"), new NameImpl("geo","isRing"), map);
-                    registerProcessMapping(new NameImpl("JTS", "exteriorRing"), new NameImpl("geo","exteriorRing"), map);
-                    registerProcessMapping(new NameImpl("JTS", "numInteriorRing"), new NameImpl("geo","numInteriorRing"), map);
-                    registerProcessMapping(new NameImpl("JTS", "numGeometries"), new NameImpl("geo","numGeometries"), map);
-                    registerProcessMapping(new NameImpl("JTS", "geometryType"), new NameImpl("geo","geometryType"), map);
-                    registerProcessMapping(new NameImpl("JTS", "boundary"), new NameImpl("geo","boundary"), map);
-                    registerProcessMapping(new NameImpl("JTS", "densify"), new NameImpl("geo","densify"), map);
-                    registerProcessMapping(new NameImpl("JTS", "relatePattern"), new NameImpl("geo","relatePattern"), map);
-                    registerProcessMapping(new NameImpl("JTS", "equalsExactTolerance"), new NameImpl("geo","equalsExactTolerance"), map);
-                    registerProcessMapping(new NameImpl("JTS", "pointN"), new NameImpl("geo","pointN"), map);
-                    registerProcessMapping(new NameImpl("JTS", "startPoint"), new NameImpl("geo","startPoint"), map);
-                    registerProcessMapping(new NameImpl("JTS", "endPoint"), new NameImpl("geo","endPoint"), map);
-                    registerProcessMapping(new NameImpl("JTS", "interiorRingN"), new NameImpl("geo","interiorRingN"), map);
-                    registerProcessMapping(new NameImpl("JTS", "polygonize"), new NameImpl("geo","polygonize"), map);
-                    registerProcessMapping(new NameImpl("JTS", "splitPolygon"), new NameImpl("geo","splitPolygon"), map);
-                    
+                    registerProcessMapping(new NameImpl("JTS", "length"), new NameImpl("geo", "length"), map);
+                    registerProcessMapping(new NameImpl("JTS", "isEmpty"), new NameImpl("geo", "isEmpty"), map);
+                    registerProcessMapping(new NameImpl("JTS", "contains"), new NameImpl("geo", "contains"), map);
+                    registerProcessMapping(new NameImpl("JTS", "disjoint"), new NameImpl("geo", "disjoint"), map);
+                    registerProcessMapping(new NameImpl("JTS", "intersects"), new NameImpl("geo", "intersects"), map);
+                    registerProcessMapping(new NameImpl("JTS", "isClosed"), new NameImpl("geo", "isClosed"), map);
+                    registerProcessMapping(new NameImpl("JTS", "isValid"), new NameImpl("geo", "isValid"), map);
+                    registerProcessMapping(new NameImpl("JTS", "buffer"), new NameImpl("geo", "buffer"), map);
+                    registerProcessMapping(new NameImpl("JTS", "getY"), new NameImpl("geo", "getY"), map);
+                    registerProcessMapping(new NameImpl("JTS", "getX"), new NameImpl("geo", "getX"), map);
+                    registerProcessMapping(new NameImpl("JTS", "union"), new NameImpl("geo", "union"), map);
+                    registerProcessMapping(new NameImpl("JTS", "intersection"), new NameImpl("geo", "intersection"), map);
+                    registerProcessMapping(new NameImpl("JTS", "difference"), new NameImpl("geo", "difference"), map);
+                    registerProcessMapping(new NameImpl("JTS", "distance"), new NameImpl("geo", "distance"), map);
+                    registerProcessMapping(new NameImpl("JTS", "envelope"), new NameImpl("geo", "envelope"), map);
+                    registerProcessMapping(new NameImpl("JTS", "dimension"), new NameImpl("geo", "dimension"), map);
+                    registerProcessMapping(new NameImpl("JTS", "overlaps"), new NameImpl("geo", "overlaps"), map);
+                    registerProcessMapping(new NameImpl("JTS", "reproject"), new NameImpl("geo", "reproject"), map);
+                    registerProcessMapping(new NameImpl("JTS", "simplify"), new NameImpl("geo", "simplify"), map);
+                    registerProcessMapping(new NameImpl("JTS", "isSimple"), new NameImpl("geo", "isSimple"), map);
+                    registerProcessMapping(new NameImpl("JTS", "equalsExact"), new NameImpl("geo", "equalsExact"), map);
+                    registerProcessMapping(new NameImpl("JTS", "getGeometryN"), new NameImpl("geo", "getGeometryN"), map);
+                    registerProcessMapping(new NameImpl("JTS", "isWithinDistance"), new NameImpl("geo", "isWithinDistance"), map);
+                    registerProcessMapping(new NameImpl("JTS", "touches"), new NameImpl("geo", "touches"), map);
+                    registerProcessMapping(new NameImpl("JTS", "crosses"), new NameImpl("geo", "crosses"), map);
+                    registerProcessMapping(new NameImpl("JTS", "within"), new NameImpl("geo", "within"), map);
+                    registerProcessMapping(new NameImpl("JTS", "relate"), new NameImpl("geo", "relate"), map);
+                    registerProcessMapping(new NameImpl("JTS", "convexHull"), new NameImpl("geo", "convexHull"), map);
+                    registerProcessMapping(new NameImpl("JTS", "symDifference"), new NameImpl("geo", "symDifference"), map);
+                    registerProcessMapping(new NameImpl("JTS", "centroid"), new NameImpl("geo", "centroid"), map);
+                    registerProcessMapping(new NameImpl("JTS", "interiorPoint"), new NameImpl("geo", "interiorPoint"), map);
+                    registerProcessMapping(new NameImpl("JTS", "numPoints"), new NameImpl("geo", "numPoints"), map);
+                    registerProcessMapping(new NameImpl("JTS", "area"), new NameImpl("geo", "area"), map);
+                    registerProcessMapping(new NameImpl("JTS", "isRing"), new NameImpl("geo", "isRing"), map);
+                    registerProcessMapping(new NameImpl("JTS", "exteriorRing"), new NameImpl("geo", "exteriorRing"), map);
+                    registerProcessMapping(new NameImpl("JTS", "numInteriorRing"), new NameImpl("geo", "numInteriorRing"), map);
+                    registerProcessMapping(new NameImpl("JTS", "numGeometries"), new NameImpl("geo", "numGeometries"), map);
+                    registerProcessMapping(new NameImpl("JTS", "geometryType"), new NameImpl("geo", "geometryType"), map);
+                    registerProcessMapping(new NameImpl("JTS", "boundary"), new NameImpl("geo", "boundary"), map);
+                    registerProcessMapping(new NameImpl("JTS", "densify"), new NameImpl("geo", "densify"), map);
+                    registerProcessMapping(new NameImpl("JTS", "relatePattern"), new NameImpl("geo", "relatePattern"), map);
+                    registerProcessMapping(new NameImpl("JTS", "equalsExactTolerance"), new NameImpl("geo", "equalsExactTolerance"), map);
+                    registerProcessMapping(new NameImpl("JTS", "pointN"), new NameImpl("geo", "pointN"), map);
+                    registerProcessMapping(new NameImpl("JTS", "startPoint"), new NameImpl("geo", "startPoint"), map);
+                    registerProcessMapping(new NameImpl("JTS", "endPoint"), new NameImpl("geo", "endPoint"), map);
+                    registerProcessMapping(new NameImpl("JTS", "interiorRingN"), new NameImpl("geo", "interiorRingN"), map);
+                    registerProcessMapping(new NameImpl("JTS", "polygonize"), new NameImpl("geo", "polygonize"), map);
+                    registerProcessMapping(new NameImpl("JTS", "splitPolygon"), new NameImpl("geo", "splitPolygon"), map);
+
                     //gs geometry processes
                     registerProcessMapping(new NameImpl("gs", "ReprojectGeometry"), new NameImpl("geo", "reproject"), map);
 
@@ -252,7 +251,7 @@ public class DeprecatedProcessFactory implements ProcessFactory, DisposableBean,
                     registerProcessMapping(new NameImpl("gs", "VectorZonalStatistics"), new NameImpl("vec", "VectorZonalStatistics"), map);
                     registerProcessMapping(new NameImpl("gs", "Heatmap"), new NameImpl("vec", "Heatmap"), map);
                     registerProcessMapping(new NameImpl("gs", "BarnesSurface"), new NameImpl("vec", "BarnesSurface"), map);
-                    
+
                     //gs raster processes
                     registerProcessMapping(new NameImpl("gs", "AddCoverages"), new NameImpl("ras", "AddCoverages"), map);
                     registerProcessMapping(new NameImpl("gs", "AreaGrid"), new NameImpl("ras", "AreaGrid"), map);
@@ -278,7 +277,7 @@ public class DeprecatedProcessFactory implements ProcessFactory, DisposableBean,
         map = null;
     }
 
-    static void registerProcessMapping(Name oldName, Name newName, Map<Name,Name> map) {
+    static void registerProcessMapping(Name oldName, Name newName, Map<Name, Name> map) {
         if (GeoServerProcessors.createProcess(newName) != null) {
             map.put(oldName, newName);
         }
@@ -290,12 +289,12 @@ public class DeprecatedProcessFactory implements ProcessFactory, DisposableBean,
         if (event instanceof ContextLoadedEvent) {
             //JD: look up GeoServer and register now rather than use constructor injection
             // to avoid circular dependency during service loading startup
-            geoServer = GeoServerExtensions.bean(GeoServer.class, 
-                ((ContextLoadedEvent) event).getApplicationContext());
+            geoServer = GeoServerExtensions.bean(GeoServer.class,
+                    ((ContextLoadedEvent) event).getApplicationContext());
             listener = new ConfigurationListenerAdapter() {
                 @Override
-                public void handleServiceChange(ServiceInfo service, List<String> propertyNames, 
-                    List<Object> oldValues, List<Object> newValues) {
+                public void handleServiceChange(ServiceInfo service, List<String> propertyNames,
+                                                List<Object> oldValues, List<Object> newValues) {
                     if (service instanceof WPSInfo) {
                         resetProcessMappings();
                     }

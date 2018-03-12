@@ -12,7 +12,6 @@ import org.geoserver.util.Filter;
 
 /**
  * @author Alessio Fabiani, GeoSolutions
- *
  */
 public abstract class ImageMosaicAdditionalResource {
 
@@ -64,6 +63,6 @@ public abstract class ImageMosaicAdditionalResource {
             }
 
         });
-        
+
     }
 }

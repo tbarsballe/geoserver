@@ -56,7 +56,7 @@ public class GetFeatureTest extends WFS20TestSupport {
     @Override
     protected void setUpInternal(SystemTestData data) throws Exception {
         data.addVectorLayer(new QName(SystemTestData.SF_URI, "WithGMLProperties", SystemTestData.SF_PREFIX), Collections.EMPTY_MAP,
-            org.geoserver.wfs.v1_1.GetFeatureTest.class, getCatalog());
+                org.geoserver.wfs.v1_1.GetFeatureTest.class, getCatalog());
         data.addVectorLayer(new QName(SystemTestData.SF_URI, "PrimitiveGeoFeatureId", SystemTestData.SF_PREFIX), Collections.EMPTY_MAP,
                 TestData.class, getCatalog());
     }
@@ -86,8 +86,8 @@ public class GetFeatureTest extends WFS20TestSupport {
 
     @Test
     public void testGet() throws Exception {
-    	testGetFifteenAll("wfs?request=GetFeature&typenames=cdf:Fifteen&version=2.0.0&service=wfs");
-    	testGetFifteenAll("wfs?request=GetFeature&typenames=(cdf:Fifteen)&version=2.0.0&service=wfs");
+        testGetFifteenAll("wfs?request=GetFeature&typenames=cdf:Fifteen&version=2.0.0&service=wfs");
+        testGetFifteenAll("wfs?request=GetFeature&typenames=(cdf:Fifteen)&version=2.0.0&service=wfs");
     }
 
     @Test
@@ -96,11 +96,11 @@ public class GetFeatureTest extends WFS20TestSupport {
         testGetFifteenAll("wfs?request=GetFeature&typenames=abc:Fifteen&version=2.0.0&service=wfs&namespaces=xmlns(abc," + MockData.CDF_URI + "),xmlns(wfs," + WFS.NAMESPACE + ")");
         testGetFifteenAll("wfs?request=GetFeature&typenames=Fifteen&version=2.0.0&service=wfs&namespaces=xmlns(" + MockData.CDF_URI + "),xmlns(wfs," + WFS.NAMESPACE + ")");
     }
-    
+
     @Test
     public void testConcurrentGet() throws Exception {
         ExecutorCompletionService<Object> es = new ExecutorCompletionService<>(Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors()));
-        final int REQUESTS =  200;
+        final int REQUESTS = 200;
         for (int i = 0; i < REQUESTS; i++) {
             es.submit(() -> {
                 testGetFifteenAll("wfs?request=GetFeature&typenames=cdf:Fifteen&version=2.0.0&service=wfs");
@@ -111,13 +111,13 @@ public class GetFeatureTest extends WFS20TestSupport {
         for (int i = 0; i < REQUESTS; i++) {
             es.take().get();
         }
-        
+
     }
-    
+
     @Test
     public void testConcurrentPost() throws Exception {
         ExecutorCompletionService<Object> es = new ExecutorCompletionService<>(Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors()));
-        final int REQUESTS =  200;
+        final int REQUESTS = 200;
         for (int i = 0; i < REQUESTS; i++) {
             es.submit(() -> {
                 testPost();
@@ -128,13 +128,13 @@ public class GetFeatureTest extends WFS20TestSupport {
         long start = System.currentTimeMillis();
         for (int i = 0; i < REQUESTS; i++) {
             es.take().get();
-            if(i % 100 == 0) {
+            if (i % 100 == 0) {
                 long curr = System.currentTimeMillis();
                 LOGGER.info(i + " - " + (curr - start));
                 start = curr;
             }
         }
-        
+
     }
 
     @Test
@@ -148,7 +148,7 @@ public class GetFeatureTest extends WFS20TestSupport {
     public void testGetTypeName() throws Exception {
         testGetFifteenAll("wfs?request=GetFeature&typename=cdf:Fifteen&version=2.0.0&service=wfs");
     }
-    
+
     @Test
     public void testGetWithCount() throws Exception {
         Document dom = getAsDOM("wfs?request=GetFeature&typenames=cdf:Fifteen&version=2.0.0&service=wfs&count=5");
@@ -160,7 +160,7 @@ public class GetFeatureTest extends WFS20TestSupport {
     @Test
     public void testGetWithCountAndStartIndex0() throws Exception {
         Document dom = getAsDOM(
-            "wfs?request=GetFeature&typenames=cdf:Fifteen&version=2.0.0&service=wfs&count=5&startIndex=0");
+                "wfs?request=GetFeature&typenames=cdf:Fifteen&version=2.0.0&service=wfs&count=5&startIndex=0");
         XMLAssert.assertXpathEvaluatesTo("5", "count(//cdf:Fifteen)", dom);
         assertEquals("5", dom.getDocumentElement().getAttribute("numberReturned"));
         assertEquals("15", dom.getDocumentElement().getAttribute("numberMatched"));
@@ -169,7 +169,7 @@ public class GetFeatureTest extends WFS20TestSupport {
     @Test
     public void testGetWithCountAndStartIndexMiddle() throws Exception {
         Document dom = getAsDOM(
-            "wfs?request=GetFeature&typenames=cdf:Fifteen&version=2.0.0&service=wfs&count=5&startIndex=7");
+                "wfs?request=GetFeature&typenames=cdf:Fifteen&version=2.0.0&service=wfs&count=5&startIndex=7");
         XMLAssert.assertXpathEvaluatesTo("5", "count(//cdf:Fifteen)", dom);
         assertEquals("5", dom.getDocumentElement().getAttribute("numberReturned"));
         assertEquals("15", dom.getDocumentElement().getAttribute("numberMatched"));
@@ -178,7 +178,7 @@ public class GetFeatureTest extends WFS20TestSupport {
     @Test
     public void testGetWithCountAndStartIndexEnd() throws Exception {
         Document dom = getAsDOM(
-            "wfs?request=GetFeature&typenames=cdf:Fifteen&version=2.0.0&service=wfs&count=5&startIndex=11");
+                "wfs?request=GetFeature&typenames=cdf:Fifteen&version=2.0.0&service=wfs&count=5&startIndex=11");
         XMLAssert.assertXpathEvaluatesTo("4", "count(//cdf:Fifteen)", dom);
         assertEquals("4", dom.getDocumentElement().getAttribute("numberReturned"));
         assertEquals("15", dom.getDocumentElement().getAttribute("numberMatched"));
@@ -186,17 +186,17 @@ public class GetFeatureTest extends WFS20TestSupport {
 
     @Test
     public void testGetPropertyNameEmpty() throws Exception {
-    	testGetFifteenAll("wfs?request=GetFeature&typename=cdf:Fifteen&version=2.0.0&service=wfs&propertyname=");
+        testGetFifteenAll("wfs?request=GetFeature&typename=cdf:Fifteen&version=2.0.0&service=wfs&propertyname=");
     }
-    
+
     @Test
     public void testGetPropertyNameStar() throws Exception {
         testGetFifteenAll("wfs?request=GetFeature&typename=cdf:Fifteen&version=2.0.0&service=wfs&propertyname=*");
     }
-    
-    private void testGetFifteenAll(String request) throws Exception{
-    	Document doc = getAsDOM(request);
-    	assertGML32(doc);
+
+    private void testGetFifteenAll(String request) throws Exception {
+        Document doc = getAsDOM(request);
+        assertGML32(doc);
 
         NodeList features = doc.getElementsByTagName("cdf:Fifteen");
         assertFalse(features.getLength() == 0);
@@ -211,10 +211,10 @@ public class GetFeatureTest extends WFS20TestSupport {
     @Test
     public void testGetWithFeatureId() throws Exception {
 
-        Document doc = 
-            getAsDOM("wfs?request=GetFeature&typeName=cdf:Fifteen&version=2.0.0&service=wfs&featureid=Fifteen.2");
+        Document doc =
+                getAsDOM("wfs?request=GetFeature&typeName=cdf:Fifteen&version=2.0.0&service=wfs&featureid=Fifteen.2");
         assertGML32(doc);
-        
+
         XMLAssert.assertXpathEvaluatesTo("1", "count(//wfs:FeatureCollection/wfs:member/cdf:Fifteen)",
                 doc);
         XMLAssert.assertXpathEvaluatesTo("Fifteen.2",
@@ -232,10 +232,10 @@ public class GetFeatureTest extends WFS20TestSupport {
 
     @Test
     public void testGetWithResourceId() throws Exception {
-        Document doc = 
+        Document doc =
                 getAsDOM("wfs?request=GetFeature&typeNames=cdf:Fifteen&version=2.0.0&service=wfs&resourceid=Fifteen.2");
         assertGML32(doc);
-        
+
         XMLAssert.assertXpathEvaluatesTo("1", "count(//wfs:FeatureCollection/wfs:member/cdf:Fifteen)",
                 doc);
         XMLAssert.assertXpathEvaluatesTo("Fifteen.2",
@@ -257,7 +257,7 @@ public class GetFeatureTest extends WFS20TestSupport {
         WFSInfo wfs = gs.getService(WFSInfo.class);
         wfs.setCiteCompliant(true);
         gs.save(wfs);
-        
+
         try {
             // ask for a typename but with a reosurceid of another one 
             Document doc =
@@ -268,7 +268,7 @@ public class GetFeatureTest extends WFS20TestSupport {
             wfs.setCiteCompliant(false);
             gs.save(wfs);
         }
-        
+
     }
 
     @Test
@@ -306,19 +306,20 @@ public class GetFeatureTest extends WFS20TestSupport {
 
     @Test
     public void testGetWithBBOX() throws Exception {
-        Document dom = 
-            getAsDOM("wfs?request=GetFeature&version=2.0.0&typeName=sf:PrimitiveGeoFeature&BBOX=57.0,-4.5,62.0,1.0,EPSG:4326");
+        Document dom =
+                getAsDOM("wfs?request=GetFeature&version=2.0.0&typeName=sf:PrimitiveGeoFeature&BBOX=57.0,-4.5,62.0,1.0,EPSG:4326");
         XMLAssert.assertXpathEvaluatesTo("1", "count(//sf:PrimitiveGeoFeature)", dom);
         XMLAssert.assertXpathExists("//sf:PrimitiveGeoFeature/gml:name[text() = 'name-f002']", dom);
     }
-    
+
     @Test
     public void testGetWithFilter() throws Exception {
-        Document dom = 
-            getAsDOM("wfs?request=GetFeature&version=2.0.0&typeName=sf:PrimitiveGeoFeature&FILTER=%3Cfes%3AFilter+xmlns%3Agml%3D%22http%3A%2F%2Fwww.opengis.net%2Fgml%2F3.2%22+xmlns%3Afes%3D%22http%3A%2F%2Fwww.opengis.net%2Ffes%2F2.0%22%3E%3Cfes%3ABBOX%3E%3Cgml%3AEnvelope+srsName%3D%22EPSG%3A4326%22%3E%3Cgml%3AlowerCorner%3E57.0+-4.5%3C%2Fgml%3AlowerCorner%3E%3Cgml%3AupperCorner%3E62.0+1.0%3C%2Fgml%3AupperCorner%3E%3C%2Fgml%3AEnvelope%3E%3C%2Ffes%3ABBOX%3E%3C%2Ffes%3AFilter%3E");
+        Document dom =
+                getAsDOM("wfs?request=GetFeature&version=2.0.0&typeName=sf:PrimitiveGeoFeature&FILTER=%3Cfes%3AFilter+xmlns%3Agml%3D%22http%3A%2F%2Fwww.opengis.net%2Fgml%2F3.2%22+xmlns%3Afes%3D%22http%3A%2F%2Fwww.opengis.net%2Ffes%2F2.0%22%3E%3Cfes%3ABBOX%3E%3Cgml%3AEnvelope+srsName%3D%22EPSG%3A4326%22%3E%3Cgml%3AlowerCorner%3E57.0+-4.5%3C%2Fgml%3AlowerCorner%3E%3Cgml%3AupperCorner%3E62.0+1.0%3C%2Fgml%3AupperCorner%3E%3C%2Fgml%3AEnvelope%3E%3C%2Ffes%3ABBOX%3E%3C%2Ffes%3AFilter%3E");
         XMLAssert.assertXpathEvaluatesTo("1", "count(//sf:PrimitiveGeoFeature)", dom);
         XMLAssert.assertXpathExists("//sf:PrimitiveGeoFeature/gml:name[text() = 'name-f002']", dom);
     }
+
     @Test
     public void testPost() throws Exception {
 
@@ -348,17 +349,17 @@ public class GetFeatureTest extends WFS20TestSupport {
                 + "version='2.0.0' "
                 + "xmlns:cdf='http://www.opengis.net/cite/data' "
                 + "xmlns:wfs='http://www.opengis.net/wfs/2.0' " + "> "
-                +   "<wfs:Query typeNames='cdf:Other'/> "
-                +   "<wfs:Query typeNames='sf:PrimitiveGeoFeature'/> "
+                + "<wfs:Query typeNames='cdf:Other'/> "
+                + "<wfs:Query typeNames='sf:PrimitiveGeoFeature'/> "
                 + "</wfs:GetFeature>";
 
-        
+
         Document doc = postAsDOM("wfs", xml);
         print(doc);
         assertGML32(doc);
 
     }
-    
+
     @Test
     public void testPostFormEncoded() throws Exception {
         String request = "wfs?service=WFS&version=2.0.0&request=GetFeature&typename=sf:PrimitiveGeoFeature"
@@ -373,23 +374,23 @@ public class GetFeatureTest extends WFS20TestSupport {
     @Test
     public void testPostWithFilter() throws Exception {
         String xml = "<wfs:GetFeature service='WFS' version='2.0.0' "
-            + "outputFormat='text/xml; subtype=gml/3.2' "
-            + "xmlns:cdf=\"http://www.opengis.net/cite/data\" "
-            + "xmlns:wfs='" + WFS.NAMESPACE + "' xmlns:fes='" + FES.NAMESPACE + "'>"
-                + "<wfs:Query typeNames=\"cdf:Other\"> " 
-                  + "<fes:Filter> "
-                    + "<fes:PropertyIsEqualTo> "
-                      + "<fes:ValueReference>cdf:integers</fes:ValueReference> "
-                      + "<fes:Literal>7</fes:Literal> "
- 
-                    + "</fes:PropertyIsEqualTo> " 
-                  + "</fes:Filter> "
-                + "</wfs:Query> " 
-              + "</wfs:GetFeature>";
+                + "outputFormat='text/xml; subtype=gml/3.2' "
+                + "xmlns:cdf=\"http://www.opengis.net/cite/data\" "
+                + "xmlns:wfs='" + WFS.NAMESPACE + "' xmlns:fes='" + FES.NAMESPACE + "'>"
+                + "<wfs:Query typeNames=\"cdf:Other\"> "
+                + "<fes:Filter> "
+                + "<fes:PropertyIsEqualTo> "
+                + "<fes:ValueReference>cdf:integers</fes:ValueReference> "
+                + "<fes:Literal>7</fes:Literal> "
+
+                + "</fes:PropertyIsEqualTo> "
+                + "</fes:Filter> "
+                + "</wfs:Query> "
+                + "</wfs:GetFeature>";
 
         Document doc = postAsDOM("wfs", xml);
         assertGML32(doc);
-        
+
         NodeList features = doc.getElementsByTagName("cdf:Other");
         assertFalse(features.getLength() == 0);
 
@@ -398,15 +399,15 @@ public class GetFeatureTest extends WFS20TestSupport {
             assertTrue(feature.hasAttribute("gml:id"));
         }
     }
-    
+
     @Test
     public void testPostWithBboxFilter() throws Exception {
         String xml = "<wfs:GetFeature service='WFS' version='2.0.0' "
-            + "outputFormat='text/xml; subtype=gml/3.2' "
-            + "xmlns:sf=\"http://cite.opengeospatial.org/gmlsf\" "
-            + "xmlns:gml='" + GML.NAMESPACE + "' "
-            + "xmlns:wfs='" + WFS.NAMESPACE + "' "
-            + "xmlns:fes='" + FES.NAMESPACE + "'>"
+                + "outputFormat='text/xml; subtype=gml/3.2' "
+                + "xmlns:sf=\"http://cite.opengeospatial.org/gmlsf\" "
+                + "xmlns:gml='" + GML.NAMESPACE + "' "
+                + "xmlns:wfs='" + WFS.NAMESPACE + "' "
+                + "xmlns:fes='" + FES.NAMESPACE + "'>"
                 + "<wfs:Query typeNames='sf:PrimitiveGeoFeature'>"
                 + "<fes:Filter>"
                 + "<fes:BBOX>"
@@ -418,7 +419,7 @@ public class GetFeatureTest extends WFS20TestSupport {
                 + "</fes:BBOX>"
                 + "</fes:Filter>"
                 + "</wfs:Query>"
-            + "</wfs:GetFeature>";
+                + "</wfs:GetFeature>";
         Document doc = postAsDOM("wfs", xml);
         assertGML32(doc);
 
@@ -499,76 +500,76 @@ public class GetFeatureTest extends WFS20TestSupport {
 
     @Test
     public void testPostWithFailingUrnBboxFilter() throws Exception {
-        String xml = 
-            "<wfs:GetFeature service='WFS' version='2.0.0'  outputFormat='text/xml; subtype=gml/3.2' "
-            + "xmlns:sf='http://cite.opengeospatial.org/gmlsf' "
-            + "xmlns:wfs='" + WFS.NAMESPACE + "' xmlns:fes='" + FES.NAMESPACE + "' "
-            + "xmlns:gml='" + GML.NAMESPACE + "'>"
-            + "<wfs:Query typeNames=\"sf:PrimitiveGeoFeature\">"
-            + "<fes:Filter>"
-            + "<fes:BBOX>"
-            + "   <fes:PropertyName>pointProperty</fes:PropertyName>"
-            + "   <gml:Envelope srsName='urn:ogc:def:crs:EPSG:6.11.2:4326'>"
-            + "      <gml:lowerCorner>57.0 -4.5</gml:lowerCorner>"
-            + "      <gml:upperCorner>62.0 1.0</gml:upperCorner>"
-            + "   </gml:Envelope>"
-            + "</fes:BBOX>"
-            + "</fes:Filter>"
-            + "</wfs:Query>"
-            + "</wfs:GetFeature>";
+        String xml =
+                "<wfs:GetFeature service='WFS' version='2.0.0'  outputFormat='text/xml; subtype=gml/3.2' "
+                        + "xmlns:sf='http://cite.opengeospatial.org/gmlsf' "
+                        + "xmlns:wfs='" + WFS.NAMESPACE + "' xmlns:fes='" + FES.NAMESPACE + "' "
+                        + "xmlns:gml='" + GML.NAMESPACE + "'>"
+                        + "<wfs:Query typeNames=\"sf:PrimitiveGeoFeature\">"
+                        + "<fes:Filter>"
+                        + "<fes:BBOX>"
+                        + "   <fes:PropertyName>pointProperty</fes:PropertyName>"
+                        + "   <gml:Envelope srsName='urn:ogc:def:crs:EPSG:6.11.2:4326'>"
+                        + "      <gml:lowerCorner>57.0 -4.5</gml:lowerCorner>"
+                        + "      <gml:upperCorner>62.0 1.0</gml:upperCorner>"
+                        + "   </gml:Envelope>"
+                        + "</fes:BBOX>"
+                        + "</fes:Filter>"
+                        + "</wfs:Query>"
+                        + "</wfs:GetFeature>";
 
         Document doc = postAsDOM("wfs", xml);
         assertGML32(doc);
-        
+
         NodeList features = doc.getElementsByTagName("sf:PrimitiveGeoFeature");
         assertEquals(0, features.getLength());
     }
- 
+
     @Test
     public void testPostWithMatchingUrnBboxFilter() throws Exception {
-        String xml = 
-            "<wfs:GetFeature service='WFS' version='2.0.0'  outputFormat='text/xml; subtype=gml/3.2' "
-            + "xmlns:sf='http://cite.opengeospatial.org/gmlsf' "
-            + "xmlns:wfs='" + WFS.NAMESPACE + "' xmlns:fes='" + FES.NAMESPACE + "' "
-            + "xmlns:gml='" + GML.NAMESPACE + "'>"
-            + "<wfs:Query typeNames=\"sf:PrimitiveGeoFeature\">"
-            + "<fes:Filter>"
-            + "<fes:BBOX>"
-            + "   <fes:PropertyName>pointProperty</fes:PropertyName>"
-            + "   <gml:Envelope srsName='urn:ogc:def:crs:EPSG:6.11.2:4326'>"
-            + "      <gml:lowerCorner>-4.5 57.0</gml:lowerCorner>"
-            + "      <gml:upperCorner>1.0 62.0</gml:upperCorner>"
-            + "   </gml:Envelope>"
-            + "</fes:BBOX>"
-            + "</fes:Filter>"
-            + "</wfs:Query>"
-            + "</wfs:GetFeature>";
-        
+        String xml =
+                "<wfs:GetFeature service='WFS' version='2.0.0'  outputFormat='text/xml; subtype=gml/3.2' "
+                        + "xmlns:sf='http://cite.opengeospatial.org/gmlsf' "
+                        + "xmlns:wfs='" + WFS.NAMESPACE + "' xmlns:fes='" + FES.NAMESPACE + "' "
+                        + "xmlns:gml='" + GML.NAMESPACE + "'>"
+                        + "<wfs:Query typeNames=\"sf:PrimitiveGeoFeature\">"
+                        + "<fes:Filter>"
+                        + "<fes:BBOX>"
+                        + "   <fes:PropertyName>pointProperty</fes:PropertyName>"
+                        + "   <gml:Envelope srsName='urn:ogc:def:crs:EPSG:6.11.2:4326'>"
+                        + "      <gml:lowerCorner>-4.5 57.0</gml:lowerCorner>"
+                        + "      <gml:upperCorner>1.0 62.0</gml:upperCorner>"
+                        + "   </gml:Envelope>"
+                        + "</fes:BBOX>"
+                        + "</fes:Filter>"
+                        + "</wfs:Query>"
+                        + "</wfs:GetFeature>";
+
         Document doc = postAsDOM("wfs", xml);
         assertGML32(doc);
-        
+
         NodeList features = doc.getElementsByTagName("sf:PrimitiveGeoFeature");
         assertEquals(1, features.getLength());
     }
 
     @Test
     public void testPostWithFunctionFilter() throws Exception {
-        String xml = 
-            "<wfs:GetFeature service='WFS' version='2.0.0'  outputFormat='text/xml; subtype=gml/3.2' "
-            + "xmlns:sf='http://cite.opengeospatial.org/gmlsf' "
-            + "xmlns:wfs='" + WFS.NAMESPACE + "' xmlns:fes='" + FES.NAMESPACE + "' "
-            + "xmlns:gml='" + GML.NAMESPACE + "'>"
-            + "<wfs:Query typeNames=\"sf:PrimitiveGeoFeature\">"
-            + "<fes:Filter>"
-             + "<fes:PropertyIsLessThan>"
-              + "<fes:Function name='random'>"
-              + "</fes:Function>"
-              + "<fes:Literal>0.5</fes:Literal>"
-             + "</fes:PropertyIsLessThan>"
-            + "</fes:Filter>"
-            + "</wfs:Query>"
-            + "</wfs:GetFeature>";
-        
+        String xml =
+                "<wfs:GetFeature service='WFS' version='2.0.0'  outputFormat='text/xml; subtype=gml/3.2' "
+                        + "xmlns:sf='http://cite.opengeospatial.org/gmlsf' "
+                        + "xmlns:wfs='" + WFS.NAMESPACE + "' xmlns:fes='" + FES.NAMESPACE + "' "
+                        + "xmlns:gml='" + GML.NAMESPACE + "'>"
+                        + "<wfs:Query typeNames=\"sf:PrimitiveGeoFeature\">"
+                        + "<fes:Filter>"
+                        + "<fes:PropertyIsLessThan>"
+                        + "<fes:Function name='random'>"
+                        + "</fes:Function>"
+                        + "<fes:Literal>0.5</fes:Literal>"
+                        + "</fes:PropertyIsLessThan>"
+                        + "</fes:Filter>"
+                        + "</wfs:Query>"
+                        + "</wfs:GetFeature>";
+
         Document doc = postAsDOM("wfs", xml);
         assertGML32(doc);
     }
@@ -578,7 +579,7 @@ public class GetFeatureTest extends WFS20TestSupport {
         Document doc = getAsDOM("wfs?request=GetFeature&typename=cdf:Fifteen&version=2.0.0&resultType=hits&service=wfs");
         print(doc);
         assertGML32(doc);
-        
+
         NodeList features = doc.getElementsByTagName("cdf:Fifteen");
         assertEquals(0, features.getLength());
 
@@ -644,19 +645,19 @@ public class GetFeatureTest extends WFS20TestSupport {
         WFSInfo wfs = getWFS();
         int oldMaxFeatures = wfs.getMaxFeatures();
         boolean hitsIgnoreMaxFeatures = wfs.isHitsIgnoreMaxFeatures();
-        
+
         try {
             // we ignore max features for number matched, regardless of the hits ingore max features setting
             wfs.setMaxFeatures(1);
             wfs.setHitsIgnoreMaxFeatures(true);
-            getGeoServer().save( wfs );
+            getGeoServer().save(wfs);
 
             Document doc = getAsDOM("wfs?request=GetFeature&typename=cdf:Seven&version=2.0.0&resultType=hits&service=wfs");
             assertGML32(doc);
             print(doc);
             assertEquals("7", doc.getDocumentElement().getAttribute("numberMatched"));
             assertEquals("0", doc.getDocumentElement().getAttribute("numberReturned"));
-            
+
             // and we are consistent in the results mode too
             doc = getAsDOM("wfs?request=GetFeature&typename=cdf:Seven&version=2.0.0&resultType=results&service=wfs");
             assertGML32(doc);
@@ -666,10 +667,10 @@ public class GetFeatureTest extends WFS20TestSupport {
             // try hits ignores max features the other way
             doc = getAsDOM("wfs?request=GetFeature&typename=cdf:Seven&version=2.0.0&resultType=hits&service=wfs");
             wfs.setHitsIgnoreMaxFeatures(false);
-            getGeoServer().save( wfs );
+            getGeoServer().save(wfs);
             assertEquals("7", doc.getDocumentElement().getAttribute("numberMatched"));
             assertEquals("0", doc.getDocumentElement().getAttribute("numberReturned"));
-            
+
             // and we are consistent in the results mode too
             doc = getAsDOM("wfs?request=GetFeature&typename=cdf:Seven&version=2.0.0&resultType=results&service=wfs");
             assertGML32(doc);
@@ -678,7 +679,7 @@ public class GetFeatureTest extends WFS20TestSupport {
         } finally {
             wfs.setMaxFeatures(oldMaxFeatures);
             wfs.setHitsIgnoreMaxFeatures(hitsIgnoreMaxFeatures);
-            getGeoServer().save( wfs );
+            getGeoServer().save(wfs);
         }
     }
 
@@ -687,12 +688,12 @@ public class GetFeatureTest extends WFS20TestSupport {
         WFSInfo wfs = getWFS();
         int oldMaxFeatures = wfs.getMaxFeatures();
         boolean oldHitsIgnoreMaxFeatures = wfs.isHitsIgnoreMaxFeatures();
-        
+
         try {
-            
+
             wfs.setMaxFeatures(1);
             wfs.setHitsIgnoreMaxFeatures(true);
-            getGeoServer().save( wfs );
+            getGeoServer().save(wfs);
 
             Document doc = getAsDOM("wfs?request=GetFeature&typename=cdf:Seven&version=2.0.0&resultType=results&service=wfs");
             assertGML32(doc);
@@ -703,15 +704,15 @@ public class GetFeatureTest extends WFS20TestSupport {
         } finally {
             wfs.setMaxFeatures(oldMaxFeatures);
             wfs.setHitsIgnoreMaxFeatures(oldHitsIgnoreMaxFeatures);
-            getGeoServer().save( wfs );
+            getGeoServer().save(wfs);
         }
     }
 
     @Test
     public void testWithSRS() throws Exception {
-        String xml = "<wfs:GetFeature version='2.0.0' service='WFS' xmlns:wfs='"+WFS.NAMESPACE+"' >"
+        String xml = "<wfs:GetFeature version='2.0.0' service='WFS' xmlns:wfs='" + WFS.NAMESPACE + "' >"
                 + "<wfs:Query xmlns:cdf='http://www.opengis.net/cite/data' typeNames='cdf:Other' " +
-                    "srsName='urn:ogc:def:crs:EPSG:4326'/>"
+                "srsName='urn:ogc:def:crs:EPSG:4326'/>"
                 + "</wfs:GetFeature>";
 
         Document dom = postAsDOM("wfs", xml);
@@ -721,27 +722,28 @@ public class GetFeatureTest extends WFS20TestSupport {
 
     @Test
     public void testWithSillyLiteral() throws Exception {
-        String xml = 
-            "<wfs:GetFeature version='2.0.0' service='WFS' "
-                + "xmlns:cdf='http://www.opengis.net/cite/data' "
-                + "xmlns:wfs='" + WFS.NAMESPACE + "' "
-                + "xmlns:gml='" + GML.NAMESPACE + "' " 
-                + "xmlns:fes='" + FES.NAMESPACE + "'>"
-                + "<wfs:Query  typeNames='cdf:Other' srsName='urn:ogc:def:crs:EPSG:4326'>"
-                + "<fes:Filter>"
-                + "  <fes:PropertyIsEqualTo>"
-                + "   <fes:ValueReference>description</fes:ValueReference>"
-                + "   <fes:Literal>"
-                + "       <wfs:Native vendorId=\"foo\" safeToIgnore=\"true\"/>"
-                + "   </fes:Literal>"
-                + "   </fes:PropertyIsEqualTo>"
-                + " </fes:Filter>" + "</wfs:Query>" + "</wfs:GetFeature>";
+        String xml =
+                "<wfs:GetFeature version='2.0.0' service='WFS' "
+                        + "xmlns:cdf='http://www.opengis.net/cite/data' "
+                        + "xmlns:wfs='" + WFS.NAMESPACE + "' "
+                        + "xmlns:gml='" + GML.NAMESPACE + "' "
+                        + "xmlns:fes='" + FES.NAMESPACE + "'>"
+                        + "<wfs:Query  typeNames='cdf:Other' srsName='urn:ogc:def:crs:EPSG:4326'>"
+                        + "<fes:Filter>"
+                        + "  <fes:PropertyIsEqualTo>"
+                        + "   <fes:ValueReference>description</fes:ValueReference>"
+                        + "   <fes:Literal>"
+                        + "       <wfs:Native vendorId=\"foo\" safeToIgnore=\"true\"/>"
+                        + "   </fes:Literal>"
+                        + "   </fes:PropertyIsEqualTo>"
+                        + " </fes:Filter>" + "</wfs:Query>" + "</wfs:GetFeature>";
 
         Document dom = postAsDOM("wfs", xml);
         assertGML32(dom);
         assertEquals(0, dom.getElementsByTagName("cdf:Other").getLength());
     }
-//
+
+    //
 //    public void testWithGmlObjectId() throws Exception {
 //        String xml = "<wfs:GetFeature xmlns:cdf=\"http://www.opengis.net/cite/data\" xmlns:wfs=\"http://www.opengis.net/wfs\" xmlns:gml=\"http://www.opengis.net/gml\" xmlns:ogc=\"http://www.opengis.net/ogc\" version=\"1.1.0\" service=\"WFS\">"
 //                + "<wfs:Query  typeName=\"cdf:Seven\" srsName=\"urn:x-ogc:def:crs:EPSG:6.11.2:4326\">"
@@ -777,23 +779,23 @@ public class GetFeatureTest extends WFS20TestSupport {
         WFSInfo wfs = getWFS();
         boolean oldFeatureBounding = wfs.isFeatureBounding();
         wfs.setFeatureBounding(true);
-        getGeoServer().save( wfs );
-        
+        getGeoServer().save(wfs);
+
         try {
             String xml = "<wfs:GetFeature service='WFS' version='2.0.0' "
-                + "xmlns:cdf='http://www.opengis.net/cite/data' "
-                + "xmlns:fes='" + FES.NAMESPACE + "' "
-                + "xmlns:wfs='" + WFS.NAMESPACE + "'> "
-                + "<wfs:Query typeNames='cdf:Other'> "
-                + "</wfs:Query> " + "</wfs:GetFeature>";
-    
+                    + "xmlns:cdf='http://www.opengis.net/cite/data' "
+                    + "xmlns:fes='" + FES.NAMESPACE + "' "
+                    + "xmlns:wfs='" + WFS.NAMESPACE + "'> "
+                    + "<wfs:Query typeNames='cdf:Other'> "
+                    + "</wfs:Query> " + "</wfs:GetFeature>";
+
             Document doc = postAsDOM("wfs", xml);
             assertGML32(doc);
             NodeList aggregatedBoundList = doc.getElementsByTagName("wfs:boundedBy");
             assertFalse(aggregatedBoundList.getLength() == 0);
             NodeList features = doc.getElementsByTagName("cdf:Other");
             assertFalse(features.getLength() == 0);
-    
+
             for (int i = 0; i < features.getLength(); i++) {
                 Element feature = (Element) features.item(i);
                 assertTrue(feature.hasAttribute("gml:id"));
@@ -807,7 +809,7 @@ public class GetFeatureTest extends WFS20TestSupport {
             }
         } finally {
             wfs.setFeatureBounding(oldFeatureBounding);
-            getGeoServer().save( wfs );
+            getGeoServer().save(wfs);
         }
     }
 
@@ -817,15 +819,15 @@ public class GetFeatureTest extends WFS20TestSupport {
         WFSInfo wfs = getWFS();
         boolean oldFeatureBounding = wfs.isFeatureBounding();
         wfs.setFeatureBounding(false);
-        getGeoServer().save( wfs );
+        getGeoServer().save(wfs);
 
         try {
             String xml = "<wfs:GetFeature service='WFS' version='2.0.0' "
-                + "xmlns:cdf='http://www.opengis.net/cite/data' "
-                + "xmlns:fes='" + FES.NAMESPACE + "' "
-                + "xmlns:wfs='" + WFS.NAMESPACE + "'> "
-                + "<wfs:Query typeNames='cdf:Other'> "
-                + "</wfs:Query> " + "</wfs:GetFeature>";
+                    + "xmlns:cdf='http://www.opengis.net/cite/data' "
+                    + "xmlns:fes='" + FES.NAMESPACE + "' "
+                    + "xmlns:wfs='" + WFS.NAMESPACE + "'> "
+                    + "<wfs:Query typeNames='cdf:Other'> "
+                    + "</wfs:Query> " + "</wfs:GetFeature>";
 
             Document doc = postAsDOM("wfs", xml);
             assertGML32(doc);
@@ -842,46 +844,46 @@ public class GetFeatureTest extends WFS20TestSupport {
             }
         } finally {
             wfs.setFeatureBounding(oldFeatureBounding);
-            getGeoServer().save( wfs );
+            getGeoServer().save(wfs);
         }
     }
 
     @Test
     public void testAfterFeatureTypeAdded() throws Exception {
-        Document dom = getAsDOM( "wfs?request=getfeature&service=wfs&version=2.0.0&typename=sf:new");
-        assertEquals( "ExceptionReport", dom.getDocumentElement().getLocalName() );
-        
-        getTestData().addVectorLayer ( new QName( SystemTestData.SF_URI, "new", SystemTestData.SF_PREFIX ), 
-    			Collections.EMPTY_MAP, org.geoserver.wfs.v1_1.GetFeatureTest.class, getCatalog());
+        Document dom = getAsDOM("wfs?request=getfeature&service=wfs&version=2.0.0&typename=sf:new");
+        assertEquals("ExceptionReport", dom.getDocumentElement().getLocalName());
+
+        getTestData().addVectorLayer(new QName(SystemTestData.SF_URI, "new", SystemTestData.SF_PREFIX),
+                Collections.EMPTY_MAP, org.geoserver.wfs.v1_1.GetFeatureTest.class, getCatalog());
         //reloadCatalogAndConfiguration();
-        
-        dom = getAsDOM( "wfs?request=getfeature&service=wfs&version=2.0.0&typename=sf:new");
+
+        dom = getAsDOM("wfs?request=getfeature&service=wfs&version=2.0.0&typename=sf:new");
         print(dom);
         assertGML32(dom);
     }
-    
+
     @Test
     public void testWithGMLProperties() throws Exception {
-        Document dom = getAsDOM( "wfs?request=getfeature&service=wfs&version=2.0.0&typename=sf:WithGMLProperties");
+        Document dom = getAsDOM("wfs?request=getfeature&service=wfs&version=2.0.0&typename=sf:WithGMLProperties");
         assertGML32(dom);
-        
+
         NodeList features = dom.getElementsByTagName("sf:WithGMLProperties");
-        assertEquals( 1, features.getLength() );
-        
-        for ( int i = 0; i < features.getLength(); i++ ) {
-            Element feature = (Element) features.item( i );
-            assertEquals( "one", getFirstElementByTagName( feature, "gml:name").getFirstChild().getNodeValue() );
-            assertEquals( "1", getFirstElementByTagName( feature, "sf:foo").getFirstChild().getNodeValue());
-            
-            Element location = getFirstElementByTagName( feature, "gml:location" );
-            assertNotNull( getFirstElementByTagName( location, "gml:Point" ) );
+        assertEquals(1, features.getLength());
+
+        for (int i = 0; i < features.getLength(); i++) {
+            Element feature = (Element) features.item(i);
+            assertEquals("one", getFirstElementByTagName(feature, "gml:name").getFirstChild().getNodeValue());
+            assertEquals("1", getFirstElementByTagName(feature, "sf:foo").getFirstChild().getNodeValue());
+
+            Element location = getFirstElementByTagName(feature, "gml:location");
+            assertNotNull(getFirstElementByTagName(location, "gml:Point"));
         }
     }
 
     @Test
     public void testLayerQualified() throws Exception {
         testGetFifteenAll("cdf/Fifteen/wfs?request=GetFeature&typename=cdf:Fifteen&version=2.0.0&service=wfs");
-        
+
         Document dom = getAsDOM("cdf/Seven/wfs?request=GetFeature&typename=cdf:Fifteen&version=2.0.0&service=wfs");
         XMLAssert.assertXpathEvaluatesTo("1", "count(//ows:ExceptionReport)", dom);
     }
@@ -902,9 +904,9 @@ public class GetFeatureTest extends WFS20TestSupport {
     @Test
     public void testGML32OutputFormat() throws Exception {
         testGetFifteenAll(
-            "wfs?request=getfeature&typename=cdf:Fifteen&version=2.0.0&service=wfs&outputFormat=gml32");
+                "wfs?request=getfeature&typename=cdf:Fifteen&version=2.0.0&service=wfs&outputFormat=gml32");
     }
-    
+
     @Test
     public void testGML32OutputFormatAlternate() throws Exception {
         testGetFifteenAll(
@@ -917,65 +919,65 @@ public class GetFeatureTest extends WFS20TestSupport {
         GMLInfo gml = wfs.getGML().get(WFSInfo.Version.V_11);
         gml.setOverrideGMLAttributes(false);
         getGeoServer().save(wfs);
-        
+
         Document dom = getAsDOM("ows?service=WFS&version=2.0.0&request=GetFeature" +
                 "&typename=" + getLayerId(MockData.PRIMITIVEGEOFEATURE));
         XMLAssert.assertXpathExists("//gml:name", dom);
         XMLAssert.assertXpathExists("//gml:description", dom);
         XMLAssert.assertXpathNotExists("//sf:name", dom);
         XMLAssert.assertXpathNotExists("//sf:description", dom);
-        
+
         gml.setOverrideGMLAttributes(true);
         getGeoServer().save(wfs);
-    
+
         dom = getAsDOM("ows?service=WFS&version=2.0.0&request=GetFeature" +
                 "&typename=" + getLayerId(MockData.PRIMITIVEGEOFEATURE));
         XMLAssert.assertXpathNotExists("//gml:name", dom);
         XMLAssert.assertXpathNotExists("//gml:description", dom);
         XMLAssert.assertXpathExists("//sf:name", dom);
         XMLAssert.assertXpathExists("//sf:description", dom);
-        
+
         gml.setOverrideGMLAttributes(false);
         getGeoServer().save(wfs);
     }
-    
+
     @Test
     public void testStoredQuery() throws Exception {
-        String xml = 
+        String xml =
                 "<wfs:CreateStoredQuery service='WFS' version='2.0.0' " +
-                "   xmlns:wfs='http://www.opengis.net/wfs/2.0' " + 
-                "   xmlns:fes='http://www.opengis.org/fes/2.0' " + 
-                "   xmlns:gml='http://www.opengis.net/gml/3.2' " + 
-                "   xmlns:myns='http://www.someserver.com/myns' " + 
-                "   xmlns:sf='" + MockData.SF_URI + "'>" + 
-                "   <wfs:StoredQueryDefinition id='myStoredQuery'> " + 
-                "      <wfs:Parameter name='integers' type='xs:integer'/> " + 
-                "      <wfs:QueryExpressionText " + 
-                "           returnFeatureTypes='cdf:Other' " + 
-                "           language='urn:ogc:def:queryLanguage:OGC-WFS::WFS_QueryExpression' " + 
-                "           isPrivate='false'> "
-                    + "<wfs:Query typeNames=\"cdf:Other\"> " 
-                    + "<fes:Filter> "
-                      + "<fes:PropertyIsEqualTo> "
+                        "   xmlns:wfs='http://www.opengis.net/wfs/2.0' " +
+                        "   xmlns:fes='http://www.opengis.org/fes/2.0' " +
+                        "   xmlns:gml='http://www.opengis.net/gml/3.2' " +
+                        "   xmlns:myns='http://www.someserver.com/myns' " +
+                        "   xmlns:sf='" + MockData.SF_URI + "'>" +
+                        "   <wfs:StoredQueryDefinition id='myStoredQuery'> " +
+                        "      <wfs:Parameter name='integers' type='xs:integer'/> " +
+                        "      <wfs:QueryExpressionText " +
+                        "           returnFeatureTypes='cdf:Other' " +
+                        "           language='urn:ogc:def:queryLanguage:OGC-WFS::WFS_QueryExpression' " +
+                        "           isPrivate='false'> "
+                        + "<wfs:Query typeNames=\"cdf:Other\"> "
+                        + "<fes:Filter> "
+                        + "<fes:PropertyIsEqualTo> "
                         + "<fes:ValueReference>cdf:integers</fes:ValueReference> "
                         + "${integers}"
-                      + "</fes:PropertyIsEqualTo> " 
-                    + "</fes:Filter> "
-                  + "</wfs:Query> " + 
-                "      </wfs:QueryExpressionText> " + 
-                "   </wfs:StoredQueryDefinition> " + 
-                "</wfs:CreateStoredQuery>"; 
+                        + "</fes:PropertyIsEqualTo> "
+                        + "</fes:Filter> "
+                        + "</wfs:Query> " +
+                        "      </wfs:QueryExpressionText> " +
+                        "   </wfs:StoredQueryDefinition> " +
+                        "</wfs:CreateStoredQuery>";
         Document dom = postAsDOM("wfs", xml);
         assertEquals("wfs:CreateStoredQueryResponse", dom.getDocumentElement().getNodeName());
-        
-        xml = "<wfs:GetFeature service='WFS' version='2.0.0' " + 
-            "       xmlns:wfs='" + WFS.NAMESPACE + "' xmlns:fes='" + FES.NAMESPACE + "'>" + 
-            "   <wfs:StoredQuery id='myStoredQuery'> " + 
-            "      <wfs:Parameter name='integers'>" + 
-            "        <fes:Literal>7</fes:Literal>" + 
-            "      </wfs:Parameter> " + 
-            "   </wfs:StoredQuery> " + 
-            "</wfs:GetFeature>";
+
+        xml = "<wfs:GetFeature service='WFS' version='2.0.0' " +
+                "       xmlns:wfs='" + WFS.NAMESPACE + "' xmlns:fes='" + FES.NAMESPACE + "'>" +
+                "   <wfs:StoredQuery id='myStoredQuery'> " +
+                "      <wfs:Parameter name='integers'>" +
+                "        <fes:Literal>7</fes:Literal>" +
+                "      </wfs:Parameter> " +
+                "   </wfs:StoredQuery> " +
+                "</wfs:GetFeature>";
         dom = postAsDOM("wfs", xml);
         print(dom);
         assertGML32(dom);
@@ -985,9 +987,9 @@ public class GetFeatureTest extends WFS20TestSupport {
 
     @Test
     public void testDefaultStoredQueryGet() throws Exception {
-        Document dom = getAsDOM("wfs?request=GetFeature&version=2.0.0&storedQueryId=" + 
-            StoredQuery.DEFAULT.getName() + "&ID=PrimitiveGeoFeature.f001");
-        
+        Document dom = getAsDOM("wfs?request=GetFeature&version=2.0.0&storedQueryId=" +
+                StoredQuery.DEFAULT.getName() + "&ID=PrimitiveGeoFeature.f001");
+
         // GetFeatureById is special, should not be wrapped by wfs:FeatureCollection
         XMLAssert.assertXpathNotExists("//wfs:FeatureCollection", dom);
         XMLAssert.assertXpathEvaluatesTo("1", "count(/sf:PrimitiveGeoFeature)", dom);
@@ -1002,6 +1004,7 @@ public class GetFeatureTest extends WFS20TestSupport {
 
     /**
      * Used to NPE, see GEOS-7532
+     *
      * @throws Exception
      */
     @Test
@@ -1042,151 +1045,151 @@ public class GetFeatureTest extends WFS20TestSupport {
 
     @Test
     public void testStoredQueryBBOX() throws Exception {
-        String xml = 
-            "<wfs:CreateStoredQuery service='WFS' version='2.0.0' " +
-            "   xmlns:wfs='http://www.opengis.net/wfs/2.0' " + 
-            "   xmlns:fes='http://www.opengis.org/fes/2.0' " + 
-            "   xmlns:gml='http://www.opengis.net/gml/3.2' " + 
-            "   xmlns:myns='http://www.someserver.com/myns' " + 
-            "   xmlns:sf='" + MockData.SF_URI + "'>" + 
-            "   <wfs:StoredQueryDefinition id='myStoredBBOXQuery'> " + 
-            "      <wfs:Parameter name='BBOX' type='gml:Envelope'/> " + 
-            "      <wfs:QueryExpressionText " + 
-            "           returnFeatureTypes='sf:PrimitiveGeoFeature' " + 
-            "           language='urn:ogc:def:queryLanguage:OGC-WFS::WFS_QueryExpression' " + 
-            "           isPrivate='false'> "
-                + "<wfs:Query typeNames='sf:PrimitiveGeoFeature'> " 
-                + "<fes:Filter> "
-                + "<fes:BBOX>"
-                + "   <fes:ValueReference>pointProperty</fes:ValueReference>"
-                + "    ${BBOX}"
-                + "</fes:BBOX>"
-                + "</fes:Filter> "
-              + "</wfs:Query> " + 
-            "      </wfs:QueryExpressionText> " + 
-            "   </wfs:StoredQueryDefinition> " + 
-            "</wfs:CreateStoredQuery>"; 
+        String xml =
+                "<wfs:CreateStoredQuery service='WFS' version='2.0.0' " +
+                        "   xmlns:wfs='http://www.opengis.net/wfs/2.0' " +
+                        "   xmlns:fes='http://www.opengis.org/fes/2.0' " +
+                        "   xmlns:gml='http://www.opengis.net/gml/3.2' " +
+                        "   xmlns:myns='http://www.someserver.com/myns' " +
+                        "   xmlns:sf='" + MockData.SF_URI + "'>" +
+                        "   <wfs:StoredQueryDefinition id='myStoredBBOXQuery'> " +
+                        "      <wfs:Parameter name='BBOX' type='gml:Envelope'/> " +
+                        "      <wfs:QueryExpressionText " +
+                        "           returnFeatureTypes='sf:PrimitiveGeoFeature' " +
+                        "           language='urn:ogc:def:queryLanguage:OGC-WFS::WFS_QueryExpression' " +
+                        "           isPrivate='false'> "
+                        + "<wfs:Query typeNames='sf:PrimitiveGeoFeature'> "
+                        + "<fes:Filter> "
+                        + "<fes:BBOX>"
+                        + "   <fes:ValueReference>pointProperty</fes:ValueReference>"
+                        + "    ${BBOX}"
+                        + "</fes:BBOX>"
+                        + "</fes:Filter> "
+                        + "</wfs:Query> " +
+                        "      </wfs:QueryExpressionText> " +
+                        "   </wfs:StoredQueryDefinition> " +
+                        "</wfs:CreateStoredQuery>";
         Document dom = postAsDOM("wfs", xml);
         assertEquals("wfs:CreateStoredQueryResponse", dom.getDocumentElement().getNodeName());
-        
-        xml = "<wfs:GetFeature service='WFS' version='2.0.0' xmlns:gml='" + GML.NAMESPACE + "'" + 
-            "       xmlns:wfs='" + WFS.NAMESPACE + "' xmlns:fes='" + FES.NAMESPACE + "'>" + 
-            "   <wfs:StoredQuery id='myStoredBBOXQuery'> " + 
-            "      <wfs:Parameter name='BBOX'>" 
-            +   "   <gml:Envelope srsName='EPSG:4326'>"
-            +   "      <gml:lowerCorner>57.0 -4.5</gml:lowerCorner>"
-            +   "      <gml:upperCorner>62.0 1.0</gml:upperCorner>"
-            +   "   </gml:Envelope>" + 
-            "      </wfs:Parameter> " + 
-            "   </wfs:StoredQuery> " + 
-            "</wfs:GetFeature>";
+
+        xml = "<wfs:GetFeature service='WFS' version='2.0.0' xmlns:gml='" + GML.NAMESPACE + "'" +
+                "       xmlns:wfs='" + WFS.NAMESPACE + "' xmlns:fes='" + FES.NAMESPACE + "'>" +
+                "   <wfs:StoredQuery id='myStoredBBOXQuery'> " +
+                "      <wfs:Parameter name='BBOX'>"
+                + "   <gml:Envelope srsName='EPSG:4326'>"
+                + "      <gml:lowerCorner>57.0 -4.5</gml:lowerCorner>"
+                + "      <gml:upperCorner>62.0 1.0</gml:upperCorner>"
+                + "   </gml:Envelope>" +
+                "      </wfs:Parameter> " +
+                "   </wfs:StoredQuery> " +
+                "</wfs:GetFeature>";
         dom = postAsDOM("wfs", xml);
         print(dom);
         assertGML32(dom);
         XMLAssert.assertXpathEvaluatesTo("1", "count(//sf:PrimitiveGeoFeature)", dom);
         XMLAssert.assertXpathExists("//sf:PrimitiveGeoFeature/gml:name[text() = 'name-f002']", dom);
     }
-    
+
     @Test
     public void testTemporalFilter() throws Exception {
         print(getAsDOM("wfs?version=2.0.0&service=wfs&request=getfeature&typename=sf:PrimitiveGeoFeature&propertyName=dateProperty,dateTimeProperty"));
-        
+
         //2006-06-26T18:00:00-06:00
         String xml = "<wfs:GetFeature service='WFS' version='2.0.0' "
-            + "outputFormat='text/xml; subtype=gml/3.2' "
-            + "xmlns:sf='" + MockData.SF_URI + "' "
-            + "xmlns:wfs='" + WFS.NAMESPACE + "' xmlns:fes='" + FES.NAMESPACE + "'>"
-                + "<wfs:Query typeNames=\"sf:PrimitiveGeoFeature\"> " 
-                  + "<fes:Filter> "
-                    + "<fes:After> "
-                      + "<fes:ValueReference>dateTimeProperty</fes:ValueReference> "
-                      + "<fes:Literal>2006-06-25T18:00:00-06:00</fes:Literal> "
-                    + "</fes:After> " 
-                  + "</fes:Filter> "
-                + "</wfs:Query> " 
-              + "</wfs:GetFeature>";
+                + "outputFormat='text/xml; subtype=gml/3.2' "
+                + "xmlns:sf='" + MockData.SF_URI + "' "
+                + "xmlns:wfs='" + WFS.NAMESPACE + "' xmlns:fes='" + FES.NAMESPACE + "'>"
+                + "<wfs:Query typeNames=\"sf:PrimitiveGeoFeature\"> "
+                + "<fes:Filter> "
+                + "<fes:After> "
+                + "<fes:ValueReference>dateTimeProperty</fes:ValueReference> "
+                + "<fes:Literal>2006-06-25T18:00:00-06:00</fes:Literal> "
+                + "</fes:After> "
+                + "</fes:Filter> "
+                + "</wfs:Query> "
+                + "</wfs:GetFeature>";
         Document dom = postAsDOM("wfs", xml);
         XMLAssert.assertXpathEvaluatesTo("1", "count(//sf:PrimitiveGeoFeature)", dom);
         XMLAssert.assertXpathExists("//sf:PrimitiveGeoFeature[@gml:id = 'PrimitiveGeoFeature.f008']", dom);
-        
+
         xml = "<wfs:GetFeature service='WFS' version='2.0.0' "
-            + "outputFormat='text/xml; subtype=gml/3.2' "
-            + "xmlns:sf='" + MockData.SF_URI + "' "
-            + "xmlns:wfs='" + WFS.NAMESPACE + "' xmlns:fes='" + FES.NAMESPACE + "'>"
-                + "<wfs:Query typeNames=\"sf:PrimitiveGeoFeature\"> " 
-                  + "<fes:Filter> "
-                    + "<fes:Before> "
-                      + "<fes:ValueReference>dateTimeProperty</fes:ValueReference> "
-                      + "<fes:Literal>2006-06-27T18:00:00-06:00</fes:Literal> "
-                    + "</fes:Before> " 
-                  + "</fes:Filter> "
-                + "</wfs:Query> " 
-              + "</wfs:GetFeature>";
+                + "outputFormat='text/xml; subtype=gml/3.2' "
+                + "xmlns:sf='" + MockData.SF_URI + "' "
+                + "xmlns:wfs='" + WFS.NAMESPACE + "' xmlns:fes='" + FES.NAMESPACE + "'>"
+                + "<wfs:Query typeNames=\"sf:PrimitiveGeoFeature\"> "
+                + "<fes:Filter> "
+                + "<fes:Before> "
+                + "<fes:ValueReference>dateTimeProperty</fes:ValueReference> "
+                + "<fes:Literal>2006-06-27T18:00:00-06:00</fes:Literal> "
+                + "</fes:Before> "
+                + "</fes:Filter> "
+                + "</wfs:Query> "
+                + "</wfs:GetFeature>";
         dom = postAsDOM("wfs", xml);
         XMLAssert.assertXpathEvaluatesTo("1", "count(//sf:PrimitiveGeoFeature)", dom);
         XMLAssert.assertXpathExists("//sf:PrimitiveGeoFeature[@gml:id = 'PrimitiveGeoFeature.f008']", dom);
-        
+
     }
 
     @Test
     public void testGetFeatureInvalidPropertyName() throws Exception {
-        Document dom = 
-            getAsDOM("wfs?version=2.0.0&service=wfs&request=GetFeature&typename=sf:PrimitiveGeoFeature&propertyName=foo");
+        Document dom =
+                getAsDOM("wfs?version=2.0.0&service=wfs&request=GetFeature&typename=sf:PrimitiveGeoFeature&propertyName=foo");
         assertEquals("ows:ExceptionReport", dom.getDocumentElement().getNodeName());
         XMLAssert.assertXpathExists("//ows:Exception[@exceptionCode = 'InvalidParameterValue']", dom);
     }
-    
+
     @Test
     public void testGetFeatureWithMultiplePropertyName() throws Exception {
-        Document dom = 
-            getAsDOM("wfs?version=2.0.0&service=wfs&request=GetFeature&typename=cdf:Fifteen,cdf:Seven");
-        
+        Document dom =
+                getAsDOM("wfs?version=2.0.0&service=wfs&request=GetFeature&typename=cdf:Fifteen,cdf:Seven");
+
         assertEquals("wfs:FeatureCollection", dom.getDocumentElement().getNodeName());
         XMLAssert.assertXpathEvaluatesTo("2", "count(wfs:FeatureCollection/wfs:member)", dom);
         XMLAssert.assertXpathEvaluatesTo("2", "count(wfs:FeatureCollection/wfs:member/wfs:FeatureCollection)", dom);
-        
-        XMLAssert.assertXpathEvaluatesTo("15", 
-            "count(wfs:FeatureCollection/wfs:member[position() = 1]/wfs:FeatureCollection//cdf:Fifteen)", dom);
-        XMLAssert.assertXpathEvaluatesTo("7", 
-            "count(wfs:FeatureCollection/wfs:member[position() = 2]/wfs:FeatureCollection//cdf:Seven)", dom);
-        
+
+        XMLAssert.assertXpathEvaluatesTo("15",
+                "count(wfs:FeatureCollection/wfs:member[position() = 1]/wfs:FeatureCollection//cdf:Fifteen)", dom);
+        XMLAssert.assertXpathEvaluatesTo("7",
+                "count(wfs:FeatureCollection/wfs:member[position() = 2]/wfs:FeatureCollection//cdf:Seven)", dom);
+
         String xml = "<wfs:GetFeature " + "service='WFS' "
-        + "version='2.0.0' "
-        + "xmlns:cdf='http://www.opengis.net/cite/data' "
-        + "xmlns:wfs='http://www.opengis.net/wfs/2.0' " + "> "
-        + "<wfs:Query typeNames='cdf:Fifteen'/> "
-        + "<wfs:Query typeNames='cdf:Seven'/> "
-        +"</wfs:GetFeature>"; 
-        dom = 
-            getAsDOM("wfs?version=2.0.0&service=wfs&request=GetFeature&typename=cdf:Fifteen,cdf:Seven");
-        
+                + "version='2.0.0' "
+                + "xmlns:cdf='http://www.opengis.net/cite/data' "
+                + "xmlns:wfs='http://www.opengis.net/wfs/2.0' " + "> "
+                + "<wfs:Query typeNames='cdf:Fifteen'/> "
+                + "<wfs:Query typeNames='cdf:Seven'/> "
+                + "</wfs:GetFeature>";
+        dom =
+                getAsDOM("wfs?version=2.0.0&service=wfs&request=GetFeature&typename=cdf:Fifteen,cdf:Seven");
+
         assertEquals("wfs:FeatureCollection", dom.getDocumentElement().getNodeName());
         XMLAssert.assertXpathEvaluatesTo("2", "count(wfs:FeatureCollection/wfs:member)", dom);
         XMLAssert.assertXpathEvaluatesTo("2", "count(wfs:FeatureCollection/wfs:member/wfs:FeatureCollection)", dom);
-        
-        XMLAssert.assertXpathEvaluatesTo("15", 
-            "count(wfs:FeatureCollection/wfs:member[position() = 1]/wfs:FeatureCollection//cdf:Fifteen)", dom);
-        XMLAssert.assertXpathEvaluatesTo("7", 
-            "count(wfs:FeatureCollection/wfs:member[position() = 2]/wfs:FeatureCollection//cdf:Seven)", dom);
+
+        XMLAssert.assertXpathEvaluatesTo("15",
+                "count(wfs:FeatureCollection/wfs:member[position() = 1]/wfs:FeatureCollection//cdf:Fifteen)", dom);
+        XMLAssert.assertXpathEvaluatesTo("7",
+                "count(wfs:FeatureCollection/wfs:member[position() = 2]/wfs:FeatureCollection//cdf:Seven)", dom);
     }
 
     @Test
     public void testSOAP11() throws Exception {
-        String xml = 
-           "<soap:Envelope xmlns:soap='" + Dispatcher.SOAP_11_NS + "'> " + 
-                " <soap:Header/> " + 
-                " <soap:Body>"
-                + "<wfs:GetFeature " + "service='WFS' "
-                +   "version='2.0.0' "
-                +   "xmlns:cdf='http://www.opengis.net/cite/data' "
-                +   "xmlns:wfs='http://www.opengis.net/wfs/2.0' " + "> "
-                +   "<wfs:Query typeNames='cdf:Other'> "
-                +     "<wfs:PropertyName>cdf:string2</wfs:PropertyName> "
-                +   "</wfs:Query> " 
-                + "</wfs:GetFeature>" + 
-                " </soap:Body> " + 
-            "</soap:Envelope> "; 
-              
+        String xml =
+                "<soap:Envelope xmlns:soap='" + Dispatcher.SOAP_11_NS + "'> " +
+                        " <soap:Header/> " +
+                        " <soap:Body>"
+                        + "<wfs:GetFeature " + "service='WFS' "
+                        + "version='2.0.0' "
+                        + "xmlns:cdf='http://www.opengis.net/cite/data' "
+                        + "xmlns:wfs='http://www.opengis.net/wfs/2.0' " + "> "
+                        + "<wfs:Query typeNames='cdf:Other'> "
+                        + "<wfs:PropertyName>cdf:string2</wfs:PropertyName> "
+                        + "</wfs:Query> "
+                        + "</wfs:GetFeature>" +
+                        " </soap:Body> " +
+                        "</soap:Envelope> ";
+
         MockHttpServletResponse resp = postAsServletResponse("wfs", xml, "application/soap+xml");
         assertEquals("application/soap+xml", resp.getContentType());
         Document dom = dom(new ByteArrayInputStream(resp.getContentAsByteArray()));
@@ -1200,12 +1203,12 @@ public class GetFeatureTest extends WFS20TestSupport {
                         " <soap:Header/> " +
                         " <soap:Body>"
                         + "<wfs:GetFeature " + "service='WFS' "
-                        +   "version='2.0.0' "
-                        +   "xmlns:cdf='http://www.opengis.net/cite/data' "
-                        +   "xmlns:wfs='http://www.opengis.net/wfs/2.0' " + "> "
-                        +   "<wfs:Query typeNames='cdf:Other'> "
-                        +     "<wfs:PropertyName>cdf:string2</wfs:PropertyName> "
-                        +   "</wfs:Query> "
+                        + "version='2.0.0' "
+                        + "xmlns:cdf='http://www.opengis.net/cite/data' "
+                        + "xmlns:wfs='http://www.opengis.net/wfs/2.0' " + "> "
+                        + "<wfs:Query typeNames='cdf:Other'> "
+                        + "<wfs:PropertyName>cdf:string2</wfs:PropertyName> "
+                        + "</wfs:Query> "
                         + "</wfs:GetFeature>" +
                         " </soap:Body> " +
                         "</soap:Envelope> ";
@@ -1219,58 +1222,59 @@ public class GetFeatureTest extends WFS20TestSupport {
 
     @Test
     public void testBogusSrsName() throws Exception {
-        String xml = 
-            "<wfs:GetFeature service='WFS' version='2.0.0' "
-            +   "xmlns:cdf='http://www.opengis.net/cite/data' "
-            +   "xmlns:wfs='http://www.opengis.net/wfs/2.0' " + "> "
-            +   "<wfs:Query typeNames='cdf:Other' srsName='EPSG:XYZ'> "
-            +     "<wfs:PropertyName>cdf:string2</wfs:PropertyName> "
-            +   "</wfs:Query> " 
-            + "</wfs:GetFeature>";
+        String xml =
+                "<wfs:GetFeature service='WFS' version='2.0.0' "
+                        + "xmlns:cdf='http://www.opengis.net/cite/data' "
+                        + "xmlns:wfs='http://www.opengis.net/wfs/2.0' " + "> "
+                        + "<wfs:Query typeNames='cdf:Other' srsName='EPSG:XYZ'> "
+                        + "<wfs:PropertyName>cdf:string2</wfs:PropertyName> "
+                        + "</wfs:Query> "
+                        + "</wfs:GetFeature>";
         Document dom = postAsDOM("wfs", xml);
         assertEquals("ows:ExceptionReport", dom.getDocumentElement().getNodeName());
         XMLAssert.assertXpathEvaluatesTo("InvalidParameterValue", "//ows:Exception/@exceptionCode", dom);
         XMLAssert.assertXpathEvaluatesTo("srsName", "//ows:Exception/@locator", dom);
-        
-        dom = getAsDOM("wfs?service=WFS&version=2.0.0&request=getFeature&typeName=cdf:Other&srsName=EPSG:XYZ");assertEquals("ows:ExceptionReport", dom.getDocumentElement().getNodeName());
+
+        dom = getAsDOM("wfs?service=WFS&version=2.0.0&request=getFeature&typeName=cdf:Other&srsName=EPSG:XYZ");
+        assertEquals("ows:ExceptionReport", dom.getDocumentElement().getNodeName());
         XMLAssert.assertXpathEvaluatesTo("InvalidParameterValue", "//ows:Exception/@exceptionCode", dom);
         XMLAssert.assertXpathEvaluatesTo("srsName", "//ows:Exception/@locator", dom);
     }
 
     @Test
     public void testQueryHandleInExceptionReport() throws Exception {
-        String xml = 
+        String xml =
                 "<wfs:GetFeature service='WFS' version='2.0.0' "
-                +   "xmlns:cdf='http://www.opengis.net/cite/data' "
-                +   "xmlns:fes='http://www.opengis.net/fes/2.0' "
-                +   "xmlns:wfs='http://www.opengis.net/wfs/2.0' " + "> "
-                +   "<wfs:Query typeNames='cdf:Other' srsName='EPSG:XYZ' handle='myHandle'> "
-                +     "<fes:Filter>"
-                +       "<fes:PropertyIsEqualTo>"
-                +         "<fes:ValueReference>foobar</fes:ValueReference>"
-                +         "<fes:Literal>xyz</fes:Literal>"
-                +       "</fes:PropertyIsEqualTo>"
-                +     "</fes:Filter>"
-                +   "</wfs:Query> " 
-                + "</wfs:GetFeature>";
+                        + "xmlns:cdf='http://www.opengis.net/cite/data' "
+                        + "xmlns:fes='http://www.opengis.net/fes/2.0' "
+                        + "xmlns:wfs='http://www.opengis.net/wfs/2.0' " + "> "
+                        + "<wfs:Query typeNames='cdf:Other' srsName='EPSG:XYZ' handle='myHandle'> "
+                        + "<fes:Filter>"
+                        + "<fes:PropertyIsEqualTo>"
+                        + "<fes:ValueReference>foobar</fes:ValueReference>"
+                        + "<fes:Literal>xyz</fes:Literal>"
+                        + "</fes:PropertyIsEqualTo>"
+                        + "</fes:Filter>"
+                        + "</wfs:Query> "
+                        + "</wfs:GetFeature>";
         Document dom = postAsDOM("wfs", xml);
         XMLAssert.assertXpathEvaluatesTo("myHandle", "//ows:Exception/@locator", dom);
     }
 
     @Test
     public void testBogusTypeNames() throws Exception {
-        String xml = 
+        String xml =
                 "<wfs:GetFeature service='WFS' version='2.0.0' "
-                +   "xmlns:cdf='http://www.opengis.net/cite/data' "
-                +   "xmlns:wfs='http://www.opengis.net/wfs/2.0' " + "> "
-                +   "<wfs:Query typeNames='foobbar'> "
-                +   "</wfs:Query> " 
-                + "</wfs:GetFeature>";
+                        + "xmlns:cdf='http://www.opengis.net/cite/data' "
+                        + "xmlns:wfs='http://www.opengis.net/wfs/2.0' " + "> "
+                        + "<wfs:Query typeNames='foobbar'> "
+                        + "</wfs:Query> "
+                        + "</wfs:GetFeature>";
         Document dom = postAsDOM("wfs", xml);
 
         XMLAssert.assertXpathEvaluatesTo("InvalidParameterValue", "//ows:Exception/@exceptionCode", dom);
         XMLAssert.assertXpathEvaluatesTo("typeName", "//ows:Exception/@locator", dom);
-        
+
         dom = getAsDOM("wfs?service=WFS&version=2.0.0&request=getFeature&typeNames=foobar");
         XMLAssert.assertXpathEvaluatesTo("InvalidParameterValue", "//ows:Exception/@exceptionCode", dom);
         XMLAssert.assertXpathEvaluatesTo("typeName", "//ows:Exception/@locator", dom);
@@ -1278,21 +1282,21 @@ public class GetFeatureTest extends WFS20TestSupport {
 
     @Test
     public void testInvalidRequest() throws Exception {
-        String xml = 
+        String xml =
                 "<wfs:GetFeature service='WFS' version='2.0.0' "
-                +   "xmlns:cdf='http://www.opengis.net/cite/data' "
-                +   "xmlns:fes='http://www.opengis.net/fes/2.0' "
-                +   "xmlns:wfs='http://www.opengis.net/wfs/2.0' " + "> "
-                +   "<wfs:Query typeNames='cdf:Other' srsName='EPSG:XYZ' handle='myHandle'> "
-                +     "<fes:Filter>"
-                +       "<fes:PropertyIsEqualTo>"
-                +         "<fes:ValueReference>foobar</fes:ValueReference>"
-                +         "<fes:Literal>xyz</fes:Literal>"
-                +       "</fes:PropertyIsEqualTo>"
-                +     "</fes:foo>"
-                +   "</wfs:Query> " 
-                + "</wfs:GetFeature>";
-        
+                        + "xmlns:cdf='http://www.opengis.net/cite/data' "
+                        + "xmlns:fes='http://www.opengis.net/fes/2.0' "
+                        + "xmlns:wfs='http://www.opengis.net/wfs/2.0' " + "> "
+                        + "<wfs:Query typeNames='cdf:Other' srsName='EPSG:XYZ' handle='myHandle'> "
+                        + "<fes:Filter>"
+                        + "<fes:PropertyIsEqualTo>"
+                        + "<fes:ValueReference>foobar</fes:ValueReference>"
+                        + "<fes:Literal>xyz</fes:Literal>"
+                        + "</fes:PropertyIsEqualTo>"
+                        + "</fes:foo>"
+                        + "</wfs:Query> "
+                        + "</wfs:GetFeature>";
+
         Document dom = postAsDOM("wfs", xml);
 
         XMLAssert.assertXpathEvaluatesTo("OperationParsingFailed", "//ows:Exception/@exceptionCode", dom);
@@ -1319,7 +1323,7 @@ public class GetFeatureTest extends WFS20TestSupport {
         assertThat(response.getContentType(), is("application/gml+xml; version=3.2"));
         // override GML 3.2 MIME type with text / xml
         setGmlMimeTypeOverride("text/xml");
-        response =  getAsServletResponse(url);
+        response = getAsServletResponse(url);
         assertThat(response.getContentType(), is("text/xml"));
         setGmlMimeTypeOverride(null);
         // test POST request
@@ -1334,34 +1338,34 @@ public class GetFeatureTest extends WFS20TestSupport {
         assertThat(response.getContentType(), is("application/gml+xml; version=3.2"));
         // override GML 3.2 MIME type with text / xml
         setGmlMimeTypeOverride("text/xml");
-        response =  postAsServletResponse("wfs", xml);
+        response = postAsServletResponse("wfs", xml);
         assertThat(response.getContentType(), is("text/xml"));
     }
 
     /**
      * Check that a Filter 2.0 {@code fes:PropertyIsLike} returns the expected number of Buildings for a given {@code matchCase}.
-     * 
-     * @param matchCase value of {@code matchCase} filter attribute or {@code null} if none
+     *
+     * @param matchCase         value of {@code matchCase} filter attribute or {@code null} if none
      * @param expectedBuildings
      */
     private void checkPropertyIsLikeMatchCase(Boolean matchCase, int expectedBuildings)
             throws Exception {
         // @formatter:off
-        String xml 
-            = "<wfs:GetFeature service=\"WFS\" version=\"2.0.0\" "
-            + "        xmlns:wfs=\"http://www.opengis.net/wfs/2.0\" "
-            + "        xmlns:fes=\"http://www.opengis.net/fes/2.0\" "
-            + "        xmlns:cite=\"http://www.opengis.net/cite\">"
-            + "    <wfs:Query typeNames=\"cite:Buildings\">"
-            + "        <fes:Filter>"
-            + "            <fes:PropertyIsLike wildCard=\"*\" singleChar=\"%\" escapeChar=\"!\""
-            + (matchCase == null ? "" : " matchCase=\"" + matchCase + "\"") + ">"
-            + "                <fes:ValueReference>cite:ADDRESS</fes:ValueReference>"
-            + "                <fes:Literal>* MAIN STREET</fes:Literal>"
-            + "            </fes:PropertyIsLike>"
-            + "        </fes:Filter>"
-            + "    </wfs:Query>"
-            + "</wfs:GetFeature>";
+        String xml
+                = "<wfs:GetFeature service=\"WFS\" version=\"2.0.0\" "
+                + "        xmlns:wfs=\"http://www.opengis.net/wfs/2.0\" "
+                + "        xmlns:fes=\"http://www.opengis.net/fes/2.0\" "
+                + "        xmlns:cite=\"http://www.opengis.net/cite\">"
+                + "    <wfs:Query typeNames=\"cite:Buildings\">"
+                + "        <fes:Filter>"
+                + "            <fes:PropertyIsLike wildCard=\"*\" singleChar=\"%\" escapeChar=\"!\""
+                + (matchCase == null ? "" : " matchCase=\"" + matchCase + "\"") + ">"
+                + "                <fes:ValueReference>cite:ADDRESS</fes:ValueReference>"
+                + "                <fes:Literal>* MAIN STREET</fes:Literal>"
+                + "            </fes:PropertyIsLike>"
+                + "        </fes:Filter>"
+                + "    </wfs:Query>"
+                + "</wfs:GetFeature>";
         // @formatter:on
         Document doc = postAsDOM("wfs", xml);
         assertEquals("wfs:FeatureCollection", doc.getDocumentElement().getNodeName());

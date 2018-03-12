@@ -24,9 +24,8 @@ import org.junit.Test;
 
 /**
  * Testing directly the {@link TurboJpegImageWorker}.
- * 
+ *
  * @author Simone Giannecchini, GeoSolutions SAS
- * 
  */
 public class TurboImageWorkerTest extends Assert {
 
@@ -85,13 +84,13 @@ public class TurboImageWorkerTest extends Assert {
 
         // create output file
         final File output = TestData.temp(this, "output.jpeg");
-        new TurboJpegImageWorker(ImageIO.read(input)).writeTurboJPEG(new FileOutputStream(output),.5f);
+        new TurboJpegImageWorker(ImageIO.read(input)).writeTurboJPEG(new FileOutputStream(output), .5f);
         assertTrue("Unable to create output file", output.exists() && output.isFile());
 
         new ImageWorker(output).getBufferedImage().flush();
 
     }
-    
+
     public void testWriterBandSelect() throws IOException {
         if (SKIP_TESTS) {
             LOGGER.warning(ERROR_LIB_MESSAGE);
@@ -104,7 +103,7 @@ public class TurboImageWorkerTest extends Assert {
 
         // create output file
         final File output = TestData.temp(this, "output.jpeg");
-        new TurboJpegImageWorker(ImageIO.read(input)).writeTurboJPEG(new FileOutputStream(output),.5f);
+        new TurboJpegImageWorker(ImageIO.read(input)).writeTurboJPEG(new FileOutputStream(output), .5f);
         assertTrue("Unable to create output file", output.exists() && output.isFile());
 
         new ImageWorker(output).getBufferedImage().flush();

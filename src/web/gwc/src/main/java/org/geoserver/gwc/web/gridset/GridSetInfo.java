@@ -64,8 +64,7 @@ class GridSetInfo implements Serializable {
 
     /**
      * @param gridset
-     * @param internal
-     *            whether this gridset is one of the GWC internally defined ones
+     * @param internal whether this gridset is one of the GWC internally defined ones
      */
     public GridSetInfo(final GridSet gridset, final boolean internal) {
         this.internal = internal;
@@ -125,8 +124,7 @@ class GridSetInfo implements Serializable {
     }
 
     /**
-     * @param pixelSize
-     *            the pixelSize to set
+     * @param pixelSize the pixelSize to set
      */
     public void setPixelSize(double pixelSize) {
         this.pixelSize = pixelSize;
@@ -151,8 +149,7 @@ class GridSetInfo implements Serializable {
     }
 
     /**
-     * @param name
-     *            the name to set
+     * @param name the name to set
      */
     public void setName(String name) {
         this.name = name;
@@ -166,8 +163,7 @@ class GridSetInfo implements Serializable {
     }
 
     /**
-     * @param description
-     *            the description to set
+     * @param description the description to set
      */
     public void setDescription(String description) {
         this.description = description;
@@ -181,8 +177,7 @@ class GridSetInfo implements Serializable {
     }
 
     /**
-     * @param crs
-     *            the crs to set
+     * @param crs the crs to set
      */
     public void setCrs(CoordinateReferenceSystem crs) {
         this.crs = crs;
@@ -196,8 +191,7 @@ class GridSetInfo implements Serializable {
     }
 
     /**
-     * @param bounds
-     *            the bounds to set
+     * @param bounds the bounds to set
      */
     public void setBounds(ReferencedEnvelope bounds) {
         this.bounds = bounds;
@@ -211,8 +205,7 @@ class GridSetInfo implements Serializable {
     }
 
     /**
-     * @param tileWidth
-     *            the tileWidth to set
+     * @param tileWidth the tileWidth to set
      */
     public void setTileWidth(int tileWidth) {
         this.tileWidth = tileWidth;
@@ -226,8 +219,7 @@ class GridSetInfo implements Serializable {
     }
 
     /**
-     * @param tileHeight
-     *            the tileHeight to set
+     * @param tileHeight the tileHeight to set
      */
     public void setTileHeight(int tileHeight) {
         this.tileHeight = tileHeight;
@@ -241,8 +233,7 @@ class GridSetInfo implements Serializable {
     }
 
     /**
-     * @param alignTopLeft
-     *            the alignTopLeft to set
+     * @param alignTopLeft the alignTopLeft to set
      */
     public void setAlignTopLeft(boolean alignTopLeft) {
         this.alignTopLeft = alignTopLeft;
@@ -256,8 +247,7 @@ class GridSetInfo implements Serializable {
     }
 
     /**
-     * @param levels
-     *            the levels to set
+     * @param levels the levels to set
      */
     public void setLevels(List<Grid> levels) {
         this.levels = levels;

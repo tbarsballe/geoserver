@@ -14,10 +14,14 @@ import org.geoserver.web.netcdf.NetCDFSettingsContainer;
 @SuppressWarnings("serial")
 public class NetCDFLayerSettingsContainer extends NetCDFSettingsContainer {
 
-    /** Layer name */
+    /**
+     * Layer name
+     */
     private String layerName;
 
-    /** Layer Unit of Measure */
+    /**
+     * Layer Unit of Measure
+     */
     private String layerUOM;
 
     public NetCDFLayerSettingsContainer() {

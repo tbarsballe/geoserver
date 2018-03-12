@@ -84,7 +84,7 @@ public class SettingsInfoImpl implements SettingsInfo {
 
     @Override
     public String getCharset() {
-        return charset; 
+        return charset;
     }
 
     @Override
@@ -200,7 +200,7 @@ public class SettingsInfoImpl implements SettingsInfo {
             return true;
         if (obj == null)
             return false;
-        if (!( obj instanceof SettingsInfo ) ) {
+        if (!(obj instanceof SettingsInfo)) {
             return false;
         }
         final SettingsInfo other = (SettingsInfo) obj;

@@ -45,7 +45,9 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 public class KMLFileFormat extends VectorFormat {
 
-    /** serialVersionUID */
+    /**
+     * serialVersionUID
+     */
     private static final long serialVersionUID = 1L;
 
     public static String KML_SRS = "EPSG:4326";
@@ -86,7 +88,7 @@ public class KMLFileFormat extends VectorFormat {
     }
 
     public FeatureReader<SimpleFeatureType, SimpleFeature> read(SimpleFeatureType featureType,
-            File file) {
+                                                                File file) {
         try {
             return new KMLTransformingFeatureReader(featureType, new FileInputStream(file));
         } catch (Exception e) {
@@ -95,7 +97,7 @@ public class KMLFileFormat extends VectorFormat {
     }
 
     public FeatureReader<SimpleFeatureType, SimpleFeature> read(SimpleFeatureType featureType,
-            InputStream inputStream) {
+                                                                InputStream inputStream) {
         return new KMLTransformingFeatureReader(featureType, inputStream);
     }
 
@@ -163,7 +165,7 @@ public class KMLFileFormat extends VectorFormat {
     }
 
     public SimpleFeatureType convertParsedFeatureType(SimpleFeatureType ft, String name,
-            Set<String> untypedAttributes) {
+                                                      Set<String> untypedAttributes) {
         SimpleFeatureType transformedType = kmlTransform.convertFeatureType(ft);
         SimpleFeatureTypeBuilder ftb = new SimpleFeatureTypeBuilder();
         ftb.init(transformedType);

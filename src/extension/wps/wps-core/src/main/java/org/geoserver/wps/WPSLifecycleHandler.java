@@ -11,13 +11,13 @@ import org.geoserver.config.GeoServer;
 import org.geoserver.config.impl.GeoServerLifecycleHandler;
 
 /**
- * Life cycle listener for WPS. 
+ * Life cycle listener for WPS.
  * <p>
- * Currently this instance will reload the process group list, registering new factories if 
+ * Currently this instance will reload the process group list, registering new factories if
  * required on reload/reset.
  * </p>
- * @author Justin Deoliveira, OpenGeo
  *
+ * @author Justin Deoliveira, OpenGeo
  */
 public class WPSLifecycleHandler implements GeoServerLifecycleHandler {
 
@@ -31,7 +31,7 @@ public class WPSLifecycleHandler implements GeoServerLifecycleHandler {
     public void onReset() {
         lookupNewProcessGroups(getWPS(), geoServer);
     }
-    
+
     public void beforeReload() {
         // nothing to do
     }
@@ -39,7 +39,7 @@ public class WPSLifecycleHandler implements GeoServerLifecycleHandler {
     @Override
     public void onDispose() {
     }
-    
+
     @Override
     public void onReload() {
         lookupNewProcessGroups(getWPS(), geoServer);

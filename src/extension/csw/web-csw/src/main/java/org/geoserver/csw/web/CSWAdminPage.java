@@ -37,8 +37,8 @@ public class CSWAdminPage extends BaseServiceAdminPage<CSWInfo> {
     protected Class<CSWInfo> getServiceClass() {
         return CSWInfo.class;
     }
-    
-    @SuppressWarnings({ "rawtypes", "unchecked" })
+
+    @SuppressWarnings({"rawtypes", "unchecked"})
     protected void build(final IModel info, Form form) {
 
         CSWInfo model = (CSWInfo) info.getObject();
@@ -61,7 +61,7 @@ public class CSWAdminPage extends BaseServiceAdminPage<CSWInfo> {
         form.add(maxDownloadSize);
     }
 
-    protected String getServiceName(){
-       return "CSW";
+    protected String getServiceName() {
+        return "CSW";
     }
 }

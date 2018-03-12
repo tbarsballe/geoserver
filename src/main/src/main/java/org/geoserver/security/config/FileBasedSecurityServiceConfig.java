@@ -7,10 +7,10 @@ package org.geoserver.security.config;
 
 /**
  * Security service configuration object that is persisted in a file.
- * 
+ *
  * @author christian
  */
-public class FileBasedSecurityServiceConfig  extends BaseSecurityNamedServiceConfig {
+public class FileBasedSecurityServiceConfig extends BaseSecurityNamedServiceConfig {
 
     private static final long serialVersionUID = 1L;
     private String fileName;
@@ -26,7 +26,7 @@ public class FileBasedSecurityServiceConfig  extends BaseSecurityNamedServiceCon
     }
 
     /**
-     * @return The name of file to persist configuration in. 
+     * @return The name of file to persist configuration in.
      */
     public String getFileName() {
         return fileName;
@@ -41,7 +41,7 @@ public class FileBasedSecurityServiceConfig  extends BaseSecurityNamedServiceCon
 
     /**
      * The time interval, in milliseconds, in which to check the underlying file for changes.
-     * 
+     *
      * @return the check interval in ms.
      * @see #setCheckInterval(long)
      */
@@ -56,18 +56,18 @@ public class FileBasedSecurityServiceConfig  extends BaseSecurityNamedServiceCon
      * file may have been modified out of process.
      * </p>
      * <p>
-     * A value of > 0 causes {@link FileWatcher} object to be created. A value of <= 0 disables 
+     * A value of > 0 causes {@link FileWatcher} object to be created. A value of <= 0 disables
      * any checking of the underlying file.
      * </p>
      * <p>
-     * Hint: the granularity of {@link File} last access time is often a second, values < 1000 may 
+     * Hint: the granularity of {@link File} last access time is often a second, values < 1000 may
      * not have the desired effect.
      * </p>
-     * 
+     *
      * @param checkInterval The time interval in ms.
      */
     public void setCheckInterval(long checkInterval) {
         this.checkInterval = checkInterval;
     }
-    
+
 }

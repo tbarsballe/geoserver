@@ -50,7 +50,7 @@ import java.util.logging.Logger;
         "definitions, " +
         "area of interest, size and a series of times for animation frames.")
 public class DownloadAnimationProcess implements GeoServerProcess {
-    
+
     static final Logger LOGGER = Logging.getLogger(DownloadAnimationProcess.class);
 
     public static final String VIDEO_MP4 = "video/mp4";

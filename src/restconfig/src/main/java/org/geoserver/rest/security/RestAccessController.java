@@ -49,7 +49,7 @@ public class RestAccessController extends AbstractAclController {
             return "Invalid '" + ruleKey + "' not matching " + KEYPATTERN;
         return null;
     }
-    
+
     @Override
     protected String getBasePath() {
         return "/security/acl/rest";

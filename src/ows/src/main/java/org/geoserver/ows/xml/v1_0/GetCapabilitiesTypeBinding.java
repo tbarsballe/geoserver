@@ -21,9 +21,9 @@ import org.geotools.xml.Node;
 
 /**
  * Binding object for the type http://www.opengis.net/ows:GetCapabilitiesType.
- *
  * <p>
- *        <pre>
+ * <p>
+ * <pre>
  *         <code>
  *  &lt;complexType name="GetCapabilitiesType"&gt;
  *      &lt;annotation&gt;
@@ -55,6 +55,7 @@ import org.geotools.xml.Node;
  *
  *          </code>
  *         </pre>
+ *
  * @generated
  */
 public class GetCapabilitiesTypeBinding extends AbstractComplexEMFBinding {
@@ -84,17 +85,17 @@ public class GetCapabilitiesTypeBinding extends AbstractComplexEMFBinding {
 
     /**
      * <!-- begin-user-doc -->
-    * @param value an instance of {@link GetCapabilitiesType} (possibly a subclass) if
-    * a binding for a specific service's GetCapabilities request used {@link Binding#BEFORE}
-    * {@link #getExecutionMode() execution mode}, and thus relies on this binding to fill
-    * the common properties. <code>null</code> otherwise.
-    *
-     * <!-- end-user-doc -->
      *
+     * @param value an instance of {@link GetCapabilitiesType} (possibly a subclass) if
+     *              a binding for a specific service's GetCapabilities request used {@link Binding#BEFORE}
+     *              {@link #getExecutionMode() execution mode}, and thus relies on this binding to fill
+     *              the common properties. <code>null</code> otherwise.
+     *              <p>
+     *              <!-- end-user-doc -->
      * @generated modifiable
      */
     public Object parse(ElementInstance instance, Node node, Object value)
-        throws Exception {
+            throws Exception {
         GetCapabilitiesType getCapabilities;
 
         if ((value != null) && value instanceof GetCapabilitiesType) {

@@ -21,13 +21,13 @@ public class GeoServerCustomSecurityProviderTest extends GeoServerSystemTestSupp
     protected void setUpSpring(List<String> springContextLocations) {
         super.setUpSpring(springContextLocations);
         springContextLocations.add(
-            getClass().getResource(getClass().getSimpleName() + "-context.xml").toString());
+                getClass().getResource(getClass().getSimpleName() + "-context.xml").toString());
     }
 
     public static class SecurityProvider extends GeoServerSecurityProvider {
         static boolean initCalled = false;
         static boolean destroyCalled = false;
-        
+
         @Override
         public void init(GeoServerSecurityManager manager) {
             initCalled = true;

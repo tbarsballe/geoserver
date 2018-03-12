@@ -37,7 +37,7 @@ public class GetSchema {
         String name = null;
 
         // Iterate over all parameters looking case insensitively for 'identifier'
-        for(Enumeration<String> a = request.getParameterNames(); a.hasMoreElements();) {
+        for (Enumeration<String> a = request.getParameterNames(); a.hasMoreElements(); ) {
             String i = a.nextElement();
 
             if ("identifier".equalsIgnoreCase(i)) {
@@ -58,16 +58,16 @@ public class GetSchema {
         }
 
         BufferedReader bufReader = new BufferedReader(new InputStreamReader(stream));
-        StringBuilder  schema    = new StringBuilder();
-        String         line      = null;
+        StringBuilder schema = new StringBuilder();
+        String line = null;
 
         try {
-            while(null != (line = bufReader.readLine())) {
+            while (null != (line = bufReader.readLine())) {
                 schema.append(line + "\n");
             }
 
             bufReader.close();
-        } catch(Exception e) {
+        } catch (Exception e) {
             throw new WPSException("NoApplicableCode", "Error reading schema on server.");
         }
 
@@ -75,7 +75,7 @@ public class GetSchema {
 
         try {
             response.getOutputStream().print(schema.toString());
-        } catch(Exception e) {
+        } catch (Exception e) {
             throw new WPSException("NoApplicableCode", "Could not write schema to output.");
         }
 

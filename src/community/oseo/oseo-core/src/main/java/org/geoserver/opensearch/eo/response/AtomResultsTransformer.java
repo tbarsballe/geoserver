@@ -166,13 +166,13 @@ public class AtomResultsTransformer extends LambdaTransformerBase {
 
         private void buildSearchLink(SearchRequest request) {
             Map<String, String> kvp = null;
-            if(request.getParentId() != null) {
+            if (request.getParentId() != null) {
                 kvp = Collections.singletonMap("parentId", request.getParentId());
             }
             String href = ResponseUtils.buildURL(request.getBaseUrl(), "oseo/search/description", kvp, URLType.SERVICE);
             element("link", NO_CONTENTS,
                     attributes("rel", "search", "href", href, "type", DescriptionResponse.OS_DESCRIPTION_MIME));
-            
+
         }
 
         private int getQueryStartIndex(SearchResults results) {
@@ -280,7 +280,7 @@ public class AtomResultsTransformer extends LambdaTransformerBase {
         }
 
         private void encodeOgcLinks(Map<String, List<SimpleFeature>> linksByOffering,
-                String hrefBase) {
+                                    String hrefBase) {
             linksByOffering.forEach((offering, links) -> {
                 element("owc:offering", () -> {
                     for (SimpleFeature link : links) {
@@ -324,22 +324,22 @@ public class AtomResultsTransformer extends LambdaTransformerBase {
                     "type", MetadataRequest.OM_METADATA, "title", "O&M metadata"));
 
             // and a quicklook as a link and as media
-            if(quicklookLink != null) {
+            if (quicklookLink != null) {
                 element("link", NO_CONTENTS, attributes("rel", "icon", "href", quicklookLink,
                         "type", "image/jpeg", "title", "Quicklook"));
                 element("media:group", () -> mediaContent(quicklookLink));
             }
-            
+
             encodeOgcLinksFromFeature(feature, request);
-            
+
             encodeDownloadLink(feature, request);
         }
 
         private void encodeDownloadLink(Feature feature, SearchRequest request) {
-            String location  = (String) value(feature, null, OpenSearchAccess.ORIGINAL_PACKAGE_LOCATION);
-            if(location != null) {
+            String location = (String) value(feature, null, OpenSearchAccess.ORIGINAL_PACKAGE_LOCATION);
+            if (location != null) {
                 String type = (String) value(feature, null, OpenSearchAccess.ORIGINAL_PACKAGE_TYPE);
-                if(type == null) {
+                if (type == null) {
                     type = MediaType.APPLICATION_OCTET_STREAM_VALUE;
                 }
                 String hrefBase = getHRefBase(request);
@@ -351,13 +351,13 @@ public class AtomResultsTransformer extends LambdaTransformerBase {
         }
 
         private void encodeGenericEntryContents(Feature feature, String name,
-                final String identifierLink, Map<String, String> descriptionVariables, SearchRequest request) {
+                                                final String identifierLink, Map<String, String> descriptionVariables, SearchRequest request) {
             element("id", identifierLink);
             element("title", name);
             element("dc:identifier", name);
             Date start = (Date) value(feature, "timeStart");
             Date end = (Date) value(feature, "timeEnd");
-            if(start != null || end != null) {
+            if (start != null || end != null) {
                 // TODO: need an actual update column
                 Date updated = end == null ? start : end;
                 String formattedUpdated = DateTimeFormatter.ISO_INSTANT.format(updated.toInstant());
@@ -365,7 +365,7 @@ public class AtomResultsTransformer extends LambdaTransformerBase {
 
                 // dc:date, can be a range
                 String spec;
-                if(start != null && end != null && start.equals(end)) {
+                if (start != null && end != null && start.equals(end)) {
                     spec = DateTimeFormatter.ISO_INSTANT.format(start.toInstant());
                 } else {
                     spec = start != null ? DateTimeFormatter.ISO_INSTANT.format(start.toInstant()) : "";
@@ -403,13 +403,13 @@ public class AtomResultsTransformer extends LambdaTransformerBase {
                         .map(p -> (SimpleFeature) p).sorted(LinkFeatureComparator.INSTANCE)
                         .collect(Collectors.groupingBy(f -> (String) f.getAttribute("offering")));
                 String hrefBase = getHRefBase(request);
-                if(linkProperties.size() > 0) {
+                if (linkProperties.size() > 0) {
                     sb.append("<h3>OGC cross links</h3>\n<ul>\n");
-                    for (Map.Entry<String, List<SimpleFeature>> entry: linksByOffering.entrySet()) {
+                    for (Map.Entry<String, List<SimpleFeature>> entry : linksByOffering.entrySet()) {
                         final String key = entry.getKey();
                         int idx = key.lastIndexOf('/');
                         String service = key;
-                        if(idx > 0 && idx < key.length() - 1) {
+                        if (idx > 0 && idx < key.length() - 1) {
                             service = key.substring(idx + 1).toUpperCase();
                         }
                         sb.append("  <li><b>").append(service).append("</b>\n<ul>");
@@ -424,10 +424,10 @@ public class AtomResultsTransformer extends LambdaTransformerBase {
                     }
                     sb.append("</ul>");
                 }
-                
-                
+
+
             }
-            
+
             return sb.toString();
         }
 
@@ -482,7 +482,7 @@ public class AtomResultsTransformer extends LambdaTransformerBase {
         }
 
         private String buildMetadataLink(String parentIdentifier, Object identifier,
-                String mimeType, SearchRequest request) {
+                                         String mimeType, SearchRequest request) {
             String baseURL = request.getBaseUrl();
             Map<String, String> kvp = new LinkedHashMap<String, String>();
             if (parentIdentifier != null) {
@@ -512,8 +512,8 @@ public class AtomResultsTransformer extends LambdaTransformerBase {
         }
 
         private Object value(Feature feature, String prefix, String attribute) {
-            Property property; 
-            if(prefix != null) {
+            Property property;
+            if (prefix != null) {
                 property = feature.getProperty(new NameImpl(prefix, attribute));
             } else {
                 property = feature.getProperty(attribute);
@@ -558,7 +558,7 @@ public class AtomResultsTransformer extends LambdaTransformerBase {
         }
 
         private void encodePaginationLink(String rel, int startIndex, int itemsPerPage,
-                SearchRequest request) {
+                                          SearchRequest request) {
             String baseURL = request.getBaseUrl();
             Map<String, String> kvp = new LinkedHashMap<String, String>();
             for (Map.Entry<Parameter, String> entry : request.getSearchParameters().entrySet()) {

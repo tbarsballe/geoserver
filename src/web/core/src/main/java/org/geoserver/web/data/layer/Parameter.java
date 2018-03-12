@@ -13,7 +13,9 @@ import org.geotools.jdbc.VirtualTableParameter;
 import org.geotools.jdbc.VirtualTableParameter.Validator;
 
 class Parameter implements Serializable {
-    /** serialVersionUID */
+    /**
+     * serialVersionUID
+     */
     private static final long serialVersionUID = -5028680760307467030L;
 
     String name;
@@ -21,8 +23,7 @@ class Parameter implements Serializable {
     String defaultValue;
 
     String regexp;
-    
-    
+
 
     public Parameter(String name, String defaultValue, String regexp) {
         this.name = name;
@@ -43,10 +44,10 @@ class Parameter implements Serializable {
             }
         }
     }
-    
+
     public VirtualTableParameter toVirtualTableParameter() {
         VirtualTableParameter result = new VirtualTableParameter(name, defaultValue);
-        if(regexp != null) {
+        if (regexp != null) {
             result.setValidator(new RegexpValidator(regexp));
         }
         return result;
@@ -75,7 +76,7 @@ class Parameter implements Serializable {
     public void setRegexp(String regexp) {
         this.regexp = regexp;
     }
-    
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -118,6 +119,6 @@ class Parameter implements Serializable {
         return "Parameter [defaultValue=" + defaultValue + ", name=" + name + ", regexp=" + regexp
                 + "]";
     }
-    
-    
+
+
 }

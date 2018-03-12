@@ -66,7 +66,7 @@ public class Receiver {
         return new DefaultConsumer(channel) {
             @Override
             public void handleDelivery(String consumerTag, Envelope envelope,
-                    AMQP.BasicProperties properties, byte[] body) throws IOException {
+                                       AMQP.BasicProperties properties, byte[] body) throws IOException {
                 service.manage(body);
             }
         };

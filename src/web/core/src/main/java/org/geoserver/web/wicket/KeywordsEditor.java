@@ -36,30 +36,31 @@ public class KeywordsEditor extends FormComponentPanel<List<KeywordInfo>> {
     TextField<String> newKeyword;
     TextField<String> vocabTextField;
     DropDownChoice<String> langChoice;
-    
+
     /**
-     * Creates a new keywords editor. 
+     * Creates a new keywords editor.
+     *
      * @param id
      * @param keywords The module should return a non null collection of strings.
      */
     public KeywordsEditor(String id, final IModel<List<KeywordInfo>> keywords) {
         super(id, keywords);
 
-        choices = new ListMultipleChoice<KeywordInfo>("keywords", new Model<ArrayList<KeywordInfo>>(), 
-            new ArrayList<KeywordInfo>(keywords.getObject()), new ChoiceRenderer<KeywordInfo>() {
-                private static final long serialVersionUID = 1L;
+        choices = new ListMultipleChoice<KeywordInfo>("keywords", new Model<ArrayList<KeywordInfo>>(),
+                new ArrayList<KeywordInfo>(keywords.getObject()), new ChoiceRenderer<KeywordInfo>() {
+            private static final long serialVersionUID = 1L;
 
-                @Override
-                public Object getDisplayValue(KeywordInfo kw) {
-                    StringBuffer sb = new StringBuffer(kw.getValue());
-                    if (kw.getLanguage() != null) {
-                        sb.append(" (").append(kw.getLanguage()).append(")");
-                    }
-                    if (kw.getVocabulary() != null) {
-                        sb.append(" [").append(kw.getVocabulary()).append("]");
-                    }
-                    return sb.toString();
+            @Override
+            public Object getDisplayValue(KeywordInfo kw) {
+                StringBuffer sb = new StringBuffer(kw.getValue());
+                if (kw.getLanguage() != null) {
+                    sb.append(" (").append(kw.getLanguage()).append(")");
                 }
+                if (kw.getVocabulary() != null) {
+                    sb.append(" [").append(kw.getVocabulary()).append("]");
+                }
+                return sb.toString();
+            }
         });
         choices.setOutputMarkupId(true);
         add(choices);
@@ -68,13 +69,15 @@ public class KeywordsEditor extends FormComponentPanel<List<KeywordInfo>> {
         newKeyword.setOutputMarkupId(true);
         add(newKeyword);
 
-        langChoice = new DropDownChoice<String>("lang", new Model<String>(), 
-            Arrays.asList(Locale.getISOLanguages()), new ChoiceRenderer<String>() {
+        langChoice = new DropDownChoice<String>("lang", new Model<String>(),
+                Arrays.asList(Locale.getISOLanguages()), new ChoiceRenderer<String>() {
             private static final long serialVersionUID = 1L;
+
             @Override
             public String getDisplayValue(String object) {
                 return new Locale(object).getDisplayLanguage();
             }
+
             @Override
             public String getIdValue(String object, int index) {
                 return object;
@@ -87,7 +90,7 @@ public class KeywordsEditor extends FormComponentPanel<List<KeywordInfo>> {
 
         vocabTextField = new TextField<String>("vocab", new Model<String>());
         vocabTextField.setOutputMarkupId(true);
-            
+
         add(vocabTextField);
 
         add(addKeywordsButton());
@@ -102,7 +105,7 @@ public class KeywordsEditor extends FormComponentPanel<List<KeywordInfo>> {
                 String value = newKeyword.getInput();
                 String lang = langChoice.getInput();
                 String vocab = vocabTextField.getInput();
-                
+
                 KeywordInfo keyword = new Keyword(value);
                 if (lang != null && !"".equals(lang.trim())) {
                     keyword.setLanguage(lang);
@@ -110,12 +113,12 @@ public class KeywordsEditor extends FormComponentPanel<List<KeywordInfo>> {
                 if (vocab != null && !"".equals(vocab.trim())) {
                     keyword.setVocabulary(vocab);
                 }
-                
+
                 @SuppressWarnings("unchecked")
                 List<KeywordInfo> choiceList = (List<KeywordInfo>) choices.getChoices();
                 choiceList.add(keyword);
                 choices.setChoices(choiceList);
-                
+
                 langChoice.setModelObject(null);
                 langChoice.modelChanged();
 
@@ -134,7 +137,7 @@ public class KeywordsEditor extends FormComponentPanel<List<KeywordInfo>> {
 
     private AjaxButton removeKeywordsButton() {
         AjaxButton button = new AjaxButton("removeKeywords") {
-            
+
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -142,7 +145,7 @@ public class KeywordsEditor extends FormComponentPanel<List<KeywordInfo>> {
                 Collection<KeywordInfo> selection = choices.getModelObject();
                 @SuppressWarnings("unchecked")
                 List<KeywordInfo> keywords = (List<KeywordInfo>) choices.getChoices();
-                for (Iterator<KeywordInfo> it = selection.iterator(); it.hasNext();) {
+                for (Iterator<KeywordInfo> it = selection.iterator(); it.hasNext(); ) {
                     KeywordInfo selected = (KeywordInfo) it.next();
                     keywords.remove(selected);
                 }
@@ -154,7 +157,7 @@ public class KeywordsEditor extends FormComponentPanel<List<KeywordInfo>> {
         // button.setDefaultFormProcessing(false);
         return button;
     }
-    
+
     @Override
     protected void onBeforeRender() {
         super.onBeforeRender();
@@ -164,7 +167,7 @@ public class KeywordsEditor extends FormComponentPanel<List<KeywordInfo>> {
     private void updateFields() {
         choices.setChoices(getModel());
     }
-    
+
     @SuppressWarnings("unchecked")
     @Override
     public void convertInput() {

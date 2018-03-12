@@ -88,10 +88,10 @@ public class BruteForceListener
                 || event instanceof AuthenticationFailureProviderNotFoundEvent) {
             // are we above the max number of blocked threads already?
             int maxBlockedThreads = config.getMaxBlockedThreads();
-            if(maxBlockedThreads > 0 && delayedUsers.size() > maxBlockedThreads) {
+            if (maxBlockedThreads > 0 && delayedUsers.size() > maxBlockedThreads) {
                 throw new MaxBlockedThreadsException(1);
             }
-            
+
             delayedUsers.put(name, new AtomicInteger(1));
             try {
                 logFailedRequest(request, name, 0);
@@ -112,7 +112,7 @@ public class BruteForceListener
     }
 
     private boolean requestAddressInWhiteList(HttpServletRequest request,
-            BruteForcePreventionConfig config) {
+                                              BruteForcePreventionConfig config) {
         // is there a white list?
         if (config.getWhitelistAddressMatchers() == null) {
             return false;
@@ -130,7 +130,7 @@ public class BruteForceListener
 
     /**
      * Returns the username for this authentication, or null if missing or cannot be determined
-     * 
+     *
      * @param authentication
      * @return
      */

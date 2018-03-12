@@ -19,7 +19,7 @@ import org.opengis.util.ProgressListener;
 
 /**
  * Builds a view of the coverage that contains only the specified coverage
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class GranuleCoverageInfo extends DecoratingCoverageInfo {

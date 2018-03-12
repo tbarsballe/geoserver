@@ -28,50 +28,50 @@ import org.junit.Test;
 public class ControlFlowCallbackProxyTest {
 
     static Monitor monitor;
-    
+
     @BeforeClass
     public static void setUpData() throws Exception {
         MonitorDAO dao = new MemoryMonitorDAO();
         new MonitorTestData(dao).setup();
         monitor = new Monitor(dao);
     }
-    
+
     @Test
     public void test() throws Exception {
         final RequestData data = monitor.start();
         DispatcherCallback callback = new DispatcherCallback() {
-            
+
             public Service serviceDispatched(Request request, Service service) throws ServiceException {
                 return null;
             }
-            
+
             public Response responseDispatched(Request request, Operation operation, Object result,
-                    Response response) {
+                                               Response response) {
                 return null;
             }
-            
+
             public Object operationExecuted(Request request, Operation operation, Object result) {
                 return null;
             }
-            
+
             public Operation operationDispatched(Request request, Operation operation) {
                 assertEquals(Status.WAITING, data.getStatus());
                 return operation;
             }
-            
+
             public Request init(Request request) {
                 return null;
             }
-            
+
             public void finished(Request request) {
             }
         };
-        
+
 
         callback = createProxy(callback);
-        callback.operationDispatched(new Request(), 
-            new Operation("foo", new Service("bar", null, null, null), null, null));
-        
+        callback.operationDispatched(new Request(),
+                new Operation("foo", new Service("bar", null, null, null), null, null));
+
         assertEquals(Status.RUNNING, data.getStatus());
     }
 
@@ -89,30 +89,30 @@ public class ControlFlowCallbackProxyTest {
             public Service serviceDispatched(Request request, Service service) throws ServiceException {
                 return null;
             }
-            
+
             public Response responseDispatched(Request request, Operation operation, Object result,
-                    Response response) {
+                                               Response response) {
                 return null;
             }
-            
+
             public Object operationExecuted(Request request, Operation operation, Object result) {
                 return null;
             }
-            
+
             public Operation operationDispatched(Request request, Operation operation) {
                 return null;
             }
-            
+
             public Request init(Request request) {
                 return null;
             }
-            
+
             public void finished(Request request) {
             }
         };
         callback = createProxy(callback);
         ControlFlowCallbackProxy proxy =
-            (ControlFlowCallbackProxy) Proxy.getInvocationHandler(callback);
+                (ControlFlowCallbackProxy) Proxy.getInvocationHandler(callback);
         assertNotNull(proxy);
         assertEquals(10l, proxy.getRunningRequests());
         assertEquals(2l, proxy.getBlockedRequests());
@@ -120,7 +120,7 @@ public class ControlFlowCallbackProxyTest {
 
     DispatcherCallback createProxy(DispatcherCallback callback) {
         ControlFlowCallbackProxy proxy = new ControlFlowCallbackProxy(monitor, callback);
-        return (DispatcherCallback) Proxy.newProxyInstance(getClass().getClassLoader(), 
+        return (DispatcherCallback) Proxy.newProxyInstance(getClass().getClassLoader(),
                 new Class[]{DispatcherCallback.class}, proxy);
     }
 }

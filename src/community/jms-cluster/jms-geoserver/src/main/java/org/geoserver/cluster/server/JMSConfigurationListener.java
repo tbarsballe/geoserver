@@ -28,11 +28,9 @@ import org.geotools.util.logging.Logging;
 
 /**
  * JMS MASTER (Producer) Listener used to send GeoServer JMSGeoServerConfigurationExt events over the JMS channel.
- * 
- * @see {@link JMSApplicationListener}
- * 
+ *
  * @author Carlo Cancellieri - carlo.cancellieri@geo-solutions.it
- * 
+ * @see {@link JMSApplicationListener}
  */
 public class JMSConfigurationListener extends JMSAbstractGeoServerProducer implements
         ConfigurationListener {
@@ -44,10 +42,9 @@ public class JMSConfigurationListener extends JMSAbstractGeoServerProducer imple
     private final JMSPublisher jmsPublisher;
 
     /**
-     * 
      * @param topicTemplate the JmsTemplate object used to send message to the topic queue
      * @param geoserver
-     * @param props properties to attach to all the message. May contains at least the producer name which should be unique.
+     * @param props         properties to attach to all the message. May contains at least the producer name which should be unique.
      */
     public JMSConfigurationListener(final GeoServer geoserver, final JMSPublisher jmsPublisher) {
         super();
@@ -61,7 +58,7 @@ public class JMSConfigurationListener extends JMSAbstractGeoServerProducer imple
 
     @Override
     public void handleGlobalChange(GeoServerInfo global, List<String> propertyNames,
-            List<Object> oldValues, List<Object> newValues) {
+                                   List<Object> oldValues, List<Object> newValues) {
 
         if (LOGGER.isLoggable(java.util.logging.Level.FINE)) {
             LOGGER.fine("Incoming event");
@@ -92,7 +89,7 @@ public class JMSConfigurationListener extends JMSAbstractGeoServerProducer imple
 
     @Override
     public void handleLoggingChange(LoggingInfo logging, List<String> propertyNames,
-            List<Object> oldValues, List<Object> newValues) {
+                                    List<Object> oldValues, List<Object> newValues) {
 
         if (LOGGER.isLoggable(java.util.logging.Level.FINE)) {
             LOGGER.fine("Incoming event");

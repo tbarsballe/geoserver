@@ -29,7 +29,7 @@ public class NetCDFSettingsContainer implements Serializable {
     public static final boolean DEFAULT_SHUFFLE = true;
 
     public static final boolean DEFAULT_COPY_ATTRIBUTES = false;
-    
+
     public static final boolean DEFAULT_COPY_GLOBAL_ATTRIBUTES = false;
 
     public static final Version DEFAULT_VERSION = Version.NETCDF_3;
@@ -262,8 +262,8 @@ public class NetCDFSettingsContainer implements Serializable {
         private String dimensions;
 
         /**
-         * @param source name of source variable
-         * @param output name of output variable
+         * @param source     name of source variable
+         * @param output     name of output variable
          * @param dimensions whitespace-separated list of output variable dimension names
          */
         public ExtraVariable(String source, String target, String dimensions) {

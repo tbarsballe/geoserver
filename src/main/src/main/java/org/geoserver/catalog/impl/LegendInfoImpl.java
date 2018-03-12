@@ -18,7 +18,7 @@ public class LegendInfoImpl implements LegendInfo {
     String format;
 
     String onlineResource;
-    
+
     public String getId() {
         return id;
     }

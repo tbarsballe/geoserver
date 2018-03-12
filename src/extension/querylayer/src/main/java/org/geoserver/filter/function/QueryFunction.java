@@ -30,7 +30,7 @@ import com.vividsolutions.jts.geom.GeometryComponentFilter;
 
 /**
  * Queries a GeoServer layer and extracts the value(s) of an attribute TODO: add sorting
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class QueryFunction extends FunctionImpl {
@@ -38,11 +38,11 @@ public class QueryFunction extends FunctionImpl {
     Catalog catalog;
 
     int maxResults;
-    
+
     boolean single;
 
     public QueryFunction(Name name, Catalog catalog, List<Expression> args, Literal fallback,
-            boolean single, int maxResults) {
+                         boolean single, int maxResults) {
         this.catalog = catalog;
         this.maxResults = maxResults;
         this.single = single;
@@ -51,7 +51,7 @@ public class QueryFunction extends FunctionImpl {
         setName(name.getLocalPart());
         setFallbackValue(fallback);
         setParameters(args);
-        
+
         if (args.size() < 3 || args.size() > 4) {
             throw new IllegalArgumentException(
                     "QuerySingle function requires 3 or 4 arguments (feature type qualified name, "
@@ -86,9 +86,9 @@ public class QueryFunction extends FunctionImpl {
             if (ad == null) {
                 throw new IllegalArgumentException("Attribute " + attribute
                         + " could not be found in layer " + layerName);
-            } else if(ad instanceof GeometryDescriptor) {
+            } else if (ad instanceof GeometryDescriptor) {
                 crs = ((GeometryDescriptor) ad).getCoordinateReferenceSystem();
-                if(crs == null) {
+                if (crs == null) {
                     crs = ft.getCRS();
                 }
             }
@@ -108,7 +108,7 @@ public class QueryFunction extends FunctionImpl {
             }
 
             // perform the query
-            Query query = new Query(null, filter, new String[] { attribute });
+            Query query = new Query(null, filter, new String[]{attribute});
             // .. just enough to judge if we went beyond the limit
             query.setMaxFeatures(maxResults + 1);
             FeatureSource fs = ft.getFeatureSource(null, null);
@@ -117,7 +117,7 @@ public class QueryFunction extends FunctionImpl {
             while (fi.hasNext()) {
                 Feature f = fi.next();
                 Object value = f.getProperty(attribute).getValue();
-                if(value instanceof Geometry && crs != null) {
+                if (value instanceof Geometry && crs != null) {
                     // if the crs is not associated with the geometry do so, this
                     // way other code will get to know the crs (e.g. for reprojection purposes)
                     Geometry geom = (Geometry) value;
@@ -148,19 +148,19 @@ public class QueryFunction extends FunctionImpl {
         }
 
     }
-    
+
     /**
      * Applies the CRS to all geometry components
-     * @author aaime
      *
+     * @author aaime
      */
     static final class GeometryCRSFilter implements GeometryComponentFilter {
         CoordinateReferenceSystem crs;
-        
+
         public GeometryCRSFilter(CoordinateReferenceSystem crs) {
             this.crs = crs;
         }
-        
+
         @Override
         public void filter(Geometry g) {
             g.setUserData(crs);

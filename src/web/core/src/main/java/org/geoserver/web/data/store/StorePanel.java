@@ -35,7 +35,7 @@ import org.geoserver.web.wicket.SimpleBookmarkableLink;
 
 /**
  * Panel listing the configured StoreInfo object on a table
- * 
+ *
  * @author Justin Deoliveira
  * @author Gabriel Roldan
  * @version $Id$
@@ -63,7 +63,7 @@ public class StorePanel extends GeoServerTablePanel<StoreInfo> {
 
     @Override
     protected Component getComponentForProperty(String id, IModel<StoreInfo> itemModel,
-            Property<StoreInfo> property) {
+                                                Property<StoreInfo> property) {
 
         final CatalogIconFactory icons = CatalogIconFactory.get();
 
@@ -100,30 +100,30 @@ public class StorePanel extends GeoServerTablePanel<StoreInfo> {
         IModel storeNameModel = NAME.getModel(itemModel);
         String storeName = (String) storeNameModel.getObject();
         StoreInfo store = getCatalog().getStoreByName(wsName, storeName, StoreInfo.class);
-        if(store instanceof DataStoreInfo) {
-            return new SimpleBookmarkableLink(id, DataAccessEditPage.class, storeNameModel, 
-                    DataAccessEditPage.STORE_NAME, storeName, 
+        if (store instanceof DataStoreInfo) {
+            return new SimpleBookmarkableLink(id, DataAccessEditPage.class, storeNameModel,
+                    DataAccessEditPage.STORE_NAME, storeName,
                     DataAccessEditPage.WS_NAME, wsName);
-        } else if(store instanceof CoverageStoreInfo){
-            return new SimpleBookmarkableLink(id, CoverageStoreEditPage.class, storeNameModel, 
-                    DataAccessEditPage.STORE_NAME, storeName, 
+        } else if (store instanceof CoverageStoreInfo) {
+            return new SimpleBookmarkableLink(id, CoverageStoreEditPage.class, storeNameModel,
+                    DataAccessEditPage.STORE_NAME, storeName,
                     DataAccessEditPage.WS_NAME, wsName);
-        } else if(store instanceof WMSStoreInfo){
-            return new SimpleBookmarkableLink(id, WMSStoreEditPage.class, storeNameModel, 
-                    DataAccessEditPage.STORE_NAME, storeName, 
+        } else if (store instanceof WMSStoreInfo) {
+            return new SimpleBookmarkableLink(id, WMSStoreEditPage.class, storeNameModel,
+                    DataAccessEditPage.STORE_NAME, storeName,
                     DataAccessEditPage.WS_NAME, wsName);
-        } else if(store instanceof WMTSStoreInfo){
-            return new SimpleBookmarkableLink(id, WMTSStoreEditPage.class, storeNameModel, 
-                    DataAccessEditPage.STORE_NAME, storeName, 
+        } else if (store instanceof WMTSStoreInfo) {
+            return new SimpleBookmarkableLink(id, WMTSStoreEditPage.class, storeNameModel,
+                    DataAccessEditPage.STORE_NAME, storeName,
                     DataAccessEditPage.WS_NAME, wsName);
-        }else {
+        } else {
             throw new RuntimeException("Don't know what to do with this store " + store);
         }
     }
 
     private Component workspaceLink(String id, IModel itemModel) {
         IModel nameModel = WORKSPACE.getModel(itemModel);
-        return new SimpleBookmarkableLink(id, WorkspaceEditPage.class, nameModel, 
+        return new SimpleBookmarkableLink(id, WorkspaceEditPage.class, nameModel,
                 "name", (String) nameModel.getObject());
     }
 

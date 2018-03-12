@@ -23,7 +23,7 @@ import com.vividsolutions.jts.geom.Point;
 
 /**
  * This is to test spatial (bbox) queries for complex features
- * 
+ *
  * @author Derrick Wong, Curtin University of Technology
  */
 
@@ -68,7 +68,7 @@ public class BBoxFilterTest extends AbstractAppSchemaTestSupport {
         assertXpathEvaluatesTo("0", "/wfs:FeatureCollection/@numberOfFeatures", doc);
         assertXpathCount(0, "//ex:geomContainer", doc);
     }
-    
+
     /**
      * This uses long lat bbox, with srsName specified in long lat format (EPSG code). This should return the results.
      */
@@ -79,7 +79,7 @@ public class BBoxFilterTest extends AbstractAppSchemaTestSupport {
         assertXpathEvaluatesTo("2", "/wfs:FeatureCollection/@numberOfFeatures", doc);
         assertXpathCount(2, "//ex:geomContainer", doc);
     }
-    
+
     /**
      * This uses long lat bbox, with srsName specified in lat long format (URN). This should not return the results.
      */
@@ -102,7 +102,7 @@ public class BBoxFilterTest extends AbstractAppSchemaTestSupport {
         assertXpathEvaluatesTo("2", "/wfs:FeatureCollection/@numberOfFeatures", doc);
         assertXpathCount(2, "//ex:geomContainer", doc);
     }
-    
+
     /**
      * The following performs a WFS request specifying a BBOX parameter of axis ordering latitude
      * longitude and srsName in EPSG code format. This test should not return features if the axis ordering behaves similar to queries
@@ -115,7 +115,7 @@ public class BBoxFilterTest extends AbstractAppSchemaTestSupport {
         assertXpathEvaluatesTo("0", "/wfs:FeatureCollection/@numberOfFeatures", doc);
         assertXpathCount(0, "//ex:geomContainer", doc);
     }
-    
+
     /**
      * The following performs a WFS request specifying a BBOX parameter of axis ordering latitude
      * longitude and srsName in URN format. This test should return features if the axis ordering behaves similar to queries
@@ -128,16 +128,16 @@ public class BBoxFilterTest extends AbstractAppSchemaTestSupport {
         assertXpathEvaluatesTo("2", "/wfs:FeatureCollection/@numberOfFeatures", doc);
         assertXpathCount(2, "//ex:geomContainer", doc);
     }
-    
+
     /**
      * The following performs a WFS request specifying a BBOX parameter of axis ordering latitude
-     * longitude and srsName in URN format using POST request (GEOS-6216). 
+     * longitude and srsName in URN format using POST request (GEOS-6216).
      * This test should return features if the axis ordering behaves similar to queries
      * to Simple features.
      */
     @Test
     public void testQueryBboxLatLongPost() {
-        
+
         String xml = "<wfs:GetFeature service=\"WFS\" version=\"1.1.0\" " //
                 + "xmlns:ogc=\"http://www.opengis.net/ogc\" " //
                 + "xmlns:wfs=\"http://www.opengis.net/wfs\" " //

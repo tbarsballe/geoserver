@@ -81,11 +81,11 @@ public class SRSDescriptionPage extends GeoServerBasePage implements IHeaderCont
                 String baseUrl = baseURL(req);
 
                 response.render(new CssUrlReferenceHeaderItem(
-                    buildURL(baseUrl, "openlayers3/ol.css", null, URLMangler.URLType.RESOURCE),
-                    null, null));
+                        buildURL(baseUrl, "openlayers3/ol.css", null, URLMangler.URLType.RESOURCE),
+                        null, null));
                 response.render(new JavaScriptUrlReferenceHeaderItem(
-                    buildURL(baseUrl, "openlayers3/ol.js", null, URLMangler.URLType.RESOURCE),
-                    null, false, "UTF-8", null));
+                        buildURL(baseUrl, "openlayers3/ol.js", null, URLMangler.URLType.RESOURCE),
+                        null, false, "UTF-8", null));
             }
         });
 
@@ -243,8 +243,7 @@ public class SRSDescriptionPage extends GeoServerBasePage implements IHeaderCont
             }
         });
         TabbedPanel wktTabs = new TabbedPanel("wktTabs", tabs) {
-            protected String getTabContainerCssClass()
-            {
+            protected String getTabContainerCssClass() {
                 return "tab-row tab-row-compact";
             }
         };
@@ -254,7 +253,7 @@ public class SRSDescriptionPage extends GeoServerBasePage implements IHeaderCont
 
         Image aovMap = new Image("aovMap", new DynamicCrsMapResource(mapCrs));
         add(aovMap);
-        
+
         // link with the reprojection console
         add(new SimpleBookmarkableLink("reprojectFrom", ReprojectPage.class, new ParamResourceModel("reprojectFrom", this, code), "fromSRS", code));
         add(new SimpleBookmarkableLink("reprojectTo", ReprojectPage.class, new ParamResourceModel("reprojectTo", this, code), "toSRS", code));

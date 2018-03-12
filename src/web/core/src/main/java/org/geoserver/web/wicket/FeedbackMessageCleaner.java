@@ -12,8 +12,8 @@ import org.apache.wicket.util.visit.IVisitor;
 
 /**
  * Cleans messages in components recursively
- * 
- * @author Andrea Aime 
+ *
+ * @author Andrea Aime
  */
 public class FeedbackMessageCleaner<C extends Component, R> implements IVisitor<C, R> {
 
@@ -21,6 +21,7 @@ public class FeedbackMessageCleaner<C extends Component, R> implements IVisitor<
 
     /**
      * Builds a cleaner removing all messages at or above the specified level. See {@link FeedbackMessage} for a list of levels
+     *
      * @param level
      */
     public FeedbackMessageCleaner(int level) {

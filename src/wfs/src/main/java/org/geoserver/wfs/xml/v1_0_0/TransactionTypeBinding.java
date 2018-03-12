@@ -24,9 +24,9 @@ import org.geotools.xml.Node;
 
 /**
  * Binding object for the type http://www.opengis.net/wfs:TransactionType.
- *
  * <p>
- *        <pre>
+ * <p>
+ * <pre>
  *         <code>
  *  &lt;xsd:complexType name="TransactionType"&gt;
  *      &lt;xsd:annotation&gt;
@@ -98,13 +98,14 @@ import org.geotools.xml.Node;
  *
  *          </code>
  *         </pre>
+ *
  * @generated
  */
 public class TransactionTypeBinding extends AbstractComplexEMFBinding {
     WfsFactory wfsfactory;
 
     public TransactionTypeBinding(WfsFactory wfsfactory) {
-        super( wfsfactory );
+        super(wfsfactory);
         this.wfsfactory = wfsfactory;
     }
 
@@ -132,7 +133,7 @@ public class TransactionTypeBinding extends AbstractComplexEMFBinding {
      * @generated modifiable
      */
     public Object parse(ElementInstance instance, Node node, Object value)
-        throws Exception {
+            throws Exception {
         TransactionType transaction = wfsfactory.createTransactionType();
 
         //lock id
@@ -141,7 +142,7 @@ public class TransactionTypeBinding extends AbstractComplexEMFBinding {
         }
 
         //transactions, need to maintain order
-        for (Iterator itr = node.getChildren().iterator(); itr.hasNext();) {
+        for (Iterator itr = node.getChildren().iterator(); itr.hasNext(); ) {
             Node child = (Node) itr.next();
             Object cv = child.getValue();
 

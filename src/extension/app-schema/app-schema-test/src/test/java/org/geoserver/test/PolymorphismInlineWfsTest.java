@@ -12,7 +12,7 @@ import org.w3c.dom.Document;
 
 /**
  * WFS GetFeature to test polymorphism mixed with inline mappings in Geoserver app-schema.
- * 
+ *
  * @author Rini Angreani, CSIRO Earth Science and Resource Engineering
  */
 public class PolymorphismInlineWfsTest extends AbstractAppSchemaTestSupport {

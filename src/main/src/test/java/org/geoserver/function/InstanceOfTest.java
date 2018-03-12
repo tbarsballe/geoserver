@@ -28,7 +28,7 @@ import org.opengis.filter.expression.Function;
 
 /**
  * Simple test class for testing the InstanceOf class.
- * 
+ *
  * @author Nicola Lagomarsini geosolutions
  */
 public class InstanceOfTest {

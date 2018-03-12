@@ -13,25 +13,23 @@ import org.geoserver.platform.resource.Resources;
 import org.geoserver.web.treeview.TreeNode;
 
 /**
- * 
  * Implementation of TreeNode for Resource
- * 
- * @author Niels Charlier
  *
+ * @author Niels Charlier
  */
 public class ResourceNode implements TreeNode<Resource>, Comparable<ResourceNode> {
-    
+
     private static final long serialVersionUID = 4941394483034830079L;
-    
+
     private Resource resource;
-    
+
     private ResourceExpandedStates expandedStates;
-    
+
     public ResourceNode(Resource resource, ResourceExpandedStates expandedStates) {
         this.resource = Resources.serializable(resource);
         this.expandedStates = expandedStates;
     }
-    
+
     @Override
     public Set<TreeNode<Resource>> getChildren() {
         Set<TreeNode<Resource>> children = new TreeSet<TreeNode<Resource>>();
@@ -54,7 +52,7 @@ public class ResourceNode implements TreeNode<Resource>, Comparable<ResourceNode
     public Resource getObject() {
         return resource;
     }
-    
+
     @Override
     public String getLabel() {
         String name = resource.name();
@@ -64,10 +62,10 @@ public class ResourceNode implements TreeNode<Resource>, Comparable<ResourceNode
             return name;
         }
     }
-    
-    @Override 
+
+    @Override
     public boolean isLeaf() {
-        return resource.getType() == Resource.Type.RESOURCE; 
+        return resource.getType() == Resource.Type.RESOURCE;
     }
 
     @Override
@@ -97,12 +95,12 @@ public class ResourceNode implements TreeNode<Resource>, Comparable<ResourceNode
         }
         return i;
     }
-    
+
     @Override
     public boolean equals(Object node) {
         return node instanceof ResourceNode && isSameAs((ResourceNode) node);
     }
-    
+
     @Override
     public int hashCode() {
         return getUniqueId().hashCode();

@@ -28,6 +28,7 @@ public class DropDownModel implements IModel<Serializable> {
     public static final String DIRECTORY_CONFIG = "Directory";
     static String DEFAULT_CONFIG;
     public static final List<String> CONFIG_LIST = new ArrayList<>(2);
+
     static {
         if (RepositoryResolver.resolverAvailableForURIScheme("file")) {
             CONFIG_LIST.add(DIRECTORY_CONFIG);

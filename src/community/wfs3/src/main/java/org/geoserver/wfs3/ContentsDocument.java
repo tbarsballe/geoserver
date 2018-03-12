@@ -20,7 +20,7 @@ import java.util.List;
  * can be used as a Freemarker template model)
  */
 public class ContentsDocument {
-    
+
     public static final String REL_SELF = "self";
     public static final String REL_ALTERNATE = "alternate";
     public static final String REL_SERVICE = "service";
@@ -75,7 +75,7 @@ public class ContentsDocument {
             this.title = title;
         }
     }
-    
+
     static class Collection {
         String collectionId;
         String title;
@@ -124,12 +124,12 @@ public class ContentsDocument {
         }
 
     }
-    
+
     private final Catalog catalog;
     private final WFSInfo wfs;
     private final List<Link> links = new ArrayList<>();
     private final ContentRequest request;
-    
+
     public ContentsDocument(ContentRequest request, WFSInfo wfs, Catalog catalog) {
         this.wfs = wfs;
         this.catalog = catalog;
@@ -165,7 +165,7 @@ public class ContentsDocument {
         addLink(new ContentsDocument.Link(apiYamlUrl, ContentsDocument.REL_SERVICE, BaseRequest.YAML_MIME,
                 "The OpenAPI definition as YAML"));
     }
-    
+
     public void addLink(Link link) {
         links.add(link);
     }
@@ -173,11 +173,11 @@ public class ContentsDocument {
     public List<Link> getLinks() {
         return links;
     }
-    
+
     public Iterator<Collection> getCollections() {
         CloseableIterator<FeatureTypeInfo> featureTypes = catalog.list(FeatureTypeInfo.class, Filter.INCLUDE);
         return new Iterator<Collection>() {
-            
+
             Collection next;
 
             @Override
@@ -185,7 +185,7 @@ public class ContentsDocument {
                 if (next != null) {
                     return true;
                 }
-                
+
                 boolean hasNext = featureTypes.hasNext();
                 if (!hasNext) {
                     featureTypes.close();
@@ -195,7 +195,7 @@ public class ContentsDocument {
                         FeatureTypeInfo featureType = featureTypes.next();
                         next = mapToCollection(featureType);
                         return true;
-                    } catch(Exception e) {
+                    } catch (Exception e) {
                         featureTypes.close();
                         throw new ServiceException("Failed to iterate over the feature types in the catalog", e);
                     }
@@ -213,15 +213,15 @@ public class ContentsDocument {
 
     private Collection mapToCollection(FeatureTypeInfo featureType) {
         Collection collection = new Collection();
-        
+
         // basic info
         String collectionId = NCNameResourceCodec.encode(featureType);
         collection.setCollectionId(collectionId);
         collection.setTitle(featureType.getTitle());
         collection.setDescription(featureType.getDescription());
         ReferencedEnvelope bbox = featureType.getLatLonBoundingBox();
-        collection.setExtent(new double[] {bbox.getMinX(), bbox.getMinY(), bbox.getMaxX(), bbox.getMaxY()});
-        
+        collection.setExtent(new double[]{bbox.getMinX(), bbox.getMinY(), bbox.getMaxX(), bbox.getMaxY()});
+
         // links
         List<String> formats = DefaultWebFeatureService30.getAvailableFormats();
         String baseUrl = request.getBaseUrl();

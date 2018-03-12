@@ -30,8 +30,8 @@ import net.sf.json.JSONObject;
 
 /**
  * Convert Map to/from JSON.
- * @author jody
  *
+ * @author jody
  */
 @Component
 public class MapJSONConverter extends BaseMessageConverter<Map<?, ?>> {
@@ -73,9 +73,10 @@ public class MapJSONConverter extends BaseMessageConverter<Map<?, ?>> {
         obj.write(outWriter);
         outWriter.flush();
     }
-    
+
     /**
      * Convert to JSON representation.
+     *
      * @param obj
      * @return json representation
      */

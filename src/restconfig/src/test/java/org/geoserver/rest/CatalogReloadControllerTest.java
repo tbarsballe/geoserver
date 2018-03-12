@@ -35,35 +35,38 @@ public class CatalogReloadControllerTest extends GeoServerSystemTestSupport {
     public synchronized void testPutReload() throws Exception {
         reset();
         MockHttpServletResponse response =
-                putAsServletResponse(ROOT_PATH + "/reload", (String)null, null);
-        assertEquals( 200, response.getStatus() );
+                putAsServletResponse(ROOT_PATH + "/reload", (String) null, null);
+        assertEquals(200, response.getStatus());
         assertTrue(watcher.didReload);
         assertTrue(watcher.didReset);
     }
+
     @Test
     public synchronized void testPostReload() throws Exception {
         reset();
         MockHttpServletResponse response =
                 postAsServletResponse(ROOT_PATH + "/reload", "", null);
-        assertEquals( 200, response.getStatus() );
+        assertEquals(200, response.getStatus());
         assertTrue(watcher.didReload);
         assertTrue(watcher.didReset);
     }
+
     @Test
     public synchronized void testPutReset() throws Exception {
         reset();
         MockHttpServletResponse response =
-                putAsServletResponse(ROOT_PATH + "/reset", (String)null, null);
-        assertEquals( 200, response.getStatus() );
+                putAsServletResponse(ROOT_PATH + "/reset", (String) null, null);
+        assertEquals(200, response.getStatus());
         assertFalse(watcher.didReload);
         assertTrue(watcher.didReset);
     }
+
     @Test
     public synchronized void testPostReset() throws Exception {
         reset();
         MockHttpServletResponse response =
                 postAsServletResponse(ROOT_PATH + "/reset", "", null);
-        assertEquals( 200, response.getStatus() );
+        assertEquals(200, response.getStatus());
         assertFalse(watcher.didReload);
         assertTrue(watcher.didReset);
     }
@@ -84,9 +87,11 @@ public class CatalogReloadControllerTest extends GeoServerSystemTestSupport {
         }
 
         @Override
-        public void onDispose() { }
+        public void onDispose() {
+        }
 
         @Override
-        public void beforeReload() { }
+        public void beforeReload() {
+        }
     }
 }

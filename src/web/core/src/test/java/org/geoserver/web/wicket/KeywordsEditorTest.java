@@ -40,18 +40,18 @@ public class KeywordsEditorTest {
             }
         }));
     }
-    
+
     @Test
     public void testRemove() throws Exception {
         // WicketHierarchyPrinter.print(tester.getLastRenderedPage(), true, false);
         FormTester ft = tester.newFormTester("form");
-        ft.selectMultiple("panel:keywords", new int[] {0, 2});
+        ft.selectMultiple("panel:keywords", new int[]{0, 2});
         tester.executeAjaxEvent("form:panel:removeKeywords", "click");
-        
+
         assertEquals(1, keywords.size());
         assertEquals("two", keywords.get(0).getValue());
     }
-    
+
     @Test
     public void testAdd() throws Exception {
         // WicketHierarchyPrinter.print(tester.getLastRenderedPage(), true, false);
@@ -60,7 +60,7 @@ public class KeywordsEditorTest {
         ft.setValue("panel:lang", "en");
         ft.setValue("panel:vocab", "foobar");
         tester.executeAjaxEvent("form:panel:addKeyword", "click");
-        
+
         assertEquals(4, keywords.size());
         assertEquals("four", keywords.get(3).getValue());
         assertEquals("en", keywords.get(3).getLanguage());

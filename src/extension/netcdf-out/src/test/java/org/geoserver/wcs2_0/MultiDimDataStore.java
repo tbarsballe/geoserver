@@ -52,17 +52,16 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * 
  * A simple datastore containing 2 granules
- * 
- * @author Jeroen Dries jeroen.dries@vito.be
  *
+ * @author Jeroen Dries jeroen.dries@vito.be
  */
 public class MultiDimDataStore extends ContentDataStore {
 
     private static final Logger LOGGER = org.geotools.util.logging.Logging.getLogger("org.geoserver.wcs2_0");
 
     private static final CoordinateReferenceSystem EPSG_4326;
+
     static {
         CoordinateReferenceSystem crs = DefaultGeographicCRS.WGS84;
         try {
@@ -74,7 +73,7 @@ public class MultiDimDataStore extends ContentDataStore {
     }
 
     private static final List<String> BAND_LIST = Arrays.asList("NDVI", "BLUE/TOC", "SWIR/VAA", "NIR/TOC", "RED/TOC",
-       "SWIR/TOC", "VNIR/VAA");
+            "SWIR/TOC", "VNIR/VAA");
 
     /**
      * The 'dim_' prefix is mandatory as per the WMS spec, and also required by
@@ -83,13 +82,14 @@ public class MultiDimDataStore extends ContentDataStore {
     private static final String BAND_DIMENSION = "BANDS";
 
     private static final SimpleDateFormat PROBA_DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
+
     static {
         PROBA_DATE_FORMAT.setTimeZone(TimeZone.getTimeZone("UTC"));
     }
 
     private static final Date THE_DATE = new Date();
     private static final ReferencedEnvelope TOTAL_BOUNDS = new ReferencedEnvelope(10.000, 55, 40, 70,
-       EPSG_4326);
+            EPSG_4326);
     private static final String FILE_LOCATION_ATTRIBUTE = "fileLocation";
     private static final String LABEL_ATTRIBUTE = "label";
     private static final String GEOMETRY_ATTRIBUTE = "geometry";
@@ -100,7 +100,7 @@ public class MultiDimDataStore extends ContentDataStore {
     private SimpleFeature feature1;
 
     private SimpleFeature feature2;
-   
+
 
     MultiDimDataStore(String parentLocation) {
         super();
@@ -150,7 +150,7 @@ public class MultiDimDataStore extends ContentDataStore {
         builder.add(FILE_LOCATION_ATTRIBUTE, String.class);
         builder.add(TIME_ATTRIBUTE, Date.class);
         builder.add(BAND_DIMENSION, String.class);
-        builder.add(LABEL_ATTRIBUTE,String.class);
+        builder.add(LABEL_ATTRIBUTE, String.class);
         return builder.buildFeatureType();
     }
 
@@ -162,15 +162,15 @@ public class MultiDimDataStore extends ContentDataStore {
                 queryCapabilities = new QueryCapabilities() {
                     @Override
                     public boolean supportsSorting(SortBy[] sortAttributes) {
-                    if (sortAttributes != null && sortAttributes.length == 1) {
-                        if (sortAttributes[0].getPropertyName().getPropertyName().equals("timestamp")) {
-                        // sort by timestamp happens to be what we do by
-                        // default
-                        // TODO does the PDF support a sort order?
-                        return true;
+                        if (sortAttributes != null && sortAttributes.length == 1) {
+                            if (sortAttributes[0].getPropertyName().getPropertyName().equals("timestamp")) {
+                                // sort by timestamp happens to be what we do by
+                                // default
+                                // TODO does the PDF support a sort order?
+                                return true;
+                            }
                         }
-                    }
-                    return super.supportsSorting(sortAttributes);
+                        return super.supportsSorting(sortAttributes);
                     }
                 };
             }
@@ -251,7 +251,7 @@ public class MultiDimDataStore extends ContentDataStore {
                         public Object visit(Intersects filter, Object data) {
                             Envelope2D envelope = (Envelope2D) data;
 
-                            Geometry polygon= ((Geometry)((Literal)filter.getExpression2()).getValue());
+                            Geometry polygon = ((Geometry) ((Literal) filter.getExpression2()).getValue());
                             org.opengis.geometry.Geometry polygon2 = JTSUtils.jtsToGo1(polygon, envelope.getCoordinateReferenceSystem());
                             envelope.setBounds(new Envelope2D(polygon2.getEnvelope()));
                             return super.visit(filter, data);
@@ -274,7 +274,7 @@ public class MultiDimDataStore extends ContentDataStore {
                                 return super.visit(filter, data);
                             }
                             if (prop.getPropertyName().equals(TIME_ATTRIBUTE)) {
-                                if(lit.getValue()!=null){
+                                if (lit.getValue() != null) {
                                     beginDate.setTime(((Date) lit.getValue()).getTime());
                                 }
                             }
@@ -298,7 +298,7 @@ public class MultiDimDataStore extends ContentDataStore {
                                 return super.visit(filter, data);
                             }
                             if (prop.getPropertyName().equals(TIME_ATTRIBUTE)) {
-                                if(lit.getValue()!=null){
+                                if (lit.getValue() != null) {
                                     endDate.setTime(((Date) lit.getValue()).getTime());
                                 }
                             }
@@ -332,11 +332,11 @@ public class MultiDimDataStore extends ContentDataStore {
                             PropertyName prop = (PropertyName) filter.getExpression();
 
                             if (prop.getPropertyName().equals(TIME_ATTRIBUTE)) {
-                                beginDate.setTime(((Date) ((Literal)filter.getLowerBoundary()).getValue()).getTime());
-                                endDate.setTime(((Date) ((Literal)filter.getUpperBoundary()).getValue()).getTime());
+                                beginDate.setTime(((Date) ((Literal) filter.getLowerBoundary()).getValue()).getTime());
+                                endDate.setTime(((Date) ((Literal) filter.getUpperBoundary()).getValue()).getTime());
                             }
                             if (prop.getPropertyName().equals(BAND_DIMENSION)) {
-                                String bands = (String) ((Literal)filter.getLowerBoundary()).getValue();
+                                String bands = (String) ((Literal) filter.getLowerBoundary()).getValue();
                                 String[] singleBands = bands.split(",");
                                 band.addAll(Arrays.asList(singleBands));
                             }
@@ -344,16 +344,16 @@ public class MultiDimDataStore extends ContentDataStore {
                         }
 
                     };
-                    Envelope2D bbox = new Envelope2D(DefaultGeographicCRS.WGS84,-180,-90,360,180);
+                    Envelope2D bbox = new Envelope2D(DefaultGeographicCRS.WGS84, -180, -90, 360, 180);
 
                     query.getFilter().accept(filterVisitor, bbox);
                     LOGGER.fine("Mosaic query on bbox: " + bbox);
 
                     //very rudimentary filtering, for unit test only!
-                    if(bbox.getMaxX()<=35.){
+                    if (bbox.getMaxX() <= 35.) {
                         return wrapAndCache(Collections.singletonList(feature1));
-                    }else{
-                        return wrapAndCache(Arrays.asList(feature1,feature2));
+                    } else {
+                        return wrapAndCache(Arrays.asList(feature1, feature2));
                     }
 
                 } catch (Exception e) {
@@ -369,11 +369,11 @@ public class MultiDimDataStore extends ContentDataStore {
             }
 
             public ContentDataStore getDataStore() {
-            return MultiDimDataStore.this;
+                return MultiDimDataStore.this;
             }
 
             public String toString() {
-            return "AbstractDataStore.AbstractFeatureSource(" + TYPENAME + ")";
+                return "AbstractDataStore.AbstractFeatureSource(" + TYPENAME + ")";
             }
 
         };

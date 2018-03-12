@@ -65,7 +65,6 @@ public class GetFeatureKvpRequestReaderTest extends GeoServerSystemTestSupport {
 
     /**
      * Same as GEOS-1875, but let's check without bbox and without name prefix
-     * 
      */
     @SuppressWarnings("unchecked")
     @Test
@@ -89,7 +88,6 @@ public class GetFeatureKvpRequestReaderTest extends GeoServerSystemTestSupport {
 
     /**
      * See https://osgeo-org.atlassian.net/browse/GEOS-1875
-     * 
      */
     @SuppressWarnings("unchecked")
     @Test
@@ -119,7 +117,6 @@ public class GetFeatureKvpRequestReaderTest extends GeoServerSystemTestSupport {
 
     /**
      * See https://osgeo-org.atlassian.net/browse/GEOS-1875
-     * 
      */
     @SuppressWarnings("unchecked")
     @Test
@@ -145,7 +142,7 @@ public class GetFeatureKvpRequestReaderTest extends GeoServerSystemTestSupport {
         assertEquals(1, typeNames.size());
         assertEquals(qName, typeNames.get(0));
     }
-    
+
     @Test
     public void testViewParams() throws Exception {
         Map<String, String> raw = new HashMap<String, String>();
@@ -167,7 +164,7 @@ public class GetFeatureKvpRequestReaderTest extends GeoServerSystemTestSupport {
         assertEquals("WHERE PERSONS > 1000000", vp1.get("where"));
         assertEquals("ABCD", vp1.get("str"));
     }
-    
+
     @Test
     public void testViewParamsMulti() throws Exception {
         Map<String, String> raw = new HashMap<String, String>();
@@ -191,7 +188,7 @@ public class GetFeatureKvpRequestReaderTest extends GeoServerSystemTestSupport {
         assertEquals("WHERE PERSONS > 10", vp2.get("where"));
         assertEquals("FOO", vp2.get("str"));
     }
-    
+
     @Test
     public void testViewParamsFanOut() throws Exception {
         Map<String, String> raw = new HashMap<String, String>();

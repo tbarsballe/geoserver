@@ -8,9 +8,9 @@ package org.geoserver.csw;
 
 /**
  * Represents the CSW/ebRIM GetRepositoryItem request
- * 
+ *
  * @author Andrea Aime - GeoSolutions
- * */
+ */
 public class GetRepositoryItemType {
 
     String service;
@@ -21,8 +21,6 @@ public class GetRepositoryItemType {
 
     /**
      * The OGC service (should be "CSW")
-     * 
-     *
      */
     public String getService() {
         return service;
@@ -34,8 +32,6 @@ public class GetRepositoryItemType {
 
     /**
      * The service version (for example "2.0.2")
-     * 
-     *
      */
     public String getVersion() {
         return version;
@@ -47,8 +43,6 @@ public class GetRepositoryItemType {
 
     /**
      * The repository item id
-     * 
-     *
      */
     public String getId() {
         return id;

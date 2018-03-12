@@ -14,7 +14,7 @@ import org.vfny.geoserver.wcs.WcsException.WcsExceptionCode;
 
 /**
  * Parses the grid offsets into a double[]
- * 
+ *
  * @author Andrea Aime
  */
 public class GridOffsetsKvpParser extends KvpParser {

@@ -67,12 +67,12 @@ import net.sf.json.JSONObject;
 public class ImportJSONReader {
 
     Importer importer;
-    
+
     @Autowired
-    public ImportJSONReader(Importer importer)  {
+    public ImportJSONReader(Importer importer) {
         this.importer = importer;
     }
-    
+
 //    public ImportContextJSONConverterReader(Importer importer, InputStream in) throws IOException {
 //        super(MediaType.APPLICATION_JSON,AbstractCatalogController.TEXT_JSON);
 //        this.importer = importer;
@@ -84,7 +84,7 @@ public class ImportJSONReader {
 //        return (ImportContext.class.isAssignableFrom(clazz) || ImportTask.class.isAssignableFrom(clazz) ||
 //                ImportTransform.class.isAssignableFrom(clazz) || TransformChain.class.isAssignableFrom(clazz));
 //    }
-    
+
 //    @Override
 //    protected boolean canWrite(MediaType mediaType) {
 //        return false; // write not supported
@@ -160,11 +160,10 @@ public class ImportJSONReader {
             r.setSRS(json.getString("srs"));
             try {
                 r.setNativeCRS(CRS.decode(json.getString("srs")));
-            }
-            catch(Exception e) {
+            } catch (Exception e) {
                 //should fail later
             }
-            
+
         }
         if (json.has("bbox")) {
             r.setNativeBoundingBox(bbox(json.getJSONObject("bbox")));
@@ -182,7 +181,7 @@ public class ImportJSONReader {
         LayerInfo l = f.createLayer();
         l.setResource(r);
         //l.setName(); don't need to this, layer.name just forwards to name of underlying resource
-        
+
         if (json.has("style")) {
             JSONObject sobj = new JSONObject();
             sobj.put("defaultStyle", json.get("style"));
@@ -193,11 +192,10 @@ public class ImportJSONReader {
             LayerInfo tmp = fromJSON(lobj, LayerInfo.class);
             if (tmp.getDefaultStyle() != null) {
                 l.setDefaultStyle(tmp.getDefaultStyle());
-            }
-            else {
+            } else {
                 sobj = new JSONObject();
                 sobj.put("style", json.get("style"));
-                
+
                 l.setDefaultStyle(fromJSON(sobj, StyleInfo.class));
             }
 
@@ -209,10 +207,11 @@ public class ImportJSONReader {
         JSONObject json = parse(inputStream);
         return task(json);
     }
+
     public ImportTask task(JSONObject json) throws IOException {
 
         if (json.has("task")) {
-            json =  json.getJSONObject("task");
+            json = json.getJSONObject("task");
         }
 
         ImportTask task = new ImportTask();
@@ -231,8 +230,7 @@ public class ImportJSONReader {
         JSONObject data = null;
         if (json.has("data")) {
             data = json.getJSONObject("data");
-        }
-        else if (json.has("source")) { // backward compatible check for source
+        } else if (json.has("source")) { // backward compatible check for source
             data = json.getJSONObject("source");
         }
 
@@ -249,7 +247,7 @@ public class ImportJSONReader {
             task.setStore(fromJSON(json.getJSONObject("target"), StoreInfo.class));
         }
 
-        LayerInfo layer = null; 
+        LayerInfo layer = null;
         if (json.has("layer")) {
             layer = layer(json.getJSONObject("layer"));
         } else {
@@ -292,10 +290,12 @@ public class ImportJSONReader {
     public ImportTransform transform(String json) throws IOException {
         return transform(IOUtils.toInputStream(json));
     }
+
     public ImportTransform transform(InputStream inputStream) throws IOException {
         JSONObject json = parse(inputStream);
         return transform(json);
     }
+
     public ImportTransform transform(JSONObject json) throws IOException {
         ImportTransform transform;
         String type = json.getString("type");
@@ -308,7 +308,7 @@ public class ImportJSONReader {
         } else if ("AttributeRemapTransform".equalsIgnoreCase(type)) {
             Class clazz;
             try {
-                clazz = Class.forName( json.getString("target") );
+                clazz = Class.forName(json.getString("target"));
             } catch (ClassNotFoundException cnfe) {
                 throw new ValidationException("unable to locate target class " + json.getString("target"));
             }
@@ -316,7 +316,7 @@ public class ImportJSONReader {
         } else if ("AttributeComputeTransform".equalsIgnoreCase(type)) {
             Class clazz;
             try {
-                clazz = Class.forName( json.getString("fieldType") );
+                clazz = Class.forName(json.getString("fieldType"));
             } catch (ClassNotFoundException cnfe) {
                 throw new ValidationException("unable to locate target class " + json.getString("type"));
             }
@@ -329,14 +329,13 @@ public class ImportJSONReader {
             String latField = json.getString("latField");
             String lngField = json.getString("lngField");
             transform = new AttributesToPointGeometryTransform(latField, lngField);
-        } else if ("ReprojectTransform".equalsIgnoreCase(type)){
+        } else if ("ReprojectTransform".equalsIgnoreCase(type)) {
             CoordinateReferenceSystem source = json.has("source") ? crs(json.getString("source")) : null;
             CoordinateReferenceSystem target = json.has("target") ? crs(json.getString("target")) : null;
 
             try {
                 transform = new ReprojectTransform(source, target);
-            } 
-            catch(Exception e) {
+            } catch (Exception e) {
                 throw new ValidationException("Error parsing reproject transform", e);
             }
         } else if ("GdalTranslateTransform".equalsIgnoreCase(type)) {
@@ -378,23 +377,17 @@ public class ImportJSONReader {
 
         if ("file".equalsIgnoreCase(type)) {
             return file(json);
-        }
-        else if("directory".equalsIgnoreCase(type)) {
+        } else if ("directory".equalsIgnoreCase(type)) {
             return directory(json);
-        }
-        else if("mosaic".equalsIgnoreCase(type)) {
+        } else if ("mosaic".equalsIgnoreCase(type)) {
             return mosaic(json);
-        }
-        else if("archive".equalsIgnoreCase(type)) {
+        } else if ("archive".equalsIgnoreCase(type)) {
             return archive(json);
-        }
-        else if ("database".equalsIgnoreCase(type)) {
+        } else if ("database".equalsIgnoreCase(type)) {
             return database(json);
-        }
-        else if ("remote".equalsIgnoreCase(type)) {
+        } else if ("remote".equalsIgnoreCase(type)) {
             return remote(json);
-        }
-        else {
+        } else {
             throw new IllegalArgumentException("Unknown data type: " + type);
         }
     }
@@ -405,8 +398,7 @@ public class ImportJSONReader {
             String file = json.getString("file");
             return FileData.createFromFile(new File(file));
             //return new FileData(new File(file));
-        }
-        else {
+        } else {
             throw new IOException(
                     "Could not find 'file' entry in data, mandatory for file type data");
         }
@@ -433,8 +425,8 @@ public class ImportJSONReader {
     }
 
     Mosaic mosaic(JSONObject json) throws IOException {
-        Mosaic m = new Mosaic(json.has("location") ?  new File(json.getString("location")) : 
-            Directory.createNew(importer.getUploadRoot()).getFile());
+        Mosaic m = new Mosaic(json.has("location") ? new File(json.getString("location")) :
+                Directory.createNew(importer.getUploadRoot()).getFile());
         if (json.has("name")) {
             m.setName(json.getString("name"));
         }
@@ -442,7 +434,7 @@ public class ImportJSONReader {
             JSONObject time = json.getJSONObject("time");
             if (!time.containsKey("mode")) {
                 throw new IllegalArgumentException("time object must specific mode property as " +
-                    "one of " + TimeMode.values());
+                        "one of " + TimeMode.values());
             }
 
             m.setTimeMode(TimeMode.valueOf(time.getString("mode").toUpperCase()));
@@ -458,8 +450,7 @@ public class ImportJSONReader {
     public Directory directory(JSONObject json) throws IOException {
         if (json.has("location")) {
             return new Directory(new File(json.getString("location")));
-        }
-        else {
+        } else {
             return Directory.createNew(importer.getUploadRoot());
         }
     }
@@ -467,16 +458,16 @@ public class ImportJSONReader {
     Database database(JSONObject json) throws IOException {
         throw new UnsupportedOperationException("TODO: implement");
     }
-    
+
     ReferencedEnvelope bbox(JSONObject json) {
         CoordinateReferenceSystem crs = null;
         if (json.has("crs")) {
-            crs = (CoordinateReferenceSystem) 
-                new XStreamPersister.CRSConverter().fromString(json.getString("crs"));
+            crs = (CoordinateReferenceSystem)
+                    new XStreamPersister.CRSConverter().fromString(json.getString("crs"));
         }
 
-        return new ReferencedEnvelope(json.getDouble("minx"), json.getDouble("maxx"), 
-            json.getDouble("miny"), json.getDouble("maxy"), crs);
+        return new ReferencedEnvelope(json.getDouble("minx"), json.getDouble("maxx"),
+                json.getDouble("miny"), json.getDouble("maxy"), crs);
     }
 
     CoordinateReferenceSystem crs(String srs) {

@@ -49,7 +49,7 @@ import java.util.logging.Level;
 @SuppressWarnings("serial")
 public class WFSAdminPage extends BaseServiceAdminPage<WFSInfo> {
 
-    
+
     public WFSAdminPage() {
         super();
     }
@@ -65,38 +65,38 @@ public class WFSAdminPage extends BaseServiceAdminPage<WFSInfo> {
     protected Class<WFSInfo> getServiceClass() {
         return WFSInfo.class;
     }
-    
-    @SuppressWarnings({ "rawtypes", "unchecked" })
+
+    @SuppressWarnings({"rawtypes", "unchecked"})
     protected void build(final IModel info, Form form) {
         // max features
-        form.add( new TextField<Integer>( "maxFeatures" ).add(RangeValidator.minimum(0)) );
-        form.add( new TextField<Integer>("maxNumberOfFeaturesForPreview") );
-        form.add( new CheckBox("featureBounding") );
-        form.add( new CheckBox("hitsIgnoreMaxFeatures"));
-        
+        form.add(new TextField<Integer>("maxFeatures").add(RangeValidator.minimum(0)));
+        form.add(new TextField<Integer>("maxNumberOfFeaturesForPreview"));
+        form.add(new CheckBox("featureBounding"));
+        form.add(new CheckBox("hitsIgnoreMaxFeatures"));
+
         //service level
-        RadioGroup sl = new RadioGroup( "serviceLevel" );
-        form.add( sl );
-        sl.add( new Radio( "basic", new Model( WFSInfo.ServiceLevel.BASIC ) ) );
-        sl.add( new Radio( "transactional", new Model( WFSInfo.ServiceLevel.TRANSACTIONAL  ) ) );
-        sl.add( new Radio( "complete", new Model( WFSInfo.ServiceLevel.COMPLETE ) ) );
-        
-        IModel gml2Model = new LoadableDetachableModel(){
-            public Object load(){
-                return ((WFSInfo)info.getObject()).getGML().get(WFSInfo.Version.V_10);
+        RadioGroup sl = new RadioGroup("serviceLevel");
+        form.add(sl);
+        sl.add(new Radio("basic", new Model(WFSInfo.ServiceLevel.BASIC)));
+        sl.add(new Radio("transactional", new Model(WFSInfo.ServiceLevel.TRANSACTIONAL)));
+        sl.add(new Radio("complete", new Model(WFSInfo.ServiceLevel.COMPLETE)));
+
+        IModel gml2Model = new LoadableDetachableModel() {
+            public Object load() {
+                return ((WFSInfo) info.getObject()).getGML().get(WFSInfo.Version.V_10);
             }
         };
 
-        IModel gml3Model = new LoadableDetachableModel(){
-            public Object load(){
-                return ((WFSInfo)info.getObject()).getGML().get(WFSInfo.Version.V_11);
+        IModel gml3Model = new LoadableDetachableModel() {
+            public Object load() {
+                return ((WFSInfo) info.getObject()).getGML().get(WFSInfo.Version.V_11);
             }
         };
 
         IModel gml32Model = new LoadableDetachableModel() {
             @Override
             protected Object load() {
-                return ((WFSInfo)info.getObject()).getGML().get(WFSInfo.Version.V_20);
+                return ((WFSInfo) info.getObject()).getGML().get(WFSInfo.Version.V_20);
             }
         };
 
@@ -108,14 +108,14 @@ public class WFSAdminPage extends BaseServiceAdminPage<WFSInfo> {
                 "text/xml; subtype=gml/3.2",
                 "text/xml"));
 
-        form.add( new CheckBox("canonicalSchemaLocation") );
-        
+        form.add(new CheckBox("canonicalSchemaLocation"));
+
         // Encode response with one featureMembers element or multiple featureMember elements
         RadioGroup eo = new RadioGroup("encodeFeatureMember");
         form.add(eo);
         eo.add(new Radio("featureMembers", new Model(Boolean.FALSE)));
         eo.add(new Radio("featureMember", new Model(Boolean.TRUE)));
-        
+
         PropertyModel metadataModel = new PropertyModel(info, "metadata");
         IModel<Boolean> prjFormatModel = new MapModel(metadataModel,
                 ShapeZipOutputFormat.SHAPE_ZIP_DEFAULT_PRJ_IS_ESRI);
@@ -139,32 +139,32 @@ public class WFSAdminPage extends BaseServiceAdminPage<WFSInfo> {
         } catch (Exception e) {
             LOGGER.log(Level.INFO, e.getMessage(), e);
         }
-        
+
         // other srs list
         TextArea srsList = new SRSListTextArea("srs", LiveCollectionModel.list(new PropertyModel(info, "sRS")));
         form.add(srsList);
         form.add(new AjaxLink("otherSRSHelp") {
             @Override
             public void onClick(AjaxRequestTarget target) {
-                dialog.showInfo(target, 
-                    new StringResourceModel("otherSRS", WFSAdminPage.this, null), 
-                    new StringResourceModel("otherSRS.message",WFSAdminPage.this, null));
+                dialog.showInfo(target,
+                        new StringResourceModel("otherSRS", WFSAdminPage.this, null),
+                        new StringResourceModel("otherSRS.message", WFSAdminPage.this, null));
             }
         });
 
     }
-    
+
     static class GMLPanel extends Panel {
 
-        public GMLPanel(String id, IModel gmlModel, String ... mimeTypes) {
+        public GMLPanel(String id, IModel gmlModel, String... mimeTypes) {
             super(id, new CompoundPropertyModel(gmlModel));
-            
+
             //srsNameStyle
-            List<GMLInfo.SrsNameStyle> choices = 
-                Arrays.asList(SrsNameStyle.values());
+            List<GMLInfo.SrsNameStyle> choices =
+                    Arrays.asList(SrsNameStyle.values());
             DropDownChoice srsNameStyle = new DropDownChoice("srsNameStyle", choices, new EnumChoiceRenderer());
             add(srsNameStyle);
-            
+
             add(new CheckBox("overrideGMLAttributes"));
 
             // GML MIME type overriding section
@@ -219,10 +219,10 @@ public class WFSAdminPage extends BaseServiceAdminPage<WFSInfo> {
             checkBoxLabel.setVisible(mimesTypesProvided);
             add(checkBoxLabel);
         }
-        
+
     }
 
-    protected String getServiceName(){
-       return "WFS";
+    protected String getServiceName() {
+        return "WFS";
     }
 }

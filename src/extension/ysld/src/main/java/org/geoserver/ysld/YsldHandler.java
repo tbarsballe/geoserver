@@ -37,8 +37,9 @@ public class YsldHandler extends StyleHandler {
 
     public static final String FORMAT = "ysld";
     public static final String MIMETYPE = "application/vnd.geoserver.ysld+yaml";
-    
+
     static final Map<StyleType, String> TEMPLATES = new HashMap<StyleType, String>();
+
     static {
         try {
             TEMPLATES.put(StyleType.POINT, IOUtils.toString(YsldHandler.class
@@ -84,7 +85,7 @@ public class YsldHandler extends StyleHandler {
     public String getCodeMirrorEditMode() {
         return "yaml";
     }
-    
+
     @Override
     public String getStyle(StyleType type, Color color, String colorName, String layerName) {
         String template = TEMPLATES.get(type);
@@ -93,19 +94,19 @@ public class YsldHandler extends StyleHandler {
         return template.replace("${colorName}", colorName).replace(
                 "${colorCode}", "#" + colorCode).replace("${layerName}", layerName);
     }
-    
+
     ZoomContextFinder zoomFinder;
     UomMapper uomMapper;
-    
+
     @Override
     public StyledLayerDescriptor parse(Object input, Version version, @Nullable ResourceLocator resourceLocator,
-        EntityResolver entityResolver) throws IOException {
-        
+                                       EntityResolver entityResolver) throws IOException {
+
         if (resourceLocator == null && input instanceof File) {
             resourceLocator = new DefaultResourceLocator();
-            ((DefaultResourceLocator)resourceLocator).setSourceUrl(URLs.fileToUrl((File) input));
+            ((DefaultResourceLocator) resourceLocator).setSourceUrl(URLs.fileToUrl((File) input));
         }
-        
+
         return Ysld.parse(toReader(input), Collections.singletonList(zoomFinder), resourceLocator, uomMapper);
     }
 
@@ -114,7 +115,7 @@ public class YsldHandler extends StyleHandler {
         Ysld.encode(sld, output, uomMapper);
     }
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @SuppressWarnings({"rawtypes", "unchecked"})
     @Override
     public List<Exception> validate(Object input, Version version, EntityResolver entityResolver) throws IOException {
         return (List) Ysld.validate(toReader(input), Collections.singletonList(zoomFinder), uomMapper);

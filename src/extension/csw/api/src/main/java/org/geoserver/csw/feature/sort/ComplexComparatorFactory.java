@@ -15,23 +15,21 @@ import org.opengis.filter.sort.SortOrder;
 
 /**
  * Builds comparators against complex features based on {@link SortBy} definitions
- * 
+ *
  * @author Andrea Aime - GeoSolutions
- * 
  */
 public class ComplexComparatorFactory {
 
     /**
      * Builds a composite comparator matching the specified sortBy array
-     *  
+     * <p>
      * <ul>
      * <li>{@link SortBy#NATURAL_ORDER}: sort by feature id (acceding)</li>
      * <li>{@link SortBy#REVERSE_ORDER}: sort by feature id (descending)</li>
      * <li>sort by supplied property name, and sort order</li>
      * </ul>
-     * 
-     * @param sortBy sort order (defined in order of precidence)
      *
+     * @param sortBy sort order (defined in order of precidence)
      */
     public static Comparator<Feature> buildComparator(SortBy... sortBy) {
         if (sortBy.length == 0) {
@@ -54,13 +52,13 @@ public class ComplexComparatorFactory {
 
     /**
      * Builds a single comparator based on the sortBy specification.
-     * 
+     * <p>
      * <ul>
      * <li>{@link SortBy#NATURAL_ORDER}: sort by feature id (acceding)</li>
      * <li>{@link SortBy#REVERSE_ORDER}: sort by feature id (descending)</li>
      * <li>sort by supplied property name, and sort order</li>
      * </ul>
-     * 
+     *
      * @param sortBy indication of sort order
      * @return Comparator used to determine sort order
      */

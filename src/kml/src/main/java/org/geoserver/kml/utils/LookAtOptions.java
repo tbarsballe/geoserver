@@ -39,14 +39,13 @@ import de.micromata.opengis.kml.v_2_2_0.AltitudeMode;
  * All of them are optional, and {@code null} will be returned by it's matching accessor method if
  * not provided. LOOKATBBOX and LOOKATGEOM are mutually exclusive, and LOOKATBBOX takes precedence
  * over LOOKATGEOM.
- * 
+ * <p>
  * Both LOOKATBBOX and LOOKATGEOM allow to define the area where the KML lookAt should be pointing
  * at. If none is provided, GeoServer will use the aggregated lat lon bounding box of all the
  * requested layers as it normally does.
  * </p>
- * 
+ *
  * @author Gabriel Roldan
- * 
  */
 public class LookAtOptions {
 
@@ -88,7 +87,7 @@ public class LookAtOptions {
     /**
      * Creates a new KMLLookAt object by parsing the vendor specific parameters out of the provided
      * map, using the properties defined in the class javadoc above as Map keys.
-     * 
+     *
      * @param options
      */
     public LookAtOptions(final Map<String, Object> options) {

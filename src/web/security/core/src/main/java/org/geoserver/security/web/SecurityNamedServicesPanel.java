@@ -32,16 +32,16 @@ import org.geoserver.web.wicket.SimpleAjaxLink;
 /**
  * Base class for listing all instances of a class of named security service type.
  * <p>
- * This base panel provides a table of the configuration instances, along with "add new" and 
- * "remove selected" functionality. Subclasses need to provide the specific type of 
+ * This base panel provides a table of the configuration instances, along with "add new" and
+ * "remove selected" functionality. Subclasses need to provide the specific type of
  * {@link SecurityNamedServiceProvider} for the service class, as well as implement some additional
  * methods for validating the removal of configuration instances.
- * </p> 
- * @author Justin Deoliveira, OpenGeo
+ * </p>
  *
+ * @author Justin Deoliveira, OpenGeo
  */
-public abstract class SecurityNamedServicesPanel<T extends SecurityNamedServiceConfig> 
-    extends Panel{
+public abstract class SecurityNamedServicesPanel<T extends SecurityNamedServiceConfig>
+        extends Panel {
 
     SecurityNamedServiceTablePanel<T> tablePanel;
     AjaxLink removeLink;
@@ -56,8 +56,8 @@ public abstract class SecurityNamedServicesPanel<T extends SecurityNamedServiceC
             @Override
             public void onClick(AjaxRequestTarget target) {
                 //create a new config class and instantiate the page
-                SecurityNamedServiceNewPage newPage = 
-                    new SecurityNamedServiceNewPage(getServiceClass());
+                SecurityNamedServiceNewPage newPage =
+                        new SecurityNamedServiceNewPage(getServiceClass());
                 newPage.setReturnPage(getPage());
                 setResponsePage(newPage);
             }
@@ -84,6 +84,7 @@ public abstract class SecurityNamedServicesPanel<T extends SecurityNamedServiceC
                         protected Component getContents(String id) {
                             return new ConfirmRemovalNamedServicePanel(id, tablePanel.getSelection());
                         }
+
                         @Override
                         protected boolean onSubmit(AjaxRequestTarget target, Component contents) {
                             for (T config : tablePanel.getSelection()) {
@@ -105,7 +106,7 @@ public abstract class SecurityNamedServicesPanel<T extends SecurityNamedServiceC
                         }
                     });
                 }
-                
+
                 //render any feedback
                 target.add(feedbackPanel);
             }
@@ -124,7 +125,7 @@ public abstract class SecurityNamedServicesPanel<T extends SecurityNamedServiceC
         tablePanel.getTopPager().setVisible(false);
 
         add(tablePanel);
-        
+
         add(feedbackPanel = new FeedbackPanel("feedback"));
         feedbackPanel.setOutputMarkupId(true);
 
@@ -133,7 +134,7 @@ public abstract class SecurityNamedServicesPanel<T extends SecurityNamedServiceC
 
     /**
      * accessors for security manager
-    */
+     */
     public GeoServerSecurityManager getSecurityManager() {
         return GeoServerApplication.get().getSecurityManager();
     }
@@ -151,7 +152,7 @@ public abstract class SecurityNamedServicesPanel<T extends SecurityNamedServiceC
     protected abstract Class getServiceClass();
 
     /**
-     * Do pre validation before a configuration object is removed. 
+     * Do pre validation before a configuration object is removed.
      */
     protected abstract void validateRemoveConfig(T config) throws SecurityConfigException;
 
@@ -160,7 +161,7 @@ public abstract class SecurityNamedServicesPanel<T extends SecurityNamedServiceC
      */
     protected abstract void removeConfig(T config) throws Exception;
 
-    
+
     SecurityNamedServicePanelInfo lookupPageInfo(SecurityNamedServiceConfig config) {
         Class serviceClass = null;
         try {
@@ -170,21 +171,21 @@ public abstract class SecurityNamedServicesPanel<T extends SecurityNamedServiceC
         }
 
         List<SecurityNamedServicePanelInfo> pageInfos = new ArrayList();
-        for (SecurityNamedServicePanelInfo pageInfo : 
-            GeoServerApplication.get().getBeansOfType(SecurityNamedServicePanelInfo.class)) {
+        for (SecurityNamedServicePanelInfo pageInfo :
+                GeoServerApplication.get().getBeansOfType(SecurityNamedServicePanelInfo.class)) {
             if (pageInfo.getServiceClass().isAssignableFrom(serviceClass)) {
                 pageInfos.add(pageInfo);
             }
         }
 
         if (pageInfos.isEmpty()) {
-            throw new RuntimeException("Unable to find page info for service config: " + config 
-                + ", service class: " + serviceClass);
+            throw new RuntimeException("Unable to find page info for service config: " + config
+                    + ", service class: " + serviceClass);
         }
         if (pageInfos.size() > 1) {
             //filter by strict equals
             List<SecurityNamedServicePanelInfo> l = new ArrayList(pageInfos);
-            for (Iterator<SecurityNamedServicePanelInfo> it = l.iterator(); it.hasNext();) {
+            for (Iterator<SecurityNamedServicePanelInfo> it = l.iterator(); it.hasNext(); ) {
                 if (!it.next().getServiceClass().equals(serviceClass)) {
                     it.remove();
                 }
@@ -193,8 +194,8 @@ public abstract class SecurityNamedServicesPanel<T extends SecurityNamedServiceC
                 //filter down to one match
                 return l.get(0);
             }
-            throw new RuntimeException("Found multiple page infos for service config: " + config 
-                + ", service class: " + serviceClass);
+            throw new RuntimeException("Found multiple page infos for service config: " + config
+                    + ", service class: " + serviceClass);
         }
 
         //found just one
@@ -202,61 +203,63 @@ public abstract class SecurityNamedServicesPanel<T extends SecurityNamedServiceC
     }
 
     void goToPage(SecurityNamedServicePanelInfo pageInfo, IModel model) {
-      //instantiate the page
+        //instantiate the page
         try {
             AbstractSecurityPage editPage = (AbstractSecurityPage) pageInfo
-                .getComponentClass().getConstructor(IModel.class).newInstance(model);
+                    .getComponentClass().getConstructor(IModel.class).newInstance(model);
             editPage.setReturnPage(getPage());
             setResponsePage(editPage);
         } catch (Exception e) {
             throw new RuntimeException(
-                "Unable to create page for page info: " + pageInfo, e);
+                    "Unable to create page for page info: " + pageInfo, e);
         }
     }
 
-    class SecurityNamedServiceTablePanel<T extends SecurityNamedServiceConfig> 
-        extends GeoServerTablePanel<T> {
-    
+    class SecurityNamedServiceTablePanel<T extends SecurityNamedServiceConfig>
+            extends GeoServerTablePanel<T> {
+
         public SecurityNamedServiceTablePanel(String id, SecurityNamedServiceProvider<T> dataProvider) {
             super(id, dataProvider, true);
         }
-    
+
         @Override
         protected Component getComponentForProperty(String id, IModel<T> itemModel, Property<T> property) {
             if (property == NAME) {
                 return createEditLink(id, itemModel, property);
             }
-    
+
             if (property instanceof ResourceBeanProperty) {
                 Object val = property.getModel(itemModel).getObject();
                 if (val != null) {
                     return new Label(id, new ResourceModel(val.toString(), val.toString()));
                 }
             }
-            
+
             //backback to just a label
             return new Label(id, property.getModel(itemModel));
         }
-    
+
         Component createEditLink(String id, final IModel model, Property<T> property) {
             return new SimpleAjaxLink(id, property.getModel(model)) {
-    
+
                 @Override
                 protected void onClick(AjaxRequestTarget target) {
-                    SecurityNamedServiceEditPage<T> editPage = 
-                        new SecurityNamedServiceEditPage<T>(model);
-                    
+                    SecurityNamedServiceEditPage<T> editPage =
+                            new SecurityNamedServiceEditPage<T>(model);
+
                     editPage.setReturnPage(getPage());
                     setResponsePage(editPage);
                 }
             };
         }
     }
-    
+
     protected void onBeforeRender() {
         tablePanel.clearSelection();
         removeLink.setEnabled(false);
         super.onBeforeRender();
-    };
-    
+    }
+
+    ;
+
 }

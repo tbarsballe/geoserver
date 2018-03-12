@@ -47,7 +47,6 @@ import net.minidev.json.JSONArray;
 
 /**
  * @author Alessio Fabiani, GeoSolutions S.A.S.
- *
  */
 public class GeoServerRestRoleService extends AbstractGeoServerSecurityService
         implements GeoServerRoleService {
@@ -58,40 +57,40 @@ public class GeoServerRestRoleService extends AbstractGeoServerSecurityService
     static final Map<String, String> emptyMap = Collections.emptyMap();
 
     static Cache<String, String> cachedResponses;
-    
+
     /**
-     * Sets a specified timeout value, in milliseconds, to be used when opening a 
-     * communications link to the resource referenced by this URLConnection. 
-     * If the timeout expires before the connection can be established, 
-     * a {@link java.net.SocketTimeoutException} is raised. 
-     * 
+     * Sets a specified timeout value, in milliseconds, to be used when opening a
+     * communications link to the resource referenced by this URLConnection.
+     * If the timeout expires before the connection can be established,
+     * a {@link java.net.SocketTimeoutException} is raised.
+     * <p>
      * A timeout of zero is interpreted as an infinite timeout.
-     *  
-     * Some non-standard implementation of this method may ignore the specified timeout. 
+     * <p>
+     * Some non-standard implementation of this method may ignore the specified timeout.
      * To see the connect timeout set, please call getConnectTimeout().
-     * 
+     *
      * @param timeout an int that specifies the connect timeout value in milliseconds
      * @throws {@link IllegalArgumentException} - if the timeout parameter is negative
      */
     private static final int CONN_TIMEOUT = 30000;
 
     /**
-     * Sets the read timeout to a specified timeout, in milliseconds. 
-     * A non-zero value specifies the timeout when reading from Input stream when a 
+     * Sets the read timeout to a specified timeout, in milliseconds.
+     * A non-zero value specifies the timeout when reading from Input stream when a
      * connection is established to a resource.
-     * If the timeout expires before there is data available for read, 
+     * If the timeout expires before there is data available for read,
      * a {@link java.net.SocketTimeoutException} is raised.
-     * 
+     * <p>
      * A timeout of zero is interpreted as an infinite timeout.
-     *  
-     * Some non-standard implementation of this method may ignore the specified timeout. 
+     * <p>
+     * Some non-standard implementation of this method may ignore the specified timeout.
      * To see the read timeout set, please call getReadTimeout().
-     * 
+     *
      * @param timeout an int that specifies the timeout value to be used in milliseconds
      * @throws {@link IllegalArgumentException} - if the timeout parameter is negative
      */
     private static final int READ_TIMEOUT = 30000;
-    
+
     private RestTemplate restTemplate;
 
     private static String rolePrefix = "ROLE_";
@@ -196,14 +195,14 @@ public class GeoServerRestRoleService extends AbstractGeoServerSecurityService
                         @Override
                         public Object executeWithContext(String json) throws Exception {
                             try {
-                                List<Object> rolesString = JsonPath.read(json, 
+                                List<Object> rolesString = JsonPath.read(json,
                                         restRoleServiceConfig.getUsersJSONPath().replace("${username}", username));
 
                                 for (Object roleObj : rolesString) {
                                     if (roleObj instanceof String) {
                                         populateRoles((String) roleObj, roles);
                                     } else if (roleObj instanceof JSONArray) {
-                                        for(Object role : ((JSONArray) roleObj)) {
+                                        for (Object role : ((JSONArray) roleObj)) {
                                             populateRoles((String) role, roles);
                                         }
                                     }
@@ -215,11 +214,11 @@ public class GeoServerRestRoleService extends AbstractGeoServerSecurityService
                             }
 
                             SortedSet<GeoServerRole> finalRoles = Collections.unmodifiableSortedSet(fixGeoServerRoles(roles));
-                            
-                            if(LOGGER.isLoggable(Level.FINE)) {
+
+                            if (LOGGER.isLoggable(Level.FINE)) {
                                 LOGGER.fine("Setting ROLES for User [" + username + "] to " + finalRoles);
                             }
-                            
+
                             return finalRoles;
                         }
 
@@ -247,12 +246,12 @@ public class GeoServerRestRoleService extends AbstractGeoServerSecurityService
             roles.clear();
             roles.add(GeoServerRole.ADMIN_ROLE);
         }
-        
+
         // Check if Role Anonymous is present other than other roles
         if (roles.size() > 1 && roles.contains(GeoServerRole.ANONYMOUS_ROLE)) {
             roles.remove(GeoServerRole.ANONYMOUS_ROLE);
         }
-        
+
         return roles;
     }
 
@@ -282,7 +281,7 @@ public class GeoServerRestRoleService extends AbstractGeoServerSecurityService
                         @Override
                         public Object executeWithContext(String json) throws Exception {
                             try {
-                                List<String> rolesString = JsonPath.read(json, 
+                                List<String> rolesString = JsonPath.read(json,
                                         restRoleServiceConfig.getRolesJSONPath());
 
                                 for (String role : rolesString) {
@@ -340,7 +339,7 @@ public class GeoServerRestRoleService extends AbstractGeoServerSecurityService
                         @Override
                         public Object executeWithContext(String json) throws Exception {
                             try {
-                                List<String> rolesString = JsonPath.read(json, 
+                                List<String> rolesString = JsonPath.read(json,
                                         restRoleServiceConfig.getRolesJSONPath());
 
                                 for (String targetRole : rolesString) {
@@ -374,7 +373,7 @@ public class GeoServerRestRoleService extends AbstractGeoServerSecurityService
 
     @Override
     public Properties personalizeRoleParams(String roleName, Properties roleParams, String userName,
-            Properties userProps) throws IOException {
+                                            Properties userProps) throws IOException {
         return null;
     }
 
@@ -443,7 +442,7 @@ public class GeoServerRestRoleService extends AbstractGeoServerSecurityService
         if (restTemplate == null) {
             restTemplate = restTemplate();
         }
-        
+
         return restTemplate;
     }
 
@@ -464,22 +463,22 @@ public class GeoServerRestRoleService extends AbstractGeoServerSecurityService
         factory.setConnectTimeout(CONN_TIMEOUT);
         return factory;
     }
-    
+
     /**
      * Execute REST CALL, and then call the given callback on HTTP JSON Response.
-     * 
+     *
      * @param callback
      * @throws Exception
      */
     protected Object connectToRESTEndpoint(
             final String roleRESTBaseURL,
-            final String roleRESTEndpoint, 
+            final String roleRESTEndpoint,
             final String roleJSONPath,
             RestEndpointConnectionCallback callback) throws Exception {
         final String restEndPoint = roleRESTBaseURL + roleRESTEndpoint + roleJSONPath;
         // First search on cache
         final String hash = getHash(restEndPoint);
-        
+
         try {
             // If the key wasn't in the "easy to compute" group, we need to
             // do things the hard way.
@@ -487,7 +486,7 @@ public class GeoServerRestRoleService extends AbstractGeoServerSecurityService
 
                 @Override
                 public String call() throws Exception {
-                    
+
                     LOGGER.fine("GeoServer REST Role Service CACHE MISS for '" + restEndPoint + "'");
 
                     ClientHttpRequest clientRequest = null;
@@ -503,20 +502,20 @@ public class GeoServerRestRoleService extends AbstractGeoServerSecurityService
                         int status = clientResponse.getRawStatusCode();
 
                         switch (status) {
-                        case 200:
-                        case 201:
-                            BufferedReader br = new BufferedReader(
-                                    new InputStreamReader(clientResponse.getBody()));
-                            StringBuilder sb = new StringBuilder();
-                            String line;
-                            while ((line = br.readLine()) != null) {
-                                sb.append(line + "\n");
-                            }
-                            br.close();
+                            case 200:
+                            case 201:
+                                BufferedReader br = new BufferedReader(
+                                        new InputStreamReader(clientResponse.getBody()));
+                                StringBuilder sb = new StringBuilder();
+                                String line;
+                                while ((line = br.readLine()) != null) {
+                                    sb.append(line + "\n");
+                                }
+                                br.close();
 
-                            String json = sb.toString();
+                                String json = sb.toString();
 
-                            return json;
+                                return json;
                         }
                     } catch (MalformedURLException ex) {
                         Logger.getLogger(getClass().getName()).log(Level.WARNING, null, ex);
@@ -549,21 +548,20 @@ public class GeoServerRestRoleService extends AbstractGeoServerSecurityService
         MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
         messageDigest.update(stringToEncrypt.getBytes());
         final String encryptedString = new String(messageDigest.digest());
-        
+
         return encryptedString;
     }
-    
+
     /**
      * Callback interface to be used in the REST call methods for performing operations on individually HTTP JSON responses.
-     * 
-     * @author Alessio Fabiani, GeoSolutions S.A.S.
      *
+     * @author Alessio Fabiani, GeoSolutions S.A.S.
      */
     interface RestEndpointConnectionCallback {
 
         /**
          * Perform specific operations accordingly to the caller needs.
-         * 
+         *
          * @param json the <code>JSON</code> string to perform an operation on.
          * @throws Exception
          */

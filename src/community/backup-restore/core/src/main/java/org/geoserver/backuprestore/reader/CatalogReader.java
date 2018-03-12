@@ -31,20 +31,19 @@ import org.springframework.util.ClassUtils;
 
 /**
  * Abstract Spring Batch {@link ItemReader}.
- * 
+ * <p>
  * Configures the {@link Catalog} and initizializes the {@link XStreamPersister}.
- * 
- * @author Alessio Fabiani, GeoSolutions
  *
+ * @author Alessio Fabiani, GeoSolutions
  */
-@SuppressWarnings({ "rawtypes" })
+@SuppressWarnings({"rawtypes"})
 public abstract class CatalogReader<T> extends BackupRestoreItem<T> implements ItemStream,
         ItemStreamReader<T>, ResourceAwareItemReaderItemStream<T>, InitializingBean {
 
     protected Class clazz;
 
     public CatalogReader(Class<T> clazz, Backup backupFacade,
-            XStreamPersisterFactory xStreamPersisterFactory) {
+                         XStreamPersisterFactory xStreamPersisterFactory) {
         super(backupFacade, xStreamPersisterFactory);
         this.clazz = clazz;
 
@@ -66,7 +65,7 @@ public abstract class CatalogReader<T> extends BackupRestoreItem<T> implements I
     /**
      * The name of the component which will be used as a stem for keys in the {@link ExecutionContext}. Subclasses should provide a default value,
      * e.g. the short form of the class name.
-     * 
+     *
      * @param name the name for the component
      */
     public void setName(String name) {
@@ -83,7 +82,7 @@ public abstract class CatalogReader<T> extends BackupRestoreItem<T> implements I
 
     /**
      * Read next item from input.
-     * 
+     *
      * @return item
      * @throws Exception Allows subclasses to throw checked exceptions for interpretation by the framework
      */
@@ -91,14 +90,14 @@ public abstract class CatalogReader<T> extends BackupRestoreItem<T> implements I
 
     /**
      * Open resources necessary to start reading input.
-     * 
+     *
      * @throws Exception Allows subclasses to throw checked exceptions for interpretation by the framework
      */
     protected abstract void doOpen() throws Exception;
 
     /**
      * Close the resources opened in {@link #doOpen()}.
-     * 
+     *
      * @throws Exception Allows subclasses to throw checked exceptions for interpretation by the framework
      */
     protected abstract void doClose() throws Exception;
@@ -136,10 +135,9 @@ public abstract class CatalogReader<T> extends BackupRestoreItem<T> implements I
     /**
      * The index of the item to start reading from. If the {@link ExecutionContext} contains a key <code>[name].read.count</code> (where
      * <code>[name]</code> is the name of this component) the value from the {@link ExecutionContext} will be used in preference.
-     * 
-     * @see #setName(String)
-     * 
+     *
      * @param count the value of the current item count
+     * @see #setName(String)
      */
     public void setCurrentItemCount(int count) {
         this.currentItemCount = count;
@@ -148,10 +146,9 @@ public abstract class CatalogReader<T> extends BackupRestoreItem<T> implements I
     /**
      * The maximum index of the items to be read. If the {@link ExecutionContext} contains a key <code>[name].read.count.max</code> (where
      * <code>[name]</code> is the name of this component) the value from the {@link ExecutionContext} will be used in preference.
-     * 
-     * @see #setName(String)
-     * 
+     *
      * @param count the value of the maximum item count
+     * @see #setName(String)
      */
     public void setMaxItemCount(int count) {
         this.maxItemCount = count;
@@ -213,7 +210,7 @@ public abstract class CatalogReader<T> extends BackupRestoreItem<T> implements I
 
     }
 
-    @SuppressWarnings({ "unchecked" })
+    @SuppressWarnings({"unchecked"})
     protected void firePostRead(T item, Resource resource) throws IOException {
         List<CatalogAdditionalResourcesReader> additionalResourceReaders = GeoServerExtensions
                 .extensions(CatalogAdditionalResourcesReader.class);
@@ -225,12 +222,12 @@ public abstract class CatalogReader<T> extends BackupRestoreItem<T> implements I
             }
         }
     }
-    
+
     /**
      * Set the flag that determines whether to save internal data for {@link ExecutionContext}. Only switch this to false if you don't want to save
      * any state from this stream, and you don't need it to be restartable. Always set it to false if the reader is being used in a concurrent
      * environment.
-     * 
+     *
      * @param saveState flag value (default true).
      */
     public void setSaveState(boolean saveState) {
@@ -239,7 +236,7 @@ public abstract class CatalogReader<T> extends BackupRestoreItem<T> implements I
 
     /**
      * The flag that determines whether to save internal state for restarts.
-     * 
+     *
      * @return true if the flag was set
      */
     public boolean isSaveState() {

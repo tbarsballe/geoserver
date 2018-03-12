@@ -18,7 +18,6 @@ import org.geoserver.platform.ServiceException;
  * {@link GwcOperationProxy} response produced by a {@link GwcServiceProxy}.
  * <p>
  * See the package documentation for more insights on how these all fit together.
- * 
  */
 public class GwcResponseProxy extends Response {
 
@@ -32,7 +31,7 @@ public class GwcResponseProxy extends Response {
         String mimeType = op.getMimeType();
         return mimeType;
     }
-    
+
     @Override
     public String[][] getHeaders(Object value, Operation operation) throws ServiceException {
         GwcOperationProxy op = (GwcOperationProxy) value;
@@ -49,7 +48,7 @@ public class GwcResponseProxy extends Response {
         }
         return headers;
     }
-    
+
     @Override
     public void write(Object value, OutputStream output, Operation operation) throws IOException,
             ServiceException {
@@ -58,7 +57,7 @@ public class GwcResponseProxy extends Response {
         byte[] contents = op.getContents();
         output.write(contents);
     }
-    
+
     @Override
     public String getPreferredDisposition(Object value, Operation operation) {
         // do not override the content disposition set by GWC

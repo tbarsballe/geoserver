@@ -27,29 +27,29 @@ import org.mozilla.javascript.tools.shell.Global;
 public class CommonJSEngine extends AbstractScriptEngine implements Invocable {
 
     private CommonJSEngineFactory factory;
-    
+
     public CommonJSEngine() {
         this(new CommonJSEngineFactory(null));
     }
 
     public CommonJSEngine(CommonJSEngineFactory factory) {
         this.factory = factory;
-    
+
     }
-    
+
     @Override
     public Bindings createBindings() {
         return new SimpleBindings();
     }
-    
+
     @Override
     public Object eval(String script, ScriptContext context) throws ScriptException {
         if (script == null) {
             throw new NullPointerException("Null script");
         }
-        return eval(new StringReader(script) , context);
+        return eval(new StringReader(script), context);
     }
-    
+
     @Override
     public Object eval(Reader reader, ScriptContext context) throws ScriptException {
         String filename = (String) get(ScriptEngine.FILENAME);
@@ -74,12 +74,12 @@ public class CommonJSEngine extends AbstractScriptEngine implements Invocable {
         }
         return result;
     }
-    
+
     @Override
     public ScriptEngineFactory getFactory() {
         return factory;
     }
-    
+
     private Global getGlobal() {
         return factory.getGlobal();
     }
@@ -131,10 +131,11 @@ public class CommonJSEngine extends AbstractScriptEngine implements Invocable {
         }
         return result;
     }
-    
+
     /**
      * Associate a context with the current thread.  This calls Context.enter()
      * and sets the language version to 1.8.
+     *
      * @return a Context associated with the thread
      */
     public static Context enterContext() {

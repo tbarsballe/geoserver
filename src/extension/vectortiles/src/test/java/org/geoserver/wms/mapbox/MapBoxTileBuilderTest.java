@@ -69,10 +69,10 @@ public class MapBoxTileBuilderTest {
         MapBoxTileBuilder tileBuilder = builderFact.newBuilder(screenSize, mapArea);
 
         Geometry point = geom("POINT(1 10)");
-        Map<String, Object> pointProps = ImmutableMap.<String, Object> of("name", "point1");
+        Map<String, Object> pointProps = ImmutableMap.<String, Object>of("name", "point1");
 
         Geometry line = geom("LINESTRING(0 0, 1 1, 2 2)");
-        Map<String, Object> lineProps = ImmutableMap.<String, Object> of("name", "line1");
+        Map<String, Object> lineProps = ImmutableMap.<String, Object>of("name", "line1");
 
         tileBuilder.addFeature("Points", "unused", "unused", point, pointProps);
         tileBuilder.addFeature("Lines", "unused", "unused", line, lineProps);
@@ -97,7 +97,7 @@ public class MapBoxTileBuilderTest {
         assertEquals(line, lineFeature.getGeometry());
         assertEquals(lineProps, lineFeature.getAttributes());
     }
-    
+
     /*
      * we ensure that the encoder is NOT clipping geometries by giving it 
      * a "too big" line and ensuring it isn't changed by the encoder.
@@ -110,11 +110,11 @@ public class MapBoxTileBuilderTest {
         Rectangle screenSize = new Rectangle(256, 256);
         ReferencedEnvelope mapArea = new ReferencedEnvelope();
 
-        MapBoxTileBuilder tileBuilder = builderFact.newBuilder(screenSize, mapArea);        
+        MapBoxTileBuilder tileBuilder = builderFact.newBuilder(screenSize, mapArea);
 
         Geometry line = geom("LINESTRING(-100 -100,300 300)"); //box is 0 to 256, so this is outside the box
-        
-        Map<String, Object> lineProps = ImmutableMap.<String, Object> of("name", "line1");
+
+        Map<String, Object> lineProps = ImmutableMap.<String, Object>of("name", "line1");
 
         tileBuilder.addFeature("Lines", "unused", "unused", line, lineProps);
 
@@ -125,12 +125,12 @@ public class MapBoxTileBuilderTest {
         ListMultimap<String, Feature> features = decode(map);
 
         assertEquals(1, features.size());
-        assertEquals(ImmutableSet.of( "Lines"), features.keySet());
+        assertEquals(ImmutableSet.of("Lines"), features.keySet());
 
         Feature lineFeature = features.get("Lines").get(0);
 
         assertTrue(lineFeature.getGeometry() instanceof LineString);
         assertEquals(line, lineFeature.getGeometry()); // line should not be clipped
     }
-    
+
 }

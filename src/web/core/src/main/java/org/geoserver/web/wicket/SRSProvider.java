@@ -26,10 +26,9 @@ import org.vfny.geoserver.crs.GeoserverCustomWKTFactory;
 
 /**
  * Provides a filtered, sorted view over the available EPSG coordinate reference systems.
- * 
+ *
  * @author Gabriel Roldan - OpenGeo
  * @author Andrea Aime - OpenGeo
- * 
  */
 public class SRSProvider extends GeoServerDataProvider<SRSProvider.SRS> {
 
@@ -37,7 +36,7 @@ public class SRSProvider extends GeoServerDataProvider<SRSProvider.SRS> {
 
     /**
      * Spots integral numbers
-     * 
+     *
      * @see #buildCodeList()
      */
     private static Pattern NUMERIC = Pattern.compile("\\d+");
@@ -45,9 +44,8 @@ public class SRSProvider extends GeoServerDataProvider<SRSProvider.SRS> {
     /**
      * A lightweight bean to carry over the code and description of a
      * {@link CoordinateReferenceSystem}
-     * 
+     *
      * @author Gabriel Roldan - OpenGeo
-     * 
      */
     public static class SRS implements Serializable, Comparable<SRS> {
 
@@ -189,9 +187,8 @@ public class SRSProvider extends GeoServerDataProvider<SRSProvider.SRS> {
     /**
      * Compares the codes so that most of the codes ger compared as numbers, but unfortunately some
      * non numeric ones can sneak in...
-     * 
+     *
      * @author Andrea Aime - TOPP
-     * 
      */
     private static class CodeComparator implements Comparator<SRS> {
 

@@ -88,7 +88,7 @@ public class WPSXStreamLoader extends XStreamServiceLoader<WPSInfo> {
         xs.alias("rangeValidator", NumberRangeValidator.class);
         xs.registerLocalConverter(NumberRangeValidator.class, "range",
                 new NumberRangeConverter(xs.getMapper(), xs.getReflectionProvider()));
-        
+
         xs.allowTypeHierarchy(ProcessGroupInfo.class);
         xs.allowTypeHierarchy(WPSInputValidator.class);
     }
@@ -156,7 +156,6 @@ public class WPSXStreamLoader extends XStreamServiceLoader<WPSInfo> {
 
     /**
      * Converter for {@link Name}
-     *
      */
     public static class NameConverter extends AbstractSingleValueConverter {
 
@@ -203,7 +202,7 @@ public class WPSXStreamLoader extends XStreamServiceLoader<WPSInfo> {
 
         @Override
         public Object doUnmarshal(Object result, HierarchicalStreamReader reader,
-                UnmarshallingContext context) {
+                                  UnmarshallingContext context) {
             ProcessGroupInfo converted = (ProcessGroupInfo) super.doUnmarshal(result, reader,
                     context);
 
@@ -244,7 +243,7 @@ public class WPSXStreamLoader extends XStreamServiceLoader<WPSInfo> {
 
         @Override
         public void marshal(Object source, HierarchicalStreamWriter writer,
-                MarshallingContext context) {
+                            MarshallingContext context) {
             NumberRange<?> range = (NumberRange<?>) source;
             writer.startNode("minValue");
             writer.setValue(String.valueOf(range.getMinValue()));

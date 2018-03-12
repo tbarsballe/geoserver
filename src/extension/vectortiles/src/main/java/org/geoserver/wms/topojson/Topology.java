@@ -24,7 +24,7 @@ public class Topology {
     private Map<String, GeometryColleciton> layers;
 
     public Topology(AffineTransform screenToWorld, List<LineString> arcs,
-            Map<String, TopoGeom.GeometryColleciton> layers) {
+                    Map<String, TopoGeom.GeometryColleciton> layers) {
 
         this.screenToWorld = screenToWorld;
         this.arcs = arcs;

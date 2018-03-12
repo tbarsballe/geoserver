@@ -35,7 +35,6 @@ import org.springframework.security.oauth2.common.OAuth2AccessToken;
 
 /**
  * @author Alessio Fabiani, GeoSolutions S.A.S.
- *
  */
 public class OAuth2RestTemplateTest extends AbstractOAuth2RestTemplateTest {
 
@@ -60,7 +59,7 @@ public class OAuth2RestTemplateTest extends AbstractOAuth2RestTemplateTest {
         when(response.getStatusCode()).thenReturn(statusCode);
         when(request.execute()).thenReturn(response);
     }
-    
+
     @Test(expected = AccessTokenRequiredException.class)
     public void testAccessDeneiedException() throws Exception {
         DefaultOAuth2AccessToken token = new DefaultOAuth2AccessToken("12345");
@@ -88,7 +87,7 @@ public class OAuth2RestTemplateTest extends AbstractOAuth2RestTemplateTest {
 
             @Override
             public void authenticate(OAuth2ProtectedResourceDetails resource,
-                    OAuth2ClientContext clientContext, ClientHttpRequest req) {
+                                     OAuth2ClientContext clientContext, ClientHttpRequest req) {
                 req.getHeaders().set("X-Authorization",
                         clientContext.getAccessToken().getTokenType() + " " + "Nah-nah-na-nah-nah");
             }
@@ -112,23 +111,23 @@ public class OAuth2RestTemplateTest extends AbstractOAuth2RestTemplateTest {
 
         assertTrue(auth.startsWith(OAuth2AccessToken.BEARER_TYPE));
 
-        OAuth2AccessTokenURLMangler urlMangler = 
+        OAuth2AccessTokenURLMangler urlMangler =
                 new OAuth2AccessTokenURLMangler(getSecurityManager(), configuration, restTemplate);
         urlMangler.geoServerOauth2RestTemplate = restTemplate;
 
         assertNotNull(urlMangler);
-        
+
         Authentication user = new UsernamePasswordAuthenticationToken("admin", "geoserver", Arrays.asList(
-                new GrantedAuthority[] { new SimpleGrantedAuthority("ROLE_ADMINISTRATOR") } ));
+                new GrantedAuthority[]{new SimpleGrantedAuthority("ROLE_ADMINISTRATOR")}));
         SecurityContextHolder.getContext().setAuthentication(user);
 
         StringBuilder baseURL = new StringBuilder("http://test.geoserver-org/wms");
         StringBuilder path = new StringBuilder();
         Map<String, String> kvp = new HashMap<String, String>();
         kvp.put("request", "GetCapabilities");
-        
+
         urlMangler.mangleURL(baseURL, path, kvp, URLType.SERVICE);
-        
+
         assertTrue(kvp.containsKey("access_token"));
         assertTrue("12345".equals(kvp.get("access_token")));
     }

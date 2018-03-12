@@ -34,7 +34,7 @@ public class RemoteEditPanel extends Panel {
     PasswordTextField password;
 
     RemoteEditPanel(String id, IModel<RemoteInfo> model, final ModalWindow parentWindow,
-            final RemotesListPanel table) {
+                    final RemotesListPanel table) {
         super(id, model);
 
         form = new Form<>("form", model);

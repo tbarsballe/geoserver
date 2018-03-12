@@ -36,7 +36,7 @@ public class KmlCentroidBuilder {
      * </p>
      */
     public Coordinate geometryCentroid(Geometry g) {
-        return geometryCentroid(g, null,null);
+        return geometryCentroid(g, null, null);
     }
 
     /**
@@ -46,10 +46,11 @@ public class KmlCentroidBuilder {
      * collection is calculated. The first point in the multi point is returned as the controid.
      * </p>
      * <p>
-     * The <tt>opts</tt> parameter is used to provide additional options controlling how the 
+     * The <tt>opts</tt> parameter is used to provide additional options controlling how the
      * centroid is computed.
      * </p>
-     * @param g The geometry to compute the centroid.
+     *
+     * @param g    The geometry to compute the centroid.
      * @param bbox The request bbox, used to potentially clip the geometry before computting the centroid.
      * @param opts The centroid options controlling whether clipping/sampling/etc... are used.
      */
@@ -85,16 +86,15 @@ public class KmlCentroidBuilder {
             if (opts.isContain()) {
                 try {
                     Point p = RendererUtilities.sampleForInternalPoint(
-                        (Polygon)g, null, null, null, -1, opts.getSamples());
+                            (Polygon) g, null, null, null, -1, opts.getSamples());
                     if (p != null && !p.isEmpty()) {
                         return p.getCoordinate();
                     }
-                }
-                catch(Exception e) {
+                } catch (Exception e) {
                     LOG.log(Level.WARNING, "Unable to calculate central point for polygon", e);
                 }
             }
-        } 
+        }
 
         // return the actual centroid
         return g.getCentroid().getCoordinate();
@@ -102,9 +102,8 @@ public class KmlCentroidBuilder {
 
     /**
      * Selects a representative geometry from the collection (the one covering the biggest area)
-     * 
-     * @param g
      *
+     * @param g
      */
     private Geometry selectRepresentativeGeometry(GeometryCollection g) {
         GeometryCollection gc = (GeometryCollection) g;

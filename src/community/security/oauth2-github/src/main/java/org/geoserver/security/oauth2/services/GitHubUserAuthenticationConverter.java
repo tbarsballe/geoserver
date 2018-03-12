@@ -12,7 +12,7 @@ import org.springframework.security.oauth2.provider.token.DefaultUserAuthenticat
 
 /**
  * User Authentication Converter for GitHub token details.
- * 
+ *
  * @author Alessio Fabiani, GeoSolutions S.A.S.
  */
 public class GitHubUserAuthenticationConverter extends DefaultUserAuthenticationConverter {
@@ -21,16 +21,16 @@ public class GitHubUserAuthenticationConverter extends DefaultUserAuthentication
 
     /**
      * Default Constructor.
-     * 
+     *
      * @param username_key
      */
     public GitHubUserAuthenticationConverter() {
         super();
     }
-    
+
     /**
      * Default Constructor.
-     * 
+     *
      * @param username_key
      */
     public GitHubUserAuthenticationConverter(String username_key) {

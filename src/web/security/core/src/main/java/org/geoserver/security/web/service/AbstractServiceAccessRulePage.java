@@ -45,7 +45,7 @@ public abstract class AbstractServiceAccessRulePage extends AbstractSecurityPage
         Form form = new Form<Serializable>("form", new CompoundPropertyModel(rule));
         add(form);
         form.add(new EmptyRolesValidator());
-        
+
         form.add(serviceChoice = new DropDownChoice<String>("service", getServiceNames()));
         serviceChoice.add(new OnChangeAjaxBehavior() {
             @Override
@@ -55,7 +55,7 @@ public abstract class AbstractServiceAccessRulePage extends AbstractSecurityPage
             }
         });
         serviceChoice.setRequired(true);
-        
+
         form.add(methodChoice = new DropDownChoice<String>("method", new MethodsModel(rule)));
 
         //we add on change behavior to ensure the underlying model is updated but don't actually
@@ -67,10 +67,10 @@ public abstract class AbstractServiceAccessRulePage extends AbstractSecurityPage
         //});
         methodChoice.setOutputMarkupId(true);
         methodChoice.setRequired(true);
-        
-        form.add(rolesFormComponent = new RuleRolesFormComponent("roles", 
-            new PropertyModel<Collection<String>>(rule, "roles")));
-            //new Model((Serializable)new ArrayList(rule.getRoles()))));
+
+        form.add(rolesFormComponent = new RuleRolesFormComponent("roles",
+                new PropertyModel<Collection<String>>(rule, "roles")));
+        //new Model((Serializable)new ArrayList(rule.getRoles()))));
 
         // build the submit/cancel
         form.add(new SubmitLink("save") {
@@ -107,13 +107,13 @@ public abstract class AbstractServiceAccessRulePage extends AbstractSecurityPage
 
         @Override
         public FormComponent<?>[] getDependentFormComponents() {
-           return new FormComponent[] { rolesFormComponent };
+            return new FormComponent[]{rolesFormComponent};
         }
 
         @Override
         public void validate(Form<?> form) {
             // only validate on final submit
-            if (form.findSubmittingButton() != form.get("save")) { 
+            if (form.findSubmittingButton() != form.get("save")) {
                 return;
             }
             updateModels();

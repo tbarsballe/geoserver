@@ -12,7 +12,7 @@ import org.opengis.util.ProgressListener;
 /**
  * Interface used by scripts to report about current progress and eventually throw service
  * exceptions with the necessary OGC details
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class StatusMonitor {
@@ -26,7 +26,7 @@ public class StatusMonitor {
 
     /**
      * Creates a status object wrapping a {@link ProgressListener}
-     * 
+     *
      * @param listener
      */
     public StatusMonitor(ProgressListener listener) {
@@ -36,8 +36,6 @@ public class StatusMonitor {
 
     /**
      * Returns the wrapped listener
-     * 
-     *
      */
     public ProgressListener getListener() {
         return listener;
@@ -45,7 +43,7 @@ public class StatusMonitor {
 
     /**
      * Sets the global progress, between 0 and 100
-     * 
+     *
      * @param progress
      */
     public void setProgress(float progress) {
@@ -54,7 +52,7 @@ public class StatusMonitor {
 
     /**
      * Sets the current task
-     * 
+     *
      * @param status
      */
     public void setTask(String status) {
@@ -64,7 +62,7 @@ public class StatusMonitor {
     /**
      * Starts a sub-task that will take "total" percentage. Call "work" to report progress within
      * the sub-task
-     * 
+     *
      * @param status
      * @param total
      */
@@ -77,7 +75,7 @@ public class StatusMonitor {
 
     /**
      * Reports progress within the current sub-task, with a number between 0 and 100
-     * 
+     *
      * @param worked
      */
     public void work(int worked) {

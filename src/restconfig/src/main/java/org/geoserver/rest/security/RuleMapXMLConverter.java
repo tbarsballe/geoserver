@@ -23,7 +23,7 @@ public class RuleMapXMLConverter extends MapXMLConverter {
     final static String RULEELEMENT = "rule";
 
     final static String RESOURCEATTR = "resource";
-    
+
     @Override
     public int getPriority() {
         // pretty specific, but leave some room for more specific converters just in case
@@ -36,7 +36,7 @@ public class RuleMapXMLConverter extends MapXMLConverter {
     }
 
     @Override
-    protected String getMapName(Map<?,?> map) {
+    protected String getMapName(Map<?, ?> map) {
         return ROOTELEMENT;
     }
 
@@ -49,7 +49,7 @@ public class RuleMapXMLConverter extends MapXMLConverter {
 
     @SuppressWarnings("unchecked")
     protected final void insert(Element elem, Object o) {
-        if(o instanceof RuleMap) {
+        if (o instanceof RuleMap) {
             Map<String, String> ruleMap = (Map<String, String>) o;
             for (Map.Entry<String, String> entry : ruleMap.entrySet()) {
                 Element ruleElement = new Element(RULEELEMENT);
@@ -60,7 +60,7 @@ public class RuleMapXMLConverter extends MapXMLConverter {
         } else {
             throw new IllegalArgumentException();
         }
-        
+
     }
 
     /**

@@ -38,7 +38,7 @@ import org.springframework.http.HttpHeaders;
 
 /**
  * Handles an internal reference to a remote location
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class RemoteRequestInputProvider extends AbstractInputProvider {
@@ -123,7 +123,7 @@ public class RemoteRequestInputProvider extends AbstractInputProvider {
                             }
                             post.setRequestEntity(new InputStreamRequestEntity(refInput,
                                     complexPPIO
-                                    .getMimeType()));
+                                            .getMimeType()));
                         } else {
                             throw new WPSException("A POST request should contain a non empty body");
                         }
@@ -140,7 +140,7 @@ public class RemoteRequestInputProvider extends AbstractInputProvider {
                 }
                 // add eventual extra headers
                 if (ref.getHeader() != null) {
-                    for (Iterator it = ref.getHeader().iterator(); it.hasNext();) {
+                    for (Iterator it = ref.getHeader().iterator(); it.hasNext(); ) {
                         HeaderType header = (HeaderType) it.next();
                         method.setRequestHeader(header.getKey(), header.getValue());
                     }

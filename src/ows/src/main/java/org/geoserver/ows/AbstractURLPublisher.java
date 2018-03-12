@@ -33,7 +33,7 @@ import org.springframework.web.servlet.mvc.AbstractController;
  * <p>
  * To use this controller, it should be mapped to a particular url in the url mapping of the spring
  * dispatcher servlet. Example:
- * 
+ * <p>
  * <pre>
  * <code>
  *   &lt;bean id="filePublisher" class="org.geoserver.ows.FilePublisher"/&gt;
@@ -48,14 +48,14 @@ import org.springframework.web.servlet.mvc.AbstractController;
  *   &lt;/bean&gt;
  * </code>
  * </pre>
- * 
+ *
  * @author Justin Deoliveira, The Open Planning Project
  * @author Andrea Aime - GeoSolutions
  */
 public abstract class AbstractURLPublisher extends AbstractController {
 
     protected ModelAndView handleRequestInternal(HttpServletRequest request,
-            HttpServletResponse response) throws Exception {
+                                                 HttpServletResponse response) throws Exception {
         URL url = getUrl(request);
 
         // if not found return a 404
@@ -63,18 +63,18 @@ public abstract class AbstractURLPublisher extends AbstractController {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
             return null;
         }
-        
+
         File file = URLs.urlToFile(url);
-        if(file != null && file.exists() && file.isDirectory()) {
+        if (file != null && file.exists() && file.isDirectory()) {
             String uri = request.getRequestURI();
             uri += uri.endsWith("/") ? "index.html" : "/index.html";
-            
+
             response.addHeader("Location", uri);
             response.sendError(HttpServletResponse.SC_MOVED_TEMPORARILY);
-            
+
             return null;
         }
-        
+
         if (file != null && checkNotModified(request, file.lastModified())) {
             response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
             return null;
@@ -121,7 +121,7 @@ public abstract class AbstractURLPublisher extends AbstractController {
                 // send out the first four bytes read
                 output = response.getOutputStream();
                 output.write(b4, 0, count);
-    
+
                 // copy the content to the output
                 byte[] buffer = new byte[8192];
                 int n = -1;
@@ -172,9 +172,9 @@ public abstract class AbstractURLPublisher extends AbstractController {
 
     /**
      * Retrieves the resource URL from the specified request
-     * @param request
      *
-     * @throws IOException 
+     * @param request
+     * @throws IOException
      */
     protected abstract URL getUrl(HttpServletRequest request) throws IOException;
 }

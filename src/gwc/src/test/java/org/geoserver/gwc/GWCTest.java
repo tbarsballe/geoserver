@@ -138,11 +138,11 @@ import com.vividsolutions.jts.geom.MultiPolygon;
 
 /**
  * Unit test suite for the {@link GWC} mediator.
- * 
  */
+
 /**
  * @author groldan
- * 
+ *
  */
 public class GWCTest {
 
@@ -215,7 +215,7 @@ public class GWCTest {
         System.setProperty("TEST_ENV_PROPERTY", "H2");
 
         catalog = mock(Catalog.class);
-        layer = mockLayer("testLayer", new String[] { "style1", "style2" }, PublishedType.RASTER);
+        layer = mockLayer("testLayer", new String[]{"style1", "style2"}, PublishedType.RASTER);
         layerGroup = mockGroup("testGroup", layer);
         mockCatalog();
 
@@ -247,7 +247,7 @@ public class GWCTest {
         tileLayer = new GeoServerTileLayer(layer, gridSetBroker, tileLayerInfo);
         GridSet testGridSet = namedGridsetCopy("TEST", gridSetBroker.getDefaults().worldEpsg4326());
 
-        GridSubset testGridSubset = GridSubsetFactory.createGridSubSet(testGridSet, new BoundingBox(-180,0,0,90),
+        GridSubset testGridSubset = GridSubsetFactory.createGridSubSet(testGridSet, new BoundingBox(-180, 0, 0, 90),
                 0, testGridSet.getGridLevels().length - 1);
         when(xmlConfig.getGridSet(eq("TEST"))).thenReturn(Optional.of(testGridSet));
         tileLayer.addGridSubset(testGridSubset);
@@ -259,11 +259,11 @@ public class GWCTest {
         GeoWebCacheEnvironment genv = createMockBuilder(GeoWebCacheEnvironment.class)
                 .withConstructor()
                 .createMock();
-        
+
         ApplicationContext appContext = createMock(ApplicationContext.class);
 
         expect(appContext.getBeanNamesForType(GeoWebCacheEnvironment.class))
-                .andReturn(new String[] { "geoWebCacheEnvironment" }).anyTimes();
+                .andReturn(new String[]{"geoWebCacheEnvironment"}).anyTimes();
         Map<String, GeoWebCacheEnvironment> genvMap = new HashMap<>();
         genvMap.put("geoWebCacheEnvironment", genv);
         expect(appContext.getBeansOfType(GeoWebCacheEnvironment.class))
@@ -271,7 +271,7 @@ public class GWCTest {
         expect(appContext.getBean("geoWebCacheEnvironment")).andReturn(genv).anyTimes();
 
         expect(appContext.getBeanNamesForType(XMLConfiguration.class))
-                .andReturn(new String[] { "geoWebCacheXMLConfiguration" }).anyTimes();
+                .andReturn(new String[]{"geoWebCacheXMLConfiguration"}).anyTimes();
         Map<String, XMLConfiguration> xmlConfMap = new HashMap();
         xmlConfMap.put("geoWebCacheXMLConfiguration", xmlConfig);
         expect(appContext.getBeansOfType(XMLConfiguration.class))
@@ -279,19 +279,19 @@ public class GWCTest {
         expect(appContext.getBean("geoWebCacheXMLConfiguration")).andReturn(xmlConfig).anyTimes();
 
         replay(appContext);
-        
+
 
         GeoWebCacheExtensions gse = createMockBuilder(GeoWebCacheExtensions.class).createMock();
         gse.setApplicationContext(appContext);
 
         replay(gse);
-        
+
         List<GeoWebCacheEnvironment> extensions = GeoWebCacheExtensions
                 .extensions(GeoWebCacheEnvironment.class);
         assertNotNull(extensions);
         assertEquals(1, extensions.size());
         assertTrue(extensions.contains(genv));
-        
+
         JDBCConfiguration jdbcConfiguration = new JDBCConfiguration();
         if (GeoWebCacheEnvironment.ALLOW_ENV_PARAMETRIZATION) {
             jdbcConfiguration.setDialect("${TEST_ENV_PROPERTY}");
@@ -304,11 +304,11 @@ public class GWCTest {
 
         JDBCConfiguration loadedConf = jdbcConfiguration.load(jdbcConfigurationFile);
         jdbcStorage.setApplicationContext(appContext);
-        
+
         expect(jdbcStorage.getJDBCDiskQuotaConfig()).andReturn(loadedConf).anyTimes();
 
         replay(jdbcStorage);
-        
+
         mediator = new GWC(gwcConfigPersister, storageBroker, tld, gridSetBroker, tileBreeder,
                 diskQuotaMonitor, owsDispatcher, catalog, catalog, storageFinder, jdbcStorage,
                 blobStoreAggregator);
@@ -466,24 +466,24 @@ public class GWCTest {
     public void testModifyGridsetNoNeedToTruncate() throws Exception {
         final String oldName = "TEST";
         final String newName = "TEST_CHANGED";
-        
+
         final GridSet oldGridset = gridSetBroker.get(oldName);
         final GridSet newGridset;
         newGridset = namedGridsetCopy(newName, oldGridset);
 
         assertNotNull(tileLayer.getGridSubset(oldName));
         assertNotNull(tileLayerGroup.getGridSubset(oldName));
-        
+
         when(xmlConfig.getGridSet(eq(newName))).thenReturn(Optional.empty());
         when(xmlConfig.canSave(eq(newGridset))).thenReturn(true);
 
         when(tld.getConfiguration(same(tileLayer))).thenReturn(config);
         when(tld.getConfiguration(same(tileLayerGroup))).thenReturn(config);
         mediator.modifyGridSet(oldName, newGridset);
-        
+
         when(xmlConfig.getGridSet(eq(oldName))).thenReturn(Optional.empty());
         when(xmlConfig.getGridSet(eq(newName))).thenReturn(Optional.of(newGridset));
-        
+
         assertNull(tileLayer.getGridSubset(oldName));
         assertNull(tileLayerGroup.getGridSubset(oldName));
         assertNotNull(tileLayer.getGridSubset(newName));
@@ -528,7 +528,7 @@ public class GWCTest {
         when(tld.getConfiguration(same(tileLayerGroup))).thenReturn(config);
 
         mediator.modifyGridSet(oldName, newGridset);
-        
+
         when(xmlConfig.getGridSet(eq(oldName))).thenReturn(Optional.empty());
         when(xmlConfig.getGridSet(eq(newName))).thenReturn(Optional.of(newGridset));
 
@@ -561,8 +561,8 @@ public class GWCTest {
 
         mediator.removeGridSets(ImmutableSet.of("My4326", "TEST"));
 
-        assertEquals(ImmutableSet.of("EPSG:4326","EPSG:900913"), tileLayer.getGridSubsets());
-        assertEquals(ImmutableSet.of("EPSG:4326","EPSG:900913"), tileLayerGroup.getGridSubsets());
+        assertEquals(ImmutableSet.of("EPSG:4326", "EPSG:900913"), tileLayer.getGridSubsets());
+        assertEquals(ImmutableSet.of("EPSG:4326", "EPSG:900913"), tileLayerGroup.getGridSubsets());
 
         verify(storageBroker, times(1)).deleteByGridSetId(eq(tileLayer.getName()), eq("TEST"));
         verify(storageBroker, times(1)).deleteByGridSetId(eq(tileLayerGroup.getName()),
@@ -642,7 +642,7 @@ public class GWCTest {
             assertTrue(true);
         }
 
-        LayerInfo layer2 = mockLayer("layer2", new String[] {}, PublishedType.RASTER);
+        LayerInfo layer2 = mockLayer("layer2", new String[]{}, PublishedType.RASTER);
         LayerGroupInfo group2 = mockGroup("group2", layer, layer2);
 
         when(catalog.getLayerByName(eq(tileLayerName(layer2)))).thenReturn(layer2);
@@ -745,16 +745,16 @@ public class GWCTest {
     @Test
     public void testTruncateByBounds() throws Exception {
         String layerName = tileLayer.getName();
-        
+
         when(tileBreeder.findTileLayer(layerName))
-            .thenReturn(tileLayer);
+                .thenReturn(tileLayer);
         final Set<Map<String, String>> cachedParameters = tileLayer.getInfo().cachedStyles().stream()
-            .map(style->Collections.singletonMap("STYLES",style))
-            .collect(Collectors.toSet());
-        
+                .map(style -> Collections.singletonMap("STYLES", style))
+                .collect(Collectors.toSet());
+
         when(storageBroker.getCachedParameters(layerName))
-            .thenReturn(cachedParameters);
-        
+                .thenReturn(cachedParameters);
+
         ReferencedEnvelope bounds;
         // bounds outside layer bounds (which are -180,0,0,90)
         bounds = new ReferencedEnvelope(10, 20, 10, 20, DefaultGeographicCRS.WGS84);
@@ -780,47 +780,47 @@ public class GWCTest {
 
         reset(tileBreeder);
         when(tileBreeder.findTileLayer(layerName))
-            .thenReturn(tileLayer);
+                .thenReturn(tileLayer);
         bounds = bounds.transform(CRS.decode("EPSG:900913"), true);
         mediator.truncate(layerName, bounds);
         verify(tileBreeder, times(expected)).seed(eq(layerName), any(SeedRequest.class));
 
         reset(tileBreeder);
         when(tileBreeder.findTileLayer(layerName))
-            .thenReturn(tileLayer);
+                .thenReturn(tileLayer);
         bounds = mediator.getAreaOfValidity(CRS.decode("EPSG:2083"));// Terra del Fuego Does not intersect subset
         mediator.truncate(layerName, bounds);
         verify(tileBreeder, times(0)).seed(eq(layerName), any(SeedRequest.class));
 
         reset(tileBreeder);
         when(tileBreeder.findTileLayer(layerName))
-            .thenReturn(tileLayer);
+                .thenReturn(tileLayer);
         bounds = mediator.getAreaOfValidity(CRS.decode("EPSG:26986"));// Massachussets
         mediator.truncate(layerName, bounds);
         verify(tileBreeder, times(expected)).seed(eq(layerName), any(SeedRequest.class));
     }
-    
+
     @Test
     public void testTruncateByBoundsWithDimension() throws Exception {
         TileLayerInfoUtil.updateAcceptAllRegExParameterFilter(tileLayerInfo, "TIME", true);
-        Collection <String> cachedTimes = Arrays.asList("time1", "time2");
+        Collection<String> cachedTimes = Arrays.asList("time1", "time2");
         String layerName = tileLayer.getName();
-        
+
         when(tileBreeder.findTileLayer(layerName))
-            .thenReturn(tileLayer);
+                .thenReturn(tileLayer);
         final Set<Map<String, String>> cachedParameters = tileLayer.getInfo().cachedStyles().stream()
-            .flatMap(style->cachedTimes.stream()
-                    .map(time->{
-                        Map<String, String> map = new HashMap();
-                        map.put("STYLE", style);
-                        map.put("TIME", time);
-                        return map;
-                    }))
-            .collect(Collectors.toSet());
-        
+                .flatMap(style -> cachedTimes.stream()
+                        .map(time -> {
+                            Map<String, String> map = new HashMap();
+                            map.put("STYLE", style);
+                            map.put("TIME", time);
+                            return map;
+                        }))
+                .collect(Collectors.toSet());
+
         when(storageBroker.getCachedParameters(layerName))
-            .thenReturn(cachedParameters);
-        
+                .thenReturn(cachedParameters);
+
         ReferencedEnvelope bounds;
         // bounds outside layer bounds (which are -180,0,0,90)
         bounds = new ReferencedEnvelope(10, 20, 10, 20, DefaultGeographicCRS.WGS84);
@@ -843,10 +843,10 @@ public class GWCTest {
         int numFormats = tileLayer.getMimeTypes().size();
         int numStyles = tileLayer.getInfo().cachedStyles().size();
         int numTimes = cachedTimes.size();
-        int numParameters = numStyles * numTimes +1;
+        int numParameters = numStyles * numTimes + 1;
         final int expected = numGridsets * numFormats * numParameters;
         verify(tileBreeder, times(expected)).seed(eq(layerName), any(SeedRequest.class));
-        
+
     }
 
     @Test
@@ -1184,21 +1184,21 @@ public class GWCTest {
     @Test
     public void testDispatchGetMapMultipleCrsMatchingGridSubsets() throws Exception {
 
-        testMultipleCrsMatchingGridSubsets("EPSG:4326", "EPSG:4326", new long[] { 1, 1, 1 });
-        testMultipleCrsMatchingGridSubsets("EPSG:4326", "EPSG:4326", new long[] { 10, 10, 10 });
+        testMultipleCrsMatchingGridSubsets("EPSG:4326", "EPSG:4326", new long[]{1, 1, 1});
+        testMultipleCrsMatchingGridSubsets("EPSG:4326", "EPSG:4326", new long[]{10, 10, 10});
 
-        testMultipleCrsMatchingGridSubsets("EPSG:4326", "GlobalCRS84Scale", new long[] { 1, 1, 1 });
+        testMultipleCrsMatchingGridSubsets("EPSG:4326", "GlobalCRS84Scale", new long[]{1, 1, 1});
         testMultipleCrsMatchingGridSubsets("EPSG:4326", "GlobalCRS84Scale",
-                new long[] { 10, 10, 10 });
+                new long[]{10, 10, 10});
 
-        testMultipleCrsMatchingGridSubsets("EPSG:4326", "GlobalCRS84Scale", new long[] { 1, 1, 1 });
+        testMultipleCrsMatchingGridSubsets("EPSG:4326", "GlobalCRS84Scale", new long[]{1, 1, 1});
         testMultipleCrsMatchingGridSubsets("EPSG:4326", "GlobalCRS84Scale",
-                new long[] { 10, 10, 10 });
+                new long[]{10, 10, 10});
 
     }
 
     private void testMultipleCrsMatchingGridSubsets(final String srs, final String expectedGridset,
-            long[] tileIndex) throws Exception {
+                                                    long[] tileIndex) throws Exception {
         GetMapRequest request = new GetMapRequest();
 
         @SuppressWarnings("unchecked")
@@ -1237,7 +1237,7 @@ public class GWCTest {
         assertEquals(expectedGridset, tileRequest.getGridSetId());
         assertEquals("image/png", tileRequest.getMimeType().getMimeType());
         assertTrue("Expected " + Arrays.toString(tileIndex) + " got "
-                + Arrays.toString(tileRequest.getTileIndex()),
+                        + Arrays.toString(tileRequest.getTileIndex()),
 
                 Arrays.equals(tileIndex, tileRequest.getTileIndex()));
     }
@@ -1305,7 +1305,7 @@ public class GWCTest {
 
         // make the request match a tile in the expected gridset
         BoundingBox bounds;
-        bounds = tileLayer.getGridSubset("EPSG:900913").boundsFromIndex(new long[] { 0, 0, 1 });
+        bounds = tileLayer.getGridSubset("EPSG:900913").boundsFromIndex(new long[]{0, 0, 1});
 
         Envelope reqBbox = new Envelope(bounds.getMinX(), bounds.getMaxX(), bounds.getMinY(),
                 bounds.getMaxY());
@@ -1341,7 +1341,7 @@ public class GWCTest {
     }
 
     private void testParameterFilter(GetMapRequest request, Map<String, String> rawKvp,
-            String rawKvpParamName, String rawKvpParamValue) {
+                                     String rawKvpParamName, String rawKvpParamValue) {
 
         // set up raw kvp
         rawKvp.put(rawKvpParamName, rawKvpParamValue);
@@ -1416,7 +1416,7 @@ public class GWCTest {
 
     @Test
     public void testSetBlobStoresSavesConfig() throws Exception {
-        when(xmlConfig.getBlobStores()).thenReturn(ImmutableList.<BlobStoreInfo> of());
+        when(xmlConfig.getBlobStores()).thenReturn(ImmutableList.<BlobStoreInfo>of());
         CompositeBlobStore composite = mock(CompositeBlobStore.class);
         doReturn(composite).when(mediator).getCompositeBlobStore();
 
@@ -1428,9 +1428,9 @@ public class GWCTest {
         when(blobStoreAggregator.getBlobStoreNames()).thenReturn(Arrays.asList("store0", "store1"));
 
         BlobStoreInfo config = new FileBlobStoreInfo("TestBlobStore");
-        List<BlobStoreInfo> newStores = ImmutableList.<BlobStoreInfo> of(config);
+        List<BlobStoreInfo> newStores = ImmutableList.<BlobStoreInfo>of(config);
         mediator.setBlobStores(newStores);
-        
+
         verify(blobStoreAggregator, times(1)).removeBlobStore(eq(configList.get(0).getName()));
         verify(blobStoreAggregator, times(1)).removeBlobStore(eq(configList.get(1).getName()));
         verify(blobStoreAggregator, times(1)).addBlobStore(eq(config));
@@ -1438,7 +1438,7 @@ public class GWCTest {
 
     @Test
     public void testSetBlobStoresRestoresRuntimeStoresOnSaveFailure() throws Exception {
-        when(blobStoreAggregator.getBlobStores()).thenReturn(ImmutableList.<BlobStoreInfo> of());
+        when(blobStoreAggregator.getBlobStores()).thenReturn(ImmutableList.<BlobStoreInfo>of());
         CompositeBlobStore composite = mock(CompositeBlobStore.class);
         doReturn(composite).when(mediator).getCompositeBlobStore();
 
@@ -1452,7 +1452,7 @@ public class GWCTest {
 
         when(blobStoreAggregator.getBlobStores()).thenReturn(oldStores);
 
-        List<BlobStoreInfo> newStores = ImmutableList.<BlobStoreInfo> of(config);
+        List<BlobStoreInfo> newStores = ImmutableList.<BlobStoreInfo>of(config);
         try {
             mediator.setBlobStores(newStores);
             fail("Expected ConfigurationException");
@@ -1467,13 +1467,13 @@ public class GWCTest {
             assertTrue("H2".equals(jdbcStorage.getJDBCDiskQuotaConfig().clone(true).getDialect()));
         }
     }
-    
+
 
     private void mockCachedSecureLayer(Envelope filterBox, BoundingBox bounds,
-            final String layerName, final String gridName, final long zoom,
-            final long col, final long row) throws GeoWebCacheException, NoSuchAuthorityCodeException, FactoryException {
+                                       final String layerName, final String gridName, final long zoom,
+                                       final long col, final long row) throws GeoWebCacheException, NoSuchAuthorityCodeException, FactoryException {
         GeoServerTileLayer tileLayer = mock(GeoServerTileLayer.class);
-        GridSubset subset = mock(GridSubset.class); 
+        GridSubset subset = mock(GridSubset.class);
         SRS srs = mock(SRS.class);
         SecuredLayerInfo layer = mock(SecuredLayerInfo.class);
         FeatureTypeInfo featureType = mock(FeatureTypeInfo.class);
@@ -1485,7 +1485,7 @@ public class GWCTest {
 
         when(tld.getTileLayer(eq(layerName))).thenReturn(tileLayer);
         when(tileLayer.getGridSubset(eq(gridName))).thenReturn(subset);
-        when(subset.boundsFromIndex(eq(new long[]{col,row,zoom}))).thenReturn(bounds);
+        when(subset.boundsFromIndex(eq(new long[]{col, row, zoom}))).thenReturn(bounds);
         when(subset.getSRS()).thenReturn(srs);
         doReturn(crs).when(mediator).getCRSForGridset(eq(subset));
         when(tileLayer.getLayerInfo()).thenReturn(layer);

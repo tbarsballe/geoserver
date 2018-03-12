@@ -21,7 +21,7 @@ import org.opengis.feature.type.Name;
 
 /**
  * Implementation of GeoTools Repository interface wrapped around the GeoServer catalog.
- * 
+ *
  * @author Christian Mueller
  * @author Justin Deoliveira
  */
@@ -30,8 +30,8 @@ public class CatalogRepository implements Repository, Serializable {
     /**
      * logger
      */
-    static Logger LOGGER = Logging.getLogger( "org.geoserver.catalog");
-    
+    static Logger LOGGER = Logging.getLogger("org.geoserver.catalog");
+
     /**
      * the geoserver catalog
      */
@@ -39,17 +39,17 @@ public class CatalogRepository implements Repository, Serializable {
 
     public CatalogRepository() {
     }
-    
+
     public CatalogRepository(Catalog catalog) {
         this.catalog = catalog;
     }
 
     public DataStore dataStore(Name name) {
         DataAccess da = access(name);
-        if ( da instanceof DataStore ) {
+        if (da instanceof DataStore) {
             return (DataStore) da;
         }
-        
+
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.fine(name + " is not a data store.");
         }
@@ -71,27 +71,26 @@ public class CatalogRepository implements Repository, Serializable {
             throw new RuntimeException(ex);
         }
     }
-    
+
     public List<DataStore> getDataStores() {
         List<DataStore> dataStores = new ArrayList<DataStore>();
-        for ( DataStoreInfo ds : getCatalog().getDataStores() ) {
-            if ( !ds.isEnabled() ) {
+        for (DataStoreInfo ds : getCatalog().getDataStores()) {
+            if (!ds.isEnabled()) {
                 continue;
             }
-            
+
             try {
-                DataAccess da = ds.getDataStore( null );
-                if ( da instanceof DataStore ) {
-                    dataStores.add( (DataStore) da );
+                DataAccess da = ds.getDataStore(null);
+                if (da instanceof DataStore) {
+                    dataStores.add((DataStore) da);
                 }
-            } 
-            catch (IOException e) {
-                LOGGER.log( Level.WARNING, "Unable to get datastore '" + ds.getName() + "'", e );
+            } catch (IOException e) {
+                LOGGER.log(Level.WARNING, "Unable to get datastore '" + ds.getName() + "'", e);
             }
         }
         return dataStores;
     }
-    
+
     /**
      * Accessor for the GeoServer catalog.
      */
@@ -100,9 +99,9 @@ public class CatalogRepository implements Repository, Serializable {
             return catalog;
         }
 
-        catalog = GeoServerExtensions.bean( Catalog.class );
-        if ( catalog == null ) {
-            LOGGER.severe( "Could not locate geoserver catalog");
+        catalog = GeoServerExtensions.bean(Catalog.class);
+        if (catalog == null) {
+            LOGGER.severe("Could not locate geoserver catalog");
         }
         return catalog;
     }

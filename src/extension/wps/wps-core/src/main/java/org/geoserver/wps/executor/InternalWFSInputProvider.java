@@ -19,7 +19,7 @@ import org.springframework.context.ApplicationContext;
 
 /**
  * Handles an internal reference to a local FeatureType by a WFS request
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class InternalWFSInputProvider extends AbstractInputProvider {
@@ -27,7 +27,7 @@ public class InternalWFSInputProvider extends AbstractInputProvider {
     private ApplicationContext context;
 
     public InternalWFSInputProvider(InputType input, ProcessParameterIO ppio,
-            ApplicationContext context) {
+                                    ApplicationContext context) {
         super(input, ppio);
         this.context = context;
     }

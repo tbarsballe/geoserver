@@ -171,13 +171,13 @@ public class GWCTransactionListenerTest {
 
         when(mediator.getDeclaredCrs(anyString())).thenReturn(compoundCrs);
         listener.afterTransaction(request, result, true);
-        
+
         ReferencedEnvelope expectedBounds = new ReferencedEnvelope(transactionBounds, CRS.getHorizontalCRS(compoundCrs));
 
         verify(mediator, times(1)).truncate(eq("theLayer"), eq(expectedBounds));
         verify(mediator, times(1)).truncate(eq("theGroup"), eq(expectedBounds));
     }
-    
+
     @Test
     public void testAfterTransaction() throws Exception {
         Map<Object, Object> extendedProperties = new HashMap<Object, Object>();
@@ -208,7 +208,7 @@ public class GWCTransactionListenerTest {
      * "theGroup"
      */
     private void issueInsert(Map<Object, Object> extendedProperties,
-            ReferencedEnvelope affectedBounds) {
+                             ReferencedEnvelope affectedBounds) {
 
         TransactionType transaction = mock(TransactionType.class);
         when(transaction.getExtendedProperties()).thenReturn(extendedProperties);
@@ -229,7 +229,7 @@ public class GWCTransactionListenerTest {
                 mediator.getTileLayersByFeatureType(eq(layerName.getNamespaceURI()),
                         eq(layerName.getLocalPart()))).thenReturn(
 
-        ImmutableSet.of("theLayer", "theGroup"));
+                ImmutableSet.of("theLayer", "theGroup"));
 
         SimpleFeatureCollection affectedFeatures = mock(SimpleFeatureCollection.class);
         when(affectedFeatures.getBounds()).thenReturn(affectedBounds);

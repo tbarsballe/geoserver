@@ -43,21 +43,20 @@ import org.xml.sax.InputSource;
 
 /**
  * Some utilities shared among WFS xml readers/writers.
- * 
- * @author Justin Deoliveira, OpenGeo
  *
+ * @author Justin Deoliveira, OpenGeo
  */
 public class WFSXmlUtils {
 
     public static void initRequestParser(Parser parser, WFSInfo wfs, GeoServer geoServer, Map kvp) {
-      //check the strict flag to determine if we should validate or not
+        //check the strict flag to determine if we should validate or not
         Boolean strict = (Boolean) kvp.get("strict");
-        if ( strict == null ) {
+        if (strict == null) {
             strict = Boolean.FALSE;
         }
-        
+
         //check for cite compliance, we always validate for cite
-        if ( wfs.isCiteCompliant() ) {
+        if (wfs.isCiteCompliant()) {
             strict = Boolean.TRUE;
         }
         parser.setValidating(strict.booleanValue());
@@ -68,7 +67,7 @@ public class WFSXmlUtils {
         //"inject" namespace mappings
         parser.getNamespaces().add(new CatalogNamespaceSupport(catalog));
     }
-    
+
     public static Object parseRequest(Parser parser, Reader reader, WFSInfo wfs) throws Exception {
         //set the input source with the correct encoding
         InputSource source = new InputSource(reader);
@@ -83,7 +82,7 @@ public class WFSXmlUtils {
             if (!parser.getValidationErrors().isEmpty()) {
                 WFSException exception = new WFSException("Invalid request", "InvalidParameterValue");
 
-                for (Iterator e = parser.getValidationErrors().iterator(); e.hasNext();) {
+                for (Iterator e = parser.getValidationErrors().iterator(); e.hasNext(); ) {
                     Exception error = (Exception) e.next();
                     exception.getExceptionText().add(error.getLocalizedMessage());
                 }
@@ -91,63 +90,62 @@ public class WFSXmlUtils {
                 throw exception;
             }
         }
-        
+
     }
 
     public static void initWfsConfiguration(
-        Configuration config, GeoServer gs, FeatureTypeSchemaBuilder schemaBuilder) {
-        
+            Configuration config, GeoServer gs, FeatureTypeSchemaBuilder schemaBuilder) {
+
         MutablePicoContainer context = config.getContext();
-        
+
         //seed the cache with entries from the catalog
         FeatureTypeCache featureTypeCache = new FeatureTypeCache();
 
         Collection featureTypes = gs.getCatalog().getFeatureTypes();
-        for (Iterator f = featureTypes.iterator(); f.hasNext();) {
+        for (Iterator f = featureTypes.iterator(); f.hasNext(); ) {
             FeatureTypeInfo meta = (FeatureTypeInfo) f.next();
-            if ( !meta.enabled() ) {
+            if (!meta.enabled()) {
                 continue;
             }
 
-            
-            FeatureType featureType =  null;
+
+            FeatureType featureType = null;
             try {
                 featureType = meta.getFeatureType();
-            } 
-            catch(Exception e) {
+            } catch (Exception e) {
                 throw new RuntimeException(e);
             }
 
             featureTypeCache.put(featureType);
         }
-        
+
         //add the wfs handler factory to handle feature elements
         context.registerComponentInstance(featureTypeCache);
         context.registerComponentInstance(new WFSHandlerFactory(gs.getCatalog(), schemaBuilder));
     }
 
-    public static void registerAbstractGeometryTypeBinding(final Configuration config, Map bindings, 
-        QName qName) {
+    public static void registerAbstractGeometryTypeBinding(final Configuration config, Map bindings,
+                                                           QName qName) {
         //use setter injection for AbstractGeometryType bindign to allow an 
         // optional crs to be set in teh binding context for parsing, this crs
         // is set by the binding of a parent element.
         // note: it is important that this component adapter is non-caching so 
         // that the setter property gets updated properly every time
         bindings.put(
-            qName,
-            new SetterInjectionComponentAdapter( 
-                qName, AbstractGeometryTypeBinding.class, 
-                new Parameter[]{ 
-                    new OptionalComponentParameter(CoordinateReferenceSystem.class),
-                    new DirectObjectParameter(config, Configuration.class), 
-                    new DirectObjectParameter(getSrsSyntax(config), SrsSyntax.class)
-                } 
-            )
+                qName,
+                new SetterInjectionComponentAdapter(
+                        qName, AbstractGeometryTypeBinding.class,
+                        new Parameter[]{
+                                new OptionalComponentParameter(CoordinateReferenceSystem.class),
+                                new DirectObjectParameter(config, Configuration.class),
+                                new DirectObjectParameter(getSrsSyntax(config), SrsSyntax.class)
+                        }
+                )
         );
     }
 
     public static SrsSyntax getSrsSyntax(Configuration obj) {
-        for (Configuration dep : ((List<Configuration>)obj.getDependencies())) {
+        for (Configuration dep : ((List<Configuration>) obj.getDependencies())) {
             if (dep instanceof org.geotools.gml2.GMLConfiguration) {
                 return ((org.geotools.gml2.GMLConfiguration) dep).getSrsSyntax();
             }
@@ -159,7 +157,7 @@ public class WFSXmlUtils {
     }
 
     public static void setSrsSyntax(Configuration obj, SrsSyntax srsSyntax) {
-        for (Configuration dep : ((List<Configuration>)obj.getDependencies())) {
+        for (Configuration dep : ((List<Configuration>) obj.getDependencies())) {
             if (dep instanceof org.geotools.gml2.GMLConfiguration) {
                 ((org.geotools.gml2.GMLConfiguration) dep).setSrsSyntax(srsSyntax);
             }
@@ -178,14 +176,16 @@ public class WFSXmlUtils {
             this.obj = obj;
             this.clazz = clazz;
         }
-    
+
         public boolean isResolvable(PicoContainer container, ComponentAdapter adapter, Class expectedType) {
             if (clazz.isAssignableFrom(expectedType)) {
                 return true;
             }
             return super.isResolvable(container, adapter, expectedType);
-        };
-    
+        }
+
+        ;
+
         @Override
         public Object resolveInstance(PicoContainer container, ComponentAdapter adapter, Class expectedType) {
             if (clazz.isAssignableFrom(expectedType)) {

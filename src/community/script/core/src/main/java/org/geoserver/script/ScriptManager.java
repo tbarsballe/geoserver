@@ -41,10 +41,9 @@ import org.springframework.stereotype.Component;
 
 /**
  * Facade for the scripting subsystem, providing methods for obtaining script context and managing
- * scripts. 
- * 
- * @author Justin Deoliveira, OpenGeo
+ * scripts.
  *
+ * @author Justin Deoliveira, OpenGeo
  */
 @Component
 public class ScriptManager implements InitializingBean {
@@ -62,7 +61,7 @@ public class ScriptManager implements InitializingBean {
         this.dataDir = dataDir;
         engineMgr = new ScriptEngineManager();
         sessions = CacheBuilder.newBuilder()
-            .maximumSize(10).expireAfterAccess(10, TimeUnit.MINUTES).build();
+                .maximumSize(10).expireAfterAccess(10, TimeUnit.MINUTES).build();
     }
 
     public GeoServerDataDirectory getDataDirectory() {
@@ -70,7 +69,7 @@ public class ScriptManager implements InitializingBean {
     }
 
     public GeoServerSecurityManager getSecurityManager() {
-        return secMgr != null ? secMgr :GeoServerExtensions.bean(GeoServerSecurityManager.class);
+        return secMgr != null ? secMgr : GeoServerExtensions.bean(GeoServerSecurityManager.class);
     }
 
     public void setSecurityManager(GeoServerSecurityManager secMgr) {
@@ -90,55 +89,51 @@ public class ScriptManager implements InitializingBean {
     public List<ScriptPlugin> getPlugins() {
         return plugins();
     }
-    
+
     /**
      * The root "scripts" directory, located directly under the root of the data directory.
-     * 
-     */    
+     */
     public Resource script() {
         return dataDir.get("scripts");
     }
-    
+
     /**
      * Gets a script directory located at the specified path
-     * 
      */
     public Resource script(String... path) {
         return script().get(Paths.path(path));
     }
-    
+
 
     /**
      * The root "scripts" directory, located directly under the root of the data directory.
-     * 
-     */    
+     */
     public Resource app() {
         return dataDir.get("scripts/apps");
     }
-    
-    /**
-     * The root "scripts" directory, located directly under the root of the data directory.
-     * 
-     */    
-    public Resource app(String path) {
-        return app().get(path);
-    }
-    
 
     /**
      * The root "scripts" directory, located directly under the root of the data directory.
-     * 
+     */
+    public Resource app(String path) {
+        return app().get(path);
+    }
+
+
+    /**
+     * The root "scripts" directory, located directly under the root of the data directory.
+     *
      * @deprecated use {@link #script()}
-     */    
+     */
     @Deprecated
     public File getScriptRoot() throws IOException {
         return script().dir();
     }
 
     /**
-     * Finds a script directory located at the specified path, returning <code>null</code> if no 
+     * Finds a script directory located at the specified path, returning <code>null</code> if no
      * such directory exists.
-     * 
+     *
      * @deprecated use {@link #script(String)}
      */
     @Deprecated
@@ -153,9 +148,8 @@ public class ScriptManager implements InitializingBean {
     /**
      * Finds a script directory located at the specified path, creating the directory if it does not
      * already exist.
-     * 
+     *
      * @deprecated use {@link #script(String...)}
-     * 
      */
     @Deprecated
     public File findOrCreateScriptDir(String path) {
@@ -163,9 +157,9 @@ public class ScriptManager implements InitializingBean {
     }
 
     /**
-     * Finds a script file with the specified filename located  in the specified directory path, 
+     * Finds a script file with the specified filename located  in the specified directory path,
      * returning <code>null</code> if the file does not exist.
-     * 
+     *
      * @deprecated use {@link #script(String...)}
      */
     @Deprecated
@@ -175,9 +169,9 @@ public class ScriptManager implements InitializingBean {
     }
 
     /**
-     * Finds a script file at the specified path, returning <code>null</code> if the file does not 
+     * Finds a script file at the specified path, returning <code>null</code> if the file does not
      * exist.
-     * 
+     *
      * @deprecated use {@link #script(String...)}
      */
     @Deprecated
@@ -188,7 +182,7 @@ public class ScriptManager implements InitializingBean {
 
     /**
      * Finds a script file at the specified path, creating it if necessary.
-     * 
+     *
      * @deprecated use {@link #script(String...)}
      */
     @Deprecated
@@ -198,7 +192,7 @@ public class ScriptManager implements InitializingBean {
 
     /**
      * The root "apps" directory, located directly under {@link #getScriptRoot()}.
-     * 
+     *
      * @deprecated use {@link #app()}
      */
     @Deprecated
@@ -208,7 +202,7 @@ public class ScriptManager implements InitializingBean {
 
     /**
      * Finds a named app dir, returning <code>null</code> if the directory does not exist.
-     * 
+     *
      * @deprecated use {@link #app(String)}
      */
     @Deprecated
@@ -218,14 +212,14 @@ public class ScriptManager implements InitializingBean {
 
     /**
      * Finds a named app dir, creating if it does not already exist.
-     * 
+     *
      * @deprecated use {@link #app(String)}
      */
     @Deprecated
     public File findOrCreateAppDir(String app) throws IOException {
         return app(app).dir();
     }
-    
+
     /**
      * Find the main script File
      */
@@ -244,31 +238,31 @@ public class ScriptManager implements InitializingBean {
 
     /**
      * Find the main script File
-     * 
+     *
      * @deprecated use {@link #findAppMainScript(Resource)}
      */
     @Deprecated
     public File findAppMainScript(File appDir) {
         return findAppMainScript(Files.asResource(appDir)).file();
     }
-    
+
 
     /**
-     * The root "wps" directory, located directly under {@link #script()} 
+     * The root "wps" directory, located directly under {@link #script()}
      */
     public Resource wps() throws IOException {
         return script("wps");
     }
 
     /**
-     * The root "wfs/tx" directory, located directly under {@link #script()} 
+     * The root "wfs/tx" directory, located directly under {@link #script()}
      */
     public Resource wfsTx() throws IOException {
         return script("scripts", "wfs", "tx");
     }
 
     /**
-     * The root "function" directory, located directly under {@link #script()} 
+     * The root "function" directory, located directly under {@link #script()}
      */
     public Resource function() {
         return script("function");
@@ -277,10 +271,10 @@ public class ScriptManager implements InitializingBean {
     public Resource lib(String ext) throws IOException {
         return script("lib").get(ext);
     }
-    
+
     /**
-     * The root "wps" directory, located directly under {@link #getScriptRoot()} 
-     * 
+     * The root "wps" directory, located directly under {@link #getScriptRoot()}
+     *
      * @deprecated use {@link #wps()}
      */
     @Deprecated
@@ -289,8 +283,8 @@ public class ScriptManager implements InitializingBean {
     }
 
     /**
-     * The root "wfs/tx" directory, located directly under {@link #getScriptRoot()} 
-     * 
+     * The root "wfs/tx" directory, located directly under {@link #getScriptRoot()}
+     *
      * @deprecated use {@link #wfsTx()}
      */
     @Deprecated
@@ -299,8 +293,8 @@ public class ScriptManager implements InitializingBean {
     }
 
     /**
-     * The root "function" directory, located directly under {@link #getScriptRoot()} 
-     * 
+     * The root "function" directory, located directly under {@link #getScriptRoot()}
+     *
      * @deprecated use {@link #function()}
      */
     @Deprecated
@@ -315,7 +309,7 @@ public class ScriptManager implements InitializingBean {
     public File getLibRoot(String ext) throws IOException {
         return script("lib/" + ext).dir();
     }
-    
+
     /**
      * Creates a new script engine for the specified script file.
      */
@@ -360,7 +354,7 @@ public class ScriptManager implements InitializingBean {
 
             sids.add(e.getValue());
         }
-        
+
         return sids;
     }
 
@@ -381,14 +375,13 @@ public class ScriptManager implements InitializingBean {
 
         return engine;
     }
-    
 
-    
+
     /**
-     * Looks up the app hook for the specified script returning <code>null</code> if no such 
+     * Looks up the app hook for the specified script returning <code>null</code> if no such
      * hook can be found.
      * <p>
-     * This method works by looking up all {@link ScriptPlugin} instances and delegating to 
+     * This method works by looking up all {@link ScriptPlugin} instances and delegating to
      * {@link ScriptPlugin#createAppHook()}.
      * </p>
      */
@@ -398,10 +391,10 @@ public class ScriptManager implements InitializingBean {
     }
 
     /**
-     * Looks up the wps hook for the specified script returning <code>null</code> if no such 
+     * Looks up the wps hook for the specified script returning <code>null</code> if no such
      * hook can be found.
      * <p>
-     * This method works by looking up all {@link ScriptPlugin} instances and delegating to 
+     * This method works by looking up all {@link ScriptPlugin} instances and delegating to
      * {@link ScriptPlugin#createWpsHook()}.
      * </p>
      */
@@ -409,13 +402,13 @@ public class ScriptManager implements InitializingBean {
         ScriptPlugin p = plugin(script.name());
         return p != null ? p.createWpsHook() : null;
     }
-    
+
 
     /**
-     * Looks up the filter hook for the specified script returning <code>null</code> if no such 
+     * Looks up the filter hook for the specified script returning <code>null</code> if no such
      * hook can be found.
      * <p>
-     * This method works by looking up all {@link ScriptPlugin} instances and delegating to 
+     * This method works by looking up all {@link ScriptPlugin} instances and delegating to
      * {@link ScriptPlugin#createFunctionHook()}.
      * </p>
      */
@@ -423,14 +416,13 @@ public class ScriptManager implements InitializingBean {
         ScriptPlugin p = plugin(script.name());
         return p != null ? p.createFunctionHook() : new FunctionHook(null);
     }
-    
-    
+
 
     /**
-     * Looks up the wfs tx hook for the specified script returning <code>null</code> if no such 
+     * Looks up the wfs tx hook for the specified script returning <code>null</code> if no such
      * hook can be found.
      * <p>
-     * This method works by looking up all {@link ScriptPlugin} instances and delegating to 
+     * This method works by looking up all {@link ScriptPlugin} instances and delegating to
      * {@link ScriptPlugin#createWfsTxHook()}.
      * </p>
      */
@@ -464,12 +456,11 @@ public class ScriptManager implements InitializingBean {
     }
 
 
-    
     /**
-     * Looks up the app hook for the specified script returning <code>null</code> if no such 
+     * Looks up the app hook for the specified script returning <code>null</code> if no such
      * hook can be found.
      * <p>
-     * This method works by looking up all {@link ScriptPlugin} instances and delegating to 
+     * This method works by looking up all {@link ScriptPlugin} instances and delegating to
      * {@link ScriptPlugin#createAppHook()}.
      * </p>
      */
@@ -480,24 +471,24 @@ public class ScriptManager implements InitializingBean {
     }
 
     /**
-     * Looks up the wps hook for the specified script returning <code>null</code> if no such 
+     * Looks up the wps hook for the specified script returning <code>null</code> if no such
      * hook can be found.
      * <p>
-     * This method works by looking up all {@link ScriptPlugin} instances and delegating to 
+     * This method works by looking up all {@link ScriptPlugin} instances and delegating to
      * {@link ScriptPlugin#createWpsHook()}.
      * </p>
      */
-    @Deprecated    
+    @Deprecated
     public WpsHook lookupWpsHook(File script) {
         ScriptPlugin p = plugin(script.getName());
         return p != null ? p.createWpsHook() : null;
     }
 
     /**
-     * Looks up the filter hook for the specified script returning <code>null</code> if no such 
+     * Looks up the filter hook for the specified script returning <code>null</code> if no such
      * hook can be found.
      * <p>
-     * This method works by looking up all {@link ScriptPlugin} instances and delegating to 
+     * This method works by looking up all {@link ScriptPlugin} instances and delegating to
      * {@link ScriptPlugin#createFunctionHook()}.
      * </p>
      */
@@ -506,12 +497,12 @@ public class ScriptManager implements InitializingBean {
         ScriptPlugin p = plugin(script.getName());
         return p != null ? p.createFunctionHook() : new FunctionHook(null);
     }
-    
+
     /**
-     * Looks up the wfs tx hook for the specified script returning <code>null</code> if no such 
+     * Looks up the wfs tx hook for the specified script returning <code>null</code> if no such
      * hook can be found.
      * <p>
-     * This method works by looking up all {@link ScriptPlugin} instances and delegating to 
+     * This method works by looking up all {@link ScriptPlugin} instances and delegating to
      * {@link ScriptPlugin#createWfsTxHook()}.
      * </p>
      */
@@ -521,7 +512,7 @@ public class ScriptManager implements InitializingBean {
         return p != null ? p.createWfsTxHook() : new WfsTxHook(null);
     }
 
-    
+
     @Deprecated
     public String lookupPluginId(File script) {
         ScriptPlugin p = plugin(script.getName());
@@ -596,12 +587,13 @@ public class ScriptManager implements InitializingBean {
         }
         return ext;
     }
-    
+
     /**
      * Find the File based on the name, ScriptType and extension.  The File and it's parent directories
      * do not have to exist, they will be created.
-     * @param name The name of the script
-     * @param type The ScriptType (wps, function wfstx, app)
+     *
+     * @param name      The name of the script
+     * @param type      The ScriptType (wps, function wfstx, app)
      * @param extension The extension (js, py, groovy)
      * @return The script File
      */
@@ -623,24 +615,25 @@ public class ScriptManager implements InitializingBean {
             return dir.get(name + "." + extension);
         }
     }
-    
+
     /**
      * Find the File based on the name, ScriptType and extension.  The File and it's parent directories
      * do not have to exist, they will be created.
-     * @param name The name of the script
-     * @param type The ScriptType (wps, function wfstx, app)
+     *
+     * @param name      The name of the script
+     * @param type      The ScriptType (wps, function wfstx, app)
      * @param extension The extension (js, py, groovy)
      * @return The script File
-     * 
      * @Depecrated (use {@link #scriptFile()})
      */
     @Deprecated
     public File findScriptFile(String name, ScriptType type, String extension) throws IOException {
         return scriptFile(name, type, extension).file();
     }
-    
+
     /**
      * Determine the ScriptType for the File
+     *
      * @param file The File
      * @return The ScriptType
      */
@@ -658,9 +651,10 @@ public class ScriptManager implements InitializingBean {
             throw new IllegalArgumentException("Can't determine ScriptType for " + file + "'!");
         }
     }
-    
+
     /**
      * Determine the ScriptType for the File
+     *
      * @param file The File
      * @return The ScriptType
      */
@@ -682,6 +676,7 @@ public class ScriptManager implements InitializingBean {
 
     /**
      * Look up the editor mode by File extension
+     *
      * @param ext The file extension (js, groovy, py)
      * @return The codemirror editor mode or null
      */

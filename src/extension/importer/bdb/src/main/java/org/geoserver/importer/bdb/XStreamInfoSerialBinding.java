@@ -53,7 +53,7 @@ public class XStreamInfoSerialBinding<T> extends SerialBase implements EntryBind
         InputStream in = new ByteArrayInputStream(data, entry.getOffset(), entry.getSize());
 
         try {
-            if (compress) { 
+            if (compress) {
                 in = new LZFInputStream(in);
             }
         } catch (Exception e) {

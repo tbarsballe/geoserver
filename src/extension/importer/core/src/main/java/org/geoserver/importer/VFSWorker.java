@@ -30,7 +30,7 @@ import org.geotools.util.logging.Logging;
 
 /**
  * Utility to work with compressed files
- * 
+ *
  * @author groldan
  */
 public class VFSWorker {
@@ -68,11 +68,8 @@ public class VFSWorker {
     }
 
     /**
-     * 
      * @param archiveFile
      * @param filter
-     * 
-     *
      */
     public List<String> listFiles(final File archiveFile, final FilenameFilter filter) {
         FileSystemManager fsManager;
@@ -190,7 +187,7 @@ public class VFSWorker {
 
     @SuppressWarnings("unchecked")
     public Collection<File> listFilesInFolder(final File targetFolder,
-            final FilenameFilter fileNameFilter) {
+                                              final FilenameFilter fileNameFilter) {
         IOFileFilter fileFilter = new IOFileFilter() {
 
             public boolean accept(File dir, String name) {

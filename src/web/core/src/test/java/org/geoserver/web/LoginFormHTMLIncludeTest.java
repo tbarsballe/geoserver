@@ -17,7 +17,7 @@ public class LoginFormHTMLIncludeTest extends GeoServerWicketTestSupport {
     @Test
     public void testImportAsStringDefault() throws Exception {
         LoginFormHTMLInclude defaultInclude = new LoginFormHTMLInclude(
-            "login.form", new PackageResourceReference(LoginFormInfo.class, "include_login_form.html"));
+                "login.form", new PackageResourceReference(LoginFormInfo.class, "include_login_form.html"));
         String defaultString = defaultInclude.importAsString();
         assertTrue("Default include should contains autocomplete=\"on\"", defaultString.contains("autocomplete=\"on\""));
     }
@@ -27,7 +27,7 @@ public class LoginFormHTMLIncludeTest extends GeoServerWicketTestSupport {
         String existingAutocompleteSetting = System.getProperty(LoginFormHTMLInclude.GEOSERVER_LOGIN_AUTOCOMPLETE);
         System.setProperty(LoginFormHTMLInclude.GEOSERVER_LOGIN_AUTOCOMPLETE, "off");
         LoginFormHTMLInclude defaultInclude = new LoginFormHTMLInclude(
-            "login.form", new PackageResourceReference(LoginFormInfo.class, "include_login_form.html"));
+                "login.form", new PackageResourceReference(LoginFormInfo.class, "include_login_form.html"));
         String defaultString = defaultInclude.importAsString();
         assertTrue("Default include should contains autocomplete=\"off\"", defaultString.contains("autocomplete=\"off\""));
 

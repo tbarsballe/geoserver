@@ -32,16 +32,15 @@ import org.opengis.filter.sort.SortBy;
  * Secures a feature collection according to the given policy. The implementation assumes
  * all of the attributes that should not be read have been shaved off already, and similarly,
  * that the read filters have been applied already in the delegate, and adds control over writes
- * 
- * @author Andrea Aime - GeoSolutions
- * 
+ *
  * @param <T>
  * @param <F>
+ * @author Andrea Aime - GeoSolutions
  */
 public class SecuredFeatureCollection<T extends FeatureType, F extends Feature> extends
         DecoratingFeatureCollection<T, F> {
     static final Logger LOGGER = Logging.getLogger(SecuredFeatureCollection.class);
-    
+
     WrapperPolicy policy;
 
     SecuredFeatureCollection(FeatureCollection<T, F> delegate, WrapperPolicy policy) {
@@ -57,7 +56,7 @@ public class SecuredFeatureCollection<T extends FeatureType, F extends Feature> 
     public FeatureCollection<T, F> sort(SortBy order) {
         // attributes should have been shaved already
         final FeatureCollection<T, F> fc = delegate.sort(order);
-        if(fc == null)
+        if (fc == null)
             return null;
         else
             return (FeatureCollection) SecuredObjects.secure(fc, policy);
@@ -65,7 +64,7 @@ public class SecuredFeatureCollection<T extends FeatureType, F extends Feature> 
 
     public FeatureCollection<T, F> subCollection(Filter filter) {
         final FeatureCollection<T, F> fc = delegate.subCollection(filter);
-        if(fc == null)
+        if (fc == null)
             return null;
         else
             return (FeatureCollection) SecuredObjects.secure(fc, policy);

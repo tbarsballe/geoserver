@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
 
 /**
  * Encapsulates a date format and regular expression.
- * 
+ *
  * @author Justin Deoliveira, OpenGeo
  */
 public class DatePattern implements java.io.Serializable {
@@ -31,7 +31,7 @@ public class DatePattern implements java.io.Serializable {
 
     /**
      * Constructor with defaults, <tt>forceGmt</tt> set to <tt>true</tt> and <tt>strict</tt>
-     * set to <tt>false</tt>. 
+     * set to <tt>false</tt>.
      */
     public DatePattern(String format, String regex) {
         this(format, regex, true, false);
@@ -40,11 +40,11 @@ public class DatePattern implements java.io.Serializable {
     /**
      * Constructor.
      *
-     * @param format The date format
-     * @param regex The regular expression to pull the date out of a another string.
+     * @param format   The date format
+     * @param regex    The regular expression to pull the date out of a another string.
      * @param forceGmt Whether the pattern should assume the GMT time zone.
-     * @param strict Whether or not this pattern must apply the regular expression to match before
-     *   parsing a date. 
+     * @param strict   Whether or not this pattern must apply the regular expression to match before
+     *                 parsing a date.
      */
     public DatePattern(String format, String regex, boolean forceGmt, boolean strict) {
         this.format = format;
@@ -58,7 +58,7 @@ public class DatePattern implements java.io.Serializable {
     }
 
     public SimpleDateFormat dateFormat() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat(format, Locale.CANADA); 
+        SimpleDateFormat dateFormat = new SimpleDateFormat(format, Locale.CANADA);
         if (forceGmt) {
             dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
         }
@@ -152,5 +152,5 @@ public class DatePattern implements java.io.Serializable {
         return true;
     }
 
-    
+
 }

@@ -48,7 +48,6 @@ import org.opengis.filter.Filter;
 import org.w3c.dom.Document;
 
 
-
 public class ImporterMosaicTest extends ImporterTestSupport {
 
     protected static QName WATTEMP = new QName(MockData.SF_URI, "watertemp", MockData.SF_PREFIX);
@@ -75,14 +74,14 @@ public class ImporterMosaicTest extends ImporterTestSupport {
         Mosaic m = new Mosaic(unpack("mosaic/bm_time.zip"));
 
         m.setTimeMode(TimeMode.FILENAME);
-        FilenameTimeHandler th = (FilenameTimeHandler) m.getTimeHandler(); 
+        FilenameTimeHandler th = (FilenameTimeHandler) m.getTimeHandler();
         th.setFilenameRegex("(\\d){6}");
         th.setTimeFormat("yyyyMM");
 
         m.prepare();
 
         List<FileData> files = m.getFiles();
-        assertEquals(4,files.size());
+        assertEquals(4, files.size());
 
         for (int i = 0; i < files.size(); i++) {
             FileData fd = files.get(i);
@@ -101,13 +100,13 @@ public class ImporterMosaicTest extends ImporterTestSupport {
         Mosaic m = new Mosaic(unpack("mosaic/bm_time.zip"));
 
         m.setTimeMode(TimeMode.FILENAME);
-        FilenameTimeHandler th = (FilenameTimeHandler) m.getTimeHandler(); 
+        FilenameTimeHandler th = (FilenameTimeHandler) m.getTimeHandler();
         th.setFilenameRegex("(\\d){6}");
         th.setTimeFormat("yyyyMM");
 
         ImportContext context = importer.createContext(m);
         assertEquals(1, context.getTasks().size());
-        
+
         importer.run(context);
 
         LayerInfo l = context.getTasks().get(0).getLayer();
@@ -119,11 +118,11 @@ public class ImporterMosaicTest extends ImporterTestSupport {
 
         runChecks(l.getName());
 
-        Document dom = getAsDOM(String.format("/%s/%s/wms?request=getcapabilities", 
-            r.getStore().getWorkspace().getName(), l.getName()));
+        Document dom = getAsDOM(String.format("/%s/%s/wms?request=getcapabilities",
+                r.getStore().getWorkspace().getName(), l.getName()));
         XMLAssert.assertXpathExists(
-            "//wms:Layer[wms:Name = '" + m.getName() + "']/wms:Dimension[@name = 'time']", dom);
-        
+                "//wms:Layer[wms:Name = '" + m.getName() + "']/wms:Dimension[@name = 'time']", dom);
+
     }
 
     @Test
@@ -145,10 +144,10 @@ public class ImporterMosaicTest extends ImporterTestSupport {
 
         runChecks(l.getName());
 
-        Document dom = getAsDOM(String.format("/%s/%s/wms?request=getcapabilities", 
-            r.getStore().getWorkspace().getName(), l.getName()));
+        Document dom = getAsDOM(String.format("/%s/%s/wms?request=getcapabilities",
+                r.getStore().getWorkspace().getName(), l.getName()));
         XMLAssert.assertXpathExists(
-            "//wms:Layer[wms:Name = '" + m.getName() + "']/wms:Dimension[@name = 'time']", dom);
+                "//wms:Layer[wms:Name = '" + m.getName() + "']/wms:Dimension[@name = 'time']", dom);
     }
 
     @Test
@@ -170,11 +169,11 @@ public class ImporterMosaicTest extends ImporterTestSupport {
 
         String mosaicLocation = store.getURL();
         File mosaicFolder = URLs.urlToFile(new URL(mosaicLocation));
-        
+
         try (InputStream is = MockData.class.getResourceAsStream("harvesting.zip")) {
             IOUtils.decompress(is, mosaicFolder);
         }
-        
+
         String fileName1 = "NCOM_wattemp_000_20081102T0000000_12.tiff";
         File file1 = new File(mosaicFolder, fileName1);
         assertTrue(file1.exists());
@@ -266,7 +265,7 @@ public class ImporterMosaicTest extends ImporterTestSupport {
         File mosaicFolder = URLs.urlToFile(new URL(mosaicLocation));
 
         File fileToHarvest = new File(mosaicFolder, "polyphemus_20130302_test.nc");
-        try(InputStream is = ImporterTest.class.getResourceAsStream("test-data/mosaic/polyphemus_20130302_test.nc")) {
+        try (InputStream is = ImporterTest.class.getResourceAsStream("test-data/mosaic/polyphemus_20130302_test.nc")) {
             FileUtils.copyInputStreamToFile(is, fileToHarvest);
         }
         assertTrue(fileToHarvest.exists());
@@ -276,7 +275,7 @@ public class ImporterMosaicTest extends ImporterTestSupport {
         assertEquals(ImportTask.State.READY, context.getTasks().get(0).getState());
 
         importer.run(context);
-        
+
         // check it succeeded
         assertEquals(ImportContext.State.COMPLETE, context.getState());
 
@@ -311,7 +310,7 @@ public class ImporterMosaicTest extends ImporterTestSupport {
         File mosaicFolder = URLs.urlToFile(new URL(mosaicLocation));
 
         File fileToHarvest = new File(mosaicFolder, "polyphemus_20130302_test.nc");
-        try(InputStream is = ImporterTest.class.getResourceAsStream("test-data/mosaic/polyphemus_20130302_test.nc")) {
+        try (InputStream is = ImporterTest.class.getResourceAsStream("test-data/mosaic/polyphemus_20130302_test.nc")) {
             FileUtils.copyInputStreamToFile(is, fileToHarvest);
         }
         assertTrue(fileToHarvest.exists());

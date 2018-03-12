@@ -19,26 +19,25 @@ import com.hazelcast.core.MessageListener;
  * <p>
  * A Spring bean of this type shall be configured in the project's {@code applicationContext.xml}
  * spring configuration file in order for {@link ResourceStore} to find it.
- * 
  */
 public class HzResourceNotificationDispatcher extends SimpleResourceNotificationDispatcher implements MessageListener<ResourceNotification> {
-    
+
     static final String TOPIC_NAME = "resourceWatcher";
-    
+
     private static final Logger LOGGER = Logging.getLogger(HzResourceNotificationDispatcher.class);
-        
-    private HzCluster cluster; 
-    
+
+    private HzCluster cluster;
+
     public HzResourceNotificationDispatcher() {
         //lazy loaded cluster
     }
-    
+
     public HzResourceNotificationDispatcher(HzCluster cluster) {
         this.cluster = cluster;
         topic().addMessageListener(this);
     }
-     
-    private ITopic<ResourceNotification> topic() {   
+
+    private ITopic<ResourceNotification> topic() {
         if (cluster == null) {
             cluster = HzCluster.getInstanceIfAvailable().orNull();
             if (cluster != null) {
@@ -55,16 +54,16 @@ public class HzResourceNotificationDispatcher extends SimpleResourceNotification
             topic.publish(event);
         } else {
             LOGGER.warning("Failed to publish resource notification, cluster not initialized (yet).");
-            super.changed(event); 
+            super.changed(event);
         }
     }
 
     @Override
     public void onMessage(Message<ResourceNotification> msg) {
-        LOGGER.info( "Received ResourceNotification from HazelCast: " + 
-               msg.getMessageObject());
-        
-        super.changed(msg.getMessageObject());        
+        LOGGER.info("Received ResourceNotification from HazelCast: " +
+                msg.getMessageObject());
+
+        super.changed(msg.getMessageObject());
     }
-    
+
 }

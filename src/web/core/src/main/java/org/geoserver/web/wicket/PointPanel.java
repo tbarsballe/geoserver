@@ -34,7 +34,7 @@ public class PointPanel extends FormComponentPanel<Point> {
 
     protected DecimalTextField xInput, yInput;
 
-    public PointPanel(String id ) {
+    public PointPanel(String id) {
         super(id, new Model<Point>(null));
 
         initComponents();
@@ -61,8 +61,8 @@ public class PointPanel extends FormComponentPanel<Point> {
         add(xLabel = new Label("xL", new ResourceModel("x")));
         add(yLabel = new Label("yL", new ResourceModel("y")));
 
-        add( xInput = new DecimalTextField( "x", new PropertyModel<Double>(this, "x")) );
-        add( yInput = new DecimalTextField( "y", new PropertyModel<Double>(this, "y")) );
+        add(xInput = new DecimalTextField("x", new PropertyModel<Double>(this, "x")));
+        add(yInput = new DecimalTextField("y", new PropertyModel<Double>(this, "y")));
     }
 
     @Override
@@ -73,13 +73,13 @@ public class PointPanel extends FormComponentPanel<Point> {
 
     private void updateFields() {
         Point p = (Point) getModelObject();
-        if(p != null) {
+        if (p != null) {
             this.x = p.getX();
             this.y = p.getY();
         }
     }
 
-    public PointPanel setReadOnly( final boolean readOnly ) {
+    public PointPanel setReadOnly(final boolean readOnly) {
         visitChildren(TextField.class, (component, visit) -> {
             component.setEnabled(!readOnly);
         });
@@ -94,7 +94,7 @@ public class PointPanel extends FormComponentPanel<Point> {
         });
 
         // update the point model
-        if(x != null && y != null) {
+        if (x != null && y != null) {
             setConvertedInput(gf.createPoint(new Coordinate(x, y)));
         } else {
             setConvertedInput(null);
@@ -113,6 +113,7 @@ public class PointPanel extends FormComponentPanel<Point> {
 
     /**
      * Sets the max number of digits for the
+     *
      * @param maximumFractionDigits
      */
     public void setMaximumFractionDigits(int maximumFractionDigits) {

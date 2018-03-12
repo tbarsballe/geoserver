@@ -9,6 +9,7 @@ package org.geoserver.wfs.json;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
@@ -17,9 +18,7 @@ import org.geoserver.wfs.WFSTestSupport;
 import org.junit.Test;
 
 /**
- * 
  * @author carlo cancellieri - GeoSolutions
- * 
  */
 public class GeoJsonDescribeTest extends WFSTestSupport {
 

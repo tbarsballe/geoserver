@@ -26,11 +26,11 @@ public class SecurityProcessFilter implements ProcessFilter, ExtensionPriority {
 
     @Override
     public ProcessFactory filterFactory(ProcessFactory pf) {
-        if(manager == null){
+        if (manager == null) {
             manager = GeoServerExtensions.bean(ProcessAccessManager.class);
             if (manager == null) {
                 manager = new DefaultProcessAccessManager(GeoServerExtensions.bean(WpsAccessRuleDAO.class));
-            } 
+            }
         }
         return new SecurityProcessFactory(pf, this);
     }

@@ -39,7 +39,6 @@ import org.geotools.coverage.io.netcdf.cf.NetCDFCFParser;
 
 /**
  * Extension of the {@link NetCDFPanel} adding support for setting the Layer name and Unit of Measure
- * 
  */
 public class NetCDFOutSettingsEditor extends NetCDFPanel<NetCDFLayerSettingsContainer> {
 
@@ -55,7 +54,9 @@ public class NetCDFOutSettingsEditor extends NetCDFPanel<NetCDFLayerSettingsCont
         UNITS.addAll(NON_SI_INSTANCE.getUnits());
     }
 
-    /** serialVersionUID */
+    /**
+     * serialVersionUID
+     */
     private static final long serialVersionUID = 1L;
 
     private final TextField<String> standardName;
@@ -63,7 +64,7 @@ public class NetCDFOutSettingsEditor extends NetCDFPanel<NetCDFLayerSettingsCont
     private final TextField<String> uom;
 
     public NetCDFOutSettingsEditor(String id, IModel<NetCDFLayerSettingsContainer> netcdfModel,
-            IModel<CoverageInfo> cinfo) {
+                                   IModel<CoverageInfo> cinfo) {
         super(id, netcdfModel);
         // Add panel for Standard name definition
         standardName = new TextField<String>("standardName", new PropertyModel(netcdfModel,
@@ -186,7 +187,7 @@ public class NetCDFOutSettingsEditor extends NetCDFPanel<NetCDFLayerSettingsCont
                 extension.convertInput(convertedInput);
             }
         });
-        
+
         setConvertedInput(convertedInput);
     }
 

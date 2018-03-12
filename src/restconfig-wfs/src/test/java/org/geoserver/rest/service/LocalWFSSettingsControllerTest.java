@@ -79,7 +79,7 @@ public class LocalWFSSettingsControllerTest extends CatalogRESTTestSupport {
 
     @Test
     public void testGetAsHTML() throws Exception {
-        getAsDOM(RestBaseController.ROOT_PATH + "/services/wfs/workspaces/sf/settings.html" );
+        getAsDOM(RestBaseController.ROOT_PATH + "/services/wfs/workspaces/sf/settings.html");
     }
 
     @Test

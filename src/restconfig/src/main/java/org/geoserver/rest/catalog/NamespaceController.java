@@ -42,7 +42,7 @@ import java.util.logging.Logger;
 @RequestMapping(path = RestBaseController.ROOT_PATH + "/namespaces", produces = {
         MediaType.APPLICATION_JSON_VALUE,
         MediaType.APPLICATION_XML_VALUE,
-        MediaType.TEXT_HTML_VALUE })
+        MediaType.TEXT_HTML_VALUE})
 public class NamespaceController extends AbstractCatalogController {
 
     private static final Logger LOGGER = Logging.getLogger(NamespaceController.class);
@@ -55,7 +55,7 @@ public class NamespaceController extends AbstractCatalogController {
     @GetMapping(value = "/{namespaceName}", produces = {
             MediaType.APPLICATION_JSON_VALUE,
             MediaType.TEXT_HTML_VALUE,
-            MediaType.APPLICATION_XML_VALUE })
+            MediaType.APPLICATION_XML_VALUE})
     public RestWrapper<NamespaceInfo> namespaceGet(@PathVariable String namespaceName) {
 
         NamespaceInfo namespace = catalog.getNamespaceByPrefix(namespaceName);
@@ -80,25 +80,25 @@ public class NamespaceController extends AbstractCatalogController {
             MediaType.TEXT_XML_VALUE,
             MediaType.APPLICATION_XML_VALUE,
             MediaTypeExtensions.TEXT_JSON_VALUE,
-            MediaType.APPLICATION_JSON_VALUE })
+            MediaType.APPLICATION_JSON_VALUE})
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<String> namespacePost(@RequestBody NamespaceInfo namespace, UriComponentsBuilder builder) {
 
         catalog.add(namespace);
         String name = namespace.getName();
         LOGGER.info("Added namespace " + name);
-        
+
         //JD: we need to keep namespace and workspace in sync, so create a worksapce
         // if one does not already exists, we can remove this once we get to a point
         // where namespace is just an attribute on a layer, and not a containing element
-        if ( catalog.getWorkspaceByName( namespace.getPrefix() ) == null ) {
+        if (catalog.getWorkspaceByName(namespace.getPrefix()) == null) {
             WorkspaceInfo ws = catalog.getFactory().createWorkspace();
-            ws.setName( namespace.getPrefix() );
+            ws.setName(namespace.getPrefix());
             ws.setIsolated(namespace.isIsolated());
-            catalog.add( ws );
+            catalog.add(ws);
         }
 
-        
+
         // build the new path
         UriComponents uriComponents = getUriComponents(name, builder);
         HttpHeaders headers = new HttpHeaders();
@@ -110,7 +110,7 @@ public class NamespaceController extends AbstractCatalogController {
             MediaType.TEXT_XML_VALUE,
             MediaType.APPLICATION_XML_VALUE,
             MediaTypeExtensions.TEXT_JSON_VALUE,
-            MediaType.APPLICATION_JSON_VALUE })
+            MediaType.APPLICATION_JSON_VALUE})
     public void namespacePut(
             @RequestBody NamespaceInfo namespace,
             @PathVariable String prefix,
@@ -125,12 +125,12 @@ public class NamespaceController extends AbstractCatalogController {
                 throw new RestException("Can't change a non existant namespace (" + prefix + ")",
                         HttpStatus.NOT_FOUND);
             }
-    
+
             String infoName = namespace.getName();
             if (infoName != null && !prefix.equals(infoName)) {
                 throw new RestException("Can't change name of namespace", HttpStatus.FORBIDDEN);
             }
-    
+
             new CatalogBuilder(catalog).updateNamespace(nsi, namespace);
             catalog.save(nsi);
         }
@@ -206,10 +206,10 @@ public class NamespaceController extends AbstractCatalogController {
             }
         };
     }
-    
+
     @Override
     public boolean supports(MethodParameter methodParameter, Type targetType,
-            Class<? extends HttpMessageConverter<?>> converterType) {
+                            Class<? extends HttpMessageConverter<?>> converterType) {
         return NamespaceInfo.class.isAssignableFrom(methodParameter.getParameterType());
     }
 
@@ -237,13 +237,13 @@ public class NamespaceController extends AbstractCatalogController {
 
             @Override
             protected void postEncodeNamespace(NamespaceInfo cs, HierarchicalStreamWriter writer,
-                    MarshallingContext context) {
+                                               MarshallingContext context) {
 
             }
 
             @Override
             protected void postEncodeReference(Object obj, String ref, String prefix,
-                    HierarchicalStreamWriter writer, MarshallingContext context) {
+                                               HierarchicalStreamWriter writer, MarshallingContext context) {
                 if (obj instanceof NamespaceInfo) {
                     converter.encodeLink("/namespaces/" + converter.encode(ref), writer);
                 }

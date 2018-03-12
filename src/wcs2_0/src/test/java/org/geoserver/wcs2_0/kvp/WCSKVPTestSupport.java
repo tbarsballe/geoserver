@@ -35,7 +35,6 @@ import org.opengis.coverage.grid.GridCoverage;
 
 /**
  * @author Simone Giannecchini, GeoSolutions SAS
- *
  */
 public abstract class WCSKVPTestSupport extends WCSTestSupport {
 

@@ -9,9 +9,8 @@ import org.geoserver.security.config.SecurityRoleServiceConfig;
 
 /**
  * Configuration class for the LDAPRoleService.
- * 
- * @author "Mauro Bartolomeoli - mauro.bartolomeoli@geo-solutions.it"
  *
+ * @author "Mauro Bartolomeoli - mauro.bartolomeoli@geo-solutions.it"
  */
 public class LDAPRoleServiceConfig extends LDAPBaseSecurityServiceConfig implements SecurityRoleServiceConfig {
 

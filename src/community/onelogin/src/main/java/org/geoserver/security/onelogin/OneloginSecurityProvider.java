@@ -24,9 +24,8 @@ import org.springframework.security.saml.SAMLProcessingFilter;
 
 /**
  * Security provider for OneLogin
- * 
- * @author Xandros
  *
+ * @author Xandros
  */
 
 public class OneloginSecurityProvider extends AbstractFilterProvider

@@ -45,7 +45,7 @@ public class SystemPropertyStatus implements ModuleStatus {
     public Optional<String> getMessage() {
         StringBuffer result = new StringBuffer();
         for (Iterator<Entry<Object, Object>> it = System.getProperties().entrySet().iterator(); it
-                .hasNext();) {
+                .hasNext(); ) {
             Entry<Object, Object> entry = it.next();
             result.append(entry.getKey().toString() + "=" + entry.getValue().toString() + "\n");
         }

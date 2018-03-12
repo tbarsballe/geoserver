@@ -18,65 +18,64 @@ public class WFSLoader extends LegacyServiceLoader<WFSInfo> {
     public Class<WFSInfo> getServiceClass() {
         return WFSInfo.class;
     }
-    
+
     public WFSInfo load(LegacyServicesReader reader, GeoServer geoServer)
             throws Exception {
-        
+
         WFSInfoImpl wfs = new WFSInfoImpl();
-        wfs.setId( "wfs" );
-        
-        Map<String,Object> properties = reader.wfs();
-        readCommon( wfs, properties, geoServer );
-        
+        wfs.setId("wfs");
+
+        Map<String, Object> properties = reader.wfs();
+        readCommon(wfs, properties, geoServer);
+
         //service level
-        wfs.setServiceLevel( WFSInfo.ServiceLevel.get( (Integer) properties.get( "serviceLevel") ) );
-        
+        wfs.setServiceLevel(WFSInfo.ServiceLevel.get((Integer) properties.get("serviceLevel")));
+
         //max features
-        Integer maxFeatures = (Integer) reader.global().get( "maxFeatures" );
-        if ( maxFeatures == null ) {
+        Integer maxFeatures = (Integer) reader.global().get("maxFeatures");
+        if (maxFeatures == null) {
             maxFeatures = Integer.MAX_VALUE;
         }
-        wfs.setMaxFeatures( maxFeatures );
-        
-        Boolean featureBounding = (Boolean) properties.get( "featureBounding");
-        if ( featureBounding != null ) {
-            wfs.setFeatureBounding( featureBounding );
+        wfs.setMaxFeatures(maxFeatures);
+
+        Boolean featureBounding = (Boolean) properties.get("featureBounding");
+        if (featureBounding != null) {
+            wfs.setFeatureBounding(featureBounding);
         }
-        
-        Boolean hitsIgnoreMaxFeatures = (Boolean) properties.get( "hitsIgnoreMaxFeatures");
+
+        Boolean hitsIgnoreMaxFeatures = (Boolean) properties.get("hitsIgnoreMaxFeatures");
         if (hitsIgnoreMaxFeatures != null) {
-            wfs.setHitsIgnoreMaxFeatures( hitsIgnoreMaxFeatures );
+            wfs.setHitsIgnoreMaxFeatures(hitsIgnoreMaxFeatures);
         }
-        
+
         //gml2
         GMLInfo gml = new GMLInfoImpl();
         gml.setOverrideGMLAttributes(true);
-        
-        Boolean srsXmlStyle = (Boolean) properties.get( "srsXmlStyle" );
-        if( srsXmlStyle ) {
-            gml.setSrsNameStyle( SrsNameStyle.XML );    
+
+        Boolean srsXmlStyle = (Boolean) properties.get("srsXmlStyle");
+        if (srsXmlStyle) {
+            gml.setSrsNameStyle(SrsNameStyle.XML);
+        } else {
+            gml.setSrsNameStyle(SrsNameStyle.NORMAL);
         }
-        else {
-            gml.setSrsNameStyle( SrsNameStyle.NORMAL );
-        }
-        wfs.getGML().put( WFSInfo.Version.V_10 , gml );
-        
+        wfs.getGML().put(WFSInfo.Version.V_10, gml);
+
         //gml3
         gml = new GMLInfoImpl();
         gml.setSrsNameStyle(SrsNameStyle.URN);
         gml.setOverrideGMLAttributes(false);
-        wfs.getGML().put( WFSInfo.Version.V_11 , gml );
+        wfs.getGML().put(WFSInfo.Version.V_11, gml);
 
         //gml32
         gml = new GMLInfoImpl();
         gml.setSrsNameStyle(SrsNameStyle.URN2);
         gml.setOverrideGMLAttributes(false);
-        wfs.getGML().put( WFSInfo.Version.V_20 , gml );
+        wfs.getGML().put(WFSInfo.Version.V_20, gml);
 
-        wfs.getVersions().add( new Version( "1.0.0" ) );
-        wfs.getVersions().add( new Version( "1.1.0" ) );
-        wfs.getVersions().add( new Version( "2.0.0" ) );
-        
+        wfs.getVersions().add(new Version("1.0.0"));
+        wfs.getVersions().add(new Version("1.1.0"));
+        wfs.getVersions().add(new Version("2.0.0"));
+
         return wfs;
     }
 

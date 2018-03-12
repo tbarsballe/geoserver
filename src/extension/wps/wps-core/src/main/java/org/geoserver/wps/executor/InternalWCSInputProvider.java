@@ -20,7 +20,7 @@ import org.springframework.context.ApplicationContext;
 
 /**
  * Handles an internal reference to a local Coverage by a WCS request
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class InternalWCSInputProvider extends AbstractInputProvider {
@@ -28,7 +28,7 @@ public class InternalWCSInputProvider extends AbstractInputProvider {
     private ApplicationContext context;
 
     public InternalWCSInputProvider(InputType input, ProcessParameterIO ppio,
-            ApplicationContext context) {
+                                    ApplicationContext context) {
         super(input, ppio);
         this.context = context;
     }
@@ -44,13 +44,13 @@ public class InternalWCSInputProvider extends AbstractInputProvider {
             // what WCS version?
             String version = getVersion(ref.getHref());
             KvpRequestReader reader;
-	    if ("1.0.0".equals(version) || "1.0".equals(version)) {
-		reader = (KvpRequestReader) context.getBean("wcs100GetCoverageRequestReader");
-	    } else if ("2.0.1".equals(version) || "2.0.0".equals(version)) {
-		reader = (KvpRequestReader) context.getBean("wcs20getCoverageKvpParser");
-	    } else {
-		reader = (KvpRequestReader) context.getBean("wcs111GetCoverageRequestReader");
-	    }
+            if ("1.0.0".equals(version) || "1.0".equals(version)) {
+                reader = (KvpRequestReader) context.getBean("wcs100GetCoverageRequestReader");
+            } else if ("2.0.1".equals(version) || "2.0.0".equals(version)) {
+                reader = (KvpRequestReader) context.getBean("wcs20getCoverageKvpParser");
+            } else {
+                reader = (KvpRequestReader) context.getBean("wcs111GetCoverageRequestReader");
+            }
 
             getCoverage = kvpParse(ref.getHref(), reader);
         }
@@ -68,8 +68,7 @@ public class InternalWCSInputProvider extends AbstractInputProvider {
             WebCoverageService20 wcs = (WebCoverageService20) context
                     .getBean("wcs20ServiceTarget");
             return wcs.getCoverage((net.opengis.wcs20.GetCoverageType) getCoverage);
-        } 
-        else {
+        } else {
             throw new WPSException("Unrecognized request type " + getCoverage);
         }
     }

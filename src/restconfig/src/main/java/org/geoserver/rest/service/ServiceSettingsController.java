@@ -39,10 +39,10 @@ public abstract class ServiceSettingsController extends AbstractGeoServerControl
         this.clazz = clazz;
     }
 
-    @GetMapping( value = {"/settings", "/workspaces/{workspaceName}/settings"}, produces = {
+    @GetMapping(value = {"/settings", "/workspaces/{workspaceName}/settings"}, produces = {
             MediaType.APPLICATION_JSON_VALUE,
             MediaType.APPLICATION_XML_VALUE,
-            MediaType.TEXT_HTML_VALUE} )
+            MediaType.TEXT_HTML_VALUE})
     public RestWrapper serviceSettingsGet(@PathVariable(required = false) String workspaceName) {
         ServiceInfo service;
         if (workspaceName != null) {
@@ -66,10 +66,10 @@ public abstract class ServiceSettingsController extends AbstractGeoServerControl
 
     public void serviceSettingsPut(ServiceInfo info, String workspaceName) {
         WorkspaceInfo ws = null;
-        if(workspaceName!=null) ws = geoServer.getCatalog().getWorkspaceByName(workspaceName);
+        if (workspaceName != null) ws = geoServer.getCatalog().getWorkspaceByName(workspaceName);
 
         ServiceInfo originalInfo;
-        if(ws!=null){
+        if (ws != null) {
             originalInfo = geoServer.getService(ws, clazz);
         } else {
             originalInfo = geoServer.getService(clazz);
@@ -78,14 +78,14 @@ public abstract class ServiceSettingsController extends AbstractGeoServerControl
             OwsUtils.copy(info, originalInfo, clazz);
             geoServer.save(originalInfo);
         } else {
-            if(ws!=null) {
+            if (ws != null) {
                 info.setWorkspace(ws);
             }
             geoServer.add(info);
         }
     }
 
-    @DeleteMapping ( value = "/workspaces/{workspaceName}/settings")
+    @DeleteMapping(value = "/workspaces/{workspaceName}/settings")
     public void serviceDelete(@PathVariable String workspaceName) {
         WorkspaceInfo ws = geoServer.getCatalog().getWorkspaceByName(workspaceName);
         if (ws == null) {

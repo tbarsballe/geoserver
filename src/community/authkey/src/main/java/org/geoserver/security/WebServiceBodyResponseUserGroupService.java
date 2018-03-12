@@ -29,11 +29,10 @@ import org.springframework.util.StringUtils;
 
 /**
  * Extracts Roles from the {@linkplain WebServiceAuthenticationKeyMapper} Response Body.
- * 
+ * <p>
  * This {@linkplain GeoServerUserGroupService} can also be used to re-map Roles to internal Security Groups.
- * 
- * @author Alessio Fabiani, GeoSolutions S.A.S.
  *
+ * @author Alessio Fabiani, GeoSolutions S.A.S.
  */
 public class WebServiceBodyResponseUserGroupService extends AbstractGeoServerSecurityService
         implements GeoServerUserGroupService {
@@ -90,7 +89,7 @@ public class WebServiceBodyResponseUserGroupService extends AbstractGeoServerSec
                         (convertToUpperCase ? role.trim().toUpperCase() : role.trim())));
             }
         }
-        
+
         if (StringUtils.hasLength(webServiceBodyConfig.getRoleServiceName())) {
             roleServiceName = webServiceBodyConfig.getRoleServiceName();
         } else {

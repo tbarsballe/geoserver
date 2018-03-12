@@ -19,7 +19,7 @@ import org.opengis.referencing.operation.MathTransform;
 import com.vividsolutions.jts.geom.Geometry;
 
 public class ReprojectTransform extends AbstractTransform implements InlineVectorTransform {
-    
+
     private static final long serialVersionUID = 1L;
 
     CoordinateReferenceSystem source, target;
@@ -51,7 +51,7 @@ public class ReprojectTransform extends AbstractTransform implements InlineVecto
     }
 
     public SimpleFeatureType apply(ImportTask task, DataStore dataStore,
-            SimpleFeatureType featureType) throws Exception {
+                                   SimpleFeatureType featureType) throws Exception {
 
         //update the layer metadata
         ResourceInfo r = task.getLayer().getResource();

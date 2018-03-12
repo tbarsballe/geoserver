@@ -7,9 +7,7 @@
 package org.geoserver.test;
 
 /**
- * 
  * @author Niels Charlier, Curtin University of Technology
- * 
  */
 
 public class MappingNameMockData extends AbstractAppSchemaMockData {

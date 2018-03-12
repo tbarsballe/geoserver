@@ -18,9 +18,8 @@ import org.xml.sax.helpers.NamespaceSupport;
 /**
  * Extends a propertyName representing a SimpleLiteral adding /dc:value at its end, and fixing
  * the namespace support as necessary
- * 
- * @author Andrea Aime - GeoSolutions
  *
+ * @author Andrea Aime - GeoSolutions
  */
 public class CSWPropertyPathExtender {
 

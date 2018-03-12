@@ -17,26 +17,25 @@ import org.geoserver.web.GeoServerApplication;
 
 /**
  * Drop down choice widget for {@link GeoServerPasswordEncoder} configurations.
- * 
- * @author Justin Deoliveira, OpenGeo
  *
+ * @author Justin Deoliveira, OpenGeo
  */
 public class PasswordEncoderChoice extends DropDownChoice<String> {
 
     public PasswordEncoderChoice(String id) {
-        super(id,new PasswordEncoderNamesModel(), new PasswordEncoderChoiceRenderer());
+        super(id, new PasswordEncoderNamesModel(), new PasswordEncoderChoiceRenderer());
     }
 
     public PasswordEncoderChoice(String id, IModel<String> model) {
-        super(id, model, new PasswordEncoderNamesModel(), new PasswordEncoderChoiceRenderer()); 
+        super(id, model, new PasswordEncoderNamesModel(), new PasswordEncoderChoiceRenderer());
     }
 
     public PasswordEncoderChoice(String id, List<GeoServerPasswordEncoder> encoders) {
         super(id, new PasswordEncoderNamesModel(encoders), new PasswordEncoderChoiceRenderer());
     }
 
-    public PasswordEncoderChoice(String id, IModel<String> model, 
-        List<GeoServerPasswordEncoder> encoders) {
+    public PasswordEncoderChoice(String id, IModel<String> model,
+                                 List<GeoServerPasswordEncoder> encoders) {
         super(id, model, new PasswordEncoderNamesModel(encoders), new PasswordEncoderChoiceRenderer());
     }
 
@@ -77,6 +76,7 @@ public class PasswordEncoderChoice extends DropDownChoice<String> {
             //do a resource lookup
             return new ResourceModel(object, object).getObject();
         }
+
         @Override
         public String getIdValue(String object, int index) {
             return object;

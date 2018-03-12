@@ -11,16 +11,16 @@ import org.geoserver.web.data.layergroup.LayerGroupProviderFilter;
 
 /**
  * Filters EO layer groups.
- * 
+ *
  * @author Davide Savazzi - geo-solutions.it
  */
 public class EoLayerGroupProviderFilter implements LayerGroupProviderFilter {
 
     public static final EoLayerGroupProviderFilter INSTANCE = new EoLayerGroupProviderFilter();
-    
+
     private EoLayerGroupProviderFilter() {
     }
-    
+
     @Override
     public boolean accept(LayerGroupInfo group) {
         return LayerGroupInfo.Mode.EO.equals(group.getMode());

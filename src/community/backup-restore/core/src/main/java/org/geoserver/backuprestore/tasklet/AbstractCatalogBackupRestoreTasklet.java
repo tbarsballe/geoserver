@@ -46,19 +46,18 @@ import org.springframework.util.Assert;
 /**
  * Base Class for Backup and Restore custom Tasklets. <br>
  * Exposes some utility methods to correctly marshall/unmarshall items to/from backup folder.
- *
+ * <p>
  * The logic is executed asynchronously using injected {@link #setTaskExecutor(TaskExecutor)} - timeout value is required to be set, so that the batch
  * job does not hang forever if the external process hangs.
- *
- * Tasklet periodically checks for termination status (i.e. {@link #doExecute(StepContribution,ChunkContext,JobExecution)} finished its execution or
+ * <p>
+ * Tasklet periodically checks for termination status (i.e. {@link #doExecute(StepContribution, ChunkContext, JobExecution)} finished its execution or
  * {@link #setTimeout(long)} expired or job was interrupted). The check interval is given by {@link #setTerminationCheckInterval(long)}.
- *
+ * <p>
  * When job interrupt is detected tasklet's execution is terminated immediately by throwing {@link JobInterruptedException}.
- *
+ * <p>
  * {@link #setInterruptOnCancel(boolean)} specifies whether the tasklet should attempt to interrupt the thread that executes the system command if it
  * is still running when tasklet exits (abnormally).
  *
- * 
  * @author Robert Kasanicky
  * @author Will Schipp
  * @author Alessio Fabiani, GeoSolutions
@@ -102,7 +101,7 @@ public abstract class AbstractCatalogBackupRestoreTasklet<T> extends BackupResto
             @Override
             public boolean accept(Resource res) {
                 if (res.name().toLowerCase().endsWith("sld") || // exclude everything ends with SLD ext (SLD, YSLD, ...)
-                res.name().toLowerCase().endsWith(".xml")
+                        res.name().toLowerCase().endsWith(".xml")
                         || res.name().toLowerCase().endsWith(".css")) // exclude CSS also
                 {
                     return false;
@@ -129,7 +128,7 @@ public abstract class AbstractCatalogBackupRestoreTasklet<T> extends BackupResto
     private volatile boolean stopped = false;
 
     public AbstractCatalogBackupRestoreTasklet(Backup backupFacade,
-            XStreamPersisterFactory xStreamPersisterFactory) {
+                                               XStreamPersisterFactory xStreamPersisterFactory) {
         super(backupFacade, xStreamPersisterFactory);
     }
 
@@ -193,7 +192,6 @@ public abstract class AbstractCatalogBackupRestoreTasklet<T> extends BackupResto
     }
 
     /**
-     * 
      * @param contribution
      * @param chunkContext
      * @param jobExecution
@@ -201,7 +199,7 @@ public abstract class AbstractCatalogBackupRestoreTasklet<T> extends BackupResto
      * @throws Exception
      */
     abstract RepeatStatus doExecute(StepContribution contribution, ChunkContext chunkContext,
-            JobExecution jobExecution) throws Exception;
+                                    JobExecution jobExecution) throws Exception;
 
     /**
      * @param resourceStore
@@ -234,7 +232,7 @@ public abstract class AbstractCatalogBackupRestoreTasklet<T> extends BackupResto
     }
 
     //
-    @SuppressWarnings({ "unchecked", "static-access" })
+    @SuppressWarnings({"unchecked", "static-access"})
     public void doWrite(Object item, Resource directory, String fileName) throws Exception {
         try {
             if (item instanceof ServiceInfo) {
@@ -268,7 +266,7 @@ public abstract class AbstractCatalogBackupRestoreTasklet<T> extends BackupResto
     }
 
     //
-    @SuppressWarnings({ "unchecked" })
+    @SuppressWarnings({"unchecked"})
     public Object doRead(Resource directory, String fileName) throws Exception {
         Object item = null;
         try {
@@ -319,7 +317,7 @@ public abstract class AbstractCatalogBackupRestoreTasklet<T> extends BackupResto
         return item;
     }
 
-    @SuppressWarnings({ "unchecked" })
+    @SuppressWarnings({"unchecked"})
     protected XStreamServiceLoader findServiceLoader(ServiceInfo service) {
         XStreamServiceLoader loader = null;
 
@@ -348,7 +346,7 @@ public abstract class AbstractCatalogBackupRestoreTasklet<T> extends BackupResto
 
     /**
      * Timeout in milliseconds.
-     * 
+     *
      * @param timeout upper limit for how long the execution of the external program is allowed to last.
      */
     public void setTimeout(long timeout) {
@@ -383,8 +381,8 @@ public abstract class AbstractCatalogBackupRestoreTasklet<T> extends BackupResto
      * Will interrupt the thread executing the system command only if {@link #setInterruptOnCancel(boolean)} has been set to true. Otherwise the
      * underlying command will be allowed to finish before the tasklet ends.
      *
-     * @since 3.0
      * @see StoppableTasklet#stop()
+     * @since 3.0
      */
     @Override
     public void stop() {

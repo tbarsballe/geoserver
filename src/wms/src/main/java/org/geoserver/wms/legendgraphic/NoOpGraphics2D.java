@@ -23,9 +23,9 @@ import org.apache.batik.ext.awt.g2d.GraphicContext;
 
 /**
  * Fake Graphics2D, pretends to draw but actually does nothing (Very dishonest!)
- * 
+ * <p>
  * Implementation note, the base class provides a lot of state management ensuring clients
- * do not go NPE when asking for current clip, color, stroke and the like 
+ * do not go NPE when asking for current clip, color, stroke and the like
  *
  * @author Andrea Aime - GeoSolutions
  */
@@ -99,13 +99,13 @@ class NoOpGraphics2D extends AbstractGraphics2D {
 
     @Override
     public boolean drawImage(Image img, int x, int y, int width, int height,
-            ImageObserver observer) {
+                             ImageObserver observer) {
         return false;
     }
 
     @Override
     public void dispose() {
-        
+
     }
 
 }

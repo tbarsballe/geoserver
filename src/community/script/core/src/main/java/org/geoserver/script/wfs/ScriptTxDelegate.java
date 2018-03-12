@@ -35,7 +35,7 @@ public class ScriptTxDelegate {
 
     WfsTxHook hook;
     ScriptFileWatcher fw;
-    
+
     public ScriptTxDelegate(Resource script, ScriptManager scriptMgr) {
         this.hook = scriptMgr.lookupWfsTxHook(script);
         this.fw = new ScriptFileWatcher(script, scriptMgr);
@@ -51,11 +51,9 @@ public class ScriptTxDelegate {
         try {
             Map context = request.getExtendedProperties();
             hook.handleBefore(fw.read(), TransactionRequest.adapt(request), context);
-        } 
-        catch(WFSException e) {
+        } catch (WFSException e) {
             throw e;
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             LOGGER.log(Level.WARNING, "Error occured in pre transaction hook", e);
         }
         return request;
@@ -90,7 +88,7 @@ public class ScriptTxDelegate {
     public void preUpdate(TransactionEvent event) throws WFSException {
         TransactionRequest request = TransactionRequest.adapt(event.getRequest());
 
-        Map<String,Object> props = updateProperties(event);
+        Map<String, Object> props = updateProperties(event);
         Map context = request.getExtendedProperties();
 
         try {
@@ -105,7 +103,7 @@ public class ScriptTxDelegate {
     public void postUpdate(TransactionEvent event) throws WFSException {
         TransactionRequest request = TransactionRequest.adapt(event.getRequest());
 
-        Map<String,Object> props = updateProperties(event);
+        Map<String, Object> props = updateProperties(event);
         Map context = request.getExtendedProperties();
 
         try {
@@ -117,7 +115,7 @@ public class ScriptTxDelegate {
         }
     }
 
-    public void preDelete(TransactionEvent event) throws WFSException  {
+    public void preDelete(TransactionEvent event) throws WFSException {
         TransactionRequest request = TransactionRequest.adapt(event.getRequest());
         Map context = request.getExtendedProperties();
 
@@ -134,11 +132,9 @@ public class ScriptTxDelegate {
         try {
             Map context = request.getExtendedProperties();
             hook.handlePreCommit(fw.read(), TransactionRequest.adapt(request), context);
-        } 
-        catch(WFSException e) {
+        } catch (WFSException e) {
             throw e;
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             LOGGER.log(Level.WARNING, "Error occured in pre commit hook", e);
         }
     }
@@ -153,12 +149,10 @@ public class ScriptTxDelegate {
 
             if (committed) {
                 hook.handlePostCommit(eng, txReq, txRes, context);
-            }
-            else {
+            } else {
                 hook.handleAbort(eng, txReq, txRes, context);
             }
-        } 
-        catch(Exception e) {
+        } catch (Exception e) {
             LOGGER.log(Level.WARNING, "Error occured in post commit hook", e);
         }
     }
@@ -166,8 +160,8 @@ public class ScriptTxDelegate {
     Map<String, Object> updateProperties(TransactionEvent event) {
         //get the map of properties changed
         UpdateElementType update = (UpdateElementType) event.getSource();
-        Map<String,Object> props = new HashMap();
-        for (PropertyType p : (List<PropertyType>)update.getProperty()) {
+        Map<String, Object> props = new HashMap();
+        for (PropertyType p : (List<PropertyType>) update.getProperty()) {
             props.put(p.getName().getLocalPart(), p.getValue());
         }
         return props;

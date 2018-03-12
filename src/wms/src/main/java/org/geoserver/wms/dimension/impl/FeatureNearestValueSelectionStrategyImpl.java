@@ -21,12 +21,11 @@ import org.geotools.util.Converters;
 import org.opengis.filter.FilterFactory2;
 
 /**
- * Default implementation for selecting the default values for dimensions of 
+ * Default implementation for selecting the default values for dimensions of
  * feature (vector) resources using the nearest-domain-value-to-the-reference-value
  * strategy.
- *  
- * @author Ilkka Rinne / Spatineo Inc for the Finnish Meteorological Institute
  *
+ * @author Ilkka Rinne / Spatineo Inc for the Finnish Meteorological Institute
  */
 
 public class FeatureNearestValueSelectionStrategyImpl extends
@@ -35,14 +34,14 @@ public class FeatureNearestValueSelectionStrategyImpl extends
     private Object toMatch;
     private String fixedCapabilitiesValue;
     private FilterFactory2 ff = CommonFactoryFinder.getFilterFactory2();
-    
+
     /**
      * Default constructor.
      */
-    public FeatureNearestValueSelectionStrategyImpl(Object toMatch){
-        this(toMatch,null);
+    public FeatureNearestValueSelectionStrategyImpl(Object toMatch) {
+        this(toMatch, null);
     }
-        
+
     public FeatureNearestValueSelectionStrategyImpl(Object toMatch, String capabilitiesValue) {
         this.toMatch = toMatch;
         this.fixedCapabilitiesValue = capabilitiesValue;
@@ -50,42 +49,42 @@ public class FeatureNearestValueSelectionStrategyImpl extends
 
     @Override
     public Object getDefaultValue(ResourceInfo resource, String dimensionName,
-            DimensionInfo dimension, Class clz) {        
+                                  DimensionInfo dimension, Class clz) {
         String attrName = dimension.getAttribute();
         Class<?> attrType = String.class;
-        if (resource instanceof FeatureTypeInfo){
+        if (resource instanceof FeatureTypeInfo) {
             List<AttributeTypeInfo> attrTypes;
             try {
-                attrTypes = ((FeatureTypeInfo)resource).attributes();
-                for (AttributeTypeInfo attr:attrTypes){
-                    if (attr.getName().equals(attrName)){
+                attrTypes = ((FeatureTypeInfo) resource).attributes();
+                for (AttributeTypeInfo attr : attrTypes) {
+                    if (attr.getName().equals(attrName)) {
                         attrType = attr.getBinding();
                         break;
                     }
                 }
             } catch (IOException e) {
-            }                       
+            }
         }
 
         final FeatureCalc nearest = new NearestVisitor(ff.property(dimension.getAttribute()),
                 this.toMatch);
-        
+
         CalcResult res = getCalculatedResult((FeatureTypeInfo) resource, dimension, nearest);
         if (res.equals(CalcResult.NULL_RESULT)) {
             return null;
         } else {
-            return Converters.convert(res.getValue(),clz);
+            return Converters.convert(res.getValue(), clz);
         }
     }
 
     @Override
     public String getCapabilitiesRepresentation(ResourceInfo resource, String dimensionName, DimensionInfo dimensionInfo) {
-        if (fixedCapabilitiesValue != null){
+        if (fixedCapabilitiesValue != null) {
             return this.fixedCapabilitiesValue;
         } else {
             return super.getCapabilitiesRepresentation(resource, dimensionName, dimensionInfo);
         }
     }
 
-  
+
 }

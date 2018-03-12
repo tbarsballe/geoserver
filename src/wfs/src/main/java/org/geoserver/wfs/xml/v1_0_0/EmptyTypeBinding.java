@@ -16,14 +16,15 @@ import org.geotools.xml.Node;
 
 /**
  * Binding object for the type http://www.opengis.net/wfs:EmptyType.
- *
  * <p>
- *        <pre>
+ * <p>
+ * <pre>
  *         <code>
  *  &lt;xsd:complexType name="EmptyType"/&gt;
  *
  *          </code>
  *         </pre>
+ *
  * @generated
  */
 public class EmptyTypeBinding extends AbstractComplexBinding {
@@ -57,7 +58,7 @@ public class EmptyTypeBinding extends AbstractComplexBinding {
      * @generated modifiable
      */
     public Object parse(ElementInstance instance, Node node, Object value)
-        throws Exception {
+            throws Exception {
         //TODO: implement
         return null;
     }

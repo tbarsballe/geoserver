@@ -15,8 +15,8 @@ import org.geotools.filter.text.cql2.CQLException;
 
 /**
  * Parses the CQL_FILTER parameter into a list of filters
- * @author Andrea Aime - TOPP
  *
+ * @author Andrea Aime - TOPP
  */
 public class CQLFilterKvpParser extends KvpParser {
     public CQLFilterKvpParser() {

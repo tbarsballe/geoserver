@@ -15,17 +15,18 @@ import com.lowagie.text.pdf.PdfGraphics2D;
 /**
  * Attaches itself to the renderer and ensures no more than maxSize bytes are used to
  * store the PDF in memory, and stops the renderer in case that happens.
+ *
  * @author Andrea Aime - OpenGeo
  */
 public class PDFMaxSizeEnforcer {
 
     long maxSize;
-    
+
     ByteBuffer pdfBytes;
 
     /**
      * Builds a new max errors enforcer. If maxErrors is not positive the enforcer will do nothing
-     * 
+     *
      * @param renderer
      * @param maxErrors
      */
@@ -37,7 +38,7 @@ public class PDFMaxSizeEnforcer {
             renderer.addRenderListener(new RenderListener() {
 
                 public void featureRenderer(SimpleFeature feature) {
-                    if(pdfBytes.size() >  maxSize) {
+                    if (pdfBytes.size() > maxSize) {
                         renderer.stopRendering();
                     }
                 }
@@ -50,15 +51,13 @@ public class PDFMaxSizeEnforcer {
 
     /**
      * True if the memory used by the PDF buffer exceeds the max memory settings
-     *
      */
     public boolean exceedsMaxSize() {
-        return maxSize > 0 && pdfBytes.size() >  maxSize;
+        return maxSize > 0 && pdfBytes.size() > maxSize;
     }
-    
+
     /**
-     * Returns the amount of memory currently used by the 
-     *
+     * Returns the amount of memory currently used by the
      */
     public long memoryUsed() {
         return pdfBytes.size();

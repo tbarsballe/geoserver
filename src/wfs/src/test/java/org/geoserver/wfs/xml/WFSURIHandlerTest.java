@@ -33,96 +33,98 @@ import org.junit.Rule;
 import org.junit.Test;
 
 public class WFSURIHandlerTest {
-    
+
     @Rule
     public PropertyRule aliases = PropertyRule.system("org.geoserver.wfs.xml.WFSURIHandler.additionalHostnames");
-    
+
     InitStrategy strategy;
 
     private GeoServer gs;
 
     private GeoServerInfo config;
-    
+
     @SuppressWarnings("deprecation")
     @Before
     public void setUp() {
         WFSURIHandler.ADDITIONAL_HOSTNAMES.clear();
         WFSURIHandler.ADDRESSES.clear();
-        
+
         // Suppress the network interface interrogation so it doesn't interfere with other tests
         strategy = new InitStrategy() {
-            public Collection<NetworkInterface> getNetworkInterfaces(){
+            public Collection<NetworkInterface> getNetworkInterfaces() {
                 return Collections.emptyList();
             }
         };
-        
+
         gs = EasyMock.createMock(GeoServer.class);
         config = EasyMock.createMock(GeoServerInfo.class);
         expect(gs.getGlobal()).andStubReturn(config);
         expect(config.getProxyBaseUrl()).andStubReturn(null);
         replay(gs, config);
     }
-    
+
     @After
     public void tearDown() {
         verify(gs, config);
     }
-    
+
     @Test
     @Ignore
     public void testFromNetworkInterfaces() {
         // Was unable to mock NetworkInterfaces
     }
-    
+
     @Test
     public void testDefaultAliases() {
-        
+
         WFSURIHandler.init(strategy);
-        
+
         assertThat(WFSURIHandler.ADDRESSES, empty());
         assertThat(WFSURIHandler.ADDITIONAL_HOSTNAMES, contains("localhost"));
-        
+
     }
 
     @Test
     public void testOverrideAliasesComma() {
-        
-        
+
+
         aliases.setValue("foo,bar , baz");
-        
+
         WFSURIHandler.init(strategy);
-        
+
         assertThat(WFSURIHandler.ADDRESSES, empty());
         assertThat(WFSURIHandler.ADDITIONAL_HOSTNAMES, containsInAnyOrder("foo", "bar", "baz"));
-        
+
     }
 
     @Test
     public void testOverrideAliasesSpace() {
-        
+
         aliases.setValue("foo bar  baz ");
-        
+
         WFSURIHandler.init(strategy);
-        
+
         assertThat(WFSURIHandler.ADDRESSES, empty());
         assertThat(WFSURIHandler.ADDITIONAL_HOSTNAMES, containsInAnyOrder("foo", "bar", "baz"));
-        
+
     }
-    
+
     @SuppressWarnings("deprecation")
     protected void setProxyBase(String url) {
-        reset(config); {
+        reset(config);
+        {
             expect(config.getProxyBaseUrl()).andStubReturn(url);
-        }replay(config);
+        }
+        replay(config);
     }
-    
+
     @Test
     public void testRecognizeReflexiveSimple() {
-        
+
         WFSURIHandler.init(strategy);
-        
+
         WFSURIHandler handler = new WFSURIHandler(gs);
-        
+
         final URI wrongHost = URI.createURI("http://example.com/geoserver/wfs?service=wfs&version=2.0.0&request=DescribeFeatureType");
         final URI notDFT = URI.createURI("http://localhost/geoserver/wfs?service=wfs&version=2.0.0&request=GetCapabilities");
         final URI localDFT = URI.createURI("http://localhost/geoserver/wfs?service=wfs&version=2.0.0&request=DescribeFeatureType");
@@ -133,13 +135,13 @@ public class WFSURIHandlerTest {
 
     @Test
     public void testRecognizeReflexiveUserAliases() {
-        
+
         aliases.setValue("foo bar baz");
-        
+
         WFSURIHandler.init(strategy);
-        
+
         WFSURIHandler handler = new WFSURIHandler(gs);
-        
+
         final URI wrongHost = URI.createURI("http://example.com/geoserver/wfs?service=wfs&version=2.0.0&request=DescribeFeatureType");
         final URI notDFT = URI.createURI("http://foo/geoserver/wfs?service=wfs&version=2.0.0&request=GetCapabilities");
         final URI fooDFT = URI.createURI("http://foo/geoserver/wfs?service=wfs&version=2.0.0&request=DescribeFeatureType");
@@ -156,13 +158,13 @@ public class WFSURIHandlerTest {
 
     @Test
     public void testRecognizeReflexiveProxy() {
-        
+
         this.setProxyBase("http://foo/geoserver");
-        
+
         WFSURIHandler.init(strategy);
-        
+
         WFSURIHandler handler = new WFSURIHandler(gs);
-        
+
         final URI wrongHost = URI.createURI("http://example.com/geoserver/wfs?service=wfs&version=2.0.0&request=DescribeFeatureType");
         final URI notDFT = URI.createURI("http://foo/geoserver/wfs?service=wfs&version=2.0.0&request=GetCapabilities");
         final URI fooDFT = URI.createURI("http://foo/geoserver/wfs?service=wfs&version=2.0.0&request=DescribeFeatureType");

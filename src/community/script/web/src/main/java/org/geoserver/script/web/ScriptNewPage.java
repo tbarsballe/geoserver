@@ -70,27 +70,27 @@ public class ScriptNewPage extends GeoServerSecuredPage {
         // Type
         DropDownChoice<String> typeDropDownChoice = new DropDownChoice<String>("type",
                 new PropertyModel(script, "type"), new LoadableDetachableModel<List<String>>() {
-                    @Override
-                    protected List<String> load() {
-                        List<String> values = Lists.newArrayList();
-                        for (ScriptType type : ScriptType.values()) {
-                            values.add(type.getLabel());
-                        }
-                        return values;
-                    }
-                });
+            @Override
+            protected List<String> load() {
+                List<String> values = Lists.newArrayList();
+                for (ScriptType type : ScriptType.values()) {
+                    values.add(type.getLabel());
+                }
+                return values;
+            }
+        });
         typeDropDownChoice.setRequired(true);
         form.add(typeDropDownChoice);
 
         // Extension
         final DropDownChoice<String> extensionDropDownChoice = new DropDownChoice<String>("extension",
-            new PropertyModel(script, "extension"),
-            new LoadableDetachableModel<List<String>>() {
-                @Override
-                protected List<String> load() {
-                    return extensions;
+                new PropertyModel(script, "extension"),
+                new LoadableDetachableModel<List<String>>() {
+                    @Override
+                    protected List<String> load() {
+                        return extensions;
+                    }
                 }
-            }
         );
         extensionDropDownChoice.setRequired(true);
         extensionDropDownChoice.add(new AjaxFormComponentUpdatingBehavior("change") {
@@ -107,7 +107,7 @@ public class ScriptNewPage extends GeoServerSecuredPage {
         SubmitLink submitLink = new SubmitLink("submit", form);
         form.add(submitLink);
         form.setDefaultButton(submitLink);
-        
+
         AjaxLink cancelLink = new AjaxLink("cancel") {
             @Override
             public void onClick(AjaxRequestTarget target) {

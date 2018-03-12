@@ -72,9 +72,9 @@ public class RestConcurrencyTest extends CatalogRESTTestSupport {
 
     @Override
     protected DispatcherServlet getDispatcher() throws Exception {
-        if(dispatcher == null) {
+        if (dispatcher == null) {
             synchronized (this) {
-                if(dispatcher == null) {
+                if (dispatcher == null) {
                     dispatcher = super.getDispatcher();
                 }
             }

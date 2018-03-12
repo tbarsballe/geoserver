@@ -10,7 +10,7 @@ import net.opengis.ows10.GetCapabilitiesType;
 
 /**
  * GetCapabilities KVP request reader
- * 
+ *
  * @author Andrea Aime, GeoSolutions
  */
 public class GetCapabilitiesKvpRequestReader extends CSWKvpRequestReader {

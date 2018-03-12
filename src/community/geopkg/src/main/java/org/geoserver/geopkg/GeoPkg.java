@@ -11,7 +11,7 @@ import com.google.common.collect.Lists;
 
 /**
  * GeoPackage Utility class.
- * 
+ *
  * @author Justin Deoliveira, Boundless
  */
 public class GeoPkg {

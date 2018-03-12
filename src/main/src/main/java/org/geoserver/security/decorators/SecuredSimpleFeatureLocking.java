@@ -26,7 +26,7 @@ import org.opengis.filter.Filter;
 
 /**
  * Simple version of SecuredFeatureStore
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class SecuredSimpleFeatureLocking extends
@@ -53,7 +53,7 @@ public class SecuredSimpleFeatureLocking extends
 
     public void modifyFeatures(String name, Object attributeValue, Filter filter)
             throws IOException {
-        modifyFeatures(new String[] { name }, new Object[] { attributeValue }, filter);
+        modifyFeatures(new String[]{name}, new Object[]{attributeValue}, filter);
 
     }
 

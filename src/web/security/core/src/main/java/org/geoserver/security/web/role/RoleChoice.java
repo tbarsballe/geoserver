@@ -22,14 +22,13 @@ import org.geotools.util.logging.Logging;
 
 /**
  * Choice widget for roles from a specific role service configuration.
- * 
- * @author Justin Deoliveira, OpenGeo
  *
+ * @author Justin Deoliveira, OpenGeo
  */
 public class RoleChoice extends DropDownChoice<String> {
 
-	static Logger LOGGER = Logging.getLogger("org.geoserver.security");
-	
+    static Logger LOGGER = Logging.getLogger("org.geoserver.security");
+
     public RoleChoice(String id, IModel<? extends SecurityRoleServiceConfig> configModel) {
         super(id, new RoleChoiceNameModel(configModel), new RoleChoiceRenderer());
     }
@@ -53,9 +52,9 @@ public class RoleChoice extends DropDownChoice<String> {
                         roleNames.add(role.getAuthority());
                     }
                 } catch (IOException e) {
-                	// catch exception, otherwise role service
-                	// configuration page cannot be opened
-                	LOGGER.log(Level.WARNING,e.getMessage(),e);
+                    // catch exception, otherwise role service
+                    // configuration page cannot be opened
+                    LOGGER.log(Level.WARNING, e.getMessage(), e);
                     //throw new WicketRuntimeException(e);
                 }
             }
@@ -77,6 +76,7 @@ public class RoleChoice extends DropDownChoice<String> {
         public Object getDisplayValue(String object) {
             return object;
         }
+
         @Override
         public String getIdValue(String object, int index) {
             return object;

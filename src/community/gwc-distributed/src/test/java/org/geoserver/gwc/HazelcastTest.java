@@ -52,24 +52,34 @@ import com.hazelcast.core.HazelcastInstance;
 
 /**
  * This class tests the functionalities of the {@link ConfigurableBlobStore} class.
- * 
+ *
  * @author Nicola Lagomarsini Geosolutions
  */
 public class HazelcastTest extends GeoServerSystemTestSupport {
 
-    /** {@link Logger} used for reporting exceptions */
+    /**
+     * {@link Logger} used for reporting exceptions
+     */
     private static final Logger LOGGER = Logging.getLogger(HazelcastTest.class);
 
-    /** Name of the test directory */
+    /**
+     * Name of the test directory
+     */
     public static final String TEST_BLOB_DIR_NAME = "gwcTestBlobs";
 
-    /** {@link CacheProvider} object used for testing purposes */
+    /**
+     * {@link CacheProvider} object used for testing purposes
+     */
     private static CacheProvider cache;
 
-    /** {@link ConfigurableBlobStore} object to test */
+    /**
+     * {@link ConfigurableBlobStore} object to test
+     */
     private static ConfigurableBlobStore blobStore;
 
-    /** Directory containing files for the {@link FileBlobStore} */
+    /**
+     * Directory containing files for the {@link FileBlobStore}
+     */
     private File directory;
 
     @BeforeClass
@@ -104,7 +114,7 @@ public class HazelcastTest extends GeoServerSystemTestSupport {
             FileUtils.deleteDirectory(directory);
         }
     }
-    
+
     @SuppressWarnings("serial")
     @Test
     public void testHazelcast() throws Exception {
@@ -150,7 +160,7 @@ public class HazelcastTest extends GeoServerSystemTestSupport {
 
         // Put a TileObject
         Resource bytes = new ByteArrayResource("1 2 3 4 5 6 test".getBytes());
-        long[] xyz = { 1L, 2L, 3L };
+        long[] xyz = {1L, 2L, 3L};
         Map<String, String> parameters = new HashMap<String, String>();
         parameters.put("a", "x");
         parameters.put("b", "ø");
@@ -172,7 +182,7 @@ public class HazelcastTest extends GeoServerSystemTestSupport {
         checkInputStreams(is, is2);
 
         // Ensure Caches contain the result
-        
+
         // cache1 
         TileObject to3 = cacheProvider1.getTileObj(to);
         assertNotNull(to3);
@@ -180,7 +190,7 @@ public class HazelcastTest extends GeoServerSystemTestSupport {
         is = to.getBlob().getInputStream();
         InputStream is3 = to3.getBlob().getInputStream();
         checkInputStreams(is, is3);
-        
+
         // cache2
         TileObject to4 = cacheProvider2.getTileObj(to);
         assertNotNull(to4);
@@ -188,24 +198,24 @@ public class HazelcastTest extends GeoServerSystemTestSupport {
         is = to.getBlob().getInputStream();
         InputStream is4 = to4.getBlob().getInputStream();
         checkInputStreams(is, is4);
-        
+
         // DELETE
-        
+
         // Remove TileObject
         TileObject to5 = TileObject.createQueryTileObject("test:123123 112", xyz, "EPSG:4326",
                 "image/jpeg", parameters);
         blobStore.delete(to5);
-        
+
         // Ensure TileObject is no more present
         TileObject to6 = TileObject.createQueryTileObject("test:123123 112", xyz, "EPSG:4326",
                 "image/jpeg", parameters);
         assertFalse(blobStore.get(to6));
-        
+
         // Ensure that each cache provider does not contain the tile object
         assertNull(cacheProvider1.getTileObj(to6));
         assertNull(cacheProvider2.getTileObj(to6));
-        
-        
+
+
         // At the end, destroy the caches
         cacheProvider1.destroy();
         cacheProvider2.destroy();

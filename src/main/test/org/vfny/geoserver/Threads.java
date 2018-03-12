@@ -71,15 +71,15 @@ class TestGetThread extends Thread {
             //rather than just writing our own.  
             int tries = 0;
             while (tries < 15) {
-            try {
-				connect();
-				break;
-            } catch (IOException ioe){
-				System.out.println("IOException: " + ioe.getMessage() +", try: " + tries);
-            	
-            	sleep(5);
-            	tries++;
-            }
+                try {
+                    connect();
+                    break;
+                } catch (IOException ioe) {
+                    System.out.println("IOException: " + ioe.getMessage() + ", try: " + tries);
+
+                    sleep(5);
+                    tries++;
+                }
             }
 
             t2 = new Date();
@@ -91,30 +91,30 @@ class TestGetThread extends Thread {
                 yield();
             }
 
-			//This reading bit seems to be damned if you do damned if you dont
-			//The first way ensures that the client doesn't prematurely close
-			//the socket, which happens on big GetFeature requests all the 
-			//time, I'm not too sure why, perhaps it gets set to not ready
-			//when the underlying stream from the server pauses or something.
-			
-			//The second way ensures that we don't get errors with the input
-			//stream closing on us, but for some reason I can't seem to reproduce
-			//them right now - the only reason I can think of is because I 
-			//changed it to explicitly create the InputStream, so it doesn't 
-			//get gced or something?  I'm not too sure though, but as the first
-			//isn't messing up at all we'll stick with it, as the second (original)
-			//way wasn't actually reading everything, so it was returning false 
-			//response times.
-			
-			//Oh ok, it seems that the exception is only on resin, with ready
-			//it works with getCaps, but with read it messes up about one in
-			//40 or so with java.net.SocketException: socket closed - so it
-			//looks like resin decides to close the socket prematurely under
-			//heavy duress or something.  I'm not sure, but I definitely feel
-			//like I'm testing servlet containers far more than GeoServer
-			//itself with this solid day of testing. 
-			
-            while (br.read() != -1);
+            //This reading bit seems to be damned if you do damned if you dont
+            //The first way ensures that the client doesn't prematurely close
+            //the socket, which happens on big GetFeature requests all the
+            //time, I'm not too sure why, perhaps it gets set to not ready
+            //when the underlying stream from the server pauses or something.
+
+            //The second way ensures that we don't get errors with the input
+            //stream closing on us, but for some reason I can't seem to reproduce
+            //them right now - the only reason I can think of is because I
+            //changed it to explicitly create the InputStream, so it doesn't
+            //get gced or something?  I'm not too sure though, but as the first
+            //isn't messing up at all we'll stick with it, as the second (original)
+            //way wasn't actually reading everything, so it was returning false
+            //response times.
+
+            //Oh ok, it seems that the exception is only on resin, with ready
+            //it works with getCaps, but with read it messes up about one in
+            //40 or so with java.net.SocketException: socket closed - so it
+            //looks like resin decides to close the socket prematurely under
+            //heavy duress or something.  I'm not sure, but I definitely feel
+            //like I'm testing servlet containers far more than GeoServer
+            //itself with this solid day of testing.
+
+            while (br.read() != -1) ;
 
             //while(br.ready())
             //	br.readLine();
@@ -127,9 +127,9 @@ class TestGetThread extends Thread {
         } catch (Exception e) {
             e.printStackTrace();
             try {
-            result = hc.getResponseCode();
+                result = hc.getResponseCode();
             } catch (IOException ioe) {
-            	result = 0;
+                result = 0;
             }
             ThreadedBatchTester.threadDone();
         }

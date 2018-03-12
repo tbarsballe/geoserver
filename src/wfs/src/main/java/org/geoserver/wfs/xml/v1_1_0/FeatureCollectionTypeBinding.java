@@ -31,9 +31,9 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 /**
  * Binding object for the type http://www.opengis.net/wfs:FeatureCollectionType.
- *
  * <p>
- *        <pre>
+ * <p>
+ * <pre>
  *         <code>
  *  &lt;xsd:complexType name="FeatureCollectionType"&gt;
  *      &lt;xsd:annotation&gt;
@@ -84,6 +84,7 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
  *
  *          </code>
  *         </pre>
+ *
  * @generated
  */
 public class FeatureCollectionTypeBinding extends AbstractComplexEMFBinding {
@@ -99,12 +100,12 @@ public class FeatureCollectionTypeBinding extends AbstractComplexEMFBinding {
     private Encoder encoder;
 
     public FeatureCollectionTypeBinding(WfsFactory wfsfactory, Catalog catalog,
-            Configuration configuration) {
+                                        Configuration configuration) {
         this(wfsfactory, catalog, configuration, null);
     }
 
     public FeatureCollectionTypeBinding(WfsFactory wfsfactory, Catalog catalog,
-            Configuration configuration, Encoder encoder) {
+                                        Configuration configuration, Encoder encoder) {
         this.wfsfactory = wfsfactory;
         this.catalog = catalog;
         this.encoder = encoder;
@@ -140,12 +141,12 @@ public class FeatureCollectionTypeBinding extends AbstractComplexEMFBinding {
      * @generated modifiable
      */
     public Object parse(ElementInstance instance, Node node, Object value)
-        throws Exception {
+            throws Exception {
         return value;
     }
 
     public Object getProperty(Object object, QName name)
-        throws Exception {
+            throws Exception {
         //check for feature collection members
         if (GML.featureMembers.equals(name)) {
             // check the WFS configuration, if encode featureMember is selected on WFS configuration
@@ -174,34 +175,33 @@ public class FeatureCollectionTypeBinding extends AbstractComplexEMFBinding {
             FeatureCollectionType featureCollection = (FeatureCollectionType) object;
 
             ReferencedEnvelope env = null;
-            for (Iterator it = featureCollection.getFeature().iterator(); it.hasNext();) {
+            for (Iterator it = featureCollection.getFeature().iterator(); it.hasNext(); ) {
                 FeatureCollection fc = (FeatureCollection) it.next();
-                if(env == null) {
+                if (env == null) {
                     env = fc.getBounds();
-                }
-                else {
+                } else {
                     env.expandToInclude(fc.getBounds());
                 }
-                
+
                 // workaround bogus collection implementation that won't return the crs
-                if(env != null &&  env.getCoordinateReferenceSystem() == null) {
+                if (env != null && env.getCoordinateReferenceSystem() == null) {
                     CoordinateReferenceSystem crs = fc.getSchema().getCoordinateReferenceSystem();
-                    if ( crs == null ) {
+                    if (crs == null) {
                         //fall back on catalog
                         FeatureTypeInfo info = catalog.getFeatureTypeByName(fc.getSchema().getName());
-                        if ( info != null ) {
+                        if (info != null) {
                             crs = info.getCRS();
                         }
                     }
                     env = new ReferencedEnvelope(env, crs);
                 }
-                
-                if ( env != null ) {
+
+                if (env != null) {
                     //JD: here we don't return the envelope if it is null or empty, this is to work 
                     // around an issue with validation in the cite engine. I have opened a jira task
                     // to track this, and hopefully eventually fix the cite engine
                     //    https://osgeo-org.atlassian.net/browse/GEOS-2700
-                    return !( env.isNull() || env.isEmpty() ) ? env : null; 
+                    return !(env.isNull() || env.isEmpty()) ? env : null;
                 }
             }
         }
@@ -222,7 +222,7 @@ public class FeatureCollectionTypeBinding extends AbstractComplexEMFBinding {
 
         if (isSimpleFeatureCollection(result)
                 && encoder.getConfiguration().hasProperty(
-                        GMLConfiguration.OPTIMIZED_ENCODING)) {
+                GMLConfiguration.OPTIMIZED_ENCODING)) {
             return new GML3FeatureCollectionEncoderDelegate(
                     (SimpleFeatureCollection) result, encoder);
         } else {

@@ -13,12 +13,12 @@ import org.junit.BeforeClass;
  * will actually be cached in memory)
  */
 public class GetFeatureNoCachingTest extends GetFeatureTest {
-    
+
     @BeforeClass
     public static void disableCaching() {
         FeatureSizeFeatureCollection.setFeatureCacheLimit(0);
     }
-    
+
     @AfterClass
     public static void enableCaching() {
         FeatureSizeFeatureCollection.setFeatureCacheLimit(FeatureSizeFeatureCollection.DEFAULT_CACHE_SIZE);

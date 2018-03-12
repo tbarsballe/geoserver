@@ -15,26 +15,26 @@ import org.geoserver.wms.WMSMapContent;
 
 /**
  * Handles a GetMap request that expects a map in SVG format.
- * 
+ *
  * @author Gabriel Roldan
  * @version $Id$
  * @see StreamingSVGMap
  * @see SVGStreamingMapResponse
  */
 public final class SVGStreamingMapOutputFormat implements GetMapOutputFormat {
-    
-    /** 
+
+    /**
      * Default capabilities for SVG format.
-     * 
+     * <p>
      * <p>
      * <ol>
-     *         <li>tiled = unsupported</li>
-     *         <li>multipleValues = unsupported</li>
-     *         <li>paletteSupported = unsupported</li>
-     *         <li>transparency = supported</li>
+     * <li>tiled = unsupported</li>
+     * <li>multipleValues = unsupported</li>
+     * <li>paletteSupported = unsupported</li>
+     * <li>transparency = supported</li>
      * </ol>
      */
-    private static MapProducerCapabilities CAPABILITIES= new MapProducerCapabilities(false, false, false, true, null);
+    private static MapProducerCapabilities CAPABILITIES = new MapProducerCapabilities(false, false, false, true, null);
 
     public SVGStreamingMapOutputFormat() {
         //
@@ -57,7 +57,6 @@ public final class SVGStreamingMapOutputFormat implements GetMapOutputFormat {
     }
 
     /**
-     * 
      * @see org.geoserver.wms.GetMapOutputFormat#produceMap(org.geoserver.wms.WMSMapContent)
      */
     public StreamingSVGMap produceMap(WMSMapContent mapContent) throws ServiceException,

@@ -20,7 +20,7 @@ import com.vividsolutions.jts.io.WKTWriter;
 
 /**
  * Used to represent geometries in WKT format
- * 
+ *
  * @author Andrea Aime - OpenGeo
  */
 public class WKTPPIO extends CDataPPIO {
@@ -45,14 +45,14 @@ public class WKTPPIO extends CDataPPIO {
         try {
             Geometry g = (Geometry) value;
             if (g instanceof LinearRing) {
-                g = g.getFactory().createLineString(((LinearRing)g).getCoordinateSequence());
+                g = g.getFactory().createLineString(((LinearRing) g).getCoordinateSequence());
             }
             new WKTWriter().write(g, w);
         } finally {
             w.flush();
         }
     }
-    
+
     @Override
     public String getFileExtension() {
         return "wkt";

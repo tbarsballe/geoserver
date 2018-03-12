@@ -20,58 +20,56 @@ import es.unex.sextante.dataObjects.IFeatureIterator;
 import es.unex.sextante.exceptions.IteratorException;
 
 public class GTFeatureIterator
-         implements
-            IFeatureIterator {
+        implements
+        IFeatureIterator {
 
-   private final FeatureIterator<SimpleFeature> m_Iter;
-
-
-   public GTFeatureIterator(final FeatureCollection<SimpleFeatureType, SimpleFeature> fc) {
+    private final FeatureIterator<SimpleFeature> m_Iter;
 
 
-      m_Iter = fc.features();
-
-   }
+    public GTFeatureIterator(final FeatureCollection<SimpleFeatureType, SimpleFeature> fc) {
 
 
-   public boolean hasNext() {
+        m_Iter = fc.features();
 
-      if (m_Iter != null) {
-         return m_Iter.hasNext();
-      }
-      else {
-         return false;
-      }
-
-   }
+    }
 
 
-   public IFeature next() throws NoSuchElementException, IteratorException {
+    public boolean hasNext() {
 
-      if (m_Iter != null) {
-         if (!m_Iter.hasNext()) {
-            throw new NoSuchElementException();
-         }
-         final SimpleFeature gtFeat = m_Iter.next();
-         final Object values[] = new Object[gtFeat.getAttributeCount() - 1];
-         for (int i = 1; i < gtFeat.getAttributeCount(); i++) {
-            values[i - 1] = gtFeat.getAttribute(i);
-         }
-         final IFeature feat = new FeatureImpl((Geometry) gtFeat.getDefaultGeometry(), values);
-         return feat;
-      }
-      else {
-         throw new IteratorException();
-      }
+        if (m_Iter != null) {
+            return m_Iter.hasNext();
+        } else {
+            return false;
+        }
 
-   }
+    }
 
 
-   public void close() {
+    public IFeature next() throws NoSuchElementException, IteratorException {
 
-      m_Iter.close();
+        if (m_Iter != null) {
+            if (!m_Iter.hasNext()) {
+                throw new NoSuchElementException();
+            }
+            final SimpleFeature gtFeat = m_Iter.next();
+            final Object values[] = new Object[gtFeat.getAttributeCount() - 1];
+            for (int i = 1; i < gtFeat.getAttributeCount(); i++) {
+                values[i - 1] = gtFeat.getAttribute(i);
+            }
+            final IFeature feat = new FeatureImpl((Geometry) gtFeat.getDefaultGeometry(), values);
+            return feat;
+        } else {
+            throw new IteratorException();
+        }
 
-   }
+    }
+
+
+    public void close() {
+
+        m_Iter.close();
+
+    }
 
 
 }

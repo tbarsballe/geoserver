@@ -50,7 +50,8 @@ public class DefaultTileLayerCatalogTest {
         FileUtils.deleteDirectory(baseDirectory);
     }
 
-    @Test public void testGetLayerById() {
+    @Test
+    public void testGetLayerById() {
         GeoServerTileLayerInfo info = new GeoServerTileLayerInfoImpl();
         info.setId("id1");
         info.setName("name1");
@@ -60,7 +61,8 @@ public class DefaultTileLayerCatalogTest {
         assertEquals(info, actual);
     }
 
-    @Test public void testGetLayerByName() {
+    @Test
+    public void testGetLayerByName() {
         GeoServerTileLayerInfo info = new GeoServerTileLayerInfoImpl();
         info.setId("id1");
         info.setName("name1");
@@ -70,7 +72,8 @@ public class DefaultTileLayerCatalogTest {
         assertEquals(info, actual);
     }
 
-    @Test public void testDelete() {
+    @Test
+    public void testDelete() {
         GeoServerTileLayerInfo info = new GeoServerTileLayerInfoImpl();
         info.setId("id1");
         info.setName("name1");
@@ -86,7 +89,8 @@ public class DefaultTileLayerCatalogTest {
         assertNull(catalog.getLayerById("id1"));
     }
 
-    @Test public void testSave() {
+    @Test
+    public void testSave() {
         final GeoServerTileLayerInfo original;
         {
             final GeoServerTileLayerInfo info = new GeoServerTileLayerInfoImpl();

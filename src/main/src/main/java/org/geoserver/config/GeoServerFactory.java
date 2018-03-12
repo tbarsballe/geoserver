@@ -9,9 +9,8 @@ import org.geoserver.catalog.MetadataLinkInfo;
 
 /**
  * Factory used to create geoserver configuration objects.
- * 
+ *
  * @author Justin Deoliveira, The Open Planning Project
- * 
  */
 public interface GeoServerFactory {
 
@@ -36,10 +35,10 @@ public interface GeoServerFactory {
     JAIInfo createJAI();
 
     /**
-     * Creates a new metadata link. 
+     * Creates a new metadata link.
      */
     MetadataLinkInfo createMetadataLink();
-    
+
     /**
      * Creates a new Imaging.
      */
@@ -59,7 +58,7 @@ public interface GeoServerFactory {
      * Creates a new logging.
      */
     LoggingInfo createLogging();
-    
+
     /**
      * Extensible factory method.
      * <p>
@@ -67,10 +66,8 @@ public interface GeoServerFactory {
      * to create the object. The lookup mechanism is specific to the runtime
      * environement.
      * </p>
-     * 
-     * @param clazz
-     *                The class of object to create.
-     * 
+     *
+     * @param clazz The class of object to create.
      * @return The new object.
      */
     <T extends Object> T create(Class<T> clazz);
@@ -83,9 +80,8 @@ public interface GeoServerFactory {
         /**
          * Determines if the extension can create objects of the specified
          * class.
-         * 
+         *
          * @param clazz The class of object to create.
-         * 
          */
         <T extends Object> boolean canCreate(Class<T> clazz);
 
@@ -95,9 +91,8 @@ public interface GeoServerFactory {
          * This method is only called if {@link #canCreate(Class)} returns
          * <code>true</code>.
          * </p>
-         * 
+         *
          * @param clazz The class of object to create.
-         * 
          * @return The new object.
          */
         <T extends Object> T create(Class<T> clazz);

@@ -8,6 +8,7 @@ package org.geoserver.jdbcconfig.internal;
 import javax.annotation.Nullable;
 
 import com.google.common.base.Joiner;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 import javax.sql.DataSource;
@@ -32,9 +33,9 @@ public class Dialect {
     }
 
     public void applyOffsetLimit(StringBuilder sql, @Nullable Integer offset,
-            @Nullable Integer limit) {
+                                 @Nullable Integer limit) {
         // some db's require limit to be present of offset is
-        if(offset != null && limit == null){
+        if (offset != null && limit == null) {
             limit = Integer.MAX_VALUE;
         }
         if (limit != null) {

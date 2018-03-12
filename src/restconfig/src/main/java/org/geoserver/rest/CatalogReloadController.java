@@ -27,6 +27,7 @@ public class CatalogReloadController extends AbstractGeoServerController {
     public void reload() throws Exception {
         geoServer.reload();
     }
+
     @RequestMapping(value = "/reset", method = {RequestMethod.POST, RequestMethod.PUT})
     public void reset() {
         geoServer.reset();

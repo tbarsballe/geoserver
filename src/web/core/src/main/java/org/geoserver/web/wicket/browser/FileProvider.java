@@ -103,7 +103,7 @@ public class FileProvider extends SortableDataProvider<File, String> {
         if (last > files.size()) {
             last = files.size();
         }
-        return files.subList((int)first, (int)last).iterator();
+        return files.subList((int) first, (int) last).iterator();
     }
 
     List<File> getFilteredFiles() {
@@ -118,8 +118,8 @@ public class FileProvider extends SortableDataProvider<File, String> {
             files = d.listFiles(new HiddenFileFilter((FileFilter) fileFilter.getObject()));
         else
             files = d.listFiles(new HiddenFileFilter());
-        
-        if(files != null)
+
+        if (files != null)
             return Arrays.asList(files);
         else
             return Collections.emptyList();
@@ -214,25 +214,25 @@ public class FileProvider extends SortableDataProvider<File, String> {
             return comparator.compare(o2, o1);
         }
     }
-    
+
     private static class HiddenFileFilter implements FileFilter {
         FileFilter delegate;
-        
+
         public HiddenFileFilter() {
             // no delegate, just skip the hidden ones
         }
-        
+
         public HiddenFileFilter(FileFilter delegate) {
             this.delegate = delegate;
         }
 
         @Override
         public boolean accept(File pathname) {
-            if(pathname.isHidden()) {
+            if (pathname.isHidden()) {
                 return false;
             }
-            
-            if(delegate != null) {
+
+            if (delegate != null) {
                 return delegate.accept(pathname);
             } else {
                 return true;

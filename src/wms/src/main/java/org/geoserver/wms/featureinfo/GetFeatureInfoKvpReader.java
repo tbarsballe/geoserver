@@ -31,7 +31,7 @@ import org.geotools.util.Version;
  * <p>
  * Request parameters:
  * </p>
- * 
+ *
  * @author Gabriel Roldan
  * @version $Id$
  */
@@ -44,22 +44,21 @@ public class GetFeatureInfoKvpReader extends KvpRequestReader {
         public GetFeatureInfoKvpRequestReader(WMS wms) {
             super(wms);
         }
+
         @Override
         protected boolean skipResource(Object theResource) {
             if (theResource instanceof LayerGroupInfo) {
-                LayerGroupInfo groupInfo = (LayerGroupInfo)theResource;
+                LayerGroupInfo groupInfo = (LayerGroupInfo) theResource;
                 if (groupInfo.isQueryDisabled()) {
                     return true;
                 }
-            }
-            else if (theResource instanceof LayerInfo) {
-                LayerInfo layerInfo = (LayerInfo)theResource;
+            } else if (theResource instanceof LayerInfo) {
+                LayerInfo layerInfo = (LayerInfo) theResource;
                 if (!wms.isQueryable(layerInfo)) {
                     return true;
                 }
-            }
-            else if (theResource instanceof MapLayerInfo) {
-                LayerInfo layerInfo = ((MapLayerInfo)theResource).getLayerInfo();
+            } else if (theResource instanceof MapLayerInfo) {
+                LayerInfo layerInfo = ((MapLayerInfo) theResource).getLayerInfo();
                 if (!wms.isQueryable(layerInfo)) {
                     return true;
                 }
@@ -67,6 +66,7 @@ public class GetFeatureInfoKvpReader extends KvpRequestReader {
             return super.skipResource(theResource);
         }
     }
+
     /**
      * Overrides MapLayerInfoKvpParser to filter not queryable objects.
      */
@@ -74,31 +74,32 @@ public class GetFeatureInfoKvpReader extends KvpRequestReader {
         public GetFeatureInfoKvpParser(String key, WMS wms) {
             super(key, wms);
         }
+
         @Override
         protected boolean skipResource(Object theResource) {
             if (theResource instanceof LayerGroupInfo) {
-                LayerGroupInfo groupInfo = (LayerGroupInfo)theResource;
+                LayerGroupInfo groupInfo = (LayerGroupInfo) theResource;
                 if (groupInfo.isQueryDisabled()) {
                     return true;
                 }
-            }
-            else if (theResource instanceof LayerInfo) {
-                LayerInfo layerInfo = (LayerInfo)theResource;
+            } else if (theResource instanceof LayerInfo) {
+                LayerInfo layerInfo = (LayerInfo) theResource;
+                if (!wms.isQueryable(layerInfo)) {
+                    return true;
+                }
+            } else if (theResource instanceof MapLayerInfo) {
+                LayerInfo layerInfo = ((MapLayerInfo) theResource).getLayerInfo();
                 if (!wms.isQueryable(layerInfo)) {
                     return true;
                 }
             }
-            else if (theResource instanceof MapLayerInfo) {
-                LayerInfo layerInfo = ((MapLayerInfo)theResource).getLayerInfo();
-                if (!wms.isQueryable(layerInfo)) {
-                    return true;
-                }
-            }            
             return super.skipResource(theResource);
         }
     }
-    
-    /** GetMap request reader used to parse the map context parameters needed. */
+
+    /**
+     * GetMap request reader used to parse the map context parameters needed.
+     */
     private GetMapKvpRequestReader getMapReader;
 
     private WMS wms;
@@ -117,7 +118,7 @@ public class GetFeatureInfoKvpReader extends KvpRequestReader {
         return wms;
     }
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @SuppressWarnings({"rawtypes", "unchecked"})
     @Override
     public Object read(Object req, Map kvp, Map rawKvp) throws Exception {
         GetFeatureInfoRequest request = (GetFeatureInfoRequest) super.read(req, kvp, rawKvp);
@@ -133,13 +134,13 @@ public class GetFeatureInfoKvpReader extends KvpRequestReader {
         }
 
         request.setGetMapRequest(getMapPart);
-        
+
         List<MapLayerInfo> getMapLayers = getMapPart.getLayers();
 
         if ((getMapPart.getSldBody() != null || getMapPart.getSld() != null) && wms.isDynamicStylingDisabled()) {
             throw new ServiceException("Dynamic style usage is forbidden");
         }
-        
+
         if ((getMapPart.getSldBody() != null || getMapPart.getSld() != null)
                 && (rawKvp.get("QUERY_LAYERS") == null || "".equals(rawKvp.get("QUERY_LAYERS")))) {
             // in this case we assume all layers in SLD body are to be queried (GS own extension)(
@@ -148,22 +149,22 @@ public class GetFeatureInfoKvpReader extends KvpRequestReader {
             request.setQueryLayers(new GetFeatureInfoKvpParser("QUERY_LAYERS", wms).parse((String) rawKvp
                     .get("QUERY_LAYERS")));
         }
-        
+
         if (request.getQueryLayers().isEmpty()) {
             throw new ServiceException("Either no layer was queryable, or no layers were specified using QUERY_LAYERS",
                     WMSErrorCode.LAYER_NOT_QUERYABLE.get(request.getVersion()), "QUERY_LAYERS");
         }
-        
-        if(kvp.containsKey("propertyName")) {
+
+        if (kvp.containsKey("propertyName")) {
             List<List<String>> propertyNames = (List<List<String>>) kvp.get("propertyName");
-            if(propertyNames.size() == 1 && request.getQueryLayers().size() > 1) {
+            if (propertyNames.size() == 1 && request.getQueryLayers().size() > 1) {
                 // assume we asked the same list for all layers
-                while(propertyNames.size() < request.getQueryLayers().size()) {
+                while (propertyNames.size() < request.getQueryLayers().size()) {
                     propertyNames.add(propertyNames.get(0));
                 }
             }
-            if(propertyNames.size() != request.getQueryLayers().size()) {
-                throw new ServiceException("Mismatch between the property name set count " 
+            if (propertyNames.size() != request.getQueryLayers().size()) {
+                throw new ServiceException("Mismatch between the property name set count "
                         + propertyNames.size() + " and the query layers count " + request.getQueryLayers().size(),
                         "InvalidParameter", "propertyName");
             }
@@ -190,14 +191,14 @@ public class GetFeatureInfoKvpReader extends KvpRequestReader {
                 throw new ServiceException("Invalid format '" + format
                         + "', supported formats are " + infoFormats, "InvalidFormat", "info_format");
             }
-            if (wms.getAllowedFeatureInfoFormats().contains(format)==false)
+            if (wms.getAllowedFeatureInfoFormats().contains(format) == false)
                 throw wms.unallowedGetFeatureInfoFormatException(format);
         }
 
         request.setInfoFormat(format);
 
         request.setFeatureCount(1); // DJB: according to the WMS spec (7.3.3.7 FEATURE_COUNT) this
-                                    // should be 1. also tested for by cite
+        // should be 1. also tested for by cite
         try {
             int maxFeatures = Integer.parseInt(String.valueOf(kvp.get("FEATURE_COUNT")));
             request.setFeatureCount(maxFeatures);
@@ -205,40 +206,39 @@ public class GetFeatureInfoKvpReader extends KvpRequestReader {
             // do nothing, FEATURE_COUNT is optional
         }
 
-        Version version = wms.negotiateVersion(request.getVersion()); 
+        Version version = wms.negotiateVersion(request.getVersion());
         request.setVersion(version.toString());
-        
+
         //JD: most wms 1.3 client implementations still use x/y rather than i/j, so we support those
         // too when i/j not specified when not running in strict cite compliance mode
         String colPixel, rowPixel;
-        if(version.compareTo(WMS.VERSION_1_3_0) >= 0) {
+        if (version.compareTo(WMS.VERSION_1_3_0) >= 0) {
             colPixel = "I";
             rowPixel = "J";
-            
-            if (!kvp.containsKey(colPixel) && !kvp.containsKey(rowPixel)) { 
-                if (!wms.getServiceInfo().isCiteCompliant() && kvp.containsKey("X") 
-                    && kvp.containsKey("Y")) {
+
+            if (!kvp.containsKey(colPixel) && !kvp.containsKey(rowPixel)) {
+                if (!wms.getServiceInfo().isCiteCompliant() && kvp.containsKey("X")
+                        && kvp.containsKey("Y")) {
                     colPixel = "X";
-                    rowPixel = "Y"; 
+                    rowPixel = "Y";
                 }
             }
-        }
-        else {
+        } else {
             colPixel = "X";
             rowPixel = "Y";
         }
-        
+
         try {
             String colParam = String.valueOf(kvp.get(colPixel));
             String rowParam = String.valueOf(kvp.get(rowPixel));
             int x = Integer.parseInt(colParam);
             int y = Integer.parseInt(rowParam);
-            
+
             //ensure x/y in dimension of image
             if (x < 0 || x > getMapPart.getWidth() || y < 0 || y > getMapPart.getHeight()) {
                 throw new ServiceException(
-                    String.format("%d, %d not in dimensions of image: %d, %d", x, y, 
-                        getMapPart.getWidth(), getMapPart.getHeight()), "InvalidPoint");
+                        String.format("%d, %d not in dimensions of image: %d, %d", x, y,
+                                getMapPart.getWidth(), getMapPart.getHeight()), "InvalidPoint");
             }
             request.setXPixel(x);
             request.setYPixel(y);

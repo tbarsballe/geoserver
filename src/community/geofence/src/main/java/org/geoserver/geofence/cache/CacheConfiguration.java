@@ -26,7 +26,6 @@ import com.google.common.base.Ticker;
 
 /**
  * @author "Mauro Bartolomeoli - mauro.bartolomeoli@geo-solutions.it"
- *
  */
 public class CacheConfiguration implements Serializable, Cloneable {
 

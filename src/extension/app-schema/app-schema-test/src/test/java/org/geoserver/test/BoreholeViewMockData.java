@@ -9,8 +9,7 @@ package org.geoserver.test;
 /**
  * Mock data for testing SF0 in app-schema
  *
- * 
- * @author Rini Angreani (CSIRO Earth Science and Resource Engineering) 
+ * @author Rini Angreani (CSIRO Earth Science and Resource Engineering)
  */
 public class BoreholeViewMockData extends AbstractAppSchemaMockData {
 
@@ -20,7 +19,7 @@ public class BoreholeViewMockData extends AbstractAppSchemaMockData {
     @Override
     public void addContent() {
         putNamespace("gsmlp", "http://xmlns.geosciml.org/geosciml-portrayal/2.0");
-        addFeatureType("gsmlp", "BoreholeView", "BoreholeView.xml", 
+        addFeatureType("gsmlp", "BoreholeView", "BoreholeView.xml",
                 "Gsml32Borehole.properties", "geosciml-portrayal.xsd");
     }
 }

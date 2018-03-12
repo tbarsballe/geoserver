@@ -19,40 +19,40 @@ import org.geoserver.security.CatalogMode;
  */
 @SuppressWarnings("unchecked")
 public class WPSInfoImpl extends ServiceInfoImpl implements WPSInfo {
-    
+
     static final String KEY_CONNECTION_TIMEOUT = "connectionTimeout";
-    
+
     static final Double DEFAULT_CONNECTION_TIMEOUT = 30.0;
-    
+
     static final String KEY_RESOURCE_EXPIRATION_TIMEOUT = "resourceExpirationTimeout";
-    
+
     static final int DEFAULT_RESOURCE_EXPIRATION_TIMEOUT = 60 * 5;
-    
+
     static final String KEY_MAX_SYNCH = "maxSynchronousProcesses";
-    
+
     static final int DEFAULT_MAX_SYNCH = Runtime.getRuntime().availableProcessors();
-    
+
     static final String KEY_MAX_ASYNCH = "maxAsynchronousProcesses";
-    
+
     static final int DEFAULT_MAX_ASYNCH = Runtime.getRuntime().availableProcessors();
-    
-    /** 
-     * Connection timeout in seconds. 
-     * Using a double allows for fractional values, like 
+
+    /**
+     * Connection timeout in seconds.
+     * Using a double allows for fractional values, like
      * as an instance, half a second ==> 0.5
      */
     Double connectionTimeout = DEFAULT_CONNECTION_TIMEOUT;
-    
+
     /**
      * Resource expiration timeout in seconds.
      */
     Integer resourceExpirationTimeout = DEFAULT_RESOURCE_EXPIRATION_TIMEOUT;
-    
+
     /**
      * Maximum number of synchronous requests running in parallel
      */
     Integer maxSynchronousProcesses = DEFAULT_MAX_SYNCH;
-    
+
     /**
      * Maximum number of asynchronous requests running in parallel
      */
@@ -62,7 +62,7 @@ public class WPSInfoImpl extends ServiceInfoImpl implements WPSInfo {
      * List of process groups/factories.
      */
     List<ProcessGroupInfo> processGroups = new ArrayList<ProcessGroupInfo>();
-    
+
     /**
      * Where to store the WPS artifacts (inputs, outputs, and so on)
      */
@@ -73,7 +73,7 @@ public class WPSInfoImpl extends ServiceInfoImpl implements WPSInfo {
      * without the proper authentication
      */
     CatalogMode catalogMode;
-    
+
     /**
      * The global maximum size of a complex input, in MB. Per process configuration can override it
      */
@@ -109,49 +109,49 @@ public class WPSInfoImpl extends ServiceInfoImpl implements WPSInfo {
     }
 
     /**
-     * Returns the connection timeout (in seconds). It represents the timeout to be used 
-     * during WPS execute requests, when opening the connection/reading through it.  
-     * 
+     * Returns the connection timeout (in seconds). It represents the timeout to be used
+     * during WPS execute requests, when opening the connection/reading through it.
+     *
      * @return the timeout, or -1 if infinite timeout.
      */
     public double getConnectionTimeout() {
-        if(connectionTimeout == null) {
+        if (connectionTimeout == null) {
             // check the metadata map for backwards compatibility with 2.1.x series
             MetadataMap md = getMetadata();
-            if(md == null) {
+            if (md == null) {
                 return DEFAULT_CONNECTION_TIMEOUT;
             }
             Double timeout = md.get(KEY_CONNECTION_TIMEOUT, Double.class);
-            if(timeout == null) {
+            if (timeout == null) {
                 return DEFAULT_CONNECTION_TIMEOUT;
             }
             connectionTimeout = timeout;
-        } 
-        
+        }
+
         return connectionTimeout;
     }
 
     /**
-     * Sets the connection timeout (in seconds) to be used in WPS execute requests. -1 for infinite timeout 
+     * Sets the connection timeout (in seconds) to be used in WPS execute requests. -1 for infinite timeout
      */
     public void setConnectionTimeout(double connectionTimeout) {
         this.connectionTimeout = connectionTimeout;
     }
 
     public int getResourceExpirationTimeout() {
-        if(resourceExpirationTimeout == null) {
+        if (resourceExpirationTimeout == null) {
             // check the metadata map for backwards compatibility with 2.1.x series
             MetadataMap md = getMetadata();
-            if(md == null) {
+            if (md == null) {
                 return DEFAULT_RESOURCE_EXPIRATION_TIMEOUT;
             }
             Integer timeout = md.get(KEY_RESOURCE_EXPIRATION_TIMEOUT, Integer.class);
-            if(timeout == null) {
+            if (timeout == null) {
                 return DEFAULT_RESOURCE_EXPIRATION_TIMEOUT;
             }
             resourceExpirationTimeout = timeout;
-        } 
-        
+        }
+
         return resourceExpirationTimeout;
     }
 
@@ -160,19 +160,19 @@ public class WPSInfoImpl extends ServiceInfoImpl implements WPSInfo {
     }
 
     public int getMaxSynchronousProcesses() {
-        if(maxSynchronousProcesses == null) {
+        if (maxSynchronousProcesses == null) {
             // check the metadata map for backwards compatibility with 2.1.x series
             MetadataMap md = getMetadata();
-            if(md == null) {
+            if (md == null) {
                 return DEFAULT_MAX_SYNCH;
             }
             Integer max = md.get(KEY_MAX_SYNCH, Integer.class);
-            if(max == null) {
+            if (max == null) {
                 return DEFAULT_MAX_SYNCH;
             }
             maxSynchronousProcesses = max;
-        } 
-        
+        }
+
         return maxSynchronousProcesses;
     }
 
@@ -181,19 +181,19 @@ public class WPSInfoImpl extends ServiceInfoImpl implements WPSInfo {
     }
 
     public int getMaxAsynchronousProcesses() {
-        if(maxAsynchronousProcesses == null) {
+        if (maxAsynchronousProcesses == null) {
             // check the metadata map for backwards compatibility with 2.1.x series
             MetadataMap md = getMetadata();
-            if(md == null) {
+            if (md == null) {
                 return DEFAULT_MAX_ASYNCH;
             }
             Integer max = md.get(KEY_MAX_ASYNCH, Integer.class);
-            if(max == null) {
+            if (max == null) {
                 return DEFAULT_MAX_ASYNCH;
             }
             maxAsynchronousProcesses = max;
-        } 
-        
+        }
+
         return maxAsynchronousProcesses;
     }
 
@@ -220,10 +220,10 @@ public class WPSInfoImpl extends ServiceInfoImpl implements WPSInfo {
         this.storageDirectory = storageDirectory;
 
     }
-    
+
     @Override
     public CatalogMode getCatalogMode() {
-        if(catalogMode==null){
+        if (catalogMode == null) {
             catalogMode = CatalogMode.HIDE;
         }
         return catalogMode;
@@ -381,5 +381,5 @@ public class WPSInfoImpl extends ServiceInfoImpl implements WPSInfo {
             return false;
         return true;
     }
-    
+
 }

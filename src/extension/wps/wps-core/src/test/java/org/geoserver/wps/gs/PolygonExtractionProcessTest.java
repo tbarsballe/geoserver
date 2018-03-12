@@ -22,8 +22,8 @@ import org.opengis.feature.simple.SimpleFeature;
 
 /**
  * Test class for the contour process.
- * @author Simone Giannecchini, GeoSolutions SAS
  *
+ * @author Simone Giannecchini, GeoSolutions SAS
  */
 public class PolygonExtractionProcessTest extends BaseRasterToVectorTest {
 
@@ -33,35 +33,34 @@ public class PolygonExtractionProcessTest extends BaseRasterToVectorTest {
      */
     @Test
     public void testProcessStandaloneBasic() throws Exception {
-    	final GridCoverage2D gc = (GridCoverage2D) getCatalog().getCoverageByName(DEM.getLocalPart()).getGridCoverage(null, GeoTools.getDefaultHints());
-    	scheduleForDisposal(gc);
-    	
-    	final PolygonExtractionProcess process = new PolygonExtractionProcess();
-		final SimpleFeatureCollection fc = process.execute(
-				gc, 
-				0,
-				true, 
-				null, 
-				null,
-				new ArrayList<Range>() {{
-				    add(new Range(0d,true, 1000d,false));
-				    add(new Range(1000d,true, 2000d,false));
-				}},
-				new NullProgressListener());
-		
+        final GridCoverage2D gc = (GridCoverage2D) getCatalog().getCoverageByName(DEM.getLocalPart()).getGridCoverage(null, GeoTools.getDefaultHints());
+        scheduleForDisposal(gc);
 
-		assertNotNull(fc);
-		assertTrue(fc.size() > 0);
+        final PolygonExtractionProcess process = new PolygonExtractionProcess();
+        final SimpleFeatureCollection fc = process.execute(
+                gc,
+                0,
+                true,
+                null,
+                null,
+                new ArrayList<Range>() {{
+                    add(new Range(0d, true, 1000d, false));
+                    add(new Range(1000d, true, 2000d, false));
+                }},
+                new NullProgressListener());
 
-		SimpleFeatureIterator fi = fc.features();
-		while (fi.hasNext()) {
-			SimpleFeature sf = fi.next();
-			Double value = (Double) sf.getAttribute("value");
-			assertTrue(value > 0 && value < 8);
-		}
-		fi.close();
+
+        assertNotNull(fc);
+        assertTrue(fc.size() > 0);
+
+        SimpleFeatureIterator fi = fc.features();
+        while (fi.hasNext()) {
+            SimpleFeature sf = fi.next();
+            Double value = (Double) sf.getAttribute("value");
+            assertTrue(value > 0 && value < 8);
+        }
+        fi.close();
     }
 
-    
 
 }

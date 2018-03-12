@@ -19,16 +19,15 @@ import org.springframework.stereotype.Component;
 
 /**
  * Injects the environment variables into the {@link EnvFunction} and clears them up at the end
- * 
+ *
  * @author Andrea Aime - GeoSolutions
- * 
  */
 @Component
 public class EnviromentInjectionCallback extends DispatcherCallbackAdapter {
 
     public void init(HttpServletRequest request, HttpServletResponse response) {
         Map<String, Object> envVars = new HashMap<>();
-        
+
         // TODO: do we want to support a OWS like "env" param here?
 
         // inject the current user among the env vars

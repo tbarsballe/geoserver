@@ -27,7 +27,7 @@ public class GWCConfigTest extends GeoServerSystemTestSupport {
     protected void onSetUp(SystemTestData testData) throws Exception {
         super.onSetUp(testData);
     }
-    
+
     @Before
     public void setup() throws Exception {
         oldDefaults = GWCConfig.getOldDefaults();

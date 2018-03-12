@@ -55,7 +55,7 @@ public class WFSSettingsControllerTest extends CatalogRESTTestSupport {
 
     @Test
     public void testGetAsHTML() throws Exception {
-        getAsDOM(RestBaseController.ROOT_PATH + "/services/wfs/settings.html" );
+        getAsDOM(RestBaseController.ROOT_PATH + "/services/wfs/settings.html");
     }
 
     @Test

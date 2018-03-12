@@ -16,17 +16,16 @@ import org.geotools.util.logging.Logging;
 import org.springframework.security.core.Authentication;
 
 /**
- * Authorizer that allows access if the user has admin rights to any workspace. 
- * 
- * @author Justin Deoliveira, OpenGeo
+ * Authorizer that allows access if the user has admin rights to any workspace.
  *
+ * @author Justin Deoliveira, OpenGeo
  */
 public class WorkspaceAdminComponentAuthorizer extends AdminComponentAuthorizer {
     private final static Logger LOGGER = Logging.getLogger(WorkspaceAdminComponentAuthorizer.class);
 
     @Override
     public boolean isAccessAllowed(Class<?> componentClass,
-            Authentication authentication) {
+                                   Authentication authentication) {
 
         //if full admin grant access
         if (super.isAccessAllowed(componentClass, authentication)) {
@@ -39,7 +38,7 @@ public class WorkspaceAdminComponentAuthorizer extends AdminComponentAuthorizer 
         }
 
         //TODO: we should cache this result somehow
-        if(isWorkspaceAdmin(authentication)) {
+        if (isWorkspaceAdmin(authentication)) {
             return true;
         }
 

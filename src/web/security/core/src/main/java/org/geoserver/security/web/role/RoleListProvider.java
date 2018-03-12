@@ -22,24 +22,25 @@ import org.geoserver.web.wicket.GeoServerDataProvider;
 
 /**
  * Page listing for {@link GeoServerUserGroup} objects
- * 
- * @author christian
  *
+ * @author christian
  */
 @SuppressWarnings("serial")
 public class RoleListProvider extends GeoServerDataProvider<GeoServerRole> {
 
-    protected String  roleServiceName;
+    protected String roleServiceName;
+
     public RoleListProvider(final String roleServiceName) {
-        this.roleServiceName=roleServiceName;
+        this.roleServiceName = roleServiceName;
     }
 
-    
+
     public static final Property<GeoServerRole> ROLENAME = new BeanProperty<GeoServerRole>("rolename", "authority");
-    
-    public final static String ParentPropertyName="parentrolename";
-    public  class ParentProperty implements Property<GeoServerRole>  {
-                
+
+    public final static String ParentPropertyName = "parentrolename";
+
+    public class ParentProperty implements Property<GeoServerRole> {
+
         @Override
         public String getName() {
             return ParentPropertyName;
@@ -47,15 +48,15 @@ public class RoleListProvider extends GeoServerDataProvider<GeoServerRole> {
 
         @Override
         public Object getPropertyValue(GeoServerRole item) {
-            GeoServerRole parent=null;
+            GeoServerRole parent = null;
             try {
                 parent = GeoServerApplication.get().getSecurityManager()
-                    .loadRoleService(roleServiceName).getParentRole(item);
+                        .loadRoleService(roleServiceName).getParentRole(item);
             } catch (IOException e) {
                 //TODO is this correct
                 throw new RuntimeException(e);
-            }            
-            if (parent==null)
+            }
+            if (parent == null)
                 return "";
             else
                 return parent.getAuthority();
@@ -80,9 +81,11 @@ public class RoleListProvider extends GeoServerDataProvider<GeoServerRole> {
         public boolean isSearchable() {
             return true;
         }
-        
-    };
-            
+
+    }
+
+    ;
+
     public static final Property<GeoServerRole> HASROLEPARAMS = new Property<GeoServerRole>() {
 
         @Override
@@ -92,10 +95,10 @@ public class RoleListProvider extends GeoServerDataProvider<GeoServerRole> {
 
         @Override
         public Object getPropertyValue(GeoServerRole item) {
-            if (item.getProperties().size()==0)
+            if (item.getProperties().size() == 0)
                 return Boolean.FALSE;
             else
-                return Boolean.TRUE;                    
+                return Boolean.TRUE;
         }
 
         @Override
@@ -116,24 +119,24 @@ public class RoleListProvider extends GeoServerDataProvider<GeoServerRole> {
         @Override
         public boolean isSearchable() {
             return true;
-        }        
+        }
     };
-    
+
     @Override
     protected List<GeoServerRole> getItems() {
-        SortedSet<GeoServerRole> roles=null;
+        SortedSet<GeoServerRole> roles = null;
         try {
             GeoServerRoleService service = null;
-            if (roleServiceName!=null)
-                    service = GeoServerApplication.get().getSecurityManager().
-                    loadRoleService(roleServiceName);
-            
-            if (service==null)
-                roles=new TreeSet<GeoServerRole>();
+            if (roleServiceName != null)
+                service = GeoServerApplication.get().getSecurityManager().
+                        loadRoleService(roleServiceName);
+
+            if (service == null)
+                roles = new TreeSet<GeoServerRole>();
             else
-                roles=service.getRoles();
+                roles = service.getRoles();
         } catch (IOException e) {
-            throw new RuntimeException(e); 
+            throw new RuntimeException(e);
         }
         List<GeoServerRole> roleList = new ArrayList<GeoServerRole>();
         roleList.addAll(roles);

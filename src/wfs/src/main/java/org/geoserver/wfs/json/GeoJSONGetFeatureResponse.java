@@ -44,10 +44,9 @@ import java.util.logging.Logger;
 
 /**
  * A GetFeatureInfo response handler specialized in producing Json and JsonP data for a GetFeatureInfo request.
- * 
+ *
  * @author Simone Giannecchini, GeoSolutions
  * @author Carlo Cancellieri - GeoSolutions
- * 
  */
 public class GeoJSONGetFeatureResponse extends WFSGetFeatureOutputFormat {
     private final Logger LOGGER = org.geotools.util.logging.Logging.getLogger(this.getClass());
@@ -80,7 +79,7 @@ public class GeoJSONGetFeatureResponse extends WFSGetFeatureOutputFormat {
      * Returns the mime type
      */
     public String getMimeType(Object value, Operation operation) throws ServiceException {
-        if(jsonp) {
+        if (jsonp) {
             return JSONType.JSONP.getMimeType();
         } else {
             return JSONType.JSON.getMimeType();
@@ -103,7 +102,7 @@ public class GeoJSONGetFeatureResponse extends WFSGetFeatureOutputFormat {
 
     @Override
     protected void write(FeatureCollectionResponse featureCollection, OutputStream output,
-            Operation describeFeatureType) throws IOException {
+                         Operation describeFeatureType) throws IOException {
 
         int numDecimals = getNumDecimals(featureCollection.getFeature(), gs, gs.getCatalog());
 
@@ -112,13 +111,13 @@ public class GeoJSONGetFeatureResponse extends WFSGetFeatureOutputFormat {
         // Generate bounds for every feature?
         WFSInfo wfs = getInfo();
         boolean featureBounding = wfs.isFeatureBounding();
-        
+
         // include fid?
         String id_option = null; // null - default, "" - none, or "property"
         //GetFeatureRequest request = GetFeatureRequest.adapt(describeFeatureType.getParameters()[0]);
         Request request = Dispatcher.REQUEST.get();
         if (request != null) {
-            id_option = JSONType.getIdPolicy( request.getKvp() );
+            id_option = JSONType.getIdPolicy(request.getKvp());
         }
         // prepare to write out
         OutputStreamWriter osw = null;
@@ -143,11 +142,11 @@ public class GeoJSONGetFeatureResponse extends WFSGetFeatureOutputFormat {
                 // a zero count when dealing with complex features means that features count is not supported
                 featureCount = null;
             }
-            
+
             final GeoJSONBuilder jsonWriter = new GeoJSONBuilder(outWriter);
             jsonWriter.setNumberOfDecimals(numDecimals);
             jsonWriter.object().key("type").value("FeatureCollection");
-            if(featureCount != null) {
+            if (featureCount != null) {
                 jsonWriter.key("totalFeatures").value(featureCount);
             } else {
                 jsonWriter.key("totalFeatures").value("unknown");
@@ -178,7 +177,7 @@ public class GeoJSONGetFeatureResponse extends WFSGetFeatureOutputFormat {
 
             // Coordinate Reference System
             try {
-                if ("true".equals(GeoServerExtensions.getProperty("GEOSERVER_GEOJSON_LEGACY_CRS"))){
+                if ("true".equals(GeoServerExtensions.getProperty("GEOSERVER_GEOJSON_LEGACY_CRS"))) {
                     // This is wrong, but GeoServer used to do it this way.
                     writeCrsLegacy(jsonWriter, crs);
                 } else {
@@ -187,7 +186,7 @@ public class GeoJSONGetFeatureResponse extends WFSGetFeatureOutputFormat {
             } catch (FactoryException e) {
                 throw (IOException) new IOException("Error looking up crs identifier").initCause(e);
             }
-            
+
             // Bounding box for featurecollection
             if (hasGeom && featureBounding) {
                 ReferencedEnvelope e = null;
@@ -334,18 +333,18 @@ public class GeoJSONGetFeatureResponse extends WFSGetFeatureOutputFormat {
     }
 
     private void writeCrs(final GeoJSONBuilder jsonWriter,
-            CoordinateReferenceSystem crs) throws FactoryException {
+                          CoordinateReferenceSystem crs) throws FactoryException {
         if (crs != null) {
             String identifier = null;
             Integer code = CRS.lookupEpsgCode(crs, true);
-            if(code != null) {
+            if (code != null) {
                 if (code != null) {
                     identifier = SrsSyntax.OGC_URN.getPrefix() + code;
                 }
             } else {
                 identifier = CRS.lookupIdentifier(crs, true);
             }
-            
+
             jsonWriter.key("crs");
             jsonWriter.object();
             jsonWriter.key("type").value("name");
@@ -360,10 +359,10 @@ public class GeoJSONGetFeatureResponse extends WFSGetFeatureOutputFormat {
             jsonWriter.value(null);
         }
     }
-    
+
     // Doesn't follow spec, but GeoServer used to do this.
     private void writeCrsLegacy(final GeoJSONBuilder jsonWriter,
-            CoordinateReferenceSystem crs) {
+                                CoordinateReferenceSystem crs) {
         // Coordinate Reference System, currently only if the namespace is
         // EPSG
         if (crs != null) {
@@ -396,9 +395,9 @@ public class GeoJSONGetFeatureResponse extends WFSGetFeatureOutputFormat {
         return JSONType.getCallbackFunction(request.getKvp());
     }
 
-    
+
     @Override
-    public String getCharset(Operation operation){
+    public String getCharset(Operation operation) {
         return gs.getGlobal().getSettings().getCharset();
     }
 }

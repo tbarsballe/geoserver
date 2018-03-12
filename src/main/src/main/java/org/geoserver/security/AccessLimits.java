@@ -9,12 +9,12 @@ import java.io.Serializable;
 
 /**
  * Base class for all AccessLimits declared by a {@link ResourceAccessManager}
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class AccessLimits implements Serializable {
     private static final long serialVersionUID = 8521276966116962954L;
-    
+
     /**
      * Gets the catalog mode for this layer
      */
@@ -29,8 +29,6 @@ public class AccessLimits implements Serializable {
 
     /**
      * The catalog mode for this layer
-     * 
-     *
      */
     public CatalogMode getMode() {
         return mode;
@@ -60,7 +58,6 @@ public class AccessLimits implements Serializable {
             return false;
         return true;
     }
-    
-    
-    
+
+
 }

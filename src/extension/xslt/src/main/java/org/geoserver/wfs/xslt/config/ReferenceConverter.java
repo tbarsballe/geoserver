@@ -60,10 +60,10 @@ class ReferenceConverter implements Converter {
         }
 
         FeatureTypeInfo result = catalog.getFeatureType(ref);
-        if(result == null) {
+        if (result == null) {
             result = catalog.getFeatureTypeByName(ref);
         }
-        
+
         return result;
     }
 }

@@ -28,9 +28,9 @@ import org.springframework.util.StringUtils;
  * <li>userkey2=username2</li>
  * <li>...</li>
  * </ul>
- * 
+ * <p>
  * The file will be automatically reloaded when modified
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class PropertyAuthenticationKeyMapper extends AbstractAuthenticationKeyMapper {
@@ -43,44 +43,43 @@ public class PropertyAuthenticationKeyMapper extends AbstractAuthenticationKeyMa
 
     PropertyFileWatcher fileWatcher;
     Properties authKeyProps;
-    
+
     public boolean supportsReadOnlyUserGroupService() {
         return true;
     }
 
-   
 
     @Override
     synchronized public GeoServerUser getUser(String key) throws IOException {
         checkProperties();
-        
-        if (authKeyProps==null) {
-            synchronize();            
-        }    
-        
+
+        if (authKeyProps == null) {
+            synchronize();
+        }
+
         if (fileWatcher.isStale()) // reload if necessary
-            authKeyProps=fileWatcher.getProperties();
-        
+            authKeyProps = fileWatcher.getProperties();
+
         String userName = authKeyProps.getProperty(key);
-        if (StringUtils.hasLength(userName)==false) {            
-            LOGGER.warning("Cannot find user for auth key: "+key);
+        if (StringUtils.hasLength(userName) == false) {
+            LOGGER.warning("Cannot find user for auth key: " + key);
             return null;
         }
-        GeoServerUser theUser=null;
+        GeoServerUser theUser = null;
         try {
-            theUser= (GeoServerUser)
-                getUserGroupService().loadUserByUsername(userName);
+            theUser = (GeoServerUser)
+                    getUserGroupService().loadUserByUsername(userName);
         } catch (UsernameNotFoundException ex) {
-            LOGGER.warning("Cannot find user: "+userName+" in user/group service: " +getUserGroupServiceName());
+            LOGGER.warning("Cannot find user: " + userName + " in user/group service: " + getUserGroupServiceName());
             return null;
         }
-        
-        if (theUser.isEnabled()==false) {                    
-            LOGGER.info("Found user "+theUser.getUsername()+ " for key " + key +
+
+        if (theUser.isEnabled() == false) {
+            LOGGER.info("Found user " + theUser.getUsername() + " for key " + key +
                     ", but this user is disabled");
             return null;
         }
-        
+
         return theUser;
     }
 
@@ -92,21 +91,21 @@ public class PropertyAuthenticationKeyMapper extends AbstractAuthenticationKeyMa
     @Override
     synchronized public int synchronize() throws IOException {
         checkProperties();
-        
-        File propFile=new File(getSecurityManager().getUserGroupRoot(),getUserGroupServiceName());
-        propFile=new File(propFile,AUTHKEYS_FILE);
-        
-        File backupFile=new File(getSecurityManager().getUserGroupRoot(),getUserGroupServiceName());
-        backupFile=new File(backupFile,AUTHKEYS_FILE+".backup");
 
-        
+        File propFile = new File(getSecurityManager().getUserGroupRoot(), getUserGroupServiceName());
+        propFile = new File(propFile, AUTHKEYS_FILE);
+
+        File backupFile = new File(getSecurityManager().getUserGroupRoot(), getUserGroupServiceName());
+        backupFile = new File(backupFile, AUTHKEYS_FILE + ".backup");
+
+
         // check if the previous synchronize failed
-        if (backupFile.exists()) 
-            throw new IOException("The file: "+backupFile.getCanonicalPath() + " has to be removed first");
-        
-        authKeyProps=new Properties();
-        Properties  oldProps=new Properties();
-        
+        if (backupFile.exists())
+            throw new IOException("The file: " + backupFile.getCanonicalPath() + " has to be removed first");
+
+        authKeyProps = new Properties();
+        Properties oldProps = new Properties();
+
         // check if property file exists and reload                        
         if (propFile.exists()) {
             FileUtils.copyFile(propFile, backupFile);
@@ -117,34 +116,34 @@ public class PropertyAuthenticationKeyMapper extends AbstractAuthenticationKeyMa
                 inputFile.close();
             }
         }
-        
-        Map<Object,Object> reverseMap=new HashMap<Object,Object>();
-        for ( Entry<Object,Object> entry :oldProps.entrySet()) {
-            reverseMap.put(entry.getValue(),entry.getKey());
+
+        Map<Object, Object> reverseMap = new HashMap<Object, Object>();
+        for (Entry<Object, Object> entry : oldProps.entrySet()) {
+            reverseMap.put(entry.getValue(), entry.getKey());
         }
-        
+
         GeoServerUserGroupService service = getUserGroupService();
-        
-        int counter=0;
+
+        int counter = 0;
         for (GeoServerUser user : service.getUsers()) {
             if (reverseMap.containsKey(user.getUsername())) {
-                authKeyProps.put(reverseMap.get(user.getUsername()),user.getUsername());
+                authKeyProps.put(reverseMap.get(user.getUsername()), user.getUsername());
             } else {
                 authKeyProps.put(createAuthKey(), user.getUsername());
                 counter++;
             }
-        }            
+        }
         FileOutputStream outputFile = new FileOutputStream(propFile, false);
         try {
             authKeyProps.store(outputFile, "Format is authkey=username");
         } finally {
             outputFile.close();
         }
-            
+
         if (backupFile.exists())
             backupFile.delete();
-        
-        fileWatcher=new PropertyFileWatcher(propFile);
+
+        fileWatcher = new PropertyFileWatcher(propFile);
         return counter;
     }
 }

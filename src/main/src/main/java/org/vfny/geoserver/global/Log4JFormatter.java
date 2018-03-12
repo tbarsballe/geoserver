@@ -106,10 +106,10 @@ public class Log4JFormatter extends Formatter {
      * Construct a <code>Log4JFormatter</code>.
      *
      * @param base The base logger name. This is used for shortening the logger
-     *        name when formatting message. For example, if the base  logger
-     *        name is "org.geotools" and a log record come from  the
-     *        "org.geotools.core" logger, it will be formatted as  "[LEVEL
-     *        core]" (i.e. the "org.geotools" part is ommited).
+     *             name when formatting message. For example, if the base  logger
+     *             name is "org.geotools" and a log record come from  the
+     *             "org.geotools.core" logger, it will be formatted as  "[LEVEL
+     *             core]" (i.e. the "org.geotools" part is ommited).
      */
     public Log4JFormatter(final String base) {
         this.base = base.trim();
@@ -125,9 +125,7 @@ public class Log4JFormatter extends Formatter {
      * Format the given log record and return the formatted string.
      *
      * @param record the log record to be formatted.
-     *
      * @return a formatted log record
-     *
      * @throws AssertionError Should never occur.
      */
     public synchronized String format(final LogRecord record) {
@@ -186,8 +184,8 @@ public class Log4JFormatter extends Formatter {
 
     /**
      * Returns the full stack trace of the given exception
-     * @param record
      *
+     * @param record
      */
     private String getStackTrace(Throwable t) {
         StringWriter sw = new StringWriter();
@@ -208,8 +206,8 @@ public class Log4JFormatter extends Formatter {
      * standard error stream}).  This action has no effect  on any loggers
      * outside the <code>base</code> namespace.
      *
-     * @param base The base logger name to apply the change on  (e.g.
-     *        "org.geotools").
+     * @param base        The base logger name to apply the change on  (e.g.
+     *                    "org.geotools").
      * @param filterLevel The level to log at - overrides user prefs.
      */
     public static void init(final String base, Level filterLevel) {
@@ -233,7 +231,7 @@ public class Log4JFormatter extends Formatter {
             }
         }
 
-        for (Logger parent = logger; parent.getUseParentHandlers();) {
+        for (Logger parent = logger; parent.getUseParentHandlers(); ) {
             parent = parent.getParent();
 
             if (parent == null) {
@@ -284,7 +282,7 @@ public class Log4JFormatter extends Formatter {
 
         //Artie Konin suggested fix (see GEOS-366)
         if (0 == logger.getHandlers().length) // seems that getHandlers() cannot return null
-         {
+        {
             log4j = new Log4JFormatter(base);
 
             Handler handler = new Stdout();
@@ -333,10 +331,10 @@ public class Log4JFormatter extends Formatter {
      * writting log message on a single line.
      *
      * @task TODO: This class should subclass {@link ConsoleHandler}.
-     *       Unfortunatly, this is currently not possible because  {@link
-     *       ConsoleHandler#setOutputStream} close {@link System#err}. If this
-     *       bug get fixed, then {@link #close} no longer need to be
-     *       overriden.
+     * Unfortunatly, this is currently not possible because  {@link
+     * ConsoleHandler#setOutputStream} close {@link System#err}. If this
+     * bug get fixed, then {@link #close} no longer need to be
+     * overriden.
      */
     private static final class Stdout extends StreamHandler {
         public Stdout() {
@@ -346,13 +344,12 @@ public class Log4JFormatter extends Formatter {
         /**
          * Construct a handler.
          *
-         * @param handler The handler to copy properties from.
+         * @param handler   The handler to copy properties from.
          * @param formatter The formatter to use.
-         *
          * @throws UnsupportedEncodingException if the encoding is not valid.
          */
         public Stdout(final Handler handler, final Formatter formatter)
-            throws UnsupportedEncodingException {
+                throws UnsupportedEncodingException {
             super(System.out, formatter);
             setErrorManager(handler.getErrorManager());
             setFilter(handler.getFilter());

@@ -12,12 +12,14 @@ import org.geoserver.security.filter.GeoServerBasicAuthenticationFilter;
 
 /**
  * Configuration panel for {@link GeoServerBasicAuthenticationFilter}.
- * 
+ *
  * @author Justin Deoliveira, OpenGeo
  */
-public class BasicAuthFilterPanel extends AuthenticationFilterPanel<BasicAuthenticationFilterConfig>{
+public class BasicAuthFilterPanel extends AuthenticationFilterPanel<BasicAuthenticationFilterConfig> {
 
-    /** serialVersionUID */
+    /**
+     * serialVersionUID
+     */
     private static final long serialVersionUID = 1L;
 
     public BasicAuthFilterPanel(String id, IModel<BasicAuthenticationFilterConfig> model) {

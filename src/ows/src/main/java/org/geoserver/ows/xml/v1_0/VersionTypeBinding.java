@@ -15,9 +15,9 @@ import org.geotools.xml.InstanceComponent;
 
 /**
  * Binding object for the type http://www.opengis.net/ows:VersionType.
- *
  * <p>
- *        <pre>
+ * <p>
+ * <pre>
  *         <code>
  *  &lt;simpleType name="VersionType"&gt;
  *      &lt;annotation&gt;
@@ -28,6 +28,7 @@ import org.geotools.xml.InstanceComponent;
  *
  *          </code>
  *         </pre>
+ *
  * @generated
  */
 public class VersionTypeBinding extends AbstractSimpleBinding {
@@ -61,7 +62,7 @@ public class VersionTypeBinding extends AbstractSimpleBinding {
      * @generated modifiable
      */
     public Object parse(InstanceComponent instance, Object value)
-        throws Exception {
+            throws Exception {
         //TODO: implement
         return value;
     }

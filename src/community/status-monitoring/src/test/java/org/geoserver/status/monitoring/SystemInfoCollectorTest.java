@@ -59,7 +59,7 @@ public class SystemInfoCollectorTest {
                     "Metric for " + m.getName() + " available but value is not retrived",
                     (m.getAvailable() && !m.getValue().equals(BaseSystemInfoCollector.DEFAULT_VALUE)
                             || (!m.getAvailable()
-                                    && m.getValue().equals(BaseSystemInfoCollector.DEFAULT_VALUE))),
+                            && m.getValue().equals(BaseSystemInfoCollector.DEFAULT_VALUE))),
                     equalTo(true));
         }
     }

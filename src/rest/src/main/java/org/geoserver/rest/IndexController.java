@@ -21,7 +21,6 @@ import java.util.*;
 /**
  * The IndexController lists the paths available for the Spring MVC RequestMappingHandler
  * Specifically, it auto-generates an index page containing all non-templated paths relative to the router root.
- *
  */
 @RestController
 @RequestMapping(path = RestBaseController.ROOT_PATH, produces = {
@@ -51,7 +50,7 @@ public class IndexController extends RestBaseController {
         Map<RequestMappingInfo, HandlerMethod> handlerMethods =
                 this.requestMappingHandlerMapping.getHandlerMethods();
 
-        for(Map.Entry<RequestMappingInfo, HandlerMethod> item : handlerMethods.entrySet()) {
+        for (Map.Entry<RequestMappingInfo, HandlerMethod> item : handlerMethods.entrySet()) {
             RequestMappingInfo mapping = item.getKey();
 
             //Only list "get" endpoints
@@ -62,13 +61,13 @@ public class IndexController extends RestBaseController {
 
                         String path = pattern;
                         //exclude other rest apis, like gwc/rest
-                        final int rootSize = RestBaseController.ROOT_PATH.length()+1;
+                        final int rootSize = RestBaseController.ROOT_PATH.length() + 1;
                         if (path.startsWith(RestBaseController.ROOT_PATH) && path.length() > rootSize) {
                             //trim root path
                             path = path.substring(rootSize);
 
                             if (path.endsWith("/**")) {
-                                path = path.substring(0, path.length()-3);
+                                path = path.substring(0, path.length() - 3);
                             }
                             if (path.length() > 0) {
                                 s.add(path);

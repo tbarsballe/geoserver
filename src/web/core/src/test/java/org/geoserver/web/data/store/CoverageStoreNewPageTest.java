@@ -107,13 +107,13 @@ public class CoverageStoreNewPageTest extends GeoServerWicketTestSupport {
                 "file:data/example.extension");
 
     }
-    
+
     @Test
     public void testGeoPackageRaster() {
         formatType = new GeoPackageFormat().getName();
         final CoverageStoreNewPage page = new CoverageStoreNewPage(formatType);
         tester.startPage(page);
-        
+
         tester.debugComponentTrees();
         Component urlComponent = tester.getComponentFromLastRenderedPage("rasterStoreForm:parametersPanel:url");
         assertThat(urlComponent, instanceOf(FileParamPanel.class));

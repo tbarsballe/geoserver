@@ -67,7 +67,7 @@ public class CssStyleControllerTest extends GeoServerSystemTestSupport {
         String content = response.getContentAsString();
         assertEquals("* {stroke: red}", content);
     }
-    
+
     @Test
     public void getGetAsSLD10() throws Exception {
         MockHttpServletResponse response = getAsServletResponse(
@@ -77,7 +77,7 @@ public class CssStyleControllerTest extends GeoServerSystemTestSupport {
         Document dom = dom(new ByteArrayInputStream(response.getContentAsByteArray()));
         assertThat(dom, hasXPath("//sld:LineSymbolizer/sld:Stroke/sld:CssParameter", namespaceContext, equalTo("#ff0000")));
     }
-    
+
     @Test
     public void getGetAsHTML() throws Exception {
         MockHttpServletResponse response = getAsServletResponse(
@@ -100,7 +100,7 @@ public class CssStyleControllerTest extends GeoServerSystemTestSupport {
                 RestBaseController.ROOT_PATH + "/styles", xml);
         assertEquals(201, response.getStatus());
         assertNotNull(cat.getStyleByName("foo"));
-        
+
         // step 2 define css
         String content = newCSS();
         response = putAsServletResponse("/rest/styles/foo?raw=true", content, CssHandler.MIME_TYPE);
@@ -185,12 +185,12 @@ public class CssStyleControllerTest extends GeoServerSystemTestSupport {
         handler.encode(Styles.sld(s), SLDHandler.VERSION_10, false, out);
         content = new String(out.toByteArray());
         assertTrue(content.contains("<sld:Name>bar</sld:Name>"));
-        
+
         // step 3 validate css
         content = "* { outline: red}";
         response = putAsServletResponse("/rest/styles/bar", content, CssHandler.MIME_TYPE);
         assertEquals(400, response.getStatus());
-        
+
         catalog.remove(styleInfo);
     }
 

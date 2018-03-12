@@ -20,10 +20,9 @@ import org.vfny.geoserver.wcs.WcsException;
 
 /**
  * Xml reader for wcs 1.0.0 xml requests.
- * 
+ *
  * @author Justin Deoliveira, The Open Planning Project
  * @author Andrea Aime, The Open Planning project
- * 
  */
 public class WcsXmlReader extends XmlRequestReader {
     /**
@@ -34,7 +33,7 @@ public class WcsXmlReader extends XmlRequestReader {
     EntityResolverProvider resolverProvider;
 
     public WcsXmlReader(String element, String version, WCSConfiguration configuration,
-            EntityResolverProvider resolverProvider) {
+                        EntityResolverProvider resolverProvider) {
         super(new QName(WCS.NAMESPACE, element), new Version(version), "wcs");
         this.configuration = configuration;
         this.resolverProvider = resolverProvider;

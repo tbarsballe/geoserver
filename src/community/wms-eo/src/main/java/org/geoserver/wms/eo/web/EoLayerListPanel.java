@@ -24,7 +24,7 @@ public class EoLayerListPanel extends LayerListPanel {
     private static final long serialVersionUID = -7650810117220868467L;
 
     public EoLayerListPanel(String contentId, final EoLayerType layerType,
-            final LayerGroupEntryProvider entryProvider) {
+                            final LayerGroupEntryProvider entryProvider) {
         super(contentId, new LayerListProvider() {
 
             @Override

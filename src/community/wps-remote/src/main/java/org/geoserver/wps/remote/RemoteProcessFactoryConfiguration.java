@@ -8,13 +8,14 @@ import java.util.Map;
 
 /**
  * Bean that includes the configurations parameters for the remote process factory and client
- * 
+ *
  * @author Alessio Fabiani, GeoSolutions
- * 
  */
 public class RemoteProcessFactoryConfiguration {
 
-    /** Configuration Default Values */
+    /**
+     * Configuration Default Values
+     */
     public static final long DEFAULT_SLEEP_TIME = 100;
 
     public static final String DEFAULT_SLEEP_TIME_NAME = "remoteProcessStubCycleSleepTime";
@@ -23,9 +24,11 @@ public class RemoteProcessFactoryConfiguration {
 
     private final Map<String, String> configKvPs;
 
-    /** Constructor */
+    /**
+     * Constructor
+     */
     public RemoteProcessFactoryConfiguration(long remoteProcessStubCycleSleepTime,
-            Map<String, String> configKvPs) {
+                                             Map<String, String> configKvPs) {
         this.remoteProcessStubCycleSleepTime = remoteProcessStubCycleSleepTime;
 
         this.configKvPs = configKvPs;
@@ -54,9 +57,8 @@ public class RemoteProcessFactoryConfiguration {
 
     /**
      * A method to access generic parsed property keys from the properties configuration file
-     * 
-     * @param prop
      *
+     * @param prop
      */
     public String get(String prop) {
         return (configKvPs != null ? configKvPs.get(prop) : null);

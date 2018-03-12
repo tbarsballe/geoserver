@@ -17,15 +17,15 @@ import com.thoughtworks.xstream.XStream;
 
 /**
  * Loads the gdal_translate.xml configuration file and configures the output format accordingly.
- *
+ * <p>
  * <p>Also keeps tabs on the configuration file, reloading the file as needed.
- * 
- * @author Stefano Costa, GeoSolutions
  *
+ * @author Stefano Costa, GeoSolutions
  */
 public class GdalConfigurator extends AbstractToolConfigurator {
 
     public static final ToolConfiguration DEFAULT;
+
     static {
         // assume it's in the classpath and GDAL_DATA is properly set in the enviroment
         // and add some default formats
@@ -35,11 +35,11 @@ public class GdalConfigurator extends AbstractToolConfigurator {
         DEFAULT = new ToolConfiguration(
                 "gdal_translate",
                 new HashMap<String, String>(),
-                new Format[] {
-                    new Format("JPEG2000", "GDAL-JPEG2000", ".jp2", true, "image/jp2"),
-                    pdfFormat,
-                    new Format("AAIGrid", "GDAL-ArcInfoGrid", ".asc", false, null),
-                    new Format("XYZ", "GDAL-XYZ", ".txt", true, "text/plain", OutputType.TEXT)
+                new Format[]{
+                        new Format("JPEG2000", "GDAL-JPEG2000", ".jp2", true, "image/jp2"),
+                        pdfFormat,
+                        new Format("AAIGrid", "GDAL-ArcInfoGrid", ".asc", false, null),
+                        new Format("XYZ", "GDAL-XYZ", ".txt", true, "text/plain", OutputType.TEXT)
                 });
     }
 
@@ -56,7 +56,7 @@ public class GdalConfigurator extends AbstractToolConfigurator {
     protected ToolConfiguration getDefaultConfiguration() {
         return DEFAULT;
     }
-    
+
     @Override
     protected XStream buildXStream() {
         XStream xstream = super.buildXStream();

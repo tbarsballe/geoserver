@@ -54,9 +54,9 @@ public class DimensionsVectorGetMapTest extends WMSDimensionsTestSupport {
         assertPixel(image, 60, 30, Color.BLACK);
     }
 
-    @Test 
+    @Test
     public void testElevationDefault() throws Exception {
-        setupVectorDimension(ResourceInfo.ELEVATION, "elevation", DimensionPresentation.LIST, 
+        setupVectorDimension(ResourceInfo.ELEVATION, "elevation", DimensionPresentation.LIST,
                 null, UNITS, UNIT_SYMBOL);
         BufferedImage image = getAsImage("wms?service=WMS&version=1.1.1&request=GetMap"
                 + "&bbox=-180,-90,180,90&styles=&Format=image/png&width=80&height=40&srs=EPSG:4326"
@@ -71,7 +71,7 @@ public class DimensionsVectorGetMapTest extends WMSDimensionsTestSupport {
 
     @Test
     public void testElevationSingle() throws Exception {
-        setupVectorDimension(ResourceInfo.ELEVATION, "elevation", DimensionPresentation.LIST, 
+        setupVectorDimension(ResourceInfo.ELEVATION, "elevation", DimensionPresentation.LIST,
                 null, UNITS, UNIT_SYMBOL);
         BufferedImage image = getAsImage("wms?service=WMS&version=1.1.1&request=GetMap"
                 + "&bbox=-180,-90,180,90&styles=&Format=image/png&width=80&height=40&srs=EPSG:4326"
@@ -86,7 +86,7 @@ public class DimensionsVectorGetMapTest extends WMSDimensionsTestSupport {
 
     @Test
     public void testElevationListMulti() throws Exception {
-        setupVectorDimension(ResourceInfo.ELEVATION, "elevation", DimensionPresentation.LIST, 
+        setupVectorDimension(ResourceInfo.ELEVATION, "elevation", DimensionPresentation.LIST,
                 null, UNITS, UNIT_SYMBOL);
         BufferedImage image = getAsImage("wms?service=WMS&version=1.1.1&request=GetMap"
                 + "&bbox=-180,-90,180,90&styles=&Format=image/png&width=80&height=40&srs=EPSG:4326"
@@ -102,7 +102,7 @@ public class DimensionsVectorGetMapTest extends WMSDimensionsTestSupport {
     @Test
     public void testElevationListExtra() throws Exception {
         // adding a extra elevation that is simply not there, should not break
-        setupVectorDimension(ResourceInfo.ELEVATION, "elevation", DimensionPresentation.LIST, 
+        setupVectorDimension(ResourceInfo.ELEVATION, "elevation", DimensionPresentation.LIST,
                 null, UNITS, UNIT_SYMBOL);
         BufferedImage image = getAsImage("wms?service=WMS&version=1.1.1&request=GetMap"
                 + "&bbox=-180,-90,180,90&styles=&Format=image/png&width=80&height=40&srs=EPSG:4326"
@@ -118,7 +118,7 @@ public class DimensionsVectorGetMapTest extends WMSDimensionsTestSupport {
     @Test
     public void testElevationInterval() throws Exception {
         // adding a extra elevation that is simply not there, should not break
-        setupVectorDimension(ResourceInfo.ELEVATION, "elevation", DimensionPresentation.LIST, 
+        setupVectorDimension(ResourceInfo.ELEVATION, "elevation", DimensionPresentation.LIST,
                 null, UNITS, UNIT_SYMBOL);
         BufferedImage image = getAsImage("wms?service=WMS&version=1.1.1&request=GetMap"
                 + "&bbox=-180,-90,180,90&styles=&Format=image/png&width=80&height=40&srs=EPSG:4326"
@@ -131,10 +131,10 @@ public class DimensionsVectorGetMapTest extends WMSDimensionsTestSupport {
         assertPixel(image, 60, 30, Color.BLACK);
     }
 
-    @Test 
+    @Test
     public void testElevationIntervalResolution() throws Exception {
         // adding a extra elevation that is simply not there, should not break
-        setupVectorDimension(ResourceInfo.ELEVATION, "elevation", DimensionPresentation.LIST, 
+        setupVectorDimension(ResourceInfo.ELEVATION, "elevation", DimensionPresentation.LIST,
                 null, UNITS, UNIT_SYMBOL);
         BufferedImage image = getAsImage("wms?service=WMS&version=1.1.1&request=GetMap"
                 + "&bbox=-180,-90,180,90&styles=&Format=image/png&width=80&height=40&srs=EPSG:4326"
@@ -174,7 +174,7 @@ public class DimensionsVectorGetMapTest extends WMSDimensionsTestSupport {
         assertPixel(image, 20, 30, Color.WHITE);
         assertPixel(image, 60, 30, Color.BLACK);
     }
-    
+
     @Test
     public void testTimeCurrentForEmptyLayer() throws Exception {
         setupVectorDimension("TimeElevationEmpty", ResourceInfo.TIME, "time", DimensionPresentation.LIST, null, null, null);
@@ -306,8 +306,8 @@ public class DimensionsVectorGetMapTest extends WMSDimensionsTestSupport {
     public void testTimeListMulti() throws Exception {
         setupVectorDimension(ResourceInfo.TIME, "time", DimensionPresentation.LIST, null, ResourceInfo.TIME_UNIT, null);
         BufferedImage image = getAsImage("wms?service=WMS&version=1.1.1&request=GetMap"
-                + "&bbox=-180,-90,180,90&styles=&Format=image/png&width=80&height=40&srs=EPSG:4326"
-                + "&layers=" + getLayerId(V_TIME_ELEVATION) + "&time=2011-05-02,2011-05-04",
+                        + "&bbox=-180,-90,180,90&styles=&Format=image/png&width=80&height=40&srs=EPSG:4326"
+                        + "&layers=" + getLayerId(V_TIME_ELEVATION) + "&time=2011-05-02,2011-05-04",
                 "image/png");
 
         // we should get only second and fourth
@@ -332,7 +332,7 @@ public class DimensionsVectorGetMapTest extends WMSDimensionsTestSupport {
         assertPixel(image, 20, 30, Color.WHITE);
         assertPixel(image, 60, 30, Color.BLACK);
     }
-    
+
     @Test
     public void testTimeListAnimated() throws Exception {
         // adding a extra elevation that is simply not there, should not break
@@ -359,101 +359,101 @@ public class DimensionsVectorGetMapTest extends WMSDimensionsTestSupport {
         MockHttpServletResponse response = getAsServletResponse("wms?service=WMS&version=1.1.1&request=GetMap"
                 + "&bbox=-180,-90,180,90&styles=&width=80&height=40&srs=EPSG:4326"
                 + "&layers=" + getLayerId(V_TIME_ELEVATION)
-                + "&time=2011-05-02,2011-05-04,2011-05-10&format=" + GIFMapResponse.IMAGE_GIF_SUBTYPE_ANIMATED 
+                + "&time=2011-05-02,2011-05-04,2011-05-10&format=" + GIFMapResponse.IMAGE_GIF_SUBTYPE_ANIMATED
                 + "&TRANSPARENT=false&BGCOLOR=0xff0000");
 
         // check we did not get a service exception
         assertEquals("image/gif", response.getContentType());
-        
+
         // check it is a animated gif with three frames
         ByteArrayInputStream bis = getBinaryInputStream(response);
         ImageInputStream iis = ImageIO.createImageInputStream(bis);
         ImageReader reader = ImageIO.getImageReadersBySuffix("gif").next();
         reader.setInput(iis);
         assertEquals(3, reader.getNumImages(true));
-        
+
         // creating film strip to be able to test different frames of animated gif
         // http://stackoverflow.com/questions/18908217/losing-transparency-when-using-imageinputstream-and-bufferedimage-to-create-png
         int h = reader.getHeight(0);
         int w = reader.getWidth(0);
         int n = reader.getNumImages(true);
         BufferedImage image = new BufferedImage(w * n, h, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g = image.createGraphics();       
+        Graphics2D g = image.createGraphics();
         for (int i = 0; i < n; i++) {
             BufferedImage img = reader.read(i);
-            g.drawImage(img, w * i, 0, null);     
+            g.drawImage(img, w * i, 0, null);
             // want to see the individual frame images and the filmstrip? uncomment below
             //File outputfile = new File("/tmp/geoserveranimatednontransparentframe"+i+".gif");
             //ImageIO.write(img, "gif", outputfile);
         }
         //File outputfile = new File("/tmp/geoserveranimatedstripnontransparent.gif");
         //ImageIO.write(image, "gif", outputfile);
-        
+
         // actual check for NON transparency and colored background
         assertPixel(image, 20, 10, Color.RED);
         assertPixel(image, 60, 10, Color.BLACK);
         assertPixel(image, 100, 10, Color.RED);
         assertPixel(image, 140, 30, Color.BLACK);
     }
-    
+
     @Test
     public void testTimeListAnimatedTransparent() throws Exception {
-    	// testing transparency in animated gif
-    	// note only by truly visual test you can test if animated gif is truly transparent
-    	// note that in this test BGCOLOR should be white, else ALL is transparent
-    	// note by uncommenting lines below you can see actual output
+        // testing transparency in animated gif
+        // note only by truly visual test you can test if animated gif is truly transparent
+        // note that in this test BGCOLOR should be white, else ALL is transparent
+        // note by uncommenting lines below you can see actual output
         setupVectorDimension(ResourceInfo.TIME, "time", DimensionPresentation.LIST, null, null, null);
         MockHttpServletResponse response = getAsServletResponse("wms?service=WMS&version=1.1.1&request=GetMap"
                 + "&bbox=-180,-90,180,90&styles=&width=80&height=40&srs=EPSG:4326"
                 + "&layers=" + getLayerId(V_TIME_ELEVATION)
-                + "&time=2011-05-02,2011-05-04,2011-05-10&format=" + GIFMapResponse.IMAGE_GIF_SUBTYPE_ANIMATED 
+                + "&time=2011-05-02,2011-05-04,2011-05-10&format=" + GIFMapResponse.IMAGE_GIF_SUBTYPE_ANIMATED
                 + "&TRANSPARENT=true&BGCOLOR=0xfffff");
 
         // check we did not get a service exception
         assertEquals("image/gif", response.getContentType());
-        
+
         // check it is a animated gif with three frames
         ByteArrayInputStream bis = getBinaryInputStream(response);
         ImageInputStream iis = ImageIO.createImageInputStream(bis);
         ImageReader reader = ImageIO.getImageReadersBySuffix("gif").next();
         reader.setInput(iis);
         assertEquals(3, reader.getNumImages(true));
-        
+
         // creating film strip to be able to test different frames of animated gif
         // http://stackoverflow.com/questions/18908217/losing-transparency-when-using-imageinputstream-and-bufferedimage-to-create-png
         int h = reader.getHeight(0);
         int w = reader.getWidth(0);
         int n = reader.getNumImages(true);
         BufferedImage image = new BufferedImage(w * n, h, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g = image.createGraphics();       
+        Graphics2D g = image.createGraphics();
         for (int i = 0; i < n; i++) {
             BufferedImage img = reader.read(i);
-            g.drawImage(img, w * i, 0, null);     
+            g.drawImage(img, w * i, 0, null);
             // want to see the individual frame images and the filmstrip? uncomment below
             //File outputfile = new File("/tmp/geoserveranimatedtransparentframe"+i+".gif");
-           //ImageIO.write(img, "gif", outputfile);
+            //ImageIO.write(img, "gif", outputfile);
         }
         //File outputfile = new File("/tmp/geoserveranimatedstriptransparent.gif");
         //ImageIO.write(image, "gif", outputfile);
-               
+
         ColorModel cm = image.getColorModel();
         assertTrue(cm.hasAlpha());
-        assertEquals(3, cm.getNumColorComponents()); 
-        
+        assertEquals(3, cm.getNumColorComponents());
+
         // actual check for transparency and color
         assertPixelIsTransparent(image, 20, 10);
         assertPixel(image, 60, 10, Color.BLACK);
         assertPixelIsTransparent(image, 100, 10);
         assertPixel(image, 140, 30, Color.BLACK);
     }
-    
+
     @Test
     public void testTimeInterval() throws Exception {
         // adding a extra elevation that is simply not there, should not break
         setupVectorDimension(ResourceInfo.TIME, "time", DimensionPresentation.LIST, null, null, null);
         BufferedImage image = getAsImage("wms?service=WMS&version=1.1.1&request=GetMap"
-                + "&bbox=-180,-90,180,90&styles=&Format=image/png&width=80&height=40&srs=EPSG:4326"
-                + "&layers=" + getLayerId(V_TIME_ELEVATION) + "&time=2011-05-02/2011-05-05",
+                        + "&bbox=-180,-90,180,90&styles=&Format=image/png&width=80&height=40&srs=EPSG:4326"
+                        + "&layers=" + getLayerId(V_TIME_ELEVATION) + "&time=2011-05-02/2011-05-05",
                 "image/png");
 
         // last three
@@ -468,8 +468,8 @@ public class DimensionsVectorGetMapTest extends WMSDimensionsTestSupport {
         // adding a extra elevation that is simply not there, should not break
         setupVectorDimension(ResourceInfo.TIME, "time", DimensionPresentation.LIST, null, null, null);
         BufferedImage image = getAsImage("wms?service=WMS&version=1.1.1&request=GetMap"
-                + "&bbox=-180,-90,180,90&styles=&Format=image/png&width=80&height=40&srs=EPSG:4326"
-                + "&layers=" + getLayerId(V_TIME_ELEVATION) + "&time=2011-05-01/2011-05-04/P2D",
+                        + "&bbox=-180,-90,180,90&styles=&Format=image/png&width=80&height=40&srs=EPSG:4326"
+                        + "&layers=" + getLayerId(V_TIME_ELEVATION) + "&time=2011-05-01/2011-05-04/P2D",
                 "image/png");
 
         // first and third
@@ -478,20 +478,20 @@ public class DimensionsVectorGetMapTest extends WMSDimensionsTestSupport {
         assertPixel(image, 20, 30, Color.BLACK);
         assertPixel(image, 60, 30, Color.WHITE);
     }
-    
-    @Test 
+
+    @Test
     public void testElevationDefaultAsRange() throws Exception {
         // setup a default 
         DimensionDefaultValueSetting defaultValueSetting = new DimensionDefaultValueSetting();
         defaultValueSetting.setStrategyType(Strategy.FIXED);
         defaultValueSetting.setReferenceValue("1/3");
         setupResourceDimensionDefaultValue(V_TIME_ELEVATION, ResourceInfo.ELEVATION, defaultValueSetting, "elevation");
-        
+
         // request with default values
         BufferedImage image = getAsImage("wms?service=WMS&version=1.1.1&request=GetMap"
                 + "&bbox=-180,-90,180,90&styles=&Format=image/png&width=80&height=40&srs=EPSG:4326"
                 + "&layers=" + getLayerId(V_TIME_ELEVATION), "image/png");
-        
+
         // RenderedImageBrowser.showChain(image);
 
         // the last three show up, the first does not
@@ -501,20 +501,20 @@ public class DimensionsVectorGetMapTest extends WMSDimensionsTestSupport {
         assertPixel(image, 60, 30, Color.BLACK);
     }
 
-    
-    @Test 
+
+    @Test
     public void testTimeDefaultAsRange() throws Exception {
         // setup a default 
         DimensionDefaultValueSetting defaultValueSetting = new DimensionDefaultValueSetting();
         defaultValueSetting.setStrategyType(Strategy.FIXED);
         defaultValueSetting.setReferenceValue("2011-05-02/2011-05-03");
         setupResourceDimensionDefaultValue(V_TIME_ELEVATION, ResourceInfo.TIME, defaultValueSetting, "time");
-        
+
         // request with default values
         BufferedImage image = getAsImage("wms?service=WMS&version=1.1.1&request=GetMap"
                 + "&bbox=-180,-90,180,90&styles=&Format=image/png&width=80&height=40&srs=EPSG:4326"
                 + "&layers=" + getLayerId(V_TIME_ELEVATION), "image/png");
-        
+
         // RenderedImageBrowser.showChain(image);
 
         // the last three show up, the first does not
@@ -523,51 +523,51 @@ public class DimensionsVectorGetMapTest extends WMSDimensionsTestSupport {
         assertPixel(image, 20, 30, Color.BLACK);
         assertPixel(image, 60, 30, Color.WHITE);
     }
-    
+
     @Test
     public void testSortAllAscending() throws Exception {
         BufferedImage image = getAsImage("wms?service=WMS&version=1.1.1&request=GetMap"
-                + "&bbox=-180,-90,180,90&styles=&Format=image/png&width=80&height=40&srs=EPSG:4326"
-                + "&layers=" + getLayerId(V_TIME_ELEVATION_STACKED) + "&sortBy=time, elevation",
+                        + "&bbox=-180,-90,180,90&styles=&Format=image/png&width=80&height=40&srs=EPSG:4326"
+                        + "&layers=" + getLayerId(V_TIME_ELEVATION_STACKED) + "&sortBy=time, elevation",
                 "image/png");
 
         // all blue
         assertPixel(image, 20, 10, Color.BLUE);
     }
-    
+
     @Test
     public void testSortTimeAElevationD() throws Exception {
         BufferedImage image = getAsImage("wms?service=WMS&version=1.1.1&request=GetMap"
-                + "&bbox=-180,-90,180,90&styles=&Format=image/png&width=80&height=40&srs=EPSG:4326"
-                + "&layers=" + getLayerId(V_TIME_ELEVATION_STACKED) + "&sortBy=time, elevation D",
+                        + "&bbox=-180,-90,180,90&styles=&Format=image/png&width=80&height=40&srs=EPSG:4326"
+                        + "&layers=" + getLayerId(V_TIME_ELEVATION_STACKED) + "&sortBy=time, elevation D",
                 "image/png");
 
         // all blue
         assertPixel(image, 20, 10, Color.GREEN);
     }
-    
+
     @Test
     public void testSortTimeDElevationA() throws Exception {
         BufferedImage image = getAsImage("wms?service=WMS&version=1.1.1&request=GetMap"
-                + "&bbox=-180,-90,180,90&styles=&Format=image/png&width=80&height=40&srs=EPSG:4326"
-                + "&layers=" + getLayerId(V_TIME_ELEVATION_STACKED) + "&sortBy=time D, elevation",
+                        + "&bbox=-180,-90,180,90&styles=&Format=image/png&width=80&height=40&srs=EPSG:4326"
+                        + "&layers=" + getLayerId(V_TIME_ELEVATION_STACKED) + "&sortBy=time D, elevation",
                 "image/png");
 
         // all blue
         assertPixel(image, 20, 10, Color.RED);
     }
-    
+
     @Test
     public void testSortDescending() throws Exception {
         BufferedImage image = getAsImage("wms?service=WMS&version=1.1.1&request=GetMap"
-                + "&bbox=-180,-90,180,90&styles=&Format=image/png&width=80&height=40&srs=EPSG:4326"
-                + "&layers=" + getLayerId(V_TIME_ELEVATION_STACKED) + "&sortBy=time D,elevation D",
+                        + "&bbox=-180,-90,180,90&styles=&Format=image/png&width=80&height=40&srs=EPSG:4326"
+                        + "&layers=" + getLayerId(V_TIME_ELEVATION_STACKED) + "&sortBy=time D,elevation D",
                 "image/png");
 
         // all black
         assertPixel(image, 20, 10, Color.BLACK);
     }
-    
+
     @Test
     public void testSortInvalidAttribute() throws Exception {
         Document dom = getAsDOM("wms?service=WMS&version=1.1.1&request=GetMap"
@@ -579,12 +579,12 @@ public class DimensionsVectorGetMapTest extends WMSDimensionsTestSupport {
         assertEquals("sortBy", xp.evaluate("/ServiceExceptionReport/ServiceException/@locator", dom));
         assertThat(xp.evaluate("/ServiceExceptionReport/ServiceException", dom), containsString("'foo'"));
     }
-    
+
     @Test
     public void testSortDescendingMultiLayer() throws Exception {
         BufferedImage image = getAsImage("wms?service=WMS&version=1.1.1&request=GetMap"
-                + "&bbox=-180,-90,180,90&styles=&Format=image/png&width=80&height=40&srs=EPSG:4326"
-                + "&layers=" + getLayerId(SystemTestData.LAKES) + "," + getLayerId(V_TIME_ELEVATION_STACKED) + "&sortBy=()(time D,elevation D)",
+                        + "&bbox=-180,-90,180,90&styles=&Format=image/png&width=80&height=40&srs=EPSG:4326"
+                        + "&layers=" + getLayerId(SystemTestData.LAKES) + "," + getLayerId(V_TIME_ELEVATION_STACKED) + "&sortBy=()(time D,elevation D)",
                 "image/png");
 
         // all black

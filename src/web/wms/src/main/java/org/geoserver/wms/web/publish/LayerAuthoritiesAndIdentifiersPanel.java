@@ -23,7 +23,7 @@ public class LayerAuthoritiesAndIdentifiersPanel extends Panel {
 
     @SuppressWarnings("unchecked")
     public LayerAuthoritiesAndIdentifiersPanel(final String id, final boolean isRootLayer,
-            final IModel<? extends CatalogInfo> layerModel) {
+                                               final IModel<? extends CatalogInfo> layerModel) {
 
         super(id);
 

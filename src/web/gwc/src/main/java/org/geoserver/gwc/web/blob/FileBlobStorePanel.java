@@ -17,7 +17,6 @@ import org.geoserver.web.wicket.ParamResourceModel;
 import org.geowebcache.config.FileBlobStoreInfo;
 
 /**
- *
  * Panel for FileBlobStore
  *
  * @author Niels Charlier
@@ -29,12 +28,12 @@ public class FileBlobStorePanel extends Panel {
     public FileBlobStorePanel(String id, final IModel<FileBlobStoreInfo> configModel) {
         super(id, configModel);
     }
-    
+
     @SuppressWarnings("unchecked")
     @Override
     public void onInitialize() {
         super.onInitialize();
-        
+
         DirectoryParamPanel paramPanel;
         add(paramPanel = new DirectoryParamPanel("baseDirectory", new PropertyModel<String>(
                 getDefaultModel().getObject(), "baseDirectory"), new ParamResourceModel("baseDirectory",
@@ -45,7 +44,7 @@ public class FileBlobStorePanel extends Panel {
                 (DirectoryFileFilter) DirectoryFileFilter.INSTANCE));
         add(new TextField<Integer>("fileSystemBlockSize").setRequired(true)
                 .add(new AttributeModifier("title", new ResourceModel("fileSystemBlockSize.title"))));
-    	
+
     }
 
 }

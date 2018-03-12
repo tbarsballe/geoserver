@@ -62,7 +62,7 @@ public class IpFlowControllerTest extends AbstractFlowControllerTest {
         }
 
     }
-    
+
     @Test
     public void testUserAndIPAddressFlowControl() {
         // an ip based flow controller that will allow just one request at a time
@@ -160,7 +160,6 @@ public class IpFlowControllerTest extends AbstractFlowControllerTest {
         }
 
     }
-
 
 
 }

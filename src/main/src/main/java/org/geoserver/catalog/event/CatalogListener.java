@@ -12,12 +12,12 @@ import org.geoserver.catalog.CatalogException;
  * Listener for catalog events.
  * <p>
  * <h4>Exceptions</h4>
- * In general the catalog protects itself against misbehaved listeners that throw 
+ * In general the catalog protects itself against misbehaved listeners that throw
  * exceptions. However sometimes it is the case in which a listener must report an error
- * via exception. For such purposes {@link CatalogException} should be thrown. 
+ * via exception. For such purposes {@link CatalogException} should be thrown.
  * </p>
- * @author   Justin Deoliveira, The Open Planning Project
  *
+ * @author Justin Deoliveira, The Open Planning Project
  */
 public interface CatalogListener {
 
@@ -28,7 +28,6 @@ public interface CatalogListener {
 
     /**
      * Handles the event of a removal from the catalog.
-     * 
      */
     void handleRemoveEvent(CatalogRemoveEvent event) throws CatalogException;
 
@@ -36,20 +35,21 @@ public interface CatalogListener {
      * Handles the event of a modification to an object in the catalog.
      */
     void handleModifyEvent(CatalogModifyEvent event) throws CatalogException;
-    
+
     /**
      * Handles the event of a post modification to an object in the catalog.
      */
     void handlePostModifyEvent(CatalogPostModifyEvent event) throws CatalogException;
-    
+
     /**
      * A callback notifying when GeoServer configuration has been reloaded.
      * <p>
      * This method will be removed in recent version as the idea of a "reload" will not
      * exist.
      * </p>
+     *
      * @deprecated.
      */
     void reloaded();
-	
+
 }

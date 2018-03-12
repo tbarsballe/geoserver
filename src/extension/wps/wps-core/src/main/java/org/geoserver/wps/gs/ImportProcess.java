@@ -70,9 +70,8 @@ import org.vfny.geoserver.util.WCSUtils;
 
 /**
  * Imports a feature collection into the GeoServer catalog
- * 
+ *
  * @author Andrea Aime - OpenGeo
- * 
  */
 @DescribeProcess(title = "Import to Catalog", description = "Imports a feature collection into the catalog")
 public class ImportProcess implements GSProcess {
@@ -109,7 +108,7 @@ public class ImportProcess implements GSProcess {
             @DescribeParameter(name = "styleName", min = 0, description = "Name of the style to be associated with the layer (default is a standard geometry-specific style)") String styleName,
             ProgressListener listener) throws ProcessException {
         // avoid null checks
-        if(listener == null) {
+        if (listener == null) {
             listener = new NullProgressListener();
         }
         listener.started();
@@ -291,7 +290,7 @@ public class ImportProcess implements GSProcess {
 
                 listener.progress(100);
                 listener.complete();
-                
+
                 return layerInfo.prefixedName();
             } catch (Exception e) {
                 throw new ProcessException(
@@ -512,7 +511,7 @@ public class ImportProcess implements GSProcess {
     }
 
     private SimpleFeatureType importDataIntoStore(SimpleFeatureCollection features, String name,
-            DataStoreInfo storeInfo, ProgressListener listener) throws IOException, ProcessException {
+                                                  DataStoreInfo storeInfo, ProgressListener listener) throws IOException, ProcessException {
         SimpleFeatureType targetType;
         // grab the data store
         DataStore ds = (DataStore) storeInfo.getDataStore(null);
@@ -566,7 +565,7 @@ public class ImportProcess implements GSProcess {
         Transaction t = new DefaultTransaction();
         fstore.setTransaction(t);
         boolean complete = false;
-        try(SimpleFeatureIterator fi = features.features()) {
+        try (SimpleFeatureIterator fi = features.features()) {
             SimpleFeatureBuilder fb = new SimpleFeatureBuilder(targetType);
             while (fi.hasNext()) {
                 SimpleFeature source = fi.next();
@@ -576,7 +575,7 @@ public class ImportProcess implements GSProcess {
                 }
                 SimpleFeature target = fb.buildFeature(null);
                 fstore.addFeatures(DataUtilities.collection(target));
-                
+
                 // we do no report progress as we'd need the collection size
                 // and the collection might be streaming
                 checkForCancellation(listener);
@@ -584,7 +583,7 @@ public class ImportProcess implements GSProcess {
             t.commit();
             complete = true;
         } finally {
-            if(!complete) {
+            if (!complete) {
                 t.rollback();
             }
             t.close();
@@ -601,13 +600,12 @@ public class ImportProcess implements GSProcess {
 
     /**
      * Applies a set of heuristics to find which target attribute corresponds to a certain input attribute
-     * 
+     *
      * @param sourceType
      * @param targetType
-     *
      */
     Map<String, String> buildAttributeMapping(SimpleFeatureType sourceType,
-            SimpleFeatureType targetType) {
+                                              SimpleFeatureType targetType) {
         // look for the typical manglings. For example, if the target is a
         // shapefile store it will move the geometry and name it the_geom
 

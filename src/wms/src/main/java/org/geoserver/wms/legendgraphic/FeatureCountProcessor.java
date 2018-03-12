@@ -97,13 +97,13 @@ class FeatureCountProcessor {
 
         @Override
         protected RenderedImage prepareImage(int width, int height, IndexColorModel palette,
-                boolean transparent) {
+                                             boolean transparent) {
             return null;
         }
 
         @Override
         protected Graphics2D getGraphics(boolean transparent, Color bgColor,
-                RenderedImage preparedImage, Map<Key, Object> hintsMap) {
+                                         RenderedImage preparedImage, Map<Key, Object> hintsMap) {
             return new NoOpGraphics2D();
         }
 
@@ -125,7 +125,7 @@ class FeatureCountProcessor {
             });
         }
     }
-    
+
     /**
      * Checks if there are rules in match first mode
      *
@@ -133,7 +133,7 @@ class FeatureCountProcessor {
      */
     private static class MatchFirstVisitor extends AbstractStyleVisitor {
         boolean matchFirst = false;
-        
+
         @Override
         public void visit(FeatureTypeStyle fts) {
             // yes, it's an approximation, we cannot really work with a mix of FTS that
@@ -144,20 +144,20 @@ class FeatureCountProcessor {
 
         }
     }
-    
+
     /**
-     * Replaces labels with small points for the sake of feature counting 
+     * Replaces labels with small points for the sake of feature counting
      *
      * @author Andrea Aime - GeoSolutions
      */
     private static class LabelReplacer extends DuplicatingStyleVisitor {
         PointSymbolizer ps;
-        
+
         LabelReplacer() {
             ps = sf.createPointSymbolizer();
             ps.getGraphic().graphicalSymbols().add(sf.createMark());
         }
-        
+
         @Override
         public void visit(TextSymbolizer text) {
             pages.push(ps);
@@ -171,6 +171,7 @@ class FeatureCountProcessor {
     /**
      * Builds a new feature count processor given the legend graphic request. It can be used to
      * alter with feature counts many rule sets.
+     *
      * @param request
      */
     public FeatureCountProcessor(GetLegendGraphicRequest request) {
@@ -180,7 +181,7 @@ class FeatureCountProcessor {
 
     /**
      * Pre-processes the legend request and returns a style whose rules have been altered to contain a feature count
-     * 
+     *
      * @param legend
      * @return
      * @throws Exception
@@ -189,7 +190,7 @@ class FeatureCountProcessor {
         if (rules == null || rules.length == 0) {
             return rules;
         }
-        
+
         // is the code running in match first mode?
         MatchFirstVisitor matchFirstVisitor = new MatchFirstVisitor();
         legend.getStyle().accept(matchFirstVisitor);
@@ -228,12 +229,12 @@ class FeatureCountProcessor {
     }
 
     private Map<Rule, AtomicInteger> renderAndCountFeatures(Rule[] rules,
-            GetMapRequest getMapRequest, boolean matchFirst) {
+                                                            GetMapRequest getMapRequest, boolean matchFirst) {
         final WMS wms = request.getWms();
         // the counters for each rule, all initialized at zero
         Map<Rule, AtomicInteger> counters = Arrays.stream(rules)
                 .collect(Collectors.toMap(Function.identity(), r -> new AtomicInteger(0)));
-        
+
         // run and count
         GetMap getMap = new GetMap(wms) {
             protected org.geoserver.wms.GetMapOutputFormat getDelegate(String outputFormat)
@@ -241,8 +242,8 @@ class FeatureCountProcessor {
                 return new FeatureRenderSpyFormat(wms, f -> {
                     boolean matched = false;
                     for (Rule rule : rules) {
-                        if(rule.isElseFilter()) {
-                            if(!matched) {
+                        if (rule.isElseFilter()) {
+                            if (!matched) {
                                 AtomicInteger counter = counters.get(rule);
                                 counter.incrementAndGet();
                             }
@@ -250,22 +251,24 @@ class FeatureCountProcessor {
                             AtomicInteger counter = counters.get(rule);
                             counter.incrementAndGet();
                             matched = true;
-                            if(matchFirst) {
+                            if (matchFirst) {
                                 break;
                             }
                         }
                     }
                 });
-            };
+            }
+
+            ;
         };
         getMap.run(getMapRequest);
-        
+
         return counters;
     }
 
     /**
      * Parse the equivalent GetMap for this layer
-     * 
+     *
      * @param legend
      * @param rules
      * @return
@@ -302,7 +305,7 @@ class FeatureCountProcessor {
 
         // remove decoration to avoid infinite recursion
         final Map formatOptions = (Map) kvp.get("FORMAT_OPTIONS");
-        if(formatOptions != null) {
+        if (formatOptions != null) {
             formatOptions.remove("layout");
         }
 
@@ -318,15 +321,15 @@ class FeatureCountProcessor {
     }
 
     private String getLayerName(LegendRequest legend) {
-        if(legend.getLayer() != null) {
+        if (legend.getLayer() != null) {
             return legend.getLayer();
-        } else if(legend.getLayerInfo() != null) {
+        } else if (legend.getLayerInfo() != null) {
             return legend.getLayerInfo().prefixedName();
-        } else if(legend.getFeatureType() != null) {
+        } else if (legend.getFeatureType() != null) {
             Name name = legend.getFeatureType().getName();
             NamespaceInfo ns = request.getWms().getCatalog().getNamespaceByURI(name.getNamespaceURI());
             final String localName = name.getLocalPart();
-            if(ns != null) {
+            if (ns != null) {
                 return ns.getPrefix() + ":" + localName;
             } else {
                 return localName;
@@ -343,14 +346,14 @@ class FeatureCountProcessor {
         fts.rules().addAll(Arrays.asList(rules));
         Style style = SF.createStyle();
         style.featureTypeStyles().add(fts);
-        
+
         // replace labels with points (labels report about features that are not
         // really in the viewport only because the lax geometry check loaded them, 
         // at the same time we cannot do a true intersection test for a variety or reasons,
         // for example, in place reprojection, rendering transformations, advanced projection handling)
         LabelReplacer replacer = new LabelReplacer();
         style.accept(replacer);
-        
+
         return (Style) replacer.getCopy();
     }
 

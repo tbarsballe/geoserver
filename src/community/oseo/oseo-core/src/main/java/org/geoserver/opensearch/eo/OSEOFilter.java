@@ -33,7 +33,7 @@ public class OSEOFilter implements GeoServerFilter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
         if (request instanceof HttpServletRequest) {
-            HttpServletRequest requestHTTP = (HttpServletRequest)request;
+            HttpServletRequest requestHTTP = (HttpServletRequest) request;
             if (requestNeedsWrapper(requestHTTP)) {
                 request = new RequestWrapper(requestHTTP);
             }
@@ -55,13 +55,13 @@ public class OSEOFilter implements GeoServerFilter {
     public void destroy() {
         // nothing to do
     }
-    
-    private static class RequestWrapper extends HttpServletRequestWrapper {        
+
+    private static class RequestWrapper extends HttpServletRequestWrapper {
         private String request;
 
         private RequestWrapper(HttpServletRequest wrapped) {
             super(wrapped);
-            if(wrapped.getPathInfo().endsWith("search")) {
+            if (wrapped.getPathInfo().endsWith("search")) {
                 request = "search";
             } else {
                 request = "description";
@@ -74,7 +74,7 @@ public class OSEOFilter implements GeoServerFilter {
         }
 
         @Override
-        public Map<String,String[]> getParameterMap() {
+        public Map<String, String[]> getParameterMap() {
             Map<String, String[]> original = super.getParameterMap();
             Map filtered = new HashMap<String, String[]>(original);
             filtered.put("service", "OSEO");
@@ -86,10 +86,10 @@ public class OSEOFilter implements GeoServerFilter {
         @Override
         public String[] getParameterValues(String name) {
             if ("service".equalsIgnoreCase(name)) {
-                return new String[] {"OSEO"};
+                return new String[]{"OSEO"};
             }
             if ("request".equalsIgnoreCase(name)) {
-                return new String[] {request};
+                return new String[]{request};
             }
             return super.getParameterValues(name);
         }

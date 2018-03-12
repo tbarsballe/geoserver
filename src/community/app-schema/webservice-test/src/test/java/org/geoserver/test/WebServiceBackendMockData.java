@@ -11,12 +11,12 @@ import org.geotools.data.complex.AppSchemaDataAccess;
 
 /**
  * Mock data for testing integration of {@link AppSchemaDataAccess} with web service back end.
- * 
+ * <p>
  * Inspired by {@link MockData}.
- * 
+ *
  * @author Rini Angreani, CSIRO Earth Science and Resource Engineering
  */
-public class WebServiceBackendMockData extends AbstractAppSchemaMockData {    
+public class WebServiceBackendMockData extends AbstractAppSchemaMockData {
     /**
      * @see org.geoserver.test.AbstractAppSchemaMockData#addContent()
      */

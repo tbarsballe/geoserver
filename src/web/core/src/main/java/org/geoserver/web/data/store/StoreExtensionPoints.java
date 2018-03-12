@@ -32,11 +32,10 @@ import org.geotools.data.DataAccessFactory;
  * and they shall have the id property set to {@code "defaultVector"} and {@code "defaultRaster"}
  * for {@link DataStoreInfo} and {@link CoverageStoreInfo} defaults respectively.
  * </p>
- * 
+ * <p>
  * TODO: port the lookup of {@link DataStorePanelInfo} present in {@link CatalogIconFactory} here.
- * 
+ *
  * @author Gabriel Roldan
- * 
  */
 public class StoreExtensionPoints {
 
@@ -47,21 +46,17 @@ public class StoreExtensionPoints {
     /**
      * Finds out the {@link StoreEditPanel} that provides the edit form components for the given
      * store.
-     * 
-     * @param componentId
-     *            the id for the returned panel
-     * @param editForm
-     *            the form that's going to contain the components in the returned panel
-     * @param storeInfo
-     *            the store being edited
-     * @param app
-     *            the {@link GeoServerApplication} where to look for registered
-     *            {@link DataStorePanelInfo}s
+     *
+     * @param componentId the id for the returned panel
+     * @param editForm    the form that's going to contain the components in the returned panel
+     * @param storeInfo   the store being edited
+     * @param app         the {@link GeoServerApplication} where to look for registered
+     *                    {@link DataStorePanelInfo}s
      * @return a custom {@link StoreEditPanel} if there's one declared for the given store type, or
-     *         a default one otherwise
+     * a default one otherwise
      */
     public static StoreEditPanel getStoreEditPanel(final String componentId, final Form editForm,
-            final StoreInfo storeInfo, final GeoServerApplication app) {
+                                                   final StoreInfo storeInfo, final GeoServerApplication app) {
 
         if (storeInfo == null) {
             throw new NullPointerException("storeInfo param");
@@ -102,7 +97,7 @@ public class StoreExtensionPoints {
     }
 
     private static DataStorePanelInfo getDefaultPanelInfo(StoreInfo storeInfo,
-            GeoServerApplication app) {
+                                                          GeoServerApplication app) {
 
         final List<DataStorePanelInfo> providers = app.getBeansOfType(DataStorePanelInfo.class);
 
@@ -146,14 +141,13 @@ public class StoreExtensionPoints {
     }
 
     /**
-     * 
      * @param storeInfo
      * @param app
      * @return the extension point descriptor for the given storeInfo, or {@code null} if there's no
-     *         contribution specific for the given storeInfo's type
+     * contribution specific for the given storeInfo's type
      */
     private static DataStorePanelInfo findPanelInfo(final StoreInfo storeInfo,
-            final GeoServerApplication app) {
+                                                    final GeoServerApplication app) {
 
         final Catalog catalog = storeInfo.getCatalog();
         final ResourcePool resourcePool = catalog.getResourcePool();
@@ -189,19 +183,19 @@ public class StoreExtensionPoints {
         List<DataStorePanelInfo> fallbacks = new ArrayList<DataStorePanelInfo>();
         for (DataStorePanelInfo provider : providers) {
             Class<?> providerFactoryClass = provider.getFactoryClass();
-            if(providerFactoryClass == null) {
+            if (providerFactoryClass == null) {
                 continue;
             }
             if (factoryClass.equals(providerFactoryClass)) {
                 return provider;
-            } else if(providerFactoryClass.isAssignableFrom(factoryClass)) {
+            } else if (providerFactoryClass.isAssignableFrom(factoryClass)) {
                 fallbacks.add(provider);
             }
         }
-        
-        if(fallbacks.size() == 1) {
+
+        if (fallbacks.size() == 1) {
             return fallbacks.get(0);
-        } else if(fallbacks.size() > 1) {
+        } else if (fallbacks.size() > 1) {
             // sort by class hierarchy, pick the closest match
             Collections.sort(fallbacks,
                     new Comparator<DataStorePanelInfo>() {
@@ -232,7 +226,7 @@ public class StoreExtensionPoints {
                 String msg = "Multiple editor panels for : (" + f1.getFactoryClass() + "): " + f1 + ", " + f2;
                 throw new RuntimeException(msg);
             }
-            
+
             return f1;
         }
 

@@ -26,7 +26,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class WatermarkDecoration implements MapDecoration {
-    /** A logger for this class. */
+    /**
+     * A logger for this class.
+     */
     private static final Logger LOGGER = Logger.getLogger("org.geoserver.wms.responses");
 
     public static final Color TRANSPARENT = new Color(255, 255, 255, 0);
@@ -41,9 +43,9 @@ public class WatermarkDecoration implements MapDecoration {
      * Transient cache to avoid reloading the same file over and over
      */
     private static final Map<URL, LogoCacheEntry> logoCache =
-        new SoftValueHashMap<URL, LogoCacheEntry>();
+            new SoftValueHashMap<URL, LogoCacheEntry>();
 
-    public void loadOptions(Map<String, String> options){
+    public void loadOptions(Map<String, String> options) {
         this.imageURL = options.get("url");
 
         if (options.containsKey("opacity")) {
@@ -56,8 +58,8 @@ public class WatermarkDecoration implements MapDecoration {
         }
     }
 
-    public Dimension findOptimalSize(Graphics2D g2d, WMSMapContent mapContent){
-        try{
+    public Dimension findOptimalSize(Graphics2D g2d, WMSMapContent mapContent) {
+        try {
             BufferedImage logo = getLogo();
             return new Dimension(logo.getWidth(), logo.getHeight());
         } catch (Exception e) {
@@ -67,29 +69,29 @@ public class WatermarkDecoration implements MapDecoration {
 
     /**
      * Print the WaterMarks into the graphic2D.
-     * 
+     *
      * @param g2D
      * @param paintArea
      * @throws IOException
      * @throws ClassCastException
      * @throws MalformedURLException
      */
-    public void paint(Graphics2D g2D, Rectangle paintArea, WMSMapContent mapContent) 
-    throws MalformedURLException, ClassCastException, IOException {
+    public void paint(Graphics2D g2D, Rectangle paintArea, WMSMapContent mapContent)
+            throws MalformedURLException, ClassCastException, IOException {
         BufferedImage logo = getLogo();
 
         if (logo != null) {
             Composite oldComposite = g2D.getComposite();
             g2D.setComposite(
-                AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity)
+                    AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity)
             );
 
-            AffineTransform tx = 
-                AffineTransform.getTranslateInstance(paintArea.getX(), paintArea.getY());
+            AffineTransform tx =
+                    AffineTransform.getTranslateInstance(paintArea.getX(), paintArea.getY());
 
             tx.scale(
-                paintArea.getWidth() / logo.getWidth(),
-                paintArea.getHeight() / logo.getHeight()
+                    paintArea.getWidth() / logo.getWidth(),
+                    paintArea.getHeight() / logo.getHeight()
             );
 
             g2D.drawImage(logo, tx, null);
@@ -121,8 +123,8 @@ public class WatermarkDecoration implements MapDecoration {
                 if (image.getType() == Resource.Type.RESOURCE) {
                     url = URLs.fileToUrl(image.file());
                 }
-            } 
-            if(url == null) {
+            }
+            if (url == null) {
                 // also check from the root of the data dir (backwards compatibility)
                 Resource image = loader.get(imageURL);
                 if (image.getType() == Resource.Type.RESOURCE) {
@@ -152,9 +154,8 @@ public class WatermarkDecoration implements MapDecoration {
     /**
      * Contains an already loaded logo and the tools to check it's up to date
      * compared to the file system
-     * 
+     *
      * @author Andrea Aime - TOPP
-     * 
      */
     private static class LogoCacheEntry {
         private BufferedImage logo;

@@ -7,11 +7,9 @@ package org.geoserver.web.publish;
 import org.geoserver.catalog.PublishedInfo;
 
 /**
- * 
  * Extension point for sections of the configuration pages that work for both layers and layergroups.
- * 
- * @author Niels Charlier
  *
+ * @author Niels Charlier
  */
 public class CommonPublishedConfigurationPanelInfo extends PublishedConfigurationPanelInfo<PublishedInfo> {
 

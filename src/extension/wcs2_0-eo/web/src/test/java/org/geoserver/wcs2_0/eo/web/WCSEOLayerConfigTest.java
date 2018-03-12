@@ -32,12 +32,12 @@ public class WCSEOLayerConfigTest extends GeoServerWicketTestSupport {
         Catalog catalog = getCatalog();
         testData.addRasterLayer(WATTEMP, "watertemp.zip", null, null, SystemTestData.class, catalog);
     }
-    
+
     @Override
     protected void setUpTestData(SystemTestData testData) throws Exception {
         testData.setUpWcs11RasterLayers();
     }
-    
+
     @Test
     public void testEditPlainTiff() {
         final LayerInfo layer = getCatalog().getLayerByName(getLayerId(MockData.TASMANIA_DEM));
@@ -47,13 +47,13 @@ public class WCSEOLayerConfigTest extends GeoServerWicketTestSupport {
                 return new WCSEOLayerConfig(id, new Model(layer));
             }
         }));
-        
+
         // print(tester.getLastRenderedPage(), true, true);
         Component panel = tester.getLastRenderedPage().get("form:panel");
         // the panel must not be visible for this layer
         assertFalse(panel.isVisible());
     }
-    
+
     @Test
     public void testEditMosaic() {
         // setup the panel with a mosaic
@@ -64,12 +64,12 @@ public class WCSEOLayerConfigTest extends GeoServerWicketTestSupport {
                 return new WCSEOLayerConfig(id, new Model(layer));
             }
         }));
-        
+
         // print(tester.getLastRenderedPage(), true, true);
         Component panel = tester.getLastRenderedPage().get("form:panel");
         // the panel must be visible for this layer, it's a ,mosaic
         assertTrue(panel.isVisible());
-        
+
         FormTester ft = tester.newFormTester("form");
         ft.setValue("panel:dataset", true);
         ft.submit();

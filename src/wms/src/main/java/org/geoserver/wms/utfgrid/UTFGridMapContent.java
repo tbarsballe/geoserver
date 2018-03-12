@@ -9,7 +9,7 @@ import java.awt.Color;
 import org.geoserver.wms.WMSMapContent;
 
 class UTFGridMapContent extends WMSMapContent {
-    
+
     UTFGridEntries entries;
     WMSMapContent other;
 
@@ -19,7 +19,7 @@ class UTFGridMapContent extends WMSMapContent {
         super(other, false);
         this.entries = entries;
         this.other = other;
-        
+
         // clean up the bits we surely don't want
         this.setMapWidth(this.getMapWidth() / downscaleFactor);
         this.setMapHeight(this.getMapHeight() / downscaleFactor);
@@ -31,7 +31,7 @@ class UTFGridMapContent extends WMSMapContent {
     UTFGridEntries getEntries() {
         return entries;
     }
-    
+
     @Override
     public void dispose() {
         try {

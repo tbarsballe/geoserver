@@ -30,14 +30,13 @@ import org.opengis.style.GraphicalSymbol;
 
 /**
  * Utility to inject static property values into a style
- * 
- * @author David Winslow, OpenGeo
  *
+ * @author David Winslow, OpenGeo
  */
 final public class IconPropertyInjector {
     private final FilterFactory filterFactory;
     private final StyleFactory styleFactory;
-    
+
     private final Map<String, String> properties;
 
     private IconPropertyInjector(Map<String, String> properties) {
@@ -45,10 +44,10 @@ final public class IconPropertyInjector {
         this.styleFactory = CommonFactoryFinder.getStyleFactory();
         this.properties = properties;
     }
-    
+
     private List<List<MiniRule>> injectProperties(List<List<MiniRule>> ftStyles) {
         List<List<MiniRule>> result = new ArrayList<List<MiniRule>>();
-        for (int ftIdx = 0; ftIdx <  ftStyles.size(); ftIdx++) {
+        for (int ftIdx = 0; ftIdx < ftStyles.size(); ftIdx++) {
             List<MiniRule> origRules = ftStyles.get(ftIdx);
             List<MiniRule> resultRules = new ArrayList<MiniRule>();
             for (int ruleIdx = 0; ruleIdx < origRules.size(); ruleIdx++) {
@@ -67,7 +66,7 @@ final public class IconPropertyInjector {
         }
         return result;
     }
-    
+
     private boolean isStatic(Expression ex) {
         return (Boolean) ex.accept(IsStaticExpressionVisitor.VISITOR, null);
     }
@@ -75,11 +74,11 @@ final public class IconPropertyInjector {
     private boolean shouldUpdate(String key, Expression exp) {
         return exp != null && properties.containsKey(key) && !isStatic(exp);
     }
-    
+
     private Expression getLiteral(String key) {
         return filterFactory.literal(properties.get(key));
     }
-    
+
     private PointSymbolizer injectPointSymbolizer(String key, PointSymbolizer original) {
         PointSymbolizer copy = styleFactory.createPointSymbolizer();
         if (original.getGraphic() != null) {
@@ -87,12 +86,12 @@ final public class IconPropertyInjector {
         }
         return copy;
     }
-    
+
     private Graphic injectGraphic(String key, Graphic original) {
         final ExternalGraphic[] externalGraphics;
         final Mark[] marks;
         final Symbol[] symbols = new Symbol[0];
-        Expression opacity = original.getOpacity(); 
+        Expression opacity = original.getOpacity();
         Expression size = original.getSize();
         Expression rotation = original.getRotation();
 
@@ -100,7 +99,7 @@ final public class IconPropertyInjector {
             opacity = getLiteral(key + ".opacity");
         }
         if (shouldUpdate(key + ".rotation", rotation)) {
-            rotation =  getLiteral(key + ".rotation");
+            rotation = getLiteral(key + ".rotation");
         }
         if (shouldUpdate(key + ".size", size)) {
             size = getLiteral(key + ".size");
@@ -135,7 +134,7 @@ final public class IconPropertyInjector {
             } else {
                 locationExpression = ExpressionExtractor.extractCqlExpressions(original.getLocation().toExternalForm());
             }
-            
+
             if (locationExpression == null || isStatic(locationExpression)) {
                 location = original.getLocation();
             } else {
@@ -153,19 +152,19 @@ final public class IconPropertyInjector {
         final Fill fill;
         final Expression size = null; // size and fill are handled only at the PointSymbolizer level - bug?
         final Expression rotation = null;
-        
+
         if (mark.getWellKnownName() == null || isStatic(mark.getWellKnownName())) {
             wellKnownName = mark.getWellKnownName();
         } else {
             wellKnownName = getLiteral(key + ".name");
         }
-        
+
         if (mark.getFill() == null) {
             fill = null;
         } else {
             fill = injectFill(key + ".fill", mark.getFill());
         }
-        
+
         if (mark.getStroke() == null) {
             stroke = null;
         } else {
@@ -177,20 +176,20 @@ final public class IconPropertyInjector {
     private Stroke injectStroke(String key, Stroke stroke) {
         final Expression color;
         final Expression width;
-        final Expression opacity; 
+        final Expression opacity;
         final Expression lineJoin;
         final Expression lineCap;
         final float[] dashArray;
         final Expression dashOffset;
         final Graphic graphicFill;
         final Graphic graphicStroke;
-        
+
         if (stroke.getColor() == null || isStatic(stroke.getColor())) {
             color = stroke.getColor();
         } else {
             color = getLiteral(key + ".color");
         }
-        
+
         if (stroke.getDashOffset() == null || isStatic(stroke.getDashOffset())) {
             dashOffset = stroke.getDashOffset();
         } else {
@@ -202,13 +201,13 @@ final public class IconPropertyInjector {
         } else {
             lineCap = getLiteral(key + ".linecap");
         }
-        
+
         if (stroke.getLineJoin() == null || isStatic(stroke.getLineJoin())) {
             lineJoin = stroke.getLineJoin();
         } else {
             lineJoin = getLiteral(key + ".linejoin");
         }
-        
+
         if (stroke.getOpacity() == null || isStatic(stroke.getOpacity())) {
             opacity = stroke.getOpacity();
         } else {
@@ -220,7 +219,7 @@ final public class IconPropertyInjector {
         } else {
             width = getLiteral(key + ".opacity");
         }
-        
+
         if (stroke.getGraphicStroke() == null) {
             graphicStroke = null;
         } else {
@@ -265,7 +264,7 @@ final public class IconPropertyInjector {
         } else {
             graphicFill = injectGraphic(key + ".graphic", fill.getGraphicFill());
         }
-        
+
         return styleFactory.createFill(color, backgroundColor, opacity, graphicFill);
     }
 

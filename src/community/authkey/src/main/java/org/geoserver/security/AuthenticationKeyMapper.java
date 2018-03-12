@@ -14,11 +14,10 @@ import org.geoserver.security.validation.FilterConfigException;
 import org.springframework.beans.factory.BeanNameAware;
 
 /**
- * 
  * Maps a unique authentication key to a user name. Since user names are
  * unique within a {@link GeoServerUserGroupService} an individual mapper
  * is needed for each service offering this feature.
- * 
+ *
  * @author Andrea Aime - GeoSolution
  */
 public interface AuthenticationKeyMapper extends BeanNameAware {
@@ -27,50 +26,49 @@ public interface AuthenticationKeyMapper extends BeanNameAware {
      * Maps the key provided in the request to the {@link GeoServerUser} object
      * of the corresponding user, or returns null
      * if no corresponding user is found
-     * 
+     * <p>
      * Returns <code>null</code> if the user is disabled
-     * 
-     * @param key
      *
+     * @param key
      */
     GeoServerUser getUser(String key) throws IOException;
-    
+
     /**
      * Assures that each user in the corresponding {@link GeoServerUserGroupService} has
      * an authentication key.
-     * 
+     * <p>
      * returns the number of added authentication keys
-     * 
+     *
      * @throws IOException
      */
     int synchronize() throws IOException;
-            
+
     /**
-     * Returns <code>true</code> it the mapper can deal with read only u 
+     * Returns <code>true</code> it the mapper can deal with read only u
      * user/group services
      */
     boolean supportsReadOnlyUserGroupService();
-    
+
     String getBeanName();
-    
+
     void setUserGroupServiceName(String serviceName);
+
     String getUserGroupServiceName();
-    
+
     public GeoServerSecurityManager getSecurityManager();
+
     public void setSecurityManager(GeoServerSecurityManager securityManager);
-    
+
     /**
      * Returns the list of configuration parameters supported by this mapper.
-     * 
-     *
      */
     public Set<String> getAvailableParameters();
-    
+
     /**
      * Configures the mapper parameters.
      */
     public void configureMapper(Map<String, String> parameters);
-    
+
     /**
      * Returns the mapper parameters.
      */

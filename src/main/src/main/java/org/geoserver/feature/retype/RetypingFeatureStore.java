@@ -26,15 +26,15 @@ import org.opengis.filter.Filter;
 import org.opengis.filter.identity.FeatureId;
 
 /**
- * Renaming wrapper for a {@link FeatureStore} instance, to be used along with {@link RetypingDataStore} 
+ * Renaming wrapper for a {@link FeatureStore} instance, to be used along with {@link RetypingDataStore}
  */
 public class RetypingFeatureStore extends RetypingFeatureSource implements SimpleFeatureStore {
 
     RetypingFeatureStore(RetypingDataStore ds,
-            SimpleFeatureStore wrapped, FeatureTypeMap typeMap) {
+                         SimpleFeatureStore wrapped, FeatureTypeMap typeMap) {
         super(ds, wrapped, typeMap);
     }
-    
+
     RetypingFeatureStore(SimpleFeatureStore wrapped, FeatureTypeMap typeMap) throws IOException {
         super(wrapped, typeMap);
     }
@@ -52,7 +52,7 @@ public class RetypingFeatureStore extends RetypingFeatureSource implements Simpl
     }
 
     public void modifyFeatures(AttributeDescriptor type, Object value, Filter filter) throws IOException {
-    	modifyFeatures(new AttributeDescriptor[] {type}, new Object[] {value}, filter);
+        modifyFeatures(new AttributeDescriptor[]{type}, new Object[]{value}, filter);
     }
 
     public void removeFeatures(Filter filter) throws IOException {
@@ -75,7 +75,7 @@ public class RetypingFeatureStore extends RetypingFeatureSource implements Simpl
         }
         return retyped;
     }
-    
+
     public void modifyFeatures(AttributeDescriptor[] type, Object[] values, Filter filter)
             throws IOException {
 

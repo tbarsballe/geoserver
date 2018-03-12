@@ -12,7 +12,9 @@ import org.geoserver.web.GeoServerSecuredPage;
 
 public class GeoGigSettingsPage extends GeoServerSecuredPage {
 
-    /** serialVersionUID */
+    /**
+     * serialVersionUID
+     */
     private static final long serialVersionUID = -6228795354577370186L;
 
     protected AjaxTabbedPanel<ITab> tabbedPanel;

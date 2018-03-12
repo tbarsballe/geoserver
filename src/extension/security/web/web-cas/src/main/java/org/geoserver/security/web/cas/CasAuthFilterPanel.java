@@ -29,12 +29,12 @@ import org.geotools.util.logging.Logging;
 
 /**
  * Configuration panel for {@link GeoServerCasAuthenticationFilter}.
- * 
+ *
  * @author mcr
  */
-public class CasAuthFilterPanel 
-    extends PreAuthenticatedUserNameFilterPanel<CasAuthenticationFilterConfig>  {
-    
+public class CasAuthFilterPanel
+        extends PreAuthenticatedUserNameFilterPanel<CasAuthenticationFilterConfig> {
+
     private static final long serialVersionUID = 1;
 
     static Logger LOGGER = Logging.getLogger("org.geoserver.security");
@@ -42,44 +42,41 @@ public class CasAuthFilterPanel
 
     public CasAuthFilterPanel(String id, IModel<CasAuthenticationFilterConfig> model) {
         super(id, model);
-                
+
         dialog = (GeoServerDialog) get("dialog");
-                        
-        
-        add(new HelpLink("connectionParametersHelp",this).setDialog(dialog));
-        add(new HelpLink("singleSignOnParametersHelp",this).setDialog(dialog));
-        add(new HelpLink("singleSignOutParametersHelp",this).setDialog(dialog));
-        add(new HelpLink("proxyTicketParametersHelp",this).setDialog(dialog));
-        
+
+
+        add(new HelpLink("connectionParametersHelp", this).setDialog(dialog));
+        add(new HelpLink("singleSignOnParametersHelp", this).setDialog(dialog));
+        add(new HelpLink("singleSignOutParametersHelp", this).setDialog(dialog));
+        add(new HelpLink("proxyTicketParametersHelp", this).setDialog(dialog));
+
         add(new TextField<String>("casServerUrlPrefix"));
         add(new CheckBox("sendRenew"));
         add(new TextField<String>("proxyCallbackUrlPrefix").setRequired(false));
-        
+
         add(new AjaxSubmitLink("casServerTest") {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 try {
-                    testURL("casServerUrlPrefix",GeoServerCasConstants.LOGOUT_URI);
-                    info(new StringResourceModel("casConnectionSuccessful",CasAuthFilterPanel.this, null).getObject());
-                }
-                catch(Exception e) {
+                    testURL("casServerUrlPrefix", GeoServerCasConstants.LOGOUT_URI);
+                    info(new StringResourceModel("casConnectionSuccessful", CasAuthFilterPanel.this, null).getObject());
+                } catch (Exception e) {
                     error(e);
                     ((GeoServerBasePage) getPage()).addFeedbackPanels(target); // to display message
                     LOGGER.log(Level.WARNING, "CAS connection error ", e);
                 }
             }
         }.setDefaultFormProcessing(false));
-        
-        
-        
+
+
         add(new AjaxSubmitLink("proxyCallbackTest") {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 try {
-                    testURL("proxyCallbackUrlPrefix",null);
-                    info(new StringResourceModel("casProxyCallbackSuccessful",CasAuthFilterPanel.this, null).getObject());
-                }
-                catch(Exception e) {
+                    testURL("proxyCallbackUrlPrefix", null);
+                    info(new StringResourceModel("casProxyCallbackSuccessful", CasAuthFilterPanel.this, null).getObject());
+                } catch (Exception e) {
                     error(e);
                     ((GeoServerBasePage) getPage()).addFeedbackPanels(target); // to display message
                     LOGGER.log(Level.WARNING, "CAS proxy callback  error ", e);
@@ -89,16 +86,15 @@ public class CasAuthFilterPanel
 
         CheckBox createSession = new CheckBox("singleSignOut");
         add(createSession);
-        
+
         add(new TextField<String>("urlInCasLogoutPage"));
         add(new AjaxSubmitLink("urlInCasLogoutPageTest") {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 try {
-                    testURL("urlInCasLogoutPage",null);
-                    info(new StringResourceModel("urlInCasLogoutPageSuccessful",CasAuthFilterPanel.this, null).getObject());
-                }
-                catch(Exception e) {
+                    testURL("urlInCasLogoutPage", null);
+                    info(new StringResourceModel("urlInCasLogoutPageSuccessful", CasAuthFilterPanel.this, null).getObject());
+                } catch (Exception e) {
                     error(e);
                     ((GeoServerBasePage) getPage()).addFeedbackPanels(target); // to display message
                     LOGGER.log(Level.WARNING, "CAs url in logout page error ", e);
@@ -106,20 +102,20 @@ public class CasAuthFilterPanel
             }
         }.setDefaultFormProcessing(false));
 
-        
+
     }
 
     public void testURL(String wicketId, String uri) throws Exception {
         // since this wasn't a regular form submission, we need to manually update component
         // models
-        ((FormComponent)get(wicketId)).processInput();
+        ((FormComponent) get(wicketId)).processInput();
         String urlString = get(wicketId).getDefaultModelObjectAsString();
-        if (uri!=null) 
-            urlString+=uri;
-        URL url = new URL(urlString);        
+        if (uri != null)
+            urlString += uri;
+        URL url = new URL(urlString);
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.getInputStream().close();
     }
-    
+
 
 }

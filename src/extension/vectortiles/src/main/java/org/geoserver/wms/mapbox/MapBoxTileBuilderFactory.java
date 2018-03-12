@@ -13,9 +13,7 @@ import org.geotools.geometry.jts.ReferencedEnvelope;
 import com.google.common.collect.ImmutableSet;
 
 /**
- * 
  * @author Niels Charlier
- *
  */
 public class MapBoxTileBuilderFactory implements VectorTileBuilderFactory {
 

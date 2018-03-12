@@ -21,17 +21,15 @@ import org.springframework.security.ldap.authentication.SpringSecurityAuthentica
 /**
  * LDAP utility class.
  * Here are the LDAP access functionalities common to all LDAP security services.
- * 
- * @author "Mauro Bartolomeoli - mauro.bartolomeoli@geo-solutions.it"
  *
+ * @author "Mauro Bartolomeoli - mauro.bartolomeoli@geo-solutions.it"
  */
 public class LDAPUtils {
 
     /**
      * Creates an LdapContext from a configuration object.
-     * 
-     * @param ldapConfig
      *
+     * @param ldapConfig
      */
     public static LdapContextSource createLdapContext(
             LDAPBaseSecurityServiceConfig ldapConfig) {
@@ -40,11 +38,11 @@ public class LDAPUtils {
         ldapContext.setCacheEnvironmentProperties(false);
         ldapContext
                 .setAuthenticationSource(new SpringSecurityAuthenticationSource());
-    
+
         if (ldapConfig.isUseTLS()) {
             // TLS does not play nicely with pooled connections
             ldapContext.setPooled(false);
-    
+
             DefaultTlsDirContextAuthenticationStrategy tls = new DefaultTlsDirContextAuthenticationStrategy();
             tls.setHostnameVerifier(new HostnameVerifier() {
                 @Override
@@ -52,25 +50,24 @@ public class LDAPUtils {
                     return true;
                 }
             });
-    
+
             ldapContext.setAuthenticationStrategy(tls);
         }
         return ldapContext;
     }
-    
+
     /**
      * Returns an LDAP template bounded to the given context, if not null.
-     * 
+     *
      * @param ctx
      * @param template
-     *
      */
     public static SpringSecurityLdapTemplate getLdapTemplateInContext(
-            final DirContext ctx,final SpringSecurityLdapTemplate template) {
+            final DirContext ctx, final SpringSecurityLdapTemplate template) {
         SpringSecurityLdapTemplate authTemplate;
-        if (ctx == null) {            
+        if (ctx == null) {
             authTemplate = template;
-            ((AbstractContextSource)authTemplate.getContextSource()).setAnonymousReadOnly(true);
+            ((AbstractContextSource) authTemplate.getContextSource()).setAnonymousReadOnly(true);
         } else {
             // if we have the authenticated context we build a new LdapTemplate
             // using it
@@ -88,7 +85,7 @@ public class LDAPUtils {
 
                 @Override
                 public DirContext getContext(String principal,
-                        String credentials) throws NamingException {
+                                             String credentials) throws NamingException {
                     return ctx;
                 }
 

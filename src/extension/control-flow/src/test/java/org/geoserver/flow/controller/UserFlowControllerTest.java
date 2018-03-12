@@ -18,16 +18,16 @@ public class UserFlowControllerTest extends AbstractFlowControllerTest {
     public void testConcurrentRequestsSingleUser() {
         // a cookie based flow controller that will allow just one request at a time
         UserConcurrentFlowController controller = new UserConcurrentFlowController(1);
-        
+
         Request firstRequest = buildCookieRequest(null);
         FlowControllerTestingThread tSample = new FlowControllerTestingThread(firstRequest, 0,
                 0, controller);
         tSample.start();
         waitTerminated(tSample, MAX_WAIT);
-        
+
         Cookie cookie = (Cookie) ((MockHttpServletResponse) firstRequest.getHttpResponse()).getCookies()[0];
         String cookieValue = cookie.getValue();
-        
+
         // make three testing threads that will "process" forever, and will use the cookie to identify themselves
         // as the same client, until we interrupt them
         FlowControllerTestingThread t1 = new FlowControllerTestingThread(buildCookieRequest(cookieValue), 0,
@@ -51,12 +51,12 @@ public class UserFlowControllerTest extends AbstractFlowControllerTest {
 
             assertEquals(ThreadState.COMPLETE, t1.state);
             assertEquals(ThreadState.PROCESSING, t2.state);
-            
+
             t2.interrupt();
         } finally {
             waitAndKill(t1, MAX_WAIT);
             waitAndKill(t2, MAX_WAIT);
         }
-        
+
     }
 }

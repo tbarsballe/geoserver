@@ -124,7 +124,7 @@ import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
 
 /**
- * 
+ *
  */
 public class ConfigDatabase {
 
@@ -153,10 +153,10 @@ public class ConfigDatabase {
     private InfoRowMapper<CatalogInfo> catalogRowMapper;
 
     private InfoRowMapper<Info> configRowMapper;
-    
+
     private CatalogClearingListener catalogListener;
     private ConfigClearingListener configListener;
-    
+
 
     /**
      * Protected default constructor needed by spring-jdbc instrumentation
@@ -170,7 +170,7 @@ public class ConfigDatabase {
     }
 
     public ConfigDatabase(final DataSource dataSource, final XStreamInfoSerialBinding binding,
-            CacheProvider cacheProvider) {
+                          CacheProvider cacheProvider) {
 
         this.binding = binding;
         this.template = new NamedParameterJdbcTemplate(dataSource);
@@ -213,7 +213,7 @@ public class ConfigDatabase {
         try (InputStream in = resource.in()) {
             Util.runScript(in, template.getJdbcOperations(), LOGGER);
         }
-        
+
         LOGGER.info("Initialization SQL script run sucessfully");
     }
 
@@ -224,7 +224,7 @@ public class ConfigDatabase {
     public void setCatalog(CatalogImpl catalog) {
         this.catalog = catalog;
         this.binding.setCatalog(catalog);
-        
+
         catalog.removeListeners(CatalogClearingListener.class);
         catalog.addListener(new CatalogClearingListener());
     }
@@ -235,8 +235,8 @@ public class ConfigDatabase {
 
     public void setGeoServer(GeoServer geoServer) {
         this.geoServer = geoServer;
-        
-        if(configListener!=null) geoServer.removeListener(configListener);
+
+        if (configListener != null) geoServer.removeListener(configListener);
         configListener = new ConfigClearingListener();
         geoServer.addListener(configListener);
     }
@@ -244,7 +244,7 @@ public class ConfigDatabase {
     public GeoServer getGeoServer() {
         return geoServer;
     }
-    
+
     public <T extends CatalogInfo> int count(final Class<T> of, final Filter filter) {
 
         QueryBuilder<T> sqlBuilder = QueryBuilder.forCount(dialect, of, dbMappings).filter(filter);
@@ -266,7 +266,7 @@ public class ConfigDatabase {
         } else {
             LOGGER.fine("Filter is not fully supported, doing scan of supported part to return the number of matches");
             // going the expensive route, filtering as much as possible
-            CloseableIterator<T> iterator = query(of, filter, null, null, (SortBy)null);
+            CloseableIterator<T> iterator = query(of, filter, null, null, (SortBy) null);
             try {
                 return Iterators.size(iterator);
             } finally {
@@ -275,30 +275,30 @@ public class ConfigDatabase {
         }
         return count;
     }
-    
+
     public <T extends Info> CloseableIterator<T> query(final Class<T> of, final Filter filter,
-            @Nullable Integer offset, @Nullable Integer limit, @Nullable SortBy sortOrder) {
-        if(sortOrder == null) {
+                                                       @Nullable Integer offset, @Nullable Integer limit, @Nullable SortBy sortOrder) {
+        if (sortOrder == null) {
             return query(of, filter, offset, limit, new SortBy[]{});
         } else {
             return query(of, filter, offset, limit, new SortBy[]{sortOrder});
         }
     }
-    
+
     public <T extends Info> CloseableIterator<T> query(final Class<T> of, final Filter filter,
-            @Nullable Integer offset, @Nullable Integer limit, @Nullable SortBy... sortOrder) {
+                                                       @Nullable Integer offset, @Nullable Integer limit, @Nullable SortBy... sortOrder) {
 
         checkNotNull(of);
         checkNotNull(filter);
         checkArgument(offset == null || offset.intValue() >= 0);
         checkArgument(limit == null || limit.intValue() >= 0);
-         
+
         QueryBuilder<T> sqlBuilder = QueryBuilder.forIds(dialect, of, dbMappings).filter(filter)
                 .offset(offset).limit(limit).sortOrder(sortOrder);
         final StringBuilder sql = sqlBuilder.build();
-        
+
         List<String> ids = null;
-        
+
         final SimplifyingFilterVisitor filterSimplifier = new SimplifyingFilterVisitor();
         final Filter simplifiedFilter = (Filter) sqlBuilder.getSupportedFilter().accept(filterSimplifier, null);
         if (simplifiedFilter instanceof PropertyIsEqualTo) {
@@ -312,7 +312,7 @@ public class ConfigDatabase {
             if (isEqualTo.getExpression2() instanceof PropertyName
                     && isEqualTo.getExpression1() instanceof Literal
                     && ((PropertyName) isEqualTo.getExpression2()).getPropertyName().equals("id")) {
-                ids = Collections.singletonList(((Literal) isEqualTo.getExpression1()).getValue().toString());                
+                ids = Collections.singletonList(((Literal) isEqualTo.getExpression1()).getValue().toString());
             }
         }
 
@@ -321,14 +321,14 @@ public class ConfigDatabase {
 
         if (ids == null) {
             final Map<String, Object> namedParameters = sqlBuilder.getNamedParameters();
-    
+
             if (LOGGER.isLoggable(Level.FINER)) {
                 LOGGER.finer("Original filter: " + filter);
                 LOGGER.finer("Supported filter: " + sqlBuilder.getSupportedFilter());
                 LOGGER.finer("Unsupported filter: " + sqlBuilder.getUnsupportedFilter());
             }
             logStatement(sql, namedParameters);
-    
+
             Stopwatch sw = Stopwatch.createStarted();
             // the oracle offset/limit implementation returns a two column result set
             // with rownum in the 2nd - queryForList will throw an exception
@@ -363,14 +363,14 @@ public class ConfigDatabase {
             // Apply the filter
             result = CloseableIteratorAdapter.filter(iterator, filter);
             // The offset and limit should not have been applied as part of the query
-            assert(!sqlBuilder.isOffsetLimitApplied());
+            assert (!sqlBuilder.isOffsetLimitApplied());
             // Apply offset and limits after filtering
             result = applyOffsetLimit(result, offset, limit);
         }
 
         return result;
     }
-    
+
     public <T extends Info> CloseableIterator<String> queryIds(final Class<T> of, final Filter filter) {
 
         checkNotNull(of);
@@ -414,13 +414,13 @@ public class ConfigDatabase {
             // Apply the filter
             result = CloseableIteratorAdapter.filter(iterator, filter);
             // The offset and limit should not have been applied as part of the query
-            assert(!sqlBuilder.isOffsetLimitApplied());
+            assert (!sqlBuilder.isOffsetLimitApplied());
         }
 
         return result;
     }
 
-    private <T extends Info> CloseableIterator<T> applyOffsetLimit(CloseableIterator<T> iterator, Integer offset, Integer limit){
+    private <T extends Info> CloseableIterator<T> applyOffsetLimit(CloseableIterator<T> iterator, Integer offset, Integer limit) {
         if (offset != null) {
             Iterators.advance(iterator, offset.intValue());
         }
@@ -429,9 +429,9 @@ public class ConfigDatabase {
         }
         return iterator;
     }
-    
+
     public <T extends Info> List<T> queryAsList(final Class<T> of, final Filter filter,
-            Integer offset, Integer count, SortBy sortOrder) {
+                                                Integer offset, Integer count, SortBy sortOrder) {
 
         CloseableIterator<T> iterator = query(of, filter, offset, count, sortOrder);
         List<T> list;
@@ -476,7 +476,7 @@ public class ConfigDatabase {
                 dialect.nextVal("seq_OBJECT"));
         logStatement(statement, params);
         KeyHolder keyHolder = new GeneratedKeyHolder();
-        int updateCount = template.update(statement, new MapSqlParameterSource(params), keyHolder, new String[] {"oid"});
+        int updateCount = template.update(statement, new MapSqlParameterSource(params), keyHolder, new String[]{"oid"});
         checkState(updateCount == 1, "Insert statement failed");
         // looks like some db's return the pk different than others, so lets try both ways
         Number key = (Number) keyHolder.getKeys().get("oid");
@@ -486,21 +486,21 @@ public class ConfigDatabase {
         addAttributes(info, key);
 
         cache.put(id, info);
-        
+
         for (InfoIdentity identity : InfoIdentities.get().getIdentities(info)) {
             if (identityCache.getIfPresent(identity) == null) {
                 identityCache.put(identity, id);
-            } else { 
+            } else {
                 //not a unique identity
                 identityCache.invalidate(identity);
             }
         }
-        
+
         return getById(id, interf);
     }
-    
-    public <T extends Info> void addNames(String id, String...names) {
-            
+
+    public <T extends Info> void addNames(String id, String... names) {
+
     }
 
     private void addAttributes(final Info info, final Number infoPk) {
@@ -533,7 +533,7 @@ public class ConfigDatabase {
     }
 
     private void addAttribute(final Info info, final Number infoPk, Property prop,
-            Integer colIndex, final String storedValue) {
+                              Integer colIndex, final String storedValue) {
         Map<String, ?> params = params("value", storedValue);
 
         final String insertPropertySQL = "insert into object_property " //
@@ -594,10 +594,9 @@ public class ConfigDatabase {
     /**
      * @param info
      * @param prop
-     *
      */
     private Info lookUpRelatedObject(final Info info, final Property prop,
-            @Nullable Integer collectionIndex) {
+                                     @Nullable Integer collectionIndex) {
 
         checkArgument(collectionIndex == 0 || prop.isCollectionProperty());
 
@@ -693,7 +692,7 @@ public class ConfigDatabase {
         } catch (EmptyResultDataAccessException notFound) {
             return;
         }
-        
+
         identityCache.invalidateAll(InfoIdentities.get().getIdentities(info));
         cache.invalidate(info.getId());
 
@@ -716,7 +715,6 @@ public class ConfigDatabase {
 
     /**
      * @param info
-     *
      */
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public <T extends Info> T save(T info) {
@@ -725,7 +723,7 @@ public class ConfigDatabase {
         final String id = info.getId();
 
         checkNotNull(id, "Can't modify an object with no id");
-        
+
         final ModificationProxy modificationProxy = ModificationProxy.handler(info);
         Preconditions.checkNotNull(modificationProxy, "Not a modification proxy: ", info);
 
@@ -740,15 +738,15 @@ public class ConfigDatabase {
         // see HACK block bellow
         final boolean updateResouceLayersName = info instanceof ResourceInfo
                 && modificationProxy.getPropertyNames().contains("name");
-        final boolean updateResourceLayersKeywords = 
+        final boolean updateResourceLayersKeywords =
                 CollectionUtils.exists(modificationProxy.getPropertyNames(), new Predicate() {
-            @Override
-            public boolean evaluate(Object input) {
-                return ((String)input).contains("keyword");
-            }
-            
-        });
-        
+                    @Override
+                    public boolean evaluate(Object input) {
+                        return ((String) input).contains("keyword");
+                    }
+
+                });
+
         modificationProxy.commit();
 
         Map<String, ?> params;
@@ -785,8 +783,8 @@ public class ConfigDatabase {
             }
         }
         // / </HACK>
-        
-        
+
+
         for (InfoIdentity identity : InfoIdentities.get().getIdentities(info)) {
             if (identityCache.getIfPresent(identity) == null) {
                 identityCache.put(identity, id);
@@ -795,7 +793,7 @@ public class ConfigDatabase {
                 identityCache.invalidate(identity);
             }
         }
-        
+
         return getById(id, clazz);
     }
 
@@ -812,6 +810,7 @@ public class ConfigDatabase {
             updateQueryableProperties(layer, layerOid, ImmutableSet.of(changedProperty));
         }
     }
+
     private <T> void updateResourceLayerKeywords(ResourceInfo info) {
         final Object newValue = info.getKeywords();
         Filter filter = Predicates.equal("resource.id", info.getId());
@@ -837,7 +836,7 @@ public class ConfigDatabase {
     }
 
     private void updateQueryableProperties(final Info info, final Integer objectId,
-            Iterable<Property> changedProperties) {
+                                           Iterable<Property> changedProperties) {
 
         Map<String, ?> params;
 
@@ -943,9 +942,8 @@ public class ConfigDatabase {
         }
         if (info instanceof CatalogInfo) {
             info = resolveCatalog((CatalogInfo) info);
-        }
-        else if (info instanceof ServiceInfo) {
-            resolveTransient((ServiceInfo)info);
+        } else if (info instanceof ServiceInfo) {
+            resolveTransient((ServiceInfo) info);
         }
 
         if (type.isAssignableFrom(info.getClass())) {
@@ -958,7 +956,7 @@ public class ConfigDatabase {
 
         return null;
     }
-    
+
     @Nullable
     public <T extends Info> String getIdByIdentity(final Class<T> type, final String... identityMappings) {
         Assert.notNull(identityMappings, "id");
@@ -966,8 +964,8 @@ public class ConfigDatabase {
         String[] descriptor = new String[length];
         String[] values = new String[length];
         for (int i = 0; i < length; i++) {
-           descriptor[i] = identityMappings[i * 2];
-           values[i] = identityMappings[i * 2 + 1];
+            descriptor[i] = identityMappings[i * 2];
+            values[i] = identityMappings[i * 2 + 1];
         }
         InfoIdentity infoIdentity = new InfoIdentity(InfoIdentities.root(type), descriptor, values);
 
@@ -980,10 +978,10 @@ public class ConfigDatabase {
         } catch (ExecutionException e) {
             Throwables.propagate(e.getCause());
         }
-        
+
         return id;
     }
-    
+
     @Nullable
     public ServiceInfo getService(final WorkspaceInfo ws, final Class<? extends ServiceInfo> clazz) {
         Assert.notNull(clazz, "clazz");
@@ -1006,7 +1004,7 @@ public class ConfigDatabase {
 
         return info;
     }
-    
+
     @Nullable
     public <T extends Info> T getByIdentity(final Class<T> type, final String... identityMappings) {
         String id = getIdByIdentity(type, identityMappings);
@@ -1154,7 +1152,7 @@ public class ConfigDatabase {
             return info;
         }
     }
-    
+
     private final class IdentityLoader implements Callable<String> {
 
         private final InfoIdentity identity;
@@ -1167,10 +1165,10 @@ public class ConfigDatabase {
         public String call() throws Exception {
             Filter filter = Filter.INCLUDE;
             for (int i = 0; i < identity.getDescriptor().length; i++) {
-                filter = and(filter,  identity.getValues()[i] == null ? isNull(identity.getDescriptor()[i]) :
-                    equal(identity.getDescriptor()[i], identity.getValues()[i]));
+                filter = and(filter, identity.getValues()[i] == null ? isNull(identity.getDescriptor()[i]) :
+                        equal(identity.getDescriptor()[i], identity.getValues()[i]));
             }
-            
+
             try {
                 return getId(identity.getClazz(), filter);
             } catch (IllegalArgumentException multipleResults) {
@@ -1178,13 +1176,13 @@ public class ConfigDatabase {
             }
         }
     }
-    
+
     private static final class ServiceIdentity implements Serializable {
         private static final long serialVersionUID = 4054478633697271203L;
-        
+
         private Class<? extends ServiceInfo> clazz;
         private WorkspaceInfo workspace;
-        
+
         public ServiceIdentity(Class<? extends ServiceInfo> clazz, WorkspaceInfo workspace) {
             this.clazz = clazz;
             this.workspace = workspace;
@@ -1227,22 +1225,22 @@ public class ConfigDatabase {
             } else if (!workspace.equals(other.workspace))
                 return false;
             return true;
-        }        
+        }
     }
-    
+
     @SuppressWarnings("unchecked")
     private <T extends ServiceInfo> CloseableIterator<T> filterService(final Class<T> clazz, CloseableIterator<ServiceInfo> it) {
-        return (CloseableIterator<T>) CloseableIteratorAdapter.filter(it, 
-                new com.google.common.base.Predicate<ServiceInfo>(){
-            
-            @Override
-            public boolean apply(@Nullable ServiceInfo input) {
-                return clazz.isAssignableFrom(input.getClass());
-            }
-            
-        });
+        return (CloseableIterator<T>) CloseableIteratorAdapter.filter(it,
+                new com.google.common.base.Predicate<ServiceInfo>() {
+
+                    @Override
+                    public boolean apply(@Nullable ServiceInfo input) {
+                        return clazz.isAssignableFrom(input.getClass());
+                    }
+
+                });
     }
-    
+
     private final class ServiceLoader implements Callable<ServiceInfo> {
 
         private final ServiceIdentity id;
@@ -1254,31 +1252,31 @@ public class ConfigDatabase {
         @Override
         public ServiceInfo call() throws Exception {
             Filter filter;
-            if (id.getWorkspace() != null && 
+            if (id.getWorkspace() != null &&
                     id.getWorkspace() != ANY_WORKSPACE) {
                 filter = equal("workspace.id", id.getWorkspace().getId());
             } else {
                 filter = isNull("workspace.id");
             }
-            
+
             // In order to handle new service types, get all services, deserialize them, and then filter
             // by checking if the implement the given interface.  Since there shouldn't be too many per
             // workspace, this shouldn't be a significant performance problem.
             CloseableIterator<? extends ServiceInfo> it = filterService(
-                    id.getClazz(), 
+                    id.getClazz(),
                     query(ServiceInfo.class, filter, null, null, (SortBy) null));
-            
+
             ServiceInfo service;
-            if (it.hasNext()){
+            if (it.hasNext()) {
                 service = it.next();
             } else {
-                if(LOGGER.isLoggable(Level.FINE)) LOGGER.log(Level.FINE, "Could not find service of type "
+                if (LOGGER.isLoggable(Level.FINE)) LOGGER.log(Level.FINE, "Could not find service of type "
                         + id.getClazz() + " in " + id.getWorkspace());
                 return null;
             }
-            
-            if(it.hasNext()) {
-                LOGGER.log(Level.WARNING, "Found multiple services of type " + 
+
+            if (it.hasNext()) {
+                LOGGER.log(Level.WARNING, "Found multiple services of type " +
                         id.getClass() + " in " + id.getWorkspace());
                 return null;
             }
@@ -1323,16 +1321,16 @@ public class ConfigDatabase {
                 }
             }
             if (info instanceof ServiceInfo) {
-                ((ServiceInfo)info).setGeoServer(geoServer);
+                ((ServiceInfo) info).setGeoServer(geoServer);
             }
 
             return info;
         }
     }
-    
+
     /**
      * @return whether there exists a property named {@code propertyName} for the given type of
-     *         object, and hence native sorting can be done over it.
+     * object, and hence native sorting can be done over it.
      */
     public boolean canSort(Class<? extends CatalogInfo> type, String propertyName) {
         Set<PropertyType> propertyTypes = dbMappings.getPropertyTypes(type, propertyName);
@@ -1343,10 +1341,10 @@ public class ConfigDatabase {
         identityCache.invalidateAll(InfoIdentities.get().getIdentities(info));
         cache.invalidate(info.getId());
     }
-    
+
     public <T extends Info> T get(Class<T> type, Filter filter) throws IllegalArgumentException {
-    
-        CloseableIterator<T> it = query(type, filter, null, 2, (org.opengis.filter.sort.SortBy)null);
+
+        CloseableIterator<T> it = query(type, filter, null, 2, (org.opengis.filter.sort.SortBy) null);
         T result = null;
         try {
             if (it.hasNext()) {
@@ -1361,9 +1359,9 @@ public class ConfigDatabase {
         }
         return result;
     }
-    
+
     public <T extends Info> String getId(Class<T> type, Filter filter) throws IllegalArgumentException {
-        
+
         CloseableIterator<String> it = queryIds(type, filter);
         String result = null;
         try {
@@ -1393,26 +1391,26 @@ public class ConfigDatabase {
         }
 
         public void handlePostModifyEvent(CatalogPostModifyEvent event) {
-            event.getSource().accept( this );
+            event.getSource().accept(this);
         }
 
         public void handleRemoveEvent(CatalogRemoveEvent event) {
-            event.getSource().accept( this );
+            event.getSource().accept(this);
         }
 
         public void reloaded() {
         }
-       
+
         @Override
         public void visit(DataStoreInfo dataStore) {
             clear(dataStore);
         }
-        
+
         @Override
         public void visit(CoverageStoreInfo coverageStore) {
             clear(coverageStore);
         }
-        
+
         @Override
         public void visit(FeatureTypeInfo featureType) {
             clear(featureType);
@@ -1457,9 +1455,10 @@ public class ConfigDatabase {
         public void visit(WMSLayerInfo wmsLayerInfoImpl) {
             clear(wmsLayerInfoImpl);
         }
-        
-        
+
+
     }
+
     /**
      * Listens to configuration events clearing cache entires when resources are modified.
      */
@@ -1496,5 +1495,5 @@ public class ConfigDatabase {
         }
     }
 
-    
+
 }

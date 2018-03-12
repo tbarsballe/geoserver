@@ -16,9 +16,9 @@ import org.geoserver.platform.GeoServerResourceLoader;
 /**
  * The default implementation for GeneralizationInfosProvider,
  * reading the info from an XML file.
- * 
+ * <p>
  * The xml schema file is "/geninfos_1.0.xsd"
- * 
+ *
  * @author Christian Mueller
  */
 public class GeneralizationInfosProviderImpl extends
@@ -31,11 +31,11 @@ public class GeneralizationInfosProviderImpl extends
 
         if (source instanceof String) {
             String path = (String) source;
-            
+
             GeoServerResourceLoader loader = GeoServerExtensions.bean(GeoServerResourceLoader.class);
             File f = loader.url(path);
             URL url = null;
-            if (f!= null && f.exists()) {
+            if (f != null && f.exists()) {
                 url = f.toURI().toURL();
             } else {
                 url = new URL(path);

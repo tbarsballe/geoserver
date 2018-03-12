@@ -18,7 +18,7 @@ import org.springframework.stereotype.Controller;
 /**
  * Protects catalog access from concurrent rest configuration calls. Will lock in write mode every call modifying catalog resources, in read mode all
  * others catalog resource related calls, no locks will be performed on other rest requests.
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 @Controller
@@ -40,7 +40,7 @@ public class RestConfigurationLockCallback implements DispatcherCallback {
 
     @Override
     public void dispatched(HttpServletRequest request, HttpServletResponse response,
-            Object handler) {
+                           Object handler) {
         Object controller = DispatcherCallback.getControllerBean(handler);
         if (controller instanceof AbstractCatalogController || controller instanceof AbstractGeoServerController) {
             if (controller instanceof CatalogReloadController
@@ -61,7 +61,7 @@ public class RestConfigurationLockCallback implements DispatcherCallback {
 
     @Override
     public void exception(HttpServletRequest request, HttpServletResponse response,
-            Exception error) {
+                          Exception error) {
         // nothing to see here, move on
     }
 

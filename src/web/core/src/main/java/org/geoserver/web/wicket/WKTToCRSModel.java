@@ -20,8 +20,8 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 @SuppressWarnings("serial")
 public class WKTToCRSModel implements IModel<CoordinateReferenceSystem> {
     private static final Logger LOGGER = Logging.getLogger(WKTToCRSModel.class);
-    IModel<String> srsModel; 
-    
+    IModel<String> srsModel;
+
     public WKTToCRSModel(IModel<String> srsModel) {
         this.srsModel = srsModel;
     }
@@ -30,7 +30,7 @@ public class WKTToCRSModel implements IModel<CoordinateReferenceSystem> {
         String wkt = srsModel.getObject();
         try {
             return CRS.parseWKT(wkt);
-        } catch(Exception e) {
+        } catch (Exception e) {
             return null;
         }
     }
@@ -39,15 +39,15 @@ public class WKTToCRSModel implements IModel<CoordinateReferenceSystem> {
         CoordinateReferenceSystem crs = (CoordinateReferenceSystem) object;
         try {
             srsModel.setObject(crs.toString());
-        } catch(Exception e) {
+        } catch (Exception e) {
             LOGGER.log(Level.INFO, "Failed to lookup the SRS code for " + crs);
             srsModel.setObject(null);
         }
-        
+
     }
 
     public void detach() {
         srsModel.detach();
     }
-    
+
 }

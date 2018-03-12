@@ -46,13 +46,13 @@ import freemarker.template.TemplateException;
  * </code>
  * </pre>
  * </p>
- * For performance reasons the template lookups will be cached, so it's advised to 
+ * For performance reasons the template lookups will be cached, so it's advised to
  * use the same FeatureTemplate object in a loop that encodes various features, but not
  * to cache it for a long time (static reference).
  * Moreover, FeatureTemplate is not thread safe, so instantiate one for each thread.
+ *
  * @author Justin Deoliveira, The Open Planning Project, jdeolive@openplans.org
  * @author Andrea Aime, TOPP
- *
  */
 public class FeatureTemplate {
     /**
@@ -65,34 +65,34 @@ public class FeatureTemplate {
         // over instantiations of kml writer
         templateConfig = new Configuration();
         templateConfig.setObjectWrapper(new FeatureWrapper());
-        
+
         //set the default output formats for dates
         templateConfig.setDateFormat("MM/dd/yyyy");
         templateConfig.setDateTimeFormat("MM/dd/yyyy HH:mm:ss");
         templateConfig.setTimeFormat("HH:mm:ss");
-        
+
         //set the default locale to be US and the 
         //TODO: this may be somethign we want to configure/change
         templateConfig.setLocale(Locale.US);
         templateConfig.setNumberFormat("0.###########");
     }
-    
+
     /**
      * The pattern used by DATETIME_FORMAT
      */
     public static String DATE_FORMAT_PATTERN = "MM/dd/yy";
-    
+
     /**
      * Default date format produced by templates
      */
     public static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat(DATE_FORMAT_PATTERN);
-    
-    
+
+
     /**
      * The pattern used by DATETIME_FORMAT
      */
     public static String DATETIME_FORMAT_PATTERN = "MM/dd/yy HH:mm:ss";
-    
+
     /**
      * Default datetime format produced by templates
      */
@@ -102,20 +102,20 @@ public class FeatureTemplate {
      * The pattern used by DATETIME_FORMAT
      */
     public static String TIME_FORMAT_PATTERN = "HH:mm:ss";
-    
+
     /**
      * Default time format produced by templates
      */
     public static SimpleDateFormat TIME_FORMAT = new SimpleDateFormat();
-    
+
     /**
      * Template cache used to avoid paying the cost of template lookup for each feature
      */
     Map templateCache = new HashMap();
-    
+
     /**
      * Cached writer used for plain conversion from Feature to String. Improves performance
-     * significantly compared to an OutputStreamWriter over a ByteOutputStream. 
+     * significantly compared to an OutputStreamWriter over a ByteOutputStream.
      */
     CharArrayWriter caw = new CharArrayWriter();
 
@@ -130,12 +130,11 @@ public class FeatureTemplate {
      * </p>
      *
      * @param feature The feature to execute the template against.
-     * @param output The output to write the result of the template to.
-     *
+     * @param output  The output to write the result of the template to.
      * @throws IOException Any errors that occur during execution of the template.
      */
     public void title(SimpleFeature feature, OutputStream output)
-        throws IOException {
+            throws IOException {
         title(feature, new OutputStreamWriter(output, Charset.forName("UTF-8")));
     }
 
@@ -150,12 +149,11 @@ public class FeatureTemplate {
      * </p>
      *
      * @param feature The feature to execute the template against.
-     * @param output The output to write the result of the template to.
-     *
+     * @param output  The output to write the result of the template to.
      * @throws IOException Any errors that occur during execution of the template.
      */
     public void link(SimpleFeature feature, OutputStream output)
-        throws IOException {
+            throws IOException {
         link(feature, new OutputStreamWriter(output, Charset.forName("UTF-8")));
     }
 
@@ -170,12 +168,11 @@ public class FeatureTemplate {
      * </p>
      *
      * @param feature The feature to execute the template against.
-     * @param output The output to write the result of the template to.
-     *
+     * @param output  The output to write the result of the template to.
      * @throws IOException Any errors that occur during execution of the template.
      */
     public void description(SimpleFeature feature, OutputStream output)
-        throws IOException {
+            throws IOException {
         description(feature, new OutputStreamWriter(output, Charset.forName("UTF-8")));
     }
 
@@ -184,12 +181,11 @@ public class FeatureTemplate {
      * writer.
      *
      * @param feature The feature to execute the template against.
-     * @param writer The writer to write the template output to.
-     *
+     * @param writer  The writer to write the template output to.
      * @throws IOException Any errors that occur during execution of the template.
      */
     public void title(SimpleFeature feature, Writer writer) throws IOException {
-        execute(feature, feature.getFeatureType(), writer, "title.ftl",null);
+        execute(feature, feature.getFeatureType(), writer, "title.ftl", null);
     }
 
     /**
@@ -197,12 +193,11 @@ public class FeatureTemplate {
      * writer.
      *
      * @param feature The feature to execute the template against.
-     * @param writer The writer to write the template output to.
-     *
+     * @param writer  The writer to write the template output to.
      * @throws IOException Any errors that occur during execution of the template.
      */
     public void link(SimpleFeature feature, Writer writer) throws IOException {
-        execute(feature, feature.getFeatureType(), writer, "link.ftl",null);
+        execute(feature, feature.getFeatureType(), writer, "link.ftl", null);
     }
 
     /**
@@ -210,13 +205,12 @@ public class FeatureTemplate {
      * writer.
      *
      * @param feature The feature to execute the template against.
-     * @param writer The writer to write the template output to.
-     *
+     * @param writer  The writer to write the template output to.
      * @throws IOException Any errors that occur during execution of the template.
      */
     public void description(SimpleFeature feature, Writer writer)
-        throws IOException {
-        execute(feature, feature.getFeatureType(), writer, "description.ftl",null);
+            throws IOException {
+        execute(feature, feature.getFeatureType(), writer, "description.ftl", null);
     }
 
     /**
@@ -224,7 +218,6 @@ public class FeatureTemplate {
      * string.
      *
      * @param feature The feature to execute the template against.
-     *
      * @throws IOException Any errors that occur during execution of the template.
      */
     public String title(SimpleFeature feature) throws IOException {
@@ -239,7 +232,6 @@ public class FeatureTemplate {
      * string.
      *
      * @param feature The feature to execute the template against.
-     *
      * @throws IOException Any errors that occur during execution of the template.
      */
     public String link(SimpleFeature feature) throws IOException {
@@ -254,7 +246,6 @@ public class FeatureTemplate {
      * string.
      *
      * @param feature The feature to execute the template against.
-     *
      * @throws IOException Any errors that occur during execution of the template.
      */
     public String description(SimpleFeature feature) throws IOException {
@@ -267,69 +258,69 @@ public class FeatureTemplate {
     /**
      * Executes a template for the feature writing the results to a writer.
      * <p>
-     * The template to execute is secified via the <tt>template</tt>, and 
-     * <tt>lookup</tt> parameters. The <tt>lookup</tt> is used to specify the 
-     * class from which <tt>template</tt> shoould be loaded relative to in teh 
+     * The template to execute is secified via the <tt>template</tt>, and
+     * <tt>lookup</tt> parameters. The <tt>lookup</tt> is used to specify the
+     * class from which <tt>template</tt> shoould be loaded relative to in teh
      * case where the user has not specified an override in the data directory.
      * </p>
-     * @param feature The feature to execute the template against.
-     * @param writer The writer for output.
+     *
+     * @param feature  The feature to execute the template against.
+     * @param writer   The writer for output.
      * @param template The template name.
-     * @param lookup The class to lookup the template relative to.
-     * 
+     * @param lookup   The class to lookup the template relative to.
      */
     public void template(SimpleFeature feature, Writer writer, String template, Class lookup)
-        throws IOException {
-        execute(feature,feature.getFeatureType(),writer,template,lookup);
+            throws IOException {
+        execute(feature, feature.getFeatureType(), writer, template, lookup);
     }
-    
+
     /**
      * Executes a template for the feature writing the results to an output stream.
      * <p>
-     * The template to execute is secified via the <tt>template</tt>, and 
-     * <tt>lookup</tt> parameters. The <tt>lookup</tt> is used to specify the 
-     * class from which <tt>template</tt> shoould be loaded relative to in teh 
+     * The template to execute is secified via the <tt>template</tt>, and
+     * <tt>lookup</tt> parameters. The <tt>lookup</tt> is used to specify the
+     * class from which <tt>template</tt> shoould be loaded relative to in teh
      * case where the user has not specified an override in the data directory.
      * </p>
-     * @param feature The feature to execute the template against.
-     * @param output The output.
+     *
+     * @param feature  The feature to execute the template against.
+     * @param output   The output.
      * @param template The template name.
-     * @param lookup The class to lookup the template relative to.
-     * 
+     * @param lookup   The class to lookup the template relative to.
      */
     public void template(SimpleFeature feature, OutputStream output, String template, Class lookup)
-        throws IOException {
-        template( feature, new OutputStreamWriter( output ), template, lookup );
+            throws IOException {
+        template(feature, new OutputStreamWriter(output), template, lookup);
     }
-    
+
     /**
      * Executes a template for the feature returning the result as a string.
      * <p>
-     * The template to execute is secified via the <tt>template</tt>, and 
-     * <tt>lookup</tt> parameters. The <tt>lookup</tt> is used to specify the 
-     * class from which <tt>template</tt> shoould be loaded relative to in teh 
+     * The template to execute is secified via the <tt>template</tt>, and
+     * <tt>lookup</tt> parameters. The <tt>lookup</tt> is used to specify the
+     * class from which <tt>template</tt> shoould be loaded relative to in teh
      * case where the user has not specified an override in the data directory.
      * </p>
-     * @param feature The feature to execute the template against.
+     *
+     * @param feature  The feature to execute the template against.
      * @param template The template name.
-     * @param lookup The class to lookup the template relative to.
-     * 
+     * @param lookup   The class to lookup the template relative to.
      */
     public String template(SimpleFeature feature, String template, Class lookup) throws IOException {
         caw.reset();
-        template(feature,caw,template,lookup);
+        template(feature, caw, template, lookup);
         return caw.toString();
     }
-    
+
     /*
      * Internal helper method to exceute the template against feature or
      * feature collection.
      */
-    private void execute(Object feature, SimpleFeatureType featureType, Writer writer, String template,Class lookup)
-        throws IOException {
+    private void execute(Object feature, SimpleFeatureType featureType, Writer writer, String template, Class lookup)
+            throws IOException {
         Template t = null;
-        
-        t = lookupTemplate(featureType, template,lookup);
+
+        t = lookupTemplate(featureType, template, lookup);
 
         try {
             t.process(feature, writer);
@@ -342,20 +333,19 @@ public class FeatureTemplate {
     /**
      * Returns the template for the specified feature type. Looking up templates is pretty
      * expensive, so we cache templates by feture type and template.
-     *
      */
     private Template lookupTemplate(SimpleFeatureType featureType, String template, Class lookup) throws IOException {
         Template t;
-        
+
         // lookup the cache first
         TemplateKey key = new TemplateKey(featureType, template);
         t = (Template) templateCache.get(key);
-        if(t != null)
+        if (t != null)
             return t;
-        
+
         // otherwise, build a loader and do the lookup
-        GeoServerTemplateLoader templateLoader = 
-            new GeoServerTemplateLoader(lookup!=null?lookup:getClass());
+        GeoServerTemplateLoader templateLoader =
+                new GeoServerTemplateLoader(lookup != null ? lookup : getClass());
         templateLoader.setFeatureType(featureType);
 
         //Configuration is not thread safe
@@ -367,20 +357,19 @@ public class FeatureTemplate {
         templateCache.put(key, t);
         return t;
     }
-    
+
     /**
      * Returns true if the required template is empty or has its default content
-     * 
+     *
      * @param featureType
      * @param template
      * @param lookup
-     *
-     * @throws IOException 
+     * @throws IOException
      */
     public boolean isTemplateEmpty(SimpleFeatureType featureType, String template,
-            Class<FeatureTemplate> lookup, String defaultContent) throws IOException {
+                                   Class<FeatureTemplate> lookup, String defaultContent) throws IOException {
         Template t = lookupTemplate(featureType, template, lookup);
-        if(t == null) {
+        if (t == null) {
             return true;
         }
         // check if the template is empty
@@ -390,16 +379,17 @@ public class FeatureTemplate {
         String templateText = sw.toString();
         return "".equals(templateText) || (defaultContent != null && defaultContent.equals(templateText));
     }
-    
+
     private static class TemplateKey {
         SimpleFeatureType type;
         String template;
+
         public TemplateKey(SimpleFeatureType type, String template) {
             super();
             this.type = type;
             this.template = template;
         }
-        
+
         public int hashCode() {
             final int PRIME = 31;
             int result = 1;
@@ -407,7 +397,7 @@ public class FeatureTemplate {
             result = PRIME * result + ((type == null) ? 0 : type.hashCode());
             return result;
         }
-        
+
         public boolean equals(Object obj) {
             if (this == obj)
                 return true;
@@ -430,5 +420,5 @@ public class FeatureTemplate {
         }
     }
 
-    
+
 }

@@ -28,11 +28,11 @@ import com.vividsolutions.jts.geom.Polygon;
  * <p>
  * Instances of this object should always be retrieved through the NameSpaceTranslatorFactory.
  * </p>
- * @see NameSpaceTranslatorFactory
  *
  * @author dzwiers, Refractions Research, Inc.
  * @author $Author: dmzwiers $ (last modification)
  * @version $Id$
+ * @see NameSpaceTranslatorFactory
  */
 public class GMLSchemaTranslator extends NameSpaceTranslator {
     private HashSet elements;
@@ -42,6 +42,7 @@ public class GMLSchemaTranslator extends NameSpaceTranslator {
      * <p>
      * Description
      * </p>
+     *
      * @param prefix
      */
     public GMLSchemaTranslator(String prefix) {
@@ -88,8 +89,6 @@ public class GMLSchemaTranslator extends NameSpaceTranslator {
      * Implementation of getElements.
      *
      * @see org.vfny.geoserver.global.xml.NameSpaceTranslator#getElements()
-     *
-     *
      */
     public Set getElements() {
         return elements;
@@ -99,8 +98,6 @@ public class GMLSchemaTranslator extends NameSpaceTranslator {
      * Implementation of getNameSpace.
      *
      * @see org.vfny.geoserver.global.xml.NameSpaceTranslator#getNameSpace()
-     *
-     *
      */
     public String getNameSpace() {
         return "http://www.opengis.net/gml";

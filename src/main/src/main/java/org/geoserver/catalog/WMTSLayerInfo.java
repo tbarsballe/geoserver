@@ -15,9 +15,7 @@ public interface WMTSLayerInfo extends ResourceInfo {
 
     /**
      * Returns the raw WMTS layer associated to this resource
-     * 
-     *
      */
     public Layer getWMTSLayer(ProgressListener listener) throws IOException;
-   
+
 }

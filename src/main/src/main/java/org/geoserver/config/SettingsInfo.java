@@ -21,8 +21,9 @@ public interface SettingsInfo extends Info {
     /**
      * The workspace the settings are specific to.
      * <p>
-     * Will be null for global settings: {@link GeoServerInfo#getSettings()} 
+     * Will be null for global settings: {@link GeoServerInfo#getSettings()}
      * </p>
+     *
      * @return A workspace, or <code>null</code>.
      */
     WorkspaceInfo getWorkspace();
@@ -34,7 +35,6 @@ public interface SettingsInfo extends Info {
 
     /**
      * The title of the settings instance.
-     * 
      */
     String getTitle();
 
@@ -42,7 +42,7 @@ public interface SettingsInfo extends Info {
      * Sets the title of the settings instance.
      */
     void setTitle(String title);
-    
+
     /**
      * The contact information.
      */
@@ -60,10 +60,9 @@ public interface SettingsInfo extends Info {
 
     /**
      * Sets the default character set.
-     * 
      */
     void setCharset(String charset);
-    
+
     /**
      * A cap on the number of decimals to use when encoding floating point numbers.
      */
@@ -78,10 +77,10 @@ public interface SettingsInfo extends Info {
      * Provider web site (used for default contact information, or service provider information if user has not filled in contact details.
      */
     String getOnlineResource();
-    
+
     /**
      * Provider web site (used for default contact information, or service provider information if user has not filled in contact details.
-     * 
+     *
      * @param onlineResource Provider website
      */
     void setOnlineResource(String onlineResource);
@@ -89,7 +88,7 @@ public interface SettingsInfo extends Info {
     /**
      * The url of a proxy in front of the GeoServer instance.
      * <p>
-     * This value is used when a reference back to the GeoServer instance must 
+     * This value is used when a reference back to the GeoServer instance must
      * be made in a response.
      * </p>
      */
@@ -136,7 +135,7 @@ public interface SettingsInfo extends Info {
      * Sets verbosity flag for exceptions.
      */
     void setVerboseExceptions(boolean verboseExceptions);
-    
+
     /**
      * A map of metadata for services.
      */
@@ -160,8 +159,7 @@ public interface SettingsInfo extends Info {
      * Set whether or not a local workspace should keep namespace prefixes in
      * the getCapabilities etc...
      *
-     * @param includePrefix
-     *            if true then the prefixes will be kept, default behaviour is to remove it.
+     * @param includePrefix if true then the prefixes will be kept, default behaviour is to remove it.
      */
     void setLocalWorkspaceIncludesPrefix(boolean includePrefix);
 }

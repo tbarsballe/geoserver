@@ -12,23 +12,24 @@ import org.opengis.feature.simple.SimpleFeatureType;
 
 /**
  * Convenience base class to make creating inline vector transforms easier
- * 
  */
 public abstract class AbstractInlineVectorTransform extends AbstractTransform implements
         InlineVectorTransform {
 
-    /** serialVersionUID */
+    /**
+     * serialVersionUID
+     */
     private static final long serialVersionUID = 1L;
 
     @Override
     public SimpleFeatureType apply(ImportTask task, DataStore dataStore,
-            SimpleFeatureType featureType) throws Exception {
+                                   SimpleFeatureType featureType) throws Exception {
         return featureType;
     }
 
     @Override
     public SimpleFeature apply(ImportTask task, DataStore dataStore, SimpleFeature oldFeature,
-            SimpleFeature feature) throws Exception {
+                               SimpleFeature feature) throws Exception {
         return feature;
     }
 

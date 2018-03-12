@@ -33,7 +33,7 @@ import org.xml.sax.helpers.NamespaceSupport;
 
 /**
  * Encodes the minimal set of EO metadata for a given coverage:
- * 
+ * <p>
  * <pre>
  *                 <wcseo:EOMetadata>
  *                     <eop:EarthObservation gml:id="someEOCoverage1_metadata">
@@ -83,37 +83,37 @@ import org.xml.sax.helpers.NamespaceSupport;
  *                     </eop:EarthObservation>
  *                 </wcseo:EOMetadata>
  * </pre>
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class WCSEOCoverageMetadataProvider implements WCS20CoverageMetadataProvider {
-    
+
     static final Logger LOGGER = Logging.getLogger(WCSEOCoverageMetadataProvider.class);
     private GeoServer gs;
 
     public WCSEOCoverageMetadataProvider(GeoServer gs) {
         this.gs = gs;
     }
-    
+
     private boolean isEarthObservationEnabled() {
         WCSInfo wcs = gs.getService(WCSInfo.class);
         Boolean enabled = wcs.getMetadata().get(WCSEOMetadata.ENABLED.key, Boolean.class);
         return Boolean.TRUE.equals(enabled);
     }
-    
+
     @Override
     public String[] getSchemaLocations(String schemaBaseURL) {
-        if(!isEarthObservationEnabled()) {
+        if (!isEarthObservationEnabled()) {
             return new String[0];
         }
         String schemaLocation = ResponseUtils.buildURL(schemaBaseURL, "schemas/wcseo/1.0/wcsEOCoverage.xsd",
                 null, URLType.RESOURCE);
-        return new String[] { WCSEOMetadata.NAMESPACE, schemaLocation };
+        return new String[]{WCSEOMetadata.NAMESPACE, schemaLocation};
     }
 
     @Override
     public void registerNamespaces(NamespaceSupport namespaces) {
-        if(!isEarthObservationEnabled()) {
+        if (!isEarthObservationEnabled()) {
             return;
         }
         namespaces.declarePrefix("wcseo", WCSEOMetadata.NAMESPACE);
@@ -132,7 +132,7 @@ public class WCSEOCoverageMetadataProvider implements WCS20CoverageMetadataProvi
         DimensionInfo time = ci.getMetadata().get(ResourceInfo.TIME, DimensionInfo.class);
         if (time == null) {
             LOGGER.log(Level.FINE, "We received a coverage info that has no " +
-            		"associated time, cannot add EO metadata to it: "+ ci.prefixedName());
+                    "associated time, cannot add EO metadata to it: " + ci.prefixedName());
             return;
         }
         GridCoverage2DReader reader = (GridCoverage2DReader) ci.getGridCoverageReader(null, null);
@@ -140,7 +140,7 @@ public class WCSEOCoverageMetadataProvider implements WCS20CoverageMetadataProvi
         WCSDimensionsHelper dimensionHelper = new WCSDimensionsHelper(time, reader, coverageId);
         tx.start("wcseo:EOMetadata");
         tx.start("eop:EarthObservation", atts("gml:id", coverageId + "_metadata"));
-        
+
         // phenomenon time
         tx.start("om:phenomenonTime");
         tx.start("gml:TimePeriod", atts("gml:id", coverageId + "_tp"));
@@ -148,14 +148,14 @@ public class WCSEOCoverageMetadataProvider implements WCS20CoverageMetadataProvi
         element(tx, "gml:endPosition", dimensionHelper.getEndTime(), null);
         tx.end("gml:TimePeriod");
         tx.end("om:phenomenonTime");
-        
+
         // resultTime
         tx.start("om:resultTime");
         tx.start("gml:TimeInstant", atts("gml:id", coverageId + "_rt"));
         element(tx, "gml:timePosition", dimensionHelper.getEndTime(), null);
         tx.end("gml:TimeInstant");
         tx.end("om:resultTime");
-        
+
         // some empty elements...
         element(tx, "om:procedure", null, null);
         element(tx, "om:observedProperty", null, null);
@@ -194,7 +194,7 @@ public class WCSEOCoverageMetadataProvider implements WCS20CoverageMetadataProvi
         tx.end("eop:centerOf");
         tx.end("eop:Footprint");
         tx.end("om:featureOfInterest");
-        
+
         // fixed metadata properties (at least for the moment)
         tx.start("eop:metaDataProperty");
         tx.start("eop:EarthObservationMetaData");
@@ -203,7 +203,7 @@ public class WCSEOCoverageMetadataProvider implements WCS20CoverageMetadataProvi
         element(tx, "eop:status", "ARCHIVED", null);
         tx.end("eop:EarthObservationMetaData");
         tx.end("eop:metaDataProperty");
-        
+
         tx.end("eop:EarthObservation");
         tx.end("wcseo:EOMetadata");
 
@@ -231,16 +231,16 @@ public class WCSEOCoverageMetadataProvider implements WCS20CoverageMetadataProvi
         }
         return GetCoverage.SRS_STARTER + EPSGCode;
     }
-    
+
     private void element(Translator tx, String element,
-            String content, AttributesImpl attributes) {
+                         String content, AttributesImpl attributes) {
         tx.start(element, attributes);
-        if(content != null) {
+        if (content != null) {
             tx.chars(content);
         }
         tx.end(element);
     }
-    
+
     Attributes atts(String... atts) {
         AttributesImpl attributes = new AttributesImpl();
         for (int i = 0; i < atts.length; i += 2) {

@@ -32,7 +32,7 @@ import org.geotools.xml.transform.TransformerBase;
 /**
  * Small embedded WCS client enabling users to build a wcs GetCoverage request (and as a side effect
  * also showing what capabilities and describe process would provide) using
- * 
+ *
  * @author Andrea Aime - OpenGeo
  */
 @SuppressWarnings("serial")

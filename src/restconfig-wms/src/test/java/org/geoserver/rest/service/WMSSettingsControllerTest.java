@@ -26,7 +26,7 @@ import static org.custommonkey.xmlunit.XMLAssert.assertXpathEvaluatesTo;
 import static org.junit.Assert.*;
 
 public class WMSSettingsControllerTest extends CatalogRESTTestSupport {
-    
+
     @After
     public void revertChanges() {
         revertService(WMSInfo.class, null);
@@ -58,7 +58,7 @@ public class WMSSettingsControllerTest extends CatalogRESTTestSupport {
 
     @Test
     public void testGetAsHTML() throws Exception {
-        getAsDOM(RestBaseController.ROOT_PATH + "/services/wms/settings.html" );
+        getAsDOM(RestBaseController.ROOT_PATH + "/services/wms/settings.html");
     }
 
     @Test
@@ -118,7 +118,7 @@ public class WMSSettingsControllerTest extends CatalogRESTTestSupport {
         assertEquals(originalString, documentToString(updated));
     }
 
-    private String documentToString(Document doc) throws Exception{
+    private String documentToString(Document doc) throws Exception {
         DOMSource domSource = new DOMSource(doc);
         StringWriter writer = new StringWriter();
         StreamResult result = new StreamResult(writer);
@@ -142,7 +142,7 @@ public class WMSSettingsControllerTest extends CatalogRESTTestSupport {
         MockHttpServletResponse response = putAsServletResponse(RestBaseController.ROOT_PATH + "/services/wms/settings", xml,
                 "text/xml");
         assertEquals(200, response.getStatus());
-        
+
         Document dom = getAsDOM(RestBaseController.ROOT_PATH + "/services/wms/settings.xml");
         assertXpathEvaluatesTo("true", "/wms/enabled", dom);
         assertXpathEvaluatesTo("WMS", "/wms/name", dom);
@@ -154,5 +154,5 @@ public class WMSSettingsControllerTest extends CatalogRESTTestSupport {
     public void testDelete() throws Exception {
         assertEquals(405, deleteAsServletResponse(RestBaseController.ROOT_PATH + "/services/wms/settings").getStatus());
     }
-    
+
 }

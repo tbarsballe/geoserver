@@ -48,21 +48,22 @@ import freemarker.template.Configuration;
  * In {@link #findTemplateSource(String)}, the following lookup heuristic is
  * applied to locate a file based on the given path.
  * <ol>
- *  <li>The path relative to '<data_dir>/featureTypes/[featureType]'
- *          given that a feature ( {@link #setFeatureType(String)} ) has been set
- *  <li>The path relative to '<data_dir>/featureTypes'
- *  <li>The path relative to '<data_dir>/templates'
- *  <li>The path relative to the calling class with {@link Class#getResource(String)}.
+ * <li>The path relative to '<data_dir>/featureTypes/[featureType]'
+ * given that a feature ( {@link #setFeatureType(String)} ) has been set
+ * <li>The path relative to '<data_dir>/featureTypes'
+ * <li>The path relative to '<data_dir>/templates'
+ * <li>The path relative to the calling class with {@link Class#getResource(String)}.
  * </ol>
  * <b>Note:</b> If method 5 succeeds, the resulting template will be copied to
  * the 'templates' directory of the data directory.
  * </p>
  *
  * @author Justin Deoliveira, The Open Planning Project, jdeolive@openplans.org
- *
  */
 public class GeoServerTemplateLoader implements TemplateLoader {
-    /** logger */
+    /**
+     * logger
+     */
     static Logger LOGGER = org.geotools.util.logging.Logging.getLogger("org.geoserver.template");
 
     /**
@@ -74,21 +75,22 @@ public class GeoServerTemplateLoader implements TemplateLoader {
      * Delegate class based template loader, may be null depending on how
      */
     ClassTemplateLoader classTemplateLoader;
-    
+
     /**
-     * GeoServer data directory 
+     * GeoServer data directory
      */
     GeoServerDataDirectory dd;
-    
+
     /**
      * Feature type directory to load template against. Its presence is mutually
      * exclusive with coverageName
      */
     protected ResourceInfo resource;
-    
+
     /**
      * Feature type directory to load template against. Its presence is mutually
      * exclusive with coverageName
+     *
      * @deprecated Keeping this around for backwards compatibility, use resource
      */
     SimpleFeatureType featureType;
@@ -96,6 +98,7 @@ public class GeoServerTemplateLoader implements TemplateLoader {
     /**
      * Coverage info directory to load template against. Its presence is mutually
      * exclusive with featureTypeInfo
+     *
      * @deprecated Keeping this around for backwards compatibility, use resource
      */
     private String coverageName;
@@ -109,22 +112,20 @@ public class GeoServerTemplateLoader implements TemplateLoader {
      * Constructs the template loader.
      *
      * @param caller The "calling" class, used to look up templates based with
-     * {@link Class#getResource(String)}, may be <code>null</code>
-     *
-     * @deprecated Use {@link #GeoServerTemplateLoader(Class, GeoServerResourceLoader)}  
+     *               {@link Class#getResource(String)}, may be <code>null</code>
      * @throws IOException
+     * @deprecated Use {@link #GeoServerTemplateLoader(Class, GeoServerResourceLoader)}
      */
     public GeoServerTemplateLoader(Class caller) throws IOException {
-        this(caller,GeoServerExtensions.bean(GeoServerResourceLoader.class));
+        this(caller, GeoServerExtensions.bean(GeoServerResourceLoader.class));
     }
-    
+
     /**
      * Constructs the template loader.
      *
      * @param caller The "calling" class, used to look up templates based with
-     * {@link Class#getResource(String)}, may be <code>null</code>
-     * @param rl The geoserver resource loader
-     *
+     *               {@link Class#getResource(String)}, may be <code>null</code>
+     * @param rl     The geoserver resource loader
      * @throws IOException
      */
     public GeoServerTemplateLoader(Class caller, GeoServerResourceLoader rl) throws IOException {
@@ -138,7 +139,7 @@ public class GeoServerTemplateLoader implements TemplateLoader {
         fileTemplateLoader = new FileTemplateLoader(dd.root());
 
         //grab the catalog and store a reference
-        catalog = (Catalog)GeoServerExtensions.bean("catalog");
+        catalog = (Catalog) GeoServerExtensions.bean("catalog");
 
         //create a class template loader to delegate to
         if (caller != null) {
@@ -152,53 +153,55 @@ public class GeoServerTemplateLoader implements TemplateLoader {
 
     /**
      * Sets the feature type in which templates are loaded against.
+     *
      * @deprecated use {@link #setFeatureType(FeatureTypeInfo)}
      */
     public void setFeatureType(SimpleFeatureType featureType) {
         this.featureType = featureType;
-        FeatureTypeInfo ft = catalog.getFeatureTypeByName( featureType.getName() );
-        if ( ft == null ) {
+        FeatureTypeInfo ft = catalog.getFeatureTypeByName(featureType.getName());
+        if (ft == null) {
             return;
             //throw new IllegalArgumentException("No feature type named " + featureType.getName() + " in catalog");
         }
-        
+
         setFeatureType(ft);
     }
-    
+
     public void setFeatureType(FeatureTypeInfo ft) {
         this.resource = ft;
     }
 
-    public void setWMSLayer(WMSLayerInfo wms){
+    public void setWMSLayer(WMSLayerInfo wms) {
         this.resource = wms;
     }
 
-    public void setWMTSLayer(WMTSLayerInfo wmts){
+    public void setWMTSLayer(WMTSLayerInfo wmts) {
         this.resource = wmts;
     }
-    
+
     /**
      * Sets the coverage info
+     *
      * @deprecated use {@link #setCoverage(CoverageInfo)}
      */
-    public void setCoverageName(String coverageName){
+    public void setCoverageName(String coverageName) {
         this.coverageName = coverageName;
-        CoverageInfo c = catalog.getCoverageByName( coverageName );
-        if ( c == null ) {
+        CoverageInfo c = catalog.getCoverageByName(coverageName);
+        if (c == null) {
             return;
             //throw new IllegalArgumentException("No coverage named " + coverageName + " in catalog");
         }
         setCoverage(c);
     }
-    
+
     public void setCoverage(CoverageInfo c) {
         this.resource = c;
     }
-    
-    public void setResource(ResourceInfo resource){
+
+    public void setResource(ResourceInfo resource) {
         this.resource = resource;
     }
-    
+
     public Object findTemplateSource(String path) throws IOException {
         File template = null;
 
@@ -209,37 +212,37 @@ public class GeoServerTemplateLoader implements TemplateLoader {
         // 4. Relative to workspaces directory
         // 5. Relative to templates directory
         // 6. Relative to the class
-        
-        if ( resource != null ) {
+
+        if (resource != null) {
             //first check relative to set resource
-            template = dd.findSuppResourceFile( resource, path);
-            
-            if ( template == null ) {
-              //next try relative to the store
-                template = dd.findSuppStoreFile( resource.getStore(), path);
-            }
-            
-            if ( template == null ) {
-                //next try relative to the workspace
-                template = dd.findSuppWorkspaceFile( resource.getStore().getWorkspace(), path);
-            }
-            
-            if ( template == null) {
-                // try global supplementary files
-                template = dd.findSuppWorkspacesFile( resource.getStore().getWorkspace(), path);
+            template = dd.findSuppResourceFile(resource, path);
+
+            if (template == null) {
+                //next try relative to the store
+                template = dd.findSuppStoreFile(resource.getStore(), path);
             }
 
-            if ( template != null ) {
+            if (template == null) {
+                //next try relative to the workspace
+                template = dd.findSuppWorkspaceFile(resource.getStore().getWorkspace(), path);
+            }
+
+            if (template == null) {
+                // try global supplementary files
+                template = dd.findSuppWorkspacesFile(resource.getStore().getWorkspace(), path);
+            }
+
+            if (template != null) {
                 return template;
             }
         }
-        
+
         //for backwards compatability, use the old lookup mechanism
         template = findTemplateSourceLegacy(path);
-        if ( template != null ) {
+        if (template != null) {
             return template;
         }
-        
+
         //next, check the templates directory
         template = (File) fileTemplateLoader.findTemplateSource("templates" + File.separator + path);
 
@@ -259,10 +262,10 @@ public class GeoServerTemplateLoader implements TemplateLoader {
 
         return null;
     }
-    
+
     File findTemplateSourceLegacy(String path) throws IOException {
         File template = null;
-        
+
         //first check relative to set feature type
         String baseDirName;
         try {
@@ -272,36 +275,34 @@ public class GeoServerTemplateLoader implements TemplateLoader {
                 String name = featureType.getTypeName();
                 String namespace = featureType.getName().getNamespaceURI();
                 FeatureTypeInfo ftInfo = null;
-                if(catalog != null && namespace != null) {
+                if (catalog != null && namespace != null) {
                     NamespaceInfo nsInfo = catalog.getNamespaceByURI(namespace);
-                    if(nsInfo != null){
-                        ftInfo = catalog.getFeatureTypeByName( nsInfo.getPrefix(), name);
+                    if (nsInfo != null) {
+                        ftInfo = catalog.getFeatureTypeByName(nsInfo.getPrefix(), name);
                     }
                 }
-                if(catalog != null && ftInfo == null){ 
+                if (catalog != null && ftInfo == null) {
                     ftInfo = catalog.getFeatureTypeByName(name);
                 }
-                if(ftInfo != null){
-                    String metadata = ftInfo.getMetadata().get("dirName",String.class);
-                    if( metadata != null ){
+                if (ftInfo != null) {
+                    String metadata = ftInfo.getMetadata().get("dirName", String.class);
+                    if (metadata != null) {
                         dirName = metadata;
-                    }
-                    else {
+                    } else {
                         dirName = ftInfo.getNamespace().getPrefix() + "_" + ftInfo.getName();
                     }
-                }
-                else {
+                } else {
                     dirName = null; // unavaialble
                 }
             } else if (coverageName != null) {
                 baseDirName = "coverages";
                 CoverageInfo coverageInfo = catalog.getCoverageByName(coverageName);
-                dirName = coverageInfo.getMetadata().get( "dirName", String.class );
+                dirName = coverageInfo.getMetadata().get("dirName", String.class);
             } else {
                 baseDirName = "featureTypes";
                 dirName = "";
             }
-            
+
             template = (File) fileTemplateLoader.findTemplateSource(baseDirName + File.separator
                     + dirName + File.separator + path);
 
@@ -311,17 +312,17 @@ public class GeoServerTemplateLoader implements TemplateLoader {
 
             if (featureType != null) {
                 NamespaceInfo nsInfo = null;
-                if ( featureType.getName().getNamespaceURI() != null ) {
+                if (featureType.getName().getNamespaceURI() != null) {
                     nsInfo = catalog.getNamespaceByURI(featureType.getName().getNamespaceURI());
                 }
                 // the feature type might not be registered, it may come from WMS feature portrayal, be a 
                 // remote one
-                if(nsInfo != null) {
+                if (nsInfo != null) {
                     //try looking up the template in the default location for the particular namespaces
                     // under templates/<namespace>
                     template = (File) fileTemplateLoader.findTemplateSource(
                             "templates" + File.separator + nsInfo.getPrefix() + File.separator + path
-                            );
+                    );
                 }
             }
 
@@ -335,12 +336,12 @@ public class GeoServerTemplateLoader implements TemplateLoader {
                 return template;
             }
 
-        } catch(NoSuchElementException e) {
+        } catch (NoSuchElementException e) {
             // this one is thrown if the feature type is not found, and happens whenever
             // the feature type is a remote one
             // No problem, we just go on, there won't be any specific template for it
         }
-        
+
         return null;
     }
 
@@ -357,7 +358,7 @@ public class GeoServerTemplateLoader implements TemplateLoader {
     }
 
     public Reader getReader(Object source, String encoding)
-        throws IOException {
+            throws IOException {
         if (source instanceof File) {
             // loaded from file
             return fileTemplateLoader.getReader(source, encoding);
@@ -390,8 +391,8 @@ public class GeoServerTemplateLoader implements TemplateLoader {
      * Used to store the intial path so the template can be copied to the data
      * directory.
      * </p>
-     * @author Justin Deoliveira, The Open Planning Project, jdeolive@openplans.org
      *
+     * @author Justin Deoliveira, The Open Planning Project, jdeolive@openplans.org
      */
     static class ClassTemplateSource {
         /**

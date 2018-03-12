@@ -34,7 +34,7 @@ public class LoggingStartupContextListenerTest {
     public void cleanupLoggers() {
         LogManager.resetConfiguration();
     }
-    
+
     @Test
     public void testLogLocationFromServletContext() throws Exception {
         File tmp = File.createTempFile("log", "tmp", new File("target"));
@@ -45,39 +45,38 @@ public class LoggingStartupContextListenerTest {
         assertTrue(logs.mkdirs());
 
         FileUtils.copyURLToFile(getClass().getResource("logging.xml"), new File(tmp, "logging.xml"));
-        
+
         MockServletContext context = new MockServletContext();
         context.setInitParameter("GEOSERVER_DATA_DIR", tmp.getPath());
         context.setInitParameter("GEOSERVER_LOG_LOCATION", new File(tmp, "foo.log").getAbsolutePath());
 
         Logger logger = Logger.getRootLogger();
-        assertNull("Expected geoserverlogfile to be null.  But was: "+logger.getAppender("geoserverlogfile"), logger.getAppender("geoserverlogfile"));
+        assertNull("Expected geoserverlogfile to be null.  But was: " + logger.getAppender("geoserverlogfile"), logger.getAppender("geoserverlogfile"));
 
         String rel = System.getProperty(LoggingUtils.RELINQUISH_LOG4J_CONTROL);
         System.setProperty(LoggingUtils.RELINQUISH_LOG4J_CONTROL, "false");
         try {
             new LoggingStartupContextListener().contextInitialized(new ServletContextEvent(context));
-        }
-        finally {
+        } finally {
             System.setProperty(LoggingUtils.RELINQUISH_LOG4J_CONTROL, "rel");
         }
 
-        Appender appender = logger.getAppender("geoserverlogfile"); 
+        Appender appender = logger.getAppender("geoserverlogfile");
         assertNotNull(appender);
         assertTrue(appender instanceof FileAppender);
 
-        assertEquals(new File(tmp, "foo.log").getCanonicalPath().toLowerCase(), ((FileAppender)appender).getFile().toLowerCase());
+        assertEquals(new File(tmp, "foo.log").getCanonicalPath().toLowerCase(), ((FileAppender) appender).getFile().toLowerCase());
     }
-    
+
     @Test
     public void testInitLoggingLock() throws Exception {
-        
+
         final File target = new File("./target");
         FileUtils.deleteQuietly(new File(target, "logs"));
         GeoServerResourceLoader loader = new GeoServerResourceLoader(target);
         FileSystemResourceStore store = (FileSystemResourceStore) loader.getResourceStore();
         store.setLockProvider(new MemoryLockProvider());
-        
+
         // make it copy the log files
         LoggingUtils.initLogging(loader, "DEFAULT_LOGGING.properties", false, null);
         // init once from default logging

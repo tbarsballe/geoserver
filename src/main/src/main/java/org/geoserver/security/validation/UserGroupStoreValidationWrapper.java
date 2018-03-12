@@ -14,39 +14,33 @@ import org.geoserver.security.impl.GeoServerUser;
 import org.geoserver.security.impl.GeoServerUserGroup;
 
 
-
 /**
- * 
  * This class is a validation wrapper for {@link GeoServerUserGroupStore}
- * 
+ * <p>
  * Usage:
  * <code>
  * GeoserverUserGroupStore valStore = new UserGroupStoreValidationWrapper(store);
  * valStore.addUser(..);
  * valStore.store()
  * </code>
- * 
- * Since the {@link GeoServerUserGroupStore} interface does not allow to 
+ * <p>
+ * Since the {@link GeoServerUserGroupStore} interface does not allow to
  * throw {@link UserGroupServiceException} objects directly, these objects
  * a wrapped into an IOException. Use {@link IOException#getCause()} to
  * get the proper exception.
- * 
- * 
- * @author christian
  *
+ * @author christian
  */
 
 
-public class UserGroupStoreValidationWrapper extends UserGroupServiceValidationWrapper implements GeoServerUserGroupStore{
+public class UserGroupStoreValidationWrapper extends UserGroupServiceValidationWrapper implements GeoServerUserGroupStore {
 
-   
 
     /**
-     * Creates a wrapper object. 
-     * 
+     * Creates a wrapper object.
+     *
      * @param store
-     * 
-     */    
+     */
     public UserGroupStoreValidationWrapper(GeoServerUserGroupStore store) {
         super(store);
     }
@@ -54,7 +48,7 @@ public class UserGroupStoreValidationWrapper extends UserGroupServiceValidationW
     GeoServerUserGroupStore getStore() {
         return (GeoServerUserGroupStore) service;
     }
-    
+
     public void initializeFromService(GeoServerUserGroupService service) throws IOException {
         getStore().initializeFromService(service);
     }
@@ -64,13 +58,12 @@ public class UserGroupStoreValidationWrapper extends UserGroupServiceValidationW
     }
 
 
-
-    public void addUser(GeoServerUser user) throws IOException,PasswordPolicyException {
+    public void addUser(GeoServerUser user) throws IOException, PasswordPolicyException {
         checkNotExistingUserName(user.getUsername());
         getStore().addUser(user);
     }
-     
-    public void updateUser(GeoServerUser user) throws IOException,PasswordPolicyException {
+
+    public void updateUser(GeoServerUser user) throws IOException, PasswordPolicyException {
         checkExistingUserName(user.getUsername());
         getStore().updateUser(user);
     }
@@ -100,7 +93,6 @@ public class UserGroupStoreValidationWrapper extends UserGroupServiceValidationW
     }
 
 
-
     public void associateUserToGroup(GeoServerUser user, GeoServerUserGroup group)
             throws IOException {
         checkExistingUserName(user.getUsername());
@@ -114,7 +106,6 @@ public class UserGroupStoreValidationWrapper extends UserGroupServiceValidationW
         checkExistingGroupName(group.getGroupname());
         getStore().disAssociateUserFromGroup(user, group);
     }
-
 
 
     public boolean isModified() {

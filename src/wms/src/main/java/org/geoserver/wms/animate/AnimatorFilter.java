@@ -19,6 +19,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
+
 import org.geoserver.filters.GeoServerFilter;
 import org.geotools.util.logging.Logging;
 
@@ -28,11 +29,11 @@ import org.geotools.util.logging.Logging;
  * Modifies requests against the WMS animate reflector service endpoints
  * in order to address <a href="https://osgeo-org.atlassian.net/browse/GEOS-6006">GEOS-6006</a>
  * </p>
- * 
+ *
  * @author Tom Kunicki, Boundless
  */
 public class AnimatorFilter implements GeoServerFilter {
-    
+
     private static final Logger LOGGER = Logging.getLogger(AnimatorFilter.class);
 
     private final static String ENDPOINT = "animate";
@@ -40,7 +41,6 @@ public class AnimatorFilter implements GeoServerFilter {
     private final static String GETMAP = "GetMap";
 
     /**
-     *
      * @param config
      * @throws ServletException
      */
@@ -52,17 +52,17 @@ public class AnimatorFilter implements GeoServerFilter {
     /**
      * Removes KVP argument <code>Request=GetMap</code> <i>(case independent)</i> if present
      * for calls against <code>.../animate</code> service endpoints.
-     * 
-     * @param request   current HTTP request
-     * @param response  current HTTP response
-     * @param chain     currently executing filter chain
-     * @throws java.io.IOException 
-     * @throws javax.servlet.ServletException 
+     *
+     * @param request  current HTTP request
+     * @param response current HTTP response
+     * @param chain    currently executing filter chain
+     * @throws java.io.IOException
+     * @throws javax.servlet.ServletException
      */
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         if (request instanceof HttpServletRequest) {
-            HttpServletRequest requestHTTP = (HttpServletRequest)request;
+            HttpServletRequest requestHTTP = (HttpServletRequest) request;
             if (requestNeedsWrapper(requestHTTP)) {
                 LOGGER.log(Level.FINER, "Modified request to {0}, removed \"Request\" KVP argument (GEOS-6006)", requestHTTP.getRequestURI());
                 request = new RequestWrapper(requestHTTP);
@@ -78,22 +78,22 @@ public class AnimatorFilter implements GeoServerFilter {
     public void destroy() {
         // nothing to do...
     }
-    
+
     private boolean requestNeedsWrapper(HttpServletRequest request) {
         if (request.getRequestURI().endsWith(ENDPOINT)) {
             Enumeration<String> names = request.getParameterNames();
             while (names.hasMoreElements()) {
                 String name = names.nextElement();
                 if (REQUEST.equalsIgnoreCase(name) &&
-                    GETMAP.equalsIgnoreCase(request.getParameter(name))) {
+                        GETMAP.equalsIgnoreCase(request.getParameter(name))) {
                     return true;
                 }
             }
         }
         return false;
     }
-    
-    private static class RequestWrapper extends HttpServletRequestWrapper {        
+
+    private static class RequestWrapper extends HttpServletRequestWrapper {
         private RequestWrapper(HttpServletRequest wrapped) {
             super(wrapped);
         }
@@ -104,7 +104,7 @@ public class AnimatorFilter implements GeoServerFilter {
         }
 
         @Override
-        public Map<String,String[]> getParameterMap() {
+        public Map<String, String[]> getParameterMap() {
             Map<String, String[]> original = super.getParameterMap();
             Map filtered = new HashMap<String, String[]>();
             for (Map.Entry<String, String[]> entry : original.entrySet()) {

@@ -26,12 +26,12 @@ import com.thoughtworks.xstream.XStream;
  * {@link NotificationXStreamDefaultInitializer}
  * <p>
  * Anonymous connection is possible using {@link CustomSaslConfig}
- * 
- * @param host the host to which the underlying TCP connection is made
- * @param port the port number to which the underlying TCP connection is made
+ *
+ * @param host        the host to which the underlying TCP connection is made
+ * @param port        the port number to which the underlying TCP connection is made
  * @param virtualHost a path which acts as a namespace (optional)
- * @param username if present is used for SASL exchange (optional)
- * @param password if present is used for SASL exchange (optional)
+ * @param username    if present is used for SASL exchange (optional)
+ * @param password    if present is used for SASL exchange (optional)
  * @author Xandros
  * @see FanoutRabbitMQSender
  */

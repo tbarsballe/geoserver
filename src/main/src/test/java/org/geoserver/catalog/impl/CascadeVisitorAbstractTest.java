@@ -25,7 +25,9 @@ public class CascadeVisitorAbstractTest extends GeoServerSystemTestSupport {
 
     protected void setUpTestData(org.geoserver.data.test.SystemTestData testData) throws Exception {
         // add nothing here
-    };
+    }
+
+    ;
 
     protected void onSetUp(org.geoserver.data.test.SystemTestData testData) throws Exception {
         Catalog catalog = getCatalog();
@@ -66,10 +68,12 @@ public class CascadeVisitorAbstractTest extends GeoServerSystemTestSupport {
         nestGroup.getStyles().add(null);
         nestGroup.getStyles().add(null);
         catalog.add(nestGroup);
-        
+
         // add a workspace specific style
         WorkspaceInfo ws = catalog.getWorkspaceByName(CITE_PREFIX);
         testData.addStyle(ws, WS_STYLE, "Streams.sld", SystemTestData.class, catalog);
-    };
+    }
+
+    ;
 
 }

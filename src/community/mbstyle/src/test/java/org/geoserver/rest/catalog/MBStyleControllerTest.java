@@ -75,10 +75,10 @@ public class MBStyleControllerTest extends GeoServerSystemTestSupport {
         assertEquals("application/json", response.getContentType());
 
         // Assert that the response contains the style info as json 
-        assertEquals("{\"style\":{\"name\":\"teststyle\"," 
-                + "\"format\":\"mbstyle\","
-                + "\"languageVersion\":{\"version\":\"1.0.0\"},"
-                + "\"filename\":\"teststyle.json\"}}", 
+        assertEquals("{\"style\":{\"name\":\"teststyle\","
+                        + "\"format\":\"mbstyle\","
+                        + "\"languageVersion\":{\"version\":\"1.0.0\"},"
+                        + "\"filename\":\"teststyle.json\"}}",
                 responseContent);
     }
 
@@ -131,21 +131,21 @@ public class MBStyleControllerTest extends GeoServerSystemTestSupport {
                 + "}";
         return jsonBody;
     }
-    
+
     @Test
     public void testRawPutJson() throws Exception {
-        String jsonBody = newMbStyle();        
+        String jsonBody = newMbStyle();
         Catalog cat = getCatalog();
         assertNull("foo not available", cat.getStyleByName("foo"));
 
-        String xml = "<style>" + "<name>foo</name>" + "<format>" + MBStyleHandler.FORMAT+ "</format>"
+        String xml = "<style>" + "<name>foo</name>" + "<format>" + MBStyleHandler.FORMAT + "</format>"
                 + "<filename>foo.json</filename>" + "</style>";
         MockHttpServletResponse response = postAsServletResponse("/rest/styles", xml);
         assertEquals(201, response.getStatus());
         assertNotNull(cat.getStyleByName("foo"));
-        
+
         // step 2 define mbstyle json
-        response = putAsServletResponse("/rest/styles/foo?raw=true",jsonBody, MBStyleHandler.MIME_TYPE);
+        response = putAsServletResponse("/rest/styles/foo?raw=true", jsonBody, MBStyleHandler.MIME_TYPE);
         assertEquals(200, response.getStatus());
 
         GeoServerResourceLoader resources = catalog.getResourceLoader();
@@ -170,7 +170,7 @@ public class MBStyleControllerTest extends GeoServerSystemTestSupport {
         Catalog cat = getCatalog();
         assertNull("foo not available", cat.getStyleByName("foo"));
 
-        MockHttpServletResponse response = postAsServletResponse("/rest/styles?name=foo",jsonBody, MBStyleHandler.MIME_TYPE);
+        MockHttpServletResponse response = postAsServletResponse("/rest/styles?name=foo", jsonBody, MBStyleHandler.MIME_TYPE);
         assertEquals(201, response.getStatus());
 
         GeoServerResourceLoader resources = catalog.getResourceLoader();

@@ -41,6 +41,6 @@ public class JaxbPPIOTest {
         assertEquals(1, parameters.size());
         assertEquals("80%", parameters.get("image-quality"));
     }
-    
-    
+
+
 }

@@ -12,7 +12,7 @@ import org.w3c.dom.Document;
 
 /**
  * WFS GetFeature to test testing GEOT-4567: using String constants in idExpression with joining.
- * 
+ *
  * @author Rini Angreani (CSIRO Earth Science and Resource Engineering)
  */
 public class StringConstantIdWfsTest extends AbstractAppSchemaTestSupport {

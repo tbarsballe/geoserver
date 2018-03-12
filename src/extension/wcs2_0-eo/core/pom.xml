@@ -51,7 +51,7 @@ application directory.
             <artifactId>xmlunit</artifactId>
             <scope>test</scope>
         </dependency>
-        
+
     </dependencies>
 
     <build>

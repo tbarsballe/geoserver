@@ -20,9 +20,9 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public abstract class AbstractRoleServiceTest extends AbstractSecurityServiceTest {
-    
-    protected GeoServerRoleService service; 
-    protected GeoServerRoleStore store; 
+
+    protected GeoServerRoleService service;
+    protected GeoServerRoleStore store;
 
     @Override
     protected void onSetUp(SystemTestData testData) throws Exception {
@@ -39,41 +39,41 @@ public abstract class AbstractRoleServiceTest extends AbstractSecurityServiceTes
     @Test
     public void testIsModified() throws Exception {
         assertFalse(store.isModified());
-        
+
         insertValues(store);
         assertTrue(store.isModified());
-        
+
         store.load();
         assertFalse(store.isModified());
-        
+
         insertValues(store);
         store.store();
         assertFalse(store.isModified());
-        
-        GeoServerRole role = 
-            store.createRoleObject("ROLE_DUMMY");
-        GeoServerRole role_parent = 
-            store.createRoleObject("ROLE_PARENT");        
 
-        
+        GeoServerRole role =
+                store.createRoleObject("ROLE_DUMMY");
+        GeoServerRole role_parent =
+                store.createRoleObject("ROLE_PARENT");
+
+
         assertFalse(store.isModified());
-        
+
         // add,remove,update
         store.addRole(role);
         store.addRole(role_parent);
         assertTrue(store.isModified());
         store.store();
-        
+
         assertFalse(store.isModified());
         store.updateRole(role);
         assertTrue(store.isModified());
         store.load();
-        
+
         assertFalse(store.isModified());
         store.removeRole(role);
         assertTrue(store.isModified());
         store.load();
-        
+
         assertFalse(store.isModified());
         store.associateRoleToGroup(role, "agroup");
         assertTrue(store.isModified());
@@ -83,24 +83,24 @@ public abstract class AbstractRoleServiceTest extends AbstractSecurityServiceTes
         store.disAssociateRoleFromGroup(role, "agroup");
         assertTrue(store.isModified());
         store.load();
-        
+
         assertFalse(store.isModified());
         store.associateRoleToUser(role, "auser");
         assertTrue(store.isModified());
         store.store();
-        
+
         assertFalse(store.isModified());
         store.disAssociateRoleFromUser(role, "auser");
         assertTrue(store.isModified());
         store.load();
-        
+
         assertFalse(store.isModified());
-        store.setParentRole(role,role_parent);
+        store.setParentRole(role, role_parent);
         assertTrue(store.isModified());
         store.store();
-        
+
         assertFalse(store.isModified());
-        store.setParentRole(role,null);
+        store.setParentRole(role, null);
         assertTrue(store.isModified());
         store.store();
 
@@ -110,22 +110,22 @@ public abstract class AbstractRoleServiceTest extends AbstractSecurityServiceTes
         assertTrue(store.isModified());
         store.load();
 
-            
-    }            
 
-    
+    }
+
+
     @Test
-    public void testInsert() throws Exception{
+    public void testInsert() throws Exception {
         // all is empty
         checkEmpty(service);
         checkEmpty(store);
-    
+
         // transaction has values ?
         insertValues(store);
         if (!isJDBCTest())
             checkEmpty(service);
         checkValuesInserted(store);
-        
+
         // rollback
         store.load();
         checkEmpty(store);
@@ -136,34 +136,34 @@ public abstract class AbstractRoleServiceTest extends AbstractSecurityServiceTes
         store.store();
         checkValuesInserted(store);
         checkValuesInserted(service);
-            
-            
+
+
     }
 
     @Test
     public void testModify() throws Exception {
         checkEmpty(service);
         checkEmpty(store);
-    
+
         insertValues(store);
         store.store();
         checkValuesInserted(store);
         checkValuesInserted(service);
-        
+
         modifyValues(store);
         if (!isJDBCTest())
             checkValuesInserted(service);
         checkValuesModified(store);
-        
+
         store.load();
         checkValuesInserted(store);
         checkValuesInserted(service);
-        
+
         modifyValues(store);
         store.store();
         checkValuesModified(store);
         checkValuesModified(service);
-                                    
+
     }
 
     @Test
@@ -171,26 +171,26 @@ public abstract class AbstractRoleServiceTest extends AbstractSecurityServiceTes
         // all is empty
         checkEmpty(service);
         checkEmpty(store);
-    
+
         insertValues(store);
         store.store();
         checkValuesInserted(store);
         checkValuesInserted(service);
-        
+
         removeValues(store);
         if (!isJDBCTest())
             checkValuesInserted(service);
         checkValuesRemoved(store);
-        
+
         store.load();
         checkValuesInserted(store);
         checkValuesInserted(service);
-        
+
         removeValues(store);
         store.store();
         checkValuesRemoved(store);
         checkValuesRemoved(service);
-                        
+
     }
 
 }

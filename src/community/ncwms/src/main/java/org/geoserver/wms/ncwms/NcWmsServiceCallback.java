@@ -21,7 +21,7 @@ public class NcWmsServiceCallback extends AbstractDispatcherCallback {
         this.service = service;
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings({"unchecked", "rawtypes"})
     public Service serviceDispatched(Request request, Service service) throws ServiceException {
         Object req = request.getKvp().get("REQUEST");
         if ("wms".equals(service.getId().toLowerCase())

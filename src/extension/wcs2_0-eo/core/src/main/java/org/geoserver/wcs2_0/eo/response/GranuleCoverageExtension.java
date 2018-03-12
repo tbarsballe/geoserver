@@ -36,20 +36,25 @@ import org.opengis.feature.simple.SimpleFeature;
 
 /**
  * Extension point implementing {@link WCS20DescribeCoverageExtension} that handles the granules for Structured Coverages
- * 
+ *
  * @author Nicola Lagomarsini - GeoSolutions
- * 
  */
 public class GranuleCoverageExtension implements WCS20DescribeCoverageExtension {
-    /** Constant used as separator for the granule definition */
+    /**
+     * Constant used as separator for the granule definition
+     */
     private static final String GRANULE_SEPARATOR = "_granule_";
 
     private static final Logger LOGGER = Logging.getLogger(GranuleCoverageExtension.class);
 
-    /** Parser used for decoding the coverageId parameter */
+    /**
+     * Parser used for decoding the coverageId parameter
+     */
     private EOCoverageResourceCodec codec;
 
-    /** GeoServer instance used for checking if the EO extension is enabled */
+    /**
+     * GeoServer instance used for checking if the EO extension is enabled
+     */
     private GeoServer geoserver;
 
     public GranuleCoverageExtension(GeoServer geoServer, EOCoverageResourceCodec codec) {
@@ -143,7 +148,7 @@ public class GranuleCoverageExtension implements WCS20DescribeCoverageExtension 
 
     /**
      * CHecks if the EO extension is enabled globally
-     * 
+     *
      * @return true if the EO extension is enabled
      */
     public boolean isEOEnabled() {
@@ -154,7 +159,7 @@ public class GranuleCoverageExtension implements WCS20DescribeCoverageExtension 
 
     /**
      * Returns the coverage identifier related to the specified coverageId, or null if the syntax is incorrect
-     * 
+     *
      * @return the coverageId related to the following coverageId parameter (with the _granule_ extension)
      */
     public String getCoverageId(String coverageId) {
@@ -172,7 +177,7 @@ public class GranuleCoverageExtension implements WCS20DescribeCoverageExtension 
 
     /**
      * Returns the coverage identifier related to the specified coverageId, or null if the syntax is incorrect
-     * 
+     *
      * @return the coverageId related to the following coverageId parameter (with the _granule_ extension)
      */
     public String getGranuleId(String coverageId) {
@@ -192,7 +197,7 @@ public class GranuleCoverageExtension implements WCS20DescribeCoverageExtension 
      * This method returns the active dimensions
      */
     private List<DimensionDescriptor> getActiveDimensionDescriptor(CoverageInfo ci,
-            StructuredGridCoverage2DReader reader, String name) throws IOException {
+                                                                   StructuredGridCoverage2DReader reader, String name) throws IOException {
         // map the source descriptors for easy retrieval
         Map<String, DimensionDescriptor> sourceDescriptors = new HashMap<String, DimensionDescriptor>();
         for (DimensionDescriptor dimensionDescriptor : reader.getDimensionDescriptors(name)) {

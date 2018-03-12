@@ -27,13 +27,13 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 /**
  * GeoServer wrapper for backend Geotools2 DataStore.
- *
+ * <p>
  * <p>
  * Support FeatureSource decorator for FeatureTypeInfo that takes care of
  * mapping the FeatureTypeInfo's FeatureSource with the schema and definition
  * query configured for it.
  * </p>
- *
+ * <p>
  * <p>
  * Because GeoServer requires that attributes always be returned in the same
  * order we need a way to smoothly inforce this. Could we use this class to do
@@ -47,7 +47,7 @@ public class GeoServerFeatureStore extends GeoServerFeatureSource implements Sim
     /**
      * Creates a new DEFQueryFeatureLocking object.
      *
-     * @param store GeoTools2 FeatureSource
+     * @param store    GeoTools2 FeatureSource
      * @param settings Settings for this store
      */
     GeoServerFeatureStore(FeatureStore<SimpleFeatureType, SimpleFeature> store, Settings settings) {
@@ -65,8 +65,8 @@ public class GeoServerFeatureStore extends GeoServerFeatureSource implements Sim
 
     /**
      * see interface for details.
-     * @param fc
      *
+     * @param fc
      * @throws IOException
      */
     public List<FeatureId> addFeatures(FeatureCollection<SimpleFeatureType, SimpleFeature> fc) throws IOException {
@@ -84,7 +84,6 @@ public class GeoServerFeatureStore extends GeoServerFeatureSource implements Sim
      * DOCUMENT ME!
      *
      * @param filter DOCUMENT ME!
-     *
      * @throws IOException DOCUMENT ME!
      */
     public void removeFeatures(Filter filter) throws IOException {
@@ -96,17 +95,15 @@ public class GeoServerFeatureStore extends GeoServerFeatureSource implements Sim
     /**
      * DOCUMENT ME!
      *
-     * @param type DOCUMENT ME!
-     * @param value DOCUMENT ME!
+     * @param type   DOCUMENT ME!
+     * @param value  DOCUMENT ME!
      * @param filter DOCUMENT ME!
-     *
      * @throws IOException DOCUMENT ME!
-     *
      * @task REVISIT: should we check that non exposed attributes are requiered
-     *       in <code>type</code>?
+     * in <code>type</code>?
      */
     public void modifyFeatures(AttributeDescriptor[] type, Object[] value, Filter filter)
-        throws IOException {
+            throws IOException {
         filter = makeDefinitionFilter(filter);
 
         store().modifyFeatures(type, value, filter);
@@ -115,14 +112,13 @@ public class GeoServerFeatureStore extends GeoServerFeatureSource implements Sim
     /**
      * DOCUMENT ME!
      *
-     * @param type DOCUMENT ME!
-     * @param value DOCUMENT ME!
+     * @param type   DOCUMENT ME!
+     * @param value  DOCUMENT ME!
      * @param filter DOCUMENT ME!
-     *
      * @throws IOException DOCUMENT ME!
      */
     public void modifyFeatures(AttributeDescriptor type, Object value, Filter filter)
-        throws IOException {
+            throws IOException {
         filter = makeDefinitionFilter(filter);
 
         store().modifyFeatures(type, value, filter);
@@ -132,7 +128,6 @@ public class GeoServerFeatureStore extends GeoServerFeatureSource implements Sim
      * DOCUMENT ME!
      *
      * @param reader DOCUMENT ME!
-     *
      * @throws IOException DOCUMENT ME!
      */
     public void setFeatures(FeatureReader<SimpleFeatureType, SimpleFeature> reader) throws IOException {
@@ -169,7 +164,7 @@ public class GeoServerFeatureStore extends GeoServerFeatureSource implements Sim
         filter = makeDefinitionFilter(filter);
 
         store().modifyFeatures(name, attributeValue, filter);
-        
+
     }
 
     public void modifyFeatures(String[] names, Object[] attributeValues, Filter filter)
@@ -177,7 +172,7 @@ public class GeoServerFeatureStore extends GeoServerFeatureSource implements Sim
         filter = makeDefinitionFilter(filter);
 
         store().modifyFeatures(names, attributeValues, filter);
-        
+
     }
 
     public void modifyFeatures(Name[] attributeNames, Object[] attributeValues, Filter filter)
@@ -185,7 +180,7 @@ public class GeoServerFeatureStore extends GeoServerFeatureSource implements Sim
         filter = makeDefinitionFilter(filter);
 
         store().modifyFeatures(attributeNames, attributeValues, filter);
-        
+
     }
 
     public void modifyFeatures(Name attributeName, Object attributeValue, Filter filter)
@@ -193,6 +188,6 @@ public class GeoServerFeatureStore extends GeoServerFeatureSource implements Sim
         filter = makeDefinitionFilter(filter);
 
         store().modifyFeatures(attributeName, attributeValue, filter);
-        
+
     }
 }

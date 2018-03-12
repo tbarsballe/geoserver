@@ -26,7 +26,9 @@ import com.vividsolutions.jts.geom.Geometry;
 
 public class KMLPlacemarkTransform extends AbstractTransform implements InlineVectorTransform {
 
-    /** serialVersionUID */
+    /**
+     * serialVersionUID
+     */
     private static final long serialVersionUID = 1L;
 
     public SimpleFeatureType convertFeatureType(SimpleFeatureType oldFeatureType) {
@@ -92,13 +94,13 @@ public class KMLPlacemarkTransform extends AbstractTransform implements InlineVe
 
     @Override
     public SimpleFeatureType apply(ImportTask task, DataStore dataStore,
-            SimpleFeatureType featureType) throws Exception {
+                                   SimpleFeatureType featureType) throws Exception {
         return convertFeatureType(featureType);
     }
 
     @Override
     public SimpleFeature apply(ImportTask task, DataStore dataStore, SimpleFeature oldFeature,
-            SimpleFeature feature) throws Exception {
+                               SimpleFeature feature) throws Exception {
         SimpleFeatureType targetFeatureType = feature.getFeatureType();
         SimpleFeature newFeature = convertFeature(oldFeature, targetFeatureType);
         feature.setAttributes(newFeature.getAttributes());

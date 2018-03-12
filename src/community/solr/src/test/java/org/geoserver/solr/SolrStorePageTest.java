@@ -69,7 +69,7 @@ public class SolrStorePageTest extends GeoServerWicketTestSupport {
         ft.select("workspacePanel:border:border_body:paramValue", 2);
         ft.submit("save");
         tester.assertNoFeedbackMessage(FeedbackMessage.ERROR);
-        
+
         // get the workspace we have just configured in the GUI
         WorkspacesModel wm = new WorkspacesModel();
         List<WorkspaceInfo> wl = (List<WorkspaceInfo>) wm.getObject();

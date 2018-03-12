@@ -30,11 +30,12 @@ import org.vfny.geoserver.wcs.WcsException;
  * geotools functions from 2.0.x WCSUtils. They were
  * removed for deprecation reasons, this is a placeholder
  * till more permanent solutions are found
+ *
  * @author Tishampati Dhar
  * @since 2.1.x
  */
 public class BilWCSUtils extends WCSUtils {
-    
+
     public final static Hints LENIENT_HINT = new Hints(Hints.LENIENT_DATUM_SHIFT, Boolean.TRUE);
 
     // ///////////////////////////////////////////////////////////////////
@@ -50,26 +51,23 @@ public class BilWCSUtils extends WCSUtils {
         hints.add(LENIENT_HINT);
     }
 
-	
-	/**
+
+    /**
      * <strong>Reprojecting</strong><br>
      * The new grid geometry can have a different coordinate reference system
      * than the underlying grid geometry. For example, a grid coverage can be
      * reprojected from a geodetic coordinate reference system to Universal
      * Transverse Mercator CRS.
      *
-     * @param coverage
-     *            GridCoverage2D
-     * @param sourceCRS
-     *            CoordinateReferenceSystem
-     * @param targetCRS
-     *            CoordinateReferenceSystem
+     * @param coverage  GridCoverage2D
+     * @param sourceCRS CoordinateReferenceSystem
+     * @param targetCRS CoordinateReferenceSystem
      * @return GridCoverage2D
      * @throws WcsException
      */
     public static GridCoverage2D reproject(GridCoverage2D coverage,
-        final CoordinateReferenceSystem sourceCRS, final CoordinateReferenceSystem targetCRS,
-        final Interpolation interpolation) throws WcsException {
+                                           final CoordinateReferenceSystem sourceCRS, final CoordinateReferenceSystem targetCRS,
+                                           final Interpolation interpolation) throws WcsException {
         // ///////////////////////////////////////////////////////////////////
         //
         // REPROJECT
@@ -87,7 +85,7 @@ public class BilWCSUtils extends WCSUtils {
             param.parameter("GridGeometry").setValue(null);
             param.parameter("InterpolationType").setValue(interpolation);
 
-            coverage = (GridCoverage2D) ((Resample)processor.getOperation("Resample")).doOperation(param, hints);
+            coverage = (GridCoverage2D) ((Resample) processor.getOperation("Resample")).doOperation(param, hints);
         }
 
         return coverage;
@@ -99,20 +97,16 @@ public class BilWCSUtils extends WCSUtils {
      * prevent from having loaded an overview of the original image based on the
      * requested scale.
      *
-     * @param coverage
-     *            GridCoverage2D
-     * @param newGridRange
-     *            GridRange
-     * @param sourceCoverage
-     *            GridCoverage
-     * @param sourceCRS
-     *            CoordinateReferenceSystem
+     * @param coverage                       GridCoverage2D
+     * @param newGridRange                   GridRange
+     * @param sourceCoverage                 GridCoverage
+     * @param sourceCRS                      CoordinateReferenceSystem
      * @param destinationEnvelopeInSourceCRS
      * @return GridCoverage2D
      */
     public static GridCoverage2D scale(final GridCoverage2D coverage, final GridEnvelope newGridRange,
-        final GridCoverage sourceCoverage, final CoordinateReferenceSystem sourceCRS,
-        final GeneralEnvelope destinationEnvelopeInSourceCRS) {
+                                       final GridCoverage sourceCoverage, final CoordinateReferenceSystem sourceCRS,
+                                       final GeneralEnvelope destinationEnvelopeInSourceCRS) {
         // ///////////////////////////////////////////////////////////////////
         //
         // SCALE to the needed resolution
@@ -123,7 +117,7 @@ public class BilWCSUtils extends WCSUtils {
         // ///////////////////////////////////////////////////////////////////
         GridGeometry2D scaledGridGeometry = new GridGeometry2D(newGridRange,
                 (destinationEnvelopeInSourceCRS != null) ? destinationEnvelopeInSourceCRS
-                                                         : sourceCoverage.getEnvelope());
+                        : sourceCoverage.getEnvelope());
 
         /*
          * Operations.DEFAULT.resample( coverage, sourceCRS, scaledGridGeometry,
@@ -134,9 +128,9 @@ public class BilWCSUtils extends WCSUtils {
         param.parameter("CoordinateReferenceSystem").setValue(sourceCRS);
         param.parameter("GridGeometry").setValue(scaledGridGeometry);
         param.parameter("InterpolationType")
-             .setValue(Interpolation.getInstance(Interpolation.INTERP_NEAREST));
+                .setValue(Interpolation.getInstance(Interpolation.INTERP_NEAREST));
 
-        final GridCoverage2D scaledGridCoverage = (GridCoverage2D) ((Resample)processor.getOperation("Resample")).doOperation(param,
+        final GridCoverage2D scaledGridCoverage = (GridCoverage2D) ((Resample) processor.getOperation("Resample")).doOperation(param,
                 hints);
 
         return scaledGridCoverage;
@@ -147,21 +141,17 @@ public class BilWCSUtils extends WCSUtils {
      * The crop operation is responsible for selecting geographic subareas of
      * the source coverage.
      *
-     * @param coverage
-     *            Coverage
-     * @param sourceEnvelope
-     *            GeneralEnvelope
-     * @param sourceCRS
-     *            CoordinateReferenceSystem
-     * @param destinationEnvelopeInSourceCRS
-     *            GeneralEnvelope
+     * @param coverage                       Coverage
+     * @param sourceEnvelope                 GeneralEnvelope
+     * @param sourceCRS                      CoordinateReferenceSystem
+     * @param destinationEnvelopeInSourceCRS GeneralEnvelope
      * @return GridCoverage2D
      * @throws WcsException
      */
     public static GridCoverage2D crop(final Coverage coverage,
-        final GeneralEnvelope sourceEnvelope, final CoordinateReferenceSystem sourceCRS,
-        final GeneralEnvelope destinationEnvelopeInSourceCRS, final Boolean conserveEnvelope)
-        throws WcsException {
+                                      final GeneralEnvelope sourceEnvelope, final CoordinateReferenceSystem sourceCRS,
+                                      final GeneralEnvelope destinationEnvelopeInSourceCRS, final Boolean conserveEnvelope)
+            throws WcsException {
         // ///////////////////////////////////////////////////////////////////
         //
         // CROP
@@ -191,7 +181,7 @@ public class BilWCSUtils extends WCSUtils {
             param.parameter("Envelope").setValue(intersectionEnvelope);
             //param.parameter("ConserveEnvelope").setValue(conserveEnvelope);
 
-            croppedGridCoverage = (GridCoverage2D) ((Crop)processor.getOperation("CoverageCrop")).doOperation(param, hints);
+            croppedGridCoverage = (GridCoverage2D) ((Crop) processor.getOperation("CoverageCrop")).doOperation(param, hints);
         } else {
             croppedGridCoverage = (GridCoverage2D) coverage;
         }

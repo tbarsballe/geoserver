@@ -13,7 +13,7 @@ import org.geoserver.geofence.services.RuleReaderServiceImpl;
 import org.junit.Test;
 
 /***
- * 
+ *
  * @author Niels Charlier
  *
  */

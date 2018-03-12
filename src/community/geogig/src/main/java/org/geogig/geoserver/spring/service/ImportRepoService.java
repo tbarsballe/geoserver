@@ -29,7 +29,7 @@ import com.google.common.base.Preconditions;
 public class ImportRepoService {
 
     public RepositoryImportRepo importRepository(RepositoryProvider provider, String repositoryName,
-            Map<String, String> parameters) throws RepositoryConnectionException {
+                                                 Map<String, String> parameters) throws RepositoryConnectionException {
         if (provider.hasGeoGig(repositoryName)) {
             throw new CommandSpecException("The specified repository name is already in use, please try a different name",
                     HttpStatus.CONFLICT);
@@ -39,7 +39,7 @@ public class ImportRepoService {
             throw new CommandSpecException("Unexpected repository provider");
         }
         Repository newRepo = ((GeoServerRepositoryProvider) provider).importExistingGeogig(repositoryName, parameters);
-        
+
         if (newRepo == null) {
             throw new CommandSpecException("Repository not found", HttpStatus.NOT_FOUND);
         }

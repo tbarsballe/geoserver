@@ -21,7 +21,6 @@ import java.util.Set;
 import java.util.logging.Logger;
 
 /**
- * 
  * @see RawMapResponse
  */
 public class OpenLayersMapOutputFormat implements GetMapOutputFormat {

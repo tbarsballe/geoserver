@@ -11,11 +11,13 @@ import org.springframework.http.HttpStatus;
  */
 public class ResourceNotFoundException extends RestException {
 
-    /** serialVersionUID */
+    /**
+     * serialVersionUID
+     */
     private static final long serialVersionUID = 4656222203528783838L;
 
     public ResourceNotFoundException() {
-        super("Not Found",HttpStatus.NOT_FOUND);
+        super("Not Found", HttpStatus.NOT_FOUND);
     }
 
     public ResourceNotFoundException(String message) {

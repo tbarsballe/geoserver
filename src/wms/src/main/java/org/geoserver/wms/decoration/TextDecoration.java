@@ -33,15 +33,17 @@ import java.util.logging.Logger;
 
 /**
  * A map decoration showing a text message driven by a Freemarker template
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class TextDecoration implements MapDecoration {
 
-    /** A logger for this class. */
+    /**
+     * A logger for this class.
+     */
     private static final Logger LOGGER = org.geotools.util.logging.Logging
             .getLogger("org.geoserver.wms.responses");
-    
+
     private static Font DEFAULT_FONT = new java.awt.Font("Serif", java.awt.Font.PLAIN, 12);
 
     String fontFamily;
@@ -64,7 +66,7 @@ public class TextDecoration implements MapDecoration {
     public void loadOptions(Map<String, String> options) throws Exception {
         // message
         this.messageTemplate = options.get("message");
-        if(messageTemplate == null) {
+        if (messageTemplate == null) {
             messageTemplate = "You forgot to set the 'message' option";
         }
         // font
@@ -89,7 +91,7 @@ public class TextDecoration implements MapDecoration {
                 LOGGER.log(Level.WARNING, "'font-color' must be a color in #RRGGBB[AA] format.", e);
             }
         }
-        if(fontColor == null) {
+        if (fontColor == null) {
             fontColor = Color.BLACK;
         }
         // halo
@@ -107,44 +109,44 @@ public class TextDecoration implements MapDecoration {
                 LOGGER.log(Level.WARNING, "'halo-color' must be a color in #RRGGBB[AA] format.", e);
             }
         }
-        if(haloRadius > 0 && haloColor == null) {
+        if (haloRadius > 0 && haloColor == null) {
             haloColor = Color.WHITE;
         }
     }
-    
+
     Font getFont() {
         Font font = DEFAULT_FONT;
-        if(fontFamily != null) {
+        if (fontFamily != null) {
             font = FontCache.getDefaultInstance().getFont(fontFamily);
-            if(font == null) {
+            if (font == null) {
                 LOGGER.log(Level.WARNING, "Font " + fontFamily + " not found, falling back on the default");
                 font = DEFAULT_FONT;
             }
         }
-        if(fontSize > 0) {
+        if (fontSize > 0) {
             font = font.deriveFont(fontSize);
         }
-        if(fontItalic) {
+        if (fontItalic) {
             font = font.deriveFont(Font.ITALIC);
         }
-        if(fontBold) {
+        if (fontBold) {
             font = font.deriveFont(Font.BOLD);
         }
         return font;
     }
-    
+
     String evaluateMessage(WMSMapContent content) throws IOException, TemplateException {
         final Map env = content.getRequest().getEnv();
         Template t = new Template("name", new StringReader(messageTemplate),
                 new Configuration());
         final BeansWrapper bw = new BeansWrapper();
         return FreeMarkerTemplateUtils.processTemplateIntoString(t, new TemplateHashModel() {
-            
+
             @Override
             public boolean isEmpty() throws TemplateModelException {
                 return env.isEmpty();
             }
-            
+
             @Override
             public TemplateModel get(String key) throws TemplateModelException {
                 String value = (String) env.get(key);
@@ -162,7 +164,7 @@ public class TextDecoration implements MapDecoration {
                         }
                     }
                 }
-                if(value != null) {
+                if (value != null) {
                     return new StringModel(value, bw);
                 } else {
                     return null;
@@ -178,7 +180,7 @@ public class TextDecoration implements MapDecoration {
         GlyphVector gv = font.createGlyphVector(g2d.getFontRenderContext(), message.toCharArray());
         Shape outline = gv.getOutline();
         Rectangle2D bounds = outline.getBounds2D();
-        double width = bounds.getWidth() + haloRadius * 2; 
+        double width = bounds.getWidth() + haloRadius * 2;
         double height = bounds.getHeight() + haloRadius * 2;
         return new Dimension((int) Math.ceil(width), (int) Math.ceil(height));
     }
@@ -193,18 +195,18 @@ public class TextDecoration implements MapDecoration {
         try {
             // extract the glyph vector outline (paint like the labelling system does)
             GlyphVector gv = font.createGlyphVector(g2d.getFontRenderContext(), message.toCharArray());
-            AffineTransform at = AffineTransform.getTranslateInstance(paintArea.x + haloRadius, 
+            AffineTransform at = AffineTransform.getTranslateInstance(paintArea.x + haloRadius,
                     paintArea.y + paintArea.height - haloRadius);
             Shape outline = gv.getOutline();
             outline = at.createTransformedShape(outline);
-            
+
             // draw the halo if necessary
-            if(haloRadius > 0) {
+            if (haloRadius > 0) {
                 g2d.setColor(haloColor);
                 g2d.setStroke(new BasicStroke(2 * haloRadius, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
                 g2d.draw(outline);
             }
-            
+
             // draw the string
             g2d.setFont(font);
             g2d.setColor(fontColor);

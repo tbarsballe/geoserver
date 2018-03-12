@@ -18,8 +18,8 @@ import org.geoserver.csw.records.iso.MetaDataDescriptor;
 import org.geoserver.platform.ServiceException;
 
 /**
- * Encodes responses with ISO MetaData records 
- * 
+ * Encodes responses with ISO MetaData records
+ *
  * @author Niels Charlier
  */
 public class MetaDataResponse extends AbstractRecordsResponse {
@@ -29,7 +29,7 @@ public class MetaDataResponse extends AbstractRecordsResponse {
     }
 
     protected void transformResponse(OutputStream output, CSWRecordsResult result,
-            RequestBaseType request, CSWInfo csw) {
+                                     RequestBaseType request, CSWInfo csw) {
         MetaDataTransformer transformer = new MetaDataTransformer(request,
                 csw.isCanonicalSchemaLocation());
         transformer.setIndentation(2);

@@ -53,18 +53,23 @@ import com.vividsolutions.jts.geom.Envelope;
 
 /**
  * Small embedded WCS client enabling users to visually build a WCS GetCoverage request
- * 
+ *
  * @author Andrea Aime - OpenGeo
  */
 @SuppressWarnings("serial")
 public class WCSRequestBuilderPanel extends Panel {
-    
+
     /**
      * How the WCS 1.1 target layout is going to be built
+     *
      * @author Andrea Aime - GeoSolutions
      */
-    enum TargetLayout { Automatic, Resolution, Affine };
-    
+    enum TargetLayout {
+        Automatic, Resolution, Affine
+    }
+
+    ;
+
 
     static final Logger LOGGER = Logging.getLogger(WCSRequestBuilderPanel.class);
 
@@ -112,11 +117,11 @@ public class WCSRequestBuilderPanel extends Panel {
         add(feedback);
 
         // the version chooser
-        final DropDownChoice<Version> version = new DropDownChoice<Version>("version", 
+        final DropDownChoice<Version> version = new DropDownChoice<Version>("version",
                 new PropertyModel<Version>(getCoverage, "version"),
                 Arrays.asList(Version.values()));
         add(version);
-        
+
         // the action that will setup the form once the coverage has been chosen
         version.add(new AjaxFormSubmitBehavior("change") {
 
@@ -127,7 +132,7 @@ public class WCSRequestBuilderPanel extends Panel {
 
             @Override
             protected void onSubmit(AjaxRequestTarget target) {
-                if(version.getModelObject() == Version.v1_0_0) {
+                if (version.getModelObject() == Version.v1_0_0) {
                     sourceGridContainer.setVisible(true);
                     targetlayoutContainer.setVisible(false);
                     manualGrid.setModelObject(false);
@@ -183,7 +188,7 @@ public class WCSRequestBuilderPanel extends Panel {
         envelope.setCRSFieldVisible(true);
         envelope.setCrsRequired(true);
         details.add(envelope);
-        
+
         // the grid panel (for WCS 1.0 requests)
         buildGridPanel();
 
@@ -191,18 +196,18 @@ public class WCSRequestBuilderPanel extends Panel {
         CoverageResponseDelegateFinder responseFactory = (CoverageResponseDelegateFinder) GeoServerApplication.get().getBean("coverageResponseDelegateFactory");
         formats = new DropDownChoice<String>("format", new PropertyModel(getCoverage, "outputFormat"), responseFactory.getOutputFormats());
         details.add(formats);
-        
+
         // the target CRS
         targetCRS = new CRSPanel("targetCRS", new PropertyModel(getCoverage, "targetCRS"));
         details.add(targetCRS);
-        
+
         // the target grid to world (for WCS 1.1 ones)
         buildAffinePanel();
-        
+
         // the describe response window
         responseWindow = new ModalWindow("responseWindow");
         add(responseWindow);
-        
+
         responseWindow.setPageCreator(new ModalWindow.PageCreator() {
 
             public Page createPage() {
@@ -234,29 +239,29 @@ public class WCSRequestBuilderPanel extends Panel {
         describeLink.setOutputMarkupId(true);
         add(describeLink);
     }
-    
+
     protected String getDescribeXML(String processId) {
-        if(getCoverage.version == Version.v1_0_0) {
-            return "<DescribeCoverage\n" + 
-            		"  version=\"1.0.0\"\n" + 
-            		"  service=\"WCS\"\n" + 
-            		"  xmlns=\"http://www.opengis.net/wcs\"\n" + 
-            		"  xmlns:nurc=\"http://www.nurc.nato.int\"\n" + 
-            		"  xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n" + 
-            		"  xsi:schemaLocation=\"http://www.opengis.net/wcs http://schemas.opengis.net/wcs/1.0.0/describeCoverage.xsd\">\n" + 
-            		"  \n" + 
-            		"    <Coverage>" + getCoverage.coverage + "</Coverage>\n" + 
-            		"    \n" + 
-            		"</DescribeCoverage>";
+        if (getCoverage.version == Version.v1_0_0) {
+            return "<DescribeCoverage\n" +
+                    "  version=\"1.0.0\"\n" +
+                    "  service=\"WCS\"\n" +
+                    "  xmlns=\"http://www.opengis.net/wcs\"\n" +
+                    "  xmlns:nurc=\"http://www.nurc.nato.int\"\n" +
+                    "  xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n" +
+                    "  xsi:schemaLocation=\"http://www.opengis.net/wcs http://schemas.opengis.net/wcs/1.0.0/describeCoverage.xsd\">\n" +
+                    "  \n" +
+                    "    <Coverage>" + getCoverage.coverage + "</Coverage>\n" +
+                    "    \n" +
+                    "</DescribeCoverage>";
         } else {
             return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n" + // 
-            "<wcs:DescribeCoverage service=\"WCS\" " + //
-            "xmlns:ows=\"http://www.opengis.net/ows/1.1\"\r\n" + // 
-            "  xmlns:wcs=\"http://www.opengis.net/wcs/1.1.1\"\r\n" + // 
-            "  xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" \r\n" + // 
-            "  version=\"1.1.1\" >\r\n" + //
-            "  <wcs:Identifier>" + getCoverage.coverage + "</wcs:Identifier>\r\n" + // 
-            "</wcs:DescribeCoverage>";
+                    "<wcs:DescribeCoverage service=\"WCS\" " + //
+                    "xmlns:ows=\"http://www.opengis.net/ows/1.1\"\r\n" + //
+                    "  xmlns:wcs=\"http://www.opengis.net/wcs/1.1.1\"\r\n" + //
+                    "  xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" \r\n" + //
+                    "  version=\"1.1.1\" >\r\n" + //
+                    "  <wcs:Identifier>" + getCoverage.coverage + "</wcs:Identifier>\r\n" + //
+                    "</wcs:DescribeCoverage>";
         }
     }
 
@@ -264,18 +269,18 @@ public class WCSRequestBuilderPanel extends Panel {
         targetlayoutContainer = new WebMarkupContainer("targetLayoutContainer");
         details.add(targetlayoutContainer);
         targetlayoutContainer.setVisible(false);
-        
-        targetLayoutChooser = new DropDownChoice<TargetLayout>("targetLayout", 
-                new Model(TargetLayout.Automatic), 
+
+        targetLayoutChooser = new DropDownChoice<TargetLayout>("targetLayout",
+                new Model(TargetLayout.Automatic),
                 Arrays.asList(TargetLayout.values()),
                 new TargetLayoutRenderer());
         targetlayoutContainer.add(targetLayoutChooser);
-        
+
         g2w = new AffineTransformPanel("targetGridToWorld", new PropertyModel(getCoverage, "targetGridToWorld"));
         targetlayoutContainer.add(g2w);
         g2w.setVisible(false);
         g2w.setOutputMarkupId(true);
-        
+
         targetLayoutChooser.add(new AjaxFormSubmitBehavior("change") {
 
             @Override
@@ -285,12 +290,12 @@ public class WCSRequestBuilderPanel extends Panel {
 
             @Override
             protected void onSubmit(AjaxRequestTarget target) {
-                if(targetLayoutChooser.getModelObject() == TargetLayout.Affine) {
+                if (targetLayoutChooser.getModelObject() == TargetLayout.Affine) {
                     AffineTransform at = guessGridToWorld(false);
                     g2w.setResolutionModeEnabled(false);
                     g2w.setModelObject(at);
                     g2w.setVisible(true);
-                } else if(targetLayoutChooser.getModelObject() == TargetLayout.Resolution) {
+                } else if (targetLayoutChooser.getModelObject() == TargetLayout.Resolution) {
                     AffineTransform at = guessGridToWorld(true);
                     g2w.setResolutionModeEnabled(true);
                     g2w.setModelObject(at);
@@ -300,37 +305,37 @@ public class WCSRequestBuilderPanel extends Panel {
                     g2w.setVisible(false);
                 }
                 target.add(WCSRequestBuilderPanel.this);
-                
+
             }
         });
-        
+
     }
 
     private void buildGridPanel() {
         sourceGridContainer = new WebMarkupContainer("sourceGridContainer");
         details.add(sourceGridContainer);
-        
+
         manualGrid = new CheckBox("manualGrid", new Model(Boolean.FALSE));
         sourceGridContainer.add(manualGrid);
-        
+
         sourceGridRange = new GridPanel("sourceGrid", new PropertyModel(getCoverage, "sourceGridRange"));
         sourceGridContainer.add(sourceGridRange);
         sourceGridRange.setVisible(false);
         sourceGridRange.setOutputMarkupId(true);
-        
+
         // the action that will setup the form once the coverage has been chosen
         manualGrid.add(new AjaxFormSubmitBehavior("change") {
 
             @Override
             protected void onError(AjaxRequestTarget target) {
                 onSubmit(target);
-                
+
             }
 
             @Override
             protected void onSubmit(AjaxRequestTarget target) {
-                if(manualGrid.getModelObject() == Boolean.TRUE) {
-                    
+                if (manualGrid.getModelObject() == Boolean.TRUE) {
+
                     GridEnvelope2D grid = guessGridLimits();
                     sourceGridRange.setModelObject(grid);
                     sourceGridRange.setVisible(true);
@@ -339,13 +344,13 @@ public class WCSRequestBuilderPanel extends Panel {
                     sourceGridRange.setVisible(false);
                 }
                 target.add(WCSRequestBuilderPanel.this);
-                
+
             }
 
-           
+
         });
-        
-        
+
+
     }
 
     protected String getDescribeXML(String coverageId, Version version) {
@@ -362,18 +367,18 @@ public class WCSRequestBuilderPanel extends Panel {
     public Component getFeedbackPanel() {
         return feedback;
     }
-    
+
     GetCoverageRequest getCoverageRequest() {
-        if(getCoverage.version == Version.v1_0_0) {
-            if(manualGrid.getModelObject() != Boolean.TRUE) {
+        if (getCoverage.version == Version.v1_0_0) {
+            if (manualGrid.getModelObject() != Boolean.TRUE) {
                 getCoverage.sourceGridRange = guessGridLimits();
             }
         } else {
-            if(targetLayoutChooser.getModelObject() == TargetLayout.Automatic) {
+            if (targetLayoutChooser.getModelObject() == TargetLayout.Automatic) {
                 getCoverage.targetGridToWorld = guessGridToWorld(true);
             }
         }
-        
+
         return getCoverage;
     }
 
@@ -387,36 +392,36 @@ public class WCSRequestBuilderPanel extends Panel {
             Envelope ge = JTS.transform(boundsNative, w2g);
             GridEnvelope2D grid = new GridEnvelope2D(new Rectangle(0, 0, (int) ge.getWidth(), (int) ge.getHeight()));
             return grid;
-        } catch(Exception e) {
+        } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Failed to guess native grid", e);
             error("Failed to guess native grid: " + e.getMessage());
             return null;
         }
     }
-    
+
     AffineTransform guessGridToWorld(boolean resolutionMode) {
         try {
             String coverageName = coverage.getModelObject();
             Catalog catalog = GeoServerApplication.get().getCatalog();
             CoverageInfo ci = catalog.getCoverageByName(coverageName);
-            
+
             ReferencedEnvelope nativeBounds = getCoverage.bounds.transform(ci.getCRS(), true);
             ReferencedEnvelope targetBounds = nativeBounds.transform(getCoverage.targetCRS, true);
             GridEnvelope2D gridLimits = guessGridLimits();
             GridGeometry2D gg = new GridGeometry2D(gridLimits, targetBounds);
             AffineTransform at = (AffineTransform) gg.getGridToCRS(PixelInCell.CELL_CORNER);
-            if(resolutionMode) {
+            if (resolutionMode) {
                 return AffineTransform.getScaleInstance(at.getScaleX(), at.getScaleY());
             } else {
                 return at;
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Failed to guess target affine transform", e);
             error("Failed to guess native grid: " + e.getMessage());
             return null;
         }
     }
-    
+
     class TargetLayoutRenderer extends ChoiceRenderer {
 
         public Object getDisplayValue(Object object) {

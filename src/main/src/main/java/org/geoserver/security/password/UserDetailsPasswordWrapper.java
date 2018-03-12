@@ -12,10 +12,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 /**
  * Wrapper class needed if the password is needed in
- * a modified form (plain text as an example) 
- *  
- * @author mcr
+ * a modified form (plain text as an example)
  *
+ * @author mcr
  */
 public class UserDetailsPasswordWrapper extends UserDetailsWrapper {
 
@@ -23,11 +22,11 @@ public class UserDetailsPasswordWrapper extends UserDetailsWrapper {
 
     public UserDetailsPasswordWrapper(UserDetails details, String password) {
         super(details);
-        this.password=password;
+        this.password = password;
     }
-    
+
     private String password;
-    
+
 
     public String getPassword() {
         return password;

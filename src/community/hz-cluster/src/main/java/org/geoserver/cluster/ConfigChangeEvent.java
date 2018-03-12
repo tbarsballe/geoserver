@@ -55,20 +55,21 @@ import org.geoserver.config.impl.SettingsInfoImpl;
 import com.google.common.base.Objects;
 
 /**
- * Event for 
- * @author Justin Deoliveira, OpenGeo
+ * Event for
  *
+ * @author Justin Deoliveira, OpenGeo
  */
 public class ConfigChangeEvent extends Event {
 
-    static Map<Class<? extends Info>,Class<? extends Info>> INTERFACES = new HashMap<Class<? extends Info>,Class<? extends Info>>();
+    static Map<Class<? extends Info>, Class<? extends Info>> INTERFACES = new HashMap<Class<? extends Info>, Class<? extends Info>>();
+
     static {
         INTERFACES.put(GeoServerInfoImpl.class, GeoServerInfo.class);
         INTERFACES.put(SettingsInfoImpl.class, SettingsInfo.class);
         INTERFACES.put(LoggingInfoImpl.class, LoggingInfo.class);
         INTERFACES.put(ContactInfoImpl.class, ContactInfo.class);
         INTERFACES.put(AttributionInfoImpl.class, AttributionInfo.class);
-        
+
         //catalog
         INTERFACES.put(CatalogImpl.class, Catalog.class);
         INTERFACES.put(NamespaceInfoImpl.class, NamespaceInfo.class);
@@ -77,16 +78,18 @@ public class ConfigChangeEvent extends Event {
         INTERFACES.put(WMSStoreInfoImpl.class, WMSStoreInfo.class);
         INTERFACES.put(CoverageStoreInfoImpl.class, CoverageStoreInfo.class);
         INTERFACES.put(StyleInfoImpl.class, StyleInfo.class);
-        INTERFACES.put(FeatureTypeInfoImpl.class, FeatureTypeInfo.class );
+        INTERFACES.put(FeatureTypeInfoImpl.class, FeatureTypeInfo.class);
         INTERFACES.put(CoverageInfoImpl.class, CoverageInfo.class);
         INTERFACES.put(WMSLayerInfoImpl.class, WMSLayerInfo.class);
         INTERFACES.put(MetadataLinkInfoImpl.class, MetadataLinkInfo.class);
         INTERFACES.put(LayerInfoImpl.class, LayerInfo.class);
-        INTERFACES.put(LayerGroupInfoImpl.class, LayerGroupInfo.class );
-        
+        INTERFACES.put(LayerGroupInfoImpl.class, LayerGroupInfo.class);
+
     }
-    
-    /** serialVersionUID */
+
+    /**
+     * serialVersionUID
+     */
     private static final long serialVersionUID = 1L;
 
     public enum Type {
@@ -107,7 +110,7 @@ public class ConfigChangeEvent extends Event {
      * name of workspace qualifying the object
      */
     String workspaceId;
-    
+
     /**
      * id of Store object if the modified object was a Resource
      */
@@ -161,7 +164,7 @@ public class ConfigChangeEvent extends Event {
         ConfigChangeEvent e = (ConfigChangeEvent) o;
         return equal(id, e.id) && equal(type, e.type);
     }
-    
+
     /**
      * Hash code is based on {@link #getObjectId() id}, {@link #getObjectName() name}, and
      * {@link #getChangeType() changeType}. {@link #getObjectClass() class} is left off because it
@@ -188,7 +191,7 @@ public class ConfigChangeEvent extends Event {
     public void setWorkspaceId(String workspaceId) {
         this.workspaceId = workspaceId;
     }
-    
+
     public String getStoreId() {
         return storeId;
     }
@@ -203,23 +206,23 @@ public class ConfigChangeEvent extends Event {
 
     public Class<? extends Info> getObjectInterface() {
         Class<? extends Info> clazz = INTERFACES.get(getObjectClass());
-        
+
         // There are several different ServiceInfo subtypes and it's an extension point 
         // so don't check for specific classes
-        if(clazz==null && ServiceInfo.class.isAssignableFrom(getObjectClass())){
+        if (clazz == null && ServiceInfo.class.isAssignableFrom(getObjectClass())) {
             clazz = ServiceInfo.class;
         }
-        
+
         // Fall back, mostly here to support EasyMock test objects in unit tests.
-        if(clazz==null) {
-            for(Class<? extends Info> realClazz: INTERFACES.values()) {
-                if(realClazz.isAssignableFrom(getObjectClass())) {
-                    clazz=realClazz;
+        if (clazz == null) {
+            for (Class<? extends Info> realClazz : INTERFACES.values()) {
+                if (realClazz.isAssignableFrom(getObjectClass())) {
+                    clazz = realClazz;
                     break;
                 }
             }
         }
-        
+
         return clazz;
     }
 
@@ -230,7 +233,7 @@ public class ConfigChangeEvent extends Event {
     public void setNativeName(String nativeName) {
         this.nativeName = nativeName;
     }
-    
+
     @Nullable
     public String getNativeName() {
         return nativeName;

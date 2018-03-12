@@ -16,7 +16,7 @@ import org.geotools.jdbc.JDBCDataStoreFactory;
 
 /**
  * Postgis data setup for the data reference set online test
- * 
+ *
  * @author Victor Tey, CSIRO Earth Science and Resource Engineering
  */
 public class WfsOnlineTestPostgisSetup extends AbstractReferenceDataSetup {

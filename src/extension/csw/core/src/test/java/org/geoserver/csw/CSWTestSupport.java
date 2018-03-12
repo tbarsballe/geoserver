@@ -38,7 +38,7 @@ import org.xml.sax.SAXParseException;
 
 public abstract class CSWTestSupport extends GeoServerSystemTestSupport {
     protected static final String BASEPATH = "csw";
-    
+
     @BeforeClass
     public static void configureXMLUnit() throws Exception {
         // init xmlunit
@@ -56,15 +56,17 @@ public abstract class CSWTestSupport extends GeoServerSystemTestSupport {
         namespaces.put("xs", "http://www.w3.org/2001/XMLSchema");
 
         XMLUnit.setXpathNamespaceContext(new SimpleNamespaceContext(namespaces));
-    };
-    
+    }
+
+    ;
+
     protected String root() {
         return "csw?";
     }
 
     /**
      * Validates a document based on the CSW schemas
-     * 
+     *
      * @throws TransformerException
      * @throws ParserConfigurationException
      */
@@ -74,7 +76,7 @@ public abstract class CSWTestSupport extends GeoServerSystemTestSupport {
 
     /**
      * Validates a document against the
-     * 
+     *
      * @param dom
      * @param configuration
      */
@@ -85,7 +87,7 @@ public abstract class CSWTestSupport extends GeoServerSystemTestSupport {
         p.parse(new DOMSource(dom));
 
         if (!p.getValidationErrors().isEmpty()) {
-            for (Iterator e = p.getValidationErrors().iterator(); e.hasNext();) {
+            for (Iterator e = p.getValidationErrors().iterator(); e.hasNext(); ) {
                 SAXParseException ex = (SAXParseException) e.next();
                 System.out.println(ex.getLineNumber() + "," + ex.getColumnNumber() + " -"
                         + ex.toString());
@@ -93,14 +95,14 @@ public abstract class CSWTestSupport extends GeoServerSystemTestSupport {
             fail("Document did not validate.");
         }
     }
-    
+
     /**
      * Loads the specified resource into a string
-     * @param resourceLocation
      *
+     * @param resourceLocation
      */
     protected String getResourceAsString(String resourceLocation) throws IOException {
-        InputStream is = null; 
+        InputStream is = null;
         try {
             is = getClass().getResourceAsStream(resourceLocation);
             return IOUtils.toString(is);
@@ -108,11 +110,11 @@ public abstract class CSWTestSupport extends GeoServerSystemTestSupport {
             IOUtils.closeQuietly(is);
         }
     }
-    
+
     /**
      * Loads the specified resource into a reader
-     * @param resourceLocation
      *
+     * @param resourceLocation
      */
     protected Reader getResourceAsReader(String resourceLocation) throws IOException {
         InputStream is = getClass().getResourceAsStream(resourceLocation);

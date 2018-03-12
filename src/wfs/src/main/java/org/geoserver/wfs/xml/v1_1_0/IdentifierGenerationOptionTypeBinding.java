@@ -16,9 +16,9 @@ import org.geotools.xml.InstanceComponent;
 
 /**
  * Binding object for the type http://www.opengis.net/wfs:IdentifierGenerationOptionType.
- *
  * <p>
- *        <pre>
+ * <p>
+ * <pre>
  *         <code>
  *  &lt;xsd:simpleType name="IdentifierGenerationOptionType"&gt;
  *      &lt;xsd:restriction base="xsd:string"&gt;
@@ -61,6 +61,7 @@ import org.geotools.xml.InstanceComponent;
  *
  *          </code>
  *         </pre>
+ *
  * @generated
  */
 public class IdentifierGenerationOptionTypeBinding extends AbstractSimpleBinding {
@@ -94,7 +95,7 @@ public class IdentifierGenerationOptionTypeBinding extends AbstractSimpleBinding
      * @generated modifiable
      */
     public Object parse(InstanceComponent instance, Object value)
-        throws Exception {
+            throws Exception {
         if ("UseExisting".equals(value)) {
             return IdentifierGenerationOptionType.USE_EXISTING_LITERAL;
         }

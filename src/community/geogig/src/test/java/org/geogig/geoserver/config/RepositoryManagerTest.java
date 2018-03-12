@@ -60,7 +60,7 @@ public class RepositoryManagerTest extends GeoServerSystemTestSupport {
     public GeoGigTestData geogigData = new GeoGigTestData();
 
     private RepositoryManager repoManager;
-    
+
     private static final Random rnd = new Random();
 
     @Before
@@ -148,7 +148,7 @@ public class RepositoryManagerTest extends GeoServerSystemTestSupport {
         RepositoryInfo rpoByName = repoManager.getByRepoName("nonexistent");
         assertNull("Expected repository to be non-existent", rpoByName);
     }
-    
+
     @Test
     public void testCreateRepoUnsupportedURIScheme() {
         Hints hints = new Hints();
@@ -164,7 +164,7 @@ public class RepositoryManagerTest extends GeoServerSystemTestSupport {
                     e.getMessage());
         }
     }
-    
+
     @Test
     public void testInvalidate() throws IOException {
         Hints hints = new Hints();
@@ -179,19 +179,19 @@ public class RepositoryManagerTest extends GeoServerSystemTestSupport {
         List<RepositoryInfo> repositories = repoManager.getAll();
         assertEquals(1, repositories.size());
         assertEquals(info, repositories.get(0));
-        
+
         // get repository
         Repository repo1 = repoManager.getRepository(info.getId());
         assertNotNull(repo1);
-        
+
         // subsequent calls should return the same repo object
         assertTrue(repo1 == repoManager.getRepository(info.getId()));
-        
+
         // invalidating should clear the cache
         repoManager.invalidate(info.getId());
         Repository repo1_after = repoManager.getRepository(info.getId());
         assertNotNull(repo1_after);
-        
+
         // they should be different instances
         assertFalse(repo1 == repo1_after);
     }
@@ -249,20 +249,20 @@ public class RepositoryManagerTest extends GeoServerSystemTestSupport {
         List<DataStoreInfo> geogigDataStores = repoManager.findGeogigStores();
         assertEquals(1, geogigDataStores.size());
         assertEquals(dsInfo, geogigDataStores.get(0));
-        
+
         List<RepositoryInfo> repositoryInfos = repoManager.getAll();
         assertEquals(1, repositoryInfos.size());
-        
+
         RepositoryInfo repoInfo = repositoryInfos.get(0);
         List<DataStoreInfo> dataStoresForRepoInfo = repoManager.findDataStores(repoInfo.getId());
         assertEquals(1, dataStoresForRepoInfo.size());
         assertEquals(dsInfo, dataStoresForRepoInfo.get(0));
-        
+
         List<LayerInfo> dataStoreLayers = repoManager.findLayers(dsInfo);
         assertEquals(2, dataStoreLayers.size());
         assertTrue(dataStoreLayers.contains(pointLayerInfo));
         assertTrue(dataStoreLayers.contains(lineLayerInfo));
-        
+
         List<FeatureTypeInfo> dataStoreFeatureTypes = repoManager.findFeatureTypes(dsInfo);
         assertEquals(2, dataStoreFeatureTypes.size());
         FeatureTypeInfo pointsTypeInfo, linesTypeInfo;
@@ -275,7 +275,7 @@ public class RepositoryManagerTest extends GeoServerSystemTestSupport {
         }
         assertEquals("points", pointsTypeInfo.getName());
         assertEquals("lines", linesTypeInfo.getName());
-        
+
         List<? extends CatalogInfo> catalogObjects = repoManager.findDependentCatalogObjects(repoInfo.getId());
         assertEquals(5, catalogObjects.size());
         assertTrue(catalogObjects.contains(dsInfo));
@@ -283,9 +283,9 @@ public class RepositoryManagerTest extends GeoServerSystemTestSupport {
         assertTrue(catalogObjects.contains(lineLayerInfo));
         assertTrue(catalogObjects.contains(pointsTypeInfo));
         assertTrue(catalogObjects.contains(linesTypeInfo));
-        
+
     }
-    
+
     @Test
     public void testRenameRepository() throws IOException {
         Hints hints = new Hints();
@@ -296,39 +296,39 @@ public class RepositoryManagerTest extends GeoServerSystemTestSupport {
         repo.command(InitOp.class).call();
         RepositoryInfo info = saveRepository(repo);
         repo.close();
-        
+
         List<RepositoryInfo> repositories = repoManager.getAll();
         assertEquals(1, repositories.size());
         assertEquals(info, repositories.get(0));
-        
+
         RepositoryInfo renamed = new RepositoryInfo();
         renamed.setId(info.getId());
         renamed.setLocation(info.getLocation());
         renamed.setRepoName("repo1_renamed");
         repoManager.save(renamed);
-        
+
         repositories = repoManager.getAll();
         assertEquals(1, repositories.size());
         assertEquals(renamed, repositories.get(0));
-        
+
         RepositoryInfo infoGet = repoManager.get(info.getId());
         assertEquals(renamed, infoGet);
-        
+
         infoGet = repoManager.getByRepoName("repo1_renamed");
         assertEquals(renamed, infoGet);
-        
+
         RepositoryInfo repoByName = repoManager.getByRepoName("repo1");
         assertNull("Expected \"repo1\" to be non-existent", repoByName);
     }
-    
+
     @Test
     public void testIsGeogigDirectory() throws IOException {
         assertFalse(RepositoryManager.isGeogigDirectory(null));
-        
+
         File repoDir = new File(testData.getDataDirectoryRoot(), "testRepo");
         repoDir.mkdirs();
         assertFalse(RepositoryManager.isGeogigDirectory(repoDir));
-        
+
         Hints hints = new Hints();
         hints.set(Hints.REPOSITORY_NAME, "repo1");
         hints.set(Hints.REPOSITORY_URL, repoDir.toURI().toString());
@@ -338,17 +338,17 @@ public class RepositoryManagerTest extends GeoServerSystemTestSupport {
         repo.command(InitOp.class).call();
         saveRepository(repo);
         repo.close();
-        
+
         assertTrue(RepositoryManager.isGeogigDirectory(repoDir));
-        
+
         File fakeRepoDir = new File(testData.getDataDirectoryRoot(), "fakeRepoDir");
         fakeRepoDir.mkdirs();
         File fakeGeogig = new File(fakeRepoDir, ".geogig");
         fakeGeogig.createNewFile();
-        
+
         assertFalse(RepositoryManager.isGeogigDirectory(fakeRepoDir));
     }
-    
+
     @Test
     public void testFindOrCreateByLocation() throws IOException {
         File repoDir = new File(testData.getDataDirectoryRoot(), "testRepo");
@@ -362,12 +362,12 @@ public class RepositoryManagerTest extends GeoServerSystemTestSupport {
         Repository repo = repoManager.getRepository(info.getId());
         String repoName = repo.command(ResolveRepositoryName.class).call();
         assertEquals("testRepo", repoName);
-        
+
         // should return the same info since it was already created.
         RepositoryInfo infoGet = repoManager.findOrCreateByLocation(repoURI);
         assertEquals(info, infoGet);
     }
-    
+
     @Test
     public void testDeleteRepository() throws IOException {
         Catalog catalog = this.getCatalog();
@@ -417,24 +417,24 @@ public class RepositoryManagerTest extends GeoServerSystemTestSupport {
         DataAccess<? extends FeatureType, ? extends Feature> dataStore = dsInfo.getDataStore(null);
         assertNotNull(dataStore);
         assertTrue(dataStore instanceof GeoGigDataStore);
-        
+
         List<DataStoreInfo> geogigDataStores = repoManager.findGeogigStores();
         assertEquals(1, geogigDataStores.size());
         assertEquals(dsInfo, geogigDataStores.get(0));
-        
+
         List<RepositoryInfo> repositoryInfos = repoManager.getAll();
         assertEquals(1, repositoryInfos.size());
-        
+
         RepositoryInfo info = repositoryInfos.get(0);
-        
+
         repoManager.delete(info.getId());
-        
+
         repositoryInfos = repoManager.getAll();
         assertEquals(0, repositoryInfos.size());
-        
+
         RepositoryInfo repoByName = repoManager.getByRepoName("repo1");
         assertNull("Expected \"repo1\" to be non-existent", repoByName);
-        
+
         try {
             repoManager.getRepository(info.getId());
             fail();
@@ -443,11 +443,11 @@ public class RepositoryManagerTest extends GeoServerSystemTestSupport {
             //expected
             assertTrue(e.getMessage().contains("Repository not found: " + info.getId()));
         }
-        
+
         geogigDataStores = repoManager.findGeogigStores();
         assertEquals(0, geogigDataStores.size());
     }
-    
+
     @Test
     public void testListBranches() throws IOException {
         Hints hints = new Hints();
@@ -463,13 +463,13 @@ public class RepositoryManagerTest extends GeoServerSystemTestSupport {
         List<Ref> branches = repo.command(BranchListOp.class).call();
         RepositoryInfo info = saveRepository(repo);
         repo.close();
-        
+
         List<Ref> repoBranches = repoManager.listBranches(info.getId());
         assertTrue(repoBranches.containsAll(branches));
         assertTrue(branches.containsAll(repoBranches));
         assertEquals(branches.size(), repoBranches.size());
     }
-    
+
     @Test
     public void testPingRemote() throws Exception {
         try {
@@ -492,12 +492,12 @@ public class RepositoryManagerTest extends GeoServerSystemTestSupport {
         repo.command(InitOp.class).call();
         RepositoryInfo info1 = saveRepository(repo);
         repo.close();
-        
+
         assertEquals(headRef, RepositoryManager.pingRemote(info1.getLocation().toString(), "user", ""));
-        
+
         File notInitialized = new File(testData.getDataDirectoryRoot(), "notARepo");
         notInitialized.mkdirs();
-        
+
         try {
             RepositoryManager.pingRemote(notInitialized.toURI().toString(), "user", "");
             fail();

@@ -10,7 +10,7 @@ import org.geoserver.threadlocals.ThreadLocalTransfer;
 
 /**
  * Transfers the {@link WPSResourceManager} executionId thread local between threads
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class ExecutionIdThreadLocalTransfer implements ThreadLocalTransfer {

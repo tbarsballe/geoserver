@@ -7,6 +7,7 @@
 package org.geoserver.test;
 
 import static org.junit.Assert.*;
+
 import org.junit.Test;
 import org.w3c.dom.Document;
 
@@ -14,11 +15,11 @@ import org.w3c.dom.Document;
  * WFS GetFeature to test GEOS-5618: using functions in idExpression with joining.
  * If the function is not translatable to SQL, it is not supported with joining.
  * However, it should work without joining.
- * 
+ *
  * @author Rini Angreani (CSIRO Earth Science and Resource Engineering)
  */
 public class IdFunctionWfsWithJoiningTest extends AbstractAppSchemaTestSupport {
-    
+
     @Override
     protected IdFunctionMockData createTestData() {
         return new IdFunctionMockData();

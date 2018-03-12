@@ -19,7 +19,7 @@ import org.geotools.util.logging.Logging;
 
 public class ServicePersister extends ConfigurationListenerAdapter {
 
-    static Logger LOGGER = Logging.getLogger( "org.geoserver" );
+    static Logger LOGGER = Logging.getLogger("org.geoserver");
 
     List<XStreamServiceLoader> loaders;
     GeoServer geoServer;
@@ -29,12 +29,12 @@ public class ServicePersister extends ConfigurationListenerAdapter {
         this.loaders = loaders;
         this.geoServer = geoServer;
         this.resourceLoader = geoServer.getCatalog().getResourceLoader();
-        
+
     }
 
     @Override
     public void handleServiceChange(ServiceInfo service, List<String> propertyNames,
-            List<Object> oldValues, List<Object> newValues) {
+                                    List<Object> oldValues, List<Object> newValues) {
 
         XStreamServiceLoader loader = findServiceLoader(service);
 
@@ -50,7 +50,7 @@ public class ServicePersister extends ConfigurationListenerAdapter {
                     f = dir(ws).get(loader.getFilename());
                     f.renameTo(dir(ws).get(loader.getFilename()));
                 } catch (IOException e) {
-                    throw new RuntimeException( e );
+                    throw new RuntimeException(e);
                 }
             }
         }
@@ -62,11 +62,11 @@ public class ServicePersister extends ConfigurationListenerAdapter {
         try {
             //TODO: handle workspace move, factor this class out into
             // separate persister class
-            Resource directory = service.getWorkspace() != null 
-                ? dir(service.getWorkspace()) : null;
-            loader.save( service, geoServer, directory);
+            Resource directory = service.getWorkspace() != null
+                    ? dir(service.getWorkspace()) : null;
+            loader.save(service, geoServer, directory);
         } catch (Throwable t) {
-            throw new RuntimeException( t );
+            throw new RuntimeException(t);
             //LOGGER.log(Level.SEVERE, "Error occurred while saving configuration", t);
         }
     }
@@ -74,19 +74,18 @@ public class ServicePersister extends ConfigurationListenerAdapter {
     public void handleServiceRemove(ServiceInfo service) {
         XStreamServiceLoader loader = findServiceLoader(service);
         try {
-            Resource dir = service.getWorkspace() != null ? dir(service.getWorkspace()) 
-                : resourceLoader.get(Paths.BASE);
+            Resource dir = service.getWorkspace() != null ? dir(service.getWorkspace())
+                    : resourceLoader.get(Paths.BASE);
             dir.get(loader.getFilename()).delete();
-        }
-        catch(Throwable t) {
+        } catch (Throwable t) {
             throw new RuntimeException(t);
         }
     }
 
     XStreamServiceLoader findServiceLoader(ServiceInfo service) {
         XStreamServiceLoader loader = null;
-        for ( XStreamServiceLoader<ServiceInfo> l : loaders  ) {
-            if ( l.getServiceClass().isInstance( service ) ) {
+        for (XStreamServiceLoader<ServiceInfo> l : loaders) {
+            if (l.getServiceClass().isInstance(service)) {
                 loader = l;
                 break;
             }
@@ -98,7 +97,7 @@ public class ServicePersister extends ConfigurationListenerAdapter {
         return loader;
     }
 
-    Resource dir( WorkspaceInfo ws ) throws IOException {
+    Resource dir(WorkspaceInfo ws) throws IOException {
         return resourceLoader.get(Paths.path("workspaces", ws.getName()));
     }
 

@@ -22,9 +22,8 @@ import org.geoserver.web.GeoServerApplication;
 /**
  * Palette widget for the authentication chain, allowing for setting active providers and defining
  * chain order.
- * 
- * @author Justin Deoliveira, OpenGeo
  *
+ * @author Justin Deoliveira, OpenGeo
  */
 public class AuthenticationChainPalette extends Palette<String> {
 
@@ -35,18 +34,19 @@ public class AuthenticationChainPalette extends Palette<String> {
     public AuthenticationChainPalette(String id, IModel<List<String>> model) {
         this(id, null, model);
     }
-    
-    public AuthenticationChainPalette(String id, IModel<List<String>> model, 
-        IModel<List<String>> choicesModel) {
+
+    public AuthenticationChainPalette(String id, IModel<List<String>> model,
+                                      IModel<List<String>> choicesModel) {
         super(id, model, choicesModel, new ChoiceRenderer() {
             @Override
             public String getIdValue(Object object, int index) {
                 return (String) getDisplayValue(object);
             }
+
             @Override
-                public Object getDisplayValue(Object object) {
-                     return object.toString();
-                }
+            public Object getDisplayValue(Object object) {
+                return object.toString();
+            }
         }, 10, true);
         add(new DefaultTheme());
     }
@@ -57,7 +57,7 @@ public class AuthenticationChainPalette extends Palette<String> {
         public List<String> getObject() {
             try {
                 return new ArrayList<String>(
-                    GeoServerApplication.get().getSecurityManager().listAuthenticationProviders());
+                        GeoServerApplication.get().getSecurityManager().listAuthenticationProviders());
             } catch (IOException e) {
                 throw new WicketRuntimeException(e);
             }
@@ -73,6 +73,7 @@ public class AuthenticationChainPalette extends Palette<String> {
             throw new UnsupportedOperationException();
         }
     }
+
     /**
      * Override otherwise the header is not i18n'ized
      */

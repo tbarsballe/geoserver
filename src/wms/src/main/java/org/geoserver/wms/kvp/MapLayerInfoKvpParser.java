@@ -18,7 +18,7 @@ import org.geoserver.wms.WMS;
 
 /**
  * KVP parser to parse a comma separated list of layer names into a list of {@link MapLayerInfo}
- * 
+ *
  * @author Gabriel Roldan
  */
 public class MapLayerInfoKvpParser extends KvpParser {
@@ -63,7 +63,7 @@ public class MapLayerInfoKvpParser extends KvpParser {
                         continue;
 
                     for (LayerInfo li : groupInfo.layers()) {
-                        
+
                         if (skipResource(li))
                             continue;
 
@@ -72,10 +72,10 @@ public class MapLayerInfoKvpParser extends KvpParser {
                     }
                 }
             } else {
-                
+
                 if (skipResource(layerInfo))
                     continue;
-                
+
                 layer = new MapLayerInfo(layerInfo);
                 layers.add(layer);
             }

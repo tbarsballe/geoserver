@@ -50,7 +50,7 @@ public abstract class ScriptProcessTest extends ScriptProcessTestSupport {
     public void testInputs() throws Exception {
         ScriptProcessFactory pf = new ScriptProcessFactory(scriptMgr);
         Name buffer = pf.getNames().iterator().next();
-        
+
         Map<String, Parameter<?>> inputs = pf.getParameterInfo(buffer);
         assertNotNull(inputs);
 
@@ -66,7 +66,7 @@ public abstract class ScriptProcessTest extends ScriptProcessTestSupport {
     public void testOutputs() throws Exception {
         ScriptProcessFactory pf = new ScriptProcessFactory(scriptMgr);
         Name buffer = pf.getNames().iterator().next();
-        
+
         Map<String, Parameter<?>> outputs = pf.getResultInfo(buffer, null);
         assertNotNull(outputs);
 
@@ -102,18 +102,17 @@ public abstract class ScriptProcessTest extends ScriptProcessTestSupport {
             Name buffer = new NameImpl(getNamespace(), pname);
 
             org.geotools.process.Process p = pf.create(buffer);
-            
+
             Map inputs = new HashMap();
             inputs.put("geom", new WKTReader().read("POINT(0 0)"));
             inputs.put("distance", 1d);
 
             Map outputs = p.execute(inputs, null);
             assertEquals(2, outputs.size());
-            
+
             assertNotNull((Geometry) outputs.get("geom"));
             assertEquals(1d, (Double) outputs.get("distance"), 0.1);
-        }
-        else {
+        } else {
             System.out.println("Script " + pname + " does not exist, skipping test");
         }
     }

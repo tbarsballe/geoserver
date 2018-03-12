@@ -27,9 +27,9 @@ import com.thoughtworks.xstream.converters.extended.NamedMapConverter;
 
 /**
  * Loads the tool configuration file and configures the output formats accordingly.
- *
+ * <p>
  * <p>Also keeps tabs on the configuration file, reloading it as needed.
- * 
+ *
  * @author Andrea Aime, GeoSolutions
  * @author Stefano Costa, GeoSolutions
  */
@@ -59,7 +59,7 @@ public abstract class AbstractToolConfigurator implements ApplicationListener<Co
         GeoServerResourceLoader loader = GeoServerExtensions.bean(GeoServerResourceLoader.class);
         configFile = loader.get(getConfigurationFile());
         loadConfiguration();
-        configFile.addListener( listener );
+        configFile.addListener(listener);
     }
 
     /**
@@ -83,9 +83,8 @@ public abstract class AbstractToolConfigurator implements ApplicationListener<Co
                 InputStream in = configFile.in();
                 try {
                     XStream xstream = buildXStream();
-                    configuration = (ToolConfiguration) xstream.fromXML( in);
-                }
-                finally {
+                    configuration = (ToolConfiguration) xstream.fromXML(in);
+                } finally {
                     in.close();
                 }
             }
@@ -95,7 +94,7 @@ public abstract class AbstractToolConfigurator implements ApplicationListener<Co
 
         if (configuration == null) {
             LOGGER.log(Level.INFO,
-                            "Could not find/load the " + getConfigurationFile() + " configuration file, using internal defaults");
+                    "Could not find/load the " + getConfigurationFile() + " configuration file, using internal defaults");
             configuration = getDefaultConfiguration();
         }
 
@@ -125,13 +124,12 @@ public abstract class AbstractToolConfigurator implements ApplicationListener<Co
 
     /**
      * Builds and configures the XStream used for de-serializing the configuration
-     *
      */
     protected XStream buildXStream() {
         XStream xstream = new SecureXStream();
         xstream.alias("ToolConfiguration", ToolConfiguration.class);
         xstream.alias("Format", Format.class);
-        xstream.allowTypes(new Class[] { ToolConfiguration.class, Format.class });
+        xstream.allowTypes(new Class[]{ToolConfiguration.class, Format.class});
         xstream.allowTypeHierarchy(FormatAdapter.class);
         xstream.addImplicitCollection(Format.class, "options", "option", String.class);
         NamedMapConverter environmentConverter = new NamedMapConverter(xstream
@@ -146,7 +144,7 @@ public abstract class AbstractToolConfigurator implements ApplicationListener<Co
      * Kill all threads on web app context shutdown to avoid permgen leaks
      */
     public void onApplicationEvent(ContextClosedEvent event) {
-        if( configFile != null ){
+        if (configFile != null) {
             configFile.removeListener(listener);
         }
     }

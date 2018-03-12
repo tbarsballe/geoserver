@@ -35,11 +35,9 @@ import org.geowebcache.config.ConfigurationException;
 import org.geowebcache.layer.TileLayer;
 
 /**
- * 
  * Page to configure a BlobStore
- * 
- * @author Niels Charlier
  *
+ * @author Niels Charlier
  */
 public class BlobStorePage extends GeoServerSecuredPage {
 
@@ -62,8 +60,8 @@ public class BlobStorePage extends GeoServerSecuredPage {
         this(null);
     }
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
-	public BlobStorePage(final BlobStoreInfo originalStore) {
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    public BlobStorePage(final BlobStoreInfo originalStore) {
 
         final List<String> assignedLayers = new ArrayList<String>();
 
@@ -77,7 +75,7 @@ public class BlobStorePage extends GeoServerSecuredPage {
         typeOfBlobStore.add(new AjaxFormComponentUpdatingBehavior("change") {
             private static final long serialVersionUID = 359589121400814043L;
 
-			@Override
+            @Override
             protected void onUpdate(AjaxRequestTarget target) {
                 blobStoreForm.setVisible(typeOfBlobStore.getModelObject() != null);
                 if (typeOfBlobStore.getModelObject() != null) {
@@ -134,7 +132,7 @@ public class BlobStorePage extends GeoServerSecuredPage {
 
             @Override
             public FormComponent<?>[] getDependentFormComponents() {
-                return new FormComponent<?>[] { cbDefault, cbEnabled };
+                return new FormComponent<?>[]{cbDefault, cbEnabled};
             }
 
             @Override
@@ -153,7 +151,7 @@ public class BlobStorePage extends GeoServerSecuredPage {
 
             @Override
             public FormComponent<?>[] getDependentFormComponents() {
-                return new FormComponent<?>[] { tfId };
+                return new FormComponent<?>[]{tfId};
             }
 
             @Override
@@ -242,7 +240,7 @@ public class BlobStorePage extends GeoServerSecuredPage {
     }
 
     protected void save(BlobStoreInfo originalStore, BlobStoreInfo blobStore,
-            List<String> assignedLayers) throws ConfigurationException {
+                        List<String> assignedLayers) throws ConfigurationException {
 
         // remove default if necessary
         BlobStoreInfo defaultStore = null;

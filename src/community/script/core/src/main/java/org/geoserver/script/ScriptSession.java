@@ -11,7 +11,7 @@ import javax.script.ScriptEngine;
 
 /**
  * Maintains the state of a {@link ScriptEngine} instance under an identifier.
- * 
+ *
  * @author Justin Deoliveira, OpenGeo
  */
 public class ScriptSession {

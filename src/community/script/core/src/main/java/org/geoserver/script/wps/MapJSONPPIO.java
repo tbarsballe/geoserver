@@ -17,7 +17,7 @@ import java.util.Map;
 
 /**
  * PPIO that allows scripts to return a Map to be encoded as JSON.
- * 
+ *
  * @author Justin Deoliveira, OpenGeo
  */
 @Component
@@ -31,14 +31,14 @@ public class MapJSONPPIO extends CDataPPIO {
     public void encode(Object value, OutputStream os) throws Exception {
         OutputStreamWriter writer = new OutputStreamWriter(os);
         JSONWriter w = new JSONWriter(writer);
-        
+
         encode((Map) value, w);
         writer.flush();
     }
 
-    void encode(Map<?,?> map, JSONWriter w) throws JSONException {
+    void encode(Map<?, ?> map, JSONWriter w) throws JSONException {
         w.object();
-        for (Map.Entry<?,?> e : map.entrySet()) {
+        for (Map.Entry<?, ?> e : map.entrySet()) {
             Object key = e.getKey();
             Object val = e.getValue();
 
@@ -47,8 +47,7 @@ public class MapJSONPPIO extends CDataPPIO {
 
             if (val instanceof Map) {
                 encode((Map) val, w);
-            }
-            else {
+            } else {
                 w.value(val);
             }
         }

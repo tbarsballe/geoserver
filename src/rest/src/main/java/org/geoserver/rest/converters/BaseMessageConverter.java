@@ -31,12 +31,12 @@ public abstract class BaseMessageConverter<T> extends AbstractHttpMessageConvert
         implements HttpMessageConverter<T>, ExtensionPriority {
 
     private static final Logger LOGGER = Logging.getLogger("org.geoserver.rest.converters");
-    
+
     protected final Catalog catalog;
-    
+
     protected final XStreamPersisterFactory xpf;
 
-    protected  final GeoServer geoServer;
+    protected final GeoServer geoServer;
 
 //    /**
 //     * Construct an {@code BaseMessageConverter} with no supported media types.
@@ -47,13 +47,13 @@ public abstract class BaseMessageConverter<T> extends AbstractHttpMessageConvert
 //        this.xpf = GeoServerExtensions.bean(XStreamPersisterFactory.class);
 //        this.geoServer = GeoServerExtensions.bean(GeoServer.class);
 //    }
-    
+
     /**
      * Construct an {@code BaseMessageConverter} with supported media types.
-     * 
+     *
      * @param supportedMediaTypes the supported media types
      */
-    protected BaseMessageConverter(MediaType... supportedMediaTypes){
+    protected BaseMessageConverter(MediaType... supportedMediaTypes) {
         super(supportedMediaTypes);
         this.catalog = (Catalog) GeoServerExtensions.bean("catalog");
         this.xpf = GeoServerExtensions.bean(XStreamPersisterFactory.class);
@@ -62,8 +62,8 @@ public abstract class BaseMessageConverter<T> extends AbstractHttpMessageConvert
 
     /**
      * Construct an {@code BaseMessageConverter} with a default charset and supported media types.
-     * 
-     * @param defaultCharset the default character set
+     *
+     * @param defaultCharset      the default character set
      * @param supportedMediaTypes the supported media types
      */
     protected BaseMessageConverter(Charset defaultCharset, MediaType... supportedMediaTypes) {
@@ -72,14 +72,14 @@ public abstract class BaseMessageConverter<T> extends AbstractHttpMessageConvert
         this.xpf = GeoServerExtensions.bean(XStreamPersisterFactory.class);
         this.geoServer = GeoServerExtensions.bean(GeoServer.class);
     }
-    
+
     /**
      * Returns the priority of the {@link BaseMessageConverter}.
      */
     public int getPriority() {
         return ExtensionPriority.LOWEST;
     }
-    
+
 //    /**
 //     * Checks if the media type provided is "included" by one of the media types declared
 //     * in {@link #getSupportedMediaTypes()}
@@ -92,7 +92,7 @@ public abstract class BaseMessageConverter<T> extends AbstractHttpMessageConvert
 //        }
 //        return false;
 //    }
-    
+
 //    @Override
 //    protected T readInternal(Class<? extends T> clazz,
 //            HttpInputMessage inputMessage) throws IOException, HttpMessageNotReadableException {
@@ -104,14 +104,14 @@ public abstract class BaseMessageConverter<T> extends AbstractHttpMessageConvert
 //            throws IOException, HttpMessageNotWritableException {
 //        throw new HttpMessageNotReadableException(getClass().getName()+" does not support serialization");
 //    }
-    
+
     /* Default implementation provided for consistent not-implemented message */
     @Override
     protected T readInternal(Class<? extends T> clazz,
-            HttpInputMessage inputMessage) throws IOException, HttpMessageNotReadableException {
+                             HttpInputMessage inputMessage) throws IOException, HttpMessageNotReadableException {
         throw new HttpMessageNotReadableException(getClass().getName() + " does not support deserialization");
     }
-    
+
     /* Default implementation provided for consistent not-implemented message */
     @Override
     protected void writeInternal(T t, HttpOutputMessage outputMessage)

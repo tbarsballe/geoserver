@@ -39,18 +39,18 @@ public class AbstractCatalogStoreTest {
                 support(CSWRecordDescriptor.getInstance());
                 support(GSRecordDescriptor.getInstance());
             }
-            
+
             @Override
             public FeatureCollection getRecordsInternal(RecordDescriptor rd, RecordDescriptor rdOutput,
-                    Query q, Transaction t) throws IOException {
-                if(rd == GSRecordDescriptor.getInstance()) {
+                                                        Query q, Transaction t) throws IOException {
+                if (rd == GSRecordDescriptor.getInstance()) {
                     return new MemoryFeatureCollection(GSRecordDescriptor.getInstance().getFeatureType());
                 } else {
                     throw new RuntimeException("Was expecting the geoserver record descriptor");
                 }
             }
         };
-        
+
         RecordDescriptor[] descriptors = store.getRecordDescriptors();
         assertEquals(2, descriptors.length);
         assertEquals(CSWRecordDescriptor.getInstance(), descriptors[0]);
@@ -60,12 +60,12 @@ public class AbstractCatalogStoreTest {
         FeatureCollection records = store.getRecords(query, Transaction.AUTO_COMMIT, null);
         assertEquals(GSRecordDescriptor.getInstance().getFeatureType(), records.getSchema());
     }
-    
+
     static class GSRecordDescriptor extends AbstractRecordDescriptor {
         static final String GS_NAMESPACE = "http://www.geoserver.org/csw";
         CSWRecordDescriptor delegate = CSWRecordDescriptor.getInstance();
         static final GSRecordDescriptor INSTANCE = new GSRecordDescriptor();
-        
+
         public static GSRecordDescriptor getInstance() {
             return INSTANCE;
         }
@@ -118,7 +118,7 @@ public class AbstractCatalogStoreTest {
         public void verifySpatialFilters(Filter filter) {
             delegate.verifySpatialFilters(filter);
         }
-        
-        
+
+
     }
 }

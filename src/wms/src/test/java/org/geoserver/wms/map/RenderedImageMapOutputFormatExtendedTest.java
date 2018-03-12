@@ -130,7 +130,7 @@ public class RenderedImageMapOutputFormatExtendedTest extends WMSTestSupport {
     }
 
     /**
-     * Test to check that a channel selection after a renderingTransformation involving 
+     * Test to check that a channel selection after a renderingTransformation involving
      * an optimized read with underlying BANDS selection will not thrown an exception,
      * by updating the band select accordingly
      */
@@ -186,7 +186,7 @@ public class RenderedImageMapOutputFormatExtendedTest extends WMSTestSupport {
     }
 
     /**
-     * Test to check that disabling ADVANCED PROJECTION HANDLING will not return a blank image 
+     * Test to check that disabling ADVANCED PROJECTION HANDLING will not return a blank image
      */
     @Test
     public void testMosaicNoProjection() throws IOException, IllegalFilterException, Exception {

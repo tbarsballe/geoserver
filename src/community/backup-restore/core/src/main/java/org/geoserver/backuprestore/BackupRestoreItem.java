@@ -27,7 +27,6 @@ import com.thoughtworks.xstream.XStream;
 
 /**
  * @author Alessio Fabiani, GeoSolutions S.A.S.
- *
  */
 public abstract class BackupRestoreItem<T> {
 
@@ -35,7 +34,7 @@ public abstract class BackupRestoreItem<T> {
      * logger
      */
     private static final Logger LOGGER = Logging.getLogger(BackupRestoreItem.class);
-    
+
     protected Backup backupFacade;
 
     private Catalog catalog;
@@ -179,12 +178,12 @@ public abstract class BackupRestoreItem<T> {
         } else {
             this.filter = null;
         }
-        
+
         initialize(stepExecution);
     }
 
     /**
-     * 
+     *
      */
     protected abstract void initialize(StepExecution stepExecution);
 
@@ -196,7 +195,7 @@ public abstract class BackupRestoreItem<T> {
      */
     protected boolean logValidationExceptions(ValidationResult result, Exception e) throws Exception {
         CatalogException validationException = new CatalogException(e);
-        if(!isBestEffort()) {
+        if (!isBestEffort()) {
             if (result != null) {
                 result.throwIfInvalid();
             } else {
@@ -204,7 +203,7 @@ public abstract class BackupRestoreItem<T> {
             }
         }
 
-        if(!isBestEffort()) {
+        if (!isBestEffort()) {
             getCurrentJobExecution().addFailureExceptions(Arrays.asList(validationException));
         }
         return false;
@@ -214,8 +213,8 @@ public abstract class BackupRestoreItem<T> {
      * @param resource
      */
     protected boolean logValidationExceptions(T resource, Throwable e) {
-        CatalogException validationException = e != null ? new CatalogException(e) : 
-            new CatalogException("Invalid resource: " + resource);
+        CatalogException validationException = e != null ? new CatalogException(e) :
+                new CatalogException("Invalid resource: " + resource);
         if (!isBestEffort()) {
             getCurrentJobExecution().addFailureExceptions(Arrays.asList(validationException));
             throw validationException;
@@ -224,7 +223,7 @@ public abstract class BackupRestoreItem<T> {
         }
         return false;
     }
-    
+
     /**
      * @param resource
      * @param ws

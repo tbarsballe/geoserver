@@ -80,7 +80,7 @@ public class LocalWMSSettingsControllerTest extends CatalogRESTTestSupport {
 
     @Test
     public void testGetAsHTML() throws Exception {
-        getAsDOM(RestBaseController.ROOT_PATH + "/services/wms/workspaces/sf/settings.html" );
+        getAsDOM(RestBaseController.ROOT_PATH + "/services/wms/workspaces/sf/settings.html");
     }
 
     public void testCreateAsJSON() throws Exception {

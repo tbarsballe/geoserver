@@ -30,14 +30,14 @@ public class LiveActivityPanel extends Panel {
 
     public LiveActivityPanel(String id) {
         super(id);
-        
+
         GeoServerTablePanel<RequestData> requests = new GeoServerTablePanel<RequestData>("requests",
                 new LiveRequestDataProvider()) {
             private static final long serialVersionUID = -431473636413825153L;
 
             @Override
             protected Component getComponentForProperty(String id, IModel<RequestData> itemModel,
-                    Property<RequestData> property) {
+                                                        Property<RequestData> property) {
                 Object prop = ((BeanProperty<RequestData>) property)
                         .getPropertyValue((RequestData) itemModel.getObject());
 
@@ -48,29 +48,29 @@ public class LiveActivityPanel extends Panel {
         add(requests);
     }
 
-    
+
     static class LiveRequestDataProvider extends GeoServerDataProvider<RequestData> {
-    	
+
         private static final long serialVersionUID = -5576324995486786071L;
-		
+
         static final Property<RequestData> ID = new BeanProperty<RequestData>("id", "id");
         static final Property<RequestData> PATH = new BeanProperty<RequestData>("path", "path");
         static final Property<RequestData> STATUS = new BeanProperty<RequestData>("status", "status");
-        
+
         @Override
         protected List<RequestData> getItems() {
             MonitorDAO dao = getApplication().getBeanOfType(Monitor.class).getDAO();
-            Query q = new Query().filter("status", 
-                Arrays.asList(Status.RUNNING, Status.WAITING, Status.CANCELLING), Comparison.IN);
-            
+            Query q = new Query().filter("status",
+                    Arrays.asList(Status.RUNNING, Status.WAITING, Status.CANCELLING), Comparison.IN);
+
             return dao.getRequests(q);
         }
 
         @Override
         protected List<Property<RequestData>> getProperties() {
-            return Arrays.asList(ID, PATH, STATUS); 
+            return Arrays.asList(ID, PATH, STATUS);
         }
-     
+
     }
-    
+
 }

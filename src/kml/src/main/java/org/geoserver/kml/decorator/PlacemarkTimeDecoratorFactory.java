@@ -33,14 +33,14 @@ import de.micromata.opengis.kml.v_2_2_0.TimeStamp;
 
 /**
  * Template driven decorator setting the name in Placemark objects
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  * @author Wayne Fang, Refractions Research, wfang@refractions.net
  * @author Arne Kepp - OpenGeo
  * @author Justin Deoliveira - OpenGeo
  */
 public class PlacemarkTimeDecoratorFactory implements KmlDecoratorFactory {
-    
+
     static final Logger LOGGER = Logging.getLogger(PlacemarkTimeDecorator.class);
 
     /**
@@ -52,7 +52,7 @@ public class PlacemarkTimeDecoratorFactory implements KmlDecoratorFactory {
     List<DateFormat> dformats = new ArrayList<DateFormat>();
 
     List<DateFormat> tformats = new ArrayList<DateFormat>();
-    
+
     public PlacemarkTimeDecoratorFactory() {
         // add default freemarker ones first since they are likely to be used
         // first, the order of this list matters.
@@ -61,7 +61,7 @@ public class PlacemarkTimeDecoratorFactory implements KmlDecoratorFactory {
 
         dtformats.add(DateFormat.getDateTimeInstance());
         dtformats.add(DateFormat.getInstance());
-        
+
         dtformats.add(new SimpleDateFormat(FeatureTemplate.DATETIME_FORMAT_PATTERN));
         addFormats(dtformats, "dd%MM%yy hh:mm:ss");
         addFormats(dtformats, "MM%dd%yy hh:mm:ss");
@@ -100,13 +100,13 @@ public class PlacemarkTimeDecoratorFactory implements KmlDecoratorFactory {
 
     @Override
     public KmlDecorator getDecorator(Class<? extends Feature> featureClass,
-            KmlEncodingContext context) {
+                                     KmlEncodingContext context) {
         // this decorator is used only for WMS
-        if(!(context.getService() instanceof WMSInfo)) {
+        if (!(context.getService() instanceof WMSInfo)) {
             return null;
         }
 
-        
+
         if (Placemark.class.isAssignableFrom(featureClass) && hasTimeTemplate(context)) {
             return new PlacemarkTimeDecorator();
         } else {
@@ -165,7 +165,7 @@ public class PlacemarkTimeDecoratorFactory implements KmlDecoratorFactory {
          * <li><code>{}</code>: no timestamp information as empty array
          * </ul>
          * </p>
-         * 
+         *
          * @param feature The feature to execute against.
          */
         public String[] execute(FeatureTemplate delegate, SimpleFeature feature) throws IOException {
@@ -177,14 +177,14 @@ public class PlacemarkTimeDecoratorFactory implements KmlDecoratorFactory {
 
             // case of nothing specified
             if (output == null || "".equals(output)) {
-                return new String[] {};
+                return new String[]{};
             }
 
             // JD: split() returns a single value when the delimiter is at the
             // end... but two when at the start do another check
             String[] timespan = output.split("\\|\\|");
             if (output.endsWith("||")) {
-                timespan = new String[] { timespan[0], null };
+                timespan = new String[]{timespan[0], null};
             }
 
             if (timespan.length > 2) {
@@ -265,7 +265,7 @@ public class PlacemarkTimeDecoratorFactory implements KmlDecoratorFactory {
          * Parses a date as a string into a well-known format.
          */
         protected Date parseDate(List formats, String date) {
-            for (Iterator f = formats.iterator(); f.hasNext();) {
+            for (Iterator f = formats.iterator(); f.hasNext(); ) {
                 SimpleDateFormat format = (SimpleDateFormat) f.next();
                 Date d = null;
                 try {

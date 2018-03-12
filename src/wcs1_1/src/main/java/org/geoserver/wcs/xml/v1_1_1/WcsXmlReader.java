@@ -20,10 +20,10 @@ import org.vfny.geoserver.wcs.WcsException;
 
 /**
  * Xml reader for wfs 1.0.0 xml requests.
- * 
+ *
  * @author Justin Deoliveira, The Open Planning Project
  * @author Andrea Aime, The Open Planning project
- *
+ * <p>
  * TODO: there is too much duplication with the 1.1.0 reader, factor it out.
  */
 public class WcsXmlReader extends XmlRequestReader {
@@ -35,7 +35,7 @@ public class WcsXmlReader extends XmlRequestReader {
     private EntityResolverProvider resolverProvider;
 
     public WcsXmlReader(String element, String version, WCSConfiguration configuration,
-            EntityResolverProvider resolverProvider) {
+                        EntityResolverProvider resolverProvider) {
         super(new QName(WCS.NAMESPACE, element), new Version(version), "wcs");
         this.configuration = configuration;
         this.resolverProvider = resolverProvider;
@@ -48,15 +48,15 @@ public class WcsXmlReader extends XmlRequestReader {
         parser.setFailOnValidationError(true);
         parser.setStrict(true);
         parser.setEntityResolver(resolverProvider.getEntityResolver());
-        
+
         // parse
         Object parsed;
         try {
             parsed = parser.parse(reader);
-        } catch(Exception e) {
+        } catch (Exception e) {
             throw new WcsException("Parsing failed, the xml request is most probably not compliant to the wcs schema", e);
         }
-        
+
         return parsed;
     }
 }

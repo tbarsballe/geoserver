@@ -47,7 +47,7 @@ import com.vividsolutions.jts.geom.Envelope;
 /**
  * Class encapsulating the logic to query features for a given layer in the current GetMap KML
  * request
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  * @author Justin Deoliveira, The Open Planning Project, jdeolive@openplans.org
  */
@@ -64,15 +64,14 @@ public class KMLFeatureAccessor {
     /**
      * Loads the feature collection based on the current styling and the scale denominator. If no
      * feature is going to be returned a null feature collection will be returned instead
-     * 
+     *
      * @param layer
      * @param mapContent
      * @param wms
      * @param scaleDenominator
-     *
      */
     public SimpleFeatureCollection loadFeatureCollection(Layer layer, WMSMapContent mapContent,
-            WMS wms, double scaleDenominator) throws Exception {
+                                                         WMS wms, double scaleDenominator) throws Exception {
         SimpleFeatureSource featureSource = (SimpleFeatureSource) layer.getFeatureSource();
         Query q = getFeaturesQuery(layer, mapContent, wms, scaleDenominator);
 
@@ -96,15 +95,14 @@ public class KMLFeatureAccessor {
 
     /**
      * Counts how many features will be returned for the specified layer in the current request
-     * 
+     *
      * @param layer
      * @param mapContent
      * @param wms
      * @param scaleDenominator
-     *
      */
     public int getFeatureCount(Layer layer, WMSMapContent mapContent, WMS wms,
-            double scaleDenominator) throws Exception {
+                               double scaleDenominator) throws Exception {
         Query q = getFeaturesQuery(layer, mapContent, wms, scaleDenominator);
 
         SimpleFeatureSource featureSource = (SimpleFeatureSource) layer.getFeatureSource();
@@ -119,18 +117,17 @@ public class KMLFeatureAccessor {
     /**
      * Builds the Query object that will return the features for the specified layer and scale
      * denominator, based also on the current WMS configuration
-     * 
+     *
      * @param layer
      * @param mapContent
      * @param wms
      * @param scaleDenominator
      * @param schema
-     *
      * @throws TransformException
      * @throws FactoryException
      */
     private Query getFeaturesQuery(Layer layer, WMSMapContent mapContent, WMS wms,
-            double scaleDenominator) throws TransformException, FactoryException {
+                                   double scaleDenominator) throws TransformException, FactoryException {
         SimpleFeatureType schema = ((SimpleFeatureSource) layer.getFeatureSource()).getSchema();
 
         // create a bbox filter in the source crs (from the GetMap request bbox)
@@ -213,34 +210,34 @@ public class KMLFeatureAccessor {
      * Creates the bounding box filters (one for each geometric attribute) needed to query a
      * <code>Layer</code>'s feature source to return just the features for the target rendering
      * extent
-     * 
+     *
      * @param schema the layer's feature source schema
-     * @param bbox the expression holding the target rendering bounding box
+     * @param bbox   the expression holding the target rendering bounding box
      * @throws IllegalFilterException if something goes wrong creating the filter
      */
     private Filter createBBoxFilter(SimpleFeatureType schema, ReferencedEnvelope aoi)
             throws IllegalFilterException {
-        
+
         // Google earth likes to make requests that go beyond 180 when zoomed out
         // fix them
         List<ReferencedEnvelope> envelopes = new ArrayList<ReferencedEnvelope>();
-        if(KmlEncodingContext.WORLD_BOUNDS_WGS84.contains((Envelope) aoi)) {
+        if (KmlEncodingContext.WORLD_BOUNDS_WGS84.contains((Envelope) aoi)) {
             envelopes.add(aoi);
         } else {
             Envelope intersection = KmlEncodingContext.WORLD_BOUNDS_WGS84.intersection((Envelope) aoi);
-            if(intersection.getWidth() > 0) {
+            if (intersection.getWidth() > 0) {
                 envelopes.add(new ReferencedEnvelope(intersection, DefaultGeographicCRS.WGS84));
             }
             // look for the portion beyond +180
-            if(aoi.getMaxX() > 180) {
+            if (aoi.getMaxX() > 180) {
                 // GE never sends values larger than 360 
                 double maxx = aoi.getMaxX() - 360;
                 double minx = aoi.getMinX() > 180 ? aoi.getMinX() - 360 : -180;
-                envelopes.add(new ReferencedEnvelope(minx, maxx, aoi.getMinY(), 
+                envelopes.add(new ReferencedEnvelope(minx, maxx, aoi.getMinY(),
                         aoi.getMaxY(), DefaultGeographicCRS.WGS84));
             }
         }
-        
+
         List<ReferencedEnvelope> sourceEnvelopes = new ArrayList<ReferencedEnvelope>();
         CoordinateReferenceSystem sourceCrs = schema.getCoordinateReferenceSystem();
         if ((sourceCrs != null)
@@ -249,22 +246,22 @@ public class KMLFeatureAccessor {
                 try {
                     ReferencedEnvelope se = re.transform(sourceCrs, true);
                     sourceEnvelopes.add(se);
-                } catch(Exception e) {
+                } catch (Exception e) {
                     // in case of failure it means we are going beyond the projectable area
                     // of the source system, meaning that we are asking for an area that's too 
                     // large -> don't do spatial filtering then
-                    
+
                     return Filter.INCLUDE;
                 }
             }
         } else {
             sourceEnvelopes.addAll(envelopes);
         }
-        
+
         GeometryDescriptor gd = schema.getGeometryDescriptor();
-        if(sourceEnvelopes.size() == 0) {
+        if (sourceEnvelopes.size() == 0) {
             return Filter.INCLUDE;
-        } else if(sourceEnvelopes.size() == 1) {
+        } else if (sourceEnvelopes.size() == 1) {
             ReferencedEnvelope se = sourceEnvelopes.get(0);
             return filterFactory.bbox(gd.getLocalName(), se.getMinX(),
                     se.getMinY(), se.getMaxX(), se.getMaxY(), null);
@@ -281,9 +278,8 @@ public class KMLFeatureAccessor {
 
     /**
      * Joins the provided filters in a single one by and-ing them (and then, simplifying them)
-     * 
-     * @param filters
      *
+     * @param filters
      */
     private Filter joinFilters(Filter... filters) {
         if (filters == null || filters.length == 0) {

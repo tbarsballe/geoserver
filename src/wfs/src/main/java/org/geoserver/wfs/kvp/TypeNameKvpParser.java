@@ -19,7 +19,7 @@ import org.opengis.feature.type.Name;
  * This parser will parse strings of the above format into a list of
  * {@link javax.xml.namespace.QName}
  * </p>
- * 
+ *
  * @author Justin Deoliveira, The Open Planning Project
  * @author groldan
  */
@@ -31,7 +31,7 @@ public class TypeNameKvpParser extends QNameKvpParser {
         super(key, catalog, false);
         this.geoserver = geoserver;
     }
-    
+
     protected Object parseToken(String token) throws Exception {
         int i = token.indexOf(':');
 
@@ -41,7 +41,7 @@ public class TypeNameKvpParser extends QNameKvpParser {
             // we don't have the namespace, use the catalog to lookup the feature type 
             // mind, this is lenient behavior so we use it only if the server is not runnig in cite mode
             FeatureTypeInfo ftInfo = catalog.getFeatureTypeByName(token);
-            if(ftInfo == null) {
+            if (ftInfo == null) {
                 return new QName(null, token);
             } else {
                 final Name name = ftInfo.getFeatureType().getName();
@@ -49,5 +49,5 @@ public class TypeNameKvpParser extends QNameKvpParser {
             }
         }
     }
-    
+
 }

@@ -52,7 +52,8 @@ public class RawDataPPIO extends ComplexPPIO {
 
         try (InputStream is = rd.getInputStream()) {
             IOUtils.copy(is, os);
-        };
+        }
+        ;
     }
 
     @Override

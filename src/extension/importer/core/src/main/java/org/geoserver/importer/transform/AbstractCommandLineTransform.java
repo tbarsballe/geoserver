@@ -26,7 +26,7 @@ import org.geoserver.importer.ImportTask;
 
 /**
  * Generic file translator getting a set of options, an input file, and an output file
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public abstract class AbstractCommandLineTransform extends AbstractTransform implements
@@ -92,12 +92,12 @@ public abstract class AbstractCommandLineTransform extends AbstractTransform imp
         int limit = 16 * 1024;
         try {
             try (OutputStream os = new BoundedOutputStream(new ByteArrayOutputStream(), limit);
-                    OutputStream es = new BoundedOutputStream(new ByteArrayOutputStream(), limit)) {
+                 OutputStream es = new BoundedOutputStream(new ByteArrayOutputStream(), limit)) {
                 PumpStreamHandler streamHandler = new PumpStreamHandler(os, es);
                 executor.setStreamHandler(streamHandler);
                 try {
                     int result = executor.execute(cmd);
-                    
+
                     if (executor.isFailure(result)) {
                         // toString call is routed to ByteArrayOutputStream, which does the right string
                         // conversion
@@ -146,7 +146,7 @@ public abstract class AbstractCommandLineTransform extends AbstractTransform imp
             // grab at least some part of the outputs
             int limit = 16 * 1024;
             try (OutputStream os = new BoundedOutputStream(new ByteArrayOutputStream(), limit);
-                    OutputStream es = new BoundedOutputStream(new ByteArrayOutputStream(), limit)) {
+                 OutputStream es = new BoundedOutputStream(new ByteArrayOutputStream(), limit)) {
                 PumpStreamHandler streamHandler = new PumpStreamHandler(os, es);
                 executor.setStreamHandler(streamHandler);
                 int result = executor.execute(cmd);
@@ -173,8 +173,6 @@ public abstract class AbstractCommandLineTransform extends AbstractTransform imp
     /**
      * Returns the list of options to be passed the executable to test its availability and ability
      * to run. e.g. "--help"
-     * 
-     *
      */
     protected abstract List<String> getAvailabilityTestOptions();
 
@@ -201,17 +199,14 @@ public abstract class AbstractCommandLineTransform extends AbstractTransform imp
     /**
      * Returns the name of all the files that should be transferred from input to output (sometimes
      * the output is made of several files)
-     * 
-     * @param data
      *
+     * @param data
      * @throws IOException
      */
     protected abstract List<String> getReplacementTargetNames(ImportData data) throws IOException;
 
     /**
      * Returns true if the command line manipulates the input file directly
-     * 
-     *
      */
     protected boolean isInline() {
         return false;
@@ -220,8 +215,6 @@ public abstract class AbstractCommandLineTransform extends AbstractTransform imp
     /**
      * Returns true if in the command line the output file comes after the input one. The default
      * implementation returns true
-     * 
-     *
      */
     protected boolean isOutputAfterInput() {
         return true;
@@ -229,18 +222,16 @@ public abstract class AbstractCommandLineTransform extends AbstractTransform imp
 
     /**
      * The command input file
-     * 
-     * @param data
      *
+     * @param data
      * @throws IOException
      */
     protected abstract File getInputFile(ImportData data) throws IOException;
 
     /**
      * The directory used for outputs, by default, a subdirectory of the input file parent
-     * 
-     * @param data
      *
+     * @param data
      * @throws IOException
      */
     protected File getOutputDirectory(ImportData data) throws IOException {
@@ -257,17 +248,14 @@ public abstract class AbstractCommandLineTransform extends AbstractTransform imp
 
     /**
      * Implementors must provide the executable to be run
-     * 
-     *
      */
     protected abstract File getExecutable() throws IOException;
 
     /**
      * Locates and executable in the system path. On windows it will automatically append .exe to
      * the searched file name
-     * 
-     * @param name
      *
+     * @param name
      * @throws IOException
      */
     protected File getExecutableFromPath(String name) throws IOException {
@@ -296,7 +284,7 @@ public abstract class AbstractCommandLineTransform extends AbstractTransform imp
 
     /**
      * Output stream wrapper with a soft limit
-     * 
+     *
      * @author Andrea Aime - GeoSolutions
      */
     static final class BoundedOutputStream extends CountingOutputStream {

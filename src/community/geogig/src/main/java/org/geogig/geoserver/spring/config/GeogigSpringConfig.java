@@ -21,6 +21,7 @@ public class GeogigSpringConfig {
     }
 
     static final String FILTER_MULTIPART_RESOLVER_NAME = "geogigFilterMultipartResolver";
+
     @Bean(name = FILTER_MULTIPART_RESOLVER_NAME)
     MultipartResolver geogigFilterMultipartResolver() {
         return new CommonsMultipartResolver();

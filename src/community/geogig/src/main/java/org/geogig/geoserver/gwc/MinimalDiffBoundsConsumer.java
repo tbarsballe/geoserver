@@ -39,7 +39,7 @@ class MinimalDiffBoundsConsumer implements PreOrderDiffWalk.Consumer {
 
     /**
      * @return a single geometry product of unioning all the bounding boxes acquired while
-     *         traversing the diff
+     * traversing the diff
      */
     public Geometry buildGeometry() {
         List<Geometry> geomList = nonPoints;
@@ -76,8 +76,8 @@ class MinimalDiffBoundsConsumer implements PreOrderDiffWalk.Consumer {
 
     @Override
     public boolean bucket(final NodeRef leftParent, final NodeRef rightParent,
-            final BucketIndex bucketIndex, @Nullable final Bucket left,
-            @Nullable final Bucket right) {
+                          final BucketIndex bucketIndex, @Nullable final Bucket left,
+                          @Nullable final Bucket right) {
         if (left == null) {
             addEnv(right);
             return false;
@@ -145,7 +145,7 @@ class MinimalDiffBoundsConsumer implements PreOrderDiffWalk.Consumer {
 
     @Override
     public void endBucket(NodeRef leftParent, NodeRef rightParent, final BucketIndex bucketIndex,
-            @Nullable final Bucket left, @Nullable final Bucket right) {
+                          @Nullable final Bucket left, @Nullable final Bucket right) {
         // nothing to do, intentionally blank
     }
 }

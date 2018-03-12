@@ -21,8 +21,7 @@ import org.opengis.referencing.crs.CRSAuthorityFactory;
 /**
  * Same as the {@link NetCDFCRSAuthorityFactory}, but this one reads a different file and
  * can be populate from an external properties file provided within the
- * GEOSERVER_DATA_DIR/user_projections/netcdf.projections.properties file. 
- * 
+ * GEOSERVER_DATA_DIR/user_projections/netcdf.projections.properties file.
  */
 public class NetCDFCRSOverridingAuthorityFactory extends NetCDFCRSAuthorityFactory implements CRSAuthorityFactory {
 

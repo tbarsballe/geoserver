@@ -9,6 +9,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
@@ -21,7 +22,7 @@ import org.springframework.mock.web.MockHttpServletResponse;
 
 /**
  * Unit test suite for {@link JSONDescribeLayerResponse}
- * 
+ *
  * @author Carlo Cancellieri - GeoSolutions
  * @version $Id$
  */
@@ -38,7 +39,6 @@ public class DescribeLayerJsonTest extends WMSTestSupport {
 
     /**
      * Tests jsonp with custom callback function
-     * 
      */
     @Test
     public void testCustomJSONP() throws Exception {
@@ -58,7 +58,6 @@ public class DescribeLayerJsonTest extends WMSTestSupport {
 
     /**
      * Tests JSON
-     * 
      */
     @Test
     public void testSimpleJSON() throws Exception {
@@ -73,8 +72,8 @@ public class DescribeLayerJsonTest extends WMSTestSupport {
     }
 
     /**
-     * @param body Accepts:<br>
-     *        DescribeLayer(...)<br>
+     * @param body  Accepts:<br>
+     *              DescribeLayer(...)<br>
      * @param layer
      */
     private void checkJSONPDescribeLayer(String body, String layer) {
@@ -90,7 +89,6 @@ public class DescribeLayerJsonTest extends WMSTestSupport {
 
     /**
      * Tests jsonp with custom callback function
-     * 
      */
     @Test
     public void testJSONLayerGroup() throws Exception {
@@ -138,7 +136,7 @@ public class DescribeLayerJsonTest extends WMSTestSupport {
         assertEquals(layerDesc.get("owsType"), "WFS");
 
     }
-    
+
     @Test
     public void testJSONDescribeLayerCharset() throws Exception {
         String layer = MockData.FORESTS.getPrefix() + ":" + MockData.FORESTS.getLocalPart();
@@ -146,9 +144,9 @@ public class DescribeLayerJsonTest extends WMSTestSupport {
                 + "&query_layers=" + layer + "&width=20&height=20" + "&outputFormat="
                 + JSONType.json;
 
-        MockHttpServletResponse result = getAsServletResponse(request,"");
+        MockHttpServletResponse result = getAsServletResponse(request, "");
         assertTrue("UTF-8".equals(result.getCharacterEncoding()));
 
     }
-    
+
 }

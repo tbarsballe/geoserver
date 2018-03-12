@@ -36,7 +36,7 @@ public class DescribeIdentifierKvpParser extends KvpParser {
 
         Ows11Factory owsFactory = new Ows11FactoryImpl();
 
-        for(String str : (List<String>)KvpUtils.readFlat(value)) {
+        for (String str : (List<String>) KvpUtils.readFlat(value)) {
             CodeType codeType = owsFactory.createCodeType();
             codeType.setValue(str);
             values.add(codeType);

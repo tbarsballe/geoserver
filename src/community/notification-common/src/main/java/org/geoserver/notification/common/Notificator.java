@@ -11,9 +11,8 @@ import com.thoughtworks.xstream.XStream;
 
 /**
  * The configuration of {@link MessageProcessor}, populated by {@link XStream}
- * 
- * @author Xandros
  *
+ * @author Xandros
  */
 public class Notificator implements Serializable {
 

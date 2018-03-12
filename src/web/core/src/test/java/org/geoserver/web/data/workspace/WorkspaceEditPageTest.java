@@ -36,7 +36,7 @@ public class WorkspaceEditPageTest extends GeoServerWicketTestSupport {
     public void init() {
         login();
         citeWorkspace = getCatalog().getWorkspaceByName(MockData.CITE_PREFIX);
-        
+
         GeoServer gs = getGeoServer();
         SettingsInfo s = gs.getSettings(citeWorkspace);
         if (s != null) {
@@ -54,9 +54,9 @@ public class WorkspaceEditPageTest extends GeoServerWicketTestSupport {
         FormTester form = tester.newFormTester("form");
         form.setValue("uri", "");
         form.submit();
-        
+
         tester.assertRenderedPage(WorkspaceEditPage.class);
-        tester.assertErrorMessages(new String[] {"Field 'uri' is required."});
+        tester.assertErrorMessages(new String[]{"Field 'uri' is required."});
     }
 
     @Test
@@ -87,8 +87,8 @@ public class WorkspaceEditPageTest extends GeoServerWicketTestSupport {
         tester.assertRenderedPage(WorkspaceEditPage.class);
         List messages = tester.getMessages(FeedbackMessage.ERROR);
         assertEquals(1, messages.size());
-        assertEquals("Invalid URI syntax: not a valid uri", 
-            ((ValidationErrorFeedback)messages.get(0)).getMessage());
+        assertEquals("Invalid URI syntax: not a valid uri",
+                ((ValidationErrorFeedback) messages.get(0)).getMessage());
     }
 
     /**
@@ -119,16 +119,16 @@ public class WorkspaceEditPageTest extends GeoServerWicketTestSupport {
             assertEquals(newNsURI, store.getConnectionParameters().get("namespace"));
         }
     }
-    
+
     @Test
     public void testDefaultCheckbox() {
         assertFalse(getCatalog().getDefaultWorkspace().getName().equals(MockData.CITE_PREFIX));
-        
+
         FormTester form = tester.newFormTester("form");
         form.setValue("default", "true");
         form.submit();
         tester.assertNoErrorMessage();
-        
+
         assertEquals(MockData.CITE_PREFIX, getCatalog().getDefaultWorkspace().getName());
     }
 
@@ -137,7 +137,7 @@ public class WorkspaceEditPageTest extends GeoServerWicketTestSupport {
         GeoServer gs = getGeoServer();
 
         assertNull(gs.getSettings(citeWorkspace));
-        
+
         FormTester form = tester.newFormTester("form");
         form.setValue("settings:enabled", true);
         form.submit();
@@ -145,7 +145,7 @@ public class WorkspaceEditPageTest extends GeoServerWicketTestSupport {
         tester.assertNoErrorMessage();
         assertNotNull(gs.getSettings(citeWorkspace));
     }
-    
+
     @Test
     public void testLocalworkspaceRemovePrefix() throws Exception {
         GeoServer gs = getGeoServer();
@@ -178,8 +178,8 @@ public class WorkspaceEditPageTest extends GeoServerWicketTestSupport {
         tester.assertRenderedPage(WorkspaceEditPage.class);
 
         FormTester form = tester.newFormTester("form");
-        assertEquals("http://foo.org", 
-            form.getTextComponentValue("settings:settingsContainer:otherSettings:proxyBaseUrl"));
+        assertEquals("http://foo.org",
+                form.getTextComponentValue("settings:settingsContainer:otherSettings:proxyBaseUrl"));
         form.setValue("settings:enabled", false);
         form.submit();
 
@@ -194,7 +194,7 @@ public class WorkspaceEditPageTest extends GeoServerWicketTestSupport {
         // edit the second workspace to make it non isolated, this should fail
         updateWorkspace("test_a2", "test_a2", "http://www.test_a.org", false);
         tester.assertRenderedPage(WorkspaceEditPage.class);
-        tester.assertErrorMessages(new String[] {"Namespace with URI 'http://www.test_a.org' already exists."});
+        tester.assertErrorMessages(new String[]{"Namespace with URI 'http://www.test_a.org' already exists."});
         // edit the first workspace and make it isolated
         updateWorkspace("test_a1", "test_a1", "http://www.test_a.org", true);
         tester.assertRenderedPage(WorkspacePage.class);
@@ -229,7 +229,7 @@ public class WorkspaceEditPageTest extends GeoServerWicketTestSupport {
         // change second workspace name and try to make non isolated, this should fail
         updateWorkspace("test_b2", "test_b3", "http://www.test_b.org", false);
         tester.assertRenderedPage(WorkspaceEditPage.class);
-        tester.assertErrorMessages(new String[] {"Namespace with URI 'http://www.test_b.org' already exists."});
+        tester.assertErrorMessages(new String[]{"Namespace with URI 'http://www.test_b.org' already exists."});
         // check that the catalog contains the expected objects
         Catalog catalog = getCatalog();
         // validate the first workspace
@@ -254,9 +254,9 @@ public class WorkspaceEditPageTest extends GeoServerWicketTestSupport {
      * Helper method that creates a workspace and add it to the catalog. This method will
      * first create the namespace and then the workspace.
      *
-     * @param prefix name of the workspace and prefix of the namespace
+     * @param prefix       name of the workspace and prefix of the namespace
      * @param namespaceUri URI fo the namespace associated to the workspace
-     * @param isolated TRUE if the created workspace and namespace should be considered isolated
+     * @param isolated     TRUE if the created workspace and namespace should be considered isolated
      */
     private void createWorkspace(String prefix, String namespaceUri, boolean isolated) {
         Catalog catalog = getCatalog();
@@ -276,9 +276,9 @@ public class WorkspaceEditPageTest extends GeoServerWicketTestSupport {
     /**
      * Helper method that edits an workspace and submits the editions.
      *
-     * @param name new workspace name
+     * @param name      new workspace name
      * @param namespace new workspace namespace URI
-     * @param isolated TRUE if the workspace should be isolated, otherwise false
+     * @param isolated  TRUE if the workspace should be isolated, otherwise false
      */
     private void updateWorkspace(String originalName, String name, String namespace, boolean isolated) {
         // make sure the form is initiated

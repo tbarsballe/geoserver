@@ -8,7 +8,7 @@ import org.geoserver.platform.ServiceException;
 
 /**
  * Simple support class used to check max rendering time during animation loops
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 class MaxAnimationTimeHelper {

@@ -44,8 +44,8 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @ControllerAdvice
-@RequestMapping(path = { RestBaseController.ROOT_PATH + "/geofence/ruleCache",
-        RestBaseController.ROOT_PATH + "/ruleCache" }) // legacy entrypoint
+@RequestMapping(path = {RestBaseController.ROOT_PATH + "/geofence/ruleCache",
+        RestBaseController.ROOT_PATH + "/ruleCache"}) // legacy entrypoint
 public class CacheController extends AbstractCatalogController {
 
     static final Logger LOGGER = Logging.getLogger(CacheController.class);
@@ -57,7 +57,7 @@ public class CacheController extends AbstractCatalogController {
         super(catalog);
     }
 
-    @GetMapping(path = "/info", produces = { MediaType.TEXT_PLAIN_VALUE })
+    @GetMapping(path = "/info", produces = {MediaType.TEXT_PLAIN_VALUE})
     public String getCacheInfo() {
         CacheStats stats = cachedRuleReader.getStats();
 
@@ -93,7 +93,7 @@ public class CacheController extends AbstractCatalogController {
         return sb.toString();
     }
 
-    @PutMapping(produces = { MediaType.TEXT_PLAIN_VALUE })
+    @PutMapping(produces = {MediaType.TEXT_PLAIN_VALUE})
     @RequestMapping(path = "/invalidate")
     public String invalidateCache() {
         LOGGER.log(Level.WARNING, "INVALIDATING CACHE");

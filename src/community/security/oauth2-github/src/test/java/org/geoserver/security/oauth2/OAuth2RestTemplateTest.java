@@ -24,7 +24,6 @@ import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 
 /**
  * @author Alessio Fabiani, GeoSolutions S.A.S.
- *
  */
 public class OAuth2RestTemplateTest extends AbstractOAuth2RestTemplateTest {
 
@@ -49,7 +48,7 @@ public class OAuth2RestTemplateTest extends AbstractOAuth2RestTemplateTest {
         when(response.getStatusCode()).thenReturn(statusCode);
         when(request.execute()).thenReturn(response);
     }
-    
+
     @Test(expected = AccessTokenRequiredException.class)
     public void testAccessDeneiedException() throws Exception {
         DefaultOAuth2AccessToken token = new DefaultOAuth2AccessToken("12345");
@@ -77,7 +76,7 @@ public class OAuth2RestTemplateTest extends AbstractOAuth2RestTemplateTest {
 
             @Override
             public void authenticate(OAuth2ProtectedResourceDetails resource,
-                    OAuth2ClientContext clientContext, ClientHttpRequest req) {
+                                     OAuth2ClientContext clientContext, ClientHttpRequest req) {
                 req.getHeaders().set("X-Authorization",
                         clientContext.getAccessToken().getTokenType() + " " + "Nah-nah-na-nah-nah");
             }

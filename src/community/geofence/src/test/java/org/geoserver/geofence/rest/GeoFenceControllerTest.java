@@ -26,7 +26,9 @@ import org.geoserver.rest.RestBaseController;
 import org.geoserver.test.GeoServerSystemTestSupport;
 import org.junit.Before;
 import org.junit.Test;
+
 import static org.junit.Assert.*;
+
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 

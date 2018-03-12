@@ -74,8 +74,8 @@ public class DefaultWebFeatureService30 implements WebFeatureService30 {
 //                return next;
 //            }
 //        } else {
-            // normal encoding
-            return response;
+        // normal encoding
+        return response;
 //        }
     }
 

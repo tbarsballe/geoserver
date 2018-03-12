@@ -11,7 +11,7 @@ import org.eclipse.xsd.util.XSDSchemaLocationResolver;
 
 public class OWSSchemaLocationResolver implements XSDSchemaLocationResolver {
     public String resolveSchemaLocation(XSDSchema xsdSchema, String namespaceURI,
-        String schemaLocationURI) {
+                                        String schemaLocationURI) {
         if (schemaLocationURI == null) {
             return null;
         }

@@ -24,12 +24,14 @@ import static org.geoserver.importer.ImporterUtils.*;
 
 /**
  * A unit of work during an import.
- * 
+ *
  * @author Justin Deoliveira, OpenGeo
  */
 public class ImportTask implements Serializable {
 
-    /** serialVersionUID */
+    /**
+     * serialVersionUID
+     */
     private static final long serialVersionUID = 1L;
 
     public static enum State {
@@ -52,11 +54,11 @@ public class ImportTask implements Serializable {
     ImportData data;
 
     /**
-     * The target store for the import 
+     * The target store for the import
      */
     StoreInfo store;
 
-    /** 
+    /**
      * state
      */
     State state = State.PENDING;
@@ -91,8 +93,8 @@ public class ImportTask implements Serializable {
      */
     Exception error;
 
-    /** 
-     * transform to apply to this import item 
+    /**
+     * transform to apply to this import item
      */
     TransformChain transform;
 
@@ -102,9 +104,9 @@ public class ImportTask implements Serializable {
     List<LogRecord> messages = new ArrayList<LogRecord>();
 
     /**
-     * various metadata 
+     * various metadata
      */
-    transient Map<Object,Object> metadata;
+    transient Map<Object, Object> metadata;
 
     /**
      * used to track progress
@@ -199,20 +201,20 @@ public class ImportTask implements Serializable {
         }
         return metadata;
     }
-    
+
     public void clearMessages() {
         if (messages != null) {
             messages.clear();
         }
     }
 
-    public void addMessage(Level level,String msg) {
+    public void addMessage(Level level, String msg) {
         if (messages == null) {
             messages = new ArrayList<LogRecord>();
         }
         messages.add(new LogRecord(level, msg));
     }
-    
+
     public List<LogRecord> getMessages() {
         List<LogRecord> retval;
         if (messages == null) {
@@ -230,7 +232,7 @@ public class ImportTask implements Serializable {
     public void setOriginalLayerName(String originalLayerName) {
         this.originalLayerName = originalLayerName;
     }
-    
+
     public int getNumberProcessed() {
         return numberProcessed;
     }
@@ -258,7 +260,7 @@ public class ImportTask implements Serializable {
     public void reattach(Catalog catalog) {
         reattach(catalog, false);
     }
-    
+
     public void reattach(Catalog catalog, boolean lookupByName) {
         store = resolve(store, catalog, lookupByName);
         layer = resolve(layer, catalog, lookupByName);

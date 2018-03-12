@@ -51,7 +51,7 @@ import com.vividsolutions.jts.geom.Polygon;
  * This is to test encoding of SRS information and reprojection values in app-schema features. This
  * is separated from SRSWfsTest as both test uses the same top level mapping and this test doesn't
  * make changes to the Axis Order.
- * 
+ *
  * @author Victor Tey, CSIRO Exploration and Mining
  */
 public class SRSReprojectionTest extends AbstractAppSchemaTestSupport {
@@ -67,7 +67,6 @@ public class SRSReprojectionTest extends AbstractAppSchemaTestSupport {
 
     /**
      * Tests re-projection of NonFeatureTypeProxy.
-     * 
      */
     @Test
     public void testNonFeatureTypeProxy() {
@@ -122,7 +121,6 @@ public class SRSReprojectionTest extends AbstractAppSchemaTestSupport {
     /**
      * Tests re-projection in a normal feature chaining mapping where there is no geometry on the
      * parent feature and only on the nested feature level
-     * 
      */
     @Test
     public void testChainingReprojection() throws NoSuchAuthorityCodeException, FactoryException,
@@ -136,9 +134,9 @@ public class SRSReprojectionTest extends AbstractAppSchemaTestSupport {
         GeometryFactory factory = new GeometryFactory();
         Polygon srcPolygon = factory.createPolygon(factory.createLinearRing(factory
                 .getCoordinateSequenceFactory().create(
-                        new Coordinate[] { new Coordinate(-1.2, 52.5), new Coordinate(-1.2, 52.6),
+                        new Coordinate[]{new Coordinate(-1.2, 52.5), new Coordinate(-1.2, 52.6),
                                 new Coordinate(-1.1, 52.6), new Coordinate(-1.1, 52.5),
-                                new Coordinate(-1.2, 52.5) })), null);
+                                new Coordinate(-1.2, 52.5)})), null);
         Polygon targetPolygon = (Polygon) JTS.transform(srcPolygon, transform);
         StringBuffer polygonBuffer = new StringBuffer();
         for (Coordinate coord : targetPolygon.getCoordinates()) {
@@ -197,7 +195,6 @@ public class SRSReprojectionTest extends AbstractAppSchemaTestSupport {
     /**
      * Tests that Xlink href works fine in nested feature chaining with features that contains
      * geometry
-     * 
      */
     @Test
     public void testChainingXlink() {
@@ -231,9 +228,9 @@ public class SRSReprojectionTest extends AbstractAppSchemaTestSupport {
         GeometryFactory factory = new GeometryFactory();
         Polygon srcPolygon = factory.createPolygon(factory.createLinearRing(factory
                 .getCoordinateSequenceFactory().create(
-                        new Coordinate[] { new Coordinate(-1.2, 52.5), new Coordinate(-1.2, 52.6),
+                        new Coordinate[]{new Coordinate(-1.2, 52.5), new Coordinate(-1.2, 52.6),
                                 new Coordinate(-1.1, 52.6), new Coordinate(-1.1, 52.5),
-                                new Coordinate(-1.2, 52.5) })), null);
+                                new Coordinate(-1.2, 52.5)})), null);
         Envelope bounds = srcPolygon.getEnvelopeInternal();
 
         BBOX intersects = ff

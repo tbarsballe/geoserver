@@ -19,9 +19,8 @@ import net.sf.json.JSONObject;
 
 /**
  * Test for {@link MasterPasswordController}
- * 
- * @author christian
  *
+ * @author christian
  */
 public class MasterPasswordControllerTest extends SecurityRESTTestSupport {
 

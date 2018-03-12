@@ -35,13 +35,13 @@ import org.opengis.filter.FilterFactory;
 
 
 public class LayerGroupEditPageTest extends LayerGroupBaseTest {
-    
+
     @Test
     public void testComputeBounds() {
         LayerGroupEditPage page = new LayerGroupEditPage(new PageParameters().add("group", "lakes"));
         tester.startPage(page);
         // print(page, true, false);
-        
+
         tester.assertRenderedPage(LayerGroupEditPage.class);
         // remove the first and second elements
         // tester.clickLink("form:layers:layers:listContainer:items:1:itemProperties:4:component:link");
@@ -52,32 +52,32 @@ public class LayerGroupEditPageTest extends LayerGroupBaseTest {
         // print(page, true, true);
         // submit the form
         tester.submitForm("publishedinfo");
-        
+
         // For the life of me I cannot get this test to work... and I know by direct UI inspection that
         // the page works as expected...
 //        FeatureTypeInfo bridges = getCatalog().getResourceByName(MockData.BRIDGES.getLocalPart(), FeatureTypeInfo.class);
 //        assertEquals(getCatalog().getLayerGroupByName("lakes").getBounds(), bridges.getNativeBoundingBox());
     }
-    
+
     @Test
     public void testComputeBoundsFromCRS() {
         LayerGroupEditPage page = new LayerGroupEditPage(new PageParameters().add("group", "lakes"));
         tester.startPage(page);
         tester.assertRenderedPage(LayerGroupEditPage.class);
-        
+
         FormTester form = tester.newFormTester("publishedinfo");
-        form.setValue("tabs:panel:bounds:crsContainer:crs:srs", "EPSG:4326"); 
+        form.setValue("tabs:panel:bounds:crsContainer:crs:srs", "EPSG:4326");
         tester.clickLink("publishedinfo:tabs:panel:generateBoundsFromCRS", true);
         tester.assertComponentOnAjaxResponse("publishedinfo:tabs:panel:bounds");
         Component ajaxComponent = tester.getComponentFromLastRenderedPage("publishedinfo:tabs:panel:bounds");
-        assert(ajaxComponent instanceof EnvelopePanel);
-        EnvelopePanel envPanel = (EnvelopePanel)ajaxComponent;
-        assertEquals(((DecimalTextField)envPanel.get("minX")).getModelObject(), new Double(-180.0));
-        assertEquals(((DecimalTextField)envPanel.get("minY")).getModelObject(), new Double(-90.0));
-        assertEquals(((DecimalTextField)envPanel.get("maxX")).getModelObject(), new Double(180.0));
-        assertEquals(((DecimalTextField)envPanel.get("maxY")).getModelObject(), new Double(90.0));
+        assert (ajaxComponent instanceof EnvelopePanel);
+        EnvelopePanel envPanel = (EnvelopePanel) ajaxComponent;
+        assertEquals(((DecimalTextField) envPanel.get("minX")).getModelObject(), new Double(-180.0));
+        assertEquals(((DecimalTextField) envPanel.get("minY")).getModelObject(), new Double(-90.0));
+        assertEquals(((DecimalTextField) envPanel.get("maxX")).getModelObject(), new Double(180.0));
+        assertEquals(((DecimalTextField) envPanel.get("maxY")).getModelObject(), new Double(90.0));
     }
-    
+
     @Before
     public void doLogin() {
         login();
@@ -91,13 +91,13 @@ public class LayerGroupEditPageTest extends LayerGroupBaseTest {
         tester.assertRenderedPage(LayerGroupEditPage.class);
         FormTester form = tester.newFormTester("publishedinfo");
         form.submit();
-        
+
         // should not work, no name provided, so we remain
         // in the same page
         tester.assertRenderedPage(LayerGroupEditPage.class);
-        tester.assertErrorMessages((Serializable[]) new String[] {"Field 'Name' is required.", "Field 'Bounds' is required."});
+        tester.assertErrorMessages((Serializable[]) new String[]{"Field 'Name' is required.", "Field 'Bounds' is required."});
     }
-    
+
     @Test
     public void testMissingCRS() {
         LayerGroupEditPage page = new LayerGroupEditPage();
@@ -112,7 +112,7 @@ public class LayerGroupEditPageTest extends LayerGroupBaseTest {
         form.setValue("tabs:panel:bounds:maxY", "90");
 
         page.lgEntryPanel.getEntries().add(
-            new LayerGroupEntry(getCatalog().getLayerByName(getLayerId(MockData.LAKES)), null));
+                new LayerGroupEntry(getCatalog().getLayerByName(getLayerId(MockData.LAKES)), null));
         form.submit("save");
 
         // should not work, duplicate provided, so we remain
@@ -122,7 +122,7 @@ public class LayerGroupEditPageTest extends LayerGroupBaseTest {
         String message = tester.getMessages(FeedbackMessage.ERROR).get(0).toString();
         assertTrue(message.contains("Bounds"));
     }
-    
+
     @Test
     public void testDuplicateName() {
         LayerGroupEditPage page = new LayerGroupEditPage();
@@ -138,7 +138,7 @@ public class LayerGroupEditPageTest extends LayerGroupBaseTest {
         form.setValue("tabs:panel:bounds:crsContainer:crs:srs", "EPSG:4326");
 
         page.lgEntryPanel.getEntries().add(
-            new LayerGroupEntry(getCatalog().getLayerByName(getLayerId(MockData.LAKES)), null));
+                new LayerGroupEntry(getCatalog().getLayerByName(getLayerId(MockData.LAKES)), null));
         form.submit("save");
 
         // should not work, duplicate provided, so we remain
@@ -146,9 +146,9 @@ public class LayerGroupEditPageTest extends LayerGroupBaseTest {
         tester.assertRenderedPage(LayerGroupEditPage.class);
         assertEquals(1, tester.getMessages(FeedbackMessage.ERROR).size());
         assertTrue(tester.getMessages(FeedbackMessage.ERROR).get(0).toString()
-            .endsWith("Layer group named 'lakes' already exists"));
+                .endsWith("Layer group named 'lakes' already exists"));
     }
-    
+
     @Test
     public void testNewName() {
         LayerGroupEditPage page = new LayerGroupEditPage();
@@ -158,15 +158,15 @@ public class LayerGroupEditPageTest extends LayerGroupBaseTest {
         FormTester form = tester.newFormTester("publishedinfo");
         form.setValue("tabs:panel:name", "newGroup");
         form.submit();
-        
+
         // should work, we switch to the edit page
         tester.assertRenderedPage(LayerGroupEditPage.class);
-        tester.assertErrorMessages((Serializable[]) new String[] {"Field 'Bounds' is required."});
+        tester.assertErrorMessages((Serializable[]) new String[]{"Field 'Bounds' is required."});
     }
-    
+
     @Test
     public void testLayerLink() {
-        
+
         LayerGroupEditPage page = new LayerGroupEditPage();
         // Create the new page
         tester.startPage(page);
@@ -180,10 +180,10 @@ public class LayerGroupEditPageTest extends LayerGroupBaseTest {
         DataView<?> dataView = (DataView<?>) page.lgEntryPanel.get("popup:content:listContainer:items");
         // Ensure that the Row count is equal to the Layers in the Catalog
         Catalog catalog = getGeoServerApplication().getCatalog();
-        
+
         int layerCount = catalog.count(LayerInfo.class, Filter.INCLUDE);
         int rowCount = (int) dataView.getRowCount();
-        
+
         assertEquals(layerCount, rowCount);
     }
 
@@ -209,7 +209,7 @@ public class LayerGroupEditPageTest extends LayerGroupBaseTest {
 
         assertEquals(styleCount, rowCount);
     }
-    
+
     @Test
     public void testLayerLinkWithWorkspace() {
         LayerGroupEditPage page = new LayerGroupEditPage(
@@ -226,18 +226,18 @@ public class LayerGroupEditPageTest extends LayerGroupBaseTest {
         DataView<?> dataView = (DataView<?>) page.lgEntryPanel.get("popup:content:listContainer:items");
         // Ensure that the Row count is equal to the Layers in the Catalog
         Catalog catalog = getGeoServerApplication().getCatalog();
-        
-        
+
+
         FilterFactory ff = CommonFactoryFinder.getFilterFactory2();
-        final Filter filter = ff.equal(ff.property("resource.store.workspace.id"), 
-                ff.literal(catalog.getWorkspaceByName("cite").getId()),true);
+        final Filter filter = ff.equal(ff.property("resource.store.workspace.id"),
+                ff.literal(catalog.getWorkspaceByName("cite").getId()), true);
 
         int layerCount = catalog.count(LayerInfo.class, filter);
         int rowCount = (int) dataView.getRowCount();
-        
+
         assertEquals(layerCount, rowCount);
     }
-    
+
     @Test
     public void testLayerGroupLinkWithWorkspace() {
         LayerGroupEditPage page = new LayerGroupEditPage(
@@ -257,21 +257,21 @@ public class LayerGroupEditPageTest extends LayerGroupBaseTest {
 
         int layerGroupCount = catalog.getLayerGroupsByWorkspace("cite").size();
         int rowCount = (int) dataView.getRowCount();
-        
+
         assertEquals(layerGroupCount, rowCount);
     }
-    
-    
+
+
     @Test
     public void testMetadataLinks() {
         LayerGroupEditPage page = new LayerGroupEditPage();
         // Create the new page
         tester.startPage(page);
         tester.assertRenderedPage(LayerGroupEditPage.class);
-        
+
         // Ensure that the Layer List page is rendered correctly
         tester.assertComponent("publishedinfo:tabs:panel:metadataLinks", MetadataLinkEditor.class);
-        
+
         FormTester form = tester.newFormTester("publishedinfo");
         form.setValue("tabs:panel:name", "lakes");
         form.setValue("tabs:panel:bounds:minX", "0");
@@ -279,16 +279,16 @@ public class LayerGroupEditPageTest extends LayerGroupBaseTest {
         form.setValue("tabs:panel:bounds:maxX", "0");
         form.setValue("tabs:panel:bounds:maxY", "0");
         form.setValue("tabs:panel:bounds:crsContainer:crs:srs", "EPSG:4326");
-        
+
         tester.executeAjaxEvent("publishedinfo:tabs:panel:metadataLinks:addlink", "click");
-        
+
         form.setValue("tabs:panel:metadataLinks:container:table:links:0:urlBorder:urlBorder_body:metadataLinkURL", "http://test.me");
         tester.executeAjaxEvent("publishedinfo:tabs:panel:metadataLinks:addlink", "click");
-        
+
         LayerGroupInfo info = page.getPublishedInfo();
         assertEquals(2, info.getMetadataLinks().size());
         assertEquals("http://test.me", info.getMetadataLinks().get(0).getContent());
-        
+
     }
 
     @Test

@@ -48,7 +48,7 @@ import com.vividsolutions.jts.geom.Envelope;
 
 /**
  * Test suite for HTMLImageMapMapProducer GetMapOutputFormat
- * 
+ *
  * @author Mauro Bartolomeoli
  */
 public class HTMLImageMapTest {
@@ -90,7 +90,7 @@ public class HTMLImageMapTest {
         // initializes GetMapOutputFormat factory and actual producer
         // this.mapFactory = getProducerFactory();
         this.mapProducer = new HTMLImageMapMapProducer();
-        this.response = new HTMLImageMapResponse(); 
+        this.response = new HTMLImageMapResponse();
     }
 
     @After
@@ -117,7 +117,7 @@ public class HTMLImageMapTest {
         return s;
     }
 
-    protected void assertTestResult(String testName, EncodeHTMLImageMap imageMap) throws Exception{
+    protected void assertTestResult(String testName, EncodeHTMLImageMap imageMap) throws Exception {
 
         ByteArrayOutputStream out = null;
         StringBuffer testText = new StringBuffer();
@@ -239,11 +239,11 @@ public class HTMLImageMapTest {
     public void testMapProduceReproject() throws Exception {
         final DataStore ds = getTestDataStore();
         final SimpleFeatureSource origional = ds.getFeatureSource("ProjectedPolygon");
-        
+
         Query query = new Query("ProjectedPolygon");
         query.setCoordinateSystem(CRS.decode("EPSG:3004"));
-        final SimpleFeatureSource fs = new DefaultView( origional, query );
-        
+        final SimpleFeatureSource fs = new DefaultView(origional, query);
+
         final ReferencedEnvelope env = new ReferencedEnvelope(fs.getBounds(),
                 CRS.decode("EPSG:3004"));
 
@@ -349,9 +349,9 @@ public class HTMLImageMapTest {
         assertTestResult("BuildingCenters", result);
 
     }
-	
+
     @Test
-	public void testMapProducePointsWithSize() throws Exception {
+    public void testMapProducePointsWithSize() throws Exception {
 
         final FeatureSource<SimpleFeatureType, SimpleFeature> fs = testDS
                 .getFeatureSource("BuildingCenters");
@@ -373,12 +373,12 @@ public class HTMLImageMapTest {
         assertTestResult("BuildingCenters2", result);
 
     }
-    
+
     @Test
-	public void testMapProducePointsWithDifferenSizeInScale1() throws Exception {
-		
-        final FeatureSource<SimpleFeatureType,SimpleFeature> fs = testDS.getFeatureSource("BuildingCenters");
-        final ReferencedEnvelope env = new ReferencedEnvelope(fs.getBounds(),WGS84);
+    public void testMapProducePointsWithDifferenSizeInScale1() throws Exception {
+
+        final FeatureSource<SimpleFeatureType, SimpleFeature> fs = testDS.getFeatureSource("BuildingCenters");
+        final ReferencedEnvelope env = new ReferencedEnvelope(fs.getBounds(), WGS84);
 
         LOGGER.info("about to create map ctx for BuildingCenters with bounds " + env);
 
@@ -386,41 +386,41 @@ public class HTMLImageMapTest {
         map.getViewport().setBounds(env);
         map.setMapWidth(mapWidth);
         map.setMapHeight(mapHeight);
-        
+
         map.setTransparent(false);
-                
+
         Style basicStyle = getTestStyle("BuildingCenters3.sld");
         map.addLayer(new FeatureLayer(fs, basicStyle));
         EncodeHTMLImageMap result = mapProducer.produceMap(map);
-        
+
         assertTestResult("BuildingCenters3", result);
 
-	}
-    
+    }
+
     @Test
-	public void testMapProducePointsWithDifferenSizeInScale2() throws Exception {
-		
-        final FeatureSource<SimpleFeatureType,SimpleFeature> fs = testDS.getFeatureSource("BuildingCenters");
-        ReferencedEnvelope tmp=fs.getBounds();
+    public void testMapProducePointsWithDifferenSizeInScale2() throws Exception {
+
+        final FeatureSource<SimpleFeatureType, SimpleFeature> fs = testDS.getFeatureSource("BuildingCenters");
+        ReferencedEnvelope tmp = fs.getBounds();
         tmp.expandBy(5, 5);
-        final ReferencedEnvelope env = new ReferencedEnvelope(tmp,WGS84);
-        
+        final ReferencedEnvelope env = new ReferencedEnvelope(tmp, WGS84);
+
         LOGGER.info("about to create map ctx for BuildingCenters with bounds " + env);
 
         final WMSMapContent map = new WMSMapContent();
         map.getViewport().setBounds(env);
         map.setMapWidth(mapWidth);
         map.setMapHeight(mapHeight);
-        
+
         map.setTransparent(false);
-                
+
         Style basicStyle = getTestStyle("BuildingCenters3.sld");
         map.addLayer(new FeatureLayer(fs, basicStyle));
         EncodeHTMLImageMap result = mapProducer.produceMap(map);
-        
+
         assertTestResult("BuildingCenters4", result);
 
-	}
+    }
 
     @Test
     public void testMapProduceMultiPoints() throws Exception {
@@ -491,7 +491,7 @@ public class HTMLImageMapTest {
         EncodeHTMLImageMap result = mapProducer.produceMap(map);
         assertTestResult("NoCoords", result);
     }
-    
+
     @Test
     public void testPointsAreAlwaysRenderedAsCircles() throws Exception {
         final String s = "VariousPoints";
@@ -500,7 +500,7 @@ public class HTMLImageMapTest {
         ReferencedEnvelope env = new ReferencedEnvelope(fs.getBounds(), WGS84);
         LOGGER.info("about to create map ctx for BuildingCenters with bounds "
                 + env);
-    
+
         WMSMapContent map = new WMSMapContent();
         map.getViewport().setBounds(env);
         map.setMapWidth(mapWidth);
@@ -508,7 +508,7 @@ public class HTMLImageMapTest {
         map.setTransparent(false);
         Style basicStyle = getTestStyle(String.format("%s.sld", s));
         map.addLayer(new FeatureLayer(fs, basicStyle));
-    
+
         EncodeHTMLImageMap result = mapProducer.produceMap(map);
         assertTestResult(s, result);
     }

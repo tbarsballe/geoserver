@@ -47,8 +47,8 @@ public class ScriptsModel extends LoadableDetachableModel<List<Script>> {
         List<Script> scripts = new ArrayList<Script>();
         ScriptManager scriptManager = (ScriptManager) GeoServerExtensions.bean("scriptManager");
         try {
-            Resource[] dirs = { scriptManager.wps(), scriptManager.wfsTx(),
-                    scriptManager.function(), scriptManager.app() };
+            Resource[] dirs = {scriptManager.wps(), scriptManager.wfsTx(),
+                    scriptManager.function(), scriptManager.app()};
             for (Resource dir : dirs) {
                 List<Resource> files = dir.list();
                 for (Resource file : files) {
@@ -65,7 +65,7 @@ public class ScriptsModel extends LoadableDetachableModel<List<Script>> {
                     } else if (dir.name().equals("wps")) {
                         if (file.getType() == Type.DIRECTORY) {
                             List<Resource> fs = file.list();
-                            for(Resource f: fs) {
+                            for (Resource f : fs) {
                                 scripts.add(new Script(f));
                             }
                         } else {

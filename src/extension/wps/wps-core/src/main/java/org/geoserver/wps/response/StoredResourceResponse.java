@@ -21,7 +21,7 @@ import org.geoserver.wps.resource.WPSResourceManager;
 
 /**
  * Returns a response already computed and stored in an output
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class StoredResourceResponse extends Response {
@@ -42,11 +42,11 @@ public class StoredResourceResponse extends Response {
 
     public String getMimeType(Object value, Operation operation) {
         Object request = operation.getParameters()[0];
-        if(request instanceof GetExecutionStatusType) {
+        if (request instanceof GetExecutionStatusType) {
             return "text/xml";
-        } else if(request instanceof GetExecutionResultType) {
+        } else if (request instanceof GetExecutionResultType) {
             GetExecutionResultType ger = (GetExecutionResultType) request;
-            if(ger.getMimeType() != null) {
+            if (ger.getMimeType() != null) {
                 return ger.getMimeType();
             } else {
                 // generic binary output...
@@ -54,18 +54,18 @@ public class StoredResourceResponse extends Response {
             }
         } else {
             throw new WPSException("Trying to get a mime type for a unknown operation, " +
-            		"we should not have got here in the first place");
+                    "we should not have got here in the first place");
         }
     }
-    
+
     @Override
     public String getAttachmentFileName(Object value, Operation operation) {
         Object request = operation.getParameters()[0];
-        if(request instanceof GetExecutionStatusType) {
+        if (request instanceof GetExecutionStatusType) {
             return "text/xml";
-        } else if(request instanceof GetExecutionResultType) {
+        } else if (request instanceof GetExecutionResultType) {
             GetExecutionResultType ger = (GetExecutionResultType) request;
-            if(ger.getOutputId() != null) {
+            if (ger.getOutputId() != null) {
                 return ger.getOutputId();
             } else {
                 // we should really never get here, the request should fail before

@@ -7,14 +7,13 @@ package org.geoserver.catalog;
 
 /**
  * Base interface for all catalog objects.
- * 
- * @author Justin Deoliveira, OpenGeo
  *
+ * @author Justin Deoliveira, OpenGeo
  */
 public interface CatalogInfo extends Info {
 
     /**
      * Accepts a visitor.
      */
-    void accept( CatalogVisitor visitor );
+    void accept(CatalogVisitor visitor);
 }

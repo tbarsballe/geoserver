@@ -30,7 +30,6 @@ import com.google.common.collect.ImmutableSet;
  * {@link ConfigStore} combos work against the same {@link ResourceStore}, making sure events issued
  * by the {@code ResourceStore} are properly handled both by the node that triggered it and the one
  * that didn't.
- *
  */
 public class RepositoryManagerConfigStoreIntegrationTest {
 
@@ -116,7 +115,8 @@ public class RepositoryManagerConfigStoreIntegrationTest {
      * repos added to {@link #store1()} are immediately available on {@link #store2()} when it
      * "joins the cluster"
      */
-    public @Test void testJoinCluster() {
+    public @Test
+    void testJoinCluster() {
         ConfigStore store1 = store1();
 
         store1.save(repo1.clone());
@@ -136,7 +136,8 @@ public class RepositoryManagerConfigStoreIntegrationTest {
      * both {@link #store1()} and {@link #store2()} are in the cluster, repos added to #1 get
      * reflected in #2
      */
-    public @Test void verifyResourceCreateEvents() {
+    public @Test
+    void verifyResourceCreateEvents() {
         ConfigStore store1 = store1();
         ConfigStore store2 = store2();
 
@@ -156,7 +157,8 @@ public class RepositoryManagerConfigStoreIntegrationTest {
      * both {@link #store1()} and {@link #store2()} are in the cluster, repos changed on #1 get
      * reflected in #2
      */
-    public @Test void verifyResourceEditEvents() {
+    public @Test
+    void verifyResourceEditEvents() {
         ConfigStore store1 = store1();
         ConfigStore store2 = store2();
 
@@ -189,7 +191,8 @@ public class RepositoryManagerConfigStoreIntegrationTest {
      * both {@link #store1()} and {@link #store2()} are in the cluster, repos removed on #2 get
      * reflected in #1
      */
-    public @Test void verifyResourceRemovedEvents() {
+    public @Test
+    void verifyResourceRemovedEvents() {
         ConfigStore store1 = store1();
         ConfigStore store2 = store2();
 

@@ -35,7 +35,7 @@ public class WorkspacePage extends GeoServerSecuredPage {
     GeoServerTablePanel<WorkspaceInfo> table;
     GeoServerDialog dialog;
     SelectionRemovalLink removal;
-    
+
     public WorkspacePage() {
         // the middle table
         add(table = new GeoServerTablePanel<WorkspaceInfo>("table", provider, true) {
@@ -43,43 +43,43 @@ public class WorkspacePage extends GeoServerSecuredPage {
 
             @Override
             protected Component getComponentForProperty(String id, IModel<WorkspaceInfo> itemModel,
-                    Property<WorkspaceInfo> property) {
-                if ( property == NAME ) {
+                                                        Property<WorkspaceInfo> property) {
+                if (property == NAME) {
                     return workspaceLink(id, itemModel);
                 } else if (property == DEFAULT) {
-                    if(getCatalog().getDefaultWorkspace().equals(itemModel.getObject()))
+                    if (getCatalog().getDefaultWorkspace().equals(itemModel.getObject()))
                         return new Icon(id, CatalogIconFactory.ENABLED_ICON);
                     else
                         return new Label(id, "");
                 } else if (property == ISOLATED) {
-                    if(itemModel.getObject().isIsolated())
+                    if (itemModel.getObject().isIsolated())
                         return new Icon(id, CatalogIconFactory.ENABLED_ICON);
                     else
                         return new Label(id, "");
                 }
-                
-                throw new IllegalArgumentException("No such property "+ property.getName());
+
+                throw new IllegalArgumentException("No such property " + property.getName());
             }
-            
+
             @Override
             protected void onSelectionUpdate(AjaxRequestTarget target) {
                 removal.setEnabled(table.getSelection().size() > 0);
-                target.add(removal);    
+                target.add(removal);
             }
         });
         table.setOutputMarkupId(true);
-        
+
         // the confirm dialog
         add(dialog = new GeoServerDialog("dialog"));
         setHeaderPanel(headerPanel());
     }
-    
+
     protected Component headerPanel() {
         Fragment header = new Fragment(HEADER_PANEL, "header", this);
-        
+
         // the add button
         header.add(new BookmarkablePageLink<WorkspaceNewPage>("addNew", WorkspaceNewPage.class));
-        
+
         // the removal button
         header.add(removal = new SelectionRemovalLink("removeSelected", table, dialog));
         removal.setOutputMarkupId(true);
@@ -89,7 +89,7 @@ public class WorkspacePage extends GeoServerSecuredPage {
         header.setEnabled(isAuthenticatedAsAdmin());
         return header;
     }
-    
+
     Component workspaceLink(String id, final IModel<WorkspaceInfo> itemModel) {
         IModel<?> nameModel = NAME.getModel(itemModel);
         return new SimpleBookmarkableLink(id, WorkspaceEditPage.class, nameModel,

@@ -37,7 +37,7 @@ import org.w3c.dom.Document;
 
 /**
  * Performs integration tests using a mock {@link ResourceAccessManager}
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class ResourceAccessManagerCSWTest extends CSWTestSupport {

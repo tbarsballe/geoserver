@@ -31,7 +31,7 @@ public class PasswordPage extends AbstractSecurityPage {
                 setResponsePage(page);
             }
         });
-        
+
         form.add(new Link("masterPasswordInfo") {
             @Override
             public void onClick() {
@@ -50,13 +50,13 @@ public class PasswordPage extends AbstractSecurityPage {
         form.add(new SubmitLink("save", form) {
             @Override
             public void onSubmit() {
-              MasterPasswordConfig config = (MasterPasswordConfig) getForm().getModelObject();
-              try {
-                  getSecurityManager().saveMasterPasswordConfig(config);
-                  doReturn();
-              } catch (Exception e) {
-                  error(e);
-              }
+                MasterPasswordConfig config = (MasterPasswordConfig) getForm().getModelObject();
+                try {
+                    getSecurityManager().saveMasterPasswordConfig(config);
+                    doReturn();
+                } catch (Exception e) {
+                    error(e);
+                }
             }
         });
         form.add(new AjaxLink("cancel") {

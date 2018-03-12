@@ -60,7 +60,7 @@ public class AlternativesResponseStream extends ServletOutputStream {
         getStream().write(b, off, len);
     }
 
-    protected ServletOutputStream getStream() throws IOException{
+    protected ServletOutputStream getStream() throws IOException {
         if (myStream != null) return myStream;
         String type = myResponse.getContentType();
 
@@ -68,13 +68,13 @@ public class AlternativesResponseStream extends ServletOutputStream {
 //            logger.warning("Mime type was not set before first write!");
 //        }
 
-        if (type != null && isCompressible(type)){
+        if (type != null && isCompressible(type)) {
             logger.log(Level.FINE, "Compressing output for mimetype: {0}", type);
             myResponse.addHeader("Content-Encoding", "gzip");
             myStream = new GZIPResponseStream(myResponse);
         } else {
             logger.log(Level.FINE, "Not compressing output for mimetype: {0}", type);
-            if(contentLength >= 0) {
+            if (contentLength >= 0) {
                 myResponse.setContentLength(contentLength);
             }
             myStream = myResponse.getOutputStream();
@@ -83,17 +83,17 @@ public class AlternativesResponseStream extends ServletOutputStream {
         return myStream;
     }
 
-    protected boolean isDirty(){
+    protected boolean isDirty() {
         return myStream != null;
     }
 
-    protected boolean isCompressible(String mimetype){
+    protected boolean isCompressible(String mimetype) {
         String stripped = stripParams(mimetype);
-        
+
         Iterator it = myCompressibleTypes.iterator();
 
-        while (it.hasNext()){
-            Pattern pat = (Pattern)it.next();
+        while (it.hasNext()) {
+            Pattern pat = (Pattern) it.next();
             Matcher matcher = pat.matcher(stripped);
             if (matcher.matches()) return true;
         }
@@ -101,10 +101,10 @@ public class AlternativesResponseStream extends ServletOutputStream {
         return false;
     }
 
-    protected String stripParams(String mimetype){
+    protected String stripParams(String mimetype) {
         int firstSemicolon = mimetype.indexOf(";");
 
-        if (firstSemicolon != -1){
+        if (firstSemicolon != -1) {
             return mimetype.substring(0, firstSemicolon);
         }
 

@@ -27,13 +27,13 @@ import org.geoserver.importer.SpatialFile;
 public class SpatialFilePanel extends ImportSourcePanel {
 
     String file;
-    
+
     TextField fileField;
     GeoServerDialog dialog;
 
     public SpatialFilePanel(String id) {
         super(id);
-        
+
         add(dialog = new GeoServerDialog("dialog"));
 
         Form form = new Form("form", new CompoundPropertyModel(this));
@@ -49,8 +49,10 @@ public class SpatialFilePanel extends ImportSourcePanel {
     public ImportData createImportSource() throws IOException {
         File file = new File(this.file);
         return FileData.createFromFile(file);
-    };
-    
+    }
+
+    ;
+
     Component chooserButton(Form form) {
         AjaxSubmitLink link = new AjaxSubmitLink("chooser") {
             @Override
@@ -72,7 +74,7 @@ public class SpatialFilePanel extends ImportSourcePanel {
                             @Override
                             protected void fileClicked(File file, AjaxRequestTarget target) {
                                 SpatialFilePanel.this.file = file.getAbsolutePath();
-                                
+
                                 fileField.clearInput();
                                 fileField.setModelObject(file.getAbsolutePath());
 
@@ -93,7 +95,7 @@ public class SpatialFilePanel extends ImportSourcePanel {
                         // clear the raw input of the field won't show the new model value
                         fileField.clearInput();
                         //fileField.setModelObject(file);
-                        
+
                         target.add(fileField);
                         return true;
                     }

@@ -17,12 +17,11 @@ import static org.junit.Assert.*;
 /**
  * Tests parsing of the property file into a security tree, and the
  * functionality of the tree as well (building the tree by hand is tedious)
- * 
+ *
  * @author Andrea Aime - TOPP
- * 
  */
 public class DefaultDataAccessManagerTreeTest extends AbstractAuthorizationTest {
-    
+
     @Before
     public void setupCatalog() {
         populateCatalog();
@@ -103,7 +102,7 @@ public class DefaultDataAccessManagerTreeTest extends AbstractAuthorizationTest 
         assertTrue(landmarks.canAccess(anonymous, AccessMode.READ));
         assertFalse(landmarks.canAccess(anonymous, AccessMode.WRITE));
         assertFalse(bases.canAccess(anonymous, AccessMode.READ));
-        
+
         // perform some checks with read only access
         assertTrue(root.canAccess(roUser, AccessMode.READ));
         assertFalse(root.canAccess(roUser, AccessMode.WRITE));
@@ -112,7 +111,7 @@ public class DefaultDataAccessManagerTreeTest extends AbstractAuthorizationTest 
         assertTrue(landmarks.canAccess(roUser, AccessMode.READ));
         assertFalse(landmarks.canAccess(roUser, AccessMode.WRITE));
         assertFalse(bases.canAccess(roUser, AccessMode.READ));
-        
+
         // perform some checks with read write access
         assertTrue(root.canAccess(rwUser, AccessMode.READ));
         assertFalse(root.canAccess(rwUser, AccessMode.WRITE));
@@ -121,7 +120,7 @@ public class DefaultDataAccessManagerTreeTest extends AbstractAuthorizationTest 
         assertTrue(landmarks.canAccess(rwUser, AccessMode.READ));
         assertTrue(landmarks.canAccess(rwUser, AccessMode.WRITE));
         assertFalse(bases.canAccess(rwUser, AccessMode.READ));
-        
+
         // military access... just access the one layer, for the rest he's like anonymous
         assertFalse(root.canAccess(milUser, AccessMode.READ));
         assertFalse(root.canAccess(milUser, AccessMode.WRITE));
@@ -132,6 +131,6 @@ public class DefaultDataAccessManagerTreeTest extends AbstractAuthorizationTest 
         assertTrue(bases.canAccess(milUser, AccessMode.READ));
         assertTrue(bases.canAccess(milUser, AccessMode.WRITE));
     }
-    
+
 
 }

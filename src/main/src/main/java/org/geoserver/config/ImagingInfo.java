@@ -11,9 +11,8 @@ import java.util.Map;
 
 /**
  * GeoServer imaging configuration.
- * 
+ *
  * @author Justin Deoliveira, The Open Planning Project
- * 
  */
 public interface ImagingInfo {
 
@@ -26,15 +25,15 @@ public interface ImagingInfo {
      * @return Returns the imageFormats.
      * @uml.property name="imageFormats"
      * @uml.associationEnd multiplicity="(0 -1)"
-     *                     inverse="imagingInfo:org.geoserver.config.ImageFormatInfo"
+     * inverse="imagingInfo:org.geoserver.config.ImageFormatInfo"
      */
     Collection<ImageFormatInfo> getImageFormats();
-    
+
     /**
-     * Returns the image format corresponding to the specified mime type, 
+     * Returns the image format corresponding to the specified mime type,
      * or <code>null</code> if it does exist.
      */
-    ImageFormatInfo getImageFormatByMimeType( String mimeType );
+    ImageFormatInfo getImageFormatByMimeType(String mimeType);
 
     /**
      * @uml.property name="allowInterpolation"
@@ -77,9 +76,9 @@ public interface ImagingInfo {
     void setTileThreads(int tileThreads);
 
     String getTileCache();
-    
-    void setTileCache( String tileCache );
-        
+
+    void setTileCache(String tileCache);
+
     /**
      * @uml.property name="memoryCapacity"
      */
@@ -99,12 +98,12 @@ public interface ImagingInfo {
      * @uml.property name="memoryThreshold"
      */
     void setMemoryThreshold(double memoryThreshold);
-    
+
     /**
      * @uml.property name="metadata"
      */
-    Map<String,Serializable> getMetadata();
+    Map<String, Serializable> getMetadata();
 
-    Map<Object,Object> getClientProperties();
+    Map<Object, Object> getClientProperties();
 
 }

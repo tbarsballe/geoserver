@@ -33,17 +33,19 @@ import org.geotools.image.io.ImageIOExt;
  * Helper class to deal with JAI availability and image encoding
  */
 public final class JAISupport {
-    /** shared package's logger */
+    /**
+     * shared package's logger
+     */
     private static final Logger LOGGER = org.geotools.util.logging.Logging.getLogger(JAISupport.class.getPackage().getName());
 
     /**
-     *  Array of mime types that have been tested to work.
-     *  Many of the mime types that JAI says it supports does not actually work.
-     *  These are mostly because of colour problems (ie. only supports grey scale, and we're giving it a ARGB).
-     *  Update this list as the supported formats are handled better!
-     *  If you dont do this, clients might request an non-functional format (cite does this).
-     *
-     *  The getSupportedFormats() will return a sub-set of these formats.
+     * Array of mime types that have been tested to work.
+     * Many of the mime types that JAI says it supports does not actually work.
+     * These are mostly because of colour problems (ie. only supports grey scale, and we're giving it a ARGB).
+     * Update this list as the supported formats are handled better!
+     * If you dont do this, clients might request an non-functional format (cite does this).
+     * <p>
+     * The getSupportedFormats() will return a sub-set of these formats.
      */
     static ArrayList testedFormats = new ArrayList();
 
@@ -52,6 +54,7 @@ public final class JAISupport {
 
         //testedFormats.add("image/png");
     }
+
     ;
 
     /**
@@ -65,7 +68,7 @@ public final class JAISupport {
      * the empty set if not available.
      *
      * @return Set&lt;String&gt; of the MIME types the available JAI library
-     *         supports, or the empty set if it is not available.
+     * supports, or the empty set if it is not available.
      */
     public static Set getSupportedFormats() {
         if (supportedFormats == null) {
@@ -89,7 +92,7 @@ public final class JAISupport {
 
                 List formatsList = Arrays.asList(mimeTypes);
 
-                for (Iterator it = formatsList.iterator(); it.hasNext();) {
+                for (Iterator it = formatsList.iterator(); it.hasNext(); ) {
                     String curFormat = it.next().toString();
 
                     if (!curFormat.equals("")) {
@@ -103,7 +106,7 @@ public final class JAISupport {
                 if (LOGGER.isLoggable(Level.CONFIG)) {
                     StringBuffer sb = new StringBuffer("Supported JAIMapResponse's MIME Types: [");
 
-                    for (Iterator it = supportedFormats.iterator(); it.hasNext();) {
+                    for (Iterator it = supportedFormats.iterator(); it.hasNext(); ) {
                         sb.append(it.next());
 
                         if (it.hasNext()) {
@@ -125,7 +128,6 @@ public final class JAISupport {
      * formats.
      *
      * @return <code>true</code> if JAI is available
-     *
      * @see #getSupportedFormats()
      */
     public static boolean isJaiAvailable() {
@@ -136,19 +138,18 @@ public final class JAISupport {
      * Encodes a BufferedImage using JAI in <code>format</code> format and
      * sends it to <code>outStream</code>.
      *
-     * @param format the MIME type of the output image in which to encode
-     *        <code>image</code> through JAI
-     * @param image the actual image to be encoded in <code>format</code>
-     *        format.
+     * @param format    the MIME type of the output image in which to encode
+     *                  <code>image</code> through JAI
+     * @param image     the actual image to be encoded in <code>format</code>
+     *                  format.
      * @param outStream the encoded image destination.
-     *
-     * @throws IOException if the image writing to <code>outStream</code>
-     *         fails.
+     * @throws IOException              if the image writing to <code>outStream</code>
+     *                                  fails.
      * @throws IllegalArgumentException if <code>format</code> is not a
-     *         supported output format for the installed JAI library.
+     *                                  supported output format for the installed JAI library.
      */
     public static void encode(String format, BufferedImage image, OutputStream outStream)
-        throws IOException {
+            throws IOException {
         if (format.equalsIgnoreCase("jpeg")) {
             format = "image/jpeg";
         }

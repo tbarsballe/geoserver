@@ -21,13 +21,14 @@ import org.geotools.xml.transform.TransformerBase;
 
 /**
  * Runs the transformer and outputs the capabilities
+ *
  * @author Emanuele Tajariol (etj) - GeoSolutions
  */
 public class WCS20GetCapabilitiesResponse extends Response {
     public WCS20GetCapabilitiesResponse() {
         super(TransformerBase.class);
     }
-    
+
     /**
      * Makes sure this triggers only
      * </p>
@@ -35,10 +36,10 @@ public class WCS20GetCapabilitiesResponse extends Response {
     @Override
     public boolean canHandle(Operation operation) {
 
-        return "GetCapabilities".equalsIgnoreCase(operation.getId()) && 
+        return "GetCapabilities".equalsIgnoreCase(operation.getId()) &&
                 operation.getService().getId().equals(WCS20Const.SERVICE_NAME) &&
-                ( operation.getService().getVersion().toString().equals(WCS20Const.V201) ||
-                  operation.getService().getVersion().toString().equals(WCS20Const.V20) );
+                (operation.getService().getVersion().toString().equals(WCS20Const.V201) ||
+                        operation.getService().getVersion().toString().equals(WCS20Const.V20));
     }
 
     @Override
@@ -62,7 +63,7 @@ public class WCS20GetCapabilitiesResponse extends Response {
 
     @Override
     public void write(Object value, OutputStream output, Operation operation)
-        throws IOException {
+            throws IOException {
         TransformerBase tx = (TransformerBase) value;
 
         try {
@@ -71,5 +72,5 @@ public class WCS20GetCapabilitiesResponse extends Response {
             throw (IOException) new IOException().initCause(e);
         }
     }
-    
+
 }

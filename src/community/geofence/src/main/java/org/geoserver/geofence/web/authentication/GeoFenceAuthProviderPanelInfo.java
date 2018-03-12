@@ -25,7 +25,6 @@ import org.geoserver.geoserver.authentication.auth.GeoFenceAuthenticationProvide
 import org.geoserver.security.web.auth.AuthenticationProviderPanelInfo;
 
 /**
- *
  * @author ETj (etj at geo-solutions.it)
  */
 public class GeoFenceAuthProviderPanelInfo extends

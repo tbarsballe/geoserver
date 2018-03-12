@@ -19,7 +19,7 @@ import org.xml.sax.helpers.AttributesImpl;
 
 /**
  * Base class for CSW transformers
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public abstract class AbstractCSWTransformer extends TransformerBase {
@@ -34,7 +34,7 @@ public abstract class AbstractCSWTransformer extends TransformerBase {
         this.request = request;
         this.canonicalSchemaLocation = canonicalSchemaLocation;
     }
-    
+
     public void encode(CSWRecordsResult response, Writer writer) throws TransformerException {
         transform(response, writer);
     }
@@ -52,7 +52,7 @@ public abstract class AbstractCSWTransformer extends TransformerBase {
             }
         }
 
-        protected  String cswSchemaLocation(String schema) {
+        protected String cswSchemaLocation(String schema) {
             if (canonicalSchemaLocation) {
                 return CSW_ROOT_LOCATION + schema;
             } else {

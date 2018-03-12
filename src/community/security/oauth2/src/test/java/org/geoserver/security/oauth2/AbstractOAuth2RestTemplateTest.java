@@ -24,7 +24,6 @@ import org.springframework.security.oauth2.client.token.grant.code.Authorization
 
 /**
  * @author Alessio Fabiani, GeoSolutions S.A.S.
- *
  */
 public abstract class AbstractOAuth2RestTemplateTest extends GeoServerMockTestSupport {
 

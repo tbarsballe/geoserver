@@ -21,6 +21,6 @@ public class WPSKvpRequestReader extends EMFKvpRequestReader {
     }
 
     protected Wps10Factory getWps10Factory() {
-        return (Wps10Factory)factory;
+        return (Wps10Factory) factory;
     }
 }

@@ -60,7 +60,7 @@ public class ServiceAccessController extends AbstractAclController {
         // regexp: ignore extra spaces, split on dot
         return path.split("\\s*\\.\\s*");
     }
-    
+
     @Override
     protected String getBasePath() {
         return "/security/acl/services";

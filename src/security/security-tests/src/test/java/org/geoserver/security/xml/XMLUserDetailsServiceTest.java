@@ -43,12 +43,12 @@ public class XMLUserDetailsServiceTest extends AbstractUserDetailsServiceTest {
 //        KeyStoreProvider.get().setUserGroupKey(serviceName,
 //                RandomPasswordProvider.get().getRandomPassword(32));
 
-        
-        XMLUserGroupServiceConfig ugConfig = new XMLUserGroupServiceConfig();                 
+
+        XMLUserGroupServiceConfig ugConfig = new XMLUserGroupServiceConfig();
         ugConfig.setName(serviceName);
         ugConfig.setClassName(XMLUserGroupService.class.getName());
-        ugConfig.setCheckInterval(1000); 
-        ugConfig.setFileName(XMLConstants.FILE_UR);        
+        ugConfig.setCheckInterval(1000);
+        ugConfig.setFileName(XMLConstants.FILE_UR);
         ugConfig.setValidating(true);
 //        ugConfig.setPasswordEncoderName(GeoserverUserPBEPasswordEncoder.PrototypeName);
         ugConfig.setPasswordEncoderName(getDigestPasswordEncoder().getName());
@@ -57,28 +57,28 @@ public class XMLUserDetailsServiceTest extends AbstractUserDetailsServiceTest {
 
         GeoServerUserGroupService service = getSecurityManager().loadUserGroupService(serviceName);
         service.initializeFromConfig(ugConfig);
-        return service;                
+        return service;
     }
 
     public GeoServerRoleService createRoleService(String serviceName) throws Exception {
-        
-        XMLRoleServiceConfig gaConfig = new XMLRoleServiceConfig();                 
+
+        XMLRoleServiceConfig gaConfig = new XMLRoleServiceConfig();
         gaConfig.setName(serviceName);
         gaConfig.setClassName(XMLRoleService.class.getName());
-        gaConfig.setCheckInterval(1000); 
+        gaConfig.setCheckInterval(1000);
         gaConfig.setFileName(XMLConstants.FILE_RR);
         gaConfig.setValidating(true);
         getSecurityManager().saveRoleService(gaConfig/*,isNewRoleService(serviceName)*/);
 
-        GeoServerRoleService service = 
-            getSecurityManager().loadRoleService(serviceName);
+        GeoServerRoleService service =
+                getSecurityManager().loadRoleService(serviceName);
         service.initializeFromConfig(gaConfig);
         return service;
     }
 
     @Test
     public void testMigration() throws IOException {
-        
+
 //        GeoserverUserGroupService userService = createUserGroupService(
 //                XMLUserGroupService.DEFAULT_NAME);
 //        GeoserverRoleService roleService = createRoleService(
@@ -86,22 +86,22 @@ public class XMLUserDetailsServiceTest extends AbstractUserDetailsServiceTest {
 //        getSecurityManager().setActiveRoleService(roleService);
 //        getSecurityManager().setActiveUserGroupService(userService);
         GeoServerUserGroupService userService = getSecurityManager().loadUserGroupService(XMLUserGroupService.DEFAULT_NAME);
-        GeoServerRoleService roleService =getSecurityManager().loadRoleService(XMLRoleService.DEFAULT_NAME);
-        
+        GeoServerRoleService roleService = getSecurityManager().loadRoleService(XMLRoleService.DEFAULT_NAME);
+
         assertEquals(3, userService.getUsers().size());
         assertEquals(3, userService.getUserCount());
-        assertEquals(0,userService.getUserGroups().size());
-        assertEquals(0,userService.getGroupCount());
-        
-        assertEquals(9,roleService.getRoles().size());
-        
+        assertEquals(0, userService.getUserGroups().size());
+        assertEquals(0, userService.getGroupCount());
+
+        assertEquals(9, roleService.getRoles().size());
+
         GeoServerUser admin = (GeoServerUser) userService.loadUserByUsername("admin");
         assertNotNull(admin);
-        GeoServerMultiplexingPasswordEncoder enc= getEncoder(userService);
+        GeoServerMultiplexingPasswordEncoder enc = getEncoder(userService);
         assertTrue(enc.isPasswordValid(admin.getPassword(), "gs", null));
-        
+
         assertTrue(admin.isEnabled());
-        
+
         GeoServerUser wfs = (GeoServerUser) userService.loadUserByUsername("wfs");
         assertNotNull(wfs);
         assertTrue(enc.isPasswordValid(wfs.getPassword(), "webFeatureService", null));
@@ -111,7 +111,7 @@ public class XMLUserDetailsServiceTest extends AbstractUserDetailsServiceTest {
         assertNotNull(disabledUser);
         assertTrue(enc.isPasswordValid(disabledUser.getPassword(), "nah", null));
         assertFalse(disabledUser.isEnabled());
-        
+
         GeoServerRole role_admin = roleService.getRoleByName(XMLRoleService.DEFAULT_LOCAL_ADMIN_ROLE);
         assertNotNull(role_admin);
         GeoServerRole role_wfs_read = roleService.getRoleByName("ROLE_WFS_READ");
@@ -125,31 +125,30 @@ public class XMLUserDetailsServiceTest extends AbstractUserDetailsServiceTest {
         assertNotNull(roleService.getRoleByName("ROLE_SERVICE_1"));
         assertNotNull(roleService.getRoleByName("ROLE_SERVICE_2"));
 
-        
 
-        assertEquals(2,admin.getAuthorities().size());
+        assertEquals(2, admin.getAuthorities().size());
         assertTrue(admin.getAuthorities().contains(role_admin));
         assertTrue(admin.getAuthorities().contains(GeoServerRole.ADMIN_ROLE));
-        
-        assertEquals(2,wfs.getAuthorities().size());
+
+        assertEquals(2, wfs.getAuthorities().size());
         assertTrue(wfs.getAuthorities().contains(role_wfs_read));
         assertTrue(wfs.getAuthorities().contains(role_wfs_write));
 
-        assertEquals(1,disabledUser.getAuthorities().size());
+        assertEquals(1, disabledUser.getAuthorities().size());
         assertTrue(disabledUser.getAuthorities().contains(role_test));
-        
+
         GeoServerSecurityManager securityManager = getSecurityManager();
-        File userfile = new File(securityManager.get("security").dir(),"users.properties");
+        File userfile = new File(securityManager.get("security").dir(), "users.properties");
         assertFalse(userfile.exists());
-        File userfileOld = new File(securityManager.get("security").dir(),"users.properties.old");
+        File userfileOld = new File(securityManager.get("security").dir(), "users.properties.old");
         assertTrue(userfileOld.exists());
 
         File roleXSD = new File(new File(securityManager.get("security/role").dir(), roleService.getName()),
-            XMLConstants.FILE_RR_SCHEMA);
+                XMLConstants.FILE_RR_SCHEMA);
         assertTrue(roleXSD.exists());
 
-        File userXSD = new File (new File(securityManager.get("security/usergroup").dir(), userService.getName()), 
-            XMLConstants.FILE_UR_SCHEMA);
+        File userXSD = new File(new File(securityManager.get("security/usergroup").dir(), userService.getName()),
+                XMLConstants.FILE_UR_SCHEMA);
         assertTrue(userXSD.exists());
         
         /* does not work from the command line

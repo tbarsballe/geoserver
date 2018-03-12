@@ -3,6 +3,7 @@
  * application directory.
  */
 package org.geoserver.wcs2_0.kvp;
+
 import static org.junit.Assert.*;
 
 import java.io.ByteArrayInputStream;
@@ -18,24 +19,24 @@ import org.junit.Test;
 import org.w3c.dom.Document;
 
 import org.springframework.mock.web.MockHttpServletResponse;
+
 /**
  * Testing {@link GMLCoverageResponseDelegate}
- * 
- * @author Simone Giannecchini, GeoSolutions SAS
  *
+ * @author Simone Giannecchini, GeoSolutions SAS
  */
 public class GMLGetCoverageKVPTest extends WCSTestSupport {
 
     private final static double DELTA = 1E-6;
 
-    @Test 
+    @Test
     public void gmlFormat() throws Exception {
-        MockHttpServletResponse response = 
-            getAsServletResponse("wcs?request=GetCoverage&service=WCS&version=2.0.1" +
-        "&coverageId=wcs__BlueMarble&format=application%2Fgml%2Bxml");
+        MockHttpServletResponse response =
+                getAsServletResponse("wcs?request=GetCoverage&service=WCS&version=2.0.1" +
+                        "&coverageId=wcs__BlueMarble&format=application%2Fgml%2Bxml");
 
         assertEquals("application/gml+xml", response.getContentType());
-        Document dom = dom(new ByteArrayInputStream(response.getContentAsString().getBytes()));     
+        Document dom = dom(new ByteArrayInputStream(response.getContentAsString().getBytes()));
     }
 
     @Test

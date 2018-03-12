@@ -59,7 +59,9 @@ public class MetadataCustomizer extends FeatureCustomizer {
         LINKAGE_URL_ATTRIBUTE_DESCRIPTOR = (AttributeDescriptor) urlPropType.getDescriptor("URL");
     }
 
-    /** An instance of {@link DownloadLinkHandler}, used to deal with download links */
+    /**
+     * An instance of {@link DownloadLinkHandler}, used to deal with download links
+     */
     private DownloadLinkHandler downloadLinkHandler;
 
     public void setDownloadLinkHandler(DownloadLinkHandler downloadLinkHandler) {
@@ -109,7 +111,7 @@ public class MetadataCustomizer extends FeatureCustomizer {
                     link = links.next();
                     updatedOnlineResources.add(createOnlineResourceElement(link));
                 }
-                
+
                 // link String should contain the last link generated
                 // let's recycle it to generate the full download link
                 updatedOnlineResources.add(createOnlineResourceElement(downloadLinkHandler.extractFullDownloadLink(link)));
@@ -128,8 +130,8 @@ public class MetadataCustomizer extends FeatureCustomizer {
 
     }
 
-    /** 
-     * Create a new OnlineResource element for the link 
+    /**
+     * Create a new OnlineResource element for the link
      */
     private ComplexAttribute createOnlineResourceElement(String link) {
         // Setting new URL attribute

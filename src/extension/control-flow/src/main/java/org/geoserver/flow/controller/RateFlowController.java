@@ -24,7 +24,7 @@ import com.google.common.base.Predicate;
 /**
  * Limits the rate of requests, and slows them down after the number of requests per unit of time is
  * filled, or throws a HTTP 429 if no delay if configured
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class RateFlowController implements FlowController {
@@ -131,7 +131,7 @@ public class RateFlowController implements FlowController {
      * been accumulated and
      */
     public RateFlowController(Predicate<Request> matcher,
-            int maxRequests, long timeInterval, long delay, KeyGenerator keyGenerator) {
+                              int maxRequests, long timeInterval, long delay, KeyGenerator keyGenerator) {
         this.matcher = matcher;
         this.maxRequests = maxRequests;
         this.timeInterval = timeInterval;
@@ -176,7 +176,7 @@ public class RateFlowController implements FlowController {
         // update the counters
         int requests = counter.addRequest(currPeriodId);
         int residual = maxRequests - requests;
-        
+
         // set the headers
         HttpServletResponse response = request.getHttpResponse();
         response.addHeader(X_RATE_LIMIT_CONTEXT, matcher.toString());
@@ -192,7 +192,7 @@ public class RateFlowController implements FlowController {
             if (delay <= 0) {
                 throw new HttpErrorCodeException(429,
                         "Too many requests requests in the current time period, check X-Rate-Limit HTTP response headers");
-            } else if(delay > timeout) {
+            } else if (delay > timeout) {
                 // no point in waiting
                 return false;
             } else {
@@ -213,11 +213,11 @@ public class RateFlowController implements FlowController {
                 && (elapsed > (timeInterval) || (elapsed > 10000))) {
             int cleanupCount = 0;
             synchronized (counters) {
-                for(Map.Entry<String, Counter> entry : counters.entrySet()) {
+                for (Map.Entry<String, Counter> entry : counters.entrySet()) {
                     Counter c = entry.getValue();
                     long timePeriodId = c.getTimePeriodId();
                     long age = (currPeriodId - timePeriodId) * timeInterval;
-                    if(age > COUNTERS_CLEANUP_THRESHOLD) {
+                    if (age > COUNTERS_CLEANUP_THRESHOLD) {
                         counters.remove(entry.getKey());
                     }
                 }

@@ -29,9 +29,9 @@ import org.xml.sax.helpers.NamespaceSupport;
 
 /**
  * Binding object for the type http://www.opengis.net/wfs:QueryType.
- *
  * <p>
- *        <pre>
+ * <p>
+ * <pre>
  *         <code>
  *  &lt;xsd:complexType name="QueryType"&gt;
  *                  &lt;xsd:annotation&gt;
@@ -96,6 +96,7 @@ import org.xml.sax.helpers.NamespaceSupport;
  *
  *          </code>
  *         </pre>
+ *
  * @generated
  */
 public class QueryTypeBinding extends AbstractComplexBinding {
@@ -132,21 +133,21 @@ public class QueryTypeBinding extends AbstractComplexBinding {
     }
 
     public void initializeChildContext(ElementInstance childInstance,
-            Node node, MutablePicoContainer context) {
+                                       Node node, MutablePicoContainer context) {
         //if an srsName is set for this geometry, put it in the context for
         // children, so they can use it as well
-        if ( node.hasAttribute("srsName") ) {
+        if (node.hasAttribute("srsName")) {
             try {
                 CoordinateReferenceSystem crs = GML2ParsingUtils.crs(node);
-                if ( crs != null ) {
+                if (crs != null) {
                     context.registerComponentInstance(CoordinateReferenceSystem.class, crs);
                 }
-            } catch(Exception e) {
+            } catch (Exception e) {
                 throw new WFSException(e, "InvalidParameterValue");
             }
         }
     }
-    
+
     /**
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -154,14 +155,14 @@ public class QueryTypeBinding extends AbstractComplexBinding {
      * @generated modifiable
      */
     public Object parse(ElementInstance instance, Node node, Object value)
-        throws Exception {
+            throws Exception {
         QueryType queryType = wfsfactory.createQueryType();
 
         //<xsd:element maxOccurs="unbounded" minOccurs="0" ref="ogc:PropertyName">
         //JD:difference in spec here, moved from ogc:PropertyName to string
         List propertyNames = node.getChildValues(PropertyName.class);
 
-        for (Iterator p = propertyNames.iterator(); p.hasNext();) {
+        for (Iterator p = propertyNames.iterator(); p.hasNext(); ) {
             PropertyName propertyName = (PropertyName) p.next();
             queryType.getPropertyName().add(propertyName.getPropertyName());
         }
@@ -190,7 +191,7 @@ public class QueryTypeBinding extends AbstractComplexBinding {
         // anyways
         //&lt;xsd:attribute name="srsName" type="xsd:anyURI" use="optional"&gt;
         if (node.hasAttribute("srsName")) {
-            queryType.setSrsName(new URI((String)node.getAttributeValue("srsName")));
+            queryType.setSrsName(new URI((String) node.getAttributeValue("srsName")));
         }
 
         return queryType;

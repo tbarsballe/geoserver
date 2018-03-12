@@ -23,35 +23,34 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 /**
  * @author Alessio Fabiani, GeoSolutions
- *
  */
 public class ServerBusyPageTest extends GeoServerWicketTestSupport {
 
     long defaultTimeout;
-    
+
     @Before
     public void clearTimeout() {
         defaultTimeout = GeoServerConfigurationLock.DEFAULT_TRY_LOCK_TIMEOUT_MS;
         GeoServerConfigurationLock.DEFAULT_TRY_LOCK_TIMEOUT_MS = 1;
     }
-    
+
     @After
     public void reinstateTimeout() {
         GeoServerConfigurationLock.DEFAULT_TRY_LOCK_TIMEOUT_MS = defaultTimeout;
     }
-    
+
     @Test
     public void testStoreEditServerBusyPage() throws Exception {
         login();
-        
-        List<GrantedAuthority> l= new ArrayList<GrantedAuthority>();
+
+        List<GrantedAuthority> l = new ArrayList<GrantedAuthority>();
         l.add(new SimpleGrantedAuthority("ROLE_ANONYMOUS"));
-        
+
         final LockType type = LockType.WRITE;
         final GeoServerConfigurationLock locker = (GeoServerConfigurationLock) GeoServerExtensions.bean("configurationLock");
         locker.setEnabled(true);
         locker.unlock(); // just to be on the safe side
-        
+
         AtomicBoolean acquired = new AtomicBoolean(false);
         AtomicBoolean release = new AtomicBoolean(false);
         if (locker != null) {
@@ -63,7 +62,7 @@ public class ServerBusyPageTest extends GeoServerWicketTestSupport {
                     acquired.set(true);
 
                     try {
-                        while(!release.get()) {
+                        while (!release.get()) {
                             Thread.sleep(50);
                         }
                     } catch (InterruptedException e) {
@@ -73,15 +72,15 @@ public class ServerBusyPageTest extends GeoServerWicketTestSupport {
                     }
                 }
 
-                
+
             };
             configWriter.start();
 
             try {
-                while(!acquired.get()) {
+                while (!acquired.get()) {
                     Thread.sleep(50);
                 }
-                
+
                 tester.startPage(DataAccessEditPage.class, new PageParameters().add("wsName", "cite").add("storeName", "cite"));
                 tester.assertRenderedPage(ServerBusyPage.class);
                 tester.assertNoErrorMessage();
@@ -90,5 +89,5 @@ public class ServerBusyPageTest extends GeoServerWicketTestSupport {
             }
         }
     }
-    
+
 }

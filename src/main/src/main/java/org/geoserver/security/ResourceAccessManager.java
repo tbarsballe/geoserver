@@ -23,6 +23,7 @@ import org.springframework.security.core.Authentication;
  * <p>
  * Implementations should extend from {@link AbstractResourceAccessManager}.
  * </p>
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public interface ResourceAccessManager {
@@ -30,7 +31,7 @@ public interface ResourceAccessManager {
     /**
      * Returns the access limits for the workspace and stores included in it. For specific resource
      * access and published resource access see the other two methods
-     * 
+     *
      * @param user
      * @param workspace
      * @return The access limits for this workspace, or null if there are no limits
@@ -41,13 +42,13 @@ public interface ResourceAccessManager {
      * Returns the access limits for the specified layer, or null if there are no limits.
      */
     public DataAccessLimits getAccessLimits(Authentication user, LayerInfo layer);
-    
+
     /**
      * Returns the access limits for the specified layer accessed via the groups listed as containers
      * (will be an empty list for direct access), or null if there are no limits.
      */
     public default DataAccessLimits getAccessLimits(Authentication user, LayerInfo layer, List<LayerGroupInfo> containers) {
-    	return getAccessLimits(user, layer);
+        return getAccessLimits(user, layer);
     }
 
 
@@ -71,18 +72,19 @@ public interface ResourceAccessManager {
      * (will be an empty list for direct access), or null if there are no limits, or null if there are no limits.
      */
     public default LayerGroupAccessLimits getAccessLimits(Authentication user, LayerGroupInfo layerGroup, List<LayerGroupInfo> containers) {
-    	return getAccessLimits(user, layerGroup);
+        return getAccessLimits(user, layerGroup);
     }
 
-    
+
     /**
-     * Returns a filter selecting only the objects authorized by the manager.  May return 
+     * Returns a filter selecting only the objects authorized by the manager.  May return
      * {@code null} in which case the caller is responsible for building a filter based on calls to
      * the manager's other methods.
+     *
      * @param user
      * @param clazz
-     *
      */
-    public @Nullable Filter getSecurityFilter(Authentication user, final Class<? extends CatalogInfo> clazz);
+    public @Nullable
+    Filter getSecurityFilter(Authentication user, final Class<? extends CatalogInfo> clazz);
 
 }

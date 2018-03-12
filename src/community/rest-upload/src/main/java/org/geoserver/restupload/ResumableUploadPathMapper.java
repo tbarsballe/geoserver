@@ -18,12 +18,11 @@ import org.geoserver.rest.util.RESTUtils;
 
 /**
  * {@link RESTUploadPathMapperImpl} implementation for the resumable REST upload
- * 
- * @author Nicola Lagomarsini
  *
+ * @author Nicola Lagomarsini
  */
 public class ResumableUploadPathMapper extends RESTUploadPathMapperImpl {
-    
+
     private final static String DEFAULT_ROOT_DIRECTORY = "data";
 
     private String sourcePath;
@@ -34,7 +33,7 @@ public class ResumableUploadPathMapper extends RESTUploadPathMapperImpl {
 
     @Override
     public void mapItemPath(String workspace, String store, Map<String, String> storeParams,
-            StringBuilder itemPath, String sourcePath) throws IOException {
+                            StringBuilder itemPath, String sourcePath) throws IOException {
         super.mapItemPath(workspace, store, storeParams, itemPath, sourcePath);
         if (!canExecute(sourcePath.toString())) {
             return;

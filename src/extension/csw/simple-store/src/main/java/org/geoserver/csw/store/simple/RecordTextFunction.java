@@ -21,7 +21,7 @@ import org.opengis.filter.expression.InternalFunction;
 
 /**
  * Collects the contents of all SimpleLiteral attributes into a collection
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class RecordTextFunction extends FunctionExpressionImpl implements InternalFunction {

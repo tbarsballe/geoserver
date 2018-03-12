@@ -173,12 +173,12 @@ public class LogStore implements GeoServerLifecycleHandler, InitializingBean {
     }
 
     private Resource resolveScript(String scriptProp, Resource configResource) {
-    	Resource scriptResource = resourceStore.get(scriptProp);
-    	
+        Resource scriptResource = resourceStore.get(scriptProp);
+
         if (scriptResource.getType().equals(Resource.Type.UNDEFINED)) {
             scriptResource = configResource.parent().get(scriptProp);
             checkArgument(scriptResource.getType().equals(Resource.Type.RESOURCE), "Script file %s does not exist",
-                scriptResource.path());
+                    scriptResource.path());
         }
 
         return scriptResource;
@@ -226,12 +226,12 @@ public class LogStore implements GeoServerLifecycleHandler, InitializingBean {
     }
 
     /**
-     * @param offset unlike JDBC offset, this offset starts at zero, not at one
-     * @param limit max number of entries to retrieve
+     * @param offset   unlike JDBC offset, this offset starts at zero, not at one
+     * @param limit    max number of entries to retrieve
      * @param severity filter logs by severity
      */
     public List<LogEvent> getLogEntries(final int offset, final int limit,
-            final @Nullable LogEvent.Severity... severity) {
+                                        final @Nullable LogEvent.Severity... severity) {
 
         checkState(enabled, "LogStore has not been initialized");
         checkArgument(offset >= 0);
@@ -241,7 +241,7 @@ public class LogStore implements GeoServerLifecycleHandler, InitializingBean {
                 "SELECT event_id, timestmp, level_string, formatted_message FROM logging_event ");
         if (severity != null) {
             sql.append("WHERE level_string IN(");
-            for (Iterator<Severity> it = Arrays.asList(severity).iterator(); it.hasNext();) {
+            for (Iterator<Severity> it = Arrays.asList(severity).iterator(); it.hasNext(); ) {
                 Severity s = it.next();
                 sql.append('\'').append(s.toString()).append('\'');
                 if (it.hasNext()) {

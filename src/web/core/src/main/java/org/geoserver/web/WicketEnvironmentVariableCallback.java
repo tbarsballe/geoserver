@@ -55,6 +55,5 @@ public class WicketEnvironmentVariableCallback implements WicketCallback {
         // nothing to do
     }
 
-   
 
 }

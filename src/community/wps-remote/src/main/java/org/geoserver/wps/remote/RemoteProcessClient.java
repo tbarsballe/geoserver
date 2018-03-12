@@ -47,33 +47,46 @@ import org.springframework.core.io.Resource;
 
 /**
  * Base class for the remote clients implementations. Those implementations will be plugged into GeoServer through the Spring app-context.
- * 
+ *
  * @author Alessio Fabiani, GeoSolutions
- * 
  */
 public abstract class RemoteProcessClient implements DisposableBean, ExtensionPriority {
 
-    /** The LOGGER */
+    /**
+     * The LOGGER
+     */
     public static final Logger LOGGER = Logging.getLogger(XMPPClient.class.getPackage().getName());
 
-    /** Whether this client is enabled or not from configuration */
+    /**
+     * Whether this client is enabled or not from configuration
+     */
     private boolean enabled;
 
-    /** Whenever more instances of the client are available, they should be ordered by ascending priority */
+    /**
+     * Whenever more instances of the client are available, they should be ordered by ascending priority
+     */
     private int priority;
 
-    /** The {@link RemoteProcessFactoryConfigurationWatcher} implementation */
+    /**
+     * The {@link RemoteProcessFactoryConfigurationWatcher} implementation
+     */
     private final RemoteProcessFactoryConfigurationWatcher remoteProcessFactoryConfigurationWatcher;
 
-    /** The registered {@link RemoteProcessFactoryListener} */
+    /**
+     * The registered {@link RemoteProcessFactoryListener}
+     */
     private Set<RemoteProcessFactoryListener> remoteFactoryListeners = Collections
             .newSetFromMap(new ConcurrentHashMap<RemoteProcessFactoryListener, Boolean>());
 
-    /** The registered {@link RemoteProcessClientListener} */
+    /**
+     * The registered {@link RemoteProcessClientListener}
+     */
     private Set<RemoteProcessClientListener> remoteClientListeners = Collections
             .newSetFromMap(new ConcurrentHashMap<RemoteProcessClientListener, Boolean>());
 
-    /** The available Registered Processing Machines */
+    /**
+     * The available Registered Processing Machines
+     */
     protected List<RemoteMachineDescriptor> registeredProcessingMachines = Collections
             .synchronizedList(new ArrayList<RemoteMachineDescriptor>());
 
@@ -89,7 +102,7 @@ public abstract class RemoteProcessClient implements DisposableBean, ExtensionPr
 
     /**
      * The default Cosntructor
-     * 
+     *
      * @param remoteProcessFactory
      */
     public RemoteProcessClient(
@@ -109,13 +122,11 @@ public abstract class RemoteProcessClient implements DisposableBean, ExtensionPr
 
     /**
      * Initialization method
-     * 
      */
     public abstract void init() throws Exception;
 
     /**
      * Destroy method
-     * 
      */
     public abstract void destroy() throws Exception;
 
@@ -157,8 +168,6 @@ public abstract class RemoteProcessClient implements DisposableBean, ExtensionPr
 
     /**
      * Whether the plugin is enabled or not.
-     * 
-     *
      */
     public boolean isEnabled() {
         return this.enabled;
@@ -173,7 +182,7 @@ public abstract class RemoteProcessClient implements DisposableBean, ExtensionPr
 
     /**
      * Set the KeyStore Certificate Path
-     * 
+     *
      * @param certificateFile
      * @throws IOException
      */
@@ -183,7 +192,7 @@ public abstract class RemoteProcessClient implements DisposableBean, ExtensionPr
 
     /**
      * Set the KeyStore Certificate Password
-     * 
+     *
      * @param certificatePassword
      */
     public void setCertificatePassword(String certificatePassword) {
@@ -199,7 +208,7 @@ public abstract class RemoteProcessClient implements DisposableBean, ExtensionPr
 
     /**
      * Registers the {@link RemoteProcessFactoryListener} remoteClientListeners
-     * 
+     *
      * @param listener
      */
     public void registerProcessFactoryListener(RemoteProcessFactoryListener listener) {
@@ -208,7 +217,7 @@ public abstract class RemoteProcessClient implements DisposableBean, ExtensionPr
 
     /**
      * De-registers the {@link RemoteProcessFactoryListener} remoteClientListeners
-     * 
+     *
      * @param listener
      */
     public void deregisterProcessFactoryListener(RemoteProcessFactoryListener listener) {
@@ -217,7 +226,7 @@ public abstract class RemoteProcessClient implements DisposableBean, ExtensionPr
 
     /**
      * Registers the {@link RemoteProcessClientListener} remoteClientListeners
-     * 
+     *
      * @param listener
      */
     public void registerProcessClientListener(RemoteProcessClientListener listener) {
@@ -226,7 +235,7 @@ public abstract class RemoteProcessClient implements DisposableBean, ExtensionPr
 
     /**
      * De-registers the {@link RemoteProcessClientListener} remoteClientListeners
-     * 
+     *
      * @param listener
      */
     public void deregisterProcessClientListener(RemoteProcessClientListener listener) {
@@ -235,15 +244,14 @@ public abstract class RemoteProcessClient implements DisposableBean, ExtensionPr
 
     /**
      * Invoke the {@link RemoteProcessClient} execution
-     * 
+     *
      * @param name
      * @param input
      * @param metadata
      * @param monitor
-     *
      */
     public abstract String execute(Name name, Map<String, Object> input,
-            Map<String, Object> metadata, ProgressListener monitor) throws Exception;
+                                   Map<String, Object> metadata, ProgressListener monitor) throws Exception;
 
     /**
      * Accessor for global geoserver instance from the test application context.
@@ -260,10 +268,8 @@ public abstract class RemoteProcessClient implements DisposableBean, ExtensionPr
     }
 
     /**
-     * 
      * @param wsName
      * @param dsName
-     *
      */
     public DataStoreInfo createH2DataStore(String wsName, String dsName) {
         // create a datastore to import into
@@ -293,12 +299,11 @@ public abstract class RemoteProcessClient implements DisposableBean, ExtensionPr
     /**
      * @param metadata
      * @param value
-     *
      * @throws IOException
      */
     public LayerInfo importLayer(File file, String type, DataStoreInfo store, String name,
-            String title, String description, String defaultStyle, String targetWorkspace,
-            String metadata) throws Exception {
+                                 String title, String description, String defaultStyle, String targetWorkspace,
+                                 String metadata) throws Exception {
         Importer importer = getImporter();
 
         LOGGER.fine(" - [Remote Process Client - importLayer] Importer Context from Spatial File:"
@@ -368,7 +373,7 @@ public abstract class RemoteProcessClient implements DisposableBean, ExtensionPr
 
             importer.run(context);
 
-            for (int importChecks=0; importChecks<10; importChecks++) {
+            for (int importChecks = 0; importChecks < 10; importChecks++) {
                 if (context.getState() == ImportContext.State.COMPLETE) {
                     if (context.getTasks() != null && context.getTasks().size() > 0) {
                         // ImportTask task = context.getTasks().get(0);

@@ -110,21 +110,21 @@ public class CollectionsController extends AbstractOpenSearchController {
     Catalog catalog;
 
     public CollectionsController(OpenSearchAccessProvider accessProvider,
-            OseoJSONConverter jsonConverter, Catalog catalog) {
+                                 OseoJSONConverter jsonConverter, Catalog catalog) {
         super(accessProvider, jsonConverter);
         this.catalog = catalog;
     }
 
-    @GetMapping(produces = { MediaType.APPLICATION_JSON_VALUE })
+    @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public CollectionReferences getCollections(HttpServletRequest request,
-            @RequestParam(name = "offset", required = false) Integer offset,
-            @RequestParam(name = "limit", required = false) Integer limit) throws IOException {
+                                               @RequestParam(name = "offset", required = false) Integer offset,
+                                               @RequestParam(name = "limit", required = false) Integer limit) throws IOException {
         // query the collections for their names
         Query query = new Query();
         setupQueryPaging(query, offset, limit);
-        query.setSortBy(new SortBy[] { FF.sort("name", SortOrder.ASCENDING) });
-        query.setPropertyNames(new String[] { "name" });
+        query.setSortBy(new SortBy[]{FF.sort("name", SortOrder.ASCENDING)});
+        query.setPropertyNames(new String[]{"name"});
         OpenSearchAccess access = accessProvider.getOpenSearchAccess();
         FeatureStore<FeatureType, Feature> fs = (FeatureStore<FeatureType, Feature>) access
                 .getCollectionSource();
@@ -147,7 +147,7 @@ public class CollectionsController extends AbstractOpenSearchController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> postCollectionJson(HttpServletRequest request,
-            @RequestBody(required = true) SimpleFeature feature)
+                                                     @RequestBody(required = true) SimpleFeature feature)
             throws IOException, URISyntaxException {
         String eoId = checkCollectionIdentifier(feature);
         Feature collectionFeature = simpleToComplex(feature, getCollectionSchema(),
@@ -161,7 +161,7 @@ public class CollectionsController extends AbstractOpenSearchController {
     }
 
     private ResponseEntity<String> returnCreatedCollectionReference(HttpServletRequest request,
-            String eoId) throws URISyntaxException {
+                                                                    String eoId) throws URISyntaxException {
         String baseURL = ResponseUtils.baseURL(request);
         String newCollectionLocation = ResponseUtils.buildURL(baseURL,
                 "/rest/oseo/collections/" + eoId, null, URLType.RESOURCE);
@@ -228,10 +228,10 @@ public class CollectionsController extends AbstractOpenSearchController {
         return returnCreatedCollectionReference(request, eoId);
     }
 
-    @GetMapping(path = "{collection}", produces = { MediaType.APPLICATION_JSON_VALUE })
+    @GetMapping(path = "{collection}", produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public SimpleFeature getCollection(HttpServletRequest request,
-            @PathVariable(name = "collection", required = true) String collection)
+                                       @PathVariable(name = "collection", required = true) String collection)
             throws IOException {
         // grab the collection
         Feature feature = queryCollection(collection, q -> {
@@ -262,8 +262,8 @@ public class CollectionsController extends AbstractOpenSearchController {
 
     @PutMapping(path = "{collection}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public void putCollectionJson(HttpServletRequest request,
-            @PathVariable(required = true, name = "collection") String collection,
-            @RequestBody(required = true) SimpleFeature feature)
+                                  @PathVariable(required = true, name = "collection") String collection,
+                                  @RequestBody(required = true) SimpleFeature feature)
             throws IOException, URISyntaxException {
         // check the collection exists
         queryCollection(collection, q -> {
@@ -309,10 +309,10 @@ public class CollectionsController extends AbstractOpenSearchController {
         runTransactionOnCollectionStore(fs -> fs.removeFeatures(filter));
     }
 
-    @GetMapping(path = "{collection}/layer", produces = { MediaType.APPLICATION_JSON_VALUE })
+    @GetMapping(path = "{collection}/layer", produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public CollectionLayer getCollectionLayer(HttpServletRequest request,
-            @PathVariable(name = "collection", required = true) String collection)
+                                              @PathVariable(name = "collection", required = true) String collection)
             throws IOException {
         // query one collection and grab its OGC links
         final Name layerPropertyName = getCollectionLayerPropertyName();
@@ -358,7 +358,7 @@ public class CollectionsController extends AbstractOpenSearchController {
         // we are inserting (feature sources do not accept a transaction...)
         CollectionLayerManager layerManager = new CollectionLayerManager(catalog, accessProvider);
         if (previousLayer != null) {
-             layerManager.removeMosaicAndLayer(previousLayer);
+            layerManager.removeMosaicAndLayer(previousLayer);
         }
         try {
             layerManager.createMosaicAndLayer(collection, layer);
@@ -386,7 +386,7 @@ public class CollectionsController extends AbstractOpenSearchController {
     }
 
     private CollectionLayer buildCollectionLayerFromFeature(Feature feature,
-            boolean notFoundOnEmpty) {
+                                                            boolean notFoundOnEmpty) {
         CollectionLayer layer = CollectionLayer.buildCollectionLayerFromFeature(feature);
         if (layer == null && notFoundOnEmpty) {
             throw new ResourceNotFoundException();
@@ -395,11 +395,10 @@ public class CollectionsController extends AbstractOpenSearchController {
         return layer;
     }
 
-   
 
     /**
      * Validates the layer and throws appropriate exceptions in case mandatory bits are missing
-     * 
+     *
      * @param layer
      * @param catalog2
      */
@@ -465,19 +464,18 @@ public class CollectionsController extends AbstractOpenSearchController {
             String bb = browseBands[i];
             boolean found = false;
             for (int j = 0; j < bands.length; j++) {
-                if(bands[j].equals(bb)) {
+                if (bands[j].equals(bb)) {
                     found = true;
                     break;
                 }
             }
-            
-            if(!found) {
+
+            if (!found) {
                 return false;
             }
         }
         return true;
     }
-
 
 
     @DeleteMapping(path = "{collection}/layer")
@@ -521,10 +519,10 @@ public class CollectionsController extends AbstractOpenSearchController {
         return sf;
     }
 
-    @GetMapping(path = "{collection}/ogcLinks", produces = { MediaType.APPLICATION_JSON_VALUE })
+    @GetMapping(path = "{collection}/ogcLinks", produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public OgcLinks getCollectionOgcLinks(HttpServletRequest request,
-            @PathVariable(name = "collection", required = true) String collection)
+                                          @PathVariable(name = "collection", required = true) String collection)
             throws IOException {
         // query one collection and grab its OGC links
         Feature feature = queryCollection(collection, q -> {
@@ -538,8 +536,8 @@ public class CollectionsController extends AbstractOpenSearchController {
 
     @PutMapping(path = "{collection}/ogcLinks", consumes = MediaType.APPLICATION_JSON_VALUE)
     public void putCollectionOgcLinks(HttpServletRequest request,
-            @PathVariable(name = "collection", required = true) String collection,
-            @RequestBody OgcLinks links) throws IOException {
+                                      @PathVariable(name = "collection", required = true) String collection,
+                                      @RequestBody OgcLinks links) throws IOException {
         // check the collection is there
         queryCollection(collection, q -> {
         });
@@ -565,7 +563,7 @@ public class CollectionsController extends AbstractOpenSearchController {
                 fs -> fs.modifyFeatures(OpenSearchAccess.OGC_LINKS_PROPERTY_NAME, null, filter));
     }
 
-    @GetMapping(path = "{collection}/metadata", produces = { MediaType.TEXT_XML_VALUE })
+    @GetMapping(path = "{collection}/metadata", produces = {MediaType.TEXT_XML_VALUE})
     public void getCollectionMetadata(
             @PathVariable(name = "collection", required = true) String collection,
             HttpServletResponse response) throws IOException {
@@ -619,13 +617,13 @@ public class CollectionsController extends AbstractOpenSearchController {
                 fs -> fs.modifyFeatures(OpenSearchAccess.METADATA_PROPERTY_NAME, null, filter));
     }
 
-    @GetMapping(path = "{collection}/description", produces = { MediaType.TEXT_HTML_VALUE })
+    @GetMapping(path = "{collection}/description", produces = {MediaType.TEXT_HTML_VALUE})
     public void getCollectionDescription(
             @PathVariable(name = "collection", required = true) String collection,
             HttpServletResponse response) throws IOException {
         // query one collection and grab its OGC links
         Feature feature = queryCollection(collection, q -> {
-            q.setPropertyNames(new String[] { OpenSearchAccess.DESCRIPTION });
+            q.setPropertyNames(new String[]{OpenSearchAccess.DESCRIPTION});
         });
 
         // grab the description

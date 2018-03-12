@@ -23,25 +23,24 @@ public class GeoServerErrorPage extends GeoServerBasePage {
 
     public GeoServerErrorPage(Throwable error) {
         IModel notice = null, errorText = new Model("");
-        
+
         boolean trace = false;
         if (getSession().getAuthentication() != null &&
-            getSession().getAuthentication().isAuthenticated()) 
-        {
-            try { 
+                getSession().getAuthentication().isAuthenticated()) {
+            try {
                 ByteArrayOutputStream bos = new ByteArrayOutputStream();
                 PrintStream ps = new PrintStream(bos);
                 error.printStackTrace(ps);
                 ps.close();
                 bos.close();
-                errorText = new Model( bos.toString() );
+                errorText = new Model(bos.toString());
                 notice = new ResourceModel("GeoServerErrorPage.whatIsThis");
                 trace = true;
             } catch (Exception e) {
                 notice = new ResourceModel("GeoServerErrorPage.failedAgain");
             }
         }
-        if ( notice != null && notice.getObject() != null) {
+        if (notice != null && notice.getObject() != null) {
             error(notice.getObject().toString());
         }
 
@@ -49,12 +48,12 @@ public class GeoServerErrorPage extends GeoServerBasePage {
 
         WebMarkupContainer wmc = new WebMarkupContainer("trace-explanation");
         wmc.setVisible(trace);
-            wmc.add(new ExternalLink(
-                    "userListLink",
-                    new ResourceModel("userListLink"),
-                    new ResourceModel("userListText")
-                    ).setVisible(trace)
-       );
+        wmc.add(new ExternalLink(
+                        "userListLink",
+                        new ResourceModel("userListLink"),
+                        new ResourceModel("userListText")
+                ).setVisible(trace)
+        );
 
         add(wmc);
 

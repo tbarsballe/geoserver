@@ -55,7 +55,7 @@ import org.geotools.util.Version;
  * By default, no DTD or XML Schema reference will be included in the document. The methods
  * {@link #setDTDLocation(String)} and {@link #setSchemaLocation(String)} can be used to override
  * this behaviour. Only one of these methods should be set per instance of this class.
- * 
+ * <p>
  * The supplied value should be relative to the web application context root.
  * </p>
  * <p>
@@ -63,11 +63,10 @@ import org.geotools.util.Version;
  * The default content type for the created document is <code>text/xml</code>, this can be
  * overridden with {@link #setContentType(String)}.
  * </p>
- * 
+ *
  * @author Justin Deoliveira
  * @author Gabriel Roldan
  * @author Carlo Cancellieri - GeoSolutions
- * 
  */
 public class WMSServiceExceptionHandler extends ServiceExceptionHandler {
 
@@ -79,6 +78,7 @@ public class WMSServiceExceptionHandler extends ServiceExceptionHandler {
      */
     static final Map<String, String> IMAGEIO_FORMATS = new HashMap<String, String>() {
         private static final long serialVersionUID = 1L;
+
         {
             put("image/png", "png");
             put("image/png8", "png");
@@ -91,12 +91,10 @@ public class WMSServiceExceptionHandler extends ServiceExceptionHandler {
 
     /**
      * Creates a new exception handler for WMS exceptions
-     * 
-     * @param services
-     *            the {@link WMSInfo}s this handler writes exceptions for
-     * @param geoServer
-     *            needed to know whether to write detailed exception reports or not (as per
-     *            {@code GeoServer.getGlobal().isVerbose()})
+     *
+     * @param services  the {@link WMSInfo}s this handler writes exceptions for
+     * @param geoServer needed to know whether to write detailed exception reports or not (as per
+     *                  {@code GeoServer.getGlobal().isVerbose()})
      */
     public WMSServiceExceptionHandler(List services, GeoServer geoServer) {
         super(services);
@@ -170,34 +168,34 @@ public class WMSServiceExceptionHandler extends ServiceExceptionHandler {
                 handleXmlException(exception, request);
             }
         } else {
-        	// use default
+            // use default
             handleXmlException(exception, request);
         }
     }
-    
+
     public static boolean isImageExceptionType(String exceptions) {
         return "application/vnd.ogc.se_inimage".equals(exceptions) || "INIMAGE".equals(exceptions)
                 || "BLANK".equals(exceptions) || "application/vnd.ogc.se_blank".equals(exceptions);
     }
-    
+
     private void handleImageException(ServiceException exception, Request request, final int width,
-            final int height, final String format, String exceptionFormat, Color bgcolor, Boolean transparent) {
-       
+                                      final int height, final String format, String exceptionFormat, Color bgcolor, Boolean transparent) {
+
         if (("BLANK".equals(exceptionFormat) || "application/vnd.ogc.se_blank".equals(exceptionFormat)) && bgcolor == null && Boolean.TRUE.equals(transparent)) {
             bgcolor = new Color(0, 0, 0, 0);
         }
-        
+
         if (bgcolor == null) {
             bgcolor = Color.WHITE;
         }
-        
-        
+
+
         BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR);
         Graphics2D g = (Graphics2D) img.getGraphics();
-        
+
         g.setColor(bgcolor);
         g.fillRect(0, 0, img.getWidth(), img.getHeight());
-        
+
         if (!("BLANK".equals(exceptionFormat) || "application/vnd.ogc.se_blank".equals(exceptionFormat))) { //wms 1.3 only
             g.setColor(Color.BLACK);
 
@@ -210,7 +208,7 @@ public class WMSServiceExceptionHandler extends ServiceExceptionHandler {
         g.dispose();
         try {
             final HttpServletResponse response = request.getHttpResponse();
-            if("image/png8".equals(format)) {
+            if ("image/png8".equals(format)) {
                 response.setContentType("image/png");
             } else {
                 response.setContentType(format);
@@ -223,20 +221,22 @@ public class WMSServiceExceptionHandler extends ServiceExceptionHandler {
                     e);
         }
     }
+
     public static boolean isPartialMapExceptionType(String exceptions) {
-        return "application/vnd.gs.wms_partial".equals(exceptions) 
+        return "application/vnd.gs.wms_partial".equals(exceptions)
                 || "PARTIALMAP".equals(exceptions);
     }
+
     private void handlePartialMapException(ServiceException exception, Request request, String format) {
-        RenderedImageMap map = (RenderedImageMap) ((WMSPartialMapException)exception).getMap();
+        RenderedImageMap map = (RenderedImageMap) ((WMSPartialMapException) exception).getMap();
         try {
             final HttpServletResponse response = request.getHttpResponse();
-            if("image/png8".equals(format)) {
+            if ("image/png8".equals(format)) {
                 response.setContentType("image/png");
             } else {
                 response.setContentType(format);
             }
-            
+
             final ServletOutputStream os = response.getOutputStream();
             ImageIO.write(map.getImage(), IMAGEIO_FORMATS.get(format), os);
             os.flush();
@@ -383,17 +383,12 @@ public class WMSServiceExceptionHandler extends ServiceExceptionHandler {
 
     /**
      * Paint the provided text onto the graphics wrapping words at the specified lineWidth.
-     * 
-     * @param g
-     *            the Graphics2D which will be used to draw the text
-     * @param text
-     *            the text to render
-     * @param lineWidth
-     *            the width of the area where words should be rendered
-     * @param startX
-     *            an offset from the left edge of the image to where text should start
-     * @param startY
-     *            an offset from the top edge of the image to where text should start
+     *
+     * @param g         the Graphics2D which will be used to draw the text
+     * @param text      the text to render
+     * @param lineWidth the width of the area where words should be rendered
+     * @param startX    an offset from the left edge of the image to where text should start
+     * @param startY    an offset from the top edge of the image to where text should start
      */
     void paintLines(Graphics2D g, String text, int lineWidth, int startX, int startY) {
         // split the text into lines, LineBreakMeasurer only lays out the single

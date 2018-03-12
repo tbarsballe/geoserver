@@ -7,7 +7,7 @@ package org.geoserver.cluster.configuration;
 
 /**
  * Defines the configuration parameters and defaults for the Master and the Slave toggles.
- * 
+ *
  * @author carlo cancellieri - GeoSolutions SAS
  */
 final public class ToggleConfiguration implements JMSConfigurationExt {

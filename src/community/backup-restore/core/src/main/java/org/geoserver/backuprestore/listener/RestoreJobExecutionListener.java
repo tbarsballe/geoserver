@@ -27,11 +27,10 @@ import org.springframework.batch.core.JobParameters;
 
 /**
  * Implements a Spring Batch {@link JobExecutionListener}.
- * 
+ * <p>
  * It's used to perform operations accordingly to the {@link Backup} batch {@link JobExecution} status.
- * 
- * @author Alessio Fabiani, GeoSolutions
  *
+ * @author Alessio Fabiani, GeoSolutions
  */
 public class RestoreJobExecutionListener implements JobExecutionListener {
 
@@ -56,34 +55,34 @@ public class RestoreJobExecutionListener implements JobExecutionListener {
         } else {
             Long id = null;
             RestoreExecutionAdapter rst = null;
-            
+
             for (Entry<Long, RestoreExecutionAdapter> entry : backupFacade.getRestoreExecutions().entrySet()) {
                 id = entry.getKey();
                 rst = entry.getValue();
-                
-                if(rst.getJobParameters().getLong(Backup.PARAM_TIME).equals(jobExecution.getJobParameters().getLong(Backup.PARAM_TIME))) {
+
+                if (rst.getJobParameters().getLong(Backup.PARAM_TIME).equals(jobExecution.getJobParameters().getLong(Backup.PARAM_TIME))) {
                     break;
                 } else {
                     id = null;
                     rst = null;
                 }
             }
-            
+
             if (rst != null) {
                 Resource archiveFile = rst.getArchiveFile();
                 Catalog restoreCatalog = rst.getRestoreCatalog();
                 List<String> options = rst.getOptions();
                 Filter filter = rst.getFilter();
-                
+
                 this.backupFacade.getRestoreExecutions().remove(id);
-                
+
                 this.restoreExecution = new RestoreExecutionAdapter(jobExecution, backupFacade.getTotalNumberOfRestoreSteps());
                 this.restoreExecution.setArchiveFile(archiveFile);
                 this.restoreExecution.setRestoreCatalog(restoreCatalog);
                 this.restoreExecution.setFilter(filter);
                 this.restoreExecution.getOptions().addAll(options);
-                
-                this.backupFacade.getRestoreExecutions().put(jobExecution.getId(), this.restoreExecution);                    
+
+                this.backupFacade.getRestoreExecutions().put(jobExecution.getId(), this.restoreExecution);
             }
         }
     }
@@ -115,7 +114,7 @@ public class RestoreJobExecutionListener implements JobExecutionListener {
             final Long executionId = jobExecution.getId();
 
             this.restoreExecution = backupFacade.getRestoreExecutions().get(jobExecution.getId());
-            
+
             LOGGER.fine("Running Executions IDs : " + executionId);
 
             if (jobExecution.getStatus() != BatchStatus.STOPPED) {
@@ -131,13 +130,13 @@ public class RestoreJobExecutionListener implements JobExecutionListener {
                     if (!dryRun) {
                         backupFacade.getGeoServer().reload();
                     }
-                    
+
                     backupFacade.getGeoServer().reset();
-                    
+
                     JobParameters jobParameters = restoreExecution.getJobParameters();
                     Resource tempFolder = Resources
                             .fromURL(jobParameters.getString(Backup.PARAM_INPUT_FILE_PATH));
-                    
+
                     // Cleanup Temporary Resources
                     String cleanUpTempFolders = jobParameters.getString(Backup.PARAM_CLEANUP_TEMP);
                     if (cleanUpTempFolders != null && Boolean.parseBoolean(cleanUpTempFolders) && tempFolder != null) {

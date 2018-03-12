@@ -30,9 +30,9 @@ import org.opengis.referencing.datum.PixelInCell;
 import org.opengis.referencing.operation.MathTransform;
 
 /**
- * Delegates every method to the delegate structured grid coverage reader. 
+ * Delegates every method to the delegate structured grid coverage reader.
  * Subclasses will override selected methods to perform their "decoration" job
- * 
+ *
  * @author Daniele Romagnoli
  */
 public abstract class DecoratingStructuredGridCoverage2DReader implements StructuredGridCoverage2DReader {
@@ -144,7 +144,7 @@ public abstract class DecoratingStructuredGridCoverage2DReader implements Struct
     }
 
     public double[] getReadingResolutions(String coverageName, OverviewPolicy policy,
-            double[] requestedResolution) throws IOException {
+                                          double[] requestedResolution) throws IOException {
         return delegate.getReadingResolutions(coverageName, policy, requestedResolution);
     }
 

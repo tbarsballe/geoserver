@@ -17,9 +17,8 @@ import org.springframework.context.ApplicationContext;
 
 /**
  * Test class ensuring that the GWC beans stored in the geowebcache-wmsservice-context.xml file are correctly loaded.
- * 
+ *
  * @author Nicola Lagomarsini geosolutions
- * 
  */
 public class TestFullWMSBeans extends GeoServerSystemTestSupport {
 

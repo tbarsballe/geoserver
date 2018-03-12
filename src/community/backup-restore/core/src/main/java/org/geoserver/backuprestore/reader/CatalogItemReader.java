@@ -15,18 +15,17 @@ import org.springframework.core.io.Resource;
 
 /**
  * Concrete Spring Batch {@link ItemReader}.
- * 
+ * <p>
  * Reads resource items from in memory {@link Catalog}.
- * 
- * @author Alessio Fabiani, GeoSolutions
  *
+ * @author Alessio Fabiani, GeoSolutions
  */
 public class CatalogItemReader<T> extends CatalogReader<T> {
 
     CloseableIterator<T> catalogIterator;
-    
+
     public CatalogItemReader(Class<T> clazz, Backup backupFacade,
-            XStreamPersisterFactory xStreamPersisterFactory) {
+                             XStreamPersisterFactory xStreamPersisterFactory) {
         super(clazz, backupFacade, xStreamPersisterFactory);
     }
 

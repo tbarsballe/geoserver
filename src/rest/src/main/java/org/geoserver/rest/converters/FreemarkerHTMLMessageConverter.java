@@ -51,7 +51,7 @@ public class FreemarkerHTMLMessageConverter extends BaseMessageConverter<RestWra
     protected boolean supports(Class<?> clazz) {
         return RestWrapper.class.isAssignableFrom(clazz);
     }
-    
+
     @Override
     protected boolean canRead(MediaType mediaType) {
         return false; // reading not supported
@@ -59,22 +59,23 @@ public class FreemarkerHTMLMessageConverter extends BaseMessageConverter<RestWra
 
     @Override
     protected RestWrapper<?> readInternal(Class<? extends RestWrapper<?>> clazz,
-            HttpInputMessage inputMessage) throws IOException, HttpMessageNotReadableException {
+                                          HttpInputMessage inputMessage) throws IOException, HttpMessageNotReadableException {
         throw new UnsupportedOperationException();
     }
-    
+
     /**
      * Write an given object to the given output message as HTML, invoked from {@link #write}.
-     * @param wrapper The wrapped object write to the output message
+     *
+     * @param wrapper       The wrapped object write to the output message
      * @param outputMessage the HTTP output message to write to
-     * @throws IOException in case of I/O errors
+     * @throws IOException                     in case of I/O errors
      * @throws HttpMessageNotWritableException in case of conversion errors
      */
     @Override
     protected void writeInternal(RestWrapper<?> wrapper, HttpOutputMessage outputMessage)
             throws IOException, HttpMessageNotWritableException {
         MediaType contentType = outputMessage.getHeaders().getContentType();
-        
+
         Writer templateWriter = null;
         wrapper.configureFreemarker(this);
         try {
@@ -82,7 +83,7 @@ public class FreemarkerHTMLMessageConverter extends BaseMessageConverter<RestWra
             Template template = wrapper.getTemplate();
             OutputStream outputStream = outputMessage.getBody();
             Charset charSet = contentType.getCharset();
-            
+
             if (charSet != null) {
                 templateWriter = new BufferedWriter(
                         new OutputStreamWriter(outputStream, charSet.name()));

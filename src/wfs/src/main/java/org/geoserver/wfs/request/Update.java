@@ -21,7 +21,7 @@ import org.geoserver.wfs.request.Insert.WFS11;
 
 /**
  * Update element in a Transaction request.
- *  
+ *
  * @author Justin Deoliveira, OpenGeo
  */
 public abstract class Update extends TransactionElement {
@@ -29,13 +29,13 @@ public abstract class Update extends TransactionElement {
     protected Update(EObject adaptee) {
         super(adaptee);
     }
-    
+
     public abstract List<Property> getUpdateProperties();
 
     public abstract void setUpdateProperties(List<Property> properties);
 
     public abstract Property createProperty();
-    
+
     public static class WFS11 extends Update {
         public WFS11(EObject adaptee) {
             super(adaptee);
@@ -79,7 +79,7 @@ public abstract class Update extends TransactionElement {
             return ue;
         }
     }
-    
+
     public static class WFS20 extends Update {
         public WFS20(EObject adaptee) {
             super(adaptee);

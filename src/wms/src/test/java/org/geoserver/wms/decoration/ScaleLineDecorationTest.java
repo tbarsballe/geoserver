@@ -19,11 +19,11 @@ public class ScaleLineDecorationTest extends DecorationTestSupport {
     public void testTransparency() throws Exception {
         ScaleLineDecoration d = new ScaleLineDecoration();
         BufferedImage bi = paintOnImage(d);
-        
+
         // ImageIO.write(bi, "PNG", new File("/tmp/test.png"));
 
         assertPixel(bi, 180, 160, Color.WHITE);
-        
+
         // setup for transparent background
         Map<String, String> options = new HashMap<String, String>();
         options.put("transparent", "true");
@@ -38,7 +38,7 @@ public class ScaleLineDecorationTest extends DecorationTestSupport {
     @Test
     public void testMeasurementOption() throws Exception {
         ScaleLineDecoration d = new ScaleLineDecoration();
-        
+
         // setup for metric
         Map<String, String> options = new HashMap<String, String>();
         options.put("measurement-system", "metric");
@@ -50,8 +50,8 @@ public class ScaleLineDecorationTest extends DecorationTestSupport {
         assertPixel(bi, 109, 139, Color.black);
         //Check that we do not have imperial
         assertPixel(bi, 109, 157, Color.white);
-        
-        
+
+
         // setup for imperial
         options.clear();
         options.put("measurement-system", "imperial");
@@ -63,21 +63,21 @@ public class ScaleLineDecorationTest extends DecorationTestSupport {
         assertPixel(bi, 109, 157, Color.black);
         //Check that we do not have metric
         assertPixel(bi, 109, 139, Color.white);
-        
-        
+
+
         // setup for both
         options.clear();
         options.put("measurement-system", "both");
         d.loadOptions(options);
         bi = paintOnImage(d);
-        
+
         //ImageIO.write(bi, "PNG", new File("/tmp/test3.png"));
         //Check for imperial
         assertPixel(bi, 109, 157, Color.black);
         //Check for metric
         assertPixel(bi, 109, 139, Color.black);
-        
-        
+
+
         // setup for default(both)
         options.clear();
         d.loadOptions(options);

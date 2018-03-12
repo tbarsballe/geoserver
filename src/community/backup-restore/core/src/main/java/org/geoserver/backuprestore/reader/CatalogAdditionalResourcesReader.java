@@ -14,9 +14,8 @@ import org.geoserver.platform.resource.Resource;
  * <br>
  * The concrete classes can be external beans defined as GeoServer Extensions
  * implementing the {@link CatalogAdditionalResourcesReader} interface.
- * 
- * @author Alessio Fabiani, GeoSolutions
  *
+ * @author Alessio Fabiani, GeoSolutions
  */
 public interface CatalogAdditionalResourcesReader<T> {
 
@@ -24,5 +23,5 @@ public interface CatalogAdditionalResourcesReader<T> {
 
     public void readAdditionalResources(Backup backupFacade, Resource base, T item)
             throws IOException;
-    
+
 }

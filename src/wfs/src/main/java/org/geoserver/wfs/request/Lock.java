@@ -14,12 +14,11 @@ import org.opengis.filter.Filter;
 
 /**
  * Lock in a LockFeature request.
- * 
- * @author Justin Deoliveira, OpenGeo
  *
+ * @author Justin Deoliveira, OpenGeo
  */
 public abstract class Lock extends RequestObject {
-    
+
     protected Lock(EObject adaptee) {
         super(adaptee);
     }
@@ -35,7 +34,7 @@ public abstract class Lock extends RequestObject {
     }
 
     public static class WFS11 extends Lock {
-        
+
         public WFS11(EObject adaptee) {
             super(adaptee);
         }
@@ -45,25 +44,25 @@ public abstract class Lock extends RequestObject {
             return eGet(adaptee, "typeName", QName.class);
         }
     }
-    
+
     public static class WFS20 extends Lock {
 
         public WFS20(EObject adaptee) {
             super(adaptee);
         }
-     
+
         @Override
         public QName getTypeName() {
             List typeNames = eGet(adaptee, "typeNames", List.class);
             if (typeNames.size() == 1) {
                 return (QName) typeNames.get(0);
-            } else if(typeNames.size() > 0) {
+            } else if (typeNames.size() > 0) {
                 throw new IllegalArgumentException("Multiple type names on single lock not supported");
             }
             // no typenames found, happens with GetFeatureById stored query for example
             return null;
         }
-        
+
         @Override
         public void setTypeName(QName typeName) {
             List typeNames = eGet(adaptee, "typeNames", List.class);

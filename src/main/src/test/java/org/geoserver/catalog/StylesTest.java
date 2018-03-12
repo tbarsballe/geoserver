@@ -38,14 +38,14 @@ public class StylesTest extends GeoServerSystemTestSupport {
         try {
             Styles.handler(null);
             fail();
+        } catch (Exception e) {
         }
-        catch(Exception e) {}
 
         try {
             Styles.handler("foo");
             fail();
+        } catch (Exception e) {
         }
-        catch(Exception e) {}
     }
 
     @Test
@@ -58,7 +58,7 @@ public class StylesTest extends GeoServerSystemTestSupport {
         props.store(bout, null);
 
         StyledLayerDescriptor sld = Styles.handler(PropertyStyleHandler.FORMAT)
-            .parse(new ByteArrayInputStream(bout.toByteArray()), null, null, null);
+                .parse(new ByteArrayInputStream(bout.toByteArray()), null, null, null);
         assertNotNull(sld);
 
         Style style = Styles.style(sld);
@@ -74,7 +74,7 @@ public class StylesTest extends GeoServerSystemTestSupport {
 
         assertNull(Styles.style(sld));
     }
-    
+
     @Test
     public void testParseStyleTwiceLock() throws Exception {
         StyleInfo style = getCatalog().getStyles().get(0);
@@ -85,14 +85,14 @@ public class StylesTest extends GeoServerSystemTestSupport {
         Styles.handler(style.getFormat()).parse(resource, style.getFormatVersion(), new DefaultResourceLocator(), null);
         Styles.handler(style.getFormat()).parse(resource, style.getFormatVersion(), new DefaultResourceLocator(), null);
     }
-    
+
     @Test
     public void testEntityExpansionOnValidation() throws Exception {
         URL url = getClass().getResource("../data/test/externalEntities.sld");
         try {
             Styles.handler("SLD").validate(url, null, getCatalog().getResourcePool().getEntityResolver());
             fail("Should have failed due to the entity resolution attempt");
-        } catch(Exception e) {
+        } catch (Exception e) {
             String message = e.getMessage();
             assertThat(message, containsString("Entity resolution disallowed"));
             assertThat(message, containsString("/this/file/does/not/exist"));

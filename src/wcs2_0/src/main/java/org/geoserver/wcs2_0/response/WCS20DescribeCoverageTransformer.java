@@ -52,14 +52,14 @@ import org.xml.sax.helpers.NamespaceSupport;
 /**
  * Based on the <code>org.geotools.xml.transform</code> framework, does the
  * job of encoding a WCS 2.0.1 DescribeCoverage document.
- * 
+ *
  * @author Emanuele Tajariol (etj) - GeoSolutions
  * @author Simone Giannecchini, GeoSolutions
  */
 public class WCS20DescribeCoverageTransformer extends GMLTransformer {
     public static final Logger LOGGER = Logging.getLogger(WCS20DescribeCoverageTransformer.class
             .getPackage().getName());
-    
+
     private MIMETypeMapper mimemapper;
     private WCSInfo wcs;
 
@@ -67,17 +67,22 @@ public class WCS20DescribeCoverageTransformer extends GMLTransformer {
 
     private CoverageResponseDelegateFinder responseFactory;
 
-    /** Available extension points for DescribeCoverage*/
+    /**
+     * Available extension points for DescribeCoverage
+     */
     private List<WCS20DescribeCoverageExtension> wcsDescribeCoverageExtensions;
 
-    /** Boolean indicating that at least an extension point for the DescribeCoverage operation is available */
+    /**
+     * Boolean indicating that at least an extension point for the DescribeCoverage operation is available
+     */
     private boolean availableDescribeCoverageExtensions;
-    
+
     /**
      * Creates a new WFSCapsTransformer object.
-     * @param mimemapper 
+     *
+     * @param mimemapper
      */
-    public WCS20DescribeCoverageTransformer(WCSInfo wcs, Catalog catalog, CoverageResponseDelegateFinder responseFactory,EnvelopeAxesLabelsMapper envelopeDimensionsMapper, MIMETypeMapper mimemapper) {
+    public WCS20DescribeCoverageTransformer(WCSInfo wcs, Catalog catalog, CoverageResponseDelegateFinder responseFactory, EnvelopeAxesLabelsMapper envelopeDimensionsMapper, MIMETypeMapper mimemapper) {
         super(envelopeDimensionsMapper);
         this.wcs = wcs;
         this.catalog = catalog;
@@ -106,11 +111,10 @@ public class WCS20DescribeCoverageTransformer extends GMLTransformer {
 
         /**
          * Encode the object.
-
          */
         @Override
         public void encode(Object o) throws IllegalArgumentException {
-            
+
             if (!(o instanceof DescribeCoverageType)) {
                 throw new IllegalArgumentException(new StringBuffer("Not a DescribeCoverageType: ")
                         .append(o).toString());
@@ -122,7 +126,7 @@ public class WCS20DescribeCoverageTransformer extends GMLTransformer {
             List<CoverageInfo> coverages = new ArrayList<CoverageInfo>();
 
             List<String> covIds = new ArrayList<String>();
-            for (String encodedCoverageId : (List<String>)request.getCoverageId()) {
+            for (String encodedCoverageId : (List<String>) request.getCoverageId()) {
                 String newCoverageID = encodedCoverageId;
                 // Extension point for encoding the coverageId
                 if (availableDescribeCoverageExtensions) {
@@ -131,18 +135,18 @@ public class WCS20DescribeCoverageTransformer extends GMLTransformer {
                     }
                 }
                 LayerInfo layer = NCNameResourceCodec.getCoverage(catalog, newCoverageID);
-                if(layer != null) {
+                if (layer != null) {
                     coverages.add((CoverageInfo) layer.getResource());
                     covIds.add(encodedCoverageId);
                 } else {
                     // if we get there there is an internal error, the coverage existence is
                     // checked before creating the transformer
-                    throw new IllegalArgumentException("Failed to locate coverage " 
+                    throw new IllegalArgumentException("Failed to locate coverage "
                             + encodedCoverageId + ", unexpected, the coverage existance has been " +
-                            		"checked earlier in the request lifecycle");
+                            "checked earlier in the request lifecycle");
                 }
             }
-            
+
             // register namespaces provided by extended capabilities
             NamespaceSupport namespaces = getNamespaceSupport();
             namespaces.declarePrefix("swe", "http://www.opengis.net/swe/2.0");
@@ -181,7 +185,7 @@ public class WCS20DescribeCoverageTransformer extends GMLTransformer {
             }
             end("wcs:CoverageDescriptions");
         }
-        
+
         String buildSchemaLocation(String schemaBaseURL, String... locations) {
             for (WCS20CoverageMetadataProvider cp : extensions) {
                 locations = helper.append(locations, cp.getSchemaLocations(schemaBaseURL));
@@ -192,12 +196,11 @@ public class WCS20DescribeCoverageTransformer extends GMLTransformer {
 
 
         /**
-         * 
          * @param ci
          */
         public void handleCoverageDescription(String encodedId, CoverageInfo ci) {
 
-             try {
+            try {
                 // see if we have to handle time, elevation and additional dimensions
                 WCSDimensionsHelper dimensionsHelper = null;
                 MetadataMap metadata = ci.getMetadata();
@@ -209,7 +212,7 @@ public class WCS20DescribeCoverageTransformer extends GMLTransformer {
                 }
 
                 GridCoverage2DReader reader = (GridCoverage2DReader) ci.getGridCoverageReader(null, null);
-                if (reader== null) {
+                if (reader == null) {
                     throw new WCS20Exception("Unable to read sample coverage for " + ci.getName());
                 }
                 // get the crs and look for an EPSG code
@@ -248,7 +251,7 @@ public class WCS20DescribeCoverageTransformer extends GMLTransformer {
                 if (dimensionsHelper != null && dimensionsHelper.getElevationDimension() != null) {
                     builder.append("elevation ");
                 }
-                
+
                 if (dimensionsHelper != null && dimensionsHelper.getTimeDimension() != null) {
                     builder.append("time ");
                 }
@@ -272,7 +275,7 @@ public class WCS20DescribeCoverageTransformer extends GMLTransformer {
                     builder.append(axisName).append(" ");
                 }
                 axesLabel = builder.substring(0, builder.length() - 1);
-                GridGeometry2D gg = new GridGeometry2D(reader.getOriginalGridRange(), 
+                GridGeometry2D gg = new GridGeometry2D(reader.getOriginalGridRange(),
                         reader.getOriginalGridToWorld(PixelInCell.CELL_CENTER), reader.getCoordinateReferenceSystem());
                 handleDomainSet(gg, 2, encodedId, srsName, axisSwap);
 
@@ -285,7 +288,7 @@ public class WCS20DescribeCoverageTransformer extends GMLTransformer {
                 end("wcs:CoverageDescription");
             } catch (Exception e) {
                 throw new WcsException(e);
-            } 
+            }
         }
 
         private GridSampleDimension[] getSampleDimensions(GridCoverage2DReader reader) throws Exception {
@@ -294,27 +297,27 @@ public class WCS20DescribeCoverageTransformer extends GMLTransformer {
                 coverage = RequestUtils.readSampleGridCoverage(reader);
                 return coverage.getSampleDimensions();
             } finally {
-                if(coverage != null) {
+                if (coverage != null) {
                     CoverageCleanerCallback.addCoverages(coverage);
                 }
             }
-            
+
         }
 
         private void handleServiceParameters(CoverageInfo ci) throws IOException {
             start("wcs:ServiceParameters");
             element("wcs:CoverageSubtype", "RectifiedGridCoverage");
-            
+
             String mapNativeFormat = mimemapper.mapNativeFormat(ci);
-            element("wcs:nativeFormat",mapNativeFormat);
+            element("wcs:nativeFormat", mapNativeFormat);
             end("wcs:ServiceParameters");
         }
 
         /**
          * Encodes the RangeType as per the {@link DescribeCoverageType}WCS spec of the provided {@link GridCoverage2D}
-         * 
+         * <p>
          * e.g.:
-         * 
+         * <p>
          * <pre>
          * {@code
          * <gmlcov:rangeType>
@@ -336,21 +339,21 @@ public class WCS20DescribeCoverageTransformer extends GMLTransformer {
          * </gmlcov:rangeType>
          * }
          * </pre>
-         * 
+         *
          * @param gc2d the {@link GridCoverage2D} for which to encode the RangeType.
          */
         public void handleRangeType(final List<CoverageDimensionInfo> bands) {
             start("gmlcov:rangeType");
             start("swe:DataRecord");
-            
+
             // handle bands
-            for(CoverageDimensionInfo sd : bands){
+            for (CoverageDimensionInfo sd : bands) {
                 final AttributesImpl fieldAttr = new AttributesImpl();
-                fieldAttr.addAttribute("", "name", "name", "", sd.getName());                
-                start("swe:field",fieldAttr);
-                
+                fieldAttr.addAttribute("", "name", "name", "", sd.getName());
+                start("swe:field", fieldAttr);
+
                 start("swe:Quantity");
-                
+
                 // Description
                 start("swe:description");
                 chars(sd.getName()); // TODO can we make up something better??
@@ -369,25 +372,25 @@ public class WCS20DescribeCoverageTransformer extends GMLTransformer {
 
                 //UoM
                 final AttributesImpl uomAttr = new AttributesImpl();
-                final String unit =sd.getUnit();
-                uomAttr.addAttribute("", "code", "code", "", unit == null ? "W.m-2.Sr-1" : unit); 
-                start("swe:uom",uomAttr);
+                final String unit = sd.getUnit();
+                uomAttr.addAttribute("", "code", "code", "", unit == null ? "W.m-2.Sr-1" : unit);
+                start("swe:uom", uomAttr);
                 end("swe:uom");
-                
+
                 // constraint on values
                 start("swe:constraint");
                 start("swe:AllowedValues");
                 handleSampleDimensionRange(sd);// TODO make  this generic
                 end("swe:AllowedValues");
                 end("swe:constraint");
-                
+
                 end("swe:Quantity");
                 end("swe:field");
             }
-        
+
             end("swe:DataRecord");
             end("gmlcov:rangeType");
-            
+
         }
 
     }

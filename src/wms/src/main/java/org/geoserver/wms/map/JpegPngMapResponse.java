@@ -21,7 +21,7 @@ public class JpegPngMapResponse extends RenderedImageMapResponse {
 
     public static final String MIME = "image/vnd.jpeg-png";
 
-    private static final String[] OUTPUT_FORMATS = { MIME };
+    private static final String[] OUTPUT_FORMATS = {MIME};
 
     private static MapProducerCapabilities CAPABILITIES = new MapProducerCapabilities(true, false,
             false, true, null);
@@ -39,13 +39,13 @@ public class JpegPngMapResponse extends RenderedImageMapResponse {
         this.jpegResponse = jpegResponse;
         this.pngResponse = pngResponse;
     }
-    
+
     @Override
     public String getMimeType(Object value, Operation operation) throws ServiceException {
         RenderedImageMap map = ((RenderedImageMap) value);
         return JpegOrPngChooser.getFromMap(map).getMime();
     }
-    
+
     @Override
     public String getPreferredDisposition(Object value, Operation operation) {
         RenderedImageMap map = ((RenderedImageMap) value);
@@ -60,7 +60,7 @@ public class JpegPngMapResponse extends RenderedImageMapResponse {
      */
     @Override
     public void formatImageOutputStream(RenderedImage image, OutputStream outStream,
-            WMSMapContent mapContent) throws ServiceException, IOException {
+                                        WMSMapContent mapContent) throws ServiceException, IOException {
         JpegOrPngChooser chooser = JpegOrPngChooser.getFromMapContent(image, mapContent);
         if (chooser.isJpegPreferred()) {
             jpegResponse.formatImageOutputStream(image, outStream, mapContent);
@@ -83,5 +83,5 @@ public class JpegPngMapResponse extends RenderedImageMapResponse {
             return "png";
         }
     }
-    
+
 }

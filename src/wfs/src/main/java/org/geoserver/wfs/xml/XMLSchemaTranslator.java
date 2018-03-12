@@ -24,11 +24,11 @@ import java.util.Set;
  * the classes we want.  Note that this list comes from
  * org.geotools.gml.producer.FeatureTypeTransformer.
  * </p>
- * @see NameSpaceTranslatorFactory
  *
  * @author dzwiers, Refractions Research, Inc.
  * @author $Author: dmzwiers $ (last modification)
  * @version $Id$
+ * @see NameSpaceTranslatorFactory
  */
 public class XMLSchemaTranslator extends NameSpaceTranslator {
     private HashSet elements;
@@ -38,6 +38,7 @@ public class XMLSchemaTranslator extends NameSpaceTranslator {
      * <p>
      * Description
      * </p>
+     *
      * @param prefix
      */
     public XMLSchemaTranslator(String prefix) {
@@ -88,8 +89,6 @@ public class XMLSchemaTranslator extends NameSpaceTranslator {
      * Implementation of getElements.
      *
      * @see org.vfny.geoserver.global.xml.NameSpaceTranslator#getElements()
-     *
-     *
      */
     public Set getElements() {
         return elements;
@@ -99,8 +98,6 @@ public class XMLSchemaTranslator extends NameSpaceTranslator {
      * Implementation of getNameSpace.
      *
      * @see org.vfny.geoserver.global.xml.NameSpaceTranslator#getNameSpace()
-     *
-     *
      */
     public String getNameSpace() {
         return "http://www.w3.org/2001/XMLSchema";

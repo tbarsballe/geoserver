@@ -118,18 +118,18 @@ public class CopyTableTaskTypeImpl implements TaskType {
                             String columnName = targetdb.getDialect().quote(rsmd.getColumnLabel(i));
                             String typeName = rsmd.getColumnTypeName(i);
                             sb.append(columnName).append(" ").append(typeName);
-                            if(("char".equals(typeName) || "varchar".equals(typeName))
+                            if (("char".equals(typeName) || "varchar".equals(typeName))
                                     && rsmd.getColumnDisplaySize(i) > 0
                                     && rsmd.getColumnDisplaySize(i) < Integer.MAX_VALUE) {
                                 sb.append(" (").append(rsmd.getColumnDisplaySize(i)).append(" ) ");
                             }
                             switch (sourcedb.getDialect().isNullable(rsmd.isNullable(i))) {
-                            case ResultSetMetaData.columnNoNulls:
-                                sb.append(" NOT NULL");
-                                break;
-                            case ResultSetMetaData.columnNullable:
-                                sb.append(" NULL");
-                                break;
+                                case ResultSetMetaData.columnNoNulls:
+                                    sb.append(" NOT NULL");
+                                    break;
+                                case ResultSetMetaData.columnNullable:
+                                    sb.append(" NULL");
+                                    break;
                             }
                             sb.append(", ");
                         }
@@ -163,7 +163,7 @@ public class CopyTableTaskTypeImpl implements TaskType {
                                     uniqueIndexes.contains(indexName)));
                         }
                         //we are copying a view and need to create the spatial index.
-                        if(indexAndColumnMap.isEmpty() && !spatialColumns.isEmpty()){
+                        if (indexAndColumnMap.isEmpty() && !spatialColumns.isEmpty()) {
                             sb.append(sourcedb.getDialect().createIndex(
                                     tempTableName,
                                     spatialColumns,

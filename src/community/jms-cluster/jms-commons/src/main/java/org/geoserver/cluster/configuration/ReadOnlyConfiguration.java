@@ -8,11 +8,9 @@ package org.geoserver.cluster.configuration;
 import java.io.IOException;
 
 /**
- * 
  * class to store and load configuration for {@link ReadOnlyGeoServerLoader}
- * 
+ *
  * @author carlo cancellieri - GeoSolutions SAS
- * 
  */
 final public class ReadOnlyConfiguration implements JMSConfigurationExt {
 
@@ -35,13 +33,13 @@ final public class ReadOnlyConfiguration implements JMSConfigurationExt {
         return config.override(READ_ONLY_KEY, DEFAULT_READ_ONLY_VALUE);
     }
 
-    public static boolean isReadOnly(JMSConfiguration config){
-		Object statusObj = config
-				.getConfiguration(ReadOnlyConfiguration.READ_ONLY_KEY);
-		if (statusObj == null) {
-			statusObj = ReadOnlyConfiguration.DEFAULT_READ_ONLY_VALUE;
-		}
-		return ReadOnlyConfigurationStatus.valueOf(statusObj.toString())
-				.equals(ReadOnlyConfigurationStatus.enabled);
-	}
+    public static boolean isReadOnly(JMSConfiguration config) {
+        Object statusObj = config
+                .getConfiguration(ReadOnlyConfiguration.READ_ONLY_KEY);
+        if (statusObj == null) {
+            statusObj = ReadOnlyConfiguration.DEFAULT_READ_ONLY_VALUE;
+        }
+        return ReadOnlyConfigurationStatus.valueOf(statusObj.toString())
+                .equals(ReadOnlyConfigurationStatus.enabled);
+    }
 }

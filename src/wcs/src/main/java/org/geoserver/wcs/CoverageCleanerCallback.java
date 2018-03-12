@@ -48,7 +48,7 @@ public class CoverageCleanerCallback extends AbstractDispatcherCallback {
 
     /**
      * Mark coverage for cleaning.
-     * 
+     *
      * @param coverages
      */
     public static void addCoverages(GridCoverage... coverages) {
@@ -62,7 +62,7 @@ public class CoverageCleanerCallback extends AbstractDispatcherCallback {
 
     /**
      * Cleans up a coverage and its internal rendered image
-     * 
+     *
      * @param coverage
      */
     public static void disposeCoverage(GridCoverage coverage) {

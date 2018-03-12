@@ -25,5 +25,5 @@ public class LayerInfoConverter implements IConverter<LayerInfo> {
     public String convertToString(LayerInfo obj, Locale locale) {
         if (obj == null) return "";
         else return ((LayerInfo) obj).prefixedName();
-    } 
+    }
 }

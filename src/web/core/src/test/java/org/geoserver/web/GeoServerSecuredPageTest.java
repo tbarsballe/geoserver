@@ -24,7 +24,7 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.security.web.savedrequest.SavedRequest;
 
 public class GeoServerSecuredPageTest extends GeoServerWicketTestSupport {
-    
+
     /**
      * Enable the Spring Security auth filters
      */
@@ -34,7 +34,7 @@ public class GeoServerSecuredPageTest extends GeoServerWicketTestSupport {
                 .bean("filterChainProxy"));
     }
 
-    
+
     @Test
     public void testSecuredPageGivesRedirectWhenLoggedOut() throws UnsupportedEncodingException {
         logout();
@@ -53,7 +53,7 @@ public class GeoServerSecuredPageTest extends GeoServerWicketTestSupport {
         tester.startPage(LayerPage.class);
         tester.assertRenderedPage(LayerPage.class);
     }
-    
+
     @Test
     public void testSessionFixationAvoidance() throws Exception {
         tester.startPage(GeoServerHomePage.class);
@@ -70,6 +70,6 @@ public class GeoServerSecuredPageTest extends GeoServerWicketTestSupport {
         // the session in wicket tester mock does not disappear, the only
         // way to see if it has been invalidated is to check that the attributes are gone...
         assertNull(session.getAttribute("test"));
-        
+
     }
 }

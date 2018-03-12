@@ -26,10 +26,10 @@ import org.geotools.util.logging.Logging;
 
 
 public class LayerInfoImpl implements LayerInfo {
-    
+
     static final Logger LOGGER = Logging.getLogger(LayerInfoImpl.class);
-    
-    static final String KEY_ADVERTISED = "advertised"; 
+
+    static final String KEY_ADVERTISED = "advertised";
 
     protected String id;
 
@@ -39,7 +39,7 @@ public class LayerInfoImpl implements LayerInfo {
     transient protected String name;
 
     private String abstractTxt;
-    
+
     protected String path;
 
     protected PublishedType type;
@@ -74,22 +74,22 @@ public class LayerInfoImpl implements LayerInfo {
     /**
      * This property is transient in 2.1.x series and stored under the metadata map with key
      * "authorityURLs", and a not transient in the 2.2.x series.
-     * 
+     *
      * @since 2.1.3
      */
     protected List<AuthorityURLInfo> authorityURLs = new ArrayList<AuthorityURLInfo>(1);
-    
+
 
     /**
      * This property is transient in 2.1.x series and stored under the metadata map with key
      * "identifiers", and a not transient in the 2.2.x series.
-     * 
+     *
      * @since 2.1.3
      */
     protected List<LayerIdentifierInfo> identifiers = new ArrayList<LayerIdentifierInfo>(1);
 
     protected WMSInterpolation defaultWMSInterpolationMethod;
-    
+
     @Override
     public String getId() {
         return id;
@@ -99,7 +99,7 @@ public class LayerInfoImpl implements LayerInfo {
         this.id = id;
     }
 
-    @Override    
+    @Override
     public String getName() {
         if (resource == null) {
             return name;
@@ -107,49 +107,49 @@ public class LayerInfoImpl implements LayerInfo {
         return resource.getName();
     }
 
-    @Override    
+    @Override
     public void setName(String name) {
         // TODO: remove this log and reinstate field assignment when resource/publish split is complete
         LOGGER.log(Level.FINE, "Warning, some code is setting the LayerInfo name, but that will be ignored");
         this.name = name;
-        
+
         if (resource == null) {
             throw new NullPointerException("Layer name must not be set without an underlying resource");
         }
         resource.setName(name);
     }
 
-    @Override    
+    @Override
     public String prefixedName() {
         return this.getResource().getStore().getWorkspace().getName() + ":" + getName();
     }
 
-    @Override    
+    @Override
     public PublishedType getType() {
         return type;
     }
-    
+
     @Override
     public void setType(PublishedType type) {
         this.type = type;
     }
 
-    @Override    
+    @Override
     public String getPath() {
         return path;
     }
-    
+
     @Override
     public void setPath(String path) {
         this.path = path;
     }
-    
+
     @Override
     public StyleInfo getDefaultStyle() {
         return defaultStyle;
     }
 
-    @Override    
+    @Override
     public void setDefaultStyle(StyleInfo defaultStyle) {
         this.defaultStyle = defaultStyle;
     }
@@ -218,27 +218,27 @@ public class LayerInfoImpl implements LayerInfo {
         // TODO: remove this log and reinstate field assignment when resource/publish split is complete
         LOGGER.log(Level.FINE, "Warning, some code is setting the LayerInfo enabled flag, but that will be ignored");
         this.enabled = enabled;
-        
+
         if (resource == null) {
             throw new NullPointerException("Layer enabled flag must not be set without an underlying resource");
         }
         resource.setEnabled(enabled);
-   }
+    }
 
     @Override
     public MetadataMap getMetadata() {
         return metadata;
     }
-    
+
     public void setMetadata(MetadataMap metadata) {
         this.metadata = metadata;
     }
-    
+
     @Override
     public void accept(CatalogVisitor visitor) {
         visitor.visit(this);
     }
-    
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -315,13 +315,13 @@ public class LayerInfoImpl implements LayerInfo {
                 return false;
         } else if (!attribution.equals(other.getAttribution()))
             return false;
-        if(authorityURLs == null){
+        if (authorityURLs == null) {
             if (other.getAuthorityURLs() != null)
                 return false;
         } else if (!authorityURLs.equals(other.getAuthorityURLs()))
             return false;
-        
-        if(identifiers == null){
+
+        if (identifiers == null) {
             if (other.getIdentifiers() != null)
                 return false;
         } else if (!identifiers.equals(other.getIdentifiers()))
@@ -343,7 +343,7 @@ public class LayerInfoImpl implements LayerInfo {
 
     @Override
     public boolean isQueryable() {
-        return this.queryable == null? true : this.queryable.booleanValue();
+        return this.queryable == null ? true : this.queryable.booleanValue();
     }
 
     @Override
@@ -353,7 +353,7 @@ public class LayerInfoImpl implements LayerInfo {
 
     @Override
     public boolean isOpaque() {
-        return this.opaque == null? false : this.opaque.booleanValue();
+        return this.opaque == null ? false : this.opaque.booleanValue();
     }
 
     @Override
@@ -371,7 +371,7 @@ public class LayerInfoImpl implements LayerInfo {
         // TODO: remove this log and reinstate field assignment when resource/publish split is complete
         LOGGER.log(Level.FINE, "Warning, some code is setting the LayerInfo advertised flag, but that will be ignored");
         this.advertised = advertised;
-        
+
         if (resource == null) {
             throw new NullPointerException("Layer advertised flag must not be set without an underlying resource");
         }
@@ -382,8 +382,8 @@ public class LayerInfoImpl implements LayerInfo {
     public List<AuthorityURLInfo> getAuthorityURLs() {
         return authorityURLs;
     }
-    
-    public void setAuthorityURLs(List<AuthorityURLInfo> authorities){
+
+    public void setAuthorityURLs(List<AuthorityURLInfo> authorities) {
         this.authorityURLs = authorities;
     }
 
@@ -392,7 +392,7 @@ public class LayerInfoImpl implements LayerInfo {
         return identifiers;
     }
 
-    public void setIdentifiers(List<LayerIdentifierInfo> identifiers){
+    public void setIdentifiers(List<LayerIdentifierInfo> identifiers) {
         this.identifiers = identifiers;
     }
 
@@ -420,12 +420,12 @@ public class LayerInfoImpl implements LayerInfo {
     public String getPrefixedName() {
         return prefixedName();
     }
-    
+
     @Override
     public WMSInterpolation getDefaultWMSInterpolationMethod() {
         return defaultWMSInterpolationMethod;
     }
-    
+
     @Override
     public void setDefaultWMSInterpolationMethod(WMSInterpolation interpolationMethod) {
         this.defaultWMSInterpolationMethod = interpolationMethod;

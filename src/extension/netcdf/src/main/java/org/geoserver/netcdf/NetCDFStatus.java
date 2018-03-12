@@ -6,6 +6,7 @@
 package org.geoserver.netcdf;
 
 import java.util.Optional;
+
 import org.geoserver.platform.ModuleStatus;
 import org.geotools.factory.GeoTools;
 import org.geotools.imageio.netcdf.utilities.NetCDFUtilities;

@@ -27,7 +27,7 @@ public class FeatureSequenceFactoryTest {
         StyleBuilder sb = new StyleBuilder();
         Style style = sb.createStyle(sb.createPolygonSymbolizer());
         style.featureTypeStyles().get(0).rules().get(0).setMaxScaleDenominator(1000);
-        
+
         // the layer
         final DefaultFeatureCollection fc = new DefaultFeatureCollection();
         FeatureLayer layer = new FeatureLayer(fc, style);
@@ -36,7 +36,7 @@ public class FeatureSequenceFactoryTest {
         WMSMapContent mc = createNiceMock(WMSMapContent.class);
         expect(mc.getScaleDenominator()).andReturn(2000d).anyTimes();
         replay(mc);
-        
+
         // and the context wiring everything toghether
         KmlEncodingContext context = createNiceMock(KmlEncodingContext.class);
         expect(context.openIterator(anyObject(SimpleFeatureCollection.class)))

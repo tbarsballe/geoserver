@@ -37,7 +37,7 @@ public class OgrXMLPPIO extends XMLPPIO {
     private String fileExtension;
 
     public OgrXMLPPIO(String mimeType, String fileExtension,
-            Ogr2OgrOutputFormat ogr2OgrOutputFormat, Operation operation) {
+                      Ogr2OgrOutputFormat ogr2OgrOutputFormat, Operation operation) {
         super(FeatureCollectionType.class, FeatureCollection.class, mimeType,
                 org.geoserver.wfs.xml.v1_1_0.WFS.FEATURECOLLECTION);
         this.fileExtension = fileExtension;

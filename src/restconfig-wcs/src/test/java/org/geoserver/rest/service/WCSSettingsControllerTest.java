@@ -7,6 +7,7 @@ package org.geoserver.rest.service;
 
 import static org.custommonkey.xmlunit.XMLAssert.assertXpathEvaluatesTo;
 import static org.junit.Assert.*;
+
 import net.sf.json.JSON;
 import net.sf.json.JSONObject;
 
@@ -50,7 +51,7 @@ public class WCSSettingsControllerTest extends CatalogRESTTestSupport {
 
     @Test
     public void testGetAsHTML() throws Exception {
-        getAsDOM(RestBaseController.ROOT_PATH + "/services/wcs/settings.html" );
+        getAsDOM(RestBaseController.ROOT_PATH + "/services/wcs/settings.html");
     }
 
     @Test

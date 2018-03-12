@@ -22,14 +22,14 @@ import org.apache.wicket.model.PropertyModel;
  */
 public class AffineTransformPanel extends FormComponentPanel<AffineTransform> {
 
-    Double scaleX,shearX,originX,scaleY,shearY,originY;
+    Double scaleX, shearX, originX, scaleY, shearY, originY;
     private WebMarkupContainer originXContainer;
     private WebMarkupContainer shearXContainer;
     private WebMarkupContainer originYContainer;
     private WebMarkupContainer shearYContainer;
     private WebMarkupContainer newline;
 
-    public AffineTransformPanel(String id ) {
+    public AffineTransformPanel(String id) {
         super(id);
 
         initComponents();
@@ -59,12 +59,12 @@ public class AffineTransformPanel extends FormComponentPanel<AffineTransform> {
         shearYContainer = new WebMarkupContainer("shearYContainer");
         add(shearYContainer);
 
-        add( new TextField( "scaleX", new PropertyModel(this, "scaleX")) );
-        shearXContainer.add( new TextField( "shearX", new PropertyModel(this, "shearX")) );
-        originXContainer.add( new TextField( "originX", new PropertyModel(this, "originX")) );
-        add( new TextField( "scaleY", new PropertyModel(this, "scaleY")) );
-        shearYContainer.add( new TextField( "shearY", new PropertyModel(this, "shearY")) );
-        originYContainer.add( new TextField( "originY", new PropertyModel(this, "originY")) );
+        add(new TextField("scaleX", new PropertyModel(this, "scaleX")));
+        shearXContainer.add(new TextField("shearX", new PropertyModel(this, "shearX")));
+        originXContainer.add(new TextField("originX", new PropertyModel(this, "originX")));
+        add(new TextField("scaleY", new PropertyModel(this, "scaleY")));
+        shearYContainer.add(new TextField("shearY", new PropertyModel(this, "shearY")));
+        originYContainer.add(new TextField("originY", new PropertyModel(this, "originY")));
     }
 
     @Override
@@ -75,7 +75,7 @@ public class AffineTransformPanel extends FormComponentPanel<AffineTransform> {
 
     private void updateFields() {
         AffineTransform at = getModelObject();
-        if(at != null) {
+        if (at != null) {
             this.scaleX = at.getScaleX();
             this.shearX = at.getShearX();
             this.originX = at.getTranslateX();
@@ -85,9 +85,9 @@ public class AffineTransformPanel extends FormComponentPanel<AffineTransform> {
         }
     }
 
-    public AffineTransformPanel setReadOnly( final boolean readOnly ) {
+    public AffineTransformPanel setReadOnly(final boolean readOnly) {
         visitChildren(TextField.class, (component, visit) -> {
-            component.setEnabled( !readOnly );
+            component.setEnabled(!readOnly);
         });
 
         return this;
@@ -100,10 +100,10 @@ public class AffineTransformPanel extends FormComponentPanel<AffineTransform> {
         });
 
         // update the grid envelope
-        if(isResolutionModeEnabled() && scaleX != null && scaleY != null) {
+        if (isResolutionModeEnabled() && scaleX != null && scaleY != null) {
             setConvertedInput(AffineTransform.getScaleInstance(scaleX, scaleY));
-        } else if(scaleX != null && shearX != null && originX != null &&
-           scaleY != null && shearY != null && originY != null) {
+        } else if (scaleX != null && shearX != null && originX != null &&
+                scaleY != null && shearY != null && originY != null) {
             setConvertedInput(new AffineTransform(scaleX, shearX, shearY, scaleY, originX, originY));
         } else {
             setConvertedInput(null);
@@ -122,6 +122,7 @@ public class AffineTransformPanel extends FormComponentPanel<AffineTransform> {
 
     /**
      * Turns the editor in a pure resolution editor
+     *
      * @param enabled
      */
     public void setResolutionModeEnabled(boolean enabled) {

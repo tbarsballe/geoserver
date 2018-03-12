@@ -16,7 +16,7 @@ import org.w3c.dom.Document;
 /**
  * This is to test using isList to group multiple values as a concatenated single value with feature
  * chaining.
- * 
+ *
  * @author Rini Angreani (CSIRO Earth Science and Resource Engineering)
  */
 
@@ -60,7 +60,7 @@ public class TimeSeriesWfsTest extends AbstractAppSchemaTestSupport {
         assertXpathCount(1, "//csml:PointSeriesFeature[@gml:id='" + id
                 + "']/csml:value/csml:PointSeriesCoverage/csml:pointSeriesDomain", doc);
         assertXpathCount(1, "//csml:PointSeriesFeature[@gml:id='" + id
-                + "']/csml:value/csml:PointSeriesCoverage/csml:pointSeriesDomain/csml:TimeSeries",
+                        + "']/csml:value/csml:PointSeriesCoverage/csml:pointSeriesDomain/csml:TimeSeries",
                 doc);
         assertXpathEvaluatesTo(
                 "ID1.2",
@@ -79,7 +79,7 @@ public class TimeSeriesWfsTest extends AbstractAppSchemaTestSupport {
 
         assertXpathEvaluatesTo(
                 "1948-01-01 1948-02-01 1948-03-01 1948-04-01 1948-05-01 1948-06-01 1948-07-01 1948-08-01 1948-09-01 1948-10-01"
-                + " 1948-11-01 1948-12-01 1949-01-01 1949-02-01 1949-03-01 1949-04-01",
+                        + " 1948-11-01 1948-12-01 1949-01-01 1949-02-01 1949-03-01 1949-04-01",
                 "//csml:PointSeriesFeature[@gml:id='"
                         + id
                         + "']/csml:value/csml:PointSeriesCoverage/csml:pointSeriesDomain/csml:TimeSeries/csml:timePositionList",
@@ -165,7 +165,7 @@ public class TimeSeriesWfsTest extends AbstractAppSchemaTestSupport {
         assertXpathCount(1, "//csml:PointSeriesFeature[@gml:id='" + id
                 + "']/csml:value/csml:PointSeriesCoverage/csml:pointSeriesDomain", doc);
         assertXpathCount(1, "//csml:PointSeriesFeature[@gml:id='" + id
-                + "']/csml:value/csml:PointSeriesCoverage/csml:pointSeriesDomain/csml:TimeSeries",
+                        + "']/csml:value/csml:PointSeriesCoverage/csml:pointSeriesDomain/csml:TimeSeries",
                 doc);
         assertXpathEvaluatesTo(
                 "ID2.2",
@@ -201,7 +201,7 @@ public class TimeSeriesWfsTest extends AbstractAppSchemaTestSupport {
                         + id
                         + "']/csml:value/csml:PointSeriesCoverage/gml:rangeSet/gml:ValueArray/gml:valueComponent/gml:QuantityList",
                 doc);
-        
+
         // parameter xlink:href
         assertXpathEvaluatesTo(
                 "http://cf-pcmdi.llnl.gov/documents/cf-standard-names/standard-name-table/current/cf-standard-name-table.html#surface_temperature",
@@ -256,5 +256,5 @@ public class TimeSeriesWfsTest extends AbstractAppSchemaTestSupport {
                         + "']/csml:value/csml:PointSeriesCoverage/gml:rangeSet/gml:ValueArray/gml:valueComponent/gml:QuantityList",
                 doc);
     }
-    
+
 }

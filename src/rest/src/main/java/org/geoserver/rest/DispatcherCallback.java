@@ -23,22 +23,23 @@ public interface DispatcherCallback {
      * Called once a handler has been located.
      */
     void dispatched(HttpServletRequest request, HttpServletResponse response, Object handler);
-    
+
     /**
-     * Called in the event of an exception occurring during a request. 
+     * Called in the event of an exception occurring during a request.
      */
     void exception(HttpServletRequest request, HttpServletResponse response, Exception error);
-    
+
     /**
-     * Final callback called once a request has been completed. 
+     * Final callback called once a request has been completed.
      * <p>
-     * This method is always called, even in the event of an exception during request processing. 
+     * This method is always called, even in the event of an exception during request processing.
      * </p>
      */
     void finished(HttpServletRequest request, HttpServletResponse response);
 
     /**
      * Attempts to unwrap the Controller in case the handler is annotation driven, returns the handler otherwise
+     *
      * @param handler
      * @return
      */

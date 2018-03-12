@@ -18,31 +18,31 @@ import org.json.simple.parser.JSONParser;
 
 /**
  * A PPIO to generate good looking JSON for the PagedUnique process results
- * 
+ *
  * @author Sandro Salari - GeoSolutions
  * @author Mauro Bartolomeoli
  */
 public class PagedUniqueProcessPPIO extends CDataPPIO {
 
     static final private JSONParser parser = new JSONParser();
-    
+
     protected PagedUniqueProcessPPIO() {
         super(PagedUniqueProcess.Results.class, PagedUniqueProcess.Results.class,
                 "application/json");
-    
+
     }
-    
+
     @Override
     public Object decode(String input) throws Exception {
         return parser.parse(input);
     }
-    
+
     @Override
     public Object decode(InputStream input) throws Exception {
         Reader reader = new InputStreamReader(input);
         return parser.parse(reader);
     }
-    
+
     @Override
     public void encode(Object value, OutputStream os) throws Exception {
         PagedUniqueProcess.Results result = (PagedUniqueProcess.Results) value;
@@ -55,7 +55,7 @@ public class PagedUniqueProcessPPIO extends CDataPPIO {
         obj.writeJSONString(writer);
         writer.flush();
     }
-    
+
     @Override
     public String getFileExtension() {
         return "json";

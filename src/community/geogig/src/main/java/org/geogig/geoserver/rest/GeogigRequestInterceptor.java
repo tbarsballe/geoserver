@@ -16,18 +16,18 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
  */
 @Component
 public class GeogigRequestInterceptor extends HandlerInterceptorAdapter {
-    
+
     public static RepositoryProvider repoProvider = null;
-    
+
     @Override
     public boolean preHandle(HttpServletRequest request,
-            HttpServletResponse response, Object handler) throws Exception {
+                             HttpServletResponse response, Object handler) throws Exception {
         if (repoProvider == null) {
             repoProvider = new GeoServerRepositoryProvider();
         }
         request.setAttribute(RepositoryProvider.KEY, repoProvider);
         return true;
     }
- 
+
 }
 

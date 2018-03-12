@@ -30,6 +30,7 @@ import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
+
 import org.geoserver.catalog.DataLinkInfo;
 
 import org.geoserver.catalog.MetadataLinkInfo;
@@ -61,7 +62,7 @@ public final class ResponseUtils {
      * @deprecated moved to {@link org.geoserver.ows.util.ResponseUtils#writeEscapedString(Writer, String)}
      */
     public static void writeEscapedString(Writer writer, String string)
-        throws IOException {
+            throws IOException {
         org.geoserver.ows.util.ResponseUtils.writeEscapedString(writer, string);
     }
 
@@ -92,8 +93,9 @@ public final class ResponseUtils {
             }
         } catch (URISyntaxException e) {
         }
-        return content;        
+        return content;
     }
+
     /**
      * Profixies a metadata link url interpreting a localhost url as a back reference to the server.
      * <p>
@@ -117,35 +119,33 @@ public final class ResponseUtils {
         content = proxifyLink(content, baseURL);
         return content;
     }
-    
+
     public static List validate(InputSource xml, URL schemaURL, boolean skipTargetNamespaceException) {
-        return validate(xml, schemaURL, skipTargetNamespaceException, null); 
+        return validate(xml, schemaURL, skipTargetNamespaceException, null);
     }
 
     public static List validate(InputSource xml, URL schemaURL, boolean skipTargetNamespaceException, EntityResolver entityResolver) {
         StreamSource source = null;
-        if (xml.getCharacterStream() != null) { 
+        if (xml.getCharacterStream() != null) {
             source = new StreamSource(xml.getCharacterStream());
-        }
-        else if (xml.getByteStream() != null) {
+        } else if (xml.getByteStream() != null) {
             source = new StreamSource(xml.getByteStream());
-        }
-        else {
+        } else {
             throw new IllegalArgumentException("Could not turn input source to stream source");
         }
         return validate(source, schemaURL, skipTargetNamespaceException, entityResolver);
     }
-    
+
     public static List validate(Source xml, URL schemaURL, boolean skipTargetNamespaceException) {
         return validate(xml, schemaURL, skipTargetNamespaceException, null);
     }
 
     public static List validate(Source xml, URL schemaURL, boolean skipTargetNamespaceException, EntityResolver entityResolver) {
         try {
-            Schema schema = 
-                SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI).newSchema(schemaURL);
+            Schema schema =
+                    SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI).newSchema(schemaURL);
             Validator v = schema.newValidator();
-            if(entityResolver != null) {
+            if (entityResolver != null) {
                 v.setResourceResolver(new EntityResolverToLSResourceResolver(v.getResourceResolver(), entityResolver));
             }
             Handler handler = new Handler(skipTargetNamespaceException, entityResolver);
@@ -165,44 +165,45 @@ public final class ResponseUtils {
         public ArrayList errors = new ArrayList();
 
         boolean skipTargetNamespaceException;
-        
+
         EntityResolver entityResolver;
-        
-        Handler (boolean skipTargetNamespaceExeption, EntityResolver entityResolver) {
+
+        Handler(boolean skipTargetNamespaceExeption, EntityResolver entityResolver) {
             this.skipTargetNamespaceException = skipTargetNamespaceExeption;
             this.entityResolver = entityResolver;
         }
 
         public void error(SAXParseException exception)
-            throws SAXException {
+                throws SAXException {
             if (skipTargetNamespaceException && exception.getMessage()
-                .startsWith("TargetNamespace.2: Expecting no namespace, but the schema document has a target name")) {
-                    return;
+                    .startsWith("TargetNamespace.2: Expecting no namespace, but the schema document has a target name")) {
+                return;
             }
 
             errors.add(exception);
         }
 
         public void fatalError(SAXParseException exception)
-            throws SAXException {
+                throws SAXException {
             errors.add(exception);
         }
 
         public void warning(SAXParseException exception)
-            throws SAXException {
+                throws SAXException {
             //do nothing
         }
-        
+
         @Override
         public InputSource resolveEntity(String publicId, String systemId)
                 throws IOException, SAXException {
-            if(entityResolver != null) {
+            if (entityResolver != null) {
                 return this.entityResolver.resolveEntity(publicId, systemId);
             } else {
                 return super.resolveEntity(publicId, systemId);
             }
         }
     }
+
     static List exception(Exception e) {
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.log(Level.FINE, "Validation error", e);

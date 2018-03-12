@@ -64,7 +64,7 @@ public class OpenLayersMapOutputFormatTest extends WMSTestSupport {
 
     @Rule
     public TestHttpClientRule clientMocker = new TestHttpClientRule();
-    
+
     @Override
     protected void onSetUp(SystemTestData testData) throws Exception {
         // get default workspace info
@@ -81,22 +81,22 @@ public class OpenLayersMapOutputFormatTest extends WMSTestSupport {
      * request (something like: %3C%2Fscript%
      * 3E%3Cscript%3Ealert%28%27x-scripted%27%29%3C%2Fscript%3E%3Cscript%3E=foo) the
      * causes js code execution.
-     * 
+     *
      * @throws IOException
      */
     @Test
     public void testXssFix() throws Exception {
-    
+
         Catalog catalog = getCatalog();
         final FeatureSource fs = catalog.getFeatureTypeByName(
                 MockData.BASIC_POLYGONS.getPrefix(),
                 MockData.BASIC_POLYGONS.getLocalPart())
                 .getFeatureSource(null, null);
-    
+
         final Envelope env = fs.getBounds();
-    
+
         LOGGER.info("about to create map ctx for BasicPolygons with bounds " + env);
-    
+
         GetMapRequest request = createGetMapRequest(MockData.BASIC_POLYGONS);
         request.getRawKvp().put(
                 "</script><script>alert('x-scripted');</script><script>", "foo");
@@ -108,7 +108,7 @@ public class OpenLayersMapOutputFormatTest extends WMSTestSupport {
         map.setBgColor(Color.red);
         map.setTransparent(false);
         map.setRequest(request);
-    
+
         StyleInfo styleByName = catalog.getStyleByName("Default");
         Style basicStyle = styleByName.getStyle();
         FeatureLayer layer = new FeatureLayer(fs, basicStyle);
@@ -166,7 +166,7 @@ public class OpenLayersMapOutputFormatTest extends WMSTestSupport {
                         "&styles=&bbox=0.2372206885127698,40.562080748421806," +
                         "14.592757149389236,44.55808294568743&width=768&height=330" +
                         "&srs=EPSG:4326&format=application/openlayers");
-        String content = response.getContentAsString();        
+        String content = response.getContentAsString();
         assertThat(content.contains("var supportsFiltering = false;"), is(true));
 
         // wmts along with filterable layer should support filtering
@@ -175,7 +175,7 @@ public class OpenLayersMapOutputFormatTest extends WMSTestSupport {
                         "&styles=&bbox=0.2372206885127698,40.562080748421806," +
                         "14.592757149389236,44.55808294568743&width=768&height=330" +
                         "&srs=EPSG:4326&format=application/openlayers");
-        content = response.getContentAsString();       
+        content = response.getContentAsString();
         assertThat(content.contains("var supportsFiltering = true;"), is(true));
     }
 
@@ -270,8 +270,8 @@ public class OpenLayersMapOutputFormatTest extends WMSTestSupport {
 
     /**
      * Test for GEOS-8178: OpenLayersOutputFormat NoSuchAuthorityCodeExceptions being thrown due to
-     *  malformed URN codes.
-     *  
+     * malformed URN codes.
+     * <p>
      * Exception is thrown when decoding CRS in isWms13FlippedCRS which is called by produceMap,
      * test uses produceMap and reads the resulting output steam to ensure "yx: true" is returned
      * for EPSG:4326, output is false before fix
@@ -279,13 +279,13 @@ public class OpenLayersMapOutputFormatTest extends WMSTestSupport {
      * @throws Exception
      */
     @Test
-    public void testUrnCodeFix() throws Exception{
+    public void testUrnCodeFix() throws Exception {
 
         Catalog catalog = getCatalog();
         final FeatureSource fs = catalog.getFeatureTypeByName(
-            MockData.BASIC_POLYGONS.getPrefix(),
-            MockData.BASIC_POLYGONS.getLocalPart())
-            .getFeatureSource(null, null);
+                MockData.BASIC_POLYGONS.getPrefix(),
+                MockData.BASIC_POLYGONS.getLocalPart())
+                .getFeatureSource(null, null);
 
         final Envelope env = fs.getBounds();
 
@@ -308,7 +308,7 @@ public class OpenLayersMapOutputFormatTest extends WMSTestSupport {
     }
 
     @Test
-    public void testOL3vsOL2() throws Exception{
+    public void testOL3vsOL2() throws Exception {
         // the base request
         String path = "wms?service=WMS&version=1.1.0&request=GetMap&layers=" + getLayerId(MockData.BASIC_POLYGONS) +
                 "&styles=&bbox=-180,-90,180,90&width=768&height=330" +
@@ -339,9 +339,9 @@ public class OpenLayersMapOutputFormatTest extends WMSTestSupport {
 
     public String getResponseContent(String path, String userAgent, String expectedMimeType) throws Exception {
         MockHttpServletRequest request = createRequest(path);
-        request.setMethod( "GET" );
+        request.setMethod("GET");
         request.setContent(new byte[]{});
-        if(userAgent != null) {
+        if (userAgent != null) {
             request.addHeader("USER-AGENT", userAgent);
         }
         MockHttpServletResponse response = dispatch(request);

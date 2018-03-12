@@ -72,19 +72,19 @@ public class ImportPage extends GeoServerSecuredPage {
 
     void initComponents(final IModel<ImportContext> model) {
         add(new Label("id", new PropertyModel(model, "id")));
-    
+
         ImportContextProvider provider = new ImportContextProvider() {
             @Override
             protected List<Property<ImportContext>> getProperties() {
                 return Arrays.asList(STATE, CREATED, UPDATED);
             }
-    
+
             @Override
             protected List<ImportContext> getItems() {
                 return Collections.singletonList(model.getObject());
             }
         };
-    
+
         add(new AjaxLink("raw") {
             @Override
             public void onClick(AjaxRequestTarget target) {
@@ -103,31 +103,31 @@ public class ImportPage extends GeoServerSecuredPage {
                             LOGGER.log(Level.FINER, e.getMessage(), e);
                             e.printStackTrace(new PrintWriter(bout));
                         }
-    
+
                         return new TextAreaPanel(id, new Model(new String(bout
                                 .toByteArray())));
                     }
-    
+
                     @Override
                     protected boolean onSubmit(AjaxRequestTarget target,
-                            Component contents) {
+                                               Component contents) {
                         return true;
                     }
                 });
             }
         }.setVisible(ImporterWebUtils.isDevMode()));
-    
+
         final ImportContextTable headerTable = new ImportContextTable("header", provider);
 
         headerTable.setOutputMarkupId(true);
         headerTable.setFilterable(false);
         headerTable.setPageable(false);
         add(headerTable);
-    
+
         final ImportContext imp = model.getObject();
         boolean selectable = imp.getState() != ImportContext.State.COMPLETE;
-        final ImportTaskTable taskTable = new ImportTaskTable("tasks", 
-            new ImportTaskProvider(model), selectable) {
+        final ImportTaskTable taskTable = new ImportTaskTable("tasks",
+                new ImportTaskProvider(model), selectable) {
             @Override
             protected void onSelectionUpdate(AjaxRequestTarget target) {
                 updateImportLink((AjaxLink) ImportPage.this.get("import"), this, target);
@@ -136,7 +136,7 @@ public class ImportPage extends GeoServerSecuredPage {
         taskTable.setOutputMarkupId(true);
         taskTable.setFilterable(false);
         add(taskTable);
-    
+
         final AjaxLink<Long> importLink = new AjaxLink<Long>("import",
                 new Model<Long>()) {
             @Override
@@ -144,11 +144,11 @@ public class ImportPage extends GeoServerSecuredPage {
                 super.disableLink(tag);
                 ImporterWebUtils.disableLink(tag);
             }
-    
+
             @Override
             public void onClick(AjaxRequestTarget target) {
                 ImportContext imp = model.getObject();
-    
+
                 BasicImportFilter filter = new BasicImportFilter();
                 for (ImportTask t : taskTable.getSelection()) {
                     filter.add(t);
@@ -160,9 +160,9 @@ public class ImportPage extends GeoServerSecuredPage {
 
                 final Long jobid = importer().runAsync(imp, filter, false);
                 setDefaultModelObject(jobid);
-    
+
                 final AjaxLink self = this;
-    
+
                 // create a timer to update the table and reload the page when
                 // necessary
                 taskTable.add(new AbstractAjaxTimerBehavior(Duration.milliseconds(500)) {
@@ -172,10 +172,10 @@ public class ImportPage extends GeoServerSecuredPage {
                         if (job == null || job.isDone()) {
                             // remove the timer
                             stop(null);
-    
+
                             self.setEnabled(true);
                             target.add(self);
-    
+
                             running.set(false);
                             target.add(cancelLink(self));
                             
@@ -190,14 +190,14 @@ public class ImportPage extends GeoServerSecuredPage {
                                 setLinkEnabled(cancelLink(self), false, target);
                             }*/
                         }
-    
+
                         // update the table
                         target.add(taskTable);
                         target.add(headerTable);
                     }
                 });
                 target.add(taskTable);
-    
+
                 // disable import button
                 setLinkEnabled(this, false, target);
                 // enable cancel button
@@ -207,51 +207,51 @@ public class ImportPage extends GeoServerSecuredPage {
         importLink.setOutputMarkupId(true);
         importLink.setEnabled(doSelectReady(imp, taskTable, null));
         add(importLink);
-    
+
         final AjaxLink cancelLink = new AjaxLink("cancel") {
             @Override
             protected void disableLink(ComponentTag tag) {
                 super.disableLink(tag);
                 ImporterWebUtils.disableLink(tag);
             }
-    
+
             @Override
             public void onClick(AjaxRequestTarget target) {
                 ImportContext imp = model.getObject();
                 if (!running.get()) {
-                //if (imp.getState() == ImportContext.State.COMPLETE) {
+                    //if (imp.getState() == ImportContext.State.COMPLETE) {
                     setResponsePage(ImportDataPage.class);
                     return;
                 }
-    
+
                 Long jobid = importLink.getModelObject();
                 if (jobid == null) {
                     return;
                 }
-    
+
                 Task<ImportContext> task = importer().getTask(jobid);
                 if (task == null || task.isDone()) {
                     return;
                 }
-    
+
                 task.getMonitor().setCanceled(true);
                 task.cancel(false);
                 try {
                     task.get();
                 } catch (Exception e) {
                 }
-    
+
                 // enable import button
                 setLinkEnabled(importLink, true, target);
                 // disable cancel button
                 //setLinkEnabled(cancelLink(importLink), false, target);
             }
-    
+
         };
         //cancelLink.setEnabled(imp.getState() == ImportContext.State.COMPLETE);
         cancelLink.add(new Label("text", new CancelTitleModel()));
         add(cancelLink);
-        
+
         WebMarkupContainer selectPanel = new WebMarkupContainer("select");
         selectPanel.add(new AjaxLink<ImportContext>("select-all", model) {
             @Override
@@ -279,10 +279,10 @@ public class ImportPage extends GeoServerSecuredPage {
         });
         add(selectPanel);
 
-        add(new Icon("icon",new DataIconModel(imp.getData())));
+        add(new Icon("icon", new DataIconModel(imp.getData())));
         add(new Label("title", new DataTitleModel(imp))
-          .add(new AttributeModifier("title", new DataTitleModel(imp, false))));
-        
+                .add(new AttributeModifier("title", new DataTitleModel(imp, false))));
+
         add(dialog = new GeoServerDialog("dialog"));
     }
 
@@ -339,28 +339,25 @@ public class ImportPage extends GeoServerSecuredPage {
                 FileData df = (FileData) data;
                 if (data instanceof Directory) {
                     icon = DataIcon.FOLDER;
+                } else {
+                    icon = df.getFormat() instanceof VectorFormat ? DataIcon.FILE_VECTOR :
+                            df.getFormat() instanceof RasterFormat ? DataIcon.FILE_RASTER : DataIcon.FILE;
                 }
-                else {
-                    icon = df.getFormat() instanceof VectorFormat ? DataIcon.FILE_VECTOR : 
-                           df.getFormat() instanceof RasterFormat ? DataIcon.FILE_RASTER : DataIcon.FILE;
-                }
-            }
-            else if (data instanceof Database) {
+            } else if (data instanceof Database) {
                 icon = DataIcon.DATABASE;
-            }
-            else {
+            } else {
                 icon = DataIcon.VECTOR; //TODO: better default
             }
             return icon.getIcon();
         }
-    
+
     }
 
     static class DataTitleModel extends LoadableDetachableModel<String> {
 
         long contextId;
         boolean abbrev;
-        
+
         DataTitleModel(ImportContext imp) {
             this(imp, true);
         }
@@ -374,24 +371,24 @@ public class ImportPage extends GeoServerSecuredPage {
         protected String load() {
             ImportContext ctx = importer().getContext(contextId);
             ImportData data = ctx.getData();
-            String title =  data != null ? data.toString() : ctx.toString();
+            String title = data != null ? data.toString() : ctx.toString();
 
             if (abbrev && title.length() > 70) {
                 //shorten it
-                title = title.substring(0,20) + "[...]" + title.substring(title.length()-50);
+                title = title.substring(0, 20) + "[...]" + title.substring(title.length() - 50);
             }
             return title;
         }
-    
+
     }
 
     class CancelTitleModel implements IModel<String> {
 
         @Override
         public String getObject() {
-            StringResourceModel m = running.get() ? 
-                new StringResourceModel("cancel", new Model("Cancel")) : 
-                new StringResourceModel("done", new Model("Done"));
+            StringResourceModel m = running.get() ?
+                    new StringResourceModel("cancel", new Model("Cancel")) :
+                    new StringResourceModel("done", new Model("Done"));
             return m.getString();
         }
 
@@ -408,10 +405,10 @@ public class ImportPage extends GeoServerSecuredPage {
 
         public TextAreaPanel(String id, IModel textAreaModel) {
             super(id);
-            
+
             add(new TextArea("textArea", textAreaModel));
         }
-    
+
     }
 
     static class FilteredImportTasksModel extends ListModel<ImportTask> {
@@ -432,7 +429,7 @@ public class ImportPage extends GeoServerSecuredPage {
             }
             return tasks;
         }
-    
+
         @Override
         public void detach() {
             super.detach();

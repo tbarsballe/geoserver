@@ -28,7 +28,7 @@ public class ProxyBaseURLIntegrationTest extends GeoServerSystemTestSupport {
         namespaces.put("xlink", "http://www.w3.org/1999/xlink");
         XMLUnit.setXpathNamespaceContext(new SimpleNamespaceContext(namespaces));
     }
-    
+
     /**
      * Do the links in getcaps respect the proxy base url?
      */
@@ -39,7 +39,7 @@ public class ProxyBaseURLIntegrationTest extends GeoServerSystemTestSupport {
         GeoServerInfo gs = getGeoServer().getGlobal();
         gs.getSettings().setProxyBaseUrl(proxyBaseUrl);
         getGeoServer().save(gs);
-        
+
         // setup the wms online resource
         WMSInfo wms = getGeoServer().getService(WMSInfo.class);
         String geoserverSite = "http://www.geoserver.org";

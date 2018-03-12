@@ -9,11 +9,11 @@ import org.geoserver.security.auth.UsernamePasswordAuthenticationProvider;
 
 /**
  * Config object for {@link UsernamePasswordAuthenticationProvider}.
- * 
+ *
  * @author Justin Deoliveira, OpenGeo
  */
-public class UsernamePasswordAuthenticationProviderConfig extends BaseSecurityNamedServiceConfig 
-    implements SecurityAuthProviderConfig {
+public class UsernamePasswordAuthenticationProviderConfig extends BaseSecurityNamedServiceConfig
+        implements SecurityAuthProviderConfig {
 
     private static final long serialVersionUID = 1L;
 

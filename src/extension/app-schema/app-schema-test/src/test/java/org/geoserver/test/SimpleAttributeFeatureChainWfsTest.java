@@ -32,7 +32,7 @@ import org.w3c.dom.Document;
 
 /**
  * Test feature chaining with simple content type, e.g. for gml:name.
- * 
+ *
  * @author Rini Angreani, CSIRO Earth Science and Resource Engineering
  */
 public class SimpleAttributeFeatureChainWfsTest extends AbstractAppSchemaTestSupport {
@@ -202,18 +202,18 @@ public class SimpleAttributeFeatureChainWfsTest extends AbstractAppSchemaTestSup
     public void testAttributeFilter() {
         // filter by name
         String xml = //
-        "<wfs:GetFeature " //
-                + FeatureChainingWfsTest.GETFEATURE_ATTRIBUTES //
-                + ">" //
-                + "    <wfs:Query typeName=\"gsml:MappedFeature\">" //
-                + "        <ogc:Filter>" //
-                + "            <ogc:PropertyIsEqualTo>" //
-                + "                <ogc:PropertyName>gml:name</ogc:PropertyName>" //
-                + "                <ogc:Literal>nametwo 4</ogc:Literal>" //
-                + "            </ogc:PropertyIsEqualTo>" //
-                + "        </ogc:Filter>" //
-                + "    </wfs:Query> " //
-                + "</wfs:GetFeature>";
+                "<wfs:GetFeature " //
+                        + FeatureChainingWfsTest.GETFEATURE_ATTRIBUTES //
+                        + ">" //
+                        + "    <wfs:Query typeName=\"gsml:MappedFeature\">" //
+                        + "        <ogc:Filter>" //
+                        + "            <ogc:PropertyIsEqualTo>" //
+                        + "                <ogc:PropertyName>gml:name</ogc:PropertyName>" //
+                        + "                <ogc:Literal>nametwo 4</ogc:Literal>" //
+                        + "            </ogc:PropertyIsEqualTo>" //
+                        + "        </ogc:Filter>" //
+                        + "    </wfs:Query> " //
+                        + "</wfs:GetFeature>";
         Document doc = postAsDOM("wfs", xml);
         LOGGER.info("WFS filter GetFeature response:\n" + prettyString(doc));
         assertXpathEvaluatesTo("1", "/wfs:FeatureCollection/@numberOfFeatures", doc);
@@ -234,18 +234,18 @@ public class SimpleAttributeFeatureChainWfsTest extends AbstractAppSchemaTestSup
                 doc);
 
         xml = //
-        "<wfs:GetFeature " //
-                + FeatureChainingWfsTest.GETFEATURE_ATTRIBUTES //
-                + ">" //
-                + "    <wfs:Query typeName=\"gsml:MappedFeature\">" //
-                + "        <ogc:Filter>" //
-                + "            <ogc:PropertyIsEqualTo>" //
-                + "                <ogc:PropertyName>gml:name</ogc:PropertyName>" //
-                + "                <ogc:Literal>nametwo 3</ogc:Literal>" //
-                + "            </ogc:PropertyIsEqualTo>" //
-                + "        </ogc:Filter>" //
-                + "    </wfs:Query> " //
-                + "</wfs:GetFeature>";
+                "<wfs:GetFeature " //
+                        + FeatureChainingWfsTest.GETFEATURE_ATTRIBUTES //
+                        + ">" //
+                        + "    <wfs:Query typeName=\"gsml:MappedFeature\">" //
+                        + "        <ogc:Filter>" //
+                        + "            <ogc:PropertyIsEqualTo>" //
+                        + "                <ogc:PropertyName>gml:name</ogc:PropertyName>" //
+                        + "                <ogc:Literal>nametwo 3</ogc:Literal>" //
+                        + "            </ogc:PropertyIsEqualTo>" //
+                        + "        </ogc:Filter>" //
+                        + "    </wfs:Query> " //
+                        + "</wfs:GetFeature>";
         doc = postAsDOM("wfs", xml);
         LOGGER.info("WFS filter GetFeature response:\n" + prettyString(doc));
 
@@ -267,18 +267,18 @@ public class SimpleAttributeFeatureChainWfsTest extends AbstractAppSchemaTestSup
                 doc);
 
         xml = //
-        "<wfs:GetFeature " //
-                + FeatureChainingWfsTest.GETFEATURE_ATTRIBUTES //
-                + ">" //
-                + "    <wfs:Query typeName=\"gsml:MappedFeature\">" //
-                + "        <ogc:Filter>" //
-                + "            <ogc:PropertyIsEqualTo>" //
-                + "                <ogc:PropertyName>gml:name</ogc:PropertyName>" //
-                + "                <ogc:Literal>nametwo 2</ogc:Literal>" //
-                + "            </ogc:PropertyIsEqualTo>" //
-                + "        </ogc:Filter>" //
-                + "    </wfs:Query> " //
-                + "</wfs:GetFeature>";
+                "<wfs:GetFeature " //
+                        + FeatureChainingWfsTest.GETFEATURE_ATTRIBUTES //
+                        + ">" //
+                        + "    <wfs:Query typeName=\"gsml:MappedFeature\">" //
+                        + "        <ogc:Filter>" //
+                        + "            <ogc:PropertyIsEqualTo>" //
+                        + "                <ogc:PropertyName>gml:name</ogc:PropertyName>" //
+                        + "                <ogc:Literal>nametwo 2</ogc:Literal>" //
+                        + "            </ogc:PropertyIsEqualTo>" //
+                        + "        </ogc:Filter>" //
+                        + "    </wfs:Query> " //
+                        + "</wfs:GetFeature>";
         doc = postAsDOM("wfs", xml);
         LOGGER.info("WFS filter GetFeature response:\n" + prettyString(doc));
 
@@ -307,18 +307,18 @@ public class SimpleAttributeFeatureChainWfsTest extends AbstractAppSchemaTestSup
     public void testClientPropertiesFilter() {
         // filter by codespace coming from parent table
         String xml = //
-        "<wfs:GetFeature " //
-                + FeatureChainingWfsTest.GETFEATURE_ATTRIBUTES
-                + ">" //
-                + "    <wfs:Query typeName=\"gsml:MappedFeature\">"
-                + "        <ogc:Filter>"
-                + "            <ogc:PropertyIsEqualTo>"
-                + "                <ogc:PropertyName>gml:name/@codeSpace</ogc:PropertyName>"
-                + "                <ogc:Literal>some:uri:mf3</ogc:Literal>"
-                + "            </ogc:PropertyIsEqualTo>"
-                + "        </ogc:Filter>"
-                + "    </wfs:Query> " //
-                + "</wfs:GetFeature>";
+                "<wfs:GetFeature " //
+                        + FeatureChainingWfsTest.GETFEATURE_ATTRIBUTES
+                        + ">" //
+                        + "    <wfs:Query typeName=\"gsml:MappedFeature\">"
+                        + "        <ogc:Filter>"
+                        + "            <ogc:PropertyIsEqualTo>"
+                        + "                <ogc:PropertyName>gml:name/@codeSpace</ogc:PropertyName>"
+                        + "                <ogc:Literal>some:uri:mf3</ogc:Literal>"
+                        + "            </ogc:PropertyIsEqualTo>"
+                        + "        </ogc:Filter>"
+                        + "    </wfs:Query> " //
+                        + "</wfs:GetFeature>";
         Document doc = postAsDOM("wfs", xml);
         LOGGER.info("WFS filter GetFeature response:\n" + prettyString(doc));
         assertXpathEvaluatesTo("1", "/wfs:FeatureCollection/@numberOfFeatures", doc);
@@ -340,18 +340,18 @@ public class SimpleAttributeFeatureChainWfsTest extends AbstractAppSchemaTestSup
 
         // filter by codespace coming from chained feature
         xml = //
-        "<wfs:GetFeature " //
-                + FeatureChainingWfsTest.GETFEATURE_ATTRIBUTES //
-                + ">"
-                + "    <wfs:Query typeName=\"gsml:MappedFeature\">"
-                + "        <ogc:Filter>"
-                + "            <ogc:PropertyIsEqualTo>"
-                + "                <ogc:PropertyName>gml:name/@codeSpace</ogc:PropertyName>"
-                + "                <ogc:Literal>some uri 4</ogc:Literal>"
-                + "            </ogc:PropertyIsEqualTo>"
-                + "        </ogc:Filter>"
-                + "    </wfs:Query> " //
-                + "</wfs:GetFeature>";
+                "<wfs:GetFeature " //
+                        + FeatureChainingWfsTest.GETFEATURE_ATTRIBUTES //
+                        + ">"
+                        + "    <wfs:Query typeName=\"gsml:MappedFeature\">"
+                        + "        <ogc:Filter>"
+                        + "            <ogc:PropertyIsEqualTo>"
+                        + "                <ogc:PropertyName>gml:name/@codeSpace</ogc:PropertyName>"
+                        + "                <ogc:Literal>some uri 4</ogc:Literal>"
+                        + "            </ogc:PropertyIsEqualTo>"
+                        + "        </ogc:Filter>"
+                        + "    </wfs:Query> " //
+                        + "</wfs:GetFeature>";
         doc = postAsDOM("wfs", xml);
         LOGGER.info("WFS filter GetFeature response:\n" + prettyString(doc));
         assertXpathEvaluatesTo("1", "/wfs:FeatureCollection/@numberOfFeatures", doc);
@@ -373,18 +373,18 @@ public class SimpleAttributeFeatureChainWfsTest extends AbstractAppSchemaTestSup
 
         // filter by xlink:href coming from chained feature
         xml = //
-        "<wfs:GetFeature " //
-                + FeatureChainingWfsTest.GETFEATURE_ATTRIBUTES //
-                + ">"
-                + "    <wfs:Query typeName=\"gsml:MappedFeature\">"
-                + "        <ogc:Filter>"
-                + "            <ogc:PropertyIsEqualTo>"
-                + "                <ogc:PropertyName>gml:name/@xlink:href</ogc:PropertyName>"
-                + "                <ogc:Literal>some:uri:4</ogc:Literal>"
-                + "            </ogc:PropertyIsEqualTo>"
-                + "        </ogc:Filter>"
-                + "    </wfs:Query> " //
-                + "</wfs:GetFeature>";
+                "<wfs:GetFeature " //
+                        + FeatureChainingWfsTest.GETFEATURE_ATTRIBUTES //
+                        + ">"
+                        + "    <wfs:Query typeName=\"gsml:MappedFeature\">"
+                        + "        <ogc:Filter>"
+                        + "            <ogc:PropertyIsEqualTo>"
+                        + "                <ogc:PropertyName>gml:name/@xlink:href</ogc:PropertyName>"
+                        + "                <ogc:Literal>some:uri:4</ogc:Literal>"
+                        + "            </ogc:PropertyIsEqualTo>"
+                        + "        </ogc:Filter>"
+                        + "    </wfs:Query> " //
+                        + "</wfs:GetFeature>";
         doc = postAsDOM("wfs", xml);
         LOGGER.info("WFS filter GetFeature response:\n" + prettyString(doc));
         assertXpathEvaluatesTo("1", "/wfs:FeatureCollection/@numberOfFeatures", doc);

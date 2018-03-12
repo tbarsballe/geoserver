@@ -12,13 +12,14 @@ import org.geoserver.security.config.SecurityConfig;
 
 /**
  * Configuration object for the GeoServer master password.
- * 
- * @author Justin Deoliveira, OpenGeo
  *
+ * @author Justin Deoliveira, OpenGeo
  */
 public class MasterPasswordConfig implements SecurityConfig {
 
-    /** serialVersionUID */
+    /**
+     * serialVersionUID
+     */
     private static final long serialVersionUID = 1L;
 
     String providerName;
@@ -46,19 +47,19 @@ public class MasterPasswordConfig implements SecurityConfig {
 
     @Override
     public SecurityConfig clone(boolean allowEnvParametrization) {
-        
+
         final GeoServerEnvironment gsEnvironment = GeoServerExtensions.bean(GeoServerEnvironment.class);
-        
+
         MasterPasswordConfig target = (MasterPasswordConfig) SerializationUtils.clone(this);
-        
+
         if (target != null) {
             if (allowEnvParametrization && gsEnvironment != null
                     && GeoServerEnvironment.ALLOW_ENV_PARAMETRIZATION) {
                 target.setProviderName((String) gsEnvironment.resolveValue(providerName));
             }
         }
-        
+
         return target;
     }
-    
+
 }

@@ -559,9 +559,9 @@ public class InputLimitsTest extends WPSTestSupport {
         // submit an asynchronous request which will take longer than the execution time limit to run
 
         String statusLocation = submitAsynchronousRequest(
-            "wps?service=WPS&version=1.0.0&request=Execute&Identifier=gs:Monkey&storeExecuteResponse=true&status=true&DataInputs="
-                + urlEncode("id=x1"));
-        
+                "wps?service=WPS&version=1.0.0&request=Execute&Identifier=gs:Monkey&storeExecuteResponse=true&status=true&DataInputs="
+                        + urlEncode("id=x1"));
+
         waitForProcessStart(statusLocation, 10);
 
         MonkeyProcess.wait("x1", 2500);
@@ -570,8 +570,8 @@ public class InputLimitsTest extends WPSTestSupport {
         // request should fail exceeding asynchronous execution time limit
         Document response3 = waitForProcessEnd(statusLocation, 10);
         assertXpathExists(
-            "//ows:ExceptionText[contains(., 'maxExecutionTime 2 seconds, maxTotalTime 3 seconds')]",
-            response3);
+                "//ows:ExceptionText[contains(., 'maxExecutionTime 2 seconds, maxTotalTime 3 seconds')]",
+                response3);
     }
 
     @Test
@@ -590,16 +590,16 @@ public class InputLimitsTest extends WPSTestSupport {
         // exceeding the total time limit when run one after another
 
         String statusLocationX1 = submitAsynchronousRequest(
-            "wps?service=WPS&version=1.0.0&request=Execute&Identifier=gs:Monkey&storeExecuteResponse=true&status=true&DataInputs="
-                + urlEncode("id=x1"));
+                "wps?service=WPS&version=1.0.0&request=Execute&Identifier=gs:Monkey&storeExecuteResponse=true&status=true&DataInputs="
+                        + urlEncode("id=x1"));
 
         String statusLocationX2 = submitAsynchronousRequest(
-            "wps?service=WPS&version=1.0.0&request=Execute&Identifier=gs:Monkey&storeExecuteResponse=true&status=true&DataInputs="
-                + urlEncode("id=x2"));
+                "wps?service=WPS&version=1.0.0&request=Execute&Identifier=gs:Monkey&storeExecuteResponse=true&status=true&DataInputs="
+                        + urlEncode("id=x2"));
 
         String statusLocationX3 = submitAsynchronousRequest(
-            "wps?service=WPS&version=1.0.0&request=Execute&Identifier=gs:Monkey&storeExecuteResponse=true&status=true&DataInputs="
-                + urlEncode("id=x3"));
+                "wps?service=WPS&version=1.0.0&request=Execute&Identifier=gs:Monkey&storeExecuteResponse=true&status=true&DataInputs="
+                        + urlEncode("id=x3"));
 
         MonkeyProcess.wait("x1", 1100);
         MonkeyProcess.wait("x2", 1100);
@@ -619,8 +619,8 @@ public class InputLimitsTest extends WPSTestSupport {
         // Third request should fail as it exceeds the asynchronous total time limit
         Document response3 = waitForProcessEnd(statusLocationX3, 10);
         assertXpathExists(
-            "//ows:ExceptionText[contains(., 'maxExecutionTime 2 seconds, maxTotalTime 3 seconds')]",
-            response3);
+                "//ows:ExceptionText[contains(., 'maxExecutionTime 2 seconds, maxTotalTime 3 seconds')]",
+                response3);
     }
 
     @Test
@@ -640,12 +640,12 @@ public class InputLimitsTest extends WPSTestSupport {
 
         // run the process and get the result
         Document result = getAsDOM("wps?service=WPS&version=1.0.0&request=Execute&Identifier=gs:Monkey&DataInputs="
-            + urlEncode("id=x1"));
+                + urlEncode("id=x1"));
 
         // request should have failed as it exceeds the synchronous execution time limit
         assertXpathExists(
-            "//ows:ExceptionText[contains(., 'maxExecutionTime 1 seconds, maxTotalTime 2 seconds')]",
-            result);
+                "//ows:ExceptionText[contains(., 'maxExecutionTime 1 seconds, maxTotalTime 2 seconds')]",
+                result);
     }
 
     @Test
@@ -663,12 +663,12 @@ public class InputLimitsTest extends WPSTestSupport {
 
         // run the process and get the result
         Document result = getAsDOM("wps?service=WPS&version=1.0.0&request=Execute&Identifier=gs:Monkey&DataInputs="
-            + urlEncode("id=x1"));
+                + urlEncode("id=x1"));
 
         // request should have failed as it exceeds the synchronous total time limit
         assertXpathExists(
-            "//ows:ExceptionText[contains(., 'maxTotalTime 1 seconds')]",
-            result);
+                "//ows:ExceptionText[contains(., 'maxTotalTime 1 seconds')]",
+                result);
     }
 
     String urlEncode(String string) throws Exception {

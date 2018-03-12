@@ -33,8 +33,8 @@ import com.sun.net.httpserver.HttpsServer;
 
 /**
  * Extends LiveData to deal with a CAS server (central authentication server)
+ *
  * @author christian
- * 
  */
 public class LiveCasData extends LiveSystemTestData {
     private static final Logger LOGGER = Logging.getLogger(LiveCasData.class);
@@ -45,13 +45,10 @@ public class LiveCasData extends LiveSystemTestData {
     /**
      * The property file containing the token -> value pairs used to get
      * a CAS server Url
-     * 
-     *
      */
     protected File fixture;
-    protected URL serverURLPrefix, serviceURL,loginURL, proxyCallbackURLPrefix;    
-    protected File keyStoreFile;     
-    
+    protected URL serverURLPrefix, serviceURL, loginURL, proxyCallbackURLPrefix;
+    protected File keyStoreFile;
 
 
     /**
@@ -60,7 +57,7 @@ public class LiveCasData extends LiveSystemTestData {
      * will be filtered.
      */
 
-    
+
     public URL getServerURLPrefix() {
         return serverURLPrefix;
     }
@@ -88,13 +85,13 @@ public class LiveCasData extends LiveSystemTestData {
     /**
      * constant fixture id
      */
-    protected String fixtureId="cas";
+    protected String fixtureId = "cas";
 
-    public LiveCasData(File dataDirSourceDirectory ) throws IOException {
+    public LiveCasData(File dataDirSourceDirectory) throws IOException {
         super(dataDirSourceDirectory);
         this.fixture = lookupFixture(fixtureId);
     }
-    
+
     public File getKeyStoreFile() {
         return keyStoreFile;
     }
@@ -105,9 +102,9 @@ public class LiveCasData extends LiveSystemTestData {
 
 
     /**
-     * Looks up the fixture file in the home directory provided that the 
-     * @param fixtureId
+     * Looks up the fixture file in the home directory provided that the
      *
+     * @param fixtureId
      */
     private File lookupFixture(String fixtureId) {
         // first of all, make sure the fixture was not disabled using a system
@@ -122,7 +119,7 @@ public class LiveCasData extends LiveSystemTestData {
         // create the hidden folder, this is handy especially on windows where
         // a user cannot create a directory starting with . from the UI 
         // (works only from the command line)
-        if(!base.exists())
+        if (!base.exists())
             base.mkdir();
         File fixtureFile = new File(base, fixtureId + ".properties");
         if (!fixtureFile.exists()) {
@@ -131,50 +128,50 @@ public class LiveCasData extends LiveSystemTestData {
             disableTest(warning);
             return null;
         }
-                
+
         Properties props = new Properties();
         try {
             props.load(new FileInputStream(fixtureFile));
             String tmp = props.getProperty(CAS_SERVER_PROPERTY);
-            if (tmp==null) tmp=""; // avoid NPE
-            serverURLPrefix=new URL(tmp);
-            loginURL=new URL(tmp+"/login");
-            
-            tmp = props.getProperty(CAS_SERVICE_PROPERTY);
-            if (tmp==null) tmp=""; // avoid NPE
-            serviceURL=new URL(tmp);
-            
-            tmp = props.getProperty(CAS_PROXYCALLBACK_PROPERTY);
-            if (tmp==null) tmp=""; // avoid NPE
-            proxyCallbackURLPrefix=new URL(tmp);
+            if (tmp == null) tmp = ""; // avoid NPE
+            serverURLPrefix = new URL(tmp);
+            loginURL = new URL(tmp + "/login");
 
-            
+            tmp = props.getProperty(CAS_SERVICE_PROPERTY);
+            if (tmp == null) tmp = ""; // avoid NPE
+            serviceURL = new URL(tmp);
+
+            tmp = props.getProperty(CAS_PROXYCALLBACK_PROPERTY);
+            if (tmp == null) tmp = ""; // avoid NPE
+            proxyCallbackURLPrefix = new URL(tmp);
+
+
         } catch (Exception e) {
-            disableTest("Error in fixture file: "+e.getMessage());
+            disableTest("Error in fixture file: " + e.getMessage());
             return null;
         }
-                
+
         // check connection
         try {
-            HttpURLConnection huc =  (HttpURLConnection)  loginURL.openConnection(); 
-            huc.setRequestMethod("GET"); 
-            huc.connect(); 
-            if (huc.getResponseCode()!=HttpServletResponse.SC_OK) {
-                disableTest("Cannot connect to "+loginURL.toString());
+            HttpURLConnection huc = (HttpURLConnection) loginURL.openConnection();
+            huc.setRequestMethod("GET");
+            huc.connect();
+            if (huc.getResponseCode() != HttpServletResponse.SC_OK) {
+                disableTest("Cannot connect to " + loginURL.toString());
                 return null;
             }
         } catch (Exception ex) {
-            disableTest("problem with cas connection: "+ex.getMessage());
+            disableTest("problem with cas connection: " + ex.getMessage());
             return null;
         }
 
-        keyStoreFile = new File(base,"keystore.jks");
-        if (keyStoreFile.exists()==false) {
-            disableTest("Keystore not found: "+ keyStoreFile.getAbsolutePath());
+        keyStoreFile = new File(base, "keystore.jks");
+        if (keyStoreFile.exists() == false) {
+            disableTest("Keystore not found: " + keyStoreFile.getAbsolutePath());
             return null;
         }
 
-        
+
         return fixtureFile;
     }
 
@@ -191,12 +188,11 @@ public class LiveCasData extends LiveSystemTestData {
         super.setUp();
     }
 
-    
-    
 
     /**
      * Permanently disable this test logging the specificed warning message (the reason
      * why the test is being disabled)
+     *
      * @param warning
      */
     private void disableTest(final String warning) {
@@ -205,82 +201,77 @@ public class LiveCasData extends LiveSystemTestData {
         System.setProperty("gs." + fixtureId, "false");
     }
 
-    protected HttpsServer createSSLServer() throws Exception{
-            
-    //        keytool -genkey -alias alias -keypass simulator \
-    //        -keystore lig.keystore -storepass simulator
-    
-             
-            InetSocketAddress address = new InetSocketAddress ( getProxyCallbackURLPrefix().getPort() );
-    
-            // initialise the HTTPS server
-            HttpsServer httpsServer = HttpsServer.create ( address, 0 );
-            SSLContext sslContext = SSLContext.getInstance ( "TLS" );
-    
-            // initialise the keystore
-            char[] password = "changeit".toCharArray ();
-            KeyStore ks = KeyStore.getInstance ( "JKS" );
-            File base = new File(System.getProperty("user.home"), ".geoserver");
-            File keystore = new File(base,"keystore.jks");
-            FileInputStream fis = new FileInputStream ( keystore );
-            ks.load ( fis, password );
-    
-            // setup the key manager factory
-            
-            KeyManagerFactory kmf = KeyManagerFactory.getInstance ( KeyManagerFactory.getDefaultAlgorithm() );
-            kmf.init ( ks, password );
-    
-    
-            // setup the trust manager factory
-            TrustManagerFactory tmf = TrustManagerFactory.getInstance ( TrustManagerFactory.getDefaultAlgorithm() );
-            tmf.init ( ks );
-    
-            // setup the HTTPS context and parameters
-            sslContext.init ( kmf.getKeyManagers (), tmf.getTrustManagers(), null );
-            httpsServer.setHttpsConfigurator(  new HttpsConfigurator( sslContext )
-            {
-                public void configure ( HttpsParameters params )
-                {
-                    try
-                    {
-                        // initialise the SSL context
-                        SSLContext c = SSLContext.getDefault ();
-                        SSLEngine engine = c.createSSLEngine ();
-                        params.setNeedClientAuth ( false );
-                        params.setCipherSuites ( engine.getEnabledCipherSuites () );
-                        params.setProtocols ( engine.getEnabledProtocols () );
-    
-                        // get the default parameters
-                        SSLParameters defaultSSLParameters = c.getDefaultSSLParameters ();
-                        params.setSSLParameters ( defaultSSLParameters );
-                    }
-                    catch ( Exception ex )
-                    {
-                        throw new RuntimeException(ex);
-                    }
+    protected HttpsServer createSSLServer() throws Exception {
+
+        //        keytool -genkey -alias alias -keypass simulator \
+        //        -keystore lig.keystore -storepass simulator
+
+
+        InetSocketAddress address = new InetSocketAddress(getProxyCallbackURLPrefix().getPort());
+
+        // initialise the HTTPS server
+        HttpsServer httpsServer = HttpsServer.create(address, 0);
+        SSLContext sslContext = SSLContext.getInstance("TLS");
+
+        // initialise the keystore
+        char[] password = "changeit".toCharArray();
+        KeyStore ks = KeyStore.getInstance("JKS");
+        File base = new File(System.getProperty("user.home"), ".geoserver");
+        File keystore = new File(base, "keystore.jks");
+        FileInputStream fis = new FileInputStream(keystore);
+        ks.load(fis, password);
+
+        // setup the key manager factory
+
+        KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
+        kmf.init(ks, password);
+
+
+        // setup the trust manager factory
+        TrustManagerFactory tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+        tmf.init(ks);
+
+        // setup the HTTPS context and parameters
+        sslContext.init(kmf.getKeyManagers(), tmf.getTrustManagers(), null);
+        httpsServer.setHttpsConfigurator(new HttpsConfigurator(sslContext) {
+            public void configure(HttpsParameters params) {
+                try {
+                    // initialise the SSL context
+                    SSLContext c = SSLContext.getDefault();
+                    SSLEngine engine = c.createSSLEngine();
+                    params.setNeedClientAuth(false);
+                    params.setCipherSuites(engine.getEnabledCipherSuites());
+                    params.setProtocols(engine.getEnabledProtocols());
+
+                    // get the default parameters
+                    SSLParameters defaultSSLParameters = c.getDefaultSSLParameters();
+                    params.setSSLParameters(defaultSSLParameters);
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex);
                 }
-            } );                
-            
-            
-            httpsServer.createContext("/test", new HttpHandler() {            
-                @Override
-                public void handle(HttpExchange t) throws IOException {
-                    LOGGER.info("https server working");
-                    t.getRequestBody().close();                                                                
-                    t.sendResponseHeaders(200, 0);
-                    t.getResponseBody().close();
-                }
-            });
-            
-            httpsServer.setExecutor(null); // creates a default executor
-            return httpsServer;
-        }
+            }
+        });
+
+
+        httpsServer.createContext("/test", new HttpHandler() {
+            @Override
+            public void handle(HttpExchange t) throws IOException {
+                LOGGER.info("https server working");
+                t.getRequestBody().close();
+                t.sendResponseHeaders(200, 0);
+                t.getResponseBody().close();
+            }
+        });
+
+        httpsServer.setExecutor(null); // creates a default executor
+        return httpsServer;
+    }
 
     protected void checkSSLServer() throws Exception {
-        
-        
+
+
         URL testSSLURL = new URL(getProxyCallbackURLPrefix().getProtocol(),
-                getProxyCallbackURLPrefix().getHost(),getProxyCallbackURLPrefix().getPort(),"/test");
+                getProxyCallbackURLPrefix().getHost(), getProxyCallbackURLPrefix().getPort(), "/test");
         HttpURLConnection con = (HttpURLConnection) testSSLURL.openConnection();
         con.getInputStream().close();
     }

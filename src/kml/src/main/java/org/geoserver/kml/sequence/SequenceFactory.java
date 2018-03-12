@@ -7,13 +7,12 @@ package org.geoserver.kml.sequence;
 
 /**
  * Builds a new Sequence
- * 
- * @author Andrea Aime - GeoSolutions
  *
  * @param <T>
+ * @author Andrea Aime - GeoSolutions
  */
 public interface SequenceFactory<T> {
-    
+
     Sequence<T> newSequence();
 
 }

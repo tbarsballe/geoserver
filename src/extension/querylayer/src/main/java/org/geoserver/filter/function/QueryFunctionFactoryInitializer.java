@@ -15,7 +15,7 @@ import org.geotools.filter.FunctionFactory;
 
 /**
  * Sets the catalog reference inside the {@link QueryLayerFunctionFactory}
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 // for the moment we implement both to make it testable, eventually this should

@@ -21,7 +21,7 @@ import org.geotools.data.DataAccessFactory.Param;
 
 /**
  * Base class for panels containing the form edit components for {@link StoreInfo} objects
- * 
+ *
  * @author Gabriel Roldan
  * @see DefaultCoverageStoreEditPanel
  */
@@ -44,6 +44,7 @@ public abstract class StoreEditPanel extends Panel {
 
     /**
      * Initializes all store parameters to their default value
+     *
      * @param info
      */
     protected void applyDataStoreParamsDefaults(StoreInfo info) {
@@ -84,10 +85,9 @@ public abstract class StoreEditPanel extends Panel {
         GeoServerApplication application = (GeoServerApplication) getApplication();
         return application.getCatalog();
     }
-    
+
     /**
      * Gives an option to store panels to raise an opinion before saving
-     *
      */
     public boolean onSave() {
         return true;

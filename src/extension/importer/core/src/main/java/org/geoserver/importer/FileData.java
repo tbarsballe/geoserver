@@ -20,10 +20,14 @@ public class FileData extends ImportData {
 
     static Logger LOGGER = Logging.getLogger(FileData.class);
 
-    /** serialVersionUID */
+    /**
+     * serialVersionUID
+     */
     private static final long serialVersionUID = 1L;
 
-    /** the file handle*/
+    /**
+     * the file handle
+     */
     protected File file;
 
     public FileData(File file) {
@@ -46,6 +50,7 @@ public class FileData extends ImportData {
 
         return new SpatialFile(file);
     }
+
     public File getFile() {
         return file;
     }
@@ -58,8 +63,8 @@ public class FileData extends ImportData {
     @Override
     public void cleanup() throws IOException {
         if (file.exists()) {
-            if (LOGGER.isLoggable(Level.FINE)){
-                LOGGER.fine("Deleting file "  + file.getAbsolutePath());
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.fine("Deleting file " + file.getAbsolutePath());
             }
 
             if (!file.delete()) {

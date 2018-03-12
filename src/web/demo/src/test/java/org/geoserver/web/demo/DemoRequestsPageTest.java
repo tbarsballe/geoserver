@@ -32,7 +32,6 @@ import org.junit.Test;
 import org.springframework.util.SerializationUtils;
 
 /**
- * 
  * @author Gabriel Roldan
  * @verion $Id$
  */
@@ -76,8 +75,8 @@ public class DemoRequestsPageTest extends GeoServerWicketTestSupport {
          * Expected choices are the file names in the demo requests dir
          * (/src/test/resources/test-data/demo-requests in this case)
          */
-        final List<String> expectedList = Arrays.asList(new String[] { "WFS_getFeature-1.1.xml",
-                "WMS_describeLayer.url" });
+        final List<String> expectedList = Arrays.asList(new String[]{"WFS_getFeature-1.1.xml",
+                "WMS_describeLayer.url"});
 
         DropDownChoice dropDown = (DropDownChoice) tester
                 .getComponentFromLastRenderedPage("demoRequestsForm:demoRequestsList");
@@ -98,7 +97,7 @@ public class DemoRequestsPageTest extends GeoServerWicketTestSupport {
          * There's an AjaxFormSubmitBehavior attached to onchange so force it
          */
         tester.executeAjaxEvent("demoRequestsForm:demoRequestsList", "change");
-        
+
         tester.assertModelValue("demoRequestsForm:demoRequestsList", requestName);
 
         final boolean isAjax = true;
@@ -134,8 +133,8 @@ public class DemoRequestsPageTest extends GeoServerWicketTestSupport {
          * There's an AjaxFormSubmitBehavior attached to onchange so force it
          */
         tester.executeAjaxEvent("demoRequestsForm:demoRequestsList", "change");
-        
-        
+
+
         tester.assertModelValue("demoRequestsForm:demoRequestsList", requestName);
 
         final boolean isAjax = true;
@@ -177,7 +176,7 @@ public class DemoRequestsPageTest extends GeoServerWicketTestSupport {
         final String modifiedUrl = "http://modified/url";
 
         TextField url = (TextField) tester.getComponentFromLastRenderedPage("demoRequestsForm:url");
-        url.setModelValue(new String[] { modifiedUrl });
+        url.setModelValue(new String[]{modifiedUrl});
 
         assertEquals(modifiedUrl, url.getValue());
 
@@ -193,7 +192,7 @@ public class DemoRequestsPageTest extends GeoServerWicketTestSupport {
         String requestUrl = req.getRequestUrl();
         assertEquals(modifiedUrl, requestUrl);
     }
-    
+
     @Test
     public void testProxyBaseUrl() {
         // setup the proxy base url
@@ -202,7 +201,7 @@ public class DemoRequestsPageTest extends GeoServerWicketTestSupport {
         global.getSettings().setProxyBaseUrl(proxyBaseUrl);
         try {
             getGeoServer().save(global);
-    
+
             final FormTester requestFormTester = tester.newFormTester("demoRequestsForm");
             final String requestName = "WMS_describeLayer.url";
             requestFormTester.select("demoRequestsList", 1);
@@ -212,22 +211,22 @@ public class DemoRequestsPageTest extends GeoServerWicketTestSupport {
              */
             tester.executeAjaxEvent("demoRequestsForm:demoRequestsList", "change");
             tester.assertModelValue("demoRequestsForm:demoRequestsList", requestName);
-    
+
             final boolean isAjax = true;
             tester.clickLink("demoRequestsForm:submit", isAjax);
-    
+
             tester.assertVisible("responseWindow");
-    
+
             IModel model = tester.getLastRenderedPage().getDefaultModel();
             assertTrue(model.getObject() instanceof DemoRequest);
             DemoRequest req = (DemoRequest) model.getObject();
-    
+
             assertEquals(Files.asResource(demoDir).path(), req.getDemoDir());
             String requestFileName = req.getRequestFileName();
             String requestUrl = req.getRequestUrl();
-    
+
             assertEquals(requestName, requestFileName);
-            assertTrue(requestUrl.startsWith(proxyBaseUrl+"/wms"));
+            assertTrue(requestUrl.startsWith(proxyBaseUrl + "/wms"));
         } finally {
             global.getSettings().setProxyBaseUrl(null);
             getGeoServer().save(global);
@@ -264,12 +263,12 @@ public class DemoRequestsPageTest extends GeoServerWicketTestSupport {
         assertEquals(username, tester.getLastRequest().getPostParameters().getParameterValue("username").toString());
         assertEquals(password, tester.getLastRequest().getPostParameters().getParameterValue("password").toString());
     }
-    
+
     @Test
     public void testSerializable() {
         DemoRequestsPage page = new DemoRequestsPage();
-        DemoRequestsPage page2 = (DemoRequestsPage) SerializationUtils.deserialize( SerializationUtils.serialize(page));
-        assertEquals(page.demoDir, page2.demoDir);         
+        DemoRequestsPage page2 = (DemoRequestsPage) SerializationUtils.deserialize(SerializationUtils.serialize(page));
+        assertEquals(page.demoDir, page2.demoDir);
     }
 
 }

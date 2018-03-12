@@ -22,32 +22,28 @@ import org.xml.sax.SAXParseException;
 
 public class SLDValidator {
     static Logger LOGGER = org.geotools.util.logging.Logging.getLogger("org.vfny.geoserver");
-    
+
     EntityResolver entityResolver;
 
     public SLDValidator() {
     }
 
     /**
-     * validates against the SLD schema in the classpath 
+     * validates against the SLD schema in the classpath
      *
      * @param xml
      * @param baseUrl GeoServer base URL
-     *
-     *
      */
     @Deprecated
     public List validateSLD(InputStream xml, String baseUrl) {
         return validateSLD(xml);
     }
-    
+
     /**
-     * validates against the SLD schema in the classpath 
+     * validates against the SLD schema in the classpath
      *
      * @param xml
      * @param baseUrl GeoServer base URL
-     *
-     *
      */
     public List validateSLD(InputStream xml) {
         return validateSLD(new InputSource(xml));
@@ -72,7 +68,6 @@ public class SLDValidator {
      *
      * @param xml
      * @param errors
-     *
      * @return DOCUMENT ME!
      */
     public static String getErrorMessage(Reader xml, List errors) {
@@ -80,11 +75,11 @@ public class SLDValidator {
         StringBuffer result = new StringBuffer();
         result.append("Your SLD is not valid.\n");
         result.append(
-            "Most common problems are: \n(1) no namespaces - use <ows:GetMap>, <sld:Rule>, <ogc:Filter>, <gml:Point>  - the part before the ':' is important\n");
+                "Most common problems are: \n(1) no namespaces - use <ows:GetMap>, <sld:Rule>, <ogc:Filter>, <gml:Point>  - the part before the ':' is important\n");
         result.append("(2) capitialization - use '<And>' not '<and>' \n");
         result.append("(3) Order - The order of elements is important \n");
         result.append(
-            "(4) Make sure your first tag imports the correct namespaces.  ie. xmlns:sld=\"http://www.opengis.net/sld\" for EVERY NAMESPACE \n");
+                "(4) Make sure your first tag imports the correct namespaces.  ie. xmlns:sld=\"http://www.opengis.net/sld\" for EVERY NAMESPACE \n");
         result.append("\n");
 
         try {
@@ -138,7 +133,7 @@ public class SLDValidator {
 
                             result.append(head + body.substring(0, colNum - 1) + "^\n");
                             result.append("       (line " + sax.getLineNumber() + ", column "
-                                + sax.getColumnNumber() + ")" + sax.getLocalizedMessage() + "\n");
+                                    + sax.getColumnNumber() + ")" + sax.getLocalizedMessage() + "\n");
                             exceptionNum++;
                         } else {
                             keep_going = false; //report later (sax.getLineNumber() > linenumber)
@@ -155,7 +150,7 @@ public class SLDValidator {
             for (int t = exceptionNum; t < errors.size(); t++) {
                 SAXParseException sax = (SAXParseException) errors.get(t);
                 result.append("       (line " + sax.getLineNumber() + ", column "
-                    + sax.getColumnNumber() + ")" + sax.getLocalizedMessage() + "\n");
+                        + sax.getColumnNumber() + ")" + sax.getLocalizedMessage() + "\n");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -171,18 +166,17 @@ public class SLDValidator {
 
         return result.toString();
     }
-    
+
     /**
      * validate a .sld against the schema
      *
-     * @param xml input stream representing the .sld file
-     * @param baseURL 
+     * @param xml       input stream representing the .sld file
+     * @param baseURL
      * @param SchemaUrl location of the schemas. Normally use
-     *        ".../schemas/sld/StyleLayerDescriptor.xsd"
-     *
+     *                  ".../schemas/sld/StyleLayerDescriptor.xsd"
      * @return list of SAXExceptions (0 if the file's okay)
      */
-    @Deprecated 
+    @Deprecated
     public List validateSLD(InputSource xml, String baseUrl) {
         return validateSLD(xml);
     }
@@ -191,7 +185,6 @@ public class SLDValidator {
      * validate a .sld against the schema
      *
      * @param xml input stream representing the .sld file
-     *
      * @return list of SAXExceptions (0 if the file's okay)
      */
     public List validateSLD(InputSource xml) {

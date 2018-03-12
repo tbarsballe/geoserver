@@ -27,7 +27,7 @@ import org.geotools.util.logging.Logging;
 /**
  * Basic property file based {@link DownloadServiceConfigurationGenerator} implementation with ability to reload config when the file changes. If
  * property file is not present, a new one will be created.
- * 
+ *
  * @author Simone Giannecchini, GeoSolutions
  */
 public class DownloadServiceConfigurationWatcher extends TimerTask implements
@@ -37,7 +37,7 @@ public class DownloadServiceConfigurationWatcher extends TimerTask implements
 
     public static final String PROPERTYFILENAME = "download.properties";
 
-    public final static String DEFAULT_PROPERTY_PATH = Paths.path(DOWNLOAD_PROCESS_DIR,         
+    public final static String DEFAULT_PROPERTY_PATH = Paths.path(DOWNLOAD_PROCESS_DIR,
             PROPERTYFILENAME);
 
     public final static Logger LOGGER = Logging
@@ -68,7 +68,9 @@ public class DownloadServiceConfigurationWatcher extends TimerTask implements
      */
     private Timer timer;
 
-    /** Default watches controlflow.properties */
+    /**
+     * Default watches controlflow.properties
+     */
     public DownloadServiceConfigurationWatcher() {
         // Get the Resource loader
         GeoServerResourceLoader loader = GeoServerExtensions.bean(GeoServerResourceLoader.class);
@@ -113,7 +115,7 @@ public class DownloadServiceConfigurationWatcher extends TimerTask implements
 
     /**
      * Initialization method for loading the {@link DownloadServiceConfiguration}.
-     * 
+     *
      * @param propertyFileWatcher Watcher of the property file
      */
     private void init(PropertyFileWatcher propertyFileWatcher) {
@@ -136,7 +138,7 @@ public class DownloadServiceConfigurationWatcher extends TimerTask implements
 
     /**
      * Loads the configuration from disk.
-     * 
+     *
      * @return an instance of {@link DownloadServiceConfiguration}.
      */
     private DownloadServiceConfiguration loadConfiguration() {
@@ -174,7 +176,7 @@ public class DownloadServiceConfigurationWatcher extends TimerTask implements
 
     /**
      * Parses the properties file for the download process configuration. When it runs into problems it uses default values
-     * 
+     *
      * @param downloadProcessProperties the {@link Properties} file to parse. Cannot be null.
      * @return an instance of {@link DownloadServiceConfiguration}.
      */

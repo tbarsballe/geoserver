@@ -21,7 +21,7 @@ public class ClusterConfigWatcher {
 
     ClusterConfig config;
     PropertyFileWatcher watcher;
-    
+
     protected ClusterConfig getNewClusterConfig() {
         return new ClusterConfig();
     }

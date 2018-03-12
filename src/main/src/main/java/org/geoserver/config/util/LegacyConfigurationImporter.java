@@ -25,14 +25,15 @@ import org.geotools.util.logging.Logging;
 /**
  * Imports configuration from a legacy "services.xml" file into a geoserver
  * configuration instance.
- * 
+ *
  * @author Justin Deoliveira, The Open Planning Project
- * 
  */
 public class LegacyConfigurationImporter {
 
-    /** logger */
-    static Logger LOGGER = Logging.getLogger( "org.geoserver.confg" );
+    /**
+     * logger
+     */
+    static Logger LOGGER = Logging.getLogger("org.geoserver.confg");
 
     /**
      * configuration
@@ -41,9 +42,8 @@ public class LegacyConfigurationImporter {
 
     /**
      * Creates the importer.
-     * 
-     * @param geoServer
-     *                The configuration to import into.
+     *
+     * @param geoServer The configuration to import into.
      */
     public LegacyConfigurationImporter(GeoServer geoServer) {
         this.geoServer = geoServer;
@@ -55,7 +55,6 @@ public class LegacyConfigurationImporter {
      * Calling code should use {@link #setConfiguration(GeoServer)} when using
      * this constructor.
      * </p>
-     * 
      */
     public LegacyConfigurationImporter() {
 
@@ -78,16 +77,14 @@ public class LegacyConfigurationImporter {
     /**
      * Imports configuration from a geoserver data directory into the
      * configuration.
-     * 
-     * @param dir
-     *                The root of the data directory.
-     * 
+     *
+     * @param dir The root of the data directory.
      */
     public void imprt(File dir) throws Exception {
 
         //TODO: this routine needs to be safer about accessing parameters, 
         // wrapping in null checks
-        
+
         GeoServerFactory factory = geoServer.getFactory();
 
         // services.xml
@@ -105,116 +102,114 @@ public class LegacyConfigurationImporter {
         //global
         //
         GeoServerInfo info = factory.createGlobal();
-        Map<String,Object> global = reader.global(); 
-        
+        Map<String, Object> global = reader.global();
+
         //info.setMaxFeatures( get( global, "maxFeatures", Integer.class ) );
-        info.setVerbose( get( global, "verbose", boolean.class ) );
-        info.setVerboseExceptions( get( global, "verboseExceptions", boolean.class ) );
-        info.setNumDecimals( get( global, "numDecimals", int.class, 4 ) );
-        info.setCharset( (String) global.get( "charSet" ) );
-        info.setUpdateSequence( get( global, "updateSequence", int.class ).longValue() );
-        info.setOnlineResource( get( global, "onlineResource", String.class ) );
-        info.setProxyBaseUrl( get( global, "ProxyBaseUrl", String.class ) );
-        
+        info.setVerbose(get(global, "verbose", boolean.class));
+        info.setVerboseExceptions(get(global, "verboseExceptions", boolean.class));
+        info.setNumDecimals(get(global, "numDecimals", int.class, 4));
+        info.setCharset((String) global.get("charSet"));
+        info.setUpdateSequence(get(global, "updateSequence", int.class).longValue());
+        info.setOnlineResource(get(global, "onlineResource", String.class));
+        info.setProxyBaseUrl(get(global, "ProxyBaseUrl", String.class));
+
         //contact
-        Map<String,Object> contact = reader.contact();
+        Map<String, Object> contact = reader.contact();
         ContactInfo contactInfo = factory.createContact();
-       
-        contactInfo.setContactPerson( (String) contact.get( "ContactPerson") );
-        contactInfo.setContactOrganization( (String) contact.get( "ContactOrganization") );
-        contactInfo.setContactVoice( (String) contact.get( "ContactVoiceTelephone" ) );
-        contactInfo.setContactFacsimile( (String) contact.get( "ContactFacsimileTelephone" ) );
-        contactInfo.setContactPosition( (String) contact.get( "ContactPosition" ) );
-        contactInfo.setContactEmail( (String) contact.get( "ContactElectronicMailAddress" ) );
-        
-        contactInfo.setAddress( (String) contact.get( "Address") );
-        contactInfo.setAddressType( (String) contact.get( "AddressType") );
-        contactInfo.setAddressCity( (String) contact.get( "City") );
-        contactInfo.setAddressCountry( (String) contact.get( "Country") );
-        contactInfo.setAddressState( (String) contact.get( "StateOrProvince") );
-        contactInfo.setAddressPostalCode( (String) contact.get( "PostCode") );
-        info.setContact( contactInfo );
-        
+
+        contactInfo.setContactPerson((String) contact.get("ContactPerson"));
+        contactInfo.setContactOrganization((String) contact.get("ContactOrganization"));
+        contactInfo.setContactVoice((String) contact.get("ContactVoiceTelephone"));
+        contactInfo.setContactFacsimile((String) contact.get("ContactFacsimileTelephone"));
+        contactInfo.setContactPosition((String) contact.get("ContactPosition"));
+        contactInfo.setContactEmail((String) contact.get("ContactElectronicMailAddress"));
+
+        contactInfo.setAddress((String) contact.get("Address"));
+        contactInfo.setAddressType((String) contact.get("AddressType"));
+        contactInfo.setAddressCity((String) contact.get("City"));
+        contactInfo.setAddressCountry((String) contact.get("Country"));
+        contactInfo.setAddressState((String) contact.get("StateOrProvince"));
+        contactInfo.setAddressPostalCode((String) contact.get("PostCode"));
+        info.setContact(contactInfo);
+
         //jai
         JAIInfo jai = new JAIInfoImpl();
-        jai.setMemoryCapacity( (Double) value( global.get( "JaiMemoryCapacity"),JAIInfoImpl.DEFAULT_MemoryCapacity ) );
-        jai.setMemoryThreshold( (Double) value( global.get( "JaiMemoryThreshold"), JAIInfoImpl.DEFAULT_MemoryThreshold) );
-        jai.setTileThreads( (Integer) value( global.get( "JaiTileThreads"), JAIInfoImpl.DEFAULT_TileThreads ) );
-        jai.setTilePriority( (Integer) value( global.get( "JaiTilePriority"), JAIInfoImpl.DEFAULT_TilePriority ) );
-        jai.setJpegAcceleration( (Boolean) value( global.get( "JaiJPEGNative" ),JAIInfoImpl.DEFAULT_JPEGNative ) );
-        jai.setPngAcceleration( (Boolean) value( global.get( "JaiPNGNative" ), JAIInfoImpl.DEFAULT_PNGNative)  );
-        jai.setRecycling( (Boolean) value( global.get( "JaiRecycling" ), JAIInfoImpl.DEFAULT_Recycling)  );
-        jai.setAllowNativeMosaic((Boolean) value( global.get( "JaiMosaicNative" ), JAIInfoImpl.DEFAULT_MosaicNative) );
-        info.setJAI( jai );
-         
-        geoServer.setGlobal( info );
-        
+        jai.setMemoryCapacity((Double) value(global.get("JaiMemoryCapacity"), JAIInfoImpl.DEFAULT_MemoryCapacity));
+        jai.setMemoryThreshold((Double) value(global.get("JaiMemoryThreshold"), JAIInfoImpl.DEFAULT_MemoryThreshold));
+        jai.setTileThreads((Integer) value(global.get("JaiTileThreads"), JAIInfoImpl.DEFAULT_TileThreads));
+        jai.setTilePriority((Integer) value(global.get("JaiTilePriority"), JAIInfoImpl.DEFAULT_TilePriority));
+        jai.setJpegAcceleration((Boolean) value(global.get("JaiJPEGNative"), JAIInfoImpl.DEFAULT_JPEGNative));
+        jai.setPngAcceleration((Boolean) value(global.get("JaiPNGNative"), JAIInfoImpl.DEFAULT_PNGNative));
+        jai.setRecycling((Boolean) value(global.get("JaiRecycling"), JAIInfoImpl.DEFAULT_Recycling));
+        jai.setAllowNativeMosaic((Boolean) value(global.get("JaiMosaicNative"), JAIInfoImpl.DEFAULT_MosaicNative));
+        info.setJAI(jai);
+
+        geoServer.setGlobal(info);
+
         //logging
         LoggingInfo logging = factory.createLogging();
-        
-        logging.setLevel( (String) global.get( "log4jConfigFile") );
-        logging.setLocation( (String) global.get( "logLocation") );
-        
-        if ( global.get( "suppressStdOutLogging" ) != null ) {
-            logging.setStdOutLogging( ! get( global, "suppressStdOutLogging", Boolean.class) );    
-        }
-        else {
+
+        logging.setLevel((String) global.get("log4jConfigFile"));
+        logging.setLocation((String) global.get("logLocation"));
+
+        if (global.get("suppressStdOutLogging") != null) {
+            logging.setStdOutLogging(!get(global, "suppressStdOutLogging", Boolean.class));
+        } else {
             logging.setStdOutLogging(true);
         }
         geoServer.setLogging(logging);
-        
+
         // read services
-        for ( LegacyServiceLoader sl : GeoServerExtensions.extensions( LegacyServiceLoader.class ) ) {
+        for (LegacyServiceLoader sl : GeoServerExtensions.extensions(LegacyServiceLoader.class)) {
             try {
                 sl.setReader(reader);
-                
-                ServiceInfo service = sl.load( geoServer );
-                if ( service != null ) {
-                    LOGGER.info( "Loading service '" + service.getId()  + "'");
-                    geoServer.add( service );
+
+                ServiceInfo service = sl.load(geoServer);
+                if (service != null) {
+                    LOGGER.info("Loading service '" + service.getId() + "'");
+                    geoServer.add(service);
                 }
-            }
-            catch( Exception e ) {
+            } catch (Exception e) {
                 String msg = "Error occured loading service: " + sl.getServiceClass().getSimpleName();
-                LOGGER.warning( msg );
-                LOGGER.log( Level.INFO, "", e );
+                LOGGER.warning(msg);
+                LOGGER.log(Level.INFO, "", e);
             }
         }
     }
-    
-    Object value( Object value, Object def ) {
+
+    Object value(Object value, Object def) {
         return value != null ? value : def;
     }
-    
-    protected <T extends Object> T get(Map map, String key, Class<T> clazz, T def ) {
-        Object o = map.get( key );
-        if ( o == null ) {
-            if ( def != null ) {
+
+    protected <T extends Object> T get(Map map, String key, Class<T> clazz, T def) {
+        Object o = map.get(key);
+        if (o == null) {
+            if (def != null) {
                 return def;
             }
-            
+
             //check for primitive type
-            if ( clazz.isPrimitive() ) {
-                if ( clazz == int.class ) {
-                    return (T) Integer.valueOf( 0 );
+            if (clazz.isPrimitive()) {
+                if (clazz == int.class) {
+                    return (T) Integer.valueOf(0);
                 }
-                if ( clazz == double.class ) {
-                    return (T) Double.valueOf( 0d ); 
+                if (clazz == double.class) {
+                    return (T) Double.valueOf(0d);
                 }
-                if ( clazz == boolean.class ) {
+                if (clazz == boolean.class) {
                     return (T) Boolean.FALSE;
                 }
             }
             return null;
         }
-        
+
         return (T) o;
     }
-    
+
     protected <T extends Object> T get(Map map, String key,
-        Class<T> clazz) {
-        return get( map, key, clazz, null );
+                                       Class<T> clazz) {
+        return get(map, key, clazz, null);
     }
-    
-    
+
+
 }

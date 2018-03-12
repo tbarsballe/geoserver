@@ -17,7 +17,7 @@ import java.util.List;
  * Notification is provided as a delta modified resources:
  * <ul>
  * <li>Listeners on a single resource will be notified on resource change to that resource.
- * 
+ * <p>
  * A listener to path="user_projections/epsg.properties" receive notification on change to the <b>epsg.properties</b> file. This notification will
  * consist of of delta=<code>user_projections/epsg.properties</code></li>
  * <li>Listeners on a directory will be notified on any resource change in the directory. The delta will include any modified directories.
@@ -26,22 +26,31 @@ import java.util.List;
  * <li>Removed resources may be represented in notification, but will have reverted to {@link Resource.Type#UNDEFINED} since the content is no longer
  * present.</li>
  * </ul>
- * 
+ *
  * @author Jody Garnett (Boundless)
  */
 public class ResourceNotification implements Serializable {
 
     private static final long serialVersionUID = 1689657047251329584L;
 
-    /** Event kind for the purpose of identification */
+    /**
+     * Event kind for the purpose of identification
+     */
     public enum Kind {
-        /** Resource created */
+        /**
+         * Resource created
+         */
         ENTRY_CREATE,
-        /** Resource deleted */
+        /**
+         * Resource deleted
+         */
         ENTRY_DELETE,
-        /** Resource modified */
+        /**
+         * Resource modified
+         */
         ENTRY_MODIFY
     }
+
     /**
      * Event for resource change notification.
      */
@@ -49,25 +58,30 @@ public class ResourceNotification implements Serializable {
         private static final long serialVersionUID = 2852962095949861322L;
         final String path;
         final Kind kind;
-        public Event( String path, Kind kind ){
+
+        public Event(String path, Kind kind) {
             this.path = path;
             this.kind = kind;
         }
+
         /**
          * Nature of change
+         *
          * @return nature of change
          */
         public Kind getKind() {
             return kind;
         }
+
         /**
-         * Resource path changed 
+         * Resource path changed
+         *
          * @return resource path changed
          */
         public String getPath() {
             return path;
         }
-        
+
         @Override
         public int hashCode() {
             final int prime = 31;
@@ -76,6 +90,7 @@ public class ResourceNotification implements Serializable {
             result = prime * result + ((path == null) ? 0 : path.hashCode());
             return result;
         }
+
         @Override
         public boolean equals(Object obj) {
             if (this == obj)
@@ -94,6 +109,7 @@ public class ResourceNotification implements Serializable {
                 return false;
             return true;
         }
+
         @Override
         public String toString() {
             return "Event [path=" + path + ", kind=" + kind + "]";
@@ -103,11 +119,15 @@ public class ResourceNotification implements Serializable {
      * ResourceStore used for for resource lookup.
      */
     //final private ResourceStore store;
-    
-    /** Notificaiton context */
+
+    /**
+     * Notificaiton context
+     */
     final private String path;
-    
-    /** Notification kind */
+
+    /**
+     * Notification kind
+     */
     final private Kind kind;
 
     /**
@@ -116,41 +136,42 @@ public class ResourceNotification implements Serializable {
     final private List<Event> delta;
 
     final private long timestamp;
-    
+
     public static List<Event> delta(File baseDirectory, List<File> created, List<File> removed, List<File> modified) {
-        if( created == null ){
+        if (created == null) {
             created = Collections.emptyList();
         }
-        if( removed == null ){
+        if (removed == null) {
             removed = Collections.emptyList();
         }
-        if( modified == null ){
+        if (modified == null) {
             modified = Collections.emptyList();
         }
-        int size = created.size()+removed.size()+modified.size();
-        if( size == 0 ) {
+        int size = created.size() + removed.size() + modified.size();
+        if (size == 0) {
             return null;
         }
-        List<Event> delta = new ArrayList<Event>( size );
-        for( File file : created ){
-            String newPath = Paths.convert( baseDirectory, file );
-            delta.add( new Event(newPath,  Kind.ENTRY_CREATE ) );
+        List<Event> delta = new ArrayList<Event>(size);
+        for (File file : created) {
+            String newPath = Paths.convert(baseDirectory, file);
+            delta.add(new Event(newPath, Kind.ENTRY_CREATE));
         }
-        for( File file : removed ){
-            String deletePath = Paths.convert( baseDirectory, file );
-            delta.add( new Event(deletePath,  Kind.ENTRY_DELETE ) );
+        for (File file : removed) {
+            String deletePath = Paths.convert(baseDirectory, file);
+            delta.add(new Event(deletePath, Kind.ENTRY_DELETE));
         }
-        for( File file : modified ){
-            String changedPath = Paths.convert( baseDirectory, file );
-            delta.add( new Event(changedPath,  Kind.ENTRY_MODIFY ) );
+        for (File file : modified) {
+            String changedPath = Paths.convert(baseDirectory, file);
+            delta.add(new Event(changedPath, Kind.ENTRY_MODIFY));
         }
         return delta;
     }
+
     /**
      * Notification of a change to a single resource.
-     * 
-     * @param path resource path changed
-     * @param kind nature of change
+     *
+     * @param path      resource path changed
+     * @param kind      nature of change
      * @param timestamp local time stamp of change
      */
     ResourceNotification(String path, Kind kind, long timestamp) {
@@ -162,35 +183,37 @@ public class ResourceNotification implements Serializable {
 
     /**
      * Notification changes to directory contents.
-     * 
-     * @param path resource path changed
-     * @param kind nature of change
+     *
+     * @param path      resource path changed
+     * @param kind      nature of change
      * @param timestamp local time stamp of change
-     * @param delta List of changes
+     * @param delta     List of changes
      */
     @SuppressWarnings("unchecked")
-    public ResourceNotification( String path, Kind kind, long timestamp, List<Event> delta ){
+    public ResourceNotification(String path, Kind kind, long timestamp, List<Event> delta) {
         this.path = path;
         this.kind = kind;
         this.delta = (List<Event>) (delta != null ? Collections.unmodifiableList(delta) : Collections.emptyList());
         this.timestamp = timestamp;
-    }   
+    }
 
     public Kind getKind() {
         return kind;
     }
+
     public String getPath() {
         return path;
     }
-    
+
     public long getTimestamp() {
         return timestamp;
     }
+
     /**
      * Paths of changed resources.
      * <p>
      * This list of changed resources is sorted and includes any relevant directories.
-     * 
+     *
      * @return paths of changed resources
      */
     public List<Event> events() {
@@ -199,7 +222,7 @@ public class ResourceNotification implements Serializable {
 
     @Override
     public String toString() {
-        return "ResourceNotification [path=" + path + ", kind=" + kind + ", delta=" + delta + ", timestamp="+timestamp+"]";
+        return "ResourceNotification [path=" + path + ", kind=" + kind + ", delta=" + delta + ", timestamp=" + timestamp + "]";
     }
 
 }

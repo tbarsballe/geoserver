@@ -29,33 +29,34 @@ public class FeatureWrapperTest {
 
     @Before
     public void setUp() throws Exception {
-    
+
         //create some data
         GeometryFactory gf = new GeometryFactory();
         SimpleFeatureType featureType = DataUtilities.createType("testType",
                 "string:String,int:Integer,double:Double,geom:Point");
 
-        features = new DefaultFeatureCollection() {};
+        features = new DefaultFeatureCollection() {
+        };
         features.add(
-            SimpleFeatureBuilder.build(featureType, new Object[] {
-                "one", new Integer(1), new Double(1.1), gf.createPoint(new Coordinate(1, 1))
-            }, "fid.1")
+                SimpleFeatureBuilder.build(featureType, new Object[]{
+                        "one", new Integer(1), new Double(1.1), gf.createPoint(new Coordinate(1, 1))
+                }, "fid.1")
         );
         features.add(
-            SimpleFeatureBuilder.build(featureType, new Object[] {
-                "two", new Integer(2), new Double(2.2), gf.createPoint(new Coordinate(2, 2))
-            }, "fid.2")
+                SimpleFeatureBuilder.build(featureType, new Object[]{
+                        "two", new Integer(2), new Double(2.2), gf.createPoint(new Coordinate(2, 2))
+                }, "fid.2")
         );
         features.add(
-            SimpleFeatureBuilder.build(featureType, new Object[] {
-                "three", new Integer(3), new Double(3.3), gf.createPoint(new Coordinate(3, 3))
-            }, "fid.3")
+                SimpleFeatureBuilder.build(featureType, new Object[]{
+                        "three", new Integer(3), new Double(3.3), gf.createPoint(new Coordinate(3, 3))
+                }, "fid.3")
         );
         cfg = new Configuration();
         cfg.setClassForTemplateLoading(getClass(), "");
         cfg.setObjectWrapper(createWrapper());
     }
-    
+
     public FeatureWrapper createWrapper() {
         return new FeatureWrapper();
     }
@@ -66,7 +67,7 @@ public class FeatureWrapperTest {
 
         StringWriter out = new StringWriter();
         template.process(features, out);
-        
+
         assertEquals("fid.1\nfid.2\nfid.3\n", out.toString().replaceAll("\r\n", "\n").replaceAll("\r", "\n"));
     }
 
@@ -90,16 +91,16 @@ public class FeatureWrapperTest {
 
         //replace ',' with '.' for locales which use a comma for decimal point
         assertEquals("string=one\nint=1\ndouble=1.1\ngeom=POINT (1 1)\n",
-            out.toString().replace(',', '.').replaceAll("\r\n", "\n").replaceAll("\r", "\n"));
+                out.toString().replace(',', '.').replaceAll("\r\n", "\n").replaceAll("\r", "\n"));
     }
-    
+
     @Test
     public void testFeatureSequence() throws Exception {
         Template template = cfg.getTemplate("FeatureSequence.ftl");
 
         StringWriter out = new StringWriter();
         template.process(features, out);
-        
+
         assertEquals("three\none\n3", out.toString().replaceAll("\r\n", "\n").replaceAll("\r", "\n"));
     }
 }

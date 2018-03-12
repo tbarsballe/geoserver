@@ -21,12 +21,12 @@ public class MessageResponse extends Response {
     }
 
     public void write(Object value, OutputStream output, Operation operation)
-        throws IOException {
+            throws IOException {
         Message message = (Message) value;
         output.write(message.message.getBytes());
     }
 
     public void abort(Object value, OutputStream output, Operation operation)
-        throws IOException {
+            throws IOException {
     }
 }

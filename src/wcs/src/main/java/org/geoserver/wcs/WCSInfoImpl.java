@@ -13,26 +13,26 @@ import org.geotools.coverage.grid.io.OverviewPolicy;
 
 /**
  * Default implementation for the {@link WCSInfo} bean.
- * 
+ *
  * @author Simone Giannecchini, GeoSolutions SAS
-  */
+ */
 @SuppressWarnings("unchecked")
 public class WCSInfoImpl extends ServiceInfoImpl implements WCSInfo {
 
     private static final long serialVersionUID = 3721044439071286273L;
-    
+
     List<String> srs = new ArrayList<String>();
 
     boolean gmlPrefixing;
-    
+
     private boolean latLon = false;
-    
+
     long maxInputMemory = -1;
-    
+
     long maxOutputMemory = -1;
-    
+
     Boolean subsamplingEnabled = Boolean.TRUE;
-    
+
     OverviewPolicy overviewPolicy;
 
     public WCSInfoImpl() {
@@ -63,7 +63,7 @@ public class WCSInfoImpl extends ServiceInfoImpl implements WCSInfo {
     }
 
     public boolean isSubsamplingEnabled() {
-        return subsamplingEnabled == null ? true : subsamplingEnabled; 
+        return subsamplingEnabled == null ? true : subsamplingEnabled;
     }
 
     public void setSubsamplingEnabled(boolean subsamplingEnabled) {
@@ -84,15 +84,15 @@ public class WCSInfoImpl extends ServiceInfoImpl implements WCSInfo {
 
     @Override
     public void setLatLon(boolean latLon) {
-        this.latLon=latLon;
-        
+        this.latLon = latLon;
+
     }
 
     @Override
     public boolean isLatLon() {
         return latLon;
     }
-    
+
     public List<String> getSRS() {
         return srs;
     }

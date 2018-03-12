@@ -18,7 +18,7 @@ import org.geotools.util.logging.Logging;
 
 /**
  * Configuration panel for {@link GeoServerOAuthAuthenticationFilter}.
- * 
+ *
  * @author Alessio Fabiani, GeoSolutions S.A.S.
  */
 public class GitHubOAuth2AuthProviderPanel

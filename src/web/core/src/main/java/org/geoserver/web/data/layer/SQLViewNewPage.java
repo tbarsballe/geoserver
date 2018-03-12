@@ -20,7 +20,9 @@ import org.geotools.jdbc.VirtualTable;
 
 public class SQLViewNewPage extends SQLViewAbstractPage {
 
-    /** serialVersionUID */
+    /**
+     * serialVersionUID
+     */
     private static final long serialVersionUID = 3670565306101168775L;
 
     public SQLViewNewPage(PageParameters params) throws IOException {
@@ -47,7 +49,7 @@ public class SQLViewNewPage extends SQLViewAbstractPage {
                     .getString());
         }
     }
-    
+
     protected void onCancel() {
         doReturn(LayerPage.class);
     }

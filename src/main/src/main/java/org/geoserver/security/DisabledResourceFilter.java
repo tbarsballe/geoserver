@@ -14,9 +14,8 @@ import org.opengis.filter.Filter;
 
 /**
  * Makes sure disabled layers/resources cannot be accessed from outside regardless of the service
- * 
- * @author Andrea Aime - GeoSolutions
  *
+ * @author Andrea Aime - GeoSolutions
  */
 public class DisabledResourceFilter extends AbstractCatalogFilter {
 

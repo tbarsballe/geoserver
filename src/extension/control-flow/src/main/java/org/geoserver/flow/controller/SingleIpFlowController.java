@@ -9,7 +9,7 @@ package org.geoserver.flow.controller;
 /**
  * A flow controller that throttles concurrent requests made from the same ip (single ip, specified
  * in configuration file)
- * 
+ *
  * @author Juan Marin, OpenGeo
  */
 public class SingleIpFlowController extends SingleQueueFlowController {

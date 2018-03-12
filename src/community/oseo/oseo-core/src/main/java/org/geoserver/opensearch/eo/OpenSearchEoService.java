@@ -13,7 +13,7 @@ public interface OpenSearchEoService {
 
     /**
      * Returns the request for the response object to produce either the global or the collection specific response
-     * 
+     *
      * @param request
      * @return
      * @throws IOException
@@ -22,7 +22,7 @@ public interface OpenSearchEoService {
 
     /**
      * Searches either collection or products, returned as complex features
-     * 
+     *
      * @param request
      * @return
      * @throws IOException
@@ -31,7 +31,7 @@ public interface OpenSearchEoService {
 
     /**
      * Retrieves a product/collection metadata in a particular format
-     * 
+     *
      * @param request
      * @return
      * @throws IOException
@@ -40,7 +40,7 @@ public interface OpenSearchEoService {
 
     /**
      * Returns the search parameters applicable to collections
-     * 
+     *
      * @param service
      * @return
      * @throws IOException
@@ -49,7 +49,7 @@ public interface OpenSearchEoService {
 
     /**
      * Returns the search parameters applicable to products of a certain collection
-     * 
+     *
      * @param service
      * @param parentId
      * @return

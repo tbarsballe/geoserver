@@ -35,11 +35,10 @@ import org.springframework.util.Assert;
 
 /**
  * Concrete Spring Batch {@link AbstractItemStreamItemWriter}.
- * 
+ * <p>
  * Streams {@link Catalog} resource items to JSON via {@link XStreamPersister} on mass storage.
- * 
- * @author Alessio Fabiani, GeoSolutions
  *
+ * @author Alessio Fabiani, GeoSolutions
  */
 public class CatalogFileWriter<T> extends CatalogWriter<T> {
 
@@ -68,7 +67,7 @@ public class CatalogFileWriter<T> extends CatalogWriter<T> {
     private boolean append = false;
 
     public CatalogFileWriter(Class<T> clazz, Backup backupFacade,
-            XStreamPersisterFactory xStreamPersisterFactory) {
+                             XStreamPersisterFactory xStreamPersisterFactory) {
         super(clazz, backupFacade, xStreamPersisterFactory);
     }
 
@@ -98,11 +97,11 @@ public class CatalogFileWriter<T> extends CatalogWriter<T> {
 
         StringBuilder lines = new StringBuilder("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\" ?>\n");
         int lineCount = 0;
-        
-        if (items.size()>0) {
+
+        if (items.size() > 0) {
             lines.append("<items>\n");
         }
-        
+
         for (T item : items) {
             lines.append(doWrite(item));
             lineCount++;
@@ -115,7 +114,7 @@ public class CatalogFileWriter<T> extends CatalogWriter<T> {
             }
         }
 
-        if (items.size()>0) {
+        if (items.size() > 0) {
             lines.append("</items>\n");
         }
 
@@ -144,7 +143,7 @@ public class CatalogFileWriter<T> extends CatalogWriter<T> {
 
     /**
      * Setter for resource. Represents a file that can be written.
-     * 
+     *
      * @param resource
      */
     @Override
@@ -155,7 +154,7 @@ public class CatalogFileWriter<T> extends CatalogWriter<T> {
     /**
      * Set the flag indicating whether or not state should be saved in the provided {@link ExecutionContext} during the {@link ItemStream} call to
      * update. Setting this to false means that it will always start at the beginning on a restart.
-     * 
+     *
      * @param saveState
      */
     public void setSaveState(boolean saveState) {
@@ -166,7 +165,7 @@ public class CatalogFileWriter<T> extends CatalogWriter<T> {
      * Flag to indicate that the target file should be deleted if it already exists, otherwise it will be created. Defaults to true, so no appending
      * except on restart. If set to false and {@link #setAppendAllowed(boolean) appendAllowed} is also false then there will be an exception when the
      * stream is opened to prevent existing data being potentially corrupted.
-     * 
+     *
      * @param shouldDeleteIfExists the flag value to set
      */
     public void setShouldDeleteIfExists(boolean shouldDeleteIfExists) {
@@ -177,7 +176,7 @@ public class CatalogFileWriter<T> extends CatalogWriter<T> {
      * Flag to indicate that the target file should be appended if it already exists. If this flag is set then the flag
      * {@link #setShouldDeleteIfExists(boolean) shouldDeleteIfExists} is automatically set to false, so that flag should not be set explicitly.
      * Defaults value is false.
-     * 
+     *
      * @param append the flag value to set
      */
     public void setAppendAllowed(boolean append) {
@@ -194,9 +193,8 @@ public class CatalogFileWriter<T> extends CatalogWriter<T> {
 
     /**
      * Initialize the reader. This method may be called multiple times before close is called.
-     * 
+     *
      * @throws Exception
-     * 
      * @see ItemStream#open(ExecutionContext)
      */
     @Override
@@ -428,7 +426,7 @@ public class CatalogFileWriter<T> extends CatalogWriter<T> {
 
         /**
          * Truncate the output at the last known good point.
-         * 
+         *
          * @throws IOException
          */
         public void truncate() throws IOException {
@@ -438,7 +436,7 @@ public class CatalogFileWriter<T> extends CatalogWriter<T> {
 
         /**
          * Creates the buffered writer for the output file channel based on configuration information.
-         * 
+         *
          * @throws IOException
          */
         private void initializeBufferedWriter() throws IOException {
@@ -483,11 +481,11 @@ public class CatalogFileWriter<T> extends CatalogWriter<T> {
                 if (transactional) {
                     TransactionAwareBufferedWriter writer = new TransactionAwareBufferedWriter(
                             channel, new Runnable() {
-                                @Override
-                                public void run() {
-                                    closeStream();
-                                }
-                            });
+                        @Override
+                        public void run() {
+                            closeStream();
+                        }
+                    });
 
                     writer.setEncoding(encoding);
                     writer.setForceSync(forceSync);
@@ -515,7 +513,7 @@ public class CatalogFileWriter<T> extends CatalogWriter<T> {
         /**
          * Checks (on setState) to make sure that the current output file's size is not smaller than the last saved commit point. If it is, then the
          * file has been damaged in some way and whole task must be started over again from the beginning.
-         * 
+         *
          * @throws IOException if there is an IO problem
          */
         private void checkFileSize() throws IOException {

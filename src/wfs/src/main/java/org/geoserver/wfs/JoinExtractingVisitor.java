@@ -40,7 +40,7 @@ import org.opengis.filter.temporal.BinaryTemporalOperator;
 public class JoinExtractingVisitor extends FilterVisitorSupport {
 
     static FilterFactory2 ff = CommonFactoryFinder.getFilterFactory2(null);
-    
+
     FeatureTypeInfo primaryFeatureType;
     String primaryAlias;
     List<FeatureTypeInfo> featureTypes;
@@ -54,7 +54,7 @@ public class JoinExtractingVisitor extends FilterVisitorSupport {
     public JoinExtractingVisitor(List<FeatureTypeInfo> featureTypes, List<String> aliases) {
         this.primaryFeatureType = null;
         this.featureTypes = new ArrayList<>(featureTypes);
-        
+
         if (aliases == null || aliases.isEmpty()) {
             hadAliases = false;
             // assign prefixes
@@ -66,7 +66,7 @@ public class JoinExtractingVisitor extends FilterVisitorSupport {
                     conflictFound = false;
                     alias = String.valueOf((char) ('a' + (j++)));
                     for (FeatureTypeInfo ft : featureTypes) {
-                        if(alias.equals(ft.getName()) || alias.equals(ft.prefixedName())) {
+                        if (alias.equals(ft.getName()) || alias.equals(ft.prefixedName())) {
                             conflictFound = true;
                             break;
                         }
@@ -77,7 +77,7 @@ public class JoinExtractingVisitor extends FilterVisitorSupport {
         } else {
             hadAliases = true;
         }
-        
+
         this.aliases = new ArrayList(aliases);
     }
 
@@ -177,8 +177,7 @@ public class JoinExtractingVisitor extends FilterVisitorSupport {
     Object handle(Filter f, Object extraData, Expression... expressions) {
         if (isJoinFilter(expressions)) {
             joinFilters.add(f);
-        }
-        else {
+        } else {
             handleOther(f, extraData);
         }
         return null;
@@ -188,7 +187,7 @@ public class JoinExtractingVisitor extends FilterVisitorSupport {
         filters.add(f);
         return null;
     }
-    
+
     boolean isJoinFilter(Expression... expressions) {
         // Used to check if the expressions were all property names
         // however, f(t1.x) = t2.y is also a join filter, and t1.x + 2 = t2.y too
@@ -253,15 +252,15 @@ public class JoinExtractingVisitor extends FilterVisitorSupport {
 
         //do same for other secondary filters
         List<Filter> otherFilters = rewriteAndSortOtherFilters(this.filters);
-        
+
         for (int i = 0; i < featureTypes.size(); i++) {
             String nativeName = featureTypes.get(i).getNativeName();
-            Join join = new Join(nativeName, joinFilters.get(i+1));
+            Join join = new Join(nativeName, joinFilters.get(i + 1));
             if (aliases != null) {
                 join.setAlias(aliases.get(i));
             }
-            if (otherFilters.get(i+1) != null) {
-                join.setFilter(otherFilters.get(i+1));
+            if (otherFilters.get(i + 1) != null) {
+                join.setFilter(otherFilters.get(i + 1));
             }
             joins.add(join);
         }
@@ -273,8 +272,6 @@ public class JoinExtractingVisitor extends FilterVisitorSupport {
      * Returns the joined feature types. If called past join extraction, it will return the types in
      * the same order as the joins (which might have been reordered to locate the center of the star
      * join)
-     * 
-     *
      */
     public List<FeatureTypeInfo> getFeatureTypes() {
         if (primaryFeatureType == null) {
@@ -306,7 +303,7 @@ public class JoinExtractingVisitor extends FilterVisitorSupport {
         List<Filter> otherFilters = rewriteAndSortOtherFilters(filters);
         return otherFilters.get(0);
     }
-    
+
     public String getPrimaryAlias() {
         setupPrimary();
         return primaryAlias;
@@ -397,8 +394,6 @@ public class JoinExtractingVisitor extends FilterVisitorSupport {
     /**
      * Builds a map going from alias, prefixed type name and simple type name to FeatureTypeInfo. In
      * case of conflicts aliases will override the type names
-     *
-     *
      */
     private Map<String, FeatureTypeInfo> buildTypeMap() {
         Map<String, FeatureTypeInfo> typeMap = new HashMap<>();
@@ -417,8 +412,6 @@ public class JoinExtractingVisitor extends FilterVisitorSupport {
 
     /**
      * Builds a map going from type name, qualified or unqualified, to alias
-     * 
-     *
      */
     private Map<String, String> buildNameToAlias() {
         Map<String, String> nameToAlias = new HashMap<>();
@@ -437,9 +430,8 @@ public class JoinExtractingVisitor extends FilterVisitorSupport {
      * Geotools only support "star" joins with a primary being the center of the join. Figure out if
      * we have one feature type that is acting as the center of the star, or throw an exception if
      * we don't have one.
-     * 
-     * @param filters2
      *
+     * @param filters2
      */
     private int getPrimaryFeatureTypeIndex(List<Filter> filters) {
         if (featureTypes.size() == 2) {
@@ -487,25 +479,23 @@ public class JoinExtractingVisitor extends FilterVisitorSupport {
     void updateFilter(Filter[] filters, int i, Filter filter) {
         if (filters[i] == null) {
             filters[i] = filter;
-        }
-        else {
+        } else {
             filters[i] = ff.and(filters[i], filter);
         }
     }
-    
+
     /**
      * Rewrites property names to either remove the join prefixes (for local filters) or replace the
      * <code>alias/attribute</code> or <code>typename/attribute</code> syntax with a
      * <code>alias.attribute</code> syntax
-     * 
-     * @author Andrea Aime - GeoSolutions
      *
+     * @author Andrea Aime - GeoSolutions
      */
     class PropertyNameRewriter extends DuplicatingFilterVisitor {
         Map<String, String> nameToAlias;
 
         private Set<String> prefixes;
-        
+
         boolean addPrefix;
 
         public PropertyNameRewriter(Map<String, String> nameToAlias, boolean prefix) {

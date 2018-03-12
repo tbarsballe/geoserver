@@ -35,10 +35,14 @@ import org.opengis.filter.expression.Literal;
  */
 public class ScriptFunctionFactory extends ScriptFactory implements FunctionFactory {
 
-    /** logger */
+    /**
+     * logger
+     */
     static Logger LOGGER = Logging.getLogger(ScriptProcessFactory.class);
-    
-    /** script manager */
+
+    /**
+     * script manager
+     */
     ScriptManager scriptMgr;
 
     SoftValueHashMap<Name, ScriptFunction> functions = new SoftValueHashMap<Name, ScriptFunction>();
@@ -72,10 +76,9 @@ public class ScriptFunctionFactory extends ScriptFactory implements FunctionFact
                 //TODO: support multiple functions in one file
                 //TODO: support the function defining its namespace
                 names.add(ff.functionName(
-                    new NameImpl(getExtension(file.name()), getBaseName(file.name())), -1));
+                        new NameImpl(getExtension(file.name()), getBaseName(file.name())), -1));
             }
-        }
-        catch (IllegalStateException e) {
+        } catch (IllegalStateException e) {
             LOGGER.log(Level.WARNING, "Error looking up filters", e);
         }
         return names;
@@ -95,7 +98,7 @@ public class ScriptFunctionFactory extends ScriptFactory implements FunctionFact
     ScriptFunction function(Name name) {
         ScriptFunction function = functions.get(name);
         if (function == null) {
-            synchronized(this) {
+            synchronized (this) {
                 function = functions.get(name);
                 if (function == null) {
                     ScriptManager scriptMgr = scriptMgr();
@@ -104,8 +107,7 @@ public class ScriptFunctionFactory extends ScriptFactory implements FunctionFact
                     Resource f = null;
                     if (name.getNamespaceURI() != null) {
                         f = filterRoot.get(name.getLocalPart() + "." + name.getNamespaceURI());
-                    }
-                    else {
+                    } else {
                         //look for a file based on basename
                         for (Resource file : filterRoot.list()) {
                             if (name.getLocalPart().equals(getBaseName(file.name()))) {
@@ -118,7 +120,7 @@ public class ScriptFunctionFactory extends ScriptFactory implements FunctionFact
                     if (f == null) {
                         return null;
                     }
-                    
+
                     if (!Resources.exists(f)) {
                         LOGGER.log(Level.WARNING, "File not found : " + f.path());
                         return null;

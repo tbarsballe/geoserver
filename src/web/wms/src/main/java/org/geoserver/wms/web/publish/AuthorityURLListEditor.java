@@ -35,9 +35,8 @@ import org.springframework.util.Assert;
 /**
  * Shows and allows editing of the {@link AuthorityURLInfo} attached to a {@link WMSInfo}, a
  * {@link LayerInfo}, or a {@link LayerGroupInfo}.
- * 
+ *
  * @author groldan
- * 
  */
 public class AuthorityURLListEditor extends FormComponentPanel<List<AuthorityURLInfo>> {
 
@@ -51,8 +50,7 @@ public class AuthorityURLListEditor extends FormComponentPanel<List<AuthorityURL
 
     /**
      * @param id
-     * @param model
-     *            the model over the appropriate cataloginfo's list of {@link AuthorityURLInfo}
+     * @param model the model over the appropriate cataloginfo's list of {@link AuthorityURLInfo}
      * @see WMSInfo#getAuthorityURLs()
      * @see LayerInfo#getAuthorityURLs()
      * @see LayerGroupInfo#getAuthorityURLs()

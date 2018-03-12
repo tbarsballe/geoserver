@@ -11,13 +11,15 @@ import org.geoserver.security.web.auth.AuthenticationFilterPanelInfo;
 
 /**
  * Configuration panel extension for {@link GeoServerOAuthAuthenticationFilter}.
- * 
+ *
  * @author Alessio Fabiani, GeoSolutions S.A.S.
  */
 public class GoogleOAuth2AuthProviderPanelInfo
         extends AuthenticationFilterPanelInfo<GoogleOAuth2FilterConfig, GoogleOAuth2AuthProviderPanel> {
 
-    /** serialVersionUID */
+    /**
+     * serialVersionUID
+     */
     private static final long serialVersionUID = 75616833259749745L;
 
     public GoogleOAuth2AuthProviderPanelInfo() {

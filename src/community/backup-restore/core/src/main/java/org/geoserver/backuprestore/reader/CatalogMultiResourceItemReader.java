@@ -43,12 +43,12 @@ import org.springframework.util.Assert;
 /**
  * Reads items from multiple resources sequentially - resource list is given by {@link #setResources(Resource[])}, the actual reading is delegated to
  * {@link #setDelegate(ResourceAwareItemReaderItemStream)}.
- * 
+ * <p>
  * Input resources are ordered using {@link #setComparator(Comparator)} to make sure resource ordering is preserved between job runs in restart
  * scenario.
- * 
+ * <p>
  * Code based on original {@link MultiResourceItemReader} by Robert Kasanicky and Lucas Ward.
- * 
+ *
  * @author Robert Kasanicky
  * @author Lucas Ward
  * @author Alessio Fabiani, GeoSolutions
@@ -73,7 +73,7 @@ public class CatalogMultiResourceItemReader<T> extends CatalogReader<T> {
     private boolean strict = false;
 
     public CatalogMultiResourceItemReader(Class<T> clazz, Backup backupFacade,
-            XStreamPersisterFactory xStreamPersisterFactory) {
+                                          XStreamPersisterFactory xStreamPersisterFactory) {
         super(clazz, backupFacade, xStreamPersisterFactory);
     }
 
@@ -84,7 +84,7 @@ public class CatalogMultiResourceItemReader<T> extends CatalogReader<T> {
     /**
      * In strict mode the reader will throw an exception on {@link #open(org.springframework.batch.item.ExecutionContext)} if there are no resources
      * to read.
-     * 
+     *
      * @param strict false by default
      */
     public void setStrict(boolean strict) {
@@ -126,7 +126,7 @@ public class CatalogMultiResourceItemReader<T> extends CatalogReader<T> {
 
     /**
      * Use the delegate to read the next item, jump to next resource if current one is exhausted. Items are appended to the buffer.
-     * 
+     *
      * @return next item from input
      */
     private T readNextItem() throws Exception {
@@ -233,7 +233,7 @@ public class CatalogMultiResourceItemReader<T> extends CatalogReader<T> {
     /**
      * Set the boolean indicating whether or not state should be saved in the provided {@link ExecutionContext} during the {@link ItemStream} call to
      * update.
-     * 
+     *
      * @param saveState
      */
     public void setSaveState(boolean saveState) {

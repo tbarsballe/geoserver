@@ -19,23 +19,29 @@ import org.opengis.filter.expression.VolatileFunction;
 
 /**
  * This class implements the {@link Function} interface and can be used for checking if an object is an instance of the provided input class.
- * 
+ * <p>
  * Users can call this function using the {@link Predicates} class:
- * 
+ * <p>
  * Predicates.isInstanceOf(Class clazz);
- * 
+ *
  * @author Nicola Lagomarsini geosolutions
  */
 public class IsInstanceOf implements VolatileFunction, Function {
 
-    /** Function name and related parameters */
+    /**
+     * Function name and related parameters
+     */
     public static FunctionName NAME = new FunctionNameImpl("isInstanceOf", Boolean.class,
             FunctionNameImpl.parameter("class", Class.class));
 
-    /** Function parameters */
+    /**
+     * Function parameters
+     */
     private List<Expression> parameters;
 
-    /** Fallback value used as default */
+    /**
+     * Fallback value used as default
+     */
     private Literal fallback;
 
     public IsInstanceOf() {

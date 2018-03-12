@@ -24,8 +24,8 @@ import java.io.IOException;
  * <p>
  * Instances of this class must be thread safe.
  * </p>
- * @author Justin Deoliveira, OpenGeo
  *
+ * @author Justin Deoliveira, OpenGeo
  */
 public class AppHook extends ScriptHook {
 
@@ -35,13 +35,13 @@ public class AppHook extends ScriptHook {
 
     /**
      * Handles a request.
-     * @param request The http request.
+     *
+     * @param request  The http request.
      * @param response The http response.
-     * @param engine The script engine of the appropriate type.
-     * 
+     * @param engine   The script engine of the appropriate type.
      */
     public void run(HttpServletRequest request, HttpServletResponse response, ScriptEngine engine)
-        throws ScriptException, IOException {
+            throws ScriptException, IOException {
         invoke(engine, "run", request, response);
     }
 

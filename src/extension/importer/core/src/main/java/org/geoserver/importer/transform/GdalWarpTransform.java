@@ -23,7 +23,7 @@ import org.geotools.gce.image.WorldImageFormat;
 
 /**
  * Runs gdalwarp on a input raster file
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class GdalWarpTransform extends AbstractCommandLineTransform implements RasterTransform {
@@ -31,7 +31,6 @@ public class GdalWarpTransform extends AbstractCommandLineTransform implements R
 
     /**
      * Checks if gdalwarp is available
-     * 
      *
      * @throws IOException
      */
@@ -42,7 +41,7 @@ public class GdalWarpTransform extends AbstractCommandLineTransform implements R
     public GdalWarpTransform(List<String> options) {
         super(options);
     }
-    
+
     @Override
     public void apply(ImportTask task, ImportData data) throws Exception {
         // let the transform run

@@ -17,9 +17,9 @@ import org.geotools.xml.Node;
 
 /**
  * Binding object for the type http://www.opengis.net/ows:SectionsType.
- *
  * <p>
- *        <pre>
+ * <p>
+ * <pre>
  *         <code>
  *  &lt;complexType name="SectionsType"&gt;
  *      &lt;annotation&gt;
@@ -32,6 +32,7 @@ import org.geotools.xml.Node;
  *
  *          </code>
  *         </pre>
+ *
  * @generated
  */
 public class SectionsTypeBinding extends AbstractComplexBinding {
@@ -65,7 +66,7 @@ public class SectionsTypeBinding extends AbstractComplexBinding {
      * @generated modifiable
      */
     public Object parse(ElementInstance instance, Node node, Object value)
-        throws Exception {
+            throws Exception {
         SectionsType sections = owsfactory.createSectionsType();
         sections.getSection().addAll(node.getChildValues("Section"));
 

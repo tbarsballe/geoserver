@@ -34,7 +34,6 @@ class GeoGigDirectoryFormComponent extends FormComponentPanel<String> {
     private final ModalWindow dialog;
 
     /**
-     *
      * @param validators any extra validator that should be added to the input field, or
      *                   {@code null}
      */
@@ -112,7 +111,9 @@ class GeoGigDirectoryFormComponent extends FormComponentPanel<String> {
 
                         target.add(directory);
                         dialog.close(target);
-                    };
+                    }
+
+                    ;
 
                     @Override
                     protected void directorySelected(File file, AjaxRequestTarget target) {

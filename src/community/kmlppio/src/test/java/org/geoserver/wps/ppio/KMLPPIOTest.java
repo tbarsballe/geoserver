@@ -26,7 +26,6 @@ import org.w3c.dom.Document;
 
 /**
  * Test Cases for KML 2.2 Encoder.
- * 
  */
 public class KMLPPIOTest extends GeoServerTestSupport {
 

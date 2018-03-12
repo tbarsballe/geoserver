@@ -19,15 +19,13 @@ import net.sf.json.JSON;
 import net.sf.json.JSONObject;
 
 
-public class SmokeTest extends GeoServerSystemTestSupport
-{
+public class SmokeTest extends GeoServerSystemTestSupport {
 
     @Test
-    public void testServiceExists() throws Exception
-    {
+    public void testServiceExists() throws Exception {
         // place the configuration file in the data dir (whicih is also used as the servlet context lookup)
         GeoServerDataDirectory dd = getDataDirectory();
-        try(InputStream is = getClass().getResourceAsStream("/test.yaml")) {
+        try (InputStream is = getClass().getResourceAsStream("/test.yaml")) {
             FileUtils.copyInputStreamToFile(is, new File(dd.root(), "test.yaml"));
         }
         JSON json = getAsJSON("/pdf/info.json?app=test");

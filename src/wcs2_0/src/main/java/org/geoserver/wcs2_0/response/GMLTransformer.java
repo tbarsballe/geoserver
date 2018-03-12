@@ -63,22 +63,21 @@ import org.xml.sax.helpers.NamespaceSupport;
 
 /**
  * Internal Base {@link GMLTransformer} for DescribeCoverage and GMLCoverageEncoding
- * 
+ *
  * @author Simone Giannecchini, GeoSolutions SAS
- * 
  */
 class GMLTransformer extends TransformerBase {
 
     protected final EnvelopeAxesLabelsMapper envelopeDimensionsMapper;
-    
+
     protected FileReference fileReference;
-    
+
     protected String mimeType;
-    
+
     public GMLTransformer(EnvelopeAxesLabelsMapper envelopeDimensionsMapper) {
-        this.envelopeDimensionsMapper=envelopeDimensionsMapper;
+        this.envelopeDimensionsMapper = envelopeDimensionsMapper;
     }
-    
+
     public void setFileReference(FileReference fileReference) {
         this.fileReference = fileReference;
     }
@@ -88,45 +87,45 @@ class GMLTransformer extends TransformerBase {
      */
     static class TAG {
         private final static String RANGE = "wcsgs:Range";
-        
+
         private final static String INTERVAL_START = "wcsgs:start";
-        
+
         private final static String INTERVAL_END = "wcsgs:end";
-        
+
         private final static String INTERVAL_PERIOD = "wcsgs:Interval";
-        
+
         private final static String SINGLE_VALUE = "wcsgs:SingleValue";
-        
+
         private static final String ADDITIONAL_DIMENSION = "wcsgs:DimensionDomain";
-        
+
         private static final String TIME_DOMAIN = "wcsgs:TimeDomain";
-        
+
         private static final String ELEVATION_DOMAIN = "wcsgs:ElevationDomain";
-     
+
     }
-    
+
     class GMLTranslator extends TranslatorSupport {
 
         protected List<WCS20CoverageMetadataProvider> extensions;
         private WCS20CoverageMetadataProvider.Translator translator = new WCS20CoverageMetadataProvider.Translator() {
-            
+
             @Override
             public void start(String element, Attributes attributes) {
                 GMLTranslator.this.start(element, attributes);
             }
-            
+
             @Override
             public void start(String element) {
                 GMLTranslator.this.start(element);
-                
+
             }
-            
+
             @Override
             public void end(String element) {
                 GMLTranslator.this.end(element);
-                
+
             }
-            
+
             @Override
             public void chars(String text) {
                 GMLTranslator.this.chars(text);
@@ -239,14 +238,14 @@ class GMLTransformer extends TransformerBase {
         /**
          * Encode the coverage function or better the GridFunction as per clause 19.3.12 of GML 3.2.1 which helps us with indicating in which way we
          * traverse the data.
-         * 
+         * <p>
          * <p>
          * Notice that we use the axisOrder to actually <strong>always</strong> encode data il easting,northing, hence in case of a northing,easting
          * crs we use a reversed order to indicate that we always walk on the raster columns first.
-         * 
+         * <p>
          * <p>
          * In cases where the coordinates increases in the opposite order ho our walk the offsetVectors of the RectifiedGrid will do the rest.
-         * 
+         *
          * @param gc2d
          * @param axisSwap
          */
@@ -266,7 +265,7 @@ class GMLTransformer extends TransformerBase {
 
         /**
          * Encoding eventual metadata that come along with this coverage
-         * 
+         * <p>
          * <pre>
          * {@code
          * <gmlcov:metadata>
@@ -276,10 +275,10 @@ class GMLTransformer extends TransformerBase {
          * </gmlcov:metadata>
          * }
          * </pre>
-         * 
+         *
          * @param context Can be either a {@link GridCoverage2DReader} or a {@link GridCoverage2D}, depending
          *                on how the method is invoked
-         * @throws IOException 
+         * @throws IOException
          */
         public void handleMetadata(Object context, WCSDimensionsHelper dimensionsHelper) throws IOException {
             start("gmlcov:metadata");
@@ -307,8 +306,9 @@ class GMLTransformer extends TransformerBase {
 
         /**
          * Look for additional dimensions in the dimensionsHelper and put additional domains to the metadata
+         *
          * @param helper
-         * @throws IOException 
+         * @throws IOException
          */
         private void handleAdditionalDimensionMetadata(final WCSDimensionsHelper helper) throws IOException {
             Utilities.ensureNonNull("helper", helper);
@@ -326,13 +326,14 @@ class GMLTransformer extends TransformerBase {
 
         /**
          * Set additional dimension metadata to the DescribeCoverage element
-         * @param name the custom dimension name
+         *
+         * @param name      the custom dimension name
          * @param dimension the custom dimension related {@link DimensionInfo} instance
-         * @param helper the {@link WCSDimensionsHelper} instance to be used to parse domains
+         * @param helper    the {@link WCSDimensionsHelper} instance to be used to parse domains
          * @throws IOException
          */
         private void setAdditionalDimensionMetadata(final String name,
-                final DimensionInfo dimension, WCSDimensionsHelper helper)
+                                                    final DimensionInfo dimension, WCSDimensionsHelper helper)
                 throws IOException {
             Utilities.ensureNonNull("helper", helper);
             final String startTag = initStartMetadataTag(TAG.ADDITIONAL_DIMENSION, name, dimension, helper);
@@ -348,32 +349,32 @@ class GMLTransformer extends TransformerBase {
                 Date date = WCSDimensionsValueParser.parseAsDate(item);
                 if (date != null) {
                     final String dimensionId = helper.getCoverageId() + "_dd_" + i;
-                    encodeDate(date, helper, dimensionId); 
+                    encodeDate(date, helper, dimensionId);
                     continue;
                 }
 
                 Double number = WCSDimensionsValueParser.parseAsDouble(item);
-                if (number != null ) {
+                if (number != null) {
                     element(TAG.SINGLE_VALUE, item.toString());
                     continue;
                 }
 
                 NumberRange<Double> range = WCSDimensionsValueParser.parseAsDoubleRange(item);
-                if (range != null ) {
+                if (range != null) {
                     encodeInterval(range.getMinValue().toString(), range.getMaxValue()
-                          .toString(), null, null);
+                            .toString(), null, null);
                     continue;
                 }
 
                 //TODO: Add support for date Ranges
                 if (item instanceof String) {
                     element(TAG.SINGLE_VALUE, item.toString());
-                } 
+                }
 //                else if (item instanceof DateRange) {
 //                    final String dimensionId = helper.getCoverageId() + "_dd_" + i;
 //                    encodeDateRange((DateRange) item, helper, dimensionId);
 //                }
-                
+
                 //TODO: Add more cases
                 i++;
             }
@@ -381,18 +382,17 @@ class GMLTransformer extends TransformerBase {
         }
 
         /**
-         * Initialize the metadata start tag for a custom dimension, setting dimension name, 
-         * checking for UOM, defaultValue, ...  
-         * 
-         * @param dimensionTag the TAG referring to type of dimension (Time, Elevation, Additional ,...)
-         * @param name the name of the custom dimension 
-         * @param dimension the custom dimension {@link DimensionInfo} instance
-         * @param helper the {@link WCSDimensionsHelper} instance used to parse default values
+         * Initialize the metadata start tag for a custom dimension, setting dimension name,
+         * checking for UOM, defaultValue, ...
          *
+         * @param dimensionTag the TAG referring to type of dimension (Time, Elevation, Additional ,...)
+         * @param name         the name of the custom dimension
+         * @param dimension    the custom dimension {@link DimensionInfo} instance
+         * @param helper       the {@link WCSDimensionsHelper} instance used to parse default values
          * @throws IOException
          */
         private String initStartMetadataTag(final String dimensionTag, final String name, final DimensionInfo dimension,
-                final WCSDimensionsHelper helper) throws IOException {
+                                            final WCSDimensionsHelper helper) throws IOException {
             final String uom = dimension.getUnitSymbol();
             String defaultValue = null;
             String prolog = null;
@@ -406,13 +406,13 @@ class GMLTransformer extends TransformerBase {
                 prolog = TAG.TIME_DOMAIN;
                 defaultValue = helper.getEndTime();
             }
-            return prolog + (uom != null ? (" uom=\"" + uom + "\"") : "") 
+            return prolog + (uom != null ? (" uom=\"" + uom + "\"") : "")
                     + (defaultValue != null ? (" default=\"" + defaultValue + "\"") : "");
         }
 
         /**
          * Set the timeDomain metadata in case the dimensionsHelper instance has a timeDimension
-         * 
+         *
          * @param helper
          * @throws IOException
          */
@@ -423,26 +423,26 @@ class GMLTransformer extends TransformerBase {
                 start(initStartMetadataTag(TAG.TIME_DOMAIN, null, timeDimension, helper));
                 final DimensionPresentation presentation = timeDimension.getPresentation();
                 final String id = helper.getCoverageId();
-                switch(presentation) {
+                switch (presentation) {
                     case CONTINUOUS_INTERVAL:
                         encodeTimePeriod(helper.getBeginTime(), helper.getEndTime(), id + "_tp_0", null, null);
                         break;
                     case DISCRETE_INTERVAL:
-                        encodeTimePeriod(helper.getBeginTime(), helper.getEndTime(), id + "_tp_0", 
+                        encodeTimePeriod(helper.getBeginTime(), helper.getEndTime(), id + "_tp_0",
                                 helper.getTimeResolutionUnit(), helper.getTimeResolutionValue());
                         break;
                     default:
                         // TODO: check if we are in the list of instants case, or in the list of periods case
-                        
+
                         // list case
                         final TreeSet<Object> domain = helper.getTimeDomain();
                         int i = 0;
                         for (Object item : domain) {
                             // gml:id is mandatory for time instant...
-                            if(item instanceof Date) {
-                               encodeDate((Date) item, helper, id + "_td_" + i);
-                            } else if(item instanceof DateRange) {
-                               encodeDateRange((DateRange) item, helper, id + "_td_" + i);
+                            if (item instanceof Date) {
+                                encodeDate((Date) item, helper, id + "_td_" + i);
+                            } else if (item instanceof DateRange) {
+                                encodeDateRange((DateRange) item, helper, id + "_td_" + i);
                             }
                             i++;
                         }
@@ -454,7 +454,7 @@ class GMLTransformer extends TransformerBase {
 
         /**
          * Set the elevationDomain metadata in case the dimensionsHelper instance has an elevationDimension
-         * 
+         *
          * @param helper
          * @throws IOException
          */
@@ -464,24 +464,24 @@ class GMLTransformer extends TransformerBase {
             if (elevationDimension != null) {
                 start(initStartMetadataTag(TAG.ELEVATION_DOMAIN, null, elevationDimension, helper));
                 final DimensionPresentation presentation = elevationDimension.getPresentation();
-                switch(presentation) {
+                switch (presentation) {
                     // Where _er_ means elevation range
                     case CONTINUOUS_INTERVAL:
                         encodeInterval(helper.getBeginElevation(), helper.getEndElevation(), null, null);
                         break;
                     case DISCRETE_INTERVAL:
-                        encodeInterval(helper.getBeginElevation(), helper.getEndElevation(),  
+                        encodeInterval(helper.getBeginElevation(), helper.getEndElevation(),
                                 helper.getElevationResolutionUnit(), helper.getElevationResolutionValue());
                         break;
                     default:
                         // TODO: check if we are in the list of instants case, or in the list of periods case
-                        
+
                         // list case
                         final TreeSet<Object> domain = helper.getElevationDomain();
                         for (Object item : domain) {
                             if (item instanceof Number) {
                                 element(TAG.SINGLE_VALUE, item.toString());
-                            } else if(item instanceof NumberRange) {
+                            } else if (item instanceof NumberRange) {
                                 NumberRange range = (NumberRange) item;
                                 encodeInterval(range.getMinValue().toString(), range.getMaxValue().toString(), null, null);
                             }
@@ -492,19 +492,21 @@ class GMLTransformer extends TransformerBase {
             }
         }
 
-        /** 
-         * Encode a DateRange item as a GML TimePeriod 
+        /**
+         * Encode a DateRange item as a GML TimePeriod
+         *
          * @param range
          * @param helper
          * @param id
          */
         private void encodeDateRange(final DateRange range, final WCSDimensionsHelper helper, final String id) {
-            encodeTimePeriod(helper.format(range.getMinValue()), helper.format(range.getMaxValue()), 
+            encodeTimePeriod(helper.format(range.getMinValue()), helper.format(range.getMaxValue()),
                     id, null, null);
         }
 
         /**
          * Encode a Date item as a GML TimeInstant
+         *
          * @param item
          * @param helper
          * @param id
@@ -519,8 +521,8 @@ class GMLTransformer extends TransformerBase {
 
 
         /**
-         * Encode a GML time period 
-         * 
+         * Encode a GML time period
+         *
          * @param beginPosition
          * @param endPosition
          * @param timePeriodId
@@ -543,13 +545,13 @@ class GMLTransformer extends TransformerBase {
 
         /**
          * Encode Interval
-         * 
+         *
          * @param beginPosition
          * @param endPosition
          * @param dimensionId
          */
         public void encodeInterval(String beginPosition, String endPosition,
-                String intervalUnit, Double intervalValue) {
+                                   String intervalUnit, Double intervalValue) {
             AttributesImpl atts = new AttributesImpl();
             start(TAG.RANGE, atts);
             element(TAG.INTERVAL_START, beginPosition);
@@ -561,11 +563,12 @@ class GMLTransformer extends TransformerBase {
             }
             end(TAG.RANGE);
         }
+
         /**
          * Encodes the boundedBy element
-         * 
+         * <p>
          * e.g.:
-         * 
+         * <p>
          * <pre>
          * {@code
          * <gml:boundedBy>
@@ -576,14 +579,15 @@ class GMLTransformer extends TransformerBase {
          * </gml:boundedBy>
          * }
          * </pre>
-         * @param ci 
+         *
+         * @param ci
          * @param gc2d
          * @param ePSGCode
          * @param axisSwap
          * @param srsName
          * @param axesNames
          * @param axisLabels
-         * @throws IOException 
+         * @throws IOException
          */
         public void handleBoundedBy(final GeneralEnvelope envelope, boolean axisSwap, String srsName, String axisLabels, WCSDimensionsHelper dimensionHelper) throws IOException {
             final CoordinateReferenceSystem crs = envelope.getCoordinateReferenceSystem();
@@ -606,7 +610,7 @@ class GMLTransformer extends TransformerBase {
                     hasTime = true;
                 }
             }
-            final int srsDimension = cs.getDimension() + (hasElevation ? 1 : 0); 
+            final int srsDimension = cs.getDimension() + (hasElevation ? 1 : 0);
 
             // Setting up envelope bounds (including elevation)
             final String lower = new StringBuilder()
@@ -639,7 +643,7 @@ class GMLTransformer extends TransformerBase {
 
             element("gml:lowerCorner", lower);
             element("gml:upperCorner", upper);
-            
+
             if (dimensionHelper != null && hasTime) {
                 element("gml:beginPosition", dimensionHelper.getBeginTime());
                 element("gml:endPosition", dimensionHelper.getEndTime());
@@ -652,12 +656,11 @@ class GMLTransformer extends TransformerBase {
 
         /**
          * Returns a beautiful String representation for the provided {@link Unit}
-         * 
+         *
          * @param crs
          * @param uom
-         *
          */
-        public String extractUoM (CoordinateReferenceSystem crs, Unit<?> uom) {
+        public String extractUoM(CoordinateReferenceSystem crs, Unit<?> uom) {
             // special handling for Degrees
             if (crs instanceof GeographicCRS) {
                 return "Deg";
@@ -667,14 +670,14 @@ class GMLTransformer extends TransformerBase {
 
         /**
          * Encodes the Range as per the GML spec of the provided {@link GridCoverage2D}
-         * 
+         *
          * @param gc2d the {@link GridCoverage2D} for which to encode the Range.
          */
         public void handleRange(GridCoverage2D gc2d) {
             // preamble
             start("gml:rangeSet");
-            
-            if(fileReference != null) {
+
+            if (fileReference != null) {
                 encodeFileReference(fileReference);
             } else {
                 encodeAsDataBlocks(gc2d);
@@ -685,7 +688,7 @@ class GMLTransformer extends TransformerBase {
 
         private void encodeFileReference(FileReference fileReference) {
             start("gml:File");
-            
+
             final AttributesImpl atts = new AttributesImpl();
             atts.addAttribute("", "xlink:arcrole", "xlink:arcrole", "", "fileReference");
             atts.addAttribute("", "xlink:href", "xlink:href", "", "cid:" + fileReference.getReference());
@@ -694,9 +697,9 @@ class GMLTransformer extends TransformerBase {
             element("gml:fileReference", "cid:" + fileReference.getReference());
             element("gml:fileStructure", "");
             element("gml:mimeType", fileReference.getMimeType());
-            
+
             end("gml:File");
-            
+
         }
 
         private void encodeAsDataBlocks(GridCoverage2D gc2d) {
@@ -719,32 +722,32 @@ class GMLTransformer extends TransformerBase {
                 iterator.startPixels();
                 while (!iterator.finishedPixels()) {
                     switch (dataType) {
-                    case DataBuffer.TYPE_BYTE:
-                    case DataBuffer.TYPE_INT:
-                    case DataBuffer.TYPE_SHORT:
-                    case DataBuffer.TYPE_USHORT:
-                        iterator.getPixel(valuesI);
-                        for (int i = 0; i < numBands; i++) {
-                            // spit out
-                            chars(String.valueOf(valuesI[i]));
-                            if (i + 1 < numBands) {
-                                chars(",");
+                        case DataBuffer.TYPE_BYTE:
+                        case DataBuffer.TYPE_INT:
+                        case DataBuffer.TYPE_SHORT:
+                        case DataBuffer.TYPE_USHORT:
+                            iterator.getPixel(valuesI);
+                            for (int i = 0; i < numBands; i++) {
+                                // spit out
+                                chars(String.valueOf(valuesI[i]));
+                                if (i + 1 < numBands) {
+                                    chars(",");
+                                }
                             }
-                        }
-                        break;
-                    case DataBuffer.TYPE_DOUBLE:
-                    case DataBuffer.TYPE_FLOAT:
-                        iterator.getPixel(valuesD);
-                        for (int i = 0; i < numBands; i++) {
-                            // spit out
-                            chars(String.valueOf(valuesD[i]));
-                            if (i + 1 < numBands) {
-                                chars(",");
+                            break;
+                        case DataBuffer.TYPE_DOUBLE:
+                        case DataBuffer.TYPE_FLOAT:
+                            iterator.getPixel(valuesD);
+                            for (int i = 0; i < numBands; i++) {
+                                // spit out
+                                chars(String.valueOf(valuesD[i]));
+                                if (i + 1 < numBands) {
+                                    chars(",");
+                                }
                             }
-                        }
-                        break;
-                    default:
-                        break;
+                            break;
+                        default:
+                            break;
                     }
                     // space as sample separator
                     chars(" ");
@@ -760,9 +763,9 @@ class GMLTransformer extends TransformerBase {
 
         /**
          * Encodes the RangeType as per the GML spec of the provided {@link GridCoverage2D}
-         * 
+         * <p>
          * e.g.:
-         * 
+         * <p>
          * <pre>
          * {@code
          * <gmlcov:rangeType>
@@ -784,7 +787,7 @@ class GMLTransformer extends TransformerBase {
          * </gmlcov:rangeType>
          * }
          * </pre>
-         * 
+         *
          * @param gc2d the {@link GridCoverage2D} for which to encode the RangeType.
          */
         public void handleRangeType(GridCoverage2D gc2d) {
@@ -853,7 +856,7 @@ class GMLTransformer extends TransformerBase {
                     element("swe:nilValue", String.valueOf(nodata), nodataAttr);
                 }
             } else if (gc2d != null) {
-            // do we have already a a NO_DATA value at hand?
+                // do we have already a a NO_DATA value at hand?
                 NoDataContainer noDataProperty = CoverageUtilities.getNoDataProperty(gc2d);
                 if (noDataProperty != null) {
                     String nodata = Double.valueOf(noDataProperty.getAsSingleValue()).toString(); // TODO test me
@@ -879,11 +882,11 @@ class GMLTransformer extends TransformerBase {
 
         /**
          * Tries to encode a meaningful range for a {@link SampleDimension}.
-         * 
+         *
          * @param sd the {@link CoverageDimensionInfo} to encode a meaningful range for.
          */
         public void handleSampleDimensionRange(CoverageDimensionInfo sd) {
-            if (!setRange(sd.getRange())) { 
+            if (!setRange(sd.getRange())) {
                 SampleDimensionType sdType = sd.getDimensionType();
                 handleSampleDimensionType(sdType);
             }
@@ -891,7 +894,7 @@ class GMLTransformer extends TransformerBase {
 
         private void handleSampleDimensionType(SampleDimensionType sdType) {
             // old data dirs upgrading will have this empty
-            if(sdType == null) {
+            if (sdType == null) {
                 // pick the one with the largest domain and be done with it
                 sdType = SampleDimensionType.REAL_64BITS;
             }
@@ -901,6 +904,7 @@ class GMLTransformer extends TransformerBase {
 
         /**
          * Encode the interval range
+         *
          * @param range
          */
         private boolean setRange(NumberRange<? extends Number> range) {
@@ -915,12 +919,12 @@ class GMLTransformer extends TransformerBase {
 
         /**
          * Tries to encode a meaningful range for a {@link SampleDimension}.
-         * 
+         *
          * @param sd the {@link SampleDimension} to encode a meaningful range for.
          */
         public void handleSampleDimensionRange(SampleDimension sd) {
             // look for ranges on the sample dimension
-            boolean setRange = false; 
+            boolean setRange = false;
             if (sd instanceof GridSampleDimension) {
                 GridSampleDimension gridSd = ((GridSampleDimension) sd);
                 setRange = setRange(gridSd.getRange());
@@ -934,9 +938,9 @@ class GMLTransformer extends TransformerBase {
 
         /**
          * Encodes the DomainSet as per the GML spec of the provided {@link GridCoverage2D}
-         * 
+         * <p>
          * e.g.:
-         * 
+         * <p>
          * <pre>
          * {@code
          * <gml:domainSet>
@@ -952,14 +956,13 @@ class GMLTransformer extends TransformerBase {
          * </gml:domainSet>
          * }
          * </pre>
-         * 
-         * 
-         * @param gc2d the {@link GridCoverage2D} for which to encode the DomainSet.
+         *
+         * @param gc2d     the {@link GridCoverage2D} for which to encode the DomainSet.
          * @param srsName
          * @param axesSwap
          */
         public void handleDomainSet(GridGeometry2D gg2D, int gridDimension, String gcName, String srsName,
-                boolean axesSwap) {
+                                    boolean axesSwap) {
             // setup vars
             final String gridId = "grid00__" + gcName;
 

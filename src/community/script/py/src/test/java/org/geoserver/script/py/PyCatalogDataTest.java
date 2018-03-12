@@ -46,7 +46,7 @@ public class PyCatalogDataTest extends ScriptTestSupport {
         super.setUp();
         setUpMock();
     }
-    
+
     public void tearDown() throws Exception {
         super.tearDown();
         tearDownMock();
@@ -54,15 +54,15 @@ public class PyCatalogDataTest extends ScriptTestSupport {
 
     void setUpMock() throws Exception {
         DeleteDbFiles.execute("target", "acme", true);
-        
+
         H2DataStoreFactory fac = new H2DataStoreFactory();
         HashMap params = new HashMap();
-    
+
         params.put(H2DataStoreFactory.DATABASE.key, "target/acme");
         params.put(H2DataStoreFactory.DBTYPE.key, "h2");
-        
+
         DataStore ds = fac.createDataStore(params);
-        
+
         SimpleFeatureTypeBuilder tb = new SimpleFeatureTypeBuilder();
         tb.setName("widgets");
         tb.add("type", String.class);
@@ -70,51 +70,51 @@ public class PyCatalogDataTest extends ScriptTestSupport {
         tb.add("geom", Point.class);
         SimpleFeatureType ft = tb.buildFeatureType();
         ds.createSchema(ft);
-        
+
         FeatureWriter fw = ds.getFeatureWriter("widgets", Transaction.AUTO_COMMIT);
-        
+
         WKTReader wkt = new WKTReader();
-        
+
         fw.hasNext();
         SimpleFeature next = (SimpleFeature) fw.next();
         next.setAttribute("type", "anvil");
         next.setAttribute("price", 10.99);
         next.setAttribute("geom", wkt.read("POINT(12.5 13.7)"));
         fw.write();
-        
+
         fw.hasNext();
         next = (SimpleFeature) fw.next();
         next.setAttribute("type", "dynamite");
         next.setAttribute("price", 99.99);
         next.setAttribute("geom", wkt.read("POINT(11.8 16.7)"));
         fw.write();
-        
+
         fw.close();
-        
+
         Catalog cat = createNiceMock(Catalog.class);
-        
+
         //workspaces
         WorkspaceInfo ws = createNiceMock(WorkspaceInfo.class);
         expect(ws.getName()).andReturn("acme").anyTimes();
         replay(ws);
-        
+
         expect(cat.getWorkspaces()).andReturn(Arrays.asList(ws)).anyTimes();
         expect(cat.getDefaultWorkspace()).andReturn(ws).anyTimes();
         expect(cat.getWorkspaceByName("acme")).andReturn(ws).anyTimes();
-        
+
         //data stores
         DataStoreInfo acme = createNiceMock(DataStoreInfo.class);
         expect(acme.getName()).andReturn("acme").anyTimes();
         expect(acme.getWorkspace()).andReturn(ws).anyTimes();
         expect(acme.getDataStore(null)).andReturn((DataAccess) ds).anyTimes();
         replay(acme);
-        
+
         expect(cat.getDataStoresByWorkspace(ws)).andReturn(Arrays.asList(acme)).anyTimes();
         expect(cat.getDataStoresByWorkspace("acme")).andReturn(Arrays.asList(acme)).anyTimes();
-        
+
         expect(cat.getDataStoreByName("acme", "acme")).andReturn(acme).anyTimes();
         expect(cat.getDataStoreByName(ws, "acme")).andReturn(acme).anyTimes();
-        
+
         //feature types
         FeatureTypeInfo widgets = createNiceMock(FeatureTypeInfo.class);
         expect(widgets.getName()).andReturn("widgets");
@@ -122,20 +122,20 @@ public class PyCatalogDataTest extends ScriptTestSupport {
         expect(widgets.getFeatureType()).andReturn(ds.getSchema("widgets"));
         expect(widgets.getStore()).andReturn(acme);
         replay(widgets);
-        
+
         expect(cat.getFeatureTypeByDataStore(acme, "widgets")).andReturn(widgets).anyTimes();
         expect(cat.getFeatureTypeByStore(acme, "widgets")).andReturn(widgets).anyTimes();
-        
+
         //app context
         ApplicationContext app = createNiceMock(ApplicationContext.class);
         expect(app.getBean("catalog")).andReturn(cat).anyTimes();
-        
+
         replay(cat);
         replay(app);
-        
+
         GeoServerExtensionsHelper.init(app);
     }
-    
+
     void tearDownMock() throws Exception {
         GeoServerExtensionsHelper.init(null);
         DeleteDbFiles.execute("target", "acme", true);
@@ -146,32 +146,32 @@ public class PyCatalogDataTest extends ScriptTestSupport {
 
         e.eval("from geoserver.catalog import Workspace");
         e.eval("acme = Workspace('acme')['acme']");
-        
+
         clear(e);
         e.eval("widgets = acme['widgets']");
         e.eval("print widgets.data.count()");
         _assert("2");
-        
+
         clear(e);
         e.eval("print widgets.data.bounds()");
         _assert("(11.8, 13.7, 12.5, 16.7)");
-        
+
         clear(e);
         e.eval("for f in widgets.data.features(): print f.geom");
         _assert("POINT (12.5 13.7)\nPOINT (11.8 16.7)");
     }
-    
+
     void print() {
         System.out.println(new String(out.toByteArray()));
     }
-    
+
     void clear(ScriptEngine e) {
         out = new ByteArrayOutputStream();
         e.getContext().setWriter(new OutputStreamWriter(out));
     }
-    
+
     void _assert(String result) {
         assertEquals(result, new String(out.toByteArray()).trim());
     }
-    
+
 }

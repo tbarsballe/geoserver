@@ -60,14 +60,14 @@ import com.vividsolutions.jts.geom.Envelope;
 
 /**
  * Georectifies a GridCoverage based on GCPs using gdal_warp under covers
- * 
+ *
  * @author Daniele Romagnoli, GeoSolutions SAS
  * @author Andrea Aime, GeoSolutions SAS
  */
 @DescribeProcess(title = "Georectify Coverage", description = "Georectifies a raster via Ground Control Points using gdal_warp")
 public class GeorectifyCoverage implements GSProcess {
-    
-    static final Logger LOGGER = Logging.getLogger(GeorectifyCoverage.class); 
+
+    static final Logger LOGGER = Logging.getLogger(GeorectifyCoverage.class);
 
     private final static Pattern GCP_PATTERN = Pattern
             .compile("\\[((\\+|-)?[0-9]+(.[0-9]+)?),\\s*((\\+|-)?[0-9]+(.[0-9]+)?)(,\\s*((\\+|-)?[0-9]+(.[0-9]+)?))?\\]");
@@ -93,8 +93,8 @@ public class GeorectifyCoverage implements GSProcess {
     }
 
     @DescribeResults({
-        @DescribeResult(name = "result", description = "Georectified raster", type=GridCoverage2D.class),
-        @DescribeResult(name = "path", description = "Pathname of the generated raster on the server", type=String.class)
+            @DescribeResult(name = "result", description = "Georectified raster", type = GridCoverage2D.class),
+            @DescribeResult(name = "path", description = "Pathname of the generated raster on the server", type = String.class)
     })
     public Map<String, Object> execute(
             @DescribeParameter(name = "data", description = "Input raster") GridCoverage2D coverage,
@@ -145,7 +145,7 @@ public class GeorectifyCoverage implements GSProcess {
                             ImageLayout.SAMPLE_MODEL_MASK);
                     RenderedImage alpha = ConstantDescriptor.create(
                             Float.valueOf(image.getWidth()), Float.valueOf(image.getHeight()),
-                            new Byte[] { Byte.valueOf((byte) 255) }, new RenderingHints(
+                            new Byte[]{Byte.valueOf((byte) 255)}, new RenderingHints(
                                     JAI.KEY_IMAGE_LAYOUT, tempLayout));
                     iw.addBand(alpha, false);
                     image = iw.getRenderedImage();
@@ -195,33 +195,33 @@ public class GeorectifyCoverage implements GSProcess {
             }
 
             // if we have the output path move the final file there
-            if(Boolean.TRUE.equals(store) && outputPath != null) {
+            if (Boolean.TRUE.equals(store) && outputPath != null) {
                 File output = new File(outputPath);
-                if(output.exists()) {
-                    if(!output.delete()) {
+                if (output.exists()) {
+                    if (!output.delete()) {
                         throw new WPSException("Output file " + outputPath + " exists but cannot be overwritten");
                     }
                 } else {
                     File parent = output.getParentFile();
-                    if(!parent.exists()) {
-                        if(!parent.mkdirs()) {
-                            throw new WPSException("Output file parent directory " 
+                    if (!parent.exists()) {
+                        if (!parent.mkdirs()) {
+                            throw new WPSException("Output file parent directory "
                                     + parent.getAbsolutePath() + " does not exist and cannot be created");
                         }
                     }
                 }
-                if(!warpedFile.renameTo(output)) {
-                    throw new WPSException("Could not move " 
-                            + warpedFile.getAbsolutePath() + " to " + outputPath 
+                if (!warpedFile.renameTo(output)) {
+                    throw new WPSException("Could not move "
+                            + warpedFile.getAbsolutePath() + " to " + outputPath
                             + ", it's likely a permission issue");
                 }
                 warpedFile = output;
             }
-                
-             // mark the output file for deletion at the end of request
-                if (resourceManager != null && !Boolean.TRUE.equals(store)) {
-                    resourceManager.addResource(new WPSFileResource(warpedFile));
-                }
+
+            // mark the output file for deletion at the end of request
+            if (resourceManager != null && !Boolean.TRUE.equals(store)) {
+                resourceManager.addResource(new WPSFileResource(warpedFile));
+            }
 
             // //
             //
@@ -230,8 +230,8 @@ public class GeorectifyCoverage implements GSProcess {
             // //
             reader = new GeoTiffReader(warpedFile);
             GridCoverage2D cov = addLocationProperty(reader.read(null), warpedFile);
-            
-            
+
+
             Map<String, Object> result = new HashMap<String, Object>();
             result.put("result", cov);
             result.put("path", warpedFile.getAbsolutePath());
@@ -252,11 +252,11 @@ public class GeorectifyCoverage implements GSProcess {
     }
 
     GridCoverage2D addLocationProperty(GridCoverage2D coverage, File warpedFile) {
-        Map  properties = new HashMap();
+        Map properties = new HashMap();
         properties.put(GridCoverage2DReader.FILE_SOURCE_PROPERTY, warpedFile.getAbsolutePath());
         properties.putAll(coverage.getProperties());
 
-        return new GridCoverageFactory().create(coverage.getName(), coverage.getRenderedImage(), 
+        return new GridCoverageFactory().create(coverage.getName(), coverage.getRenderedImage(),
                 coverage.getGridGeometry(), coverage.getSampleDimensions(), null, properties);
     }
 
@@ -264,7 +264,7 @@ public class GeorectifyCoverage implements GSProcess {
      * Given a target query and a target grid geometry returns the query to be used to read the
      * input data of the process involved in rendering. This method will be called only if the input
      * data is a feature collection.
-     * 
+     *
      * @param targetQuery
      * @param gridGeometry
      * @return The transformed query, or null if no inversion is possible/meaningful
@@ -277,7 +277,7 @@ public class GeorectifyCoverage implements GSProcess {
      * Given a target query and a target grid geometry returns the grid geometry to be used to read
      * the input data of the process involved in rendering. This method will be called only if the
      * input data is a grid coverage or a grid coverage reader
-     * 
+     *
      * @param targetQuery
      * @param gridGeometry
      * @return The transformed query, or null if no inversion is possible/meaningful
@@ -289,8 +289,8 @@ public class GeorectifyCoverage implements GSProcess {
 
     /**
      * Store a GridCoverage2D and returns the file where the underlying image have been stored.
-     * 
-     * @param coverage a {@link GridCoverage2D} wrapping the image to be stored.
+     *
+     * @param coverage   a {@link GridCoverage2D} wrapping the image to be stored.
      * @param tempFolder
      * @return the {@link File} storing the image.
      * @throws IOException
@@ -302,22 +302,20 @@ public class GeorectifyCoverage implements GSProcess {
     }
 
     /**
-     * 
-     * @param originalFile {@link File} referring the dataset to be warped
+     * @param originalFile   {@link File} referring the dataset to be warped
      * @param targetEnvelope the target envelope
-     * @param width the final image's width
-     * @param height the final image's height
-     * @param targetCrs the target coordinate reference system
+     * @param width          the final image's width
+     * @param height         the final image's height
+     * @param targetCrs      the target coordinate reference system
      * @param order
      * @param tempFolder
      * @param loggingFolder
      * @param timeOut
-     *
      * @throws IOException
      */
     private File warpFile(final File originalFile, final Envelope targetEnvelope, final CoordinateReferenceSystem targetCRS,
-            final Integer width, final Integer height, final Integer order, final File tempFolder,
-            final File loggingFolder, final Long timeOut, final String warpingParameters)
+                          final Integer width, final Integer height, final Integer order, final File tempFolder,
+                          final File loggingFolder, final Long timeOut, final String warpingParameters)
             throws IOException {
         final File file = File.createTempFile("warped", ".tif", tempFolder);
         final String vrtFilePath = originalFile.getAbsolutePath();
@@ -334,22 +332,21 @@ public class GeorectifyCoverage implements GSProcess {
 
     /**
      * A simple utility method setting up the command arguments for gdalWarp
-     * 
-     * @param targetEnvelope the target envelope in the form: xmin ymin xmax ymax
-     * @param width the target image width
-     * @param height the target image height
-     * @param targetCrs the target crs
-     * @param order the warping polynomial order
-     * @param inputFilePath the path of the file referring to the dataset to be warped
-     * @param outputFilePath the path of the file referring to the produced dataset
      *
+     * @param targetEnvelope the target envelope in the form: xmin ymin xmax ymax
+     * @param width          the target image width
+     * @param height         the target image height
+     * @param targetCrs      the target crs
+     * @param order          the warping polynomial order
+     * @param inputFilePath  the path of the file referring to the dataset to be warped
+     * @param outputFilePath the path of the file referring to the produced dataset
      */
     private final static String buildWarpArgument(final String targetEnvelope, final Integer width,
-            final Integer height, final String targetCrs, final Integer order,
-            final String inputFilePath, final String outputFilePath, final String warpingParameters) {
+                                                  final Integer height, final String targetCrs, final Integer order,
+                                                  final String inputFilePath, final String outputFilePath, final String warpingParameters) {
         String imageSize = width != null && height != null ? " -ts " + width + " " + height : "";
-        String te = targetEnvelope != null && targetEnvelope.length() > 0 ? "-te " + targetEnvelope : ""; 
-        return  te + imageSize + " -t_srs " + targetCrs
+        String te = targetEnvelope != null && targetEnvelope.length() > 0 ? "-te " + targetEnvelope : "";
+        return te + imageSize + " -t_srs " + targetCrs
                 + " " + (order != null ? " -order " + order : "") + " " + warpingParameters + " "
                 + inputFilePath + " " + outputFilePath + "";
     }
@@ -380,12 +377,11 @@ public class GeorectifyCoverage implements GSProcess {
 
     /**
      * Parse the bounding box to be used by gdalwarp command
-     * 
-     * @param boundingBox
      *
+     * @param boundingBox
      */
     private static String parseBBox(Envelope re) {
-        if(re == null) {
+        if (re == null) {
             return "";
         } else {
             return re.getMinX() + " " + re.getMinY() + " " + re.getMaxX() + " " + re.getMaxY();
@@ -404,14 +400,14 @@ public class GeorectifyCoverage implements GSProcess {
     /**
      * First processing step which setup a VRT by adding ground control points to the specified
      * input file.
-     * 
+     *
      * @param originalFilePath the path of the file referring to the original image.
-     * @param gcp the Ground Control Points option to be attached to the translating command.
+     * @param gcp              the Ground Control Points option to be attached to the translating command.
      * @return a File containing the translated dataset.
      * @throws IOException
      */
     private File addGroundControlPoints(final String originalFilePath, final String gcp,
-            final String parameters) throws IOException {
+                                        final String parameters) throws IOException {
         final File vrtFile = File.createTempFile("vrt_", ".vrt", config.getTempFolder());
         final String argument = "-of VRT " + parameters + " " + gcp + " " + originalFilePath
                 + " " + vrtFile.getAbsolutePath();
@@ -439,7 +435,7 @@ public class GeorectifyCoverage implements GSProcess {
      * logged error messages (if any).
      */
     private static void executeCommand(final String gdalCommand, final String argument,
-            final File loggingFolder, final Map<String,String> envVars)
+                                       final File loggingFolder, final Map<String, String> envVars)
             throws IOException {
 
         final File logFile = File.createTempFile("LOG", ".log", loggingFolder);
@@ -448,7 +444,7 @@ public class GeorectifyCoverage implements GSProcess {
         List<String> commands = new ArrayList<String>(Arrays.asList(argument.trim().split("\\s+")));
         commands.add(0, gdalCommand);
         ProcessBuilder builder = new ProcessBuilder(commands);
-        if(envVars != null) {
+        if (envVars != null) {
             builder.environment().putAll(envVars);
         } else {
             builder.environment().putAll(System.getenv());
@@ -461,29 +457,27 @@ public class GeorectifyCoverage implements GSProcess {
             log = new FileOutputStream(logFile);
             Process p = builder.start();
             IOUtils.copy(p.getInputStream(), log);
-    
+
             p.waitFor();
             log.flush();
             exitValue = p.exitValue();
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             throw new WPSException("Error launching OS command: " + gdalCommand + " with arguments " + argument + " and env vars " + envVars, e);
-        }
-        finally {
-            if(exitValue != 0) {
+        } finally {
+            if (exitValue != 0) {
                 if (logFile.exists() && logFile.canRead()) {
                     String error = getError(logFile);
                     throw new WPSException("Error launching OS command: '" + gdalCommand + "' with arguments '" + argument + "' and env vars '" + envVars + "': \n" + error);
                 }
             }
-            
+
             if (logFile != null) {
                 logFile.delete();
             }
             IOUtils.closeQuietly(log);
         }
     }
-    
+
     public boolean isAvailable() {
         File tmp = new File(System.getProperty("java.io.tmpdir"));
         try {
@@ -504,7 +498,6 @@ public class GeorectifyCoverage implements GSProcess {
     /**
      * @param gcps
      * @param gcpNum
-     *
      */
     private String parseGcps(String gcps, int[] gcpNum) {
         Matcher gcpMatcher = GCP_PATTERN.matcher(gcps);

@@ -33,7 +33,7 @@ public class JavaScriptPlugin extends ScriptPlugin {
     protected JavaScriptPlugin() {
         super("js", CommonJSEngineFactory.class);
     }
-    
+
     @Override
     public String getId() {
         return "javascript";
@@ -43,7 +43,7 @@ public class JavaScriptPlugin extends ScriptPlugin {
     public String getDisplayName() {
         return "JavaScript";
     }
-    
+
     @Override
     public void init(ScriptManager scriptMgr) throws Exception {
         super.init(scriptMgr);
@@ -51,7 +51,7 @@ public class JavaScriptPlugin extends ScriptPlugin {
         scriptMgr.getEngineManager().registerEngineExtension(
                 "js", new CommonJSEngineFactory(getModulePaths()));
     }
-    
+
     @Override
     public void initScriptEngine(ScriptEngine engine) {
         super.initScriptEngine(engine);
@@ -73,7 +73,7 @@ public class JavaScriptPlugin extends ScriptPlugin {
         } catch (URISyntaxException e) {
             throw new RuntimeException("Trouble evaluating GeoScript module path.", e);
         }
-        
+
         // GeoServer modules
         URL geoserverModuleUrl = getClass().getResource("modules");
         String geoserverModulePath;
@@ -94,17 +94,17 @@ public class JavaScriptPlugin extends ScriptPlugin {
 
         return (List<String>) Arrays.asList(geoscriptModulePath, geoserverModulePath, userModulePath);
     }
-    
+
     @Override
     public WpsHook createWpsHook() {
         return new JavaScriptWpsHook(this);
     }
-    
+
     @Override
     public FunctionHook createFunctionHook() {
         return new JavaScriptFunctionHook(this);
     }
-    
+
     @Override
     public AppHook createAppHook() {
         return new JavaScriptAppHook(this);

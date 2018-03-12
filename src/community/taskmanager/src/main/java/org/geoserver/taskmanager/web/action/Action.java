@@ -8,12 +8,10 @@ import org.geoserver.taskmanager.util.Named;
 import org.geoserver.taskmanager.web.ConfigurationPage;
 
 /**
- * 
  * @author Niels Charlier
- *
  */
 public interface Action extends Named {
-    
+
     void execute(ConfigurationPage onPage, String value);
 
 }

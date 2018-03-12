@@ -17,7 +17,6 @@ import org.opengis.filter.sort.SortOrder;
  * to the CSW one, which is slightly different)
  *
  * @author Justin Deoliveira, The Open Planning Project
- *
  */
 public class SortByKvpParser extends NestedKvpParser {
     FilterFactory filterFactory;

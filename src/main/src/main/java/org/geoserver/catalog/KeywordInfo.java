@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 
 /**
  * A keyword used for service and layer metadata.
- *  
+ *
  * @author Justin Deoliveira, OpenGeo
  */
 public interface KeywordInfo {

@@ -15,16 +15,15 @@ import java.util.Calendar;
 import java.util.List;
 
 /**
- * 
  * wpt represents a waypoint, point of interest, or named feature on a map.
- * 
- * 
+ * <p>
+ * <p>
  * <p>
  * Java class for wptType complex type.
- * 
+ * <p>
  * <p>
  * The following schema fragment specifies the expected content contained within this class.
- * 
+ * <p>
  * <pre>
  * &lt;complexType name="wptType">
  *   &lt;complexContent>
@@ -56,8 +55,6 @@ import java.util.List;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 public class WptType {
     protected double ele = Double.NaN;
@@ -104,7 +101,6 @@ public class WptType {
 
     /**
      * Gets the value of the ele property.
-     * 
      */
     public double getEle() {
         return ele;
@@ -112,7 +108,6 @@ public class WptType {
 
     /**
      * Sets the value of the ele property.
-     * 
      */
     public void setEle(double value) {
         this.ele = value;
@@ -120,7 +115,6 @@ public class WptType {
 
     /**
      * Gets the value of the time property.
-     * 
      */
     public Calendar getTime() {
         return time;
@@ -128,7 +122,6 @@ public class WptType {
 
     /**
      * Sets the value of the time property.
-     * 
      */
     public void setTime(Calendar value) {
         this.time = value;
@@ -136,7 +129,6 @@ public class WptType {
 
     /**
      * Gets the value of the magvar property.
-     * 
      */
     public double getMagvar() {
         return magvar;
@@ -144,7 +136,6 @@ public class WptType {
 
     /**
      * Sets the value of the magvar property.
-     * 
      */
     public void setMagvar(double value) {
         this.magvar = value;
@@ -152,7 +143,6 @@ public class WptType {
 
     /**
      * Gets the value of the geoidheight property.
-     * 
      */
     public double getGeoidheight() {
         return geoidheight;
@@ -160,7 +150,6 @@ public class WptType {
 
     /**
      * Sets the value of the geoidheight property.
-     * 
      */
     public void setGeoidheight(double value) {
         this.geoidheight = value;
@@ -168,7 +157,6 @@ public class WptType {
 
     /**
      * Gets the value of the name property.
-     * 
      */
     public String getName() {
         return name;
@@ -176,7 +164,6 @@ public class WptType {
 
     /**
      * Sets the value of the name property.
-     * 
      */
     public void setName(String value) {
         this.name = value;
@@ -184,7 +171,6 @@ public class WptType {
 
     /**
      * Gets the value of the cmt property.
-     * 
      */
     public String getCmt() {
         return cmt;
@@ -192,7 +178,6 @@ public class WptType {
 
     /**
      * Sets the value of the cmt property.
-     * 
      */
     public void setCmt(String value) {
         this.cmt = value;
@@ -200,7 +185,6 @@ public class WptType {
 
     /**
      * Gets the value of the desc property.
-     * 
      */
     public String getDesc() {
         return desc;
@@ -208,7 +192,6 @@ public class WptType {
 
     /**
      * Sets the value of the desc property.
-     * 
      */
     public void setDesc(String value) {
         this.desc = value;
@@ -216,7 +199,6 @@ public class WptType {
 
     /**
      * Gets the value of the src property.
-     * 
      */
     public String getSrc() {
         return src;
@@ -224,7 +206,6 @@ public class WptType {
 
     /**
      * Sets the value of the src property.
-     * 
      */
     public void setSrc(String value) {
         this.src = value;
@@ -232,23 +213,21 @@ public class WptType {
 
     /**
      * Gets the value of the link property.
-     * 
+     * <p>
      * <p>
      * This accessor method returns a reference to the live list, not a snapshot. Therefore any modification you make to the returned list will be
      * present inside the JAXB object. This is why there is not a <CODE>set</CODE> method for the link property.
-     * 
+     * <p>
      * <p>
      * For example, to add a new item, do as follows:
-     * 
+     * <p>
      * <pre>
      * getLink().add(newItem);
      * </pre>
-     * 
-     * 
+     * <p>
+     * <p>
      * <p>
      * Objects of the following type(s) are allowed in the list {@link LinkType }
-     * 
-     * 
      */
     public List<LinkType> getLink() {
         if (link == null) {
@@ -260,7 +239,6 @@ public class WptType {
 
     /**
      * Gets the value of the sym property.
-     * 
      */
     public String getSym() {
         return sym;
@@ -268,7 +246,6 @@ public class WptType {
 
     /**
      * Sets the value of the sym property.
-     * 
      */
     public void setSym(String value) {
         this.sym = value;
@@ -276,7 +253,6 @@ public class WptType {
 
     /**
      * Gets the value of the type property.
-     * 
      */
     public String getType() {
         return type;
@@ -284,7 +260,6 @@ public class WptType {
 
     /**
      * Sets the value of the type property.
-     * 
      */
     public void setType(String value) {
         this.type = value;
@@ -292,7 +267,6 @@ public class WptType {
 
     /**
      * Gets the value of the fix property.
-     * 
      */
     public String getFix() {
         return fix;
@@ -300,7 +274,6 @@ public class WptType {
 
     /**
      * Sets the value of the fix property.
-     * 
      */
     public void setFix(String value) {
         this.fix = value;
@@ -308,7 +281,6 @@ public class WptType {
 
     /**
      * Gets the value of the sat property.
-     * 
      */
     public int getSat() {
         return sat;
@@ -316,7 +288,6 @@ public class WptType {
 
     /**
      * Sets the value of the sat property.
-     * 
      */
     public void setSat(int value) {
         this.sat = value;
@@ -324,7 +295,6 @@ public class WptType {
 
     /**
      * Gets the value of the hdop property.
-     * 
      */
     public double getHdop() {
         return hdop;
@@ -332,7 +302,6 @@ public class WptType {
 
     /**
      * Sets the value of the hdop property.
-     * 
      */
     public void setHdop(double value) {
         this.hdop = value;
@@ -340,7 +309,6 @@ public class WptType {
 
     /**
      * Gets the value of the vdop property.
-     * 
      */
     public double getVdop() {
         return vdop;
@@ -348,7 +316,6 @@ public class WptType {
 
     /**
      * Sets the value of the vdop property.
-     * 
      */
     public void setVdop(double value) {
         this.vdop = value;
@@ -356,7 +323,6 @@ public class WptType {
 
     /**
      * Gets the value of the pdop property.
-     * 
      */
     public double getPdop() {
         return pdop;
@@ -364,7 +330,6 @@ public class WptType {
 
     /**
      * Sets the value of the pdop property.
-     * 
      */
     public void setPdop(double value) {
         this.pdop = value;
@@ -372,7 +337,6 @@ public class WptType {
 
     /**
      * Gets the value of the ageofdgpsdata property.
-     * 
      */
     public double getAgeofdgpsdata() {
         return ageofdgpsdata;
@@ -380,7 +344,6 @@ public class WptType {
 
     /**
      * Sets the value of the ageofdgpsdata property.
-     * 
      */
     public void setAgeofdgpsdata(double value) {
         this.ageofdgpsdata = value;
@@ -388,7 +351,6 @@ public class WptType {
 
     /**
      * Gets the value of the dgpsid property.
-     * 
      */
     public int getDgpsid() {
         return dgpsid;
@@ -396,7 +358,6 @@ public class WptType {
 
     /**
      * Sets the value of the dgpsid property.
-     * 
      */
     public void setDgpsid(int value) {
         this.dgpsid = value;
@@ -404,7 +365,6 @@ public class WptType {
 
     /**
      * Gets the value of the extensions property.
-     * 
      */
     public ExtensionsType getExtensions() {
         return extensions;
@@ -412,7 +372,6 @@ public class WptType {
 
     /**
      * Sets the value of the extensions property.
-     * 
      */
     public void setExtensions(ExtensionsType value) {
         this.extensions = value;
@@ -420,7 +379,6 @@ public class WptType {
 
     /**
      * Gets the value of the lat property.
-     * 
      */
     public double getLat() {
         return lat;
@@ -428,7 +386,6 @@ public class WptType {
 
     /**
      * Sets the value of the lat property.
-     * 
      */
     public void setLat(double value) {
         this.lat = value;
@@ -436,7 +393,6 @@ public class WptType {
 
     /**
      * Gets the value of the lon property.
-     * 
      */
     public double getLon() {
         return lon;
@@ -444,7 +400,6 @@ public class WptType {
 
     /**
      * Sets the value of the lon property.
-     * 
      */
     public void setLon(double value) {
         this.lon = value;

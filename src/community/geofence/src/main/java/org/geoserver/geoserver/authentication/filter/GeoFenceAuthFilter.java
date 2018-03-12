@@ -51,7 +51,6 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationEn
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 /**
- *
  * @author ETj (etj at geo-solutions.it)
  */
 public class GeoFenceAuthFilter
@@ -184,7 +183,7 @@ public class GeoFenceAuthFilter
 
     /**
      * Reads username and password from Basic auth headers.
-     * 
+     *
      * @return a BasicUser instance, or null if no basic auth detected.
      */
     private BasicUser getBasicAuth(ServletRequest request) {

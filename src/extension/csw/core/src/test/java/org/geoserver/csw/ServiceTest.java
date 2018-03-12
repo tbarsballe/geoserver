@@ -11,8 +11,8 @@ import org.geotools.util.Version;
 import org.junit.Test;
 
 /**
- * Checks the service is registered and reachable 
- * 
+ * Checks the service is registered and reachable
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class ServiceTest extends CSWSimpleTestSupport {

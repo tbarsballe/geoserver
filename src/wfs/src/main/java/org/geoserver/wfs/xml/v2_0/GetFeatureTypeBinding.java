@@ -7,6 +7,7 @@ package org.geoserver.wfs.xml.v2_0;
 
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.namespace.QName;
+
 import net.opengis.wfs20.Wfs20Factory;
 import org.geoserver.wfs.xml.SqlViewParamsExtractor;
 import org.geotools.xml.ElementInstance;

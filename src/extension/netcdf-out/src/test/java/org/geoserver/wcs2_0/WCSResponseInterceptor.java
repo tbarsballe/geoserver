@@ -26,21 +26,21 @@ public final class WCSResponseInterceptor extends BaseCoverageResponseDelegate i
 
     public WCSResponseInterceptor(GeoServer geoserver) {
         super(geoserver, Arrays.asList("MyOutput"), new HashMap<String, String>() { // file
-                    // extensions
-                    {
-                        put(MIME_TYPE, "zip");
-                    }
-                }, new HashMap<String, String>() { // mime types
-                    {
-                        put("MyOutput", MIME_TYPE);
+            // extensions
+            {
+                put(MIME_TYPE, "zip");
+            }
+        }, new HashMap<String, String>() { // mime types
+            {
+                put("MyOutput", MIME_TYPE);
 
-                    }
-                });
+            }
+        });
     }
 
     @Override
     public void encode(GridCoverage2D coverage, String outputFormat,
-            Map<String, String> econdingParameters, OutputStream output) throws ServiceException,
+                       Map<String, String> econdingParameters, OutputStream output) throws ServiceException,
             IOException {
         this.result = coverage;
     }

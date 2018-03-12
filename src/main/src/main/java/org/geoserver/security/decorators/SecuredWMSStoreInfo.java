@@ -28,7 +28,7 @@ public class SecuredWMSStoreInfo extends DecoratingWMSStoreInfo {
         WebMapServer wms = super.getWebMapServer(null);
         if (wms == null)
             return null;
-        else if(policy.level == AccessLevel.METADATA)
+        else if (policy.level == AccessLevel.METADATA)
             throw SecureCatalogImpl.unauthorizedAccess(this.getName());
         else
             return (WebMapServer) SecuredObjects.secure(wms, policy);

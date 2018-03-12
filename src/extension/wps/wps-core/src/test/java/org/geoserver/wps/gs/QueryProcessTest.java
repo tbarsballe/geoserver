@@ -21,7 +21,7 @@ import org.junit.Test;
 import org.w3c.dom.Document;
 
 public class QueryProcessTest extends WPSTestSupport {
-    
+
     @Override
     protected void registerNamespaces(Map<String, String> namespaces) {
         namespaces.put("feature", SystemTestData.BUILDINGS.getNamespaceURI());
@@ -112,7 +112,7 @@ public class QueryProcessTest extends WPSTestSupport {
         assertXpathEvaluatesTo("1", "count(" + base + "/feature:FID)", d);
         assertXpathEvaluatesTo("1", "count(" + base + "/feature:ADDRESS)", d);
     }
-    
+
     @Test
     public void testFilterOGC() throws Exception {
         String request = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
@@ -167,7 +167,7 @@ public class QueryProcessTest extends WPSTestSupport {
         assertXpathEvaluatesTo("1", "count(" + base + "/feature:ADDRESS)", d);
     }
 
-    
+
     @Test
     public void testFilterOGCCData() throws Exception {
         String request = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
@@ -274,6 +274,6 @@ public class QueryProcessTest extends WPSTestSupport {
         assertXpathEvaluatesTo("1", "count(" + base + "/feature:FID)", d);
         assertXpathEvaluatesTo("1", "count(" + base + "/feature:ADDRESS)", d);
     }
-    
-    
+
+
 }

@@ -26,12 +26,14 @@ import org.geoserver.platform.resource.Files;
  */
 @SuppressWarnings("serial")
 public class FileExistsValidator implements IValidator<String> {
-    
+
     private UrlValidator delegate;
-    
-    /** Optional base directory for use during testing */
+
+    /**
+     * Optional base directory for use during testing
+     */
     File baseDirectory = null;
-    
+
     /**
      * Checks the file exists on the local file system
      */
@@ -41,15 +43,16 @@ public class FileExistsValidator implements IValidator<String> {
 
     /**
      * If <code>allowRemoveUrl</code> is true this validator allows the file to be either
-     * local (no URI scheme, or file URI scheme) or a remote 
+     * local (no URI scheme, or file URI scheme) or a remote
+     *
      * @param allowRemoteUrl
      */
     public FileExistsValidator(boolean allowRemoteUrl) {
-        if(allowRemoteUrl) {
+        if (allowRemoteUrl) {
             this.delegate = new UrlValidator();
-        } 
+        }
     }
-    
+
     @Override
     public void validate(IValidatable<String> validatable) {
         String uriSpec = validatable.getValue();
@@ -57,15 +60,15 @@ public class FileExistsValidator implements IValidator<String> {
         // Make sure we are dealing with a local path
         try {
             URI uri = new URI(uriSpec);
-            if(uri.getScheme() != null && !"file".equals(uri.getScheme())) {
-                if(delegate != null) {
+            if (uri.getScheme() != null && !"file".equals(uri.getScheme())) {
+                if (delegate != null) {
                     delegate.validate(validatable);
                     InputStream is = null;
                     try {
                         URLConnection connection = uri.toURL().openConnection();
                         connection.setConnectTimeout(10000);
                         is = connection.getInputStream();
-                    } catch(Exception e) {
+                    } catch (Exception e) {
                         IValidationError err = new ValidationError("FileExistsValidator.unreachable")
                                 .addKey("FileExistsValidator.unreachable")
                                 .setVariable("file", uriSpec);
@@ -78,22 +81,21 @@ public class FileExistsValidator implements IValidator<String> {
             } else {
                 // ok, strip away the scheme and just get to the path
                 String path = uri.getPath();
-                if(path != null && new File(path).exists()) {
+                if (path != null && new File(path).exists()) {
                     return;
                 }
             }
-        } catch(URISyntaxException e) {
+        } catch (URISyntaxException e) {
             // may be a windows path, move on
         }
 
         File relFile = null;
 
         GeoServerResourceLoader loader = GeoServerExtensions.bean(GeoServerResourceLoader.class);
-        if (baseDirectory != null ){
+        if (baseDirectory != null) {
             // local to provided baseDirectory
             relFile = Files.url(baseDirectory, uriSpec);
-        }
-        else if( loader != null ){
+        } else if (loader != null) {
             // local to data directory?
             relFile = loader.url(uriSpec);
         }

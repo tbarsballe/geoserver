@@ -12,13 +12,13 @@ import org.springframework.security.core.Authentication;
 
 /**
  * Shows the tools link only if there is at least one tool around
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class EmptyPageLinksAuthorizer extends DefaultPageAuthorizer {
-    
+
     List<Class> linkClasses = Collections.emptyList();
-    
+
     public List<Class> getLinkClasses() {
         return linkClasses;
     }
@@ -38,7 +38,7 @@ public class EmptyPageLinksAuthorizer extends DefaultPageAuthorizer {
         // hide the page if there is demo around
         GeoServerApplication app = GeoServerApplication.get();
         for (Class<?> linkClass : linkClasses) {
-            if(app.getBeansOfType(linkClass).size() > 0) {
+            if (app.getBeansOfType(linkClass).size() > 0) {
                 return true;
             }
         }

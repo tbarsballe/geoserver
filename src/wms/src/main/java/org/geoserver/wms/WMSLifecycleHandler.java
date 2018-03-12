@@ -28,7 +28,7 @@ import java.util.logging.Logger;
 
 /**
  * Drops imaging caches
- * 
+ *
  * @author Andrea Aime - OpenGeo
  */
 public class WMSLifecycleHandler implements GeoServerLifecycleHandler, ApplicationListener {
@@ -69,7 +69,7 @@ public class WMSLifecycleHandler implements GeoServerLifecycleHandler, Applicati
 
         // reloads the font cache
         reloadFontCache();
-        
+
         // reset WMS Animator Executor Service
         resetAnimatorExecutorService();
     }
@@ -81,10 +81,10 @@ public class WMSLifecycleHandler implements GeoServerLifecycleHandler, Applicati
     private void resetAnimatorExecutorService() {
         shutdownAnimatorExecutorService();
 
-        Long framesTimeout = this.wmsConfig.getMaxAnimatorRenderingTime() != null ? 
+        Long framesTimeout = this.wmsConfig.getMaxAnimatorRenderingTime() != null ?
                 this.wmsConfig.getMaxAnimatorRenderingTime() : Long.MAX_VALUE;
-        ExecutorService animatorExecutorService = 
-            new ThreadPoolExecutor(4, 20, framesTimeout, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>());
+        ExecutorService animatorExecutorService =
+                new ThreadPoolExecutor(4, 20, framesTimeout, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>());
 
         this.wmsConfig.setAnimatorExecutorService(animatorExecutorService);
     }
@@ -130,7 +130,7 @@ public class WMSLifecycleHandler implements GeoServerLifecycleHandler, Applicati
     public void onApplicationEvent(ApplicationEvent event) {
         if (event instanceof ContextRefreshedEvent) {
             reloadFontCache();
-            
+
             // reset WMS Animator Executor Service
             resetAnimatorExecutorService();
         }

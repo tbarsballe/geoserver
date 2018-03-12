@@ -24,7 +24,7 @@ import java.util.stream.Stream;
  * utility to match file paths in said roots
  */
 public class FileRootsFinder implements Serializable {
-    
+
     /**
      * Utility so split and rebuild paths accounting for ResourceStore little own illusion
      * of working on a *nix file system regardless of the actual file system
@@ -35,12 +35,12 @@ public class FileRootsFinder implements Serializable {
         boolean dataDirectoryPath;
         String base;
         String name;
-        
+
         public PathSplitter(String input, boolean dataDirectoryPath) {
             // decide which separator to use based on data dir vs actual file system
             this.separator = dataDirectoryPath ? "/" : File.separator;
             this.dataDirectoryPath = dataDirectoryPath;
-            
+
             // remove protocol part if needed (we have messy inputs stored that do not always start with
             // file:// but sometimes with file:/ and sometimes with file: (no / at all)
             if (input.startsWith("file:")) {
@@ -67,17 +67,17 @@ public class FileRootsFinder implements Serializable {
 
             // fix base in case of data dir
             if (dataDirectoryPath) {
-               base = Paths.convert(base); 
+                base = Paths.convert(base);
             }
         }
-        
+
         private String buildPath(String name) {
             // Data dir relative path weirdness, the protocol has to be 
             // file:/ instead of file:// or it won't work. 
             String prefix = dataDirectoryPath ? "file:" : "file://";
             // make data dir relative paths actually relative despite user's input
             String localBase = base;
-            if(dataDirectoryPath && localBase.startsWith(separator)) {
+            if (dataDirectoryPath && localBase.startsWith(separator)) {
                 localBase = base.substring(1);
             }
             if (localBase.endsWith(separator)) {
@@ -95,7 +95,7 @@ public class FileRootsFinder implements Serializable {
     public FileRootsFinder(boolean includeDataDir) {
         this(GeoServerFileChooser.HIDE_FS, includeDataDir);
     }
-    
+
     public FileRootsFinder(boolean hideFileSystem, boolean includeDataDir) {
         // build the roots
         roots = new ArrayList<File>();
@@ -113,7 +113,7 @@ public class FileRootsFinder implements Serializable {
         }
 
         // add the home directory as well if it was possible to determine it at all
-        if(!hideFileSystem && GeoServerFileChooser.USER_HOME != null) {
+        if (!hideFileSystem && GeoServerFileChooser.USER_HOME != null) {
             roots.add(1, GeoServerFileChooser.USER_HOME);
         }
     }
@@ -134,8 +134,8 @@ public class FileRootsFinder implements Serializable {
      * Support method for autocomplete text boxes, given a input and an optional file filter returns an
      * a {@link Stream} containing the actual paths matching the provided input (any file/directory starting with the same
      * path as the input and containing the file name in a case insensitive way)
-     * 
-     * @param input A partial path, can be a single name or a full path (can be relative, will be matched against the data directory) 
+     *
+     * @param input      A partial path, can be a single name or a full path (can be relative, will be matched against the data directory)
      * @param fileFilter An optional file filter to filter the returned files. The file filter should accept directories.
      * @return
      */
@@ -176,5 +176,5 @@ public class FileRootsFinder implements Serializable {
         return result.sorted();
     }
 
-    
+
 }

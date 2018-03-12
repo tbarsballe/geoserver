@@ -268,7 +268,7 @@ public class GeogigLayerIntegrationListener implements CatalogListener {
         Catalog catalog = geoserver.getCatalog();
         catalog.save(geogigLayer);
         LOGGER.log(Level.INFO, "Updated geogig auth identifier for layer {0} as {1}",
-                new Object[] { geogigLayer.prefixedName(), newIdentifier });
+                new Object[]{geogigLayer.prefixedName(), newIdentifier});
     }
 
     private String buildLayerIdentifier(LayerInfo geogigLayer) {

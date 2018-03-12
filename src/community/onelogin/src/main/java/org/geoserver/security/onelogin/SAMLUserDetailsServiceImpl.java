@@ -33,7 +33,7 @@ import org.springframework.util.StringUtils;
 
 /**
  * Assigns {@link GeoServerRole} to user after successful authentication
- * 
+ *
  * @author Xandros
  */
 
@@ -92,11 +92,10 @@ public class SAMLUserDetailsServiceImpl implements SAMLUserDetailsService {
 
     /**
      * Calculates roles from a {@link GeoServerRoleService} The default service is {@link GeoServerSecurityManager#getActiveRoleService()}
-     * 
+     * <p>
      * The result contains all inherited roles, but no personalized roles
-     * 
-     * @param principal
      *
+     * @param principal
      * @throws IOException
      */
     protected Collection<GeoServerRole> getRolesFromRoleService(String principal)
@@ -112,9 +111,8 @@ public class SAMLUserDetailsServiceImpl implements SAMLUserDetailsService {
 
     /**
      * Calculates roles using a {@link GeoServerUserGroupService} if the principal is not found, an empty collection is returned
-     * 
-     * @param principal
      *
+     * @param principal
      * @throws IOException
      */
     protected Collection<GeoServerRole> getRolesFromUserGroupService(String principal)
@@ -140,11 +138,10 @@ public class SAMLUserDetailsServiceImpl implements SAMLUserDetailsService {
 
     /**
      * Calculates roles using the String found in the http header attribute if no role string is found, anempty collection is returned
-     * 
+     * <p>
      * The result contains personalized roles
-     * 
-     * @param principal
      *
+     * @param principal
      * @throws IOException
      */
     protected Collection<GeoServerRole> getRolesFromHttpAttribute(String principal)

@@ -28,16 +28,15 @@ import org.geoserver.web.GeoServerApplication;
 /**
  * New page for specific class of named security service.
  * <p>
- *  Most of the work is delegated to {@link SecurityNamedServicePanelInfo} and
- *   {@link SecurityNamedServicePanel}.
+ * Most of the work is delegated to {@link SecurityNamedServicePanelInfo} and
+ * {@link SecurityNamedServicePanel}.
  * </p>
  *
  * @author Justin Deoliveira, OpenGeo
- *
  */
 public class SecurityNamedServiceNewPage
-    <S extends GeoServerSecurityService, T extends SecurityNamedServiceConfig>
-    extends SecurityNamedServicePage<T> {
+        <S extends GeoServerSecurityService, T extends SecurityNamedServiceConfig>
+        extends SecurityNamedServicePage<T> {
 
     Form form;
     WebMarkupContainer panelContainer;
@@ -51,22 +50,22 @@ public class SecurityNamedServiceNewPage
         List<SecurityNamedServicePanelInfo> panelInfos = lookupPanelInfos(serviceClass);
 
         AjaxLinkGroup<SecurityNamedServicePanelInfo> serviceLinks =
-            new AjaxLinkGroup<SecurityNamedServicePanelInfo>("services", panelInfos) {
+                new AjaxLinkGroup<SecurityNamedServicePanelInfo>("services", panelInfos) {
 
-                @Override
-                protected void populateItem(ListItem<SecurityNamedServicePanelInfo> item) {
-                    SecurityNamedServicePanelInfo panelInfo = item.getModelObject();
-                    item.add(newLink("link", item.getModel()).add(
-                        new Label("title", createShortTitleModel(panelInfo))).setEnabled(item.getIndex() > 0));
-                    item.add(new Label("description", createDescriptionModel(panelInfo)));
-                }
+                    @Override
+                    protected void populateItem(ListItem<SecurityNamedServicePanelInfo> item) {
+                        SecurityNamedServicePanelInfo panelInfo = item.getModelObject();
+                        item.add(newLink("link", item.getModel()).add(
+                                new Label("title", createShortTitleModel(panelInfo))).setEnabled(item.getIndex() > 0));
+                        item.add(new Label("description", createDescriptionModel(panelInfo)));
+                    }
 
-                @Override
-                protected void onClick(AjaxLink<SecurityNamedServicePanelInfo> link,
-                        AjaxRequestTarget target) {
-                    updatePanel(link.getModelObject(), target);
-                }
-        };
+                    @Override
+                    protected void onClick(AjaxLink<SecurityNamedServicePanelInfo> link,
+                                           AjaxRequestTarget target) {
+                        updatePanel(link.getModelObject(), target);
+                    }
+                };
 
         add(new WebMarkupContainer("servicesContainer").add(serviceLinks).setOutputMarkupId(true));
 
@@ -96,10 +95,10 @@ public class SecurityNamedServiceNewPage
         //create a new config object
         T config = null;
         try {
-             config = (T) panelInfo.getServiceConfigClass().newInstance();
+            config = (T) panelInfo.getServiceConfigClass().newInstance();
         } catch (Exception e) {
             throw new WicketRuntimeException(
-                "Unable to create config class: " + panelInfo.getServiceConfigClass(), e);
+                    "Unable to create config class: " + panelInfo.getServiceConfigClass(), e);
         }
 
         config.setClassName(panelInfo.getServiceClass().getCanonicalName());
@@ -125,7 +124,7 @@ public class SecurityNamedServiceNewPage
 
         List<SecurityNamedServicePanelInfo> panelInfos = new ArrayList();
         for (SecurityNamedServicePanelInfo pageInfo :
-            GeoServerApplication.get().getBeansOfType(SecurityNamedServicePanelInfo.class)) {
+                GeoServerApplication.get().getBeansOfType(SecurityNamedServicePanelInfo.class)) {
             if (serviceClass.isAssignableFrom(pageInfo.getServiceClass())) {
                 panelInfos.add(pageInfo);
             }

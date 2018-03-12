@@ -19,7 +19,7 @@ import org.geotools.util.logging.Logging;
 
 /**
  * Cleans up the temporary storage directory for WPS, as well as the storage process statuses
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class WPSStorageCleaner extends TimerTask {
@@ -58,8 +58,6 @@ public class WPSStorageCleaner extends TimerTask {
     /**
      * The file expiration delay in milliseconds. A file will be deleted when it's been around more
      * than expirationDelay
-     * 
-     *
      */
     public long getExpirationDelay() {
         return expirationDelay;
@@ -67,7 +65,7 @@ public class WPSStorageCleaner extends TimerTask {
 
     /**
      * Sets the temp file expiration delay
-     * 
+     *
      * @param expirationDelay
      */
     public void setExpirationDelay(long expirationDelay) {

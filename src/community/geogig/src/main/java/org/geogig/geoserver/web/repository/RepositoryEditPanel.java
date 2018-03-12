@@ -29,7 +29,7 @@ public class RepositoryEditPanel extends FormComponentPanel<RepositoryInfo> {
     private final GeoGigRepositoryInfoFormComponent config;
 
     public RepositoryEditPanel(final String wicketId, IModel<RepositoryInfo> model,
-            final boolean isNew) {
+                               final boolean isNew) {
         super(wicketId, model);
 
         config = new GeoGigRepositoryInfoFormComponent("repositoryConfig", model, isNew);

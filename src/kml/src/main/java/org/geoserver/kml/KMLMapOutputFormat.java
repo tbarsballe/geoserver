@@ -24,11 +24,13 @@ import de.micromata.opengis.kml.v_2_2_0.Kml;
 
 /**
  * Handles a GetMap request that spects a map in KML format.
- * 
+ *
  * @author James Macgill
  */
 public class KMLMapOutputFormat implements GetMapOutputFormat {
-    /** standard logger */
+    /**
+     * standard logger
+     */
     protected static final Logger LOGGER = Logging.getLogger(KMLMapOutputFormat.class);
 
     static final MapProducerCapabilities KML_CAPABILITIES = new MapProducerCapabilities(false,
@@ -38,7 +40,7 @@ public class KMLMapOutputFormat implements GetMapOutputFormat {
      * Official KML mime type
      */
     public static final String MIME_TYPE = "application/vnd.google-earth.kml+xml";
-    
+
     /**
      * Format tweaked to force the generation of per layer network links
      */
@@ -49,7 +51,7 @@ public class KMLMapOutputFormat implements GetMapOutputFormat {
                     "application/vnd.google-earth.kml xml")));
 
     private WMS wms;
-    
+
     StreamingKMLBuilder builder = new StreamingKMLBuilder();
 
     public KMLMapOutputFormat(WMS wms) {
@@ -73,10 +75,9 @@ public class KMLMapOutputFormat implements GetMapOutputFormat {
 
     /**
      * Produce the actual map ready for output.
-     * 
+     *
      * @param map WMSMapContext describing what layers, styles, area of interest etc are to be used
-     *        when producing the map.
-     * 
+     *            when producing the map.
      * @see GetMapOutputFormat#produceMap(WMSMapContent)
      */
     public KMLMap produceMap(WMSMapContent mapContent) throws ServiceException, IOException {

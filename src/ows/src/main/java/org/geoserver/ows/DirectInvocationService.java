@@ -27,19 +27,16 @@ public interface DirectInvocationService {
 
     /**
      * Provides a more direct way of invoking a service operation than using reflection.
-     * 
-     * @param operationName
-     *            the name of the operation to execute, as declared in the
-     *            {@link Service#getOperations() service operations} for the service descriptor that
-     *            targets this service object.
-     * @param parameters
-     *            the list of parameters for the actual operation, as if the actual method were
-     *            invoked through {@link Method#invoke(Object, Object...)}
+     *
+     * @param operationName the name of the operation to execute, as declared in the
+     *                      {@link Service#getOperations() service operations} for the service descriptor that
+     *                      targets this service object.
+     * @param parameters    the list of parameters for the actual operation, as if the actual method were
+     *                      invoked through {@link Method#invoke(Object, Object...)}
      * @return the operation result
-     * @throws IllegalArgumentException
-     *             if either the operation name or arguments list doesn't match one of the service
-     *             provided operations
-     *             under any other circumstances, specific to the operation being executed
+     * @throws IllegalArgumentException if either the operation name or arguments list doesn't match one of the service
+     *                                  provided operations
+     *                                  under any other circumstances, specific to the operation being executed
      */
     Object invokeDirect(String operationName, Object[] parameters) throws IllegalArgumentException,
             Exception;

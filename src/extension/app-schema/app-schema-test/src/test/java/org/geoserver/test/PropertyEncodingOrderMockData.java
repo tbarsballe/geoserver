@@ -7,7 +7,6 @@ package org.geoserver.test;
 
 /**
  * @author Xiangtan Lin, CSIRO Information Management and Technology
- * 
  */
 public class PropertyEncodingOrderMockData extends AbstractAppSchemaMockData {
 

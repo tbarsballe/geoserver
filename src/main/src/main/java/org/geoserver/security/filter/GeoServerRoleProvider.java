@@ -12,7 +12,7 @@ import org.geoserver.security.config.SecurityNamedServiceConfig;
 
 /**
  * Security provider for {@link GeoServerRoleFilter}
- * 
+ *
  * @author mcr
  */
 public class GeoServerRoleProvider extends AbstractFilterProvider {

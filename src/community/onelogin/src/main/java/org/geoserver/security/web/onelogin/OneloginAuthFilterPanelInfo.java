@@ -9,9 +9,8 @@ import org.geoserver.security.onelogin.OneloginAuthenticationFilterConfig;
 import org.geoserver.security.web.auth.AuthenticationFilterPanelInfo;
 
 /**
- * 
  * Configuration panel extension for {@link OneloginAuthFilterPanel}.
- * 
+ *
  * @author Xandros
  */
 public class OneloginAuthFilterPanelInfo extends

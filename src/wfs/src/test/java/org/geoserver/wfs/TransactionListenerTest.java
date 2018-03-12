@@ -23,20 +23,19 @@ import org.w3c.dom.Document;
 /**
  * This test must be run with the server configured with the wfs 1.0 cite
  * configuration, with data initialized.
- * 
+ *
  * @author Justin Deoliveira, The Open Planning Project
- * 
  */
 public class TransactionListenerTest extends WFSTestSupport {
-    
+
     TransactionListenerTester listener;
 
     @Override
-    protected void setUpSpring(List<String> springContextLocations) {    	
+    protected void setUpSpring(List<String> springContextLocations) {
         super.setUpSpring(springContextLocations);
         springContextLocations.add("classpath:/org/geoserver/wfs/TransactionListenerTestContext.xml");
     }
-        
+
     @Before
     public void clearState() throws Exception {
         listener = (TransactionListenerTester) applicationContext.getBean("transactionListenerTester");
@@ -88,14 +87,14 @@ public class TransactionListenerTest extends WFSTestSupport {
 
         postAsDOM("wfs", insert);
         assertEquals(2, listener.events.size());
-        
+
         TransactionEvent firstEvent = (TransactionEvent) listener.events.get(0);
         assertTrue(firstEvent.getSource() instanceof InsertElementType);
         assertEquals(TransactionEventType.PRE_INSERT, firstEvent.getType());
         assertEquals(CiteTestData.LINES, firstEvent.getLayerName());
         // one feature from the pre-insert hook, one from the post-insert hook
         assertEquals(2, listener.features.size());
-        
+
         // what was the fid of the inserted feature?
         String getFeature = "<wfs:GetFeature " + "service=\"WFS\" "
                 + "version=\"1.0.0\" "
@@ -145,14 +144,14 @@ public class TransactionListenerTest extends WFSTestSupport {
         assertEquals(CiteTestData.POLYGONS, firstEvent.getLayerName());
         Feature updatedBefore = (Feature) listener.features.get(0);
         assertEquals("t0002", updatedBefore.getProperty("id").getValue());
-        
+
         TransactionEvent secondEvent = (TransactionEvent) listener.events.get(1);
         assertTrue(secondEvent.getSource() instanceof UpdateElementType);
         assertEquals(TransactionEventType.POST_UPDATE, secondEvent.getType());
         assertEquals(CiteTestData.POLYGONS, secondEvent.getLayerName());
         Feature updatedAfter = (Feature) listener.features.get(1);
         assertEquals("t0003", updatedAfter.getProperty("id").getValue());
-        
+
         assertEquals(2, listener.features.size());
     }
 }

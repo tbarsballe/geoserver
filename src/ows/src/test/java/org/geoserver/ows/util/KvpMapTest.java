@@ -10,14 +10,14 @@ import static org.junit.Assert.assertEquals;
 
 public class KvpMapTest {
 
-  @Test
-  public void testCaseInsensitive() {
-    KvpMap map = new KvpMap();
-    map.put("foo", "bar");
+    @Test
+    public void testCaseInsensitive() {
+        KvpMap map = new KvpMap();
+        map.put("foo", "bar");
 
-    assertEquals("bar", map.get("FOO"));
-    assertEquals("bar", map.get("foo"));
-    assertEquals("bar", map.getOrDefault("foo", null));
-    assertEquals("bar", map.getOrDefault("FOO", null));
-  }
+        assertEquals("bar", map.get("FOO"));
+        assertEquals("bar", map.get("foo"));
+        assertEquals("bar", map.getOrDefault("foo", null));
+        assertEquals("bar", map.getOrDefault("FOO", null));
+    }
 }

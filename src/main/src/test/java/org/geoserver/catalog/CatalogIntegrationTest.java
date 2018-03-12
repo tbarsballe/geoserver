@@ -47,22 +47,22 @@ import org.opengis.referencing.NoSuchAuthorityCodeException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 @Category(SystemTest.class)
-@TestSetup(run=TestSetupFrequency.REPEAT)
+@TestSetup(run = TestSetupFrequency.REPEAT)
 public class CatalogIntegrationTest extends GeoServerSystemTestSupport {
-    
+
     @Override
     protected void setUpTestData(SystemTestData testData) throws Exception {
         super.setUpTestData(testData);
         testData.setUpDefaultRasterLayers();
-        
+
         GeoServerExtensions extension = GeoServerExtensions.bean(GeoServerExtensions.class);
-        if( extension == null ){
-            GeoServerExtensionsHelper.init( this.applicationContext );
+        if (extension == null) {
+            GeoServerExtensionsHelper.init(this.applicationContext);
         }
-        
+
         File root = testData.getDataDirectoryRoot();
         File defaultWorkspace = new File(root, "workspaces/default.xml");
-        if(defaultWorkspace.exists()) {
+        if (defaultWorkspace.exists()) {
             defaultWorkspace.delete();
         }
     }
@@ -73,7 +73,7 @@ public class CatalogIntegrationTest extends GeoServerSystemTestSupport {
         testData.addStyle("multiStyleGroup", "multiStyleGroup.sld", CatalogIntegrationTest.class, getCatalog());
         testData.addStyle("recursiveStyleGroup", "recursiveStyleGroup.sld", CatalogIntegrationTest.class, getCatalog());
     }
-    
+
     @Test
     public void testWorkspaceRemoveAndReadd() {
         // remove all workspaces
@@ -87,17 +87,17 @@ public class CatalogIntegrationTest extends GeoServerSystemTestSupport {
         }
         assertEquals(0, catalog.getWorkspaces().size());
         assertEquals(0, catalog.getNamespaces().size());
-        
+
         // add back one (this would NPE)
         catalog.add(defaultNamespace);
         catalog.add(defaultWs);
         assertEquals(1, catalog.getWorkspaces().size());
         assertEquals(1, catalog.getNamespaces().size());
-        
+
         // get back by name (this would NPE too)
         assertNotNull(catalog.getNamespaceByURI(defaultNamespace.getURI()));
     }
-    
+
     /**
      * Checks that the namespace/workspace listener keeps on working after
      * a catalog reload
@@ -105,78 +105,78 @@ public class CatalogIntegrationTest extends GeoServerSystemTestSupport {
     @Test
     public void testNamespaceWorkspaceListenerAttached() throws Exception {
         Catalog catalog = getCatalog();
-        
+
         NamespaceInfo ns = catalog.getNamespaceByPrefix(MockData.CITE_PREFIX);
         String newName = "XYWZ1234";
         ns.setPrefix(newName);
         catalog.save(ns);
         assertNotNull(catalog.getWorkspaceByName(newName));
         assertNotNull(catalog.getNamespaceByPrefix(newName));
-        
+
         // force a reload
         int listenersBefore = catalog.getListeners().size();
         getGeoServer().reload();
         int listenersAfter = catalog.getListeners().size();
         assertEquals(listenersBefore, listenersAfter);
-        
+
         // check the NamespaceWorkspaceListener is still attached and working
         ns = catalog.getNamespaceByPrefix(newName);
         ns.setPrefix(MockData.CITE_PREFIX);
         catalog.save(ns);
         assertNotNull(catalog.getWorkspaceByName(MockData.CITE_PREFIX));
-        
+
         // make sure we only have one resource pool listener and one catalog persister
         int countCleaner = 0;
         int countPersister = 0;
         for (CatalogListener listener : catalog.getListeners()) {
-            if(listener instanceof ResourcePool.CacheClearingListener) {
+            if (listener instanceof ResourcePool.CacheClearingListener) {
                 countCleaner++;
-            } else if(listener instanceof GeoServerPersister) {
+            } else if (listener instanceof GeoServerPersister) {
                 countPersister++;
             }
         }
         assertEquals(1, countCleaner);
         assertEquals(1, countPersister);
     }
-    
+
     @Test
     public void modificationProxySerializeTest() throws Exception {
         Catalog catalog = getCatalog();
-        
+
         // workspace
         WorkspaceInfo ws = catalog.getWorkspaceByName(MockData.CITE_PREFIX);
         WorkspaceInfo ws2 = serialize(ws);
         assertSame(ModificationProxy.unwrap(ws), ModificationProxy.unwrap(ws2));
-        
+
         // namespace
         NamespaceInfo ns = catalog.getNamespaceByPrefix(MockData.CITE_PREFIX);
         NamespaceInfo ns2 = serialize(ns);
         assertSame(ModificationProxy.unwrap(ns), ModificationProxy.unwrap(ns2));
-        
+
         // data store and related objects
         DataStoreInfo ds = catalog.getDataStoreByName(MockData.CITE_PREFIX);
         DataStoreInfo ds2 = serialize(ds);
         assertSame(ModificationProxy.unwrap(ds), ModificationProxy.unwrap(ds2));
         assertSame(ModificationProxy.unwrap(ds.getWorkspace()), ModificationProxy.unwrap(ds2.getWorkspace()));
-        
+
         // coverage store and related objects
         CoverageStoreInfo cs = catalog.getCoverageStoreByName(MockData.TASMANIA_DEM.getLocalPart());
         CoverageStoreInfo cs2 = serialize(cs);
         assertSame(ModificationProxy.unwrap(cs), ModificationProxy.unwrap(cs2));
         assertSame(ModificationProxy.unwrap(cs.getWorkspace()), ModificationProxy.unwrap(cs2.getWorkspace()));
-        
+
         // feature type and related objects
         FeatureTypeInfo ft = catalog.getFeatureTypeByName(getLayerId(MockData.BRIDGES));
         FeatureTypeInfo ft2 = serialize(ft);
         assertSame(ModificationProxy.unwrap(ft), ModificationProxy.unwrap(ft2));
         assertSame(ModificationProxy.unwrap(ft.getStore()), ModificationProxy.unwrap(ft2.getStore()));
-        
+
         // coverage and related objects
         CoverageInfo ci = catalog.getCoverageByName(getLayerId(MockData.TASMANIA_DEM));
         CoverageInfo ci2 = serialize(ci);
         assertSame(ModificationProxy.unwrap(ci), ModificationProxy.unwrap(ci2));
         assertSame(ModificationProxy.unwrap(ci.getStore()), ModificationProxy.unwrap(ci.getStore()));
-        
+
         // style
         StyleInfo streamsStyle = catalog.getStyleByName("Streams");
         StyleInfo si2 = serialize(streamsStyle);
@@ -185,7 +185,7 @@ public class CatalogIntegrationTest extends GeoServerSystemTestSupport {
         // layer and related objects
         LayerInfo li = catalog.getLayerByName(getLayerId(MockData.BRIDGES));
         // ... let's add an extra style
-        
+
         li.getStyles().add(streamsStyle);
         catalog.save(li);
         LayerInfo li2 = serialize(li);
@@ -193,7 +193,7 @@ public class CatalogIntegrationTest extends GeoServerSystemTestSupport {
         assertSame(ModificationProxy.unwrap(li.getResource()), ModificationProxy.unwrap(li2.getResource()));
         assertSame(ModificationProxy.unwrap(li.getDefaultStyle()), ModificationProxy.unwrap(li2.getDefaultStyle()));
         assertSame(ModificationProxy.unwrap(li.getStyles().iterator().next()), ModificationProxy.unwrap(li2.getStyles().iterator().next()));
-        
+
         // try a group layer
         CatalogBuilder cb = new CatalogBuilder(catalog);
         LayerGroupInfo lg = catalog.getFactory().createLayerGroup();
@@ -213,7 +213,7 @@ public class CatalogIntegrationTest extends GeoServerSystemTestSupport {
         assertSame(ModificationProxy.unwrap(lg), ModificationProxy.unwrap(lg2));
         assertSame(ModificationProxy.unwrap(lg.getLayers().get(0)), ModificationProxy.unwrap(lg2.getLayers().get(0)));
         assertSame(ModificationProxy.unwrap(lg.getLayers().get(1)), ModificationProxy.unwrap(lg2.getLayers().get(1)));
-        
+
         // now check a half modified proxy
         LayerInfo lim = catalog.getLayerByName(getLayerId(MockData.BRIDGES));
         // ... let's add an extra style
@@ -223,21 +223,20 @@ public class CatalogIntegrationTest extends GeoServerSystemTestSupport {
         LayerInfo lim2 = serialize(lim);
         assertSame(ModificationProxy.unwrap(lim.getDefaultStyle()), ModificationProxy.unwrap(lim2.getDefaultStyle()));
         assertSame(ModificationProxy.unwrap(lim.getStyles().iterator().next()), ModificationProxy.unwrap(lim2.getStyles().iterator().next()));
-        
+
         // mess a bit with the metadata map too
         String key = "workspaceKey";
         lim.getMetadata().put(key, ws);
         LayerInfo lim3 = serialize(lim);
         assertSame(ModificationProxy.unwrap(lim), ModificationProxy.unwrap(lim3));
-        assertSame(ModificationProxy.unwrap(lim.getMetadata().get(key)), 
+        assertSame(ModificationProxy.unwrap(lim.getMetadata().get(key)),
                 ModificationProxy.unwrap(lim3.getMetadata().get(key)));
     }
-    
+
     /**
      * Serializes and de-serializes the provided object
-     * 
-     * @param object
      *
+     * @param object
      * @throws IOException
      * @throws ClassNotFoundException
      */
@@ -249,7 +248,7 @@ public class CatalogIntegrationTest extends GeoServerSystemTestSupport {
         ByteArrayInputStream bis = new ByteArrayInputStream(bos.toByteArray());
         ObjectInputStream ois = new ObjectInputStream(bis);
         return (T) ois.readObject();
-        
+
     }
 
     @Test
@@ -293,31 +292,31 @@ public class CatalogIntegrationTest extends GeoServerSystemTestSupport {
         assertNull(catalog.getStyleByName(style.getName()));
         assertNull(catalog.getLayerGroupByName(lg.getName()));
     }
-    
+
     @Test
-    public void testReprojectLayerGroup() 
+    public void testReprojectLayerGroup()
             throws NoSuchAuthorityCodeException, FactoryException, Exception {
-        
+
         Catalog catalog = getCatalog();
-        
+
         CatalogBuilder cb = new CatalogBuilder(catalog);
         LayerGroupInfo lg = catalog.getFactory().createLayerGroup();
         LayerInfo l = catalog.getLayerByName(getLayerId(MockData.ROAD_SEGMENTS));
         lg.getLayers().add(l);
         lg.getStyles().add(null);
         lg.setName("test-reproject");
-        
+
         // EPSG:4901 "equivalent" but different uom
         String wkt = "GEOGCS[\"GCS_ATF_Paris\",DATUM[\"D_ATF\",SPHEROID[\"Plessis_1817\",6376523.0,308.64]],PRIMEM[\"Paris\",2.337229166666667],UNIT[\"Grad\",0.01570796326794897]]";
         CoordinateReferenceSystem lCrs = CRS.parseWKT(wkt);
-        ((FeatureTypeInfo)l.getResource()).setSRS(null);
-        ((FeatureTypeInfo)l.getResource()).setNativeCRS(lCrs);
+        ((FeatureTypeInfo) l.getResource()).setSRS(null);
+        ((FeatureTypeInfo) l.getResource()).setNativeCRS(lCrs);
         assertNull(CRS.lookupEpsgCode(lCrs, false));
-        
+
         // Use the real thing now
-        CoordinateReferenceSystem lgCrs = CRS.decode("EPSG:4901"); 
+        CoordinateReferenceSystem lgCrs = CRS.decode("EPSG:4901");
         assertNotNull(CRS.lookupEpsgCode(lgCrs, false));
-        
+
         //Reproject our layer group to EPSG:4901. We expect it to have an EPSG code.
         cb.calculateLayerGroupBounds(lg, lgCrs);
         assertNotNull(CRS.lookupEpsgCode(lg.getBounds().getCoordinateReferenceSystem(), false));
@@ -436,14 +435,14 @@ public class CatalogIntegrationTest extends GeoServerSystemTestSupport {
         assertEquals(catalog.getLayerByName((getLayerId(MockData.PONDS))), layers.get(3));
         assertEquals(catalog.getLayerByName((getLayerId(MockData.BUILDINGS))), layers.get(4));
         //user layer (inline feature) with user style -> 1 layer
-        SimpleFeature inlineFeature = (SimpleFeature) ((FeatureTypeInfo)layers.get(5).getResource()).getFeatureSource(null, null).getFeatures().features().next();
+        SimpleFeature inlineFeature = (SimpleFeature) ((FeatureTypeInfo) layers.get(5).getResource()).getFeatureSource(null, null).getFeatures().features().next();
         assertTrue(inlineFeature.getDefaultGeometry() instanceof Point);
-        assertEquals("POINT (115.741666667 -64.6583333333)", ((Point)inlineFeature.getDefaultGeometry()).toText());
+        assertEquals("POINT (115.741666667 -64.6583333333)", ((Point) inlineFeature.getDefaultGeometry()).toText());
         assertTrue(styles.get(5).getStyle().featureTypeStyles().get(0).rules().get(0).getSymbolizers()[0] instanceof PointSymbolizer);
 
         //Test bounds calculation
         new LayerGroupHelper(lg).calculateBounds();
-        assertEquals(new ReferencedEnvelope(-180,180,-90,90, DefaultGeographicCRS.WGS84), lg.getBounds());
+        assertEquals(new ReferencedEnvelope(-180, 180, -90, 90, DefaultGeographicCRS.WGS84), lg.getBounds());
     }
 
     @Test

@@ -19,7 +19,9 @@ import org.geoserver.web.util.MetadataMapModel;
  */
 public class NetCDFOutTabPanel extends PublishedEditTabPanel<LayerInfo> {
 
-    /** serialVersionUID */
+    /**
+     * serialVersionUID
+     */
     private static final long serialVersionUID = 1L;
 
     public NetCDFOutTabPanel(String id, IModel<LayerInfo> model, IModel<CoverageInfo> resourceModel) {
@@ -27,7 +29,7 @@ public class NetCDFOutTabPanel extends PublishedEditTabPanel<LayerInfo> {
 
         // Selection of the IModel associated to the metadata map
         final PropertyModel<MetadataMap> metadata = new PropertyModel<MetadataMap>(
-                    resourceModel, "metadata");
+                resourceModel, "metadata");
         // Selection of the CoverageInfo model
         IModel<CoverageInfo> cmodel = null;
         if (resourceModel.getObject() instanceof CoverageInfo) {
@@ -37,10 +39,10 @@ public class NetCDFOutTabPanel extends PublishedEditTabPanel<LayerInfo> {
 
         // Getting the NetcdfSettingsContainer model from MetadataMap
         IModel<NetCDFLayerSettingsContainer> netcdfModel = new MetadataMapModel<NetCDFLayerSettingsContainer>(metadata,
-                    NetCDFSettingsContainer.NETCDFOUT_KEY, NetCDFLayerSettingsContainer.class);
-        NetCDFOutSettingsEditor editor = new NetCDFOutSettingsEditor("netcdfeditor",    
-                    netcdfModel, cmodel);
+                NetCDFSettingsContainer.NETCDFOUT_KEY, NetCDFLayerSettingsContainer.class);
+        NetCDFOutSettingsEditor editor = new NetCDFOutSettingsEditor("netcdfeditor",
+                netcdfModel, cmodel);
         add(editor);
-        
+
     }
 }

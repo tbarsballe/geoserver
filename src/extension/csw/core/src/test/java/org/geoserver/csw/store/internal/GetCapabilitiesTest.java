@@ -66,7 +66,7 @@ public class GetCapabilitiesTest extends CSWInternalTestSupport {
                 "1",
                 "count(//ows:Operation[@name='GetRecords']/ows:Constraint[@name='SupportedDublinCoreQueryables' and ows:Value = 'csw:AnyText'])",
                 dom);
-        
+
         // check we have BoundingBox among the queriables
         assertXpathEvaluatesTo(
                 "1",
@@ -78,7 +78,7 @@ public class GetCapabilitiesTest extends CSWInternalTestSupport {
                 "1",
                 "count(//ows:Operation[@name='GetDomain']/ows:Parameter[@name='PropertyName' and ows:Value = 'dc:title'])",
                 dom);
-        
+
         // check we have Abstract among the domain property names
         assertXpathEvaluatesTo(
                 "1",

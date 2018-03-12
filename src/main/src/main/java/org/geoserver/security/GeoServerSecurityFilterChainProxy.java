@@ -40,19 +40,19 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
 public class GeoServerSecurityFilterChainProxy implements SecurityManagerListener, ApplicationContextAware, InitializingBean, Filter {
-    
+
     static Logger LOGGER = Logging.getLogger("org.geoserver.security");
 
     static ThreadLocal<HttpServletRequest> REQUEST = new ThreadLocal<HttpServletRequest>();
-    
+
     /**
      * Request header attribute indicating if the request was running through
      * a Geoserver security filter chain. The default is <code>false</code>.
-     * 
+     * <p>
      * The mandatory {@link GeoServerSecurityContextPersistenceFilter} object
      * sets this attribute to <code>true</code>
      */
-    public final static String SECURITY_ENABLED_ATTRIBUTE="org.geoserver.security.enabled";
+    public final static String SECURITY_ENABLED_ATTRIBUTE = "org.geoserver.security.enabled";
 
     private boolean chainsInitialized;
 
@@ -64,12 +64,12 @@ public class GeoServerSecurityFilterChainProxy implements SecurityManagerListene
     //app context
     ApplicationContext appContext;
 
-    
+
     public GeoServerSecurityFilterChainProxy(GeoServerSecurityManager securityManager) {
         this.securityManager = securityManager;
         this.securityManager.addListener(this);
-        chainsInitialized=false;
-       
+        chainsInitialized = false;
+
     }
     
 /*    
@@ -103,23 +103,21 @@ public class GeoServerSecurityFilterChainProxy implements SecurityManagerListene
 
         return filterChain;
     }
-*/   
-    
+*/
+
     /**
      * Returns <code>true</code> if the current {@link HttpServletRequest}
-     * has traveled through a security filter chain. 
-     * 
-     *
+     * has traveled through a security filter chain.
      */
     static public boolean isSecurityEnabledForCurrentRequest() {
-        
-        if (REQUEST.get()==null) {
+
+        if (REQUEST.get() == null) {
             return true;
         }
-        
+
         if (Boolean.TRUE.equals(REQUEST.get().getAttribute(SECURITY_ENABLED_ATTRIBUTE)))
-                return true;
-        
+            return true;
+
         return false;
     }
 
@@ -132,8 +130,7 @@ public class GeoServerSecurityFilterChainProxy implements SecurityManagerListene
     public void init(FilterConfig filterConfig) throws ServletException {
         if (proxy != null) {
             proxy.init(filterConfig);
-        }
-        else {
+        } else {
             // FilterChainProxy doesn't to anything in it's init() method so i believe it's ok
             // if it doesn't get called
             LOGGER.warning("init() called but proxy not yet configured");
@@ -143,15 +140,14 @@ public class GeoServerSecurityFilterChainProxy implements SecurityManagerListene
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
-        
+
         // assume security is disabled
         request.setAttribute(SECURITY_ENABLED_ATTRIBUTE, Boolean.FALSE);
         //set the request thread local
         REQUEST.set((HttpServletRequest) request);
         try {
             proxy.doFilter(request, response, chain);
-        }
-        finally {
+        } finally {
             REQUEST.remove();
         }
     }
@@ -163,7 +159,9 @@ public class GeoServerSecurityFilterChainProxy implements SecurityManagerListene
 
     public void afterPropertiesSet() {
         createFilterChain();
-    };
+    }
+
+    ;
 
     void createFilterChain() {
 
@@ -172,8 +170,8 @@ public class GeoServerSecurityFilterChainProxy implements SecurityManagerListene
             return;
         }
 
-        SecurityManagerConfig config = securityManager.getSecurityConfig(); 
-        GeoServerSecurityFilterChain filterChain = 
+        SecurityManagerConfig config = securityManager.getSecurityConfig();
+        GeoServerSecurityFilterChain filterChain =
                 new GeoServerSecurityFilterChain(config.getFilterChain());
 
         // similar to the list of authentication providers
@@ -191,12 +189,11 @@ public class GeoServerSecurityFilterChainProxy implements SecurityManagerListene
                 try {
                     Filter filter = lookupFilter(filterName);
                     if (filter == null) {
-                        throw new NullPointerException("No filter named " + filterName +" could " +
-                            "be found");
+                        throw new NullPointerException("No filter named " + filterName + " could " +
+                                "be found");
                     }
                     filters.add(filter);
-                }
-                catch(Exception ex) {
+                } catch (Exception ex) {
                     LOGGER.log(Level.SEVERE, "Error loading filter: " + filterName, ex);
                 }
             }
@@ -207,7 +204,7 @@ public class GeoServerSecurityFilterChainProxy implements SecurityManagerListene
             // first, call destroy of all current filters        
             if (chainsInitialized) {
                 for (SecurityFilterChain chain : proxy.getFilterChains()) {
-                    for (Filter filter: chain.getFilters()) {
+                    for (Filter filter : chain.getFilters()) {
                         filter.destroy();
                     }
                 }
@@ -217,45 +214,44 @@ public class GeoServerSecurityFilterChainProxy implements SecurityManagerListene
 
             proxy = new FilterChainProxy(filterChains);
             proxy.afterPropertiesSet();
-            chainsInitialized=true;
+            chainsInitialized = true;
         }
     }
 
     /**
-     * Creates a {@link GeoServerRequestMatcher} object for 
+     * Creates a {@link GeoServerRequestMatcher} object for
      * the specified {@link RequestFilterChain}
-     * 
-     * @param chain
      *
+     * @param chain
      */
     public GeoServerRequestMatcher matcherForChain(RequestFilterChain chain) {
-        
+
         Set<HTTPMethod> methods = chain.getHttpMethods();
-        if (chain.isMatchHTTPMethod()==false)
-            methods=null;
-        
-        List<String> tmp =chain.getPatterns();
-        
-        if (tmp==null)
-            return new GeoServerRequestMatcher(methods, (RequestMatcher[])null);
-        
+        if (chain.isMatchHTTPMethod() == false)
+            methods = null;
+
+        List<String> tmp = chain.getPatterns();
+
+        if (tmp == null)
+            return new GeoServerRequestMatcher(methods, (RequestMatcher[]) null);
+
         // resolve multiple patterns separated by a comma
-        List<String> patterns=new ArrayList<String>();
+        List<String> patterns = new ArrayList<String>();
         for (String pattern : tmp) {
             String[] array = pattern.split(",");
             for (String singlePattern : array)
                 patterns.add(singlePattern);
         }
-        
-        RequestMatcher[] matchers=new RequestMatcher[patterns.size()];
-        for (int i = 0;i<matchers.length;i++) {
+
+        RequestMatcher[] matchers = new RequestMatcher[patterns.size()];
+        for (int i = 0; i < matchers.length; i++) {
             matchers[i] = new IncludeQueryStringAntPathRequestMatcher(patterns.get(i));
         }
-        return new GeoServerRequestMatcher(methods,matchers); 
+        return new GeoServerRequestMatcher(methods, matchers);
     }
-    
+
     /**
-     * looks up a named filter  
+     * looks up a named filter
      */
     public Filter lookupFilter(String filterName) throws IOException {
         Filter filter = securityManager.loadFilter(filterName);
@@ -266,7 +262,7 @@ public class GeoServerSecurityFilterChainProxy implements SecurityManagerListene
                     filter = (Filter) obj;
                 }
             } catch (NoSuchBeanDefinitionException ex) {
-                  // do nothing
+                // do nothing
             }
         }
         return filter;
@@ -279,7 +275,7 @@ public class GeoServerSecurityFilterChainProxy implements SecurityManagerListene
         //do some cleanup
         securityManager.removeListener(this);
     }
-    
+
     public List<SecurityFilterChain> getFilterChains() {
         return proxy.getFilterChains();
     }

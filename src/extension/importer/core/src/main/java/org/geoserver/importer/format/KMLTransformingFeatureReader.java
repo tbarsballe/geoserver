@@ -27,7 +27,7 @@ public class KMLTransformingFeatureReader implements
     }
 
     public KMLTransformingFeatureReader(SimpleFeatureType featureType,
-            FeatureReader<SimpleFeatureType, SimpleFeature> reader) {
+                                        FeatureReader<SimpleFeatureType, SimpleFeature> reader) {
         this.featureType = featureType;
         this.reader = reader;
     }

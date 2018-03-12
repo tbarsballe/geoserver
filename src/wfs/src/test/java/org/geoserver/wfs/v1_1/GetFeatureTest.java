@@ -52,9 +52,9 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 public class GetFeatureTest extends WFSTestSupport {
-    
+
     XmlTestUtil xmlUtil;
-    
+
     @Before
     public void setupXmlUtil() {
         xmlUtil = new XmlTestUtil();
@@ -62,30 +62,30 @@ public class GetFeatureTest extends WFSTestSupport {
         xmlUtil.addNamespace("sf", "http://cite.opengeospatial.org/gmlsf");
         //xmlUtil.setShowXML(System.out); // Uncomment to display XML on failure
     }
-    
+
     @Override
     protected void setUpInternal(SystemTestData data) throws Exception {
-    	data.addVectorLayer ( new QName( SystemTestData.SF_URI, "WithGMLProperties", SystemTestData.SF_PREFIX ), 
-    			Collections.EMPTY_MAP, getClass(), getCatalog());
+        data.addVectorLayer(new QName(SystemTestData.SF_URI, "WithGMLProperties", SystemTestData.SF_PREFIX),
+                Collections.EMPTY_MAP, getClass(), getCatalog());
     }
 
     @Test
     public void testGet() throws Exception {
-    	testGetFifteenAll("wfs?request=GetFeature&typename=cdf:Fifteen&version=1.1.0&service=wfs");
+        testGetFifteenAll("wfs?request=GetFeature&typename=cdf:Fifteen&version=1.1.0&service=wfs");
     }
-    
+
     @Test
     public void testGetPropertyNameEmpty() throws Exception {
-    	testGetFifteenAll("wfs?request=GetFeature&typename=cdf:Fifteen&version=1.1.0&service=wfs&propertyname=");
+        testGetFifteenAll("wfs?request=GetFeature&typename=cdf:Fifteen&version=1.1.0&service=wfs&propertyname=");
     }
-    
+
     @Test
     public void testGetPropertyNameStar() throws Exception {
         testGetFifteenAll("wfs?request=GetFeature&typename=cdf:Fifteen&version=1.1.0&service=wfs&propertyname=*");
     }
-    
-    private void testGetFifteenAll(String request) throws Exception{
-    	Document doc = getAsDOM(request);
+
+    private void testGetFifteenAll(String request) throws Exception {
+        Document doc = getAsDOM(request);
         assertEquals("wfs:FeatureCollection", doc.getDocumentElement()
                 .getNodeName());
 
@@ -122,7 +122,7 @@ public class GetFeatureTest extends WFSTestSupport {
         XMLAssert.assertXpathEvaluatesTo("NamedPlaces.1107531895891",
                 "//wfs:FeatureCollection/gml:featureMembers/cite:NamedPlaces/@gml:id", doc);
     }
-    
+
     @Test
     public void testGetWithTwoFeatureId() throws Exception {
 
@@ -169,25 +169,25 @@ public class GetFeatureTest extends WFSTestSupport {
         String xml =
                 "<soap:Envelope xmlns:soap='http://www.w3.org/2003/05/soap-envelope'> " +
                         " <soap:Header/> " +
-                        " <soap:Body>" 
-                + "<wfs:GetFeature " + "service=\"WFS\" "
-                + "version=\"1.1.0\" "
-                + "xmlns:cdf=\"http://www.opengis.net/cite/data\" "
-                + "xmlns:ogc=\"http://www.opengis.net/ogc\" "
-                + "xmlns:wfs=\"http://www.opengis.net/wfs\" " + "> "
-                + "<wfs:Query typeName=\"cdf:Other\"> "
-                + "<wfs:PropertyName>cdf:string2</wfs:PropertyName> "
-                + "</wfs:Query> " 
-                + "</wfs:GetFeature>"
-                + "</soap:Body>" 
-                + "</soap:Envelope>";
+                        " <soap:Body>"
+                        + "<wfs:GetFeature " + "service=\"WFS\" "
+                        + "version=\"1.1.0\" "
+                        + "xmlns:cdf=\"http://www.opengis.net/cite/data\" "
+                        + "xmlns:ogc=\"http://www.opengis.net/ogc\" "
+                        + "xmlns:wfs=\"http://www.opengis.net/wfs\" " + "> "
+                        + "<wfs:Query typeName=\"cdf:Other\"> "
+                        + "<wfs:PropertyName>cdf:string2</wfs:PropertyName> "
+                        + "</wfs:Query> "
+                        + "</wfs:GetFeature>"
+                        + "</soap:Body>"
+                        + "</soap:Envelope>";
 
         MockHttpServletResponse response = postAsServletResponse("wfs", xml, "application/soap+xml");
         assertEquals("application/soap+xml", response.getContentType());
-        
+
         Document doc = dom(new ByteArrayInputStream(response.getContentAsByteArray()));
         print(doc);
-        
+
         assertXpathExists("/soap12:Envelope", doc);
         assertXpathExists("/soap12:Envelope/soap12:Body/wfs:FeatureCollection", doc);
         assertXpathEvaluatesTo("1", "count(/soap12:Envelope/soap12:Body/wfs:FeatureCollection/gml:featureMembers/cdf:Other)", doc);
@@ -235,13 +235,13 @@ public class GetFeatureTest extends WFSTestSupport {
             assertTrue(feature.hasAttribute("gml:id"));
         }
     }
-    
+
     @Test
     public void testPostWithBboxFilter() throws Exception {
         String xml = "<wfs:GetFeature " + "service=\"WFS\" "
                 + "version=\"1.1.0\" "
                 + "outputFormat=\"text/xml; subtype=gml/3.1.1\" "
-                + "xmlns:gml=\"http://www.opengis.net/gml\" " 
+                + "xmlns:gml=\"http://www.opengis.net/gml\" "
                 + "xmlns:sf=\"http://cite.opengeospatial.org/gmlsf\" "
                 + "xmlns:wfs=\"http://www.opengis.net/wfs\" "
                 + "xmlns:ogc=\"http://www.opengis.net/ogc\" > "
@@ -257,7 +257,7 @@ public class GetFeatureTest extends WFSTestSupport {
                 + "</ogc:Filter>"
                 + "</wfs:Query>"
                 + "</wfs:GetFeature>";
-        
+
         Document doc = postAsDOM("wfs", xml);
         assertEquals("wfs:FeatureCollection", doc.getDocumentElement()
                 .getNodeName());
@@ -265,56 +265,56 @@ public class GetFeatureTest extends WFSTestSupport {
         NodeList features = doc.getElementsByTagName("sf:PrimitiveGeoFeature");
         assertEquals(1, features.getLength());
     }
-    
+
     @Test
     public void testPostWithFailingUrnBboxFilter() throws Exception {
         String xml = "<wfs:GetFeature " + "service=\"WFS\" "
-            + "version=\"1.1.0\" "
-            + "outputFormat=\"text/xml; subtype=gml/3.1.1\" "
-            + "xmlns:gml=\"http://www.opengis.net/gml\" " 
-            + "xmlns:sf=\"http://cite.opengeospatial.org/gmlsf\" "
-            + "xmlns:wfs=\"http://www.opengis.net/wfs\" "
-            + "xmlns:ogc=\"http://www.opengis.net/ogc\" > "
-            + "<wfs:Query typeName=\"sf:PrimitiveGeoFeature\">"
-            + "<ogc:Filter>"
-            + "<ogc:BBOX>"
-            + "   <ogc:PropertyName>pointProperty</ogc:PropertyName>"
-            + "   <gml:Envelope srsName=\"urn:x-ogc:def:crs:EPSG:6.11.2:4326\">"
-            + "      <gml:lowerCorner>57.0 -4.5</gml:lowerCorner>"
-            + "      <gml:upperCorner>62.0 1.0</gml:upperCorner>"
-            + "   </gml:Envelope>"
-            + "</ogc:BBOX>"
-            + "</ogc:Filter>"
-            + "</wfs:Query>"
-            + "</wfs:GetFeature>";
+                + "version=\"1.1.0\" "
+                + "outputFormat=\"text/xml; subtype=gml/3.1.1\" "
+                + "xmlns:gml=\"http://www.opengis.net/gml\" "
+                + "xmlns:sf=\"http://cite.opengeospatial.org/gmlsf\" "
+                + "xmlns:wfs=\"http://www.opengis.net/wfs\" "
+                + "xmlns:ogc=\"http://www.opengis.net/ogc\" > "
+                + "<wfs:Query typeName=\"sf:PrimitiveGeoFeature\">"
+                + "<ogc:Filter>"
+                + "<ogc:BBOX>"
+                + "   <ogc:PropertyName>pointProperty</ogc:PropertyName>"
+                + "   <gml:Envelope srsName=\"urn:x-ogc:def:crs:EPSG:6.11.2:4326\">"
+                + "      <gml:lowerCorner>57.0 -4.5</gml:lowerCorner>"
+                + "      <gml:upperCorner>62.0 1.0</gml:upperCorner>"
+                + "   </gml:Envelope>"
+                + "</ogc:BBOX>"
+                + "</ogc:Filter>"
+                + "</wfs:Query>"
+                + "</wfs:GetFeature>";
 
         Document doc = postAsDOM("wfs", xml);
         assertEquals("wfs:FeatureCollection", doc.getDocumentElement().getNodeName());
         NodeList features = doc.getElementsByTagName("sf:PrimitiveGeoFeature");
         assertEquals(0, features.getLength());
     }
-    
+
     @Test
     public void testPostWithMatchingUrnBboxFilter() throws Exception {
         String xml = "<wfs:GetFeature " + "service=\"WFS\" "
-            + "version=\"1.1.0\" "
-            + "outputFormat=\"text/xml; subtype=gml/3.1.1\" "
-            + "xmlns:gml=\"http://www.opengis.net/gml\" " 
-            + "xmlns:sf=\"http://cite.opengeospatial.org/gmlsf\" "
-            + "xmlns:wfs=\"http://www.opengis.net/wfs\" "
-            + "xmlns:ogc=\"http://www.opengis.net/ogc\" > "
-            + "<wfs:Query typeName=\"sf:PrimitiveGeoFeature\">"
-            + "<ogc:Filter>"
-            + "<ogc:BBOX>"
-            + "   <ogc:PropertyName>pointProperty</ogc:PropertyName>"
-            + "   <gml:Envelope srsName=\"urn:x-ogc:def:crs:EPSG:6.11.2:4326\">"
-            + "      <gml:lowerCorner>-4.5 57.0</gml:lowerCorner>"
-            + "      <gml:upperCorner>1.0 62.0</gml:upperCorner>"
-            + "   </gml:Envelope>"
-            + "</ogc:BBOX>"
-            + "</ogc:Filter>"
-            + "</wfs:Query>"
-            + "</wfs:GetFeature>";
+                + "version=\"1.1.0\" "
+                + "outputFormat=\"text/xml; subtype=gml/3.1.1\" "
+                + "xmlns:gml=\"http://www.opengis.net/gml\" "
+                + "xmlns:sf=\"http://cite.opengeospatial.org/gmlsf\" "
+                + "xmlns:wfs=\"http://www.opengis.net/wfs\" "
+                + "xmlns:ogc=\"http://www.opengis.net/ogc\" > "
+                + "<wfs:Query typeName=\"sf:PrimitiveGeoFeature\">"
+                + "<ogc:Filter>"
+                + "<ogc:BBOX>"
+                + "   <ogc:PropertyName>pointProperty</ogc:PropertyName>"
+                + "   <gml:Envelope srsName=\"urn:x-ogc:def:crs:EPSG:6.11.2:4326\">"
+                + "      <gml:lowerCorner>-4.5 57.0</gml:lowerCorner>"
+                + "      <gml:upperCorner>1.0 62.0</gml:upperCorner>"
+                + "   </gml:Envelope>"
+                + "</ogc:BBOX>"
+                + "</ogc:Filter>"
+                + "</wfs:Query>"
+                + "</wfs:GetFeature>";
 
         Document doc = postAsDOM("wfs", xml);
         assertThat(doc, xmlUtil.hasNode("wfs:FeatureCollection"));
@@ -416,16 +416,16 @@ public class GetFeatureTest extends WFSTestSupport {
         assertEquals(1, dom.getElementsByTagName("cdf:Seven")
                 .getLength());
     }
-    
+
     @Test
     public void testPostWithBoundsEnabled() throws Exception {
         // enable feature bounds computation
         WFSInfo wfs = getWFS();
         boolean oldFeatureBounding = wfs.isFeatureBounding();
         wfs.setFeatureBounding(true);
-        getGeoServer().save( wfs );
-        
-        
+        getGeoServer().save(wfs);
+
+
         try {
             String xml = "<wfs:GetFeature " + "service=\"WFS\" "
                     + "version=\"1.1.0\" "
@@ -435,14 +435,14 @@ public class GetFeatureTest extends WFSTestSupport {
                     + "<wfs:Query typeName=\"cdf:Other\"> "
                     + "<wfs:PropertyName>cdf:string2</wfs:PropertyName> "
                     + "</wfs:Query> " + "</wfs:GetFeature>";
-    
+
             Document doc = postAsDOM("wfs", xml);
             assertEquals("wfs:FeatureCollection", doc.getDocumentElement()
                     .getNodeName());
-    
+
             NodeList features = doc.getElementsByTagName("cdf:Other");
             assertFalse(features.getLength() == 0);
-    
+
             for (int i = 0; i < features.getLength(); i++) {
                 Element feature = (Element) features.item(i);
                 assertTrue(feature.hasAttribute("gml:id"));
@@ -456,99 +456,99 @@ public class GetFeatureTest extends WFSTestSupport {
             }
         } finally {
             wfs.setFeatureBounding(oldFeatureBounding);
-            getGeoServer().save( wfs );
+            getGeoServer().save(wfs);
         }
     }
 
     @Test
     public void testAfterFeatureTypeAdded() throws Exception {
-        Document dom = getAsDOM( "wfs?request=getfeature&service=wfs&version=1.1.0&typename=sf:new");
-        assertEquals( "ExceptionReport", dom.getDocumentElement().getLocalName() );
-        
-        getTestData().addVectorLayer ( new QName( SystemTestData.SF_URI, "new", SystemTestData.SF_PREFIX ), 
-    			Collections.EMPTY_MAP, getClass(), getCatalog());
-        
+        Document dom = getAsDOM("wfs?request=getfeature&service=wfs&version=1.1.0&typename=sf:new");
+        assertEquals("ExceptionReport", dom.getDocumentElement().getLocalName());
+
+        getTestData().addVectorLayer(new QName(SystemTestData.SF_URI, "new", SystemTestData.SF_PREFIX),
+                Collections.EMPTY_MAP, getClass(), getCatalog());
+
         //reloadCatalogAndConfiguration();
-        
-        dom = getAsDOM( "wfs?request=getfeature&service=wfs&version=1.1.0&typename=sf:new");
-        assertEquals( "FeatureCollection", dom.getDocumentElement().getLocalName() );
+
+        dom = getAsDOM("wfs?request=getfeature&service=wfs&version=1.1.0&typename=sf:new");
+        assertEquals("FeatureCollection", dom.getDocumentElement().getLocalName());
     }
-    
+
     @Test
     public void testWithGMLProperties() throws Exception {
-        Document dom = getAsDOM( "wfs?request=getfeature&service=wfs&version=1.1.0&typename=sf:WithGMLProperties");
-        
-        assertEquals( "FeatureCollection", dom.getDocumentElement().getLocalName() );
-        
+        Document dom = getAsDOM("wfs?request=getfeature&service=wfs&version=1.1.0&typename=sf:WithGMLProperties");
+
+        assertEquals("FeatureCollection", dom.getDocumentElement().getLocalName());
+
         NodeList features = dom.getElementsByTagName("sf:WithGMLProperties");
-        assertEquals( 1, features.getLength() );
-        
-        for ( int i = 0; i < features.getLength(); i++ ) {
-            Element feature = (Element) features.item( i );
-            assertEquals( "one", getFirstElementByTagName( feature, "gml:name").getFirstChild().getNodeValue() );
-            assertEquals( "1", getFirstElementByTagName( feature, "sf:foo").getFirstChild().getNodeValue());
-            
-            Element location = getFirstElementByTagName( feature, "gml:location" );
-            assertNotNull( getFirstElementByTagName( location, "gml:Point" ) );
+        assertEquals(1, features.getLength());
+
+        for (int i = 0; i < features.getLength(); i++) {
+            Element feature = (Element) features.item(i);
+            assertEquals("one", getFirstElementByTagName(feature, "gml:name").getFirstChild().getNodeValue());
+            assertEquals("1", getFirstElementByTagName(feature, "sf:foo").getFirstChild().getNodeValue());
+
+            Element location = getFirstElementByTagName(feature, "gml:location");
+            assertNotNull(getFirstElementByTagName(location, "gml:Point"));
         }
     }
- 
+
     @Test
     public void testLayerQualified() throws Exception {
         testGetFifteenAll("cdf/Fifteen/wfs?request=GetFeature&typename=cdf:Fifteen&version=1.1.0&service=wfs");
-        
+
         Document dom = getAsDOM("cdf/Seven/wfs?request=GetFeature&typename=cdf:Fifteen&version=1.1.0&service=wfs");
         XMLAssert.assertXpathEvaluatesTo("1", "count(//ows:ExceptionReport)", dom);
     }
-    
+
     @Test
     public void testUserSuppliedNamespacePrefix() throws Exception {
         testGetFifteenAll("wfs?request=GetFeature&typename=myPrefix:Fifteen&version=1.1.0&service=wfs&"
                 + "namespace=xmlns(myPrefix%3D" // the '=' sign shall be encoded, hence '%3D'
                 + URLEncoder.encode(SystemTestData.FIFTEEN.getNamespaceURI(), "UTF-8") + ")");
     }
-    
+
     @Test
     public void testUserSuppliedDefaultNamespace() throws Exception {
         testGetFifteenAll("wfs?request=GetFeature&typename=Fifteen&version=1.1.0&service=wfs&"
                 + "namespace=xmlns("
                 + URLEncoder.encode(SystemTestData.FIFTEEN.getNamespaceURI(), "UTF-8") + ")");
     }
-    
+
     @Test
     public void testGML32OutputFormat() throws Exception {
         testGetFifteenAll(
-            "wfs?request=getfeature&typename=cdf:Fifteen&version=1.1.0&service=wfs&outputFormat=gml32");
+                "wfs?request=getfeature&typename=cdf:Fifteen&version=1.1.0&service=wfs&outputFormat=gml32");
     }
-    
+
     @Test
     public void testGMLAttributeMapping() throws Exception {
         WFSInfo wfs = getWFS();
         GMLInfo gml = wfs.getGML().get(WFSInfo.Version.V_11);
         gml.setOverrideGMLAttributes(false);
         getGeoServer().save(wfs);
-        
+
         Document dom = getAsDOM("ows?service=WFS&version=1.1.0&request=GetFeature" +
                 "&typename=" + getLayerId(SystemTestData.PRIMITIVEGEOFEATURE));
         assertXpathExists("//gml:name", dom);
         assertXpathExists("//gml:description", dom);
         XMLAssert.assertXpathNotExists("//sf:name", dom);
         XMLAssert.assertXpathNotExists("//sf:description", dom);
-        
+
         gml.setOverrideGMLAttributes(true);
         getGeoServer().save(wfs);
-    
+
         dom = getAsDOM("ows?service=WFS&version=1.1.0&request=GetFeature" +
                 "&typename=" + getLayerId(SystemTestData.PRIMITIVEGEOFEATURE));
         XMLAssert.assertXpathNotExists("//gml:name", dom);
         XMLAssert.assertXpathNotExists("//gml:description", dom);
         assertXpathExists("//sf:name", dom);
         assertXpathExists("//sf:description", dom);
-        
+
         gml.setOverrideGMLAttributes(false);
         getGeoServer().save(wfs);
     }
-    
+
     @Test
     public void testSortedAscending() throws Exception {
         Document dom = getAsDOM("wfs?request=GetFeature&typename=" + getLayerId(SystemTestData.BUILDINGS)
@@ -556,19 +556,19 @@ public class GetFeatureTest extends WFSTestSupport {
         XMLAssert.assertXpathEvaluatesTo("2", "count(//cite:Buildings)", dom);
         XMLAssert.assertXpathEvaluatesTo("113", "//cite:Buildings[1]/cite:FID", dom);
         XMLAssert.assertXpathEvaluatesTo("114", "//cite:Buildings[2]/cite:FID", dom);
-        
+
         // with max features
         dom = getAsDOM("wfs?request=GetFeature&typename=" + getLayerId(SystemTestData.BUILDINGS)
                 + "&version=1.1.0&service=wfs&sortBy=ADDRESS&maxFeatures=1");
         XMLAssert.assertXpathEvaluatesTo("1", "count(//cite:Buildings)", dom);
         XMLAssert.assertXpathEvaluatesTo("113", "//cite:Buildings[1]/cite:FID", dom);
-        
+
         // and with paging, first page
         dom = getAsDOM("wfs?request=GetFeature&typename=" + getLayerId(SystemTestData.BUILDINGS)
                 + "&version=1.1.0&service=wfs&sortBy=ADDRESS&maxFeatures=1&startIndex=0");
         XMLAssert.assertXpathEvaluatesTo("1", "count(//cite:Buildings)", dom);
         XMLAssert.assertXpathEvaluatesTo("113", "//cite:Buildings[1]/cite:FID", dom);
-        
+
         // second page
         dom = getAsDOM("wfs?request=GetFeature&typename=" + getLayerId(SystemTestData.BUILDINGS)
                 + "&version=1.1.0&service=wfs&sortBy=ADDRESS&maxFeatures=1&startIndex=1");
@@ -583,19 +583,19 @@ public class GetFeatureTest extends WFSTestSupport {
         XMLAssert.assertXpathEvaluatesTo("2", "count(//cite:Buildings)", dom);
         XMLAssert.assertXpathEvaluatesTo("114", "//cite:Buildings[1]/cite:FID", dom);
         XMLAssert.assertXpathEvaluatesTo("113", "//cite:Buildings[2]/cite:FID", dom);
-        
+
         // with max features
         dom = getAsDOM("wfs?request=GetFeature&typename=" + getLayerId(SystemTestData.BUILDINGS)
                 + "&version=1.1.0&service=wfs&sortBy=ADDRESS D&maxFeatures=1");
         XMLAssert.assertXpathEvaluatesTo("1", "count(//cite:Buildings)", dom);
         XMLAssert.assertXpathEvaluatesTo("114", "//cite:Buildings[1]/cite:FID", dom);
-        
+
         // and with paging, first page
         dom = getAsDOM("wfs?request=GetFeature&typename=" + getLayerId(SystemTestData.BUILDINGS)
                 + "&version=1.1.0&service=wfs&sortBy=ADDRESS D&maxFeatures=1&startIndex=0");
         XMLAssert.assertXpathEvaluatesTo("1", "count(//cite:Buildings)", dom);
         XMLAssert.assertXpathEvaluatesTo("114", "//cite:Buildings[1]/cite:FID", dom);
-        
+
         // second page
         dom = getAsDOM("wfs?request=GetFeature&typename=" + getLayerId(SystemTestData.BUILDINGS)
                 + "&version=1.1.0&service=wfs&sortBy=ADDRESS D&maxFeatures=1&startIndex=1");
@@ -614,19 +614,19 @@ public class GetFeatureTest extends WFSTestSupport {
 
     @Test
     public void testEncodeSrsDimension() throws Exception {
-        Document dom = getAsDOM("wfs?request=GetFeature&version=1.1.0&service=wfs&typename=" 
-            + getLayerId(SystemTestData.PRIMITIVEGEOFEATURE));
+        Document dom = getAsDOM("wfs?request=GetFeature&version=1.1.0&service=wfs&typename="
+                + getLayerId(SystemTestData.PRIMITIVEGEOFEATURE));
         assertXpathExists("//gml:Point[@srsDimension = '2']", dom);
 
         WFSInfo wfs = getWFS();
         wfs.setCiteCompliant(true);
         getGeoServer().save(wfs);
 
-        dom = getAsDOM("wfs?request=GetFeature&version=1.1.0&service=wfs&typename=" 
+        dom = getAsDOM("wfs?request=GetFeature&version=1.1.0&service=wfs&typename="
                 + getLayerId(SystemTestData.PRIMITIVEGEOFEATURE));
         XMLAssert.assertXpathNotExists("//gml:Point[@srsDimension = '2']", dom);
     }
-    
+
     @Test
     public void testWfs20AndGML31() throws Exception {
         Document doc = getAsDOM("wfs?request=GetFeature&typeName=cdf:Fifteen&version=2.0.0&service=wfs&featureid=Fifteen.2&outputFormat=gml3");
@@ -702,7 +702,7 @@ public class GetFeatureTest extends WFSTestSupport {
         count = xpath.evaluate("count(//gml:featureMembers/cite:Buildings)", document);
         assertThat(Integer.parseInt(count), greaterThan(0));
     }
-    
+
     @Test
     public void testNPEOnPaginationLinks() throws Exception {
         String xml = "<wfs:GetFeature " + "service=\"WFS\" "
@@ -759,7 +759,7 @@ public class GetFeatureTest extends WFSTestSupport {
         assertEquals(5, json.getJSONArray("features").size());
         assertEquals(15, json.getInt("totalFeatures"));
     }
-    
+
     @Test
     public void testGetWithCountAndStartIndexEnd() throws Exception {
         JSONObject json = (JSONObject) getAsJSON(

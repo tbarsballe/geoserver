@@ -22,23 +22,21 @@ import org.junit.Before;
 import org.junit.Test;
 
 
-
-
 public class RasterLegendBuilderTest {
-    
+
     GetLegendGraphicRequest request;
-    
+
     @Before
     public void setup() {
         request = new GetLegendGraphicRequest();
     }
-    
+
     @Test
     public void testRuleTextRampOneElements() {
         StyleBuilder sb = new StyleBuilder();
-        ColorMap cmap = sb.createColorMap(new String[] {null}, new double[] {10}, new Color[] {Color.RED}, ColorMap.TYPE_RAMP);
+        ColorMap cmap = sb.createColorMap(new String[]{null}, new double[]{10}, new Color[]{Color.RED}, ColorMap.TYPE_RAMP);
         Style style = sb.createStyle(sb.createRasterSymbolizer(cmap, 1));
-        
+
         RasterLayerLegendHelper helper = new RasterLayerLegendHelper(request, style, null);
         List<ColorMapEntryLegendBuilder> rows = new ArrayList<>(helper.getcMapLegendCreator().getBodyRows());
         assertEquals(1, rows.size());
@@ -49,9 +47,9 @@ public class RasterLegendBuilderTest {
     @Test
     public void testRuleTextRampTwoElements() {
         StyleBuilder sb = new StyleBuilder();
-        ColorMap cmap = sb.createColorMap(new String[] {null,  null}, new double[] {10,  100}, new Color[] {Color.RED, Color.BLUE}, ColorMap.TYPE_RAMP);
+        ColorMap cmap = sb.createColorMap(new String[]{null, null}, new double[]{10, 100}, new Color[]{Color.RED, Color.BLUE}, ColorMap.TYPE_RAMP);
         Style style = sb.createStyle(sb.createRasterSymbolizer(cmap, 1));
-        
+
         RasterLayerLegendHelper helper = new RasterLayerLegendHelper(request, style, null);
         List<ColorMapEntryLegendBuilder> rows = new ArrayList<>(helper.getcMapLegendCreator().getBodyRows());
         assertEquals(2, rows.size());
@@ -60,13 +58,13 @@ public class RasterLegendBuilderTest {
         ColorMapEntryLegendBuilder lastRow = rows.get(1);
         assertEquals("100.0 <= x", lastRow.getRuleManager().text);
     }
-    
+
     @Test
     public void testRuleTextRampThreeElements() {
         StyleBuilder sb = new StyleBuilder();
-        ColorMap cmap = sb.createColorMap(new String[] {null,  null, null}, new double[] {10,  50, 100}, new Color[] {Color.RED, Color.WHITE, Color.BLUE}, ColorMap.TYPE_RAMP);
+        ColorMap cmap = sb.createColorMap(new String[]{null, null, null}, new double[]{10, 50, 100}, new Color[]{Color.RED, Color.WHITE, Color.BLUE}, ColorMap.TYPE_RAMP);
         Style style = sb.createStyle(sb.createRasterSymbolizer(cmap, 1));
-        
+
         RasterLayerLegendHelper helper = new RasterLayerLegendHelper(request, style, null);
         List<ColorMapEntryLegendBuilder> rows = new ArrayList<>(helper.getcMapLegendCreator().getBodyRows());
         assertEquals(3, rows.size());
@@ -77,13 +75,13 @@ public class RasterLegendBuilderTest {
         ColorMapEntryLegendBuilder lastRow = rows.get(2);
         assertEquals("100.0 <= x", lastRow.getRuleManager().text);
     }
-    
+
     @Test
     public void testRuleTextIntervalOneElements() {
         StyleBuilder sb = new StyleBuilder();
-        ColorMap cmap = sb.createColorMap(new String[] {null}, new double[] {10}, new Color[] {Color.RED}, ColorMap.TYPE_INTERVALS);
+        ColorMap cmap = sb.createColorMap(new String[]{null}, new double[]{10}, new Color[]{Color.RED}, ColorMap.TYPE_INTERVALS);
         Style style = sb.createStyle(sb.createRasterSymbolizer(cmap, 1));
-        
+
         RasterLayerLegendHelper helper = new RasterLayerLegendHelper(request, style, null);
         List<ColorMapEntryLegendBuilder> rows = new ArrayList<>(helper.getcMapLegendCreator().getBodyRows());
         assertEquals(1, rows.size());
@@ -94,9 +92,9 @@ public class RasterLegendBuilderTest {
     @Test
     public void testRuleTextIntervalsTwoElements() {
         StyleBuilder sb = new StyleBuilder();
-        ColorMap cmap = sb.createColorMap(new String[] {null,  null}, new double[] {10,  100}, new Color[] {Color.RED, Color.BLUE}, ColorMap.TYPE_INTERVALS);
+        ColorMap cmap = sb.createColorMap(new String[]{null, null}, new double[]{10, 100}, new Color[]{Color.RED, Color.BLUE}, ColorMap.TYPE_INTERVALS);
         Style style = sb.createStyle(sb.createRasterSymbolizer(cmap, 1));
-        
+
         RasterLayerLegendHelper helper = new RasterLayerLegendHelper(request, style, null);
         List<ColorMapEntryLegendBuilder> rows = new ArrayList<>(helper.getcMapLegendCreator().getBodyRows());
         assertEquals(2, rows.size());
@@ -105,13 +103,13 @@ public class RasterLegendBuilderTest {
         ColorMapEntryLegendBuilder lastRow = rows.get(1);
         assertEquals("10.0 <= x < 100.0", lastRow.getRuleManager().text);
     }
-    
+
     @Test
     public void testRuleTextIntervalsThreeElements() {
         StyleBuilder sb = new StyleBuilder();
-        ColorMap cmap = sb.createColorMap(new String[] {null,  null, null}, new double[] {10,  50, 100}, new Color[] {Color.RED, Color.WHITE, Color.BLUE}, ColorMap.TYPE_INTERVALS);
+        ColorMap cmap = sb.createColorMap(new String[]{null, null, null}, new double[]{10, 50, 100}, new Color[]{Color.RED, Color.WHITE, Color.BLUE}, ColorMap.TYPE_INTERVALS);
         Style style = sb.createStyle(sb.createRasterSymbolizer(cmap, 1));
-        
+
         RasterLayerLegendHelper helper = new RasterLayerLegendHelper(request, style, null);
         List<ColorMapEntryLegendBuilder> rows = new ArrayList<>(helper.getcMapLegendCreator().getBodyRows());
         assertEquals(3, rows.size());
@@ -122,13 +120,13 @@ public class RasterLegendBuilderTest {
         ColorMapEntryLegendBuilder lastRow = rows.get(2);
         assertEquals("50.0 <= x < 100.0", lastRow.getRuleManager().text);
     }
-    
+
     @Test
     public void testInfiniteOnIntervals() {
         StyleBuilder sb = new StyleBuilder();
-        ColorMap cmap = sb.createColorMap(new String[] {null,  null, null}, new double[] {Double.NEGATIVE_INFINITY,  50, Double.POSITIVE_INFINITY}, new Color[] {Color.RED, Color.WHITE, Color.BLUE}, ColorMap.TYPE_INTERVALS);
+        ColorMap cmap = sb.createColorMap(new String[]{null, null, null}, new double[]{Double.NEGATIVE_INFINITY, 50, Double.POSITIVE_INFINITY}, new Color[]{Color.RED, Color.WHITE, Color.BLUE}, ColorMap.TYPE_INTERVALS);
         Style style = sb.createStyle(sb.createRasterSymbolizer(cmap, 1));
-        
+
         RasterLayerLegendHelper helper = new RasterLayerLegendHelper(request, style, null);
         List<ColorMapEntryLegendBuilder> rows = new ArrayList<>(helper.getcMapLegendCreator().getBodyRows());
         assertEquals(2, rows.size());
@@ -137,14 +135,14 @@ public class RasterLegendBuilderTest {
         ColorMapEntryLegendBuilder midRow = rows.get(1);
         assertEquals("50.0 <= x", midRow.getRuleManager().text);
     }
-    
+
     @Test
     public void testLegendBorderColour() {
         StyleBuilder sb = new StyleBuilder();
-        ColorMap cmap = sb.createColorMap(new String[] {null,  null, null}, new double[] {Double.NEGATIVE_INFINITY,  50, Double.POSITIVE_INFINITY}, new Color[] {Color.RED, Color.WHITE, Color.BLUE}, ColorMap.TYPE_INTERVALS);
+        ColorMap cmap = sb.createColorMap(new String[]{null, null, null}, new double[]{Double.NEGATIVE_INFINITY, 50, Double.POSITIVE_INFINITY}, new Color[]{Color.RED, Color.WHITE, Color.BLUE}, ColorMap.TYPE_INTERVALS);
         Style style = sb.createStyle(sb.createRasterSymbolizer(cmap, 1));
 
-        
+
         // Check default border colour 
         Color colourToTest = LegendUtils.DEFAULT_BORDER_COLOR;
 
@@ -152,7 +150,7 @@ public class RasterLegendBuilderTest {
         List<ColorMapEntryLegendBuilder> rows = new ArrayList<>(helper.getcMapLegendCreator().getBodyRows());
         assertEquals(2, rows.size());
         ColorMapEntryLegendBuilder firstRow = rows.get(0);
-		assertEquals(colourToTest, firstRow.getColorManager().borderColor);
+        assertEquals(colourToTest, firstRow.getColorManager().borderColor);
         assertEquals(colourToTest, firstRow.getRuleManager().borderColor);
         ColorMapEntryLegendBuilder midRow = rows.get(1);
         assertEquals(colourToTest, midRow.getColorManager().borderColor);
@@ -160,9 +158,9 @@ public class RasterLegendBuilderTest {
 
         // Change legend border colour to red
         Map<String, Object> legendOptions = new HashMap<String, Object>();
-        
+
         colourToTest = Color.red;
-        
+
         legendOptions.put("BORDERCOLOR", SLD.toHTMLColor(colourToTest));
 
         request.setLegendOptions(legendOptions);
@@ -170,7 +168,7 @@ public class RasterLegendBuilderTest {
         rows = new ArrayList<>(helper.getcMapLegendCreator().getBodyRows());
         assertEquals(2, rows.size());
         firstRow = rows.get(0);
-		assertEquals(colourToTest, firstRow.getColorManager().borderColor);
+        assertEquals(colourToTest, firstRow.getColorManager().borderColor);
         assertEquals(colourToTest, firstRow.getRuleManager().borderColor);
         midRow = rows.get(1);
         assertEquals(colourToTest, midRow.getColorManager().borderColor);
@@ -178,7 +176,7 @@ public class RasterLegendBuilderTest {
 
         // Change legend border colour to blue        
         colourToTest = Color.blue;
-        
+
         legendOptions.clear();
         legendOptions.put("borderColor", SLD.toHTMLColor(colourToTest));
 
@@ -187,7 +185,7 @@ public class RasterLegendBuilderTest {
         rows = new ArrayList<>(helper.getcMapLegendCreator().getBodyRows());
         assertEquals(2, rows.size());
         firstRow = rows.get(0);
-		assertEquals(colourToTest, firstRow.getColorManager().borderColor);
+        assertEquals(colourToTest, firstRow.getColorManager().borderColor);
         assertEquals(colourToTest, firstRow.getRuleManager().borderColor);
         midRow = rows.get(1);
         assertEquals(colourToTest, midRow.getColorManager().borderColor);

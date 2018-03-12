@@ -63,5 +63,5 @@ public class RESTDispatcherCallbackTest extends GeoServerSystemTestSupport {
         verify(callback);
     }
 
-   
+
 }

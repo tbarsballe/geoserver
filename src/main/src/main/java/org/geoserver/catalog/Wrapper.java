@@ -15,7 +15,7 @@ package org.geoserver.catalog;
  * This interface aims to be compatible with the JDK 1.6 Wrapper class, which
  * cannot be used in this release of GeoServer due to requirements of being
  * JDK 1.5 compatible.
- * 
+ *
  * @deprecated use org.geotools.decorate.Wrapper
  */
 

@@ -14,21 +14,21 @@ import org.geowebcache.GeoWebCacheExtensions;
 import org.geowebcache.config.BlobStoreInfo;
 
 /**
- *
  * Access point for BlobStore Types stored in Spring
  *
  * @author Niels Charlier
  */
 public final class BlobStoreTypes {
-    
-    private BlobStoreTypes() {}
-    
+
+    private BlobStoreTypes() {
+    }
+
     /**
      * Lazy loaded map of blob store types
      */
     private static Map<Class<? extends BlobStoreInfo>, BlobStoreType<?>> TYPES;
-            
-    
+
+
     private static Map<Class<? extends BlobStoreInfo>, BlobStoreType<?>> getTypes() {
         if (TYPES == null) {
             //the treemap with comparator makes sure that the types are always displayed in the
@@ -48,11 +48,9 @@ public final class BlobStoreTypes {
     }
 
     /**
-     * 
      * Get BlobStoreType from BlobStoreInfo class
-     * 
-     * @param clazz 
      *
+     * @param clazz
      */
     public static BlobStoreType<?> getFromClass(Class<? extends BlobStoreInfo> clazz) {
         return getTypes().get(clazz);
@@ -60,8 +58,6 @@ public final class BlobStoreTypes {
 
     /**
      * Get all BlobStoreTypes
-     * 
-     *
      */
     public static List<BlobStoreType<?>> getAll() {
         return new ArrayList<BlobStoreType<?>>(getTypes().values());

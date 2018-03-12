@@ -29,14 +29,14 @@ import org.opengis.feature.simple.SimpleFeature;
 import org.springframework.mock.web.MockHttpServletResponse;
 
 public class GetFeatureBoundedTest extends WFSTestSupport {
-    
+
     @Override
     protected void setUpInternal(SystemTestData data) throws Exception {
         WFSInfo wfs = getWFS();
         wfs.setFeatureBounding(true);
         getGeoServer().save(wfs);
     }
-       
+
     @Test
     public void testCloseIterators() throws Exception {
         // build a wfs response with an iterator that will mark if close has been called, or not
@@ -44,7 +44,7 @@ public class GetFeatureBoundedTest extends WFSTestSupport {
         FeatureSource fs = fti.getFeatureSource(null, null);
         SimpleFeatureCollection fc = (SimpleFeatureCollection) fs.getFeatures();
         final AtomicInteger openIterators = new AtomicInteger(0);
-        
+
         SimpleFeatureCollection decorated = new org.geotools.feature.collection.DecoratingSimpleFeatureCollection(
                 fc) {
             @Override
@@ -52,17 +52,17 @@ public class GetFeatureBoundedTest extends WFSTestSupport {
                 openIterators.incrementAndGet();
                 final SimpleFeature f = DataUtilities.first(delegate);
                 return new SimpleFeatureIterator() {
-                    
+
                     @Override
                     public SimpleFeature next() throws NoSuchElementException {
                         return f;
                     }
-                    
+
                     @Override
                     public boolean hasNext() {
                         return true;
                     }
-                    
+
                     @Override
                     public void close() {
                         openIterators.decrementAndGet();
@@ -70,13 +70,13 @@ public class GetFeatureBoundedTest extends WFSTestSupport {
                 };
             }
         };
-        
+
         FeatureBoundsFeatureCollection fbc = new FeatureBoundsFeatureCollection(decorated, decorated.getSchema());
         FeatureIterator<?> i = fbc.features();
         i.close();
-         
+
         assertEquals(0, openIterators.get());
     }
-    
+
 
 }

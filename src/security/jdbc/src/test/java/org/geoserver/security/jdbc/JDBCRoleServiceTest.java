@@ -27,16 +27,15 @@ import org.junit.Test;
 public abstract class JDBCRoleServiceTest extends AbstractRoleServiceTest {
 
     static Logger LOGGER = org.geotools.util.logging.Logging.getLogger("org.geoserver.security.jdbc");
-    
-    protected abstract String getFixtureId();            
-    
-    
+
+    protected abstract String getFixtureId();
+
 
     @After
     public void dropExistingTables() throws Exception {
-        if (store!=null) {
-            JDBCRoleStore jdbcStore =(JDBCRoleStore)store;
-            JDBCTestSupport.dropExistingTables(jdbcStore,jdbcStore.getConnection());
+        if (store != null) {
+            JDBCRoleStore jdbcStore = (JDBCRoleStore) store;
+            JDBCTestSupport.dropExistingTables(jdbcStore, jdbcStore.getConnection());
             store.store();
         }
 
@@ -45,41 +44,41 @@ public abstract class JDBCRoleServiceTest extends AbstractRoleServiceTest {
     @Before
     public void init() throws IOException {
         Assume.assumeTrue(getTestData().isTestDataAvailable());
-        
+
         service = getSecurityManager().loadRoleService(getFixtureId());
         store = createStore(service);
     }
 
-    public GeoServerRoleService createRoleService(String serviceName) throws Exception {    
+    public GeoServerRoleService createRoleService(String serviceName) throws Exception {
         return JDBCTestSupport.createRoleService(getFixtureId(),
-            (LiveDbmsDataSecurity)getTestData(), getSecurityManager());        
+                (LiveDbmsDataSecurity) getTestData(), getSecurityManager());
     }
 
     @Override
     public GeoServerRoleStore createStore(GeoServerRoleService service) throws IOException {
-        JDBCRoleStore store = 
-            (JDBCRoleStore) super.createStore(service);
+        JDBCRoleStore store =
+                (JDBCRoleStore) super.createStore(service);
         try {
-            JDBCTestSupport.dropExistingTables(store,store.getConnection());
+            JDBCTestSupport.dropExistingTables(store, store.getConnection());
         } catch (SQLException e) {
             throw new IOException(e);
         }
         store.createTables();
         store.store();
-        
-        return store;        
+
+        return store;
     }
 
     @Test
     public void testRoleDatabaseSetup() {
-        try {        
-            JDBCRoleStore jdbcStore =  
-                (JDBCRoleStore) store;
+        try {
+            JDBCRoleStore jdbcStore =
+                    (JDBCRoleStore) store;
             assertTrue(jdbcStore.tablesAlreadyCreated());
             jdbcStore.checkDDLStatements();
             jdbcStore.checkDMLStatements();
             jdbcStore.clear();
-            jdbcStore.dropTables();            
+            jdbcStore.dropTables();
             jdbcStore.store();
             assertFalse(jdbcStore.tablesAlreadyCreated());
             jdbcStore.load();
@@ -94,16 +93,12 @@ public abstract class JDBCRoleServiceTest extends AbstractRoleServiceTest {
             return super.createTestData();
         return new LiveDbmsDataSecurity(getFixtureId());
     }
-    
-    
-    
+
 
     @Override
     protected boolean isJDBCTest() {
         return true;
     }
-
-
 
 
 }

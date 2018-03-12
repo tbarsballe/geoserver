@@ -37,9 +37,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class NetCDFPanel<T extends NetCDFSettingsContainer> extends FormComponentPanel<T>{
+public class NetCDFPanel<T extends NetCDFSettingsContainer> extends FormComponentPanel<T> {
 
-    /** serialVersionUID */
+    /**
+     * serialVersionUID
+     */
     private static final long serialVersionUID = 1L;
     protected final ListView<GlobalAttribute> globalAttributes;
     protected final ListView<VariableAttribute> variableAttributes;
@@ -61,7 +63,7 @@ public class NetCDFPanel<T extends NetCDFSettingsContainer> extends FormComponen
     protected final WebMarkupContainer container;
     protected final ListView<NetCDFExtensionPanelInfo> extensionPanels;
 
-    @SuppressWarnings({ "rawtypes", "serial", "unchecked" })
+    @SuppressWarnings({"rawtypes", "serial", "unchecked"})
     public NetCDFPanel(String id, IModel<T> netcdfModel) {
         super(id, netcdfModel);
         container = new WebMarkupContainer("container");
@@ -334,13 +336,13 @@ public class NetCDFPanel<T extends NetCDFSettingsContainer> extends FormComponen
         if (object == null) {
             netcdfModel.setObject((T) new NetCDFSettingsContainer());
         }
-        
+
         // extension panels
         extensionPanels = createExtensionPanelList("extensions", netcdfModel);
         extensionPanels.setReuseItems(true);
         add(extensionPanels);
     }
-    
+
     @Override
     public void convertInput() {
         IVisitor<Component, Object> formComponentVisitor = (component, visit) -> {
@@ -373,7 +375,7 @@ public class NetCDFPanel<T extends NetCDFSettingsContainer> extends FormComponen
                 extension.convertInput(convertedInput);
             }
         });
-        
+
         setConvertedInput((T) convertedInput);
     }
 

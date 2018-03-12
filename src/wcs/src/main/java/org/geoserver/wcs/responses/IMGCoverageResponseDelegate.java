@@ -22,10 +22,10 @@ import org.opengis.parameter.ParameterValueGroup;
 
 /**
  * Encodes coverages in "world image" formats, png, jpeg and gif.
- * 
  * <p>
- * Notice that depending on the underlying coverage structure this is not always possible.      
- * 
+ * <p>
+ * Notice that depending on the underlying coverage structure this is not always possible.
+ *
  * @author $Author: Alessio Fabiani (alessio.fabiani@gmail.com) $ (last modification)
  * @author $Author: Simone Giannecchini (simboss1@gmail.com) $ (last modification)
  */
@@ -36,27 +36,27 @@ public class IMGCoverageResponseDelegate extends BaseCoverageResponseDelegate im
         super(
                 geoserver,
                 Arrays.asList("png", "jpeg", "JPEG", "PNG"), //output formats
-                new HashMap<String, String>(){ // file extensions
+                new HashMap<String, String>() { // file extensions
                     {
                         put("png", "png");
                         put("jpeg", "jpeg");
                         put("JPEG", "jpeg");
                         put("PNG", "png");
                         put("image/png", "png");
-                        put("image/jpeg", "jpeg");                       
+                        put("image/jpeg", "jpeg");
                     }
                 },
-                new HashMap<String, String>(){ //mime types
+                new HashMap<String, String>() { //mime types
                     {
                         put("png", "image/png");
                         put("jpeg", "image/jpeg");
                         put("PNG", "image/png");
-                        put("JPEG", "image/jpeg");                        
+                        put("JPEG", "image/jpeg");
                     }
                 });
     }
 
-	public void encode(GridCoverage2D sourceCoverage, String outputFormat, Map<String,String> econdingParameters, OutputStream output) throws ServiceException, IOException {
+    public void encode(GridCoverage2D sourceCoverage, String outputFormat, Map<String, String> econdingParameters, OutputStream output) throws ServiceException, IOException {
         if (sourceCoverage == null) {
             throw new IllegalStateException(
                     "It seems prepare() has not been called or has not succeed");
@@ -69,10 +69,10 @@ public class IMGCoverageResponseDelegate extends BaseCoverageResponseDelegate im
         final ParameterValueGroup writeParameters = writerParams.getWriteParameters();
         final ParameterValue<?> format = writeParameters.parameter("Format");
         format.setValue(getFileExtension(outputFormat));
-        
+
         try {
             // writing
-            writer.write(sourceCoverage, new GeneralParameterValue[] { format });
+            writer.write(sourceCoverage, new GeneralParameterValue[]{format});
             output.flush();
         } finally {
 

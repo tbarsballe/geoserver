@@ -30,7 +30,7 @@ public class RestHttpInputWrapper implements HttpInputMessage {
     /**
      * Apply configuration to the XStreamPersister based on the converter
      *
-     * @param persister The XStream persister
+     * @param persister               The XStream persister
      * @param xStreamMessageConverter The XStream converter
      */
     public void configurePersister(XStreamPersister persister, XStreamMessageConverter xStreamMessageConverter) {

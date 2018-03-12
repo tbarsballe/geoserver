@@ -50,7 +50,9 @@ public class PreviewLayer {
 
     public enum PreviewLayerType {
         Raster, Vector, Remote, Group
-    };
+    }
+
+    ;
 
     LayerInfo layerInfo;
 
@@ -73,52 +75,52 @@ public class PreviewLayer {
             return groupInfo.prefixedName();
         }
     }
-    
+
     public String getWorkspace() {
         if (layerInfo != null) {
             return layerInfo.getResource().getStore().getWorkspace().getName();
-        } else if (groupInfo != null && groupInfo.getWorkspace() != null){
+        } else if (groupInfo != null && groupInfo.getWorkspace() != null) {
             return groupInfo.getWorkspace().getName();
         }
         return null;
     }
-    
+
     public PackageResourceReference getIcon() {
-        if(layerInfo != null)
+        if (layerInfo != null)
             return CatalogIconFactory.get().getSpecificLayerIcon(layerInfo);
         else
             return CatalogIconFactory.GROUP_ICON;
     }
-    
+
     public PackageResourceReference getTypeSpecificIcon() {
-        if(layerInfo != null)
+        if (layerInfo != null)
             return CatalogIconFactory.get().getSpecificLayerIcon(layerInfo);
         else
             return CatalogIconFactory.GROUP_ICON;
     }
-    
+
     public String getTitle() {
-        if(layerInfo != null) {
+        if (layerInfo != null) {
             return layerInfo.getResource().getTitle();
-        } else if(groupInfo != null) {
+        } else if (groupInfo != null) {
             return groupInfo.getTitle();
         } else {
             return "";
         }
     }
-    
+
     public String getAbstract() {
-        if(layerInfo != null) {
+        if (layerInfo != null) {
             return layerInfo.getResource().getAbstract();
-        } else if(groupInfo != null) {
+        } else if (groupInfo != null) {
             return groupInfo.getAbstract();
         } else {
             return "";
         }
     }
-    
+
     public String getKeywords() {
-        if(layerInfo != null) {
+        if (layerInfo != null) {
             return layerInfo.getResource().getKeywords().toString();
         } else {
             return "";
@@ -140,9 +142,8 @@ public class PreviewLayer {
 
     /**
      * Builds a fake GetMap request
-     * 
-     * @param prefixedName
      *
+     * @param prefixedName
      */
     GetMapRequest getRequest() {
         if (request == null) {
@@ -152,13 +153,13 @@ public class PreviewLayer {
             List<MapLayerInfo> layers = expandLayers(catalog);
             request.setLayers(layers);
             request.setFormat("application/openlayers");
-            
+
             // in the case of groups we already know about the envelope and the target SRS
-            if(groupInfo != null) {
+            if (groupInfo != null) {
                 ReferencedEnvelope bounds = groupInfo.getBounds();
                 request.setBbox(bounds);
                 String epsgCode = GML2EncodingUtils.epsgCode(bounds.getCoordinateReferenceSystem());
-                if(epsgCode != null)
+                if (epsgCode != null)
                     request.setSRS("EPSG:" + epsgCode);
             }
             try {
@@ -174,10 +175,9 @@ public class PreviewLayer {
 
     /**
      * Expands the specified name into a list of layer info names
-     * 
+     *
      * @param name
      * @param catalog
-     *
      */
     private List<MapLayerInfo> expandLayers(Catalog catalog) {
         List<MapLayerInfo> layers = new ArrayList<MapLayerInfo>();
@@ -191,7 +191,7 @@ public class PreviewLayer {
         }
         return layers;
     }
-    
+
     String getBaseUrl(String service) {
         return getBaseUrl(service, false);
     }
@@ -201,7 +201,7 @@ public class PreviewLayer {
         String base = ResponseUtils.baseURL(req);
 
         String ws = getWorkspace();
-        if(ws == null || useGlobalRef) {
+        if (ws == null || useGlobalRef) {
             // global reference
             return ResponseUtils.buildURL(base, service, null, URLType.SERVICE);
         } else {
@@ -211,10 +211,9 @@ public class PreviewLayer {
 
     /**
      * Given a request and a target format, builds the WMS request
-     * 
+     *
      * @param request
      * @param string
-     *
      */
     public String getWmsLink() {
         GetMapRequest request = getRequest();
@@ -235,7 +234,6 @@ public class PreviewLayer {
      * Returns the default GML link for this layer.
      *
      * @param gmlParamsCache optional map where computed GML output params are cached
-     *
      */
     public String getGmlLink(Map<String, GMLOutputParams> gmlParamsCache) {
         GMLOutputParams gmlParams = new GMLOutputParams();
@@ -287,12 +285,12 @@ public class PreviewLayer {
 
     /**
      * Returns the GML version used in the feature type's definition.
-     *
+     * <p>
      * <p>
      * The method recursively climbs up the type hierarchy of the provided feature type, until it finds AbstractFeatureType. Then, the GML version is
      * determined by looking at the namespace URI.
      * </p>
-     *
+     * <p>
      * <p>
      * Please note that this method does not differentiate between GML 2 and GML 3.1.1, but assumes that "http://www.opengis.net/gml" namespace always
      * refers to GML 3.1.1.

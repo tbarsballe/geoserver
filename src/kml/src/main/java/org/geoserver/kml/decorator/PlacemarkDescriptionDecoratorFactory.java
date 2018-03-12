@@ -20,19 +20,19 @@ import de.micromata.opengis.kml.v_2_2_0.Placemark;
 
 /**
  * Adds template based description to Placemark objects
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class PlacemarkDescriptionDecoratorFactory implements KmlDecoratorFactory {
 
     @Override
     public KmlDecorator getDecorator(Class<? extends Feature> featureClass,
-            KmlEncodingContext context) {
+                                     KmlEncodingContext context) {
         // this decorator makes sense only for WMS
-        if(!(context.getService() instanceof WMSInfo)) {
+        if (!(context.getService() instanceof WMSInfo)) {
             return null;
         }
-        
+
         if (Placemark.class.isAssignableFrom(featureClass) && context.isDescriptionEnabled()) {
             return new PlacemarkDescriptionDecorator();
         } else {

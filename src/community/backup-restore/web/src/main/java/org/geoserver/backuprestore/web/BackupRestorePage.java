@@ -58,7 +58,6 @@ import org.springframework.batch.core.repository.JobRestartException;
 
 /**
  * @author Alessio Fabiani, GeoSolutions S.A.S.
- *
  */
 public class BackupRestorePage<T extends AbstractExecutionAdapter> extends GeoServerSecuredPage implements GeoServerUnlockablePage {
 
@@ -314,7 +313,7 @@ public class BackupRestorePage<T extends AbstractExecutionAdapter> extends GeoSe
                 } else {
                     try {
                         backupFacade().abandonExecution(bkp.getId());
-                        
+
                         PageParameters pp = new PageParameters();
                         pp.add("id", bkp.getId());
                         if (bkp instanceof BackupExecutionAdapter) {

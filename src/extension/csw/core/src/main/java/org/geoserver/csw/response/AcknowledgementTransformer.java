@@ -31,7 +31,7 @@ import org.xml.sax.helpers.AttributesImpl;
 
 /**
  * Encodes a Acknoledgement response
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class AcknowledgementTransformer extends AbstractCSWTransformer {
@@ -120,10 +120,10 @@ public class AcknowledgementTransformer extends AbstractCSWTransformer {
 
         private Document parseAsXML(String data) {
             try {
-                DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance(); 
-                factory.setNamespaceAware( true );
-                factory.setValidating( false );
-               
+                DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+                factory.setNamespaceAware(true);
+                factory.setValidating(false);
+
                 DocumentBuilder builder = factory.newDocumentBuilder();
                 if (!data.startsWith("<?xml")) {
                     data = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + data;

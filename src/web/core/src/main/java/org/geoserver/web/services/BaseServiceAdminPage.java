@@ -65,8 +65,7 @@ import org.geoserver.web.wicket.LiveCollectionModel;
  *   </pre>
  * </p>
  *
- *@author Justin Deoliveira, The Open Planning Project
- *
+ * @author Justin Deoliveira, The Open Planning Project
  */
 public abstract class BaseServiceAdminPage<T extends ServiceInfo> extends GeoServerSecuredPage {
 
@@ -91,14 +90,13 @@ public abstract class BaseServiceAdminPage<T extends ServiceInfo> extends GeoSer
         dialog = new GeoServerDialog("dialog");
         add(dialog);
 
-        Form form = new Form( "form", new CompoundPropertyModel(infoModel));
+        Form form = new Form("form", new CompoundPropertyModel(infoModel));
         add(form);
 
         if (service.getWorkspace() == null) {
             //create the panel that has the drop down list to switch between workspace
             form.add(new GlobalWorkspacePanel("workspace"));
-        }
-        else {
+        } else {
             //create just a panel with a label that signifies the workspace
             form.add(new LocalWorkspacePanel("workspace", service));
         }
@@ -108,14 +106,14 @@ public abstract class BaseServiceAdminPage<T extends ServiceInfo> extends GeoSer
         form.add(new Label("service.enabled", new StringResourceModel("service.enabled", this).setParameters(getServiceName())));
         form.add(new TextField("maintainer"));
         TextField onlineResource = new TextField("onlineResource");
-        
+
         final GeoServerEnvironment gsEnvironment = GeoServerExtensions.bean(GeoServerEnvironment.class);
-        
+
         // AF: Disable Binding if GeoServer Env Parametrization is enabled!
         if (gsEnvironment == null || !GeoServerEnvironment.ALLOW_ENV_PARAMETRIZATION) {
             onlineResource.add(new UrlValidator());
         }
-        
+
         form.add(onlineResource);
         form.add(new CheckBox("enabled"));
         form.add(new CheckBox("citeCompliant"));
@@ -132,33 +130,32 @@ public abstract class BaseServiceAdminPage<T extends ServiceInfo> extends GeoSer
         extensionPanels.setReuseItems(true);
         form.add(extensionPanels);
 
-        SubmitLink submit = new SubmitLink("submit",new StringResourceModel( "save", (Component)null, null) ) {
+        SubmitLink submit = new SubmitLink("submit", new StringResourceModel("save", (Component) null, null)) {
             @Override
             public void onSubmit() {
                 try {
-                    handleSubmit((T)infoModel.getObject());
+                    handleSubmit((T) infoModel.getObject());
                     doReturn();
-                }
-                catch(Exception e) {
+                } catch (Exception e) {
                     error(e);
                 }
             }
         };
         form.add(submit);
 
-        Button cancel = new Button( "cancel" ) {
+        Button cancel = new Button("cancel") {
             public void onSubmit() {
                 doReturn();
             }
         };
-        form.add( cancel );
+        form.add(cancel);
         //cancel.setDefaultFormProcessing( false );
     }
 
-   protected ListView createExtensionPanelList(String id, final IModel infoModel) {
+    protected ListView createExtensionPanelList(String id, final IModel infoModel) {
         List<AdminPagePanelInfo> panels =
-            getGeoServerApplication().getBeansOfType(AdminPagePanelInfo.class);
-        for (Iterator<AdminPagePanelInfo> it = panels.iterator(); it.hasNext();) {
+                getGeoServerApplication().getBeansOfType(AdminPagePanelInfo.class);
+        for (Iterator<AdminPagePanelInfo> it = panels.iterator(); it.hasNext(); ) {
             AdminPagePanelInfo panel = it.next();
             if (!getServiceClass().equals(panel.getServiceClass())) {
                 it.remove();
@@ -174,10 +171,9 @@ public abstract class BaseServiceAdminPage<T extends ServiceInfo> extends GeoSer
                     AdminPagePanel panel = info.getComponentClass().getConstructor(
                             String.class, IModel.class).newInstance("content", infoModel);
                     item.add(panel);
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     throw new WicketRuntimeException("Failed to create admin extension panel of " +
-                        "type " + info.getComponentClass().getSimpleName(), e);
+                            "type " + info.getComponentClass().getSimpleName(), e);
                 }
             }
         };
@@ -200,10 +196,11 @@ public abstract class BaseServiceAdminPage<T extends ServiceInfo> extends GeoSer
      * This means that component id's should match the info bean property
      * they correspond to.
      * </p>
+     *
      * @param info The service info object.
      * @param form The page form.
      */
-    protected abstract void build(IModel info, Form form ); // {
+    protected abstract void build(IModel info, Form form); // {
 
     // }
 
@@ -213,13 +210,13 @@ public abstract class BaseServiceAdminPage<T extends ServiceInfo> extends GeoSer
      * This implementation simply saves the service. Subclasses may
      * extend / override if need be.
      * </p>
+     *
      * @param info
      */
-    protected void handleSubmit( T info ) {
+    protected void handleSubmit(T info) {
         if (info.getId() != null) {
-            getGeoServer().save( info );
-        }
-        else {
+            getGeoServer().save(info);
+        } else {
             //means a non attached instance was passed to us, do nothing, up to caller to add it
             // to configuration
         }
@@ -276,8 +273,7 @@ public abstract class BaseServiceAdminPage<T extends ServiceInfo> extends GeoSer
             if (id == null && serviceClass == null) {
                 //keep reference serialize service object
                 service = getObject();
-            }
-            else {
+            } else {
                 service = null;
             }
         }
@@ -296,7 +292,7 @@ public abstract class BaseServiceAdminPage<T extends ServiceInfo> extends GeoSer
             Collection<WorkspaceInfo> workspaces = (Collection<WorkspaceInfo>) wsModel.getObject();
 
             GeoServer gs = getGeoServer();
-            for (Iterator<WorkspaceInfo> it = workspaces.iterator(); it.hasNext();) {
+            for (Iterator<WorkspaceInfo> it = workspaces.iterator(); it.hasNext(); ) {
                 if (gs.getService(it.next(), getServiceClass()) == null) {
                     it.remove();
                 }
@@ -311,7 +307,7 @@ public abstract class BaseServiceAdminPage<T extends ServiceInfo> extends GeoSer
             super(id);
 
             final DropDownChoice<WorkspaceInfo> wsChoice = new DropDownChoice<WorkspaceInfo>("workspace",
-                new ServiceFilteredWorkspacesModel(new WorkspacesModel()), new WorkspaceChoiceRenderer());
+                    new ServiceFilteredWorkspacesModel(new WorkspacesModel()), new WorkspaceChoiceRenderer());
             wsChoice.setNullValid(true);
             wsChoice.add(new AjaxFormComponentUpdatingBehavior("change") {
                 @Override

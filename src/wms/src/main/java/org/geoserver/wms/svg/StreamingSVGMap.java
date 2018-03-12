@@ -30,7 +30,7 @@ import com.vividsolutions.jts.geom.Point;
 
 /**
  * Streaming SVG encoder (does not support styling)
- * 
+ *
  * @author Gabriel Roldan
  * @version $Id$
  */
@@ -39,20 +39,23 @@ public class StreamingSVGMap extends WebMap {
     private static final Logger LOGGER = org.geotools.util.logging.Logging
             .getLogger("org.vfny.geoserver.responses.wms.map");
 
-    /** the XML and SVG header */
+    /**
+     * the XML and SVG header
+     */
     private static final String SVG_HEADER = "<?xml version=\"1.0\" standalone=\"no\"?>\n\t"
             + "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" \n\tstroke=\"green\" \n\tfill=\"none\" \n\tstroke-width=\"0.1%\"\n\tstroke-linecap=\"round\"\n\tstroke-linejoin=\"round\"\n\twidth=\"_width_\" \n\theight=\"_height_\" \n\tviewBox=\"_viewBox_\" \n\tpreserveAspectRatio=\"xMidYMid meet\">\n";
 
-    /** the SVG closing element */
+    /**
+     * the SVG closing element
+     */
     private static final String SVG_FOOTER = "</svg>\n";
 
     private SVGWriter writer;
 
     /**
      * Creates a new EncodeSVG object.
-     * 
+     *
      * @param mapContent
-     * 
      */
     public StreamingSVGMap(WMSMapContent mapContent) {
         super(mapContent);
@@ -110,8 +113,6 @@ public class StreamingSVGMap extends WebMap {
     }
 
     /**
-     * 
-     * 
      * @task TODO: respect layer filtering given by their Styles
      */
     private void writeLayers() throws IOException {

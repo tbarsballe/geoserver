@@ -34,7 +34,7 @@ import com.vividsolutions.jts.geom.Envelope;
  * <li>BBOX
  * </ul>
  * </p>
- * 
+ *
  * @author Gabriel Roldan
  */
 public class DynamicCrsMapResource extends AbstractResource {
@@ -57,10 +57,10 @@ public class DynamicCrsMapResource extends AbstractResource {
                 int width = params.getParameterValue("WIDTH").toInt(400);
                 int height = params.getParameterValue("HEIGHT").toInt(200);
                 String bboxStr = params.getParameterValue("BBOX").toOptionalString();
-        
+
                 ByteArrayOutputStream output = null;
                 if (bboxStr != null) {
-        
+
                     try {
                         CRSAreaOfValidityMapBuilder builder = new CRSAreaOfValidityMapBuilder(width, height);
                         Envelope envelope = parseEnvelope(bboxStr);
@@ -72,7 +72,7 @@ public class DynamicCrsMapResource extends AbstractResource {
                         e.printStackTrace();
                     }
                 }
-        
+
                 final byte[] byteArray = output == null ? null : output.toByteArray();
                 if (byteArray != null) {
                     attributes.getResponse().write(byteArray);
@@ -105,7 +105,7 @@ public class DynamicCrsMapResource extends AbstractResource {
         }
 
         public Bytes length() {
-            return Bytes.bytes(content == null? 0 : content.length);
+            return Bytes.bytes(content == null ? 0 : content.length);
         }
 
         public InputStream getInputStream() throws ResourceStreamNotFoundException {

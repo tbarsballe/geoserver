@@ -39,7 +39,7 @@ import org.geowebcache.layer.TileLayer;
  * A page that lists all {@link LayerInfo} and {@link LayerGroupInfo} that don't already have an
  * associated {@link GeoServerTileLayer} and allows to create a tile layer for each of one or in
  * bulk using the default settings.
- * 
+ *
  * @author groldan
  */
 public class NewCachedLayerPage extends GeoServerSecuredPage {
@@ -64,7 +64,7 @@ public class NewCachedLayerPage extends GeoServerSecuredPage {
 
             @Override
             protected Component getComponentForProperty(String id, IModel<TileLayer> itemModel,
-                    Property<TileLayer> property) {
+                                                        Property<TileLayer> property) {
 
                 if (property == TYPE) {
                     Fragment f = new Fragment(id, "iconFragment", NewCachedLayerPage.this);
@@ -145,7 +145,6 @@ public class NewCachedLayerPage extends GeoServerSecuredPage {
     /**
      * A simple ajax link that asks for confirmation and configures all the selected layers and
      * layer groups using the {@link GWC#getConfig() default settings}.
-     * 
      */
     private class BulkCachedLayerConfigurationLink extends AjaxLink<String> {
 
@@ -186,10 +185,10 @@ public class NewCachedLayerPage extends GeoServerSecuredPage {
                     IModel<String> model = new StringResourceModel(
                             "NewCachedLayerPage.confirmBulkConfig.message",
                             BulkCachedLayerConfigurationLink.this).setParameters(
-                            		new Object[] { selectedLayerCount.toString() });
+                            new Object[]{selectedLayerCount.toString()});
                     Label confirmLabel = new Label(id, model);
                     confirmLabel.setEscapeModelStrings(false);// allow some html inside, like
-                                                              // <b></b>, etc
+                    // <b></b>, etc
                     return confirmLabel;
                 }
 
@@ -216,5 +215,7 @@ public class NewCachedLayerPage extends GeoServerSecuredPage {
                 }
             });
         }
-    };
+    }
+
+    ;
 }

@@ -29,7 +29,7 @@ import org.junit.Test;
 public class GribDataTest extends TestCase {
 
     @Test
-    public void testFormatSupported() throws FileNotFoundException, IOException{
+    public void testFormatSupported() throws FileNotFoundException, IOException {
         // Check if the Grib Library is available by calling the NetCDFUtilities.isGribAvailable() method
         Assert.assertTrue(NetCDFUtilities.isGribAvailable());
         // Selection of the input file
@@ -41,7 +41,7 @@ public class GribDataTest extends TestCase {
         ImageReaderSpi spi = new NetCDFImageReaderSpi();
         Assert.assertTrue(spi.canDecodeInput(file));
     }
-    
+
     @Test
     public void testImage() throws FileNotFoundException, IOException {
         // Selection of the input file

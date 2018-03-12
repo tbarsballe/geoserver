@@ -7,7 +7,7 @@ package org.geoserver.wps;
 
 /**
  * The execution status request
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class GetExecutionResultType {

@@ -19,5 +19,5 @@ public class StoreNameComparator implements Comparator<StoreInfo> {
     public int compare(StoreInfo o1, StoreInfo o2) {
         return o1.getName().compareTo(o2.getName());
     }
-    
+
 }

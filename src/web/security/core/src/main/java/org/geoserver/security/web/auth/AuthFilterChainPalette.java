@@ -28,43 +28,44 @@ import org.geoserver.web.GeoServerApplication;
 public class AuthFilterChainPalette extends Palette<String> {
 
     AvailableAuthFilterNamesModel choicesModel;
-    
+
     public AuthFilterChainPalette(String id) {
         this(id, null, new AvailableAuthFilterNamesModel());
     }
-    
+
     public AuthFilterChainPalette(String id, IModel<List<String>> model) {
         this(id, model, new AvailableAuthFilterNamesModel());
     }
-    
-    public AuthFilterChainPalette(String id, IModel<List<String>> model, 
-        IModel<List<String>> choicesModel) {
+
+    public AuthFilterChainPalette(String id, IModel<List<String>> model,
+                                  IModel<List<String>> choicesModel) {
         super(id, model, choicesModel, new ChoiceRenderer() {
             @Override
             public String getIdValue(Object object, int index) {
                 return (String) getDisplayValue(object);
             }
+
             @Override
-                public Object getDisplayValue(Object object) {
-                     return object.toString();
-                }
+            public Object getDisplayValue(Object object) {
+                return object.toString();
+            }
         }, 10, true);
-        this.choicesModel=(AvailableAuthFilterNamesModel)choicesModel;
+        this.choicesModel = (AvailableAuthFilterNamesModel) choicesModel;
         add(new DefaultTheme());
     }
 
     public void setChain(VariableFilterChain chain) {
-        choicesModel.chain=chain;
+        choicesModel.chain = chain;
     }
-    
+
     static class AvailableAuthFilterNamesModel implements IModel<List<String>> {
 
         VariableFilterChain chain;
-        
+
         @Override
         public List<String> getObject() {
             List<String> result = new ArrayList<String>();
-            try {         
+            try {
                 result.addAll(chain.listFilterCandidates(GeoServerApplication.get().getSecurityManager()));
             } catch (IOException e) {
                 throw new WicketRuntimeException(e);
@@ -82,22 +83,21 @@ public class AuthFilterChainPalette extends Palette<String> {
             throw new UnsupportedOperationException();
         }
     }
-    
-    @Override
-    protected Recorder newRecorderComponent()
-    {
-      Recorder recorder=super.newRecorderComponent();     
-      recorder.add(new AjaxFormComponentUpdatingBehavior("change") {
-        private static final long serialVersionUID = 1L;
 
-        @Override
-        protected void onUpdate(AjaxRequestTarget target) {
-        }
-          
-      });
-      return recorder;
+    @Override
+    protected Recorder newRecorderComponent() {
+        Recorder recorder = super.newRecorderComponent();
+        recorder.add(new AjaxFormComponentUpdatingBehavior("change") {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+            }
+
+        });
+        return recorder;
     }
-    
+
     /**
      * Override otherwise the header is not i18n'ized
      */

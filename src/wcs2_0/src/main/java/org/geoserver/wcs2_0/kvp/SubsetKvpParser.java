@@ -16,7 +16,7 @@ import org.geoserver.wcs2_0.exception.WCS20Exception.WCS20ExceptionCode;
 
 /**
  * Parses the WCS 2.0 subset key
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class SubsetKvpParser extends KvpParser {
@@ -46,7 +46,7 @@ public class SubsetKvpParser extends KvpParser {
         if (openIdx == -1 || closeIdx == -1 || closeIdx < value.length() - 1) {
             throw new OWS20Exception("Invalid syntax, dimension [ , crs ] ( intervalOrPoint ) is expected",
                     WCS20ExceptionCode.InvalidEncodingSyntax, "subset");
-            
+
         }
 
         // parse the first part, dimension[,crs]

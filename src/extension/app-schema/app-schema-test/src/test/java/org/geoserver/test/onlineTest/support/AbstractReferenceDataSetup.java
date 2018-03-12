@@ -29,9 +29,8 @@ import com.sun.rowset.CachedRowSetImpl;
  * Base class that initialise and provides the methods for online test to take place. Other tests
  * that intends to run their unit test online should extend from this class and implement the
  * abstract methods.
- * 
+ *
  * @author Victor Tey, CSIRO Earth Science and Resource Engineering
- * 
  */
 public abstract class AbstractReferenceDataSetup extends JDBCTestSetup {
 
@@ -40,20 +39,20 @@ public abstract class AbstractReferenceDataSetup extends JDBCTestSetup {
      */
     public static final String ONLINE_TEST_PROFILE = "onlineTestProfile";
 
-    protected Logger LOGGER = Logger.getLogger(AbstractReferenceDataSetup.class);   
-    
+    protected Logger LOGGER = Logger.getLogger(AbstractReferenceDataSetup.class);
+
     /**
      * A static map which tracks which fixture files can not be found. This prevents continually
      * looking up the file and reporting it not found to the user.
      */
     protected static Map<String, Boolean> found = new HashMap<String, Boolean>();
-    
+
     // The type of database to use.
     public abstract JDBCDataStoreFactory createDataStoreFactory();
 
     // Setup the data.
     public abstract void setUp() throws Exception;
-    
+
     protected abstract Properties createExampleFixture();
 
     public void setUpData() throws Exception {
@@ -65,7 +64,7 @@ public abstract class AbstractReferenceDataSetup extends JDBCTestSetup {
     }
 
     // retrieve the id of the database.
-    public abstract String getDatabaseID();   
+    public abstract String getDatabaseID();
 
     protected Map<String, Boolean> getOnlineMap() {
         return found;
@@ -127,7 +126,7 @@ public abstract class AbstractReferenceDataSetup extends JDBCTestSetup {
 
     /**
      * Creates Example Fixture
-     * 
+     *
      * @param exFixtureFile
      * @param exampleFixture
      */
@@ -148,11 +147,11 @@ public abstract class AbstractReferenceDataSetup extends JDBCTestSetup {
             ioe.printStackTrace();
         }
     }
-    
+
     /**
      * This method doesn't not handle paging therefore care must be taken when dealing with large
      * dataset.
-     * 
+     *
      * @param sql statement
      * @return CachedRowSetImpl the result from the execution of the sql
      */
@@ -171,7 +170,7 @@ public abstract class AbstractReferenceDataSetup extends JDBCTestSetup {
         }
 
     }
-    
+
     public void run(String input, boolean replaceNewLine) throws Exception {
         if (replaceNewLine) {
             run(input);
@@ -184,12 +183,11 @@ public abstract class AbstractReferenceDataSetup extends JDBCTestSetup {
     public void run(String input) throws Exception {
         super.run(input.replaceAll(DatabaseUtil.NEWLINE, " "));
     }
-    
+
     /**
      * Get srid from geometry type.
-     * 
-     * @param type
-     *            geometry type
+     *
+     * @param type geometry type
      * @return srid
      */
     protected int getSrid(GeometryType type) {

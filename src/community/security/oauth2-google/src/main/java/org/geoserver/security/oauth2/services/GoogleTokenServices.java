@@ -27,7 +27,7 @@ import org.springframework.web.client.RestTemplate;
 
 /**
  * Remote Token Services for Google token details.
- * 
+ *
  * @author Alessio Fabiani, GeoSolutions S.A.S.
  */
 public class GoogleTokenServices extends GeoServerOAuthRemoteTokenServices {
@@ -90,7 +90,7 @@ public class GoogleTokenServices extends GeoServerOAuthRemoteTokenServices {
     }
 
     private Map<String, Object> postForMap(String path, MultiValueMap<String, String> formData,
-            HttpHeaders headers) {
+                                           HttpHeaders headers) {
         if (headers.getContentType() == null) {
             headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
         }

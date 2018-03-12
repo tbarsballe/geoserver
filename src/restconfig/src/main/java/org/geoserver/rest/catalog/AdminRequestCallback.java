@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * Rest callback that sets the {@link AdminRequest} thread local.
- * 
+ *
  * @author Justin Deoliveira, OpenGeo
  */
 @Component
@@ -24,7 +24,7 @@ public class AdminRequestCallback extends DispatcherCallbackAdapter {
 
     @Override
     public void dispatched(HttpServletRequest HttpServletRequest,
-            HttpServletResponse HttpServletResponse, Object handler) {
+                           HttpServletResponse HttpServletResponse, Object handler) {
         Object controllerBean = DispatcherCallback.getControllerBean(handler);
         if (controllerBean instanceof AbstractCatalogController
                 || controllerBean instanceof AbstractGeoServerController) {
@@ -34,7 +34,7 @@ public class AdminRequestCallback extends DispatcherCallbackAdapter {
 
     @Override
     public void finished(HttpServletRequest HttpServletRequest,
-            HttpServletResponse HttpServletResponse) {
+                         HttpServletResponse HttpServletResponse) {
         AdminRequest.finish();
     }
 

@@ -18,27 +18,29 @@ import com.google.common.cache.CacheBuilder;
  * a new {@link Cache} object with two Java parameters called maxCachedEntries and evictionTime.
  * The first parameters indicates the maximum entries that the cache could contain (by default 25000)
  * while the second one indicates the eviction time for each entry in minutes(default 20).
- * 
- * 
- * @author Nicola Lagomarsini geosolutions
  *
+ * @author Nicola Lagomarsini geosolutions
  */
 public class JDBCCacheProvider implements CacheProvider {
 
     public static final int DEFAULT_CONCURRENCY_LEVEL = 4;
 
     public static final int DEFAULT_EXPIRATION_MINUTES = 20;
-    
+
     public static final int DEFAULT_MAX_ENTRIES = 25000;
 
     public static final String DEFAULT_SIZE_KEY = "maxCachedEntries";
-    
+
     public static final String DEFAULT_TIME_KEY = "evictionTime";
 
-    /** Maximum number of cache entries*/
+    /**
+     * Maximum number of cache entries
+     */
     public final int maxEntries = Integer.parseInt(System.getProperty(DEFAULT_SIZE_KEY, DEFAULT_MAX_ENTRIES + ""));
 
-    /** Expiration time in minutes for each entry*/
+    /**
+     * Expiration time in minutes for each entry
+     */
     public final long expirationMinutes = Long.parseLong(System.getProperty(DEFAULT_TIME_KEY, DEFAULT_EXPIRATION_MINUTES + ""));
 
     @Override

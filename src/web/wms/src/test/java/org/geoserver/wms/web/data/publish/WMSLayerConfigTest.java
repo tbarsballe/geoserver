@@ -37,7 +37,7 @@ import org.junit.Test;
 
 @SuppressWarnings("serial")
 public class WMSLayerConfigTest extends GeoServerWicketTestSupport {
-    
+
     @Before
     public void resetPondStyle() {
         Catalog catalog = getCatalog();
@@ -45,7 +45,7 @@ public class WMSLayerConfigTest extends GeoServerWicketTestSupport {
         style.setWorkspace(null);
         catalog.save(style);
     }
-    
+
     @Test
     public void testExisting() {
         final LayerInfo layer = getCatalog().getLayerByName(MockData.PONDS.getLocalPart());
@@ -60,15 +60,15 @@ public class WMSLayerConfigTest extends GeoServerWicketTestSupport {
         tester.assertRenderedPage(FormTestPage.class);
         tester.assertComponent("form", Form.class);
         tester.assertComponent("form:panel:styles:defaultStyle", DropDownChoice.class);
-        
+
         // check selecting something else works
-        StyleInfo target = ((List<StyleInfo>) new StylesModel().getObject()).get(0); 
+        StyleInfo target = ((List<StyleInfo>) new StylesModel().getObject()).get(0);
         FormTester ft = tester.newFormTester("form");
         ft.select("panel:styles:defaultStyle", 0);
         ft.submit();
         tester.assertModelValue("form:panel:styles:defaultStyle", target);
     }
-    
+
     @Test
     public void testNew() {
         final LayerInfo layer = getCatalog().getFactory().createLayer();
@@ -81,17 +81,17 @@ public class WMSLayerConfigTest extends GeoServerWicketTestSupport {
         }
         );
         Component layerConfig = page.get("form:panel:styles:defaultStyle");
-        
+
         tester.startPage(page);
         tester.assertRenderedPage(FormTestPage.class);
         tester.assertComponent("form", Form.class);
         tester.assertComponent("form:panel:styles:defaultStyle", DropDownChoice.class);
-        
+
         // check submitting like this will create errors, there is no selection
         tester.submitForm("form");
-        
+
         assertTrue(layerConfig.getFeedbackMessages().hasMessage(FeedbackMessage.ERROR));
-        
+
         // now set something and check there are no messages this time
         page.getSession().getFeedbackMessages().clear();
         FormTester ft = tester.newFormTester("form");
@@ -109,7 +109,7 @@ public class WMSLayerConfigTest extends GeoServerWicketTestSupport {
         style.setWorkspace(ws);
         catalog.save(style);
 
-        
+
         final LayerInfo layer = getCatalog().getLayerByName(MockData.PONDS.getLocalPart());
         FormTestPage page = new FormTestPage(new ComponentBuilder() {
 
@@ -122,8 +122,8 @@ public class WMSLayerConfigTest extends GeoServerWicketTestSupport {
         tester.assertRenderedPage(FormTestPage.class);
         tester.debugComponentTrees();
 
-        Image img = (Image) 
-            tester.getComponentFromLastRenderedPage("form:panel:styles:defaultStyleLegendGraphic");
+        Image img = (Image)
+                tester.getComponentFromLastRenderedPage("form:panel:styles:defaultStyleLegendGraphic");
         assertNotNull(img);
         assertEquals(1, img.getBehaviors().size());
         assertTrue(img.getBehaviors().get(0) instanceof AttributeModifier);
@@ -141,10 +141,10 @@ public class WMSLayerConfigTest extends GeoServerWicketTestSupport {
 
         FormTestPage page = new FormTestPage(new ComponentBuilder() {
 
-                public Component buildComponent(String id) {
-                    return new WMSLayerConfig(id, layerModel);
-                }
+            public Component buildComponent(String id) {
+                return new WMSLayerConfig(id, layerModel);
             }
+        }
         );
 
         tester.startPage(page);

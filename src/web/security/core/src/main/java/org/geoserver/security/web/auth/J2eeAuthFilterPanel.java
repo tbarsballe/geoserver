@@ -26,17 +26,19 @@ import org.geoserver.security.web.role.RoleServiceChoice;
 
 /**
  * Configuration panel for {@link GeoServerJ2eeAuthenticationFilter}.
- * 
+ *
  * @author Justin Deoliveira, OpenGeo
  */
 public class J2eeAuthFilterPanel extends J2eeBaseAuthFilterPanel<J2eeAuthenticationFilterConfig> {
 
-    /** serialVersionUID */
+    /**
+     * serialVersionUID
+     */
     private static final long serialVersionUID = 1L;
 
     public J2eeAuthFilterPanel(String id, IModel<J2eeAuthenticationFilterConfig> model) {
         super(id, model);
     }
 
-   
+
 }

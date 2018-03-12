@@ -52,14 +52,13 @@ import org.springframework.mock.web.MockHttpServletResponse;
 
 /**
  * Integration test for GeoServer cached layers using the GWC REST API
- * 
  */
 public class RESTIntegrationTest extends GeoServerSystemTestSupport {
 
     @Override
     protected void onSetUp(SystemTestData testData) throws Exception {
         super.onSetUp(testData);
-        
+
         GWC.get().getConfig().setDirectWMSIntegrationEnabled(false);
     }
 
@@ -123,14 +122,14 @@ public class RESTIntegrationTest extends GeoServerSystemTestSupport {
 
         MockHttpServletResponse response = putLayer(url, "badId", layerName);
 
-        assertThat(response, 
-                hasProperty("status", 
+        assertThat(response,
+                hasProperty("status",
                         equalTo(HttpServletResponse.SC_BAD_REQUEST)));
-        assertThat(response, 
-                hasProperty("contentAsString", 
+        assertThat(response,
+                hasProperty("contentAsString",
                         containsString("No GeoServer Layer or LayerGroup exists with id 'badId'")));
-        assertThat(response, 
-                hasProperty("contentType", 
+        assertThat(response,
+                hasProperty("contentType",
                         startsWith("text/plain")));
     }
 
@@ -144,14 +143,14 @@ public class RESTIntegrationTest extends GeoServerSystemTestSupport {
         final String url = "gwc/rest/layers/badLayerName.xml";
         MockHttpServletResponse response = putLayer(url, "", "badLayerName");
 
-        assertThat(response, 
-                hasProperty("status", 
+        assertThat(response,
+                hasProperty("status",
                         equalTo(HttpServletResponse.SC_NOT_FOUND)));
-        assertThat(response, 
-                hasProperty("contentAsString", 
+        assertThat(response,
+                hasProperty("contentAsString",
                         containsString("GeoServer Layer or LayerGroup 'badLayerName' not found")));
-        assertThat(response, 
-                hasProperty("contentType", 
+        assertThat(response,
+                hasProperty("contentType",
                         startsWith("text/plain")));
     }
 
@@ -167,14 +166,14 @@ public class RESTIntegrationTest extends GeoServerSystemTestSupport {
 
         String expected = "Layer with id '" + id
                 + "' found but name does not match: 'badLayerName'/'" + layerName + "'";
-        assertThat(response, 
-                hasProperty("status", 
+        assertThat(response,
+                hasProperty("status",
                         equalTo(HttpServletResponse.SC_BAD_REQUEST)));
-        assertThat(response, 
-                hasProperty("contentAsString", 
+        assertThat(response,
+                hasProperty("contentAsString",
                         containsString(expected)));
-        assertThat(response, 
-                hasProperty("contentType", 
+        assertThat(response,
+                hasProperty("contentType",
                         startsWith("text/plain")));
     }
 
@@ -191,14 +190,14 @@ public class RESTIntegrationTest extends GeoServerSystemTestSupport {
 
         MockHttpServletResponse response = putLayer(url, id, "");
 
-        assertThat(response, 
-                hasProperty("status", 
+        assertThat(response,
+                hasProperty("status",
                         equalTo(HttpServletResponse.SC_BAD_REQUEST)));
-        assertThat(response, 
-                hasProperty("contentAsString", 
+        assertThat(response,
+                hasProperty("contentAsString",
                         containsString("Layer name not provided")));
-        assertThat(response, 
-                hasProperty("contentType", 
+        assertThat(response,
+                hasProperty("contentType",
                         startsWith("text/plain")));
     }
 
@@ -312,16 +311,16 @@ public class RESTIntegrationTest extends GeoServerSystemTestSupport {
 
         List<ParameterFilter> filters = Lists.newArrayList(info.getParameterFilters());
         assertEquals(3, filters.size()); // Float, String, and a Style filter that should replace 
-                                         // the old String style filter.
+        // the old String style filter.
 
-        FloatParameterFilter floatFilter=null;
-        StringParameterFilter stringFilter=null;
-        StyleParameterFilter styleFilter=null;
-        
-        for(ParameterFilter filter: filters) {
-            if(filter instanceof FloatParameterFilter) floatFilter = (FloatParameterFilter) filter;
-            if(filter instanceof StringParameterFilter) stringFilter = (StringParameterFilter) filter;
-            if(filter instanceof StyleParameterFilter) styleFilter = (StyleParameterFilter) filter;
+        FloatParameterFilter floatFilter = null;
+        StringParameterFilter stringFilter = null;
+        StyleParameterFilter styleFilter = null;
+
+        for (ParameterFilter filter : filters) {
+            if (filter instanceof FloatParameterFilter) floatFilter = (FloatParameterFilter) filter;
+            if (filter instanceof StringParameterFilter) stringFilter = (StringParameterFilter) filter;
+            if (filter instanceof StyleParameterFilter) styleFilter = (StyleParameterFilter) filter;
         }
 
         assertNotNull(floatFilter);
@@ -337,10 +336,10 @@ public class RESTIntegrationTest extends GeoServerSystemTestSupport {
         assertEquals("BGCOLOR", stringFilter.getKey());
         assertEquals("0xFFFFFF", stringFilter.getDefaultValue());
         assertEquals(ImmutableList.of("0x000000", "0x888888"), stringFilter.getLegalValues());
-        
+
         assertEquals("STYLES", styleFilter.getKey());
     }
-    
+
     @Test
     public void testPutStyleParameterFilter() throws Exception {
         final String layerName = getLayerId(MockData.LAKES);
@@ -388,8 +387,8 @@ public class RESTIntegrationTest extends GeoServerSystemTestSupport {
 
         List<ParameterFilter> filters = Lists.newArrayList(info.getParameterFilters());
         assertEquals(1, filters.size());
-        
-        StyleParameterFilter styleFilter=(StyleParameterFilter) filters.get(0);
+
+        StyleParameterFilter styleFilter = (StyleParameterFilter) filters.get(0);
 
         assertEquals("STYLES", styleFilter.getKey());
         assertEquals("capitals", styleFilter.getDefaultValue());
@@ -501,12 +500,12 @@ public class RESTIntegrationTest extends GeoServerSystemTestSupport {
         List<ParameterFilter> filters = Lists.newArrayList(info.getParameterFilters());
         assertEquals(2, filters.size());
 
-        FloatParameterFilter floatFilter=null;
-        StyleParameterFilter styleFilter=null;
-        
-        for(ParameterFilter filter: filters) {
-            if(filter instanceof FloatParameterFilter) floatFilter = (FloatParameterFilter) filter;
-            if(filter instanceof StyleParameterFilter) styleFilter = (StyleParameterFilter) filter;
+        FloatParameterFilter floatFilter = null;
+        StyleParameterFilter styleFilter = null;
+
+        for (ParameterFilter filter : filters) {
+            if (filter instanceof FloatParameterFilter) floatFilter = (FloatParameterFilter) filter;
+            if (filter instanceof StyleParameterFilter) styleFilter = (StyleParameterFilter) filter;
         }
 
         assertNotNull(floatFilter);
@@ -536,48 +535,48 @@ public class RESTIntegrationTest extends GeoServerSystemTestSupport {
                     + " <name>" + layerName + "</name>"//
                     + " <autoCacheStyles>true</autoCacheStyles>"
                     + "</GeoServerLayer>";
-    
-    
+
+
             MockHttpServletResponse response = super.postAsServletResponse(url, xml, "text/xml");
-    
+
             assertEquals(HttpServletResponse.SC_OK, response.getStatus());
-    
+
             GeoServerTileLayer tileLayer = (GeoServerTileLayer) mediator.getTileLayerByName(layerName);
             GeoServerTileLayerInfo info = tileLayer.getInfo();
-    
-    
+
+
             List<ParameterFilter> filters = Lists.newArrayList(info.getParameterFilters());
             assertThat(
-                    filters, 
+                    filters,
                     contains(allOf(
                             Matchers.<ParameterFilter>hasProperty("key", is("STYLES")),
-                            isA((Class<ParameterFilter>)StyleParameterFilter.class.asSubclass(ParameterFilter.class))))
-                    );
+                            isA((Class<ParameterFilter>) StyleParameterFilter.class.asSubclass(ParameterFilter.class))))
+            );
         }
         {
             final String xml = "<GeoServerLayer>"//
                     + " <name>" + layerName + "</name>"//
                     + " <autoCacheStyles>false</autoCacheStyles>"
                     + "</GeoServerLayer>";
-    
-    
+
+
             MockHttpServletResponse response = super.postAsServletResponse(url, xml, "text/xml");
-    
+
             assertEquals(HttpServletResponse.SC_OK, response.getStatus());
-    
+
             GeoServerTileLayer tileLayer = (GeoServerTileLayer) mediator.getTileLayerByName(layerName);
             GeoServerTileLayerInfo info = tileLayer.getInfo();
-    
-    
+
+
             List<ParameterFilter> filters = Lists.newArrayList(info.getParameterFilters());
             assertThat(
-                    filters, 
+                    filters,
                     not(contains(allOf(
                             Matchers.<ParameterFilter>hasProperty("key", is("STYLES")),
-                            isA((Class<ParameterFilter>)StyleParameterFilter.class.asSubclass(ParameterFilter.class))))
+                            isA((Class<ParameterFilter>) StyleParameterFilter.class.asSubclass(ParameterFilter.class))))
                     ));
         }
-        
+
     }
 
     @Test
@@ -622,7 +621,7 @@ public class RESTIntegrationTest extends GeoServerSystemTestSupport {
         MockHttpServletResponse sr = getAsServletResponse(url);
         assertEquals(200, sr.getStatus());
         assertTrue(sr.getContentType(), sr.getContentType().startsWith("application/json"));
-        JSONObject json = (JSONObject)getAsJSON(url);
+        JSONObject json = (JSONObject) getAsJSON(url);
         assertNotNull(json.getJSONArray("long-array-array"));
 
     }
@@ -635,15 +634,15 @@ public class RESTIntegrationTest extends GeoServerSystemTestSupport {
 
         final String xml =
                 "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
-                "<seedRequest>\n" +
-                "  <name>"+layerName+"</name>\n" +
-                "  <gridSetId>EPSG:4326</gridSetId>\n" +
-                "  <zoomStart>0</zoomStart>\n" +
-                "  <zoomStop>12</zoomStop>\n" +
-                "  <format>image/png</format>\n" +
-                "  <type>seed</type>\n" +
-                "  <threadCount>1</threadCount>\n" +
-                "</seedRequest>";
+                        "<seedRequest>\n" +
+                        "  <name>" + layerName + "</name>\n" +
+                        "  <gridSetId>EPSG:4326</gridSetId>\n" +
+                        "  <zoomStart>0</zoomStart>\n" +
+                        "  <zoomStop>12</zoomStop>\n" +
+                        "  <format>image/png</format>\n" +
+                        "  <type>seed</type>\n" +
+                        "  <threadCount>1</threadCount>\n" +
+                        "</seedRequest>";
 
         MockHttpServletResponse sr = postAsServletResponse(url, xml);
         assertEquals(200, sr.getStatus());
@@ -657,7 +656,7 @@ public class RESTIntegrationTest extends GeoServerSystemTestSupport {
         final String id = getCatalog().getLayerByName(layerName).getId();
 
         final String json = "{ \"seedRequest\": {\n" +
-                "  \"name\": \""+layerName+"\",\n" +
+                "  \"name\": \"" + layerName + "\",\n" +
                 "  \"gridSetId\": \"EPSG:4326\",\n" +
                 "  \"zoomStart\": 0,\n" +
                 "  \"zoomStop\": 12,\n" +
@@ -676,7 +675,7 @@ public class RESTIntegrationTest extends GeoServerSystemTestSupport {
         MockHttpServletResponse sr = getAsServletResponse(url);
         assertEquals(200, sr.getStatus());
         assertTrue(sr.getContentType(), sr.getContentType().startsWith("application/json"));
-        JSONObject json = (JSONObject)getAsJSON(url);
+        JSONObject json = (JSONObject) getAsJSON(url);
 
         JSONArray jsonArr = json.getJSONArray("long-array-array");
         assertNotNull(jsonArr);

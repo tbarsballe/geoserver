@@ -13,8 +13,8 @@ public class JDBCConfigProperties extends JDBCLoaderProperties {
     public JDBCConfigProperties(JDBCConfigPropertiesFactoryBean factory) {
         super(factory);
     }
-    
+
     //jdbcconfig specific properties  may go here.
-    
+
 
 }

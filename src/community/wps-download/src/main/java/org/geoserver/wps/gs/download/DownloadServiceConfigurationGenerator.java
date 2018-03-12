@@ -7,9 +7,8 @@ package org.geoserver.wps.gs.download;
 
 /**
  * Simple interface to get the {@link DownloadServiceConfiguration}.
- * 
+ *
  * @author Simone Giannecchini, GeoSolutions
- * 
  */
 public interface DownloadServiceConfigurationGenerator {
 

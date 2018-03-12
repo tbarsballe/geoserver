@@ -67,7 +67,8 @@ public class PGRasterPanel extends Panel {
 
     CRSPanel epsgcode;
 
-    private static CoordinateReferenceSystem DEFAULT_CRS; 
+    private static CoordinateReferenceSystem DEFAULT_CRS;
+
     static {
         try {
             DEFAULT_CRS = CRS.decode("EPSG:4326");
@@ -82,13 +83,13 @@ public class PGRasterPanel extends Panel {
 
         super(id);
         server = addTextPanel(paramsModel, "server", true);
-        
+
         port = addTextPanel(paramsModel, "port", true);
         SRSToCRSModel srsModel = new SRSToCRSModel(new PropertyModel(paramsModel, "ESPG:4326"));
         epsgcode = new CRSPanel("epsgcode", srsModel);
         epsgcode.setModelObject(DEFAULT_CRS);
         add(epsgcode);
-        
+
         user = addTextPanel(paramsModel, "user", "Postgis user", true);
         password = addPasswordPanel(paramsModel, "password");
         database = addTextPanel(paramsModel, "database", "Postgis Database", true);
@@ -96,7 +97,7 @@ public class PGRasterPanel extends Panel {
         schema = addTextPanel(paramsModel, "schema", true);
         schema.setModelValue(new String[]{"public"});
         fileext = addTextPanel(paramsModel, "fileext", "tiles file extension filter", false);
-        importopt = addTextPanel(paramsModel, "importopt", "raster2pgsql script import options",  false);
+        importopt = addTextPanel(paramsModel, "importopt", "raster2pgsql script import options", false);
 
         server.setOutputMarkupId(true);
         port.setOutputMarkupId(true);
@@ -118,7 +119,7 @@ public class PGRasterPanel extends Panel {
                 paramsModel, paramName), new ResourceModel(resourceKey, paramName), true);
         add(pwdPanel);
 
-        String defaultTitle = paramName; 
+        String defaultTitle = paramName;
 
         ResourceModel titleModel = new ResourceModel(resourceKey + ".title", defaultTitle);
         String title = String.valueOf(titleModel.getObject());
@@ -131,7 +132,7 @@ public class PGRasterPanel extends Panel {
     private FormComponent addTextPanel(final IModel paramsModel, final String paramName, final boolean required) {
         return addTextPanel(paramsModel, paramName, paramName, required);
     }
-    
+
     private FormComponent addTextPanel(final IModel paramsModel, final String paramName, final String paramTitle, final boolean required) {
         final String resourceKey = getClass().getSimpleName() + "." + paramName;
 
@@ -157,14 +158,14 @@ public class PGRasterPanel extends Panel {
     /**
      * Setup a URL String composing all the required configuration options
      *
-     * @throws FactoryException 
+     * @throws FactoryException
      */
     public String buildURL() {
         StringBuilder builder = new StringBuilder("pgraster://");
 //        pgraster://USER:PASS@HOST:PORT:DATABASE.SCHEMA.TABLE@EPSGCODE:*.FILE_EXTENSION?OPTIONS#/PATH/TO/RASTER_TILES/"
         builder.append(user.getValue()).append(":").append(password.getValue()).append("@").append(server.getValue()).append(":")
-        .append(port.getValue()).append(":").append(database.getValue()).append(".").append(schema.getValue()).append(".")
-        .append(table.getValue());
+                .append(port.getValue()).append(":").append(database.getValue()).append(".").append(schema.getValue()).append(".")
+                .append(table.getValue());
         final CoordinateReferenceSystem crs = (CoordinateReferenceSystem) epsgcode.getModel().getObject();
         if (crs != null) {
             Integer code;

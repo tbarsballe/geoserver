@@ -203,7 +203,7 @@ public class AdminRulesRestControllerTest extends GeofenceBaseTest {
      * Helper method that will validate a move result.
      */
     private void validateResult(ResponseEntity<JaxbAdminRuleList> result,
-            HttpStatus expectedHttpStatus, int rules) {
+                                HttpStatus expectedHttpStatus, int rules) {
         assertThat(result, notNullValue());
         assertThat(result.getStatusCode(), is(expectedHttpStatus));
         if (rules > 0) {

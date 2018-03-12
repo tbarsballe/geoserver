@@ -29,7 +29,7 @@ import org.springframework.security.ldap.userdetails.LdapAuthoritiesPopulator;
 
 /**
  * LDAP security provider.
- * 
+ *
  * @author Justin Deoliveira, OpenGeo
  */
 public class LDAPSecurityProvider extends GeoServerSecurityProvider {
@@ -51,12 +51,12 @@ public class LDAPSecurityProvider extends GeoServerSecurityProvider {
     public Class<LDAPAuthenticationProvider> getAuthenticationProviderClass() {
         return LDAPAuthenticationProvider.class;
     }
-    
+
     @Override
     public Class<? extends GeoServerUserGroupService> getUserGroupServiceClass() {
         return LDAPUserGroupService.class;
     }
-    
+
     @Override
     public GeoServerAuthenticationProvider createAuthenticationProvider(SecurityNamedServiceConfig config) {
         LDAPSecurityServiceConfig ldapConfig = (LDAPSecurityServiceConfig) config;
@@ -73,8 +73,8 @@ public class LDAPSecurityProvider extends GeoServerSecurityProvider {
 
         // authenticate and extract user using a distinguished name
         if (ldapConfig.getUserDnPattern() != null) {
-            authenticator.setUserDnPatterns(new String[] { ldapConfig
-                    .getUserDnPattern() });
+            authenticator.setUserDnPatterns(new String[]{ldapConfig
+                    .getUserDnPattern()});
         }
 
         LdapAuthoritiesPopulator authPopulator = null;
@@ -138,15 +138,14 @@ public class LDAPSecurityProvider extends GeoServerSecurityProvider {
 
         }
 
-        
-        
+
         return new LDAPAuthenticationProvider(provider,
                 ldapConfig.getAdminGroup(), ldapConfig.getGroupAdminGroup());
     }
 
     @Override
     public Class<? extends GeoServerRoleService> getRoleServiceClass() {
-        return LDAPRoleService.class; 
+        return LDAPRoleService.class;
     }
 
     @Override
@@ -154,10 +153,10 @@ public class LDAPSecurityProvider extends GeoServerSecurityProvider {
             throws IOException {
         return new LDAPRoleService();
     }
-    
+
     @Override
     public GeoServerUserGroupService createUserGroupService(SecurityNamedServiceConfig config)
             throws IOException {
-            return new LDAPUserGroupService(config);
+        return new LDAPUserGroupService(config);
     }
 }

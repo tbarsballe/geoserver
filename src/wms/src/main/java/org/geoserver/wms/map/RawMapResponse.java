@@ -16,7 +16,7 @@ import org.springframework.util.Assert;
 
 /**
  * A {@link Response} to handle a {@link RawMap}
- * 
+ *
  * @author Gabriel Roldan
  * @see RawMap
  */

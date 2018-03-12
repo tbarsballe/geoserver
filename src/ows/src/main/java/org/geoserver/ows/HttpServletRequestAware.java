@@ -15,8 +15,8 @@ import javax.servlet.http.HttpServletRequest;
  * Note: This interface is added to allow existing services to adapt to the
  * new ows dispatch framework.
  * </p>
- * @author Justin Deoliveira, The Open Planning Project, jdeolive@openplans.org
  *
+ * @author Justin Deoliveira, The Open Planning Project, jdeolive@openplans.org
  * @deprecated Client code should not implement this interface
  */
 public interface HttpServletRequestAware {

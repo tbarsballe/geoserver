@@ -54,7 +54,7 @@ public class ReadSecuredCatalogDecoratorsTest extends AbstractAuthorizationTest 
             ro.getFeatureSource(null, null);
             fail("This should have failed with a security exception");
         } catch (Exception e) {
-            if (ReadOnlyDataStoreTest.isSpringSecurityException(e)==false)
+            if (ReadOnlyDataStoreTest.isSpringSecurityException(e) == false)
                 fail("Should have failed with a security exception");
         }
         SecuredDataStoreInfo store = (SecuredDataStoreInfo) ro.getStore();
@@ -88,7 +88,7 @@ public class ReadSecuredCatalogDecoratorsTest extends AbstractAuthorizationTest 
             ReadOnlyDataStore dataStore = (ReadOnlyDataStore) ro.getDataStore(null);
             fail("This should have failed with a security exception");
         } catch (Exception e) {
-            if (ReadOnlyDataStoreTest.isSpringSecurityException(e)==false)
+            if (ReadOnlyDataStoreTest.isSpringSecurityException(e) == false)
                 fail("Should have failed with a security exception");
         }
     }

@@ -49,7 +49,7 @@ import com.google.common.io.Closeables;
 public class CatalogPropertyAccessor implements PropertyAccessor {
 
     private static final Logger LOGGER = Logging.getLogger(CatalogPropertyAccessor.class);
-    
+
     @Override
     public boolean canHandle(Object object, String xpath, Class<?> target) {
         return object instanceof Info;
@@ -76,10 +76,10 @@ public class CatalogPropertyAccessor implements PropertyAccessor {
     }
 
     /**
-     * @param input the object to extract the (possibly nested,indexed, or collection) property from
+     * @param input        the object to extract the (possibly nested,indexed, or collection) property from
      * @param propertyName the property to extract from {@code input}
      * @return the evaluated value of the given property, or {@code null} if a prior nested property
-     *         in the path is null;
+     * in the path is null;
      * @throws IllegalArgumentException if no such property exists for the given object
      */
     public Object getProperty(final Object input, final String propertyName)
@@ -94,7 +94,6 @@ public class CatalogPropertyAccessor implements PropertyAccessor {
 
     /**
      * @param input
-     *
      */
     @SuppressWarnings("unchecked")
     private List<String> getAnyText(final Info input) {
@@ -140,7 +139,7 @@ public class CatalogPropertyAccessor implements PropertyAccessor {
             Collection<Object> col = (Collection<Object>) input;
             List<Object> result = new ArrayList<Object>(col.size());
             for (Object o : col) {
-                if(o == null) {
+                if (o == null) {
                     continue;
                 }
                 // if one of the nested properties is not found just ignore and move
@@ -149,7 +148,7 @@ public class CatalogPropertyAccessor implements PropertyAccessor {
                     Object value = getProperty(o, propName);
                     Object nested = getProperty(value, propertyNames, offset + 1);
                     result.add(nested);
-                } catch(Exception e) {
+                } catch (Exception e) {
                     LOGGER.log(Level.FINE, "Skipping nested property not found", e);
                 }
             }
@@ -269,7 +268,7 @@ public class CatalogPropertyAccessor implements PropertyAccessor {
     }
 
     /**
-     * 
+     *
      */
     private static synchronized void loadFullTextProperties() {
         if (!FULL_TEXT_PROPERTIES.isEmpty()) {

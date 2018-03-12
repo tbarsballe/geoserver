@@ -15,11 +15,9 @@ import org.geoserver.web.GeoServerWicketTestSupport;
 import org.junit.Test;
 
 /**
- * 
  * Geofence Rules Model Test
- * 
- * @author Niels Charlier
  *
+ * @author Niels Charlier
  */
 public class GeofenceRulesModelTest extends GeoServerWicketTestSupport {
 

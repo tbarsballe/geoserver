@@ -16,7 +16,6 @@ import org.geoserver.web.wicket.GeoServerDataProvider;
 
 /**
  * @author Alessio Fabiani, GeoSolutions
- *
  */
 public class BackupRestoreExecutionsProvider<T> extends GeoServerDataProvider<AbstractExecutionAdapter> {
     public static Property<AbstractExecutionAdapter> ID = new BeanProperty("id", "id");
@@ -41,15 +40,16 @@ public class BackupRestoreExecutionsProvider<T> extends GeoServerDataProvider<Ab
     public Class<T> getType() {
         return this.clazz;
     }
-    
+
     @Override
     protected List<Property<AbstractExecutionAdapter>> getProperties() {
         return Arrays.asList(ID, STATE, STARTED, PROGRESS, ARCHIVEFILE);
     }
+
     @Override
     protected List<AbstractExecutionAdapter> getItems() {
         if (getType() == BackupExecutionAdapter.class) {
-            return new ArrayList<AbstractExecutionAdapter>(BackupRestoreWebUtils.backupFacade().getBackupExecutions().values());            
+            return new ArrayList<AbstractExecutionAdapter>(BackupRestoreWebUtils.backupFacade().getBackupExecutions().values());
         } else if (getType() == RestoreExecutionAdapter.class) {
             return new ArrayList<AbstractExecutionAdapter>(BackupRestoreWebUtils.backupFacade().getRestoreExecutions().values());
         }

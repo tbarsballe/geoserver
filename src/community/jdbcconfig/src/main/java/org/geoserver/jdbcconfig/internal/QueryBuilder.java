@@ -50,13 +50,11 @@ class QueryBuilder<T extends Info> {
 
     private Filter unsupportedFilter;
 
-    private boolean offsetLimitApplied=false;
+    private boolean offsetLimitApplied = false;
 
     /**
      * @param clazz
      * @param
-     * 
-     * 
      */
     private QueryBuilder(Dialect dialect, final Class<T> clazz, DbMappings dbMappings, final boolean isCountQuery) {
         this.dialect = dialect;
@@ -67,12 +65,12 @@ class QueryBuilder<T extends Info> {
     }
 
     public static <T extends Info> QueryBuilder<T> forCount(Dialect dialect, final Class<T> clazz,
-            DbMappings dbMappings) {
+                                                            DbMappings dbMappings) {
         return new QueryBuilder<T>(dialect, clazz, dbMappings, true);
     }
 
     public static <T extends Info> QueryBuilder<T> forIds(Dialect dialect, final Class<T> clazz,
-            DbMappings dbMappings) {
+                                                          DbMappings dbMappings) {
         return new QueryBuilder<T>(dialect, clazz, dbMappings, false);
     }
 
@@ -103,18 +101,18 @@ class QueryBuilder<T extends Info> {
     }
 
     public QueryBuilder<T> sortOrder(SortBy order) {
-        if(order==null){
+        if (order == null) {
             this.sortOrder();
         } else {
-            this.sortOrder(new SortBy[] {order});
+            this.sortOrder(new SortBy[]{order});
         }
         return this;
     }
 
-    
+
     public QueryBuilder<T> sortOrder(SortBy... order) {
-        if(order==null || order.length==0){
-            this.sortOrder=null;
+        if (order == null || order.length == 0) {
+            this.sortOrder = null;
         } else {
             this.sortOrder = order;
         }
@@ -135,27 +133,27 @@ class QueryBuilder<T extends Info> {
          * 
          * The sort each of the created attribute.
          */
-        
+
         // Need to put together the ORDER BY clause as we go and then add it at the end
         StringBuilder orderBy = new StringBuilder();
         orderBy.append("ORDER BY ");
-        
+
         int i = 0;
-        
+
         query.append("SELECT id FROM ");
-        
+
         query.append("\n    (SELECT oid, id FROM object WHERE ");
-        if (queryType!=null) { 
+        if (queryType != null) {
             query.append("type_id in (:types) /* ").
-            append(queryType.getCanonicalName()).append(" */\n      AND ");
+                    append(queryType.getCanonicalName()).append(" */\n      AND ");
         }
         query.append(whereClause).append(") object");
-        
-        for(SortBy order: orders) {
+
+        for (SortBy order : orders) {
             final String sortProperty = order.getPropertyName().getPropertyName();
-            final String subSelectName = "subSelect"+i;
-            final String attributeName = "prop"+i;
-            final String propertyParamName = "sortProperty"+i;
+            final String subSelectName = "subSelect" + i;
+            final String attributeName = "prop" + i;
+            final String propertyParamName = "sortProperty" + i;
 
             final Set<Integer> sortPropertyTypeIds;
             sortPropertyTypeIds = dbMappings.getPropertyTypeIds(queryType, sortProperty);
@@ -166,26 +164,26 @@ class QueryBuilder<T extends Info> {
 
             query.append("\n  LEFT JOIN");
             query.append("\n    (SELECT oid, value ").append(attributeName).
-            append(" FROM \n      object_property WHERE property_type IN (:").
-            append(propertyParamName).append(")) ").append(subSelectName);
+                    append(" FROM \n      object_property WHERE property_type IN (:").
+                    append(propertyParamName).append(")) ").append(subSelectName);
 
             query.append("  /* ").append(order.getPropertyName().getPropertyName())
-                .append(" ").append(ascDesc(order)).append(" */");
-            
+                    .append(" ").append(ascDesc(order)).append(" */");
+
             query.append("\n  ON object.oid = ").append(subSelectName).append(".oid");
             // Update the ORDER BY clause to be added later
-            if(i>0) orderBy.append(", ");
+            if (i > 0) orderBy.append(", ");
             orderBy.append(attributeName).append(" ").append(ascDesc(order));
-            
+
             i++;
         }
-        
+
         query.append("\n  ").append(orderBy);
     }
-    
+
     private StringBuilder buildWhereClause() {
         final SimplifyingFilterVisitor filterSimplifier = new SimplifyingFilterVisitor();
-        
+
         this.predicateBuilder = new FilterToCatalogSQL(this.queryType, this.dbMappings);
         Capabilities fcs = new Capabilities(FilterToCatalogSQL.CAPABILITIES);
         FeatureType parent = null;
@@ -213,7 +211,7 @@ class QueryBuilder<T extends Info> {
                 return null;
             }
         };
-        
+
 
         CapabilitiesFilterSplitter filterSplitter;
         filterSplitter = new CapabilitiesFilterSplitter(fcs, parent, transactionAccessor);
@@ -226,14 +224,14 @@ class QueryBuilder<T extends Info> {
         Filter demultipliedFilter = (Filter) supported.accept(new LiteralDemultiplyingFilterVisitor(), null);
         this.supportedFilter = (Filter) demultipliedFilter.accept(filterSimplifier, null);
         this.unsupportedFilter = (Filter) unsupported.accept(filterSimplifier, null);
-        
+
         StringBuilder whereClause = new StringBuilder();
         return (StringBuilder) this.supportedFilter.accept(predicateBuilder, whereClause);
     }
 
-    
+
     public StringBuilder build() {
-        
+
         StringBuilder whereClause = buildWhereClause();
 
         StringBuilder query = new StringBuilder();
@@ -259,7 +257,7 @@ class QueryBuilder<T extends Info> {
 
         return query;
     }
-    
+
     /**
      * When the query was built, were the offset and limit included.
      */
@@ -270,13 +268,13 @@ class QueryBuilder<T extends Info> {
     private static String ascDesc(SortBy order) {
         return SortOrder.ASCENDING.equals(order.getSortOrder()) ? "ASC" : "DESC";
     }
-    
+
     protected void applyOffsetLimit(StringBuilder sql) {
-        if(unsupportedFilter.equals(Filter.INCLUDE)){
+        if (unsupportedFilter.equals(Filter.INCLUDE)) {
             dialect.applyOffsetLimit(sql, offset, limit);
-            offsetLimitApplied=true;
+            offsetLimitApplied = true;
         } else {
-            offsetLimitApplied=false;
+            offsetLimitApplied = false;
         }
     }
 

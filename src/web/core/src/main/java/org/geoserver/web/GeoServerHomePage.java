@@ -45,7 +45,7 @@ import com.google.common.base.Stopwatch;
 
 /**
  * Home page, shows just the introduction and the capabilities link
- * 
+ * <p>
  * <p>
  * This page uses the {@link CapabilitiesHomePageLinkProvider} extension point to enable other
  * modules to contribute links for GetCapabilities documents. The default
@@ -53,63 +53,62 @@ import com.google.common.base.Stopwatch;
  * {@link ServiceInfo} implementations. Other extension point implementations may contribute service
  * description document links non backed by ServiceInfo objects.
  * </p>
- * 
+ *
  * @author Andrea Aime - TOPP
- * 
  */
 public class GeoServerHomePage extends GeoServerBasePage implements GeoServerUnlockablePage {
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @SuppressWarnings({"rawtypes", "unchecked"})
     public GeoServerHomePage() {
         GeoServer gs = getGeoServer();
         ContactInfo contact = gs.getGlobal().getSettings().getContact();
 
         //add some contact info
         add(new ExternalLink("contactURL", contact.getOnlineResource())
-            .add( new Label("contactName", contact.getContactOrganization())));
+                .add(new Label("contactName", contact.getContactOrganization())));
         {
             String version = String.valueOf(new ResourceModel("version").getObject());
             String contactEmail = contact.getContactEmail();
-            HashMap<String, String>params = new HashMap<String, String>();
+            HashMap<String, String> params = new HashMap<String, String>();
             params.put("version", version);
             params.put("contactEmail", (contactEmail == null ? "geoserver@example.org" : contactEmail));
             Label label = new Label("footerMessage", new StringResourceModel("GeoServerHomePage.footer", this, new Model(params)));
             label.setEscapeModelStrings(false);
             add(label);
         }
-        
-        
+
+
         Authentication auth = getSession().getAuthentication();
-        if(isAdmin(auth)) {
+        if (isAdmin(auth)) {
             Stopwatch sw = Stopwatch.createStarted();
             Fragment f = new Fragment("catalogLinks", "catalogLinksFragment", this);
             Catalog catalog = getCatalog();
-            
+
             NumberFormat numberFormat = NumberFormat.getIntegerInstance(getLocale());
             numberFormat.setGroupingUsed(true);
-            
+
             final Filter allLayers = acceptAll();
             final Filter allStores = acceptAll();
             final Filter allWorkspaces = acceptAll();
-            
+
             final int layerCount = catalog.count(LayerInfo.class, allLayers);
             final int storesCount = catalog.count(StoreInfo.class, allStores);
-            final int wsCount =  catalog.count(WorkspaceInfo.class, allWorkspaces);
-            
+            final int wsCount = catalog.count(WorkspaceInfo.class, allWorkspaces);
+
             f.add(new BookmarkablePageLink("layersLink", LayerPage.class)
-                .add(new Label( "nlayers", numberFormat.format(layerCount) )));
+                    .add(new Label("nlayers", numberFormat.format(layerCount))));
             f.add(new BookmarkablePageLink("addLayerLink", NewLayerPage.class));
-            
-            
-            f.add(new BookmarkablePageLink("storesLink",StorePage.class)
-                .add(new Label( "nstores", numberFormat.format(storesCount) )));
+
+
+            f.add(new BookmarkablePageLink("storesLink", StorePage.class)
+                    .add(new Label("nstores", numberFormat.format(storesCount))));
             f.add(new BookmarkablePageLink("addStoreLink", NewDataPage.class));
-            
-            f.add(new BookmarkablePageLink("workspacesLink",WorkspacePage.class)
-                .add(new Label( "nworkspaces", numberFormat.format(wsCount) )));
+
+            f.add(new BookmarkablePageLink("workspacesLink", WorkspacePage.class)
+                    .add(new Label("nworkspaces", numberFormat.format(wsCount))));
             f.add(new BookmarkablePageLink("addWorkspaceLink", WorkspaceNewPage.class));
             add(f);
-            
+
             sw.stop();
         } else {
             Label placeHolder = new Label("catalogLinks");
@@ -127,7 +126,7 @@ public class GeoServerHomePage extends GeoServerBasePage implements GeoServerUnl
             protected void populateItem(ListItem<GeoServerHomePageContentProvider> item) {
                 GeoServerHomePageContentProvider provider = item.getModelObject();
                 Component extraContent = provider.getPageBodyComponent("contentList");
-                if(null == extraContent){
+                if (null == extraContent) {
                     Label placeHolder = new Label("contentList");
                     placeHolder.setVisible(false);
                     extraContent = placeHolder;
@@ -167,14 +166,14 @@ public class GeoServerHomePage extends GeoServerBasePage implements GeoServerUnl
         };
         return providersModel;
     }
-    
+
     /**
      * Checks if the current user is authenticated and is the administrator
      */
-    private boolean isAdmin(Authentication authentication) {        
-        
+    private boolean isAdmin(Authentication authentication) {
+
         return GeoServerExtensions.bean(GeoServerSecurityManager.class).
-            checkAuthenticationForAdminRole(authentication);
+                checkAuthenticationForAdminRole(authentication);
     }
 
 }

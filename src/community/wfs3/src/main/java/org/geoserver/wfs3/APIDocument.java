@@ -700,7 +700,7 @@ public class APIDocument {
     protected Map<String, FormatDescription> getAvailableFormats() {
         Map<String, FormatDescription> descriptions = new LinkedHashMap<>();
         List<String> formatNames = DefaultWebFeatureService30.getAvailableFormats();
-        for (String formatName: formatNames) {
+        for (String formatName : formatNames) {
             if ((formatName.contains("text") && !formatName.contains("xml") && !formatName.contains("gml")) ||
                     formatName.contains("csv")) {
                 descriptions.put(formatName, new FormatDescription().withType(TYPE_STRING));

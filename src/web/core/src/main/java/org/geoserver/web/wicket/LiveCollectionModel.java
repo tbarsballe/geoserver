@@ -21,7 +21,7 @@ import org.apache.wicket.model.IModel;
  */
 public abstract class LiveCollectionModel<S, T extends Collection<S>> implements IModel<T> {
     private static final long serialVersionUID = 3505518156788420409L;
-    
+
     IModel<? extends Collection<S>> wrapped;
 
     public LiveCollectionModel(IModel<? extends Collection<S>> wrapped) {
@@ -34,7 +34,7 @@ public abstract class LiveCollectionModel<S, T extends Collection<S>> implements
     public void setObject(T object) {
         Collection<S> collection = wrapped.getObject();
         collection.clear();
-        if(object != null) {
+        if (object != null) {
             collection.addAll(object);
         }
     }
@@ -54,10 +54,10 @@ public abstract class LiveCollectionModel<S, T extends Collection<S>> implements
             public List<S> getObject() {
                 return new ArrayList<S>(wrapped.getObject());
             }
-            
+
         };
     }
-    
+
     /**
      * Returns a model for live sets
      */
@@ -69,7 +69,7 @@ public abstract class LiveCollectionModel<S, T extends Collection<S>> implements
             public Set<S> getObject() {
                 return new HashSet<S>(wrapped.getObject());
             }
-            
+
         };
     }
 }

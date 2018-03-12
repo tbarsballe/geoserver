@@ -12,7 +12,7 @@ import java.util.TreeMap;
 
 /**
  * Mock data for {@link Gsml32BoreholeWfsTest}.
- * 
+ *
  * @author Rini Angreani (CSIRO Earth Science and Resource Engineering)
  */
 public class Gsml32BoreholeIntervalMockData extends AbstractAppSchemaMockData {
@@ -20,7 +20,7 @@ public class Gsml32BoreholeIntervalMockData extends AbstractAppSchemaMockData {
     public static final String GSML_SCHEMA_LOCATION = "https://www.seegrid.csiro.au/subversion/GeoSciML/branches/3.2.0/schemas/geosciml/3.2/geosciml.xsd";
 
     public static final String GSMLBH_PREFIX = "gsmlbh";
-    
+
     protected static final Map<String, String> GSML32_NAMESPACES = Collections
             .unmodifiableMap(new TreeMap<String, String>() {
                 /** serialVersionUID */
@@ -40,7 +40,7 @@ public class Gsml32BoreholeIntervalMockData extends AbstractAppSchemaMockData {
                     put("xlink", "http://www.w3.org/1999/xlink");
                 }
             });
-    
+
     public Gsml32BoreholeIntervalMockData() {
         super(GSML32_NAMESPACES);
     }

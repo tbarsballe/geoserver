@@ -6,16 +6,14 @@
 package org.geoserver.util;
 
 /**
- * 
  * Simple generic Filter
- * 
- * @author Niels Charlier
  *
  * @param <T>
+ * @author Niels Charlier
  */
 @FunctionalInterface
 public interface Filter<T> {
 
     public boolean accept(T obj);
-    
+
 }

@@ -81,7 +81,7 @@ public class GetMapCallbackTest extends WMSDimensionsTestSupport {
         assertEquals(1, callback.exceptions.size());
         assertEquals(message, callback.exceptions.get(0).getMessage());
     }
-    
+
     @Test
     public void testAddLayer() throws Exception {
         FeatureTypeInfo ft = getCatalog().getFeatureTypeByName(getLayerId(MockData.BRIDGES));
@@ -97,7 +97,7 @@ public class GetMapCallbackTest extends WMSDimensionsTestSupport {
             }
         };
         getMap.setGetMapCallbacks(Arrays.asList((GetMapCallback) callback));
-        
+
         // request a layer group with two layers
         Document dom = getAsDOM("wms?request=reflect&layers=nature&format=rss&version=1.1.0");
         // print(dom);
@@ -109,16 +109,16 @@ public class GetMapCallbackTest extends WMSDimensionsTestSupport {
         assertEquals(1, callback.mapContents.size());
         assertEquals(1, callback.maps.size());
         assertEquals(0, callback.exceptions.size());
-        
+
         assertEquals(layer, callback.layers.get(2));
     }
-    
+
     @Test
     public void testRemoveLayer() throws Exception {
         TestCallback callback = new TestCallback() {
             @Override
             public Layer beforeLayer(WMSMapContent content, Layer layer) {
-                if("cite:Lakes".equals(layer.getTitle())) {
+                if ("cite:Lakes".equals(layer.getTitle())) {
                     return null;
                 } else {
                     return super.beforeLayer(content, layer);
@@ -126,7 +126,7 @@ public class GetMapCallbackTest extends WMSDimensionsTestSupport {
             }
         };
         getMap.setGetMapCallbacks(Arrays.asList((GetMapCallback) callback));
-        
+
         // request a layer group with two layers
         Document dom = getAsDOM("wms?request=reflect&layers=nature&format=rss&version=1.1.0");
         // print(dom);
@@ -138,18 +138,18 @@ public class GetMapCallbackTest extends WMSDimensionsTestSupport {
         assertEquals(1, callback.mapContents.size());
         assertEquals(1, callback.maps.size());
         assertEquals(0, callback.exceptions.size());
-        
+
         assertEquals("cite:Forests", callback.layers.get(0).getTitle());
     }
-    
+
     @Test
     public void testAnimator() throws Exception {
         TestCallback callback = new TestCallback();
         getMap.setGetMapCallbacks(Arrays.asList((GetMapCallback) callback));
         String requestURL = "wms/animate?layers=" + getLayerId(MockData.BASIC_POLYGONS) + "&aparam=fake_param&avalues=val0,val1,val2";
-        
+
         MockHttpServletResponse resp = getAsServletResponse(requestURL);
-        
+
         assertEquals("image/gif", resp.getContentType());
 
         // the three frames, plus the fake request the animator does to get the mime type and
@@ -161,18 +161,18 @@ public class GetMapCallbackTest extends WMSDimensionsTestSupport {
         assertEquals(4, callback.maps.size());
         assertEquals(0, callback.exceptions.size());
     }
-    
+
     @Test
     public void testAnimatedGifDimensions() throws Exception {
         TestCallback callback = new TestCallback();
         getMap.setGetMapCallbacks(Arrays.asList((GetMapCallback) callback));
-        
+
         setupVectorDimension(ResourceInfo.TIME, "time", DimensionPresentation.LIST, null, null, null);
         MockHttpServletResponse response = getAsServletResponse("wms?service=WMS&version=1.1.1&request=GetMap"
                 + "&bbox=-180,-90,180,90&styles=&Format=image/png&width=80&height=40&srs=EPSG:4326"
                 + "&layers=" + getLayerId(V_TIME_ELEVATION)
                 + "&time=2011-05-02,2011-05-04,2011-05-10&format=" + GIFMapResponse.IMAGE_GIF_SUBTYPE_ANIMATED);
-        
+
         assertEquals("image/gif", response.getContentType());
 
         // the three frames in a single request

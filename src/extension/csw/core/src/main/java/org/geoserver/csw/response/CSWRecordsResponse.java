@@ -18,8 +18,8 @@ import org.geoserver.platform.ServiceException;
 import org.geotools.csw.CSW;
 
 /**
- * Encodes responses with CSW Dublin Core records 
- * 
+ * Encodes responses with CSW Dublin Core records
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class CSWRecordsResponse extends AbstractRecordsResponse {
@@ -29,7 +29,7 @@ public class CSWRecordsResponse extends AbstractRecordsResponse {
     }
 
     protected void transformResponse(OutputStream output, CSWRecordsResult result,
-            RequestBaseType request, CSWInfo csw) {
+                                     RequestBaseType request, CSWInfo csw) {
         CSWRecordTransformer transformer = new CSWRecordTransformer(request,
                 csw.isCanonicalSchemaLocation());
         transformer.setIndentation(2);

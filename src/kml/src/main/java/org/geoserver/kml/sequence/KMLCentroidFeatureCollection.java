@@ -26,19 +26,18 @@ import com.vividsolutions.jts.geom.Point;
 
 /**
  * Wraps a generic feature collection and returns a collection whose feature geometries
- * are the centroids of the original features  
- * 
+ * are the centroids of the original features
+ *
  * @author Andrea Aime - GeoSolutions
  */
 class KMLCentroidFeatureCollection extends DecoratingSimpleFeatureCollection {
 
-    
 
     private SimpleFeatureType schema;
     private KmlEncodingContext context;
 
     protected KMLCentroidFeatureCollection(
-        FeatureCollection<SimpleFeatureType, SimpleFeature> delegate, KmlEncodingContext context) {
+            FeatureCollection<SimpleFeatureType, SimpleFeature> delegate, KmlEncodingContext context) {
         super(delegate);
         this.context = context;
 
@@ -63,12 +62,12 @@ class KMLCentroidFeatureCollection extends DecoratingSimpleFeatureCollection {
         tb.setName(delegate.getSchema().getName());
         this.schema = tb.buildFeatureType();
     }
-    
+
     @Override
     public SimpleFeatureIterator features() {
         return new KMLCentroidFeatureIterator(delegate.features(), this.schema, this.context);
     }
-    
+
     static class KMLCentroidFeatureIterator implements SimpleFeatureIterator {
 
         private SimpleFeatureIterator delegate;
@@ -95,7 +94,7 @@ class KMLCentroidFeatureCollection extends DecoratingSimpleFeatureCollection {
             SimpleFeature f = delegate.next();
             for (Object attribute : f.getAttributes()) {
                 if ((attribute instanceof Geometry) &&
-                    !(attribute instanceof Point)) {
+                        !(attribute instanceof Point)) {
                     Geometry geom = (Geometry) attribute;
                     Coordinate point = centroids.geometryCentroid(geom, context.getRequest().getBbox(), centroidOpts);
                     attribute = geom.getFactory().createPoint(point);

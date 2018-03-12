@@ -11,7 +11,6 @@ import java.util.Set;
  * Dialect specific commands.
  *
  * @author Timothy De Bock
- *
  */
 public interface Dialect {
 
@@ -24,7 +23,6 @@ public interface Dialect {
     String quote(String tableName);
 
     /**
-     * 
      * @param currentViewName
      * @param newViewName
      * @return
@@ -33,6 +31,7 @@ public interface Dialect {
 
     /**
      * Returns the create index statement with the index name over the columns.
+     *
      * @param tableName
      * @param columnNames
      * @param isSpatialIndex
@@ -42,7 +41,6 @@ public interface Dialect {
     String createIndex(String tableName, Set<String> columnNames, boolean isSpatialIndex, boolean isUniqueIndex);
 
     /**
-     * 
      * @param sourceConn
      * @param tableName
      * @return

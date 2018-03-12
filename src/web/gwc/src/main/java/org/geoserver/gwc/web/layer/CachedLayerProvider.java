@@ -29,7 +29,7 @@ import com.google.common.collect.Lists;
 /**
  * Provides a filtered, sorted view over GWC {@link TileLayer}s for {@link CachedLayersPage} using
  * {@link TileLayer} as data view.
- * 
+ *
  * @author groldan
  */
 class CachedLayerProvider extends GeoServerDataProvider<TileLayer> {
@@ -76,20 +76,20 @@ class CachedLayerProvider extends GeoServerDataProvider<TileLayer> {
         private static final long serialVersionUID = 3503671083744555325L;
 
         /**
-         * 
+         *
          * @retun the used quota for the tile layer, may be {@code null}
          */
         @Override
         public Object getPropertyValue(TileLayer item) {
             GWC gwc = GWC.get();
-            if(gwc.isDiskQuotaEnabled()) {
+            if (gwc.isDiskQuotaEnabled()) {
                 return gwc.getUsedQuota(item.getName());
             } else {
                 return null;
             }
         }
     };
-    
+
 
     static final Property<TileLayer> BLOBSTORE = new BeanProperty<TileLayer>("blobstore", "blobStoreId");
 

@@ -9,9 +9,8 @@ import java.util.Map;
 
 /**
  * Factory used to create catalog objects.
- * 
+ *
  * @author Justin Deoliveira, The Open Planning Project
- * 
  */
 public interface CatalogFactory {
 
@@ -19,7 +18,7 @@ public interface CatalogFactory {
      * Creates a new data store.
      */
     DataStoreInfo createDataStore();
-    
+
     /**
      * Creates a new web map server connection
      */
@@ -49,7 +48,7 @@ public interface CatalogFactory {
      * Creates a new attribute type.
      */
     AttributeTypeInfo createAttribute();
-    
+
     /**
      * Creates a new feature type.
      */
@@ -59,7 +58,7 @@ public interface CatalogFactory {
      * Creates a new coverage.
      */
     CoverageInfo createCoverage();
-    
+
     /**
      * Creates a new WMS layer
      */
@@ -80,7 +79,7 @@ public interface CatalogFactory {
      * Creates a new legend.
      */
     LegendInfo createLegend();
-    
+
     /**
      * Creates a new attribution record.
      */
@@ -100,7 +99,7 @@ public interface CatalogFactory {
      * Creates a new base map.
      */
     LayerGroupInfo createLayerGroup();
-    
+
     /**
      * Creates a new style.
      */
@@ -108,7 +107,6 @@ public interface CatalogFactory {
 
     /**
      * Creates new namespace.
-     * 
      */
     NamespaceInfo createNamespace();
 
@@ -116,7 +114,7 @@ public interface CatalogFactory {
      * Creates a new workspace.
      */
     WorkspaceInfo createWorkspace();
-    
+
     /**
      * Extensible factory method.
      * <p>
@@ -124,10 +122,8 @@ public interface CatalogFactory {
      * to create the object. The lookup mechanism is specific to the runtime
      * environement.
      * </p>
-     * 
-     * @param clazz
-     *                The class of object to create.
-     * 
+     *
+     * @param clazz The class of object to create.
      * @return The new object.
      */
     <T extends Object> T create(Class<T> clazz);
@@ -140,10 +136,8 @@ public interface CatalogFactory {
         /**
          * Determines if the extension can create objects of the specified
          * class.
-         * 
-         * @param clazz
-         *                The class of object to create.
-         * 
+         *
+         * @param clazz The class of object to create.
          */
         <T extends Object> boolean canCreate(Class<T> clazz);
 
@@ -153,12 +147,9 @@ public interface CatalogFactory {
          * This method is only called if {@link #canCreate(Class)} returns
          * <code>true</code>.
          * </p>
-         * 
-         * @param clazz
-         *                The class of object to create.
-         * @param context
-         *                A context to initialize the object.
-         * 
+         *
+         * @param clazz   The class of object to create.
+         * @param context A context to initialize the object.
          * @return The new object.
          */
         <T extends Object> T create(Class<T> clazz, Map<Object, Object> context);

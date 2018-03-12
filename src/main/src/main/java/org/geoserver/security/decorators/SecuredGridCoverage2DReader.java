@@ -37,14 +37,16 @@ import com.vividsolutions.jts.geom.MultiPolygon;
 
 /**
  * Applies access limits policies around the wrapped reader
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class SecuredGridCoverage2DReader extends DecoratingGridCoverage2DReader {
 
-    /** Parameters used to control the {@link Crop} operation. */
+    /**
+     * Parameters used to control the {@link Crop} operation.
+     */
     private static final ParameterValueGroup cropParams;
-    
+
     /**
      * Cached crop factory
      */
@@ -76,8 +78,8 @@ public class SecuredGridCoverage2DReader extends DecoratingGridCoverage2DReader 
         return SecuredGridCoverage2DReader.read(delegate, policy, parameters);
     }
 
-    static GridCoverage2D read(GridCoverage2DReader delegate, WrapperPolicy policy, 
-            GeneralParameterValue[] parameters) throws IllegalArgumentException, IOException {
+    static GridCoverage2D read(GridCoverage2DReader delegate, WrapperPolicy policy,
+                               GeneralParameterValue[] parameters) throws IllegalArgumentException, IOException {
         //Package private static method to share reading code with Structured reader 
         MultiPolygon rasterFilter = null;
         if (policy.getLimits() instanceof CoverageAccessLimits) {
@@ -98,12 +100,12 @@ public class SecuredGridCoverage2DReader extends DecoratingGridCoverage2DReader 
                 for (GeneralParameterValue lparam : limitParams) {
                     // remove the overwritten param, if any
                     final GeneralParameterDescriptor ldescriptor = lparam.getDescriptor();
-                    for (Iterator it = params.iterator(); it.hasNext();) {
+                    for (Iterator it = params.iterator(); it.hasNext(); ) {
                         GeneralParameterValue param = (GeneralParameterValue) it.next();
                         if (param.getDescriptor().equals(lparam.getDescriptor())) {
                             it.remove();
                             break;
-                        } 
+                        }
                     }
                     // add the overwrite param (will be an overwrite if it was already there, an
                     // addition otherwise)
@@ -113,8 +115,8 @@ public class SecuredGridCoverage2DReader extends DecoratingGridCoverage2DReader 
                 parameters = params
                         .toArray(new GeneralParameterValue[params.size()]);
             }
-            
-            if(readFilter != null && !Filter.INCLUDE.equals(readFilter)) {
+
+            if (readFilter != null && !Filter.INCLUDE.equals(readFilter)) {
                 Format format = delegate.getFormat();
                 ParameterValueGroup readParameters = format.getReadParameters();
                 List<GeneralParameterDescriptor> descriptors = readParameters.getDescriptor()
@@ -141,7 +143,7 @@ public class SecuredGridCoverage2DReader extends DecoratingGridCoverage2DReader 
                             "FILTER", "Filter");
                 }
 
-                
+
             }
         }
 
@@ -150,7 +152,7 @@ public class SecuredGridCoverage2DReader extends DecoratingGridCoverage2DReader 
         // crop if necessary
         if (rasterFilter != null && grid != null) {
             Geometry coverageBounds = JTS.toGeometry((Envelope) new ReferencedEnvelope(grid.getEnvelope2D()));
-            if(coverageBounds.intersects(rasterFilter)) {
+            if (coverageBounds.intersects(rasterFilter)) {
                 final ParameterValueGroup param = cropParams.clone();
                 param.parameter("source").setValue(grid);
                 param.parameter("ROI").setValue(rasterFilter);

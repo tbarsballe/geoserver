@@ -21,7 +21,7 @@ import org.opengis.metadata.citation.Citation;
 
 /**
  * Provides a hook to locate grid shift files, such as NTv1, NTv2 and NADCON ones.
- * 
+ *
  * @author Andrea Aime - Geosolutions
  * @author Oscar Fonts - geomati.co
  */
@@ -40,9 +40,9 @@ public class GeoserverGridShiftLocator extends AbstractFactory implements GridSh
 
     /**
      * Locate the specified grid file.
-     * 
+     * <p>
      * It will look in GEOSERVER_DATA_DIR/user_projections
-     * 
+     *
      * @param grid the grid name/location
      * @return the fully resolved URL of the grid or null, if the resource cannot be located.
      */
@@ -50,14 +50,14 @@ public class GeoserverGridShiftLocator extends AbstractFactory implements GridSh
     public URL locateGrid(String grid) {
         if (grid == null)
             return null;
-        
+
         GeoServerResourceLoader loader = GeoServerExtensions.bean(GeoServerResourceLoader.class);
-        if( loader == null ){
+        if (loader == null) {
             return null; // must be test case still loading
         }
         Resource gridfile = loader.get("user_projections/" + grid);
 
-        if (gridfile.getType() == Type.RESOURCE ) {
+        if (gridfile.getType() == Type.RESOURCE) {
             return URLs.fileToUrl(gridfile.file());
         } else {
             return null;

@@ -37,12 +37,12 @@ import org.w3c.dom.Document;
 import org.springframework.mock.web.MockHttpServletResponse;
 
 public class KMLWFSTest extends WFSTestSupport {
-    
+
     @Override
     protected void setUpNamespaces(Map<String, String> namespaces) {
         namespaces.put("kml", "http://www.opengis.net/kml/2.2");
     }
-    
+
 
     @Test
     public void testGetCapabilities() throws Exception {
@@ -62,10 +62,10 @@ public class KMLWFSTest extends WFSTestSupport {
                 + KMLMapOutputFormat.MIME_TYPE.replace("+", "%2B"));
         assertEquals(200, response.getStatus());
         assertEquals("inline; filename=" + MockData.AGGREGATEGEOFEATURE.getLocalPart() + ".kml", response.getHeader("Content-Disposition"));
-        Document doc = dom(new ByteArrayInputStream( response.getContentAsString().getBytes()));
+        Document doc = dom(new ByteArrayInputStream(response.getContentAsString().getBytes()));
         checkAggregateGeoFeatureKmlContents(doc);
     }
-    
+
     @Test
     public void testGetFeatureKMLAlias() throws Exception {
         Document doc = getAsDOM("wfs?service=WFS&version=1.1.0&request=GetFeature&typeName="
@@ -76,20 +76,20 @@ public class KMLWFSTest extends WFSTestSupport {
 
     private void checkAggregateGeoFeatureKmlContents(Document doc) throws Exception {
         // print(doc);
-        
+
         // there is one schema
         XMLAssert.assertXpathEvaluatesTo("1", "count(//kml:Document/kml:Schema)", doc);
         // check we only have the non geom properties
         XMLAssert.assertXpathEvaluatesTo("6", "count(//kml:Document/kml:Schema/kml:SimpleField)",
                 doc);
         XMLAssert.assertXpathEvaluatesTo(
-                        "0",
-                        "count(//kml:Document/kml:Schema/kml:SimpleField[@name='multiPointProperty'])",
-                        doc);
+                "0",
+                "count(//kml:Document/kml:Schema/kml:SimpleField[@name='multiPointProperty'])",
+                doc);
         XMLAssert.assertXpathEvaluatesTo(
-                        "0",
-                        "count(//kml:Document/kml:Schema/kml:SimpleField[@name='multiCurveProperty'])",
-                        doc);
+                "0",
+                "count(//kml:Document/kml:Schema/kml:SimpleField[@name='multiCurveProperty'])",
+                doc);
         XMLAssert.assertXpathEvaluatesTo("0",
                 "count(//kml:Document/kml:Schema/kml:SimpleField[@name='multiSurfaceProperty'])",
                 doc);
@@ -116,19 +116,19 @@ public class KMLWFSTest extends WFSTestSupport {
                 + "[@name='strProperty']", doc);
         XMLAssert.assertXpathEvaluatesTo("BK030", sd + "[@name='featureCode']", doc);
     }
-    
+
     @Test
     public void testForceWGS84() throws Exception {
         Document doc = getAsDOM("wfs?service=WFS&version=1.1.0&request=GetFeature&typeName="
                 + getLayerId(MockData.MPOINTS) + "&outputFormat=KML");
-                
+
         // print(doc);
 
         XMLAssert.assertXpathEvaluatesTo("1", "count(//kml:Folder)", doc);
         XMLAssert.assertXpathEvaluatesTo("-92.99707024070754,4.523788746085423", "//kml:Placemark/kml:MultiGeometry/kml:Point[1]/kml:coordinates", doc);
         XMLAssert.assertXpathEvaluatesTo("-92.99661950641159,4.524241081543828", "//kml:Placemark/kml:MultiGeometry/kml:Point[2]/kml:coordinates", doc);
     }
-    
+
     @Test
     public void testCloseIterators() throws ServiceException, IOException {
         // build a wfs response with an iterator that will mark if close has been called, or not
@@ -143,17 +143,17 @@ public class KMLWFSTest extends WFSTestSupport {
                 openIterators.incrementAndGet();
                 final SimpleFeature f = DataUtilities.first(delegate);
                 return new SimpleFeatureIterator() {
-                    
+
                     @Override
                     public SimpleFeature next() throws NoSuchElementException {
                         return f;
                     }
-                    
+
                     @Override
                     public boolean hasNext() {
                         return true;
                     }
-                    
+
                     @Override
                     public void close() {
                         openIterators.decrementAndGet();
@@ -167,34 +167,34 @@ public class KMLWFSTest extends WFSTestSupport {
 
         WFSKMLOutputFormat outputFormat = GeoServerExtensions.bean(WFSKMLOutputFormat.class);
         FilterOutputStream fos = new FilterOutputStream(new ByteArrayOutputStream()) {
-            
+
             int count = 0;
-            
+
             @Override
             public void write(byte[] b) throws IOException {
                 write(b, 0, b.length);
             }
-            
+
             @Override
             public void write(byte[] b, int off, int len) throws IOException {
                 for (int i = off; i < len; i++) {
                     write(b[i]);
                 }
             }
-            
+
             @Override
             public void write(int b) throws IOException {
                 count++;
-                if(count > 100) {
+                if (count > 100) {
                     throw new IOException("Simularing client shutting down connection");
                 }
                 super.write(b);
             }
-            
+
         };
         try {
             outputFormat.write(fcResponse, fos, null);
-        } catch(Exception e) {
+        } catch (Exception e) {
             // fine, it's expected
         }
 

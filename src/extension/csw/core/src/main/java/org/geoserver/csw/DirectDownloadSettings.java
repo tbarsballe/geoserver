@@ -9,12 +9,14 @@ import java.io.Serializable;
 import org.geoserver.catalog.MetadataMap;
 
 /**
- * Simple class storing the DirectDownload settings such as links creation 
+ * Simple class storing the DirectDownload settings such as links creation
  * capability enabled and max download size.
  */
 public class DirectDownloadSettings implements Serializable {
 
-    /** serialVersionUID */
+    /**
+     * serialVersionUID
+     */
     private static final long serialVersionUID = 1L;
 
     public static final String DIRECTDOWNLOAD_KEY = "DirectDownload.Key";
@@ -43,19 +45,20 @@ public class DirectDownloadSettings implements Serializable {
         return maxDownloadSize;
     }
 
-    /** Max download size in KB */
+    /**
+     * Max download size in KB
+     */
     public void setMaxDownloadSize(long maxDownloadSize) {
         this.maxDownloadSize = maxDownloadSize;
     }
-    
-    /** 
+
+    /**
      * Look for a {@link DirectDownloadSettings} instance in the provided metadataMap.
-     * If not available, look for the default object stored in {@link CSWInfo} metadataMap 
+     * If not available, look for the default object stored in {@link CSWInfo} metadataMap
      * as fallback (if provided)
-     *  
+     *
      * @param map
      * @param csw
-     *
      */
     public static DirectDownloadSettings getSettingsFromMetadata(MetadataMap map, CSWInfo csw) {
         DirectDownloadSettings settings = null;

@@ -12,16 +12,15 @@ import org.geoserver.platform.GeoServerResourceLoader;
 import org.springframework.web.context.ServletContextAware;
 
 /**
- * 
  * Resource Caches that uses GeoServer Data Directory.
- * 
- * @author NielsCharlier
  *
+ * @author NielsCharlier
  */
 public class DataDirectoryResourceCache extends SimpleResourceCache implements ServletContextAware {
 
-    public DataDirectoryResourceCache() {}
-    
+    public DataDirectoryResourceCache() {
+    }
+
     @Override
     public void setServletContext(ServletContext servletContext) {
         String data = GeoServerResourceLoader.lookupGeoServerDataDirectory(servletContext);

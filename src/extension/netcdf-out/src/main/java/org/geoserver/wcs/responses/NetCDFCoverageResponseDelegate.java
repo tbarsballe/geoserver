@@ -32,7 +32,7 @@ import ucar.ma2.InvalidRangeException;
 
 /**
  * {@link CoverageResponseDelegate} implementation for NetCDF multidimensional Grids
- * 
+ *
  * @author Daniele Romagnoli, GeoSolutions SAS
  */
 public class NetCDFCoverageResponseDelegate extends BaseCoverageResponseDelegate implements
@@ -65,7 +65,7 @@ public class NetCDFCoverageResponseDelegate extends BaseCoverageResponseDelegate
     }
 
     public void encode(GridCoverage2D sourceCoverage, String outputFormat,
-            Map<String, String> encodingParameters, OutputStream output) throws ServiceException,
+                       Map<String, String> encodingParameters, OutputStream output) throws ServiceException,
             IOException {
         GranuleStack granuleStack = toGranuleStack(sourceCoverage);
 
@@ -108,7 +108,8 @@ public class NetCDFCoverageResponseDelegate extends BaseCoverageResponseDelegate
 
     /**
      * Stream back the content of the temporary file to the output stream
-     * @param file the temporary file containing the NetCDF output.
+     *
+     * @param file   the temporary file containing the NetCDF output.
      * @param output the outputStream where to write the output
      * @throws IOException
      */
@@ -146,7 +147,7 @@ public class NetCDFCoverageResponseDelegate extends BaseCoverageResponseDelegate
                 return fileName;
             }
         }
-        
+
         return super.getFileName(value, coverageId, format);
     }
 }

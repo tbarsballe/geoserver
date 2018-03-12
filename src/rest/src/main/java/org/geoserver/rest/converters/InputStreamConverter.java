@@ -16,19 +16,20 @@ import java.io.InputStream;
 
 /**
  * Convert InputStream directly to provided output.
- * 
+ *
  * @author Torben Barsballe (Boundless)
  */
 public class InputStreamConverter extends BaseMessageConverter<InputStream> {
-    
-    public InputStreamConverter(){
+
+    public InputStreamConverter() {
         super(MediaType.ALL);
     }
+
     @Override
     protected boolean canRead(MediaType mediaType) {
         return false;
     }
-    
+
     @Override
     protected boolean supports(Class<?> clazz) {
         return InputStream.class.isAssignableFrom(clazz);
@@ -36,7 +37,7 @@ public class InputStreamConverter extends BaseMessageConverter<InputStream> {
 
     @Override
     protected InputStream readInternal(Class<? extends InputStream> clazz,
-            HttpInputMessage inputMessage) throws IOException, HttpMessageNotReadableException {
+                                       HttpInputMessage inputMessage) throws IOException, HttpMessageNotReadableException {
         throw new HttpMessageNotReadableException(getClass().getName() + " does not support deserialization");
     }
 
@@ -44,9 +45,8 @@ public class InputStreamConverter extends BaseMessageConverter<InputStream> {
     protected void writeInternal(InputStream inputStream, HttpOutputMessage outputMessage)
             throws IOException, HttpMessageNotWritableException {
         try {
-            IOUtils.copy(inputStream,outputMessage.getBody());
-        }
-        finally {
+            IOUtils.copy(inputStream, outputMessage.getBody());
+        } finally {
             inputStream.close();
         }
     }

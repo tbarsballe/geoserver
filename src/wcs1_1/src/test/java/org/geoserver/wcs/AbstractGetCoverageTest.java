@@ -38,7 +38,7 @@ public abstract class AbstractGetCoverageTest extends WCSTestSupport {
     WCSConfiguration configuration;
 
     WcsXmlReader xmlReader;
-    
+
     List<GridCoverage> coverages = new ArrayList<GridCoverage>();
 
     @Before
@@ -50,12 +50,12 @@ public abstract class AbstractGetCoverageTest extends WCSTestSupport {
         xmlReader = new WcsXmlReader("GetCoverage", "1.1.1", configuration,
                 EntityResolverProvider.RESOLVE_DISABLED_PROVIDER);
     }
-    
+
     @After
     public void cleanCoverages() {
-    	for (GridCoverage coverage : coverages) {
-			CoverageCleanerCallback.disposeCoverage(coverage);
-		}
+        for (GridCoverage coverage : coverages) {
+            CoverageCleanerCallback.disposeCoverage(coverage);
+        }
     }
 
     /**
@@ -71,8 +71,6 @@ public abstract class AbstractGetCoverageTest extends WCSTestSupport {
 
     /**
      * Prepares the basic KVP map (service, version, request)
-     * 
-     *
      */
     protected Map<String, Object> baseMap() {
         Map<String, Object> raw = new HashMap<String, Object>();
@@ -119,7 +117,7 @@ public abstract class AbstractGetCoverageTest extends WCSTestSupport {
     protected Map caseInsensitiveKvp(HashMap input) {
         // make it case insensitive like the servlet+dispatcher maps
         Map result = new HashMap();
-        for (Iterator it = input.keySet().iterator(); it.hasNext();) {
+        for (Iterator it = input.keySet().iterator(); it.hasNext(); ) {
             String key = (String) it.next();
             result.put(key.toUpperCase(), input.get(key));
         }

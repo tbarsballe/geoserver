@@ -19,7 +19,7 @@ public class RuleMap<K, V> extends LinkedHashMap<K, V> {
     public RuleMap() {
         super();
     }
-    
+
     public RuleMap(Map<K, V> source) {
         super(source);
     }

@@ -25,15 +25,13 @@ import org.opengis.geometry.Envelope;
 
 /**
  * Test class for the contour process.
- * 
+ *
  * @author Simone Giannecchini, GeoSolutions SAS
- * 
  */
 public class ContourProcessTest extends BaseRasterToVectorTest {
 
     /**
      * Test basic capabilities for the contour process. It works on the DEM tiff and produces a shapefile. Nothing more nothing less.
-     * 
      */
     @Test
     public void testProcessStandaloneBasicValues() throws Exception {
@@ -73,15 +71,14 @@ public class ContourProcessTest extends BaseRasterToVectorTest {
         double offsetY = fullEnvelope.getSpan(1) / 5;
         subset.setEnvelope(minX + offsetX, minY + offsetY, minX + offsetX * 2, minY + offsetY * 2);
         gc = (GridCoverage2D) new Operations(null).crop(gc, subset);
-        
+
         scheduleForDisposal(gc);
-        
+
         return gc;
     }
 
     /**
      * Test basic capabilities for the contour process. It works on the DEM tiff and produces a shapefile. Nothing more nothing less.
-     * 
      */
     @Test
     public void testProcessStandaloneBasicInterval() throws Exception {

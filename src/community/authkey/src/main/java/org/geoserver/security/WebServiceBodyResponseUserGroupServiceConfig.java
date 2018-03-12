@@ -9,14 +9,15 @@ import org.geoserver.security.config.SecurityUserGroupServiceConfig;
 
 /**
  * Configuration for the {@linkplain WebServiceBodyResponseUserGroupService}.
- * 
- * @author Alessio Fabiani, GeoSolutions S.A.S.
  *
+ * @author Alessio Fabiani, GeoSolutions S.A.S.
  */
 public class WebServiceBodyResponseUserGroupServiceConfig extends BaseSecurityNamedServiceConfig
         implements SecurityUserGroupServiceConfig {
 
-    /** serialVersionUID */
+    /**
+     * serialVersionUID
+     */
     private static final long serialVersionUID = 4071134289430150933L;
 
     public WebServiceBodyResponseUserGroupServiceConfig() {
@@ -59,7 +60,7 @@ public class WebServiceBodyResponseUserGroupServiceConfig extends BaseSecurityNa
 
     /**
      * Regular expression, used to extract the roles name from the webservice response
-     * 
+     *
      * @return the searchRoles
      */
     public String getSearchRoles() {
@@ -68,7 +69,7 @@ public class WebServiceBodyResponseUserGroupServiceConfig extends BaseSecurityNa
 
     /**
      * Regular expression, used to extract the roles name from the webservice response
-     * 
+     *
      * @param searchRoles the searchRoles to set
      */
     public void setSearchRoles(String searchRoles) {
@@ -80,7 +81,7 @@ public class WebServiceBodyResponseUserGroupServiceConfig extends BaseSecurityNa
      * They must be in the form <pre>"GROUP_&lt;ROLENAME 1&gt;, ..., GROUP_&lt;ROLENAME N&gt;"</pre>, where
      * <pre>ROLE_&lt;ROLENAME 1&gt;, ..., ROLE_&lt;ROLENAME N&gt;</pre> represent all the possible Roles returned by the
      * Web Service.
-     * 
+     *
      * @return the availableGroups
      */
     public String getAvailableGroups() {
@@ -92,7 +93,7 @@ public class WebServiceBodyResponseUserGroupServiceConfig extends BaseSecurityNa
      * They must be in the form <pre>"GROUP_&lt;ROLENAME 1&gt;, ..., GROUP_&lt;ROLENAME N&gt;"</pre>, where
      * <pre>ROLE_&lt;ROLENAME 1&gt;, ..., ROLE_&lt;ROLENAME N&gt;</pre> represent all the possible Roles returned by the
      * Web Service.
-     * 
+     *
      * @param availableGroups the availableGroups to set
      */
     public void setAvailableGroups(String availableGroups) {
@@ -102,7 +103,7 @@ public class WebServiceBodyResponseUserGroupServiceConfig extends BaseSecurityNa
     /**
      * Optional name of the Role Service to use for Roles resolution.
      * If null it will use the Security Default Active Service.
-     * 
+     *
      * @return the roleServiceName
      */
     public String getRoleServiceName() {
@@ -112,7 +113,7 @@ public class WebServiceBodyResponseUserGroupServiceConfig extends BaseSecurityNa
     /**
      * Optional name of the Role Service to use for Roles resolution.
      * If null it will use the Security Default Active Service.
-     * 
+     *
      * @param roleServiceName the roleServiceName to set
      */
     public void setRoleServiceName(String roleServiceName) {

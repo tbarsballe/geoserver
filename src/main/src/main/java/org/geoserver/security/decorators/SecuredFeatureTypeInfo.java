@@ -35,7 +35,7 @@ import org.opengis.util.ProgressListener;
 /**
  * Wraps a {@link FeatureTypeInfo} so that it will return a secured
  * FeatureSource
- * 
+ *
  * @author Andrea Aime - TOPP
  */
 public class SecuredFeatureTypeInfo extends DecoratingFeatureTypeInfo {
@@ -46,33 +46,33 @@ public class SecuredFeatureTypeInfo extends DecoratingFeatureTypeInfo {
         super(info);
         this.policy = policy;
     }
-    
+
     @Override
     public FeatureType getFeatureType() throws IOException {
-        
+
         FeatureType ft = super.getFeatureType();
-        
-        if(policy.getLimits() == null) {
+
+        if (policy.getLimits() == null) {
             return ft;
-        } else if(policy.getLimits() instanceof VectorAccessLimits) {
+        } else if (policy.getLimits() instanceof VectorAccessLimits) {
             VectorAccessLimits val = (VectorAccessLimits) policy.getLimits();
 
             // get what we can actually read (and it makes it easier to deal with property names) 
             Query query = val.getReadQuery();
-            
+
             // do we have any attribute filtering?
-            if(query.getPropertyNames() == Query.ALL_NAMES) {
+            if (query.getPropertyNames() == Query.ALL_NAMES) {
                 return ft;
             }
-            
-            if(ft instanceof SimpleFeatureType) {
+
+            if (ft instanceof SimpleFeatureType) {
                 SimpleFeatureType sft = (SimpleFeatureType) ft;
                 Set<String> properties = new HashSet<String>(Arrays.asList(query.getPropertyNames()));
                 SimpleFeatureTypeBuilder tb = new SimpleFeatureTypeBuilder();
                 tb.init(sft);
                 for (AttributeDescriptor at : sft.getAttributeDescriptors()) {
                     String attName = at.getLocalName();
-                    if(!properties.contains(attName)) {
+                    if (!properties.contains(attName)) {
                         tb.remove(attName);
                     }
                 }
@@ -90,7 +90,7 @@ public class SecuredFeatureTypeInfo extends DecoratingFeatureTypeInfo {
             throw new IllegalArgumentException("SecureFeatureSources has been fed " +
                     "with unexpected AccessLimits class " + policy.getLimits().getClass());
         }
-        
+
     }
 
     //--------------------------------------------------------------------------
@@ -100,8 +100,8 @@ public class SecuredFeatureTypeInfo extends DecoratingFeatureTypeInfo {
     public FeatureSource getFeatureSource(ProgressListener listener, Hints hints)
             throws IOException {
         final FeatureSource fs = delegate.getFeatureSource(listener, hints);
-        
-        if(policy.level == AccessLevel.METADATA) {
+
+        if (policy.level == AccessLevel.METADATA) {
             throw SecureCatalogImpl.unauthorizedAccess(this.getName());
         } else {
             return (FeatureSource) SecuredObjects.secure(fs, policy);
@@ -111,5 +111,5 @@ public class SecuredFeatureTypeInfo extends DecoratingFeatureTypeInfo {
     public DataStoreInfo getStore() {
         return (DataStoreInfo) SecuredObjects.secure(delegate.getStore(), policy);
     }
-    
+
 }

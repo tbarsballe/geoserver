@@ -5,22 +5,19 @@
 package org.geoserver.status.monitoring.collector;
 
 /**
- * 
  * To implements to retrieve system information metrics using low level API.
  * <p>
  * Base implementation to extends is provided by {@link BaseSystemInfoCollector}
- * 
- * @author sandr
  *
+ * @author sandr
  */
 
 public interface SystemInfoCollector {
 
     /**
-     * 
-     * @return the list of metric 
+     * @return the list of metric
      */
-    
+
     Metrics retrieveAllSystemInfo();
 
 }

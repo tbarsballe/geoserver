@@ -11,9 +11,8 @@ import org.w3c.dom.Document;
 
 /**
  * Tests whether not specifying idExpression (using primary keys by default) works.
- * 
+ *
  * @author Rini Angreani (CSIRO Earth Science and Resource Engineering)
- * 
  */
 public class DefaultIdTest extends AbstractAppSchemaTestSupport {
     private static String ID_PREFIX;

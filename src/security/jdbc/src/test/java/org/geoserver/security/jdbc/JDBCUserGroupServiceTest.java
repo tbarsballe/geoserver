@@ -27,7 +27,7 @@ import org.junit.Test;
 public abstract class JDBCUserGroupServiceTest extends AbstractUserGroupServiceTest {
 
     static Logger LOGGER = org.geotools.util.logging.Logging.getLogger("org.geoserver.security.jdbc");
-    
+
     protected abstract String getFixtureId();
 
     @Before
@@ -37,15 +37,14 @@ public abstract class JDBCUserGroupServiceTest extends AbstractUserGroupServiceT
 
     @After
     public void dropExistingTables() throws Exception {
-        if (store!=null) {
-            JDBCUserGroupStore jdbcStore =(JDBCUserGroupStore)store;
-            JDBCTestSupport.dropExistingTables(jdbcStore,jdbcStore.getConnection());
+        if (store != null) {
+            JDBCUserGroupStore jdbcStore = (JDBCUserGroupStore) store;
+            JDBCTestSupport.dropExistingTables(jdbcStore, jdbcStore.getConnection());
             store.store();
         }
     }
 
-   
-    
+
     @Override
     public void setServiceAndStore() throws Exception {
         if (getTestData().isTestDataAvailable()) {
@@ -54,53 +53,54 @@ public abstract class JDBCUserGroupServiceTest extends AbstractUserGroupServiceT
         }
     }
 
- 
+
     @Override
     protected SecurityUserGroupServiceConfig createConfigObject(String name) {
 
         try {
-            return JDBCTestSupport.createConfigObject(getFixtureId(), 
-                (LiveDbmsDataSecurity)getTestData(), getSecurityManager());
+            return JDBCTestSupport.createConfigObject(getFixtureId(),
+                    (LiveDbmsDataSecurity) getTestData(), getSecurityManager());
 
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
-        
+
     public GeoServerUserGroupService createUserGroupService(String serviceName) throws Exception {
-        
-        return JDBCTestSupport.createUserGroupService(getFixtureId(), 
-            (LiveDbmsDataSecurity)getTestData(), getSecurityManager());
+
+        return JDBCTestSupport.createUserGroupService(getFixtureId(),
+                (LiveDbmsDataSecurity) getTestData(), getSecurityManager());
     }
-        
+
     @Override
     public GeoServerUserGroupStore createStore(GeoServerUserGroupService service) throws IOException {
-        JDBCUserGroupStore store = 
-            (JDBCUserGroupStore) super.createStore(service);
+        JDBCUserGroupStore store =
+                (JDBCUserGroupStore) super.createStore(service);
         try {
-            JDBCTestSupport.dropExistingTables(store,store.getConnection());
+            JDBCTestSupport.dropExistingTables(store, store.getConnection());
         } catch (SQLException e) {
             throw new IOException(e);
         }
         store.createTables();
         store.store();
-        return store;        
+        return store;
     }
+
     @Test
     public void testUserGroupDatabaseSetup() throws IOException {
 
-            JDBCUserGroupStore jdbcStore = 
-                (JDBCUserGroupStore) store;            
-            assertTrue(jdbcStore.tablesAlreadyCreated());
-            jdbcStore.checkDDLStatements();
-            jdbcStore.checkDMLStatements();
-            jdbcStore.clear();
-            jdbcStore.dropTables();
-            jdbcStore.store();
-            assertFalse(jdbcStore.tablesAlreadyCreated());
-            jdbcStore.load();
+        JDBCUserGroupStore jdbcStore =
+                (JDBCUserGroupStore) store;
+        assertTrue(jdbcStore.tablesAlreadyCreated());
+        jdbcStore.checkDDLStatements();
+        jdbcStore.checkDMLStatements();
+        jdbcStore.clear();
+        jdbcStore.dropTables();
+        jdbcStore.store();
+        assertFalse(jdbcStore.tablesAlreadyCreated());
+        jdbcStore.load();
     }
-        
+
 
     @Override
     protected SystemTestData createTestData() throws Exception {
@@ -108,7 +108,7 @@ public abstract class JDBCUserGroupServiceTest extends AbstractUserGroupServiceT
             return super.createTestData();
         return new LiveDbmsDataSecurity(getFixtureId());
     }
-    
+
     @Override
     protected boolean isJDBCTest() {
         return true;

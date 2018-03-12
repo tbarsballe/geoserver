@@ -23,7 +23,7 @@ class OgcLink {
     public OgcLink() {
         // default constructor
     }
-    
+
     public OgcLink(String offering, String method, String code, String type, String href) {
         this.offering = offering;
         this.method = method;
@@ -72,5 +72,5 @@ class OgcLink {
         this.href = href;
     }
 
-    
+
 }

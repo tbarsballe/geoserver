@@ -11,14 +11,14 @@ import org.geoserver.security.impl.ReadOnlyUGService;
 /**
  * Configuration panel for {@link ReadOnlyUGService}.
  * <p>
- * This service is only used for testing, it is only available when running from the development 
- * environment. 
+ * This service is only used for testing, it is only available when running from the development
+ * environment.
  * </p>
- *  
+ *
  * @author Justin Deoliveira, OpenGeo
  */
-public class ReadOnlyUserGroupServicePanelInfo 
-    extends UserGroupServicePanelInfo<MemoryUserGroupServiceConfigImpl, ReadOnlyUserGroupServicePanel> {
+public class ReadOnlyUserGroupServicePanelInfo
+        extends UserGroupServicePanelInfo<MemoryUserGroupServiceConfigImpl, ReadOnlyUserGroupServicePanel> {
 
     public ReadOnlyUserGroupServicePanelInfo() {
         setComponentClass(ReadOnlyUserGroupServicePanel.class);

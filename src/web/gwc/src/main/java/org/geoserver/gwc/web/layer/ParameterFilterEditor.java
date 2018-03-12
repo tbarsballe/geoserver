@@ -61,7 +61,7 @@ class ParameterFilterEditor extends FormComponentPanel<Set<ParameterFilter>> {
     private static final Logger LOGGER = Logging.getLogger(ParameterFilterEditor.class);
 
     private static final long serialVersionUID = 5098470663723800345L;
-    
+
     private static final List<String> COMMON_KEYS = Arrays.asList(
             "ENV",
             "FORMAT_OPTIONS",
@@ -84,10 +84,10 @@ class ParameterFilterEditor extends FormComponentPanel<Set<ParameterFilter>> {
     private final ListView<ParameterFilter> filters;
 
     private final ParameterListValidator validator;
-    
+
     private final DropDownChoice<Class<? extends ParameterFilter>> availableFilterTypes;
     private final TextField<String> newFilterKey;
-    
+
     private class ParameterListValidator implements IValidator<Set<ParameterFilter>> {
 
         private static final long serialVersionUID = 1L;
@@ -123,13 +123,13 @@ class ParameterFilterEditor extends FormComponentPanel<Set<ParameterFilter>> {
                         keys.add(key);
                     }
                 }
-                    
+
 
             }
         }
 
         private void error(IValidatable<Set<ParameterFilter>> validatable, final String resourceKey,
-                final String... params) {
+                           final String... params) {
 
             ValidationError error = new ValidationError();
             String message;
@@ -170,16 +170,16 @@ class ParameterFilterEditor extends FormComponentPanel<Set<ParameterFilter>> {
 
             @Override
             protected void onBeforeRender() {
-            	//let's remove the correct child quickly before wicket just removes the last one on the list.
-            	for (final Iterator<Component> iterator = iterator(); iterator.hasNext();){
-					final ListItem<?> child = (ListItem<?>) iterator.next();
-					if (child != null) {
-						if (!getList().contains(child.get("subform").getDefaultModelObject())) {
-							iterator.remove();
-						}
-					}
-				}
-            	
+                //let's remove the correct child quickly before wicket just removes the last one on the list.
+                for (final Iterator<Component> iterator = iterator(); iterator.hasNext(); ) {
+                    final ListItem<?> child = (ListItem<?>) iterator.next();
+                    if (child != null) {
+                        if (!getList().contains(child.get("subform").getDefaultModelObject())) {
+                            iterator.remove();
+                        }
+                    }
+                }
+
                 super.onBeforeRender();
             }
 
@@ -191,12 +191,12 @@ class ParameterFilterEditor extends FormComponentPanel<Set<ParameterFilter>> {
 
                 //Create form
                 final Label keyLabel;
-                keyLabel = new Label("key", new PropertyModel<String>(item.getModel(),"key"));
+                keyLabel = new Label("key", new PropertyModel<String>(item.getModel(), "key"));
                 item.add(keyLabel);
-                
-                final Component subForm = getSubform("subform", new Model<ParameterFilter> (item.getModelObject()));
+
+                final Component subForm = getSubform("subform", new Model<ParameterFilter>(item.getModelObject()));
                 item.add(subForm);
-                
+
                 final AjaxSubmitLink removeLink;
 
                 removeLink = new AjaxSubmitLink("removeLink") {
@@ -204,7 +204,7 @@ class ParameterFilterEditor extends FormComponentPanel<Set<ParameterFilter>> {
 
                     @Override
                     protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                    	getList().remove((ParameterFilter) getDefaultModelObject());
+                        getList().remove((ParameterFilter) getDefaultModelObject());
                         target.add(container);
                     }
                 };
@@ -219,10 +219,10 @@ class ParameterFilterEditor extends FormComponentPanel<Set<ParameterFilter>> {
         filters.setOutputMarkupId(true);
         // this is necessary to avoid loosing item contents on edit/validation checks
         filters.setReuseItems(true);
-        
-		Form<?> filtersForm = new Form<>("filtersForm", filters.getDefaultModel());
+
+        Form<?> filtersForm = new Form<>("filtersForm", filters.getDefaultModel());
         filtersForm.add(filters);
-                
+
         table.add(filtersForm);
 
         List<String> parameterKeys = new ArrayList<String>(GWC.get().getGridSetBroker().getNames());
@@ -230,15 +230,15 @@ class ParameterFilterEditor extends FormComponentPanel<Set<ParameterFilter>> {
             parameterKeys.remove(filter.getKey());
         }
         Collections.sort(parameterKeys);
-        
+
         GeoServerAjaxFormLink addStyleFilterLink = new GeoServerAjaxFormLink("addStyleFilter") {
             private static final long serialVersionUID = 1L;
 
             @Override
             protected void onClick(AjaxRequestTarget target, Form<?> form) {
                 StyleParameterFilter newFilter = new StyleParameterFilter();
-                newFilter.setLayer((LayerInfo)layerModel.getObject());
-                
+                newFilter.setLayer((LayerInfo) layerModel.getObject());
+
                 addFilter(newFilter);
 
                 target.add(container);
@@ -246,7 +246,7 @@ class ParameterFilterEditor extends FormComponentPanel<Set<ParameterFilter>> {
         };
         addStyleFilterLink.add(new Icon("addIcon", GWCIconFactory.ADD_ICON));
         add(addStyleFilterLink);
-        
+
         // FIXME: make this extensible so new kinds of filter can be supported by
         ArrayList<Class<? extends ParameterFilter>> filterTypes =
                 new ArrayList<Class<? extends ParameterFilter>>();
@@ -254,57 +254,57 @@ class ParameterFilterEditor extends FormComponentPanel<Set<ParameterFilter>> {
         filterTypes.add(FloatParameterFilter.class);
         filterTypes.add(IntegerParameterFilter.class);
         filterTypes.add(RegexParameterFilter.class);
-        
-        
+
+
         availableFilterTypes = new DropDownChoice<Class<? extends ParameterFilter>>
-            (       "availableFilterTypes", 
-                    new Model<Class<? extends ParameterFilter>>(),
-                    new Model<ArrayList<Class<? extends ParameterFilter>>>(filterTypes), 
-                    new ChoiceRenderer<Class<? extends ParameterFilter>>() {
+                ("availableFilterTypes",
+                        new Model<Class<? extends ParameterFilter>>(),
+                        new Model<ArrayList<Class<? extends ParameterFilter>>>(filterTypes),
+                        new ChoiceRenderer<Class<? extends ParameterFilter>>() {
 
-                        /** serialVersionUID */
-                        private static final long serialVersionUID = 1L;
+                            /** serialVersionUID */
+                            private static final long serialVersionUID = 1L;
 
-                        @Override
-                        public Object getDisplayValue(
-                                Class<? extends ParameterFilter> object) {
-                            String resource = "ParameterFilterEditor.filtername."
-                                    +object.getCanonicalName();
-                            try {
-                                // Try to look up a localized name for the class
-                                return getLocalizer().getString(resource, 
-                                        ParameterFilterEditor.this);
-                            } catch (MissingResourceException ex) {
-                                // Use the simple name as a backup
-                                if(LOGGER.isLoggable(Level.CONFIG))
-                                    LOGGER.log(Level.CONFIG, "Could not find localization resource"+
-                                " for ParameterFilter subclass "+object.getCanonicalName());
-                                
-                                return object.getSimpleName();
+                            @Override
+                            public Object getDisplayValue(
+                                    Class<? extends ParameterFilter> object) {
+                                String resource = "ParameterFilterEditor.filtername."
+                                        + object.getCanonicalName();
+                                try {
+                                    // Try to look up a localized name for the class
+                                    return getLocalizer().getString(resource,
+                                            ParameterFilterEditor.this);
+                                } catch (MissingResourceException ex) {
+                                    // Use the simple name as a backup
+                                    if (LOGGER.isLoggable(Level.CONFIG))
+                                        LOGGER.log(Level.CONFIG, "Could not find localization resource" +
+                                                " for ParameterFilter subclass " + object.getCanonicalName());
+
+                                    return object.getSimpleName();
+                                }
                             }
-                        }
 
-                        @Override
-                        public String getIdValue(
-                                Class<? extends ParameterFilter> object,
-                                int index) {
-                            return Integer.toString(index);
-                        }
-                
-            });
+                            @Override
+                            public String getIdValue(
+                                    Class<? extends ParameterFilter> object,
+                                    int index) {
+                                return Integer.toString(index);
+                            }
+
+                        });
         availableFilterTypes.setOutputMarkupId(true);
         add(availableFilterTypes);
-        
+
         newFilterKey = new TextField<String>("newFilterKey", Model.of(""));
         add(newFilterKey);
-        
+
         // TODO update this to eliminate keys that are in use
         final RepeatingView commonKeys = new RepeatingView("commonKeys");
-        for(String key: COMMON_KEYS) {
+        for (String key : COMMON_KEYS) {
             commonKeys.add(new Label(commonKeys.newChildId(), key));
         }
         add(commonKeys);
-        
+
         GeoServerAjaxFormLink addFilterLink = new GeoServerAjaxFormLink("addFilter") {
             private static final long serialVersionUID = 1L;
 
@@ -313,10 +313,10 @@ class ParameterFilterEditor extends FormComponentPanel<Set<ParameterFilter>> {
                 availableFilterTypes.processInput();
                 newFilterKey.processInput();
                 String key = newFilterKey.getModelObject();
-                if(key == null || key.isEmpty()){
+                if (key == null || key.isEmpty()) {
                     ParamResourceModel rm = new ParamResourceModel("ParameterFilterEditor.nonEmptyFilter", null, "");
                     error(rm.getString());
-                }else{
+                } else {
                     Class<? extends ParameterFilter> type = availableFilterTypes.getModelObject();
 
                     try {
@@ -325,9 +325,9 @@ class ParameterFilterEditor extends FormComponentPanel<Set<ParameterFilter>> {
                         addFilter(newFilter);
                         newFilterKey.setModel(Model.of("")); // Reset the key field
                     } catch (NoSuchMethodException ex) {
-                        LOGGER.log(Level.WARNING, "No Default Constructor for "+type ,ex);
-                    } catch (InvocationTargetException | SecurityException  | InstantiationException | IllegalAccessException ex) {
-                        LOGGER.log(Level.WARNING, "Could not execute default Constructor for "+type ,ex);
+                        LOGGER.log(Level.WARNING, "No Default Constructor for " + type, ex);
+                    } catch (InvocationTargetException | SecurityException | InstantiationException | IllegalAccessException ex) {
+                        LOGGER.log(Level.WARNING, "Could not execute default Constructor for " + type, ex);
                     }
                 }
                 target.add(container);
@@ -339,12 +339,12 @@ class ParameterFilterEditor extends FormComponentPanel<Set<ParameterFilter>> {
 
     /**
      * Returns an appropriate subform for the given ParameterFilter model
-     * @param model
      *
+     * @param model
      */
     @SuppressWarnings("unchecked")
-    private Component getSubform(String id, IModel<? extends ParameterFilter> model){
-        
+    private Component getSubform(String id, IModel<? extends ParameterFilter> model) {
+
         if (model.getObject() instanceof RegexParameterFilter) {
             return new RegexParameterFilterSubform(id, (IModel<RegexParameterFilter>) model);
         }
@@ -362,7 +362,7 @@ class ParameterFilterEditor extends FormComponentPanel<Set<ParameterFilter>> {
         }
         return new DefaultParameterFilterSubform(id, (IModel<ParameterFilter>) model);
     }
-    
+
     @Override
     public void convertInput() {
         filters.visitChildren((component, visit) -> {
@@ -377,19 +377,19 @@ class ParameterFilterEditor extends FormComponentPanel<Set<ParameterFilter>> {
     }
 
     private boolean hasFilter(String key) {
-        for(ParameterFilter existing: filters.getModelObject()) {
-            if(existing.getKey().equalsIgnoreCase(key)) return true;
+        for (ParameterFilter existing : filters.getModelObject()) {
+            if (existing.getKey().equalsIgnoreCase(key)) return true;
         }
         return false;
     }
-    
+
     private boolean addFilter(ParameterFilter filter) {
-        if(hasFilter(filter.getKey())) return false;
+        if (hasFilter(filter.getKey())) return false;
 
         filters.getModelObject().add(filter);
         return true;
     }
-    
+
     /**
      */
     @Override

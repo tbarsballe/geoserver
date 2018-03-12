@@ -28,7 +28,7 @@ import org.opengis.style.GraphicalSymbol;
 /**
  * Evaluates a meta-buffer against the specified feature. Can be called with multiple subsequent
  * features and will accumulate the largest available buffer.
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class DynamicBufferEstimator extends AbstractStyleVisitor {

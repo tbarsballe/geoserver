@@ -32,9 +32,8 @@ import ucar.nc2.dataset.NetcdfDataset;
 
 /**
  * Base support class for NetCDF wcs tests.
- * 
+ *
  * @author Daniele Romagnoli, GeoSolutions
- * 
  */
 public class WCSNetCDFTest extends WCSNetCDFBaseTest {
 
@@ -80,13 +79,12 @@ public class WCSNetCDFTest extends WCSNetCDFBaseTest {
     }
 
     /**
-     * This test checks if an exception is not thrown when is requested an image with a total size lower than the maximum 
+     * This test checks if an exception is not thrown when is requested an image with a total size lower than the maximum
      * geoserver output size.
-     * 
      */
     @Test
     public void testOutputMemoryNotExceeded() throws Exception {
-     // Setting of the output limit to 40 Kb
+        // Setting of the output limit to 40 Kb
         setOutputLimit(40);
         // http response from the request inside the string
         MockHttpServletResponse response = getAsServletResponse("ows?request=GetCoverage&service=WCS&version=2.0.1" +
@@ -97,12 +95,11 @@ public class WCSNetCDFTest extends WCSNetCDFBaseTest {
         assertEquals("application/x-netcdf", response.getContentType());
         // Reset output limit
         setOutputLimit(-1);
-    }   
-    
+    }
+
     /**
      * This test checks if an exception is thrown when is requested an image with a total size greater than the maximum
      * geoserver output memory allowed.
-     * 
      */
     @Test
     public void testOutputMemoryExceeded() throws Exception {
@@ -116,11 +113,10 @@ public class WCSNetCDFTest extends WCSNetCDFBaseTest {
         // Reset output limit
         setOutputLimit(-1);
     }
-    
+
     /**
-     * This test checks if an exception is not thrown when is requested an image with a total size lower than the maximum 
+     * This test checks if an exception is not thrown when is requested an image with a total size lower than the maximum
      * geoserver input size.
-     * 
      */
     @Test
     public void testInputMemoryCorrect() throws Exception {
@@ -135,12 +131,11 @@ public class WCSNetCDFTest extends WCSNetCDFBaseTest {
         assertEquals("application/x-netcdf", response.getContentType());
         // Reset input limit
         setInputLimit(-1);
-    }   
-    
+    }
+
     /**
      * This test checks if an exception is thrown when is requested an image with a total size greater than the maximum
      * geoserver input memory allowed.
-     * 
      */
     @Test
     public void testInputMemoryExceeded() throws Exception {
@@ -186,7 +181,7 @@ public class WCSNetCDFTest extends WCSNetCDFBaseTest {
             assertEquals("grid_longitude", rlonVar.findAttribute("long_name").getStringValue());
             assertEquals("grid_longitude", rlonVar.findAttribute("standard_name").getStringValue());
             assertEquals("degrees", rlonVar.findAttribute("units").getStringValue());
-            assertArrayEquals(new float[] { -30, -20, -10, 0, 10, 20, 30 },
+            assertArrayEquals(new float[]{-30, -20, -10, 0, 10, 20, 30},
                     (float[]) rlonVar.read().copyTo1DJavaArray(), (float) DELTA);
             Variable rlatVar = dataset.findVariable("rlat");
             assertNotNull(rlatVar);
@@ -195,7 +190,7 @@ public class WCSNetCDFTest extends WCSNetCDFBaseTest {
             assertEquals("grid_latitude", rlatVar.findAttribute("long_name").getStringValue());
             assertEquals("grid_latitude", rlatVar.findAttribute("standard_name").getStringValue());
             assertEquals("degrees", rlatVar.findAttribute("units").getStringValue());
-            assertArrayEquals(new float[] { -20, -10, 0, 10, 20 },
+            assertArrayEquals(new float[]{-20, -10, 0, 10, 20},
                     (float[]) rlatVar.read().copyTo1DJavaArray(), (float) DELTA);
             // check projection variable
             Variable projVar = dataset.findVariable("rotated_latitude_longitude");
@@ -216,9 +211,9 @@ public class WCSNetCDFTest extends WCSNetCDFBaseTest {
             assertEquals(rlatDim, tempVar.getDimensions().get(0));
             assertEquals(rlonDim, tempVar.getDimensions().get(1));
             assertArrayEquals(
-                    new float[] { 300, 299, 298, 297, 296, 295, 294, 299, 300, 299, 298, 297, 296,
+                    new float[]{300, 299, 298, 297, 296, 295, 294, 299, 300, 299, 298, 297, 296,
                             295, 298, 299, 300, 299, 298, 297, 296, 297, 298, 299, 300, 299, 298,
-                            297, 296, 297, 298, 299, 300, 299, 298 },
+                            297, 296, 297, 298, 299, 300, 299, 298},
                     (float[]) tempVar.read().copyTo1DJavaArray(), (float) DELTA);
         } finally {
             FileUtils.deleteQuietly(file);
@@ -256,7 +251,7 @@ public class WCSNetCDFTest extends WCSNetCDFBaseTest {
             assertEquals("grid_longitude", rlonVar.findAttribute("long_name").getStringValue());
             assertEquals("grid_longitude", rlonVar.findAttribute("standard_name").getStringValue());
             assertEquals("degrees", rlonVar.findAttribute("units").getStringValue());
-            assertArrayEquals(new float[] { -30, -20, -10, 0, 10, 20, 30 },
+            assertArrayEquals(new float[]{-30, -20, -10, 0, 10, 20, 30},
                     (float[]) rlonVar.read().copyTo1DJavaArray(), (float) DELTA);
             Variable rlatVar = dataset.findVariable("rlat");
             assertNotNull(rlatVar);
@@ -265,7 +260,7 @@ public class WCSNetCDFTest extends WCSNetCDFBaseTest {
             assertEquals("grid_latitude", rlatVar.findAttribute("long_name").getStringValue());
             assertEquals("grid_latitude", rlatVar.findAttribute("standard_name").getStringValue());
             assertEquals("degrees", rlatVar.findAttribute("units").getStringValue());
-            assertArrayEquals(new float[] { -20, -10, 0, 10, 20 },
+            assertArrayEquals(new float[]{-20, -10, 0, 10, 20},
                     (float[]) rlatVar.read().copyTo1DJavaArray(), (float) DELTA);
             // check projection variable
             Variable projVar = dataset.findVariable("rotated_latitude_longitude");
@@ -286,9 +281,9 @@ public class WCSNetCDFTest extends WCSNetCDFBaseTest {
             assertEquals(rlatDim, dataVar.getDimensions().get(0));
             assertEquals(rlonDim, dataVar.getDimensions().get(1));
             assertArrayEquals(
-                    new float[] { 300, 299, 298, 297, 296, 295, 294, 299, 300, 299, 298, 297, 296,
+                    new float[]{300, 299, 298, 297, 296, 295, 294, 299, 300, 299, 298, 297, 296,
                             295, 298, 299, 300, 299, 298, 297, 296, 297, 298, 299, 300, 299, 298,
-                            297, 296, 297, 298, 299, 300, 299, 298 },
+                            297, 296, 297, 298, 299, 300, 299, 298},
                     (float[]) dataVar.read().copyTo1DJavaArray(), (float) DELTA);
         } finally {
             FileUtils.deleteQuietly(file);
@@ -326,7 +321,7 @@ public class WCSNetCDFTest extends WCSNetCDFBaseTest {
             assertEquals("grid_longitude", rlonVar.findAttribute("long_name").getStringValue());
             assertEquals("grid_longitude", rlonVar.findAttribute("standard_name").getStringValue());
             assertEquals("degrees", rlonVar.findAttribute("units").getStringValue());
-            assertArrayEquals(new float[] { -18, -8, 2, 12, 22 },
+            assertArrayEquals(new float[]{-18, -8, 2, 12, 22},
                     (float[]) rlonVar.read().copyTo1DJavaArray(), (float) DELTA);
             Variable rlatVar = dataset.findVariable("rlat");
             assertNotNull(rlatVar);
@@ -335,7 +330,7 @@ public class WCSNetCDFTest extends WCSNetCDFBaseTest {
             assertEquals("grid_latitude", rlatVar.findAttribute("long_name").getStringValue());
             assertEquals("grid_latitude", rlatVar.findAttribute("standard_name").getStringValue());
             assertEquals("degrees", rlatVar.findAttribute("units").getStringValue());
-            assertArrayEquals(new float[] { -20, -10, 0, 10, 20 },
+            assertArrayEquals(new float[]{-20, -10, 0, 10, 20},
                     (float[]) rlatVar.read().copyTo1DJavaArray(), (float) DELTA);
             // check projection variable
             Variable projVar = dataset.findVariable("rotated_latitude_longitude");
@@ -355,8 +350,8 @@ public class WCSNetCDFTest extends WCSNetCDFBaseTest {
             assertEquals(rlatDim, dataVar.getDimensions().get(0));
             assertEquals(rlonDim, dataVar.getDimensions().get(1));
             assertArrayEquals(
-                    new float[] { 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112,
-                            113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124 },
+                    new float[]{100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112,
+                            113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124},
                     (float[]) dataVar.read().copyTo1DJavaArray(), (float) DELTA);
         } finally {
             FileUtils.deleteQuietly(file);

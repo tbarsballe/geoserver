@@ -14,12 +14,13 @@ import org.geotools.data.wmts.WebMapTileServer;
 
 @SuppressWarnings("serial")
 public class WMTSStoreEditPage extends AbstractWMTSStorePage {
-    
+
     public static final String STORE_NAME = "storeName";
     public static final String WS_NAME = "wsName";
-    
+
     /**
      * Uses a "name" parameter to locate the datastore
+     *
      * @param parameters
      */
     public WMTSStoreEditPage(PageParameters parameters) {
@@ -39,7 +40,7 @@ public class WMTSStoreEditPage extends AbstractWMTSStorePage {
     @Override
     protected void onSave(WMTSStoreInfo info, AjaxRequestTarget target)
             throws IllegalArgumentException {
-        if(!info.isEnabled()) {
+        if (!info.isEnabled()) {
             doSaveStore(info);
         } else {
             try {
@@ -51,7 +52,7 @@ public class WMTSStoreEditPage extends AbstractWMTSStorePage {
                 WebMapTileServer wmts = getCatalog().getResourcePool().getWebMapTileServer(info);
                 wmts.getCapabilities();
                 doSaveStore(info);
-            } catch(Exception e) {
+            } catch (Exception e) {
                 confirmSaveOnConnectionFailure(info, target, e);
             }
         }
@@ -68,16 +69,16 @@ public class WMTSStoreEditPage extends AbstractWMTSStorePage {
         Catalog catalog = getCatalog();
 
         // Cloning into "expandedStore" through the super class "clone" method
-        WMTSStoreInfo expandedStore = (WMTSStoreInfo) catalog.getResourcePool().clone(info, true); 
-        
+        WMTSStoreInfo expandedStore = (WMTSStoreInfo) catalog.getResourcePool().clone(info, true);
+
         getCatalog().validate(expandedStore, false).throwIfInvalid();
-        
+
         getCatalog().save(info);
         doReturn(StorePage.class);
     }
 
     private void confirmSaveOnConnectionFailure(final WMTSStoreInfo info,
-            final AjaxRequestTarget requestTarget, final Exception error) {
+                                                final AjaxRequestTarget requestTarget, final Exception error) {
 
         getCatalog().getResourcePool().clear(info);
 
@@ -121,6 +122,5 @@ public class WMTSStoreEditPage extends AbstractWMTSStorePage {
         });
     }
 
-  
 
 }

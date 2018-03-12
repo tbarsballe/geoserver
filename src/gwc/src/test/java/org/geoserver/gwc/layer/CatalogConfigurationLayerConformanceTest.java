@@ -45,10 +45,10 @@ import org.junit.rules.TemporaryFolder;
  * GeoServer integration test for {@link TileLayerConfiguration}
  */
 public class CatalogConfigurationLayerConformanceTest extends LayerConfigurationTest {
-    
-    @Rule 
+
+    @Rule
     public MockWepAppContextRule context = new MockWepAppContextRule();
-    
+
     @Rule
     public TemporaryFolder temp = new TemporaryFolder();
 
@@ -63,17 +63,17 @@ public class CatalogConfigurationLayerConformanceTest extends LayerConfiguration
 
     @Override
     protected TileLayer getGoodInfo(String id, int rand) throws Exception {
-        PublishedInfo pinfo = layerCatalog.computeIfAbsent(id, (name)->{
-            LayerGroupInfo info = EasyMock.createMock("TestPublished_"+id,LayerGroupInfo.class);
+        PublishedInfo pinfo = layerCatalog.computeIfAbsent(id, (name) -> {
+            LayerGroupInfo info = EasyMock.createMock("TestPublished_" + id, LayerGroupInfo.class);
             MetadataMap mMap = new MetadataMap();
-            
+
             EasyMock.expect(info.getMetadata()).andStubReturn(mMap);
             EasyMock.expect(info.prefixedName()).andStubReturn(id);
             EasyMock.expect(info.getId()).andStubReturn(id);
             EasyMock.replay(info);
             return info;
         });
-        
+
         GeoServerTileLayer layer = new GeoServerTileLayer(pinfo, gwcConfig, gsBroker);
         doModifyInfo(layer, rand);
         return layer;
@@ -82,7 +82,7 @@ public class CatalogConfigurationLayerConformanceTest extends LayerConfiguration
     @Override
     protected TileLayer getBadInfo(String id, int rand) throws Exception {
         return new AbstractTileLayer() {
-            
+
             @Override
             public String getName() {
                 return id;
@@ -120,7 +120,7 @@ public class CatalogConfigurationLayerConformanceTest extends LayerConfiguration
                     throws GeoWebCacheException {
                 return null;
             }
-            
+
         };
     }
 
@@ -130,7 +130,7 @@ public class CatalogConfigurationLayerConformanceTest extends LayerConfiguration
         Assume.assumeTrue(false);
         return null;
     }
-    
+
     Map<String, PublishedInfo> layerCatalog = new HashMap<>();
 
     private GWC mediator;
@@ -138,43 +138,46 @@ public class CatalogConfigurationLayerConformanceTest extends LayerConfiguration
     private Catalog catalog;
 
     private File dataDir;
-    
+
     @Override
     protected TileLayerConfiguration getConfig() throws Exception {
         catalog = EasyMock.createMock("catalog", Catalog.class);
         gsBroker = EasyMock.createMock("gsBroker", GridSetBroker.class);
         mediator = EasyMock.createMock("mediator", GWC.class);
-        
-        mediator.syncEnv();EasyMock.expectLastCall().anyTimes();
-        mediator.layerAdded(EasyMock.anyObject(String.class));EasyMock.expectLastCall().anyTimes();
+
+        mediator.syncEnv();
+        EasyMock.expectLastCall().anyTimes();
+        mediator.layerAdded(EasyMock.anyObject(String.class));
+        EasyMock.expectLastCall().anyTimes();
         EasyMock.expect(mediator.layerRemoved(EasyMock.anyObject(String.class))).andStubReturn(true);
-        mediator.layerRenamed(EasyMock.anyObject(String.class),EasyMock.anyObject(String.class));EasyMock.expectLastCall().anyTimes();
-        
+        mediator.layerRenamed(EasyMock.anyObject(String.class), EasyMock.anyObject(String.class));
+        EasyMock.expectLastCall().anyTimes();
+
         EasyMock.replay(catalog, gsBroker, mediator);
         context.addBean("mediator", mediator, GWC.class);
         GWC.set(mediator);
-        
+
         gwcConfig = new GWCConfig();
         dataDir = temp.newFolder();
         GeoServerResourceLoader resourceLoader = new GeoServerResourceLoader(dataDir);
-        XMLConfiguration xmlConfig = new XMLConfiguration(context.getContextProvider(), (ConfigurationResourceProvider)null);
+        XMLConfiguration xmlConfig = new XMLConfiguration(context.getContextProvider(), (ConfigurationResourceProvider) null);
         TileLayerCatalog tlCatalog = new DefaultTileLayerCatalog(resourceLoader, xmlConfig);
-        
+
         return new CatalogConfiguration(catalog, tlCatalog, gsBroker);
     }
-    
+
     @After
     public void removeMediator() throws Exception {
         GWC.set(null);
     }
-    
+
     @Override
     protected TileLayerConfiguration getSecondConfig() throws Exception {
         gwcConfig = new GWCConfig();
         GeoServerResourceLoader resourceLoader = new GeoServerResourceLoader(dataDir);
-        XMLConfiguration xmlConfig = new XMLConfiguration(context.getContextProvider(), (ConfigurationResourceProvider)null);
+        XMLConfiguration xmlConfig = new XMLConfiguration(context.getContextProvider(), (ConfigurationResourceProvider) null);
         TileLayerCatalog tlCatalog = new DefaultTileLayerCatalog(resourceLoader, xmlConfig);
-        
+
         return new CatalogConfiguration(catalog, tlCatalog, gsBroker);
     }
 
@@ -200,7 +203,7 @@ public class CatalogConfigurationLayerConformanceTest extends LayerConfiguration
         Assume.assumeTrue(false);
     }
 
-    @Override 
+    @Override
     @Ignore // TODO Need to implement a clone/deep copy/modification proxy to make this safe.
     @Test
     public void testModifyCallRequiredToChangeInfoFromGetInfo() throws Exception {

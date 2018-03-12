@@ -66,7 +66,7 @@ public class WpsAccessRule implements Comparable<WpsAccessRule>, Serializable {
      */
     public WpsAccessRule() {
         this(ANY, ANY);
-    }   
+    }
 
     public String getGroupName() {
         return groupName;
@@ -94,19 +94,16 @@ public class WpsAccessRule implements Comparable<WpsAccessRule>, Serializable {
 
     /**
      * Returns the key for the current rule. No other rule should have the same
-     * 
-     *
      */
     public String getKey() {
-        return groupName + "." + wpsName ;
+        return groupName + "." + wpsName;
     }
 
     /**
      * Returns the list of roles as a comma separated string for this rule
-     *
      */
     public String getValue() {
-        if(roles.isEmpty()) {
+        if (roles.isEmpty()) {
             return WpsAccessRule.ANY;
         } else {
             StringBuffer sb = new StringBuffer();
@@ -116,7 +113,7 @@ public class WpsAccessRule implements Comparable<WpsAccessRule>, Serializable {
             }
             sb.setLength(sb.length() - 1);
             return sb.toString();
-        } 
+        }
     }
 
     /**
@@ -148,7 +145,7 @@ public class WpsAccessRule implements Comparable<WpsAccessRule>, Serializable {
      * Full equality, roles included
      */
     public boolean equalsExact(WpsAccessRule obj) {
-        if(0 != compareTo(obj))
+        if (0 != compareTo(obj))
             return false;
         else
             return roles.equals(obj.roles);

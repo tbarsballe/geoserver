@@ -41,7 +41,9 @@ public class WMSSettingsController extends ServiceSettingsController {
     private static final Logger LOGGER = Logging.getLogger(WMSSettingsController.class);
 
     @Autowired
-    public WMSSettingsController(GeoServer geoServer) { super(geoServer, WMSInfo.class); }
+    public WMSSettingsController(GeoServer geoServer) {
+        super(geoServer, WMSInfo.class);
+    }
 
     @PutMapping(value = {"/settings", "/workspaces/{workspaceName}/settings"}, consumes = {
             MediaType.APPLICATION_JSON_VALUE,
@@ -68,7 +70,7 @@ public class WMSSettingsController extends ServiceSettingsController {
     @Override
     public void configurePersister(XStreamPersister persister, XStreamMessageConverter converter) {
         persister.setHideFeatureTypeAttributes();
-        persister.setCallback( new XStreamPersister.Callback() {
+        persister.setCallback(new XStreamPersister.Callback() {
             @Override
             protected ServiceInfo getServiceObject() {
                 Map<String, String> uriTemplateVars = (Map<String, String>) RequestContextHolder.getRequestAttributes().getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE, RequestAttributes.SCOPE_REQUEST);
@@ -82,6 +84,7 @@ public class WMSSettingsController extends ServiceSettingsController {
                 }
                 return service;
             }
+
             @Override
             protected Class<WMSInfo> getObjectClass() {
                 return WMSInfo.class;

@@ -4,7 +4,7 @@
  * application directory.
  */
 package org.geoserver.wfs.response;
- 
+
 import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -77,37 +77,35 @@ import freemarker.template.Template;
 
 
 /**
- *
  * This class returns a shapefile encoded results of the users's query.
- *
+ * <p>
  * Based on ShapeFeatureResponseDelegate.java from geoserver 1.5.x
  *
  * @author originally authored by Chris Holmes, The Open Planning Project, cholmes@openplans.org
  * @author ported to gs 1.6.x by Saul Farber, MassGIS, saul.farber@state.ma.us
- *
  */
 public class ShapeZipOutputFormat extends WFSGetFeatureOutputFormat implements ApplicationContextAware {
     private static final Logger LOGGER = Logging.getLogger(ShapeZipOutputFormat.class);
     public static final String GS_SHAPEFILE_CHARSET = "GS-SHAPEFILE-CHARSET";
     public static final String SHAPE_ZIP_DEFAULT_PRJ_IS_ESRI = "SHAPE-ZIP_DEFAULT_PRJ_IS_ESRI";
-    
+
     private static final Configuration templateConfig = new Configuration();
-    
+
     private ApplicationContext applicationContext;
     private Catalog catalog;
     private GeoServerResourceLoader resourceLoader;
     private long maxShpSize = Long.getLong("GS_SHP_MAX_SIZE", Integer.MAX_VALUE);
     private long maxDbfSize = Long.getLong("GS_DBF_MAX_SIZE", Integer.MAX_VALUE);
-    
+
     /**
      * @deprecated use {@link #ShapeZipOutputFormat(GeoServer)}
      */
     public ShapeZipOutputFormat() {
-        this(GeoServerExtensions.bean(GeoServer.class), 
-                (Catalog) GeoServerExtensions.bean("catalog"), 
+        this(GeoServerExtensions.bean(GeoServer.class),
+                (Catalog) GeoServerExtensions.bean("catalog"),
                 (GeoServerResourceLoader) GeoServerExtensions.bean("resourceLoader"));
     }
-    
+
     public ShapeZipOutputFormat(GeoServer gs, Catalog catalog, GeoServerResourceLoader resourceLoader) {
         super(gs, "SHAPE-ZIP");
         this.catalog = catalog;
@@ -118,10 +116,10 @@ public class ShapeZipOutputFormat extends WFSGetFeatureOutputFormat implements A
      * @see WFSGetFeatureOutputFormat#getMimeType(Object, Operation)
      */
     public String getMimeType(Object value, Operation operation)
-        throws ServiceException {
+            throws ServiceException {
         return "application/zip";
     }
-    
+
     public String getCapabilitiesElementName() {
         return "SHAPE-ZIP";
     }
@@ -138,7 +136,7 @@ public class ShapeZipOutputFormat extends WFSGetFeatureOutputFormat implements A
     public String getPreferredDisposition(Object value, Operation operation) {
         return DISPOSITION_ATTACH;
     }
-    
+
     /**
      * Get this output format's file name for for the zipped shapefile.
      * <p>
@@ -149,15 +147,14 @@ public class ShapeZipOutputFormat extends WFSGetFeatureOutputFormat implements A
      * option. For example: {@code &format_options=FILENAME:roads.zip}
      * <li>Otherwise a file name is inferred from the requested feature type(s) name.
      * </ul>
-     * 
+     *
      * @return the the file name for the zipped shapefile(s)
-     * 
      */
     @Override
     public String getAttachmentFileName(Object value, Operation operation) {
         SimpleFeatureCollection fc = (SimpleFeatureCollection) ((FeatureCollectionResponse) value).getFeature().get(0);
         FeatureTypeInfo ftInfo = getFeatureTypeInfo(fc.getSchema());
-        
+
         String filename = null;
         GetFeatureRequest request = GetFeatureRequest.adapt(operation.getParameters()[0]);
         if (request != null) {
@@ -172,11 +169,11 @@ public class ShapeZipOutputFormat extends WFSGetFeatureOutputFormat implements A
         }
         return filename + (filename.endsWith(".zip") ? "" : ".zip");
     }
-    
+
     protected void write(FeatureCollectionResponse featureCollection, OutputStream output,
-            Operation getFeature) throws IOException, ServiceException {
-    	List<SimpleFeatureCollection> collections = new ArrayList<SimpleFeatureCollection>();
-        collections.addAll((List)featureCollection.getFeature());
+                         Operation getFeature) throws IOException, ServiceException {
+        List<SimpleFeatureCollection> collections = new ArrayList<SimpleFeatureCollection>();
+        collections.addAll((List) featureCollection.getFeature());
         Charset charset = getShapefileCharset(getFeature);
         write(collections, charset, output, GetFeatureRequest.adapt(getFeature.getParameters()[0]));
     }
@@ -184,8 +181,8 @@ public class ShapeZipOutputFormat extends WFSGetFeatureOutputFormat implements A
     /**
      * @see WFSGetFeatureOutputFormat#write(Object, OutputStream, Operation)
      */
-    public void write(List<SimpleFeatureCollection> collections, Charset charset, OutputStream output, 
-        final GetFeatureRequest request) throws IOException, ServiceException {
+    public void write(List<SimpleFeatureCollection> collections, Charset charset, OutputStream output,
+                      final GetFeatureRequest request) throws IOException, ServiceException {
         //We might get multiple featurecollections in our response (multiple queries?) so we need to
         //write out multiple shapefile sets, one for each query response.
         final File tempDir = IOUtils.createTempDirectory("shpziptemp");
@@ -198,7 +195,7 @@ public class ShapeZipOutputFormat extends WFSGetFeatureOutputFormat implements A
                 return fileName;
 
             }
-            
+
             @Override
             protected void shapefileDumped(String fileName, SimpleFeatureType remappedSchema) throws IOException {
                 try {
@@ -213,10 +210,10 @@ public class ShapeZipOutputFormat extends WFSGetFeatureOutputFormat implements A
         dumper.setMaxDbfSize(maxDbfSize);
         dumper.setMaxShpSize(maxShpSize);
         dumper.setCharset(charset);
-        
-        
+
+
         // target charset
-        
+
         try {
             // if an empty result out of feature type with unknown geometry is created, the
             // zip file will be empty and the zip output stream will break
@@ -224,22 +221,22 @@ public class ShapeZipOutputFormat extends WFSGetFeatureOutputFormat implements A
             for (SimpleFeatureCollection collection : collections) {
                 shapefileCreated |= dumper.dump(collection);
             }
-            
+
             // take care of the case the output is completely empty
-            if(!shapefileCreated) {
+            if (!shapefileCreated) {
                 createEmptyZipWarning(tempDir);
             }
-            
+
             // dump the request
             createRequestDump(tempDir, request, collections.get(0));
-            
+
             // zip all the files produced
             final FilenameFilter filter = new FilenameFilter() {
-            
+
                 public boolean accept(File dir, String name) {
                     name = name.toLowerCase();
                     return name.endsWith(".shp") || name.endsWith(".shx") || name.endsWith(".dbf")
-                           || name.endsWith(".prj") || name.endsWith(".cst") || name.endsWith(".txt");
+                            || name.endsWith(".prj") || name.endsWith(".cst") || name.endsWith(".txt");
                 }
             };
             ZipOutputStream zipOut = new ZipOutputStream(output);
@@ -253,7 +250,7 @@ public class ShapeZipOutputFormat extends WFSGetFeatureOutputFormat implements A
             // make sure we remove the temp directory and its contents completely now
             try {
                 FileUtils.deleteDirectory(tempDir);
-            } catch(IOException e) {
+            } catch (IOException e) {
                 LOGGER.warning("Could not delete temp directory: " + tempDir.getAbsolutePath() + " due to: " + e.getMessage());
             }
         }
@@ -261,22 +258,23 @@ public class ShapeZipOutputFormat extends WFSGetFeatureOutputFormat implements A
 
     /**
      * Dumps the request
+     *
      * @param simpleFeatureCollection
      */
     private void createRequestDump(File tempDir, GetFeatureRequest gft, SimpleFeatureCollection fc) {
         final Request request = Dispatcher.REQUEST.get();
-        if(request == null || gft == null) {
+        if (request == null || gft == null) {
             // we're probably running in a unit test
             return;
         }
-        
+
         // build the target file
         FeatureTypeInfo ftInfo = getFeatureTypeInfo(fc.getSchema());
         String fileName = new FileNameSource(getClass()).getRequestDumpName(ftInfo) + ".txt";
         File target = new File(tempDir, fileName);
-        
+
         try {
-            if(request.isGet()) {
+            if (request.isGet()) {
                 final HttpServletRequest httpRequest = request.getHttpRequest();
                 String baseUrl = ResponseUtils.baseURL(httpRequest);
                 String path = request.getPath();
@@ -289,7 +287,7 @@ public class ShapeZipOutputFormat extends WFSGetFeatureOutputFormat implements A
             } else {
                 org.geotools.xml.Configuration cfg = null;
                 QName elementName = null;
-                if(gft.getVersion().equals("1.1.0")) {
+                if (gft.getVersion().equals("1.1.0")) {
                     cfg = new WFSConfiguration();
                     elementName = WFS.GetFeature;
                 } else {
@@ -304,14 +302,14 @@ public class ShapeZipOutputFormat extends WFSGetFeatureOutputFormat implements A
                     encoder.setIndentSize(2);
                     encoder.encode(gft, elementName, fos);
                 } finally {
-                    if(fos != null)
+                    if (fos != null)
                         fos.close();
                 }
             }
-        } catch(IOException e) {
+        } catch (IOException e) {
             throw new WFSException(gft, "Failed to dump the WFS request");
         }
-        
+
     }
 
     private void createEmptyZipWarning(File tempDir) throws IOException {
@@ -323,15 +321,14 @@ public class ShapeZipOutputFormat extends WFSGetFeatureOutputFormat implements A
         } finally {
             pw.close();
         }
-    }   
+    }
 
-    
 
     /**
      * Either retrieves the corresponding FeatureTypeInfo from the catalog or fakes one
-     * with the necessary information 
-     * @param c
+     * with the necessary information
      *
+     * @param c
      */
     private FeatureTypeInfo getFeatureTypeInfo(SimpleFeatureType schema) {
         FeatureTypeInfo ftInfo = catalog.getFeatureTypeByName(schema.getName());
@@ -359,16 +356,16 @@ public class ShapeZipOutputFormat extends WFSGetFeatureOutputFormat implements A
      * </p>
      */
     private void changeWKTFormatIfFileFormatIsESRI(File tempDir, GetFeatureRequest request,
-            String fileName, SimpleFeatureType remappedSchema) throws FactoryException,
+                                                   String fileName, SimpleFeatureType remappedSchema) throws FactoryException,
             IOException, FileNotFoundException {
-        
+
         boolean useEsriFormat = false;
-        
+
         // if the request originates from the WPS we won't actually have any GetFeatureType request
-        if(request == null) {
+        if (request == null) {
             return;
         }
-        
+
         Map<String, ?> formatOptions = request.getFormatOptions();
         final String requestedPrjFileFormat = (String) formatOptions.get("PRJFILEFORMAT");
         if (null == requestedPrjFileFormat) {
@@ -376,21 +373,21 @@ public class ShapeZipOutputFormat extends WFSGetFeatureOutputFormat implements A
             MetadataMap metadata = bean.getMetadata();
             Boolean defaultIsEsri = metadata.get(SHAPE_ZIP_DEFAULT_PRJ_IS_ESRI, Boolean.class);
             useEsriFormat = defaultIsEsri != null && defaultIsEsri.booleanValue();
-        }else{
+        } else {
             useEsriFormat = "ESRI".equalsIgnoreCase(requestedPrjFileFormat);
         }
-        
+
         if (useEsriFormat) {
             replaceOGCPrjFileByESRIPrjFile(tempDir, fileName, remappedSchema);
         }
     }
 
     private void replaceOGCPrjFileByESRIPrjFile(File tempDir, String fileName,
-            SimpleFeatureType remappedSchema) throws FactoryException, IOException,
+                                                SimpleFeatureType remappedSchema) throws FactoryException, IOException,
             FileNotFoundException {
         final Integer epsgCode = CRS.lookupEpsgCode(remappedSchema.getGeometryDescriptor()
                 .getCoordinateReferenceSystem(), true);
-        if(epsgCode == null){
+        if (epsgCode == null) {
             LOGGER.info("Can't find the EPSG code for the shapefile CRS");
             return;
         }
@@ -400,12 +397,12 @@ public class ShapeZipOutputFormat extends WFSGetFeatureOutputFormat implements A
             Properties properties = new Properties();
             InputStream fis = null;
             try {
-            	fis = file.in();
-            	properties.load(fis);
+                fis = file.in();
+                properties.load(fis);
             } finally {
-            	org.apache.commons.io.IOUtils.closeQuietly(fis);
+                org.apache.commons.io.IOUtils.closeQuietly(fis);
             }
-			
+
 
             String data = (String) properties.get(epsgCode.toString());
 
@@ -430,21 +427,22 @@ public class ShapeZipOutputFormat extends WFSGetFeatureOutputFormat implements A
 
     /**
      * Looks up the charset parameter, either in the GetFeature request or as a global parameter
+     *
      * @param getFeature
      * @return the found charset, or the platform's default one if none was specified
      */
     private Charset getShapefileCharset(Operation getFeature) {
         Charset result = null;
-        
+
         GetFeatureRequest gft = GetFeatureRequest.adapt(getFeature.getParameters()[0]);
-        if(gft.getFormatOptions() != null && gft.getFormatOptions().get("CHARSET") != null) {
-           result = (Charset) gft.getFormatOptions().get("CHARSET");
+        if (gft.getFormatOptions() != null && gft.getFormatOptions().get("CHARSET") != null) {
+            result = (Charset) gft.getFormatOptions().get("CHARSET");
         } else {
             final String charsetName = GeoServerExtensions.getProperty(GS_SHAPEFILE_CHARSET, applicationContext);
-            if(charsetName != null)
+            if (charsetName != null)
                 result = Charset.forName(charsetName);
         }
-        
+
         // if not specified let's use the shapefile default one
         return result != null ? result : Charset.forName("ISO-8859-1");
     }
@@ -452,7 +450,7 @@ public class ShapeZipOutputFormat extends WFSGetFeatureOutputFormat implements A
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
     }
-    
+
     public long getMaxShpSize() {
         return maxShpSize;
     }
@@ -474,29 +472,29 @@ public class ShapeZipOutputFormat extends WFSGetFeatureOutputFormat implements A
     public void setMaxDbfSize(long maxDbfSize) {
         this.maxDbfSize = maxDbfSize;
     }
-    
-    
+
+
     static class FileNameSource {
-        
+
         private Class clazz;
 
         public FileNameSource(Class clazz) {
             this.clazz = clazz;
         }
-        
+
         private Properties processTemplate(FeatureTypeInfo ftInfo, String geometryType) {
             try {
                 // setup template subsystem
                 GeoServerTemplateLoader templateLoader = new GeoServerTemplateLoader(clazz);
                 templateLoader.setFeatureType(ftInfo);
-    
+
                 // load the template
                 Template template = null;
                 synchronized (templateConfig) {
                     templateConfig.setTemplateLoader(templateLoader);
                     template = templateConfig.getTemplate("shapezip.ftl");
                 }
-    
+
                 // prepare the template context
                 Date timestamp;
                 if (Dispatcher.REQUEST.get() != null) {
@@ -513,56 +511,55 @@ public class ShapeZipOutputFormat extends WFSGetFeatureOutputFormat implements A
                 java.util.Calendar cal = Calendar.getInstance(new SimpleTimeZone(0, "GMT"));
                 format.setCalendar(cal);
                 context.put("iso_timestamp", format.format(timestamp));
-                
+
                 // process the template, write out and turn it into a property map
                 StringWriter sw = new StringWriter();
                 template.process(context, sw);
-    
+
                 Properties props = new Properties();
                 props.load(new ByteArrayInputStream(sw.toString().getBytes()));
-                
+
                 return props;
-            } catch(Exception e) {
+            } catch (Exception e) {
                 throw new WFSException("Failed to process the file name template", e);
             }
         }
-        
+
         private String getTypeName(FeatureTypeInfo ftInfo) {
             return ftInfo.getName().replace(".", "_");
         }
-        
+
         public String getZipName(FeatureTypeInfo ftInfo) {
             Properties props = processTemplate(ftInfo, null);
             String filename = props.getProperty("zip");
             if (filename == null) {
                 filename = getTypeName(ftInfo);
             }
-            
+
             return filename;
         }
-        
+
         public String getShapeName(FeatureTypeInfo ftInfo, String geometryType) {
             Properties props = processTemplate(ftInfo, geometryType);
             String filename = props.getProperty("shp");
             if (filename == null) {
-                filename = getTypeName(ftInfo) + geometryType; 
+                filename = getTypeName(ftInfo) + geometryType;
             }
-            
+
             return filename;
         }
-        
+
         public String getRequestDumpName(FeatureTypeInfo ftInfo) {
             Properties props = processTemplate(ftInfo, null);
             String filename = props.getProperty("txt");
             if (filename == null) {
                 filename = getTypeName(ftInfo);
             }
-            
+
             return filename;
         }
-        
+
     }
-    
-    
-    
+
+
 }

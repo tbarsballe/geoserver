@@ -11,7 +11,7 @@ import org.geoserver.web.GeoServerApplication;
 
 /**
  * Model for the main {@link MasterPasswordConfig} configuration.
- *  
+ *
  * @author Justin Deoliveira, OpenGeo
  */
 public class MasterPasswordConfigModel extends LoadableDetachableModel<MasterPasswordConfig> {

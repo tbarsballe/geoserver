@@ -8,22 +8,21 @@ import java.util.Map;
 
 /**
  * Interface allowing a {@link RemoteProcess} instance to listen to the {@link RemoteProcessClient} messages.
- * 
+ *
  * @author Alessio Fabiani, GeoSolutions
- * 
  */
 public interface RemoteProcessClientListener {
-    
+
     /**
      * Returns the assigned unique @param pId of the {@link RemoteProcess}
-     * 
+     *
      * @return
      */
     public String getPID();
 
     /**
      * Sets the progress of the {@link RemoteProcess} associated to the remote service with the unique @param pId
-     * 
+     *
      * @param pId
      * @param progress
      */
@@ -31,7 +30,7 @@ public interface RemoteProcessClientListener {
 
     /**
      * Completes of the {@link RemoteProcess} associated to the remote service with the unique @param pId
-     * 
+     *
      * @param pId
      * @param outputs
      */
@@ -39,7 +38,7 @@ public interface RemoteProcessClientListener {
 
     /**
      * Raise an Exception to the {@link RemoteProcess} associated to the remote service with the unique @param pId
-     * 
+     *
      * @param pId
      * @param cause
      * @param metadata

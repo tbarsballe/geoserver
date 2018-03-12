@@ -31,7 +31,7 @@ public class WMSStoreInfoImpl extends StoreInfoImpl implements WMSStoreInfo {
 
     protected WMSStoreInfoImpl() {
     }
-    
+
     public WMSStoreInfoImpl(Catalog catalog) {
         super(catalog);
     }
@@ -71,7 +71,7 @@ public class WMSStoreInfoImpl extends StoreInfoImpl implements WMSStoreInfo {
 
     @Override
     public void setMaxConnections(int maxConcurrentConnections) {
-        this.maxConnections = maxConcurrentConnections;        
+        this.maxConnections = maxConcurrentConnections;
     }
 
     @Override

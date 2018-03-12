@@ -10,9 +10,8 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 /**
  * Converts between CRS string representations and {@link CoordinateReferenceSystem}
- * 
+ *
  * @author Andrea Aime - OpenGeo
- * 
  */
 public class CoordinateReferenceSystemPPIO extends LiteralPPIO {
 

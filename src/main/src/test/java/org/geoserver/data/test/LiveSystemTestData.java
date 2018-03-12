@@ -26,7 +26,7 @@ public class LiveSystemTestData extends SystemTestData {
     }
 
     public void tearDown() throws Exception {
-        if(data != null) {
+        if (data != null) {
             IOUtils.delete(data);
         }
     }

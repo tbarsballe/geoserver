@@ -71,9 +71,8 @@ import com.google.common.collect.Lists;
  * the {@link CatalogLayerEventListener} will caught the modification to the layer or layer group
  * and delete the cache for the layer.
  * </p>
- * 
+ *
  * @author groldan
- * 
  * @see GridSubsetsEditor
  * @see LayerCacheOptionsTabPanel
  * @see LayerGroupCacheOptionsPanel
@@ -102,7 +101,7 @@ class GeoServerTileLayerEditor extends FormComponentPanel<GeoServerTileLayerInfo
      * Whether the cached layer is enabled (like in {@link TileLayer#isEnabled()}
      */
     private final FormComponent<Boolean> enabled;
-    
+
     /**
      * The blobstoreId
      */
@@ -125,9 +124,9 @@ class GeoServerTileLayerEditor extends FormComponentPanel<GeoServerTileLayerInfo
     private final FormComponent<Integer> gutter;
 
     private final CheckGroup<String> cacheFormats;
-    
+
     private final FormComponent<Integer> expireCache;
-    
+
     private final FormComponent<Integer> expireClients;
 
     private final GridSubsetsEditor gridSubsets;
@@ -145,8 +144,8 @@ class GeoServerTileLayerEditor extends FormComponentPanel<GeoServerTileLayerInfo
      * @param tileLayerModel must be a {@link GeoServerTileLayerInfoModel}
      */
     public GeoServerTileLayerEditor(final String id,
-            final IModel<? extends PublishedInfo> layerModel,
-            final IModel<GeoServerTileLayerInfo> tileLayerModel) {
+                                    final IModel<? extends PublishedInfo> layerModel,
+                                    final IModel<GeoServerTileLayerInfo> tileLayerModel) {
         super(id);
         checkArgument(tileLayerModel instanceof GeoServerTileLayerInfoModel);
         this.layerModel = layerModel;
@@ -192,10 +191,10 @@ class GeoServerTileLayerEditor extends FormComponentPanel<GeoServerTileLayerInfo
         add(new Label("createTileLayerLabel", createTileLayerLabelModel));
 
         // Get the model and check if the Enabled parameter has been defined
-        GeoServerTileLayerInfoModel model = ((GeoServerTileLayerInfoModel)tileLayerModel);
+        GeoServerTileLayerInfoModel model = ((GeoServerTileLayerInfoModel) tileLayerModel);
 
         boolean undefined = model.getEnabled() == null;
-        
+
         boolean doCreateTileLayer;
         if (tileLayerInfo.getId() != null) {
             doCreateTileLayer = true;
@@ -223,21 +222,21 @@ class GeoServerTileLayerEditor extends FormComponentPanel<GeoServerTileLayerInfo
         add(enabled = new CheckBox("enabled", new PropertyModel<Boolean>(getModel(), "enabled")));
         enabled.add(new AttributeModifier("title", new ResourceModel("enabled.title")));
         configs.add(enabled);
-        
+
         ChoiceRenderer<String> blobStoreRenderer = new ChoiceRenderer<String>() {
             private static final long serialVersionUID = 1L;
 
             final String defaultStore = getDefaultBlobStoreId();
-            
+
             @Override
             public String getIdValue(String object, int index) {
                 return object;
             }
-            
+
             @Override
             public Object getDisplayValue(String object) {
                 String value = object;
-                if(object.equals(defaultStore)){
+                if (object.equals(defaultStore)) {
                     value += " (*)";
                 }
                 return value;
@@ -258,17 +257,17 @@ class GeoServerTileLayerEditor extends FormComponentPanel<GeoServerTileLayerInfo
                 final Boolean createVal = createLayer.getConvertedInput();
                 final Boolean enabledVal = enabled.getConvertedInput();
                 final String blobStoreIdVal = blobStoreId.getConvertedInput();
-                
+
                 if (createVal && enabledVal && !isBlobStoreEnabled(blobStoreIdVal)) {
                     error(new ParamResourceModel("enabledError", GeoServerTileLayerEditor.this).getString());
                 }
             }
         });
-                
+
         // CheckBox for enabling/disabling inner caching for the layer
         enableInMemoryCaching = new CheckBox("inMemoryCached", new PropertyModel<Boolean>(getModel(), "inMemoryCached"));
         ConfigurableBlobStore store = GeoServerExtensions.bean(ConfigurableBlobStore.class);
-        if(store != null && store.getCache() != null){
+        if (store != null && store.getCache() != null) {
             enableInMemoryCaching.setEnabled(mediator.getConfig().isInnerCachingEnabled()
                     && !store.getCache().isImmutable());
         }
@@ -313,22 +312,22 @@ class GeoServerTileLayerEditor extends FormComponentPanel<GeoServerTileLayerInfo
             }
         };
         cacheFormatsList.setReuseItems(true);// otherwise it looses state on invalid form state
-                                             // submits
+        // submits
         cacheFormats.add(cacheFormatsList);
 
         IModel<Integer> expireCacheModel = new PropertyModel<Integer>(getModel(), "expireCache");
         expireCache = new TextField<Integer>("expireCache", expireCacheModel);
         configs.add(expireCache);
-        
+
         IModel<Integer> expireClientsModel = new PropertyModel<Integer>(getModel(), "expireClients");
         expireClients = new TextField<Integer>("expireClients", expireClientsModel);
         configs.add(expireClients);
-        
+
         IModel<Set<XMLGridSubset>> gridSubsetsModel;
         gridSubsetsModel = new PropertyModel<Set<XMLGridSubset>>(getModel(), "gridSubsets");
         gridSubsets = new GridSubsetsEditor("cachedGridsets", gridSubsetsModel);
         configs.add(gridSubsets);
-        
+
         IModel<Set<ParameterFilter>> parameterFilterModel;
         parameterFilterModel = new PropertyModel<Set<ParameterFilter>>(getModel(), "parameterFilters");
         parameterFilters = new ParameterFilterEditor("parameterFilters", parameterFilterModel, layerModel);
@@ -362,13 +361,13 @@ class GeoServerTileLayerEditor extends FormComponentPanel<GeoServerTileLayerInfo
         }
         return blobStoreIds;
     }
-    
+
     private boolean isBlobStoreEnabled(String blobStoreId) {
         if (blobStoreId == null) {
             return true;
         }
         for (BlobStoreInfo blobStore : GWC.get().getBlobStores()) {
-            if(blobStore.getId().equals(blobStoreId)) {
+            if (blobStore.getId().equals(blobStoreId)) {
                 return blobStore.isEnabled();
             }
         }
@@ -379,10 +378,10 @@ class GeoServerTileLayerEditor extends FormComponentPanel<GeoServerTileLayerInfo
         GeoServerTileLayerInfoModel model = (GeoServerTileLayerInfoModel) super.getModel();
         return model.isNew();
     }
-    
-    private String getDefaultBlobStoreId(){
+
+    private String getDefaultBlobStoreId() {
         BlobStoreInfo defaultBlobStore = GWC.get().getDefaultBlobStore();
-        return defaultBlobStore == null? null : defaultBlobStore.getId();
+        return defaultBlobStore == null ? null : defaultBlobStore.getId();
     }
 
     public void save() {
@@ -407,7 +406,7 @@ class GeoServerTileLayerEditor extends FormComponentPanel<GeoServerTileLayerInfo
         // has an id
         Preconditions.checkState(layer.getId() != null);
         tileLayerInfo.setId(layer.getId());
-        
+
         final String name;
         final GridSetBroker gridsets = gwc.getGridSetBroker();
         GeoServerTileLayer tileLayer;
@@ -422,10 +421,10 @@ class GeoServerTileLayerEditor extends FormComponentPanel<GeoServerTileLayerInfo
         }
 
         tileLayerInfo.setName(name);
-        
+
         // Remove the Layer from the cache if it is present
         ConfigurableBlobStore store = GeoServerExtensions.bean(ConfigurableBlobStore.class);
-        if(store != null){
+        if (store != null) {
             CacheProvider cache = store.getCache();
             if (cache != null) {
                 if (enableInMemoryCaching.getModelObject()) {
@@ -433,16 +432,15 @@ class GeoServerTileLayerEditor extends FormComponentPanel<GeoServerTileLayerInfo
                 } else {
                     cache.addUncachedLayer(name);
                 }
-            } 
+            }
         }
-        
-        if (tileLayerExists) {          
+
+        if (tileLayerExists) {
             gwc.save(tileLayer);
         } else {
             gwc.add(tileLayer);
         }
     }
-
 
 
     private void updateConfigsVisibility(AjaxRequestTarget target) {
@@ -507,7 +505,7 @@ class GeoServerTileLayerEditor extends FormComponentPanel<GeoServerTileLayerInfo
     public void convertInput() {
         createLayer.processInput();
         final boolean createTileLayer = createLayer.getModelObject().booleanValue();
-        GeoServerTileLayerInfoModel model = ((GeoServerTileLayerInfoModel)getModel());
+        GeoServerTileLayerInfoModel model = ((GeoServerTileLayerInfoModel) getModel());
         model.setEnabled(createTileLayer);
         GeoServerTileLayerInfo tileLayerInfo = getModelObject();
 
@@ -521,7 +519,7 @@ class GeoServerTileLayerEditor extends FormComponentPanel<GeoServerTileLayerInfo
             cacheFormats.processInput();
             parameterFilters.processInput();
             gridSubsets.processInput();
-            
+
 //            // Remove add the Layer to the cache if it is present
 //            ConfigurableBlobStore store = GeoServerExtensions.bean(ConfigurableBlobStore.class);
 //            if(store != null){
@@ -550,7 +548,7 @@ class GeoServerTileLayerEditor extends FormComponentPanel<GeoServerTileLayerInfo
     @Override
     protected void onBeforeRender() {
         super.onBeforeRender();
-        
+
     }
 
 }

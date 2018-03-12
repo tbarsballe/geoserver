@@ -34,7 +34,7 @@ public class OraclePanel extends AbstractDbPanel {
     JNDIDbParamPanel jndiParamPanel;
     BasicDbParamPanel basicParamPanel;
     OCIParamPanel ociParamPanel;
-    
+
     public OraclePanel(String id) {
         super(id);
     }
@@ -46,7 +46,7 @@ public class OraclePanel extends AbstractDbPanel {
         // basic panel
         basicParamPanel = new BasicDbParamPanel("01", "localhost", 1521, true);
         result.put(CONNECTION_DEFAULT, basicParamPanel);
-        
+
         // oci one
         ociParamPanel = new OCIParamPanel("02");
         result.put(CONNECTION_OCI, ociParamPanel);
@@ -54,10 +54,10 @@ public class OraclePanel extends AbstractDbPanel {
         // jndi param panels
         jndiParamPanel = new JNDIDbParamPanel("03", "java:comp/env/jdbc/mydatabase");
         result.put(CONNECTION_JNDI, jndiParamPanel);
-        
+
         return result;
     }
-    
+
     @Override
     protected DataStoreFactorySpi fillStoreParams(Map<String, Serializable> params) {
         DataStoreFactorySpi factory;
@@ -68,7 +68,7 @@ public class OraclePanel extends AbstractDbPanel {
             fillInJndiParams(params, jndiParamPanel);
         } else if (CONNECTION_OCI.equals(connectionType)) {
             factory = new OracleNGOCIDataStoreFactory();
-            
+
             params.put(ALIAS.key, ociParamPanel.alias);
             params.put(USER.key, ociParamPanel.username);
             params.put(PASSWD.key, ociParamPanel.password);
@@ -82,7 +82,7 @@ public class OraclePanel extends AbstractDbPanel {
             params.put(PASSWD.key, basicParamPanel.password);
             params.put(DATABASE.key, basicParamPanel.database);
         }
-        if(!CONNECTION_JNDI.equals(connectionType)) {
+        if (!CONNECTION_JNDI.equals(connectionType)) {
             // connection pool params common to OCI and default connections
             fillInConnPoolParams(params, basicParamPanel);
         }
@@ -108,10 +108,10 @@ public class OraclePanel extends AbstractDbPanel {
         String alias;
         String username;
         String password;
-    
+
         public OCIParamPanel(String id) {
             super(id);
-    
+
             add(new TextField("alias", new PropertyModel(this, "alias")).setRequired(true));
             add(new TextField("username", new PropertyModel(this, "username")).setRequired(true));
             add(new PasswordTextField("password", new PropertyModel(this, "password"))

@@ -18,13 +18,15 @@ import org.geotools.util.logging.Logging;
 
 /**
  * Configuration panel for {@link GeoServerOAuthAuthenticationFilter}.
- * 
+ *
  * @author Alessio Fabiani, GeoSolutions S.A.S.
  */
 public class GeoNodeOAuth2AuthProviderPanel
         extends PreAuthenticatedUserNameFilterPanel<GeoNodeOAuth2FilterConfig> {
 
-    /** serialVersionUID */
+    /**
+     * serialVersionUID
+     */
     private static final long serialVersionUID = -3025321797363970302L;
 
     static Logger LOGGER = Logging.getLogger("org.geoserver.security");

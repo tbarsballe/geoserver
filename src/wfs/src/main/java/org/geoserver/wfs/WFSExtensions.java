@@ -13,7 +13,7 @@ import org.springframework.context.ApplicationContext;
 
 /**
  * Utility class uses to process GeoServer WFS extension points.
- * 
+ *
  * @author Jesse Eichar
  * @version $Id$
  */

@@ -20,7 +20,8 @@ import org.opengis.filter.identity.FeatureId;
 /**
  * Takes a filter that eventually contains a fid filter and builds a new filter that contains
  * the same fids but with a different prefix
- * @author Andrea Aime 
+ *
+ * @author Andrea Aime
  */
 class FidTransformeVisitor extends DuplicatingFilterVisitor {
     private Object featureType;
@@ -39,7 +40,7 @@ class FidTransformeVisitor extends DuplicatingFilterVisitor {
         }
         Filter external = null;
         Set<FeatureId> fids = new HashSet<FeatureId>();
-        for (Iterator it = ids.iterator(); it.hasNext();) {
+        for (Iterator it = ids.iterator(); it.hasNext(); ) {
             FeatureId id = new FeatureIdImpl((String) it.next());
             FeatureId retyped = RetypingFeatureCollection.reTypeId(id, map.getFeatureType(), map.getOriginalFeatureType());
             fids.add(retyped);

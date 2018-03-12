@@ -19,9 +19,8 @@ import org.geotools.xml.EMFUtils;
 
 /**
  * Parses a GetCapabilities request for WCS into the correspondent model object
- * 
+ *
  * @author Andrea Aime - TOPP
- * 
  */
 public class Wcs10GetCapabilitiesRequestReader extends EMFKvpRequestReader {
     public Wcs10GetCapabilitiesRequestReader() {
@@ -37,22 +36,22 @@ public class Wcs10GetCapabilitiesRequestReader extends EMFKvpRequestReader {
             if (ver != null && "".equals(ver)) {
                 ver = null;
             }
-            
+
             GetCapabilitiesType getCapabilities = (GetCapabilitiesType) request;
             getCapabilities.setVersion(ver);
         }
-        if(rawKvp.containsKey("acceptVersions")) {
+        if (rawKvp.containsKey("acceptVersions")) {
             String value = (String) rawKvp.get("acceptVersions");
             EObject acceptVersions = Ows10Factory.eINSTANCE.createAcceptVersionsType();
-            ((Collection)EMFUtils.get(acceptVersions, "version")).addAll(KvpUtils.readFlat(value, KvpUtils.INNER_DELIMETER));
+            ((Collection) EMFUtils.get(acceptVersions, "version")).addAll(KvpUtils.readFlat(value, KvpUtils.INNER_DELIMETER));
             kvp.put("acceptVersions", acceptVersions);
         }
         // make sure we get the right Sections-Type param -> workaround for GEOS-6807
-        if(rawKvp.containsKey("sections")){
+        if (rawKvp.containsKey("sections")) {
             String value = (String) rawKvp.get("sections");
             LOGGER.info("Sections: " + value);
             EObject sections = Ows10Factory.eINSTANCE.createSectionsType();
-            ((Collection)EMFUtils.get(sections, "section")).addAll(KvpUtils.readFlat(value, KvpUtils.INNER_DELIMETER));
+            ((Collection) EMFUtils.get(sections, "section")).addAll(KvpUtils.readFlat(value, KvpUtils.INNER_DELIMETER));
             kvp.put("sections", sections);
         }
 

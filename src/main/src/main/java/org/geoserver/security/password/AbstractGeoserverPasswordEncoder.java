@@ -18,11 +18,10 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.security.authentication.encoding.PasswordEncoder;
 
 /**
- * Abstract base implementation, delegating the encoding 
+ * Abstract base implementation, delegating the encoding
  * to third party encoders implementing {@link PasswordEncoder}
- * 
- * @author christian
  *
+ * @author christian
  */
 public abstract class AbstractGeoserverPasswordEncoder implements GeoServerPasswordEncoder {
 
@@ -40,8 +39,8 @@ public abstract class AbstractGeoserverPasswordEncoder implements GeoServerPassw
     static {
         Security.addProvider(new BouncyCastleProvider());
     }
-    
-    
+
+
     public String getName() {
         return name;
     }
@@ -54,7 +53,7 @@ public abstract class AbstractGeoserverPasswordEncoder implements GeoServerPassw
      * Does nothing, subclases may override.
      */
     public void initialize(GeoServerSecurityManager securityManager) throws IOException {
-        
+
     }
 
     /**
@@ -79,7 +78,7 @@ public abstract class AbstractGeoserverPasswordEncoder implements GeoServerPassw
     }
 
     /**
-     * Creates the encoder instance used when source is a string. 
+     * Creates the encoder instance used when source is a string.
      */
     protected abstract PasswordEncoder createStringEncoder();
 
@@ -95,7 +94,7 @@ public abstract class AbstractGeoserverPasswordEncoder implements GeoServerPassw
     }
 
     /**
-     * Creates the encoder instance used when source is a char array. 
+     * Creates the encoder instance used when source is a char array.
      */
     protected abstract CharArrayPasswordEncoder createCharEncoder();
 
@@ -105,7 +104,7 @@ public abstract class AbstractGeoserverPasswordEncoder implements GeoServerPassw
     protected final PasswordEncoder getActualEncoder() {
         return null;
     }
-    
+
     @Override
     public String encodePassword(String rawPass, Object salt) throws DataAccessException {
         return doEncodePassword(getStringEncoder().encodePassword(rawPass, salt));
@@ -138,13 +137,13 @@ public abstract class AbstractGeoserverPasswordEncoder implements GeoServerPassw
     @Override
     public boolean isPasswordValid(String encPass, String rawPass, Object salt)
             throws DataAccessException {
-        if (encPass==null) return false;
+        if (encPass == null) return false;
         return getStringEncoder().isPasswordValid(stripPrefix(encPass), rawPass, salt);
     }
 
     @Override
     public boolean isPasswordValid(String encPass, char[] rawPass, Object salt) {
-        if (encPass==null) return false;
+        if (encPass == null) return false;
         return getCharEncoder().isPasswordValid(stripPrefix(encPass), rawPass, salt);
     }
 
@@ -153,7 +152,7 @@ public abstract class AbstractGeoserverPasswordEncoder implements GeoServerPassw
     }
 
     protected String removePrefix(String encPass) {
-        return encPass.replaceFirst(getPrefix()+GeoServerPasswordEncoder.PREFIX_DELIMTER, "");
+        return encPass.replaceFirst(getPrefix() + GeoServerPasswordEncoder.PREFIX_DELIMTER, "");
     }
 
     @Override
@@ -164,11 +163,11 @@ public abstract class AbstractGeoserverPasswordEncoder implements GeoServerPassw
      * @return true if this encoder has encoded encPass
      */
     public boolean isResponsibleForEncoding(String encPass) {
-        if (encPass==null) return false;        
-        return encPass.startsWith(getPrefix()+GeoServerPasswordEncoder.PREFIX_DELIMTER);
+        if (encPass == null) return false;
+        return encPass.startsWith(getPrefix() + GeoServerPasswordEncoder.PREFIX_DELIMTER);
     }
-    
-    
+
+
     public String decode(String encPass) throws UnsupportedOperationException {
         throw new UnsupportedOperationException("decoding passwords not supported");
     }

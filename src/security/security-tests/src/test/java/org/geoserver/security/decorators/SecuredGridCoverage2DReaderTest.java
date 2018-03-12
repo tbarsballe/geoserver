@@ -51,7 +51,7 @@ public class SecuredGridCoverage2DReaderTest extends SecureObjectsTest {
 
         final ParameterValue pv = ImageMosaicFormat.FILTER.createValue();
         pv.setValue(requestFilter);
-        secured.read(new GeneralParameterValue[] { pv });
+        secured.read(new GeneralParameterValue[]{pv});
 
     }
 
@@ -75,11 +75,11 @@ public class SecuredGridCoverage2DReaderTest extends SecureObjectsTest {
 
         final ParameterValue pv = ImageMosaicFormat.FILTER.createValue();
         pv.setValue(requestFilter);
-        secured.read(new GeneralParameterValue[] { pv });
+        secured.read(new GeneralParameterValue[]{pv});
     }
 
-    private static void setupReadAssertion(GridCoverage2DReader reader, 
-            final Filter requestFilter, final Filter securityFilter) throws IOException {
+    private static void setupReadAssertion(GridCoverage2DReader reader,
+                                           final Filter requestFilter, final Filter securityFilter) throws IOException {
         // the assertion
         expect(reader.read(isA(GeneralParameterValue[].class))).andAnswer(
                 new IAnswer<GridCoverage2D>() {
@@ -95,7 +95,7 @@ public class SecuredGridCoverage2DReaderTest extends SecureObjectsTest {
                     }
                 });
         EasyMock.replay(reader);
-        
+
     }
 
     private Format setupFormat() {

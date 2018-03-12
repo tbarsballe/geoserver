@@ -16,29 +16,29 @@ class QuickTemplate {
 
     /**
      * Simple replacement of a set of variables in a string with their values
-     * 
+     *
      * @param template
      * @param variables
-     * @return 
+     * @return
      */
     static String replaceVariables(CharSequence template, Map<String, String> variables) {
         StringBuilder sb = new StringBuilder(template);
         for (Map.Entry<String, String> entry : variables.entrySet()) {
             replaceVariable(sb, entry.getKey(), entry.getValue());
         }
-        
+
         return sb.toString();
     }
 
     static void replaceVariable(StringBuilder sb, String key, String value) {
         // infinite loop avoidance
-        if(key.equals(value)) {
+        if (key.equals(value)) {
             return;
         }
-        
+
         // replace with minimum char movement
         int idx = sb.lastIndexOf(key);
-        while(idx >= 0) {
+        while (idx >= 0) {
             sb.replace(idx, idx + key.length(), value);
             idx = sb.lastIndexOf(key, idx);
         }

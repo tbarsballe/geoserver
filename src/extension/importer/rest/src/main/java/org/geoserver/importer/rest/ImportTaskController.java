@@ -71,8 +71,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @RestController
-@RequestMapping(path = RestBaseController.ROOT_PATH+"/imports/{id}/tasks", produces = {
-        MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_HTML_VALUE })
+@RequestMapping(path = RestBaseController.ROOT_PATH + "/imports/{id}/tasks", produces = {
+        MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_HTML_VALUE})
 public class ImportTaskController extends ImportBaseController {
 
     static final Logger LOGGER = Logging.getLogger(ImportTaskController.class);
@@ -83,8 +83,8 @@ public class ImportTaskController extends ImportBaseController {
     }
 
     @GetMapping
-    public ImportWrapper tasksGet(@PathVariable Long id, @RequestParam(required=false) String expand) {
-        return (writer, builder, converter) -> converter.tasks(builder,context(id).getTasks(), true, converter.expand(expand, 0));
+    public ImportWrapper tasksGet(@PathVariable Long id, @RequestParam(required = false) String expand) {
+        return (writer, builder, converter) -> converter.tasks(builder, context(id).getTasks(), true, converter.expand(expand, 0));
     }
 
     @GetMapping(path = "/{taskId}")
@@ -114,27 +114,27 @@ public class ImportTaskController extends ImportBaseController {
         } catch (JSONException jex) {
             throw new RestException("Internal Error", HttpStatus.INTERNAL_SERVER_ERROR, jex);
         }
-        return (writer,builder,converter) -> writer.write(progress.toString());
+        return (writer, builder, converter) -> writer.write(progress.toString());
     }
 
     @GetMapping(path = "/{taskId}/target")
-    public ImportWrapper targetGet(@PathVariable Long id, @PathVariable Integer taskId, @RequestParam(required=false) String expand) {
+    public ImportWrapper targetGet(@PathVariable Long id, @PathVariable Integer taskId, @RequestParam(required = false) String expand) {
         final ImportTask task = task(id, taskId);
         if (task.getStore() == null) {
             throw new RestException("Task has no target store", HttpStatus.NOT_FOUND);
         }
-        return (writer, builder, converter) -> converter.store(builder,task.getStore(), task, true, converter.expand(expand, 1));
+        return (writer, builder, converter) -> converter.store(builder, task.getStore(), task, true, converter.expand(expand, 1));
 
     }
 
     @GetMapping(path = "/{taskId}/layer")
-    public ImportWrapper layersGet(@PathVariable Long id, @PathVariable Integer taskId, @RequestParam(required=false) String expand) {
+    public ImportWrapper layersGet(@PathVariable Long id, @PathVariable Integer taskId, @RequestParam(required = false) String expand) {
         ImportTask task = task(id, taskId);
-        return (writer, builder, converter) -> converter.layer(builder,task, true, converter.expand(expand, 1));
+        return (writer, builder, converter) -> converter.layer(builder, task, true, converter.expand(expand, 1));
     }
 
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE})
-    public Object taskPost(@PathVariable Long id, @RequestParam(required=false) String expand, HttpServletRequest request, HttpServletResponse response) {
+    public Object taskPost(@PathVariable Long id, @RequestParam(required = false) String expand, HttpServletRequest request, HttpServletResponse response) {
         ImportData data = null;
 
         LOGGER.info("Handling POST of " + request.getContentType());
@@ -183,14 +183,14 @@ public class ImportTaskController extends ImportBaseController {
     /**
      * Uploads a file as a new import task.
      *
-     * @param id The import id
+     * @param id       The import id
      * @param filename The destination name of the file
      */
     @PutMapping(path = "/{taskId:.+}")
     public Object taskPutFile(
             @PathVariable Long id,
-            @PathVariable(name="taskId") Object filename,
-            @RequestParam(required=false) String expand,
+            @PathVariable(name = "taskId") Object filename,
+            @RequestParam(required = false) String expand,
             HttpServletRequest request, HttpServletResponse response) {
 
         ImportContext context = context(id);
@@ -214,13 +214,13 @@ public class ImportTaskController extends ImportBaseController {
 
     @PutMapping(path = "/{taskId}/layer")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public ImportWrapper layerPut(@PathVariable Long id, @PathVariable Integer taskId, @RequestParam(required=false) String expand, @RequestBody LayerInfo layer) {
+    public ImportWrapper layerPut(@PathVariable Long id, @PathVariable Integer taskId, @RequestParam(required = false) String expand, @RequestBody LayerInfo layer) {
         ImportTask task = task(id, taskId);
 
         return (writer, builder, converter) -> {
             updateLayer(task, layer, importer, converter);
             importer.changed(task);
-            converter.layer(builder,task, true, converter.expand(expand, 1));
+            converter.layer(builder, task, true, converter.expand(expand, 1));
         };
     }
 
@@ -249,12 +249,11 @@ public class ImportTaskController extends ImportBaseController {
             }
             response.setStatus(HttpStatus.CREATED.value());
 
-            return (ImportWrapper) (writer, builder,converter) -> {
+            return (ImportWrapper) (writer, builder, converter) -> {
                 if (result.size() == 1) {
-                    converter.task(builder,result.get(0), true, converter.expand(expand, 1));
-                }
-                else {
-                    converter.tasks(builder,result, true, converter.expand(expand, 0));
+                    converter.task(builder, result.get(0), true, converter.expand(expand, 1));
+                } else {
+                    converter.tasks(builder, result, true, converter.expand(expand, 0));
                 }
             };
         }
@@ -329,7 +328,6 @@ public class ImportTaskController extends ImportBaseController {
     }
 
 
-
     void handleTaskPut(Long id, Integer taskId, HttpServletRequest request, HttpServletResponse response, ImportJSONWriter converter) {
         ImportTask orig = task(id, taskId);
         ImportTask task;
@@ -393,7 +391,7 @@ public class ImportTaskController extends ImportBaseController {
     private ImportData handleFileUpload(ImportContext context, Object taskId, HttpServletRequest request) {
         Directory directory = findOrCreateDirectory(context);
         try {
-            directory.accept(taskId.toString(),request.getInputStream());
+            directory.accept(taskId.toString(), request.getInputStream());
         } catch (IOException e) {
             throw new RestException("Error unpacking file",
                     HttpStatus.INTERNAL_SERVER_ERROR, e);
@@ -462,7 +460,7 @@ public class ImportTaskController extends ImportBaseController {
                 LOGGER.warning(msg + " in PUT request");
                 throw converter.badRequest(msg);
             } catch (FactoryException ex) {
-                throw new RestException("Error with referencing", HttpStatus.INTERNAL_SERVER_ERROR,ex);
+                throw new RestException("Error with referencing", HttpStatus.INTERNAL_SERVER_ERROR, ex);
             }
             // make this the specified native if none exists
             // useful for csv or other files
@@ -491,8 +489,7 @@ public class ImportTaskController extends ImportBaseController {
             if (update.getWorkspace() != null) {
                 existing = cat.getStoreByName(
                         update.getWorkspace(), update.getName(), StoreInfo.class);
-            }
-            else {
+            } else {
                 existing = importer.getCatalog().getStoreByName(update.getName(), StoreInfo.class);
             }
             if (existing == null) {
@@ -511,12 +508,10 @@ public class ImportTaskController extends ImportBaseController {
             if (existing instanceof DataStoreInfo) {
                 clone = cb.buildDataStore(existing.getName());
                 cb.updateDataStore((DataStoreInfo) clone, (DataStoreInfo) existing);
-            }
-            else if (existing instanceof CoverageStoreInfo) {
+            } else if (existing instanceof CoverageStoreInfo) {
                 clone = cb.buildCoverageStore(existing.getName());
                 cb.updateCoverageStore((CoverageStoreInfo) clone, (CoverageStoreInfo) existing);
-            }
-            else {
+            } else {
                 throw new RestException(
                         "Unable to handle existing store: " + update, HttpStatus.INTERNAL_SERVER_ERROR);
             }
@@ -524,20 +519,16 @@ public class ImportTaskController extends ImportBaseController {
             ((StoreInfoImpl) clone).setId(existing.getId());
             task.setStore(clone);
             task.setDirect(false);
-        }
-        else if (orig == null){
+        } else if (orig == null) {
             task.setStore(update);
-        }
-        else {
+        } else {
             //update the original
             CatalogBuilder cb = new CatalogBuilder(importer.getCatalog());
             if (orig instanceof DataStoreInfo) {
-                cb.updateDataStore((DataStoreInfo)orig, (DataStoreInfo)update);
-            }
-            else if (orig instanceof CoverageStoreInfo) {
-                cb.updateCoverageStore((CoverageStoreInfo)orig, (CoverageStoreInfo)update);
-            }
-            else {
+                cb.updateDataStore((DataStoreInfo) orig, (DataStoreInfo) update);
+            } else if (orig instanceof CoverageStoreInfo) {
+                cb.updateCoverageStore((CoverageStoreInfo) orig, (CoverageStoreInfo) update);
+            } else {
                 throw new RestException(
                         "Unable to update store with " + update, HttpStatus.INTERNAL_SERVER_ERROR);
             }

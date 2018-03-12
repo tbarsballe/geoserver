@@ -38,7 +38,7 @@ import org.xml.sax.helpers.ParserAdapter;
  * A base {@code FILTER} parameter parser that expects a subclass to provide the
  * actual {@link Parser} configuration for the expected OGC Filter Encoding spec
  * version.
- * 
+ *
  * @author Justin Deoliveira
  * @author Gabriel Roldan
  */
@@ -54,7 +54,7 @@ public abstract class FilterKvpParser extends KvpParser {
     /**
      * Subclasses shall implement to provide the parse() method the appropriate
      * parser Configuration for the filter spec version they specialize on.
-     * 
+     *
      * @return The Configuration for the appropriate Filter spec version.
      */
     protected abstract Configuration getParserConfiguration();
@@ -108,14 +108,10 @@ public abstract class FilterKvpParser extends KvpParser {
      * backwards compatability with cases in which the new parser chokes on a
      * filter that hte old one could handle.
      * </p>
-     * 
-     * @param rawRequest
-     *            The plain POST text from the client.
-     * 
+     *
+     * @param rawRequest The plain POST text from the client.
      * @return The geotools filter constructed from rawRequest.
-     * 
-     * @throws WfsException
-     *             For any problems reading the request.
+     * @throws WfsException For any problems reading the request.
      */
     protected Filter parseXMLFilterWithOldParser(Reader rawRequest) throws ServiceException {
         // translate string into a proper SAX input source

@@ -39,12 +39,12 @@ import com.vividsolutions.jts.geom.Envelope;
 
 /**
  * Abstract base class for mock data based on the app-schema test data set.
- * 
+ *
  * @author Ben Caradoc-Davies, CSIRO Exploration and Mining
  */
-public abstract class AbstractAppSchemaMockData extends SystemTestData 
-    implements NamespaceTestData {
-    
+public abstract class AbstractAppSchemaMockData extends SystemTestData
+        implements NamespaceTestData {
+
     /**
      * Folder for for test data.
      */
@@ -89,7 +89,7 @@ public abstract class AbstractAppSchemaMockData extends SystemTestData
                     put("xlink", "http://www.w3.org/1999/xlink");
                 }
             });
-    
+
     /**
      * Map of namespace prefix to namespace URI.
      */
@@ -107,7 +107,7 @@ public abstract class AbstractAppSchemaMockData extends SystemTestData
                     put("sml", "http://www.opengis.net/sensorML/1.0.1");
                 }
             });
-                        
+
     /**
      * Use FeatureTypeInfo constants for srs handling as values
      */
@@ -153,14 +153,16 @@ public abstract class AbstractAppSchemaMockData extends SystemTestData
     private final Map<String, String> namespaces;
 
     private final List<String> isolatedNamespaces = new ArrayList<>();
-    
-    private final Map<String, String> layerStyles = new LinkedHashMap<String,String>();
+
+    private final Map<String, String> layerStyles = new LinkedHashMap<String, String>();
 
     private File styles;
 
-    /** the 'featureTypes' directory, under 'data' */
+    /**
+     * the 'featureTypes' directory, under 'data'
+     */
     private File featureTypesBaseDir;
-    
+
     /**
      * Pair of property file name and feature type directory to create db tables for online tests
      */
@@ -170,16 +172,17 @@ public abstract class AbstractAppSchemaMockData extends SystemTestData
      * Indicates fixture id (postgis or oracle) if running in online mode
      */
     private String onlineTestId;
-    
+
     /**
-     * SchemaCatalog to work with AppSchemaValidator for test requests validation. 
+     * SchemaCatalog to work with AppSchemaValidator for test requests validation.
      */
     private SchemaCatalog catalog;
 
     /**
      * True if running 3D online test. Only matters for Oracle, since a special wkt parser is needed.
      */
-	private boolean is3D = false;
+    private boolean is3D = false;
+
     /**
      * Constructor with the default namespaces, schema directory, and catalog file.
      */
@@ -202,11 +205,11 @@ public abstract class AbstractAppSchemaMockData extends SystemTestData
         // create a featureTypes directory
         featureTypesBaseDir = new File(data, "featureTypes");
         featureTypesBaseDir.mkdir();
-        
+
         // create the styles directory
         styles = new File(data, "styles");
         styles.mkdir();
-        
+
         propertiesFiles = new HashMap<String, File>();
 
         addContent();
@@ -220,19 +223,17 @@ public abstract class AbstractAppSchemaMockData extends SystemTestData
         }
         setUpCatalog();
     }
-    
+
     public boolean isOracleOnlineTest() {
-        return "oracle".equals(onlineTestId); 
+        return "oracle".equals(onlineTestId);
     }
-    
+
     public boolean isPostgisOnlineTest() {
         return "postgis".equals(onlineTestId);
     }
 
     /**
-     * 
-     * @param catalogLocation
-     *            file location relative to test-data dir.
+     * @param catalogLocation file location relative to test-data dir.
      */
     protected void setSchemaCatalog(String catalogLocation) {
         if (catalogLocation != null) {
@@ -251,7 +252,7 @@ public abstract class AbstractAppSchemaMockData extends SystemTestData
 
     /**
      * Return the namespace prefixx to namespace URI map for this data.
-     * 
+     *
      * @see org.geoserver.test.NamespaceTestData#getNamespaces()
      */
     public Map<String, String> getNamespaces() {
@@ -290,25 +291,21 @@ public abstract class AbstractAppSchemaMockData extends SystemTestData
      * Copy a file from the test-data directory to a feature type directory. if fileName contains
      * directory path eg, dir1/dir2/file.xml, the full path will be used to locate the resource.
      * After which the directory will be ignored.
-     * 
-     * @param namespacePrefix
-     *            namespace prefix of the WFS feature type
-     * @param typeName
-     *            local name of the WFS feature type
-     * @param fileName
-     *            short name of the file in test-data to copy
-     * @param data
-     *            mock data root directory
+     *
+     * @param namespacePrefix namespace prefix of the WFS feature type
+     * @param typeName        local name of the WFS feature type
+     * @param fileName        short name of the file in test-data to copy
+     * @param data            mock data root directory
      */
     private void copyFileToFeatureTypeDir(String namespacePrefix, String typeName, String fileName) {
         InputStream input = openResource(fileName);
         copy(input, "featureTypes" + "/" + getDataStoreName(namespacePrefix, typeName) + "/"
-                        + fileName.substring(fileName.lastIndexOf("/") + 1, fileName.length()));
+                + fileName.substring(fileName.lastIndexOf("/") + 1, fileName.length()));
     }
 
     /**
      * Returns the root of the mock data directory,
-     * 
+     *
      * @see org.geoserver.data.test.TestData#getDataDirectoryRoot()
      */
     public File getDataDirectoryRoot() {
@@ -317,7 +314,7 @@ public abstract class AbstractAppSchemaMockData extends SystemTestData
 
     /**
      * Returns true.
-     * 
+     *
      * @see org.geoserver.data.test.TestData#isTestDataAvailable()
      */
     public boolean isTestDataAvailable() {
@@ -326,7 +323,7 @@ public abstract class AbstractAppSchemaMockData extends SystemTestData
 
     /**
      * Configures mock data directory.
-     * 
+     *
      * @see org.geoserver.data.test.TestData#setUp()
      */
     public void setUp() throws IOException {
@@ -339,10 +336,10 @@ public abstract class AbstractAppSchemaMockData extends SystemTestData
     public void setUpDefault() throws Exception {
         //do nothing
     }
-    
+
     /**
      * Removes the mock data directory.
-     * 
+     *
      * @see org.geoserver.data.test.TestData#tearDown()
      */
     public void tearDown() {
@@ -360,9 +357,9 @@ public abstract class AbstractAppSchemaMockData extends SystemTestData
     private void setUpCatalog() {
         CatalogWriter writer = new CatalogWriter();
         writer.dataStores(datastoreParams, datastoreNamespacePrefixes, Collections
-                .<String> emptySet());
+                .<String>emptySet());
         writer.coverageStores(new HashMap<String, Map<String, String>>(),
-                new HashMap<String, String>(), Collections.<String> emptySet());
+                new HashMap<String, String>(), Collections.<String>emptySet());
         writer.namespaces(namespaces, isolatedNamespaces);
         writer.styles(layerStyles);
         try {
@@ -374,11 +371,9 @@ public abstract class AbstractAppSchemaMockData extends SystemTestData
 
     /**
      * Copies from an {@link InputStream} to path under the mock data directory.
-     * 
-     * @param input
-     *            source from which file content is copied
-     * @param location
-     *            path relative to mock data directory
+     *
+     * @param input    source from which file content is copied
+     * @param location path relative to mock data directory
      */
     private void copy(InputStream input, String location) {
         try {
@@ -387,14 +382,12 @@ public abstract class AbstractAppSchemaMockData extends SystemTestData
             throw new RuntimeException(e);
         }
     }
-    
+
     /**
      * Copies a String content to a file in the path under the mock data directory.
-     * 
-     * @param content
-     *            file content
-     * @param location
-     *            path relative to mock data directory
+     *
+     * @param content  file content
+     * @param location path relative to mock data directory
      */
     private void copy(String content, String location) {
         File file = new File(data, location);
@@ -417,22 +410,18 @@ public abstract class AbstractAppSchemaMockData extends SystemTestData
 
     /**
      * Write an info.xml file describing a feature type to the feature type directory.
-     * 
      * <p>
-     * 
+     * <p>
+     * <p>
      * Stolen from {@link MockData}.
-     * 
-     * @param namespacePrefix
-     *            namespace prefix of the WFS feature type
-     * @param typeName
-     *            namespace prefix of the WFS feature type
-     * @param featureTypeDir
-     *            feature type directory
-     * @param dataStoreName
-     *            data store directory name
+     *
+     * @param namespacePrefix namespace prefix of the WFS feature type
+     * @param typeName        namespace prefix of the WFS feature type
+     * @param featureTypeDir  feature type directory
+     * @param dataStoreName   data store directory name
      */
     private static void writeInfoFile(String namespacePrefix, String typeName, File featureTypeDir,
-            String dataStoreName) {
+                                      String dataStoreName) {
         // prepare extra params default
         Map<String, Object> params = new HashMap<String, Object>();
         params.put(KEY_STYLE, "Default");
@@ -485,18 +474,12 @@ public abstract class AbstractAppSchemaMockData extends SystemTestData
 
     /**
      * Build the connection parameters map for a data store.
-     * 
-     * @param namespacePrefix
-     *            namespace prefix of the WFS feature type
-     * @param typeName
-     *            local name of the WFS feature type
-     * @param mappingFileName
-     *            file name of the app-schema mapping file
-     * @param featureTypesBaseDir
-     *            feature types base directory
-     * @param dataStoreName
-     *            data store name
      *
+     * @param namespacePrefix     namespace prefix of the WFS feature type
+     * @param typeName            local name of the WFS feature type
+     * @param mappingFileName     file name of the app-schema mapping file
+     * @param featureTypesBaseDir feature types base directory
+     * @param dataStoreName       data store name
      */
     @SuppressWarnings("serial")
     private static Map<String, Serializable> buildAppSchemaDatastoreParams(
@@ -518,18 +501,14 @@ public abstract class AbstractAppSchemaMockData extends SystemTestData
     /**
      * Add one feature type, copying its resources and registering, creating its info.xml, and
      * adding it to catalog.xml.
-     * 
-     * @param namespacePrefix
-     *            namespace prefix of the WFS feature type
-     * @param typeName
-     *            local name of the WFS feature type
-     * @param mappingFileName
-     *            file name of the app-schema mapping file
-     * @param supportFileNames
-     *            names of other files to be copied into the feature type directory
+     *
+     * @param namespacePrefix  namespace prefix of the WFS feature type
+     * @param typeName         local name of the WFS feature type
+     * @param mappingFileName  file name of the app-schema mapping file
+     * @param supportFileNames names of other files to be copied into the feature type directory
      */
     public void addFeatureType(String namespacePrefix, String typeName, String mappingFileName,
-            String... supportFileNames) {
+                               String... supportFileNames) {
         File featureTypeDir = getFeatureTypeDir(featureTypesBaseDir, namespacePrefix, typeName);
         String dataStoreName = getDataStoreName(namespacePrefix, typeName);
         try {
@@ -544,30 +523,25 @@ public abstract class AbstractAppSchemaMockData extends SystemTestData
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-    }    
-    
+    }
+
     /**
-     * The same as {@link #addFeatureType(String, String, String, String...)} except this to enable 3D WKT parser for Oracle. 
+     * The same as {@link #addFeatureType(String, String, String, String...)} except this to enable 3D WKT parser for Oracle.
      * Use this one for tests with 3D data that needs to be run online.
-     * 
-     * @param namespacePrefix
-     *            namespace prefix of the WFS feature type
-     * @param typeName
-     *            local name of the WFS feature type
-     * @param mappingFileName
-     *            file name of the app-schema mapping file
-     * @param supportFileNames
-     *            names of other files to be copied into the feature type directory
+     *
+     * @param namespacePrefix  namespace prefix of the WFS feature type
+     * @param typeName         local name of the WFS feature type
+     * @param mappingFileName  file name of the app-schema mapping file
+     * @param supportFileNames names of other files to be copied into the feature type directory
      */
     public void add3DFeatureType(String namespacePrefix, String typeName, String mappingFileName,
-            String... supportFileNames) {
+                                 String... supportFileNames) {
         addFeatureType(namespacePrefix, typeName, mappingFileName, supportFileNames);
         this.is3D = true;
     }
-    
+
     /**
      * Determine which setup class to use based on the fixture id specified in the vm arg.
-     * 
      */
     private void createTablesInTestDatabase() throws Exception {
         AbstractReferenceDataSetup setup = null;
@@ -590,7 +564,8 @@ public abstract class AbstractAppSchemaMockData extends SystemTestData
 
     /**
      * Adds the specified style to the data directory
-     * @param styleId the style id
+     *
+     * @param styleId  the style id
      * @param fileName filename of SLD file in test-data to be copied into the data directory
      */
     public void addStyle(String styleId, String fileName) {
@@ -600,30 +575,28 @@ public abstract class AbstractAppSchemaMockData extends SystemTestData
         try {
             IOUtils.copy(styleContents, to);
         } catch (IOException e) {
-            throw new RuntimeException (e);
+            throw new RuntimeException(e);
         }
     }
 
     /**
      * Add a datastore and record its prefix in the lookup table.
-     * 
+     *
      * @param dataStoreName
      * @param namespacePrefix
      * @param params
      */
     private void addDataStore(String dataStoreName, String namespacePrefix,
-            Map<String, Serializable> params) {
+                              Map<String, Serializable> params) {
         datastoreParams.put(dataStoreName, params);
         datastoreNamespacePrefixes.put(dataStoreName, namespacePrefix);
     }
 
     /**
      * Put a namespace into the map.
-     * 
-     * @param namspacePrefix
-     *            namespace prefix
-     * @param namespaceUri
-     *            namespace URI
+     *
+     * @param namspacePrefix namespace prefix
+     * @param namespaceUri   namespace URI
      */
     protected void putNamespace(String namspacePrefix, String namespaceUri) {
         namespaces.put(namspacePrefix, namespaceUri);
@@ -633,7 +606,7 @@ public abstract class AbstractAppSchemaMockData extends SystemTestData
      * Put an isolated namespace into the namespaces map.
      *
      * @param namespacePrefix namespace prefix
-     * @param namespaceUri namespace URI
+     * @param namespaceUri    namespace URI
      */
     protected void putIsolatedNamespace(String namespacePrefix, String namespaceUri) {
         namespaces.put(namespacePrefix, namespaceUri);
@@ -642,23 +615,20 @@ public abstract class AbstractAppSchemaMockData extends SystemTestData
 
     /**
      * Remove a namespace in a map.
-     * 
-     * @param namespacePrefix
-     *            namespace prefix
+     *
+     * @param namespacePrefix namespace prefix
      */
     protected void removeNamespace(String namespacePrefix) {
         namespaces.remove(namespacePrefix);
         isolatedNamespaces.remove(namespacePrefix);
     }
-    
+
     /**
      * Get the name of the data store for a feature type. This is used to construct the name of the
      * feature type directory as well as the name of the data store.
-     * 
-     * @param namespacePrefix
-     *            namespace prefix of the WFS feature type
-     * @param typeName
-     *            local name of the WFS feature type
+     *
+     * @param namespacePrefix namespace prefix of the WFS feature type
+     * @param typeName        local name of the WFS feature type
      * @return name of the data store for the feature type
      */
     protected static String getDataStoreName(String namespacePrefix, String typeName) {
@@ -667,7 +637,7 @@ public abstract class AbstractAppSchemaMockData extends SystemTestData
 
     /**
      * Return the featureTypes directory under which individual feature type folders are stored.
-     * 
+     *
      * @return the featureTypes directory
      */
     protected File getFeatureTypesBaseDir() {
@@ -676,32 +646,26 @@ public abstract class AbstractAppSchemaMockData extends SystemTestData
 
     /**
      * Get the file for the directory that contains the mapping and property files.
-     * 
-     * @param namespacePrefix
-     *            namespace prefix of the WFS feature type
-     * @param typeName
-     *            local name of the WFS feature type
+     *
+     * @param namespacePrefix namespace prefix of the WFS feature type
+     * @param typeName        local name of the WFS feature type
      * @return directory that contains the mapping and property files
      */
     private static File getFeatureTypeDir(File featureTypesBaseDir, String namespacePrefix,
-            String typeName) {
+                                          String typeName) {
         return new File(featureTypesBaseDir, getDataStoreName(namespacePrefix, typeName));
     }
 
     /**
      * Copy the mapping and property files to the feature type directory.
-     * 
-     * @param namespacePrefix
-     *            namespace prefix of the WFS feature type
-     * @param typeName
-     *            local name of the WFS feature type
-     * @param mappingFileName
-     *            name of the mapping file for this feature type
-     * @param supportFileNames
-     *            names of the support files, such as properties files, for this feature type
+     *
+     * @param namespacePrefix  namespace prefix of the WFS feature type
+     * @param typeName         local name of the WFS feature type
+     * @param mappingFileName  name of the mapping file for this feature type
+     * @param supportFileNames names of the support files, such as properties files, for this feature type
      */
     private void copyMappingAndSupportFiles(String namespacePrefix, String typeName,
-            String mappingFileName, String... supportFileNames) {
+                                            String mappingFileName, String... supportFileNames) {
         onlineTestId = System.getProperty("testDatabase");
         if (onlineTestId != null) {
             onlineTestId = onlineTestId.toLowerCase().trim();
@@ -713,7 +677,7 @@ public abstract class AbstractAppSchemaMockData extends SystemTestData
                         + getDataStoreName(namespacePrefix, typeName)
                         + "/"
                         + mappingFileName.substring(mappingFileName.lastIndexOf("/") + 1,
-                                mappingFileName.length()));
+                        mappingFileName.length()));
 
                 for (String propertyFileName : supportFileNames) {
                     if (propertyFileName.endsWith(".xml")) {
@@ -723,7 +687,7 @@ public abstract class AbstractAppSchemaMockData extends SystemTestData
                                 + getDataStoreName(namespacePrefix, typeName)
                                 + "/"
                                 + propertyFileName.substring(propertyFileName.lastIndexOf("/") + 1,
-                                        propertyFileName.length()));
+                                propertyFileName.length()));
                     } else {
                         copyFileToFeatureTypeDir(namespacePrefix, typeName, propertyFileName);
                         if (propertyFileName.endsWith(".properties")) {
@@ -752,9 +716,8 @@ public abstract class AbstractAppSchemaMockData extends SystemTestData
     /**
      * Modify the mapping file stream that is to be copied to the target directory. This is so the
      * mapping file copy has the right datastore parameters to use the test database.
-     * 
-     * @param mappingFileName
-     *            Mapping file to be copied
+     *
+     * @param mappingFileName Mapping file to be copied
      * @return Modified content string
      * @throws IOException
      */

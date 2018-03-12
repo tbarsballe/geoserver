@@ -30,12 +30,13 @@ import org.opengis.coverage.grid.GridCoverage;
 
 /**
  * Returns a single coverage encoded in the specified output format (eventually the native one)
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class WCS20GetCoverageResponse extends Response {
 
     public final static String COVERAGE_ID_PARAM = "coverageId";
-    
+
     CoverageResponseDelegateFinder responseFactory;
 
     public WCS20GetCoverageResponse(CoverageResponseDelegateFinder responseFactory) {
@@ -75,22 +76,22 @@ public class WCS20GetCoverageResponse extends Response {
     public void write(Object value, OutputStream output, Operation operation) throws IOException {
         // grab the coverage
         GridCoverage2D coverage = (GridCoverage2D) value;
-        
+
         // grab the format
         GetCoverageType getCoverage = (GetCoverageType) operation.getParameters()[0];
         String format = getCoverage.getFormat();
         if (format == null) {
             format = "image/tiff";
-        } 
+        }
 
         // extract additional extensions
-        final Map<String,String> encodingParameters= new HashMap<String,String>();
+        final Map<String, String> encodingParameters = new HashMap<String, String>();
         final ExtensionType extension = getCoverage.getExtension();
         if (extension != null) {
             final EList<ExtensionItemType> extensions = extension.getContents();
-            for (ExtensionItemType ext:extensions) {
+            for (ExtensionItemType ext : extensions) {
                 encodingParameters.put(ext.getName(), ext.getSimpleContent());
-            }            
+            }
         }
 
         String coverageId = getCoverage.getCoverageId();
@@ -102,7 +103,7 @@ public class WCS20GetCoverageResponse extends Response {
         CoverageResponseDelegate delegate = responseFactory.encoderFor(format);
         delegate.encode(coverage, format, encodingParameters, output);
     }
-    
+
     @Override
     public String getAttachmentFileName(Object value, Operation operation) {
         // grab the format
@@ -110,11 +111,11 @@ public class WCS20GetCoverageResponse extends Response {
         String format = getCoverage.getFormat();
         if (format == null) {
             format = "image/tiff";
-        } 
-        
+        }
+
         // grab the delegate and thus the extension
         CoverageResponseDelegate delegate = responseFactory.encoderFor(format);
-        
+
         // collect the name of the coverages that have been requested
         String extension = delegate.getFileExtension(format);
         return delegate.getFileName((GridCoverage2D) value, getCoverage.getCoverageId(), format);

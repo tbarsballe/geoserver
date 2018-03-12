@@ -35,11 +35,10 @@ import org.opengis.util.ProgressListener;
 /**
  * Delegates all methods to the provided delegate. Suclasses will override
  * methods in order to perform their decoration work
- * 
- * @author Andrea Aime - TOPP
- * 
+ *
  * @param <T>
  * @param <F>
+ * @author Andrea Aime - TOPP
  */
 public class DecoratingCoverageInfo extends AbstractDecorator<CoverageInfo>
         implements CoverageInfo {
@@ -67,9 +66,9 @@ public class DecoratingCoverageInfo extends AbstractDecorator<CoverageInfo>
     public Catalog getCatalog() {
         return delegate.getCatalog();
     }
-    
+
     public void setCatalog(Catalog catalog) {
-        delegate.setCatalog( catalog );
+        delegate.setCatalog(catalog);
     }
 
     public CoordinateReferenceSystem getCRS() {
@@ -98,12 +97,12 @@ public class DecoratingCoverageInfo extends AbstractDecorator<CoverageInfo>
     }
 
     public GridCoverage getGridCoverage(ProgressListener listener,
-            ReferencedEnvelope envelope, Hints hints) throws IOException {
+                                        ReferencedEnvelope envelope, Hints hints) throws IOException {
         return delegate.getGridCoverage(listener, envelope, hints);
     }
 
     public GridCoverageReader getGridCoverageReader(ProgressListener listener,
-            Hints hints) throws IOException {
+                                                    Hints hints) throws IOException {
         return delegate.getGridCoverageReader(listener, hints);
     }
 
@@ -290,16 +289,16 @@ public class DecoratingCoverageInfo extends AbstractDecorator<CoverageInfo>
     public void setTitle(String title) {
         delegate.setTitle(title);
     }
-    
+
     public void accept(CatalogVisitor visitor) {
         delegate.accept(visitor);
     }
-    
+
     @Override
     public boolean isAdvertised() {
         return delegate.isAdvertised();
     }
-    
+
     @Override
     public void setAdvertised(boolean advertised) {
         delegate.setAdvertised(advertised);

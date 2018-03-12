@@ -19,6 +19,7 @@ public interface GetFeatureCallback extends ExtensionPriority {
 
     /**
      * Called before the actual data query happens
+     *
      * @param context
      */
     void beforeQuerying(GetFeatureContext context) throws IOException, ServiceException;

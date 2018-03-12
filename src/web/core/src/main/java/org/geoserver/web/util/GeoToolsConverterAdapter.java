@@ -16,24 +16,24 @@ public class GeoToolsConverterAdapter implements IConverter<Object> {
     Converter myConverter;
     Class<?> myTarget;
 
-    public GeoToolsConverterAdapter(Converter c, Class<?> target){
+    public GeoToolsConverterAdapter(Converter c, Class<?> target) {
         myConverter = c;
         myTarget = target;
     }
 
-    public Object convertToObject(String str, Locale locale){
-        try{
+    public Object convertToObject(String str, Locale locale) {
+        try {
             return myConverter.convert(str, myTarget);
-        } catch (Exception e){
+        } catch (Exception e) {
             return null;
         }
 
     }
 
-    public String convertToString(Object o, Locale locale){
-        try{
+    public String convertToString(Object o, Locale locale) {
+        try {
             return myConverter.convert(o, String.class);
-        } catch (Exception e){
+        } catch (Exception e) {
             return null;
         }
     }

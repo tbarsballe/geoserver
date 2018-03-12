@@ -14,9 +14,8 @@ import org.opengis.coverage.grid.GridCoverageReader;
 /**
  * An implementation of {@link CoverageMimeTypeMapper} based on the {@link GridCoverage2D} class
  * associated to the CoverageInfo
- * 
+ *
  * @author Andrea Aime - GeoSolutions
- * 
  */
 public class FormatNameMimeMapper implements CoverageMimeTypeMapper {
 

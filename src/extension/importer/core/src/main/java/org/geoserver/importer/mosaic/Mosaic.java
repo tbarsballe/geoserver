@@ -36,7 +36,7 @@ public class Mosaic extends Directory {
 
     TimeMode timeMode;
     TimeHandler timeHandler;
-    
+
     public Mosaic(File file) {
         super(file, false);
         setTimeMode(TimeMode.NONE);
@@ -67,8 +67,8 @@ public class Mosaic extends Directory {
                 String basename = FilenameUtils.getBaseName(f.getName());
 
                 //is this file part a shapefile or properties file?
-                if (new File(f.getParentFile(), basename+".shp").exists() || 
-                    new File(f.getParentFile(), basename+".properties").exists()) {
+                if (new File(f.getParentFile(), basename + ".shp").exists() ||
+                        new File(f.getParentFile(), basename + ".properties").exists()) {
                     return true;
                 }
 
@@ -85,12 +85,12 @@ public class Mosaic extends Directory {
             if (format == null) {
                 throw new IllegalArgumentException("Unable to determine format for mosaic files");
             }
-    
+
             if (!(format instanceof RasterFormat)) {
                 throw new IllegalArgumentException("Mosaic directory must contain only raster files");
             }
         }
-        
+
         setFormat(new MosaicFormat());
     }
 
@@ -101,7 +101,7 @@ public class Mosaic extends Directory {
 
             //process the granule
             try {
-                AbstractGridCoverage2DReader r = ((GridFormat)format).gridReader(g);
+                AbstractGridCoverage2DReader r = ((GridFormat) format).gridReader(g);
                 try {
                     //get the envelope
                     GridCoverage2D cov = r.read(null);
@@ -115,8 +115,7 @@ public class Mosaic extends Directory {
                     g.setTimestamp(timeHandler.computeTimestamp(g));
 
                     return g;
-                }
-                finally {
+                } finally {
                     if (r != null) {
                         r.dispose();
                     }

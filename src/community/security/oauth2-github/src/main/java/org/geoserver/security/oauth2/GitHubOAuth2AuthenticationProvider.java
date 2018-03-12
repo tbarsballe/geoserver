@@ -11,16 +11,15 @@ import org.geoserver.security.filter.GeoServerSecurityFilter;
 
 /**
  * @author Alessio Fabiani, GeoSolutions S.A.S.
- *
  */
 public class GitHubOAuth2AuthenticationProvider extends GeoServerOAuthAuthenticationProvider {
 
     public GitHubOAuth2AuthenticationProvider(
-            GeoServerSecurityManager securityManager, 
+            GeoServerSecurityManager securityManager,
             String tokenServices, String oauth2SecurityConfiguration, String geoServerOauth2RestTemplate) {
         super(securityManager, tokenServices, oauth2SecurityConfiguration, geoServerOauth2RestTemplate);
     }
-    
+
     @Override
     public void handlePostChanged(GeoServerSecurityManager securityManager) {
         // Nothing to do
@@ -35,7 +34,7 @@ public class GitHubOAuth2AuthenticationProvider extends GeoServerOAuthAuthentica
     public Class<? extends GeoServerSecurityFilter> getFilterClass() {
         return GitHubOAuthAuthenticationFilter.class;
     }
-    
+
     @Override
     public GeoServerSecurityFilter createFilter(SecurityNamedServiceConfig config) {
         return new GitHubOAuthAuthenticationFilter(config, tokenServices,

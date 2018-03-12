@@ -20,11 +20,13 @@ import org.geoserver.web.wicket.ParamResourceModel;
 
 public class CoverageViewEditPage extends CoverageViewAbstractPage {
 
-    /** serialVersionUID */
+    /**
+     * serialVersionUID
+     */
     private static final long serialVersionUID = -3932025430605245513L;
 
     public CoverageViewEditPage(String workspaceName, String storeName, String coverageName,
-            CoverageInfo coverageInfo, ResourceConfigurationPage previusPage) throws IOException {
+                                CoverageInfo coverageInfo, ResourceConfigurationPage previusPage) throws IOException {
         super(workspaceName, storeName, coverageName, coverageInfo);
         this.previousPage = previusPage;
         this.coverageInfo = coverageInfo;

@@ -23,8 +23,6 @@ import com.vividsolutions.jts.geom.Point;
 
 /**
  * Small helper class to convert from JTS Geometry to GPX types
- * 
- * 
  */
 public class GPXHelper {
     private GpxType gpxType;

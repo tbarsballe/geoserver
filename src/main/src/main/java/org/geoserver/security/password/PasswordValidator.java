@@ -11,44 +11,43 @@ import org.geoserver.security.validation.PasswordPolicyException;
 import org.geoserver.security.validation.PasswordValidatorImpl;
 
 /**
- * Validates a password based on 
+ * Validates a password based on
  * {@link PasswordPolicyConfig} object
- * 
+ * <p>
  * At a bare minimum, <code>null</code> passwords
  * should not be allowed.
- * 
- * Additionally, password must not start with 
+ * <p>
+ * Additionally, password must not start with
  * prefixes used by the {@link GeoServerPasswordEncoder} objects
  * To get the prefixes use
- * 
+ * <p>
  * <code>
  * for (GeoserverPasswordEncoder enc : GeoServerExtensions.extensions(
- *           GeoserverPasswordEncoder.class)) {
- *     System.out.println(enc.getPrefix()+GeoserverPasswordEncoder.PREFIX_DELIMTER);
- *         }
+ * GeoserverPasswordEncoder.class)) {
+ * System.out.println(enc.getPrefix()+GeoserverPasswordEncoder.PREFIX_DELIMTER);
+ * }
  * </code>
- * 
+ * <p>
  * A concrete example can be found in
  * {@link PasswordValidatorImpl#PasswordValidatorImpl()}
- * 
- * @author christian
  *
+ * @author christian
  */
 public interface PasswordValidator {
-    
-    public final static String DEFAULT_NAME="default";
-    public final static String MASTERPASSWORD_NAME="master";
-    
+
+    public final static String DEFAULT_NAME = "default";
+    public final static String MASTERPASSWORD_NAME = "master";
+
     /**
      * Setter for the config
      */
     void setConfig(PasswordPolicyConfig config);
-    
+
     /**
      * Getter for the config
      */
     PasswordPolicyConfig getConfig();
-    
+
     /**
      * Validates the password, throws an exception if the password is not valid
      */

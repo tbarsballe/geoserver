@@ -26,11 +26,9 @@ import org.opengis.style.GraphicalSymbol;
 /**
  * Utility to extract the values of dynamic properties from a style when applied to a particular
  * feature.
- * 
- * @see IconPropertyInjector
- * 
- * @author David Winslow, OpenGeo
  *
+ * @author David Winslow, OpenGeo
+ * @see IconPropertyInjector
  */
 public final class IconPropertyExtractor {
     private List<List<MiniRule>> style;
@@ -63,6 +61,7 @@ public final class IconPropertyExtractor {
         private static final String OPACITY = ".opacity";
 
         private final SimpleFeature feature;
+
         public FeatureProperties(SimpleFeature feature) {
             this.feature = feature;
         }
@@ -75,17 +74,17 @@ public final class IconPropertyExtractor {
                 return embeddedIconProperties();
             }
         }
-        
+
         public IconProperties trySingleExternalGraphic() {
             MiniRule singleRule = null;
             for (List<MiniRule> rules : style) {
                 boolean applied = false;
-                
+
                 for (MiniRule rule : rules) {
-                    final boolean applicable = 
+                    final boolean applicable =
                             (rule.isElseFilter && !applied) ||
-                            (rule.filter == null) ||
-                            (rule.filter.evaluate(feature));
+                                    (rule.filter == null) ||
+                                    (rule.filter.evaluate(feature));
                     if (applicable) {
                         if (singleRule == null) {
                             singleRule = rule;
@@ -100,7 +99,7 @@ public final class IconPropertyExtractor {
             }
             return isExternalGraphic(singleRule);
         }
-        
+
         public IconProperties isExternalGraphic(MiniRule rule) {
             if (rule.symbolizers.size() != 1) {
                 return null;
@@ -113,13 +112,13 @@ public final class IconPropertyExtractor {
                 return null;
             }
             GraphicalSymbol gSym = g.graphicalSymbols().get(0);
-            if (! (gSym instanceof ExternalGraphic)) {
+            if (!(gSym instanceof ExternalGraphic)) {
                 return null;
             }
             ExternalGraphic exGraphic = (ExternalGraphic) gSym;
             try {
                 Double opacity = g.getOpacity().evaluate(feature, Double.class);
-                Double size = 1d*Icons.getExternalSize(exGraphic, feature);
+                Double size = 1d * Icons.getExternalSize(exGraphic, feature);
                 if (size != null) size = size / Icons.DEFAULT_SYMBOL_SIZE;
                 Double rotation = g.getRotation().evaluate(feature, Double.class);
                 Expression urlExpression = ExpressionExtractor.extractCqlExpressions(exGraphic.getLocation().toExternalForm());
@@ -128,16 +127,16 @@ public final class IconPropertyExtractor {
                 throw new RuntimeException(e);
             }
         }
-        
+
         public IconProperties embeddedIconProperties() {
-            Map<String,String> props = new TreeMap<String,String>();
+            Map<String, String> props = new TreeMap<String, String>();
             Double size = null;
             boolean allRotated = true;
             for (int i = 0; i < style.size(); i++) {
                 List<MiniRule> rules = style.get(i);
                 for (int j = 0; j < rules.size(); j++) {
                     MiniRule rule = rules.get(j);
-                    final boolean matches; 
+                    final boolean matches;
                     if (rule.filter == null) {
                         matches = !rule.isElseFilter || props.isEmpty();
                     } else {
@@ -151,8 +150,8 @@ public final class IconPropertyExtractor {
                             if (sym.getGraphic() != null) {
                                 addGraphicProperties(i + "." + j + "." + k, sym.getGraphic(), props);
                                 final Double gRotation = graphicRotation(sym.getGraphic());
-                                allRotated &= gRotation!=null;
-                                
+                                allRotated &= gRotation != null;
+
                                 final Double gSize = Icons.graphicSize(sym.getGraphic(), gRotation, feature);
                                 if (size == null || (gSize != null && gSize > size)) {
                                     size = gSize;
@@ -164,14 +163,14 @@ public final class IconPropertyExtractor {
             }
             if (size != null) size = size / 16d;
             // If all the symbols in the stack were rotated, force it to be oriented to a bearing.
-            final Double rotation = allRotated ? 0d: null;
+            final Double rotation = allRotated ? 0d : null;
             return IconProperties.generator(null, size, rotation, props);
         }
 
         public boolean isStatic(Expression ex) {
             return (Boolean) ex.accept(IsStaticExpressionVisitor.VISITOR, null);
         }
-        
+
         private Double graphicRotation(Graphic g) {
             if (g.getRotation() != null) {
                 return g.getRotation().evaluate(feature, Double.class);
@@ -179,8 +178,8 @@ public final class IconPropertyExtractor {
                 return null;
             }
         }
-        
-        public void addGraphicProperties(String prefix, Graphic g, Map<String,String> props) {
+
+        public void addGraphicProperties(String prefix, Graphic g, Map<String, String> props) {
             if (g.getOpacity() != null && !isStatic(g.getOpacity())) {
                 props.put(prefix + OPACITY, g.getOpacity().evaluate(feature, String.class));
             }

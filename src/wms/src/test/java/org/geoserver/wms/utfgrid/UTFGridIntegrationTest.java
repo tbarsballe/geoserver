@@ -58,7 +58,6 @@ public class UTFGridIntegrationTest extends WMSTestSupport {
 
     /**
      * The UTF grid format shows up in the caps document. The format name is freeform
-     * 
      */
     @Test
     public void testCapabilities11() throws Exception {
@@ -70,7 +69,6 @@ public class UTFGridIntegrationTest extends WMSTestSupport {
 
     /**
      * The UTF grid format shows up in the caps document. WMS 1.3 requires the usage of mime types that will match the result content type
-     * 
      */
     @Test
     public void testCapabilities13() throws Exception {
@@ -80,7 +78,7 @@ public class UTFGridIntegrationTest extends WMSTestSupport {
         assertEquals("1",
                 xpath.evaluate("count(//wms:GetMap[wms:Format='application/json;type=utfgrid'])", dom));
     }
-    
+
     @Test
     public void testEmptyOutput() throws Exception {
         UTFGridTester tester = getAsGridTester(
@@ -88,8 +86,8 @@ public class UTFGridIntegrationTest extends WMSTestSupport {
                         + "&styles=&bbox=-10.0028,-0.0028,-9.0048,0.0048&width=256&height=256&srs=EPSG:4326&format=utfgrid");
         assertEquals(1, tester.getKeyCount());
         for (int i = 0; i < 32; i++) {
-            for(int j = 0; j < 32; j++) {
-                tester.assertGridPixel(' ', i, j);                
+            for (int j = 0; j < 32; j++) {
+                tester.assertGridPixel(' ', i, j);
             }
         }
     }
@@ -105,10 +103,10 @@ public class UTFGridIntegrationTest extends WMSTestSupport {
         JSONObject f = tester.getFeature('!');
         assertEquals("Green Forest", f.getString("NAME"));
     }
-    
+
     private UTFGridTester getAsGridTester(String request, int width, int height, int resolution) throws Exception {
         MockHttpServletResponse response = getAsServletResponse(request);
-        if(!response.getContentType().startsWith("application/json")) {
+        if (!response.getContentType().startsWith("application/json")) {
             System.out.println(response.getContentAsString());
             fail("Expected json but got " + response.getContentType());
         }
@@ -133,7 +131,7 @@ public class UTFGridIntegrationTest extends WMSTestSupport {
         JSONObject f = tester.getFeature('!');
         assertEquals("Green Forest", f.getString("NAME"));
     }
-    
+
     @Test
     public void testAlternateMimetype() throws Exception {
         UTFGridTester tester = getAsGridTester(
@@ -144,7 +142,6 @@ public class UTFGridIntegrationTest extends WMSTestSupport {
 
     /**
      * Using a color classified style. Should not make any different to UTFGrid, as long as we paint all features
-     * 
      */
     @Test
     public void testLineSymbolizerClassified() throws Exception {
@@ -164,7 +161,6 @@ public class UTFGridIntegrationTest extends WMSTestSupport {
 
     /**
      * Check we get a usable result even with super-thin lines
-     * 
      */
     @Test
     public void testThinLineSymbolizer() throws Exception {
@@ -176,7 +172,6 @@ public class UTFGridIntegrationTest extends WMSTestSupport {
 
     /**
      * Check we get a correct result with graphic stroked + dash array
-     * 
      */
     @Test
     public void testDotted() throws Exception {
@@ -274,64 +269,64 @@ public class UTFGridIntegrationTest extends WMSTestSupport {
         assertEquals("119", f.getString("FID"));
         assertEquals("Route 75", f.getString("NAME"));
         assertEquals(0, f.getInt("NUM_LANES"));
-        
+
         tester.assertGridPixel('#', 6, 27);
         f = tester.getFeature('#');
         assertEquals("111", f.getString("FID"));
         assertEquals("Cam Stream", f.getString("NAME"));
-        
+
         tester.assertGridPixel('%', 10, 12);
         f = tester.getFeature('%');
         assertEquals("120", f.getString("FID"));
         assertEquals(" ", f.getString("NAME"));
         assertEquals("Stock Pond", f.getString("TYPE"));
-        
+
         tester.assertGridPixel('$', 10, 62);
         f = tester.getFeature('$');
         assertEquals("103", f.getString("FID"));
         assertEquals("Route 5", f.getString("NAME"));
-        
+
         tester.assertGridPixel('(', 22, 56);
         f = tester.getFeature('(');
         assertEquals("114", f.getString("FID"));
         assertEquals("215 Main Street", f.getString("ADDRESS"));
-        
+
         tester.assertGridPixel(')', 24, 33);
         f = tester.getFeature(')');
         assertEquals("110", f.getString("FID"));
         assertEquals("Cam Bridge", f.getString("NAME"));
-        
+
         tester.assertGridPixel('&', 24, 35);
         f = tester.getFeature('&');
         assertEquals("105", f.getString("FID"));
         assertEquals("Main Street", f.getString("NAME"));
-        
+
         tester.assertGridPixel('+', 24, 43);
         f = tester.getFeature('+');
         assertEquals("113", f.getString("FID"));
         assertEquals("123 Main Street", f.getString("ADDRESS"));
-        
+
         tester.assertGridPixel('-', 45, 48);
         f = tester.getFeature('-');
         assertEquals("101", f.getString("FID"));
         assertEquals("Blue Lake", f.getString("NAME"));
-        
+
         tester.assertGridPixel(',', 35, 17);
         f = tester.getFeature(',');
         assertEquals("106", f.getString("FID"));
         assertEquals("Dirt Road by Green Forest", f.getString("NAME"));
-        
+
         tester.assertGridPixel('\'', 38, 25);
         f = tester.getFeature('\'');
         assertEquals("109", f.getString("FID"));
         assertEquals("Green Forest", f.getString("NAME"));
-        
+
         tester.assertGridPixel('*', 32, 9);
         f = tester.getFeature('*');
         assertEquals("102", f.getString("FID"));
         assertEquals("Route 5", f.getString("NAME"));
     }
-    
+
     @Test
     public void testMultiLayerForestOnTop() throws Exception {
         UTFGridTester tester = getAsGridTester("wms?service=WMS&version=1.1.0&request=GetMap"
@@ -342,29 +337,29 @@ public class UTFGridIntegrationTest extends WMSTestSupport {
         assertEquals("119", f.getString("FID"));
         assertEquals("Route 75", f.getString("NAME"));
         assertEquals(0, f.getInt("NUM_LANES"));
-        
+
         tester.assertGridPixel('#', 6, 27);
         f = tester.getFeature('#');
         assertEquals("111", f.getString("FID"));
         assertEquals("Cam Stream", f.getString("NAME"));
-        
+
         tester.assertGridPixel('%', 10, 12);
         f = tester.getFeature('%');
         assertEquals("120", f.getString("FID"));
         assertEquals(" ", f.getString("NAME"));
         assertEquals("Stock Pond", f.getString("TYPE"));
-        
+
         tester.assertGridPixel('$', 10, 62);
         f = tester.getFeature('$');
         assertEquals("103", f.getString("FID"));
         assertEquals("Route 5", f.getString("NAME"));
-        
+
         tester.assertGridPixel('\'', 23, 33);
         f = tester.getFeature('\'');
         assertEquals("110", f.getString("FID"));
         assertEquals("Cam Bridge", f.getString("NAME"));
 
-        
+
         tester.assertGridPixel('&', 22, 56);
         tester.assertGridPixel('&', 24, 35);
         tester.assertGridPixel('&', 24, 43);
@@ -374,13 +369,13 @@ public class UTFGridIntegrationTest extends WMSTestSupport {
         f = tester.getFeature('&');
         assertEquals("109", f.getString("FID"));
         assertEquals("Green Forest", f.getString("NAME"));
-        
+
         tester.assertGridPixel('(', 32, 9);
         f = tester.getFeature('(');
         assertEquals("102", f.getString("FID"));
         assertEquals("Route 5", f.getString("NAME"));
     }
-    
+
     @Test
     public void testPolygonExtractionFromRaster() throws Exception {
         String url = "wms?LAYERS=" + getLayerId(MockData.TASMANIA_DEM) + "&styles=polygonExtract&"

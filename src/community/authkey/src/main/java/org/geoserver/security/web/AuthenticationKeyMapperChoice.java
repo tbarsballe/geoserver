@@ -16,23 +16,22 @@ import org.geoserver.security.AuthenticationKeyMapper;
 
 /**
  * Drop down choice widget for {@link AuthenticationKeyMapper} configurations.
- * 
- * @author mcr
  *
+ * @author mcr
  */
 public class AuthenticationKeyMapperChoice extends DropDownChoice<String> {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 1L;
 
     public AuthenticationKeyMapperChoice(String id) {
-        super(id,new AuthenticationKeyMapperNamesModel(), new AuthenticationKeyMapperChoiceRenderer());
+        super(id, new AuthenticationKeyMapperNamesModel(), new AuthenticationKeyMapperChoiceRenderer());
     }
 
     public AuthenticationKeyMapperChoice(String id, IModel<String> model) {
-        super(id, model, new AuthenticationKeyMapperNamesModel(), new AuthenticationKeyMapperChoiceRenderer()); 
+        super(id, model, new AuthenticationKeyMapperNamesModel(), new AuthenticationKeyMapperChoiceRenderer());
     }
 
     static class AuthenticationKeyMapperNamesModel implements IModel<List<String>> {
@@ -41,8 +40,8 @@ public class AuthenticationKeyMapperChoice extends DropDownChoice<String> {
         List<String> mapperNames;
 
         AuthenticationKeyMapperNamesModel() {
-            List<AuthenticationKeyMapper> mappers = 
-                        GeoServerExtensions.extensions(AuthenticationKeyMapper.class);
+            List<AuthenticationKeyMapper> mappers =
+                    GeoServerExtensions.extensions(AuthenticationKeyMapper.class);
             this.mapperNames = new ArrayList<String>();
             for (AuthenticationKeyMapper mapper : mappers) {
                 this.mapperNames.add(mapper.getBeanName());
@@ -71,12 +70,14 @@ public class AuthenticationKeyMapperChoice extends DropDownChoice<String> {
 
     static class AuthenticationKeyMapperChoiceRenderer extends ChoiceRenderer<String> {
         private static final long serialVersionUID = 1L;
+
         @Override
         public Object getDisplayValue(String object) {
             //do a resource lookup
-            return new StringResourceModel(AuthenticationKeyFilterPanel.class.getSimpleName()+
+            return new StringResourceModel(AuthenticationKeyFilterPanel.class.getSimpleName() +
                     "." + object).setParameters(object).getObject();
         }
+
         @Override
         public String getIdValue(String object, int index) {
             return object;

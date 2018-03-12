@@ -12,7 +12,6 @@ import org.geotools.filter.expression.PropertyAccessorFactory;
 
 /**
  * Property accessor for GeoServer ExecutionStatus beans
- * 
  */
 public class ExecutionStatusAccessorFactory implements PropertyAccessorFactory {
 
@@ -20,7 +19,7 @@ public class ExecutionStatusAccessorFactory implements PropertyAccessorFactory {
 
     @Override
     public PropertyAccessor createPropertyAccessor(Class<?> type, String xpath, Class<?> target,
-            Hints hints) {
+                                                   Hints hints) {
         if (ExecutionStatus.class.isAssignableFrom(type)) {
             return INSTANCE;
         }

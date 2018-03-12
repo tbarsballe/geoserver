@@ -57,14 +57,13 @@ import org.vfny.geoserver.wcs.WcsException.WcsExceptionCode;
 
 /**
  * GetCoverage request reader for WCS 1.0.0
- * 
+ *
  * @author Simone Giannecchini, GeoSolutions SAS
- * 
  */
 public class Wcs10GetCoverageRequestReader extends EMFKvpRequestReader {
 
     public static final String VERSION = "1.0.0";
-	Catalog catalog;
+    Catalog catalog;
 
     public Wcs10GetCoverageRequestReader(Catalog catalog) {
         super(GetCoverageType.class, Wcs10Factory.eINSTANCE);
@@ -122,9 +121,7 @@ public class Wcs10GetCoverageRequestReader extends EMFKvpRequestReader {
     }
 
     /**
-     * 
      * @param kvp
-     *
      */
     private DomainSubsetType parseDomainSubset(Map kvp) {
         final DomainSubsetType domainSubset = Wcs10Factory.eINSTANCE.createDomainSubsetType();
@@ -137,8 +134,8 @@ public class Wcs10GetCoverageRequestReader extends EMFKvpRequestReader {
         if (crsName == null)
             throw new WcsException("CRS parameter is mandatory", MissingParameterValue, "crs");
         final CoordinateReferenceSystem crs = decodeCRS100(crsName);
-        if(crs==null)
-        	throw new WcsException("CRS parameter is invalid:"+crsName,InvalidParameterValue , "crs");
+        if (crs == null)
+            throw new WcsException("CRS parameter is invalid:" + crsName, InvalidParameterValue, "crs");
 //        final VerticalCRS verticalCRS = CRS.getVerticalCRS(crs);
 //        final boolean hasVerticalCRS = verticalCRS != null;
 
@@ -148,11 +145,11 @@ public class Wcs10GetCoverageRequestReader extends EMFKvpRequestReader {
         final GeneralEnvelope bbox = (GeneralEnvelope) kvp.get("BBOX");
         if (bbox == null)
             throw new WcsException("bbox parameter is mandatory", MissingParameterValue, "bbox");
-        
+
         // afabiani: consider Elevation as band, forcing the bbox to be 2D only
         if (bbox.getDimension() != 2)
             throw new WcsException("Requested bounding box is not 2-dimensional: " + bbox.getDimension(), InvalidParameterValue, "bbox");
-        
+
         final GeneralEnvelope envelope = new GeneralEnvelope(/* TODO: ignore 3D CRS for now crs */ bbox.getDimension() == 3 ? DefaultGeographicCRS.WGS84_3D : crs);
         if (/* TODO: ignore 3D CRS for now !hasVerticalCRS */ bbox.getDimension() == 2)
             envelope.setEnvelope(bbox.getLowerCorner().getOrdinate(0), bbox.getLowerCorner()
@@ -166,7 +163,7 @@ public class Wcs10GetCoverageRequestReader extends EMFKvpRequestReader {
 //                    .getOrdinate(2));
         else
             throw new WcsException("bbox not compliant with the specified CRS", InvalidParameterValue, "bbox");
-        
+
         //
         // TIME
         //
@@ -195,12 +192,12 @@ public class Wcs10GetCoverageRequestReader extends EMFKvpRequestReader {
         if (w != null && h != null) {
             //
             // normal grid management, only the envelope and the raster dimensions have been specified, 
-        	// we need to compute RESX, RESY, RESZ afterwards
+            // we need to compute RESX, RESY, RESZ afterwards
             //
 
             // get W and H
-            int width =  w instanceof Integer?((Integer)w):Integer.parseInt((String)w);
-            int height =w instanceof Integer?((Integer)h):Integer.parseInt((String)h);
+            int width = w instanceof Integer ? ((Integer) w) : Integer.parseInt((String) w);
+            int height = w instanceof Integer ? ((Integer) h) : Integer.parseInt((String) h);
             grid.getAxisName().add("x");
             grid.getAxisName().add("y");
 
@@ -242,26 +239,25 @@ public class Wcs10GetCoverageRequestReader extends EMFKvpRequestReader {
             final Object ry = kvp.get("resy");
             if (rx != null && ry != null) {
                 // get resx e resy but correct also the sign for them taking into account 
-            	final CoordinateSystem cs=crs.getCoordinateSystem();
-            	final AxisDirection northingDirection=cs.getAxis(1).getDirection();
-            	final int yAxisCorrection=AxisDirection.NORTH.equals(northingDirection)?-1:1;
-            	final AxisDirection eastingDirection=cs.getAxis(0).getDirection();
-            	final int xAxisCorrection=AxisDirection.EAST.equals(eastingDirection)?1:-1;
-                final double resX = Double.parseDouble((String) rx)*xAxisCorrection;
-                final double resY = Double.parseDouble((String) ry)*yAxisCorrection;
-                
+                final CoordinateSystem cs = crs.getCoordinateSystem();
+                final AxisDirection northingDirection = cs.getAxis(1).getDirection();
+                final int yAxisCorrection = AxisDirection.NORTH.equals(northingDirection) ? -1 : 1;
+                final AxisDirection eastingDirection = cs.getAxis(0).getDirection();
+                final int xAxisCorrection = AxisDirection.EAST.equals(eastingDirection) ? 1 : -1;
+                final double resX = Double.parseDouble((String) rx) * xAxisCorrection;
+                final double resY = Double.parseDouble((String) ry) * yAxisCorrection;
+
                 // basic check, the resolution cannot be larger than any of the two spans 
                 // for the envelope because otherwise the size in raster space will be invalid
                 // We expect the final raster area to be at least 2 pixel on each raster dimension
-                if(Math.abs(envelope.getSpan(0)/Math.abs(resX))<2||Math.abs(envelope.getSpan(1)/Math.abs(resY))<2)
-                    throw new IllegalArgumentException(Errors.format(ErrorKeys.ILLEGAL_ARGUMENT_$1,"resolutions"));
-                               
-                
+                if (Math.abs(envelope.getSpan(0) / Math.abs(resX)) < 2 || Math.abs(envelope.getSpan(1) / Math.abs(resY)) < 2)
+                    throw new IllegalArgumentException(Errors.format(ErrorKeys.ILLEGAL_ARGUMENT_$1, "resolutions"));
+
 
                 // now compute offset vector for the transform from the envelope
                 // Following ISO 19123 we use the CELL_CENTER convention but with the raster 
-                final double origX = envelope.getLowerCorner().getOrdinate(0)+resX/2;
-                final double origY = envelope.getUpperCorner().getOrdinate(1)+resY/2;
+                final double origX = envelope.getLowerCorner().getOrdinate(0) + resX / 2;
+                final double origY = envelope.getUpperCorner().getOrdinate(1) + resY / 2;
 
                 // create offset point
                 final PointType origin = Gml4wcsFactory.eINSTANCE.createPointType();
@@ -330,12 +326,12 @@ public class Wcs10GetCoverageRequestReader extends EMFKvpRequestReader {
      * @param tPos
      */
     private void addToTimeSequence(TimeSequenceType timeSequence, Object tPos) {
-        if(tPos instanceof Date) {
-            final TimePositionType timePosition = 
-                Gml4wcsFactory.eINSTANCE.createTimePositionType();
+        if (tPos instanceof Date) {
+            final TimePositionType timePosition =
+                    Gml4wcsFactory.eINSTANCE.createTimePositionType();
             timePosition.setValue(tPos);
             timeSequence.getTimePosition().add(timePosition);
-        } else if(tPos instanceof DateRange){
+        } else if (tPos instanceof DateRange) {
             DateRange range = (DateRange) tPos;
             final TimePeriodType timePeriod = Wcs10Factory.eINSTANCE.createTimePeriodType();
             final TimePositionType start = Gml4wcsFactory.eINSTANCE.createTimePositionType();
@@ -358,7 +354,7 @@ public class Wcs10GetCoverageRequestReader extends EMFKvpRequestReader {
             } else
                 checkTypeAxisRange(rangeSubset, axis, "Band");
         }
-        
+
         if (kvp.get("ELEVATION") != null) {
             Object axis = kvp.get("ELEVATION");
             if (axis instanceof AxisSubsetType) {
@@ -447,7 +443,7 @@ public class Wcs10GetCoverageRequestReader extends EMFKvpRequestReader {
         }
     }
 
-    private OutputType parseOutputElement(final Map<String,String> kvp) throws Exception {
+    private OutputType parseOutputElement(final Map<String, String> kvp) throws Exception {
         final OutputType output = Wcs10Factory.eINSTANCE.createOutputType();
         final CodeType crsType = Gml4wcsFactory.eINSTANCE.createCodeType();
         final CodeType formatType = Gml4wcsFactory.eINSTANCE.createCodeType();
@@ -476,11 +472,10 @@ public class Wcs10GetCoverageRequestReader extends EMFKvpRequestReader {
 
     /**
      * DEcode the requested CRS following the WCS 1.0 style with LON,LAT axes order.
-     * 
-     * @param crsName
      *
+     * @param crsName
      */
-    private static CoordinateReferenceSystem decodeCRS100(String crsName) throws WcsException{
+    private static CoordinateReferenceSystem decodeCRS100(String crsName) throws WcsException {
         if ("WGS84(DD)".equals(crsName)) {
             crsName = "EPSG:4326";
         }
@@ -489,18 +484,17 @@ public class Wcs10GetCoverageRequestReader extends EMFKvpRequestReader {
             // in 100 we work with Lon,Lat always
             return CRS.decode(crsName, true);
         } catch (NoSuchAuthorityCodeException e) {
-            throw new WcsException("Could not recognize crs " + crsName, InvalidParameterValue,"crs");
+            throw new WcsException("Could not recognize crs " + crsName, InvalidParameterValue, "crs");
         } catch (FactoryException e) {
-            throw new WcsException("Could not recognize crs " + crsName, InvalidParameterValue,"crs");
+            throw new WcsException("Could not recognize crs " + crsName, InvalidParameterValue, "crs");
         }
 
     }
 
     /**
      * Parses the interpolation parameter from the kvp. If nothing is present the default nearest neighbor is set.
-     * 
-     * @param kvp
      *
+     * @param kvp
      */
     private InterpolationMethodType parseInterpolation(Map kvp) {
         if (kvp.containsKey("interpolation")) {

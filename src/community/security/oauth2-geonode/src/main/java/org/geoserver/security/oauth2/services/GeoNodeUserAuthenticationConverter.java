@@ -12,7 +12,7 @@ import org.springframework.security.oauth2.provider.token.DefaultUserAuthenticat
 
 /**
  * User Authentication Converter for GeoNode token details.
- * 
+ *
  * @author Alessio Fabiani, GeoSolutions S.A.S.
  */
 public class GeoNodeUserAuthenticationConverter extends DefaultUserAuthenticationConverter {
@@ -21,7 +21,7 @@ public class GeoNodeUserAuthenticationConverter extends DefaultUserAuthenticatio
 
     /**
      * Default Constructor.
-     * 
+     *
      * @param username_key
      */
     public GeoNodeUserAuthenticationConverter() {
@@ -30,7 +30,7 @@ public class GeoNodeUserAuthenticationConverter extends DefaultUserAuthenticatio
 
     /**
      * Default Constructor.
-     * 
+     *
      * @param username_key
      */
     public GeoNodeUserAuthenticationConverter(final String username_key) {

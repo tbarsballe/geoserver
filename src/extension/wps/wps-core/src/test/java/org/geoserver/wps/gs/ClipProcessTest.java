@@ -56,7 +56,7 @@ public class ClipProcessTest extends WPSTestSupport {
 
         MockHttpServletResponse response = postAsServletResponse(root(), xml);
         // System.out.println(response.getOutputStreamContent());
-        
+
         Parser p = new Parser(new WFSConfiguration());
         FeatureCollectionType fct = (FeatureCollectionType) p.parse(new ByteArrayInputStream(
                 response.getContentAsString().getBytes()));

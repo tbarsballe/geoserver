@@ -8,8 +8,8 @@ package org.geoserver.security;
 
 /**
  * The security mode in which the catalog should be operating
- * @author Administrator
  *
+ * @author Administrator
  */
 public enum CatalogMode {
     /**
@@ -21,9 +21,9 @@ public enum CatalogMode {
     /**
      * Always list of all the layers and allow access to each layer metadata.
      * If a user tries to access the data and she cannot read, or to write data and
-     * she cannot write, challenge her with an authentication request. 
+     * she cannot write, challenge her with an authentication request.
      * This mode does not hide the existence of layers, and
-     * should work fine with most applications requiring authentication. 
+     * should work fine with most applications requiring authentication.
      */
     CHALLENGE,
     /**

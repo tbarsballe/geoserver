@@ -39,9 +39,8 @@ import org.geotools.util.logging.Logging;
  * <li>Facilities to setup the database structure from a sql script. The sql
  * must have each command on a single line</li>
  * </ul>
- * 
+ *
  * @author Andrea Aime - TOPP
- * 
  */
 public class LiveDbmsData extends LiveSystemTestData {
     private static final Logger LOGGER = Logging.getLogger(LiveDbmsData.class);
@@ -49,8 +48,6 @@ public class LiveDbmsData extends LiveSystemTestData {
     /**
      * The property file containing the token -> value pairs used for filtering
      * and to grab a JDBC datastore connection.
-     * 
-     *
      */
     protected File fixture;
 
@@ -71,7 +68,7 @@ public class LiveDbmsData extends LiveSystemTestData {
 
     /**
      * The identifier of the fixture, which is also the name of the file (followed by .properties)
-     * and the system property used to disable the test (prefixed by gs.) 
+     * and the system property used to disable the test (prefixed by gs.)
      */
     protected String fixtureId;
 
@@ -87,7 +84,7 @@ public class LiveDbmsData extends LiveSystemTestData {
      * a sql script that first drops all tables and views and then recreates them,
      * if a statement fails it'll be logged and skipped anyways. This makes it possible
      * to inspect the database contents  </li>
-     * 
+     *
      * @param dataDirSourceDirectory
      * @param filterMap
      * @param sqlScript
@@ -100,9 +97,9 @@ public class LiveDbmsData extends LiveSystemTestData {
     }
 
     /**
-     * Looks up the fixture file in the home directory provided that the 
-     * @param fixtureId
+     * Looks up the fixture file in the home directory provided that the
      *
+     * @param fixtureId
      */
     private File lookupFixture(String fixtureId) {
         // first of all, make sure the fixture was not disabled using a system
@@ -117,7 +114,7 @@ public class LiveDbmsData extends LiveSystemTestData {
         // create the hidden folder, this is handy especially on windows where
         // a user cannot create a directory starting with . from the UI 
         // (works only from the command line)
-        if(!base.exists())
+        if (!base.exists())
             base.mkdir();
         File fixtureFile = new File(base, fixtureId + ".properties");
         if (!fixtureFile.exists()) {
@@ -126,7 +123,7 @@ public class LiveDbmsData extends LiveSystemTestData {
             disableTest(warning);
             return null;
         }
-        
+
         return fixtureFile;
     }
 
@@ -219,9 +216,8 @@ public class LiveDbmsData extends LiveSystemTestData {
     /**
      * Uses the current {@link JDBCDataStore} facilities to grab a connection, subclasses can
      * override to use other methods
-     * 
-     * @param ds
      *
+     * @param ds
      * @throws IOException
      */
     protected Connection getDatabaseConnection(DataStore ds) throws IOException {
@@ -234,7 +230,6 @@ public class LiveDbmsData extends LiveSystemTestData {
 
     /**
      * Returns the filtered paths list as a live list (can be modified directly)
-     *
      */
     public List<String> getFilteredPaths() {
         return filteredPaths;
@@ -243,6 +238,7 @@ public class LiveDbmsData extends LiveSystemTestData {
     /**
      * Permanently disable this test logging the specificed warning message (the reason
      * why the test is being disabled)
+     *
      * @param warning
      */
     private void disableTest(final String warning) {

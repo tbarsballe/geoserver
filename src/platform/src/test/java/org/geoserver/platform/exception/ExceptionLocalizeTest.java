@@ -52,8 +52,7 @@ public class ExceptionLocalizeTest {
         Locale.setDefault(Locale.FRENCH);
         try {
             assertEquals("bonjour", GeoServerExceptions.localize(new TestException().id("hi")));
-        }
-        finally {
+        } finally {
             Locale.setDefault(old);
         }
     }

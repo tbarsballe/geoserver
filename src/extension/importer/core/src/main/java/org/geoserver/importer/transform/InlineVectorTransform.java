@@ -16,23 +16,22 @@ import org.opengis.feature.simple.SimpleFeatureType;
  * <p>
  * This type of transform can only be applied to an indirect import.
  * </p>
- * 
+ *
  * @author Justin Deoliveira, OpenGeo
  */
 public interface InlineVectorTransform extends VectorTransform {
 
-    SimpleFeatureType apply(ImportTask task, DataStore dataStore, SimpleFeatureType featureType) 
-        throws Exception;
+    SimpleFeatureType apply(ImportTask task, DataStore dataStore, SimpleFeatureType featureType)
+            throws Exception;
 
     /**
-     * 
      * @param item
      * @param dataStore
      * @param oldFeature
      * @param feature
      * @return null to discontinue processing
-     * @throws Exception 
+     * @throws Exception
      */
-    SimpleFeature apply(ImportTask task, DataStore dataStore, SimpleFeature oldFeature, SimpleFeature feature) 
-        throws Exception;
+    SimpleFeature apply(ImportTask task, DataStore dataStore, SimpleFeature oldFeature, SimpleFeature feature)
+            throws Exception;
 }

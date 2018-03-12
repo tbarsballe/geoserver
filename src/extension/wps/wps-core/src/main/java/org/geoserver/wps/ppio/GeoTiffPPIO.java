@@ -31,11 +31,10 @@ import org.geotools.util.logging.Logging;
 
 /**
  * Decodes/encodes a GeoTIFF file
- * 
+ *
  * @author Andrea Aime - OpenGeo
  * @author Simone Giannecchini, GeoSolutions
  * @author Daniele Romagnoli, GeoSolutions
- * 
  */
 public class GeoTiffPPIO extends BinaryPPIO {
 
@@ -45,7 +44,7 @@ public class GeoTiffPPIO extends BinaryPPIO {
     protected static final String QUALITY_KEY = "quality";
 
     private static final Set<String> SUPPORTED_PARAMS = new HashSet<String>();
-    
+
     private static final String SUPPORTED_PARAMS_LIST;
 
     static {
@@ -88,11 +87,11 @@ public class GeoTiffPPIO extends BinaryPPIO {
 
     @Override
     public void encode(Object value, OutputStream os) throws Exception {
-        encode (value, null, os);
+        encode(value, null, os);
     }
-    
+
     @Override
-    public void encode (Object value, Map<String, Object> encodingParameters, OutputStream os) throws Exception {
+    public void encode(Object value, Map<String, Object> encodingParameters, OutputStream os) throws Exception {
         GridCoverage2D coverage = (GridCoverage2D) value;
         GeoTiffWriterHelper helper = new GeoTiffWriterHelper(coverage);
         setEncodingParams(helper, encodingParameters);
@@ -105,7 +104,7 @@ public class GeoTiffPPIO extends BinaryPPIO {
     }
 
     private void setEncodingParams(GeoTiffWriterHelper helper,
-            Map<String, Object> encodingParameters) {
+                                   Map<String, Object> encodingParameters) {
         if (encodingParameters != null && !encodingParameters.isEmpty()) {
             for (String encodingParam : encodingParameters.keySet()) {
                 if (!SUPPORTED_PARAMS.contains(encodingParam)) {

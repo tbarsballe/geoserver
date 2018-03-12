@@ -38,7 +38,7 @@ public class GeoserverXMLResourceProvider implements ConfigurationResourceProvid
     static final String GEOWEBCACHE_CACHE_DIR_PROPERTY = DefaultStorageFinder.GWC_CACHE_DIR;
 
     public static final String DEFAULT_CONFIGURATION_DIR_NAME = "gwc";
-    
+
     /**
      * Location of the configuration file
      */
@@ -48,7 +48,7 @@ public class GeoserverXMLResourceProvider implements ConfigurationResourceProvid
      * Name of the configuration file
      */
     private final String configFileName;
-    
+
     private String templateLocation;
 
     public GeoserverXMLResourceProvider(String providedConfigDirectory, String configFileName,
@@ -59,10 +59,10 @@ public class GeoserverXMLResourceProvider implements ConfigurationResourceProvid
                 "Will look for '%s' in directory '%s'.",
                 configFileName, configDirectory.dir().getAbsolutePath()));
     }
-    
+
     public GeoserverXMLResourceProvider(final String configFileName,
-            final ResourceStore resourceStore) throws ConfigurationException {
-        this(null, configFileName, resourceStore);        
+                                        final ResourceStore resourceStore) throws ConfigurationException {
+        this(null, configFileName, resourceStore);
     }
 
     /**
@@ -142,7 +142,7 @@ public class GeoserverXMLResourceProvider implements ConfigurationResourceProvid
     private Resource findConfigFile() throws IOException {
         return configDirectory.get(configFileName);
     }
-    
+
     public String getLocation() throws IOException {
         return findConfigFile().path();
     }
@@ -158,7 +158,7 @@ public class GeoserverXMLResourceProvider implements ConfigurationResourceProvid
                     + getClass().getResource(templateLocation).toExternalForm());
             // grab template from classpath
             try {
-                IOUtils.copy(getClass().getResourceAsStream(templateLocation), 
+                IOUtils.copy(getClass().getResourceAsStream(templateLocation),
                         xmlFile.out());
             } catch (IOException e) {
                 throw new IOException("Error copying template config to "
@@ -197,7 +197,7 @@ public class GeoserverXMLResourceProvider implements ConfigurationResourceProvid
                 public int compare(Resource o1, Resource o2) {
                     return (int) (o1.lastmodified() - o2.lastmodified());
                 }
-                
+
             });
             Resource oldest = previousBackUps.get(0);
             LOGGER.debug("Deleting oldest config backup " + oldest + " to keep a maximum of "

@@ -17,16 +17,16 @@ public class AttributeComputeTransformTest extends TransformTestSupport {
 
     public void testTransformLiteral() throws Exception {
         AttributeComputeTransform tx = new AttributeComputeTransform("theDate", Date.class, "2012-05-03T12:00:00Z");
-        
+
         // reference
         // riverType = DataUtilities.createType(namespace+".river", "id:0,geom:MultiLineString,river:String,flow:0.0");
-        
+
         // transforming type
         SimpleFeatureType transformedType = tx.apply(null, null, riverType);
         AttributeDescriptor ad = transformedType.getDescriptor("theDate");
         assertNotNull(ad);
         assertEquals(Date.class, ad.getType().getBinding());
-        
+
         // transforming feature
         SimpleFeature riverFeature = riverFeatures[0];
         SimpleFeature targetFeature = SimpleFeatureBuilder.build(transformedType, riverFeature.getAttributes(), "theId");
@@ -64,7 +64,7 @@ public class AttributeComputeTransformTest extends TransformTestSupport {
         try {
             SimpleFeatureType transformedType = tx.apply(null, null, riverType);
             fail("Should have thrown an exception, flow is already there");
-        } catch(IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             assertTrue(e.getMessage().contains("flow"));
         }
     }

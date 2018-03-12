@@ -26,19 +26,19 @@ public class GetFeatureHandler extends WFSRequestObjectHandler {
     @SuppressWarnings("unchecked")
     @Override
     public List<String> getLayers(Object request) {
-        List<Object> queries = (List<Object>) EMFUtils.get((EObject)request,"query");
+        List<Object> queries = (List<Object>) EMFUtils.get((EObject) request, "query");
         if (queries == null) {
             return null;
         }
-        
+
         List<String> layers = new ArrayList<String>();
         for (Object q : queries) {
             List<Object> typeNames = (List<Object>) EMFUtils.get((EObject) q, "typeName");
-            
+
             for (Object o : typeNames) {
                 layers.add(toString(o));
             }
-             
+
         }
         return layers;
     }
@@ -53,7 +53,7 @@ public class GetFeatureHandler extends WFSRequestObjectHandler {
     @Override
     protected CoordinateReferenceSystem getCrsFromElement(Object element) {
         List<Object> types = (List<Object>) OwsUtils.get(element, "typeName");
-        if(types.size()==1){
+        if (types.size() == 1) {
             return crsFromTypeName((QName) types.get(0));
         } else {
             return null;

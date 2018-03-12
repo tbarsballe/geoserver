@@ -7,10 +7,9 @@ package org.geoserver.security.config;
 
 /**
  * {@link GeoServerCredentialsFromRequestHeaderAuthenticationFilter} configuration object.
- * 
+ *
  * @author Lorenzo Natali, GeoSolutions
  * @author Mauro Bartolomeoli, GeoSolutions
- *
  */
 public class CredentialsFromRequestHeaderFilterConfig extends
         SecurityFilterConfig implements SecurityAuthFilterConfig {

@@ -82,7 +82,7 @@ abstract class AbstractGridSetPage extends GeoServerSecuredPage {
     protected final TileMatrixSetEditor tileMatrixSetEditor;
 
     protected final Component addLevelLink;
-    
+
     protected final FeedbackPanel feedback;
 
     public AbstractGridSetPage(final PageParameters parameters) {
@@ -156,11 +156,11 @@ abstract class AbstractGridSetPage extends GeoServerSecuredPage {
 
             @Override
             protected void onClick(AjaxRequestTarget target, Form<?> form) {
-				crs.processInput();
+                crs.processInput();
                 bounds.processInput();
                 tileWidth.getFormComponent().processInput();
                 tileHeight.getFormComponent().processInput();
-            	
+
                 addZoomLevel(target);
                 target.add(tileMatrixSetEditor);
                 target.add(feedback);
@@ -192,7 +192,7 @@ abstract class AbstractGridSetPage extends GeoServerSecuredPage {
 
             @Override
             protected void onClick(AjaxRequestTarget target, Form<?> form) {
-            	crs.processInput();
+                crs.processInput();
                 computeBounds();
                 target.add(bounds);
                 target.add(feedback);
@@ -252,7 +252,7 @@ abstract class AbstractGridSetPage extends GeoServerSecuredPage {
                 maxXInput.add(new UpdateTableBehavior());
                 maxYInput.add(new UpdateTableBehavior());
                 maxZInput.add(new UpdateTableBehavior());
-                
+
             }
         }
 
@@ -282,7 +282,6 @@ abstract class AbstractGridSetPage extends GeoServerSecuredPage {
 
     /**
      * @param model
-     *
      */
     private GridSetCRSPanel crs(IModel<GridSetInfo> model) {
         GridSetCRSPanel crsPanel = new GridSetCRSPanel("crs", model);
@@ -291,7 +290,6 @@ abstract class AbstractGridSetPage extends GeoServerSecuredPage {
 
     /**
      * @author groldan
-     * 
      */
     protected static class GridSetCRSPanel extends CRSPanel {
         private static final long serialVersionUID = 1L;
@@ -315,7 +313,7 @@ abstract class AbstractGridSetPage extends GeoServerSecuredPage {
             add(units);
             add(metersPerUnit);
         }
-        
+
         protected void onSRSUpdated(String srs, AjaxRequestTarget target) {
             target.add(units);
             target.add(metersPerUnit);
@@ -439,9 +437,8 @@ abstract class AbstractGridSetPage extends GeoServerSecuredPage {
         private final String previousName;
 
         /**
-         * @param previousName
-         *            the initial name of the gridset when the page loaded, may be {@code null} only
-         *            in case we're creating a new gridset
+         * @param previousName the initial name of the gridset when the page loaded, may be {@code null} only
+         *                     in case we're creating a new gridset
          */
         public UniqueNameValidator(final String previousName) {
             this.previousName = previousName;

@@ -27,22 +27,22 @@ import org.geotools.util.logging.Logging;
 
 /**
  * Catalog Listener that set up WMS-EO required styles.
- * 
+ * <p>
  * If the styles are not present in the Catalog they will be added at initialization.
  * If they are deleted, the Listener will create them again.
  * If they are modified, the Listener will prevent changes to be saved.
- * 
+ *
  * @author Davide Savazzi - geo-solutions.it
  */
 public class EoStyleCatalogListener implements CatalogListener, EoStyles {
 
     private final Catalog catalog;
     private final GeoServerResourceLoader resourceLoader;
-    private static final Logger LOGGER = Logging.getLogger(EoStyleCatalogListener.class);    
+    private static final Logger LOGGER = Logging.getLogger(EoStyleCatalogListener.class);
 
     /**
      * Create WMS-EO styles if they are not present in the Catalog and start listening to Catalog events.
-     * 
+     *
      * @param catalog
      * @param resourceLoader
      * @throws IOException
@@ -53,10 +53,11 @@ public class EoStyleCatalogListener implements CatalogListener, EoStyles {
         initializeStyles();
         catalog.addListener(this);
     }
-    
-    
+
+
     /**
      * Create WMS-EO styles if they are not present in the Catalog
+     *
      * @throws IOException
      */
     private void initializeStyles() throws IOException {
@@ -67,20 +68,20 @@ public class EoStyleCatalogListener implements CatalogListener, EoStyles {
             }
         }
     }
-    
+
     /**
      * Copies a WMS-EO style to the data directory and adds a catalog entry for it.
-     * 
+     * <p>
      * See org.geoserver.config.GeoServerLoader.initializeStyle.
      */
     private void initializeStyle(String styleName, String sld) throws IOException {
         // copy the file out to the data directory if necessary
         Resource res = resourceLoader.get(Paths.path("styles", sld));
         if (!Resources.exists(res)) {
-            IOUtils.copy(EoStyleCatalogListener.class.getResourceAsStream(sld), 
+            IOUtils.copy(EoStyleCatalogListener.class.getResourceAsStream(sld),
                     res.out());
         }
-        
+
         // create a style for it
         StyleInfo s = catalog.getFactory().createStyle();
         s.setName(styleName);
@@ -103,7 +104,7 @@ public class EoStyleCatalogListener implements CatalogListener, EoStyles {
             // when this event has been fired the style has already been removed
             try {
                 // try to find if a required style has been deleted and recreate it
-                initializeStyles();                
+                initializeStyles();
             } catch (IOException e) {
                 if (LOGGER.isLoggable(Level.WARNING)) {
                     LOGGER.log(Level.WARNING, e.getMessage(), e);
@@ -125,7 +126,7 @@ public class EoStyleCatalogListener implements CatalogListener, EoStyles {
                     throw new CatalogException("Style " + styleName + " is used by module WMS-EO and is read-only");
                 }
             }
-        } */        
+        } */
     }
 
     @Override
@@ -135,7 +136,7 @@ public class EoStyleCatalogListener implements CatalogListener, EoStyles {
     @Override
     public void handleAddEvent(CatalogAddEvent event) throws CatalogException {
     }
-    
+
     @Override
     public void reloaded() {
     }

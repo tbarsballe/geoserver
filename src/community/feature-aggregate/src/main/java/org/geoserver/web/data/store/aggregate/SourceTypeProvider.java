@@ -57,11 +57,11 @@ class SourceTypeProvider extends GeoServerDataProvider<SourceType> {
             super(name);
             this.config = config;
         }
-        
+
         public Comparator<SourceType> getComparator() {
             return null;
         }
-        
+
         @Override
         public Object getPropertyValue(final SourceType item) {
             return new IModel<Boolean>() {
@@ -84,6 +84,8 @@ class SourceTypeProvider extends GeoServerDataProvider<SourceType> {
             };
         }
 
-    };
+    }
+
+    ;
 
 }

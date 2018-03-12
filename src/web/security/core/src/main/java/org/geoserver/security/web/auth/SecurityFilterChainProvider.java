@@ -19,66 +19,67 @@ import org.springframework.util.StringUtils;
 
 /**
  * Provider for {@link RequestFilterChain} objects
- * 
+ *
  * @author Christian Mueller
  */
-public  class SecurityFilterChainProvider 
-    extends GeoServerDataProvider<RequestFilterChain> {
+public class SecurityFilterChainProvider
+        extends GeoServerDataProvider<RequestFilterChain> {
 
     SecurityManagerConfig config;
+
     public SecurityFilterChainProvider(SecurityManagerConfig config) {
-        this.config=config;
+        this.config = config;
     }
-    
+
     private static final long serialVersionUID = 1L;
 
-    /** name of the config */
-    public static final Property<RequestFilterChain> NAME = 
+    /**
+     * name of the config
+     */
+    public static final Property<RequestFilterChain> NAME =
             new BeanProperty<RequestFilterChain>("name", "name");
-    
-        
-    public static Property<RequestFilterChain> POSITION = 
-            new PropertyPlaceholder<RequestFilterChain>( "position" );
-    public static Property<RequestFilterChain> REMOVE = 
-            new PropertyPlaceholder<RequestFilterChain>( "remove" );
 
-    public static final Property<RequestFilterChain> DISABLED = 
+
+    public static Property<RequestFilterChain> POSITION =
+            new PropertyPlaceholder<RequestFilterChain>("position");
+    public static Property<RequestFilterChain> REMOVE =
+            new PropertyPlaceholder<RequestFilterChain>("remove");
+
+    public static final Property<RequestFilterChain> DISABLED =
             new BeanProperty<RequestFilterChain>("disabled", "disabled");
-    public static final Property<RequestFilterChain> ALLOWSESSIONCREATION = 
+    public static final Property<RequestFilterChain> ALLOWSESSIONCREATION =
             new BeanProperty<RequestFilterChain>("allowSessionCreation", "allowSessionCreation");
-    public static final Property<RequestFilterChain> REQUIRESSL = 
+    public static final Property<RequestFilterChain> REQUIRESSL =
             new BeanProperty<RequestFilterChain>("requireSSL", "requireSSL");
-    public static final Property<RequestFilterChain> MATCHHTTPMETHOD = 
-            new BeanProperty<RequestFilterChain>("matchHTTPMethod", "matchHTTPMethod");    
-    
-    public static final Property<RequestFilterChain> PATTERNS = 
-        new AbstractProperty<RequestFilterChain>("patternString") {
-        @Override
-        public Object getPropertyValue(RequestFilterChain item) {
-            return StringUtils.collectionToCommaDelimitedString(item.getPatterns());            
-        }
-    };
-    
-    public static final Property<RequestFilterChain> HTTPMETHODS = 
+    public static final Property<RequestFilterChain> MATCHHTTPMETHOD =
+            new BeanProperty<RequestFilterChain>("matchHTTPMethod", "matchHTTPMethod");
+
+    public static final Property<RequestFilterChain> PATTERNS =
+            new AbstractProperty<RequestFilterChain>("patternString") {
+                @Override
+                public Object getPropertyValue(RequestFilterChain item) {
+                    return StringUtils.collectionToCommaDelimitedString(item.getPatterns());
+                }
+            };
+
+    public static final Property<RequestFilterChain> HTTPMETHODS =
             new AbstractProperty<RequestFilterChain>("httpMethods") {
-            @Override
-            public Object getPropertyValue(RequestFilterChain item) {                
-                return StringUtils.collectionToCommaDelimitedString(item.getHttpMethods());            
-            }
-        };
+                @Override
+                public Object getPropertyValue(RequestFilterChain item) {
+                    return StringUtils.collectionToCommaDelimitedString(item.getHttpMethods());
+                }
+            };
 
-    
-    public static final Property<RequestFilterChain> HASROLEFILTER = 
+
+    public static final Property<RequestFilterChain> HASROLEFILTER =
             new AbstractProperty<RequestFilterChain>("hasRoleFilter") {
-            @Override
-            public Object getPropertyValue(RequestFilterChain item) {
-                return StringUtils.hasLength( item.getRoleFilterName());
-            }
-        };
+                @Override
+                public Object getPropertyValue(RequestFilterChain item) {
+                    return StringUtils.hasLength(item.getRoleFilterName());
+                }
+            };
 
-    
-    
-    
+
     @Override
     protected List<Property<RequestFilterChain>> getProperties() {
         List<Property<RequestFilterChain>> result = new ArrayList<Property<RequestFilterChain>>();
@@ -94,8 +95,6 @@ public  class SecurityFilterChainProvider
         result.add(REMOVE);
         return result;
     }
-
-
 
 
     @Override

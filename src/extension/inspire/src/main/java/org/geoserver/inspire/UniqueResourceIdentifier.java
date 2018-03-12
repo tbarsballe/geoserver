@@ -9,7 +9,7 @@ import java.io.Serializable;
 
 /**
  * A INSPIRE download service spatial dataset identifier
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class UniqueResourceIdentifier implements Serializable {
@@ -26,13 +26,13 @@ public class UniqueResourceIdentifier implements Serializable {
 
     public UniqueResourceIdentifier(String code) {
         this.code = code;
-   }
-    
+    }
+
     public UniqueResourceIdentifier(String code, String namespace) {
         this.code = code;
         this.namespace = namespace;
     }
-    
+
     public UniqueResourceIdentifier(String code, String namespace, String metadataURL) {
         this.code = code;
         this.namespace = namespace;
@@ -111,6 +111,5 @@ public class UniqueResourceIdentifier implements Serializable {
                 + ", metadataURL=" + metadataURL + "]";
     }
 
-    
 
 }

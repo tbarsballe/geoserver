@@ -85,11 +85,12 @@ public class MonkeyProcess {
             }
         }
     }
+
     @DescribeResult(name = "result")
     public SimpleFeatureCollection execute(@DescribeParameter(name = "id") String id,
-            @DescribeParameter(name = "fc", min = 0) SimpleFeatureCollection fc,
-            @DescribeParameter(name = "extra", min = 0) String extra,
-            ProgressListener listener) throws Exception {
+                                           @DescribeParameter(name = "fc", min = 0) SimpleFeatureCollection fc,
+                                           @DescribeParameter(name = "extra", min = 0) String extra,
+                                           ProgressListener listener) throws Exception {
         BlockingQueue<Command> queue = getCommandQueue(id);
         while (true) {
             Command command = queue.take();

@@ -26,20 +26,19 @@ import org.springframework.stereotype.Service;
 
 /**
  * Parameter types refering to external resources.
- * 
- * @author Niels Charlier
  *
+ * @author Niels Charlier
  */
 @Service
 public class ExtTypes {
     private static final Logger LOGGER = Logging.getLogger(ExtTypes.class);
-    
+
     @Autowired
     private LookupService<DbSource> dbSources;
-    
+
     @Autowired
     private LookupService<ExternalGS> extGeoservers;
-    
+
     @Autowired
     private GeoServer geoServer;
 
@@ -56,7 +55,7 @@ public class ExtTypes {
         }
 
     };
-    
+
     public final ParameterType tableName() {
         return new ParameterType() {
             private Set<String> getTables(String databaseName) {
@@ -68,7 +67,7 @@ public class ExtTypes {
                         try {
                             Connection conn = ds.getDataSource().getConnection();
                             DatabaseMetaData md = conn.getMetaData();
-                            ResultSet rs = md.getTables(null, ds.getSchema(), "%", 
+                            ResultSet rs = md.getTables(null, ds.getSchema(), "%",
                                     new String[]{"TABLE", "VIEW"});
                             while (rs.next()) {
                                 if (ds.getSchema() != null || rs.getString(2) == null) {
@@ -83,28 +82,30 @@ public class ExtTypes {
                     }
                 }
                 return tables;
-            }        
+            }
 
             @Override
             public List<String> getDomain(List<String> dependsOnRawValues) {
                 return new ArrayList<String>(getTables(dependsOnRawValues.get(0)));
             }
-            
+
             @Override
             public boolean validate(String value, List<String> dependsOnRawValues) {
                 //since the table may not yet exist  (could be result of other task
                 //do not validate its existence.
-                return true; 
+                return true;
             }
-    
+
             @Override
             public Object parse(String value, List<String> dependsOnRawValues) {
                 return new DbTableImpl(dbSources.get(dependsOnRawValues.get(0)), value);
             }
-    
+
         };
-    };
-    
+    }
+
+    ;
+
     public final ParameterType extGeoserver = new ParameterType() {
 
         @Override
@@ -118,7 +119,7 @@ public class ExtTypes {
         }
 
     };
-    
+
     public final ParameterType internalLayer = new ParameterType() {
 
         @Override
@@ -134,11 +135,11 @@ public class ExtTypes {
         public LayerInfo parse(String value, List<String> dependsOnRawValues) {
             return geoServer.getCatalog().getLayerByName(value);
         }
-        
+
         @Override
         public List<String> getActions() {
             return Collections.singletonList("LayerEdit");
         }
-        
+
     };
 }

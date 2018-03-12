@@ -18,14 +18,14 @@ import org.springframework.context.ApplicationContextAware;
 
 /**
  * Locates the encoders for a certain coverage format
- * 
+ *
  * @author Alessio Fabiani (alessio.fabiani@gmail.com) $ (last modification)
  * @author $Author: Simone Giannecchini (simboss1@gmail.com) $ (last modification)
  */
 public class CoverageResponseDelegateFinder implements ApplicationContextAware {
-    
+
     private ApplicationContext applicationContext;
-    
+
     private CoverageResponseDelegateFinder() {
     }
 
@@ -44,20 +44,19 @@ public class CoverageResponseDelegateFinder implements ApplicationContextAware {
 
         return null;
     }
-    
+
     /**
      * Returns the list of all the supported output formats
-     *
      */
     public List<String> getOutputFormats() {
         Set<String> formats = new HashSet<String>();
         List<CoverageResponseDelegate> delegates = GeoServerExtensions.extensions(CoverageResponseDelegate.class, applicationContext);
         for (CoverageResponseDelegate delegate : delegates) {
-            if(delegate.isAvailable()) {
+            if (delegate.isAvailable()) {
                 formats.addAll(delegate.getOutputFormats());
             }
         }
-        
+
         List<String> result = new ArrayList<String>(formats);
         Collections.sort(result);
         return result;
@@ -65,7 +64,7 @@ public class CoverageResponseDelegateFinder implements ApplicationContextAware {
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        this.applicationContext = applicationContext;        
+        this.applicationContext = applicationContext;
     }
 
 }

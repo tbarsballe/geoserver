@@ -1,4 +1,3 @@
-
 /* (c) 2018 Open Source Geospatial Foundation - all rights reserved
  * This code is licensed under the GPL 2.0 license, available at the root
  * application directory.
@@ -19,25 +18,25 @@ import static org.hamcrest.MatcherAssert.assertThat;
 /**
  * Tests that isolated workspaces \ namespaces allow the publishing of the same complex
  * feature type multiple times.
- *
+ * <p>
  * The tests use three three different types of mappings which allow us to test three
  * particular situations, note that stations contain measurements:
- *
+ * <p>
  * <ul>
- *   <li>
- *     both stations and measurements feature types are mapped and published in the
- *     same isolated workspace
- *   </li>
- *   <li>
- *     stations feature type is published in the isolated workspace and measurement type
- *     is an included type (i.e. it is not published)
- *   </li>
- *   <li>
- *     only stations feature type is published in the isolated workspace and the global
- *     (non isolated) measurements feature type is used for feature chaining
- *   </li>
+ * <li>
+ * both stations and measurements feature types are mapped and published in the
+ * same isolated workspace
+ * </li>
+ * <li>
+ * stations feature type is published in the isolated workspace and measurement type
+ * is an included type (i.e. it is not published)
+ * </li>
+ * <li>
+ * only stations feature type is published in the isolated workspace and the global
+ * (non isolated) measurements feature type is used for feature chaining
+ * </li>
  * </ul>
- *
+ * <p>
  * All mappings can be used for GML 3.1 and GML 3.2 with the correct parameterization.
  */
 public final class IsolatedNamespacesWfsTest extends AbstractAppSchemaTestSupport {

@@ -36,17 +36,17 @@ import com.google.common.base.Preconditions;
  */
 @Service("repositoryInitService")
 public class GeoserverRepositoryInitService extends RepositoryInitService {
-    
+
     @Override
     public RepositoryInitRepo initRepository(RepositoryProvider provider, String repositoryName,
-            Map<String, String> parameters) throws RepositoryConnectionException {
+                                             Map<String, String> parameters) throws RepositoryConnectionException {
         if (provider.hasGeoGig(repositoryName)) {
             throw new CommandSpecException("The specified repository name is already in use, please try a different name",
                     HttpStatus.CONFLICT);
         }
 
         Repository newRepo = provider.createGeogig(repositoryName, parameters);
-        
+
         if (newRepo.isOpen()) {
             throw new CommandSpecException("Cannot run init on an already initialized repository.", HttpStatus.CONFLICT);
         }
@@ -78,7 +78,7 @@ public class GeoserverRepositoryInitService extends RepositoryInitService {
         saveRepository(newRepo);
         return info;
     }
-    
+
     private RepositoryInfo saveRepository(Repository geogig) {
         // repo was just created, need to register it with an ID in the manager
         // create a RepositoryInfo object

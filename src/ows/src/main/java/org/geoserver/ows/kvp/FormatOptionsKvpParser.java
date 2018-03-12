@@ -26,7 +26,6 @@ import org.springframework.context.ApplicationContextAware;
  * <pre>FORMAT_OPTIONS=opt1:val1,val2;opt2:val1;opt3:...</pre>
  *
  * @author Justin Deoliveira, The Open Planning Project, jdeolive@openplans.org
- *
  */
 public class FormatOptionsKvpParser extends KvpParser implements ApplicationContextAware {
     /**
@@ -37,11 +36,11 @@ public class FormatOptionsKvpParser extends KvpParser implements ApplicationCont
     public FormatOptionsKvpParser() {
         this("format_options");
     }
- 
+
     /**
      * Builds a {@link FormatOptionsKvpParser} with a user specified key (for params that have the
      * syntax of format_options, but not the same name)
-     * 
+     *
      * @param key
      */
     public FormatOptionsKvpParser(String key) {
@@ -49,7 +48,7 @@ public class FormatOptionsKvpParser extends KvpParser implements ApplicationCont
     }
 
     public void setApplicationContext(ApplicationContext applicationContext)
-        throws BeansException {
+            throws BeansException {
         this.applicationContext = applicationContext;
     }
 
@@ -58,19 +57,19 @@ public class FormatOptionsKvpParser extends KvpParser implements ApplicationCont
         Map formatOptions = new CaseInsensitiveMap(new TreeMap());
 
         List<String> kvps = KvpUtils.escapedTokens(value, ';');
-        
+
         for (String kvp : kvps) {
             List<String> kv = KvpUtils.escapedTokens(kvp, ':', 2);
             String key = kv.get(0);
             String raw = kv.size() == 1 ? "true" : KvpUtils.unescape(kv.get(1));
-               
+
             Object parsed = null;
 
-            for (Iterator p = parsers.iterator(); p.hasNext();) {
+            for (Iterator p = parsers.iterator(); p.hasNext(); ) {
                 KvpParser parser = (KvpParser) p.next();
-                if ( key.equalsIgnoreCase( parser.getKey() ) ) {
-                    parsed = parser.parse( raw );
-                    if ( parsed != null ) {
+                if (key.equalsIgnoreCase(parser.getKey())) {
+                    parsed = parser.parse(raw);
+                    if (parsed != null) {
 
                         break;
                     }
@@ -78,8 +77,8 @@ public class FormatOptionsKvpParser extends KvpParser implements ApplicationCont
             }
 
             if (parsed == null) {
-                if(LOGGER.isLoggable(Level.FINER))
-                    LOGGER.finer( "Could not find kvp parser for: '" + key + "'. Storing as raw string.");
+                if (LOGGER.isLoggable(Level.FINER))
+                    LOGGER.finer("Could not find kvp parser for: '" + key + "'. Storing as raw string.");
                 parsed = raw;
             }
 

@@ -24,16 +24,16 @@ import org.geoserver.catalog.StyleInfo;
 import org.geoserver.catalog.WorkspaceInfo;
 
 public final class InfoIdentities {
-    
+
     private static final InfoIdentities SINGLETON = new InfoIdentities();
-    
+
     public final static InfoIdentities get() {
         return SINGLETON;
     }
-    
-    private static final Class<?>[] ROOT_CLASSES = new Class<?>[] { MapInfo.class,
+
+    private static final Class<?>[] ROOT_CLASSES = new Class<?>[]{MapInfo.class,
             NamespaceInfo.class, LayerInfo.class, LayerGroupInfo.class, ResourceInfo.class, StoreInfo.class,
-            StyleInfo.class, WorkspaceInfo.class };
+            StyleInfo.class, WorkspaceInfo.class};
 
     @SuppressWarnings("unchecked")
     public static <T extends Info> Class<? extends Info> root(Class<T> clazz) {
@@ -44,6 +44,7 @@ public final class InfoIdentities {
         }
         return null;
     }
+
     private final Map<Class<? extends Info>, String[][]> descriptors = new HashMap<>();
 
     public final <T extends Info> List<InfoIdentity> getIdentities(T info) {
@@ -68,14 +69,14 @@ public final class InfoIdentities {
             return list;
         }
     }
-    
+
     @SafeVarargs
     private final <T extends Info> void put(Class<T> clazz, String[]... descriptor) {
         descriptors.put(clazz, descriptor);
     }
-    
+
     private InfoIdentities() {
-        put(MapInfo.class, new String[] {"name"});
+        put(MapInfo.class, new String[]{"name"});
         put(NamespaceInfo.class, new String[]{"prefix"}, new String[]{"URI"});
         put(LayerGroupInfo.class, new String[]{"name"});
         put(LayerInfo.class, new String[]{"resource.id"});
@@ -84,5 +85,5 @@ public final class InfoIdentities {
         put(StyleInfo.class, new String[]{"name"}, new String[]{"workspace.id", "name"});
         put(WorkspaceInfo.class, new String[]{"name"});
     }
-    
+
 }

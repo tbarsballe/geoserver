@@ -11,16 +11,15 @@
 package org.geoserver.wps.ppio.gpx;
 
 /**
- * 
  * A link to an external resource (Web page, digital photo, video clip, etc) with additional information.
- * 
- * 
+ * <p>
+ * <p>
  * <p>
  * Java class for linkType complex type.
- * 
+ * <p>
  * <p>
  * The following schema fragment specifies the expected content contained within this class.
- * 
+ * <p>
  * <pre>
  * &lt;complexType name="linkType">
  *   &lt;complexContent>
@@ -34,8 +33,6 @@ package org.geoserver.wps.ppio.gpx;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 public class LinkType {
     protected String text;
@@ -46,9 +43,8 @@ public class LinkType {
 
     /**
      * Gets the value of the text property.
-     * 
+     *
      * @return possible object is {@link String }
-     * 
      */
     public String getText() {
         return text;
@@ -56,9 +52,8 @@ public class LinkType {
 
     /**
      * Sets the value of the text property.
-     * 
+     *
      * @param value allowed object is {@link String }
-     * 
      */
     public void setText(String value) {
         this.text = value;
@@ -66,9 +61,8 @@ public class LinkType {
 
     /**
      * Gets the value of the type property.
-     * 
+     *
      * @return possible object is {@link String }
-     * 
      */
     public String getType() {
         return type;
@@ -76,9 +70,8 @@ public class LinkType {
 
     /**
      * Sets the value of the type property.
-     * 
+     *
      * @param value allowed object is {@link String }
-     * 
      */
     public void setType(String value) {
         this.type = value;
@@ -86,9 +79,8 @@ public class LinkType {
 
     /**
      * Gets the value of the href property.
-     * 
+     *
      * @return possible object is {@link String }
-     * 
      */
     public String getHref() {
         return href;
@@ -96,9 +88,8 @@ public class LinkType {
 
     /**
      * Sets the value of the href property.
-     * 
+     *
      * @param value allowed object is {@link String }
-     * 
      */
     public void setHref(String value) {
         this.href = value;

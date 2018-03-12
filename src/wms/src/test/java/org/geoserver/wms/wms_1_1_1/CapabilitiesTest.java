@@ -10,10 +10,12 @@ import static org.custommonkey.xmlunit.XMLAssert.assertXpathExists;
 import static org.custommonkey.xmlunit.XMLAssert.assertXpathNotExists;
 import static org.custommonkey.xmlunit.XMLUnit.newXpathEngine;
 import static org.junit.Assert.*;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 
 import static org.hamcrest.CoreMatchers.is;
+
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.StringWriter;
@@ -63,9 +65,9 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 public class CapabilitiesTest extends WMSTestSupport {
-  
+
     private static final String BASE_URL = "http://localhost/geoserver";
-    
+
     public CapabilitiesTest() {
         super();
     }
@@ -73,22 +75,22 @@ public class CapabilitiesTest extends WMSTestSupport {
     @Override
     protected void setUpTestData(SystemTestData testData) throws Exception {
         super.setUpTestData(testData);
-        testData.setUpDefaultRasterLayers();        
+        testData.setUpDefaultRasterLayers();
     }
 
     @Override
     protected void onSetUp(SystemTestData testData) throws Exception {
         super.onSetUp(testData);
-       
+
         Catalog catalog = getCatalog();
-        DataStoreInfo info =catalog.getDataStoreByName(MockData.SF_PREFIX);
+        DataStoreInfo info = catalog.getDataStoreByName(MockData.SF_PREFIX);
         info.setEnabled(false);
         catalog.save(info);
-        
+
         GeoServerInfo global = getGeoServer().getGlobal();
         global.getSettings().setProxyBaseUrl("src/test/resources/geoserver");
         getGeoServer().save(global);
-        
+
         // add a workspace qualified style
         WorkspaceInfo ws = catalog.getWorkspaceByName(MockData.CITE_PREFIX);
         testData.addStyle(ws, "Lakes", "Lakes.sld", SystemTestData.class, catalog);
@@ -99,7 +101,7 @@ public class CapabilitiesTest extends WMSTestSupport {
         StyleInfo tigerRoadsStyle = catalog.getStyleByName(ws, "tiger_roads");
         lakesLayer.getStyles().add(tigerRoadsStyle);
         catalog.save(lakesLayer);
-        
+
         setupOpaqueGroup(catalog);
     }
 
@@ -109,8 +111,8 @@ public class CapabilitiesTest extends WMSTestSupport {
         Element e = dom.getDocumentElement();
         assertEquals("WMT_MS_Capabilities", e.getLocalName());
     }
-    
-    @org.junit.Test 
+
+    @org.junit.Test
     public void testCapabilitiesNoWGS84DD() throws Exception {
         Document dom = dom(get("wms?request=getCapabilities&version=1.1.1"), false);
         // print(dom);
@@ -154,7 +156,7 @@ public class CapabilitiesTest extends WMSTestSupport {
         InputStream content = new ByteArrayInputStream(response.getContentAsByteArray());
         Document document = dom(content, true);
         // check that all the available mime types are present
-        for(String mimeType : GetCapabilitiesTransformer.WMS_CAPS_AVAIL_MIME) {
+        for (String mimeType : GetCapabilitiesTransformer.WMS_CAPS_AVAIL_MIME) {
             assertXpathExists(String.format("//GetCapabilities[Format='%s']", mimeType), document);
         }
     }
@@ -192,7 +194,7 @@ public class CapabilitiesTest extends WMSTestSupport {
 
         assertEquals(getRawTopLayerCount(), nodeLayers.getLength());
     }
-    
+
     @Test
     public void testNonAdvertisedLayer() throws Exception {
         String layerId = getLayerId(MockData.BUILDINGS);
@@ -201,7 +203,7 @@ public class CapabilitiesTest extends WMSTestSupport {
             // now you see me
             Document dom = dom(get("wms?request=getCapabilities&version=1.1.1"), true);
             assertXpathExists("//Layer[Name='" + layerId + "']", dom);
-            
+
             // now you don't!
             layer.setAdvertised(false);
             getCatalog().save(layer);
@@ -212,7 +214,7 @@ public class CapabilitiesTest extends WMSTestSupport {
             getCatalog().save(layer);
         }
     }
-    
+
     @Test
     public void testNonAdvertisedLayerInLayerSpecificService() throws Exception {
         String layerId = getLayerId(MockData.BUILDINGS);
@@ -242,8 +244,8 @@ public class CapabilitiesTest extends WMSTestSupport {
         assertEquals("WMT_MS_Capabilities", e.getLocalName());
         XpathEngine xpath = XMLUnit.newXpathEngine();
         assertEquals(0, xpath.getMatchingNodes("//Layer/Name[starts-with(., 'cite')]", dom).getLength());
-        assertTrue (xpath.getMatchingNodes("//Layer/Name[not(starts-with(., 'cite'))]", dom)
-                .getLength() > 0 );
+        assertTrue(xpath.getMatchingNodes("//Layer/Name[not(starts-with(., 'cite'))]", dom)
+                .getLength() > 0);
 
         NodeList nodes = xpath.getMatchingNodes("//Layer//OnlineResource", dom);
         assertTrue(nodes.getLength() > 0);
@@ -325,13 +327,13 @@ public class CapabilitiesTest extends WMSTestSupport {
         assertXpathEvaluatesTo("1", "count(//Attribution/Title)", doc);
         assertXpathEvaluatesTo("1", "count(//Attribution/LogoURL)", doc);
     }
-    
+
 
     @Test
     public void testLayerGroup() throws Exception {
         LayerInfo points = getCatalog().getLayerByName(MockData.POINTS.getLocalPart());
-        CatalogBuilder builder = new CatalogBuilder(getCatalog());        
-        
+        CatalogBuilder builder = new CatalogBuilder(getCatalog());
+
         //create layergr
         LayerGroupInfo lg = getCatalog().getFactory().createLayerGroup();
         //attribution
@@ -349,7 +351,7 @@ public class CapabilitiesTest extends WMSTestSupport {
         getCatalog().add(lg);
         // add keywords to layer group
         addKeywordsToLayerGroup("MyLayerGroup");
-        
+
         try {
             Document doc = getAsDOM("wms?service=WMS&request=getCapabilities&version=1.1.1", true);
             //print(doc);
@@ -398,7 +400,7 @@ public class CapabilitiesTest extends WMSTestSupport {
         assertTrue(href.contains("style=point"));
     }
 
-    @Test 
+    @Test
     public void testServiceMetadata() throws Exception {
         final WMSInfo service = getGeoServer().getService(WMSInfo.class);
         service.setTitle("test title");
@@ -424,7 +426,7 @@ public class CapabilitiesTest extends WMSTestSupport {
         contact.setContactPerson("__me");
         contact.setContactPosition("__position");
         contact.setContactVoice("__phone");
-        
+
         getGeoServer().save(global);
         getGeoServer().save(service);
 
@@ -438,7 +440,7 @@ public class CapabilitiesTest extends WMSTestSupport {
         assertXpathEvaluatesTo("test keyword 1", base + "KeywordList/Keyword[1]", doc);
         assertXpathEvaluatesTo("test keyword 2", base + "KeywordList/Keyword[2]", doc);
         assertXpathEvaluatesTo("http://example.com/geoserver", base + "OnlineResource/@xlink:href", doc);
-        
+
         String cinfo = base + "ContactInformation/";
         assertXpathEvaluatesTo("__me", cinfo + "ContactPersonPrimary/ContactPerson", doc);
         assertXpathEvaluatesTo("__org", cinfo + "ContactPersonPrimary/ContactOrganization", doc);
@@ -453,8 +455,8 @@ public class CapabilitiesTest extends WMSTestSupport {
         assertXpathEvaluatesTo("__fax", cinfo + "ContactFacsimileTelephone", doc);
         assertXpathEvaluatesTo("e@mail", cinfo + "ContactElectronicMailAddress", doc);
     }
-    
-    @Test 
+
+    @Test
     public void testNoFeesOrContraints() throws Exception {
         final WMSInfo service = getGeoServer().getService(WMSInfo.class);
         service.setAccessConstraints(null);
@@ -471,13 +473,13 @@ public class CapabilitiesTest extends WMSTestSupport {
     }
 
     @Test
-    public void testQueryable() throws Exception{
+    public void testQueryable() throws Exception {
         LayerInfo lines = getCatalog().getLayerByName(MockData.LINES.getLocalPart());
         lines.setQueryable(true);
         getCatalog().save(lines);
         LayerInfo points = getCatalog().getLayerByName(MockData.POINTS.getLocalPart());
         points.setQueryable(false);
-        getCatalog().save(points);        
+        getCatalog().save(points);
 
         String linesName = MockData.LINES.getPrefix() + ":" + MockData.LINES.getLocalPart();
         String pointsName = MockData.POINTS.getPrefix() + ":" + MockData.POINTS.getLocalPart();
@@ -490,17 +492,17 @@ public class CapabilitiesTest extends WMSTestSupport {
     }
 
     @Test
-    public void testOpaque() throws Exception{
+    public void testOpaque() throws Exception {
         LayerInfo lines = getCatalog().getLayerByName(MockData.LINES.getLocalPart());
         lines.setOpaque(true);
         getCatalog().save(lines);
         LayerInfo points = getCatalog().getLayerByName(MockData.POINTS.getLocalPart());
         points.setOpaque(false);
-        getCatalog().save(points);        
+        getCatalog().save(points);
 
         String linesName = MockData.LINES.getPrefix() + ":" + MockData.LINES.getLocalPart();
         String pointsName = MockData.POINTS.getPrefix() + ":" + MockData.POINTS.getLocalPart();
-        
+
         Document doc = getAsDOM("wms?service=WMS&request=getCapabilities&version=1.1.1", true);
 
         assertXpathEvaluatesTo("1", "//Layer[Name='" + linesName + "']/@opaque", doc);
@@ -508,7 +510,7 @@ public class CapabilitiesTest extends WMSTestSupport {
     }
 
     @Test
-    public void testExceptions() throws Exception{
+    public void testExceptions() throws Exception {
 
         Document doc = getAsDOM("wms?service=WMS&request=getCapabilities&version=1.1.1", true);
 
@@ -534,10 +536,10 @@ public class CapabilitiesTest extends WMSTestSupport {
         }
     }
 
-    @org.junit.Test 
+    @org.junit.Test
     public void testDataLinks() throws Exception {
         String layerName = MockData.POINTS.getPrefix() + ":" + MockData.POINTS.getLocalPart();
-        
+
         LayerInfo layer = getCatalog().getLayerByName(MockData.POINTS.getLocalPart());
         DataLinkInfo mdlink = getCatalog().getFactory().createDataLink();
         mdlink.setContent("http://geoserver.org");
@@ -545,42 +547,42 @@ public class CapabilitiesTest extends WMSTestSupport {
         ResourceInfo resource = layer.getResource();
         resource.getDataLinks().add(mdlink);
         getCatalog().save(resource);
-        
+
         Document doc = getAsDOM("wms?service=WMS&request=getCapabilities&version=1.1.1", true);
         String xpath = "//Layer[Name='" + layerName + "']/DataURL/Format";
         assertXpathEvaluatesTo("text/xml", xpath, doc);
-        
+
         xpath = "//Layer[Name='" + layerName + "']/DataURL/OnlineResource/@xlink:type";
         assertXpathEvaluatesTo("simple", xpath, doc);
-        
+
         xpath = "//Layer[Name='" + layerName + "']/DataURL/OnlineResource/@xlink:href";
         assertXpathEvaluatesTo("http://geoserver.org", xpath, doc);
-        
+
         // Test transforming localhost to proxyBaseUrl
         GeoServerInfo global = getGeoServer().getGlobal();
         String proxyBaseUrl = global.getSettings().getProxyBaseUrl();
         mdlink.setContent("/metadata");
         getCatalog().save(resource);
-        
+
         doc = getAsDOM("wms?service=WMS&request=getCapabilities&version=1.1.1", true);
         assertXpathEvaluatesTo(proxyBaseUrl + "/metadata", xpath, doc);
-        
+
         // Test KVP in URL
         String query = "key=value";
         mdlink.setContent("/metadata?" + query);
         getCatalog().save(resource);
-        
+
         doc = getAsDOM("wms?service=WMS&request=getCapabilities&version=1.1.1", true);
         assertXpathEvaluatesTo(proxyBaseUrl + "/metadata?" + query, xpath, doc);
 
         mdlink.setContent("http://localhost/metadata?" + query);
         getCatalog().save(resource);
-        
+
         doc = getAsDOM("wms?service=WMS&request=getCapabilities&version=1.1.1", true);
         assertXpathEvaluatesTo("http://localhost/metadata?" + query, xpath, doc);
-        
+
     }
-    
+
     @Test
     public void testStyleWorkspaceQualified() throws Exception {
         Document doc = getAsDOM("wms?service=WMS&request=getCapabilities&version=1.1.1", true);
@@ -598,12 +600,12 @@ public class CapabilitiesTest extends WMSTestSupport {
         assertXpathExists("//Layer[Name='cite:Lakes']/Style[1]/Name", doc);
         assertXpathExists("//Layer[Name='cite:Lakes']/Style[1]/Title", doc);
         assertXpathExists("//Layer[Name='cite:Lakes']/Style[1]/LegendURL", doc);
-        
+
         assertXpathExists("//Layer[Name='cite:Lakes']/Style[2]/Name", doc);
         assertXpathExists("//Layer[Name='cite:Lakes']/Style[2]/Title", doc);
         assertXpathExists("//Layer[Name='cite:Lakes']/Style[2]/LegendURL", doc);
     }
-    
+
     @Test
     public void testDuplicateLayerGroup() throws Exception {
         // see https://osgeo-org.atlassian.net/browse/GEOS-6154
@@ -611,11 +613,11 @@ public class CapabilitiesTest extends WMSTestSupport {
         LayerInfo lakes = catalog.getLayerByName(getLayerId(MockData.LAKES));
         lakes.setAdvertised(false);
         catalog.save(lakes);
-        
+
         try {
             Document doc = getAsDOM("wms?service=WMS&request=getCapabilities&version=1.1.1", true);
             // print(doc);
-            
+
             // nested
             assertXpathEvaluatesTo("1", "count(//Layer[Title='containerGroup']/Layer[Name='nature'])", doc);
             // no other instances
@@ -625,7 +627,7 @@ public class CapabilitiesTest extends WMSTestSupport {
             catalog.save(lakes);
         }
     }
-    
+
     @Test
     public void testOpaqueGroup() throws Exception {
         Document dom = dom(get("wms?request=GetCapabilities&version=1.1.0"), true);
@@ -640,7 +642,7 @@ public class CapabilitiesTest extends WMSTestSupport {
     @Test
     public void testNestedGroupInOpaqueGroup() throws Exception {
         Catalog catalog = getCatalog();
-        
+
         // nest container inside opaque, this should make it disappear from the caps
         LayerGroupInfo container = catalog.getLayerGroupByName(CONTAINER_GROUP);
         LayerGroupInfo opaque = catalog.getLayerGroupByName(OPAQUE_GROUP);
@@ -679,42 +681,41 @@ public class CapabilitiesTest extends WMSTestSupport {
             catalog.save(opaque);
         }
     }
-    
+
     @Test
-    public void testRootLayer()throws Exception{
+    public void testRootLayer() throws Exception {
 
         Document dom = findCapabilities(false);
 
         WMS wms = getWMS();
-        WMSInfo info=wms.getServiceInfo();
-        
+        WMSInfo info = wms.getServiceInfo();
+
         DOMSource domSource = new DOMSource(dom);
         StringWriter writer = new StringWriter();
         StreamResult result = new StreamResult(writer);
         TransformerFactory tf = TransformerFactory.newInstance();
         Transformer transformer = tf.newTransformer();
         transformer.transform(domSource, result);
-        
-        assertEquals(writer.toString().contains(info.getRootLayerTitle()) , true);
+
+        assertEquals(writer.toString().contains(info.getRootLayerTitle()), true);
     }
-    
+
     /**
      * Retrieves the WMS's capabilities document.
-     * 
+     *
      * @param scaleHintUnitsPerDiaPixel true if the scalehint must be in units per diagonal of a pixel
      * @return Capabilities as {@link Document}
-     * 
      */
-    private Document findCapabilities(Boolean scaleHintUnitsPerDiaPixel) throws Exception{
+    private Document findCapabilities(Boolean scaleHintUnitsPerDiaPixel) throws Exception {
         //set the Scalehint units per diagonal pixel setting.
         WMS wms = getWMS();
-        WMSInfo info=wms.getServiceInfo();
-        info.setRootLayerTitle("test the title");  
-        MetadataMap mm= info.getMetadata();
+        WMSInfo info = wms.getServiceInfo();
+        info.setRootLayerTitle("test the title");
+        MetadataMap mm = info.getMetadata();
         mm.put(WMS.SCALEHINT_MAPUNITS_PIXEL, scaleHintUnitsPerDiaPixel);
         info.getGeoServer().save(info);
-        
-        Capabilities_1_3_0_Transformer tr = new Capabilities_1_3_0_Transformer(wms, BASE_URL, 
+
+        Capabilities_1_3_0_Transformer tr = new Capabilities_1_3_0_Transformer(wms, BASE_URL,
                 wms.getAllowedMapFormats(), new HashSet<ExtendedCapabilitiesProvider>());
         GetCapabilitiesRequest req = new GetCapabilitiesRequest();
         req.setBaseUrl(BASE_URL);

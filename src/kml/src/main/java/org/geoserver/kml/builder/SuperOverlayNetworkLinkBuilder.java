@@ -56,9 +56,8 @@ import de.micromata.opengis.kml.v_2_2_0.ViewRefreshMode;
 
 /**
  * Builds a KML document with a superoverlay hierarchy for each layer
- * 
+ *
  * @author Andrea Aime - GeoSolutions
- * 
  */
 public class SuperOverlayNetworkLinkBuilder extends AbstractNetworkLinkBuilder {
 
@@ -67,7 +66,7 @@ public class SuperOverlayNetworkLinkBuilder extends AbstractNetworkLinkBuilder {
     private WMSMapContent mapContent;
 
     private WMS wms;
-    
+
     static final String VISIBLE_KEY = "kmlvisible";
 
     public SuperOverlayNetworkLinkBuilder(KmlEncodingContext context) {
@@ -83,7 +82,7 @@ public class SuperOverlayNetworkLinkBuilder extends AbstractNetworkLinkBuilder {
 
         // normalize the requested bounds to match a WGS84 hierarchy tile
         Tile tile = new Tile(new ReferencedEnvelope(request.getBbox(), Tile.WGS84));
-        while(tile.getZ() > 0 && !tile.getEnvelope().contains(request.getBbox())) {
+        while (tile.getZ() > 0 && !tile.getEnvelope().contains(request.getBbox())) {
             tile = tile.getParent();
         }
         Envelope normalizedEnvelope = null;
@@ -119,25 +118,24 @@ public class SuperOverlayNetworkLinkBuilder extends AbstractNetworkLinkBuilder {
         link.setViewRefreshMode(ViewRefreshMode.NEVER);
     }
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @SuppressWarnings({"rawtypes", "unchecked"})
     private void encodeLayerSuperOverlay(Document container, MapLayerInfo layerInfo, int layerIndex, Envelope bounds,
-            int zoomLevel) {
+                                         int zoomLevel) {
         Map formatOptions = request.getFormatOptions();
-        
+
         Layer layer = mapContent.layers().get(layerIndex);
         Folder folder = container.createAndAddFolder();
         folder.setName(layerInfo.getLabel());
         if (layerInfo.getDescription() != null && layerInfo.getDescription().length() > 0) {
             folder.setDescription(layerInfo.getDescription());
         }
-        
+
         // Allow for all layers to be disabled by default.  This can be advantageous with
         // multiple large data-sets.
         if (formatOptions.get(VISIBLE_KEY) != null) {
             boolean visible = Boolean.parseBoolean(formatOptions.get(VISIBLE_KEY).toString());
             folder.setVisibility(visible);
-        }
-        else {
+        } else {
             folder.setVisibility(true);
         }
 
@@ -146,11 +144,11 @@ public class SuperOverlayNetworkLinkBuilder extends AbstractNetworkLinkBuilder {
             LookAtDecoratorFactory lookAtFactory = new LookAtDecoratorFactory();
             ReferencedEnvelope layerBounds = layer.getBounds();
             CoordinateReferenceSystem layerCRS = layerBounds.getCoordinateReferenceSystem();
-            if(layerCRS != null && !CRS.equalsIgnoreMetadata(layerCRS, DefaultGeographicCRS.WGS84)) {
+            if (layerCRS != null && !CRS.equalsIgnoreMetadata(layerCRS, DefaultGeographicCRS.WGS84)) {
                 try {
                     layerBounds = layerBounds.transform(DefaultGeographicCRS.WGS84, true);
-                } catch(Exception e) {
-                    throw new ServiceException("Failed to transform the layer bounds for " 
+                } catch (Exception e) {
+                    throw new ServiceException("Failed to transform the layer bounds for "
                             + layer.getTitle() + " to WGS84", e);
                 }
             }
@@ -163,7 +161,7 @@ public class SuperOverlayNetworkLinkBuilder extends AbstractNetworkLinkBuilder {
 
     /**
      * Encode the network links for the specified envelope and zoom level
-     * 
+     *
      * @param layer
      * @param top
      * @param zoomLevel
@@ -239,8 +237,8 @@ public class SuperOverlayNetworkLinkBuilder extends AbstractNetworkLinkBuilder {
         nl.setName(name);
         addRegion(nl, box, 128, -1);
         Link link = nl.createAndSetLink();
-        String getMap = WMSRequests.getGetMapUrl(request, layer, 0, box, new String[] { "format",
-                KMLMapOutputFormat.MIME_TYPE, "width", "256", "height", "256", "format", NetworkLinkMapOutputFormat.KML_MIME_TYPE  });
+        String getMap = WMSRequests.getGetMapUrl(request, layer, 0, box, new String[]{"format",
+                KMLMapOutputFormat.MIME_TYPE, "width", "256", "height", "256", "format", NetworkLinkMapOutputFormat.KML_MIME_TYPE});
         link.setHref(getMap);
         LOGGER.fine("Network link " + name + ":" + getMap);
         link.setViewRefreshMode(ViewRefreshMode.ON_REGION);
@@ -338,7 +336,7 @@ public class SuperOverlayNetworkLinkBuilder extends AbstractNetworkLinkBuilder {
         addRegion(nl, box, 128, -1);
         nl.setVisibility(true);
         Link link = nl.createAndSetLink();
-        String url = WMSRequests.getGetMapUrl(request, layer, 0, box, new String[] { "width",
+        String url = WMSRequests.getGetMapUrl(request, layer, 0, box, new String[]{"width",
                 "256", "height", "256", "format_options", foEncoded, "superoverlay", "true"});
         link.setHref(url);
     }
@@ -407,8 +405,8 @@ public class SuperOverlayNetworkLinkBuilder extends AbstractNetworkLinkBuilder {
         GroundOverlay go = container.createAndAddGroundOverlay();
         go.setDrawOrder(drawOrder);
         Icon icon = go.createAndSetIcon();
-        String href = WMSRequests.getGetMapUrl(request, layer, 0, box, new String[] { "width",
-                "256", "height", "256", "format", "image/png", "transparent", "true" });
+        String href = WMSRequests.getGetMapUrl(request, layer, 0, box, new String[]{"width",
+                "256", "height", "256", "format", "image/png", "transparent", "true"});
         icon.setHref(href);
         LOGGER.fine(href);
 
@@ -421,9 +419,8 @@ public class SuperOverlayNetworkLinkBuilder extends AbstractNetworkLinkBuilder {
 
     /**
      * Returns true if the request is GWC compatible
-     * 
-     * @param mapContent
      *
+     * @param mapContent
      */
     @SuppressWarnings("unchecked")
     private boolean isRequestGWCCompatible(GetMapRequest request, int layerIndex, WMS wms) {
@@ -460,7 +457,7 @@ public class SuperOverlayNetworkLinkBuilder extends AbstractNetworkLinkBuilder {
         if (filters != null && filters.size() > 0 && filters.get(layerIndex) != Filter.INCLUDE) {
             return false;
         }
-        
+
         // no extra sorts
         List<List<SortBy>> sortBy = request.getSortBy();
         if (sortBy != null && sortBy.size() > 0) {

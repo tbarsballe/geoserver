@@ -23,7 +23,7 @@ import org.geowebcache.diskquota.storage.TileSetVisitor;
 /**
  * A {@link QuotaStore} delegating to another instance of {@link QuotaStore}, and allowing the
  * delegate to be changed at runtime.
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class ConfigurableQuotaStore implements QuotaStore {
@@ -35,7 +35,7 @@ public class ConfigurableQuotaStore implements QuotaStore {
     public void setStore(QuotaStore delegate) {
         this.delegate = delegate;
     }
-    
+
     public QuotaStore getStore() {
         return delegate;
     }
@@ -89,7 +89,7 @@ public class ConfigurableQuotaStore implements QuotaStore {
     }
 
     public void addToQuotaAndTileCounts(TileSet tileSet, Quota quotaDiff,
-            Collection<PageStatsPayload> tileCountDiffs) throws InterruptedException {
+                                        Collection<PageStatsPayload> tileCountDiffs) throws InterruptedException {
         delegate.addToQuotaAndTileCounts(tileSet, quotaDiff, tileCountDiffs);
     }
 

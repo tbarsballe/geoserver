@@ -22,7 +22,7 @@ import org.opengis.util.ProgressListener;
 /**
  * A map using input providers internally, allows for deferred execution of the input parsing (it
  * happens in a single shot when the first input is fetched)
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 class LazyInputMap extends AbstractMap<String, Object> {
@@ -51,7 +51,7 @@ class LazyInputMap extends AbstractMap<String, Object> {
         // return the value
         return values.get(key);
     }
-    
+
     private void parseInputs() {
         // we want to (try to) actually parse stuff just once
         if (parsed) {
@@ -104,10 +104,10 @@ class LazyInputMap extends AbstractMap<String, Object> {
         }
         return result;
     }
-    
+
     public int longStepCount() {
         int count = 0;
-        for (InputProvider provider: providers.values()) {
+        for (InputProvider provider : providers.values()) {
             count += provider.longStepCount();
         }
         return count;
@@ -141,11 +141,12 @@ class LazyInputMap extends AbstractMap<String, Object> {
 
     /**
      * The listener will be informed of the parse progress, when it happens
+     *
      * @param listener
      */
     public void setListener(ProgressListener listener) {
         this.listener = listener;
     }
 
-    
+
 }

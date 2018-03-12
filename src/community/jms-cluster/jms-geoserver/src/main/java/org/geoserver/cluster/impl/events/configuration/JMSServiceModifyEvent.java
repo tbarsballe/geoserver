@@ -16,7 +16,7 @@ import java.util.List;
  * This Class define a wrapper of the {@link JMSModifyEvent} class to define an
  * event which can be recognized by the {@link JMSServiceHandler} as ServiceInfo
  * modified events.
- *
+ * <p>
  * <p>A service modified event can represent three situations, the service was
  * added, removed or is configuration was modified.
  *

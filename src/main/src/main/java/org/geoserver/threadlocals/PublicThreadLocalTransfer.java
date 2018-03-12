@@ -11,7 +11,7 @@ import java.util.Map;
 
 /**
  * A helper class that transfers ThreadLocals that can be referenced as public static fields
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 @SuppressWarnings("unchecked")

@@ -15,9 +15,7 @@ import org.geoserver.security.ldap.LDAPUserGroupServiceConfig;
 import org.geoserver.security.web.usergroup.UserGroupServicePanel;
 
 /**
- * 
  * @author Niels Charlier
- *
  */
 public class LDAPUserGroupServicePanel extends UserGroupServicePanel<LDAPUserGroupServiceConfig> {
     private static final long serialVersionUID = -5052166946618920800L;
@@ -36,7 +34,7 @@ public class LDAPUserGroupServicePanel extends UserGroupServicePanel<LDAPUserGro
             pwdField.setResetPassword(false);
             add(pwdField);
         }
-        
+
         public void resetModel() {
             get("user").setDefaultModelObject(null);
             get("password").setDefaultModelObject(null);
@@ -70,7 +68,7 @@ public class LDAPUserGroupServicePanel extends UserGroupServicePanel<LDAPUserGro
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
                 //reset any values that were set
-                LDAPAuthenticationPanel ldapAuthenticationPanel = 
+                LDAPAuthenticationPanel ldapAuthenticationPanel =
                         (LDAPAuthenticationPanel) LDAPUserGroupServicePanel.this.get("authenticationPanel");
                 ldapAuthenticationPanel.resetModel();
                 ldapAuthenticationPanel.setVisible(getModelObject().booleanValue());

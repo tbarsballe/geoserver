@@ -23,12 +23,11 @@ import org.springframework.batch.core.StepExecution;
 /**
  * Base Class for {@link JobExecution} wrappers. Those will be used to share objects, I/O parameters and GeoServer B/R specific variables and the
  * batch contexts.
- * 
+ * <p>
  * {@link ConcurrentHashMap}s are populated from the {@link Backup} facade in order to allow external classes to follow jobs executions and retrieve
  * configuration, parameters and statuses.
- * 
- * @author Alessio Fabiani, GeoSolutions
  *
+ * @author Alessio Fabiani, GeoSolutions
  */
 public abstract class AbstractExecutionAdapter {
 
@@ -41,12 +40,12 @@ public abstract class AbstractExecutionAdapter {
     private List<Throwable> warningsList = Collections.synchronizedList(new ArrayList<Throwable>());
 
     private Resource archiveFile;
-    
+
     private Filter filter;
-    
+
     /**
      * Default Constructor
-     * 
+     *
      * @param jobExecution
      */
     public AbstractExecutionAdapter(JobExecution jobExecution, Integer totalNumberOfSteps) {
@@ -70,7 +69,7 @@ public abstract class AbstractExecutionAdapter {
 
     /**
      * The Unique Job Execution ID
-     * 
+     *
      * @return
      */
     public Long getId() {
@@ -91,7 +90,7 @@ public abstract class AbstractExecutionAdapter {
 
     /**
      * The Spring Batch {@link JobParameters}
-     * 
+     *
      * @return JobParameters of the enclosing job
      */
     public JobParameters getJobParameters() {
@@ -100,7 +99,7 @@ public abstract class AbstractExecutionAdapter {
 
     /**
      * The Spring Batch Job TimeStamp
-     * 
+     *
      * @return
      */
     public Date getTime() {
@@ -109,9 +108,9 @@ public abstract class AbstractExecutionAdapter {
 
     /**
      * The Spring Batch {@link BatchStatus}
-     * 
+     * <p>
      * ABANDONED COMPLETED FAILED STARTED STARTING STOPPED STOPPING UNKNOWN
-     * 
+     *
      * @return BatchStatus of the enclosing job
      */
     public BatchStatus getStatus() {
@@ -120,7 +119,7 @@ public abstract class AbstractExecutionAdapter {
 
     /**
      * The Spring Batch {@link ExitStatus}
-     * 
+     *
      * @return the exitCode of the enclosing job
      */
     public ExitStatus getExitStatus() {
@@ -129,25 +128,26 @@ public abstract class AbstractExecutionAdapter {
 
     /**
      * Set {@link ExitStatus} of the current Spring Batch Execution
+     *
      * @param exitStatus
      */
     public void setExitStatus(ExitStatus exitStatus) {
         delegate.setExitStatus(exitStatus);
     }
-    
+
     /**
      * Returns all {@link StepExecution}s of the current
      * Spring Batch Execution
-     * 
+     *
      * @return
      */
     public Collection<StepExecution> getStepExecutions() {
         return delegate.getStepExecutions();
     }
-    
+
     /**
      * The Spring Batch {@link JobInstance}
-     * 
+     *
      * @return the Job that is executing.
      */
     public JobInstance getJobInstance() {
@@ -157,7 +157,7 @@ public abstract class AbstractExecutionAdapter {
     /**
      * Test if this {@link JobExecution} indicates that it is running. It should be noted that this does not necessarily mean that it has been
      * persisted as such yet.
-     * 
+     *
      * @return true if the end time is null
      */
     public boolean isRunning() {
@@ -166,7 +166,7 @@ public abstract class AbstractExecutionAdapter {
 
     /**
      * Test if this {@link JobExecution} indicates that it has been signalled to stop.
-     * 
+     *
      * @return true if the status is {@link BatchStatus#STOPPING}
      */
     public boolean isStopping() {
@@ -193,7 +193,7 @@ public abstract class AbstractExecutionAdapter {
 
     /**
      * Adds exceptions to the current executions marking it as FAILED.
-     * 
+     *
      * @param exceptions
      */
     public void addFailureExceptions(List<Throwable> exceptions) {
@@ -206,7 +206,7 @@ public abstract class AbstractExecutionAdapter {
 
     /**
      * Adds exceptions to the current executions as Warnings.
-     * 
+     *
      * @param exceptions
      */
     public void addWarningExceptions(List<Throwable> exceptions) {
@@ -217,7 +217,7 @@ public abstract class AbstractExecutionAdapter {
 
     /**
      * Returns the total number of Job steps
-     * 
+     *
      * @return the totalNumberOfSteps
      */
     public Integer getTotalNumberOfSteps() {
@@ -226,7 +226,7 @@ public abstract class AbstractExecutionAdapter {
 
     /**
      * Returns the current number of executed steps.
-     * 
+     *
      * @return
      */
     public Integer getExecutedSteps() {
@@ -241,7 +241,6 @@ public abstract class AbstractExecutionAdapter {
     }
 
     /**
-     * 
      * @return
      */
     public String getProgress() {

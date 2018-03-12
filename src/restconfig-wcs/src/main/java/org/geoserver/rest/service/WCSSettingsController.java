@@ -41,9 +41,11 @@ public class WCSSettingsController extends ServiceSettingsController {
     private static final Logger LOGGER = Logging.getLogger(WCSSettingsController.class);
 
     @Autowired
-    public WCSSettingsController(GeoServer geoServer) { super(geoServer, WCSInfo.class); }
+    public WCSSettingsController(GeoServer geoServer) {
+        super(geoServer, WCSInfo.class);
+    }
 
-    @PutMapping( value = {"/settings", "/workspaces/{workspaceName}/settings"},
+    @PutMapping(value = {"/settings", "/workspaces/{workspaceName}/settings"},
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaTypeExtensions.TEXT_JSON_VALUE,
                     MediaType.APPLICATION_XML_VALUE, MediaType.TEXT_XML_VALUE})
     public void serviceSettingsPut(@RequestBody WCSInfo info,
@@ -64,7 +66,7 @@ public class WCSSettingsController extends ServiceSettingsController {
     @Override
     public void configurePersister(XStreamPersister persister, XStreamMessageConverter converter) {
         persister.setHideFeatureTypeAttributes();
-        persister.setCallback( new XStreamPersister.Callback() {
+        persister.setCallback(new XStreamPersister.Callback() {
             @Override
             protected ServiceInfo getServiceObject() {
                 Map<String, String> uriTemplateVars = (Map<String, String>) RequestContextHolder.getRequestAttributes().getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE, RequestAttributes.SCOPE_REQUEST);
@@ -78,6 +80,7 @@ public class WCSSettingsController extends ServiceSettingsController {
                 }
                 return service;
             }
+
             @Override
             protected Class<WCSInfo> getObjectClass() {
                 return WCSInfo.class;

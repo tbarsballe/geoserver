@@ -24,5 +24,5 @@ public class Utils {
         mapper.registerModule(module);
         return mapper.readValue(data, KombuMessage.class);
     }
-    
+
 }

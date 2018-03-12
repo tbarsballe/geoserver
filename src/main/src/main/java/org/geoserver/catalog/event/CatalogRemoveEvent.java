@@ -8,10 +8,9 @@ package org.geoserver.catalog.event;
 import org.geoserver.catalog.CatalogInfo;
 
 /**
- * Event for the removal of an object to the catalog. 
+ * Event for the removal of an object to the catalog.
  *
  * @author Justin Deoliveira, The Open Planning Project
- *
  */
 public interface CatalogRemoveEvent extends CatalogEvent {
 

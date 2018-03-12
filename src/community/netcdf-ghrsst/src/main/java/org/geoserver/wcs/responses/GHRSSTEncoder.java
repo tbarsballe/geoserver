@@ -221,7 +221,6 @@ public class GHRSSTEncoder extends AbstractNetCDFEncoder {
      */
     BandVariable[] bandVariables;
 
-    
 
     /**
      * {@link DefaultNetCDFEncoder} constructor.
@@ -284,7 +283,7 @@ public class GHRSSTEncoder extends AbstractNetCDFEncoder {
                 }
             }
             bandVariable.noDataValue = noDataValue;
-            
+
             // collect stats for data packing
             DataPacking.DataStats stats = null;
             DataPacking dataPacking = this.dataPacking;
@@ -307,7 +306,7 @@ public class GHRSSTEncoder extends AbstractNetCDFEncoder {
                         dataPacking = DataPacking.LONG;
                         break;
                     default:
-                        throw new IllegalArgumentException("Don't know how to handle packing for data type " + 
+                        throw new IllegalArgumentException("Don't know how to handle packing for data type " +
                                 varDataType);
                 }
             }
@@ -379,7 +378,7 @@ public class GHRSSTEncoder extends AbstractNetCDFEncoder {
 
             // Initialize the gridMapping part of the variable
             crsWriter.initializeGridMapping(var);
-            
+
             // Copy from source NetCDF
             if (copyAttributes || extraVariables != null && !extraVariables.isEmpty()) {
                 try (NetcdfDataset source = getSourceNetcdfDataset(sampleGranule)) {
@@ -408,7 +407,7 @@ public class GHRSSTEncoder extends AbstractNetCDFEncoder {
                             addValidMinMax(sourceVar, var, dataPacker, writer, NetCDFUtilities.VALID_MIN);
                             addValidMinMax(sourceVar, var, dataPacker, writer, NetCDFUtilities.VALID_MAX);
                         }
-                        
+
                         if (extraVariables != null) {
                             for (NetCDFSettingsContainer.ExtraVariable extra : extraVariables) {
                                 Variable sourceVar = source.findVariable(extra.getSource());
@@ -448,7 +447,7 @@ public class GHRSSTEncoder extends AbstractNetCDFEncoder {
                     }
                 }
             }
-            
+
             // Apply variable attributes from settings (allowing overwrite)
             if (variableAttributes != null) {
                 for (NetCDFSettingsContainer.VariableAttribute att : variableAttributes) {
@@ -458,7 +457,7 @@ public class GHRSSTEncoder extends AbstractNetCDFEncoder {
             }
         }
     }
-    
+
     private Double getDoubleAttribute(Variable sourceVar, String attributeName) {
         Attribute attribute = sourceVar.findAttribute(attributeName);
         if (attribute != null) {
@@ -536,7 +535,7 @@ public class GHRSSTEncoder extends AbstractNetCDFEncoder {
         }
         spatialDimensionSize[numDimensions - 2] = dimSize[numDimensions - 2];
         spatialDimensionSize[numDimensions - 1] = dimSize[numDimensions - 1];
-        
+
         writeNonScalarExtraVariables(dimName);
 
         // prepare writing matrices
@@ -610,13 +609,13 @@ public class GHRSSTEncoder extends AbstractNetCDFEncoder {
                     }
                 }
             }
-            
+
             // dump all collected matrices
             for (BandVariable bandVariable : bandVariables) {
-                writer.write(bandVariable.var, originIndexing, bandVariable.matrix);    
+                writer.write(bandVariable.var, originIndexing, bandVariable.matrix);
             }
             writer.flush();
-            
+
             // Finalize the iterator 
             data.done();
         }
@@ -666,7 +665,7 @@ public class GHRSSTEncoder extends AbstractNetCDFEncoder {
         addGlobalAttributesFromSettings();
     }
 
-    
+
     private DateRange getDatasetDateRange() {
         Date startDate = null;
         Date endDate = null;
@@ -738,5 +737,5 @@ public class GHRSSTEncoder extends AbstractNetCDFEncoder {
         return isoFormat.format(date);
     }
 
-   
+
 }

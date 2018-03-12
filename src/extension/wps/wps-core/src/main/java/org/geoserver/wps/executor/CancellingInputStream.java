@@ -14,9 +14,8 @@ import org.opengis.util.ProgressListener;
 /**
  * Wrapper class for input streams that will throw an exception when a process got cancelled while
  * loading the inputs
- * 
- * @author Andrea Aime - GeoSolutions
  *
+ * @author Andrea Aime - GeoSolutions
  */
 public class CancellingInputStream extends FilterInputStream {
 

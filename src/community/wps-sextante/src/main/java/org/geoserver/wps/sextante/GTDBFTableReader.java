@@ -17,133 +17,134 @@ import es.unex.sextante.outputs.FileOutputChannel;
 import es.unex.sextante.outputs.IOutputChannel;
 
 public class GTDBFTableReader
-         extends
-            AbstractTable {
+        extends
+        AbstractTable {
 
-   private String                m_sName;
-   private final String          m_sFilename;
-   private int                   m_iRecordCount;
-   private final DbaseFileReader m_BaseDataObject;
-
-
-   public GTDBFTableReader(final String sFilename) throws IOException {
-
-      final FileChannel in = new FileInputStream(sFilename).getChannel();
-      final DbaseFileReader r = new DbaseFileReader(in, false, Charset.defaultCharset());
-      m_BaseDataObject = r;
-      m_sFilename = sFilename;
-
-   }
+    private String m_sName;
+    private final String m_sFilename;
+    private int m_iRecordCount;
+    private final DbaseFileReader m_BaseDataObject;
 
 
-   private DbaseFileReader getDBFReader() {
+    public GTDBFTableReader(final String sFilename) throws IOException {
 
-      return m_BaseDataObject;
+        final FileChannel in = new FileInputStream(sFilename).getChannel();
+        final DbaseFileReader r = new DbaseFileReader(in, false, Charset.defaultCharset());
+        m_BaseDataObject = r;
+        m_sFilename = sFilename;
 
-   }
-
-
-   public void addRecord(final Object[] attributes) {
-   //this class is only for reading
-   }
+    }
 
 
-   public int getFieldCount() {
+    private DbaseFileReader getDBFReader() {
 
-      return getDBFReader().getHeader().getNumFields();
+        return m_BaseDataObject;
 
-   }
-
-
-   public String getFieldName(final int i) {
-
-      return getDBFReader().getHeader().getFieldName(i);
-
-   }
+    }
 
 
-   public Class getFieldType(final int i) {
-
-      return getDBFReader().getHeader().getFieldClass(i);
-
-   }
+    public void addRecord(final Object[] attributes) {
+        //this class is only for reading
+    }
 
 
-   public long getRecordCount() {
+    public int getFieldCount() {
 
-      return m_iRecordCount;
+        return getDBFReader().getHeader().getNumFields();
 
-   }
-
-
-   public IRecordsetIterator iterator() {
-
-      return new GTDBFIterator(getDBFReader());
-
-   }
+    }
 
 
-   public void close() {
+    public String getFieldName(final int i) {
 
-      try {
-         getDBFReader().close();
-      }
-      catch (final IOException e) {
-         // TODO Auto-generated catch block
-         e.printStackTrace();
-      }
+        return getDBFReader().getHeader().getFieldName(i);
 
-   }
+    }
 
 
-   public IOutputChannel getOutputChannel() {
+    public Class getFieldType(final int i) {
 
-      return new FileOutputChannel(m_sFilename);
+        return getDBFReader().getHeader().getFieldClass(i);
 
-   }
-
-
-   public String getName() {
-
-      return m_sName;
-
-   }
+    }
 
 
-   public void open() {
+    public long getRecordCount() {
 
-      m_iRecordCount = 0;
-      final DbaseFileReader reader = getDBFReader();
-      while (reader.hasNext()) {
-         try {
-            reader.readRow();
-         }
-         catch (final IOException e) {}
-         m_iRecordCount++;
-      }
+        return m_iRecordCount;
 
-   }
+    }
 
 
-   public void postProcess() throws Exception {}
+    public IRecordsetIterator iterator() {
+
+        return new GTDBFIterator(getDBFReader());
+
+    }
 
 
-   public void setName(final String name) {
+    public void close() {
 
-      m_sName = name;
+        try {
+            getDBFReader().close();
+        } catch (final IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
-   }
+    }
 
 
-   @Override
-   public void free() {}
+    public IOutputChannel getOutputChannel() {
+
+        return new FileOutputChannel(m_sFilename);
+
+    }
 
 
-   @Override
-   public Object getBaseDataObject() {
+    public String getName() {
 
-      return m_BaseDataObject;
+        return m_sName;
 
-   }
+    }
+
+
+    public void open() {
+
+        m_iRecordCount = 0;
+        final DbaseFileReader reader = getDBFReader();
+        while (reader.hasNext()) {
+            try {
+                reader.readRow();
+            } catch (final IOException e) {
+            }
+            m_iRecordCount++;
+        }
+
+    }
+
+
+    public void postProcess() throws Exception {
+    }
+
+
+    public void setName(final String name) {
+
+        m_sName = name;
+
+    }
+
+
+    @Override
+    public void free() {
+    }
+
+
+    @Override
+    public Object getBaseDataObject() {
+
+        return m_BaseDataObject;
+
+    }
 
 }

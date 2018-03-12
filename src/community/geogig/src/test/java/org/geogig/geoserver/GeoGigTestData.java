@@ -259,7 +259,7 @@ public class GeoGigTestData extends ExternalResource {
     /**
      * Inserts features in the working tree under the given parent tree path.
      * <p>
-     * The parent tree must exist. The {@code featureSpecs} are of the form {@code  featureSpec := 
+     * The parent tree must exist. The {@code featureSpecs} are of the form {@code  featureSpec :=
      * <id>=<attname>:<value>[;<attname>:<value>]+} . The parsing routine is as naive as it can be
      * so do not use any '=', ':', or ';' in the values.
      * <p>

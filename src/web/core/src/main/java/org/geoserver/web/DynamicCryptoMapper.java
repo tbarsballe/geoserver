@@ -16,7 +16,7 @@ import org.geoserver.security.GeoServerSecurityManager;
 /**
  * Switches between a normal mapper that does not add hash segments at the end of the url making bookmarkable
  * url actually stateless, and a crypto one that does it all
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 class DynamicCryptoMapper implements IRequestMapperDelegate {
@@ -32,7 +32,7 @@ class DynamicCryptoMapper implements IRequestMapperDelegate {
         // GeoServerCryptProvider cryptProvider = new GeoServerCryptProvider(securityManager);
         this.cryptoMapper = new CryptoMapper(plainMapper, application);
     }
-    
+
     IRequestMapper getMapper() {
         if (securityManager.isEncryptingUrlParams()) {
             return cryptoMapper;
@@ -40,7 +40,7 @@ class DynamicCryptoMapper implements IRequestMapperDelegate {
             return plainMapper;
         }
     }
-    
+
     public IRequestHandler mapRequest(Request request) {
         return getMapper().mapRequest(request);
     }
@@ -57,9 +57,6 @@ class DynamicCryptoMapper implements IRequestMapperDelegate {
     public IRequestMapper getDelegateMapper() {
         return getMapper();
     }
-    
-    
 
-    
-    
+
 }

@@ -16,9 +16,8 @@ import org.eclipse.emf.ecore.EObject;
 
 /**
  * Property of an Update element in a Transaction.
- * 
- * @author Justin Deoliveira, OpenGeo
  *
+ * @author Justin Deoliveira, OpenGeo
  */
 public abstract class Property extends RequestObject {
 
@@ -33,11 +32,10 @@ public abstract class Property extends RequestObject {
     public void setValue(Object value) {
         eSet(adaptee, "value", value);
     }
-    
+
     public abstract QName getName();
 
     public abstract void setName(QName name);
-
 
 
     public static class WFS11 extends Property {
@@ -62,7 +60,7 @@ public abstract class Property extends RequestObject {
             return p;
         }
     }
-    
+
     public static class WFS20 extends Property {
         public WFS20(EObject adaptee) {
             super(adaptee);

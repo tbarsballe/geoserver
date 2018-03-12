@@ -49,8 +49,8 @@ import org.springframework.core.io.Resource;
 
 /**
  * Based on original {@link BoshEndpoint}, which uses an old version of jetty-server and jetty-security.
- * 
- * 
+ * <p>
+ * <p>
  * Allows HTTP clients to communicate via the BOSH protocol with Vysper.
  * <p>
  * See http://xmpp.org/extensions/xep-0124.html and http://xmpp.org/extensions/xep-0206.html
@@ -83,7 +83,7 @@ public class XMPPBoshEndpoint implements Endpoint {
 
     /**
      * Setter for the listen port
-     * 
+     *
      * @param port
      */
     public void setPort(int port) {
@@ -94,22 +94,22 @@ public class XMPPBoshEndpoint implements Endpoint {
      * Configures the SSL keystore
      * <p>
      * Required if SSL is enabled. Also, setting the keystore password is required.
-     * 
-     * @see #setSSLCertificateKeystorePassword
+     *
      * @param keystorePath the path to the Java keystore
-     * @throws IOException 
+     * @throws IOException
+     * @see #setSSLCertificateKeystorePassword
      */
     public void setSSLCertificateKeystore(Resource keystorePath) throws IOException {
         sslKeystorePath = keystorePath.getFile().getAbsolutePath();
     }
-    
+
     /**
      * Configures the SSL keystore
      * <p>
      * Required if SSL is enabled. Also, setting the keystore password is required.
-     * 
-     * @see #setSSLCertificateKeystorePassword
+     *
      * @param keystorePath the path to the Java keystore
+     * @see #setSSLCertificateKeystorePassword
      */
     public void setSSLCertificateKeystore(String keystorePath) {
         sslKeystorePath = keystorePath;
@@ -121,7 +121,7 @@ public class XMPPBoshEndpoint implements Endpoint {
      * Required if SSL is enabled. Also, the keystore must be set using {@link #setSSLCertificateKeystore(String)} } The password is used both for
      * accessing the keystore and for recovering the key from the keystore. The unique password is a limitation, you cannot use different passwords
      * for the keystore and for the key.
-     * 
+     *
      * @param password the password used as the keystore password and also used when recovering the key from the keystore
      */
     public void setSSLCertificateKeystorePassword(String password) {
@@ -132,7 +132,7 @@ public class XMPPBoshEndpoint implements Endpoint {
      * Enables/disables SSL for this endpoint.
      * <p>
      * If SSL is enabled it requires SSL certificate information that can be configured with {@link #setSSLCertificateInfo(String, String)}
-     * 
+     *
      * @param value
      */
     public void setSSLEnabled(boolean value) {
@@ -141,7 +141,7 @@ public class XMPPBoshEndpoint implements Endpoint {
 
     /**
      * Get the list of domains allowed to access this endpoint
-     * 
+     *
      * @return The list of allowed domains
      */
     public List<String> getAccessControlAllowOrigin() {
@@ -150,7 +150,7 @@ public class XMPPBoshEndpoint implements Endpoint {
 
     /**
      * Set the list of domains allowed to access this endpoint
-     * 
+     *
      * @param accessControlAllowOrigin The list of allowed domains
      */
     public void setAccessControlAllowOrigin(List<String> accessControlAllowOrigin) {
@@ -159,7 +159,7 @@ public class XMPPBoshEndpoint implements Endpoint {
 
     /**
      * Determines the context URI where the BOSH transport will be accessible. The default is as 'root context' under '/'.
-     * 
+     *
      * @param contextPath
      */
     public void setContextPath(String contextPath) {
@@ -171,13 +171,13 @@ public class XMPPBoshEndpoint implements Endpoint {
     /**
      * create a basic Jetty server including a connector on the configured port override in subclass to create a different kind of setup or to reuse
      * an existing instance
-     * 
+     *
      * @return
      */
     protected Server createJettyServer() {
         Server server = new Server();
         ServerConnector connector;
-        
+
         // HTTP Configuration
         // HttpConfiguration is a collection of configuration information
         // appropriate for http and https. The default scheme for http is
@@ -188,7 +188,7 @@ public class XMPPBoshEndpoint implements Endpoint {
         http_config.setSecureScheme("https");
         http_config.setSecurePort(port);
         http_config.setOutputBufferSize(32768);
-        
+
         if (isSSLEnabled) {
             // SSL Context Factory for HTTPS
             // SSL requires a certificate so we configure a factory for ssl contents
@@ -200,7 +200,7 @@ public class XMPPBoshEndpoint implements Endpoint {
             sslContextFactory.setKeyStorePath(sslKeystorePath);
             sslContextFactory.setKeyManagerPassword(sslKeystorePassword);
             sslContextFactory.setKeyStorePassword(sslKeystorePassword);
-            
+
             // HTTPS Configuration
             // A new HttpConfiguration object is needed for the next connector and
             // you can pass the old one as an argument to effectively clone the
@@ -213,13 +213,13 @@ public class XMPPBoshEndpoint implements Endpoint {
             // src.setStsMaxAge(2000);
             // src.setStsIncludeSubDomains(true);
             https_config.addCustomizer(src);
-            
+
             // HTTPS connector
             // We create a second ServerConnector, passing in the http configuration
             // we just made along with the previously created ssl context factory.
             // Next we set the port and a longer idle timeout.
             connector = new ServerConnector(server,
-                new SslConnectionFactory(sslContextFactory, HttpVersion.HTTP_1_1.asString()),
+                    new SslConnectionFactory(sslContextFactory, HttpVersion.HTTP_1_1.asString()),
                     new HttpConnectionFactory(https_config));
             connector.setIdleTimeout(500000);
         } else {
@@ -228,14 +228,14 @@ public class XMPPBoshEndpoint implements Endpoint {
             connector.setIdleTimeout(30000);
         }
         connector.setPort(port);
-        server.setConnectors(new Connector[] { connector });
+        server.setConnectors(new Connector[]{connector});
         return server;
     }
 
     /**
      * create handler for BOSH. for a different handler setup, override in a subclass. for more than one handler, add them to a
      * org.eclipse.jetty.server.handler.ContextHandlerCollection and return the collection
-     * 
+     *
      * @return
      */
     protected Handler createHandler() {

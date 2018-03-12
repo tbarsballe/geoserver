@@ -18,7 +18,9 @@ import java.util.logging.Logger;
 
 public class JsgiRequest extends ScriptableObject {
 
-    /** serialVersionUID */
+    /**
+     * serialVersionUID
+     */
     private static final long serialVersionUID = 1L;
 
     static Logger LOGGER = Logging.getLogger("org.geoserver.script.js");
@@ -26,7 +28,7 @@ public class JsgiRequest extends ScriptableObject {
     /**
      * Generates a JavaScript object that conforms to the JSGI spec.
      * http://wiki.commonjs.org/wiki/JSGI/Level0/A/Draft2
-     * 
+     *
      * @param request
      * @param response
      * @param cx
@@ -69,7 +71,7 @@ public class JsgiRequest extends ScriptableObject {
         // create jsgi object
         Scriptable jsgiObject = cx.newObject(scope);
         int readonly = ScriptableObject.PERMANENT | ScriptableObject.READONLY;
-        Scriptable version = cx.newArray(scope, new Object[] {Integer.valueOf(0), Integer.valueOf(3)});
+        Scriptable version = cx.newArray(scope, new Object[]{Integer.valueOf(0), Integer.valueOf(3)});
         ScriptableObject.defineProperty(jsgiObject, "version", version, readonly);
         ScriptableObject.defineProperty(jsgiObject, "multithread", Boolean.TRUE, readonly);
         ScriptableObject.defineProperty(jsgiObject, "multiprocess", Boolean.FALSE, readonly);
@@ -83,7 +85,7 @@ public class JsgiRequest extends ScriptableObject {
         env.put("servletRequest", env, Context.javaToJS(request, scope));
         env.put("servletResponse", env, Context.javaToJS(response, scope));
         this.put("env", this, env);
-        
+
     }
 
     @Override

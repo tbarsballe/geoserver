@@ -168,7 +168,7 @@ public class ServiceInfoImpl implements ServiceInfo {
     public void setVersions(List versions) {
         this.versions = versions;
     }
-    
+
     public List getExceptionFormats() {
         return exceptionFormats;
     }
@@ -251,7 +251,7 @@ public class ServiceInfoImpl implements ServiceInfo {
         result = prime
                 * result
                 + ((accessConstraints == null) ? 0 : accessConstraints
-                        .hashCode());
+                .hashCode());
         result = prime * result + (citeCompliant ? 1231 : 1237);
         result = prime * result + (enabled ? 1231 : 1237);
         result = prime
@@ -284,10 +284,10 @@ public class ServiceInfoImpl implements ServiceInfo {
             return true;
         if (obj == null)
             return false;
-        if (!( obj instanceof ServiceInfo ) ) {
+        if (!(obj instanceof ServiceInfo)) {
             return false;
         }
-        
+
         final ServiceInfo other = (ServiceInfo) obj;
         if (abstrct == null) {
             if (other.getAbstract() != null)

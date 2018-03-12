@@ -31,7 +31,7 @@ public class OseoJSONConverter extends BaseMessageConverter<Object> {
     public OseoJSONConverter() {
         super(MediaType.APPLICATION_JSON);
     }
-    
+
     @Override
     protected boolean supports(Class clazz) {
         return (OgcLinks.class.isAssignableFrom(clazz)

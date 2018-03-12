@@ -26,14 +26,14 @@ public class Database extends ImportData {
     /**
      * Database connection parameters
      */
-    Map<String,Serializable> parameters;
+    Map<String, Serializable> parameters;
 
     /**
      * List of tables
      */
     List<Table> tables = new ArrayList<Table>();
 
-    public Database(Map<String,Serializable> parameters) {
+    public Database(Map<String, Serializable> parameters) {
         this.parameters = parameters;
     }
 
@@ -47,7 +47,7 @@ public class Database extends ImportData {
 
     @Override
     public String getName() {
-        String database = (String) parameters.get(JDBCDataStoreFactory.DATABASE.key); 
+        String database = (String) parameters.get(JDBCDataStoreFactory.DATABASE.key);
         if (database != null) {
             //file based databases might be a full path to a file (sqlite, h2, etc..) use only 
             // the last part
@@ -62,7 +62,7 @@ public class Database extends ImportData {
     @Override
     public void prepare(ProgressMonitor m) throws IOException {
         tables = new ArrayList<Table>();
-        DataStoreFactorySpi factory = 
+        DataStoreFactorySpi factory =
                 (DataStoreFactorySpi) DataStoreUtils.aquireFactory(parameters);
         if (factory == null) {
             throw new IOException("Unable to find data store for specified parameters");
@@ -82,12 +82,11 @@ public class Database extends ImportData {
                 tbl.setFormat(format);
                 tables.add(tbl);
             }
-        }
-        finally {
+        } finally {
             //TODO: cache the datastore for subsquent calls
             store.dispose();
         }
-        
+
     }
 
     @Override
@@ -125,7 +124,7 @@ public class Database extends ImportData {
             }
         });
     }
-    
+
     private Object readResolve() {
         tables = tables != null ? tables : new ArrayList();
         return this;

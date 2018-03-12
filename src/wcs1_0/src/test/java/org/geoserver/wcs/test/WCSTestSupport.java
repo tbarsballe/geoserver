@@ -33,9 +33,8 @@ import org.w3c.dom.NodeList;
 
 /**
  * Base support class for wcs tests.
- * 
+ *
  * @author Andrea Aime, TOPP
- * 
  */
 public abstract class WCSTestSupport extends CoverageTestSupport {
     protected static XpathEngine xpath;
@@ -127,13 +126,13 @@ public abstract class WCSTestSupport extends CoverageTestSupport {
         }
         return null;
     }
-    
+
     protected void setupRasterDimension(QName layer, String metadata, DimensionPresentation presentation, Double resolution) {
         CoverageInfo info = getCatalog().getCoverageByName(layer.getLocalPart());
         DimensionInfo di = new DimensionInfoImpl();
         di.setEnabled(true);
         di.setPresentation(presentation);
-        if(resolution != null) {
+        if (resolution != null) {
             di.setResolution(new BigDecimal(resolution));
         }
         info.getMetadata().put(metadata, di);

@@ -31,9 +31,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @Controller
 @RequestMapping("/taskmanager-import")
 public class ImportTool {
-    
+
     private static final Logger LOGGER = Logging.getLogger(ImportTool.class);
-            
+
     @Autowired
     private TaskManagerDao dao;
 
@@ -45,31 +45,31 @@ public class ImportTool {
 
     @Autowired
     private BatchJobService bjService;
-    
+
     private static final String SPLIT_BY = ";";
-    
+
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "/{template}", method = RequestMethod.POST)
     public void doImportWithTemplate(@PathVariable String template, @RequestBody String csvFile) throws IOException {
-              
+
         if (!SecurityContextHolder.getContext().getAuthentication().getAuthorities()
                 .contains(GeoServerRole.ADMIN_ROLE)) {
             throw new AccessDeniedException("You must be administrator.");
         }
-        
+
         try (Scanner scanner = new Scanner(csvFile)) {
             if (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
                 String[] attNames = line.split(SPLIT_BY);
-                
+
                 while (scanner.hasNextLine()) {
                     line = scanner.nextLine();
                     String[] split = line.split(SPLIT_BY);
                     Map<String, String> record = new HashMap<String, String>();
-                    for (int i = 0 ; i < Math.min(attNames.length, split.length); i++) {
+                    for (int i = 0; i < Math.min(attNames.length, split.length); i++) {
                         record.put(attNames[i], split[i]);
                     }
-                    
+
                     String configName = record.remove("name");
                     Configuration config = dao.getConfiguration(configName);
                     if (config == null) {
@@ -83,29 +83,29 @@ public class ImportTool {
                     if (record.containsKey("workspace")) {
                         config.setWorkspace(record.remove("workspace"));
                     }
-                    
-                    for (Map.Entry<String, String> entry : record.entrySet())  {
+
+                    for (Map.Entry<String, String> entry : record.entrySet()) {
                         dataUtil.setConfigurationAttribute(config, entry.getKey(), entry.getValue());
                     }
-                    
+
                     List<ValidationError> errors = taskUtil.validate(config);
                     if (!errors.isEmpty()) {
                         for (ValidationError error : errors) {
                             LOGGER.warning("Failed to import configuration " + config.getName() +
                                     ", validation error: " + error.toString());
                         }
-                    } else {    
+                    } else {
                         try {
                             bjService.saveAndSchedule(config);
                         } catch (Exception e) {
-                            LOGGER.log(Level.WARNING, 
+                            LOGGER.log(Level.WARNING,
                                     "Failed to import configuration " + config.getName(), e);
                         }
                     }
-                }            
+                }
             }
         }
-        
+
     }
 
 }

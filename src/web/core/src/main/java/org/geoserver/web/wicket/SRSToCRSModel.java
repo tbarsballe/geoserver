@@ -20,19 +20,19 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 public class SRSToCRSModel implements IModel<CoordinateReferenceSystem> {
     private static final long serialVersionUID = 1887687559796645124L;
     private static final Logger LOGGER = Logging.getLogger(SRSToCRSModel.class);
-    IModel<String> srsModel; 
-    
+    IModel<String> srsModel;
+
     public SRSToCRSModel(IModel<String> srsModel) {
         this.srsModel = srsModel;
     }
 
     public CoordinateReferenceSystem getObject() {
         String srs = (String) srsModel.getObject();
-        if(srs == null || "UNKNOWN".equals(srs))
+        if (srs == null || "UNKNOWN".equals(srs))
             return null;
         try {
             return CRS.decode(srs);
-        } catch(Exception e) {
+        } catch (Exception e) {
             return null;
         }
     }
@@ -43,15 +43,15 @@ public class SRSToCRSModel implements IModel<CoordinateReferenceSystem> {
             Integer epsgCode = CRS.lookupEpsgCode(crs, false);
             String srs = epsgCode != null ? "EPSG:" + epsgCode : null;
             srsModel.setObject(srs);
-        } catch(Exception e) {
+        } catch (Exception e) {
             LOGGER.log(Level.INFO, "Failed to lookup the SRS code for " + crs);
             srsModel.setObject(null);
         }
-        
+
     }
 
     public void detach() {
         srsModel.detach();
     }
-    
+
 }

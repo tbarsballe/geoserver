@@ -34,16 +34,16 @@ public class DescribeCoverageTest extends WCSTestSupport {
     @Test
     public void testDescribeCoverageSimple() throws Exception {
 
-        final File xml= new File("./src/test/resources/testDescribeCoverage.xml");
-        final String request= FileUtils.readFileToString(xml);                
-        
+        final File xml = new File("./src/test/resources/testDescribeCoverage.xml");
+        final String request = FileUtils.readFileToString(xml);
+
         Document dom = postAsDOM("wcs", request);
         assertNotNull(dom);
         // print(dom, System.out);
-        
+
         // validate
         checkValidationErrors(dom, WCS20_SCHEMA);
-        
+
         // check it is good
         assertXpathEvaluatesTo("wcs__BlueMarble", "//wcs:CoverageDescription//wcs:CoverageId", dom);
         assertXpathEvaluatesTo("3", "count(//wcs:CoverageDescription//gmlcov:rangeType//swe:DataRecord//swe:field)", dom);
@@ -52,18 +52,17 @@ public class DescribeCoverageTest extends WCSTestSupport {
         assertXpathEvaluatesTo("-43.0020833333312 146.5020833333281", "//wcs:CoverageDescriptions//wcs:CoverageDescription[1]//gml:domainSet//gml:RectifiedGrid//gml:origin//gml:Point//gml:pos", dom);
 
     }
-    
-    
-    
+
+
     @Test
     public void testDescribeCoverageMultiband() throws Exception {
-        final File xml= new File("./src/test/resources/testDescribeCoverageMultiBand.xml");
-        final String request= FileUtils.readFileToString(xml);  
-        
+        final File xml = new File("./src/test/resources/testDescribeCoverageMultiBand.xml");
+        final String request = FileUtils.readFileToString(xml);
+
         Document dom = postAsDOM("wcs", request);
         assertNotNull(dom);
         // print(dom, System.out);
-        
+
         checkValidationErrors(dom, WCS20_SCHEMA);
 
         // check it is good

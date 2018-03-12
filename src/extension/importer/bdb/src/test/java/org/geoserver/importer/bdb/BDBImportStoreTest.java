@@ -37,15 +37,15 @@ public class BDBImportStoreTest extends ImporterTestSupport {
     @Parameters(name = "{0}")
     public static Collection<Object[]> data() {
         List<Object[]> result = new ArrayList<>();
-        result.add(new Object[] { "serial", BindingType.SERIAL });
-        result.add(new Object[] { "xstream", BindingType.XSTREAM });
+        result.add(new Object[]{"serial", BindingType.SERIAL});
+        result.add(new Object[]{"xstream", BindingType.XSTREAM});
 
         return result;
     }
 
     BDBImportStore store;
     File dbRoot;
-    
+
     private BindingType bindingType;
 
     public BDBImportStoreTest(String name, BindingType bindingType) {
@@ -59,11 +59,11 @@ public class BDBImportStoreTest extends ImporterTestSupport {
         store.init();
         dbRoot = new File(importer.getImportRoot(), "bdb");
     }
-    
+
     // in order to test this, run once, then change the serialVersionUID of ImportContext2
     @Test
     public void testSerialVersionUIDChange() throws Exception {
-        Importer imp =  new Importer(null) {
+        Importer imp = new Importer(null) {
 
             @Override
             public File getImportRoot() {
@@ -71,7 +71,7 @@ public class BDBImportStoreTest extends ImporterTestSupport {
                 root.mkdirs();
                 return root;
             }
-            
+
         };
         ImportContext ctx = new ImportContext2();
         ctx.setState(ImportContext.State.PENDING);
@@ -80,19 +80,19 @@ public class BDBImportStoreTest extends ImporterTestSupport {
         try {
             store.init();
             store.add(ctx);
-            
+
             Iterator<ImportContext> iterator = store.iterator();
             while (iterator.hasNext()) {
                 ctx = iterator.next();
                 assertEquals("fooboo", ctx.getUser());
             }
-            
+
             store.add(ctx);
-        } finally {        
+        } finally {
             store.destroy();
         }
     }
-    
+
     public static class ImportContext2 extends ImportContext {
         private static final long serialVersionUID = 12345;
     }
@@ -102,12 +102,12 @@ public class BDBImportStoreTest extends ImporterTestSupport {
         File dir = unpack("shape/archsites_epsg_prj.zip");
         ImportContext context = importer.createContext(new Directory(dir));
 
-        assertEquals(1,context.getTasks().size());
+        assertEquals(1, context.getTasks().size());
         for (int i = 0; i < context.getTasks().size(); i++) {
             assertNotNull(context.getTasks().get(i).getStore());
             assertNotNull(context.getTasks().get(i).getStore().getCatalog());
         }
-        
+
         // @todo commented these out as importer.createContext adds to the store
 //        assertNull(context.getId());
 
@@ -125,15 +125,15 @@ public class BDBImportStoreTest extends ImporterTestSupport {
 
         store.query(cv);
         assertEquals(1, cv.getCount());
-        
+
         SearchingVisitor sv = new SearchingVisitor(context.getId());
         store.query(sv);
         assertTrue(sv.isFound());
-        
+
         importer.reattach(context2);
 
         // ensure various transient bits are set correctly on deserialization
-        assertEquals(1,context2.getTasks().size());
+        assertEquals(1, context2.getTasks().size());
         for (int i = 0; i < context2.getTasks().size(); i++) {
             assertNotNull(context2.getTasks().get(i).getStore());
             assertNotNull(context2.getTasks().get(i).getStore().getCatalog());
@@ -178,9 +178,9 @@ public class BDBImportStoreTest extends ImporterTestSupport {
 
     @Test
     public void testDatabaseRecovery() throws Exception {
-        
+
     }
-    
+
     @Test
     public void testIDManagement() throws Exception {
         // verify base - first one is zero
@@ -213,11 +213,13 @@ public class BDBImportStoreTest extends ImporterTestSupport {
         SearchingVisitor(long id) {
             this.id = id;
         }
+
         public void visit(ImportContext context) {
             if (context.getId().longValue() == id) {
                 found = true;
             }
         }
+
         public boolean isFound() {
             return found;
         }
@@ -228,6 +230,6 @@ public class BDBImportStoreTest extends ImporterTestSupport {
         store.destroy();
         // clean up the databse       
         FileUtils.deleteDirectory(dbRoot);
-        
+
     }
 }

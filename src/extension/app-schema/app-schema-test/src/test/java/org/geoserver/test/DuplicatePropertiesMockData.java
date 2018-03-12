@@ -10,9 +10,9 @@ import org.geoserver.data.test.MockData;
 
 /**
  * Mock data for testing duplicate properties found in WFS output
- * 
+ * <p>
  * Inspired by {@link MockData}.
- * 
+ *
  * @author Florence Tan, CSIRO Earth Science and Resource Engineering
  */
 public class DuplicatePropertiesMockData extends AbstractAppSchemaMockData {
@@ -34,7 +34,7 @@ public class DuplicatePropertiesMockData extends AbstractAppSchemaMockData {
     public void addContent() {
         putNamespace(EX_PREFIX, EX_URI);
         addFeatureType(EX_PREFIX, "ERM", "duplicateProperties.xml",
-                "duplicateProperties.properties", "duplicateProperties.xsd");        
+                "duplicateProperties.properties", "duplicateProperties.xsd");
     }
 
 }

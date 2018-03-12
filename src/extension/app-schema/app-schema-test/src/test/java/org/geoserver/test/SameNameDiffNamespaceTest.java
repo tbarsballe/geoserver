@@ -12,9 +12,8 @@ import org.junit.Test;
 
 /**
  * Tests whether two 'name' properties with different namespace are properly encoded
- * 
+ *
  * @author Niels Charlier, Curtin University of Technology
- * 
  */
 public class SameNameDiffNamespaceTest extends AbstractAppSchemaTestSupport {
 
@@ -22,7 +21,7 @@ public class SameNameDiffNamespaceTest extends AbstractAppSchemaTestSupport {
     protected SameNameDiffNamespaceMockData createTestData() {
         return new SameNameDiffNamespaceMockData();
     }
-       
+
     /**
      * Test GetFeature with two 'name' properties with different namespace.
      */
@@ -32,7 +31,7 @@ public class SameNameDiffNamespaceTest extends AbstractAppSchemaTestSupport {
         LOGGER.info("WFS GetFeature response:\n" + prettyString(doc));
         assertXpathCount(1, "//ex:MyTestFeature[@gml:id='f1']/gml:name", doc);
         assertXpathCount(1, "//ex:MyTestFeature[@gml:id='f1']/ex:name", doc);
-        
+
     }
-    
+
 }

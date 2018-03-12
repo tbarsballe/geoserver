@@ -27,19 +27,20 @@ import org.xml.sax.helpers.AttributesImpl;
 /**
  * <code>org.geotools.xml.transform.TransformerBase</code> specialized in producing a WMS
  * DescribeLayer responses.
- * 
+ *
  * @author Gabriel Roldan
  * @version $Id$
  */
 public class DescribeLayerTransformer extends TransformerBase {
-    /** The base url upon URLs which point to 'me' should be based. */
+    /**
+     * The base url upon URLs which point to 'me' should be based.
+     */
     private String baseURL;
 
     /**
      * Creates a new DescribeLayerTransformer object.
-     * 
-     * @param serverBaseUrl
-     *            the base URL, usually "http://host:port/geoserver"
+     *
+     * @param serverBaseUrl the base URL, usually "http://host:port/geoserver"
      */
     public DescribeLayerTransformer(final String baseURL) {
         if (baseURL == null) {
@@ -51,10 +52,8 @@ public class DescribeLayerTransformer extends TransformerBase {
 
     /**
      * Creates and returns a Translator specialized in producing a DescribeLayer response document.
-     * 
-     * @param handler
-     *            the content handler to send sax events to.
-     * 
+     *
+     * @param handler the content handler to send sax events to.
      * @return a new <code>DescribeLayerTranslator</code>
      */
     public Translator createTranslator(ContentHandler handler) {
@@ -64,16 +63,14 @@ public class DescribeLayerTransformer extends TransformerBase {
     /**
      * Gets the <code>Transformer</code> created by the overriden method in the superclass and adds
      * it the DOCTYPE token pointing to the DescribeLayer DTD on this server instance.
-     * 
+     * <p>
      * <p>
      * The DTD is set at the fixed location given by the <code>schemaBaseUrl</code> passed to the
      * constructor <code>+ "wms/1.1.1/WMS_DescribeLayerResponse.dtd</code>.
      * </p>
-     * 
+     *
      * @return a Transformer propoerly configured to produce DescribeLayer responses.
-     * 
-     * @throws TransformerException
-     *             if it is thrown by <code>super.createTransformer()</code>
+     * @throws TransformerException if it is thrown by <code>super.createTransformer()</code>
      */
     public Transformer createTransformer() throws TransformerException {
         Transformer transformer = super.createTransformer();
@@ -85,7 +82,7 @@ public class DescribeLayerTransformer extends TransformerBase {
 
     /**
      * Sends SAX events to produce a DescribeLayer response document.
-     * 
+     *
      * @author Gabriel Roldan
      * @version $Id$
      */
@@ -99,12 +96,9 @@ public class DescribeLayerTransformer extends TransformerBase {
 
         /**
          * Encode the object.
-         * 
-         * @param o
-         *            The {@link DescribeLayerRequest} to encode a DescribeLayer response for
-         * 
-         * @throws IllegalArgumentException
-         *             if the Object is not encodeable.
+         *
+         * @param o The {@link DescribeLayerRequest} to encode a DescribeLayer response for
+         * @throws IllegalArgumentException if the Object is not encodeable.
          */
         public void encode(Object o) throws IllegalArgumentException {
             if (!(o instanceof DescribeLayerRequest)) {
@@ -131,7 +125,7 @@ public class DescribeLayerTransformer extends TransformerBase {
         /**
          * As currently GeoServer does not have support for nested layers, this method declares a
          * <code>LayerDescription</code> element for each featuretype requested.
-         * 
+         *
          * @param req
          */
         private void handleLayers(DescribeLayerRequest req) {
@@ -142,7 +136,7 @@ public class DescribeLayerTransformer extends TransformerBase {
             AttributesImpl queryAtts = new AttributesImpl();
             queryAtts.addAttribute("", "typeName", "typeName", "", "");
 
-            for (Iterator it = layers.iterator(); it.hasNext();) {
+            for (Iterator it = layers.iterator(); it.hasNext(); ) {
                 layer = (MapLayerInfo) it.next();
 
                 AttributesImpl layerAtts = new AttributesImpl();

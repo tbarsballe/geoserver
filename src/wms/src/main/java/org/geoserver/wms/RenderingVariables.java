@@ -13,7 +13,7 @@ import org.geotools.util.logging.Logging;
 
 /**
  * Helper that injects enviroment variables in the {@link EnvFunction} given a map context
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class RenderingVariables {

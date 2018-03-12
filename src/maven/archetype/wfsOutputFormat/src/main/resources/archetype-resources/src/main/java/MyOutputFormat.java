@@ -5,14 +5,14 @@
  */
 package ${groupId};
 
-import java.io.IOException;
-import java.io.OutputStream;
+        import java.io.IOException;
+        import java.io.OutputStream;
 
-import net.opengis.wfs.FeatureCollectionType;
+        import net.opengis.wfs.FeatureCollectionType;
 
-import org.geoserver.platform.Operation;
-import org.geoserver.platform.ServiceException;
-import org.geoserver.wfs.WFSGetFeatureOutputFormat;
+        import org.geoserver.platform.Operation;
+        import org.geoserver.platform.ServiceException;
+        import org.geoserver.wfs.WFSGetFeatureOutputFormat;
 
 public class MyOutputFormat extends WFSGetFeatureOutputFormat {
 
@@ -31,7 +31,7 @@ public class MyOutputFormat extends WFSGetFeatureOutputFormat {
         // class returns 'text/xml'
         return super.getMimeType(value, operation);
     }
-    
+
     @Override
     protected boolean canHandleInternal(Operation operation) {
         //any additional checks that need to be performed to 
@@ -39,10 +39,10 @@ public class MyOutputFormat extends WFSGetFeatureOutputFormat {
         // should go here
         return super.canHandleInternal(operation);
     }
-    
+
     @Override
     protected void write(FeatureCollectionType featureCollection,
-            OutputStream output, Operation getFeature) throws IOException,
+                         OutputStream output, Operation getFeature) throws IOException,
             ServiceException {
         //write out content here
     }

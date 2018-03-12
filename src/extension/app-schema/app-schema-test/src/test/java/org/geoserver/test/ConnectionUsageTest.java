@@ -66,7 +66,7 @@ public class ConnectionUsageTest extends AbstractAppSchemaTestSupport {
     public void testConnectionSharedAmongNestedIterators() throws Exception {
         PropertyIsEqualTo equals = ff
                 .equals(ff
-                        .property("ex:nestedFeature/ex:ConnectionUsageFirstNested/ex:nestedFeature/ex:ConnectionUsageSecondNested/gml:name"),
+                                .property("ex:nestedFeature/ex:ConnectionUsageFirstNested/ex:nestedFeature/ex:ConnectionUsageSecondNested/gml:name"),
                         ff.literal("C_nested_second"));
 
         try (FeatureIterator fIt = mappingFs.getFeatures(equals).features()) {
@@ -84,7 +84,7 @@ public class ConnectionUsageTest extends AbstractAppSchemaTestSupport {
     public void testConnectionSharedIfTransactionIs() throws Exception {
         PropertyIsEqualTo equals = ff
                 .equals(ff
-                        .property("ex:nestedFeature/ex:ConnectionUsageFirstNested/ex:nestedFeature/ex:ConnectionUsageSecondNested/gml:name"),
+                                .property("ex:nestedFeature/ex:ConnectionUsageFirstNested/ex:nestedFeature/ex:ConnectionUsageSecondNested/gml:name"),
                         ff.literal("C_nested_second"));
 
         FeatureCollection fc = mappingFs.getFeatures(equals);
@@ -125,7 +125,7 @@ public class ConnectionUsageTest extends AbstractAppSchemaTestSupport {
     public void testConnectionNotSharedIfTransactionIsNot() throws Exception {
         PropertyIsEqualTo equals = ff
                 .equals(ff
-                        .property("ex:nestedFeature/ex:ConnectionUsageFirstNested/ex:nestedFeature/ex:ConnectionUsageSecondNested/gml:name"),
+                                .property("ex:nestedFeature/ex:ConnectionUsageFirstNested/ex:nestedFeature/ex:ConnectionUsageSecondNested/gml:name"),
                         ff.literal("C_nested_second"));
 
         FeatureCollection fc = mappingFs.getFeatures(equals);
@@ -171,7 +171,7 @@ public class ConnectionUsageTest extends AbstractAppSchemaTestSupport {
      * This test uses a conditionally joined feature with a broken mapping configuration to trigger
      * a RuntimeException when iterator.next() is called and verifies that no connection leak occurs,
      * even if the caller forgets to catch unchecked exceptions.
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -183,7 +183,7 @@ public class ConnectionUsageTest extends AbstractAppSchemaTestSupport {
         // feature type ex:ConnectionUsageThirdNested
         PropertyIsEqualTo equals = ff
                 .equals(ff
-                        .property("ex:nestedFeature/ex:ConnectionUsageFirstNested/ex:nestedFeature/ex:ConnectionUsageSecondNested/gml:name"),
+                                .property("ex:nestedFeature/ex:ConnectionUsageFirstNested/ex:nestedFeature/ex:ConnectionUsageSecondNested/gml:name"),
                         ff.literal("A_nested_second"));
 
         FeatureIterator fIt = mappingFs.getFeatures(equals).features();
@@ -254,7 +254,7 @@ public class ConnectionUsageTest extends AbstractAppSchemaTestSupport {
     }
 
     private void testNestedIteratorsRecursively(FeatureTypeMapping mapping,
-            DataAccessMappingFeatureIterator mappingIt) throws IOException {
+                                                DataAccessMappingFeatureIterator mappingIt) throws IOException {
         List<AttributeMapping> attrs = mapping.getAttributeMappings();
         assertTrue(attrs != null);
         assertTrue(attrs.size() > 0);

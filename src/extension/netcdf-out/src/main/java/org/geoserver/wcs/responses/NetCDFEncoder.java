@@ -26,7 +26,7 @@ public interface NetCDFEncoder {
 
     /**
      * Writes out the NetCDF file
-     * 
+     *
      * @throws IOException
      * @throws InvalidRangeException
      */
@@ -39,6 +39,7 @@ public interface NetCDFEncoder {
 
     /**
      * Extracts the NetCDF encoding settings out of the encoding parameters
+     *
      * @param encodingParameters
      * @return
      */
@@ -50,12 +51,13 @@ public interface NetCDFEncoder {
                 return getSettings(coverageId);
             }
         }
-        
+
         return null;
     }
 
     /**
      * Extracts the NetCDF encoding settings from the coverage identifier
+     *
      * @param coverageId
      * @return
      */
@@ -76,7 +78,7 @@ public interface NetCDFEncoder {
                     NetCDFLayerSettingsContainer.class);
             return settings;
         }
-        
+
         return null;
     }
 

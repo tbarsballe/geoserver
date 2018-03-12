@@ -50,11 +50,11 @@ import org.junit.Test;
 
 /**
  * Tests the WMS default value support for TIME dimension raster layers.
- * 
+ *
  * @author Ilkka Rinne <ilkka.rinne@spatineo.com>
  */
 public class RasterTimeDimensionDefaultValueTest extends WMSDimensionsTestSupport {
-    
+
     static final QName WATTEMP_FUTURE = new QName(MockData.SF_URI, "watertemp_future_generated",
             MockData.SF_PREFIX);
 
@@ -71,13 +71,13 @@ public class RasterTimeDimensionDefaultValueTest extends WMSDimensionsTestSuppor
     public void setup() throws Exception {
         wms = getWMS(); //with the initialized application context
     }
-   
-      
+
+
     @Test
     public void testDefaultTimeCoverageSelector() throws Exception {
         // Use default default value strategy: 
         setupResourceDimensionDefaultValue(WATTEMP_FUTURE, ResourceInfo.TIME, null);
-        
+
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.HOUR_OF_DAY, cal.getActualMinimum(Calendar.HOUR_OF_DAY));
         cal.set(Calendar.MINUTE, cal.getActualMinimum(Calendar.MINUTE));
@@ -91,7 +91,7 @@ public class RasterTimeDimensionDefaultValueTest extends WMSDimensionsTestSuppor
         assertTrue("Returns a valid Default time", d != null);
         assertTrue("Default time should be the closest one", d.getTime() == todayMidnight);
     }
-    
+
     @Test
     public void testExplicitCurrentTimeCoverageSelector() throws Exception {
         // Use explicit default value strategy: 
@@ -99,7 +99,7 @@ public class RasterTimeDimensionDefaultValueTest extends WMSDimensionsTestSuppor
         defaultValueSetting.setStrategyType(Strategy.NEAREST);
         defaultValueSetting.setReferenceValue(DimensionDefaultValueSetting.TIME_CURRENT);
         setupResourceDimensionDefaultValue(WATTEMP_FUTURE, ResourceInfo.TIME, defaultValueSetting);
-        
+
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.HOUR_OF_DAY, cal.getActualMinimum(Calendar.HOUR_OF_DAY));
         cal.set(Calendar.MINUTE, cal.getActualMinimum(Calendar.MINUTE));
@@ -113,7 +113,7 @@ public class RasterTimeDimensionDefaultValueTest extends WMSDimensionsTestSuppor
         assertTrue("Returns a valid Default time", d != null);
         assertTrue("Default time should be the closest one", d.getTime() == todayMidnight);
     }
-    
+
     @Test
     public void testFixedTimeRange() throws Exception {
         // Use explicit default value strategy: 
@@ -121,7 +121,7 @@ public class RasterTimeDimensionDefaultValueTest extends WMSDimensionsTestSuppor
         defaultValueSetting.setStrategyType(Strategy.FIXED);
         defaultValueSetting.setReferenceValue("P1M/PRESENT");
         setupResourceDimensionDefaultValue(WATTEMP_FUTURE, ResourceInfo.TIME, defaultValueSetting);
-        
+
         CoverageInfo coverage = getCatalog().getCoverageByName(WATTEMP_FUTURE.getLocalPart());
 
         // the default is a single value, as we get the nearest to the range
@@ -133,16 +133,16 @@ public class RasterTimeDimensionDefaultValueTest extends WMSDimensionsTestSuppor
         // the beginning
         assertDateEquals(new Date(curr.getTime() - 30l * MILLIS_IN_DAY), (java.util.Date) d.getMinValue(), 60000);
     }
-    
+
     @Test
     public void testExplicitMinTimeCoverageSelector() throws Exception {
         // Use explicit default value strategy: 
         DimensionDefaultValueSetting defaultValueSetting = new DimensionDefaultValueSetting();
         defaultValueSetting.setStrategyType(Strategy.MINIMUM);
         setupResourceDimensionDefaultValue(WATTEMP_FUTURE, ResourceInfo.TIME, defaultValueSetting);
-        
+
         //From src/test/resources/org/geoserver/wms/watertemp.zip:
-        Date expected = Date.valueOf("2008-10-31"); 
+        Date expected = Date.valueOf("2008-10-31");
 
         CoverageInfo coverage = getCatalog().getCoverageByName(WATTEMP_FUTURE.getLocalPart());
 
@@ -150,14 +150,14 @@ public class RasterTimeDimensionDefaultValueTest extends WMSDimensionsTestSuppor
         assertTrue("Returns a valid Default time", d != null);
         assertTrue("Default time should be the smallest one", d.getTime() == expected.getTime());
     }
-    
+
     @Test
     public void testExplicitMaxTimeCoverageSelector() throws Exception {
         // Use explicit default value strategy: 
         DimensionDefaultValueSetting defaultValueSetting = new DimensionDefaultValueSetting();
         defaultValueSetting.setStrategyType(Strategy.MAXIMUM);
         setupResourceDimensionDefaultValue(WATTEMP_FUTURE, ResourceInfo.TIME, defaultValueSetting);
-        
+
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.HOUR_OF_DAY, cal.getActualMinimum(Calendar.HOUR_OF_DAY));
         cal.set(Calendar.MINUTE, cal.getActualMinimum(Calendar.MINUTE));
@@ -176,7 +176,7 @@ public class RasterTimeDimensionDefaultValueTest extends WMSDimensionsTestSuppor
         assertTrue("Returns a valid Default time", d != null);
         assertTrue("Default time should be the biggest one", d.getTime() == oneYearInFuture);
     }
-    
+
     @Test
     public void testExplicitFixedTimeCoverageSelector() throws Exception {
         String fixedTimeStr = "2012-06-01T03:00:00.000Z";
@@ -187,14 +187,14 @@ public class RasterTimeDimensionDefaultValueTest extends WMSDimensionsTestSuppor
         setupResourceDimensionDefaultValue(WATTEMP_FUTURE, ResourceInfo.TIME, defaultValueSetting);
 
         long fixedTime = DateUtil.parseDateTime(fixedTimeStr);
-               
+
         CoverageInfo coverage = getCatalog().getCoverageByName(WATTEMP_FUTURE.getLocalPart());
 
         java.util.Date d = (java.util.Date) wms.getDefaultTime(coverage);
         assertTrue("Returns a valid Default time", d != null);
         assertTrue("Default time should be the fixed one", d.getTime() == fixedTime);
     }
-    
+
     @Test
     public void testExplicitNearestToGivenTimeCoverageSelector() throws Exception {
         String preferredTimeStr = "2009-01-01T00:00:00.000Z";
@@ -205,8 +205,8 @@ public class RasterTimeDimensionDefaultValueTest extends WMSDimensionsTestSuppor
         setupResourceDimensionDefaultValue(WATTEMP_FUTURE, ResourceInfo.TIME, defaultValueSetting);
 
         //From src/test/resources/org/geoserver/wms/watertemp.zip:
-        Date expected = Date.valueOf("2008-11-01"); 
-        
+        Date expected = Date.valueOf("2008-11-01");
+
         CoverageInfo coverage = getCatalog().getCoverageByName(WATTEMP_FUTURE.getLocalPart());
 
         java.util.Date d = (java.util.Date) wms.getDefaultTime(coverage);
@@ -275,8 +275,8 @@ public class RasterTimeDimensionDefaultValueTest extends WMSDimensionsTestSuppor
         addRasterLayerFromDataDir(WATTEMP_FUTURE, dataDirectory, catalog);
 
     }
-   
-    
+
+
     /*
      * This method is necessary here, because SystemTestData#addRasterLayer assumes that the raster data file is somewhere in the classpath and should
      * be copied to the data directory before registering the new layer. This method skips the copy and extract and assumes that the coverage data is
@@ -385,5 +385,5 @@ public class RasterTimeDimensionDefaultValueTest extends WMSDimensionsTestSuppor
             }
         }
     }
-    
+
 }

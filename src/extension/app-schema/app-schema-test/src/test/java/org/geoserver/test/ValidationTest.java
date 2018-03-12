@@ -12,9 +12,8 @@ import org.w3c.dom.Document;
 
 /**
  * Validation testing with GeoServer
- * 
+ *
  * @author Victor Tey, CSIRO Exploration and Mining
- * 
  */
 public class ValidationTest extends AbstractAppSchemaTestSupport {
 

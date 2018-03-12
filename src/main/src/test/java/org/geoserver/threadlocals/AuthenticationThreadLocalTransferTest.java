@@ -22,7 +22,7 @@ public class AuthenticationThreadLocalTransferTest extends AbstractThreadLocalTr
         SecurityContextHolder.getContext().setAuthentication(null);
     }
 
-    
+
     @Test
     public void testRequest() throws InterruptedException, ExecutionException {
         // setup the state
@@ -30,12 +30,12 @@ public class AuthenticationThreadLocalTransferTest extends AbstractThreadLocalTr
         SecurityContextHolder.getContext().setAuthentication(auth);
         // test it's transferred properly using the base class machinery
         testThreadLocalTransfer(new ThreadLocalTransferCallable(new AuthenticationThreadLocalTransfer()) {
-            
+
             @Override
             void assertThreadLocalCleaned() {
                 assertNull(SecurityContextHolder.getContext().getAuthentication());
             }
-            
+
             @Override
             void assertThreadLocalApplied() {
                 assertSame(auth, SecurityContextHolder.getContext().getAuthentication());

@@ -21,53 +21,52 @@ import org.opengis.filter.sort.SortBy;
 import org.opengis.util.ProgressListener;
 
 /**
- * This class is just a mean trick to smuggle in the resource name in to 
+ * This class is just a mean trick to smuggle in the resource name in to
  * a FeatureCollection, when returned as result of a GetFeatureInfo request
  * Previously this was assumed to be equal to the name of the type of the FeatureCollection
  * But this is not the case for complex features in app-schema.
- *  
+ * <p>
  * The other thing this does is providing an implementation of size(), since the
  * app-schema one always returns 0. This is used for limiting features to a maximum.
- * 
+ * <p>
  * The decorator never needs to be used for SimpleFeatureCollections.
- * 
- * @author Niels Charlier, Curtin University of Technology
  *
+ * @author Niels Charlier, Curtin University of Technology
  */
 @SuppressWarnings("unchecked")
 public class FeatureCollectionDecorator implements FeatureCollection<FeatureType, Feature> {
 
     /**
      * Get Resource Name of a Feature Collection
-     * 
+     *
      * @param fc Feature Collection
      * @return Name of Resource
      */
-    public static Name getName(FeatureCollection fc) {        
-        if (fc instanceof FeatureCollectionDecorator){
+    public static Name getName(FeatureCollection fc) {
+        if (fc instanceof FeatureCollectionDecorator) {
             return ((FeatureCollectionDecorator) fc).getName();
         } else {
             return fc.getSchema().getName();
         }
     }
-    
-    
+
+
     protected FeatureCollection fc;
     protected Name name;
-    
-    public FeatureCollectionDecorator(Name name, FeatureCollection fc){
+
+    public FeatureCollectionDecorator(Name name, FeatureCollection fc) {
         this.name = name;
         this.fc = fc;
     }
-    
+
     public Name getName() {
         return name;
     }
-    
+
     public FeatureIterator<Feature> features() {
         return (FeatureIterator<Feature>) fc.features();
     }
-    
+
     public FeatureType getSchema() {
         return fc.getSchema();
     }
@@ -78,7 +77,7 @@ public class FeatureCollectionDecorator implements FeatureCollection<FeatureType
 
     public void accepts(FeatureVisitor visitor, ProgressListener progress) throws IOException {
         fc.accepts(visitor, progress);
-        
+
     }
 
     public FeatureCollection<FeatureType, Feature> subCollection(Filter filter) {

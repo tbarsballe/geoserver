@@ -35,22 +35,21 @@ public class GeoserverCustomWKTFactory extends FactoryUsingWKT {
         String cust_proj_file = System.getProperty(SYSTEM_DEFAULT_USER_PROJ_FILE);
         if (cust_proj_file == null) {
             GeoServerResourceLoader loader = GeoServerExtensions.bean(GeoServerResourceLoader.class);
-            if( loader != null ){ // not available during construction SystemTestData - call CRS reset to fix
+            if (loader != null) { // not available during construction SystemTestData - call CRS reset to fix
                 Resource custom_proj = loader.get("user_projections/epsg.properties");
-                if( custom_proj.getType() == Type.RESOURCE ){
+                if (custom_proj.getType() == Type.RESOURCE) {
                     cust_proj_file = custom_proj.file().getAbsolutePath();
                 }
             }
         }
-        if( cust_proj_file != null ){
+        if (cust_proj_file != null) {
             // Attempt to load user-defined projections
             File proj_file = new File(cust_proj_file);
             if (proj_file.exists()) {
                 URL url = URLs.fileToUrl(proj_file);
-                if( url != null ){
+                if (url != null) {
                     return url;
-                }
-                else {
+                } else {
                     LOGGER.log(Level.SEVERE, "Had troubles converting file name to URL");
                 }
             }

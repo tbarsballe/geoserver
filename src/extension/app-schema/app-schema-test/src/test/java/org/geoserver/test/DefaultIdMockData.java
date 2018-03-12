@@ -8,9 +8,8 @@ package org.geoserver.test;
 
 /**
  * Mock data for {@link DefaultIdTest}.
- * 
+ *
  * @author Rini Angreani (CSIRO Earth Science and Resource Engineering)
- * 
  */
 
 public class DefaultIdMockData extends AbstractAppSchemaMockData {

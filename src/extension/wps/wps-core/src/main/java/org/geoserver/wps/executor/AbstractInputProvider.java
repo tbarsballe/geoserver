@@ -29,7 +29,7 @@ import org.springframework.validation.Validator;
 
 /**
  * Base class for single value input providers
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public abstract class AbstractInputProvider implements InputProvider {
@@ -38,8 +38,8 @@ public abstract class AbstractInputProvider implements InputProvider {
      * Creates an input provider
      */
     public static InputProvider getInputProvider(InputType input, ProcessParameterIO ppio,
-            WPSExecutionManager executor, ApplicationContext context,
-            Collection<Validator> validators) throws Exception {
+                                                 WPSExecutionManager executor, ApplicationContext context,
+                                                 Collection<Validator> validators) throws Exception {
         InputProvider provider;
         if (input.getReference() != null) {
             // this is a reference
@@ -102,19 +102,16 @@ public abstract class AbstractInputProvider implements InputProvider {
 
     /**
      * Computes the value
-     * 
-     * @param listener
-     * 
      *
+     * @param listener
      */
     protected abstract Object getValueInternal(ProgressListener listener) throws Exception;
 
     /**
      * Simulates what the Dispatcher is doing when parsing a KVP request
-     * 
+     *
      * @param href
      * @param reader
-     *
      */
     protected Object kvpParse(String href, KvpRequestReader reader) throws Exception {
         Map original = new KvpMap(KvpUtils.parseQueryString(href));
@@ -137,9 +134,8 @@ public abstract class AbstractInputProvider implements InputProvider {
 
     /**
      * Returns the version from the kvp request
-     * 
-     * @param href
      *
+     * @param href
      */
     protected String getVersion(String href) {
         return (String) new KvpMap(KvpUtils.parseQueryString(href)).get("VERSION");

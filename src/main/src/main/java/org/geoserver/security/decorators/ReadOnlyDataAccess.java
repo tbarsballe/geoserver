@@ -23,11 +23,10 @@ import org.opengis.feature.type.Name;
  * performed through it. Regardless of the policy the data access is kept read only as
  * services are supposed to perform writes via {@link FeatureStore} instances returned
  * by {@link FeatureTypeInfo} and not via direct calls to data access.
- * 
- * @author Andrea Aime - TOPP
- * 
+ *
  * @param <T>
  * @param <F>
+ * @author Andrea Aime - TOPP
  */
 public class ReadOnlyDataAccess<T extends FeatureType, F extends Feature> extends
         DecoratingDataAccess<T, F> {
@@ -38,14 +37,14 @@ public class ReadOnlyDataAccess<T extends FeatureType, F extends Feature> extend
     ReadOnlyDataAccess(DataAccess<T, F> delegate, WrapperPolicy policy) {
         super(delegate);
         this.policy = policy;
-   }
+    }
 
     @Override
     public FeatureSource<T, F> getFeatureSource(Name typeName) throws IOException {
         final FeatureSource<T, F> fs = super.getFeatureSource(typeName);
         if (fs == null)
             return null;
-        
+
         return (FeatureSource) SecuredObjects.secure(fs, policy);
     }
 
@@ -63,13 +62,14 @@ public class ReadOnlyDataAccess<T extends FeatureType, F extends Feature> extend
     public void removeSchema(Name typeName) throws IOException {
         throw notifyUnsupportedOperation();
     }
+
     /**
      * Notifies the caller the requested operation is not supported, using a plain {@link UnsupportedOperationException}
      * in case we have to conceal the fact the data is actually writable, using an Spring Security security exception otherwise
      * to force an authentication from the user
      */
     RuntimeException notifyUnsupportedOperation() {
-        if(policy.response == Response.CHALLENGE) {
+        if (policy.response == Response.CHALLENGE) {
             return SecureCatalogImpl.unauthorizedAccess();
         } else
             return new UnsupportedOperationException("This data access is read only, service code is supposed to perform writes via FeatureStore instead");

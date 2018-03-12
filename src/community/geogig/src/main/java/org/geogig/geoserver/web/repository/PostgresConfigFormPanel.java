@@ -40,8 +40,8 @@ class PostgresConfigFormPanel extends FormComponentPanel<PostgresConfigBean> {
                 new ResourceModel("PostgresConfigFormPanel.port", "Port"), false);
         // set the type for the port, and validators
         portPanel.getFormComponent().setType(Integer.TYPE).add(
-                (IValidator)RangeValidator.minimum(1025),
-                (IValidator)RangeValidator.maximum(65535));
+                (IValidator) RangeValidator.minimum(1025),
+                (IValidator) RangeValidator.maximum(65535));
         add(portPanel);
         dbPanel = new TextParamPanel("dbPanel", new PropertyModel<>(model, "database"),
                 new ResourceModel("PostgresConfigFormPanel.database", "Database Name"), true);

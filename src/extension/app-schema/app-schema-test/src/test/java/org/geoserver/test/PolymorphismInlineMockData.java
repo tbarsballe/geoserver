@@ -10,9 +10,9 @@ import org.geoserver.data.test.MockData;
 
 /**
  * Mock data for PolymorphismInlineWfsTest.
- * 
+ * <p>
  * Inspired by {@link MockData}.
- * 
+ *
  * @author Rini Angreani, CSIRO Earth Science and Resource Engineering
  */
 public class PolymorphismInlineMockData extends AbstractAppSchemaMockData {

@@ -14,7 +14,7 @@ import org.geoserver.security.validation.SecurityConfigException;
 import org.geoserver.security.validation.SecurityConfigValidator;
 import org.geoserver.security.web.SecurityNamedServicesPanel;
 
-public class AuthenticationFiltersPanel extends SecurityNamedServicesPanel<SecurityAuthFilterConfig>{
+public class AuthenticationFiltersPanel extends SecurityNamedServicesPanel<SecurityAuthFilterConfig> {
 
     public AuthenticationFiltersPanel(String id) {
         super(id, new AuthenticationFiltersProvider());
@@ -28,8 +28,8 @@ public class AuthenticationFiltersPanel extends SecurityNamedServicesPanel<Secur
     @Override
     protected void validateRemoveConfig(SecurityAuthFilterConfig config)
             throws SecurityConfigException {
-        SecurityConfigValidator.getConfigurationValiator(GeoServerSecurityFilter.class, 
-            config.getClassName()).validateRemoveFilter(config);
+        SecurityConfigValidator.getConfigurationValiator(GeoServerSecurityFilter.class,
+                config.getClassName()).validateRemoveFilter(config);
     }
 
     @Override

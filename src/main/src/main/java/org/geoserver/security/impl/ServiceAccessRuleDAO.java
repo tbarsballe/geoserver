@@ -34,20 +34,19 @@ public class ServiceAccessRuleDAO extends AbstractAccessRuleDAO<ServiceAccessRul
      * property file name
      */
     static final String SERVICES = "services.properties";
-    
+
     /**
      * the catalog
      */
     Catalog rawCatalog;
-    
+
     /**
      * Returns the instanced contained in the Spring context for the UI to use
-     *
      */
     public static ServiceAccessRuleDAO get() {
-       return GeoServerExtensions.bean(ServiceAccessRuleDAO.class); 
+        return GeoServerExtensions.bean(ServiceAccessRuleDAO.class);
     }
-    
+
     public ServiceAccessRuleDAO(GeoServerDataDirectory dd, Catalog rawCatalog) throws IOException {
         super(dd, SERVICES);
         this.rawCatalog = rawCatalog;
@@ -55,16 +54,16 @@ public class ServiceAccessRuleDAO extends AbstractAccessRuleDAO<ServiceAccessRul
 
     /**
      * Builds a new dao
-     * 
+     *
      * @param rawCatalog
      */
     public ServiceAccessRuleDAO() throws IOException {
         super(GeoServerExtensions.bean(GeoServerDataDirectory.class), SERVICES);
     }
-    
+
     /**
      * Builds a new dao with a custom security dir. Used mostly for testing purposes
-     * 
+     *
      * @param rawCatalog
      */
     ServiceAccessRuleDAO(Catalog rawCatalog, Resource securityDir) {
@@ -73,13 +72,12 @@ public class ServiceAccessRuleDAO extends AbstractAccessRuleDAO<ServiceAccessRul
 
     /**
      * Parses the rules contained in the property file
-     * 
-     * @param props
      *
+     * @param props
      */
     protected void loadRules(Properties props) {
         TreeSet<ServiceAccessRule> result = new TreeSet<ServiceAccessRule>();
-        for (Map.Entry<Object,Object> entry : props.entrySet()) {
+        for (Map.Entry<Object, Object> entry : props.entrySet()) {
             String ruleKey = (String) entry.getKey();
             String ruleValue = (String) entry.getValue();
 
@@ -91,27 +89,25 @@ public class ServiceAccessRuleDAO extends AbstractAccessRuleDAO<ServiceAccessRul
                 result.add(rule);
             }
         }
-        
+
         // make sure to add the "all access alloed" rule if the set if empty
-        if(result.size() == 0) {
+        if (result.size() == 0) {
             result.add(new ServiceAccessRule(new ServiceAccessRule()));
         }
-        
+
         rules = result;
     }
 
     /**
      * Parses a single layer.properties line into a {@link DataAccessRule}, returns false if the
      * rule is not valid
-     * 
-     *
      */
     ServiceAccessRule parseServiceAccessRule(String ruleKey, String ruleValue) {
         final String rule = ruleKey + "=" + ruleValue;
 
         // parse
         String[] elements = parseElements(ruleKey);
-        if(elements.length != 2) {
+        if (elements.length != 2) {
             LOGGER.warning("Invalid rule " + rule + ", the expected format is service.method=role1,role2,...");
             return null;
         }
@@ -131,10 +127,9 @@ public class ServiceAccessRuleDAO extends AbstractAccessRuleDAO<ServiceAccessRul
         // build the rule
         return new ServiceAccessRule(service, method, roles);
     }
-    
+
     /**
      * Turns the rules list into a property bag
-     *
      */
     protected Properties toProperties() {
         Properties props = new Properties();
@@ -146,24 +141,22 @@ public class ServiceAccessRuleDAO extends AbstractAccessRuleDAO<ServiceAccessRul
 
     /**
      * Parses workspace.layer.mode into an array of strings
-     * 
-     * @param path
      *
+     * @param path
      */
     private String[] parseElements(String path) {
         // regexp: ignore extra spaces, split on dot
         return path.split("\\s*\\.\\s*");
     }
-    
+
     /**
      * Returns a sorted set of rules associated to the role
-     * 
-     * @param role
      *
+     * @param role
      */
     public SortedSet<ServiceAccessRule> getRulesAssociatedWithRole(String role) {
         SortedSet<ServiceAccessRule> result = new TreeSet<ServiceAccessRule>();
-        for (ServiceAccessRule rule: getRules())
+        for (ServiceAccessRule rule : getRules())
             if (rule.getRoles().contains(role))
                 result.add(rule);
         return result;

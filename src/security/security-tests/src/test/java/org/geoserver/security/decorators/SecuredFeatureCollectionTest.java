@@ -50,8 +50,8 @@ public class SecuredFeatureCollectionTest extends SecureObjectsTest {
         store = createNiceMock(FeatureStore.class);
         expect(store.getSchema()).andReturn(schema).anyTimes();
         expect(store.getFeatures()).andReturn(fc).anyTimes();
-        expect(store.getFeatures((Filter)anyObject())).andReturn(fc).anyTimes();
-        expect(store.getFeatures((Query)anyObject())).andReturn(fc).anyTimes();
+        expect(store.getFeatures((Filter) anyObject())).andReturn(fc).anyTimes();
+        expect(store.getFeatures((Query) anyObject())).andReturn(fc).anyTimes();
         replay(store);
         /*expect(fc.features()).andReturn(it).anyTimes();
         expect(fc.sort(sort)).andReturn(fc).anyTimes();
@@ -88,13 +88,13 @@ public class SecuredFeatureCollectionTest extends SecureObjectsTest {
     @Test
     public void testReadOnly() throws Exception {
         SecuredFeatureStore ro = new SecuredFeatureStore(store, WrapperPolicy.readOnlyHide(null));
-        
+
         // let's check the iterator, should allow read but not remove
         FeatureCollection rofc = ro.getFeatures();
         FeatureIterator roit = rofc.features();
         roit.hasNext();
         roit.next();
-    
+
         // check derived collections are still read only and share the same
         // challenge policy
         SecuredFeatureCollection sorted = (SecuredFeatureCollection) rofc
@@ -119,7 +119,7 @@ public class SecuredFeatureCollectionTest extends SecureObjectsTest {
             ro.addFeatures(fc);
             fail("Should have failed with a spring security exception");
         } catch (Exception e) {
-            if (ReadOnlyDataStoreTest.isSpringSecurityException(e)==false)
+            if (ReadOnlyDataStoreTest.isSpringSecurityException(e) == false)
                 fail("Should have failed with a security exception");
         }
 
@@ -127,21 +127,21 @@ public class SecuredFeatureCollectionTest extends SecureObjectsTest {
             ro.removeFeatures(Filter.INCLUDE);
             fail("Should have failed with a spring security exception");
         } catch (Exception e) {
-            if (ReadOnlyDataStoreTest.isSpringSecurityException(e)==false)
+            if (ReadOnlyDataStoreTest.isSpringSecurityException(e) == false)
                 fail("Should have failed with a security exception");
         }
         try {
             ro.removeFeatures(ECQL.toFilter("IN ('testSchema.1')"));
             fail("Should have failed with a spring security exception");
         } catch (Exception e) {
-            if (ReadOnlyDataStoreTest.isSpringSecurityException(e)==false)
+            if (ReadOnlyDataStoreTest.isSpringSecurityException(e) == false)
                 fail("Should have failed with a security exception");
         }
         try {
             ro.removeFeatures(Filter.EXCLUDE);
             fail("Should have failed with a spring security exception");
         } catch (Exception e) {
-            if (ReadOnlyDataStoreTest.isSpringSecurityException(e)==false)
+            if (ReadOnlyDataStoreTest.isSpringSecurityException(e) == false)
                 fail("Should have failed with a security exception");
         }
 

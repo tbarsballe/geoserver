@@ -30,11 +30,11 @@ import org.opengis.filter.Filter;
  * performed through it. Regardless of the policy the store is kept read only as
  * services are supposed to perform writes via {@link FeatureStore} instances returned
  * by {@link FeatureTypeInfo} and not via direct data store access.
- * 
+ *
  * @author Andrea Aime - TOPP
  */
 public class ReadOnlyDataStore extends org.geotools.data.store.DecoratingDataStore {
-    
+
 
     WrapperPolicy policy;
 
@@ -55,7 +55,7 @@ public class ReadOnlyDataStore extends org.geotools.data.store.DecoratingDataSto
             throws IOException {
         final SimpleFeatureSource fs = super.getFeatureSource(typeName);
         return wrapFeatureSource(fs);
-            
+
     }
 
     @SuppressWarnings("unchecked")
@@ -63,7 +63,7 @@ public class ReadOnlyDataStore extends org.geotools.data.store.DecoratingDataSto
             final SimpleFeatureSource fs) {
         if (fs == null)
             return null;
-        
+
         WrapperPolicy childPolicy = buildPolicyForFeatureSource();
         return DataUtilities.simple((FeatureSource) SecuredObjects.secure(fs, childPolicy));
     }
@@ -83,19 +83,19 @@ public class ReadOnlyDataStore extends org.geotools.data.store.DecoratingDataSto
 
     @Override
     public FeatureWriter<SimpleFeatureType, SimpleFeature> getFeatureWriter(String typeName,
-            Filter filter, Transaction transaction) throws IOException {
+                                                                            Filter filter, Transaction transaction) throws IOException {
         throw notifyUnsupportedOperation();
     }
 
     @Override
     public FeatureWriter<SimpleFeatureType, SimpleFeature> getFeatureWriter(String typeName,
-            Transaction transaction) throws IOException {
+                                                                            Transaction transaction) throws IOException {
         throw notifyUnsupportedOperation();
     }
 
     @Override
     public FeatureWriter<SimpleFeatureType, SimpleFeature> getFeatureWriterAppend(String typeName,
-            Transaction transaction) throws IOException {
+                                                                                  Transaction transaction) throws IOException {
         throw notifyUnsupportedOperation();
     }
 
@@ -130,7 +130,7 @@ public class ReadOnlyDataStore extends org.geotools.data.store.DecoratingDataSto
      * to force an authentication from the user
      */
     protected RuntimeException notifyUnsupportedOperation() {
-        if(policy.response == Response.CHALLENGE) {
+        if (policy.response == Response.CHALLENGE) {
             return SecureCatalogImpl.unauthorizedAccess();
         } else
             return new UnsupportedOperationException("This datastore is read only, service code is supposed to perform writes via FeatureStore instead");

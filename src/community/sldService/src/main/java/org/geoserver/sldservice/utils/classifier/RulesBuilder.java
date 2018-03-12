@@ -40,7 +40,6 @@ import org.opengis.filter.expression.PropertyName;
  * & Equal Interval
  *
  * @author kappu
- *
  */
 public class RulesBuilder {
 
@@ -64,10 +63,9 @@ public class RulesBuilder {
      * @param features
      * @param property
      * @param classNumber
-     *
      */
     public List<Rule> quantileClassification(FeatureCollection features, String property,
-            Class<?> propertyType, int classNumber, boolean open, boolean normalize) {
+                                             Class<?> propertyType, int classNumber, boolean open, boolean normalize) {
 
         FeatureType fType;
         Classifier groups = null;
@@ -99,10 +97,9 @@ public class RulesBuilder {
      * @param features
      * @param property
      * @param classNumber
-     *
      */
     public List<Rule> equalIntervalClassification(FeatureCollection features, String property,
-            Class<?> propertyType, int classNumber, boolean open, boolean normalize) {
+                                                  Class<?> propertyType, int classNumber, boolean open, boolean normalize) {
         Classifier groups = null;
         try {
 
@@ -134,10 +131,9 @@ public class RulesBuilder {
      *
      * @param features
      * @param property
-     *
      */
     public List<Rule> uniqueIntervalClassification(FeatureCollection features, String property,
-            Class<?> propertyType, int intervals, boolean normalize)
+                                                   Class<?> propertyType, int intervals, boolean normalize)
             throws IllegalArgumentException {
         Classifier groups = null;
         int classNumber = features.size();
@@ -171,7 +167,7 @@ public class RulesBuilder {
 
     /**
      * Generate Polygon Symbolyzer for each rule in list Fill color is choose from rampcolor
-     * 
+     *
      * @param rules
      * @param fillRamp
      * @param reverseColors
@@ -195,8 +191,8 @@ public class RulesBuilder {
             while (it.hasNext() && colors.hasNext()) {
                 color = colors.next();
                 rule = it.next();
-                rule.setSymbolizers(new Symbolizer[] { sb.createPolygonSymbolizer(
-                        sb.createStroke(Color.BLACK, 1), sb.createFill(color)) });
+                rule.setSymbolizers(new Symbolizer[]{sb.createPolygonSymbolizer(
+                        sb.createStroke(Color.BLACK, 1), sb.createFill(color))});
             }
         } catch (Exception e) {
             if (LOGGER.isLoggable(Level.INFO))
@@ -208,7 +204,7 @@ public class RulesBuilder {
 
     /**
      * Generate Polygon Symbolyzer for each rule in list Fill color is choose from rampcolor
-     * 
+     *
      * @param rules
      * @param ramp
      */
@@ -235,8 +231,8 @@ public class RulesBuilder {
 
                 Mark mark = sb.createMark(StyleBuilder.MARK_CIRCLE, sb.createFill(color),
                         sb.createStroke(color));
-                rule.setSymbolizers(new Symbolizer[] {
-                        sb.createPointSymbolizer(sb.createGraphic(null, mark, null)) });
+                rule.setSymbolizers(new Symbolizer[]{
+                        sb.createPointSymbolizer(sb.createGraphic(null, mark, null))});
             }
         } catch (Exception e) {
             if (LOGGER.isLoggable(Level.INFO))
@@ -248,7 +244,7 @@ public class RulesBuilder {
 
     /**
      * Generate Line Symbolyzer for each rule in list Stroke color is choose from rampcolor
-     * 
+     *
      * @param rules
      * @param fillRamp
      * @param reverseColors
@@ -272,7 +268,7 @@ public class RulesBuilder {
             while (it.hasNext() && colors.hasNext()) {
                 color = colors.next();
                 rule = it.next();
-                rule.setSymbolizers(new Symbolizer[] { sb.createLineSymbolizer(color) });
+                rule.setSymbolizers(new Symbolizer[]{sb.createLineSymbolizer(color)});
             }
         } catch (Exception e) {
             if (LOGGER.isLoggable(Level.INFO))
@@ -288,13 +284,12 @@ public class RulesBuilder {
 
     /**
      * Generate Rules from Rangedclassifier groups build a List of rules
-     * 
+     *
      * @param groups
      * @param property
-     *
      */
     private List<Rule> openRangedRules(RangedClassifier groups, String property,
-            Class<?> propertyType, boolean normalize) {
+                                       Class<?> propertyType, boolean normalize) {
 
         Rule r;
         Filter f;
@@ -354,7 +349,7 @@ public class RulesBuilder {
     }
 
     private Expression normalizeProperty(PropertyName property, Class<?> propertyType,
-            boolean normalize) {
+                                         boolean normalize) {
         if (normalize && (Integer.class.isAssignableFrom(propertyType)
                 || Long.class.isAssignableFrom(propertyType))) {
             return ff.function("parseDouble", property);
@@ -364,13 +359,12 @@ public class RulesBuilder {
 
     /**
      * Generate Rules from Rangedclassifier groups build a List of rules
-     * 
+     *
      * @param groups
      * @param property
-     *
      */
     private List<Rule> closedRangedRules(RangedClassifier groups, String property,
-            Class<?> propertyType, boolean normalize) {
+                                         Class<?> propertyType, boolean normalize) {
 
         Rule r;
         Filter f;
@@ -410,13 +404,12 @@ public class RulesBuilder {
 
     /**
      * Generate Rules from Explicit classifier groups build a List of rules
-     * 
+     *
      * @param groups
      * @param property
-     *
      */
     private List<Rule> explicitRules(ExplicitClassifier groups, String property,
-            Class<?> propertyType) {
+                                     Class<?> propertyType) {
 
         Rule r;
         Filter f;
@@ -461,10 +454,9 @@ public class RulesBuilder {
      * @param features
      * @param property
      * @param classNumber
-     *
      */
     public List<Rule> jenksClassification(FeatureCollection features, String property,
-            Class<?> propertyType, int classNumber, boolean open, boolean normalize) {
+                                          Class<?> propertyType, int classNumber, boolean open, boolean normalize) {
         Classifier groups = null;
         try {
             final Function classify = ff.function("Jenks", ff.property(property),

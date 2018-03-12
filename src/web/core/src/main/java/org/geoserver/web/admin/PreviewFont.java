@@ -20,7 +20,7 @@ import org.apache.wicket.markup.html.image.resource.BufferedDynamicImageResource
 
 /**
  * A Font that contains a preview image
- * 
+ *
  * @author Miles Jordan, Australian Antarctic Division
  */
 @SuppressWarnings("serial")
@@ -57,7 +57,7 @@ public class PreviewFont implements Serializable {
 
     /**
      * Gets the preview image
-     * 
+     *
      * @return a preview image of the font
      */
     public BufferedDynamicImageResource getPreviewImage() {
@@ -69,7 +69,7 @@ public class PreviewFont implements Serializable {
 
     /**
      * Generates the preview image for this font
-     * 
+     *
      * @return an image resource
      */
     private BufferedDynamicImageResource createPreviewImage() {
@@ -110,8 +110,6 @@ public class PreviewFont implements Serializable {
 
     /**
      * Returns the font name
-     * 
-     *
      */
     public String getFontName() {
         return font.getFontName();

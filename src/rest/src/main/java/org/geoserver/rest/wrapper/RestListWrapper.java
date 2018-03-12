@@ -16,7 +16,7 @@ import java.util.Collection;
  * (XML and JSON output).
  * Also supports Collection type responses using the {@link FreemarkerHTMLMessageConverter},
  * but is not required for such responses.
- *
+ * <p>
  * In the previous rest API this wasn't needed because in each individual rest request the Collections were aliased to
  */
 public class RestListWrapper<T> extends RestWrapperAdapter<T> {

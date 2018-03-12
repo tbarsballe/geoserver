@@ -41,11 +41,11 @@ import org.springframework.mock.web.MockHttpServletResponse;
 /**
  * Dynaminc dimensions differ for custom ones in that the reader does not know about the until
  * it's generated, while simple custom dimensions are hard coded and known to the Format class as well
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class DynamicDimensionsTest extends WMSTestSupport {
-    
+
     private static final QName WATTEMP = new QName(MockData.DEFAULT_URI, "watertemp", MockData.DEFAULT_PREFIX);
     private static final String DIMENSION_NAME = "WAVELENGTH";
     private static final String CAPABILITIES_REQUEST = "wms?request=getCapabilities&version=1.1.1";
@@ -55,22 +55,22 @@ public class DynamicDimensionsTest extends WMSTestSupport {
     @Override
     protected void onSetUp(SystemTestData testData) throws Exception {
         super.onSetUp(testData);
-        
+
         // add org.geoserver.catalog.testReader.CustomFormat coverage
         String styleName = "temperature";
         testData.addStyle(styleName, "../temperature.sld", getClass(), getCatalog());
         Map propertyMap = new HashMap();
-        propertyMap.put(LayerProperty.STYLE,"temperature");
+        propertyMap.put(LayerProperty.STYLE, "temperature");
         testData.addRasterLayer(WATTEMP, "watertempDynamicDims.zip", null, propertyMap, SystemTestData.class, getCatalog());
-        
+
         GeoServerInfo global = getGeoServer().getGlobal();
         global.getSettings().setProxyBaseUrl("src/test/resources/geoserver");
         getGeoServer().save(global);
-        
+
         WMSInfo wms = getGeoServer().getService(WMSInfo.class);
         wms.getSRS().add("EPSG:4326");
         getGeoServer().save(wms);
-        
+
         Map<String, String> namespaces = new HashMap<String, String>();
         namespaces.put("xlink", "http://www.w3.org/1999/xlink");
         namespaces.put("", "http://www.opengis.net/wms");
@@ -78,7 +78,7 @@ public class DynamicDimensionsTest extends WMSTestSupport {
         getTestData().registerNamespaces(namespaces);
         XMLUnit.setXpathNamespaceContext(new SimpleNamespaceContext(namespaces));
     }
-    
+
     @After
     public void removeRasterDimensions() {
         CoverageInfo info = getCatalog().getCoverageByName(WATTEMP.getLocalPart());
@@ -96,7 +96,7 @@ public class DynamicDimensionsTest extends WMSTestSupport {
         assertXpathEvaluatesTo("1", "count(//Layer[Name='gs:watertemp'])", dom);
         assertXpathEvaluatesTo("0", "count(//Layer/Dimension)", dom);
     }
-    
+
     @Test
     public void testCapabilities() throws Exception {
         setupRasterDimension(DIMENSION_NAME, DimensionPresentation.LIST, null, null);
@@ -105,30 +105,30 @@ public class DynamicDimensionsTest extends WMSTestSupport {
 
         // check dimension has been declared 
         assertXpathEvaluatesTo("1", "count(//Layer/Dimension)", dom);
-        
+
         // check we have the extent
         assertXpathEvaluatesTo(DIMENSION_NAME, "//Layer/Extent/@name", dom);
         assertXpathEvaluatesTo("020", "//Layer/Extent/@default", dom);
         assertXpathEvaluatesTo("020,100", "//Layer/Extent", dom);
     }
-    
+
     @Test
     public void testGetMapInvalidValue() throws Exception {
         setupRasterDimension(DIMENSION_NAME, DimensionPresentation.LIST, "nano meters", "nm");
-        
+
         // check that we get no data when requesting an incorrect value for custom dimension
         MockHttpServletResponse response = getAsServletResponse("wms?bbox=" + BBOX + "&styles="
                 + "&layers=" + LAYERS + "&Format=image/png" + "&request=GetMap" + "&width=550"
-                + "&height=250" + "&srs=EPSG:4326" 
+                + "&height=250" + "&srs=EPSG:4326"
                 + "&DIM_" + DIMENSION_NAME + "=bad_dimension_value");
         BufferedImage image = ImageIO.read(getBinaryInputStream(response));
         assertTrue(isEmpty(image));
     }
-    
+
     @Test
     public void testGetMapDefaultValue() throws Exception {
         setupRasterDimension(DIMENSION_NAME, DimensionPresentation.LIST, "nano meters", "nm");
-        
+
         // check that we get data when requesting a correct value for custom dimension
         MockHttpServletResponse response = getAsServletResponse("wms?bbox=" + BBOX + "&styles="
                 + "&layers=" + LAYERS + "&Format=image/png" + "&request=GetMap" + "&width=550"
@@ -136,17 +136,17 @@ public class DynamicDimensionsTest extends WMSTestSupport {
         BufferedImage image = ImageIO.read(getBinaryInputStream(response));
         assertFalse(isEmpty(image));
         // this pixel is red-ish with the default value, 020, but black with 100
-        assertPixel(image, 337, 177, new Color(255,197,197));
+        assertPixel(image, 337, 177, new Color(255, 197, 197));
     }
-    
+
     @Test
     public void testGetMapValidValue() throws Exception {
         setupRasterDimension(DIMENSION_NAME, DimensionPresentation.LIST, "nano meters", "nm");
-        
+
         // check that we get data when requesting a correct value for custom dimension
         MockHttpServletResponse response = getAsServletResponse("wms?bbox=" + BBOX + "&styles="
                 + "&layers=" + LAYERS + "&Format=image/png" + "&request=GetMap" + "&width=550"
-                + "&height=250" + "&srs=EPSG:4326" 
+                + "&height=250" + "&srs=EPSG:4326"
                 + "&bgColor=0x0000FF"
                 + "&DIM_" + DIMENSION_NAME + "=100");
         BufferedImage image = ImageIO.read(getBinaryInputStream(response));
@@ -154,11 +154,11 @@ public class DynamicDimensionsTest extends WMSTestSupport {
         // this pixel is red-ish with the default value, 020, but blue with 100
         assertPixel(image, 337, 177, Color.BLUE);
     }
-    
+
     @Test
     public void testGetMapCaseInsensitiveKey() throws Exception {
         setupRasterDimension(DIMENSION_NAME, DimensionPresentation.LIST, "nano meters", "nm");
-        
+
         // check that we get data when requesting a correct value for custom dimension
         MockHttpServletResponse response = getAsServletResponse("wms?bbox=" + BBOX + "&styles="
                 + "&layers=" + LAYERS + "&Format=image/png" + "&request=GetMap" + "&width=550"
@@ -171,7 +171,7 @@ public class DynamicDimensionsTest extends WMSTestSupport {
         assertPixel(image, 337, 177, Color.BLUE);
     }
 
-    
+
     private void setupRasterDimension(String metadata, DimensionPresentation presentation, String units, String unitSymbol) {
         CoverageInfo info = getCatalog().getCoverageByName(WATTEMP.getLocalPart());
         DimensionInfo di = new DimensionInfoImpl();
@@ -180,12 +180,12 @@ public class DynamicDimensionsTest extends WMSTestSupport {
         di.setUnits(units);
         di.setUnitSymbol(unitSymbol);
         info.getMetadata().put(ResourceInfo.CUSTOM_DIMENSION_PREFIX + metadata, di);
-        
+
         final Map customParameters = new HashMap();
         info.getParameters().put(AbstractGridFormat.USE_JAI_IMAGEREAD.getName().toString(), Boolean.FALSE);
         getCatalog().save(info);
     }
-    
+
     private static boolean isEmpty(BufferedImage image) {
         final DataBuffer pixData = image.getRaster().getDataBuffer();
         final int bankCount = pixData.getNumBanks();

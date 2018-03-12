@@ -18,9 +18,8 @@ import org.geoserver.web.util.MetadataMapModel;
 
 /**
  * Simple Panel which adds a TextField for setting the Root Directory for the WorkSpace or Global Settings.
- * 
+ *
  * @author Nicola Lagomarsini Geosolutions S.A.S.
- * 
  */
 public class RESTSettingsPanel extends SettingsPluginPanel {
 
@@ -29,14 +28,14 @@ public class RESTSettingsPanel extends SettingsPluginPanel {
         // Model associated to the metadata map
         final PropertyModel<MetadataMap> metadata = new PropertyModel<MetadataMap>(model,
                 "metadata");
-        
+
         // TextField associated to the root directory to map
         TextField rootField = new TextField("rootdir", new MetadataMapModel(metadata,
                 RESTUtils.ROOT_KEY, String.class));
         add(rootField);
-        
+
         // CheckBox associated to the root directory to map
-        CheckBox quietCheckBox = new CheckBox("quiet",  new MetadataMapModel(metadata,
+        CheckBox quietCheckBox = new CheckBox("quiet", new MetadataMapModel(metadata,
                 RESTUtils.QUIET_ON_NOT_FOUND_KEY, Boolean.class));
         add(quietCheckBox);
     }

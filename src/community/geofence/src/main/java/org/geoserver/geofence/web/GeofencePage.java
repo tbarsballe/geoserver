@@ -57,7 +57,6 @@ import org.geoserver.web.util.MapModel;
  * GeoFence wicket administration UI for GeoServer.
  *
  * @author "Mauro Bartolomeoli - mauro.bartolomeoli@geo-solutions.it"
- *
  */
 public class GeofencePage extends GeoServerSecuredPage {
 
@@ -90,7 +89,7 @@ public class GeofencePage extends GeoServerSecuredPage {
         form.add(new TextField<String>("servicesUrl",
                 new ExtPropertyModel<String>(configModel, "servicesUrl")
                         .setReadOnly(config.isInternal())).setRequired(true)
-                                .setEnabled(!config.isInternal()));
+                .setEnabled(!config.isInternal()));
 
         form.add(new AjaxSubmitLink("test") {
             private static final long serialVersionUID = -91239899377941223L;
@@ -106,7 +105,7 @@ public class GeofencePage extends GeoServerSecuredPage {
 
                     info(new StringResourceModel(
                             GeofencePage.class.getSimpleName() + ".connectionSuccessful")
-                                    .getObject());
+                            .getObject());
                 } catch (Exception e) {
                     error(e);
                     LOGGER.log(Level.WARNING, e.getMessage(), e);
@@ -288,8 +287,6 @@ public class GeofencePage extends GeoServerSecuredPage {
 
     /**
      * Creates a new wicket model from the configuration object.
-     *
-     *
      */
     private IModel<GeoFenceConfiguration> getGeoFenceConfigModel() {
         return new Model<GeoFenceConfiguration>(config);
@@ -297,8 +294,6 @@ public class GeofencePage extends GeoServerSecuredPage {
 
     /**
      * Creates a new wicket model from the configuration object.
-     *
-     *
      */
     private IModel<CacheConfiguration> getCacheConfigModel() {
         return new Model<CacheConfiguration>(cacheParams);

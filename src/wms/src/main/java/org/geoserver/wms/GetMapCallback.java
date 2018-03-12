@@ -17,7 +17,7 @@ import org.geotools.map.Layer;
  * <li>Alter the map content before rendering</li>
  * <li>Alter the rendering results</li>
  * </ul>
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public interface GetMapCallback {
@@ -55,6 +55,7 @@ public interface GetMapCallback {
 
     /**
      * Called if the GetMap fails for any reason.
+     *
      * @param t
      */
     void failed(Throwable t);

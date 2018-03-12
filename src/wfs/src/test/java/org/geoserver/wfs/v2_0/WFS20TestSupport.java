@@ -10,6 +10,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Map;
+
 import org.geoserver.platform.GeoServerExtensions;
 import org.geoserver.platform.Service;
 import org.geoserver.wfs.GMLInfo;
@@ -47,27 +48,27 @@ public class WFS20TestSupport extends WFSTestSupport {
         namespaces.put("fes", "http://www.opengis.net/fes/2.0");
         namespaces.put("gml", "http://www.opengis.net/gml/3.2");
     }
-    
+
     /**
      * @return The 2.0 service descriptor.
      */
     protected Service getServiceDescriptor20() {
-        return (Service) GeoServerExtensions.bean( "wfsService-2.0" );
+        return (Service) GeoServerExtensions.bean("wfsService-2.0");
     }
-    
+
     /**
      * Asserts a document is valid gml 3.2
      */
     protected void assertGML32(Document doc) {
         assertEquals(WFS.NAMESPACE, doc.getDocumentElement().getAttribute("xmlns:wfs"));
-        
-        String schemaLocation = doc.getDocumentElement().getAttribute("xsi:schemaLocation"); 
+
+        String schemaLocation = doc.getDocumentElement().getAttribute("xsi:schemaLocation");
         assertTrue(schemaLocation.contains(WFS.NAMESPACE));
-        
+
         String[] parts = schemaLocation.split(" ");
-        for (int i = 0; i < parts .length; i++) {
+        for (int i = 0; i < parts.length; i++) {
             if (parts[i].equals(WFS.NAMESPACE)) {
-                assertTrue(parts[i+1].endsWith("2.0/wfs.xsd"));
+                assertTrue(parts[i + 1].endsWith("2.0/wfs.xsd"));
             }
         }
         assertEquals("wfs:FeatureCollection", doc.getDocumentElement().getNodeName());

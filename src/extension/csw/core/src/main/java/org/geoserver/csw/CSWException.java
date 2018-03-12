@@ -14,7 +14,9 @@ import org.geoserver.platform.ServiceException;
  */
 public class CSWException extends ServiceException {
 
-    /** serialVersionUID */
+    /**
+     * serialVersionUID
+     */
     private static final long serialVersionUID = 4265653177643108445L;
 
     public CSWException(String message) {

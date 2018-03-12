@@ -25,7 +25,7 @@ import com.vividsolutions.jts.geom.Point;
 
 /**
  * Unit test for {@link GetMap}
- * 
+ *
  * @author Gabriel Roldan (TOPP)
  * @version $Id$
  * @since 2.5.x
@@ -155,7 +155,7 @@ public class GetMapTest {
                 return null;
             }
         };
-        
+
         getMapOp = new GetMap(wms);
         WebMap map = getMapOp.run(request);
         assertTrue(producer.produceMapCalled);

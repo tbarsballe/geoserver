@@ -19,43 +19,42 @@ import com.google.common.base.Preconditions;
 
 /**
  * Loads JDBCResourceStore if enabled or falls back to regular store if disabled.
- * 
- * @author Niels Charlier
  *
+ * @author Niels Charlier
  */
 public class JDBCResourceStoreFactoryBean implements FactoryBean<ResourceStore>, InitializingBean {
-    
+
     private ResourceStore resourceStore;
-    
-    public JDBCResourceStoreFactoryBean(ResourceStore fallbackStore, DataSource ds, 
-            JDBCResourceStoreProperties config) {
+
+    public JDBCResourceStoreFactoryBean(ResourceStore fallbackStore, DataSource ds,
+                                        JDBCResourceStoreProperties config) {
         if (config.isEnabled()) {
             resourceStore = new JDBCResourceStore(ds, config, fallbackStore);
         } else {
             resourceStore = fallbackStore;
         }
     }
-    
+
     public void setCache(ResourceCache cache) {
         if (resourceStore instanceof JDBCResourceStore) {
             ((JDBCResourceStore) resourceStore).setCache(cache);
         }
     }
-    
+
     /**
      * Configure LockProvider used during {@link Resource#out()}.
-     * 
-     * @param lockProvider LockProvider used for Resource#out()    
+     *
+     * @param lockProvider LockProvider used for Resource#out()
      */
     public void setLockProvider(LockProvider lockProvider) {
         if (resourceStore instanceof JDBCResourceStore) {
             ((JDBCResourceStore) resourceStore).setLockProvider(lockProvider);
         }
     }
-    
+
     /**
      * Configure ResourceWatcher
-     * 
+     *
      * @param resourceWatcher
      */
     public void setResourceNotificationDispatcher(ResourceNotificationDispatcher resourceWatcher) {
@@ -63,7 +62,7 @@ public class JDBCResourceStoreFactoryBean implements FactoryBean<ResourceStore>,
             ((JDBCResourceStore) resourceStore).setResourceNotificationDispatcher(resourceWatcher);
         }
     }
-    
+
     @Override
     public void afterPropertiesSet() throws Exception {
         if (resourceStore instanceof JDBCResourceStore) {

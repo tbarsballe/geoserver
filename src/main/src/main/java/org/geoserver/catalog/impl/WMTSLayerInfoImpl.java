@@ -16,10 +16,10 @@ import org.opengis.util.ProgressListener;
 @SuppressWarnings("serial")
 public class WMTSLayerInfoImpl extends ResourceInfoImpl implements WMTSLayerInfo {
 
-    
+
     protected WMTSLayerInfoImpl() {
     }
-    
+
     public WMTSLayerInfoImpl(Catalog catalog) {
         super(catalog);
     }
@@ -29,7 +29,7 @@ public class WMTSLayerInfoImpl extends ResourceInfoImpl implements WMTSLayerInfo
     }
 
     public void accept(CatalogVisitor visitor) {
-        visitor.visit( this);
+        visitor.visit(this);
     }
 
     @Override

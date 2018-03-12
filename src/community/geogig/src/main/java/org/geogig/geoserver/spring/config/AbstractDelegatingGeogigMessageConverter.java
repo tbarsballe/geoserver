@@ -29,12 +29,12 @@ public abstract class AbstractDelegatingGeogigMessageConverter extends BaseMessa
             Logging.getLogger(AbstractDelegatingGeogigMessageConverter.class);
 
     private final HttpMessageConverter<Object> delegate;
-    
+
     public AbstractDelegatingGeogigMessageConverter(HttpMessageConverter<Object> delegate, MediaType... mediaTypes) {
         super(delegate.getSupportedMediaTypes().toArray(new MediaType[delegate.getSupportedMediaTypes().size()]));
         this.delegate = delegate;
     }
-    
+
     @SuppressWarnings("rawtypes")
     private boolean isGeogigPackage(Class clazz) {
         // only return true if the provided class package matches the GeoGig DTO packages
@@ -59,29 +59,29 @@ public abstract class AbstractDelegatingGeogigMessageConverter extends BaseMessa
     protected boolean supports(Class clazz) {
         return isGeogigPackage(clazz);
     }
-    
+
     @Override
     public boolean canRead(Class<?> clazz, MediaType mediaType) {
         return isGeogigPackage(clazz) && delegate.canRead(clazz, mediaType);
     }
-    
+
     @Override
     public boolean canWrite(Class<?> clazz, MediaType mediaType) {
         return isGeogigPackage(clazz) && delegate.canWrite(clazz, mediaType);
     }
-    
+
     @Override
     protected Object readInternal(Class<? extends Object> clazz,
-            HttpInputMessage inputMessage) throws IOException, HttpMessageNotReadableException {
+                                  HttpInputMessage inputMessage) throws IOException, HttpMessageNotReadableException {
         return delegate.read(clazz, inputMessage);
     }
-    
+
     @Override
     protected void writeInternal(Object object, HttpOutputMessage outputMessage)
             throws IOException, HttpMessageNotWritableException {
         delegate.write(object, outputMessage.getHeaders().getContentType(), outputMessage);
     }
-    
+
     @Override
     public int getPriority() {
         return ExtensionPriority.HIGHEST;

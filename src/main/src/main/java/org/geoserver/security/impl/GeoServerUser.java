@@ -19,20 +19,20 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.StringUtils;
 
 /**
- * GeoServer implementation of  {@link UserDetails}. 
- * 
+ * GeoServer implementation of  {@link UserDetails}.
+ *
  * @author christian
  */
 public class GeoServerUser implements UserDetails, CredentialsContainer, Comparable<GeoServerUser> {
 
     private static final long serialVersionUID = 1L;
 
-    
-    public static final String DEFAULT_ADMIN_PASSWD="geoserver";
-    public static final boolean AdminEnabled=true;
-    public static final String ADMIN_USERNAME="admin";
-    final public static String ROOT_USERNAME="root";
-    final public static String ANONYMOUS_USERNAME="anonymous";
+
+    public static final String DEFAULT_ADMIN_PASSWD = "geoserver";
+    public static final boolean AdminEnabled = true;
+    public static final String ADMIN_USERNAME = "admin";
+    final public static String ROOT_USERNAME = "root";
+    final public static String ANONYMOUS_USERNAME = "anonymous";
 
     /**
      * Create the geoserver default administrator
@@ -43,7 +43,7 @@ public class GeoServerUser implements UserDetails, CredentialsContainer, Compara
         admin.setEnabled(AdminEnabled);
         return admin;
     }
-    
+
     public static GeoServerUser createRoot() {
         GeoServerUser root = new GeoServerUser(GeoServerUser.ROOT_USERNAME);
         root.setPassword(null);
@@ -53,7 +53,7 @@ public class GeoServerUser implements UserDetails, CredentialsContainer, Compara
         root.setAuthorities(roles);
         return root;
     }
-    
+
     public static GeoServerUser createAnonymous() {
         GeoServerUser anon = new GeoServerUser(GeoServerUser.ANONYMOUS_USERNAME);
         anon.setPassword(null);
@@ -65,24 +65,22 @@ public class GeoServerUser implements UserDetails, CredentialsContainer, Compara
     }
 
 
-
     private String password;
     private String username;
     private boolean accountNonExpired;
     private boolean accountNonLocked;
     private boolean credentialsNonExpired;
     private boolean enabled;
-    
+
     protected Properties properties;
     protected Collection<GrantedAuthority> authorities;
 
-     
 
     public GeoServerUser(String username) {
-        this.username=username;
+        this.username = username;
         this.enabled = true;
-        this.accountNonExpired=this.accountNonLocked=this.credentialsNonExpired = true;
-        this.authorities=null;
+        this.accountNonExpired = this.accountNonLocked = this.credentialsNonExpired = true;
+        this.authorities = null;
     }
 
     public GeoServerUser(GeoServerUser other) {
@@ -91,8 +89,8 @@ public class GeoServerUser implements UserDetails, CredentialsContainer, Compara
         this.accountNonExpired = other.isAccountNonExpired();
         this.accountNonLocked = other.isAccountNonLocked();
         this.credentialsNonExpired = other.isCredentialsNonExpired();
-        this.authorities = other.getAuthorities() != null ? 
-            new ArrayList<GrantedAuthority>(other.getAuthorities()) : null;
+        this.authorities = other.getAuthorities() != null ?
+                new ArrayList<GrantedAuthority>(other.getAuthorities()) : null;
     }
 
     /**
@@ -132,7 +130,7 @@ public class GeoServerUser implements UserDetails, CredentialsContainer, Compara
     }
 
     public void setAccountNonExpired(boolean accountNonExpired) {
-        if (this.accountNonExpired!=accountNonExpired) {
+        if (this.accountNonExpired != accountNonExpired) {
             this.accountNonExpired = accountNonExpired;
         }
     }
@@ -145,7 +143,7 @@ public class GeoServerUser implements UserDetails, CredentialsContainer, Compara
     }
 
     public void setAccountNonLocked(boolean accountNonLocked) {
-        if (this.accountNonLocked!=accountNonLocked) {
+        if (this.accountNonLocked != accountNonLocked) {
             this.accountNonLocked = accountNonLocked;
             //calculateGrantedAuthorities();
         }
@@ -159,7 +157,7 @@ public class GeoServerUser implements UserDetails, CredentialsContainer, Compara
     }
 
     public void setCredentialsNonExpired(boolean credentialsNonExpired) {
-        if (this.credentialsNonExpired!=credentialsNonExpired) {
+        if (this.credentialsNonExpired != credentialsNonExpired) {
             this.credentialsNonExpired = credentialsNonExpired;
             //calculateGrantedAuthorities();
         }
@@ -169,18 +167,18 @@ public class GeoServerUser implements UserDetails, CredentialsContainer, Compara
      * @see org.springframework.security.core.userdetails.UserDetails#getAuthorities()
      */
     public Collection<GrantedAuthority> getAuthorities() {
-        if (authorities==null)
-            authorities=Collections.unmodifiableSet(new TreeSet<GrantedAuthority>());
+        if (authorities == null)
+            authorities = Collections.unmodifiableSet(new TreeSet<GrantedAuthority>());
         return authorities;
     }
 
     /**
-     * Set the roles of the user. 
-     * 
+     * Set the roles of the user.
+     *
      * @param roles
      */
     public void setAuthorities(Set<? extends GrantedAuthority> roles) {
-        authorities=Collections.unmodifiableSet(roles);
+        authorities = Collections.unmodifiableSet(roles);
     }
 
     /* (non-Javadoc)
@@ -193,12 +191,12 @@ public class GeoServerUser implements UserDetails, CredentialsContainer, Compara
     /**
      * Additional properties associated with the user.
      * <p>
-     * This typically is information filled in by the backend user/group service. For examples: 
+     * This typically is information filled in by the backend user/group service. For examples:
      * eMail Address, telephone number, etc..
      * </p>
      */
     public Properties getProperties() {
-        if (properties==null)
+        if (properties == null)
             properties = new Properties();
         return properties;
     }
@@ -207,7 +205,7 @@ public class GeoServerUser implements UserDetails, CredentialsContainer, Compara
      * @see java.lang.Comparable#compareTo(java.lang.Object)
      */
     public int compareTo(GeoServerUser o) {
-        if (o==null) return 1;
+        if (o == null) return 1;
         return getUsername().compareTo(o.getUsername());
     }
 
@@ -250,10 +248,10 @@ public class GeoServerUser implements UserDetails, CredentialsContainer, Compara
         sb.append("CredentialsNonExpired: ").append(this.credentialsNonExpired).append("; ");
         sb.append("AccountNonLocked: ").append(this.accountNonLocked).append("; ");
         sb.append(" [ ");
-        if (authorities!=null)
+        if (authorities != null)
             sb.append(StringUtils.collectionToCommaDelimitedString(authorities));
         sb.append(" ] ");
-        
+
         return sb.toString();
     }
 }

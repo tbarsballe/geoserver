@@ -16,9 +16,9 @@ import org.geotools.xml.Node;
 
 /**
  * Binding object for the element http://www.opengis.net/wfs:Query.
- *
  * <p>
- *        <pre>
+ * <p>
+ * <pre>
  *         <code>
  *  &lt;xsd:element name="Query" type="wfs:QueryType"&gt;       &lt;xsd:annotation&gt;
  *              &lt;xsd:documentation&gt;             The Query element is used to
@@ -32,6 +32,7 @@ import org.geotools.xml.Node;
  *
  *          </code>
  *         </pre>
+ *
  * @generated
  */
 public class QueryBinding extends AbstractComplexBinding {
@@ -65,7 +66,7 @@ public class QueryBinding extends AbstractComplexBinding {
      * @generated modifiable
      */
     public Object parse(ElementInstance instance, Node node, Object value)
-        throws Exception {
+            throws Exception {
         //TODO: implement
         return null;
     }

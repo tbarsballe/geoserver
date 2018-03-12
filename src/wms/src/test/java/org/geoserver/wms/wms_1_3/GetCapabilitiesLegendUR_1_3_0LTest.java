@@ -25,7 +25,7 @@ public class GetCapabilitiesLegendUR_1_3_0LTest extends GetCapabilitiesLegendURL
     protected String getRootElement() {
         return "WMS_Capabilities";
     }
-    
+
     @Override
     protected String getElementPrefix() {
         return "wms:";

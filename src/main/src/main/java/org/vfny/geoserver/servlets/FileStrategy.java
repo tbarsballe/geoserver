@@ -33,36 +33,44 @@ public class FileStrategy implements ServiceStrategy {
         return "FILE";
     }
 
-    /** Buffer size used to copy safe to response.getOutputStream() */
+    /**
+     * Buffer size used to copy safe to response.getOutputStream()
+     */
     private static int BUFF_SIZE = 4096;
 
-    /** Temporary file number */
+    /**
+     * Temporary file number
+     */
     static int sequence = 0;
 
-    /** Class logger */
+    /**
+     * Class logger
+     */
     protected static Logger LOGGER = org.geotools.util.logging.Logging.getLogger("org.vfny.geoserver.servlets");
 
-    /** OutputStream provided to writeTo method */
+    /**
+     * OutputStream provided to writeTo method
+     */
     private OutputStream safe;
 
-    /** Temporary file used by safe */
+    /**
+     * Temporary file used by safe
+     */
     private File temp;
 
     /**
      * Provides a outputs stream on a temporary file.
-     *
+     * <p>
      * <p>
      * I have changed this to use a BufferedWriter to agree with SpeedStrategy.
      * </p>
      *
      * @param response Response being handled
-     *
      * @return Outputstream for a temporary file
-     *
      * @throws IOException If temporary file could not be created.
      */
     public DispatcherOutputStream getDestination(HttpServletResponse response)
-        throws IOException {
+            throws IOException {
         // REVISIT: Should do more than sequence here
         // (In case we are running two GeoServers at once)
         // - Could we use response.getHandle() in the filename?
@@ -75,7 +83,7 @@ public class FileStrategy implements ServiceStrategy {
 
             if (!temp.canRead() || !temp.canWrite()) {
                 String errorMsg = "Temporary-file permission problem for location: "
-                    + temp.getPath();
+                        + temp.getPath();
                 throw new IOException(errorMsg);
             }
         } catch (IOException e) {
@@ -92,13 +100,13 @@ public class FileStrategy implements ServiceStrategy {
     /**
      * Closes safe output stream, copies resulting file to response.
      *
-     * @throws IOException If temporay file or response is unavailable
+     * @throws IOException           If temporay file or response is unavailable
      * @throws IllegalStateException if flush is called before getDestination
      */
     public void flush(HttpServletResponse response) throws IOException {
         if ((temp == null) || (response == null) || (safe == null) || !temp.exists()) {
             LOGGER.fine("temp is " + temp + ", response is " + response + " safe is " + safe
-                + ", temp exists " + temp.exists());
+                    + ", temp exists " + temp.exists());
             throw new IllegalStateException("flush should only be called after getDestination");
         }
 

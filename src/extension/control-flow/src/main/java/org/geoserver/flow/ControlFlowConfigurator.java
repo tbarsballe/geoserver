@@ -9,9 +9,8 @@ import java.util.Collection;
 
 /**
  * A builder for the flow controllers
- * 
+ *
  * @author Andrea Aime - OpenGeo
- * 
  */
 public interface ControlFlowConfigurator {
 
@@ -19,9 +18,10 @@ public interface ControlFlowConfigurator {
      * Builds the set of flow controllers to be used in the {@link ControlFlowCallback}
      */
     Collection<FlowController> buildFlowControllers() throws Exception;
-    
+
     /**
      * Maximum time the request can be held in queue before giving up to it.
+     *
      * @return The maximum time in milliseconds. Use 0 or a negative number for no timeout
      */
     long getTimeout();
@@ -29,8 +29,6 @@ public interface ControlFlowConfigurator {
     /**
      * Returns true if the set of flow controllers changed since last invocation of
      * {@link #buildFlowControllers()}
-     * 
-     *
      */
     boolean isStale();
 }

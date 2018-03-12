@@ -8,11 +8,11 @@ package org.geoserver.security.xml;
 import org.geoserver.security.config.FileBasedSecurityServiceConfig;
 
 /**
- * Extension of {@link FileBasedSecurityServiceConfig} in which the underlying file stored as XML. 
- * 
+ * Extension of {@link FileBasedSecurityServiceConfig} in which the underlying file stored as XML.
+ *
  * @author christian
  */
-public class XMLSecurityServiceConfig  extends FileBasedSecurityServiceConfig {
+public class XMLSecurityServiceConfig extends FileBasedSecurityServiceConfig {
 
     private static final long serialVersionUID = 1L;
     private boolean validating;

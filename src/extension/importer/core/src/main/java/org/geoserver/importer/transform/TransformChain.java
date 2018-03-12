@@ -19,9 +19,8 @@ import org.geotools.util.logging.Logging;
 
 /**
  * Chain of transformations to apply during the import process.
- * 
+ *
  * @author Justin Deoliveira, OpenGeo
- * 
  * @see {@link VectorTransformChain} {@link RasterTransformChain}
  */
 public abstract class TransformChain<T extends ImportTransform> implements Serializable {
@@ -31,7 +30,7 @@ public abstract class TransformChain<T extends ImportTransform> implements Seria
     static Logger LOGGER = Logging.getLogger(TransformChain.class);
 
     protected List<T> transforms;
-    
+
     public TransformChain() {
         this(new ArrayList<T>(3));
     }
@@ -82,10 +81,10 @@ public abstract class TransformChain<T extends ImportTransform> implements Seria
             }
         }
     }
-    
+
     /**
      * Runs all {@link PreTransform} in the chain
-     * 
+     *
      * @param item
      * @param data
      */
@@ -101,7 +100,7 @@ public abstract class TransformChain<T extends ImportTransform> implements Seria
 
     /**
      * Runs all {@link PostTransform} in the chain
-     * 
+     *
      * @param item
      * @param data
      */

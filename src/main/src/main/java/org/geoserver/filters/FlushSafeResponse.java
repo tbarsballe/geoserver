@@ -15,25 +15,25 @@ import javax.servlet.http.HttpServletResponseWrapper;
 /**
  * A wrapper making sure the servlet container will never see a flush call once the output stream
  * is closed
- *  
+ *
  * @author Andrea Aime - GeoSolutions
  */
 class FlushSafeResponse extends HttpServletResponseWrapper implements HttpServletResponse {
-    
+
     ServletOutputStream os = null;
 
     public FlushSafeResponse(HttpServletResponse response) {
         super(response);
     }
-    
+
     @Override
     public synchronized ServletOutputStream getOutputStream() throws IOException {
-        if(os == null) {
-            os = new FlushSafeServletOutputStream(super.getOutputStream()); 
+        if (os == null) {
+            os = new FlushSafeServletOutputStream(super.getOutputStream());
         }
         return os;
     }
-    
+
     static class FlushSafeServletOutputStream extends ServletOutputStream {
 
         OutputStream delegate;
@@ -60,7 +60,7 @@ class FlushSafeResponse extends HttpServletResponseWrapper implements HttpServle
 
         @Override
         public void flush() throws IOException {
-            if(!closed) {
+            if (!closed) {
                 delegate.flush();
             }
         }

@@ -28,7 +28,7 @@ public class LayerCodecTest extends GeoServerSystemTestSupport {
         testData.setUpDefaultRasterLayers();
         testData.setUpWcs10RasterLayers();
     }
-    
+
     @Test
     public void testBasicKVP() throws Exception {
         {

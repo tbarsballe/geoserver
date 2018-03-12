@@ -25,19 +25,22 @@ import org.opengis.util.InternationalString;
 
 /**
  * A process factory that wraps a {@link RemoteProcessClient} and can be used to get information about it and create the corresponding process.
- * 
+ *
  * @author Alessio Fabiani, GeoSolutions
- * 
  */
 public class RemoteProcessFactory implements ProcessFactory, RemoteProcessFactoryListener {
 
     public static final String WPS_VERSION = "1.0.0";
 
-    /** The LOGGER */
+    /**
+     * The LOGGER
+     */
     public static final Logger LOGGER = Logging
             .getLogger(RemoteProcessFactory.class.getPackage().getName());
 
-    /** Associates the generic sets of inputs and outputs declared by the remote service to the {@link RemoteProcess} instance */
+    /**
+     * Associates the generic sets of inputs and outputs declared by the remote service to the {@link RemoteProcess} instance
+     */
     private Map<Name, RemoteServiceDescriptor> descriptors = new ConcurrentHashMap<Name, RemoteServiceDescriptor>();
 
     /**
@@ -47,7 +50,9 @@ public class RemoteProcessFactory implements ProcessFactory, RemoteProcessFactor
      */
     private Map<Name, RemoteProcess> remoteInstances = new ConcurrentHashMap<Name, RemoteProcess>();
 
-    /** The {@link RemoteProcessClient} instance */
+    /**
+     * The {@link RemoteProcessClient} instance
+     */
     private RemoteProcessClient remoteClient;
 
     /**
@@ -86,17 +91,23 @@ public class RemoteProcessFactory implements ProcessFactory, RemoteProcessFactor
         this.remoteClient = remoteClient;
     }
 
-    /** The Title of the {@link RemoteProcessFactory} */
+    /**
+     * The Title of the {@link RemoteProcessFactory}
+     */
     public InternationalString getTitle() {
         return new SimpleInternationalString("Remote");
     }
 
-    /** The currently available {@link RemoteProcess} stubs on the {@link RemoteProcessFactory} */
+    /**
+     * The currently available {@link RemoteProcess} stubs on the {@link RemoteProcessFactory}
+     */
     public Set<Name> getNames() {
         return descriptors.keySet();
     }
 
-    /** Utility method to check if a {@link RemoteProcess} stub has been already registered */
+    /**
+     * Utility method to check if a {@link RemoteProcess} stub has been already registered
+     */
     boolean checkName(Name name) {
         if (name == null)
             throw new NullPointerException("Process name cannot be null");
@@ -115,7 +126,7 @@ public class RemoteProcessFactory implements ProcessFactory, RemoteProcessFactor
 
     /**
      * Creates a new {@link RemoteProcess} stub
-     * 
+     *
      * @throws IllegalArgumentException
      */
     public Process create(Name name) throws IllegalArgumentException {
@@ -135,7 +146,9 @@ public class RemoteProcessFactory implements ProcessFactory, RemoteProcessFactor
         }
     }
 
-    /** Get the {@link RemoteProcess} textual description */
+    /**
+     * Get the {@link RemoteProcess} textual description
+     */
     public InternationalString getDescription(Name name) {
         synchronized (descriptors) {
             if (checkName(name))
@@ -144,7 +157,9 @@ public class RemoteProcessFactory implements ProcessFactory, RemoteProcessFactor
         }
     }
 
-    /** Get the {@link RemoteProcess} title */
+    /**
+     * Get the {@link RemoteProcess} title
+     */
     public InternationalString getTitle(Name name) {
         synchronized (descriptors) {
             if (checkName(name))
@@ -153,7 +168,9 @@ public class RemoteProcessFactory implements ProcessFactory, RemoteProcessFactor
         }
     }
 
-    /** Get the {@link RemoteProcess} short name */
+    /**
+     * Get the {@link RemoteProcess} short name
+     */
     public String getName(Name name) {
         if (checkName(name)) {
             return name.getLocalPart();
@@ -171,7 +188,9 @@ public class RemoteProcessFactory implements ProcessFactory, RemoteProcessFactor
         return WPS_VERSION;
     }
 
-    /** Get the {@link RemoteProcess} textual description */
+    /**
+     * Get the {@link RemoteProcess} textual description
+     */
     public Map<String, Parameter<?>> getParameterInfo(Name name) {
         synchronized (descriptors) {
             if (checkName(name))
@@ -180,7 +199,9 @@ public class RemoteProcessFactory implements ProcessFactory, RemoteProcessFactor
         }
     }
 
-    /** Get the {@link RemoteProcess} textual description */
+    /**
+     * Get the {@link RemoteProcess} textual description
+     */
     public Map<String, Parameter<?>> getResultInfo(Name name, Map<String, Object> inputs)
             throws IllegalArgumentException {
         synchronized (descriptors) {
@@ -205,7 +226,9 @@ public class RemoteProcessFactory implements ProcessFactory, RemoteProcessFactor
         return Collections.EMPTY_MAP;
     }
 
-    /** Registers a new remote service */
+    /**
+     * Registers a new remote service
+     */
     @Override
     public void registerProcess(RemoteServiceDescriptor serviceDescriptor) {
         Name name = serviceDescriptor.getName();
@@ -218,7 +241,9 @@ public class RemoteProcessFactory implements ProcessFactory, RemoteProcessFactor
         LOGGER.info("Registered Service [" + name + "]");
     }
 
-    /** De-registers a remote service */
+    /**
+     * De-registers a remote service
+     */
     @Override
     public void deregisterProcess(Name name) {
         if (checkName(name)) {

@@ -17,11 +17,11 @@ import java.util.List;
 /**
  * When doing a POST or PUT to endpoints accepting some file, the URL will contain the extension of the POSTed file,
  * while the response should be a standard XML or JSON response, depending on the accepts header.
- *
+ * <p>
  * The default ContentNegotiationStrategies will favor the extension when determining the response type.
  * For example, when posting an sld file, "Ponds.sld", to "/rest/styles/Ponds.sld", the default content negotiation
  * assumes this to mean you expect an .sld response.
- *
+ * <p>
  * This strategy overrides this behavior for specified paths
  */
 public class PutIgnoringExtensionContentNegotiationStrategy implements ContentNegotiationStrategy {
@@ -31,8 +31,9 @@ public class PutIgnoringExtensionContentNegotiationStrategy implements ContentNe
 
     /**
      * Construct a new strategy. This should be instantiated as a bean for it to get picked up by the {@link RestConfiguration}
+     *
      * @param pathMatcher The {@link PatternsRequestCondition} used to determine if the request path matches
-     * @param mediaTypes The list of {@link MediaType}s to return when the path matches
+     * @param mediaTypes  The list of {@link MediaType}s to return when the path matches
      */
     public PutIgnoringExtensionContentNegotiationStrategy(PatternsRequestCondition pathMatcher, List<MediaType> mediaTypes) {
         this.pathMatcher = pathMatcher;

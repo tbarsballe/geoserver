@@ -12,9 +12,8 @@ import org.geotools.util.Utilities;
  * Realization of {@link LayerIdentifierInfo}; being a "data type" there's no
  * {@code createAuthorityURL()} method in {@code CatalogFactory}, instead directly instantiate this
  * class.
- * 
+ *
  * @author groldan
- * 
  */
 public class LayerIdentifier implements LayerIdentifierInfo {
 

@@ -13,13 +13,14 @@ import org.geoserver.catalog.Catalog;
 /**
  * Abstract implementation of the {@link RESTUploadPathMapper} interface which does not remap the input root and file path. All the various
  * {@link RESTUploadPathMapper} implementations should extend this base class.
- * 
+ *
  * @author Nicola Lagomarsini Geosolutions S.A.S.
- * 
  */
 public abstract class RESTUploadPathMapperImpl implements RESTUploadPathMapper {
 
-    /** Catalog object used for searching the various settings inside the metadata map */
+    /**
+     * Catalog object used for searching the various settings inside the metadata map
+     */
     protected Catalog catalog;
 
     public RESTUploadPathMapperImpl(Catalog catalog) {
@@ -27,10 +28,12 @@ public abstract class RESTUploadPathMapperImpl implements RESTUploadPathMapper {
     }
 
     public void mapStorePath(StringBuilder rootDir, String workspace, String store,
-            Map<String, String> storeParams) throws IOException { }
+                             Map<String, String> storeParams) throws IOException {
+    }
 
     public void mapItemPath(String workspace, String store,
-            Map<String, String> storeParams, StringBuilder itemPath, String itemName) throws IOException { }
+                            Map<String, String> storeParams, StringBuilder itemPath, String itemName) throws IOException {
+    }
 
     public void setCatalog(Catalog catalog) {
         this.catalog = catalog;

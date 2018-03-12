@@ -12,9 +12,8 @@ import de.micromata.opengis.kml.v_2_2_0.Kml;
 
 /**
  * A WebMap containing a KML document
- * 
+ *
  * @author Andrea Aime - GeoSolutions
- * 
  */
 public class KMLMap extends WebMap {
 

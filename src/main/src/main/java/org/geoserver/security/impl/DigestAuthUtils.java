@@ -19,20 +19,19 @@ import org.springframework.util.StringUtils;
 
 
 /**
- * This is an exact copy of 
+ * This is an exact copy of
  * org.springframework.security.web.authentication.www.DigestAuthUtils;
- *
+ * <p>
  * The Spring class has package visibility, no idea why.
  * The functionally is used for test cases and may be
- * used by a client agent using the geoserver library 
- * 
- * @author mcr
+ * used by a client agent using the geoserver library
  *
+ * @author mcr
  */
 public class DigestAuthUtils {
     private static final String[] EMPTY_STRING_ARRAY = new String[0];
 
-    public  static String encodePasswordInA1Format(String username, String realm, String password) {
+    public static String encodePasswordInA1Format(String username, String realm, String password) {
         String a1 = username + ":" + realm + ":" + password;
         String a1Md5 = md5Hex(a1);
 
@@ -146,7 +145,7 @@ public class DigestAuthUtils {
      * @param removeCharacters one or more characters to remove from each element prior to attempting the split
      *                         operation (typically the quotation mark symbol) or <code>null</code> if no removal should occur
      * @return a <code>Map</code> representing the array contents, or <code>null</code> if the array to process was
-     *         null or empty
+     * null or empty
      */
     public static Map<String, String> splitEachArrayElementAndCreateMap(String[] array, String delimiter, String removeCharacters) {
         if ((array == null) || (array.length == 0)) {
@@ -184,7 +183,7 @@ public class DigestAuthUtils {
      * @param toSplit   the string to split
      * @param delimiter to split the string up with
      * @return a two element array with index 0 being before the delimiter, and index 1 being after the delimiter
-     *         (neither element includes the delimiter)
+     * (neither element includes the delimiter)
      * @throws IllegalArgumentException if an argument was invalid
      */
     public static String[] split(String toSplit, String delimiter) {

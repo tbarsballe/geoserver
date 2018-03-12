@@ -23,21 +23,21 @@ public class ConfirmRemovalGroupPanelTest extends AbstractConfirmRemovalPanelTes
     private static final long serialVersionUID = 1L;
 
     protected boolean disassociateRoles = false;
-    
+
     protected void setupPanel(final List<GeoServerUserGroup> roots) {
         tester.startPage(new FormTestPage(new ComponentBuilder() {
             private static final long serialVersionUID = 1L;
 
             public Component buildComponent(String id) {
                 Model<Boolean> model = new Model<Boolean>(disassociateRoles);
-                return new ConfirmRemovalGroupPanel(id, model,roots.toArray(new GeoServerUserGroup[roots.size()])) {
+                return new ConfirmRemovalGroupPanel(id, model, roots.toArray(new GeoServerUserGroup[roots.size()])) {
                     @Override
                     protected IModel<String> canRemove(GeoServerUserGroup data) {
-                        SelectionGroupRemovalLink link = new SelectionGroupRemovalLink(getUserGroupServiceName(),"XXX",null,null,disassociateRoles);
+                        SelectionGroupRemovalLink link = new SelectionGroupRemovalLink(getUserGroupServiceName(), "XXX", null, null, disassociateRoles);
                         return link.canRemove(data);
                     }
 
-                    private static final long serialVersionUID = 1L;                    
+                    private static final long serialVersionUID = 1L;
                 };
             }
         }));
@@ -51,22 +51,21 @@ public class ConfirmRemovalGroupPanelTest extends AbstractConfirmRemovalPanelTes
 
     @Test
     public void testRemoveGroup() throws Exception {
-        disassociateRoles=false;
+        disassociateRoles = false;
         //initializeForXML();
-        removeObject();                                       
+        removeObject();
     }
 
     @Test
     public void testRemoveGroupWithRoles() throws Exception {
-        disassociateRoles=true;
+        disassociateRoles = true;
         //initializeForXML();
-        removeObject();                                       
+        removeObject();
     }
 
-    
 
     @Override
-    protected GeoServerUserGroup getRemoveableObject() throws Exception{
+    protected GeoServerUserGroup getRemoveableObject() throws Exception {
         if (disassociateRoles)
             return ugService.createGroupObject("g_all", true);
         else
@@ -79,17 +78,17 @@ public class ConfirmRemovalGroupPanelTest extends AbstractConfirmRemovalPanelTes
     }
 
     @Override
-    protected String getProblematicObjectRegExp() throws Exception{
+    protected String getProblematicObjectRegExp() throws Exception {
         return "";
     }
 
     @Override
-    protected String getRemoveableObjectRegExp() throws Exception{
+    protected String getRemoveableObjectRegExp() throws Exception {
         if (disassociateRoles)
-            return ".*"+getRemoveableObject().getGroupname()+".*ROLE_WMS.*";
-        else    
-            return ".*"+getRemoveableObject().getGroupname()+".*";
-    }    
+            return ".*" + getRemoveableObject().getGroupname() + ".*ROLE_WMS.*";
+        else
+            return ".*" + getRemoveableObject().getGroupname() + ".*";
+    }
 
 
 }

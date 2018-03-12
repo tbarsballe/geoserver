@@ -63,7 +63,7 @@ import com.vividsolutions.jts.geom.Polygon;
 /**
  * Helper class to dynamically create a graphic representation of the area of validity for a
  * {@link CoordinateReferenceSystem coordinate reference system}.
- * 
+ *
  * @author Gabriel Roldan
  * @version $Id$
  */
@@ -128,14 +128,14 @@ class CRSAreaOfValidityMapBuilder {
             Polygon westPolygon = createBoundingPolygon(westBoundLongitude, 180,
                     southBoundLatitude, northBoundLatitude, numSteps);
 
-            geogBoundingGeom = gf.createMultiPolygon(new Polygon[] { eastPolygon, westPolygon });
+            geogBoundingGeom = gf.createMultiPolygon(new Polygon[]{eastPolygon, westPolygon});
         }
         return geogBoundingGeom;
     }
 
     private Polygon createBoundingPolygon(final double westBoundLongitude,
-            final double eastBoundLongitude, final double southBoundLatitude,
-            final double northBoundLatitude, final int numSteps) {
+                                          final double eastBoundLongitude, final double southBoundLatitude,
+                                          final double northBoundLatitude, final int numSteps) {
         // build a densified LinearRing so it does reproject better
         final double dx = (eastBoundLongitude - westBoundLongitude) / numSteps;
         final double dy = (northBoundLatitude - southBoundLatitude) / numSteps;
@@ -190,7 +190,7 @@ class CRSAreaOfValidityMapBuilder {
     }
 
     public RenderedImage createMapFor(CoordinateReferenceSystem crs,
-            com.vividsolutions.jts.geom.Envelope areaOfInterest) throws IOException {
+                                      com.vividsolutions.jts.geom.Envelope areaOfInterest) throws IOException {
         BufferedImage image = new BufferedImage(mapWidth, mapHeight, BufferedImage.TYPE_INT_ARGB);
         Graphics2D graphics = image.createGraphics();
         createMapFor(crs, areaOfInterest, graphics);
@@ -200,7 +200,7 @@ class CRSAreaOfValidityMapBuilder {
 
     @SuppressWarnings("unchecked")
     public void createMapFor(final CoordinateReferenceSystem crs,
-            final com.vividsolutions.jts.geom.Envelope areaOfInterest, final Graphics2D graphics)
+                             final com.vividsolutions.jts.geom.Envelope areaOfInterest, final Graphics2D graphics)
             throws IOException {
 
         Geometry geographicBoundingBox = getGeographicBoundingBox(crs);
@@ -226,7 +226,7 @@ class CRSAreaOfValidityMapBuilder {
         renderingHints.put(StreamingRenderer.CONTINUOUS_MAP_WRAPPING, Boolean.TRUE);
         renderer.setRendererHints(renderingHints);
         renderer.paint(graphics, paintArea, areaOfInterest);
-        
+
         mapContent.dispose();
     }
 
@@ -259,7 +259,7 @@ class CRSAreaOfValidityMapBuilder {
     }
 
     private MapContext getMapContext(CoordinateReferenceSystem crs, Geometry geographicBoundingBox,
-            com.vividsolutions.jts.geom.Envelope areaOfInterest) throws IOException {
+                                     com.vividsolutions.jts.geom.Envelope areaOfInterest) throws IOException {
 
         DefaultMapContext mapContent = new DefaultMapContext();
 
@@ -319,8 +319,8 @@ class CRSAreaOfValidityMapBuilder {
                 LineString geom;
                 int level;
 
-                geom = gf.createLineString(new Coordinate[] { new Coordinate(lon, lat),
-                        new Coordinate(lon, lat + 5) });
+                geom = gf.createLineString(new Coordinate[]{new Coordinate(lon, lat),
+                        new Coordinate(lon, lat + 5)});
 
                 level = 1;
                 if (lon % 10 == 0) {
@@ -336,8 +336,8 @@ class CRSAreaOfValidityMapBuilder {
                 f.setAttribute(1, Integer.valueOf(level));
                 writer.write();
 
-                geom = gf.createLineString(new Coordinate[] { new Coordinate(lon, lat),
-                        new Coordinate(lon + 5, lat) });
+                geom = gf.createLineString(new Coordinate[]{new Coordinate(lon, lat),
+                        new Coordinate(lon + 5, lat)});
 
                 level = 1;
                 if (lat % 10 == 0) {

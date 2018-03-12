@@ -30,7 +30,7 @@ import com.sun.media.jai.util.PropertyUtil;
 
 /**
  * A thread safe implementation of OperationRegistry using Java 5 Concurrent {@link ReadWriteLock}
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public final class ConcurrentOperationRegistry extends OperationRegistry {
@@ -68,7 +68,9 @@ public final class ConcurrentOperationRegistry extends OperationRegistry {
 
     }
 
-    /** The reader/writer lock for this class. */
+    /**
+     * The reader/writer lock for this class.
+     */
     private ReadWriteLock lock;
 
     public ConcurrentOperationRegistry() {
@@ -250,7 +252,7 @@ public final class ConcurrentOperationRegistry extends OperationRegistry {
     }
 
     public void setProductPreference(String modeName, String descriptorName,
-            String preferredProductName, String otherProductName) {
+                                     String preferredProductName, String otherProductName) {
         Lock writeLock = lock.writeLock();
         try {
             writeLock.lock();
@@ -262,7 +264,7 @@ public final class ConcurrentOperationRegistry extends OperationRegistry {
     }
 
     public void unsetProductPreference(String modeName, String descriptorName,
-            String preferredProductName, String otherProductName) {
+                                       String preferredProductName, String otherProductName) {
         Lock writeLock = lock.writeLock();
         try {
             writeLock.lock();
@@ -306,7 +308,7 @@ public final class ConcurrentOperationRegistry extends OperationRegistry {
     }
 
     public void registerFactory(String modeName, String descriptorName, String productName,
-            Object factory) {
+                                Object factory) {
         Lock writeLock = lock.writeLock();
         try {
             writeLock.lock();
@@ -317,7 +319,7 @@ public final class ConcurrentOperationRegistry extends OperationRegistry {
     }
 
     public void unregisterFactory(String modeName, String descriptorName, String productName,
-            Object factory) {
+                                  Object factory) {
         Lock writeLock = lock.writeLock();
         try {
             writeLock.lock();
@@ -328,7 +330,7 @@ public final class ConcurrentOperationRegistry extends OperationRegistry {
     }
 
     public void setFactoryPreference(String modeName, String descriptorName, String productName,
-            Object preferredOp, Object otherOp) {
+                                     Object preferredOp, Object otherOp) {
         Lock writeLock = lock.writeLock();
         try {
             writeLock.lock();
@@ -339,7 +341,7 @@ public final class ConcurrentOperationRegistry extends OperationRegistry {
     }
 
     public void unsetFactoryPreference(String modeName, String descriptorName, String productName,
-            Object preferredOp, Object otherOp) {
+                                       Object preferredOp, Object otherOp) {
         Lock writeLock = lock.writeLock();
         try {
             writeLock.lock();
@@ -361,7 +363,7 @@ public final class ConcurrentOperationRegistry extends OperationRegistry {
     }
 
     public Object[][] getFactoryPreferences(String modeName, String descriptorName,
-            String productName) {
+                                            String productName) {
         Lock readLock = lock.readLock();
         try {
             readLock.lock();
@@ -417,7 +419,7 @@ public final class ConcurrentOperationRegistry extends OperationRegistry {
     }
 
     public void addPropertyGenerator(String modeName, String descriptorName,
-            PropertyGenerator generator) {
+                                     PropertyGenerator generator) {
         Lock writeLock = lock.writeLock();
         try {
             writeLock.lock();
@@ -428,7 +430,7 @@ public final class ConcurrentOperationRegistry extends OperationRegistry {
     }
 
     public void removePropertyGenerator(String modeName, String descriptorName,
-            PropertyGenerator generator) {
+                                        PropertyGenerator generator) {
         Lock writeLock = lock.writeLock();
         try {
             writeLock.lock();
@@ -439,7 +441,7 @@ public final class ConcurrentOperationRegistry extends OperationRegistry {
     }
 
     public void copyPropertyFromSource(String modeName, String descriptorName, String propertyName,
-            int sourceIndex) {
+                                       int sourceIndex) {
         Lock writeLock = lock.writeLock();
         try {
             writeLock.lock();
@@ -491,7 +493,7 @@ public final class ConcurrentOperationRegistry extends OperationRegistry {
     }
 
     public PropertySource getPropertySource(String modeName, String descriptorName, Object op,
-            Vector sources) {
+                                            Vector sources) {
         Lock readLock = lock.readLock();
         try {
             readLock.lock();

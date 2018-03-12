@@ -12,7 +12,7 @@ import org.geoserver.catalog.impl.AuthorityURL;
 /**
  * Support interface for publication of AuthorityURL elements in WMS capabilities, assigned to
  * either the root WMS layer or any individual layer, including layer gorups.
- * 
+ *
  * @author groldan
  * @see AuthorityURL
  * @see LayerInfo#getAuthorityURLs()
@@ -26,8 +26,7 @@ public interface AuthorityURLInfo extends Serializable {
     public String getName();
 
     /**
-     * @param name
-     *            the authority name
+     * @param name the authority name
      */
     public void setName(String name);
 
@@ -37,8 +36,7 @@ public interface AuthorityURLInfo extends Serializable {
     public String getHref();
 
     /**
-     * @param href
-     *            the authority URL online resource link
+     * @param href the authority URL online resource link
      */
     public void setHref(String href);
 }

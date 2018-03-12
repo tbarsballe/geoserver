@@ -18,21 +18,20 @@ import org.opengis.filter.Filter;
 
 /**
  * A simplified model of an SLD rule used for internal manipulation.
- * 
+ *
  * @author David Winslow, OpenGeo
- * 
  */
 class MiniRule {
-        public final Filter filter;
-        public final boolean isElseFilter;
-        public final List<PointSymbolizer> symbolizers;
-        
-        public MiniRule(Filter filter, boolean isElseFilter, List<PointSymbolizer> symbolizers) {
-                this.filter = filter;
-                this.isElseFilter = isElseFilter;
-                this.symbolizers = symbolizers;
-        }
-        
+    public final Filter filter;
+    public final boolean isElseFilter;
+    public final List<PointSymbolizer> symbolizers;
+
+    public MiniRule(Filter filter, boolean isElseFilter, List<PointSymbolizer> symbolizers) {
+        this.filter = filter;
+        this.isElseFilter = isElseFilter;
+        this.symbolizers = symbolizers;
+    }
+
     static List<List<MiniRule>> minify(Style style) {
         List<List<MiniRule>> ftStyles = new ArrayList<List<MiniRule>>();
         for (FeatureTypeStyle ftStyle : style.featureTypeStyles()) {
@@ -53,13 +52,13 @@ class MiniRule {
         }
         return ftStyles;
     }
-    
+
     static Style makeStyle(StyleFactory factory, List<List<MiniRule>> ftStyles) {
         Style style = factory.createStyle();
         for (List<MiniRule> rules : ftStyles) {
             FeatureTypeStyle ftStyle = factory.createFeatureTypeStyle();
             for (MiniRule miniRule : rules) {
-                if(!miniRule.symbolizers.isEmpty()){
+                if (!miniRule.symbolizers.isEmpty()) {
                     Rule realRule = factory.createRule();
                     for (Symbolizer sym : miniRule.symbolizers) {
                         realRule.symbolizers().add(sym);

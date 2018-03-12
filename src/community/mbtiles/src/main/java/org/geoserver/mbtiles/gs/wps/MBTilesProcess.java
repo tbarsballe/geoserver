@@ -67,7 +67,7 @@ public class MBTilesProcess implements GSProcess {
     private MBTilesGetMapOutputFormat mapOutput;
 
     public MBTilesProcess(Catalog catalog, MBTilesGetMapOutputFormat mapOutput,
-            WPSResourceManager storage) {
+                          WPSResourceManager storage) {
         this.resources = storage;
         this.mapOutput = mapOutput;
         this.catalog = catalog;
@@ -105,8 +105,8 @@ public class MBTilesProcess implements GSProcess {
             @DescribeParameter(name = "styleNames", description = "Name of the styles to use", min = 0, collectionType = String.class) Collection<String> styleNames,
             @DescribeParameter(name = "stylePath", description = "Path of the style to use", min = 0) URL stylePath,
             @DescribeParameter(name = "styleBody", description = "Body of the style to use", min = 0) String styleBody)
-            throws IOException { 
-        
+            throws IOException {
+
         // Extract the filename if present
         String name;
 
@@ -118,9 +118,9 @@ public class MBTilesProcess implements GSProcess {
         } else {
             throw new ProcessException("Layers parameter is empty");
         }
-        
+
         // Initial check on the layers and styleNames size
-        if(styleNames != null && styleNames.size() != layerz.size()){
+        if (styleNames != null && styleNames.size() != layerz.size()) {
             throw new ProcessException("Layers and styleNames must have the same size");
         }
 

@@ -39,21 +39,21 @@ public class FeatureTypeInfoImpl extends ResourceInfoImpl implements
 
     protected List<AttributeTypeInfo> attributes = new ArrayList<AttributeTypeInfo>();
     protected List<String> responseSRS = new ArrayList<String>();
-    
+
     boolean overridingServiceSRS;
     boolean skipNumberMatched = false;
     boolean circularArcPresent;
-    
+
     public boolean isCircularArcPresent() {
-    	return circularArcPresent;
-	}
+        return circularArcPresent;
+    }
 
-	public void setCircularArcPresent(boolean curveGeometryEnabled) {
-		this.circularArcPresent = curveGeometryEnabled;
-	}
+    public void setCircularArcPresent(boolean curveGeometryEnabled) {
+        this.circularArcPresent = curveGeometryEnabled;
+    }
 
-	Measure linearizationTolerance;
-    
+    Measure linearizationTolerance;
+
     protected FeatureTypeInfoImpl() {
     }
 
@@ -62,7 +62,7 @@ public class FeatureTypeInfoImpl extends ResourceInfoImpl implements
     }
 
     public FeatureTypeInfoImpl(Catalog catalog, String id) {
-        super(catalog,id);
+        super(catalog, id);
     }
 
     public DataStoreInfo getStore() {
@@ -77,11 +77,11 @@ public class FeatureTypeInfoImpl extends ResourceInfoImpl implements
     public List<AttributeTypeInfo> getAttributes() {
         return attributes;
     }
-    
+
     public void setAttributes(List<AttributeTypeInfo> attributes) {
         this.attributes = attributes;
     }
-    
+
     /*
      * The filter is computed by current cqlFilter
      */
@@ -100,32 +100,32 @@ public class FeatureTypeInfoImpl extends ResourceInfoImpl implements
     public int getMaxFeatures() {
         return maxFeatures;
     }
-    
+
     public void setMaxFeatures(int maxFeatures) {
         this.maxFeatures = maxFeatures;
     }
-    
+
     public int getNumDecimals() {
         return numDecimals;
     }
-    
+
     public void setNumDecimals(int numDecimals) {
         this.numDecimals = numDecimals;
     }
-    
+
     public List<AttributeTypeInfo> attributes() throws IOException {
-        return catalog.getResourcePool().getAttributes( this );
+        return catalog.getResourcePool().getAttributes(this);
     }
 
     public FeatureType getFeatureType() throws IOException {
-        return catalog.getResourcePool().getFeatureType( this );
+        return catalog.getResourcePool().getFeatureType(this);
     }
-    
+
     public FeatureSource<? extends FeatureType, ? extends Feature> getFeatureSource(ProgressListener listener, Hints hints)
             throws IOException {
-        return catalog.getResourcePool().getFeatureSource( this, hints );
+        return catalog.getResourcePool().getFeatureSource(this, hints);
     }
-    
+
     public void accept(CatalogVisitor visitor) {
         visitor.visit(this);
     }
@@ -137,7 +137,7 @@ public class FeatureTypeInfoImpl extends ResourceInfoImpl implements
     public void setResponseSRS(List<String> otherSrs) {
         this.responseSRS = otherSrs;
     }
-   
+
     public boolean isOverridingServiceSRS() {
         return overridingServiceSRS;
     }
@@ -205,7 +205,7 @@ public class FeatureTypeInfoImpl extends ResourceInfoImpl implements
                 }
             }
             if (attributesIterator.hasNext() || otherAttributesIterator.hasNext())
-              return false;
+                return false;
         }
         if (responseSRS == null) {
             if (other.getResponseSRS() != null)
@@ -232,7 +232,7 @@ public class FeatureTypeInfoImpl extends ResourceInfoImpl implements
                 return false;
         } else if (!cqlFilter.equals(other.getCqlFilter()))
             return false;
-        
+
         return true;
     }
 
@@ -256,5 +256,5 @@ public class FeatureTypeInfoImpl extends ResourceInfoImpl implements
         this.cqlFilter = cqlFilter;
         this.filter = null;
     }
-    
+
 }

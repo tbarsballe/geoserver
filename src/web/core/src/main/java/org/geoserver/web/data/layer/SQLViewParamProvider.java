@@ -20,7 +20,9 @@ import org.geotools.util.logging.Logging;
 
 public class SQLViewParamProvider extends GeoServerDataProvider<Parameter> {
 
-    /** serialVersionUID */
+    /**
+     * serialVersionUID
+     */
     private static final long serialVersionUID = 4823593149295419810L;
 
     private static final String DEFAULT_REGEXP = "^[\\w\\d\\s]+$";
@@ -35,7 +37,7 @@ public class SQLViewParamProvider extends GeoServerDataProvider<Parameter> {
             "defaultValue");
 
     static final Property<Parameter> REGEXP = new BeanProperty<Parameter>("regexp", "regexp");
-    
+
     public SQLViewParamProvider() {
         setEditable(true);
     }
@@ -59,7 +61,7 @@ public class SQLViewParamProvider extends GeoServerDataProvider<Parameter> {
 
     /**
      * Adds the parameters found in the sql definition
-     * 
+     *
      * @param sql
      */
     public void refreshFromSql(String sql) {

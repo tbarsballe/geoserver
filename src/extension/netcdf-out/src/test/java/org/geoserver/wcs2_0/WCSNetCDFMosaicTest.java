@@ -67,7 +67,7 @@ import ucar.nc2.Dimension;
 import ucar.nc2.Variable;
 import ucar.nc2.dataset.NetcdfDataset;
 
-@TestSetup(run=TestSetupFrequency.ONCE)
+@TestSetup(run = TestSetupFrequency.ONCE)
 public class WCSNetCDFMosaicTest extends WCSNetCDFBaseTest {
 
     private static final double DELTA = 1E-6;
@@ -89,7 +89,7 @@ public class WCSNetCDFMosaicTest extends WCSNetCDFBaseTest {
     private final static Section NETCDF_SECTION;
     private CoverageView coverageView = null;
 
-    static{
+    static {
         System.setProperty("org.geotools.referencing.forceXY", "true");
         final List<Range> ranges = new LinkedList<Range>();
         ranges.add(new Range(1));
@@ -173,7 +173,7 @@ public class WCSNetCDFMosaicTest extends WCSNetCDFBaseTest {
         boolean isCompressed = layerName.contains("COMPRESSED");
         // Update the UnitOfMeasure to km and noData to -9999
         CoverageDimensionInfo dimension = info.getDimensions().get(0);
-        String originalUnit = ORIGINAL_UNIT; 
+        String originalUnit = ORIGINAL_UNIT;
         dimension.setUnit(originalUnit);
 
         List<Double> nullValues = dimension.getNullValues();
@@ -215,9 +215,9 @@ public class WCSNetCDFMosaicTest extends WCSNetCDFBaseTest {
         GranuleStack stack = (GranuleStack) lastResult;
 
         //we expect a single granule which covers the entire mosaic
-        for(GridCoverage2D c : stack.getGranules()){
-            assertEquals(30., c.getEnvelope2D().getHeight(),0.001);
-            assertEquals(45., c.getEnvelope2D().getWidth(),0.001);
+        for (GridCoverage2D c : stack.getGranules()) {
+            assertEquals(30., c.getEnvelope2D().getHeight(), 0.001);
+            assertEquals(45., c.getEnvelope2D().getWidth(), 0.001);
         }
         assertEquals(1, stack.getGranules().size());
     }
@@ -397,16 +397,16 @@ public class WCSNetCDFMosaicTest extends WCSNetCDFBaseTest {
         String unit = var.getUnitsString();
         assertEquals(ORIGINAL_UNIT, unit);
 
-        Attribute fillValue = var.findAttribute(NetCDFUtilities.FILL_VALUE); 
+        Attribute fillValue = var.findAttribute(NetCDFUtilities.FILL_VALUE);
         assertNotNull(fillValue);
 
         // There is dataPacking, therefore, fillValue should have been changed
         assertEquals(PACKED_FILL_VALUE, fillValue.getNumericValue().doubleValue(), 1E-6);
 
-        Attribute addOffsetAttr = var.findAttribute(DataPacking.ADD_OFFSET); 
+        Attribute addOffsetAttr = var.findAttribute(DataPacking.ADD_OFFSET);
         assertNotNull(addOffsetAttr);
 
-        Attribute scaleFactorAttr = var.findAttribute(DataPacking.SCALE_FACTOR); 
+        Attribute scaleFactorAttr = var.findAttribute(DataPacking.SCALE_FACTOR);
         assertNotNull(scaleFactorAttr);
         double scaleFactor = scaleFactorAttr.getNumericValue().doubleValue();
         double addOffset = addOffsetAttr.getNumericValue().doubleValue();
@@ -417,7 +417,7 @@ public class WCSNetCDFMosaicTest extends WCSNetCDFBaseTest {
         // Data has been packed to short
 
         double packedData = (ORIGINAL_PIXEL_VALUE - addOffset) / scaleFactor;
-        assertEquals((short)(packedData + 0.5), data , DELTA);
+        assertEquals((short) (packedData + 0.5), data, DELTA);
 
         dataset.close();
     }
@@ -441,10 +441,10 @@ public class WCSNetCDFMosaicTest extends WCSNetCDFBaseTest {
         String unit = var.getUnitsString();
         assertEquals(CANONICAL_UNIT, unit);
 
-        Attribute addOffsetAttr = var.findAttribute(DataPacking.ADD_OFFSET); 
+        Attribute addOffsetAttr = var.findAttribute(DataPacking.ADD_OFFSET);
         assertNotNull(addOffsetAttr);
 
-        Attribute scaleFactorAttr = var.findAttribute(DataPacking.SCALE_FACTOR); 
+        Attribute scaleFactorAttr = var.findAttribute(DataPacking.SCALE_FACTOR);
         assertNotNull(scaleFactorAttr);
         double scaleFactor = scaleFactorAttr.getNumericValue().doubleValue();
         double addOffset = addOffsetAttr.getNumericValue().doubleValue();
@@ -456,9 +456,9 @@ public class WCSNetCDFMosaicTest extends WCSNetCDFBaseTest {
 
         // Going from original unit to canonical, then packing
         double packedData = ((ORIGINAL_PIXEL_VALUE * 1000) - addOffset) / scaleFactor;
-        assertEquals((short)(packedData + 0.5), data , DELTA);
+        assertEquals((short) (packedData + 0.5), data, DELTA);
 
-        Attribute fillValue = var.findAttribute(NetCDFUtilities.FILL_VALUE); 
+        Attribute fillValue = var.findAttribute(NetCDFUtilities.FILL_VALUE);
         assertNotNull(fillValue);
         // There is dataPacking, therefore, fillValue should have been changed
         assertEquals(PACKED_FILL_VALUE, fillValue.getNumericValue().doubleValue(), DELTA);
@@ -470,7 +470,7 @@ public class WCSNetCDFMosaicTest extends WCSNetCDFBaseTest {
 
         dataset.close();
     }
-    
+
     private void addViewToCatalog() throws Exception {
         final Catalog cat = getCatalog();
         final CoverageStoreInfo storeInfo = cat.getCoverageStoreByName(DUMMYMOSAIC.getLocalPart());
@@ -479,7 +479,7 @@ public class WCSNetCDFMosaicTest extends WCSNetCDFBaseTest {
         builder.setStore(storeInfo);
 
         final CoverageInfo coverageInfo = coverageView.createCoverageInfo("dummyView", storeInfo, builder);
-        coverageInfo.getParameters().put("USE_JAI_IMAGEREAD","false");
+        coverageInfo.getParameters().put("USE_JAI_IMAGEREAD", "false");
         cat.add(coverageInfo);
         final LayerInfo layerInfo = builder.buildLayer(coverageInfo);
         cat.add(layerInfo);
@@ -544,7 +544,7 @@ public class WCSNetCDFMosaicTest extends WCSNetCDFBaseTest {
 
     /**
      * Check <code>Temperature_surface</code> extra variables, variable attributes, and global attributes of different type.
-     * 
+     *
      * @param format the output format MIME type
      */
     private void checkExtraVariables(String format) throws Exception {
@@ -579,7 +579,7 @@ public class WCSNetCDFMosaicTest extends WCSNetCDFBaseTest {
             assertEquals("time", timeVar.findAttribute("description").getStringValue());
             assertEquals("seconds since 1970-01-01 00:00:00 UTC",
                     timeVar.findAttribute("units").getStringValue());
-            assertArrayEquals(new double[] { 1461664800, 1461708000 },
+            assertArrayEquals(new double[]{1461664800, 1461708000},
                     (double[]) timeVar.read().copyTo1DJavaArray(), (double) DELTA);
             Variable rlonVar = dataset.findVariable("rlon");
             assertNotNull(rlonVar);
@@ -588,7 +588,7 @@ public class WCSNetCDFMosaicTest extends WCSNetCDFBaseTest {
             assertEquals("grid_longitude", rlonVar.findAttribute("long_name").getStringValue());
             assertEquals("grid_longitude", rlonVar.findAttribute("standard_name").getStringValue());
             assertEquals("degrees", rlonVar.findAttribute("units").getStringValue());
-            assertArrayEquals(new float[] { -30, -20, -10, 0, 10, 20, 30 },
+            assertArrayEquals(new float[]{-30, -20, -10, 0, 10, 20, 30},
                     (float[]) rlonVar.read().copyTo1DJavaArray(), (float) DELTA);
             Variable rlatVar = dataset.findVariable("rlat");
             assertNotNull(rlatVar);
@@ -597,7 +597,7 @@ public class WCSNetCDFMosaicTest extends WCSNetCDFBaseTest {
             assertEquals("grid_latitude", rlatVar.findAttribute("long_name").getStringValue());
             assertEquals("grid_latitude", rlatVar.findAttribute("standard_name").getStringValue());
             assertEquals("degrees", rlatVar.findAttribute("units").getStringValue());
-            assertArrayEquals(new float[] { -20, -10, 0, 10, 20 },
+            assertArrayEquals(new float[]{-20, -10, 0, 10, 20},
                     (float[]) rlatVar.read().copyTo1DJavaArray(), (float) DELTA);
             // check projection variable
             Variable projVar = dataset.findVariable("rotated_latitude_longitude");
@@ -618,11 +618,11 @@ public class WCSNetCDFMosaicTest extends WCSNetCDFBaseTest {
             assertEquals(timeDim, tempVar.getDimensions().get(0));
             assertEquals(rlatDim, tempVar.getDimensions().get(1));
             assertEquals(rlonDim, tempVar.getDimensions().get(2));
-            assertArrayEquals(new float[] { 300, 299, 298, 297, 296, 295, 294, 299, 300, 299, 298,
-                    297, 296, 295, 298, 299, 300, 299, 298, 297, 296, 297, 298, 299, 300, 299, 298,
-                    297, 296, 297, 298, 299, 300, 299, 298, 301, 300, 299, 298, 297, 296, 295, 300,
-                    301, 300, 299, 298, 297, 296, 299, 300, 301, 300, 299, 298, 297, 298, 299, 300,
-                    301, 300, 299, 298, 297, 298, 299, 300, 301, 300, 299 },
+            assertArrayEquals(new float[]{300, 299, 298, 297, 296, 295, 294, 299, 300, 299, 298,
+                            297, 296, 295, 298, 299, 300, 299, 298, 297, 296, 297, 298, 299, 300, 299, 298,
+                            297, 296, 297, 298, 299, 300, 299, 298, 301, 300, 299, 298, 297, 296, 295, 300,
+                            301, 300, 299, 298, 297, 296, 299, 300, 301, 300, 299, 298, 297, 298, 299, 300,
+                            301, 300, 299, 298, 297, 298, 299, 300, 301, 300, 299},
                     (float[]) tempVar.read().copyTo1DJavaArray(), (float) DELTA);
             // some attributes expected to copied from source variable
             assertEquals("TMP", tempVar.findAttribute("abbreviation").getStringValue());
@@ -646,7 +646,7 @@ public class WCSNetCDFMosaicTest extends WCSNetCDFBaseTest {
                     reftimeVar.findAttribute("standard_name").getStringValue());
             assertEquals("GRIB reference time",
                     reftimeVar.findAttribute("long_name").getStringValue());
-            assertArrayEquals(new double[] { 6, 3 },
+            assertArrayEquals(new double[]{6, 3},
                     (double[]) reftimeVar.read().copyTo1DJavaArray(), (double) DELTA);
             // scalar extra variable copied from source with dimensions ""
             Variable scalarReftimeVar = dataset.findVariable("scalar_forecast_reference_time");

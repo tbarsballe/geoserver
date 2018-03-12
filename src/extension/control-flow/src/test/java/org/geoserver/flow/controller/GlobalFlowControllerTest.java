@@ -69,7 +69,7 @@ public class GlobalFlowControllerTest extends AbstractFlowControllerTest {
             waitAndKill(t3, MAX_WAIT);
         }
     }
-    
+
     @Test
     public void testTimeout() {
         // create a single item flow controller 
@@ -81,17 +81,17 @@ public class GlobalFlowControllerTest extends AbstractFlowControllerTest {
                 400, controller);
         FlowControllerTestingThread t2 = new FlowControllerTestingThread(new Request(), 100,
                 400, controller);
-        
+
         // start t1 first, let go t2 after
         try {
             t1.start();
             waitBlocked(t1, MAX_WAIT);
             t2.start();
-            
+
             // wait until both terminate
             waitTerminated(t1, MAX_WAIT);
             waitTerminated(t2, MAX_WAIT);
-            
+
             assertEquals(ThreadState.COMPLETE, t1.state);
             assertEquals(ThreadState.TIMED_OUT, t2.state);
         } finally {
@@ -101,6 +101,5 @@ public class GlobalFlowControllerTest extends AbstractFlowControllerTest {
 
     }
 
-    
 
 }

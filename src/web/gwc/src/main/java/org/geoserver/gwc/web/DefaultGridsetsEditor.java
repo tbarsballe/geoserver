@@ -36,9 +36,8 @@ import org.geowebcache.grid.GridSetBroker;
 /**
  * Form component that edits the default {@link GWCConfig#getDefaultCachingGridSetIds() cached
  * gridsets} for {@link CachingOptionsPanel}.
- * 
+ *
  * @author groldan
- * 
  */
 class DefaultGridsetsEditor extends FormComponentPanel<Set<String>> {
 
@@ -98,7 +97,7 @@ class DefaultGridsetsEditor extends FormComponentPanel<Set<String>> {
 
         @Override
         protected Component getComponentForProperty(String id, IModel<GridSet> itemModel,
-                Property<GridSet> property) {
+                                                    Property<GridSet> property) {
             // Property objects are package access, so we can't statically reference them here
             // see org.geoserver.gwc.web.gridset.ACTION_LINK
             final String propertyName = property.getName();

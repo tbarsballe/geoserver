@@ -9,13 +9,13 @@ import org.geoserver.wms.WMS;
 
 /**
  * A GetFeatureInfo response handler specialized in producing GML 2 data for a GetFeatureInfo request.
- *
  * <p>
- *     This class is an alternative to <code>GML2FeatureInfoOutputFormat</code>.
+ * <p>
+ * This class is an alternative to <code>GML2FeatureInfoOutputFormat</code>.
  * </p>
  *
- * @see GML3FeatureInfoOutputFormat
  * @author Alex van den Hoogen (Geodan)
+ * @see GML3FeatureInfoOutputFormat
  */
 public class XML2FeatureInfoOutputFormat extends GML2FeatureInfoOutputFormat {
 

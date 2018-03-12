@@ -22,41 +22,40 @@ import org.springframework.security.web.access.intercept.FilterSecurityIntercept
 
 /**
  * Security interceptor filter
- * 
- * @author mcr
  *
+ * @author mcr
  */
 public class GeoServerSecurityInterceptorFilter extends GeoServerCompositeFilter {
     @Override
     public void initializeFromConfig(SecurityNamedServiceConfig config) throws IOException {
         super.initializeFromConfig(config);
-        
-        
-        SecurityInterceptorFilterConfig siConfig = 
+
+
+        SecurityInterceptorFilterConfig siConfig =
                 (SecurityInterceptorFilterConfig) config;
-        
+
         FilterSecurityInterceptor filter = new FilterSecurityInterceptor();
 
         filter.setAuthenticationManager(getSecurityManager().authenticationManager());
-        
+
         List<AccessDecisionVoter<?>> voters = new ArrayList<>();
         RoleVoter roleVoter = new RoleVoter();
         roleVoter.setRolePrefix("");
         voters.add(roleVoter);
         voters.add(new AuthenticatedVoter());
-        AffirmativeBased accessDecisionManager = new AffirmativeBased(voters); 
+        AffirmativeBased accessDecisionManager = new AffirmativeBased(voters);
         accessDecisionManager.setAllowIfAllAbstainDecisions(siConfig.isAllowIfAllAbstainDecisions());
-        filter.setAccessDecisionManager(accessDecisionManager);        
-        
+        filter.setAccessDecisionManager(accessDecisionManager);
+
         // TODO, Justin, is this correct
         filter.setSecurityMetadataSource((FilterInvocationSecurityMetadataSource)
-                    GeoServerExtensions.bean(siConfig.getSecurityMetadataSource()));
+                GeoServerExtensions.bean(siConfig.getSecurityMetadataSource()));
         try {
             filter.afterPropertiesSet();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        getNestedFilters().add(filter);        
+        getNestedFilters().add(filter);
     }
-    
+
 }

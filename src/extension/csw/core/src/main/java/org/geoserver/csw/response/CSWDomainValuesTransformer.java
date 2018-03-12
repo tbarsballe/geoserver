@@ -6,6 +6,7 @@
 package org.geoserver.csw.response;
 
 import static org.geoserver.ows.util.ResponseUtils.buildSchemaURL;
+
 import net.opengis.cat.csw20.GetDomainType;
 import net.opengis.cat.csw20.RequestBaseType;
 
@@ -21,8 +22,7 @@ import org.xml.sax.helpers.AttributesImpl;
 /**
  * Encodes a CloseableIterator<String> containing domain values into the specified
  * XML Domain Response
- * 
- * 
+ *
  * @author Alessio Fabiani - GeoSolutions
  */
 public class CSWDomainValuesTransformer extends AbstractRecordTransformer {
@@ -37,7 +37,7 @@ public class CSWDomainValuesTransformer extends AbstractRecordTransformer {
     public Translator createTranslator(ContentHandler handler) {
         return new CSWDomainValueTranslator(handler);
     }
-    
+
     @Override
     public boolean canHandleRespose(CSWRecordsResult response) {
         return true;
@@ -72,27 +72,26 @@ public class CSWDomainValuesTransformer extends AbstractRecordTransformer {
             AttributesImpl domainValuesElementAtts = new AttributesImpl();
             addAttribute(domainValuesElementAtts, "type", "csw:Record");
             start(domainValuesElement, domainValuesElementAtts);
-            
-            if (((GetDomainType)request).getParameterName() != null && !((GetDomainType)request).getParameterName().isEmpty()) {
+
+            if (((GetDomainType) request).getParameterName() != null && !((GetDomainType) request).getParameterName().isEmpty()) {
                 String parameterNameElement = "csw:ParameterName";
-                element(parameterNameElement, ((GetDomainType)request).getParameterName());
-            } else if (((GetDomainType)request).getPropertyName() != null && !((GetDomainType)request).getPropertyName().isEmpty()) {
+                element(parameterNameElement, ((GetDomainType) request).getParameterName());
+            } else if (((GetDomainType) request).getPropertyName() != null && !((GetDomainType) request).getPropertyName().isEmpty()) {
                 String propertyNameElement = "csw:PropertyName";
-                element(propertyNameElement, ((GetDomainType)request).getPropertyName());
+                element(propertyNameElement, ((GetDomainType) request).getPropertyName());
             }
 
 
             String valuesElementType = "csw:ListOfValues";
             start(valuesElementType);
-            
-            while (response.hasNext())
-            {
+
+            while (response.hasNext()) {
                 String value = response.next();
                 element("csw:Value", value);
             }
-            
+
             end(valuesElementType);
-            
+
             end(domainValuesElement);
             end("csw:GetDomainResponse");
 

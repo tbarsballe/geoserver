@@ -18,8 +18,8 @@ import org.springframework.web.context.WebApplicationContext;
  * struts ui stuff which requires application modules to be placed into the
  * servlet context.
  * </p>
- * @author Justin Deoliveira, The Open Planning Project, jdeolive@openplans.org
  *
+ * @author Justin Deoliveira, The Open Planning Project, jdeolive@openplans.org
  */
 public class GeoServerServletContextInitializer implements ApplicationContextAware {
     /**
@@ -38,7 +38,7 @@ public class GeoServerServletContextInitializer implements ApplicationContextAwa
     }
 
     public void setApplicationContext(ApplicationContext context)
-        throws BeansException {
+            throws BeansException {
         if (context instanceof WebApplicationContext) {
             WebApplicationContext webContext = (WebApplicationContext) context;
             webContext.getServletContext().setAttribute(key, object);

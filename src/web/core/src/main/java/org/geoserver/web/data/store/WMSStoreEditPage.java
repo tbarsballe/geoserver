@@ -14,12 +14,13 @@ import org.geoserver.web.wicket.GeoServerDialog;
 import org.geotools.data.wms.WebMapServer;
 
 public class WMSStoreEditPage extends AbstractWMSStorePage {
-    
+
     public static final String STORE_NAME = "storeName";
     public static final String WS_NAME = "wsName";
-    
+
     /**
      * Uses a "name" parameter to locate the datastore
+     *
      * @param parameters
      */
     public WMSStoreEditPage(PageParameters parameters) {
@@ -39,7 +40,7 @@ public class WMSStoreEditPage extends AbstractWMSStorePage {
     @Override
     protected void onSave(WMSStoreInfo info, AjaxRequestTarget target)
             throws IllegalArgumentException {
-        if(!info.isEnabled()) {
+        if (!info.isEnabled()) {
             doSaveStore(info);
         } else {
             try {
@@ -51,7 +52,7 @@ public class WMSStoreEditPage extends AbstractWMSStorePage {
                 WebMapServer webMapServer = getCatalog().getResourcePool().getWebMapServer(info);
                 webMapServer.getCapabilities();
                 doSaveStore(info);
-            } catch(Exception e) {
+            } catch (Exception e) {
                 confirmSaveOnConnectionFailure(info, target, e);
             }
         }
@@ -68,17 +69,17 @@ public class WMSStoreEditPage extends AbstractWMSStorePage {
         Catalog catalog = getCatalog();
 
         // Cloning into "expandedStore" through the super class "clone" method
-        WMSStoreInfo expandedStore = catalog.getResourcePool().clone(info, true); 
-        
+        WMSStoreInfo expandedStore = catalog.getResourcePool().clone(info, true);
+
         getCatalog().validate(expandedStore, false).throwIfInvalid();
-        
+
         getCatalog().save(info);
         doReturn(StorePage.class);
     }
 
     @SuppressWarnings("serial")
     private void confirmSaveOnConnectionFailure(final WMSStoreInfo info,
-            final AjaxRequestTarget requestTarget, final Exception error) {
+                                                final AjaxRequestTarget requestTarget, final Exception error) {
 
         getCatalog().getResourcePool().clear(info);
 

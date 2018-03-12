@@ -50,7 +50,7 @@ import com.vividsolutions.jts.geom.MultiPolygon;
 /**
  * Describes the CSW records and provides some handy constants to help building features
  * representing CSW:Record.
- * 
+ * <p>
  * A few remarks about the {@link #RECORD_TYPE} feature type:
  * <ul>
  * <li>The SimpleLiterals are complex elements with simple contents, which we cannot properly
@@ -61,13 +61,13 @@ import com.vividsolutions.jts.geom.MultiPolygon;
  * instance, to deal with that we build a single geometry, a multipolygon, and keep the original
  * bounding boxes in the attribute user data, under the {@link #RECORD_BBOX_DESCRIPTOR} key</li>
  * </ul>
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class CSWRecordDescriptor extends AbstractRecordDescriptor {
-	        
+
     private static FilterFactory2 FF = CommonFactoryFinder.getFilterFactory2();
-    
+
     /**
      * Contains the declarations of common namespaces and prefixes used in the CSW world
      */
@@ -75,15 +75,15 @@ public class CSWRecordDescriptor extends AbstractRecordDescriptor {
     public static final Name SIMPLE_LITERAL_SCHEME = new NameImpl(DC.NAMESPACE, "scheme");
 
     public static final Name SIMPLE_LITERAL_VALUE = new NameImpl(DC.NAMESPACE, "value");
-    
+
     public static final Name DC_ELEMENT_NAME = new NameImpl(DC.NAMESPACE, DC.DCelement.getLocalPart());
 
     public static final NameImpl RECORD_BBOX_NAME = new NameImpl(OWS.NAMESPACE, "BoundingBox");
-    
+
     public static final List<Name> BRIEF_ELEMENTS;
-    
+
     public static final List<Name> SUMMARY_ELEMENTS;
-       
+
     public static final NamespaceSupport NAMESPACES;
 
     public static final ComplexType SIMPLE_LITERAL;
@@ -91,19 +91,19 @@ public class CSWRecordDescriptor extends AbstractRecordDescriptor {
     public static final AttributeDescriptor DC_ELEMENT;
 
     public static final AttributeDescriptor RECORD_BBOX_DESCRIPTOR;
-    
+
     public static final FeatureType RECORD_TYPE;
-    
+
     public static final AttributeDescriptor RECORD_DESCRIPTOR;
-    
+
     static final CRSRecordProjectyPathAdapter PATH_EXTENDER;
-    
+
     static final NamespaceQualifier NSS_QUALIFIER;
-    
+
     static final DefaultCRSFilterVisitor CRS_DEFAULTER;
-    
+
     static final ReprojectingFilterVisitor CRS_REPROJECTOR;
-    
+
     public static final List<Name> QUERIABLES;
 
     static {
@@ -115,7 +115,7 @@ public class CSWRecordDescriptor extends AbstractRecordDescriptor {
         NAMESPACES.declarePrefix("dct", DCT.NAMESPACE);
         NAMESPACES.declarePrefix("ows", OWS.NAMESPACE);
         NAMESPACES.declarePrefix("ogc", OGC.NAMESPACE);
-       
+
         // prepare the CSW record related types
         FeatureTypeFactory typeFactory = new FeatureTypeFactoryImpl();
         TypeBuilder builder = new TypeBuilder(typeFactory);
@@ -148,32 +148,32 @@ public class CSWRecordDescriptor extends AbstractRecordDescriptor {
             index = reader.parse(new URL("http://schemas.opengis.net/csw/2.0.2/record.xsd"));
         } catch (IOException e) {
             //this is fatal
-            throw new RuntimeException("Failed to parse CSW Record Schemas" , e);
+            throw new RuntimeException("Failed to parse CSW Record Schemas", e);
         }
 
         FeatureTypeRegistry featureTypeRegistry = new FeatureTypeRegistry(NAMESPACES, typeFactory, new RecordFeatureTypeRegistryConfiguration("RecordType"));
 
         featureTypeRegistry.register(SIMPLE_LITERAL);
-        
+
         featureTypeRegistry.register(bboxType);
-        
+
         featureTypeRegistry.addSchemas(index);
-        
+
         RECORD_TYPE = (FeatureType) featureTypeRegistry.getAttributeType(new NameImpl(
                 CSW.NAMESPACE, "RecordType"));
-        
+
         RECORD_DESCRIPTOR = featureTypeRegistry.getDescriptor(new NameImpl(CSW.NAMESPACE, "Record"), null);
-        
+
         RECORD_BBOX_DESCRIPTOR = (AttributeDescriptor) RECORD_TYPE.getDescriptor(RECORD_BBOX_NAME);
-        DC_ELEMENT =  (AttributeDescriptor) RECORD_TYPE.getDescriptor(DC_ELEMENT_NAME);        
-        
+        DC_ELEMENT = (AttributeDescriptor) RECORD_TYPE.getDescriptor(DC_ELEMENT_NAME);
+
         //---
-        
+
         // setup the list of names for brief and summary records
         BRIEF_ELEMENTS = createNameList(NAMESPACES, "dc:identifier", "dc:title", "dc:type", "ows:BoundingBox");
-        SUMMARY_ELEMENTS = createNameList(NAMESPACES, "dc:identifier", "dc:title", "dc:type", "dc:subject", 
+        SUMMARY_ELEMENTS = createNameList(NAMESPACES, "dc:identifier", "dc:title", "dc:type", "dc:subject",
                 "dc:format", "dc:relation", "dct:modified", "dct:abstract", "dct:spatial", "ows:BoundingBox");
-        
+
         // create the xpath extender that fill adapt dc:title to dc:title/dc:value
         PATH_EXTENDER = new CRSRecordProjectyPathAdapter(NAMESPACES);
         // qualified the xpath in the filters
@@ -183,19 +183,18 @@ public class CSWRecordDescriptor extends AbstractRecordDescriptor {
         // transforms geometry filters into the internal representation
         CRS_REPROJECTOR = new ReprojectingFilterVisitor(FF, RECORD_TYPE);
 
-        
+
         //build queriables list
-        QUERIABLES = createNameList(NAMESPACES, "dc:contributor", "dc:source", "dc:language", 
-                "dc:title", "dc:subject", "dc:creator", "dc:type", "ows:BoundingBox", "dct:modified", 
-                "dct:abstract", "dc:relation", "dc:date", "dc:identifier", "dc:publisher", 
+        QUERIABLES = createNameList(NAMESPACES, "dc:contributor", "dc:source", "dc:language",
+                "dc:title", "dc:subject", "dc:creator", "dc:type", "ows:BoundingBox", "dct:modified",
+                "dct:abstract", "dc:relation", "dc:date", "dc:identifier", "dc:publisher",
                 "dc:format", "csw:AnyText", "dc:rights");
     }
-    
+
     /**
      * Checks if a field is public static final
-     * 
-     * @param field
      *
+     * @param field
      */
     static boolean isConstant(Field field) {
         int modifier = field.getModifiers();
@@ -216,15 +215,15 @@ public class CSWRecordDescriptor extends AbstractRecordDescriptor {
     @Override
     public List<Name> getPropertiesForElementSet(ElementSetType elementSet) {
         switch (elementSet) {
-        case BRIEF:
-            return CSWRecordDescriptor.BRIEF_ELEMENTS;
-        case SUMMARY:
-            return CSWRecordDescriptor.SUMMARY_ELEMENTS;
-        default:
-            return null;
+            case BRIEF:
+                return CSWRecordDescriptor.BRIEF_ELEMENTS;
+            case SUMMARY:
+                return CSWRecordDescriptor.SUMMARY_ELEMENTS;
+            default:
+                return null;
         }
     }
-    
+
     @Override
     public NamespaceSupport getNamespaceSupport() {
         return NAMESPACES;
@@ -233,18 +232,18 @@ public class CSWRecordDescriptor extends AbstractRecordDescriptor {
     @Override
     public Query adaptQuery(Query query) {
         Filter filter = query.getFilter();
-        if(filter != null && !Filter.INCLUDE.equals(filter)) {
+        if (filter != null && !Filter.INCLUDE.equals(filter)) {
             Filter qualified = (Filter) filter.accept(NSS_QUALIFIER, null);
             Filter extended = (Filter) qualified.accept(PATH_EXTENDER, null);
             query.setFilter(extended);
         }
-        
+
         SortBy[] sortBy = query.getSortBy();
-        if(sortBy != null && sortBy.length > 0) {
+        if (sortBy != null && sortBy.length > 0) {
             CSWPropertyPathExtender extender = new CSWPropertyPathExtender();
             for (int i = 0; i < sortBy.length; i++) {
                 SortBy sb = sortBy[i];
-                if(!SortBy.NATURAL_ORDER.equals(sb) && !SortBy.REVERSE_ORDER.equals(sb)) {
+                if (!SortBy.NATURAL_ORDER.equals(sb) && !SortBy.REVERSE_ORDER.equals(sb)) {
                     PropertyName name = sb.getPropertyName();
                     PropertyName extended = extender.extendProperty(name, FF, NAMESPACES);
                     sortBy[i] = new SortByImpl(extended, sb.getSortOrder());
@@ -252,19 +251,19 @@ public class CSWRecordDescriptor extends AbstractRecordDescriptor {
             }
             query.setSortBy(sortBy);
         }
-        
+
         return query;
-         
+
     }
-    
+
     @Override
     public String getBoundingBoxPropertyName() {
         return "BoundingBox";
     }
-    
+
     /**
-     * Locates the AttributeDescriptor corresponding to the specified element name 
-     */    
+     * Locates the AttributeDescriptor corresponding to the specified element name
+     */
     public static AttributeDescriptor getDescriptor(String elementName) {
         return (AttributeDescriptor) Types.findDescriptor(RECORD_TYPE, elementName);
     }
@@ -273,29 +272,30 @@ public class CSWRecordDescriptor extends AbstractRecordDescriptor {
     public List<Name> getQueryables() {
         return QUERIABLES;
     }
-    
+
     @Override
     public String getQueryablesDescription() {
         return "SupportedDublinCoreQueryables";
     }
-    
+
     @Override
     public PropertyName translateProperty(Name name) {
         return new CSWPropertyPathExtender().extendProperty(buildPropertyName(NAMESPACES, name), FF, NAMESPACES);
     }
-    
+
     public void verifySpatialFilters(Filter filter) {
         filter.accept(new SpatialFilterChecker(getFeatureType()), null);
     }
-    
+
     //singleton
-    
-    private CSWRecordDescriptor() {}
-    
-    private static CSWRecordDescriptor INSTANCE; 
-    
-    public static CSWRecordDescriptor getInstance() { 
-        if (INSTANCE == null) {        
+
+    private CSWRecordDescriptor() {
+    }
+
+    private static CSWRecordDescriptor INSTANCE;
+
+    public static CSWRecordDescriptor getInstance() {
+        if (INSTANCE == null) {
             //if there is a bean available, use the bean otherwise create other
             INSTANCE = GeoServerExtensions.bean(CSWRecordDescriptor.class);
             if (INSTANCE == null) {
@@ -304,5 +304,5 @@ public class CSWRecordDescriptor extends AbstractRecordDescriptor {
         }
         return INSTANCE;
     }
-    
+
 }

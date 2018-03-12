@@ -21,9 +21,7 @@ import org.springframework.util.Assert;
 import net.sf.json.JSONObject;
 
 /**
- * 
  * @author Alessio Fabiani, GeoSolutions
- *
  */
 public class RESTBackupTest extends BackupRestoreTestSupport {
 
@@ -90,7 +88,7 @@ public class RESTBackupTest extends BackupRestoreTestSupport {
 
     JSONObject postNewBackup(String body) throws Exception {
         MockHttpServletResponse resp =
-                postAsServletResponse(RestBaseController.ROOT_PATH + "/br/backup", body, 
+                postAsServletResponse(RestBaseController.ROOT_PATH + "/br/backup", body,
                         MediaType.APPLICATION_JSON_VALUE);
 
         assertEquals(201, resp.getStatus());

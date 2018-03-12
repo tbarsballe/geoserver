@@ -63,8 +63,8 @@ public class IconTestSupport {
                     buff.append("&");
                 }
                 buff.append(entry.getKey())
-                    .append("=")
-                    .append(URLEncoder.encode(entry.getValue(), "UTF-8"));
+                        .append("=")
+                        .append(URLEncoder.encode(entry.getValue(), "UTF-8"));
             }
             return buff.toString();
         } catch (UnsupportedEncodingException e) {
@@ -73,13 +73,13 @@ public class IconTestSupport {
     }
 
     protected final PointSymbolizer mark(String name, Color stroke, Color fill,
-            float opacity, int size) {
-                return SLD.pointSymbolizer(SLD.createPointStyle(name, stroke, fill, opacity, size));
-            }
+                                         float opacity, int size) {
+        return SLD.pointSymbolizer(SLD.createPointStyle(name, stroke, fill, opacity, size));
+    }
 
     protected final PointSymbolizer externalGraphic(String url, String format) {
         ExternalGraphic exGraphic = styleFactory.createExternalGraphic(url, format);
-        Graphic graphic = styleFactory.createGraphic(new ExternalGraphic[] { exGraphic }, null, null, null, null, null);
+        Graphic graphic = styleFactory.createGraphic(new ExternalGraphic[]{exGraphic}, null, null, null, null, null);
         return styleFactory.createPointSymbolizer(graphic, null);
     }
 

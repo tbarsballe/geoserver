@@ -15,9 +15,9 @@ import org.apache.wicket.model.ResourceModel;
 
 public class ActivityPage extends MonitorBasePage {
 
-        private static final long serialVersionUID = 4172665268503474405L;
+    private static final long serialVersionUID = 4172665268503474405L;
 
-	public ActivityPage() {
+    public ActivityPage() {
         List<AbstractTab> tabs = new ArrayList<AbstractTab>();
         tabs.add(new AbstractTab(new ResourceModel("live")) {
             private static final long serialVersionUID = 4764386249807182104L;
@@ -52,6 +52,6 @@ public class ActivityPage extends MonitorBasePage {
             }
         });
         add(new TabbedPanel<AbstractTab>("charts", tabs));
-        
+
     }
 }

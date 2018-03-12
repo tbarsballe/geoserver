@@ -40,7 +40,7 @@ public class NCNameResourceCodec {
     protected static Logger LOGGER = Logging.getLogger(NCNameResourceCodec.class);
 
     private final static String DELIMITER = "__";
-    
+
 
     public static String encode(ResourceInfo resource) {
         return encode(resource.getNamespace().getPrefix(), resource.getName());
@@ -50,17 +50,17 @@ public class NCNameResourceCodec {
         return workspaceName + DELIMITER + resourceName;
     }
 
-    
+
     public static LayerInfo getCoverage(Catalog catalog, String encodedCoverageId) throws WCS20Exception {
         List<LayerInfo> layers = NCNameResourceCodec.getLayers(catalog, encodedCoverageId);
-        if(layers == null)
+        if (layers == null)
             return null;
 
         LayerInfo ret = null;
 
         for (LayerInfo layer : layers) {
             if (layer != null && layer.getType() == PublishedType.RASTER) {
-                if(ret == null) {
+                if (ret == null) {
                     ret = layer;
                 } else {
                     LOGGER.warning("Multiple coverages found for NSName '" + encodedCoverageId + "': "
@@ -81,8 +81,8 @@ public class NCNameResourceCodec {
      */
     public static List<LayerInfo> getLayers(Catalog catalog, String encodedResourceId) {
         List<MapEntry<String, String>> decodedList = decode(encodedResourceId);
-        if(decodedList.isEmpty()) {
-            LOGGER.info("Could not decode id '"+encodedResourceId+"'");
+        if (decodedList.isEmpty()) {
+            LOGGER.info("Could not decode id '" + encodedResourceId + "'");
             return null;
         }
 
@@ -129,12 +129,11 @@ public class NCNameResourceCodec {
     }
 
     /**
-     *
      * @return a List of possible workspace/name pairs, possibly empty if the input could not be decoded;
      */
-    public static List<MapEntry<String,String>> decode(String qualifiedName) {
+    public static List<MapEntry<String, String>> decode(String qualifiedName) {
         int lastPos = qualifiedName.lastIndexOf(DELIMITER);
-        List<MapEntry<String,String>> ret = new ArrayList<MapEntry<String, String>>();
+        List<MapEntry<String, String>> ret = new ArrayList<MapEntry<String, String>>();
 
         if (lastPos == -1) {
             ret.add(new MapEntry<String, String>(null, qualifiedName));
@@ -142,10 +141,10 @@ public class NCNameResourceCodec {
         }
 
         while (lastPos > -1) {
-            String ws   = qualifiedName.substring(0, lastPos);
-            String name = qualifiedName.substring(lastPos+DELIMITER.length());
+            String ws = qualifiedName.substring(0, lastPos);
+            String name = qualifiedName.substring(lastPos + DELIMITER.length());
             ret.add(new MapEntry<String, String>(ws, name));
-            lastPos = qualifiedName.lastIndexOf(DELIMITER, lastPos-1);
+            lastPos = qualifiedName.lastIndexOf(DELIMITER, lastPos - 1);
         }
         return ret;
     }

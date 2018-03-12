@@ -21,7 +21,7 @@ public class LocalWorkspaceThreadLocalTransferTest extends AbstractThreadLocalTr
     public void cleanupThreadLocals() {
         LocalWorkspace.remove();
     }
-    
+
     @Test
     public void testRequest() throws InterruptedException, ExecutionException {
         // setup the state
@@ -29,12 +29,12 @@ public class LocalWorkspaceThreadLocalTransferTest extends AbstractThreadLocalTr
         LocalWorkspace.set(ws);
         // test it's transferred properly using the base class machinery
         testThreadLocalTransfer(new ThreadLocalTransferCallable(new LocalWorkspaceThreadLocalTransfer()) {
-            
+
             @Override
             void assertThreadLocalCleaned() {
                 assertNull(LocalWorkspace.get());
             }
-            
+
             @Override
             void assertThreadLocalApplied() {
                 assertSame(ws, LocalWorkspace.get());

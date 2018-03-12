@@ -14,10 +14,9 @@ import org.springframework.util.CompositeIterator;
 /**
  * A simple way to compose to lists into one. Will only work as a iterator source, it does not
  * really implement the {@link List} basic functionalities
- * 
- * @author Andrea Aime - GeoSolutions
- * 
+ *
  * @param <T>
+ * @author Andrea Aime - GeoSolutions
  */
 public class CompositeList<T> extends AbstractList<T> {
 

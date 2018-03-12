@@ -56,9 +56,9 @@ public class SecuredWebMapTileServer extends WebMapTileServer {
 
     public GetCapabilitiesResponse issueRequest(GetCapabilitiesRequest request) throws IOException,
             ServiceException {
-        if(delegate!=null) {
+        if (delegate != null) {
             return delegate.issueRequest(request);
-        }else {
+        } else {
             return null;
         }
     }

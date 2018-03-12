@@ -25,35 +25,39 @@ import org.vfny.geoserver.Request;
  * @version $Id$
  */
 public abstract class XmlRequestReader {
-    /** Class logger */
+    /**
+     * Class logger
+     */
     protected static Logger LOGGER = org.geotools.util.logging.Logging.getLogger("org.vfny.geoserver.requests.readers");
 
-    /** The service handling the request **/
+    /**
+     * The service handling the request
+     **/
     private ServiceInfo serviceConfig;
-    
+
 
     /**
-    * DOCUMENT ME!
-    *
-    * @param reader DOCUMENT ME!
-    *
-    * @return DOCUMENT ME!
-    *
-    * @throws ServiceException DOCUMENT ME!
-    */
+     * DOCUMENT ME!
+     *
+     * @param reader DOCUMENT ME!
+     * @return DOCUMENT ME!
+     * @throws ServiceException DOCUMENT ME!
+     */
     public abstract Request read(Reader reader, HttpServletRequest req)
-        throws ServiceException;
+            throws ServiceException;
 
-   
+
     /**
      * This will create a new XmlRequestReader
+     *
      * @param service The config of the service handling the request
      */
     public XmlRequestReader(ServiceInfo service) {
-        this.serviceConfig = service;;
+        this.serviceConfig = service;
+        ;
     }
-    
-    
+
+
     public ServiceInfo getService() {
         return serviceConfig;
     }

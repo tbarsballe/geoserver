@@ -38,11 +38,10 @@ import org.springframework.security.web.authentication.Http403ForbiddenEntryPoin
  * from Request Headers.
  * It is quite flexible through the capability to extract username and password
  * from the same or different request headers, using regular expressions to capture
- * them in a structured header content.  
- * 
+ * them in a structured header content.
+ *
  * @author Lorenzo Natali, GeoSolutions
  * @author Mauro Bartolomeoli, GeoSolutions
- *
  */
 public class GeoServerCredentialsFromRequestHeaderFilter extends
         GeoServerSecurityFilter implements AuthenticationCachingFilter,
@@ -53,11 +52,11 @@ public class GeoServerCredentialsFromRequestHeaderFilter extends
     private Pattern userNameRegex;
     private Pattern passwordRegex;
     private boolean decodeURI = true;
-    
+
     private MessageDigest digest;
-    
+
     protected AuthenticationEntryPoint aep;
-    
+
     @Override
     public void initializeFromConfig(SecurityNamedServiceConfig config) throws IOException {
         super.initializeFromConfig(config);
@@ -80,7 +79,7 @@ public class GeoServerCredentialsFromRequestHeaderFilter extends
             throw new IllegalStateException("No MD5 algorithm available!");
         }
     }
-    
+
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
@@ -102,14 +101,13 @@ public class GeoServerCredentialsFromRequestHeaderFilter extends
         request.setAttribute(GeoServerSecurityFilter.AUTHENTICATION_ENTRY_POINT_HEADER, aep);
         chain.doFilter(request, response);
     }
-    
+
     /**
      * Parse an header string to extract the credential. The regular expression must contain a group, that will represent the credential to be
      * extracted.
-     * 
-     * @param header the String to parse
-     * @param pattern the pattern to use. This must contain one group
      *
+     * @param header  the String to parse
+     * @param pattern the pattern to use. This must contain one group
      */
     private String parseHeader(String header, Pattern pattern) {
         Matcher m = pattern.matcher(header);
@@ -120,13 +118,13 @@ public class GeoServerCredentialsFromRequestHeaderFilter extends
             return null;
         }
     }
-    
+
     /**
      * Try to authenticate.
      * If credentials are found in the configured header(s),
      * then authentication is delegated to the AuthenticationProvider
      * chain.
-     * 
+     *
      * @param request
      * @param response
      */
@@ -176,17 +174,17 @@ public class GeoServerCredentialsFromRequestHeaderFilter extends
         // Set the authentication with the roles injected
         SecurityContextHolder.getContext().setAuthentication(newResult);
     }
-    
+
     @Override
     public boolean applicableForHtml() {
         return true;
     }
-    
+
     @Override
     public boolean applicableForServices() {
         return true;
     }
-    
+
     /**
      * The cache key is the concatenation of the headers' values (global identifier)
      */
@@ -227,7 +225,7 @@ public class GeoServerCredentialsFromRequestHeaderFilter extends
         buff.append(digestString);
         return buff.toString();
     }
-    
+
     protected boolean cacheAuthentication(Authentication auth, HttpServletRequest request) {
         // only cache if no HTTP session is available
         if (request.getSession(false) != null)

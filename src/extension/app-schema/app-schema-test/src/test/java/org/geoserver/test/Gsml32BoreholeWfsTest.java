@@ -12,7 +12,7 @@ import org.w3c.dom.Document;
 
 /**
  * WFS test based on GeoSciML 3.2 Borehole type, a GML 3.2 application schema.
- * 
+ *
  * @author Rini Angreani (CSIRO Earth Science and Resource Engineering)
  */
 public class Gsml32BoreholeWfsTest extends AbstractAppSchemaTestSupport {
@@ -30,17 +30,17 @@ public class Gsml32BoreholeWfsTest extends AbstractAppSchemaTestSupport {
      */
     @Test
     public void testGetFeatureContent() throws Exception {
-        String path = "wfs?request=GetFeature&typename=gsmlbh:Borehole&outputFormat=gml32";               
+        String path = "wfs?request=GetFeature&typename=gsmlbh:Borehole&outputFormat=gml32";
         String newline = System.getProperty("line.separator");
         Document doc = getAsDOM(path);
         LOGGER.info("Response for " + path + " :" + newline + prettyString(doc));
-        
+
         assertXpathEvaluatesTo("2", "/wfs:FeatureCollection/@numberReturned", doc);
         assertXpathEvaluatesTo("unknown", "/wfs:FeatureCollection/@numberMatched", doc);
         assertXpathCount(2, "//gsmlbh:Borehole", doc);
-        
+
         // First borehole
-        assertXpathCount(1, "//gsmlbh:Borehole[@gml:id='borehole.GA.17322']", doc);        
+        assertXpathCount(1, "//gsmlbh:Borehole[@gml:id='borehole.GA.17322']", doc);
         // Ensure fabricated LineString works as expected
         // Also custom srsName and 1D posList works
         String lineStringPath = "sa:relatedSamplingFeature/sa:SamplingFeatureComplex/sa:relatedSamplingFeature/spec:SF_Specimen/spec:samplingLocation/gml:LineString";
@@ -53,14 +53,14 @@ public class Gsml32BoreholeWfsTest extends AbstractAppSchemaTestSupport {
         assertXpathEvaluatesTo("borehole.shape.GA.17322", "//gsmlbh:Borehole[@gml:id='borehole.GA.17322']/sams:shape/gml:Curve/@gml:id", doc);
         assertXpathCount(0, "/gsmlbh:Borehole[@gml:id='borehole.GA.17322']/sams:shape/gml:Curve/@srsName", doc);
         assertXpathCount(0, "/gsmlbh:Borehole[@gml:id='borehole.GA.17322']/sams:shape/gml:Curve/@srsDimension", doc);
-       
+
         // Second borehole
-        assertXpathCount(1, "//gsmlbh:Borehole[@gml:id='borehole.GA.17338']", doc);        
+        assertXpathCount(1, "//gsmlbh:Borehole[@gml:id='borehole.GA.17338']", doc);
         assertXpathEvaluatesTo("borehole.specimen.samplingLocation.GA.102", "//gsmlbh:Borehole[@gml:id='borehole.GA.17338']/" + lineStringPath + "/@gml:id", doc);
         assertXpathEvaluatesTo("#borehole.shape.GA.17338", "//gsmlbh:Borehole[@gml:id='borehole.GA.17338']/" + lineStringPath + "/@srsName", doc);
         assertXpathEvaluatesTo("1", "//gsmlbh:Borehole[@gml:id='borehole.GA.17322']/" + lineStringPath + "/@srsDimension", doc);
         assertXpathEvaluatesTo("m", "//gsmlbh:Borehole[@gml:id='borehole.GA.17338']/" + lineStringPath + "/@uomLabels", doc);
-        assertXpathEvaluatesTo("85.3 89.6", "//gsmlbh:Borehole[@gml:id='borehole.GA.17338']/" + lineStringPath + "/gml:posList", doc);  
+        assertXpathEvaluatesTo("85.3 89.6", "//gsmlbh:Borehole[@gml:id='borehole.GA.17338']/" + lineStringPath + "/gml:posList", doc);
         assertXpathEvaluatesTo("borehole.shape.GA.17338", "//gsmlbh:Borehole[@gml:id='borehole.GA.17338']/sams:shape/gml:Curve/@gml:id", doc);
         assertXpathCount(0, "/gsmlbh:Borehole[@gml:id='borehole.GA.17338']/sams:shape/gml:Curve/@srsName", doc);
         assertXpathCount(0, "/gsmlbh:Borehole[@gml:id='borehole.GA.17338']/sams:shape/gml:Curve/@srsDimension", doc);

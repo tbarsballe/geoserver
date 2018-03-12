@@ -17,12 +17,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.w3c.dom.Document;
 
-public class LayerWorkspaceTest extends WMSTestSupport{
+public class LayerWorkspaceTest extends WMSTestSupport {
 
     private Catalog catalog;
 
     @Before
-    public  void setCatalog() throws Exception {
+    public void setCatalog() throws Exception {
         catalog = getCatalog();
     }
 
@@ -30,17 +30,17 @@ public class LayerWorkspaceTest extends WMSTestSupport{
         return cat.getLayerByName(getLayerId(name));
     }
 
-    @Test 
+    @Test
     public void testGlobalCapabilities() throws Exception {
         LayerInfo layer = layer(catalog, MockData.PRIMITIVEGEOFEATURE);
         Document doc = getAsDOM("/wms?service=WMS&request=getCapabilities&version=1.1.1", true);
         assertXpathExists("//Layer[Name='" + layer.prefixedName() + "']", doc);
     }
-    
+
     @Test
     public void testGlobalDescribeLayer() throws Exception {
         LayerInfo layer = layer(catalog, MockData.PRIMITIVEGEOFEATURE);
-        Document doc = getAsDOM("/wms?service=WMS&request=describeLayer&version=1.1.1&LAYERS=" 
+        Document doc = getAsDOM("/wms?service=WMS&request=describeLayer&version=1.1.1&LAYERS="
                 + layer.getName(), true);
         assertXpathExists("//LayerDescription[@name='" + layer.prefixedName() + "']", doc);
     }
@@ -48,12 +48,12 @@ public class LayerWorkspaceTest extends WMSTestSupport{
     @Test
     public void testWorkspaceCapabilities() throws Exception {
         Document doc = getAsDOM("/sf/wms?service=WMS&request=getCapabilities&version=1.1.1", true);
-        assertXpathExists("//Layer[Name='" + MockData.PRIMITIVEGEOFEATURE.getLocalPart()+ "']", doc);
+        assertXpathExists("//Layer[Name='" + MockData.PRIMITIVEGEOFEATURE.getLocalPart() + "']", doc);
     }
-    
+
     @Test
     public void testWorkspaceDescribeLayer() throws Exception {
-        Document doc = getAsDOM("/sf/wms?service=WMS&request=describeLayer&version=1.1.1&LAYERS=" 
+        Document doc = getAsDOM("/sf/wms?service=WMS&request=describeLayer&version=1.1.1&LAYERS="
                 + MockData.PRIMITIVEGEOFEATURE.getLocalPart(), true);
         assertXpathExists("//LayerDescription[@name='" + MockData.PRIMITIVEGEOFEATURE.getLocalPart() + "']", doc);
     }

@@ -19,9 +19,8 @@ import org.springframework.context.ApplicationContext;
 /**
  * A provider that always returns the same set of flow control rules, regardless of the current
  * request, based on the list provided by a ControlFlowConfigurator
- * 
+ *
  * @author Andrea Aime - GeoSolutions
- * 
  */
 public class DefaultFlowControllerProvider implements FlowControllerProvider {
 

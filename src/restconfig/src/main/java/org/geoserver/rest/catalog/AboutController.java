@@ -41,7 +41,7 @@ import freemarker.template.SimpleHash;
 
 @RestController
 @RequestMapping(path = RestBaseController.ROOT_PATH + "/about",
-        produces = { MediaType.TEXT_HTML_VALUE, MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
+        produces = {MediaType.TEXT_HTML_VALUE, MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 @ControllerAdvice
 public class AboutController extends RestBaseController {
 
@@ -68,7 +68,7 @@ public class AboutController extends RestBaseController {
     }
 
     protected AboutModel getModel(AboutModelType type, String regex, String from, String to,
-            String key, String value) {
+                                  String key, String value) {
         AboutModel model = null;
 
         // filter name by regex
@@ -125,7 +125,7 @@ public class AboutController extends RestBaseController {
 
     @Override
     public boolean supports(MethodParameter methodParameter, Type targetType,
-            Class<? extends HttpMessageConverter<?>> converterType) {
+                            Class<? extends HttpMessageConverter<?>> converterType) {
         return AboutModel.class.isAssignableFrom(methodParameter.getParameterType());
     }
 
@@ -168,7 +168,7 @@ public class AboutController extends RestBaseController {
 
         // AboutModel
         xs.processAnnotations(AboutModel.class);
-        xs.allowTypes(new Class[] { AboutModel.class });
+        xs.allowTypes(new Class[]{AboutModel.class});
         xs.addImplicitCollection(AboutModel.class, "manifests");
         xs.alias("about", AboutModel.class);
 
@@ -182,7 +182,7 @@ public class AboutController extends RestBaseController {
 
             @Override
             public void marshal(Object source, HierarchicalStreamWriter writer,
-                    MarshallingContext context) {
+                                MarshallingContext context) {
                 ManifestModel model = (ManifestModel) source;
                 writer.addAttribute("name", model.getName());
                 for (java.util.Map.Entry<String, String> entry : model.getEntries().entrySet())
@@ -195,7 +195,7 @@ public class AboutController extends RestBaseController {
 
                         @Override
                         public void marshal(Object source, HierarchicalStreamWriter writer,
-                                MarshallingContext context) {
+                                            MarshallingContext context) {
                             @SuppressWarnings("unchecked")
                             Entry<String, String> e = (Entry<String, String>) source;
                             writer.startNode(e.getKey());
@@ -205,7 +205,7 @@ public class AboutController extends RestBaseController {
 
                         @Override
                         public Object unmarshal(HierarchicalStreamReader reader,
-                                UnmarshallingContext context) {
+                                                UnmarshallingContext context) {
                             throw new UnsupportedOperationException("Not implemented");
                         }
 

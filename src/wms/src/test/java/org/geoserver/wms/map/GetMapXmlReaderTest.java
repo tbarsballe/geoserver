@@ -30,7 +30,7 @@ import org.opengis.filter.PropertyIsEqualTo;
 public class GetMapXmlReaderTest extends KvpRequestReaderTestSupport {
     GetMapXmlReader reader;
     Dispatcher dispatcher;
-    
+
     /**
      * This is a READ ONLY TEST so we can use one time setup
      */
@@ -51,7 +51,7 @@ public class GetMapXmlReaderTest extends KvpRequestReaderTestSupport {
         cb.calculateLayerGroupBounds(gi);
         getCatalog().add(gi);
     }
-    
+
     @Override
     protected void oneTimeTearDown() throws Exception {
         super.oneTimeTearDown();
@@ -66,18 +66,18 @@ public class GetMapXmlReaderTest extends KvpRequestReaderTestSupport {
         WMS wms = new WMS(getGeoServer());
         reader = new GetMapXmlReader(wms);
     }
-    
+
     public void testCreateRequest() throws Exception {
         GetMapRequest request = (GetMapRequest) reader.createRequest();
         assertNotNull(request);
     }
-    
+
     public void testResolveStylesForLayerGroup() throws Exception {
         GetMapRequest request = (GetMapRequest) reader.createRequest();
         BufferedReader input = getResourceInputStream("WMSPostLayerGroupNonDefaultStyle.xml");
 
         request = (GetMapRequest) reader.read(request, input, new HashMap());
-        
+
         String layer = MockData.BASIC_POLYGONS.getLocalPart();
         assertEquals(1, request.getLayers().size());
         assertTrue(request.getLayers().get(0).getName().endsWith(layer));
@@ -87,13 +87,13 @@ public class GetMapXmlReaderTest extends KvpRequestReaderTestSupport {
         Style style = request.getStyles().get(0);
         assertEquals(expected, style);
     }
-    
+
     public void testLayerFeatureConstraintFilterParsing() throws Exception {
-    	GetMapRequest request = (GetMapRequest) reader.createRequest();
+        GetMapRequest request = (GetMapRequest) reader.createRequest();
         BufferedReader input = getResourceInputStream("WMSPostLayerFeatureConstraintFilter.xml");
 
         request = (GetMapRequest) reader.read(request, input, new HashMap());
-        
+
         // Named layer
         String linesLayer = MockData.LINES.getLocalPart();
         assertEquals(1, request.getLayers().size());
@@ -103,13 +103,13 @@ public class GetMapXmlReaderTest extends KvpRequestReaderTestSupport {
         PropertyIsEqualTo parsed = (PropertyIsEqualTo) request.getFilter().get(0);
         assertEquals("[ NAME = VALUE ]", parsed.toString());
     }
-    
+
     public void testAllowDynamicStyles() throws Exception {
         GetMapRequest request = (GetMapRequest) reader.createRequest();
         BufferedReader input = getResourceInputStream("WMSPostLayerGroupNonDefaultStyle.xml");
 
         WMS wms = new WMS(getGeoServer());
-        WMSInfo  oldInfo = wms.getGeoServer().getService(WMSInfo.class);
+        WMSInfo oldInfo = wms.getGeoServer().getService(WMSInfo.class);
         WMSInfo info = new WMSInfoImpl();
         info.setDynamicStylingDisabled(Boolean.TRUE);
         getGeoServer().remove(oldInfo);
@@ -118,7 +118,7 @@ public class GetMapXmlReaderTest extends KvpRequestReaderTestSupport {
         boolean error = false;
         try {
             request = (GetMapRequest) reader.read(request, input, new HashMap());
-        } catch(ServiceException e) {
+        } catch (ServiceException e) {
             error = true;
         }
         getGeoServer().remove(info);

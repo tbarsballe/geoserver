@@ -18,9 +18,9 @@ import org.opengis.filter.Filter;
 
 /**
  * Binding object for the type http://www.opengis.net/wfs:LockType.
- *
  * <p>
- *        <pre>
+ * <p>
+ * <pre>
  *         <code>
  *  &lt;xsd:complexType name="LockType"&gt;
  *      &lt;xsd:annotation&gt;
@@ -67,6 +67,7 @@ import org.opengis.filter.Filter;
  *
  *          </code>
  *         </pre>
+ *
  * @generated
  */
 public class LockTypeBinding extends AbstractComplexBinding {
@@ -100,7 +101,7 @@ public class LockTypeBinding extends AbstractComplexBinding {
      * @generated modifiable
      */
     public Object parse(ElementInstance instance, Node node, Object value)
-        throws Exception {
+            throws Exception {
         LockType lock = wfsfactory.createLockType();
 
         //&lt;xsd:element maxOccurs="1" minOccurs="0" ref="ogc:Filter"/&gt;

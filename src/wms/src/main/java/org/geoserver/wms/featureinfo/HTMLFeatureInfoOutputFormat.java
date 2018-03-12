@@ -35,7 +35,7 @@ import freemarker.template.TemplateModelException;
 /**
  * Produces a FeatureInfo response in HTML. Relies on {@link AbstractFeatureInfoResponse} and the
  * feature delegate to do most of the work, just implements an HTML based writeTo method.
- * 
+ *
  * @author James Macgill, PSU
  * @author Andrea Aime, TOPP
  * @version $Id$
@@ -45,7 +45,7 @@ public class HTMLFeatureInfoOutputFormat extends GetFeatureInfoOutputFormat {
     private static final String FORMAT = "text/html";
 
     private static Configuration templateConfig;
-    
+
     private static DirectTemplateFeatureCollectionFactory tfcFactory = new DirectTemplateFeatureCollectionFactory();
 
     static {
@@ -53,18 +53,18 @@ public class HTMLFeatureInfoOutputFormat extends GetFeatureInfoOutputFormat {
         // over instantiations of kml writer
         templateConfig = new Configuration();
         templateConfig.setObjectWrapper(new FeatureWrapper(tfcFactory) {
-    
+
             @Override
             public TemplateModel wrap(Object object) throws TemplateModelException {
                 if (object instanceof FeatureCollection) {
-                    SimpleHash map = (SimpleHash) super.wrap(object);                    
+                    SimpleHash map = (SimpleHash) super.wrap(object);
                     map.put("request", Dispatcher.REQUEST.get().getKvp());
                     map.put("environment", new EnvironmentVariablesTemplateModel());
                     return map;
                 }
                 return super.wrap(object);
             }
-    
+
         });
     }
 
@@ -76,17 +76,13 @@ public class HTMLFeatureInfoOutputFormat extends GetFeatureInfoOutputFormat {
         super(FORMAT);
         this.wms = wms;
     }
-    
+
     /**
      * Writes the image to the client.
-     * 
-     * @param out
-     *            The output stream to write to.
-     * 
-     * @throws org.vfny.geoserver.ServiceException
-     *             For problems with geoserver
-     * @throws java.io.IOException
-     *             For problems writing the output.
+     *
+     * @param out The output stream to write to.
+     * @throws org.vfny.geoserver.ServiceException For problems with geoserver
+     * @throws java.io.IOException                 For problems writing the output.
      */
     @SuppressWarnings("unchecked")
     @Override
@@ -97,7 +93,7 @@ public class HTMLFeatureInfoOutputFormat extends GetFeatureInfoOutputFormat {
         final OutputStreamWriter osw = new OutputStreamWriter(out, charSet);
 
         try {
-         // if there is only one feature type loaded, we allow for header/footer customization,
+            // if there is only one feature type loaded, we allow for header/footer customization,
             // otherwise we stick with the generic ones
             Template header = null;
             Template footer = null;
@@ -108,7 +104,7 @@ public class HTMLFeatureInfoOutputFormat extends GetFeatureInfoOutputFormat {
             } else {
                 // load the default ones
                 header = getTemplate(null, "header.ftl", charSet);
-                footer = getTemplate( null, "footer.ftl", charSet);
+                footer = getTemplate(null, "footer.ftl", charSet);
             }
 
             try {
@@ -119,15 +115,15 @@ public class HTMLFeatureInfoOutputFormat extends GetFeatureInfoOutputFormat {
             }
 
             // process content template for all feature collections found
-            for (int i=0; i < collections.size(); i++ ) {
+            for (int i = 0; i < collections.size(); i++) {
                 FeatureCollection fc = collections.get(i);
                 if (fc != null && fc.size() > 0) {
                     Template content = null;
-                    if (! (fc.getSchema() instanceof SimpleFeatureType)) {
+                    if (!(fc.getSchema() instanceof SimpleFeatureType)) {
                         //if there is a specific template for complex features, use that.
                         content = getTemplate(FeatureCollectionDecorator.getName(fc), "complex_content.ftl", charSet);
-                    }                
-                    if (content==null) {
+                    }
+                    if (content == null) {
                         content = getTemplate(FeatureCollectionDecorator.getName(fc), "content.ftl", charSet);
                     }
                     try {
@@ -151,8 +147,8 @@ public class HTMLFeatureInfoOutputFormat extends GetFeatureInfoOutputFormat {
                 }
             }
             osw.flush();
-        } finally {        
-        
+        } finally {
+
             //close any open iterators        
             tfcFactory.purge();
         }
@@ -161,17 +157,13 @@ public class HTMLFeatureInfoOutputFormat extends GetFeatureInfoOutputFormat {
     /**
      * Uses a {@link GeoServerTemplateLoader TemplateLoader} too look up for the template file named
      * <code>templateFilename</code> for the given <code>featureType</code>.
-     * 
-     * @param name
-     *            the name of the featureType to look the template for
-     *            In case you want to load the default template you can leave this argument null
-     * @param templateFileName
-     *            the name of the template to look for
-     * @param charset
-     *            the encoding to apply to the resulting {@link Template}
+     *
+     * @param name             the name of the featureType to look the template for
+     *                         In case you want to load the default template you can leave this argument null
+     * @param templateFileName the name of the template to look for
+     * @param charset          the encoding to apply to the resulting {@link Template}
      * @return the template named <code>templateFileName</code>
-     * @throws IOException
-     *             if the template can't be loaded
+     * @throws IOException if the template can't be loaded
      */
     Template getTemplate(Name name, String templateFileName, Charset charset)
             throws IOException {
@@ -193,9 +185,9 @@ public class HTMLFeatureInfoOutputFormat extends GetFeatureInfoOutputFormat {
             return t;
         }
     }
-    
+
     @Override
-    public String getCharset(){ 
+    public String getCharset() {
         return wms.getGeoServer().getSettings().getCharset();
     }
 }

@@ -31,14 +31,14 @@ import org.geoserver.config.GeoServer;
 
 /**
  * Utility methods helpful when processing GeoServer Requests.
- *
+ * <p>
  * <p>
  * Provides helper functions and classes useful when implementing your own
  * Response classes. Of significant importantance are the Request processing
  * functions that allow access to the WebContainer, GeoServer and the User's
  * Session.
  * </p>
- *
+ * <p>
  * <p>
  * If you are working with the STRUTS API the Action method is the direct
  * paralle of the Response classes. You may whish to look at how ConfigAction
@@ -50,7 +50,7 @@ import org.geoserver.config.GeoServer;
  */
 public final class Requests {
     static Logger LOGGER = org.geotools.util.logging.Logging.getLogger("org.vfny.geoserver");
-    
+
     /*
      * This is the parameter used to get the proxy from the
      * web.xml file.  This is a bit hacky, it should be moved to
@@ -64,11 +64,11 @@ public final class Requests {
     /**
      * Get base url used - it is not any more assumed to be
      * http://server:port/geoserver
-     *
+     * <p>
      * GRR: it is not any more assumed the context path is /geoserver. If a proxyBaseUrl
      * was provided, then that's the full context path and thus the proxyBaseUrl is returned as is,
      * instead of appending /geosverver to it.
-     *
+     * <p>
      * Removed the hardcoded "http://" and replaced it with
      * httpServletRequest.getScheme() because the https case was not being
      * handled.
@@ -90,13 +90,13 @@ public final class Requests {
         if ((url == null) || (url.trim().length() == 0)) {
             if (httpServletRequest != null) {
                 url = httpServletRequest.getSession().getServletContext()
-                                        .getInitParameter(PROXY_PARAM);
+                        .getInitParameter(PROXY_PARAM);
             }
 
             if ((url == null) || (url.trim().length() == 0)) {
                 url = httpServletRequest.getScheme() + "://" + httpServletRequest.getServerName()
-                    + ":" + httpServletRequest.getServerPort()
-                    + httpServletRequest.getContextPath() + "/";
+                        + ":" + httpServletRequest.getServerPort()
+                        + httpServletRequest.getContextPath() + "/";
             } else {
                 url = appendContextPath(url, httpServletRequest.getContextPath());
             }
@@ -126,13 +126,13 @@ public final class Requests {
         if ((url == null) || (url.trim().length() == 0)) {
             if (httpServletRequest != null) {
                 url = httpServletRequest.getSession().getServletContext()
-                                        .getInitParameter(PROXY_PARAM);
+                        .getInitParameter(PROXY_PARAM);
             }
 
             if ((url == null) || (url.trim().length() == 0)) {
                 url = httpServletRequest.getScheme() + "://" + httpServletRequest.getServerName()
-                    + ":" + httpServletRequest.getServerPort() + httpServletRequest.getRequestURI()
-                    + "/";
+                        + ":" + httpServletRequest.getServerPort() + httpServletRequest.getRequestURI()
+                        + "/";
             } else {
                 url = appendContextPath(url, httpServletRequest.getRequestURI());
             }
@@ -145,14 +145,12 @@ public final class Requests {
         return url;
     }
 
-    
 
     /**
      * Appends a context path to a base url.
-     * 
-     * @param url The base url.
+     *
+     * @param url         The base url.
      * @param contextPath The context path to be appended.
-     * 
      * @return A full url with the context path appended.
      */
     public static String appendContextPath(String url, String contextPath) {
@@ -166,7 +164,7 @@ public final class Requests {
 
         return url + "/" + contextPath;
     }
-    
+
     /**
      * Appends a query string to a url.
      * <p>
@@ -174,9 +172,8 @@ public final class Requests {
      * '&' to be prepended.
      * </p>
      *
-     * @param url The base url.
+     * @param url         The base url.
      * @param queryString The query string to be appended, should not contain the '?' character.
-     *
      * @return A full url with the query string appended.
      */
     public static String appendQueryString(String url, String queryString) {
@@ -201,24 +198,22 @@ public final class Requests {
         return getBaseUrl(httpServletRequest, geoserver) + "schemas/";
     }
 
-    
+
     /**
      * Tests is user is loggin in.
-     *
+     * <p>
      * <p>
      * True if UserContainer exists has been created.
      * </p>
      *
      * @param request HttpServletRequest providing current Session
-     *
-     *
      */
     public static boolean isLoggedIn(HttpServletRequest request) {
         // check the user is not the anonymous one
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         return (authentication != null)
-        && !(authentication instanceof AnonymousAuthenticationToken);
+                && !(authentication instanceof AnonymousAuthenticationToken);
     }
 
     /**
@@ -227,7 +222,7 @@ public final class Requests {
      * It the paramter is added, the response is checked to see if the response
      * is encoded in gzip, deflate or plain bytes. The correct input stream wrapper is then
      * selected and returned.
-     *
+     * <p>
      * This method was added as part of GEOS-420
      *
      * @param url The url to the sld file
@@ -273,11 +268,11 @@ public final class Requests {
             return conn.getInputStream();
         }
     }
-    
+
     /**
      * Parses an 'option-holding' parameters in the following form
      * FORMAT_OPTIONS=multiKey:val1,val2,val3;singleKey:val
-     * 
+     * <p>
      * Useful for parsing out the FORMAT_OPTIONS and LEGEND_OPTIONS parameters
      */
     public static Map parseOptionParameter(String rawOptionString) throws IllegalArgumentException {
@@ -285,11 +280,11 @@ public final class Requests {
         if (rawOptionString == null) {
             return map;
         }
-        
+
         StringTokenizer semiColonSplitter = new StringTokenizer(rawOptionString, ";");
         while (semiColonSplitter.hasMoreElements()) {
             String curKVP = semiColonSplitter.nextToken();
-            
+
             final int cloc = curKVP.indexOf(":");
             if (cloc <= 0) {
                 throw new IllegalArgumentException("Key-value-pair: '" + curKVP + "' isn't properly formed.  It must be of the form 'Key:Value1,Value2...'");
@@ -301,13 +296,13 @@ public final class Requests {
                 StringTokenizer commaSplitter = new StringTokenizer(values, ",");
                 while (commaSplitter.hasMoreElements())
                     valueList.add(commaSplitter.nextToken());
-                
+
                 map.put(key, valueList);
             } else {
                 map.put(key, values);
             }
         }
-        
+
         return map;
     }
 }

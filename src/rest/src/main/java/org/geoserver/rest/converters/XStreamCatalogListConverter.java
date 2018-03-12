@@ -49,13 +49,14 @@ public abstract class XStreamCatalogListConverter
     public boolean canRead(Class<?> clazz, MediaType mediaType) {
         return false;
     }
-    
+
     @Override
     public RestListWrapper<?> readInternal(Class<? extends RestListWrapper<?>> clazz,
-            HttpInputMessage inputMessage) throws IOException, HttpMessageNotReadableException {
+                                           HttpInputMessage inputMessage) throws IOException, HttpMessageNotReadableException {
         throw new HttpMessageNotReadableException(
                 getClass().getName() + " does not support deserialization of catalog lists");
     }
+
     //
     // writing
     //
@@ -86,7 +87,7 @@ public abstract class XStreamCatalogListConverter
 
             @Override
             protected void writeItem(Object item, MarshallingContext context,
-                    HierarchicalStreamWriter writer) {
+                                     HierarchicalStreamWriter writer) {
 
                 writer.startNode(name);
                 context.convertAnother(item);
@@ -100,7 +101,7 @@ public abstract class XStreamCatalogListConverter
             }
 
             public void marshal(Object source, HierarchicalStreamWriter writer,
-                    MarshallingContext context) {
+                                MarshallingContext context) {
 
                 String ref;
                 //Special case for layer list, to handle the non-workspace-specific endpoint for layers
@@ -115,9 +116,7 @@ public abstract class XStreamCatalogListConverter
                 } else if (OwsUtils.getter(clazz, "id", Long.class) != null) {
                     // For some reason Importer objects have Long ids so this catches that case
                     ref = OwsUtils.get(source, "id").toString();
-                }
-
-                else {
+                } else {
                     throw new RuntimeException(
                             "Could not determine identifier for: " + clazz.getName());
                 }
@@ -189,7 +188,7 @@ public abstract class XStreamCatalogListConverter
     public static class JSONXStreamListConverter extends XStreamCatalogListConverter {
 
         public JSONXStreamListConverter() {
-            super(MediaType.APPLICATION_JSON,XStreamJSONMessageConverter.TEXT_JSON);
+            super(MediaType.APPLICATION_JSON, XStreamJSONMessageConverter.TEXT_JSON);
         }
 
         @Override

@@ -16,8 +16,8 @@ import org.geotools.xml.Node;
 
 /**
  * Binding object for the type http://www.opengis.net/ows:BoundingBoxType.
- *
- *        <pre>
+ * <p>
+ * <pre>
  *         <code>
  *  &lt;complexType name="BoundingBoxType"&gt;
  *      &lt;annotation&gt;
@@ -86,7 +86,7 @@ public class BoundingBoxTypeBinding extends AbstractComplexBinding {
      * @generated modifiable
      */
     public Object parse(ElementInstance instance, Node node, Object value)
-        throws Exception {
+            throws Exception {
         //TODO: implement
         return null;
     }

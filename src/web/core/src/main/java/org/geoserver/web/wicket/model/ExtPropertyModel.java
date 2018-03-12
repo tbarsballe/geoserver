@@ -10,27 +10,26 @@ import org.apache.wicket.model.PropertyModel;
 /**
  * Extension of property model.
  * Additional support for:
- *      - read-only properties (particularly for disabled fields, otherwise a null is sent despite content)
- * 
- * @author Niels Charlier
+ * - read-only properties (particularly for disabled fields, otherwise a null is sent despite content)
  *
  * @param <T>
+ * @author Niels Charlier
  */
-public class ExtPropertyModel<T> extends PropertyModel<T>{
-    
+public class ExtPropertyModel<T> extends PropertyModel<T> {
+
     private static final long serialVersionUID = 8377548798715670872L;
-    
+
     private boolean readOnly;
 
     public ExtPropertyModel(Object modelObject, String expression) {
-        super(modelObject, expression);        
+        super(modelObject, expression);
     }
-    
+
     @Override
     public void setObject(T object) {
         if (!readOnly) {
             super.setObject(object);
-        }        
+        }
     }
 
     public boolean isReadOnly() {
@@ -41,5 +40,5 @@ public class ExtPropertyModel<T> extends PropertyModel<T>{
         this.readOnly = readOnly;
         return this;
     }
-    
+
 }

@@ -21,9 +21,8 @@ import org.geotools.data.ows.HTTPResponse;
 /**
  * A simple mock http client, allows to set expectations on requests and provide canned responses on
  * them
- * 
+ *
  * @author Andrea Aime - GeoSolutions
- * 
  */
 public class MockHttpClient extends AbstractHttpClient {
 
@@ -33,7 +32,7 @@ public class MockHttpClient extends AbstractHttpClient {
      * Binds a certain URL to a response. The order of the query string parameters is not relevant,
      * the code will match the same set of KVP params regardless of their sequence and case of their
      * keys (from OGC specs, keys are case insensitive, values are case sensitive)
-     * 
+     *
      * @param url
      * @param response
      */
@@ -43,17 +42,17 @@ public class MockHttpClient extends AbstractHttpClient {
 
     /**
      * Binds a certain POST request to a response.
-     * 
+     *
      * @param url
      * @param response
      */
     public void expectPost(URL url, String postContent, String postContentType,
-            HTTPResponse response) {
+                           HTTPResponse response) {
         expectPOST(url, postContent.getBytes(), postContentType, response);
     }
 
     public void expectPOST(URL url, byte[] postContent, String postContentType,
-            HTTPResponse response) {
+                           HTTPResponse response) {
         expectedRequests.put(new Request(url, postContent, postContentType), response);
     }
 
@@ -103,7 +102,7 @@ public class MockHttpClient extends AbstractHttpClient {
             this.path = url.getProtocol() + "://" + url.getHost() + url.getPath();
             Map<String, Object> parsedQueryString = KvpUtils.parseQueryString(url.toExternalForm());
             // we use a treemap as it makes it easier to see what's missing when no bound url is found
-            this.kvp = new TreeMap<String, Object>(); 
+            this.kvp = new TreeMap<String, Object>();
             for (Entry<String, Object> entry : parsedQueryString.entrySet()) {
                 this.kvp.put(entry.getKey().toUpperCase(), entry.getValue());
             }

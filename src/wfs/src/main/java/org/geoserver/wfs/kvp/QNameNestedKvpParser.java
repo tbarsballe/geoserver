@@ -13,7 +13,7 @@ import org.geoserver.ows.NestedKvpParser;
 public class QNameNestedKvpParser extends NestedKvpParser {
 
     QNameKvpParser delegate;
-    
+
     public QNameNestedKvpParser(String key, Catalog catalog) {
         super(key, QName.class);
         delegate = new QNameKvpParser(key, catalog);

@@ -46,7 +46,7 @@ import com.google.common.collect.Multimap;
 
 /**
  * Allows the admin to edit the limits for a specific process
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class ProcessLimitsPage extends GeoServerSecuredPage {
@@ -89,7 +89,7 @@ public class ProcessLimitsPage extends GeoServerSecuredPage {
 
             @Override
             protected Component getComponentForProperty(String id, IModel<InputLimit> itemModel,
-                    Property<InputLimit> property) {
+                                                        Property<InputLimit> property) {
                 InputLimit limit = (InputLimit) itemModel.getObject();
                 String propertyName = property.getName();
                 if (propertyName.equals("type")) {
@@ -160,7 +160,6 @@ public class ProcessLimitsPage extends GeoServerSecuredPage {
     /**
      * Turn the input limits into the UI into a set of operational validators, filtering out those
      * that have empty or default input
-     * 
      */
     protected Multimap<String, WPSInputValidator> buildValidators(List<InputLimit> inputLimits) {
         Multimap<String, WPSInputValidator> result = ArrayListMultimap.create();
@@ -181,9 +180,8 @@ public class ProcessLimitsPage extends GeoServerSecuredPage {
     /**
      * Go from the available process validator to a UI representation, adding also the possible
      * validators that are not yet set
-     * 
-     * @param process
      *
+     * @param process
      */
     private List<InputLimit> buildInputLimits(FilteredProcess process) {
         ApplicationContext applicationContext = GeoServerApplication.get().getApplicationContext();
@@ -241,7 +239,7 @@ public class ProcessLimitsPage extends GeoServerSecuredPage {
 
     /**
      * The input limit
-     * 
+     *
      * @author Andrea Aime - GeoSolutions
      */
     static final class InputLimit implements Serializable {

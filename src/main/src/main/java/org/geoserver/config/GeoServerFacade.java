@@ -14,14 +14,13 @@ import org.geoserver.catalog.WorkspaceInfo;
  *
  * @author ETj <etj at geo-solutions.it>
  * @author Justin Deoliveira, OpenGeo
- * 
  */
 public interface GeoServerFacade {
 
     GeoServer getGeoServer();
-    
+
     void setGeoServer(GeoServer geoServer);
-    
+
     /**
      * The global geoserver configuration.
      */
@@ -30,8 +29,8 @@ public interface GeoServerFacade {
     /**
      * Sets the global configuration.
      */
-    void setGlobal( GeoServerInfo global );
-    
+    void setGlobal(GeoServerInfo global);
+
     /**
      * Saves the global geoserver configuration after modification.
      */
@@ -61,17 +60,17 @@ public interface GeoServerFacade {
      * The logging configuration.
      */
     LoggingInfo getLogging();
-    
+
     /**
      * Sets logging configuration.
      */
-    void setLogging( LoggingInfo logging );
-    
+    void setLogging(LoggingInfo logging);
+
     /**
      * Saves the logging configuration.
      */
     void save(LoggingInfo logging);
-    
+
     /**
      * Adds a service to the configuration.
      */
@@ -89,7 +88,6 @@ public interface GeoServerFacade {
 
     /**
      * GeoServer services.
-     * 
      */
     Collection<? extends ServiceInfo> getServices();
 
@@ -100,9 +98,8 @@ public interface GeoServerFacade {
 
     /**
      * GeoServer global service filtered by class.
-     * 
-     * @param clazz
-     *                The class of the service to return.
+     *
+     * @param clazz The class of the service to return.
      */
     <T extends ServiceInfo> T getService(Class<T> clazz);
 
@@ -110,47 +107,43 @@ public interface GeoServerFacade {
      * GeoServer service specific to the specified workspace and filtered by class.
      *
      * @param workspace The workspace the service is specific to.
-     * @param clazz The class of the service to return.
+     * @param clazz     The class of the service to return.
      */
     <T extends ServiceInfo> T getService(WorkspaceInfo workspace, Class<T> clazz);
 
     /**
      * Looks up a service by id.
-     * 
-     * @param id
-     *                The id of the service.
+     *
+     * @param id    The id of the service.
      * @param clazz The type of the service.
-     * 
      * @return The service with the specified id, or <code>null</code> if no
-     *         such service coud be found.
+     * such service coud be found.
      */
     <T extends ServiceInfo> T getService(String id, Class<T> clazz);
 
     /**
      * Looks up a service by name.
-     * 
-     * @param name The name of the service.
+     *
+     * @param name  The name of the service.
      * @param clazz The type of the service.
-     * 
      * @return The service with the specified name or <code>null</code> if no
-     *         such service could be found.
+     * such service could be found.
      */
-    <T extends ServiceInfo> T getServiceByName(String name, Class<T> clazz );
+    <T extends ServiceInfo> T getServiceByName(String name, Class<T> clazz);
 
     /**
      * Looks up a service by name, specific to the specified workspace.
-     * 
-     * @param name The name of the service.
+     *
+     * @param name      The name of the service.
      * @param workspace The workspace the service is specific to.
-     * @param clazz The type of the service.
-     * 
-     * @return The service with the specified name or <code>null</code> if no such service could be 
+     * @param clazz     The type of the service.
+     * @return The service with the specified name or <code>null</code> if no such service could be
      * found.
      */
-    <T extends ServiceInfo> T getServiceByName(String name, WorkspaceInfo workspace, Class<T> clazz );
+    <T extends ServiceInfo> T getServiceByName(String name, WorkspaceInfo workspace, Class<T> clazz);
 
     /**
-     * Disposes the configuration. 
+     * Disposes the configuration.
      */
     void dispose();
 }

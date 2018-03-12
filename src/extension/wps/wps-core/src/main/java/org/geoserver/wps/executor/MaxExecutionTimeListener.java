@@ -15,7 +15,7 @@ import org.opengis.util.ProgressListener;
 
 /**
  * A listener wrapper that will forcefully fail a process once the max time expired
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class MaxExecutionTimeListener extends DelegateProgressListener {
@@ -31,9 +31,9 @@ public class MaxExecutionTimeListener extends DelegateProgressListener {
         super(progress);
 
         if (maxTotalTime > 0 && maxTotalTime < maxExecutionTime) {
-            LOGGER.log(Level.WARNING, 
+            LOGGER.log(Level.WARNING,
                     "The maximum total queuing and execution time allowed for processes is "
-                    + "less than the maximum allowed execution time");
+                            + "less than the maximum allowed execution time");
         }
 
         this.maxExecutionTime = maxExecutionTime;
@@ -59,8 +59,6 @@ public class MaxExecutionTimeListener extends DelegateProgressListener {
 
     /**
      * Returns true if the execution went beyond the allowed max time
-     * 
-     *
      */
     public boolean isExpired() {
         boolean maxExecutionTimeExceeded = maxExecutionTime > 0 && startTime > 0 && (System.currentTimeMillis() - startTime) > maxExecutionTime;
@@ -70,8 +68,6 @@ public class MaxExecutionTimeListener extends DelegateProgressListener {
 
     /**
      * The maximum execution time
-     * 
-     *
      */
     public long getMaxExecutionTime() {
         return maxExecutionTime;
@@ -79,7 +75,7 @@ public class MaxExecutionTimeListener extends DelegateProgressListener {
 
     /**
      * The maximum total time
-     * 
+     *
      * @return
      */
     public long getMaxTotalTime() {

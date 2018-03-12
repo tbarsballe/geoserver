@@ -12,12 +12,14 @@ import org.opengis.feature.type.Name;
 
 /**
  * The bean to be rendered in the new layer page
- * 
+ *
  * @author Andrea Aime - OpenGeo
  */
 public class Resource implements Comparable<Resource>, Serializable {
 
-    /** serialVersionUID */
+    /**
+     * serialVersionUID
+     */
     private static final long serialVersionUID = 8744964557875392120L;
     /**
      * The resource name
@@ -29,7 +31,7 @@ public class Resource implements Comparable<Resource>, Serializable {
      * If this resource has already been published, or not
      */
     boolean published;
-    
+
     /**
      * Specified if this resource is from a multi-coverage reader
      */
@@ -44,7 +46,7 @@ public class Resource implements Comparable<Resource>, Serializable {
         this.name = name.getLocalPart();
         this.uri = name.getNamespaceURI();
     }
-    
+
     public String getLocalName() {
         return name;
     }
@@ -92,7 +94,7 @@ public class Resource implements Comparable<Resource>, Serializable {
         // namespace URI (and the prefix is not available in Name)
         return name.compareTo(o.name);
     }
-    
+
     @Override
     public String toString() {
         return name + "(" + published + ")";

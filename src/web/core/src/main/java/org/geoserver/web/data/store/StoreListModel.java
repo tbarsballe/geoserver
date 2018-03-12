@@ -16,9 +16,8 @@ import org.geoserver.web.GeoServerApplication;
 
 /**
  * Model providing the store list
- * 
+ *
  * @author Andrea Aime - GeoSolutions
- * 
  */
 public class StoreListModel extends LoadableDetachableModel<List<StoreInfo>> {
     private static final long serialVersionUID = -7742496075623731474L;

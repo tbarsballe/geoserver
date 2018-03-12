@@ -8,7 +8,7 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 
 /**
  * The GeoServer OAuth2 Filter Configuration. This POJO contains the properties needed to correctly configure the Spring Auth Filter.
- * 
+ *
  * @author Alessio Fabiani, GeoSolutions S.A.S.
  */
 public interface OAuth2FilterConfig {
@@ -115,26 +115,24 @@ public interface OAuth2FilterConfig {
 
     /**
      * **THIS MUST** be different for every OAuth2 Plugin
-     * 
+     *
      * @return
      */
     public String getLoginEndpoint();
-    
+
     /**
      * **THIS MUST** be different for every OAuth2 Plugin
-     * 
+     *
      * @return
      */
     public String getLogoutEndpoint();
 
     /**
-     * 
      * @param loginEndpoint
      */
     public void setLoginEndpoint(String loginEndpoint);
-    
+
     /**
-     * 
      * @param logoutEndpoint
      */
     public void setLogoutEndpoint(String logoutEndpoint);
@@ -152,7 +150,7 @@ public interface OAuth2FilterConfig {
 
     /**
      * Returns filter {@link AuthenticationEntryPoint} actual implementation
-     * 
+     *
      * @return {@link AuthenticationEntryPoint}
      */
     public AuthenticationEntryPoint getAuthenticationEntryPoint();

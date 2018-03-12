@@ -17,5 +17,5 @@ class StyleNameComparator implements Comparator<StyleInfo> {
     public int compare(StyleInfo o1, StyleInfo o2) {
         return o1.getName().compareToIgnoreCase(o2.getName());
     }
-    
+
 }

@@ -44,145 +44,145 @@ import org.opengis.feature.Feature;
 
 /**
  * Internal Catalog Store Feature Iterator
- * 
+ *
  * @author Niels Charlier
  */
 class CatalogStoreFeatureIterator implements Iterator<Feature> {
-    
+
     protected static final FilterFactory2 ff = CommonFactoryFinder.getFilterFactory2();
 
     static final Logger LOGGER = Logging.getLogger(CatalogStoreFeatureIterator.class);
-    
+
     protected RecordBuilder builder;
 
     protected Iterator<ResourceInfo> layerIt;
-    
+
     protected ResourceInfo nextResource;
-    
+
     protected Iterator<LayerGroupInfo> layerGroupIt;
-    
+
     protected LayerGroupInfo nextLayerGroup;
-    
+
     protected CatalogStoreMapping mapping;
-    
+
     protected CatalogFacade catalogFacade;
-    
+
     protected Map<String, String> interpolationProperties = new HashMap<String, String>();
-    
+
     protected int offset;
-    
+
     protected int count;
-    
+
     protected SortBy[] sortOrder;
-    
+
     protected Filter filter;
-    
+
     protected int index;
-    
+
     protected Comparator<Info> comparator;
 
     private RecordDescriptor recordDescriptor;
-    
+
     public CatalogStoreFeatureIterator(int offset, int count, SortBy[] sortOrder, Filter filter, Catalog catalog, CatalogStoreMapping mapping, RecordDescriptor recordDescriptor, Map<String, String> interpolationProperties) {
         this.interpolationProperties = interpolationProperties;
         this.offset = offset;
         this.count = count;
         this.sortOrder = sortOrder;
         this.filter = filter;
-        catalogFacade = catalog.getFacade();        
+        catalogFacade = catalog.getFacade();
         this.mapping = mapping;
-        
+
         Filter advertised = ff.equals(ff.property("advertised"), ff.literal(true));
-        
+
         layerIt = catalogFacade.list(ResourceInfo.class, ff.and(filter, advertised), null, null, sortOrder);
         nextLayer();
         layerGroupIt = catalogFacade.list(LayerGroupInfo.class, filter, null, null, sortOrder);
         nextLayerGroup();
-                
-        comparator = sortOrder==null || sortOrder.length==0 ? null : CatalogComparatorFactory.buildComparator(sortOrder);
-        index = 0;        
+
+        comparator = sortOrder == null || sortOrder.length == 0 ? null : CatalogComparatorFactory.buildComparator(sortOrder);
+        index = 0;
         while (index < offset && hasNext()) {
-        	nextInternal();
+            nextInternal();
         }
         this.recordDescriptor = recordDescriptor;
         builder = new GenericRecordBuilder(recordDescriptor);
     }
-    
+
     @Override
-    public boolean hasNext() {        
-        return index < offset+count && (nextResource != null || nextLayerGroup != null );
+    public boolean hasNext() {
+        return index < offset + count && (nextResource != null || nextLayerGroup != null);
     }
-    
+
     public ResourceInfo nextLayer() {
-    	ResourceInfo result = nextResource;
-    	
-    	if (layerIt.hasNext()) {
-        	nextResource = layerIt.next();
+        ResourceInfo result = nextResource;
+
+        if (layerIt.hasNext()) {
+            nextResource = layerIt.next();
         } else {
-        	nextResource = null;
+            nextResource = null;
         }
-    	
-    	return result;
+
+        return result;
     }
-    
+
     public LayerGroupInfo nextLayerGroup() {
-    	LayerGroupInfo result = nextLayerGroup;
-    	
-    	if (layerGroupIt.hasNext()) {
-    		nextLayerGroup = layerGroupIt.next();
+        LayerGroupInfo result = nextLayerGroup;
+
+        if (layerGroupIt.hasNext()) {
+            nextLayerGroup = layerGroupIt.next();
         } else {
-        	nextLayerGroup = null;
+            nextLayerGroup = null;
         }
-    	
-    	return result;
+
+        return result;
     }
-    
+
     public CatalogInfo nextInternal() {
-    	if (!hasNext()) {
+        if (!hasNext()) {
             throw new NoSuchElementException("No more records to retrieve");
-        }        
+        }
         index++;
-        
+
         if (nextResource == null) {
-        	return nextLayerGroup();
+            return nextLayerGroup();
         }
-        
+
         if (nextLayerGroup == null) {
-        	return nextLayer();
+            return nextLayer();
         }
-        
+
         if (comparator == null) {
-        	return nextLayer();
+            return nextLayer();
         }
-                
+
         int c = comparator.compare(nextResource, nextLayerGroup);
         if (c <= 0) {
-        	return nextLayer();
+            return nextLayer();
         } else {
-        	return nextLayerGroup();
-        }        
+            return nextLayerGroup();
+        }
     }
-    
+
     @Override
     public Feature next() {
         CatalogInfo info = nextInternal();
-        
+
         if (info instanceof ResourceInfo) {
-        	return convertToFeature( (ResourceInfo) info );
+            return convertToFeature((ResourceInfo) info);
         } else {
-        	return convertToFeature( (LayerGroupInfo) info );
+            return convertToFeature((LayerGroupInfo) info);
         }
     }
-    
+
     private String mapProperties(CatalogInfo resource) {
         String id = null;
-        for (CatalogStoreMapping.CatalogStoreMappingElement mappingElement: mapping.elements()) {
-                Object value = mappingElement.getContent().evaluate(resource);
+        for (CatalogStoreMapping.CatalogStoreMappingElement mappingElement : mapping.elements()) {
+            Object value = mappingElement.getContent().evaluate(resource);
 
             if (value != null) {
                 if (value instanceof Collection) {
-                    ((Collection)value).removeAll(Collections.singleton(null));
-                    if (((Collection)value).size() > 0) {
+                    ((Collection) value).removeAll(Collections.singleton(null));
+                    if (((Collection) value).size() > 0) {
                         String[] elements = new String[((Collection) value).size()];
                         int i = 0;
                         for (Object element : (Collection) value) {
@@ -204,8 +204,8 @@ class CatalogStoreFeatureIterator implements Iterator<Feature> {
 
     /**
      * Get a {@link FeatureCustomizer} for this info.
-     * @param info
      *
+     * @param info
      */
     private FeatureCustomizer getCustomizer(CatalogInfo info) {
         FeatureCustomizer customizer = null;
@@ -262,20 +262,19 @@ class CatalogStoreFeatureIterator implements Iterator<Feature> {
         }
         return feature;
     }
-    
-    
+
 
     private Feature convertToFeature(LayerGroupInfo resource) {
-       
-        String id = mapProperties(resource);        
-       
+
+        String id = mapProperties(resource);
+
         // move on to the bounding boxes      
         if (mapping.isIncludeEnvelope()) {
             ReferencedEnvelope bbox = null;
-            bbox = resource.getBounds();            
+            bbox = resource.getBounds();
             if (bbox != null) {
                 builder.addBoundingBox(bbox);
-            }          
+            }
         }
 
         return builder.build(id);
@@ -285,9 +284,8 @@ class CatalogStoreFeatureIterator implements Iterator<Feature> {
     public void remove() {
         throw new UnsupportedOperationException("This iterator is read only");
     }
-    
 
-    
+
     /**
      * Pattern to match a property to be substituted. Note the reluctant quantifier.
      */

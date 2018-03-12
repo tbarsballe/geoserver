@@ -9,11 +9,10 @@ package org.geoserver.security.validation;
 
 
 /**
- * Exception used for validation errors 
+ * Exception used for validation errors
  * during security configuration
- * 
- * @author christian
  *
+ * @author christian
  */
 public class SecurityConfigException extends AbstractSecurityException {
     private static final long serialVersionUID = 1L;
@@ -62,15 +61,15 @@ public class SecurityConfigException extends AbstractSecurityException {
 
     public static final String AUTH_FILTER_ALREADY_EXISTS_$1 = "AUTH_FILTER_ALREADY_EXISTS";
     //return MessageFormat.format("Authentication filter {0} alreday exists",args);
-    
+
 
     public static final String PASSWD_POLICY_NOT_FOUND_$1 = "PASSWD_POLICY_NOT_FOUND";
     //return MessageFormat.format("Password policy {0} does not exist",args);
 
-    
+
     public static final String USERGROUP_SERVICE_NOT_FOUND_$1 = "USERGROUP_SERVICE_NOT_FOUND";
     //return MessageFormat.format("User/group service {0} does not exist",args);
-    
+
     public static final String AUTH_FILTER_NOT_FOUND_$1 = "AUTH_FILTER_NOT_FOUND";
     //return MessageFormat.format("Authentication filter {0} does not exist",args);
 
@@ -79,10 +78,10 @@ public class SecurityConfigException extends AbstractSecurityException {
 
     public static final String ROLE_SERVICE_ACTIVE_$1 = "ROLE_SERVICE_ACTIVE";
     //return MessageFormat.format("Role service {0} is active and cannot be deleted",args);
-    
+
     public static final String AUTH_PROVIDER_ACTIVE_$1 = "AUTH_PROVIDER_ACTIVE";
     //return MessageFormat.format("Authentication provider {0} is active and cannot be deleted",args);
-    
+
     public static final String PASSWD_ENCODER_REQUIRED_$1 = "PASSWD_ENCODER_REQUIRED";
     //return MessageFormat.format("No password encoder specified for user/group service {0}",args);
 
@@ -104,27 +103,27 @@ public class SecurityConfigException extends AbstractSecurityException {
     public static final String PASSWD_POLICY_MASTER_DELETE = "PASSWD_POLICY_MASTER_DELETE";
     //return MessageFormat.format("Policy for the master password cannot be deleted",args);
 
-    public static final String FILTER_CHAIN_NULL_ERROR="FILTER_CHAIN_NULL_ERROR";
-    public static final String FILTER_CHAIN_NAME_MANDATORY="FILTER_CHAIN_NAME_MANDATORY";
-    public static final String FILTER_CHAIN_EMPTY_$1="FILTER_CHAIN_EMPTY";
-    
-    public static final String FILTER_CHAIN_NOT_REMOVEABLE_$1="FILTER_CHAIN_NOT_REMOVEABLE";
-    public static final String FILTER_CHAIN_NAME_NOT_UNIQUE_$1="FILTER_CHAIN_NAME_NOT_UNIQUE";
-    public static final String UNKNOWN_INTERCEPTOR_FILTER_$2="UNKNOWN_INTERCEPTOR_FILTER";
-    public static final String INTERCEPTOR_FILTER_MANDATORY_$1="INTERCEPTOR_FILTER_MANDATORY";
-    public static final String UNKNOWN_EXCEPTION_FILTER_$2="UNKNOWN_EXCEPTION_FILTER";
-    public static final String EXCEPTION_FILTER_MANDATORY_$1="INTERCEPTOR_EXCEPTION_MANDATORY";
-            
-    public static final String PATTERN_LIST_EMPTY_$1="PATTERN_LIST_EMPTY";
-    public static final String ANONYMOUS_NOT_LAST_$1="ANONYMOUS_NOT_LAST";
-    public static final String UNKNOWN_ROLE_FILTER_$2="UNKNOWN_ROLE_FILTER";
-    public static final String UNKNOWN_FILTER_$2="UNKNOWN_FILTER";
-    public static final String NOT_AN_AUTHENTICATION_FILTER_$2="NOT_AN_AUTHENTICATION_FILTER";
-    public static final String NOT_A_HTML_AUTHENTICATION_FILTER_$2="NOT_A_HTML_AUTHENTICATION_FILTER";
-    public static final String NOT_A_SERVICE_AUTHENTICATION_FILTER_$2="NOT_A_SERVICE_AUTHENTICATION_FILTER";
-    public static final String FILTER_STILL_USED="FILTER_STILL_USED";
-    public static final String RESERVED_ROLE_NAME="RESERVED_ROLE_NAME";
-    
+    public static final String FILTER_CHAIN_NULL_ERROR = "FILTER_CHAIN_NULL_ERROR";
+    public static final String FILTER_CHAIN_NAME_MANDATORY = "FILTER_CHAIN_NAME_MANDATORY";
+    public static final String FILTER_CHAIN_EMPTY_$1 = "FILTER_CHAIN_EMPTY";
+
+    public static final String FILTER_CHAIN_NOT_REMOVEABLE_$1 = "FILTER_CHAIN_NOT_REMOVEABLE";
+    public static final String FILTER_CHAIN_NAME_NOT_UNIQUE_$1 = "FILTER_CHAIN_NAME_NOT_UNIQUE";
+    public static final String UNKNOWN_INTERCEPTOR_FILTER_$2 = "UNKNOWN_INTERCEPTOR_FILTER";
+    public static final String INTERCEPTOR_FILTER_MANDATORY_$1 = "INTERCEPTOR_FILTER_MANDATORY";
+    public static final String UNKNOWN_EXCEPTION_FILTER_$2 = "UNKNOWN_EXCEPTION_FILTER";
+    public static final String EXCEPTION_FILTER_MANDATORY_$1 = "INTERCEPTOR_EXCEPTION_MANDATORY";
+
+    public static final String PATTERN_LIST_EMPTY_$1 = "PATTERN_LIST_EMPTY";
+    public static final String ANONYMOUS_NOT_LAST_$1 = "ANONYMOUS_NOT_LAST";
+    public static final String UNKNOWN_ROLE_FILTER_$2 = "UNKNOWN_ROLE_FILTER";
+    public static final String UNKNOWN_FILTER_$2 = "UNKNOWN_FILTER";
+    public static final String NOT_AN_AUTHENTICATION_FILTER_$2 = "NOT_AN_AUTHENTICATION_FILTER";
+    public static final String NOT_A_HTML_AUTHENTICATION_FILTER_$2 = "NOT_A_HTML_AUTHENTICATION_FILTER";
+    public static final String NOT_A_SERVICE_AUTHENTICATION_FILTER_$2 = "NOT_A_SERVICE_AUTHENTICATION_FILTER";
+    public static final String FILTER_STILL_USED = "FILTER_STILL_USED";
+    public static final String RESERVED_ROLE_NAME = "RESERVED_ROLE_NAME";
+
     public SecurityConfigException(String errorId, Object[] args) {
         super(errorId, args);
     }

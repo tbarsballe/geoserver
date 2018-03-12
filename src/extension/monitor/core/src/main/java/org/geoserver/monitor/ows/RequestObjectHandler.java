@@ -16,9 +16,8 @@ import org.opengis.geometry.BoundingBox;
 
 /**
  * Class that extracts information from an ows request.
- * 
- * @author Justin Deoliveira, OpenGeo
  *
+ * @author Justin Deoliveira, OpenGeo
  */
 public abstract class RequestObjectHandler {
 
@@ -26,40 +25,38 @@ public abstract class RequestObjectHandler {
 
     String reqObjClassName;
     protected MonitorConfig monitorConfig;
-    
+
     protected RequestObjectHandler(String reqObjClassName, MonitorConfig config) {
         this.reqObjClassName = reqObjClassName;
         this.monitorConfig = config;
     }
-    
+
     public boolean canHandle(Object request) {
         Class<?> clazz;
         try {
             clazz = Class.forName(reqObjClassName);
-        } 
-        catch (ClassNotFoundException e) {
+        } catch (ClassNotFoundException e) {
             return false;
         }
-        
+
         return clazz.isInstance(request);
     }
-    
+
     public void handle(Object request, RequestData data) {
         try {
             data.setResources(getLayers(request));
-            if(monitorConfig.getBboxMode()!=MonitorConfig.BboxMode.NONE){
+            if (monitorConfig.getBboxMode() != MonitorConfig.BboxMode.NONE) {
                 data.setBbox(getBBox(request));
             }
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             //TODO; rather than just catch and log we should add a configuration parameter, 
             // development vs production, and throw the exception in development mode
             LOGGER.log(Level.WARNING, "Error handling request object", e);
         }
     }
-    
+
     protected abstract List<String> getLayers(Object request);
-    
+
     /**
      * Find a bounding box for the area covered by the request.
      */

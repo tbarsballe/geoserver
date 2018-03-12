@@ -21,15 +21,20 @@ import org.geoserver.wms.WMSMapContent;
 import org.geoserver.wms.map.XMLTransformerMap;
 
 public class AtomGeoRSSMapOutputFormat implements GetMapOutputFormat {
-    /** mime type */
+    /**
+     * mime type
+     */
     public static String MIME_TYPE = "application/atom+xml";
-    
+
     static final MapProducerCapabilities ATOM_CAPABILITIES = new MapProducerCapabilities(false, false, false, true, null);
 
-    /** format names/aliases */
+    /**
+     * format names/aliases
+     */
     public static final Set<String> FORMAT_NAMES;
+
     static {
-        String[] FORMATS = { MIME_TYPE, "atom", "application/atom xml" };
+        String[] FORMATS = {MIME_TYPE, "atom", "application/atom xml"};
         Set<String> names = new TreeSet<String>(String.CASE_INSENSITIVE_ORDER);
         names.addAll(Arrays.asList(FORMATS));
         FORMAT_NAMES = Collections.unmodifiableSet(names);
@@ -83,7 +88,6 @@ public class AtomGeoRSSMapOutputFormat implements GetMapOutputFormat {
     public MapProducerCapabilities getCapabilities(String format) {
         return ATOM_CAPABILITIES;
     }
-    
-    
+
 
 }

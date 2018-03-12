@@ -37,15 +37,17 @@ public class ObjectToMapWrapper<T> extends BeansWrapper {
 
     /**
      * Constructs an ObjectToMapWrapper for the provided clazz.
+     *
      * @param clazz
      */
-    public ObjectToMapWrapper(Class<T> clazz ) {
+    public ObjectToMapWrapper(Class<T> clazz) {
         this(clazz, Collections.EMPTY_LIST);
     }
 
     /**
      * Constructs an ObjectToMapWrapper for the provided clazz.
      * Any child properties that match classesToExpand will be unwrapped to a map
+     *
      * @param clazz
      * @param classesToExpand
      */
@@ -56,20 +58,20 @@ public class ObjectToMapWrapper<T> extends BeansWrapper {
 
     /**
      * Constructs a {@link SimpleHash} representing the passed object.
-     *
+     * <p>
      * If the object is already a SimpleHash, it is returned.
      * If the object is a {@link Collection}, with contents matching {@link #clazz}, a SimpleHash with a single entry
      * is returned:
-     *
-     *   "values", containing the collection, as a {@link CollectionModel}
-     *
+     * <p>
+     * "values", containing the collection, as a {@link CollectionModel}
+     * <p>
      * If the object is an {@link Object}, that matches {@link #clazz}, a SimpleHash with a two entries is returned:
-     *
-     *   "properties", containing a {@link MapModel} representing the object. Map entries are populated using reflection
-     *   to get the property names and values. See {@link OwsUtils#get(Object, String)} for more details. If any values
-     *   have a class assignable to any class included in {@link #classesToExpand}, those values are likewise extracted
-     *   into a map. Otherwise the toString method of that object is called.
-     *
+     * <p>
+     * "properties", containing a {@link MapModel} representing the object. Map entries are populated using reflection
+     * to get the property names and values. See {@link OwsUtils#get(Object, String)} for more details. If any values
+     * have a class assignable to any class included in {@link #classesToExpand}, those values are likewise extracted
+     * into a map. Otherwise the toString method of that object is called.
+     * <p>
      * If none of the above give a result, {@link BeansWrapper#wrap(Object)} is returned.
      *
      * @param object Object to wrap
@@ -79,10 +81,10 @@ public class ObjectToMapWrapper<T> extends BeansWrapper {
     @SuppressWarnings("unchecked")
     @Override
     public TemplateModel wrap(Object object) throws TemplateModelException {
-        if ( object instanceof SimpleHash) {
+        if (object instanceof SimpleHash) {
             return (SimpleHash) object;
         }
-        if ( object instanceof Collection) {
+        if (object instanceof Collection) {
             Collection c = (Collection) object;
             if (c.isEmpty() || clazz.isAssignableFrom(c.iterator().next().getClass())) {
                 SimpleHash hash = new SimpleHash();
@@ -92,12 +94,12 @@ public class ObjectToMapWrapper<T> extends BeansWrapper {
                 return hash;
             }
         }
-        if ( object != null && clazz.isAssignableFrom( object.getClass() ) ) {
+        if (object != null && clazz.isAssignableFrom(object.getClass())) {
             Map<String, Object> map = objectToMap(object, clazz);
 
             SimpleHash model = new SimpleHash();
-            model.put( "properties", new MapModel(map, this) );
-            model.put( "className", clazz.getSimpleName() );
+            model.put("properties", new MapModel(map, this));
+            model.put("className", clazz.getSimpleName());
             setRequestInfo(model);
             wrapInternal(map, model, (T) object);
             return model;
@@ -108,29 +110,29 @@ public class ObjectToMapWrapper<T> extends BeansWrapper {
 
     /**
      * Converts the provided object to a map using reflection on on clazz.
-     *
+     * <p>
      * If any values
      * have a class assignable to any class included in {@link #classesToExpand}, those values are likewise extracted
      * into a map.
      *
      * @param object Object to convert.
-     * @param clazz The advertized class of the object, from which the map keys are generated.
+     * @param clazz  The advertized class of the object, from which the map keys are generated.
      * @return
      */
     protected Map<String, Object> objectToMap(Object object, Class clazz) {
         HashMap<String, Object> map = new HashMap<>();
 
         ClassProperties cp = OwsUtils.getClassProperties(clazz);
-        for ( String p : cp.properties() ) {
-            if ( "Class".equals( p ) ) continue;
+        for (String p : cp.properties()) {
+            if ("Class".equals(p)) continue;
             Object value;
             try {
                 value = OwsUtils.get(object, p);
-            } catch(Exception e) {
+            } catch (Exception e) {
                 LOGGER.log(Level.WARNING, "Could not resolve property " + p + " of bean " + object, e);
                 value = "** Failed to retrieve value of property " + p + ". Error message is: " + e.getMessage() + "**";
             }
-            if ( value == null ) {
+            if (value == null) {
                 value = "null";
             }
             String key = Character.toLowerCase(p.charAt(0)) + p.substring(1);
@@ -163,8 +165,8 @@ public class ObjectToMapWrapper<T> extends BeansWrapper {
         }
         return null;
     }
-    private static Set<Class<?>> getValueTypes()
-    {
+
+    private static Set<Class<?>> getValueTypes() {
         Set<Class<?>> ret = new HashSet<>();
         //primitives
         ret.add(Boolean.class);
@@ -202,9 +204,9 @@ public class ObjectToMapWrapper<T> extends BeansWrapper {
      * Called in the case of a map model
      *
      * @param properties A map of properties obtained reflectively from the object being
-     * serialized.
-     * @param model The resulting template model.
-     * @param object The object being serialized.
+     *                   serialized.
+     * @param model      The resulting template model.
+     * @param object     The object being serialized.
      */
     protected void wrapInternal(Map<String, Object> properties, SimpleHash model, T object) {
     }
@@ -213,7 +215,7 @@ public class ObjectToMapWrapper<T> extends BeansWrapper {
      * Template method to customize the returned template model.
      * Called in the case of a list model
      *
-     * @param model The resulting template model.
+     * @param model  The resulting template model.
      * @param object The object being serialized.
      */
     protected void wrapInternal(SimpleHash model, Collection<T> object) {

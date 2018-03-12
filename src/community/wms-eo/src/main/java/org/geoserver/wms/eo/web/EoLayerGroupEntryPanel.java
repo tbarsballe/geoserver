@@ -47,103 +47,102 @@ public class EoLayerGroupEntryPanel extends Panel {
     List<EoLayerGroupEntry> items;
     EoLayerType layerType;
     String layerGroupName;
-    
-    public EoLayerGroupEntryPanel( String id, LayerGroupInfo layerGroup, ModalWindow popupWindow) {
-        super( id );
+
+    public EoLayerGroupEntryPanel(String id, LayerGroupInfo layerGroup, ModalWindow popupWindow) {
+        super(id);
         this.popupWindow = popupWindow;
-        
+
         Catalog catalog = GeoServerApplication.get().getCatalog();
-        
+
         this.layerGroupName = layerGroup.getName();
         items = new ArrayList<EoLayerGroupEntry>();
-        for ( int i = 0; i < layerGroup.getLayers().size(); i++ ) {
-            PublishedInfo layer = layerGroup.getLayers().get( i );
-            StyleInfo style = layerGroup.getStyles().get( i );
-            if(style == null) {
+        for (int i = 0; i < layerGroup.getLayers().size(); i++) {
+            PublishedInfo layer = layerGroup.getLayers().get(i);
+            StyleInfo style = layerGroup.getStyles().get(i);
+            if (style == null) {
                 LayerInfo li = catalog.getLayer(layer.getId());
-                if(layer != null) {
+                if (layer != null) {
                     style = li.getDefaultStyle();
                 }
             }
-            items.add( new EoLayerGroupEntry( (LayerInfo) layer, style, layerGroup.getName() ) );
+            items.add(new EoLayerGroupEntry((LayerInfo) layer, style, layerGroup.getName()));
         }
-        
+
         // layers
         final EoLayerTypeRenderer eoLayerTypeRenderer = new EoLayerTypeRenderer();
-        entryProvider = new LayerGroupEntryProvider( items );
-        layerTable = new GeoServerTablePanel<EoLayerGroupEntry>("layers",entryProvider) {
+        entryProvider = new LayerGroupEntryProvider(items);
+        layerTable = new GeoServerTablePanel<EoLayerGroupEntry>("layers", entryProvider) {
 
             @Override
             protected Component getComponentForProperty(String id, IModel<EoLayerGroupEntry> itemModel,
-                    Property<EoLayerGroupEntry> property) {
-                if ( property == LayerGroupEntryProvider.LAYER ) {
+                                                        Property<EoLayerGroupEntry> property) {
+                if (property == LayerGroupEntryProvider.LAYER) {
                     EoLayerGroupEntry entry = (EoLayerGroupEntry) itemModel.getObject();
-                    return new Label( id, entry.getLayer().prefixedName());
+                    return new Label(id, entry.getLayer().prefixedName());
                 }
-                if ( property == LayerGroupEntryProvider.TYPE) {
+                if (property == LayerGroupEntryProvider.TYPE) {
                     EoLayerType type = (EoLayerType) property.getModel(itemModel).getObject();
                     return new Label(id, (String) eoLayerTypeRenderer.getDisplayValue(type));
                 }
-                if ( property == LayerGroupEntryProvider.STYLE ) {
-                    return styleLink( id, itemModel );
+                if (property == LayerGroupEntryProvider.STYLE) {
+                    return styleLink(id, itemModel);
                 }
-                if ( property == LayerGroupEntryProvider.REMOVE ) {
-                    return removeLink( id, itemModel );
+                if (property == LayerGroupEntryProvider.REMOVE) {
+                    return removeLink(id, itemModel);
                 }
-                if ( property == LayerGroupEntryProvider.POSITION ) {
-                    return positionPanel( id, itemModel ); 
+                if (property == LayerGroupEntryProvider.POSITION) {
+                    return positionPanel(id, itemModel);
                 }
-                
+
                 return null;
             }
         };
-        layerTable.setFilterable( false );
+        layerTable.setFilterable(false);
         layerTable.setSortable(false);
-        layerTable.setOutputMarkupId( true );
+        layerTable.setOutputMarkupId(true);
         layerTable.setItemReuseStrategy(new DefaultItemReuseStrategy());
         add(layerTable);
 
-        
 
     }
-    
+
     public List<EoLayerGroupEntry> getEntries() {
         return items;
     }
-    
+
     Component styleLink(String id, final IModel itemModel) {
         // decide if the style is the default and the current style name
         EoLayerGroupEntry entry = (EoLayerGroupEntry) itemModel.getObject();
         String styleName = null;
         boolean defaultStyle = true;
-        if(entry.getStyle() != null) {
+        if (entry.getStyle() != null) {
             styleName = entry.getStyle().getName();
             defaultStyle = false;
-        } else if(entry.getLayer() instanceof LayerInfo) {
+        } else if (entry.getLayer() instanceof LayerInfo) {
             LayerInfo layer = (LayerInfo) entry.getLayer();
             if (layer.getDefaultStyle() != null) {
                 styleName = layer.getDefaultStyle().getName();
             }
         }
-            
+
         // build and returns the link, but disable it if the style is the default
-        SimpleAjaxLink<String> link = new SimpleAjaxLink<String>( id, new Model(styleName)) {
+        SimpleAjaxLink<String> link = new SimpleAjaxLink<String>(id, new Model(styleName)) {
 
             @Override
             public void onClick(AjaxRequestTarget target) {
                 final EoLayerGroupEntry entry = (EoLayerGroupEntry) itemModel.getObject();
-                
-                popupWindow.setInitialHeight( 375 );
-                popupWindow.setInitialWidth( 525 );
+
+                popupWindow.setInitialHeight(375);
+                popupWindow.setInitialWidth(525);
                 popupWindow.setTitle(new ParamResourceModel("chooseStyle", this));
-                popupWindow.setContent( new EoStyleListPanel( popupWindow.getContentId(), entry.getLayerType()) {
+                popupWindow.setContent(new EoStyleListPanel(popupWindow.getContentId(), entry.getLayerType()) {
                     @Override
                     protected void handleStyle(StyleInfo style, AjaxRequestTarget target) {
-                        entry.setStyle( style );
-                        
+                        entry.setStyle(style);
+
                         //redraw
-                        target.add( layerTable );
-                        popupWindow.close( target );
+                        target.add(layerTable);
+                        popupWindow.close(target);
                     }
                 });
                 popupWindow.show(target);
@@ -153,58 +152,58 @@ public class EoLayerGroupEntryPanel extends Panel {
         link.getLink().setEnabled(!defaultStyle);
         return link;
     }
-    
+
     Component removeLink(String id, IModel itemModel) {
         final EoLayerGroupEntry entry = (EoLayerGroupEntry) itemModel.getObject();
-        ImageAjaxLink link = new ImageAjaxLink( id, new PackageResourceReference( LayerGroupEntryPanel.class, "../../img/icons/silk/delete.png") ) {
+        ImageAjaxLink link = new ImageAjaxLink(id, new PackageResourceReference(LayerGroupEntryPanel.class, "../../img/icons/silk/delete.png")) {
             @Override
             protected void onClick(AjaxRequestTarget target) {
-                
-                items.remove( entry );
-                target.add( layerTable );
+
+                items.remove(entry);
+                target.add(layerTable);
             }
         };
         link.getImage().add(new AttributeModifier("alt", new ParamResourceModel("AbstractLayerGroupPage.th.remove", link)));
         return link;
     }
-    
+
     Component positionPanel(String id, IModel itemModel) {
-        return new PositionPanel( id, (EoLayerGroupEntry) itemModel.getObject() );
+        return new PositionPanel(id, (EoLayerGroupEntry) itemModel.getObject());
     }
-  
+
     static class LayerGroupEntryProvider extends GeoServerDataProvider<EoLayerGroupEntry> {
 
-        public static Property<EoLayerGroupEntry> LAYER = 
-            new PropertyPlaceholder<EoLayerGroupEntry>( "sourceLayer");
-        
-        public static Property<EoLayerGroupEntry> LAYER_SUBNAME = 
-                new BeanProperty<EoLayerGroupEntry>( "layer", "layerSubName");
+        public static Property<EoLayerGroupEntry> LAYER =
+                new PropertyPlaceholder<EoLayerGroupEntry>("sourceLayer");
 
-        
-        public static Property<EoLayerGroupEntry> STYLE = 
-            new PropertyPlaceholder<EoLayerGroupEntry>( "style" );
-        
-        public static Property<EoLayerGroupEntry> TYPE = 
-                new BeanProperty<EoLayerGroupEntry>( "layerType", "layerType" );
+        public static Property<EoLayerGroupEntry> LAYER_SUBNAME =
+                new BeanProperty<EoLayerGroupEntry>("layer", "layerSubName");
 
-        
-        public static Property<EoLayerGroupEntry> REMOVE = 
-            new PropertyPlaceholder<EoLayerGroupEntry>( "remove" );
-        
-        public static Property<EoLayerGroupEntry> POSITION = 
-            new PropertyPlaceholder<EoLayerGroupEntry>( "position" );
 
-        static List PROPERTIES = Arrays.asList( POSITION, LAYER, LAYER_SUBNAME, TYPE, STYLE, REMOVE );
-        
+        public static Property<EoLayerGroupEntry> STYLE =
+                new PropertyPlaceholder<EoLayerGroupEntry>("style");
+
+        public static Property<EoLayerGroupEntry> TYPE =
+                new BeanProperty<EoLayerGroupEntry>("layerType", "layerType");
+
+
+        public static Property<EoLayerGroupEntry> REMOVE =
+                new PropertyPlaceholder<EoLayerGroupEntry>("remove");
+
+        public static Property<EoLayerGroupEntry> POSITION =
+                new PropertyPlaceholder<EoLayerGroupEntry>("position");
+
+        static List PROPERTIES = Arrays.asList(POSITION, LAYER, LAYER_SUBNAME, TYPE, STYLE, REMOVE);
+
         List<EoLayerGroupEntry> items;
-        
-        public LayerGroupEntryProvider( List<EoLayerGroupEntry> items ) {
+
+        public LayerGroupEntryProvider(List<EoLayerGroupEntry> items) {
             this.items = items;
         }
-        
+
         @Override
         protected List<EoLayerGroupEntry> getItems() {
-            return items; 
+            return items;
         }
 
         @Override
@@ -215,31 +214,31 @@ public class EoLayerGroupEntryPanel extends Panel {
     }
 
     class PositionPanel extends Panel {
-        
+
         EoLayerGroupEntry entry;
         private ImageAjaxLink upLink;
-        private ImageAjaxLink downLink;        
-        
-        public PositionPanel( String id, final EoLayerGroupEntry entry ) {
-            super( id );
+        private ImageAjaxLink downLink;
+
+        public PositionPanel(String id, final EoLayerGroupEntry entry) {
+            super(id);
             this.entry = entry;
             this.setOutputMarkupId(true);
-            
-            upLink = new ImageAjaxLink( "up", new PackageResourceReference( LayerGroupEntryPanel.class, "../../img/icons/silk/arrow_up.png") ) {
+
+            upLink = new ImageAjaxLink("up", new PackageResourceReference(LayerGroupEntryPanel.class, "../../img/icons/silk/arrow_up.png")) {
                 @Override
                 protected void onClick(AjaxRequestTarget target) {
-                    int index = items.indexOf( PositionPanel.this.entry );
-                    items.remove( index );
+                    int index = items.indexOf(PositionPanel.this.entry);
+                    items.remove(index);
                     items.add(Math.max(0, index - 1), PositionPanel.this.entry);
-                    target.add( layerTable );
+                    target.add(layerTable);
                     target.add(this);
-                    target.add(downLink);   
-                    target.add(upLink);                    
+                    target.add(downLink);
+                    target.add(upLink);
                 }
-                
+
                 @Override
                 protected void onComponentTag(ComponentTag tag) {
-                    if ( items.indexOf( entry ) == 0 ) {
+                    if (items.indexOf(entry) == 0) {
                         tag.put("style", "visibility:hidden");
                     } else {
                         tag.put("style", "visibility:visible");
@@ -248,23 +247,23 @@ public class EoLayerGroupEntryPanel extends Panel {
             };
             upLink.getImage().add(new AttributeModifier("alt", new ParamResourceModel("up", upLink)));
             upLink.setOutputMarkupId(true);
-            add( upLink);            
+            add(upLink);
 
-            downLink = new ImageAjaxLink( "down", new PackageResourceReference( LayerGroupEntryPanel.class, "../../img/icons/silk/arrow_down.png") ) {
+            downLink = new ImageAjaxLink("down", new PackageResourceReference(LayerGroupEntryPanel.class, "../../img/icons/silk/arrow_down.png")) {
                 @Override
                 protected void onClick(AjaxRequestTarget target) {
-                    int index = items.indexOf( PositionPanel.this.entry );
-                    items.remove( index );
+                    int index = items.indexOf(PositionPanel.this.entry);
+                    items.remove(index);
                     items.add(Math.min(items.size(), index + 1), PositionPanel.this.entry);
-                    target.add( layerTable );
-                    target.add(this);                    
-                    target.add(downLink);   
-                    target.add(upLink);                    
+                    target.add(layerTable);
+                    target.add(this);
+                    target.add(downLink);
+                    target.add(upLink);
                 }
-                
+
                 @Override
                 protected void onComponentTag(ComponentTag tag) {
-                    if ( items.indexOf( entry ) == items.size() - 1) {
+                    if (items.indexOf(entry) == items.size() - 1) {
                         tag.put("style", "visibility:hidden");
                     } else {
                         tag.put("style", "visibility:visible");
@@ -273,7 +272,7 @@ public class EoLayerGroupEntryPanel extends Panel {
             };
             downLink.getImage().add(new AttributeModifier("alt", new ParamResourceModel("down", downLink)));
             downLink.setOutputMarkupId(true);
-            add( downLink);
+            add(downLink);
         }
     }
 

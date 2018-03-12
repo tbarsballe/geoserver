@@ -66,14 +66,14 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
  * <li>Logout URI: <b>https://github.com/logout</b></li>
  * <li>Scopes: <b>user</b></li>
  * </ul>
- * 
+ *
  * @author Alessio Fabiani, GeoSolutions S.A.S.
  */
-@Configuration(value="githubOAuth2SecurityConfiguration")
+@Configuration(value = "githubOAuth2SecurityConfiguration")
 @EnableOAuth2Client
 class GitHubOAuth2SecurityConfiguration extends GeoServerOAuth2SecurityConfiguration {
 
-    @Bean(name="githubOAuth2Resource")
+    @Bean(name = "githubOAuth2Resource")
     public OAuth2ProtectedResourceDetails geoServerOAuth2Resource() {
         AuthorizationCodeResourceDetails details = new AuthorizationCodeResourceDetails();
         details.setId("github-oauth2-client");
@@ -84,11 +84,11 @@ class GitHubOAuth2SecurityConfiguration extends GeoServerOAuth2SecurityConfigura
 
         return details;
     }
-    
+
     /**
      * Must have "session" scope
      */
-    @Bean(name="githubOauth2RestTemplate")
+    @Bean(name = "githubOauth2RestTemplate")
     @Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
     public OAuth2RestTemplate geoServerOauth2RestTemplate() {
 
@@ -99,7 +99,7 @@ class GitHubOAuth2SecurityConfiguration extends GeoServerOAuth2SecurityConfigura
         authorizationCodeAccessTokenProvider.setStateMandatory(false);
 
         AccessTokenProvider accessTokenProviderChain = new AccessTokenProviderChain(
-                Arrays.<AccessTokenProvider> asList(authorizationCodeAccessTokenProvider,
+                Arrays.<AccessTokenProvider>asList(authorizationCodeAccessTokenProvider,
                         new ImplicitAccessTokenProvider(),
                         new ResourceOwnerPasswordAccessTokenProvider(),
                         new ClientCredentialsAccessTokenProvider()));

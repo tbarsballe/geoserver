@@ -75,7 +75,7 @@ public class WMTSStoreInfoImpl extends StoreInfoImpl implements WMTSStoreInfo {
 
     @Override
     public void setMaxConnections(int maxConcurrentConnections) {
-        this.maxConnections = maxConcurrentConnections;        
+        this.maxConnections = maxConcurrentConnections;
     }
 
     @Override
@@ -98,28 +98,24 @@ public class WMTSStoreInfoImpl extends StoreInfoImpl implements WMTSStoreInfo {
         this.connectTimeout = timeoutSeconds;
     }
 
-    public String getHeaderName()
-    {
+    public String getHeaderName() {
         return headerName;
     }
 
-    public void setHeaderName(String headerName)
-    {
+    public void setHeaderName(String headerName) {
         this.headerName = headerName;
     }
 
-    public String getHeaderValue()
-    {
+    public String getHeaderValue() {
         return headerValue;
     }
 
-    public void setHeaderValue(String headerValue)
-    {
+    public void setHeaderValue(String headerValue) {
         this.headerValue = headerValue;
     }
 
     public void accept(CatalogVisitor visitor) {
-        visitor.visit( this);
+        visitor.visit(this);
     }
 
     public WebMapTileServer getWebMapTileServer(ProgressListener listener) throws IOException {
@@ -140,5 +136,5 @@ public class WMTSStoreInfoImpl extends StoreInfoImpl implements WMTSStoreInfo {
         getMetadata().put("useConnectionPooling", Boolean.valueOf(useHttpConnectionPooling));
     }
 
-    
+
 }

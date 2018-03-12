@@ -52,7 +52,7 @@ public class TransformRepositoryTest {
             XSLTTestSupport.deleteDirectory(dataDir);
         }
         assertTrue(dataDir.mkdirs());
-        
+
         // setup a mock catalog
         Catalog catalog = EasyMock.createNiceMock(Catalog.class);
         ft1 = new FeatureTypeInfoImpl(catalog);
@@ -132,13 +132,13 @@ public class TransformRepositoryTest {
         testRoot.mkdirs();
         File file = new File(testRoot, "test.xml");
         FileUtils.writeStringToFile(file, xml1);
-        
+
         TransformInfo info1 = repo.getTransformInfo("test");
         assertNotNull(info1);
 
         // wait enough for the file to be considered stale
         Thread.sleep((long) (CacheItem.MIN_INTERVALS_CHECK * 1.1));
-        
+
         // write another version
         String xml2 = "<transform>\n" //
                 + "  <sourceFormat>text/xml; subtype=gml/2.1.2</sourceFormat>\n" //
@@ -157,7 +157,7 @@ public class TransformRepositoryTest {
         assertEquals("json", info2.getFileExtension());
         assertEquals("json-tx.xslt", info2.getXslt());
     }
-    
+
     @Test
     public void testDeleteOnFilesystem() throws IOException, InterruptedException {
         // write out the config and make the repo cache it
@@ -171,13 +171,13 @@ public class TransformRepositoryTest {
         testRoot.mkdirs();
         File file = new File(testRoot, "test.xml");
         FileUtils.writeStringToFile(file, xml1);
-        
+
         TransformInfo info1 = repo.getTransformInfo("test");
         assertNotNull(info1);
 
         // wait enough for the file to be considered stale
         Thread.sleep((long) (CacheItem.MIN_INTERVALS_CHECK * 1.1));
-        
+
         // delete the resource from disk
         file.delete();
 
@@ -185,7 +185,7 @@ public class TransformRepositoryTest {
         TransformInfo info2 = repo.getTransformInfo("test");
         assertNull(info2);
     }
-    
+
     @Test
     public void testFeatureTypeReference() throws Exception {
         TransformInfo original = new TransformInfo();
@@ -195,7 +195,7 @@ public class TransformRepositoryTest {
         original.setFileExtension("txt");
         original.setXslt("test-tx.xslt");
         original.setFeatureType(ft1);
-        
+
         repo.putTransformInfo(original);
         File configFile = new File(testRoot, "test.xml");
         assertTrue(configFile.exists());
@@ -204,19 +204,19 @@ public class TransformRepositoryTest {
         repo.infoCache.clear();
         TransformInfo reloaded = repo.getTransformInfo("test");
         assertEquals(original, reloaded);
-        
+
         // check the file on disk
         Document doc = XMLUnit.buildTestDocument(FileUtils.readFileToString(configFile));
         XMLAssert.assertXpathEvaluatesTo("ft1-id", "/transform/featureType/id", doc);
     }
-    
+
     @Test
     public void testListMethods() throws Exception {
         // prepare a set of configurations
         writeConfiguration("c1", null);
         writeConfiguration("c2", ft1);
         writeConfiguration("c3", ft2);
-        
+
         // check all transforms
         List<TransformInfo> configs = repo.getAllTransforms();
         assertEquals(3, configs.size());
@@ -243,7 +243,7 @@ public class TransformRepositoryTest {
         names = getConfigurationNames(configs);
         assertTrue(names.contains("c3"));
     }
-    
+
     @Test
     public void testWriteXSLT() throws Exception {
         TransformInfo original = new TransformInfo();
@@ -257,21 +257,21 @@ public class TransformRepositoryTest {
 
         File info = new File(testRoot, "test.xml");
         assertTrue(info.exists());
-        
+
         repo.putTransformSheet(original, getClass().getResourceAsStream("test.xslt"));
-        
+
         File xslt = new File(testRoot, "test-tx.xslt");
         assertTrue(xslt.exists());
-        
+
         String expected = IOUtils.toString(getClass().getResourceAsStream("test.xslt"));
         String actual = FileUtils.readFileToString(xslt);
         assertEquals(expected, actual);
-        
+
         repo.removeTransformInfo(original);
         assertFalse(info.exists());
         assertFalse(xslt.exists());
     }
-    
+
     @Test
     public void testWriteXSLTShared() throws Exception {
         TransformInfo info1 = new TransformInfo();
@@ -282,10 +282,10 @@ public class TransformRepositoryTest {
         info1.setXslt("test-tx.xslt");
 
         repo.putTransformInfo(info1);
-        
+
         File infoFile1 = new File(testRoot, "test1.xml");
         assertTrue(infoFile1.exists());
-        
+
         TransformInfo info2 = new TransformInfo();
         info2.setName("test2");
         info2.setSourceFormat("application/xml");
@@ -297,24 +297,24 @@ public class TransformRepositoryTest {
 
         File infoFile2 = new File(testRoot, "test2.xml");
         assertTrue(infoFile2.exists());
-        
+
         repo.putTransformSheet(info1, getClass().getResourceAsStream("test.xslt"));
-        
+
         File xslt = new File(testRoot, "test-tx.xslt");
         assertTrue(xslt.exists());
-        
+
         repo.removeTransformInfo(info1);
         assertFalse(infoFile1.exists());
         // shared, not deleted
         assertTrue(xslt.exists());
         assertTrue(infoFile2.exists());
-        
+
         // remote the other too
         repo.removeTransformInfo(info2);
         assertFalse(xslt.exists());
         assertFalse(infoFile2.exists());
     }
-    
+
     @Test
     public void testTransform() throws Exception {
         TransformInfo info = new TransformInfo();
@@ -326,7 +326,7 @@ public class TransformRepositoryTest {
 
         repo.putTransformInfo(info);
         repo.putTransformSheet(info, getClass().getResourceAsStream("test.xslt"));
-        
+
         Transformer transformer = repo.getTransformer(info);
         InputStream is = getClass().getResourceAsStream("sample.xml");
         StreamSource source = new StreamSource(is);
@@ -337,13 +337,13 @@ public class TransformRepositoryTest {
         XMLAssert.assertXpathEvaluatesTo("1", "count(/html/body/table/tr[td='museum'])", dom);
         XMLAssert.assertXpathEvaluatesTo("1", "count(/html/body/table/tr[td='-74.0104611,40.70758763'])", dom);
     }
-    
+
     private Set<String> getConfigurationNames(List<TransformInfo> configs) {
         Set<String> result = new HashSet<String>();
         for (TransformInfo ti : configs) {
             result.add(ti.getName());
         }
-        
+
         return result;
     }
 
@@ -356,10 +356,9 @@ public class TransformRepositoryTest {
         ti.setXslt("test-tx.xslt");
         ti.setFeatureType(ft);
         String xml = repo.xs.toXML(ti);
-        
+
         FileUtils.writeStringToFile(new File(testRoot, name + ".xml"), xml);
     }
-    
-    
-    
+
+
 }

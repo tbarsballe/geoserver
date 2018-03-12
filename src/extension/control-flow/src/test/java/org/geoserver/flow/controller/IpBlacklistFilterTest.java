@@ -56,7 +56,9 @@ public class IpBlacklistFilterTest {
     }
 
     static class TestServlet extends HttpServlet {
-        /** serialVersionUID */
+        /**
+         * serialVersionUID
+         */
         private static final long serialVersionUID = 1L;
 
         private boolean serviceCalled = false;

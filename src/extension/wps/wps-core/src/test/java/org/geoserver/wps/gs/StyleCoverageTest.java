@@ -23,7 +23,7 @@ public class StyleCoverageTest extends WPSTestSupport {
     @Override
     protected void onSetUp(SystemTestData testData) throws Exception {
         super.onSetUp(testData);
-        
+
         addWcs11Coverages(testData);
     }
 
@@ -89,12 +89,12 @@ public class StyleCoverageTest extends WPSTestSupport {
                 + "  </wps:ResponseForm>\n" + "</wps:Execute>";
 
         MockHttpServletResponse response = postAsServletResponse(root(), xml);
-        assertEquals("attachment; filename=result.tiff",response.getHeader("Content-Disposition"));
+        assertEquals("attachment; filename=result.tiff", response.getHeader("Content-Disposition"));
         InputStream is = getBinaryInputStream(response);
-        
+
         // very odd, the tiff reader is not able to read the tiff file, yet desktop apps
         // can read that file just fine...
-        
+
 //        IOUtils.copy(is, new FileOutputStream("/tmp/testfile.tiff"));
 //        
 //        GeoTiffFormat format = new GeoTiffFormat();

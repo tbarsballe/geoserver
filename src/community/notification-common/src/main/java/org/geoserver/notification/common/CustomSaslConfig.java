@@ -16,9 +16,8 @@ import com.rabbitmq.client.impl.PlainMechanism;
 
 /**
  * Implementation to allow the ANONYMOUS auth mechanism
- * 
- * @author Xandros
  *
+ * @author Xandros
  */
 public class CustomSaslConfig implements SaslConfig {
     private final String[] mechanisms;
@@ -30,11 +29,11 @@ public class CustomSaslConfig implements SaslConfig {
     public static final CustomSaslConfig ANONYMOUS = new CustomSaslConfig("ANONYMOUS");
 
     public CustomSaslConfig() {
-        this.mechanisms = new String[] { "PLAIN", "EXTERNAL", "ANONYMOUS" };
+        this.mechanisms = new String[]{"PLAIN", "EXTERNAL", "ANONYMOUS"};
     }
 
     private CustomSaslConfig(String mechanism) {
-        this.mechanisms = new String[] { mechanism };
+        this.mechanisms = new String[]{mechanism};
     }
 
     @Override

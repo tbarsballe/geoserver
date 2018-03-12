@@ -8,7 +8,7 @@ package org.geoserver.test;
 
 /**
  * Mock data for {@link Gsml30WfsTest}.
- * 
+ *
  * @author Ben Caradoc-Davies, CSIRO Exploration and Mining
  */
 public class Gsml30MockData extends AbstractAppSchemaMockData {

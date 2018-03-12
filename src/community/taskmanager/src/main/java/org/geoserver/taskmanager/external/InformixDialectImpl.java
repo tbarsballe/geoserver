@@ -7,7 +7,6 @@ package org.geoserver.taskmanager.external;
 /**
  * Informix implementation.
  *
- * 
  * @author Timothy De Bock
  */
 public class InformixDialectImpl extends DefaultDialectImpl {
@@ -21,6 +20,7 @@ public class InformixDialectImpl extends DefaultDialectImpl {
     /**
      * Override because in a view informix returns the value of the underlying column definition of the table.
      * Even when performing left join in the create view statement.
+     *
      * @param nullable
      * @return
      */

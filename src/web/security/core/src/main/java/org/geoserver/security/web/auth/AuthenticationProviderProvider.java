@@ -14,16 +14,15 @@ import org.geoserver.security.web.SecurityNamedServiceProvider;
 
 /**
  * Data provider for authentication provider configurations.
- * 
- * @author Justin Deoliveira, OpenGeo
  *
+ * @author Justin Deoliveira, OpenGeo
  */
-public class AuthenticationProviderProvider 
-    extends SecurityNamedServiceProvider<SecurityAuthProviderConfig> {
+public class AuthenticationProviderProvider
+        extends SecurityNamedServiceProvider<SecurityAuthProviderConfig> {
 
     @Override
     protected List<SecurityAuthProviderConfig> getItems() {
-        List <SecurityAuthProviderConfig> result = new ArrayList<SecurityAuthProviderConfig>();
+        List<SecurityAuthProviderConfig> result = new ArrayList<SecurityAuthProviderConfig>();
         try {
             for (String name : getSecurityManager().listAuthenticationProviders()) {
                 result.add(getSecurityManager().loadAuthenticationProviderConfig(name));

@@ -16,11 +16,9 @@ import org.springframework.jms.core.JmsTemplate;
 
 /**
  * JMS MASTER (Producer) Listener used to provide basic functionalities to the producer implementations
- * 
- * @see {@link JMSApplicationListener}
- * 
+ *
  * @author Carlo Cancellieri - carlo.cancellieri@geo-solutions.it
- * 
+ * @see {@link JMSApplicationListener}
  */
 public abstract class JMSAbstractProducer extends JMSApplicationListener {
 
@@ -48,9 +46,8 @@ public abstract class JMSAbstractProducer extends JMSApplicationListener {
 
     /**
      * Constructor
-     * 
+     *
      * @param topicTemplate the getJmsTemplate() object used to send message to the topic queue
-     * 
      */
     public JMSAbstractProducer() {
         super(ToggleType.MASTER);

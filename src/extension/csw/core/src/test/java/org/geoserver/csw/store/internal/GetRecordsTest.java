@@ -18,9 +18,7 @@ import org.junit.Test;
 import org.w3c.dom.Document;
 
 /**
- * 
  * @author Niels Charlier
- * 
  */
 public class GetRecordsTest extends CSWInternalTestSupport {
 
@@ -37,12 +35,12 @@ public class GetRecordsTest extends CSWInternalTestSupport {
     @Test
     public void testAllRecordsPaged() throws Exception {
         String request = "csw?service=CSW&version=2.0.2&request=GetRecords&typeNames=csw:Record" +
-            "&resultType=results&elementSetName=full";
-        
+                "&resultType=results&elementSetName=full";
+
         Document d = getAsDOM(request);
         //print(d);
         //validateSchema(d.getElementsByTagName("//gmd:MD_MetaData"));
-        
+
         // we have the right kind of document
         assertXpathEvaluatesTo("1", "count(/csw:GetRecordsResponse)", d);
 
@@ -51,13 +49,13 @@ public class GetRecordsTest extends CSWInternalTestSupport {
         assertXpathEvaluatesTo("29", "//csw:SearchResults/@numberOfRecordsMatched", d);
         assertXpathEvaluatesTo("10", "//csw:SearchResults/@numberOfRecordsReturned", d);
         assertXpathEvaluatesTo("11", "//csw:SearchResults/@nextRecord", d);
-        assertXpathEvaluatesTo("10", "count(//csw:SearchResults/*)", d);   
+        assertXpathEvaluatesTo("10", "count(//csw:SearchResults/*)", d);
     }
-    
+
     @Test
     public void testAllRecords() throws Exception {
         String request = "csw?service=CSW&version=2.0.2&request=GetRecords&typeNames=csw:Record" +
-            "&resultType=results&elementSetName=full&maxRecords=100";
+                "&resultType=results&elementSetName=full&maxRecords=100";
         Document d = getAsDOM(request);
         //print(d);
         checkValidationErrors(d, new CSWConfiguration());
@@ -195,7 +193,6 @@ public class GetRecordsTest extends CSWInternalTestSupport {
 
     /**
      * From CITE compliance, throw an error if a non spatial property is used in a spatial filter
-     * 
      */
     @Test
     public void testSpatialFilterNonGeomProperty() throws Exception {
@@ -205,7 +202,7 @@ public class GetRecordsTest extends CSWInternalTestSupport {
         // print(d);
         checkOws10Exception(d);
     }
-    
+
     @Test
     public void testTitleFilterMetaDataRecord() throws Exception {
         String request = "csw?service=CSW&version=2.0.2&request=GetRecords&namespace=xmlns(gmd=http://www.isotc211.org/2005/gmd)&typeNames=gmd:MD_Metadata&resultType=results&elementSetName=brief&constraint=Title='Forests'&outputSchema=http://www.opengis.net/cat/csw/2.0.2";
@@ -217,27 +214,27 @@ public class GetRecordsTest extends CSWInternalTestSupport {
         assertXpathEvaluatesTo("1", "count(//csw:SearchResults/*)", d);
         assertXpathEvaluatesTo("Forests", "//csw:BriefRecord/dc:title", d);
     }
-    
+
 
     /**
      * From CITE compliance, throw an error the output format is not supported
      */
-    @Test 
+    @Test
     public void testUnsupportedOutputFormat() throws Exception {
         String request = "csw?service=CSW&version=2.0.2&request=GetRecords&typeNames=csw:Record&outputFormat=application/xhtml+xml";
         Document d = getAsDOM(request);
         print(d);
         checkOws10Exception(d, ServiceException.INVALID_PARAMETER_VALUE, "outputFormat");
     }
-    
+
     @Test
     public void testUnadvertised() throws Exception {
         //unadvertise layer
         ResourceInfo forests = getCatalog().getResourceByName("Forests", ResourceInfo.class);
         forests.setAdvertised(false);
-        getCatalog().save(forests); 
-        
-        
+        getCatalog().save(forests);
+
+
         String request = "csw?service=CSW&version=2.0.2&request=GetRecords&typeNames=csw:Record"
                 + "&resultType=results&elementSetName=full&maxRecords=100";
         Document d = getAsDOM(request);
@@ -255,10 +252,10 @@ public class GetRecordsTest extends CSWInternalTestSupport {
 
         // check contents Forests record
         assertXpathNotExists("//csw:Record[dc:title='Forests']", d);
-        
+
         //restore catalog
         forests.setAdvertised(true);
-        getCatalog().save(forests); 
+        getCatalog().save(forests);
     }
 
 }

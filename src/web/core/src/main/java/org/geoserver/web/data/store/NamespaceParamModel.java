@@ -13,7 +13,6 @@ import org.geoserver.web.util.MapModel;
 /**
  * Model to wrap and unwrap a {@link NamespaceInfo} to and from a String for the Datastore's
  * "namespace" parameter
- * 
  */
 public class NamespaceParamModel extends MapModel {
     public NamespaceParamModel(IModel model, String expression) {

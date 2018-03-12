@@ -168,7 +168,7 @@ public class NcwmsIntegrationTest extends WMSTestSupport {
                 "wms?service=WMS&version=1.3.0&request=GetCapabilities&dataset=cite");
         assertDatasetWithCapabilities(dom);
     }
-    
+
     @Test
     public void testDatasetFilteringPOST() throws Exception {
         // filter by workspace
@@ -202,35 +202,35 @@ public class NcwmsIntegrationTest extends WMSTestSupport {
         // root container and the layer itself
         assertEquals(2, xpath.getMatchingNodes("//wms:Layer", dom).getLength());
     }
-    
-    
+
+
     @Test
     public void testPostRequest() throws Exception {
-        String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + 
-            "<ogc:GetMap xmlns:ogc=\"http://www.opengis.net/ows\"\n" + 
-            "            xmlns:gml=\"http://www.opengis.net/gml\"\n" + 
-            "   version=\"1.1.1\" service=\"WMS\">\n" + 
-            "   <StyledLayerDescriptor version=\"1.0.0\">\n" + 
-            "      <NamedLayer>\n" + 
-            "        <Name>" + getLayerId(RAIN) + "</Name>\n" + 
-            "        <NamedStyle><Name>" + GRAY_BLUE_STYLE + "</Name></NamedStyle> \n" + 
-            "      </NamedLayer> \n" + 
-            "   </StyledLayerDescriptor>\n" + 
-            "   <BoundingBox srsName=\"http://www.opengis.net/gml/srs/epsg.xml#4326\">\n" + 
-            "      <gml:coord><gml:X>-180</gml:X><gml:Y>-90</gml:Y></gml:coord>\n" + 
-            "      <gml:coord><gml:X>180</gml:X><gml:Y>90</gml:Y></gml:coord>\n" + 
-            "   </BoundingBox>\n" + 
-            "   <Output>\n" + 
-            "      <Format>image/png</Format>\n" + 
-            "      <Size><Width>320</Width><Height>160</Height></Size>\n" + 
-            "   </Output>\n" + 
-            "</ogc:GetMap>";
-        
+        String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+                "<ogc:GetMap xmlns:ogc=\"http://www.opengis.net/ows\"\n" +
+                "            xmlns:gml=\"http://www.opengis.net/gml\"\n" +
+                "   version=\"1.1.1\" service=\"WMS\">\n" +
+                "   <StyledLayerDescriptor version=\"1.0.0\">\n" +
+                "      <NamedLayer>\n" +
+                "        <Name>" + getLayerId(RAIN) + "</Name>\n" +
+                "        <NamedStyle><Name>" + GRAY_BLUE_STYLE + "</Name></NamedStyle> \n" +
+                "      </NamedLayer> \n" +
+                "   </StyledLayerDescriptor>\n" +
+                "   <BoundingBox srsName=\"http://www.opengis.net/gml/srs/epsg.xml#4326\">\n" +
+                "      <gml:coord><gml:X>-180</gml:X><gml:Y>-90</gml:Y></gml:coord>\n" +
+                "      <gml:coord><gml:X>180</gml:X><gml:Y>90</gml:Y></gml:coord>\n" +
+                "   </BoundingBox>\n" +
+                "   <Output>\n" +
+                "      <Format>image/png</Format>\n" +
+                "      <Size><Width>320</Width><Height>160</Height></Size>\n" +
+                "   </Output>\n" +
+                "</ogc:GetMap>";
+
         MockHttpServletResponse resp = postAsServletResponse("wms", xml);
         assertEquals("image/png", resp.getContentType());
         InputStream is = getBinaryInputStream(resp);
         BufferedImage image = ImageIO.read(is);
-        
+
         // heavy rain here
         assertPixel(image, 32, 74, new Color(37, 37, 236));
         // mid value here
@@ -238,7 +238,7 @@ public class NcwmsIntegrationTest extends WMSTestSupport {
         // dry here
         assertPixel(image, 160, 60, new Color(170, 170, 170));
     }
-    
+
     @Test
     public void testWfsCapabilitiesPostRequest() throws Exception {
         // run a WFS 2.0 capabilities request, used to NPE in the NcWmsDatasetCallback

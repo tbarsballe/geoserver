@@ -36,7 +36,7 @@ import java.util.logging.Logger;
  * module)
  */
 public class WFS3Filter implements GeoServerFilter {
-    
+
     static final Logger LOGGER = Logging.getLogger(WFS3Filter.class);
 
     private final Catalog catalog;
@@ -58,7 +58,7 @@ public class WFS3Filter implements GeoServerFilter {
             if (requestNeedsWrapper(requestHTTP)) {
                 try {
                     request = new RequestWrapper(requestHTTP);
-                } catch(HttpErrorCodeException exception) {
+                } catch (HttpErrorCodeException exception) {
                     ((HttpServletResponse) response).sendError(exception.getErrorCode(), exception.getMessage());
                     return;
                 }
@@ -117,7 +117,7 @@ public class WFS3Filter implements GeoServerFilter {
             } else {
                 throw new HttpErrorCodeException(HttpStatus.NOT_FOUND.value(), "Unsupported path " + pathInfo);
             }
-            
+
             mapped = request != null;
 
             // everythign defaults to JSON in WFS3
@@ -125,9 +125,9 @@ public class WFS3Filter implements GeoServerFilter {
             if (f != null) {
                 if ("json".equalsIgnoreCase(f)) {
                     this.outputFormat = BaseRequest.JSON_MIME;
-                } else if("yaml".equalsIgnoreCase(f)) {
+                } else if ("yaml".equalsIgnoreCase(f)) {
                     this.outputFormat = BaseRequest.YAML_MIME;
-                } else if("html".equalsIgnoreCase(f)) {
+                } else if ("html".equalsIgnoreCase(f)) {
                     this.outputFormat = BaseRequest.HTML_MIME;
                 } else {
                     this.outputFormat = f;

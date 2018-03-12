@@ -6,6 +6,7 @@
 package org.geoserver.ows;
 
 import static org.geoserver.ows.util.ResponseUtils.stripRemainingPath;
+
 import java.util.Map;
 
 /**
@@ -19,9 +20,8 @@ import java.util.Map;
  * <pre>
  *   /geoserver/&lt;localWorkspace&gt;/&lt;localLayer&gt;/wfs?...
  * </pre>
- * 
- * @author Justin Deoliveira, OpenGeo
  *
+ * @author Justin Deoliveira, OpenGeo
  */
 public class LocalWorkspaceURLMangler implements URLMangler {
 
@@ -29,21 +29,21 @@ public class LocalWorkspaceURLMangler implements URLMangler {
      * the name/identifier of the ows: wfs, wms, wcs, etc...
      */
     String ows;
-    
+
     public LocalWorkspaceURLMangler(String ows) {
         this.ows = ows;
     }
-    
+
     public void mangleURL(StringBuilder baseURL, StringBuilder path, Map<String, String> kvp,
-            URLType type) {
-        
+                          URLType type) {
+
         if (type == URLType.SERVICE && stripRemainingPath(path.toString()).equalsIgnoreCase(ows)) {
             if (LocalWorkspace.get() != null) {
-                path.insert(0, LocalWorkspace.get().getName()+"/");
-                
+                path.insert(0, LocalWorkspace.get().getName() + "/");
+
                 if (LocalPublished.get() != null) {
-                    int i = LocalWorkspace.get().getName().length()+1;
-                    path.insert(i, LocalPublished.get().getName()+"/");
+                    int i = LocalWorkspace.get().getName().length() + 1;
+                    path.insert(i, LocalPublished.get().getName() + "/");
                 }
             }
         }

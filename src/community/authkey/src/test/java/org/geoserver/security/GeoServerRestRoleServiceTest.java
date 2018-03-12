@@ -25,7 +25,6 @@ import com.google.common.util.concurrent.ExecutionError;
 
 /**
  * @author Alessio Fabiani, GeoSolutions S.A.S.
- *
  */
 public class GeoServerRestRoleServiceTest {
 
@@ -54,7 +53,7 @@ public class GeoServerRestRoleServiceTest {
         // Not needed anymore thanks to the internal cache
         /* mockServer.expect(requestTo(uri + "/api/adminRole"))
             .andRespond(withSuccess("{\"adminRole\": \"admin\"}", MediaType.APPLICATION_JSON)); */
-        
+
         mockServer.expect(requestTo(uri + "/api/users/test@geoserver.org"))
                 .andRespond(withSuccess(
                         "{\"users\": [{\"username\": \"test@geoserver.org\", \"groups\": [\"test\"]}]}",

@@ -16,9 +16,8 @@ import org.geoserver.GeoServerConfigurationLock.LockType;
  * <p>
  * It locks in write mode all {@link GeoServerSecuredPage} subclasses, as those have some
  * possibility to write on the configuration/catalog, all other pages are locked in read mode.
- * 
+ *
  * @author Andrea Aime - GeoSolutions
- * 
  */
 public class WicketConfigurationLockCallback implements WicketCallback {
 
@@ -49,24 +48,24 @@ public class WicketConfigurationLockCallback implements WicketCallback {
     public void onRequestTargetSet(Class<? extends IRequestablePage> requestTarget) {
         onRequestTargetSet(null, requestTarget);
     }
-    
+
     @Override
     public void onRequestTargetSet(RequestCycle cycle,
-            Class<? extends IRequestablePage> requestTarget) {
-        
+                                   Class<? extends IRequestablePage> requestTarget) {
+
         if (!GeoServerUnlockablePage.class.isAssignableFrom(requestTarget)) {
             LockType type = locker.getCurrentLock();
             if (type != null || requestTarget == null) {
                 return;
             }
-    
+
             boolean lockTaken = false;
             if (type == null) {
                 // lock read mode, it will be upgraded to write as soon
                 // as a write operation on the catalog is attempted
                 lockTaken = locker.tryLock(LockType.READ);
             }
-            
+
             // Check if the configuration is locked and the page is safe...
             if (cycle != null && !lockTaken) {
                 cycle.setResponsePage(ServerBusyPage.class);

@@ -31,7 +31,6 @@ import com.google.common.base.Optional;
 /**
  * Classpath {@link CommandHook hook} that catches remotes related commands before they are executed
  * and validates them against the {@link WhitelistRule whitelist rules} to let them process or not.
- *
  */
 public final class NetworkSecurityHook implements CommandHook {
 
@@ -71,7 +70,7 @@ public final class NetworkSecurityHook implements CommandHook {
     @SuppressWarnings("unchecked")
     @Override
     public <T> T post(AbstractGeoGigOp<T> command, Object retVal,
-            RuntimeException potentialException) throws Exception {
+                      RuntimeException potentialException) throws Exception {
         return (T) retVal;
     }
 

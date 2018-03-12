@@ -39,7 +39,7 @@ import freemarker.template.TemplateModelException;
 
 @RestController
 @RequestMapping(path = RestBaseController.ROOT_PATH + "/about/status",
-        produces = { MediaType.TEXT_HTML_VALUE, MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
+        produces = {MediaType.TEXT_HTML_VALUE, MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 public class AboutStatusController extends RestBaseController {
 
     @GetMapping
@@ -68,7 +68,7 @@ public class AboutStatusController extends RestBaseController {
     public void configurePersister(XStreamPersister persister, XStreamMessageConverter converter) {
         XStream xs = persister.getXStream();
         xs.processAnnotations(ModuleStatus.class);
-        xs.allowTypes(new Class[] { ModuleStatus.class });
+        xs.allowTypes(new Class[]{ModuleStatus.class});
         xs.alias("about", List.class);
         xs.alias("status", ModuleStatus.class);
         xs.addDefaultImplementation(ModuleStatusImpl.class, ModuleStatus.class);
@@ -77,12 +77,12 @@ public class AboutStatusController extends RestBaseController {
 
     @Override
     protected String getTemplateName(Object object) {
-         return "ModuleStatusImpl";
+        return "ModuleStatusImpl";
     }
 
     @Override
     public boolean supports(MethodParameter methodParameter, Type targetType,
-            Class<? extends HttpMessageConverter<?>> converterType) {        
+                            Class<? extends HttpMessageConverter<?>> converterType) {
         return ModuleStatus.class.isAssignableFrom(methodParameter.getParameterType());
     }
 
@@ -106,7 +106,7 @@ public class AboutStatusController extends RestBaseController {
                                 status.getComponent().ifPresent(component -> hash.put("component", component));
                                 status.getVersion().ifPresent(version -> hash.put("version", version));
                                 //Make sure to escape the string, otherwise strange chars here will bork the XML parser later
-                                
+
                                 status.getMessage().ifPresent(message -> {
                                     String noControlChars = message.replaceAll("\u001b", "ESC")
                                             .replaceAll("\u0008", "BACK")

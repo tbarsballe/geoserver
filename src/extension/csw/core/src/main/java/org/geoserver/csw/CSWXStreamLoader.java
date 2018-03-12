@@ -20,7 +20,7 @@ import com.thoughtworks.xstream.XStream;
 
 /**
  * Service loader for the Catalog Services for the Web
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class CSWXStreamLoader extends XStreamServiceLoader<CSWInfo> {

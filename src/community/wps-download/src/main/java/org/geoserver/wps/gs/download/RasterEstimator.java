@@ -29,25 +29,25 @@ import com.vividsolutions.jts.geom.PrecisionModel;
 
 /**
  * This class check whether or not the provided download request goes beyond the provided limits for raster data or not.
- * 
+ *
  * @author Simone Giannecchini, GeoSolutions
- * 
  */
 class RasterEstimator {
 
     private static final Logger LOGGER = Logging.getLogger(RasterEstimator.class);
 
-    /** The downloadServiceConfiguration object containing the limits to check */
+    /**
+     * The downloadServiceConfiguration object containing the limits to check
+     */
     private DownloadServiceConfiguration downloadServiceConfiguration;
 
     private Catalog catalog;
 
     /**
      * Constructor
-     * 
-     * @param limits the parent {@link DownloadEstimatorProcess} that contains the download limits to be enforced.
-     * @param catalog 
-     * 
+     *
+     * @param limits  the parent {@link DownloadEstimatorProcess} that contains the download limits to be enforced.
+     * @param catalog
      */
     public RasterEstimator(DownloadServiceConfiguration limits, Catalog catalog) {
         this.downloadServiceConfiguration = limits;
@@ -59,20 +59,19 @@ class RasterEstimator {
 
     /**
      * Check the download limits for raster data.
-     * 
-     * @param coverage the {@link CoverageInfo} to estimate the download limits
-     * @param roi the {@link Geometry} for the clip/intersection
-     * @param targetCRS the reproject {@link CoordinateReferenceSystem} (useless for the moment)
-     * @param clip whether or not to clip the resulting data (useless for the moment)
-     * @param filter the {@link Filter} to load the data
-     * @param targetSizeX the size of the target image along the X axis
-     * @param targetSizeY the size of the target image along the Y axis
-     * @param selectedBands the band indices selected for output, in case of raster input
      *
+     * @param coverage      the {@link CoverageInfo} to estimate the download limits
+     * @param roi           the {@link Geometry} for the clip/intersection
+     * @param targetCRS     the reproject {@link CoordinateReferenceSystem} (useless for the moment)
+     * @param clip          whether or not to clip the resulting data (useless for the moment)
+     * @param filter        the {@link Filter} to load the data
+     * @param targetSizeX   the size of the target image along the X axis
+     * @param targetSizeY   the size of the target image along the Y axis
+     * @param selectedBands the band indices selected for output, in case of raster input
      */
     public boolean execute(final ProgressListener progressListener, CoverageInfo coverageInfo,
-            Geometry roi, CoordinateReferenceSystem targetCRS, boolean clip, Filter filter,
-            Integer targetSizeX, Integer targetSizeY, int[] bandIndices) throws Exception {
+                           Geometry roi, CoordinateReferenceSystem targetCRS, boolean clip, Filter filter,
+                           Integer targetSizeX, Integer targetSizeY, int[] bandIndices) throws Exception {
 
         final long rasterSizeLimits = downloadServiceConfiguration.getRasterSizeLimits();
 
@@ -147,7 +146,7 @@ class RasterEstimator {
             scaling = new ScaleToTarget(reader);
         }
         scaling.setTargetSize(targetSizeX, targetSizeY);
-        
+
         GridGeometry2D gg = null;
 
         if (targetSizeX == null && targetSizeY == null) {
@@ -155,7 +154,7 @@ class RasterEstimator {
             GridGeometryProvider provider = new GridGeometryProvider(reader, roiManager, filter, catalog);
             gg = provider.getGridGeometry();
         } else {
-            gg = scaling.getGridGeometry();    
+            gg = scaling.getGridGeometry();
         }
 
         areaRead = (long) gg.getGridRange2D().width * gg.getGridRange2D().height;
@@ -180,7 +179,7 @@ class RasterEstimator {
         }
 
         // If the area exceeds the limits, false is returned
-        if (rasterSizeLimits > DownloadServiceConfiguration.NO_LIMIT 
+        if (rasterSizeLimits > DownloadServiceConfiguration.NO_LIMIT
                 && (areaRead > rasterSizeLimits || targetArea > rasterSizeLimits)) {
             if (LOGGER.isLoggable(Level.FINE)) {
                 LOGGER.log(Level.FINE, "Area exceeds the limits");
@@ -191,45 +190,45 @@ class RasterEstimator {
             LOGGER.log(Level.FINE, "Area does not exceed the limits");
         }
         // Try to check write limits, using input's coverageinfo 
-        int bandsCount =  coverageInfo.getDimensions().size();
-        
+        int bandsCount = coverageInfo.getDimensions().size();
+
         // Use sample info type for each output band to estimate size
         List<CoverageDimensionInfo> coverageDimensionInfoList = coverageInfo.getDimensions();
         int accumulatedPixelSizeInBits = 0;
-        
+
         // Use only selected bands for output, if specified
-        if (bandIndices!=null && bandIndices.length>0){
-            for (int i=0;i<bandIndices.length;i++){
+        if (bandIndices != null && bandIndices.length > 0) {
+            for (int i = 0; i < bandIndices.length; i++) {
                 //Use valid indices
-                if (bandIndices[i]>=0 && bandIndices[i]<bandsCount)
+                if (bandIndices[i] >= 0 && bandIndices[i] < bandsCount)
                     accumulatedPixelSizeInBits +=
-                        TypeMap.getSize(coverageDimensionInfoList.get(bandIndices[i]).getDimensionType());
+                            TypeMap.getSize(coverageDimensionInfoList.get(bandIndices[i]).getDimensionType());
             }
-        }else{
-            for (int i=0;i<bandsCount;i++){
+        } else {
+            for (int i = 0; i < bandsCount; i++) {
                 accumulatedPixelSizeInBits +=
                         TypeMap.getSize(coverageDimensionInfoList.get(i).getDimensionType());
-            
+
             }
         }
-        
+
         /// Total size in bytes
-        long rasterSizeInBytes = (long) targetArea*accumulatedPixelSizeInBits/8;
-        
+        long rasterSizeInBytes = (long) targetArea * accumulatedPixelSizeInBits / 8;
+
         final long writeLimits = downloadServiceConfiguration.getWriteLimits();
-        
+
         // If size exceeds the write limits, false is returned
         if (writeLimits > DownloadServiceConfiguration.NO_LIMIT && rasterSizeInBytes > writeLimits) {
             if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.log(Level.FINE, "Output raw raster size ("+rasterSizeInBytes+") exceeds"
-                        + " the specified write limits ("+writeLimits+")");
+                LOGGER.log(Level.FINE, "Output raw raster size (" + rasterSizeInBytes + ") exceeds"
+                        + " the specified write limits (" + writeLimits + ")");
             }
             return false;
         }
         if (LOGGER.isLoggable(Level.FINE)) {
-            LOGGER.log(Level.FINE, "Output raw raster size ("+rasterSizeInBytes+") does not exceed"
-                    + " the specified write limits ("+writeLimits+")");
-        }    
+            LOGGER.log(Level.FINE, "Output raw raster size (" + rasterSizeInBytes + ") does not exceed"
+                    + " the specified write limits (" + writeLimits + ")");
+        }
         return true;
 
     }

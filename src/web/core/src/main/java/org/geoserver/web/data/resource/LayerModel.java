@@ -13,19 +13,19 @@ import org.geoserver.web.GeoServerApplication;
 /**
  * A model that serializes the layer fully, and re-attaches it to the catalog
  * on deserialization
- * @author Andrea Aime - OpenGeo
  *
+ * @author Andrea Aime - OpenGeo
  */
 @SuppressWarnings("serial")
 public class LayerModel implements IModel {
     LayerInfo layerInfo;
-    
+
     public LayerModel(LayerInfo layerInfo) {
         setObject(layerInfo);
     }
 
     public Object getObject() {
-        if(layerInfo.getResource().getCatalog() == null)
+        if (layerInfo.getResource().getCatalog() == null)
             new CatalogBuilder(GeoServerApplication.get().getCatalog()).attach(layerInfo);
         return layerInfo;
     }
@@ -40,6 +40,5 @@ public class LayerModel implements IModel {
         // nothing specific to do
     }
 
-    
 
 }

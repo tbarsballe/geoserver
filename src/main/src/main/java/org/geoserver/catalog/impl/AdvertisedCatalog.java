@@ -30,13 +30,13 @@ import org.opengis.filter.FilterFactory;
 
 /**
  * Filters out the non advertised layers and resources.
- * 
+ *
  * @author Davide Savazzi - GeoSolutions
  */
 public class AdvertisedCatalog extends AbstractFilteredCatalog {
 
     private static final long serialVersionUID = 3361872345280114573L;
-    
+
     /**
      * Exposes a filtered down view of a layer group
      *
@@ -57,13 +57,13 @@ public class AdvertisedCatalog extends AbstractFilteredCatalog {
         public List<PublishedInfo> getLayers() {
             return new FilteredList<>(filteredLayers, delegate.getLayers());
         }
-        
+
         @Override
         public List<StyleInfo> getStyles() {
             return new FilteredList<>(filteredStyles, delegate.getStyles());
         }
     }
-    
+
     private LayerGroupVisibilityPolicy layerGroupPolicy = LayerGroupVisibilityPolicy.HIDE_NEVER;
 
     /**
@@ -75,6 +75,7 @@ public class AdvertisedCatalog extends AbstractFilteredCatalog {
 
     /**
      * Set LayerGroup visibility policy.
+     *
      * @param layerGroupPolicy
      */
     public void setLayerGroupVisibilityPolicy(LayerGroupVisibilityPolicy layerGroupPolicy) {
@@ -83,9 +84,8 @@ public class AdvertisedCatalog extends AbstractFilteredCatalog {
 
     /**
      * Hide Layer if Request is GetCapabilities and Layer or its Resource are not advertised.
-     * 
-     * @param layer
      *
+     * @param layer
      */
     private boolean hideLayer(LayerInfo layer) {
         if (!layer.isAdvertised()) {
@@ -94,12 +94,11 @@ public class AdvertisedCatalog extends AbstractFilteredCatalog {
             return hideResource(layer.getResource());
         }
     }
-    
+
     /**
      * Hide Resource if it's not advertised and Request is GetCapabilities.
-     * 
-     * @param resource
      *
+     * @param resource
      */
     private boolean hideResource(ResourceInfo resource) {
         if (!resource.isAdvertised()) {
@@ -108,12 +107,12 @@ public class AdvertisedCatalog extends AbstractFilteredCatalog {
             return false;
         }
     }
-    
+
     private boolean isOgcCapabilitiesRequest() {
         Request request = Dispatcher.REQUEST.get();
         return request != null && "GetCapabilities".equalsIgnoreCase(request.getRequest());
     }
-    
+
     /**
      * Returns true if the layer should be hidden, false otherwise
      * <ol>
@@ -142,7 +141,7 @@ public class AdvertisedCatalog extends AbstractFilteredCatalog {
             return resource;
         }
     }
-    
+
     @Override
     protected LayerInfo checkAccess(LayerInfo layer) {
         if (layer == null || hideLayer(layer)) {
@@ -157,7 +156,7 @@ public class AdvertisedCatalog extends AbstractFilteredCatalog {
         if (group == null) {
             return null;
         }
-        
+
         // do not go and check every layer if the request is not a GetCapabilities
         Request request = Dispatcher.REQUEST.get();
         if (request == null || !"GetCapabilities".equalsIgnoreCase(request.getRequest())) {
@@ -233,16 +232,15 @@ public class AdvertisedCatalog extends AbstractFilteredCatalog {
 
     @Override
     protected <T extends CatalogInfo> Filter securityFilter(Class<T> infoType, Filter filter) {
-        if(!isOgcCapabilitiesRequest()) {
+        if (!isOgcCapabilitiesRequest()) {
             // Not needed for other kinds of request
             // TODO use a common implementation for GetCapabilities and Layer Preview
             return filter;
         }
-        
-        if (!ResourceInfo.class.isAssignableFrom(infoType) && 
-            !LayerInfo.class.isAssignableFrom(infoType) &&
-            !LayerGroupInfo.class.isAssignableFrom(infoType)) 
-        {
+
+        if (!ResourceInfo.class.isAssignableFrom(infoType) &&
+                !LayerInfo.class.isAssignableFrom(infoType) &&
+                !LayerGroupInfo.class.isAssignableFrom(infoType)) {
             // these kind of objects are not secured
             return filter;
         }
@@ -262,7 +260,7 @@ public class AdvertisedCatalog extends AbstractFilteredCatalog {
                 } else {
                     throw new IllegalArgumentException("Can't build filter for objects of type "
                             + info.getClass().getName());
-                }                
+                }
             }
         };
 
@@ -271,8 +269,8 @@ public class AdvertisedCatalog extends AbstractFilteredCatalog {
         // create a filter combined with the security credentials check
         Filter securityFilter = factory.equals(factory.literal(Boolean.TRUE), visible);
         return Predicates.and(filter, securityFilter);
-    }    
-    
+    }
+
     @Override
     protected <T extends StoreInfo> T checkAccess(T store) {
         return store;
@@ -296,7 +294,7 @@ public class AdvertisedCatalog extends AbstractFilteredCatalog {
     @Override
     protected <T extends StoreInfo> List<T> filterStores(List<T> stores) {
         return stores;
-    }    
+    }
 
     @Override
     protected List<StyleInfo> filterStyles(List<StyleInfo> styles) {
@@ -312,7 +310,7 @@ public class AdvertisedCatalog extends AbstractFilteredCatalog {
     protected <T extends WorkspaceInfo> List<T> filterWorkspaces(List<T> workspaces) {
         return workspaces;
     }
-    
+
     @Override
     public void save(LayerGroupInfo layerGroup) {
         if (layerGroup instanceof AdvertisedLayerGroup) {

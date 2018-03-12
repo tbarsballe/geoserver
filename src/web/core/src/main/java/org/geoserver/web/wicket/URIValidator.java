@@ -13,6 +13,7 @@ import org.apache.wicket.validation.ValidationError;
 
 /**
  * Validates a URI syntax by building a {@link URI} object around it
+ *
  * @author Andrea Aime - OpenGeo
  */
 @SuppressWarnings("serial")
@@ -23,7 +24,7 @@ public class URIValidator implements IValidator<String> {
         String uri = (String) validatable.getValue();
         try {
             new URI(uri);
-        } catch(Exception e) {
+        } catch (Exception e) {
             validatable.error(new ValidationError("invalidURI")
                     .addKey("invalidURI").setVariable("uri", uri));
         }

@@ -51,10 +51,9 @@ import org.vfny.geoserver.global.ConfigurationException;
 import org.geoserver.config.GeoServer;
 
 /**
- * 
  * @author Gabriel Roldan
- * @since 1.8.x
  * @version $Id$
+ * @since 1.8.x
  */
 @SuppressWarnings("serial")
 public class DemoRequestsPage extends GeoServerBasePage {
@@ -87,7 +86,7 @@ public class DemoRequestsPage extends GeoServerBasePage {
 
     /**
      * Package visible constructor aimed to help in setting up unit tests for this class
-     * 
+     *
      * @param demoDir
      */
     DemoRequestsPage(final Resource demoDir) {
@@ -100,12 +99,10 @@ public class DemoRequestsPage extends GeoServerBasePage {
     /**
      * Loads the contents of the demo request file named {@code reqFileName} and located in the
      * demo directory.
-     * 
-     * @param reqFileName
-     *            the file name to load the contents for
+     *
+     * @param reqFileName the file name to load the contents for
      * @return the file contents
-     * @throws IOException
-     *             if an io exception occurs opening or loading the file
+     * @throws IOException if an io exception occurs opening or loading the file
      */
     private String getFileContents(final String reqFileName) throws IOException {
         final Resource file = demoDir.get(reqFileName);
@@ -161,9 +158,9 @@ public class DemoRequestsPage extends GeoServerBasePage {
                 String proxyBaseUrl;
                 final String baseUrl;
                 {
-                    HttpServletRequest httpServletRequest = 
-                        getGeoServerApplication().servletRequest(DemoRequestsPage.this.getRequest());
-                    proxyBaseUrl = GeoServerExtensions.getProperty("PROXY_BASE_URL");                    
+                    HttpServletRequest httpServletRequest =
+                            getGeoServerApplication().servletRequest(DemoRequestsPage.this.getRequest());
+                    proxyBaseUrl = GeoServerExtensions.getProperty("PROXY_BASE_URL");
                     if (StringUtils.isEmpty(proxyBaseUrl)) {
                         GeoServer gs = getGeoServer();
                         proxyBaseUrl = gs.getGlobal().getSettings().getProxyBaseUrl();
@@ -235,7 +232,7 @@ public class DemoRequestsPage extends GeoServerBasePage {
 
         responseWindow = new ModalWindow("responseWindow");
         add(responseWindow);
-        
+
         //responseWindow.setPageMapName("demoResponse");
         responseWindow.setCookieName("demoResponse");
 

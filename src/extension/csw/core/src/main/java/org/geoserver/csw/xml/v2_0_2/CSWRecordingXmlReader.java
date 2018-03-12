@@ -21,14 +21,14 @@ import org.geoserver.util.EntityResolverProvider;
 
 /**
  * The GetRecords request has a "validate" mode in which we have to return an Acknowledgement
- * with the verbatim request, thus we have to store it 
+ * with the verbatim request, thus we have to store it
  */
 public class CSWRecordingXmlReader extends CSWXmlReader implements DispatcherCallback {
-    
+
     public static final ThreadLocal<String> RECORDED_REQUEST = new ThreadLocal<String>();
 
     public CSWRecordingXmlReader(String element, String version, CSWConfiguration configuration,
-            EntityResolverProvider resolverProvider) {
+                                 EntityResolverProvider resolverProvider) {
         super(element, version, configuration, resolverProvider);
     }
 
@@ -60,7 +60,7 @@ public class CSWRecordingXmlReader extends CSWXmlReader implements DispatcherCal
 
     @Override
     public Response responseDispatched(Request request, Operation operation, Object result,
-            Response response) {
+                                       Response response) {
         return response;
     }
 

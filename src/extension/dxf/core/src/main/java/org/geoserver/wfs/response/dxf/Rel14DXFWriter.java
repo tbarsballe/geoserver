@@ -35,9 +35,8 @@ import com.vividsolutions.jts.geom.Polygon;
 /**
  * DXFWriter for the release 14 of DXF.
  * see http://www.autodesk.com/techpubs/autocad/acadr14/dxf/index.htm
- * 
+ *
  * @author Mauro Bartolomeoli, mbarto@infosia.it
- * 
  */
 public class Rel14DXFWriter extends AbstractDXFWriter {
     private static final Logger LOGGER = Logging.getLogger(Rel14DXFWriter.class);
@@ -51,14 +50,14 @@ public class Rel14DXFWriter extends AbstractDXFWriter {
 
     // cache for block handles
     Map<String, Object> textConfig = null;
-    
+
     // block name counter (blocks will be names "0", "1", ...
     int blockCounter = 0;
 
     // DXF version
     protected String version = "AC1014";
 
-    
+
     public Rel14DXFWriter() {
         super();
         textConfig = new HashMap<String, Object>();
@@ -109,7 +108,7 @@ public class Rel14DXFWriter extends AbstractDXFWriter {
 
     /**
      * Writes the Header section.
-     * 
+     *
      * @param featureList
      * @throws IOException
      */
@@ -122,7 +121,7 @@ public class Rel14DXFWriter extends AbstractDXFWriter {
 
     /**
      * Writes the classes section.
-     * 
+     *
      * @param featureList
      * @throws IOException
      */
@@ -142,7 +141,7 @@ public class Rel14DXFWriter extends AbstractDXFWriter {
 
     /**
      * Writes a class definition.
-     * 
+     *
      * @param name
      * @param devname
      * @param description
@@ -152,7 +151,7 @@ public class Rel14DXFWriter extends AbstractDXFWriter {
      * @throws IOException
      */
     private void writeClass(String name, String devname, String description, int flags,
-            boolean proxy, boolean entities) throws IOException {
+                            boolean proxy, boolean entities) throws IOException {
         writeGroup(0, "CLASS");
         writeGroup(1, name);
         writeGroup(2, devname);
@@ -164,7 +163,7 @@ public class Rel14DXFWriter extends AbstractDXFWriter {
 
     /**
      * Writes the tables section
-     * 
+     *
      * @param featureList
      * @throws IOException
      */
@@ -186,7 +185,7 @@ public class Rel14DXFWriter extends AbstractDXFWriter {
 
     /**
      * Writes the blocks section
-     * 
+     *
      * @param featureList
      * @throws IOException
      */
@@ -205,7 +204,7 @@ public class Rel14DXFWriter extends AbstractDXFWriter {
 
     /**
      * Writes the entities section
-     * 
+     *
      * @param featureList
      * @throws IOException
      */
@@ -222,7 +221,7 @@ public class Rel14DXFWriter extends AbstractDXFWriter {
 
     /**
      * Writes the objects section
-     * 
+     *
      * @param featureList
      * @throws IOException
      */
@@ -232,7 +231,7 @@ public class Rel14DXFWriter extends AbstractDXFWriter {
 
     /**
      * Writes entities representing the given collection.
-     * 
+     *
      * @param coll
      * @throws IOException
      */
@@ -256,7 +255,7 @@ public class Rel14DXFWriter extends AbstractDXFWriter {
                         writeInsert(layer, name);
                     } else {
                         writeGeometry(layer, "1F", (Geometry) f.getDefaultGeometry());
-                        String name = blockNames.get(coll.hashCode()+"");
+                        String name = blockNames.get(coll.hashCode() + "");
                         if (writeAttributes) {
                             String ownerHandle = blockHandles.get(coll.hashCode()
                                     + "");
@@ -274,9 +273,9 @@ public class Rel14DXFWriter extends AbstractDXFWriter {
     }
 
     private void writeAttributes(String layer, String ownerHandle, SimpleFeature f) throws IOException {
-        Geometry geometry = (Geometry)f.getDefaultGeometry();
+        Geometry geometry = (Geometry) f.getDefaultGeometry();
         Point intPoint = geometry.getInteriorPoint();
-        for ( Property p : f.getProperties()) {
+        for (Property p : f.getProperties()) {
             Name name = p.getName();
             LOGGER.warning("    attr: " + name.getLocalPart() + " = " + p.getValue());
             if (!(p.getValue() instanceof Geometry)) {
@@ -310,7 +309,7 @@ public class Rel14DXFWriter extends AbstractDXFWriter {
 
     /**
      * Writes a block insert entity.
-     * 
+     *
      * @param layer
      * @param name
      * @throws IOException
@@ -334,7 +333,7 @@ public class Rel14DXFWriter extends AbstractDXFWriter {
         writeSubClass("AcDbBlockReference");
         writeGroup(66, "     1");
         writeName(name);
-        Geometry geometry = (Geometry)f.getDefaultGeometry();
+        Geometry geometry = (Geometry) f.getDefaultGeometry();
         Point intPoint = geometry.getInteriorPoint();
         writePoint(intPoint.getX(), intPoint.getY(), 0.0);
         writeAttributes(layer, ownerHandle, f);
@@ -346,10 +345,10 @@ public class Rel14DXFWriter extends AbstractDXFWriter {
         writeSubClass("AcDbEntity");
         writeLayer(layer);
     }
-    
+
     /**
      * Writes all the given feature list associated blocks.
-     * 
+     *
      * @param featureList
      * @throws IOException
      */
@@ -361,20 +360,20 @@ public class Rel14DXFWriter extends AbstractDXFWriter {
 
     /**
      * Writes all the given feature collection associated blocks.
-     * 
+     *
      * @param featureList
      * @throws IOException
      */
     private void writeFeatureBlocks(FeatureCollection coll) throws IOException {
         LOGGER.warning("Rel14DXFWriter.writeFeatureBlocks");
         String layer = getLayerName(coll);
-        
+
         FeatureIterator<SimpleFeature> iter = coll.features();
         try {
             while (iter.hasNext()) {
                 SimpleFeature f = iter.next();
                 String fid = f.getID();
-                
+
                 // consider only items cached to be treated as
                 // blocks (by the previous block_record analysis)
                 if (blockNames.containsKey(fid)) {
@@ -391,25 +390,25 @@ public class Rel14DXFWriter extends AbstractDXFWriter {
             iter.close();
         }
 
-        }
+    }
 
     /**
      * Writes all the given attribute definition blocks to be used for later INSERT
      * entities
-     * 
+     *
      * @param featureList
      * @throws IOException
      */
     private void writeAttributeDefinitionBlocks(List<FeatureCollection> featureList) throws IOException {
         LOGGER.warning("Rel14DXFWriter.writeAttributeDefinitionBlocks");
         for (FeatureCollection coll : featureList) {
-            String fid = coll.hashCode()+"";
-            
+            String fid = coll.hashCode() + "";
+
             // consider only items cached to be treated as
             // blocks (by the previous block_record analysis)
-            if (blockNames.containsKey(coll.hashCode()+"")) {
-                String ownerHandle = blockHandles.get(coll.hashCode()+"");
-                String name = blockNames.get(coll.hashCode()+"");
+            if (blockNames.containsKey(coll.hashCode() + "")) {
+                String ownerHandle = blockHandles.get(coll.hashCode() + "");
+                String name = blockNames.get(coll.hashCode() + "");
                 String startHandle = getNewHandle("Block");
                 String endHandle = getNewHandle("Block");
                 writeStartBlock(startHandle, ownerHandle, false, "0", name);
@@ -425,11 +424,11 @@ public class Rel14DXFWriter extends AbstractDXFWriter {
             }
         }
     }
-    
+
     private void writeAttributeDefinitions(String layer, String ownerHandle,
-            FeatureCollection fc) throws IOException {
+                                           FeatureCollection fc) throws IOException {
         FeatureTypeImpl schema = (FeatureTypeImpl) fc.getSchema();
-        for ( PropertyDescriptor p : schema.getDescriptors()) {
+        for (PropertyDescriptor p : schema.getDescriptors()) {
             Name name = p.getName();
             LOGGER.warning("    attr: " + name.getLocalPart());
             if (!(p.getType() instanceof GeometryType)) {
@@ -461,7 +460,7 @@ public class Rel14DXFWriter extends AbstractDXFWriter {
 
     /**
      * Writes a given geometry.
-     * 
+     *
      * @param layer
      * @param ownerHandle
      * @param geom
@@ -489,7 +488,7 @@ public class Rel14DXFWriter extends AbstractDXFWriter {
 
     /**
      * Writes a point geometry.
-     * 
+     *
      * @param layer
      * @param ownerHandle
      * @param p
@@ -503,7 +502,7 @@ public class Rel14DXFWriter extends AbstractDXFWriter {
 
     /**
      * Writes a polyline geometry.
-     * 
+     *
      * @param layer
      * @param ownerHandle
      * @param coords
@@ -511,7 +510,7 @@ public class Rel14DXFWriter extends AbstractDXFWriter {
      * @throws IOException
      */
     private void writePolylineGeometry(String layer, String ownerHandle, Coordinate[] coords,
-            boolean closed) throws IOException {
+                                       boolean closed) throws IOException {
         writeGeometryStart("LWPOLYLINE", layer, ownerHandle);
         writeSubClass("AcDbPolyline");
         writeIntegerGroup(90, coords.length);
@@ -524,7 +523,7 @@ public class Rel14DXFWriter extends AbstractDXFWriter {
 
     /**
      * Writes the static model space block.
-     * 
+     *
      * @throws IOException
      */
     private void writeModelSpaceBlock() throws IOException {
@@ -534,7 +533,7 @@ public class Rel14DXFWriter extends AbstractDXFWriter {
 
     /**
      * Writes the static paper space block.
-     * 
+     *
      * @throws IOException
      */
     private void writePaperSpaceBlock() throws IOException {
@@ -544,7 +543,7 @@ public class Rel14DXFWriter extends AbstractDXFWriter {
 
     /**
      * Writes a start block section.
-     * 
+     *
      * @param handle
      * @param ownerHandle
      * @param paperSpace
@@ -553,7 +552,7 @@ public class Rel14DXFWriter extends AbstractDXFWriter {
      * @throws IOException
      */
     private void writeStartBlock(String handle, String ownerHandle, boolean paperSpace,
-            String layer, String name) throws IOException {
+                                 String layer, String name) throws IOException {
         writeGroup(0, "BLOCK");
         writeGroup(5, handle);
         writeOwnerHandle(ownerHandle);
@@ -573,7 +572,7 @@ public class Rel14DXFWriter extends AbstractDXFWriter {
 
     /**
      * Writes an end block section.
-     * 
+     *
      * @param handle
      * @param ownerHandle
      * @param paperSpace
@@ -582,7 +581,7 @@ public class Rel14DXFWriter extends AbstractDXFWriter {
      * @throws IOException
      */
     private void writeEndBlock(String handle, String ownerHandle, boolean paperSpace, String layer,
-            String name) throws IOException {
+                               String name) throws IOException {
         writeGroup(0, "ENDBLK");
         writeGroup(5, handle);
         writeOwnerHandle(ownerHandle);
@@ -595,7 +594,7 @@ public class Rel14DXFWriter extends AbstractDXFWriter {
 
     /**
      * Writes block references table.
-     * 
+     *
      * @param featureList
      * @throws IOException
      */
@@ -623,9 +622,8 @@ public class Rel14DXFWriter extends AbstractDXFWriter {
 
     /**
      * Writes a block reference, given the desired name. The handle is dinamically created.
-     * 
-     * @param blockName
      *
+     * @param blockName
      * @throws IOException
      */
     private String writeBlockRecord(String blockName) throws IOException {
@@ -636,7 +634,7 @@ public class Rel14DXFWriter extends AbstractDXFWriter {
 
     /**
      * Writes the model space fixed block reference.
-     * 
+     *
      * @throws IOException
      */
     private void writeModelSpaceBlockRecord() throws IOException {
@@ -645,7 +643,7 @@ public class Rel14DXFWriter extends AbstractDXFWriter {
 
     /**
      * Writes the paper space fixed block reference.
-     * 
+     *
      * @throws IOException
      */
     private void writePaperSpaceBlockRecord() throws IOException {
@@ -655,7 +653,7 @@ public class Rel14DXFWriter extends AbstractDXFWriter {
 
     /**
      * Writes a block reference, using given handles.
-     * 
+     *
      * @param handle
      * @param ownerHandle
      * @param name
@@ -673,9 +671,8 @@ public class Rel14DXFWriter extends AbstractDXFWriter {
 
     /**
      * Builds a block list for the given feature list.
-     * 
-     * @param featureList
      *
+     * @param featureList
      */
     private int countBlocks(List featureList) {
         if (blockNames == null) {
@@ -693,7 +690,7 @@ public class Rel14DXFWriter extends AbstractDXFWriter {
 
     /**
      * Add blocks for the given collection.
-     * 
+     *
      * @param coll
      */
     private void addBlocks(FeatureCollection coll) {
@@ -709,23 +706,22 @@ public class Rel14DXFWriter extends AbstractDXFWriter {
                 if (geometryAsBlock || isBlockGeometry(geom)) {
                     LOGGER.warning("    added");
                     blockNames.put(f.getID(), (blockCounter++) + "");
-            }
+                }
             }
         } finally {
             iter.close();
         }
         if (writeAttributes) {
             // add attribute definition blocks 
-            blockNames.put(coll.hashCode()+"", (blockCounter++) + "");
+            blockNames.put(coll.hashCode() + "", (blockCounter++) + "");
         }
-        
+
     }
 
     /**
      * Checks if a geometry is complex and should be exported as a block.
-     * 
-     * @param geom
      *
+     * @param geom
      */
     private boolean isBlockGeometry(Geometry geom) {
         if (geom != null) {
@@ -743,7 +739,7 @@ public class Rel14DXFWriter extends AbstractDXFWriter {
 
     /**
      * Writes the dimstyle table.
-     * 
+     *
      * @throws IOException
      */
     private void writeDimensionStyles() throws IOException {
@@ -758,7 +754,7 @@ public class Rel14DXFWriter extends AbstractDXFWriter {
 
     /**
      * Writes a dimstyle item.
-     * 
+     *
      * @param handle
      * @param ownerHandle
      * @param styleHandle
@@ -767,7 +763,7 @@ public class Rel14DXFWriter extends AbstractDXFWriter {
      * @throws IOException
      */
     private void writeDimensionStyle(String handle, String ownerHandle, String styleHandle,
-            String name, int flags) throws IOException {
+                                     String name, int flags) throws IOException {
         writeGroup(0, "DIMSTYLE");
         writeGroup(105, handle);
         writeOwnerHandle(ownerHandle);
@@ -834,7 +830,7 @@ public class Rel14DXFWriter extends AbstractDXFWriter {
 
     /**
      * Writes the view table.
-     * 
+     *
      * @throws IOException
      */
     private void writeView() throws IOException {
@@ -848,7 +844,7 @@ public class Rel14DXFWriter extends AbstractDXFWriter {
 
     /**
      * Writes the layer table.
-     * 
+     *
      * @param featureList
      * @throws IOException
      */
@@ -863,7 +859,7 @@ public class Rel14DXFWriter extends AbstractDXFWriter {
         for (Object coll : featureList) {
             writeLayer((FeatureCollection) coll);
         }
-        if (writeAttributes){
+        if (writeAttributes) {
             for (Object coll : featureList) {
                 writeAttributeLayer((FeatureCollection) coll);
             }
@@ -874,11 +870,11 @@ public class Rel14DXFWriter extends AbstractDXFWriter {
 
     /**
      * Writes a layer with the given properties
-     * 
+     *
      * @throws IOException
      */
     private void writeLayerItem(String handle, String ownerHandle, String name, boolean frozen,
-            int color, int ltype) throws IOException {
+                                int color, int ltype) throws IOException {
         writeGroup(0, "LAYER");
         writeGroup(5, handle);
         writeOwnerHandle(ownerHandle);
@@ -898,7 +894,7 @@ public class Rel14DXFWriter extends AbstractDXFWriter {
 
     /**
      * Writes the background ("0") layer.
-     * 
+     *
      * @throws IOException
      */
     private void writeBgLayer() throws IOException {
@@ -908,7 +904,7 @@ public class Rel14DXFWriter extends AbstractDXFWriter {
 
     /**
      * Writes a layer for the given featurecollection.
-     * 
+     *
      * @param coll
      * @throws IOException
      */
@@ -919,7 +915,7 @@ public class Rel14DXFWriter extends AbstractDXFWriter {
 
     /**
      * Writes a layer for the given featurecollection.
-     * 
+     *
      * @param coll
      * @throws IOException
      */
@@ -928,10 +924,10 @@ public class Rel14DXFWriter extends AbstractDXFWriter {
         writeLayerItem(getNewHandle("Layer"), "2", attributesLayer, false, getColor(coll),
                 getLineType(coll));
     }
-    
+
     /**
      * Writes the line types table.
-     * 
+     *
      * @throws IOException
      */
     private void writeLineTypes() throws IOException {
@@ -940,8 +936,8 @@ public class Rel14DXFWriter extends AbstractDXFWriter {
         writeOwnerHandle("0");
         writeSubClass("AcDbSymbolTable");
         writeSize(lineTypes.length);
-        writeLineType("14", "5", "BYBLOCK", "", 0.0, new LineTypeItem[] {});
-        writeLineType("15", "5", "BYLAYER", "", 0.0, new LineTypeItem[] {});
+        writeLineType("14", "5", "BYBLOCK", "", 0.0, new LineTypeItem[]{});
+        writeLineType("15", "5", "BYLAYER", "", 0.0, new LineTypeItem[]{});
         for (LineType ltype : lineTypes)
             writeLineType(getNewHandle("LType"), "5", ltype.getName(), ltype.getDescription(),
                     ltype.getLength(), ltype.getItems());
@@ -950,6 +946,7 @@ public class Rel14DXFWriter extends AbstractDXFWriter {
 
     /**
      * Writes a LineType definition.
+     *
      * @param handle
      * @param ownerHandle
      * @param name
@@ -959,7 +956,7 @@ public class Rel14DXFWriter extends AbstractDXFWriter {
      * @throws IOException
      */
     private void writeLineType(String handle, String ownerHandle, String name, String description,
-            double length, LineTypeItem[] items) throws IOException {
+                               double length, LineTypeItem[] items) throws IOException {
         writeGroup(0, "LTYPE");
         writeGroup(5, handle);
         writeOwnerHandle(ownerHandle);
@@ -979,7 +976,7 @@ public class Rel14DXFWriter extends AbstractDXFWriter {
 
     /**
      * Writes the appid tables.
-     * 
+     *
      * @throws IOException
      */
     private void writeApplications() throws IOException {
@@ -995,7 +992,7 @@ public class Rel14DXFWriter extends AbstractDXFWriter {
 
     /**
      * Writes the default ACAD appid.
-     * 
+     *
      * @param handle
      * @param ownerHandle
      * @param name
@@ -1017,7 +1014,7 @@ public class Rel14DXFWriter extends AbstractDXFWriter {
 
     /**
      * Writes the UCS table.
-     * 
+     *
      * @throws IOException
      */
     private void writeUCS() throws IOException {
@@ -1031,7 +1028,7 @@ public class Rel14DXFWriter extends AbstractDXFWriter {
 
     /**
      * Writes the styles table.
-     * 
+     *
      * @throws IOException
      */
     private void writeStyles() throws IOException {
@@ -1046,6 +1043,7 @@ public class Rel14DXFWriter extends AbstractDXFWriter {
 
     /**
      * Writes a style item.
+     *
      * @param handle
      * @param ownerHandle
      * @param name
@@ -1072,7 +1070,7 @@ public class Rel14DXFWriter extends AbstractDXFWriter {
 
     /**
      * Writes the viewport table.
-     * 
+     *
      * @param featureList
      * @throws IOException
      */
@@ -1088,7 +1086,7 @@ public class Rel14DXFWriter extends AbstractDXFWriter {
 
     /**
      * Writes a viewport framing the given feature list.
-     * 
+     *
      * @param name
      * @param featureList
      * @throws IOException
@@ -1153,7 +1151,7 @@ public class Rel14DXFWriter extends AbstractDXFWriter {
 
     /**
      * Writes variables for the header section.
-     * 
+     *
      * @param featureList
      * @throws IOException
      */

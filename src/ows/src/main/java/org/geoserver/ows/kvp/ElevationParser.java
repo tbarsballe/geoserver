@@ -23,13 +23,13 @@ import org.geotools.util.logging.Logging;
 
 /**
  * Parses the {@code elevation} parameter of the request.
- * 
+ *
  * @author Ariel Nunez, GeoSolutions S.A.S.
  * @author Simone Giannecchini, GeoSolutions S.A.S.
  * @version $Id$
  */
 public class ElevationParser {
-    
+
     static final Logger LOGGER = Logging.getLogger(ElevationParser.class);
 
     /**
@@ -62,14 +62,12 @@ public class ElevationParser {
      * containing only the parsed value. In the second case, this method returns a list including
      * all elevations from start value up to the end value with the interval specified in the
      * {@code value} string.
-     * 
-     * @param value
-     *            The elevation item or items to parse.
+     *
+     * @param value The elevation item or items to parse.
      * @return A list of doubles, or an empty list of the {@code value} string is null or empty.
-     * @throws ParseException
-     *             if the string can not be parsed.
+     * @throws ParseException if the string can not be parsed.
      */
-    @SuppressWarnings( { "unchecked", "rawtypes" })
+    @SuppressWarnings({"unchecked", "rawtypes"})
     public Collection parse(String value) throws ParseException {
         if (value == null) {
             return Collections.emptyList();
@@ -150,7 +148,7 @@ public class ElevationParser {
     }
 
     private void addValue(Collection result, Double step) {
-        for (Iterator it = result.iterator(); it.hasNext();) {
+        for (Iterator it = result.iterator(); it.hasNext(); ) {
             final Object element = it.next();
             if (element instanceof Double) {
                 // convert
@@ -169,7 +167,7 @@ public class ElevationParser {
     }
 
     private void addPeriod(Collection result, NumberRange<Double> newRange) {
-        for (Iterator it = result.iterator(); it.hasNext();) {
+        for (Iterator it = result.iterator(); it.hasNext(); ) {
             final Object element = it.next();
             if (element instanceof Double) {
                 // convert
@@ -188,5 +186,5 @@ public class ElevationParser {
         result.add(newRange);
 
     }
-    
+
 }

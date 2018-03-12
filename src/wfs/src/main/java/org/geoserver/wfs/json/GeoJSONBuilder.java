@@ -38,13 +38,12 @@ import net.sf.json.util.JSONBuilder;
  *
  * @author Chris Holmes, The Open Planning Project
  * @version $Id$
- *
  */
 public class GeoJSONBuilder extends JSONBuilder {
 
     private final Logger LOGGER = org.geotools.util.logging.Logging
-    .getLogger(this.getClass());
-    
+            .getLogger(this.getClass());
+
     private CRS.AxisOrder axisOrder = CRS.AxisOrder.EAST_NORTH;
 
     private int numDecimals = 6;
@@ -56,6 +55,7 @@ public class GeoJSONBuilder extends JSONBuilder {
     /**
      * Writes any geometry object.  This class figures out which geometry representation to write
      * and calls subclasses to actually write the object.
+     *
      * @param geometry The geometry to be encoded
      * @return The JSONBuilder with the new geometry
      * @throws JSONException If anything goes wrong
@@ -71,43 +71,43 @@ public class GeoJSONBuilder extends JSONBuilder {
             this.key("coordinates");
 
             switch (geometryType) {
-            case POINT:
-                Point point = (Point) geometry;
-                Coordinate c = point.getCoordinate();
-                writeCoordinate(c.x, c.y, c.z);
-                break;
-            case LINESTRING:
-                writeCoordinates(((LineString)geometry).getCoordinateSequence());
-                break;
-            case MULTIPOINT:
-                writeCoordinates(geometry.getCoordinates());
-                break;
-            case POLYGON:
-                writePolygon((Polygon) geometry);
+                case POINT:
+                    Point point = (Point) geometry;
+                    Coordinate c = point.getCoordinate();
+                    writeCoordinate(c.x, c.y, c.z);
+                    break;
+                case LINESTRING:
+                    writeCoordinates(((LineString) geometry).getCoordinateSequence());
+                    break;
+                case MULTIPOINT:
+                    writeCoordinates(geometry.getCoordinates());
+                    break;
+                case POLYGON:
+                    writePolygon((Polygon) geometry);
 
-                break;
+                    break;
 
-            case MULTILINESTRING:
-                this.array();
+                case MULTILINESTRING:
+                    this.array();
 
-                for (int i = 0, n = geometry.getNumGeometries(); i < n; i++) {
-                    writeCoordinates(((LineString)geometry.getGeometryN(i)).getCoordinateSequence());
-                }
+                    for (int i = 0, n = geometry.getNumGeometries(); i < n; i++) {
+                        writeCoordinates(((LineString) geometry.getGeometryN(i)).getCoordinateSequence());
+                    }
 
-                this.endArray();
+                    this.endArray();
 
-                break;
+                    break;
 
-            case MULTIPOLYGON:
-                this.array();
+                case MULTIPOLYGON:
+                    this.array();
 
-                for (int i = 0, n = geometry.getNumGeometries(); i < n; i++) {
-                    writePolygon((Polygon) geometry.getGeometryN(i));
-                }
+                    for (int i = 0, n = geometry.getNumGeometries(); i < n; i++) {
+                        writePolygon((Polygon) geometry.getGeometryN(i));
+                    }
 
-                this.endArray();
+                    this.endArray();
 
-                break;
+                    break;
             }
         } else {
             writeGeomCollection((GeometryCollection) geometry);
@@ -128,26 +128,27 @@ public class GeoJSONBuilder extends JSONBuilder {
     }
 
     private JSONBuilder writeCoordinates(Coordinate[] coords)
-        throws JSONException {
+            throws JSONException {
         return writeCoordinates(new CoordinateArraySequence(coords));
     }
-    
+
     /**
      * Write the coordinates of a geometry
+     *
      * @param coords The coordinates to write
      * @return this
      * @throws JSONException
      */
     private JSONBuilder writeCoordinates(CoordinateSequence coords)
-        throws JSONException {
+            throws JSONException {
         this.array();
-        
+
         // guess the dimension of the coordinate sequence
         int dim = CoordinateSequences.coordinateDimension(coords);
 
         final int coordCount = coords.size();
         for (int i = 0; i < coordCount; i++) {
-            if(dim > 2) {
+            if (dim > 2) {
                 writeCoordinate(coords.getX(i), coords.getY(i), coords.getOrdinate(i, 2));
             } else {
                 writeCoordinate(coords.getX(i), coords.getY(i));
@@ -160,17 +161,17 @@ public class GeoJSONBuilder extends JSONBuilder {
     private JSONBuilder writeCoordinate(double x, double y) {
         return writeCoordinate(x, y, Double.NaN);
     }
-    
+
     private JSONBuilder writeCoordinate(double x, double y, double z) {
         this.array();
-        if(axisOrder==CRS.AxisOrder.NORTH_EAST){
+        if (axisOrder == CRS.AxisOrder.NORTH_EAST) {
             roundedValue(y);
             roundedValue(x);
         } else {
             roundedValue(x);
             roundedValue(y);
         }
-        if(!Double.isNaN(z)) {
+        if (!Double.isNaN(z)) {
             roundedValue(z);
         }
 
@@ -180,16 +181,17 @@ public class GeoJSONBuilder extends JSONBuilder {
     private void roundedValue(double value) {
         super.value(RoundingUtil.round(value, numDecimals));
     }
-    
+
     /**
      * Turns an envelope into an array [minX,minY,maxX,maxY]
+     *
      * @param env envelope representing bounding box
      * @return this
      */
     protected JSONBuilder writeBoundingBox(Envelope env) {
         this.key("bbox");
         this.array();
-        if(axisOrder==CRS.AxisOrder.NORTH_EAST) {
+        if (axisOrder == CRS.AxisOrder.NORTH_EAST) {
             roundedValue(env.getMinY());
             roundedValue(env.getMinX());
             roundedValue(env.getMaxY());
@@ -205,6 +207,7 @@ public class GeoJSONBuilder extends JSONBuilder {
 
     /**
      * Writes a polygon
+     *
      * @param geometry The polygon to write
      * @throws JSONException
      */
@@ -217,28 +220,42 @@ public class GeoJSONBuilder extends JSONBuilder {
         }
 
         this.endArray(); //end the linear ring
-                         //this.endObject(); //end the 
+        //this.endObject(); //end the
     }
 
-    /** Internal representation of OGC SF Point */
+    /**
+     * Internal representation of OGC SF Point
+     */
     protected static final int POINT = 1;
 
-    /** Internal representation of OGC SF LineString */
+    /**
+     * Internal representation of OGC SF LineString
+     */
     protected static final int LINESTRING = 2;
 
-    /** Internal representation of OGC SF Polygon */
+    /**
+     * Internal representation of OGC SF Polygon
+     */
     protected static final int POLYGON = 3;
 
-    /** Internal representation of OGC SF MultiPoint */
+    /**
+     * Internal representation of OGC SF MultiPoint
+     */
     protected static final int MULTIPOINT = 4;
 
-    /** Internal representation of OGC SF MultiLineString */
+    /**
+     * Internal representation of OGC SF MultiLineString
+     */
     protected static final int MULTILINESTRING = 5;
 
-    /** Internal representation of OGC SF MultiPolygon */
+    /**
+     * Internal representation of OGC SF MultiPolygon
+     */
     protected static final int MULTIPOLYGON = 6;
 
-    /** Internal representation of OGC SF MultiGeometry */
+    /**
+     * Internal representation of OGC SF MultiGeometry
+     */
     protected static final int MULTIGEOMETRY = 7;
 
     public static String getGeometryName(Geometry geometry) {
@@ -265,7 +282,6 @@ public class GeoJSONBuilder extends JSONBuilder {
      * Gets the internal representation for the given Geometry
      *
      * @param geometry a Geometry
-     *
      * @return int representation of Geometry
      */
     public static int getGeometryType(Geometry geometry) {
@@ -290,7 +306,7 @@ public class GeoJSONBuilder extends JSONBuilder {
             return MULTIGEOMETRY;
         } else {
             throw new IllegalArgumentException(
-                "Unable to determine geometry type " + geometry.getClass());
+                    "Unable to determine geometry type " + geometry.getClass());
         }
     }
 
@@ -303,7 +319,7 @@ public class GeoJSONBuilder extends JSONBuilder {
      */
     public JSONBuilder writeList(final List list) {
         this.array();
-        for (final Object o: list) {
+        for (final Object o : list) {
             this.value(o);
         }
         return this.endArray();
@@ -318,7 +334,7 @@ public class GeoJSONBuilder extends JSONBuilder {
      */
     public JSONBuilder writeMap(final Map map) {
         this.object();
-        for (final Object k: map.keySet()) {
+        for (final Object k : map.keySet()) {
             this.key(k.toString());
             this.value(map.get(k));
         }
@@ -327,11 +343,11 @@ public class GeoJSONBuilder extends JSONBuilder {
 
     /**
      * Overrides handling of specialized types.
-     *
+     * <p>
      * Overrides the encoding {@code java.util.Date} and its date/time/timestamp
      * descendants, as well as {@code java.util.Calendar} instances as ISO 8601 strings.
      * In addition handles rounding numbers to the specified number of decimal points.
-     *
+     * <p>
      * Overrides the handling of java.util.Map, java.util.List, and Geometry objects
      * as well.
      *
@@ -344,9 +360,9 @@ public class GeoJSONBuilder extends JSONBuilder {
         } else if (value instanceof Geometry) {
             this.writeGeom((Geometry) value);
         } else if (value instanceof List) {
-            this.writeList((List)value);
+            this.writeList((List) value);
         } else if (value instanceof Map) {
-            this.writeMap((Map)value);
+            this.writeMap((Map) value);
         } else {
             if (value instanceof java.util.Date || value instanceof Calendar) {
                 value = Converters.convert(value, String.class);
@@ -356,10 +372,11 @@ public class GeoJSONBuilder extends JSONBuilder {
         return this;
     }
 
-    
+
     /**
-     * Set the axis order to assume all input will be provided in. Has no effect on geometries 
+     * Set the axis order to assume all input will be provided in. Has no effect on geometries
      * that have already been written.
+     *
      * @param axisOrder
      */
     public void setAxisOrder(CRS.AxisOrder axisOrder) {

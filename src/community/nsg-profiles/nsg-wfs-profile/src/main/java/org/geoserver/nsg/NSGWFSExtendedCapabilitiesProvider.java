@@ -98,7 +98,7 @@ public class NSGWFSExtendedCapabilitiesProvider implements WFSExtendedCapabiliti
             OperationMetadata pageResults = new OperationMetadata("PageResults", true, true);
             pageResults.getParameters().add(new DomainType("outputFormat", GML32_FORMAT));
             operations.add(pageResults);
-            
+
             for (OperationMetadata operation : operations) {
                 // add the version if not GetCapabilities, could have been done in core, but this seems like a niche 
                 // nitpick, it's a WFS 2.0 capabilities the version number should be obvious to the client
@@ -118,9 +118,8 @@ public class NSGWFSExtendedCapabilitiesProvider implements WFSExtendedCapabiliti
                     operation.getParameters().add(timeoutParameter);
                 }
             }
-            
-            
-            
+
+
         }
     }
 

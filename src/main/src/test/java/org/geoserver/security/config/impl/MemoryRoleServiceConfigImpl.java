@@ -42,7 +42,7 @@ public class MemoryRoleServiceConfigImpl extends BaseSecurityNamedServiceConfig
 
     @Override
     public void setAdminRoleName(String name) {
-        adminRoleName=name;
+        adminRoleName = name;
     }
 
     public String getGroupAdminRoleName() {

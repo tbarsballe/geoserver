@@ -14,8 +14,8 @@ import org.geoserver.wcs2_0.exception.WCS20Exception;
 
 /**
  * Parses the WCS 2.0 {@link ScaleToExtentType} from KVP
- * @author Andrea Aime - GeoSolutions
  *
+ * @author Andrea Aime - GeoSolutions
  */
 public class ScaleExtentKvpParser extends KvpParser {
 
@@ -27,11 +27,11 @@ public class ScaleExtentKvpParser extends KvpParser {
     public Object parse(String value) throws Exception {
         // clean up extra space
         value = value.trim();
-        
+
         ScaleToExtentType se = Wcs20Factory.eINSTANCE.createScaleToExtentType();
 
         int base = 0;
-        for (;;) {
+        for (; ; ) {
             // search the open parenthesis
             int idxOpen = value.indexOf("(", base);
             if (idxOpen == -1) {
@@ -59,7 +59,7 @@ public class ScaleExtentKvpParser extends KvpParser {
 
             }
             int idxNextMid = value.indexOf(",", idxMid + 1);
-            if(idxNextMid != -1 && idxNextMid < idxClosed) {
+            if (idxNextMid != -1 && idxNextMid < idxClosed) {
                 throw new WCS20Exception(
                         "Invalid ScaleExtent syntax, expecting a comma separate list of axisName(min,max)*",
                         WCS20Exception.WCS20ExceptionCode.InvalidEncodingSyntax, "scaleExtent");
@@ -75,9 +75,9 @@ public class ScaleExtentKvpParser extends KvpParser {
                 te.setAxis(axisName.trim());
                 te.setLow(Double.valueOf(low));
                 te.setHigh(Double.valueOf(high));
-    
+
                 se.getTargetAxisExtent().add(te);
-            } catch(NumberFormatException e) {
+            } catch (NumberFormatException e) {
                 WCS20Exception ex = new WCS20Exception(
                         "Invalid ScaleExtent syntax, expecting a comma separate list of axisName(min,max)*",
                         WCS20Exception.WCS20ExceptionCode.InvalidEncodingSyntax, "scaleExtent");
@@ -96,7 +96,7 @@ public class ScaleExtentKvpParser extends KvpParser {
                             WCS20Exception.WCS20ExceptionCode.InvalidEncodingSyntax, "scaleExtent");
                 }
             } else {
-                if(idxSeparator > idxNextClosed) {
+                if (idxSeparator > idxNextClosed) {
                     throw new WCS20Exception(
                             "Invalid ScaleExtent syntax, expecting a comma separate list of axisName(min,max)*",
                             WCS20Exception.WCS20ExceptionCode.InvalidEncodingSyntax, "scaleExtent");

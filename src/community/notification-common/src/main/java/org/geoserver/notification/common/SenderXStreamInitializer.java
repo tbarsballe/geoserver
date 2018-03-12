@@ -32,7 +32,7 @@ public class SenderXStreamInitializer implements NotificationXStreamInitializer 
      * Define an alias for the {@link DefaultNotificationProcessor#sender sender}<br>
      * Define a class for the {@link NotificationSender}<br>
      * An example of sender configuration section in notifier.xml is:
-     *
+     * <p>
      * <pre>
      *  {@code
      *  <genericProcessor>
@@ -44,7 +44,6 @@ public class SenderXStreamInitializer implements NotificationXStreamInitializer 
      * </pre>
      *
      * @param xs XStream object
-     *
      */
     public SenderXStreamInitializer(String name, Class<? extends NotificationSender> clazz) {
         super();
@@ -60,9 +59,7 @@ public class SenderXStreamInitializer implements NotificationXStreamInitializer 
     }
 
     /**
-     *
      * @author Alessio Fabiani, GeoSolutions S.A.S.
-     *
      */
     static public class SenderConverter extends ReflectionConverter {
 
@@ -74,12 +71,12 @@ public class SenderXStreamInitializer implements NotificationXStreamInitializer 
          * @param senderXStreamInitializer
          */
         public SenderConverter(Mapper mapper, ReflectionProvider reflectionProvider,
-                SenderXStreamInitializer senderXStreamInitializer) {
+                               SenderXStreamInitializer senderXStreamInitializer) {
             super(mapper, reflectionProvider);
             this.senderXStreamInitializer = senderXStreamInitializer;
         }
 
-        @SuppressWarnings({ "rawtypes", "unchecked" })
+        @SuppressWarnings({"rawtypes", "unchecked"})
         @Override
         public boolean canConvert(Class clazz) {
             return clazz.isAssignableFrom(senderXStreamInitializer.clazz);
@@ -92,7 +89,7 @@ public class SenderXStreamInitializer implements NotificationXStreamInitializer 
 
             List<SenderXStreamInitializer> serializers = GeoServerExtensions.extensions(SenderXStreamInitializer.class);
 
-            for(SenderXStreamInitializer serializer : serializers) {
+            for (SenderXStreamInitializer serializer : serializers) {
                 if (serializer.name.equals(nodeName)) {
                     try {
                         sender = serializer.clazz.newInstance();

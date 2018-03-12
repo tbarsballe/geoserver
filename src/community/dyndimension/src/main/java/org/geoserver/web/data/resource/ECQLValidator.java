@@ -25,7 +25,7 @@ import org.opengis.filter.expression.Expression;
 /**
  * Validates that a ECQL expression is syntactically valid, and if a set of valid attribute is
  * provided, that the expression only uses those attributes
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class ECQLValidator implements IValidator<String> {

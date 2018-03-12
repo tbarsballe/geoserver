@@ -19,7 +19,7 @@ import org.opengis.feature.type.Name;
 
 /**
  * A single output parameter, along with the chosen output mime type and the output inclusion flag
- * 
+ *
  * @author Andrea Aime - OpenGeo
  */
 @SuppressWarnings("serial")

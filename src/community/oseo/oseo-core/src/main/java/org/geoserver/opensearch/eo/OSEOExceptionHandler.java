@@ -20,7 +20,7 @@ import org.geoserver.platform.ServiceException;
 /**
  * Returns exceptions as a RSS feed, as suggested in the OpenSearch EO developer guide at
  * http://www.opensearch.org/Documentation/Developer_how_to_guide
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class OSEOExceptionHandler extends ServiceExceptionHandler {
@@ -41,7 +41,7 @@ public class OSEOExceptionHandler extends ServiceExceptionHandler {
 
         if (exception instanceof OWS20Exception) {
             OWS20Exception ex = (OWS20Exception) exception;
-            if(ex.getHttpCode() != null) {
+            if (ex.getHttpCode() != null) {
                 response.setStatus(ex.getHttpCode());
             } else {
                 response.setStatus(500);

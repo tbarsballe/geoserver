@@ -24,19 +24,20 @@ import org.geoserver.wms.WebMapService;
  * <p>
  * This
  * </p>
- * 
+ *
  * @author Justin Deoliveira, The Open Planning Project, jdeolive@openplans.org
- * 
  */
 public class KMLReflector {
     private static Logger LOGGER = org.geotools.util.logging.Logging
             .getLogger("org.vfny.geoserver.wms.responses.map.kml");
 
-    /** default 'format' value */
+    /**
+     * default 'format' value
+     */
     public static final String FORMAT = KMLMapOutputFormat.MIME_TYPE;
 
     private static Map<String, Map<String, Object>> MODES;
-    
+
     /**
      * Default ground overlay size
      */
@@ -50,7 +51,7 @@ public class KMLReflector {
         options.put("superoverlay", true);
         options.put("mode", "superoverlay");
         temp.put("superoverlay", options);
-        
+
         options = new HashMap<String, Object>();
         options.put("superoverlay", false);
         options.put("kmscore", 100); // download -> really download vectors
@@ -63,7 +64,7 @@ public class KMLReflector {
         temp.put("refresh", options);
 
         MODES = temp;
-        
+
         DEFAULT_OVERLAY_SIZE = Integer.getInteger("org.geoserver.kml.defaultOverlaySize", 2048);
     }
 
@@ -87,7 +88,7 @@ public class KMLReflector {
     // }
 
     public static org.geoserver.wms.WebMap doWms(GetMapRequest request, WebMapService wms,
-            WMS wmsConfiguration) throws Exception {
+                                                 WMS wmsConfiguration) throws Exception {
         // set the content disposition
         StringBuffer filename = new StringBuffer();
         boolean containsRasterData = false;
@@ -102,11 +103,11 @@ public class KMLReflector {
             if (layer.getType() == MapLayerInfo.TYPE_VECTOR) {
                 isRegionatingFriendly = isRegionatingFriendly
                         && layer.getFeature().getFeatureSource(null, null).getQueryCapabilities()
-                                .isReliableFIDSupported();
+                        .isReliableFIDSupported();
             } else if (layer.getType() == MapLayerInfo.TYPE_REMOTE_VECTOR) {
                 isRegionatingFriendly = isRegionatingFriendly
                         && layer.getRemoteFeatureSource().getQueryCapabilities()
-                                .isReliableFIDSupported();
+                        .isReliableFIDSupported();
             }
 
             // strip off prefix
@@ -213,12 +214,12 @@ public class KMLReflector {
     /**
      * Copy all the format_options parameters from the kvp map and put them into the formatOptions
      * map. If a parameter is already present in formatOption map it will be preserved.
-     * 
+     *
      * @param kvp
      * @param formatOptions
      */
     public static void organizeFormatOptionsParams(Map<String, String> kvp,
-            Map<String, Object> formatOptions) throws Exception {
+                                                   Map<String, Object> formatOptions) throws Exception {
         WMSRequests.mergeEntry(kvp, formatOptions, "legend");
         WMSRequests.mergeEntry(kvp, formatOptions, "kmscore");
         WMSRequests.mergeEntry(kvp, formatOptions, "kmattr");

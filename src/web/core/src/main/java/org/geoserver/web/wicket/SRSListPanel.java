@@ -17,10 +17,10 @@ import org.geoserver.web.wicket.SRSProvider.SRS;
  * A panel which contains a list of all coordinate reference systems available to GeoServer.
  * <p>
  * Using this compontent in a page would look like:
- * 
+ * <p>
  * <pre>
  * public class MyPage {
- * 
+ *
  *     public MyPage() {
  *     ...
  *     add( new SRSListPanel( &quot;srsList&quot; ) );
@@ -28,9 +28,9 @@ import org.geoserver.web.wicket.SRSProvider.SRS;
  *   }
  * }
  * </pre>
- * 
+ * <p>
  * And the markup:
- * 
+ * <p>
  * <pre>
  * ...
  *  &lt;body&gt;
@@ -38,20 +38,19 @@ import org.geoserver.web.wicket.SRSProvider.SRS;
  *  &lt;/body&gt;
  *  ...
  * </pre>
- * 
+ * <p>
  * </p>
  * <p>
  * Client could should override the method {@link #createLinkForCode(String, IModel)} to provide
  * some action when the user clicks on a SRS code in the list.
  * </p>
- * 
+ *
  * @author Andrea Aime, OpenGeo
  * @author Justin Deoliveira, OpenGeo
  * @authos Gabriel Roldan, OpenGeo
- * 
  */
 public abstract class SRSListPanel extends Panel {
-    
+
     private static final long serialVersionUID = 3777350932084160337L;
     GeoServerTablePanel<SRS> table;
 
@@ -67,7 +66,7 @@ public abstract class SRSListPanel extends Panel {
 
             @Override
             protected Component getComponentForProperty(String id, IModel<SRS> itemModel,
-                    Property<SRS> property) {
+                                                        Property<SRS> property) {
 
                 SRS srs = (SRS) itemModel.getObject();
 
@@ -90,10 +89,11 @@ public abstract class SRSListPanel extends Panel {
 
         add(table);
     }
-    
+
     /**
-     * Hides the top pager so that the panel shows nicely in a small space (such as in a 
+     * Hides the top pager so that the panel shows nicely in a small space (such as in a
      * popup window)
+     *
      * @param compact
      */
     public void setCompactMode(boolean compact) {
@@ -106,12 +106,9 @@ public abstract class SRSListPanel extends Panel {
      * Subclasses may override to perform an action when an epsg code has been selected. This
      * default implementation returns a link that does nothing.
      * </p>
-     * 
-     * @param linkId
-     *            The id of the link component to be created.
-     * @param itemModel
-     *            The epsg code (integer).
-     * 
+     *
+     * @param linkId    The id of the link component to be created.
+     * @param itemModel The epsg code (integer).
      */
     @SuppressWarnings("unchecked")
     protected Component createLinkForCode(String linkId, IModel<SRS> itemModel) {
@@ -122,16 +119,17 @@ public abstract class SRSListPanel extends Panel {
             @Override
             protected void onClick(AjaxRequestTarget target) {
                 onCodeClicked(target, getDefaultModelObjectAsString());
-                
+
             }
         };
     }
-    
+
     /**
-     * Suclasses must override and perform whatever they see fit when a SRS code link is clicked 
+     * Suclasses must override and perform whatever they see fit when a SRS code link is clicked
+     *
      * @param target
      * @param modelObject
      */
     protected abstract void onCodeClicked(AjaxRequestTarget target, String epsgCode);
-    
+
 }

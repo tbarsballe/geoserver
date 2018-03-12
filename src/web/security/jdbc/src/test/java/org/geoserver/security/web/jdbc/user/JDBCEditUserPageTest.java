@@ -14,10 +14,12 @@ public class JDBCEditUserPageTest extends EditUserPageTest {
 
     protected void doInitialize() throws Exception {
         initializeForJDBC();
-    };
+    }
+
+    ;
 
     @Test
-    public void testFill() throws Exception{
+    public void testFill() throws Exception {
         doTestFill();
     }
 

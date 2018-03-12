@@ -51,31 +51,31 @@ public class GetMapIntegrationTest extends WMSTestSupport {
         super.setUpTestData(testData);
         testData.setUpWcs10RasterLayers();
     }
-    
+
     @Override
     protected void onSetUp(SystemTestData testData) throws Exception {
         super.onSetUp(testData);
-        Catalog catalog=getCatalog();
-        testData.addStyle("indexed","indexed.sld",getClass(),catalog);
-        testData.addStyle("crop_raster","CropTransform.sld",getClass(),catalog);
+        Catalog catalog = getCatalog();
+        testData.addStyle("indexed", "indexed.sld", getClass(), catalog);
+        testData.addStyle("crop_raster", "CropTransform.sld", getClass(), catalog);
         testData.addStyle("lakeScale", "lakeScale.sld", getClass(), catalog);
- 
+
         Map<LayerProperty, Object> props = new HashMap<>();
         props.put(LayerProperty.STYLE, "indexed");
-        
-        testData.addRasterLayer(new QName(MockData.SF_URI, "indexed", MockData.SF_PREFIX), 
-                "indexed.tif", "tif", props,getClass(),catalog);
+
+        testData.addRasterLayer(new QName(MockData.SF_URI, "indexed", MockData.SF_PREFIX),
+                "indexed.tif", "tif", props, getClass(), catalog);
 
         props.put(LayerProperty.STYLE, "raster");
-        
-        testData.addRasterLayer(new QName(MockData.SF_URI, "paletted", MockData.SF_PREFIX), 
-                "paletted.tif", "tif", props,getClass(),catalog);
 
-        testData.addRasterLayer(new QName(MockData.SF_URI, "mosaic", MockData.SF_PREFIX), 
-                "raster-filter-test.zip",null, props,SystemTestData.class, catalog);
+        testData.addRasterLayer(new QName(MockData.SF_URI, "paletted", MockData.SF_PREFIX),
+                "paletted.tif", "tif", props, getClass(), catalog);
 
-        testData.addRasterLayer(new QName(MockData.SF_URI, "fourbits", MockData.SF_PREFIX), 
-                "fourbits.zip", null, props,SystemTestData.class,catalog);
+        testData.addRasterLayer(new QName(MockData.SF_URI, "mosaic", MockData.SF_PREFIX),
+                "raster-filter-test.zip", null, props, SystemTestData.class, catalog);
+
+        testData.addRasterLayer(new QName(MockData.SF_URI, "fourbits", MockData.SF_PREFIX),
+                "fourbits.zip", null, props, SystemTestData.class, catalog);
 
         testData.addStyle("BasicStyleGroup", "BasicStyleGroup.sld", GetMapKvpRequestReaderTest.class, getCatalog());
         LayerGroupInfo lg = catalog.getFactory().createLayerGroup();
@@ -85,9 +85,9 @@ public class GetMapIntegrationTest extends WMSTestSupport {
         lg.getLayers().add(null);
         lg.getStyles().add(s);
         catalog.add(lg);
-        
+
     }
-    
+
     @Test
     public void testIndexed() throws Exception {
         MockHttpServletResponse response = getAsServletResponse("wms?LAYERS=sf:indexed&STYLES=&FORMAT=image/png&SERVICE=WMS&VERSION=1.1.1"
@@ -112,14 +112,14 @@ public class GetMapIntegrationTest extends WMSTestSupport {
         ImageAssert.assertEquals(new File(
                 "src/test/resources/org/geoserver/wms/map/indexed-bg-expected.png"), image, 0);
     }
-    
+
     @Test
     public void testRasterFilterRed() throws Exception {
         MockHttpServletResponse response = getAsServletResponse("wms?bgcolor=0x000000&LAYERS=sf:mosaic&STYLES=&FORMAT=image/png&SERVICE=WMS&VERSION=1.1.1" +
-        "&REQUEST=GetMap&SRS=EPSG:4326&BBOX=0,0,1,1&WIDTH=150&HEIGHT=150&transparent=false&CQL_FILTER=location like 'red%25'");
-        
+                "&REQUEST=GetMap&SRS=EPSG:4326&BBOX=0,0,1,1&WIDTH=150&HEIGHT=150&transparent=false&CQL_FILTER=location like 'red%25'");
+
         assertEquals("image/png", response.getContentType());
-        
+
         // check we got the 
         RenderedImage image = ImageIO.read(getBinaryInputStream(response));
         int[] pixel = new int[3];
@@ -128,14 +128,14 @@ public class GetMapIntegrationTest extends WMSTestSupport {
         assertEquals(0, pixel[1]);
         assertEquals(0, pixel[2]);
     }
-    
+
     @Test
     public void testRasterFilterGreen() throws Exception {
         MockHttpServletResponse response = getAsServletResponse("wms?bgcolor=0x000000&LAYERS=sf:mosaic&STYLES=&FORMAT=image/png&SERVICE=WMS&VERSION=1.1.1" +
-        "&REQUEST=GetMap&SRS=EPSG:4326&BBOX=0,0,1,1&WIDTH=150&HEIGHT=150&transparent=false&CQL_FILTER=location like 'green%25'");
-        
+                "&REQUEST=GetMap&SRS=EPSG:4326&BBOX=0,0,1,1&WIDTH=150&HEIGHT=150&transparent=false&CQL_FILTER=location like 'green%25'");
+
         assertEquals("image/png", response.getContentType());
-        
+
         RenderedImage image = ImageIO.read(getBinaryInputStream(response));
         int[] pixel = new int[3];
         image.getData().getPixel(0, 0, pixel);
@@ -143,29 +143,29 @@ public class GetMapIntegrationTest extends WMSTestSupport {
         assertEquals(255, pixel[1]);
         assertEquals(0, pixel[2]);
     }
-    
+
     @Test
     public void testMosaicTwice() throws Exception {
         MockHttpServletResponse response = getAsServletResponse("wms?bgcolor=0x000000&LAYERS=sf:mosaic&STYLES=&FORMAT=image/png&SERVICE=WMS&VERSION=1.1.1" +
-        "&REQUEST=GetMap&SRS=EPSG:4326&BBOX=0,0,1,1&WIDTH=150&HEIGHT=150&transparent=false");
-        
+                "&REQUEST=GetMap&SRS=EPSG:4326&BBOX=0,0,1,1&WIDTH=150&HEIGHT=150&transparent=false");
+
         assertEquals("image/png", response.getContentType());
-        
+
         response = getAsServletResponse("wms?bgcolor=0x000000&LAYERS=sf:mosaic&STYLES=&FORMAT=image/png&SERVICE=WMS&VERSION=1.1.1" +
-        "&REQUEST=GetMap&SRS=EPSG:4326&BBOX=0,0,1,1&WIDTH=150&HEIGHT=150&transparent=false");
-        
+                "&REQUEST=GetMap&SRS=EPSG:4326&BBOX=0,0,1,1&WIDTH=150&HEIGHT=150&transparent=false");
+
         assertEquals("image/png", response.getContentType());
     }
-    
+
     @Test
     public void testIndexedTransparency() throws Exception {
         String request = "wms?LAYERS=sf:paletted&STYLES=&FORMAT=image%2Fpng&SERVICE=WMS" +
-        		"&VERSION=1.1.1&REQUEST=GetMap&SRS=EPSG%3A3174" +
-        		"&BBOX=-3256153.625,826440.25,-2756153.625,1326440.25" +
-        		"&WIDTH=256&HEIGHT=256&transparent=true";
+                "&VERSION=1.1.1&REQUEST=GetMap&SRS=EPSG%3A3174" +
+                "&BBOX=-3256153.625,826440.25,-2756153.625,1326440.25" +
+                "&WIDTH=256&HEIGHT=256&transparent=true";
         MockHttpServletResponse response = getAsServletResponse(request);
         assertEquals("image/png", response.getContentType());
-        
+
         RenderedImage image = ImageIO.read(getBinaryInputStream(response));
         assertTrue(image.getColorModel().hasAlpha());
 
@@ -177,33 +177,34 @@ public class GetMapIntegrationTest extends WMSTestSupport {
         image.getData().getPixel(255, 255, rgba);
         assertEquals(255, rgba[3]);
     }
-    
+
     @Test
     public void testFourBits() throws Exception {
         String request = "wms?LAYERS=sf:fourbits&STYLES=&FORMAT=image/png" +
-        		"&SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&SRS=EPSG%3A4269" +
-        		"&BBOX=-118.58930224611,45.862378906251,-118.33030957033,45.974688476563" +
-        		"&WIDTH=761&HEIGHT=330";
-        
+                "&SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&SRS=EPSG%3A4269" +
+                "&BBOX=-118.58930224611,45.862378906251,-118.33030957033,45.974688476563" +
+                "&WIDTH=761&HEIGHT=330";
+
         MockHttpServletResponse response = getAsServletResponse(request);
         assertEquals("image/png", response.getContentType());
     }
-    
+
     /**
      * https://osgeo-org.atlassian.net/browse/GEOS-4893, make meta-tiler work
      * with WMS 1.3 as well
-     * @throws Exception 
+     *
+     * @throws Exception
      */
     @Test
     public void testMetaWMS13() throws Exception {
         String wms11 = "wms?LAYERS=cite%3ALakes&STYLES=&FORMAT=image%2Fpng&TILED=true&TILESORIGIN=0.0006%2C-0.0018" +
-        		"&SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&SRS=EPSG%3A4326&BBOX=0.0006,-0.0018,0.0031,0.0007&WIDTH=256&HEIGHT=256";
+                "&SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&SRS=EPSG%3A4326&BBOX=0.0006,-0.0018,0.0031,0.0007&WIDTH=256&HEIGHT=256";
         String wms13 = "wms?LAYERS=cite%3ALakes&STYLES=&FORMAT=image%2Fpng&TILED=true&TILESORIGIN=-0.0018%2C0.0006" +
-        		"&SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&CRS=EPSG%3A4326&BBOX=-0.0018,0.0006,0.0007,0.0031&WIDTH=256&HEIGHT=256";
+                "&SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&CRS=EPSG%3A4326&BBOX=-0.0018,0.0006,0.0007,0.0031&WIDTH=256&HEIGHT=256";
 
         BufferedImage image11 = getAsImage(wms11, "image/png");
         BufferedImage image13 = getAsImage(wms13, "image/png");
-        
+
         // compare the general structure
         assertEquals(image11.getWidth(), image13.getWidth());
         assertEquals(image11.getHeight(), image13.getHeight());
@@ -218,7 +219,7 @@ public class GetMapIntegrationTest extends WMSTestSupport {
             assertTrue(Arrays.equals(bankData11[i], bankData13[i]));
         }
     }
-    
+
     @Test
     public void testOpenLayersProxy() throws Exception {
         NamespaceContext oldContext = XMLUnit.getXpathNamespaceContext();
@@ -227,39 +228,39 @@ public class GetMapIntegrationTest extends WMSTestSupport {
             namespaces.put("xhtml", "http://www.w3.org/1999/xhtml");
             registerNamespaces(namespaces);
             XMLUnit.setXpathNamespaceContext(new SimpleNamespaceContext(namespaces));
-            
+
             // setup a proxy base url
             GeoServerInfo global = getGeoServer().getGlobal();
             global.getSettings().setProxyBaseUrl("http://www.geoserver.org:1234/gs");
             getGeoServer().save(global);
-            
+
             Document dom = getAsDOM("wms?LAYERS=sf:indexed&STYLES=&FORMAT=application/openlayers&SERVICE=WMS&VERSION=1.1.1"
                     + "&REQUEST=GetMap&SRS=EPSG:4326&BBOX=100,78,104,80&WIDTH=300&HEIGHT=150");
-    
-            assertXpathEvaluatesTo("http://www.geoserver.org:1234/gs/openlayers/OpenLayers.js", 
+
+            assertXpathEvaluatesTo("http://www.geoserver.org:1234/gs/openlayers/OpenLayers.js",
                     "//xhtml:script[contains(@src, 'OpenLayers.js')]/@src", dom);
         } finally {
             XMLUnit.setXpathNamespaceContext(oldContext);
         }
     }
-    
+
     @Test
     public void testRasterRenderingTx() throws Exception {
         System.out.println(getCatalog().getCoverages());
-        
+
         String layer = getLayerId(MockData.USA_WORLDIMG);
         String url = "wms?service=WMS&VERSION=1.1.1&request=GetMap&styles="
-                + "&format=image/png&layers="  + layer + "&WIDTH=100&HEIGHT=100"
+                + "&format=image/png&layers=" + layer + "&WIDTH=100&HEIGHT=100"
                 + "&srs=epsg:4326&BBOX=-130,49,-125,54";
-        
+
         BufferedImage image = getAsImage(url, "image/png");
         Color color = getPixelColor(image, 25, 25);
         // the color is not white, nor white-ish
         assertTrue(color.getRed() + color.getGreen() + color.getBlue() < (250 * 3));
-        
+
         // now crop and check the image is cut
         url = "wms?service=WMS&VERSION=1.1.1&request=GetMap&styles=crop_raster"
-                + "&format=image/png&layers="  + layer + "&WIDTH=100&HEIGHT=100"
+                + "&format=image/png&layers=" + layer + "&WIDTH=100&HEIGHT=100"
                 + "&srs=epsg:4326&BBOX=-130,49,-125,54";
         image = getAsImage(url, "image/png");
         color = getPixelColor(image, 25, 25);
@@ -271,7 +272,7 @@ public class GetMapIntegrationTest extends WMSTestSupport {
     public void testRasterRenderingTxOutOfBbox() throws Exception {
         String layer = getLayerId(MockData.USA_WORLDIMG);
         String url = "wms?service=WMS&VERSION=1.1.1&request=GetMap&styles=crop_raster"
-                + "&format=image/png&layers="  + layer + "&WIDTH=100&HEIGHT=100"
+                + "&format=image/png&layers=" + layer + "&WIDTH=100&HEIGHT=100"
                 + "&srs=epsg:4326&BBOX=-120,40,-115,45";
         BufferedImage image = getAsImage(url, "image/png");
         Color color = getPixelColor(image, 25, 25);
@@ -291,11 +292,11 @@ public class GetMapIntegrationTest extends WMSTestSupport {
         String layer = getLayerId(CiteTestData.POINTS);
 
         MockHttpServletResponse response = getAsServletResponse("wms?bbox=" + bbox +
-            "&layers=" + layer +
-            "&sld_body=" + w.toString() +
-            "&style_format=" + PropertyStyleHandler.FORMAT +
-            "&Format=image/png" + "&request=GetMap" +
-            "&width=550" + "&height=250" + "&srs=EPSG:4326");
+                "&layers=" + layer +
+                "&sld_body=" + w.toString() +
+                "&style_format=" + PropertyStyleHandler.FORMAT +
+                "&Format=image/png" + "&request=GetMap" +
+                "&width=550" + "&height=250" + "&srs=EPSG:4326");
         checkImage(response);
     }
 

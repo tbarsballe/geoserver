@@ -11,13 +11,15 @@ import org.geoserver.security.web.auth.AuthenticationFilterPanelInfo;
 
 /**
  * Configuration panel extension for {@link GeoServerOAuthAuthenticationFilter}.
- * 
+ *
  * @author Alessio Fabiani, GeoSolutions S.A.S.
  */
 public class GitHubOAuth2AuthProviderPanelInfo
         extends AuthenticationFilterPanelInfo<GitHubOAuth2FilterConfig, GitHubOAuth2AuthProviderPanel> {
 
-    /** serialVersionUID */
+    /**
+     * serialVersionUID
+     */
     private static final long serialVersionUID = -3891569684560944819L;
 
     public GitHubOAuth2AuthProviderPanelInfo() {

@@ -60,7 +60,7 @@ import com.vividsolutions.jts.geom.Envelope;
  * If an operation is called for which its corresponding operation bean is not set, the call will
  * result in an {@link UnsupportedOperationException}
  * </p>
- * 
+ *
  * @author Andrea Aime
  * @author Justin Deoliveira
  * @author Gabriel Roldan
@@ -142,7 +142,7 @@ public class DefaultWebMapService implements WebMapService, ApplicationContextAw
      * Max number of rule filters to be used against the data source
      */
     private static Integer MAX_FILTER_RULES = null;
-    
+
     /**
      * Use a global rendering pool, or use a new pool each time
      */
@@ -237,7 +237,7 @@ public class DefaultWebMapService implements WebMapService, ApplicationContextAw
             else
                 MAX_FILTER_RULES = Integer.valueOf(rules);
         }
-        
+
         // control usage of the global rendering thread pool
         if (USE_GLOBAL_RENDERING_POOL == null) {
             String usePool = GeoServerExtensions.getProperty("USE_GLOBAL_RENDERING_POOL", context);
@@ -252,26 +252,21 @@ public class DefaultWebMapService implements WebMapService, ApplicationContextAw
     /**
      * Checks wheter the line width optimization is enabled, or not (defaults to true unless the
      * user sets the OPTIMIZE_LINE_WIDTH property to false)
-     * 
-     *
      */
     public static boolean isLineWidthOptimizationEnabled() {
         return OPTIMIZE_LINE_WIDTH;
     }
-    
+
     /**
      * If true (default) use the sld rule filters to compose the query to the DB, otherwise don't
      * and get down only with the bbox and eventual definition filter)
-     * 
-     *
      */
     public static int getMaxFilterRules() {
         return MAX_FILTER_RULES;
     }
-    
+
     /**
      * If true (default) the direct raster rendering path is enabled
-     *
      */
     public static boolean isDirectRasterPathEnabled() {
         return !BYPASS_DIRECT;
@@ -355,7 +350,7 @@ public class DefaultWebMapService implements WebMapService, ApplicationContextAw
 
     /**
      * Method for generation of WMS animations.
-     * 
+     *
      * @param getMap GetMapRequest
      * @return the <WebMap> output
      */
@@ -366,7 +361,7 @@ public class DefaultWebMapService implements WebMapService, ApplicationContextAw
             throw new RuntimeException(e);
         }
     }
-    
+
     /**
      * @see WebMapService#reflect(GetMapRequest)
      */
@@ -384,7 +379,7 @@ public class DefaultWebMapService implements WebMapService, ApplicationContextAw
 
     /**
      * s
-     * 
+     *
      * @see WebMapService#getMapReflect(GetMapRequest)
      */
     public WebMap getMapReflect(GetMapRequest request) {
@@ -427,15 +422,15 @@ public class DefaultWebMapService implements WebMapService, ApplicationContextAw
     /**
      * This method tries to automatically determine SRS, bounding box and output size based on the
      * layers provided by the user and any other parameters.
-     * 
+     * <p>
      * If bounds are not specified by the user, they are automatically se to the union of the bounds
      * of all layers.
-     * 
+     * <p>
      * The size of the output image defaults to 512 pixels, the height is automatically determined
      * based on the width to height ratio of the requested layers. This is also true if either
      * height or width are specified by the user. If both height and width are specified by the
      * user, the automatically determined bounding box will be adjusted to fit inside these bounds.
-     * 
+     * <p>
      * General idea 1) Figure out whether SRS has been specified, fall back to EPSG:4326 2)
      * Determine whether all requested layers use the same SRS, - if so, try to do bounding box
      * calculations in native coordinates 3) Aggregate the bounding boxes (in EPSG:4326 or native)
@@ -647,13 +642,11 @@ public class DefaultWebMapService implements WebMapService, ApplicationContextAw
     /**
      * This adjusts the bounds by zooming out 2%, but also ensuring that the maximum bounds do not
      * exceed the world bounding box
-     * 
+     * <p>
      * This only applies if the SRS is EPSG:4326 or EPSG:900913
-     * 
-     * @param reqSRS
-     *            the SRS
-     * @param bbox
-     *            the current bounding box
+     *
+     * @param reqSRS the SRS
+     * @param bbox   the current bounding box
      * @return the adjusted bounding box
      */
     private static Envelope adjustBounds(String reqSRS, Envelope bbox) {
@@ -672,18 +665,16 @@ public class DefaultWebMapService implements WebMapService, ApplicationContextAw
 
     /**
      * Returns a app wide cached rendering pool that can be used for parallelized rendering
-     * 
-     *
      */
     public static ExecutorService getRenderingPool() {
-        if(USE_GLOBAL_RENDERING_POOL && RENDERING_POOL == null) {
+        if (USE_GLOBAL_RENDERING_POOL && RENDERING_POOL == null) {
             synchronized (DefaultWebMapService.class) {
-                if(RENDERING_POOL == null) {
+                if (RENDERING_POOL == null) {
                     RENDERING_POOL = Executors.newCachedThreadPool();
                 }
             }
         }
-        
+
         return RENDERING_POOL;
     }
 

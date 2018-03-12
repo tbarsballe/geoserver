@@ -17,21 +17,18 @@ import org.geoserver.platform.resource.ResourceStore;
 import org.geoserver.platform.resource.Resources;
 
 /**
- * 
  * Adaptor from Geoserver resource to Spring Resource
- * 
- * @author Niels Charlier
  *
+ * @author Niels Charlier
  */
 public class SpringResourceAdaptor implements org.springframework.core.io.Resource {
-    
-    
+
+
     /**
-     * 
      * Spring Resource is made relative to Data Directory if path is relative.
-     * 
+     *
      * @param resource Spring resource
-     * @param store the Resource Store
+     * @param store    the Resource Store
      * @return Spring resource relative to Data Directory
      * @throws IOException
      */
@@ -53,7 +50,7 @@ public class SpringResourceAdaptor implements org.springframework.core.io.Resour
     }
 
     private Resource resource;
-      
+
     public SpringResourceAdaptor(Resource resource) {
         this.resource = resource;
     }
@@ -121,5 +118,5 @@ public class SpringResourceAdaptor implements org.springframework.core.io.Resour
     public Resource getResource() {
         return resource;
     }
-    
+
 }

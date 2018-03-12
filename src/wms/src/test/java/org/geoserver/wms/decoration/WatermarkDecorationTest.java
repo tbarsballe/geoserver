@@ -25,7 +25,7 @@ import org.junit.Test;
 
 
 public class WatermarkDecorationTest extends GeoServerSystemTestSupport {
-    
+
     @Test
     public void testAbsolutePath() throws Exception {
         WatermarkDecoration d = new WatermarkDecoration();
@@ -34,12 +34,12 @@ public class WatermarkDecorationTest extends GeoServerSystemTestSupport {
         options.put("url", URLs.fileToUrl(file.getAbsoluteFile().getCanonicalFile()).toExternalForm());
         d.loadOptions(options);
         BufferedImage logo = d.getLogo();
-        
+
         assertNotNull(logo);
         assertEquals(180, logo.getWidth());
         assertEquals(90, logo.getHeight());
     }
-    
+
     @Test
     public void testRelativePath() throws Exception {
         WatermarkDecoration d = new WatermarkDecoration();
@@ -48,11 +48,11 @@ public class WatermarkDecorationTest extends GeoServerSystemTestSupport {
         File styles = getDataDirectory().findOrCreateDir("styles");
         File logoFile = new File(styles, "world.png").getAbsoluteFile();
         FileUtils.copyFile(file, logoFile);
-        
+
         options.put("url", "file:styles/world.png");
         d.loadOptions(options);
         BufferedImage logo = d.getLogo();
-        
+
         assertNotNull(logo);
         assertEquals(180, logo.getWidth());
         assertEquals(90, logo.getHeight());
@@ -75,5 +75,5 @@ public class WatermarkDecorationTest extends GeoServerSystemTestSupport {
         assertEquals(180, logo.getWidth());
         assertEquals(90, logo.getHeight());
     }
-    
+
 }

@@ -23,7 +23,7 @@ final class NullResourceStore implements ResourceStore {
     @Override
     public Resource get(final String resourcePath) {
         return new Resource() {
-            
+
             String path = resourcePath;
 
             @Override
@@ -45,16 +45,17 @@ final class NullResourceStore implements ResourceStore {
             public Lock lock() {
                 return locks.acquire(path);
             }
-            
+
             @Override
             public void addListener(ResourceListener listener) {
                 // no events provided
             }
+
             @Override
             public void removeListener(ResourceListener listener) {
                 // no events provided
             }
-            
+
             @Override
             public OutputStream out() {
                 throw new IllegalStateException("Unable to write to ResourceStore.EMPTY");

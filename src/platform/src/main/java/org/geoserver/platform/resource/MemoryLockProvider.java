@@ -15,7 +15,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 
 /**
  * An in memory lock provider based on a striped lock
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class MemoryLockProvider implements LockProvider {

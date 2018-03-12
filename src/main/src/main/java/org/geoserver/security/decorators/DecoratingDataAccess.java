@@ -19,15 +19,14 @@ import org.opengis.feature.type.Name;
 /**
  * Delegates all methods to the provided delegate. Suclasses will override
  * methods in order to perform their decoration work
- * 
- * @author Andrea Aime - TOPP
- * 
+ *
  * @param <T>
  * @param <F>
+ * @author Andrea Aime - TOPP
  */
 public abstract class DecoratingDataAccess<T extends FeatureType, F extends Feature> extends
         AbstractDecorator<DataAccess<T, F>> implements DataAccess<T, F> {
-    
+
     public DecoratingDataAccess(DataAccess<T, F> delegate) {
         super(delegate);
     }

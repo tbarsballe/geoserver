@@ -23,9 +23,9 @@ import org.geotools.xml.EMFUtils;
  * This request reader makes use of the Eclipse Modelling Framework
  * reflection api.
  * </p>
+ *
  * @author Justin Deoliveira, The Open Planning Project
  * @author Andrea Aime, TOPP
- *
  */
 public class EMFKvpRequestReader extends KvpRequestReader {
     /**
@@ -76,23 +76,23 @@ public class EMFKvpRequestReader extends KvpRequestReader {
         //use emf reflection
         EObject eObject = (EObject) request;
 
-        for (Iterator e = kvp.entrySet().iterator(); e.hasNext();) {
+        for (Iterator e = kvp.entrySet().iterator(); e.hasNext(); ) {
             Map.Entry entry = (Map.Entry) e.next();
             String property = (String) entry.getKey();
             Object value = entry.getValue();
 
             //respect the filter
-            if ( filter( property ) ) {
+            if (filter(property)) {
                 continue;
             }
-            
+
             if (EMFUtils.has(eObject, property)) {
                 try {
                     setValue(eObject, property, value);
-                } catch(Exception ex) {
-                    throw new ServiceException("Failed to set property " + property 
-                            + " in request object using value " + value 
-                            + (value != null ? " of type " + value.getClass() : ""), ex, 
+                } catch (Exception ex) {
+                    throw new ServiceException("Failed to set property " + property
+                            + " in request object using value " + value
+                            + (value != null ? " of type " + value.getClass() : ""), ex,
                             ServiceException.INVALID_PARAMETER_VALUE, property);
                 }
             }

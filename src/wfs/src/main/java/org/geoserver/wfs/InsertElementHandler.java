@@ -50,7 +50,6 @@ import java.util.logging.Logger;
  * Handler for the insert element
  *
  * @author Andrea Aime - TOPP
- *
  */
 public class InsertElementHandler extends AbstractTransactionElementHandler {
     /**
@@ -65,16 +64,16 @@ public class InsertElementHandler extends AbstractTransactionElementHandler {
     }
 
     public void checkValidity(TransactionElement element, Map<QName, FeatureTypeInfo> featureTypeInfos)
-        throws WFSTransactionException {
-        if (!getInfo().getServiceLevel().getOps().contains( WFSInfo.Operation.TRANSACTION_INSERT)) {
+            throws WFSTransactionException {
+        if (!getInfo().getServiceLevel().getOps().contains(WFSInfo.Operation.TRANSACTION_INSERT)) {
             throw new WFSException(element, "Transaction INSERT support is not enabled");
         }
     }
 
     @SuppressWarnings("unchecked")
-    public void execute(TransactionElement element, TransactionRequest request, Map featureStores, 
-        TransactionResponse response, TransactionListener listener) throws WFSTransactionException {
-        
+    public void execute(TransactionElement element, TransactionRequest request, Map featureStores,
+                        TransactionResponse response, TransactionListener listener) throws WFSTransactionException {
+
         Insert insert = (Insert) element;
         LOGGER.finer("Transaction Insert:" + insert);
 
@@ -84,13 +83,13 @@ public class InsertElementHandler extends AbstractTransactionElementHandler {
             // group features by their schema
             HashMap /* <SimpleFeatureType,FeatureCollection> */ schema2features = new HashMap();
 
-            
+
             List featureList = insert.getFeatures();
-            for (Iterator f = featureList.iterator(); f.hasNext();) {
+            for (Iterator f = featureList.iterator(); f.hasNext(); ) {
                 SimpleFeature feature = (SimpleFeature) f.next();
                 SimpleFeatureType schema = feature.getFeatureType();
                 ListFeatureCollection collection =
-                    (ListFeatureCollection) schema2features.get(schema);
+                        (ListFeatureCollection) schema2features.get(schema);
 
                 if (collection == null) {
                     collection = new ListFeatureCollection(schema);
@@ -122,7 +121,7 @@ public class InsertElementHandler extends AbstractTransactionElementHandler {
             // as they were supplied
             Map<String, List<FeatureId>> schema2fids = new HashMap<String, List<FeatureId>>();
 
-            for (Iterator c = schema2features.values().iterator(); c.hasNext();) {
+            for (Iterator c = schema2features.values().iterator(); c.hasNext(); ) {
                 SimpleFeatureCollection collection = (SimpleFeatureCollection) c.next();
                 SimpleFeatureType schema = collection.getSchema();
 
@@ -132,25 +131,25 @@ public class InsertElementHandler extends AbstractTransactionElementHandler {
 
                 if (store == null) {
                     throw new WFSException(request, "Could not locate FeatureStore for '" + elementName
-                        + "'");
+                            + "'");
                 }
 
                 if (collection != null) {
                     // if we really need to, make sure we are inserting coordinates that do
                     // match the CRS area of validity
-                    if(getInfo().isCiteCompliant()) {
+                    if (getInfo().isCiteCompliant()) {
                         checkFeatureCoordinatesRange(collection);
                     }
-                    
+
                     // reprojection
                     final GeometryDescriptor defaultGeometry = store.getSchema().getGeometryDescriptor();
-                    if(defaultGeometry != null) {
+                    if (defaultGeometry != null) {
                         CoordinateReferenceSystem target = defaultGeometry.getCoordinateReferenceSystem();
                         if (target != null /* && !CRS.equalsIgnoreMetadata(collection.getSchema().getCoordinateReferenceSystem(), target) */) {
                             collection = new ReprojectingFeatureCollection(collection, target);
                         }
                     }
-                    
+
                     // Need to use the namespace here for the
                     // lookup, due to our weird
                     // prefixed internal typenames. see
@@ -186,21 +185,21 @@ public class InsertElementHandler extends AbstractTransactionElementHandler {
                     TransactionEvent event = new TransactionEvent(TransactionEventType.PRE_INSERT,
                             request, elementName, collection);
                     event.setSource(Insert.WFS11.unadapt(insert));
-                    
-                    listener.dataStoreChange( event );
+
+                    listener.dataStoreChange(event);
                     fids.addAll(store.addFeatures(collection));
-                    
+
                     //fire post insert event
                     SimpleFeatureCollection features = store.getFeatures(filterFactory.id(new HashSet<FeatureId>(fids)));
-                    event = new TransactionEvent(TransactionEventType.POST_INSERT, request, 
-                        elementName, features, Insert.WFS11.unadapt(insert));
-                    listener.dataStoreChange( event );
+                    event = new TransactionEvent(TransactionEventType.POST_INSERT, request,
+                            elementName, features, Insert.WFS11.unadapt(insert));
+                    listener.dataStoreChange(event);
                 }
             }
 
             // report back fids, we need to keep the same order the
             // fids were reported in the original feature collection
-            for (Iterator f = featureList.iterator(); f.hasNext();) {
+            for (Iterator f = featureList.iterator(); f.hasNext(); ) {
                 SimpleFeature feature = (SimpleFeature) f.next();
                 SimpleFeatureType schema = feature.getFeatureType();
 
@@ -222,9 +221,10 @@ public class InsertElementHandler extends AbstractTransactionElementHandler {
         response.setTotalInserted(BigInteger.valueOf(inserted));
     }
 
-    
+
     /**
      * Checks that all features coordinates are within the expected coordinate range
+     *
      * @param collection
      * @throws PointOutsideEnvelopeException
      */
@@ -233,14 +233,14 @@ public class InsertElementHandler extends AbstractTransactionElementHandler {
         List types = collection.getSchema().getAttributeDescriptors();
         SimpleFeatureIterator fi = collection.features();
         try {
-            while(fi.hasNext()) {
+            while (fi.hasNext()) {
                 SimpleFeature f = fi.next();
                 for (int i = 0; i < types.size(); i++) {
-                    if(types.get(i) instanceof GeometryDescriptor) {
+                    if (types.get(i) instanceof GeometryDescriptor) {
                         GeometryDescriptor gat = (GeometryDescriptor) types.get(i);
-                        if(gat.getCoordinateReferenceSystem() != null) {
+                        if (gat.getCoordinateReferenceSystem() != null) {
                             Geometry geom = (Geometry) f.getAttribute(i);
-                            if(geom != null)
+                            if (geom != null)
                                 JTS.checkCoordinatesRange(geom, gat.getCoordinateReferenceSystem());
                         }
                     }
@@ -257,12 +257,12 @@ public class InsertElementHandler extends AbstractTransactionElementHandler {
 
     public QName[] getTypeNames(TransactionRequest request, TransactionElement element) throws WFSTransactionException {
         Insert insert = (Insert) element;
-        
+
         List typeNames = new ArrayList();
 
         List features = insert.getFeatures();
         if (!features.isEmpty()) {
-            for (Iterator f = features.iterator(); f.hasNext();) {
+            for (Iterator f = features.iterator(); f.hasNext(); ) {
                 Object next = f.next();
                 // if parsing fails the parser just returns a Map, do throw an error in this case
                 if (!(next instanceof SimpleFeature)) {

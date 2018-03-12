@@ -2,7 +2,8 @@
  * (c) 2013 OpenPlans
  * This code is licensed under the GPL 2.0 license, availible at the root
  * application directory.
- */package org.geoserver.wms.capabilities;
+ */
+package org.geoserver.wms.capabilities;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -41,19 +42,20 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
- * Test cases for Capabilities' ScaleHint  
- * 
+ * Test cases for Capabilities' ScaleHint
+ *
  * @author Mauricio Pazos
  * @author Niels Charlier
- *
  */
 public class GetCapabilitiesScaleDenominatorTest extends WMSTestSupport {
-    
+
     private final XpathEngine xpath;
 
     private static final String BASE_URL = "http://localhost/geoserver";
 
-    /** Test layers */
+    /**
+     * Test layers
+     */
     public static final QName REGIONATED = new QName(MockData.SF_URI, "Regionated", MockData.SF_PREFIX);
     public static final QName ACCIDENT = new QName(MockData.SF_URI, "Accident", MockData.SF_PREFIX);
     public static final QName ACCIDENT2 = new QName(MockData.SF_URI, "Accident2", MockData.SF_PREFIX);
@@ -62,7 +64,7 @@ public class GetCapabilitiesScaleDenominatorTest extends WMSTestSupport {
 
     private Catalog catalog;
 
-    public GetCapabilitiesScaleDenominatorTest(){
+    public GetCapabilitiesScaleDenominatorTest() {
 
         Map<String, String> namespaces = new HashMap<String, String>();
         namespaces.put("xlink", "http://www.w3.org/1999/xlink");
@@ -107,97 +109,96 @@ public class GetCapabilitiesScaleDenominatorTest extends WMSTestSupport {
         layerInfo.setDefaultStyle(defaultStyle);
         this.catalog.save(layerInfo);
     }
-    
+
     void addLayerGroups(SystemTestData testData) throws Exception {
         //setup basic layergroups
         testData.addStyle("Accident3_2", getClass(), this.catalog);
-        
+
         CoordinateReferenceSystem nativeCrs = CRS.decode("EPSG:4326", true);
         ReferencedEnvelope nativeBounds = new ReferencedEnvelope(-180, 180, -90, 90, nativeCrs);
-        
-        LayerGroupInfo layerGroup1 = catalog.getFactory().createLayerGroup();        
+
+        LayerGroupInfo layerGroup1 = catalog.getFactory().createLayerGroup();
         layerGroup1.setName("testLayerGroup1");
         layerGroup1.setBounds(nativeBounds);
         layerGroup1.setMode(Mode.NAMED);
-        
-        LayerGroupInfo layerGroup2 = catalog.getFactory().createLayerGroup();        
+
+        LayerGroupInfo layerGroup2 = catalog.getFactory().createLayerGroup();
         layerGroup2.setName("testLayerGroup2");
         layerGroup2.setBounds(nativeBounds);
-        
-        LayerGroupInfo layerGroup3 = catalog.getFactory().createLayerGroup();        
+
+        LayerGroupInfo layerGroup3 = catalog.getFactory().createLayerGroup();
         layerGroup3.setName("testLayerGroup3");
         layerGroup3.setBounds(nativeBounds);
-        
+
         //add layers & styles
         layerGroup1.getLayers().add(catalog.getLayerByName(getLayerId(REGIONATED)));
         layerGroup1.getStyles().add(null);
         layerGroup1.getLayers().add(catalog.getLayerByName(getLayerId(ACCIDENT3)));
         layerGroup1.getStyles().add(catalog.getStyleByName("Accident3_2"));
-        
+
         layerGroup2.getLayers().add(catalog.getLayerByName(getLayerId(REGIONATED)));
         layerGroup2.getLayers().add(catalog.getLayerByName(getLayerId(ACCIDENT)));
         layerGroup2.getLayers().add(catalog.getLayerByName(getLayerId(ACCIDENT2)));
         layerGroup2.getStyles().add(null);
         layerGroup2.getStyles().add(null);
         layerGroup2.getStyles().add(null);
-        
+
         layerGroup3.getLayers().add(layerGroup2);
         layerGroup3.getLayers().add(catalog.getLayerByName(getLayerId(ACCIDENT3)));
         layerGroup3.getStyles().add(null);
         layerGroup3.getStyles().add(null);
-                        
+
         catalog.add(layerGroup1);
         catalog.add(layerGroup2);
         catalog.add(layerGroup3);
     }
-    
+
     @Test
-    public void testLayerGroups()throws Exception{
+    public void testLayerGroups() throws Exception {
 
         Document dom = findCapabilities(false);
-        
+
         // print(dom);
         checkWms13ValidationErrors(dom);
 
-        Element layerElement= searchLayerElement("testLayerGroup1", dom);
+        Element layerElement = searchLayerElement("testLayerGroup1", dom);
 
         NodeList minScaleNode = layerElement.getElementsByTagName("MinScaleDenominator");
-        Element minScaleElement = (Element)minScaleNode.item(0);
-        
+        Element minScaleElement = (Element) minScaleNode.item(0);
+
         NodeList maxScaleNode = layerElement.getElementsByTagName("MaxScaleDenominator");
-        Element maxScaleElement = (Element)maxScaleNode.item(0);
-        
+        Element maxScaleElement = (Element) maxScaleNode.item(0);
+
         assertEquals(Double.valueOf(80000000), Double.valueOf(minScaleElement.getTextContent()));
         assertEquals(Double.valueOf(1000000000), Double.valueOf(maxScaleElement.getTextContent()));
-        
-        layerElement= searchLayerElement("testLayerGroup3", dom);        
-        
+
+        layerElement = searchLayerElement("testLayerGroup3", dom);
+
         minScaleNode = layerElement.getElementsByTagName("wms:MinScaleDenominator");
-        minScaleElement = (Element)minScaleNode.item(0);
-        
+        minScaleElement = (Element) minScaleNode.item(0);
+
         maxScaleNode = layerElement.getElementsByTagName("wms:MaxScaleDenominator");
-        maxScaleElement = (Element)minScaleNode.item(0);
+        maxScaleElement = (Element) minScaleNode.item(0);
 
         assertNull(minScaleElement);
         assertNull(maxScaleElement);
     }
-    
+
     /**
      * Retrieves the WMS's capabilities document.
-     * 
+     *
      * @param scaleHintUnitsPerDiaPixel true if the scalehint must be in units per diagonal of a pixel
      * @return Capabilities as {@link Document}
-     * 
      */
-    private Document findCapabilities(Boolean scaleHintUnitsPerDiaPixel) throws Exception{
+    private Document findCapabilities(Boolean scaleHintUnitsPerDiaPixel) throws Exception {
         //set the Scalehint units per diagonal pixel setting.
         WMS wms = getWMS();
-        WMSInfo info=wms.getServiceInfo();
-        MetadataMap mm= info.getMetadata();
+        WMSInfo info = wms.getServiceInfo();
+        MetadataMap mm = info.getMetadata();
         mm.put(WMS.SCALEHINT_MAPUNITS_PIXEL, scaleHintUnitsPerDiaPixel);
         info.getGeoServer().save(info);
 
-        Capabilities_1_3_0_Transformer tr = new Capabilities_1_3_0_Transformer(wms, BASE_URL, 
+        Capabilities_1_3_0_Transformer tr = new Capabilities_1_3_0_Transformer(wms, BASE_URL,
                 wms.getAllowedMapFormats(), new HashSet<ExtendedCapabilitiesProvider>());
         GetCapabilitiesRequest req = new GetCapabilitiesRequest();
         req.setBaseUrl(BASE_URL);
@@ -212,9 +213,9 @@ public class GetCapabilitiesScaleDenominatorTest extends WMSTestSupport {
     }
 
 
-    /** 
-     * Searches the required layer in the capabilities document. 
-     * 
+    /**
+     * Searches the required layer in the capabilities document.
+     *
      * @param layerRequired
      * @param capabilities
      * @return The layer element or null it the required layer isn't found
@@ -222,7 +223,7 @@ public class GetCapabilitiesScaleDenominatorTest extends WMSTestSupport {
      */
     private Element searchLayerElement(final String layerRequired, Document capabilities) throws XpathException {
 
-        NodeList layersNodes = xpath.getMatchingNodes("//wms:Layer/wms:Name",capabilities);
+        NodeList layersNodes = xpath.getMatchingNodes("//wms:Layer/wms:Name", capabilities);
         for (int i = 0; i < layersNodes.getLength(); i++) {
 
             Element e = (Element) layersNodes.item(i);
@@ -232,9 +233,9 @@ public class GetCapabilitiesScaleDenominatorTest extends WMSTestSupport {
                 Node item = childNodes.item(j);
                 String nodeValue = item.getNodeValue();
 
-                if(layerRequired.equalsIgnoreCase(nodeValue)){
+                if (layerRequired.equalsIgnoreCase(nodeValue)) {
 
-                    return  (Element) e.getParentNode(); // returns the layer element associated to the required layer name.
+                    return (Element) e.getParentNode(); // returns the layer element associated to the required layer name.
                 }
             }
         }

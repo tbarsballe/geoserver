@@ -18,12 +18,12 @@ import org.geotools.util.logging.Logging;
 
 /**
  * A flow controller that throttles concurrent requests made from the same ip (any ip)
- * 
+ *
  * @author Juan Marin, OpenGeo
  */
 
 public class IpFlowController extends QueueController {
-    
+
     /**
      * Thread local holding the current request queue id TODO: consider having a user map in {@link Request} instead
      */
@@ -31,7 +31,7 @@ public class IpFlowController extends QueueController {
 
     /**
      * A flow controller that throttles concurrent requests made from the same ip (any ip)
-     * 
+     *
      * @author Juan Marin, OpenGeo
      */
 
@@ -40,12 +40,12 @@ public class IpFlowController extends QueueController {
     public IpFlowController(int queueSize) {
         this.queueSize = queueSize;
     }
-    
+
     @Override
     public void requestComplete(Request request) {
         String queueId = QUEUE_ID.get();
         QUEUE_ID.remove();
-        if(queueId != null) {
+        if (queueId != null) {
             BlockingQueue<Request> queue = queues.get(queueId);
             if (queue != null)
                 queue.remove(request);
@@ -107,7 +107,7 @@ public class IpFlowController extends QueueController {
     static String getRemoteAddr(HttpServletRequest req) {
         String forwardedFor = req.getHeader("X-Forwarded-For");
         if (forwardedFor != null) {
-            if(-1 == forwardedFor.indexOf(',')){
+            if (-1 == forwardedFor.indexOf(',')) {
                 return forwardedFor;
             }
             String[] ips = forwardedFor.split(", ");

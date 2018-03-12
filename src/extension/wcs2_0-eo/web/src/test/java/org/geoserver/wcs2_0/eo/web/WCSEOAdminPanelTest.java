@@ -48,7 +48,7 @@ public class WCSEOAdminPanelTest extends GeoServerWicketTestSupport {
 
         tester.assertModelValue("form:panel:enabled", true);
         assertTrue((boolean) wcs.getMetadata().get(WCSEOMetadata.ENABLED.key, Boolean.class));
-        
+
     }
 
 }

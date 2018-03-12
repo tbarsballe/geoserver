@@ -90,7 +90,7 @@ public class NcWmsService {
     /**
      * Implements the GetTimeSeries method, which can retrieve a time series of values on a certain point, using a syntax similar to the
      * GetFeatureInfo operation.
-     * 
+     *
      * @param request
      * @return
      */
@@ -150,7 +150,7 @@ public class NcWmsService {
             for (Object d : availableDates) {
                 // check timeout
                 countdownClock.checkTimeout();
-                
+
                 // run query
                 Date date = (Date) d;
                 DateRange currentDate = new DateRange(date, date);
@@ -158,9 +158,9 @@ public class NcWmsService {
                 request.getGetMapRequest().getTime().add(currentDate);
                 FeatureInfoRequestParameters requestParams = new FeatureInfoRequestParameters(request);
                 List<FeatureCollection> identifiedCollections = identifier.identify(requestParams, 1);
-                
+
                 // collect the data
-                if(identifiedCollections != null) {
+                if (identifiedCollections != null) {
                     for (FeatureCollection c : identifiedCollections) {
                         try (FeatureIterator featIter = c.features()) {
                             if (featIter.hasNext()) { // no need to loop, we just want one value

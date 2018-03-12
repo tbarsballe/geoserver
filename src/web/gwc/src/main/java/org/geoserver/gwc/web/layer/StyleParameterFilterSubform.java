@@ -20,8 +20,8 @@ import org.geoserver.gwc.layer.StyleParameterFilter;
 
 /**
  * Subform that displays basic information about a ParameterFilter
- * @author Kevin Smith, OpenGeo
  *
+ * @author Kevin Smith, OpenGeo
  */
 public class StyleParameterFilterSubform extends AbstractParameterFilterSubform<StyleParameterFilter> {
 
@@ -30,29 +30,31 @@ public class StyleParameterFilterSubform extends AbstractParameterFilterSubform<
      */
     static class SetAsListModel implements IModel<List<String>> {
 
-        /** serialVersionUID */
+        /**
+         * serialVersionUID
+         */
         private static final long serialVersionUID = 1L;
-        
+
         final private IModel<Set<String>> realModel;
-        
+
         final private List<String> fakeObject;
-        
+
         final protected String extra;
-        
+
         public SetAsListModel(IModel<Set<String>> realModel, String extra) {
             super();
             this.realModel = realModel;
             this.extra = extra;
-            
-            Set<String> realObj =  realModel.getObject();
-            
+
+            Set<String> realObj = realModel.getObject();
+
             int size;
-            if(realObj==null) {
+            if (realObj == null) {
                 size = 0;
             } else {
                 size = realObj.size();
             }
-            if(extra!=null){
+            if (extra != null) {
                 size++;
             }
             fakeObject = new ArrayList<String>(size);
@@ -66,18 +68,18 @@ public class StyleParameterFilterSubform extends AbstractParameterFilterSubform<
         @Override
         public List<String> getObject() {
             Set<String> realObj = realModel.getObject();
-            
+
             fakeObject.clear();
-            
-            if(extra!=null) fakeObject.add(extra);
-            if(realObj != null) fakeObject.addAll(realObj);
-            
+
+            if (extra != null) fakeObject.add(extra);
+            if (realObj != null) fakeObject.addAll(realObj);
+
             return fakeObject;
         }
 
         @Override
         public void setObject(List<String> object) {
-            if(object == null){
+            if (object == null) {
                 realModel.setObject(null);
             } else {
                 Set<String> newObj = new HashSet<String>(object);
@@ -86,12 +88,13 @@ public class StyleParameterFilterSubform extends AbstractParameterFilterSubform<
             }
         }
     }
+
     static class LabelledEmptyStringModel implements IModel<String> {
 
         private static final long serialVersionUID = 7591957769540603345L;
 
         final private IModel<String> realModel;
-        
+
         final String label;
 
         public LabelledEmptyStringModel(IModel<String> realModel, String label) {
@@ -108,7 +111,7 @@ public class StyleParameterFilterSubform extends AbstractParameterFilterSubform<
         @Override
         public String getObject() {
             String s = realModel.getObject();
-            if (s==null || s.isEmpty()){
+            if (s == null || s.isEmpty()) {
                 return label;
             } else {
                 return s;
@@ -123,32 +126,35 @@ public class StyleParameterFilterSubform extends AbstractParameterFilterSubform<
                 realModel.setObject(object);
             }
         }
-    
+
     }
+
     /**
-     * Model Set<String> as a List<String> and add an option to represent the set being 
+     * Model Set<String> as a List<String> and add an option to represent the set being
      * {@literal null}
      */
     static class NullableSetAsListModel implements IModel<List<String>> {
 
-        /** serialVersionUID */
+        /**
+         * serialVersionUID
+         */
         private static final long serialVersionUID = 1L;
-        
+
         final private IModel<Set<String>> realModel;
-        
+
         final private List<String> fakeObject;
-        
+
         final protected String nullify;
-        
+
         public NullableSetAsListModel(IModel<Set<String>> realModel, String nullify) {
             super();
             this.realModel = realModel;
             this.nullify = nullify;
-            
-            Set<String> realObj =  realModel.getObject();
-            
+
+            Set<String> realObj = realModel.getObject();
+
             int size;
-            if(realObj==null) {
+            if (realObj == null) {
                 size = 1;
             } else {
                 size = realObj.size();
@@ -164,21 +170,21 @@ public class StyleParameterFilterSubform extends AbstractParameterFilterSubform<
         @Override
         public List<String> getObject() {
             Set<String> realObj = realModel.getObject();
-            
+
             fakeObject.clear();
-            
-            if(realObj!=null) {
+
+            if (realObj != null) {
                 fakeObject.addAll(realObj);
             } else {
                 fakeObject.add(nullify);
             }
-            
+
             return fakeObject;
         }
 
         @Override
         public void setObject(List<String> object) {
-            if(object == null || object.contains(nullify)){
+            if (object == null || object.contains(nullify)) {
                 realModel.setObject(null);
             } else {
                 Set<String> newObj = new HashSet<String>(object);
@@ -187,40 +193,42 @@ public class StyleParameterFilterSubform extends AbstractParameterFilterSubform<
             }
         }
     }
-    
 
 
-    /** serialVersionUID */
+    /**
+     * serialVersionUID
+     */
     private static final long serialVersionUID = 1L;
 
     public StyleParameterFilterSubform(String id,
-            IModel<StyleParameterFilter> model) {
+                                       IModel<StyleParameterFilter> model) {
         super(id, model);
     }
-    
+
     @Override
     public void onInitialize() {
-    	super.onInitialize();
-    	
-    	final Component defaultValue;
-        
+        super.onInitialize();
+
+        final Component defaultValue;
+
         final String allStyles = getLocalizer().getString("allStyles", this);
         final String layerDefault = getLocalizer().getString("layerDefault", this);
-        
-        final IModel<List<String>> availableStylesModelDefault = 
+
+        final IModel<List<String>> availableStylesModelDefault =
                 new SetAsListModel(new PropertyModel<Set<String>>(getModel(), "layerStyles"), layerDefault);
-        final IModel<List<String>> availableStylesModelAllowed = 
+        final IModel<List<String>> availableStylesModelAllowed =
                 new SetAsListModel(new PropertyModel<Set<String>>(getModel(), "layerStyles"), allStyles);
-        final IModel<List<String>> selectedStylesModel = 
+        final IModel<List<String>> selectedStylesModel =
                 new NullableSetAsListModel(new PropertyModel<Set<String>>(getModel(), "styles"), allStyles);
-        final IModel<String> selectedDefaultModel = 
+        final IModel<String> selectedDefaultModel =
                 new LabelledEmptyStringModel(new PropertyModel<String>(getModel(), "realDefault"), layerDefault);
-        
+
         defaultValue = new DropDownChoice<String>("defaultValue", selectedDefaultModel, availableStylesModelDefault);
         add(defaultValue);
-        
+
         final CheckBoxMultipleChoice<String> styles = new CheckBoxMultipleChoice<String>("styles", selectedStylesModel, availableStylesModelAllowed);
-        styles.setPrefix("<li>");styles.setSuffix("</li>");
+        styles.setPrefix("<li>");
+        styles.setSuffix("</li>");
         add(styles);
     }
 

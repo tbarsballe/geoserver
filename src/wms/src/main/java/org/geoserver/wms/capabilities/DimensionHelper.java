@@ -45,7 +45,7 @@ import org.xml.sax.helpers.AttributesImpl;
 
 /**
  * Helper class avoiding to duplicate the time/elevation management code between WMS 1.1 and 1.3
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 abstract class DimensionHelper {
@@ -83,7 +83,7 @@ abstract class DimensionHelper {
 
     void handleVectorLayerDimensions(LayerInfo layer) {
         //TODO: custom dimension handling
-        
+
         // do we have time and elevation?
         FeatureTypeInfo typeInfo = (FeatureTypeInfo) layer.getResource();
         DimensionInfo timeInfo = typeInfo.getMetadata().get(ResourceInfo.TIME,
@@ -126,9 +126,9 @@ abstract class DimensionHelper {
         try {
             // do we have time?
             WMTSLayerInfo wli = (WMTSLayerInfo) layerInfo.getResource();
-            WMTSLayer wl = (WMTSLayer)wli.getWMTSLayer(null);
+            WMTSLayer wl = (WMTSLayer) wli.getWMTSLayer(null);
             for (String dimName : wl.getDimensions().keySet()) {
-                if(TIME.equalsIgnoreCase(dimName)) {
+                if (TIME.equalsIgnoreCase(dimName)) {
                     Dimension timeDimension = wl.getDimension(dimName);
 
                     if (mode == Mode.WMS11) {
@@ -149,13 +149,13 @@ abstract class DimensionHelper {
 
     /**
      * Writes down the raster layer dimensions, if any
-     * 
+     *
      * @param layer
      * @throws RuntimeException
-     * @throws IOException 
+     * @throws IOException
      */
     void handleRasterLayerDimensions(final LayerInfo layer) throws RuntimeException, IOException {
-        
+
         // do we have time and elevation?
         CoverageInfo cvInfo = (CoverageInfo) layer.getResource();
         if (cvInfo == null)
@@ -166,7 +166,7 @@ abstract class DimensionHelper {
         DimensionInfo elevInfo = null;
         Map<String, DimensionInfo> customDimensions = new HashMap<String, DimensionInfo>();
         GridCoverage2DReader reader = null;
-        
+
         for (Map.Entry<String, Serializable> e : cvInfo.getMetadata().entrySet()) {
             String key = e.getKey();
             Object value = e.getValue();
@@ -197,7 +197,7 @@ abstract class DimensionHelper {
         if (!hasTime && !hasElevation && !hasCustomDimensions) {
             return;
         }
-        
+
         Catalog catalog = cvInfo.getCatalog();
         if (catalog == null)
             throw new ServiceException("Unable to acquire catalog resource for layer: "
@@ -211,28 +211,28 @@ abstract class DimensionHelper {
         try {
             reader = (GridCoverage2DReader) cvInfo.getGridCoverageReader(null, null);
         } catch (Throwable t) {
-                 LOGGER.log(Level.SEVERE, "Unable to acquire a reader for this coverage with format: "
-                                 + csinfo.getFormat().getName(), t);
+            LOGGER.log(Level.SEVERE, "Unable to acquire a reader for this coverage with format: "
+                    + csinfo.getFormat().getName(), t);
         }
         if (reader == null) {
             throw new ServiceException("Unable to acquire a reader for this coverage with format: "
                     + csinfo.getFormat().getName());
         }
         ReaderDimensionsAccessor dimensions = new ReaderDimensionsAccessor(reader);
-        
+
         // Process only custom dimensions supported by the reader
         if (hasCustomDimensions) {
             for (String key : customDimensions.keySet()) {
                 if (!dimensions.hasDomain(key)) customDimensions.remove(key);
             }
         }
-        
+
         if (mode == Mode.WMS11) {
             String elevUnits = hasElevation ? elevInfo.getUnits() : "";
             String elevUnitSymbol = hasElevation ? elevInfo.getUnitSymbol() : "";
             declareWMS11Dimensions(hasTime, hasElevation, elevUnits, elevUnitSymbol, customDimensions);
         }
-        
+
 
         // timeDimension
         if (hasTime && dimensions.hasTime()) {
@@ -243,7 +243,7 @@ abstract class DimensionHelper {
         if (hasElevation && dimensions.hasElevation()) {
             handleElevationDimensionRaster(cvInfo, elevInfo, dimensions);
         }
-        
+
         // custom dimensions
         if (hasCustomDimensions) {
             for (String key : customDimensions.keySet()) {
@@ -257,7 +257,7 @@ abstract class DimensionHelper {
         TreeSet<Object> elevations = dimensions.getElevationDomain();
         String elevationMetadata = getZDomainRepresentation(elevInfo, elevations);
         String defaultValue = getDefaultValueRepresentation(cvInfo, ResourceInfo.ELEVATION, "0");
-        writeElevationDimension(elevations, elevationMetadata, 
+        writeElevationDimension(elevations, elevationMetadata,
                 elevInfo.getUnits(), elevInfo.getUnitSymbol(), defaultValue);
     }
 
@@ -265,9 +265,9 @@ abstract class DimensionHelper {
         DimensionInfo dimensionInfo = wms.getDimensionInfo(resource, dimensionName);
         DimensionDefaultValueSelectionStrategy strategy = wms.getDefaultValueStrategy(resource, dimensionName, dimensionInfo);
         String defaultValue = strategy.getCapabilitiesRepresentation(resource, dimensionName, dimensionInfo);
-        if(defaultValue == null) {
+        if (defaultValue == null) {
             defaultValue = fallback;
-        } 
+        }
         return defaultValue;
     }
 
@@ -277,9 +277,9 @@ abstract class DimensionHelper {
         String defaultValue = getDefaultValueRepresentation(cvInfo, ResourceInfo.TIME, DimensionDefaultValueSetting.TIME_CURRENT);
         writeTimeDimension(timeMetadata, defaultValue, timeInfo.isNearestMatchEnabled());
     }
-    
+
     private void handleCustomDimensionRaster(CoverageInfo cvInfo, String dimName, DimensionInfo dimension,
-            ReaderDimensionsAccessor dimAccessor) throws IOException {
+                                             ReaderDimensionsAccessor dimAccessor) throws IOException {
         final List<String> values = dimAccessor.getDomain(dimName);
         String metadata = getCustomDomainRepresentation(dimension, values);
         String defaultValue = wms.getDefaultCustomDimensionValue(dimName, cvInfo, String.class);
@@ -288,9 +288,10 @@ abstract class DimensionHelper {
 
     /**
      * Writes WMS 1.1.1 conforming dimensions (WMS 1.3 squashed dimensions and extent in the same tag instead)
-     * @param hasTime - <tt>true</tt> if the layer has the time dimension, <tt>false</tt> otherwise
-     * @param hasElevation - <tt>true</tt> if the layer has the elevation dimension, <tt>false</tt> otherwise
-     * @param elevUnits - <tt>units</tt> attribute of the elevation dimension
+     *
+     * @param hasTime        - <tt>true</tt> if the layer has the time dimension, <tt>false</tt> otherwise
+     * @param hasElevation   - <tt>true</tt> if the layer has the elevation dimension, <tt>false</tt> otherwise
+     * @param elevUnits      - <tt>units</tt> attribute of the elevation dimension
      * @param elevUnitSymbol - <tt>unitSymbol</tt> attribute of the elevation dimension
      */
     private void declareWMS11Dimensions(boolean hasTime, boolean hasElevation, String elevUnits, String elevUnitSymbol, Map<String, DimensionInfo> customDimensions) {
@@ -313,7 +314,7 @@ abstract class DimensionHelper {
                 String units = di.getUnits();
                 String unitSymbol = di.getUnitSymbol();
                 custDim.addAttribute("", UNITS, UNITS, "", units != null ? units : "");
-                if(unitSymbol != null) {
+                if (unitSymbol != null) {
                     custDim.addAttribute("", UNIT_SYMBOL, UNIT_SYMBOL, "", unitSymbol);
                 }
                 element("Dimension", null, custDim);
@@ -328,7 +329,7 @@ abstract class DimensionHelper {
 
         if (DimensionPresentation.LIST == dimension.getPresentation()) {
             for (Object val : values) {
-                if(val instanceof Double) {
+                if (val instanceof Double) {
                     buff.append(val);
                 } else {
                     NumberRange<Double> range = (NumberRange<Double>) val;
@@ -380,10 +381,9 @@ abstract class DimensionHelper {
 
     /**
      * Builds the proper presentation given the current
-     * 
+     *
      * @param dimension
      * @param values
-     *
      */
     String getTemporalDomainRepresentation(DimensionInfo dimension, TreeSet<? extends Object> values) {
         String timeMetadata = null;
@@ -411,7 +411,7 @@ abstract class DimensionHelper {
             buff.append("/");
             buff.append(df.format(interval.getMaxValue()));
             buff.append("/");
-            
+
             final BigDecimal resolution = dimension.getResolution();
             if (resolution != null) {
                 // resolution has been provided
@@ -442,44 +442,44 @@ abstract class DimensionHelper {
 
     /**
      * Builds a single time range from the domain, be it made of Date or TimeRange objects
-     * @param values
      *
+     * @param values
      */
     private DateRange getMinMaxTimeInterval(TreeSet<? extends Object> values) {
         Object minValue = values.first();
         Object maxValue = values.last();
         Date min, max;
-        if(minValue instanceof DateRange) {
+        if (minValue instanceof DateRange) {
             min = ((DateRange) minValue).getMinValue();
         } else {
-            min = (Date) minValue; 
+            min = (Date) minValue;
         }
-        if(maxValue instanceof DateRange) {
+        if (maxValue instanceof DateRange) {
             max = ((DateRange) maxValue).getMaxValue();
         } else {
-            max = (Date) maxValue; 
+            max = (Date) maxValue;
         }
         return new DateRange(min, max);
     }
-    
+
     /**
      * Builds a single Z range from the domain, be it made of Double or NumberRange objects
-     * @param values
      *
+     * @param values
      */
     private NumberRange<Double> getMinMaxZInterval(TreeSet<? extends Object> values) {
         Object minValue = values.first();
         Object maxValue = values.last();
         Double min, max;
-        if(minValue instanceof NumberRange) {
+        if (minValue instanceof NumberRange) {
             min = ((NumberRange<Double>) minValue).getMinValue();
         } else {
-            min = (Double) minValue; 
+            min = (Double) minValue;
         }
-        if(maxValue instanceof NumberRange) {
+        if (maxValue instanceof NumberRange) {
             max = ((NumberRange<Double>) maxValue).getMaxValue();
         } else {
-            max = (Double) maxValue; 
+            max = (Double) maxValue;
         }
         return new NumberRange<Double>(Double.class, min, max);
     }
@@ -487,43 +487,40 @@ abstract class DimensionHelper {
 
     /**
      * Returns true if all the values in the set are Date instances
-     * 
-     * @param values
      *
+     * @param values
      */
     private boolean allDates(TreeSet<? extends Object> values) {
-        for(Object value : values) {
-            if(!(value instanceof Date)) {
-               return false; 
+        for (Object value : values) {
+            if (!(value instanceof Date)) {
+                return false;
             }
         }
-        
+
         return true;
     }
-    
+
     /**
      * Returns true if all the values in the set are Double instances
-     * 
-     * @param values
      *
+     * @param values
      */
     private boolean allDoubles(TreeSet<? extends Object> values) {
-        for(Object value : values) {
-            if(!(value instanceof Double)) {
-               return false; 
+        for (Object value : values) {
+            if (!(value instanceof Double)) {
+                return false;
             }
         }
-        
+
         return true;
     }
 
 
     /**
      * Builds the proper presentation given the specified value domain
-     * 
+     *
      * @param dimension
      * @param values
-     *
      */
     String getCustomDomainRepresentation(DimensionInfo dimension, List<String> values) {
         String metadata = null;
@@ -557,7 +554,7 @@ abstract class DimensionHelper {
 
     /**
      * Writes out metadata for the time dimension
-     * 
+     *
      * @param typeInfo
      * @throws IOException
      */
@@ -568,7 +565,7 @@ abstract class DimensionHelper {
         boolean nearest = false;
         if (values != null && !values.isEmpty()) {
             DimensionInfo timeInfo = typeInfo.getMetadata().get(ResourceInfo.TIME,
-                DimensionInfo.class);
+                    DimensionInfo.class);
             timeMetadata = getTemporalDomainRepresentation(timeInfo, values);
             nearest = timeInfo.isNearestMatchEnabled();
         } else {
@@ -577,7 +574,7 @@ abstract class DimensionHelper {
         String defaultValue = getDefaultValueRepresentation(typeInfo, ResourceInfo.TIME, DimensionDefaultValueSetting.TIME_CURRENT);
         writeTimeDimension(timeMetadata, defaultValue, nearest);
     }
-    
+
     private void handleElevationDimensionVector(FeatureTypeInfo typeInfo) throws IOException {
         TreeSet<Double> elevations = wms.getFeatureTypeElevations(typeInfo);
         String elevationMetadata;
@@ -596,7 +593,7 @@ abstract class DimensionHelper {
 
     private void writeTimeDimension(String timeMetadata, String defaultTimeStr, boolean nearestMatch) {
         AttributesImpl timeDim = new AttributesImpl();
-        if(defaultTimeStr == null) {
+        if (defaultTimeStr == null) {
             defaultTimeStr = DimensionDefaultValueSetting.TIME_CURRENT;
         }
         if (mode == Mode.WMS11) {
@@ -617,21 +614,21 @@ abstract class DimensionHelper {
         }
     }
 
-    private void writeElevationDimension(TreeSet<? extends Object> elevations, final String elevationMetadata, 
-            final String units, final String unitSymbol, String defaultValue) {      
+    private void writeElevationDimension(TreeSet<? extends Object> elevations, final String elevationMetadata,
+                                         final String units, final String unitSymbol, String defaultValue) {
         if (mode == Mode.WMS11) {
             AttributesImpl elevDim = new AttributesImpl();
             elevDim.addAttribute("", NAME, NAME, "", ELEVATION);
             elevDim.addAttribute("", DEFAULT, DEFAULT, "", defaultValue);
             element("Extent", elevationMetadata, elevDim);
         } else {
-            writeElevationDimensionElement(elevationMetadata, defaultValue, 
+            writeElevationDimensionElement(elevationMetadata, defaultValue,
                     units, unitSymbol);
         }
     }
-    
-    private void writeElevationDimensionElement(final String elevationMetadata, final String defaultValue, 
-            final String units, final String unitSymbol) {
+
+    private void writeElevationDimensionElement(final String elevationMetadata, final String defaultValue,
+                                                final String units, final String unitSymbol) {
         AttributesImpl elevDim = new AttributesImpl();
         String unitsNotNull = units;
         String unitSymNotNull = (unitSymbol == null) ? "" : unitSymbol;
@@ -649,7 +646,7 @@ abstract class DimensionHelper {
         }
         element("Dimension", elevationMetadata, elevDim);
     }
-    
+
     private void writeCustomDimension(String name, String metadata, String defaultValue, String unit, String unitSymbol) {
         AttributesImpl dim = new AttributesImpl();
         dim.addAttribute("", NAME, NAME, "", name);
@@ -666,7 +663,7 @@ abstract class DimensionHelper {
             if (unitSymbol != null && !"".equals(unitSymbol)) {
                 dim.addAttribute("", UNIT_SYMBOL, UNIT_SYMBOL, "", unitSymbol);
             }
-            
+
             element("Dimension", metadata, dim);
         }
     }

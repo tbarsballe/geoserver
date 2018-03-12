@@ -80,17 +80,18 @@ import org.xml.sax.SAXException;
  * @author Andrea Aime - GeoSolutions
  */
 public abstract class AbstractOpenSearchController extends RestBaseController {
-    
+
     interface ZipPart {
 
         /**
          * Returns true if the part matches the provided name
+         *
          * @param name
          * @return
          */
         public boolean matches(String name);
     }
-    
+
     static final Logger LOGGER = Logging.getLogger(CollectionsController.class);
 
     static final String SOURCE_NAME = "SourceName";
@@ -111,7 +112,7 @@ public abstract class AbstractOpenSearchController extends RestBaseController {
     protected OpenSearchAccess getOpenSearchAccess() throws IOException {
         return accessProvider.getOpenSearchAccess();
     }
-    
+
     protected DataStoreInfo getOpenSearchStoreInfo() throws IOException {
         return accessProvider.getDataStoreInfo();
     }
@@ -169,7 +170,7 @@ public abstract class AbstractOpenSearchController extends RestBaseController {
     }
 
     protected SimpleFeatureType mapFeatureTypeToSimple(FeatureType schema,
-            Consumer<SimpleFeatureTypeBuilder> extraAttributeBuilder) {
+                                                       Consumer<SimpleFeatureTypeBuilder> extraAttributeBuilder) {
         SimpleFeatureTypeBuilder tb = new SimpleFeatureTypeBuilder();
         for (PropertyDescriptor pd : schema.getDescriptors()) {
             // skip multivalue, metadata and quicklook
@@ -232,7 +233,7 @@ public abstract class AbstractOpenSearchController extends RestBaseController {
     }
 
     protected SimpleFeature mapFeatureToSimple(Feature f, SimpleFeatureType targetSchema,
-            Consumer<SimpleFeatureBuilder> extraValueBuilder) {
+                                               Consumer<SimpleFeatureBuilder> extraValueBuilder) {
         SimpleFeatureBuilder fb = new SimpleFeatureBuilder(targetSchema);
         List<AttributeDescriptor> attributeDescriptors = targetSchema.getAttributeDescriptors();
         String identifier = f.getIdentifier().getID();
@@ -258,7 +259,7 @@ public abstract class AbstractOpenSearchController extends RestBaseController {
 
     /**
      * Un-maps OSEO related attributes to a prefix:name for for json encoding
-     * 
+     *
      * @param fc
      * @return
      */
@@ -298,7 +299,7 @@ public abstract class AbstractOpenSearchController extends RestBaseController {
 
     /**
      * Checks XML well formedness (TODO: check against actual schemas)
-     * 
+     *
      * @param xml
      * @throws IOException
      * @throws SAXException
@@ -317,13 +318,13 @@ public abstract class AbstractOpenSearchController extends RestBaseController {
 
     /**
      * Factors out the boilerplate to create a transaction, run it, commit it if successful, revert otherwise, and finally close it
-     * 
+     *
      * @param store
      * @param featureStoreConsumer
      * @throws IOException
      */
     protected void runTransactionOnStore(FeatureStore store,
-            IOConsumer<FeatureStore> featureStoreConsumer) throws IOException {
+                                         IOConsumer<FeatureStore> featureStoreConsumer) throws IOException {
         try (Transaction t = new DefaultTransaction()) {
             store.setTransaction(t);
             try {
@@ -339,7 +340,7 @@ public abstract class AbstractOpenSearchController extends RestBaseController {
 
     /**
      * Turns a complex feature into a single item feature collection
-     * 
+     *
      * @param f
      * @return
      */
@@ -351,13 +352,13 @@ public abstract class AbstractOpenSearchController extends RestBaseController {
 
     /**
      * Converts the simple feature representatin of a collection into a complex feature suitable for OpenSearchAccess usage
-     * 
+     *
      * @param feature
      * @return
      * @throws IOException
      */
     protected Feature simpleToComplex(SimpleFeature feature, FeatureType targetSch,
-            Collection<String> ignoredAttributes) throws IOException {
+                                      Collection<String> ignoredAttributes) throws IOException {
         ComplexFeatureBuilder builder = new ComplexFeatureBuilder(targetSch);
         AttributeBuilder ab = new AttributeBuilder(FEATURE_FACTORY);
         for (AttributeDescriptor ad : feature.getType().getAttributeDescriptors()) {
@@ -385,40 +386,40 @@ public abstract class AbstractOpenSearchController extends RestBaseController {
     protected Name toName(String sourceName, String defaultNamespace) {
         String[] split = sourceName.split(":");
         switch (split.length) {
-        case 1:
-            if ("geometry".equals(sourceName)) {
-                return new NameImpl(defaultNamespace, "footprint");
-            } else {
-                return new NameImpl(defaultNamespace, sourceName);
-            }
-        case 2:
-            String prefix = split[0];
-            String localName = split[1];
-            String namespaceURI = null;
-            if ("eo".equals(prefix)) {
-                namespaceURI = OpenSearchAccess.EO_NAMESPACE;
-            } else {
-                for (OpenSearchAccess.ProductClass pc : OpenSearchAccess.ProductClass.values()) {
-                    if (prefix.equals(pc.getPrefix())) {
-                        namespaceURI = pc.getNamespace();
+            case 1:
+                if ("geometry".equals(sourceName)) {
+                    return new NameImpl(defaultNamespace, "footprint");
+                } else {
+                    return new NameImpl(defaultNamespace, sourceName);
+                }
+            case 2:
+                String prefix = split[0];
+                String localName = split[1];
+                String namespaceURI = null;
+                if ("eo".equals(prefix)) {
+                    namespaceURI = OpenSearchAccess.EO_NAMESPACE;
+                } else {
+                    for (OpenSearchAccess.ProductClass pc : OpenSearchAccess.ProductClass.values()) {
+                        if (prefix.equals(pc.getPrefix())) {
+                            namespaceURI = pc.getNamespace();
+                        }
                     }
                 }
-            }
 
-            if (namespaceURI == null) {
-                throw new RestException("Unrecognized attribute prefix in property " + sourceName,
-                        HttpStatus.BAD_REQUEST);
-            }
+                if (namespaceURI == null) {
+                    throw new RestException("Unrecognized attribute prefix in property " + sourceName,
+                            HttpStatus.BAD_REQUEST);
+                }
 
-            return new NameImpl(namespaceURI, localName);
-        default:
-            throw new RestException("Unrecognized attribute " + sourceName, HttpStatus.BAD_REQUEST);
+                return new NameImpl(namespaceURI, localName);
+            default:
+                throw new RestException("Unrecognized attribute " + sourceName, HttpStatus.BAD_REQUEST);
         }
     }
 
     /**
      * Builds the feature type exposed to client for OGC links
-     * 
+     *
      * @return
      * @throws IOException
      */
@@ -450,7 +451,7 @@ public abstract class AbstractOpenSearchController extends RestBaseController {
         }
         return linksCollection;
     }
-    
+
     protected <T extends ZipPart> Map<T, byte[]> parsePartsFromZip(InputStream body, T[] parts)
             throws IOException {
         // check the zip contents and map to the expected parts
@@ -479,7 +480,7 @@ public abstract class AbstractOpenSearchController extends RestBaseController {
         }
         return result;
     }
-    
+
     @SuppressWarnings("unchecked")
     protected <T> T parseJSON(Class<T> clazz, byte[] rawData) throws IOException {
         T links = (T) jsonConverter.read(clazz, new HttpInputMessage() {
@@ -507,7 +508,7 @@ public abstract class AbstractOpenSearchController extends RestBaseController {
                     HttpStatus.BAD_REQUEST, e);
         }
     }
-    
+
     protected SimpleFeatureCollection parseGeoJSONFeatureCollection(String fileReference, final byte[] payload) {
         try {
             SimpleFeatureCollection fc = (SimpleFeatureCollection) new FeatureJSON()
@@ -519,7 +520,6 @@ public abstract class AbstractOpenSearchController extends RestBaseController {
                     HttpStatus.BAD_REQUEST, e);
         }
     }
-
 
 
 }

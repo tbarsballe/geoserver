@@ -23,9 +23,8 @@ import org.vfny.geoserver.wcs.WcsException.WcsExceptionCode;
 /**
  * This and wfs BBoxKvpParser share a lot, it's just they don't share the same
  * output type. Find a way to create one common superclass.
- * 
+ *
  * @author Andrea Aime
- * 
  */
 public class BoundingBoxKvpParser extends KvpParser {
     public BoundingBoxKvpParser() {
@@ -71,21 +70,21 @@ public class BoundingBoxKvpParser extends KvpParser {
         if (unparsed.size() % 2 == 1) {
             crsName = (String) unparsed.get(unparsed.size() - 1);
             try {
-                if("urn:ogc:def:crs:OGC:1.3:CRS84".equals(crsName)) {
+                if ("urn:ogc:def:crs:OGC:1.3:CRS84".equals(crsName)) {
                     crsName = "EPSG:4326";
                 } else {
                     crs = CRS.decode(crsName);
                     if (crs.getCoordinateSystem().getDimension() != lower.length)
                         throw new WcsException("CRS specified has dimension "
-                            + crs.getCoordinateSystem().getDimension() + " but bbox specified has "
-                            + lower.length, InvalidParameterValue, "BoundingBox");
+                                + crs.getCoordinateSystem().getDimension() + " but bbox specified has "
+                                + lower.length, InvalidParameterValue, "BoundingBox");
                 }
             } catch (Exception e) {
                 throw new WcsException("Could not recognize crs " + crsName, InvalidParameterValue,
                         "BoundingBox");
             }
         }
-        
+
         // we do not check that lower <= higher because in the case of geographic
         // bbox we have to accept the case where the lower coordinate is higher
         // than the high one and handle it as antimeridian crossing, better do that once

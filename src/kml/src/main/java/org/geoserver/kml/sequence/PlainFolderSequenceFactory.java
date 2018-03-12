@@ -28,7 +28,7 @@ import de.micromata.opengis.kml.v_2_2_0.ViewRefreshMode;
 /**
  * Creates a sequence of folders mapping the layers in the map content, using either kml dumps
  * or ground overlays (the classic approach, that is)
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class PlainFolderSequenceFactory extends AbstractFolderSequenceFactory {
@@ -56,7 +56,7 @@ public class PlainFolderSequenceFactory extends AbstractFolderSequenceFactory {
                     addGroundOverlay(folder, layer);
                     // in case of ground overlays we might still want to output placemarks
                     // for the 
-                    if(context.isPlacemarkForced()) {
+                    if (context.isPlacemarkForced()) {
                         addFeatureCentroids(layer, folder);
                     }
                 }
@@ -67,8 +67,9 @@ public class PlainFolderSequenceFactory extends AbstractFolderSequenceFactory {
 
         /**
          * Adds the feature centroids to the output features, without actually adding the full
-         * geometry (used when doing raster overlays of vector data with a desire to retain the 
+         * geometry (used when doing raster overlays of vector data with a desire to retain the
          * popups)
+         *
          * @param layer
          * @param folder
          */
@@ -83,7 +84,7 @@ public class PlainFolderSequenceFactory extends AbstractFolderSequenceFactory {
 
         /**
          * Encodes the ground overlay for the specified layer
-         * 
+         *
          * @param folder
          * @param layer
          */
@@ -102,7 +103,7 @@ public class PlainFolderSequenceFactory extends AbstractFolderSequenceFactory {
                     .getRenderingArea());
             boolean reprojectBBox = (box.getCoordinateReferenceSystem() != null)
                     && !CRS.equalsIgnoreMetadata(box.getCoordinateReferenceSystem(),
-                            DefaultGeographicCRS.WGS84);
+                    DefaultGeographicCRS.WGS84);
             if (reprojectBBox) {
                 try {
                     box = box.transform(DefaultGeographicCRS.WGS84, true);
@@ -130,8 +131,8 @@ public class PlainFolderSequenceFactory extends AbstractFolderSequenceFactory {
             } else {
                 // refer to a GetMap request
                 return WMSRequests.getGetMapUrl(mapContent.getRequest(), layer, 0,
-                        mapContent.getRenderingArea(), new String[] { "format", "image/png",
-                                "transparent", "true" });
+                        mapContent.getRenderingArea(), new String[]{"format", "image/png",
+                                "transparent", "true"});
             }
         }
 
@@ -142,32 +143,32 @@ public class PlainFolderSequenceFactory extends AbstractFolderSequenceFactory {
          * the kmscore value. kmscore determines whether to return the features as vectors, or as
          * one raster image. It is the point, determined by the user, where X number of features is
          * "too many" and the result should be returned as an image instead.
-         * 
+         * <p>
          * kmscore is logarithmic. The higher the value, the more features it takes to make the
          * algorithm return an image. The lower the kmscore, the fewer features it takes to force an
          * image to be returned. (in use, the formula is exponential: as you increase the KMScore
          * value, the number of features required increases exponentially).
-         * 
-         * @param kmscore the score, between 0 and 100, use to determine what output to use
+         *
+         * @param kmscore     the score, between 0 and 100, use to determine what output to use
          * @param numFeatures how many features are being rendered
          * @return true: use just kml vectors, false: use raster result
          */
         boolean useVectorOutput(KmlEncodingContext context) {
             // are we in download mode?
             String mode = context.getMode();
-            if("refresh".equalsIgnoreCase(mode)) {
+            if ("refresh".equalsIgnoreCase(mode)) {
                 // calculate kmscore to determine if we should write as vectors
                 // or pre-render
                 int kmscore = context.getKmScore();
-    
+
                 if (kmscore == 100) {
                     return true; // vector KML
                 }
-    
+
                 if (kmscore == 0) {
                     return false; // raster KMZ
                 }
-    
+
                 // For numbers in between, determine exponentionally based on kmscore value:
                 // 10^(kmscore/15)
                 // This results in exponential growth.
@@ -176,7 +177,7 @@ public class PlainFolderSequenceFactory extends AbstractFolderSequenceFactory {
                 // respectively)
                 // A good default kmscore value is around 40 (464 features)
                 double magic = Math.pow(10, kmscore / 15);
-    
+
                 int currentSize = context.getCurrentFeatureCollection().size();
                 if (currentSize > magic) {
                     return false; // return raster

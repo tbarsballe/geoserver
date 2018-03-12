@@ -17,10 +17,10 @@ import java.util.List;
  * </pre>
  * <p>
  * After which the extension lookup methods in {@link GeoServerExtensions} will
- * use any instances of this interface as a supplementary lookup to the initial 
- * spring context lookup.  
+ * use any instances of this interface as a supplementary lookup to the initial
+ * spring context lookup.
  * </p>
- * 
+ *
  * @author Justin Deoliveira, OpenGeo
  */
 public interface ExtensionProvider<T> {
@@ -29,13 +29,12 @@ public interface ExtensionProvider<T> {
      * The extension point this provider handles.
      */
     Class<T> getExtensionPoint();
-    
+
     /**
      * Returns a list of extensions that implement the specified class.
-     * 
+     *
      * @param extensionPoint The class for which implementations are being looked up.
-     * 
-     * @return A list of objects implementing <tt>extensionPoint</tt>, or an empty 
+     * @return A list of objects implementing <tt>extensionPoint</tt>, or an empty
      * list if no such objects are available.
      */
     List<T> getExtensions(Class<T> extensionPoint);

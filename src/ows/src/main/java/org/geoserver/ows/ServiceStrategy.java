@@ -34,14 +34,12 @@ public interface ServiceStrategy extends Cloneable {
      * </p>
      *
      * @param response The servlet response.
-     *
      * @return An output stream to write to.
-     *
      * @throws IOException Any I/O errors that occur.
      * @see DispatcherOutputStream
      */
     public DispatcherOutputStream getDestination(HttpServletResponse response)
-        throws IOException;
+            throws IOException;
 
     /**
      * Flushes the output, causing the response to be written to the actual
@@ -50,15 +48,15 @@ public interface ServiceStrategy extends Cloneable {
      * Any resources that the strategy holds on to should also be released at
      * this point.
      * </p>
-     * @param response TODO
      *
+     * @param response TODO
      * @throws IOException Any I/O errors that occur.
      */
     public void flush(HttpServletResponse response) throws IOException;
 
     /**
      * Complete opperation in the negative.
-     *
+     * <p>
      * <p>
      * Gives ServiceConfig a chance to clean up resources
      * </p>
@@ -67,7 +65,6 @@ public interface ServiceStrategy extends Cloneable {
 
     /**
      * Clones the service strategy.
-     *
      */
     public Object clone() throws CloneNotSupportedException;
 }

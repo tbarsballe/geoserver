@@ -41,8 +41,7 @@ public class CatalogNamespaceSupport extends NamespaceSupport {
             public boolean hasMoreElements() {
                 if (it.hasNext()) {
                     return true;
-                }
-                else {
+                } else {
                     it.close();
                     return false;
                 }
@@ -64,6 +63,7 @@ public class CatalogNamespaceSupport extends NamespaceSupport {
                 public boolean hasMoreElements() {
                     return false;
                 }
+
                 @Override
                 public Object nextElement() {
                     return null;
@@ -83,8 +83,7 @@ public class CatalogNamespaceSupport extends NamespaceSupport {
             public Object nextElement() {
                 try {
                     return pre;
-                }
-                finally {
+                } finally {
                     read = false;
                 }
             }

@@ -24,10 +24,11 @@ import org.vfny.geoserver.util.PartialBufferedOutputStream2;
  * enough for a full getCapabilities document.
  *
  * @author Brent Owens (The Open Planning Project)
- * @version
  */
 public class PartialBufferStrategy2 implements ServiceStrategy {
-    /** Class logger */
+    /**
+     * Class logger
+     */
     protected static Logger LOGGER = org.geotools.util.logging.Logging.getLogger("org.vfny.geoserver.servlets");
     public static final int DEFAULT_BUFFER_SIZE = 50;
     private PartialBufferedOutputStream2 out = null;
@@ -55,7 +56,7 @@ public class PartialBufferStrategy2 implements ServiceStrategy {
      * @see org.vfny.geoserver.servlets.AbstractService.ServiceStrategy#getDestination(javax.servlet.http.HttpServletResponse)
      */
     public DispatcherOutputStream getDestination(HttpServletResponse response)
-        throws IOException {
+            throws IOException {
         out = new PartialBufferedOutputStream2(response, bufferedSize());
 
         return new DispatcherOutputStream(out);
@@ -85,7 +86,7 @@ public class PartialBufferStrategy2 implements ServiceStrategy {
                     LOGGER.info("OutputStream was successfully aborted.");
                 } else {
                     LOGGER.warning(
-                        "OutputStream could not be aborted in time. An error has occurred and could not be sent to the user.");
+                            "OutputStream could not be aborted in time. An error has occurred and could not be sent to the user.");
                 }
             } catch (IOException e) {
                 LOGGER.warning("Error aborting OutputStream");

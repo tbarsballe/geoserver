@@ -13,16 +13,16 @@ import org.geoserver.security.impl.MemoryUserGroupService;
 /**
  * Configuration panel info for {@link MemoryUserGroupService}.
  * <p>
- * This service is only used for testing, it is only available when running from the development 
- * environment. 
+ * This service is only used for testing, it is only available when running from the development
+ * environment.
  * </p>
- * 
+ *
  * @author Justin Deoliveira, OpenGeo
  */
 public class MemoryUserGroupServicePanel extends UserGroupServicePanel<MemoryUserGroupServiceConfigImpl> {
 
     public MemoryUserGroupServicePanel(String id,
-            IModel<MemoryUserGroupServiceConfigImpl> model) {
+                                       IModel<MemoryUserGroupServiceConfigImpl> model) {
         super(id, model);
 
         add(new TextField("toBeEncrypted"));

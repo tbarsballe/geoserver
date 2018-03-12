@@ -12,7 +12,7 @@ public interface NotificationEncoder {
 
     /**
      * Transforms notification into byte stream payload
-     * 
+     *
      * @throws Exception
      */
     public byte[] encode(Notification notification) throws Exception;

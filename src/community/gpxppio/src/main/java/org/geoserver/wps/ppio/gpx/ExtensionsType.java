@@ -11,20 +11,20 @@
 package org.geoserver.wps.ppio.gpx;
 
 import org.w3c.dom.Element;
+
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 
  * You can add extend GPX by adding your own elements from another schema here.
- * 
- * 
+ * <p>
+ * <p>
  * <p>
  * Java class for extensionsType complex type.
- * 
+ * <p>
  * <p>
  * The following schema fragment specifies the expected content contained within this class.
- * 
+ * <p>
  * <pre>
  * &lt;complexType name="extensionsType">
  *   &lt;complexContent>
@@ -36,31 +36,27 @@ import java.util.List;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 public class ExtensionsType {
     protected List<Object> any;
 
     /**
      * Gets the value of the any property.
-     * 
+     * <p>
      * <p>
      * This accessor method returns a reference to the live list, not a snapshot. Therefore any modification you make to the returned list will be
      * present inside the JAXB object. This is why there is not a <CODE>set</CODE> method for the any property.
-     * 
+     * <p>
      * <p>
      * For example, to add a new item, do as follows:
-     * 
+     * <p>
      * <pre>
      * getAny().add(newItem);
      * </pre>
-     * 
-     * 
+     * <p>
+     * <p>
      * <p>
      * Objects of the following type(s) are allowed in the list {@link Object } {@link Element }
-     * 
-     * 
      */
     public List<Object> getAny() {
         if (any == null) {

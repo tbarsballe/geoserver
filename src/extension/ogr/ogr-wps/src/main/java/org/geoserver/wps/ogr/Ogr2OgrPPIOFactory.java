@@ -45,7 +45,7 @@ public class Ogr2OgrPPIOFactory implements PPIOFactory {
             GetFeatureType gft = WfsFactory.eINSTANCE.createGetFeatureType();
             gft.setOutputFormat(of.getGeoserverFormat());
             Operation operation = new Operation("GetFeature", new Service("WFS", null, new Version(
-                    "1.1.0"), Arrays.asList("GetFeature")), null, new Object[] { gft });
+                    "1.1.0"), Arrays.asList("GetFeature")), null, new Object[]{gft});
             // String computedMimeType = of.mimeType;
             // if (computedMimeType == null || computedMimeType.isEmpty()) {
             String computedMimeType = ogr2OgrOutputFormat.getMimeType(null, operation);
@@ -59,20 +59,20 @@ public class Ogr2OgrPPIOFactory implements PPIOFactory {
                         operation);
             } else {
                 switch (of.getType()) {
-                case BINARY:
-                    ppio = new OgrBinaryPPIO(computedMimeType, of.getFileExtension(),
-                            ogr2OgrOutputFormat, operation);
-                    break;
-                case TEXT:
-                    ppio = new OgrCDataPPIO(computedMimeType, of.getFileExtension(),
-                            ogr2OgrOutputFormat, operation);
-                    break;
-                case XML:
-                    ppio = new OgrXMLPPIO(computedMimeType, of.getFileExtension(), ogr2OgrOutputFormat,
-                            operation);
-                    break;
-                default:
-                    break;
+                    case BINARY:
+                        ppio = new OgrBinaryPPIO(computedMimeType, of.getFileExtension(),
+                                ogr2OgrOutputFormat, operation);
+                        break;
+                    case TEXT:
+                        ppio = new OgrCDataPPIO(computedMimeType, of.getFileExtension(),
+                                ogr2OgrOutputFormat, operation);
+                        break;
+                    case XML:
+                        ppio = new OgrXMLPPIO(computedMimeType, of.getFileExtension(), ogr2OgrOutputFormat,
+                                operation);
+                        break;
+                    default:
+                        break;
                 }
             }
             if (ppio != null) {

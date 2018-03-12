@@ -46,19 +46,19 @@ public class WMTSLayerImporterPage extends GeoServerSecuredPage {
     int errorCount;
     int updateCount;
     private Form<WMTSLayerImporterPage> form;
-    
+
     public WMTSLayerImporterPage(PageParameters params) {
-        
+
         storeId = params.get("storeId").toString();
-        
+
         WMTSStoreInfo store = (WMTSStoreInfo) getCatalog().getStore(storeId, WMTSStoreInfo.class);
 
         // check if we have anything to import
-        provider = new WMTSLayerProvider();        
+        provider = new WMTSLayerProvider();
         provider.setStoreId(storeId);
-        
+
         if (provider.size() <= 0) {
-            error(new ParamResourceModel("storeEmpty", this, store.getName(), 
+            error(new ParamResourceModel("storeEmpty", this, store.getName(),
                     store.getWorkspace().getName()).getString());
         }
 
@@ -72,24 +72,24 @@ public class WMTSLayerImporterPage extends GeoServerSecuredPage {
 
             @Override
             protected Component getComponentForProperty(String id, IModel<LayerResource> itemModel,
-                    Property<LayerResource> property) {
+                                                        Property<LayerResource> property) {
                 if (property == WMTSLayerProvider.NAME) {
                     return new Label(id, property.getModel(itemModel));
-                } else if(property == WMTSLayerProvider.STATUS) {
+                } else if (property == WMTSLayerProvider.STATUS) {
                     Fragment f = new Fragment(id, "labelIcon", WMTSLayerImporterPage.this);
                     f.add(new Image("icon", new IconModel(itemModel)));
                     f.add(new Label("label", new StatusModel(itemModel)));
                     return f;
-                } else if(property == WMTSLayerProvider.ACTION) {
+                } else if (property == WMTSLayerProvider.ACTION) {
                     final LayerResource resource = (LayerResource) itemModel.getObject();
                     final LayerStatus status = resource.getStatus();
-                    if(status == LayerStatus.PUBLISHED || status == LayerStatus.NEWLY_PUBLISHED || status == LayerStatus.UPDATED) {
+                    if (status == LayerStatus.PUBLISHED || status == LayerStatus.NEWLY_PUBLISHED || status == LayerStatus.UPDATED) {
                         return resourceChooserLink(id, itemModel, new ParamResourceModel("NewLayerPage.publishAgain", this));
                     } else {
                         return resourceChooserLink(id, itemModel, new ParamResourceModel("NewLayerPage.publish", this));
                     }
-                } 
-                
+                }
+
                 return null;
             }
 
@@ -102,9 +102,9 @@ public class WMTSLayerImporterPage extends GeoServerSecuredPage {
         AjaxSubmitLink submitLink = submitLink();
         form.add(submitLink);
         form.add(importAllLink());
-        
+
     }
-    
+
     SimpleAjaxLink<LayerResource> resourceChooserLink(String id, IModel<LayerResource> itemModel, IModel<?> label) {
         return new SimpleAjaxLink<LayerResource>(id, itemModel, label) {
 
@@ -119,7 +119,7 @@ public class WMTSLayerImporterPage extends GeoServerSecuredPage {
 
         };
     }
-    
+
     LayerInfo buildLayerInfo(LayerResource resource) {
         Catalog catalog = getCatalog();
         StoreInfo store = catalog.getStore(storeId, StoreInfo.class);
@@ -128,14 +128,14 @@ public class WMTSLayerImporterPage extends GeoServerSecuredPage {
             CatalogBuilder builder = new CatalogBuilder(catalog);
             builder.setStore(store);
             WMTSLayerInfo wli = builder.buildWMTSLayer(resource.getLocalName());
-            return builder.buildLayer(wli);            
+            return builder.buildLayer(wli);
         } catch (Exception e) {
             throw new RuntimeException(
                     "Error occurred while building the resources for the configuration page",
                     e);
         }
     }
-    
+
     AjaxSubmitLink submitLink() {
         return new AjaxSubmitLink("import") {
 
@@ -163,12 +163,12 @@ public class WMTSLayerImporterPage extends GeoServerSecuredPage {
 
         };
     }
-    
+
     void publishLayers(List<LayerResource> selection) {
         Catalog catalog = getCatalog();
         CatalogBuilder builder = new CatalogBuilder(catalog);
-        
-        WMTSStoreInfo store = getCatalog().getStore(storeId, WMTSStoreInfo.class);                                        
+
+        WMTSStoreInfo store = getCatalog().getStore(storeId, WMTSStoreInfo.class);
         builder.setStore(store);
 
         importCount = 0;
@@ -178,20 +178,20 @@ public class WMTSLayerImporterPage extends GeoServerSecuredPage {
             publishLayer(resource, builder, store, catalog);
         }
 
-        createImportReport(); 
+        createImportReport();
         layers.reset();
         provider.updateLayerOrder();
     }
-    
+
     AjaxSubmitLink importAllLink() {
         return new AjaxSubmitLink("importAll") {
 
             private static final long serialVersionUID = 7089389540839181808L;
 
             @Override
-            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {                
+            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 try {
-                    
+
                     publishLayers(provider.getItems());
                 } catch (Exception e) {
                     LOGGER.log(Level.SEVERE, "Error while setting up mass import", e);
@@ -201,23 +201,23 @@ public class WMTSLayerImporterPage extends GeoServerSecuredPage {
             }
         };
     }
-    
+
     private void publishLayer(LayerResource layer, CatalogBuilder builder, WMTSStoreInfo store, Catalog catalog) {
-                
+
         WMTSLayerInfo wli;
         LayerInfo li;
         try {
             wli = builder.buildWMTSLayer(layer.getLocalName());
-            li  = builder.buildLayer(wli);
+            li = builder.buildLayer(wli);
         } catch (IOException e) {
             LOGGER.log(Level.WARNING,
                     "Error building WMTS cascading layer "
-                    + layer.getLocalName(), e);
+                            + layer.getLocalName(), e);
             layer.setStatus(LayerStatus.ERROR);
             layer.setError(e.getMessage());
             errorCount++;
             return;
-        }        
+        }
 
         WMTSLayerInfo exists = catalog.getResourceByStore(store, li.getName(),
                 WMTSLayerInfo.class);
@@ -237,36 +237,36 @@ public class WMTSLayerImporterPage extends GeoServerSecuredPage {
                 catalog.remove(wli);
                 LOGGER.log(Level.WARNING,
                         "Error auto configuring WMTS cascading layer "
-                        + li.getName(), e);
+                                + li.getName(), e);
                 layer.setStatus(LayerStatus.ERROR);
                 layer.setError(e.getMessage());
                 errorCount++;
             }
         }
-        
+
     }
-    
-    private void createImportReport(){        
+
+    private void createImportReport() {
         if (importCount > 0) {
             info("Succesfully imported " + importCount + " layers");
         } else {
             info("No new layers were imported");
         }
-        
+
         if (updateCount > 0) {
             info("Updated " + updateCount + " layers");
         }
-        
+
         if (errorCount > 0) {
             error("Unable to import " + errorCount + " layers, you may want to import them manually");
         }
     }
-    
+
     final class StatusModel implements IModel<String> {
-        
+
         private static final long serialVersionUID = 7754149365712750847L;
         IModel<LayerResource> layerResource;
-        
+
         public StatusModel(IModel<LayerResource> layerResource) {
             super();
             this.layerResource = layerResource;
@@ -274,8 +274,8 @@ public class WMTSLayerImporterPage extends GeoServerSecuredPage {
 
         public String getObject() {
             LayerResource resource = (LayerResource) layerResource.getObject();
-                return new ParamResourceModel("WMTSLayerImporterPage.status." + resource.getStatus(), 
-                        WMTSLayerImporterPage.this, resource.getError()).getString();
+            return new ParamResourceModel("WMTSLayerImporterPage.status." + resource.getStatus(),
+                    WMTSLayerImporterPage.this, resource.getError()).getString();
         }
 
         public void setObject(String object) {
@@ -285,32 +285,32 @@ public class WMTSLayerImporterPage extends GeoServerSecuredPage {
         public void detach() {
             // nothing to do
         }
-        
+
     }
-    
+
     final class IconModel implements IModel<PackageResourceReference> {
-        
+
         private static final long serialVersionUID = 5762710251083186192L;
         IModel<LayerResource> layerResource;
-        
+
         public IconModel(IModel<LayerResource> layerResource) {
             this.layerResource = layerResource;
         }
 
         public PackageResourceReference getObject() {
             LayerResource resource = (LayerResource) layerResource.getObject();
-            if(resource.getStatus() == LayerStatus.ERROR) {
+            if (resource.getStatus() == LayerStatus.ERROR) {
                 return new PackageResourceReference(
                         GeoServerBasePage.class, "img/icons/silk/error.png");
-            } else if(resource.getStatus() == LayerStatus.NEW) {
+            } else if (resource.getStatus() == LayerStatus.NEW) {
                 return new PackageResourceReference(
                         GeoServerBasePage.class, "img/icons/silk/add.png");
-            } else if(resource.getStatus() == LayerStatus.NEWLY_PUBLISHED) {
+            } else if (resource.getStatus() == LayerStatus.NEWLY_PUBLISHED) {
                 return CatalogIconFactory.ENABLED_ICON;
-            } else if(resource.getStatus() == LayerStatus.UPDATED) {
+            } else if (resource.getStatus() == LayerStatus.UPDATED) {
                 return new PackageResourceReference(
                         GeoServerBasePage.class, "img/icons/silk/pencil.png");
-            } else if(resource.getStatus() == LayerStatus.PUBLISHED) {
+            } else if (resource.getStatus() == LayerStatus.PUBLISHED) {
                 return CatalogIconFactory.MAP_ICON;
             } else {
                 return null;
@@ -324,6 +324,6 @@ public class WMTSLayerImporterPage extends GeoServerSecuredPage {
         public void detach() {
             // nothing to do
         }
-        
+
     }
 }

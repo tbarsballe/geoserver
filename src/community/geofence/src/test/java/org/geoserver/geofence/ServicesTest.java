@@ -14,6 +14,7 @@ import org.geoserver.platform.GeoServerExtensions;
 import org.w3c.dom.Document;
 
 import static org.custommonkey.xmlunit.XMLAssert.assertXpathEvaluatesTo;
+
 import org.junit.Test;
 
 public class ServicesTest extends GeofenceBaseTest {

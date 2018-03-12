@@ -30,12 +30,14 @@ import org.geotools.util.logging.Logging;
 
 /**
  * A DescribeLayer response specialized in producing Json or JsonP data for a DescribeLayer request.
- * 
+ *
  * @author carlo cancellieri - GeoSolutions
  */
 public class JSONDescribeLayerResponse extends DescribeLayerResponse {
 
-    /** A logger for this class. */
+    /**
+     * A logger for this class.
+     */
     protected static final Logger LOGGER = Logging.getLogger(JSONDescribeLayerResponse.class);
 
     /**
@@ -63,20 +65,20 @@ public class JSONDescribeLayerResponse extends DescribeLayerResponse {
             throws ServiceException, IOException {
 
         switch (type) {
-        case JSON:
-            OutputStreamWriter osw = null;
-            Writer outWriter = null;
-            try {
-                osw = new OutputStreamWriter(output, wms.getGeoServer().getSettings().getCharset());
-                outWriter = new BufferedWriter(osw);
+            case JSON:
+                OutputStreamWriter osw = null;
+                Writer outWriter = null;
+                try {
+                    osw = new OutputStreamWriter(output, wms.getGeoServer().getSettings().getCharset());
+                    outWriter = new BufferedWriter(osw);
 
-                writeJSON(outWriter, layers);
-            } finally {
-                IOUtils.closeQuietly(outWriter);
-                IOUtils.closeQuietly(osw);
-            }
-        case JSONP:
-            writeJSONP(output, layers);
+                    writeJSON(outWriter, layers);
+                } finally {
+                    IOUtils.closeQuietly(outWriter);
+                    IOUtils.closeQuietly(osw);
+                }
+            case JSONP:
+                writeJSONP(output, layers);
         }
     }
 
@@ -100,7 +102,7 @@ public class JSONDescribeLayerResponse extends DescribeLayerResponse {
             IOUtils.closeQuietly(osw);
         }
     }
-    
+
     private void writeJSON(Writer outWriter, DescribeLayerModel description) throws IOException {
 
         try {
@@ -139,7 +141,7 @@ public class JSONDescribeLayerResponse extends DescribeLayerResponse {
     }
 
     @Override
-    public String getCharset(Operation operation){
+    public String getCharset(Operation operation) {
         return wms.getGeoServer().getSettings().getCharset();
     }
 }

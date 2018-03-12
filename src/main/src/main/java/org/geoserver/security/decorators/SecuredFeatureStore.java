@@ -35,11 +35,10 @@ import org.opengis.filter.identity.FeatureId;
 
 /**
  * A feature store wrapper enforcing the access policy contained in the WrapperPolicy.
- * 
- * @author Andrea Aime - GeoSolutions
- * 
+ *
  * @param <T>
  * @param <F>
+ * @author Andrea Aime - GeoSolutions
  */
 public class SecuredFeatureStore<T extends FeatureType, F extends Feature> extends
         SecuredFeatureSource<T, F> implements FeatureStore<T, F> {
@@ -116,7 +115,7 @@ public class SecuredFeatureStore<T extends FeatureType, F extends Feature> exten
 
     public void modifyFeatures(AttributeDescriptor type, Object value, Filter filter)
             throws IOException {
-        modifyFeatures(new AttributeDescriptor[] { type }, new Object[] { value }, filter);
+        modifyFeatures(new AttributeDescriptor[]{type}, new Object[]{value}, filter);
     }
 
     public void modifyFeatures(Name[] names, Object[] values, Filter filter) throws IOException {
@@ -162,7 +161,7 @@ public class SecuredFeatureStore<T extends FeatureType, F extends Feature> exten
 
     public void modifyFeatures(Name attributeName, Object attributeValue, Filter filter)
             throws IOException {
-        modifyFeatures(new Name[] { attributeName }, new Object[] { attributeValue }, filter);
+        modifyFeatures(new Name[]{attributeName}, new Object[]{attributeValue}, filter);
     }
 
     public void removeFeatures(Filter filter) throws IOException {

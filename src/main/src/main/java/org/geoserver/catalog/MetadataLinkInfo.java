@@ -7,9 +7,8 @@ package org.geoserver.catalog;
 
 /**
  * A metadata link.
- * 
+ *
  * @author Justin Deoliveira, The Open Planning Project
- * 
  */
 public interface MetadataLinkInfo extends Info {
 

@@ -12,7 +12,7 @@ import org.w3c.dom.Document;
 
 /**
  * WFS test based on Observations and Measurements (om) 2.0
- * 
+ *
  * @author Rini Angreani (CSIRO Earth Science and Resource Engineering)
  */
 public class Observation_2_0_WfsTest extends AbstractAppSchemaTestSupport {

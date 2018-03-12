@@ -12,7 +12,7 @@ import org.geoserver.wps.WPSException;
 
 /**
  * Input stream wrapper that ensures we won't read more than maxSize bytes for a given input
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 class MaxSizeInputStream extends CountingInputStream {

@@ -31,10 +31,9 @@ import org.geotools.xml.Encoder;
  * WFS output format for a GetFeature operation in which the resultType is "hits".
  *
  * @author Justin Deoliveira, The Open Planning Project, jdeolive@openplans.org
- *
  */
 public class HitsOutputFormat extends WFSResponse {
-    
+
     /**
      * Xml configuration
      */
@@ -50,7 +49,7 @@ public class HitsOutputFormat extends WFSResponse {
      * @return "text/xml";
      */
     public String getMimeType(Object value, Operation operation)
-        throws ServiceException {
+            throws ServiceException {
         return "text/xml";
     }
 
@@ -65,11 +64,11 @@ public class HitsOutputFormat extends WFSResponse {
     }
 
     public void write(Object value, OutputStream output, Operation operation)
-        throws IOException, ServiceException {
+            throws IOException, ServiceException {
         WFSInfo wfs = getInfo();
-        
+
         FeatureCollectionResponse featureCollection = (FeatureCollectionResponse) value;
-        
+
         //create a new feautre collcetion type with just the numbers
         FeatureCollectionResponse hits = featureCollection.create();
         if (GML3OutputFormat.isComplexFeature(featureCollection)) {
@@ -83,7 +82,7 @@ public class HitsOutputFormat extends WFSResponse {
         } else {
             hits.setNumberOfFeatures(featureCollection.getNumberOfFeatures());
         }
-        
+
         hits.setTotalNumberOfFeatures(featureCollection.getTotalNumberOfFeatures());
         hits.setNext(featureCollection.getNext());
         hits.setPrevious(featureCollection.getPrevious());
@@ -91,7 +90,7 @@ public class HitsOutputFormat extends WFSResponse {
 
         encode(hits, output, wfs);
     }
-    
+
     private BigInteger countFeature(FeatureCollectionResponse fct) {
         BigInteger count = BigInteger.valueOf(0);
         for (int fcIndex = 0; fcIndex < fct.getFeature().size(); fcIndex++) {
@@ -110,12 +109,12 @@ public class HitsOutputFormat extends WFSResponse {
         return count;
     }
 
-    protected void encode(FeatureCollectionResponse hits, OutputStream output, WFSInfo wfs) 
-        throws IOException {
+    protected void encode(FeatureCollectionResponse hits, OutputStream output, WFSInfo wfs)
+            throws IOException {
         Encoder encoder = new Encoder(configuration, configuration.schema());
-        encoder.setEncoding(Charset.forName( wfs.getGeoServer().getSettings().getCharset()) );
+        encoder.setEncoding(Charset.forName(wfs.getGeoServer().getSettings().getCharset()));
         encoder.setSchemaLocation(org.geoserver.wfs.xml.v1_1_0.WFS.NAMESPACE,
-            ResponseUtils.appendPath(wfs.getSchemaBaseURL(), "wfs/1.1.0/wfs.xsd"));
+                ResponseUtils.appendPath(wfs.getSchemaBaseURL(), "wfs/1.1.0/wfs.xsd"));
 
         encoder.encode(hits.getAdaptee(), org.geoserver.wfs.xml.v1_1_0.WFS.FEATURECOLLECTION, output);
     }

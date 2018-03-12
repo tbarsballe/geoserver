@@ -65,7 +65,7 @@ public class WhitelistRulePanel extends GeoServerTablePanel<WhitelistRule> {
     @SuppressWarnings("rawtypes")
     @Override
     public Component getComponentForProperty(String id, final IModel<WhitelistRule> model,
-            Property<WhitelistRule> property) {
+                                             Property<WhitelistRule> property) {
         if (property == WhitelistRulesProvider.NAME) {
             return new Label(id, property.getModel(model));
         } else if (property == WhitelistRulesProvider.PATTERN) {

@@ -8,8 +8,8 @@ package org.geoserver.test.http;
 import org.geotools.data.ows.HTTPClient;
 
 /**
- * A base class for HTTPClient 
- *  
+ * A base class for HTTPClient
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public abstract class AbstractHttpClient implements HTTPClient {
@@ -23,7 +23,7 @@ public abstract class AbstractHttpClient implements HTTPClient {
     protected int readTimeout;
 
     protected boolean tryGzip;
-    
+
     public String getUser() {
         return user;
     }
@@ -41,23 +41,23 @@ public abstract class AbstractHttpClient implements HTTPClient {
 
     }
 
-    
+
     public int getConnectTimeout() {
         return connectTimeout;
     }
 
-    
+
     public void setConnectTimeout(int connectTimeout) {
         this.connectTimeout = connectTimeout;
 
     }
 
-    
+
     public int getReadTimeout() {
         return this.readTimeout;
     }
 
-    
+
     public void setReadTimeout(int readTimeout) {
         this.readTimeout = readTimeout;
     }
@@ -72,7 +72,6 @@ public abstract class AbstractHttpClient implements HTTPClient {
     }
 
     /**
-     *
      * @see org.geotools.data.ows.HTTPClient#isTryGzip()
      */
     @Override

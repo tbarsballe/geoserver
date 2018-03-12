@@ -18,7 +18,7 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 /**
  * Base class for helpers used to invoke an external tool.
- * 
+ *
  * @author Andrea Aime, GeoSolutions
  * @author Stefano Costa, GeoSolutions
  */
@@ -52,7 +52,7 @@ public abstract class AbstractToolWrapper implements ToolWrapper {
 
     @Override
     public File convert(File inputData, File outputDirectory, String typeName,
-            Format format, CoordinateReferenceSystem crs) throws IOException, InterruptedException {
+                        Format format, CoordinateReferenceSystem crs) throws IOException, InterruptedException {
         // build the command line
         List<String> cmd = new ArrayList<String>();
         cmd.add(executable);
@@ -88,7 +88,7 @@ public abstract class AbstractToolWrapper implements ToolWrapper {
 
         // output may be a directory, handle that case gracefully
         File output = new File(outputDirectory, outFileName);
-        if(output.isDirectory()) {
+        if (output.isDirectory()) {
             output = new File(output, outFileName);
         }
         return output;
@@ -96,24 +96,24 @@ public abstract class AbstractToolWrapper implements ToolWrapper {
 
     /**
      * Sets up input and output parameters.
-     * 
+     * <p>
      * <p>
      * Uses {@link #isInputFirst()} internally to determine whether input or output should come first in the list of arguments.
      * </p>
-     * 
+     * <p>
      * <p>
      * May be overridden by subclasses, e.g. to support commands that modify the input file inline and thus need no output parameter.
      * </p>
-     * 
-     * @param cmd the command to run and its arguments
-     * @param inputData the input file
+     *
+     * @param cmd             the command to run and its arguments
+     * @param inputData       the input file
      * @param outputDirectory the output directory
-     * @param typeName the type name
-     * @param format the format descriptor
+     * @param typeName        the type name
+     * @param format          the format descriptor
      * @return the name of the (main) output file
      */
     protected String setInputOutput(List<String> cmd, File inputData, File outputDirectory, String typeName,
-            Format format) {
+                                    Format format) {
         String outFileName = typeName;
 
         if (format.getFileExtension() != null)
@@ -131,38 +131,38 @@ public abstract class AbstractToolWrapper implements ToolWrapper {
 
     /**
      * Utility method to dump a {@link CoordinateReferenceSystem} to a temporary file on disk.
-     * 
+     *
      * @param parentDir
      * @param crs
      * @return the temp file containing the CRS definition in WKT format
-     * @throws IOException 
+     * @throws IOException
      */
     protected static File dumpCrs(File parentDir, CoordinateReferenceSystem crs) throws IOException {
-      File crsFile = null;
-      if (crs != null) {
-          // we don't use an EPSG code since there is no guarantee we'll be able to reverse
-          // engineer one. Using WKT also ensures the EPSG params such as the TOWGS84 ones are
-          // not lost in the conversion
-          // We also write to a file because some operating systems cannot take arguments with
-          // quotes and spaces inside (and/or ProcessBuilder is not good enough to escape them)
-          crsFile = File.createTempFile("srs", "wkt", parentDir);
-          String s = crs.toWKT();
-          s = s.replaceAll("\n\r", "").replaceAll("  ", "");
-          FileUtils.writeStringToFile(crsFile, s);
-      }
+        File crsFile = null;
+        if (crs != null) {
+            // we don't use an EPSG code since there is no guarantee we'll be able to reverse
+            // engineer one. Using WKT also ensures the EPSG params such as the TOWGS84 ones are
+            // not lost in the conversion
+            // We also write to a file because some operating systems cannot take arguments with
+            // quotes and spaces inside (and/or ProcessBuilder is not good enough to escape them)
+            crsFile = File.createTempFile("srs", "wkt", parentDir);
+            String s = crs.toWKT();
+            s = s.replaceAll("\n\r", "").replaceAll("  ", "");
+            FileUtils.writeStringToFile(crsFile, s);
+        }
 
-      return crsFile;
+        return crsFile;
     }
 
     /**
      * Invoked by <code>convert()</code> before the command is actually run, but after the options specified in the format configuration have been
      * added to the arguments list.
-     * 
+     * <p>
      * <p>
      * Default implementation does nothing at all. May be implemented by subclasses to append additional arguments to <code>cmd</code>.
      * </p>
-     * 
-     * @param cmd the command to run and its arguments
+     *
+     * @param cmd             the command to run and its arguments
      * @param inputData
      * @param outputDirectory
      * @param typeName
@@ -171,18 +171,18 @@ public abstract class AbstractToolWrapper implements ToolWrapper {
      * @throws IOException
      */
     protected void onBeforeRun(List<String> cmd, File inputData, File outputDirectory, String typeName,
-            Format format, CoordinateReferenceSystem crs) throws IOException {
+                               Format format, CoordinateReferenceSystem crs) throws IOException {
         // default implementation does nothing
     }
 
     /**
      * Invoked by <code>convert()</code> after the command is run. Invocation is done inside a <code>try ... finally</code> block, so it happens even
      * if an exception is thrown during command execution.
-     * 
+     * <p>
      * <p>
      * Default implementation does nothing at all. May be implemented by subclasses to do some clean-up work.
      * </p>
-     * 
+     *
      * @param exitCode the exit code of the invoked command. Usually, 0 indicates normal termination
      * @throws IOException
      */
@@ -194,9 +194,9 @@ public abstract class AbstractToolWrapper implements ToolWrapper {
     /**
      * Runs the specified command appending the output to the string builder and
      * returning the exit code.
-     * 
+     *
      * @param cmd the command to run and its arguments
-     * @param sb command output is appended here
+     * @param sb  command output is appended here
      * @return the exit code of the invoked command. Usually, 0 indicates normal termination
      * @throws IOException
      * @throws InterruptedException
@@ -204,7 +204,7 @@ public abstract class AbstractToolWrapper implements ToolWrapper {
     protected int run(List<String> cmd, StringBuilder sb) throws IOException, InterruptedException {
         // run the process and grab the output for error reporting purposes
         ProcessBuilder builder = new ProcessBuilder(cmd);
-        if(environment != null)
+        if (environment != null)
             builder.environment().putAll(environment);
         builder.redirectErrorStream(true);
         Process p = builder.start();

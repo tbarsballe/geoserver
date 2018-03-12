@@ -66,7 +66,7 @@ import java.io.Reader;
 /**
  * Reader for UCS-2 and UCS-4 encodings.
  * (more precisely ISO-10646-UCS-(2|4) encodings).
- *
+ * <p>
  * This variant is modified to handle supplementary Unicode code points
  * correctly. Though this required a lot of new code and definitely
  * reduced the perfomance comparing to original version. I tried my best
@@ -75,7 +75,6 @@ import java.io.Reader;
  * some bugs may still nest in the code. -AK
  *
  * @author Neil Graham, IBM
- *
  * @version $Id$
  */
 public class UCSReader extends Reader {
@@ -120,13 +119,19 @@ public class UCSReader extends Reader {
     // Data
     //
 
-    /** Input stream. */
+    /**
+     * Input stream.
+     */
     protected InputStream fInputStream;
 
-    /** Byte buffer. */
+    /**
+     * Byte buffer.
+     */
     protected byte[] fBuffer;
 
-    /** what kind of data we're dealing with */
+    /**
+     * what kind of data we're dealing with
+     */
     protected short fEncoding;
 
     /**
@@ -201,7 +206,7 @@ public class UCSReader extends Reader {
     /**
      * Read a single character.  This method will block until a character is
      * available, an I/O error occurs, or the end of the stream is reached.
-     *
+     * <p>
      * If supplementary Unicode character is encountered in <code>UCS-4</code>
      * input, it will be encoded into <code>UTF-16</code> surrogate pair
      * according to RFC 2781. High surrogate code unit will be returned
@@ -209,13 +214,12 @@ public class UCSReader extends Reader {
      * during next <code>read()</code> or <code>read(char[], int, int)</code>
      * invocation. -AK
      *
-     * @return     Java 16-bit <code>char</code> value containing UTF-16 code
-     *             unit which may be either code point from Basic Multilingual
-     *             Plane or one of the surrogate code units (high or low)
-     *             of the pair representing supplementary Unicode character
-     *             (one in <code>0x10000 - 0x10FFFF</code> range) -AK
-     *
-     * @exception  IOException  when I/O error occurs
+     * @return Java 16-bit <code>char</code> value containing UTF-16 code
+     * unit which may be either code point from Basic Multilingual
+     * Plane or one of the surrogate code units (high or low)
+     * of the pair representing supplementary Unicode character
+     * (one in <code>0x10000 - 0x10FFFF</code> range) -AK
+     * @throws IOException when I/O error occurs
      */
     public int read() throws IOException {
         // If we got something in the char buffer, let's use it.
@@ -269,7 +273,7 @@ public class UCSReader extends Reader {
             } else {
                 int cp1 = (codepoint - 0x10000) & 0xFFFFF;
                 int highSurrogate = 0xD800 + (cp1 >>> 10); // ">>" should work too
-                                                           // Saving low surrogate for future use
+                // Saving low surrogate for future use
 
                 fCharBuf[fCharCount] = (char) (0xDC00 + (cp1 & 0x3FF));
 
@@ -290,28 +294,26 @@ public class UCSReader extends Reader {
      * Read characters into a portion of an array.  This method will block
      * until some input is available, an I/O error occurs, or the end of the
      * stream is reached.
-     *
+     * <p>
      * I suspect that the whole stuff works awfully slow, so if you know
      * for sure that your <code>UCS-4</code> input does not contain any
      * supplementary code points you probably should use original
      * <code>UCSReader</code> class from Xerces team
      * (<code>org.apache.xerces.impl.io.UCSReader</code>). -AK
      *
-     * @param      ch     Destination buffer
-     * @param      offset Offset at which to start storing characters
-     * @param      length Maximum number of characters to read
-     *
-     * @return     The number of characters read, or <code>-1</code> if the
-     *             end of the stream has been reached. Note that this is not
-     *             a number of <code>UCS-4</code> characters read, but
-     *             instead number of <code>UTF-16</code> code units. These
-     *             two are equal only if there were no supplementary Unicode
-     *             code points among read chars.
-     *
-     * @exception  IOException  If an I/O error occurs
+     * @param ch     Destination buffer
+     * @param offset Offset at which to start storing characters
+     * @param length Maximum number of characters to read
+     * @return The number of characters read, or <code>-1</code> if the
+     * end of the stream has been reached. Note that this is not
+     * a number of <code>UCS-4</code> characters read, but
+     * instead number of <code>UTF-16</code> code units. These
+     * two are equal only if there were no supplementary Unicode
+     * code points among read chars.
+     * @throws IOException If an I/O error occurs
      */
     public int read(char[] ch, int offset, int length)
-        throws IOException {
+            throws IOException {
         /*
          * The behavior of this method is _intended_ to be like this:
          *
@@ -512,17 +514,15 @@ public class UCSReader extends Reader {
      * from there to reduce complexity of the latter.
      * </p>
      *
-     * @param      ch      destination buffer
-     * @param      offset  offset at which to start storing characters
-     * @param      length  maximum number of characters to read
-     *
-     * @return     The number of characters read, or <code>-1</code>
-     *             if the end of the stream has been reached
-     *
-     * @exception  IOException  If an I/O error occurs
+     * @param ch     destination buffer
+     * @param offset offset at which to start storing characters
+     * @param length maximum number of characters to read
+     * @return The number of characters read, or <code>-1</code>
+     * if the end of the stream has been reached
+     * @throws IOException If an I/O error occurs
      */
     protected int readUCS2(char[] ch, int offset, int length)
-        throws IOException {
+            throws IOException {
         int byteLength = length << 1;
 
         if (byteLength > fBuffer.length) {
@@ -546,7 +546,7 @@ public class UCSReader extends Reader {
             int charRead = fInputStream.read();
 
             if (charRead == -1) { // end of input; something likely went
-                                  // wrong! Pad buffer with nulls.
+                // wrong! Pad buffer with nulls.
                 fBuffer[count] = 0;
             } else {
                 fBuffer[count] = (byte) charRead;
@@ -575,11 +575,9 @@ public class UCSReader extends Reader {
      * Skip characters.  This method will block until some characters are
      * available, an I/O error occurs, or the end of the stream is reached.
      *
-     * @param  n  The number of characters to skip
-     *
-     * @return    The number of characters actually skipped
-     *
-     * @exception  IOException  If an I/O error occurs
+     * @param n The number of characters to skip
+     * @return The number of characters actually skipped
+     * @throws IOException If an I/O error occurs
      */
     public long skip(long n) throws IOException {
         /*
@@ -607,8 +605,7 @@ public class UCSReader extends Reader {
      * @return True if the next read() is guaranteed not to block for input,
      * false otherwise.  Note that returning false does not guarantee that the
      * next read will block.
-     *
-     * @exception  IOException  If an I/O error occurs
+     * @throws IOException If an I/O error occurs
      */
     public boolean ready() throws IOException {
         return false;
@@ -628,14 +625,13 @@ public class UCSReader extends Reader {
      * This is one of them :) It relies on marking facilities of underlying
      * byte stream.
      *
-     * @param  readAheadLimit  Limit on the number of characters that may be
-     *                         read while still preserving the mark.  After
-     *                         reading this many characters, attempting to
-     *                         reset the stream may fail.
-     *
-     * @exception  IOException  If the stream does not support
-     *                          <code>mark</code>, or if some other I/O error
-     *                          occurs
+     * @param readAheadLimit Limit on the number of characters that may be
+     *                       read while still preserving the mark.  After
+     *                       reading this many characters, attempting to
+     *                       reset the stream may fail.
+     * @throws IOException If the stream does not support
+     *                     <code>mark</code>, or if some other I/O error
+     *                     occurs
      */
     public void mark(int readAheadLimit) throws IOException {
         fInputStream.mark(readAheadLimit);
@@ -649,10 +645,10 @@ public class UCSReader extends Reader {
      * implementation does not support <code>mark</code>/<code>reset</code>
      * by itself, it relies on underlying byte stream in this matter.
      *
-     * @exception  IOException  If the stream has not been marked,
-     *                          or if the mark has been invalidated,
-     *                          or if the stream does not support reset(),
-     *                          or if some other I/O error occurs
+     * @throws IOException If the stream has not been marked,
+     *                     or if the mark has been invalidated,
+     *                     or if the stream does not support reset(),
+     *                     or if some other I/O error occurs
      */
     public void reset() throws IOException {
         fInputStream.reset();
@@ -664,7 +660,7 @@ public class UCSReader extends Reader {
      * or <code>reset</code> invocations will throw an IOException.
      * Closing a previously-closed stream, however, has no effect.
      *
-     * @exception  IOException  If an I/O error occurs
+     * @throws IOException If an I/O error occurs
      */
     public void close() throws IOException {
         fInputStream.close();
@@ -677,12 +673,12 @@ public class UCSReader extends Reader {
      * Returns the encoding currently in use by this character stream.
      *
      * @return Encoding of this stream. Either ISO-10646-UCS-2 or
-     *         ISO-10646-UCS-4. Problem is that this string doesn't indicate
-     *         the byte order of that encoding. What to do, then? Unlike
-     *         UTF-16 byte order cannot be made part of the encoding name
-     *         in this case and still can be critical. Currently you can
-     *         find out the byte order by invoking <code>getByteOrder</code>
-     *         method.
+     * ISO-10646-UCS-4. Problem is that this string doesn't indicate
+     * the byte order of that encoding. What to do, then? Unlike
+     * UTF-16 byte order cannot be made part of the encoding name
+     * in this case and still can be critical. Currently you can
+     * find out the byte order by invoking <code>getByteOrder</code>
+     * method.
      */
     public String getEncoding() {
         if (4 > fEncoding) {
@@ -701,7 +697,7 @@ public class UCSReader extends Reader {
      * better.
      *
      * @return <code>LITTLE_ENDIAN</code> or <code>BIG_ENDIAN</code> depending
-     *         on byte order of current encoding of this stream.
+     * on byte order of current encoding of this stream.
      */
     public String getByteOrder() {
         if ((1 == fEncoding) || (4 == fEncoding)) {
@@ -718,13 +714,13 @@ public class UCSReader extends Reader {
      * <blockquote><pre>
      * codePoint &gt;= 0x10000 &amp;&amp; codePoint &lt;= 0x10ffff
      * </pre></blockquote>
-     *
+     * <p>
      * Stolen from JDK 1.5 <code>java.lang.Character</code> class in
      * order to provide JDK 1.4 compatibility.
      *
-     * @param  codePoint the character (Unicode code point) to be tested
+     * @param codePoint the character (Unicode code point) to be tested
      * @return <code>true</code> if the specified character is in the Unicode
-     *         supplementary character range; <code>false</code> otherwise.
+     * supplementary character range; <code>false</code> otherwise.
      */
     protected boolean isSupplementaryCodePoint(int codePoint) {
         return (codePoint >= MIN_SUPPLEMENTARY_CODE_POINT) && (codePoint <= MAX_CODE_POINT);

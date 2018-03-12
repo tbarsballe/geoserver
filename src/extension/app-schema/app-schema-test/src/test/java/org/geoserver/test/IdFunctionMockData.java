@@ -10,9 +10,9 @@ import org.geoserver.data.test.MockData;
 
 /**
  * Mock data for testing GEOS-5618: using functions in idExpression with joining.
- * 
+ * <p>
  * Inspired by {@link MockData}.
- * 
+ *
  * @author Rini Angreani (CSIRO Earth Science and Resource Engineering)
  */
 

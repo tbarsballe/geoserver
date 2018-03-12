@@ -19,22 +19,19 @@ import java.util.TreeMap;
 
 
 /**
- * 
- *  Implementation for testing
- *  uses serialization into a byte array
- * 
- * @author christian
+ * Implementation for testing
+ * uses serialization into a byte array
  *
+ * @author christian
  */
 public class MemoryRoleService extends AbstractRoleService {
 
     byte[] byteArray;
     protected String toBeEncrypted;
-    
+
     public String getToBeEncrypted() {
         return toBeEncrypted;
     }
-
 
 
     @Override
@@ -48,22 +45,22 @@ public class MemoryRoleService extends AbstractRoleService {
         store.initializeFromService(this);
         return store;
     }
-    
+
     @SuppressWarnings("unchecked")
     @Override
     protected void deserialize() throws IOException {
         clearMaps();
-        if (byteArray==null) return;
+        if (byteArray == null) return;
         ByteArrayInputStream in = new ByteArrayInputStream(byteArray);
         ObjectInputStream oin = new ObjectInputStream(in);
         try {
-            helper.roleMap = (TreeMap<String,GeoServerRole>) oin.readObject();
-            helper.role_parentMap =(HashMap<GeoServerRole,GeoServerRole>) oin.readObject();
-            helper.user_roleMap = (TreeMap<String,SortedSet<GeoServerRole>>)oin.readObject();
-            helper.group_roleMap = (TreeMap<String,SortedSet<GeoServerRole>>)oin.readObject();
+            helper.roleMap = (TreeMap<String, GeoServerRole>) oin.readObject();
+            helper.role_parentMap = (HashMap<GeoServerRole, GeoServerRole>) oin.readObject();
+            helper.user_roleMap = (TreeMap<String, SortedSet<GeoServerRole>>) oin.readObject();
+            helper.group_roleMap = (TreeMap<String, SortedSet<GeoServerRole>>) oin.readObject();
         } catch (ClassNotFoundException e) {
             throw new IOException(e);
-        }            
+        }
     }
 
     @Override
@@ -75,7 +72,7 @@ public class MemoryRoleService extends AbstractRoleService {
     @Override
     public void initializeFromConfig(SecurityNamedServiceConfig config) throws IOException {
         super.initializeFromConfig(config);
-        toBeEncrypted = (((MemoryRoleServiceConfigImpl)config).getToBeEncrypted());
+        toBeEncrypted = (((MemoryRoleServiceConfigImpl) config).getToBeEncrypted());
     }
 
 }

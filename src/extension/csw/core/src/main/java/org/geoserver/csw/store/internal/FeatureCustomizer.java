@@ -17,7 +17,7 @@ import org.opengis.feature.Feature;
 import org.opengis.filter.FilterFactory2;
 
 /**
- * Subclasses implementations allow to customize Feature values. 
+ * Subclasses implementations allow to customize Feature values.
  */
 abstract class FeatureCustomizer {
 
@@ -36,15 +36,17 @@ abstract class FeatureCustomizer {
     }
 
     /**
-     * Customize the provided feature, looking for additional values 
+     * Customize the provided feature, looking for additional values
      * to be retrieved from the referred resource object.
-     * 
+     *
      * @param feature
      * @param resource
      */
     abstract void customizeFeature(Feature feature, CatalogInfo resource);
 
-    /** Map of all the registered feature customizers */
+    /**
+     * Map of all the registered feature customizers
+     */
     static Map<String, FeatureCustomizer> CUSTOMIZERS;
 
     static Map<String, FeatureCustomizer> getCustomizers() {
@@ -61,9 +63,8 @@ abstract class FeatureCustomizer {
 
     /**
      * Return a customizer instance for the specified typeName
-     * 
-     * @param typeName
      *
+     * @param typeName
      */
     public static FeatureCustomizer getCustomizer(String typeName) {
         getCustomizers();

@@ -7,9 +7,8 @@ package org.geoserver.platform;
 
 /**
  * Black lists a bean by bean id.
- * 
+ *
  * @author Andrea Aime - OpenGeo
- * 
  */
 public class NameExclusionFilter implements ExtensionFilter {
     String beanId;
@@ -20,6 +19,7 @@ public class NameExclusionFilter implements ExtensionFilter {
 
     /**
      * Sets the bean to be filtered out
+     *
      * @param beanId
      */
     public void setBeanId(String beanId) {

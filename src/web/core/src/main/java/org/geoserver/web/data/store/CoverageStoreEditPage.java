@@ -25,44 +25,43 @@ import org.opengis.coverage.grid.GridCoverageReader;
 
 /**
  * Supports coverage store configuration
- * 
+ *
  * @author Andrea Aime
  */
 public class CoverageStoreEditPage extends AbstractCoverageStorePage {
-    
+
     public static final String STORE_NAME = "storeName";
     public static final String WS_NAME = "wsName";
-    
-    
+
+
     /**
      * Dialog to ask for save confirmation in case the store can't be reached
      */
     private GeoServerDialog dialog;
-    
+
     /**
      * Uses a "name" parameter to locate the datastore
+     *
      * @param parameters
      */
     public CoverageStoreEditPage(PageParameters parameters) {
         String wsName = parameters.get(WS_NAME).toOptionalString();
         String storeName = parameters.get(STORE_NAME).toString();
         CoverageStoreInfo csi = getCatalog().getCoverageStoreByName(wsName, storeName);
-        
-        if(csi == null) {
+
+        if (csi == null) {
             getSession().error(
-                 new ParamResourceModel("CoverageStoreEditPage.notFound", this, storeName, wsName).getString()
+                    new ParamResourceModel("CoverageStoreEditPage.notFound", this, storeName, wsName).getString()
             );
             doReturn(StorePage.class);
             return;
         }
-        
+
         initUI(csi);
     }
 
     /**
-     * 
-     * @param storeId
-     *            the store id
+     * @param storeId the store id
      */
     public CoverageStoreEditPage(final String storeId) throws IllegalArgumentException {
         Catalog catalog = getCatalog();
@@ -85,7 +84,7 @@ public class CoverageStoreEditPage extends AbstractCoverageStorePage {
     void initUI(CoverageStoreInfo store) {
         dialog = new GeoServerDialog("dialog");
         add(dialog);
-        
+
         super.initUI(store);
 
         if (store.getId() != null) {
@@ -142,7 +141,7 @@ public class CoverageStoreEditPage extends AbstractCoverageStorePage {
 
     @SuppressWarnings("serial")
     private void confirmSaveOnConnectionFailure(final CoverageStoreInfo info,
-            final AjaxRequestTarget requestTarget, final Exception error) {
+                                                final AjaxRequestTarget requestTarget, final Exception error) {
         final String exceptionMessage = error.getMessage();
 
         dialog.showOkCancel(requestTarget, new GeoServerDialog.DialogDelegate() {
@@ -198,11 +197,11 @@ public class CoverageStoreEditPage extends AbstractCoverageStorePage {
 
             ResourcePool resourcePool = catalog.getResourcePool();
             resourcePool.clear(info);
-            
+
             // Cloning into "expandedStore" through the super class "clone" method
             CoverageStoreInfo expandedStore = resourcePool.clone(info, true);
             catalog.validate(expandedStore, false).throwIfInvalid();
-            
+
             catalog.save(info);
 
             for (CoverageInfo coverage : alreadyConfigured) {

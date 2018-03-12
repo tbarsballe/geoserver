@@ -27,12 +27,12 @@ public class JAIEXTPanel extends Panel {
 
         PropertyModel<JAIEXTInfo> jaiextModel = new PropertyModel<JAIEXTInfo>(model, "JAIEXTInfo");
 
-        @SuppressWarnings({ "rawtypes", "unchecked" })
+        @SuppressWarnings({"rawtypes", "unchecked"})
         Palette jaiextSelector = new Palette<String>("jaiextOps",
                 LiveCollectionModel.set(new PropertyModel(jaiextModel, "JAIOperations")),
                 LiveCollectionModel.set(new PropertyModel(jaiextModel, "JAIEXTOperations")),
                 new JAChoiceRenderer(), 7, false) {
-                    private static final long serialVersionUID = -4665147378650094510L;
+            private static final long serialVersionUID = -4665147378650094510L;
 
             /**
              * Override otherwise the header is not i18n'ized
@@ -54,23 +54,23 @@ public class JAIEXTPanel extends Panel {
         add(jaiextSelector);
     }
 
-    
+
     static class JAChoiceRenderer extends ChoiceRenderer<String> {
         private static final long serialVersionUID = -1978519626641784908L;
-        
+
         private static final String ALGEBRIC = "algebric";
         private static final String OPERATION_CONST = "operationConst";
         private static final String STATS = "Stats";
-        
+
         @Override
         public Object getDisplayValue(String object) {
-            if(object.equalsIgnoreCase(STATS)){
+            if (object.equalsIgnoreCase(STATS)) {
                 return new ParamResourceModel("JAIEXTPanel." + STATS, null, "").getString();
-            } else if(object.equalsIgnoreCase(OPERATION_CONST)){
+            } else if (object.equalsIgnoreCase(OPERATION_CONST)) {
                 return new ParamResourceModel("JAIEXTPanel." + OPERATION_CONST, null, "").getString();
-            }else if(object.equalsIgnoreCase(ALGEBRIC)){
+            } else if (object.equalsIgnoreCase(ALGEBRIC)) {
                 return new ParamResourceModel("JAIEXTPanel." + ALGEBRIC, null, "").getString();
-            }else {
+            } else {
                 return object;
             }
         }
@@ -81,6 +81,5 @@ public class JAIEXTPanel extends Panel {
         }
 
 
-        
     }
 }

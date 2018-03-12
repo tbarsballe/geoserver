@@ -17,7 +17,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class JpegOrPngChooserTest {
-    
+
     private BufferedImage indexed;
     private BufferedImage gray;
     private BufferedImage rgb;
@@ -25,7 +25,7 @@ public class JpegOrPngChooserTest {
     private BufferedImage rgba_opaque;
     private BufferedImage rgba_partial;
 
-    @Before 
+    @Before
     public void prepareImages() {
         // paletted image
         indexed = new BufferedImage(10, 10, BufferedImage.TYPE_BYTE_INDEXED);
@@ -63,15 +63,15 @@ public class JpegOrPngChooserTest {
         JpegOrPngChooser chooser = new JpegOrPngChooser(image);
         assertFalse(chooser.isJpegPreferred());
         assertEquals("image/png", chooser.getMime());
-        assertEquals("png", chooser.getExtension());       
+        assertEquals("png", chooser.getExtension());
     }
-    
+
     private void assertJpeg(RenderedImage image) {
         JpegOrPngChooser chooser = new JpegOrPngChooser(image);
         assertTrue(chooser.isJpegPreferred());
         assertEquals("image/jpeg", chooser.getMime());
-        assertEquals("jpeg", chooser.getExtension());       
+        assertEquals("jpeg", chooser.getExtension());
     }
-    
-    
+
+
 }

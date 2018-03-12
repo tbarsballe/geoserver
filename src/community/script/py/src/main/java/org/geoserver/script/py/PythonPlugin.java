@@ -27,9 +27,8 @@ import org.python.util.PythonInterpreter;
 
 /**
  * Python script plugin.
- * 
- * @author Justin Deoliveira, OpenGeo
  *
+ * @author Justin Deoliveira, OpenGeo
  */
 public class PythonPlugin extends ScriptPlugin {
 
@@ -64,7 +63,7 @@ public class PythonPlugin extends ScriptPlugin {
 //                return Py.None;
 //            }
 //        });
-        
+
     }
 
     @Override
@@ -93,6 +92,7 @@ public class PythonPlugin extends ScriptPlugin {
     }
 
     static HashMap<Class<? extends PyObject>, Class> pyToJava = new HashMap();
+
     static {
         pyToJava.put(PyString.class, String.class);
         pyToJava.put(PyInteger.class, Integer.class);
@@ -101,7 +101,7 @@ public class PythonPlugin extends ScriptPlugin {
         pyToJava.put(PyBoolean.class, Boolean.class);
         //pyToJava.put(PyFile.class, File.class);
     }
-    
+
     public static Class toJavaClass(PyType type) {
         Class clazz = null;
         try {
@@ -109,9 +109,9 @@ public class PythonPlugin extends ScriptPlugin {
             if (o != null && o instanceof Class) {
                 clazz = (Class) o;
             }
+        } catch (PyException e) {
         }
-        catch(PyException e) {}
-        
+
         if (clazz != null && PyObject.class.isAssignableFrom(clazz)) {
             try {
                 PyObject pyobj = (PyObject) clazz.newInstance();
@@ -119,17 +119,17 @@ public class PythonPlugin extends ScriptPlugin {
                 if (obj != null) {
                     clazz = obj.getClass();
                 }
+            } catch (Exception e) {
             }
-            catch(Exception e) {}
         }
-        
+
         if (clazz != null && PyObject.class.isAssignableFrom(clazz)) {
             Class jclass = pyToJava.get(clazz);
             if (jclass != null) {
                 clazz = jclass;
             }
         }
-        
+
         if (clazz != null && clazz.getName().startsWith("org.python.proxies")) {
             //get base type
             PyType base = (PyType) type.getBase();
@@ -138,7 +138,7 @@ public class PythonPlugin extends ScriptPlugin {
                 clazz = c;
             }
         }
-         return clazz;
+        return clazz;
     }
 
 }

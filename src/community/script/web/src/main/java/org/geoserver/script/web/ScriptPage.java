@@ -32,7 +32,7 @@ public class ScriptPage extends GeoServerSecuredPage {
         add(table = new GeoServerTablePanel<Script>("table", provider, true) {
             @Override
             protected Component getComponentForProperty(String id, IModel<Script> itemModel,
-                    Property<Script> property) {
+                                                        Property<Script> property) {
                 if (property == ScriptProvider.NAME) {
                     return scriptLink(id, itemModel);
                 } else if (property == ScriptProvider.TYPE) {
@@ -76,7 +76,7 @@ public class ScriptPage extends GeoServerSecuredPage {
         IModel<?> nameModel = ScriptProvider.NAME.getModel(itemModel);
         IModel<?> fileModel = ScriptProvider.FILE.getModel(itemModel);
         return new SimpleBookmarkableLink(id, ScriptEditPage.class, nameModel,
-        // @TODO type and extension instead of file
+                // @TODO type and extension instead of file
                 "file", fileModel.getObject().toString());
     }
 

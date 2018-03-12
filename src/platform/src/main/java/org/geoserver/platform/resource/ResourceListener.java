@@ -18,7 +18,7 @@ package org.geoserver.platform.resource;
  * {@link Resource#dir()}) in response to this notification to unpack the change locally.
  * <p>
  * Watch directory contents:
- * 
+ * <p>
  * <pre>
  * <code>
  * resourceStore.addListener( "styles", new ResourceListener(){
@@ -45,7 +45,7 @@ package org.geoserver.platform.resource;
  * <p>
  * Example reload on resource change:
  * </p>
- * 
+ * <p>
  * <pre>
  * <code>
  * resource.addListener( new ResourceListener(){
@@ -58,5 +58,5 @@ package org.geoserver.platform.resource;
  * </pre>
  */
 public interface ResourceListener {
-    public void changed( ResourceNotification notify );
+    public void changed(ResourceNotification notify);
 }

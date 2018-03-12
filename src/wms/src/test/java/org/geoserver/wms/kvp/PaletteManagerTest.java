@@ -13,7 +13,7 @@ import org.geotools.image.palette.InverseColorMapOp;
 import org.junit.Test;
 
 public class PaletteManagerTest {
-    
+
     @Test
     public void testSameIndexColorModel() {
         IndexColorModel safePalette = PaletteManager.safePalette;
@@ -22,7 +22,7 @@ public class PaletteManagerTest {
         InverseColorMapOp op2 = PaletteManager.getInverseColorMapOp(safePalette);
         assertEquals(op1, op2);
     }
-    
+
     @Test
     public void testDifferentColorModels() {
         IndexColorModel safePalette = PaletteManager.safePalette;
@@ -33,7 +33,7 @@ public class PaletteManagerTest {
         assertNotEquals(op1, op2);
     }
 
-    
+
     /**
      * Builds a palette with the same structure as the safe one, but fully gray
      */

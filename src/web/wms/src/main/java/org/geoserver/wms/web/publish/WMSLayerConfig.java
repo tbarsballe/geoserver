@@ -49,15 +49,15 @@ public class WMSLayerConfig extends PublishedConfigurationPanel<LayerInfo> {
 
     public WMSLayerConfig(String id, IModel<LayerInfo> layerModel) {
         super(id, layerModel);
-        
-        add(new CheckBox("queryableEnabled", new PropertyModel<Boolean>(layerModel,"queryable")));
-        add(new CheckBox("opaqueEnabled", new PropertyModel<Boolean>(layerModel,"opaque")));
-        
+
+        add(new CheckBox("queryableEnabled", new PropertyModel<Boolean>(layerModel, "queryable")));
+        add(new CheckBox("opaqueEnabled", new PropertyModel<Boolean>(layerModel, "opaque")));
+
         // styles block container
         WebMarkupContainer styleContainer = new WebMarkupContainer("styles");
         add(styleContainer);
         ResourceInfo resource = layerModel.getObject().getResource();
-        styleContainer.setVisible(resource instanceof CoverageInfo || resource instanceof FeatureTypeInfo); 
+        styleContainer.setVisible(resource instanceof CoverageInfo || resource instanceof FeatureTypeInfo);
 
         // default style chooser. A default style is required
         StylesModel styles = new StylesModel();
@@ -88,7 +88,7 @@ public class WMSLayerConfig extends PublishedConfigurationPanel<LayerInfo> {
         });
 
         // build a palette with no reordering allowed, since order doesn't affect anything
-        LiveCollectionModel stylesModel = 
+        LiveCollectionModel stylesModel =
                 LiveCollectionModel.set(new PropertyModel<Set<StyleInfo>>(layerModel, "styles"));
         Palette<StyleInfo> extraStyles = new Palette<StyleInfo>("extraStyles", stylesModel, styles,
                 new StyleNameRenderer(), 10, false) {
@@ -114,11 +114,11 @@ public class WMSLayerConfig extends PublishedConfigurationPanel<LayerInfo> {
         };
         extraStyles.add(new DefaultTheme());
         styleContainer.add(extraStyles);
-        
+
         TextField<Integer> renderingBuffer = new TextField<Integer>("renderingBuffer", new MapModel(new PropertyModel(layerModel, "metadata"), LayerInfo.BUFFER), Integer.class);
         renderingBuffer.add(RangeValidator.minimum(0));
         styleContainer.add(renderingBuffer);
-        
+
         add(new TextField<String>("wmsPath", new PropertyModel<String>(layerModel, "path")));
 
         List<WMSInterpolation> interpolChoices = Arrays.asList(WMSInterpolation.values());

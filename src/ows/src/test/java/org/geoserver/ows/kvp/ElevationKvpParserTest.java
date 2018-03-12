@@ -16,7 +16,7 @@ import junit.framework.TestCase;
 
 /**
  * Test for the elevation kvp parser
- * 
+ *
  * @author Simone Giannecchini, GeoSolutions SAS
  */
 public class ElevationKvpParserTest extends TestCase {

@@ -48,7 +48,7 @@ class FakeHttpServletRequest implements HttpServletRequest {
             return null;
         }
     };
-    
+
     private String workspace;
 
     private Map<String, String> parameterMap = new HashMap<String, String>(10);
@@ -58,7 +58,7 @@ class FakeHttpServletRequest implements HttpServletRequest {
     public FakeHttpServletRequest(Map<String, String> parameterMap, Cookie[] cookies) {
         this(parameterMap, cookies, null);
     }
-    
+
     public FakeHttpServletRequest(Map<String, String> parameterMap, Cookie[] cookies, String workspace) {
         this.parameterMap = parameterMap;
         this.cookies = cookies;
@@ -122,8 +122,8 @@ class FakeHttpServletRequest implements HttpServletRequest {
     }
 
     public String getRequestURI() {
-        if(workspace != null && !workspace.isEmpty()) {
-            return "/geoserver/"+workspace+"/wms";
+        if (workspace != null && !workspace.isEmpty()) {
+            return "/geoserver/" + workspace + "/wms";
         } else {
             return "/geoserver/wms";
         }

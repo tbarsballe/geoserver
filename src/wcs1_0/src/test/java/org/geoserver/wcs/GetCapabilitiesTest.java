@@ -54,7 +54,7 @@ public class GetCapabilitiesTest extends WCSTestSupport {
         // print(dom);
         checkValidationErrors(dom, WCS10_GETCAPABILITIES_SCHEMA);
     }
-    
+
     @Test
     public void testSkipMisconfigured() throws Exception {
         // enable skipping of misconfigured layers
@@ -66,11 +66,11 @@ public class GetCapabilitiesTest extends WCSTestSupport {
         CoverageStoreInfo cvInfo = getCatalog().getCoverageStoreByName(MockData.TASMANIA_DEM.getLocalPart());
         cvInfo.setURL("file:///I/AM/NOT/THERE");
         getCatalog().save(cvInfo);
-        
+
         // check we got everything but that specific layer, and that the output is still schema compliant
         Document dom = getAsDOM(BASEPATH + "?request=GetCapabilities&service=WCS&version=1.0.0");
         checkValidationErrors(dom, WCS10_DESCRIBECOVERAGE_SCHEMA);
-        
+
         int count = getCatalog().getCoverages().size();
         assertEquals(count - 1, dom.getElementsByTagName("wcs:CoverageOfferingBrief").getLength());
     }
@@ -120,7 +120,7 @@ public class GetCapabilitiesTest extends WCSTestSupport {
     public void testUpdateSequenceEqualsGet() throws Exception {
         long i = getGeoServer().getGlobal().getUpdateSequence();
         Document dom = getAsDOM(BASEPATH
-                + "?request=GetCapabilities&service=WCS&version=1.0.0&updateSequence="+i);
+                + "?request=GetCapabilities&service=WCS&version=1.0.0&updateSequence=" + i);
         // print(dom);
         final Node root = dom.getFirstChild();
         assertEquals("ServiceExceptionReport", root.getNodeName());
@@ -148,7 +148,7 @@ public class GetCapabilitiesTest extends WCSTestSupport {
     public void testUpdateSequenceSuperiorGet() throws Exception {
         long i = getGeoServer().getGlobal().getUpdateSequence() + 1;
         Document dom = getAsDOM(BASEPATH
-                + "?request=GetCapabilities&service=WCS&version=1.0.0&updateSequence="+i);
+                + "?request=GetCapabilities&service=WCS&version=1.0.0&updateSequence=" + i);
         // print(dom);
         checkOws11Exception(dom);
     }
@@ -178,7 +178,7 @@ public class GetCapabilitiesTest extends WCSTestSupport {
     public void testSectionsAll() throws Exception {
         Document dom = getAsDOM(BASEPATH
                 + "?request=GetCapabilities&service=WCS&version=1.0.0&section=/");
-        
+
         checkValidationErrors(dom, WCS10_GETCAPABILITIES_SCHEMA);
         assertXpathEvaluatesTo("1", "count(//wcs:Service)", dom);
         assertXpathEvaluatesTo("1", "count(//wcs:Capability)", dom);
@@ -201,7 +201,7 @@ public class GetCapabilitiesTest extends WCSTestSupport {
         assertXpathEvaluatesTo("0", "count(//wcs:Capability)", dom);
         assertXpathEvaluatesTo("0", "count(//wcs:ContentMetadata)", dom);
     }
-    
+
     @Test
     public void testMetadataLinks() throws Exception {
         Catalog catalog = getCatalog();
@@ -212,7 +212,7 @@ public class GetCapabilitiesTest extends WCSTestSupport {
         ml.setAbout("http://www.geoserver.org");
         ci.getMetadataLinks().add(ml);
         catalog.save(ci);
-        
+
         Document dom = getAsDOM(BASEPATH
                 + "?request=GetCapabilities&service=WCS&version=1.0.0");
         print(dom);
@@ -244,52 +244,52 @@ public class GetCapabilitiesTest extends WCSTestSupport {
         assertXpathEvaluatesTo("simple", xpathBase + "/@xlink:type", dom);
         assertXpathEvaluatesTo(proxyBaseUrl + "/metadata?key=value", xpathBase + "/@xlink:href", dom);
     }
-    
+
     @Test
     public void testWorkspaceQualified() throws Exception {
         int expected = getCatalog().getCoverageStores().size();
         Document dom = getAsDOM(BASEPATH
                 + "?request=GetCapabilities&service=WCS&version=1.0.0");
-        assertEquals( expected, xpath.getMatchingNodes("//wcs:CoverageOfferingBrief", dom).getLength());
-        
+        assertEquals(expected, xpath.getMatchingNodes("//wcs:CoverageOfferingBrief", dom).getLength());
+
         expected = getCatalog().getCoverageStoresByWorkspace(MockData.CDF_PREFIX).size();
         dom = getAsDOM("cdf/wcs?request=GetCapabilities&service=WCS&version=1.0.0");
-        assertEquals( expected, xpath.getMatchingNodes("//wcs:CoverageOfferingBrief", dom).getLength());
+        assertEquals(expected, xpath.getMatchingNodes("//wcs:CoverageOfferingBrief", dom).getLength());
     }
-    
+
     @Test
     public void testLayerQualified() throws Exception {
         int expected = getCatalog().getCoverageStores().size();
         Document dom = getAsDOM(BASEPATH
                 + "?request=GetCapabilities&service=WCS&version=1.0.0");
-        assertEquals( expected, xpath.getMatchingNodes("//wcs:CoverageOfferingBrief", dom).getLength());
-        
+        assertEquals(expected, xpath.getMatchingNodes("//wcs:CoverageOfferingBrief", dom).getLength());
+
         dom = getAsDOM("wcs/World/wcs?request=GetCapabilities&service=WCS&version=1.0.0");
-        assertEquals( 1, xpath.getMatchingNodes("//wcs:CoverageOfferingBrief", dom).getLength());
+        assertEquals(1, xpath.getMatchingNodes("//wcs:CoverageOfferingBrief", dom).getLength());
     }
-    
+
     @Test
     public void testTimeCoverage() throws Exception {
         setupRasterDimension(WATTEMP, ResourceInfo.TIME, DimensionPresentation.LIST, null);
-        
+
         Document dom = getAsDOM(BASEPATH + "?request=GetCapabilities&service=WCS&version=1.0.0");
         // print(dom);
         checkValidationErrors(dom, WCS10_GETCAPABILITIES_SCHEMA);
-        
+
         // check the envelopes
         String base = "//wcs:CoverageOfferingBrief[wcs:name='wcs:watertemp']//wcs:lonLatEnvelope";
         assertXpathEvaluatesTo("2008-10-31T00:00:00.000Z", base + "/gml:timePosition[1]", dom);
         assertXpathEvaluatesTo("2008-11-01T00:00:00.000Z", base + "/gml:timePosition[2]", dom);
     }
-    
+
     @Test
     public void testTimeRangeCoverage() throws Exception {
         setupRasterDimension(TIMERANGES, ResourceInfo.TIME, DimensionPresentation.LIST, null);
-        
+
         Document dom = getAsDOM(BASEPATH + "?request=GetCapabilities&service=WCS&version=1.0.0");
         // print(dom);
         checkValidationErrors(dom, WCS10_GETCAPABILITIES_SCHEMA);
-        
+
         // check the envelopes
         String base = "//wcs:CoverageOfferingBrief[wcs:name='sf:timeranges']//wcs:lonLatEnvelope";
         assertXpathEvaluatesTo("2008-10-31T00:00:00.000Z", base + "/gml:timePosition[1]", dom);

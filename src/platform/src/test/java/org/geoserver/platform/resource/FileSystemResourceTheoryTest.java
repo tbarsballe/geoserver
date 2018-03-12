@@ -34,8 +34,8 @@ public class FileSystemResourceTheoryTest extends ResourceTheoryTest {
 
     @DataPoints
     public static String[] testPaths() {
-        return new String[] { "FileA", "FileB", "DirC", "DirC/FileD", "DirE", "UndefF",
-                "DirC/UndefF", "DirE/UndefF", "DirE/UndefG/UndefH/UndefI" };
+        return new String[]{"FileA", "FileB", "DirC", "DirC/FileD", "DirE", "UndefF",
+                "DirC/UndefF", "DirE/UndefF", "DirE/UndefG/UndefH/UndefI"};
     }
 
     @Override
@@ -68,15 +68,15 @@ public class FileSystemResourceTheoryTest extends ResourceTheoryTest {
         File fileD = Paths.toFile(store.baseDirectory, "DirC/FileD");
 
         AwaitResourceListener listener = new AwaitResourceListener();
-        
+
         store.get("DirC/FileD").addListener(listener);
         store.watcher.schedule(30, TimeUnit.MILLISECONDS);
-        
+
         long before = fileD.lastModified();
         long after = touch(fileD);
-        assertTrue( "touched", after>before);
-        
-        ResourceNotification n = listener.await(5,TimeUnit.SECONDS);
+        assertTrue("touched", after > before);
+
+        ResourceNotification n = listener.await(5, TimeUnit.SECONDS);
         assertNotNull("detected event", n);
 
         assertEquals("file modified", Kind.ENTRY_MODIFY, n.getKind());
@@ -84,44 +84,48 @@ public class FileSystemResourceTheoryTest extends ResourceTheoryTest {
 
         listener.reset();
         fileD.delete();
-        n = listener.await(5,TimeUnit.SECONDS);
+        n = listener.await(5, TimeUnit.SECONDS);
         assertEquals("file removed", Kind.ENTRY_DELETE, n.getKind());
 
         listener.reset();
         fileD.createNewFile();
-        n = listener.await(5,TimeUnit.SECONDS);
+        n = listener.await(5, TimeUnit.SECONDS);
         assertEquals("file created", Kind.ENTRY_CREATE, n.getKind());
         store.get("DirC/FileD").removeListener(listener);
     }
+
     /**
      * Must delay long enough to match file system resolution (2 seconds).
      * <p>
      * Example: Linux systems expect around 1 second resolution for file modification.
+     *
      * @param file
      * @return resulting value of lastmodified
      * @throws InterruptedException
      */
-    private long touch(File file ) throws InterruptedException {
+    private long touch(File file) throws InterruptedException {
         long origional = file.lastModified();
-        if( origional == 0l ){
+        if (origional == 0l) {
             return 0l; // cannot modify a file that does not exsist
         }
         Thread.sleep(2000); // wait two seconds
         long modifided = System.currentTimeMillis();
-        file.setLastModified( modifided );        
-        for(modifided = file.lastModified(); (modifided-origional) < 2000; modifided = file.lastModified() ){
-            file.setLastModified( System.currentTimeMillis() );
+        file.setLastModified(modifided);
+        for (modifided = file.lastModified(); (modifided - origional) < 2000; modifided = file.lastModified()) {
+            file.setLastModified(System.currentTimeMillis());
             Thread.sleep(1000);
         }
         return modifided;
     }
+
     @Test
     public void eventNotification() throws InterruptedException {
         AwaitResourceListener listener = new AwaitResourceListener();
-        
-        ResourceNotification n = listener.await(5,TimeUnit.SECONDS); // expect timeout as no events will be sent!
-        assertNull( "No events expected", n );        
+
+        ResourceNotification n = listener.await(5, TimeUnit.SECONDS); // expect timeout as no events will be sent!
+        assertNull("No events expected", n);
     }
+
     @Test
     public void directoryEvents() throws Exception {
         File fileA = Paths.toFile(store.baseDirectory, "FileA");
@@ -133,11 +137,11 @@ public class FileSystemResourceTheoryTest extends ResourceTheoryTest {
         AwaitResourceListener listener = new AwaitResourceListener();
         store.get(Paths.BASE).addListener(listener);
         store.watcher.schedule(30, TimeUnit.MILLISECONDS);
-        
+
         long before = fileB.lastModified();
         long after = touch(fileB);
-        assertTrue( "touched", after>before);
-        ResourceNotification n = listener.await(5,TimeUnit.SECONDS);
+        assertTrue("touched", after > before);
+        ResourceNotification n = listener.await(5, TimeUnit.SECONDS);
 
         assertEquals(Kind.ENTRY_MODIFY, n.getKind());
         assertEquals(Paths.BASE, n.getPath());
@@ -148,40 +152,43 @@ public class FileSystemResourceTheoryTest extends ResourceTheoryTest {
 
         listener.reset();
         fileA.delete();
-        n = listener.await(5,TimeUnit.SECONDS);
-        assertEquals(Kind.ENTRY_MODIFY,n.getKind());
-        assertEquals(Paths.BASE,n.getPath());
+        n = listener.await(5, TimeUnit.SECONDS);
+        assertEquals(Kind.ENTRY_MODIFY, n.getKind());
+        assertEquals(Paths.BASE, n.getPath());
         e = n.events().get(0);
         assertEquals(Kind.ENTRY_DELETE, e.getKind());
         assertEquals("FileA", e.getPath());
-        
+
         listener.reset();
         fileA.createNewFile();
-        n = listener.await(5,TimeUnit.SECONDS);
-        assertEquals(Kind.ENTRY_MODIFY,n.getKind());
-        assertEquals(Paths.BASE,n.getPath());
+        n = listener.await(5, TimeUnit.SECONDS);
+        assertEquals(Kind.ENTRY_MODIFY, n.getKind());
+        assertEquals(Paths.BASE, n.getPath());
         e = n.events().get(0);
         assertEquals(Kind.ENTRY_CREATE, e.getKind());
         assertEquals("FileA", e.getPath());
-        
+
         store.get(Paths.BASE).removeListener(listener);
     }
 
-    /** ResourceListener that traps the next ResourceNotification for testing */
+    /**
+     * ResourceListener that traps the next ResourceNotification for testing
+     */
     static class AwaitResourceListener extends Await<ResourceNotification> implements ResourceListener {
         @Override
         public void changed(ResourceNotification notify) {
             notify(notify);
         }
     }
+
     /**
      * Support class to efficiently wait for event notification.
-     * 
-     * @author Jody Garnett (Boundless)
+     *
      * @param <T> Event Type
+     * @author Jody Garnett (Boundless)
      */
     static abstract class Await<T> {
-        
+
         Lock lock = new ReentrantLock(true);
 
         Condition condition = lock.newCondition();
@@ -201,31 +208,33 @@ public class FileSystemResourceTheoryTest extends ResourceTheoryTest {
             }
 
         }
-        public T await() throws InterruptedException{
-            return await(5,TimeUnit.SECONDS);
+
+        public T await() throws InterruptedException {
+            return await(5, TimeUnit.SECONDS);
         }
+
         /**
          * Wait for event notification.
          * <p>
          * If the event has arrived already this method will return immediately, if not
          * we will wait for signal. If the event still has not arrived after five seconds
          * null will be returned.
-         *  
+         *
          * @return Notification event, or null if it does not arrive within 5 seconds
          * @throws InterruptedException
          */
         public T await(long howlong, TimeUnit unit) throws InterruptedException {
             final long DELAY = unit.convert(howlong, TimeUnit.MILLISECONDS);
-            lock.lock();            
+            lock.lock();
             try {
                 if (this.event == null) {
                     long mark = System.currentTimeMillis();
                     while (this.event == null) {
                         long check = System.currentTimeMillis();
-                        if( mark + DELAY < check ){
+                        if (mark + DELAY < check) {
                             return null; // event did not show up!
                         }
-                        boolean signal = condition.await(1, TimeUnit.SECONDS );
+                        boolean signal = condition.await(1, TimeUnit.SECONDS);
                         //System.out.println("check wait="+signal+" time="+check+" notify="+this.event);
                     }
                 }
@@ -243,12 +252,13 @@ public class FileSystemResourceTheoryTest extends ResourceTheoryTest {
                 lock.unlock();
             }
         }
-        
+
         @Override
         public String toString() {
             return "Await [event=" + event + "]";
-        }        
+        }
     }
+
     @Override
     protected Resource getDirectory() {
         try {

@@ -44,8 +44,8 @@ public class AccessManagerTest extends GeofenceBaseTest {
 
     public void testAdmin() {
         UsernamePasswordAuthenticationToken user = new UsernamePasswordAuthenticationToken("admin",
-                "geoserver", Arrays.asList(new GrantedAuthority[] {
-                        new SimpleGrantedAuthority("ROLE_ADMINISTRATOR") }));
+                "geoserver", Arrays.asList(new GrantedAuthority[]{
+                new SimpleGrantedAuthority("ROLE_ADMINISTRATOR")}));
 
         // check workspace access
         WorkspaceInfo citeWS = getCatalog().getWorkspaceByName(MockData.CITE_PREFIX);
@@ -65,8 +65,8 @@ public class AccessManagerTest extends GeofenceBaseTest {
     public void testCiteCannotWriteOnWorkspace() {
         configManager.getConfiguration().setGrantWriteToWorkspacesToAuthenticatedUsers(false);
         UsernamePasswordAuthenticationToken user = new UsernamePasswordAuthenticationToken("cite",
-                "cite", Arrays.asList(new GrantedAuthority[] {
-                        new SimpleGrantedAuthority("ROLE_AUTHENTICATED") }));
+                "cite", Arrays.asList(new GrantedAuthority[]{
+                new SimpleGrantedAuthority("ROLE_AUTHENTICATED")}));
 
         // check workspace access
         WorkspaceInfo citeWS = getCatalog().getWorkspaceByName(MockData.CITE_PREFIX);
@@ -78,8 +78,8 @@ public class AccessManagerTest extends GeofenceBaseTest {
     public void testCiteCanWriteOnWorkspace() {
         configManager.getConfiguration().setGrantWriteToWorkspacesToAuthenticatedUsers(true);
         UsernamePasswordAuthenticationToken user = new UsernamePasswordAuthenticationToken("cite",
-                "cite", Arrays.asList(new GrantedAuthority[] {
-                        new SimpleGrantedAuthority("ROLE_AUTHENTICATED") }));
+                "cite", Arrays.asList(new GrantedAuthority[]{
+                new SimpleGrantedAuthority("ROLE_AUTHENTICATED")}));
 
         // check workspace access
         WorkspaceInfo citeWS = getCatalog().getWorkspaceByName(MockData.CITE_PREFIX);
@@ -209,7 +209,6 @@ public class AccessManagerTest extends GeofenceBaseTest {
     /**
      * This test is very similar to testAreaLimited(), but the source resource is set to have the 900913 SRS. We expect that the allowedarea is
      * projected into the resource CRS.
-     *
      */
     public void testArea900913() throws Exception {
         UsernamePasswordAuthenticationToken user = new UsernamePasswordAuthenticationToken("area",
@@ -271,8 +270,8 @@ public class AccessManagerTest extends GeofenceBaseTest {
         String service = "WMS";
         String requestName = "GetMap";
         Authentication user = new UsernamePasswordAuthenticationToken("admin", "geoserver",
-                Arrays.asList(new GrantedAuthority[] {
-                        new SimpleGrantedAuthority("ROLE_ADMINISTRATOR") }));
+                Arrays.asList(new GrantedAuthority[]{
+                        new SimpleGrantedAuthority("ROLE_ADMINISTRATOR")}));
         SecurityContextHolder.getContext().setAuthentication(user);
         List<MapLayerInfo> mapLayersInfos = new ArrayList<>();
         mapLayersInfos.add(new MapLayerInfo(getCatalog().getLayerByName("Buildings")));

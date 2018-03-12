@@ -13,7 +13,7 @@ import org.geoserver.wms.GetLegendGraphicRequest;
 
 /**
  * Producer of legend graphics in image/gif format.
- * 
+ *
  * @author Gabriel Roldan
  * @version $Id$
  */

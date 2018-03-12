@@ -88,7 +88,7 @@ public class GenericDbSourceImpl extends NamedImpl implements DbSource {
 
     @Override
     public Map<String, Object> getParameters() {
-      throw new UnsupportedOperationException("Generic datasource cannot be used as a store.");
+        throw new UnsupportedOperationException("Generic datasource cannot be used as a store.");
     }
 
     @Override

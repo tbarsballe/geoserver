@@ -32,7 +32,7 @@ import org.opengis.parameter.GeneralParameterValue;
 public class ReaderDimensionAccessorTest {
 
     static class MockDimensionReader extends AbstractGridCoverage2DReader {
-        
+
         Map<String, String> metadata = new HashMap<>();
 
         @Override
@@ -46,23 +46,25 @@ public class ReaderDimensionAccessorTest {
                 throws IllegalArgumentException, IOException {
             return null;
         }
-        
+
         @Override
         public String[] getMetadataNames() {
             Set<String> keys = metadata.keySet();
             return (String[]) keys.toArray(new String[keys.size()]);
         }
-        
+
         @Override
         public String getMetadataValue(String coverageName, String name) {
             return super.getMetadataValue(name);
         }
-        
+
         @Override
         public String getMetadataValue(String name) {
             return metadata.get(name);
         }
-    };
+    }
+
+    ;
 
     @Test
     public void testMixedTimeExtraction() throws IOException, ParseException {
@@ -81,7 +83,7 @@ public class ReaderDimensionAccessorTest {
         assertEquals(accessor.getTimeFormat().parse("2016-02-23T09:00:00.000Z"), thirdEntry.getMinValue());
         assertEquals(accessor.getTimeFormat().parse("2016-02-23T12:00:00.000Z"), thirdEntry.getMaxValue());
     }
-    
+
     @Test
     public void testMixedElevationExtraction() throws IOException {
         MockDimensionReader reader = new MockDimensionReader();
@@ -113,7 +115,7 @@ public class ReaderDimensionAccessorTest {
         reader.metadata.put("MYDIM_DOMAIN_DATATYPE", "java.util.Date");
         ReaderDimensionsAccessor accessor = new ReaderDimensionsAccessor(reader);
         List<Object> converted = accessor.convertDimensionValue("MYDIM",
-                Arrays.asList("2001-05-01T00:00:00.000Z","2001-05-02T00:00:00.000Z","2001-05-03T00:00:00.000Z"));
+                Arrays.asList("2001-05-01T00:00:00.000Z", "2001-05-02T00:00:00.000Z", "2001-05-03T00:00:00.000Z"));
         assertEquals(3, converted.size());
         assertEquals(DF.parse("2001-05-01 00:00:00"), converted.get(0));
         assertEquals(DF.parse("2001-05-02 00:00:00"), converted.get(1));

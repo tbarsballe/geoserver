@@ -26,7 +26,7 @@ import org.opengis.filter.FilterFactory2;
 import org.opengis.filter.expression.Function;
 
 public class UTFGridStyleVisitorTest {
-    
+
     UTFGridStyleVisitor visitor;
     StyleBuilder sb = new StyleBuilder();
     FilterFactory2 ff = sb.getFilterFactory();
@@ -46,7 +46,7 @@ public class UTFGridStyleVisitorTest {
         Style copy = (Style) visitor.getCopy();
         assertEquals(0, copy.featureTypeStyles().size());
     }
-    
+
     @Test
     public void testFill() {
         PolygonSymbolizer polygonSymbolizer = sb.createPolygonSymbolizer(Color.BLACK, Color.BLACK, 3);
@@ -65,7 +65,7 @@ public class UTFGridStyleVisitorTest {
         assertEquals(colorFunction, fill.getColor());
         assertEquals(Integer.valueOf(1), fill.getOpacity().evaluate(null, Integer.class));
     }
-    
+
     @Test
     public void testGraphicStrokeFill() {
         Graphic graphic = sb.createGraphic(null, sb.createMark("square"), null);
@@ -76,7 +76,7 @@ public class UTFGridStyleVisitorTest {
         Fill fill = sb.createFill(null, null, 0.5, graphic);
         PolygonSymbolizer polygonSymbolizer = sb.createPolygonSymbolizer(stroke, fill);
         Style style = sb.createStyle(polygonSymbolizer);
-        
+
         style.accept(visitor);
         Style copy = (Style) visitor.getCopy();
         PolygonSymbolizer ls = (PolygonSymbolizer) copy.featureTypeStyles().get(0).rules().get(0).symbolizers().get(0);
@@ -89,7 +89,7 @@ public class UTFGridStyleVisitorTest {
         assertEquals(colorFunction, fillCopy.getColor());
         assertEquals(Integer.valueOf(1), fillCopy.getOpacity().evaluate(null, Integer.class));
     }
-    
+
     @Test
     public void testLine() {
         Style style = sb.createStyle(sb.createLineSymbolizer(sb.createStroke(Color.BLACK, 3)));
@@ -102,10 +102,10 @@ public class UTFGridStyleVisitorTest {
         assertNull(stroke.dashArray());
     }
 
-    
+
     @Test
     public void testStrokedLine() {
-        Style style = sb.createStyle(sb.createLineSymbolizer(sb.createStroke(Color.BLACK, 1, new float[] {8, 8})));
+        Style style = sb.createStyle(sb.createLineSymbolizer(sb.createStroke(Color.BLACK, 1, new float[]{8, 8})));
         style.accept(visitor);
         Style copy = (Style) visitor.getCopy();
         LineSymbolizer ls = (LineSymbolizer) copy.featureTypeStyles().get(0).rules().get(0).symbolizers().get(0);
@@ -114,7 +114,7 @@ public class UTFGridStyleVisitorTest {
         assertEquals(Integer.valueOf(1), stroke.getWidth().evaluate(null, Integer.class));
         assertEquals(0, stroke.dashArray().size());
     }
-    
+
     @Test
     public void testGraphicStroke() {
         Graphic graphic = sb.createGraphic(null, sb.createMark("square"), null);
@@ -122,7 +122,7 @@ public class UTFGridStyleVisitorTest {
         Stroke stroke = sb.createStroke();
         stroke.setGraphicStroke(graphic);
         Style style = sb.createStyle(sb.createLineSymbolizer(stroke));
-        
+
         style.accept(visitor);
         Style copy = (Style) visitor.getCopy();
         LineSymbolizer ls = (LineSymbolizer) copy.featureTypeStyles().get(0).rules().get(0).symbolizers().get(0);
@@ -131,7 +131,7 @@ public class UTFGridStyleVisitorTest {
         assertEquals(Integer.valueOf(8), stroke.getWidth().evaluate(null, Integer.class));
         assertNull(stroke.dashArray());
     }
-    
+
     /**
      * Blending alters colors (which are ids for UTFGrid), remove it
      */
@@ -140,16 +140,16 @@ public class UTFGridStyleVisitorTest {
         FeatureTypeStyle fts = sb.createFeatureTypeStyle(sb.createLineSymbolizer());
         fts.getOptions().put(FeatureTypeStyle.COMPOSITE, BlendingMode.MULTIPLY.getName());
         fts.getOptions().put(FeatureTypeStyle.COMPOSITE_BASE, "true");
-        Style style =  sb.createStyle();
+        Style style = sb.createStyle();
         style.featureTypeStyles().add(fts);
-        
+
         style.accept(visitor);
         Style copy = (Style) visitor.getCopy();
         Map<String, String> options = copy.featureTypeStyles().get(0).getOptions();
         assertNull(options.get(FeatureTypeStyle.COMPOSITE));
         assertNull(options.get(FeatureTypeStyle.COMPOSITE_BASE));
     }
-    
+
     /**
      * Alpha composite does not alter colors (which are ids for UTFGrid), we can preserve it
      */
@@ -158,16 +158,16 @@ public class UTFGridStyleVisitorTest {
         FeatureTypeStyle fts = sb.createFeatureTypeStyle(sb.createLineSymbolizer());
         fts.getOptions().put(FeatureTypeStyle.COMPOSITE, "source-over");
         fts.getOptions().put(FeatureTypeStyle.COMPOSITE_BASE, "true");
-        Style style =  sb.createStyle();
+        Style style = sb.createStyle();
         style.featureTypeStyles().add(fts);
-        
+
         style.accept(visitor);
         Style copy = (Style) visitor.getCopy();
         Map<String, String> options = copy.featureTypeStyles().get(0).getOptions();
         assertEquals("source-over", options.get(FeatureTypeStyle.COMPOSITE));
         assertEquals("true", options.get(FeatureTypeStyle.COMPOSITE_BASE));
     }
-    
+
     @Test
     public void testRasterToVectorTransform() {
         FeatureTypeStyle fts = sb.createFeatureTypeStyle(sb.createLineSymbolizer());
@@ -176,18 +176,18 @@ public class UTFGridStyleVisitorTest {
         Function tx = ff.function("ras:Contour", data, levels);
         fts.setTransformation(tx);
         fts.getOptions().put(FeatureTypeStyle.COMPOSITE_BASE, "true");
-        Style style =  sb.createStyle();
+        Style style = sb.createStyle();
         style.featureTypeStyles().add(fts);
-        
+
         style.accept(visitor);
         Style copy = (Style) visitor.getCopy();
         assertTrue(visitor.hasTransformations());
         assertTrue(visitor.hasVectorTransformations());
         assertThat(copy.featureTypeStyles().get(0).getTransformation(), instanceOf(Function.class));
-        Function txCopy =  (Function) copy.featureTypeStyles().get(0).getTransformation();
+        Function txCopy = (Function) copy.featureTypeStyles().get(0).getTransformation();
         assertEquals("ras:Contour", txCopy.getName());
     }
-    
+
     @Test
     public void testVectorToRasterTransform() {
         FeatureTypeStyle fts = sb.createFeatureTypeStyle(sb.createLineSymbolizer());
@@ -195,14 +195,14 @@ public class UTFGridStyleVisitorTest {
         Function tx = ff.function("vec:Heatmap", data);
         fts.setTransformation(tx);
         fts.getOptions().put(FeatureTypeStyle.COMPOSITE_BASE, "true");
-        Style style =  sb.createStyle();
+        Style style = sb.createStyle();
         style.featureTypeStyles().add(fts);
-        
+
         style.accept(visitor);
         Style copy = (Style) visitor.getCopy();
         assertTrue(visitor.hasTransformations());
         assertFalse(visitor.hasVectorTransformations());
         assertEquals(0, copy.featureTypeStyles().size());
     }
-    
+
 }

@@ -12,7 +12,6 @@ import org.geowebcache.grid.GridSetBroker;
 
 /**
  * @see GWC#getGridSetBroker()
- * 
  */
 class GridSetDetachableModel extends LoadableDetachableModel<GridSet> {
     private static final long serialVersionUID = 7948457592325861589L;

@@ -105,9 +105,10 @@ public class FeatureTypeControllerWFSTest extends CatalogRESTTestSupport {
         put(BASEPATH + "/workspaces/gs/datastores/ngpds/file.properties?" + q, zbytes.toByteArray(),
                 "application/zip");
     }
-    
+
     /**
      * Add a property data store with multiple feature types, but only configure the first.
+     *
      * @param configureFeatureType
      * @throws Exception
      */

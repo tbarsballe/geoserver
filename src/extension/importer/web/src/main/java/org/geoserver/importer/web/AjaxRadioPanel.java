@@ -22,27 +22,28 @@ import org.apache.wicket.model.Model;
  * <p>
  * Taken from https://github.com/mnadeem/wicketAjaxRadio.
  * </p>
+ *
  * @param <T>
  */
 public abstract class AjaxRadioPanel<T extends Serializable> extends Panel {
 
     private static final long serialVersionUID = 1L;
-    
+
     protected abstract void onRadioSelect(AjaxRequestTarget target, T newSelection);
-    
+
     public AjaxRadioPanel(String id, List<T> items) {
         this(id, items, null);
     }
-    
+
     public AjaxRadioPanel(String id, List<T> items, T currentSelection) {
         super(id);
         add(buildContents(items, currentSelection));
     }
 
     private Component buildContents(List<T> items, T currentSelection) {
-        
+
         final RadioGroup<T> group = new RadioGroup<T>("radioGroup", new Model(currentSelection));
-        group.add(new ListView<T> ("radioButtons", items) {
+        group.add(new ListView<T>("radioButtons", items) {
             @Override
             protected void populateItem(ListItem<T> item) {
                 item.add(newRadioCell(group, item));
@@ -54,9 +55,9 @@ public abstract class AjaxRadioPanel<T extends Serializable> extends Panel {
 
     protected AjaxRadio<T> newRadioCell(final RadioGroup<T> group, ListItem<T> item) {
         return new AjaxRadio<T>("radio", item.getModel()) {
-    
+
             private static final long serialVersionUID = 1L;
-    
+
             @Override
             public void onAjaxEvent(AjaxRequestTarget target) {
                 onRadioSelect(target, group.getModelObject());

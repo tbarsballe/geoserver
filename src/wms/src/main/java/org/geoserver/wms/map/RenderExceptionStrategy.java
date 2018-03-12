@@ -48,10 +48,9 @@ public class RenderExceptionStrategy implements RenderListener {
     /**
      * Creates a render listener to stop the given {@code renderer} when a non ignorable
      * exception is notified
-     * 
-     * @param renderer
-     *            the renderer to {@link GTRenderer#stopRendering() stop} if a non
-     *            ignorable exception occurs
+     *
+     * @param renderer the renderer to {@link GTRenderer#stopRendering() stop} if a non
+     *                 ignorable exception occurs
      */
     public RenderExceptionStrategy(final GTRenderer renderer) {
         this.renderer = renderer;
@@ -61,7 +60,7 @@ public class RenderExceptionStrategy implements RenderListener {
     /**
      * Tells whether a non ignorable exception occurred and hence the rendering process was
      * aborted
-     * 
+     *
      * @return {@code true} if rendering aborted due to an exception, {@code false} otherwise
      */
     public boolean exceptionOccurred() {
@@ -70,7 +69,7 @@ public class RenderExceptionStrategy implements RenderListener {
 
     /**
      * @return the non ignorable exception occurred on the rendering loop, or {@code null} if
-     *         the renderer finished successfully.
+     * the renderer finished successfully.
      */
     public Exception getException() {
         return renderException;
@@ -83,7 +82,7 @@ public class RenderExceptionStrategy implements RenderListener {
     public void errorOccurred(final Exception renderException) {
 
         Throwable cause = renderException;
-        
+
         while (cause != null) {
             if (cause instanceof TransformException
                     || cause instanceof IllegalAttributeException
@@ -107,7 +106,7 @@ public class RenderExceptionStrategy implements RenderListener {
 
     /**
      * Not used, we're only checking exceptions here
-     * 
+     *
      * @see RenderListener#featureRenderer(SimpleFeature)
      */
     public void featureRenderer(SimpleFeature feature) {

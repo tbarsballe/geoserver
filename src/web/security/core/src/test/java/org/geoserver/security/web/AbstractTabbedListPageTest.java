@@ -23,9 +23,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 public abstract class AbstractTabbedListPageTest<T> extends AbstractSecurityWicketTestSupport {
-    
-     public static final String FIRST_COLUM_PATH="itemProperties:0:component:link";
-    
+
+    public static final String FIRST_COLUM_PATH = "itemProperties:0:component:link";
+
 
     @Before
     public void setUp() throws Exception {
@@ -47,50 +47,55 @@ public abstract class AbstractTabbedListPageTest<T> extends AbstractSecurityWick
     public void testRenders() throws Exception {
         tester.assertRenderedPage(listPage(getServiceName()).getClass());
     }
-    
-    
-            
+
+
     protected String getItemsPath() {
-        return getTabbedPanelPath()+":panel:table:listContainer:items";
-    };
+        return getTabbedPanelPath() + ":panel:table:listContainer:items";
+    }
+
+    ;
 
     protected abstract String getTabbedPanelPath();
+
     protected abstract String getServiceName();
+
     abstract protected Page listPage(String serviceName);
-    abstract protected Page newPage(AbstractSecurityPage responsePage,Object...params);
-    abstract protected Page editPage(AbstractSecurityPage responsePage,Object...params);
- 
+
+    abstract protected Page newPage(AbstractSecurityPage responsePage, Object... params);
+
+    abstract protected Page editPage(AbstractSecurityPage responsePage, Object... params);
+
     abstract protected String getSearchString() throws Exception;
+
     abstract protected Property<T> getEditProperty();
+
     abstract protected boolean checkEditForm(String search);
-    
-    
+
+
     @Test
     public void testEdit() throws Exception {
         // the name link for the first user
         AbstractSecurityPage listPage = (AbstractSecurityPage) listPage(getServiceName());
         //tester.startPage(listPage);
-                   
+
         String search = getSearchString();
         assertNotNull(search);
         Component c = getFromList(FIRST_COLUM_PATH, search, getEditProperty());
         assertNotNull(c);
         tester.clickLink(c.getPageRelativePath());
-        
+
         tester.assertRenderedPage(editPage(listPage).getClass());
-        assertTrue(checkEditForm(search));                
+        assertTrue(checkEditForm(search));
     }
-    
-    
-    
-    
+
+
     protected Component getFromList(String columnPath, Object columnValue, Property<T> property) {
-        
+
         MarkupContainer listView = (MarkupContainer) tester.getLastRenderedPage().get(getItemsPath());
-        
+
         @SuppressWarnings("unchecked")
         Iterator<Component> it = (Iterator<Component>) listView.iterator();
-        
+
         while (it.hasNext()) {
             MarkupContainer m = (MarkupContainer) it.next();
             Component c = m.get(columnPath);
@@ -101,64 +106,63 @@ public abstract class AbstractTabbedListPageTest<T> extends AbstractSecurityWick
         }
         return null;
     }
-    
+
     @Test
     public void testNew() throws Exception {
-        listPage(getServiceName());        
-        tester.clickLink(getTabbedPanelPath()+":panel:header:addNew");        
+        listPage(getServiceName());
+        tester.clickLink(getTabbedPanelPath() + ":panel:header:addNew");
         Page newPage = tester.getLastRenderedPage();
         tester.assertRenderedPage(newPage.getClass());
     }
-    
-    
-    
+
+
     @Test
     public void testRemove() throws Exception {
         addAdditonalData();
-        doRemove(getTabbedPanelPath()+":panel:header:removeSelected");
+        doRemove(getTabbedPanelPath() + ":panel:header:removeSelected");
     }
-    
-    
+
+
     protected void doRemove(String pathForLink) throws Exception {
         Page testPage = listPage(getServiceName());
-        
-        String selectAllPath = getTabbedPanelPath()+":panel:table:listContainer:selectAllContainer:selectAll";        
+
+        String selectAllPath = getTabbedPanelPath() + ":panel:table:listContainer:selectAllContainer:selectAll";
         tester.assertComponent(selectAllPath, CheckBox.class);
         CheckBox selectAllComponent = (CheckBox) tester.getComponentFromLastRenderedPage(selectAllPath);
-        
+
         // simulate setting a form value, without an actual form around it
         setFormComponentValue(selectAllComponent, "true");
         tester.executeAjaxEvent(selectAllPath, "click");
 
-        String windowPath=getTabbedPanelPath()+ ":panel:dialog:dialog";       
-        ModalWindow w  = (ModalWindow) testPage.get(windowPath);                        
+        String windowPath = getTabbedPanelPath() + ":panel:dialog:dialog";
+        ModalWindow w = (ModalWindow) testPage.get(windowPath);
         assertNull(w.getTitle()); // window was not opened
         tester.executeAjaxEvent(pathForLink, "click");
         assertNotNull(w.getTitle()); // window was opened        
-        simulateDeleteSubmit();        
+        simulateDeleteSubmit();
         executeModalWindowCloseButtonCallback(w);
     }
-        
-    protected abstract void simulateDeleteSubmit() throws Exception;        
+
+    protected abstract void simulateDeleteSubmit() throws Exception;
 
     protected Component getRemoveLink() {
-        Component result =tester.getLastRenderedPage().get(getTabbedPanelPath()+":panel:header:removeSelected");
+        Component result = tester.getLastRenderedPage().get(getTabbedPanelPath() + ":panel:header:removeSelected");
         assertNotNull(result);
         return result;
     }
-    
+
     protected Component getRemoveLinkWithRoles() {
-        Component result =tester.getLastRenderedPage().get(getTabbedPanelPath()+":panel:header:removeSelectedWithRoles");
+        Component result = tester.getLastRenderedPage().get(getTabbedPanelPath() + ":panel:header:removeSelectedWithRoles");
         assertNotNull(result);
         return result;
     }
 
-    
+
     protected Component getAddLink() {
-        Component result =tester.getLastRenderedPage().get(getTabbedPanelPath()+":panel:header:addNew");
+        Component result = tester.getLastRenderedPage().get(getTabbedPanelPath() + ":panel:header:addNew");
         assertNotNull(result);
         return result;
     }
 
-    
+
 }

@@ -18,8 +18,8 @@ import org.opengis.filter.identity.FeatureId;
 import org.opengis.filter.identity.Identifier;
 
 /**
- * Extracts feature type names from any Id filters. 
- * 
+ * Extracts feature type names from any Id filters.
+ *
  * @author Justin Deoliveira, OpenGeo
  */
 public class TypeNameExtractingVisitor extends DefaultFilterVisitor {

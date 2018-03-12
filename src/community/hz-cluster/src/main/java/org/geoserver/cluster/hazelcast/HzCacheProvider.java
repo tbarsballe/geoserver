@@ -39,7 +39,6 @@ import com.hazelcast.core.IMap;
  * {@link CacheProvider} for a cluster configuration. Looked up by interface by
  * {@link DefaultCacheProvider#findProvider()} hence shall be declared in
  * {@code applicationContext.xml}.
- *
  */
 public class HzCacheProvider implements CacheProvider {
 
@@ -49,7 +48,9 @@ public class HzCacheProvider implements CacheProvider {
 
     public static final String DEFAULT_TIME_KEY = "evictionTime";
 
-    /** Expiration time in minutes for each entry*/
+    /**
+     * Expiration time in minutes for each entry
+     */
     public final long expirationMinutes = Long.parseLong(System.getProperty(DEFAULT_TIME_KEY, DEFAULT_TTL + ""));
 
     private Map<String, Cache<?, ?>> inUse = Maps.newConcurrentMap();
@@ -221,7 +222,7 @@ public class HzCacheProvider implements CacheProvider {
         private XStreamPersister persister;
 
         public HzCatalogCache(String mapName, long ttl, TimeUnit ttlUnit,
-                XStreamPersisterFactory serializationFactory2) {
+                              XStreamPersisterFactory serializationFactory2) {
             this.mapName = mapName;
             this.ttl = ttl;
             this.timeunit = ttlUnit;

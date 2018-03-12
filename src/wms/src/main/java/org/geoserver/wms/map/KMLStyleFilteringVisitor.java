@@ -10,7 +10,7 @@ import org.geotools.styling.PointSymbolizer;
 
 /**
  * A style visitor that copies styles but removes all point and text symbolizers
- * 
+ *
  * @author Andrea Aime - OpenGeo
  */
 public class KMLStyleFilteringVisitor extends SymbolizerFilteringVisitor {
@@ -23,5 +23,5 @@ public class KMLStyleFilteringVisitor extends SymbolizerFilteringVisitor {
         pages.push(null);
     }
 
-   
+
 }

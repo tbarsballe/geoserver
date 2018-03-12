@@ -43,11 +43,11 @@ import com.google.common.util.concurrent.ListenableFuture;
 
 /**
  * A delegating {@link RuleReaderService} with caching capabilities.
- * <P/>
+ * <p/>
  * Cache eviction policy is LRU.<br/>
  * Cache coherence is handled by entry timeout.<br/>
  * <p/>
- * 
+ *
  * @author ETj (etj at geo-solutions.it)
  */
 public class CachedRuleReader implements RuleReaderService {
@@ -78,7 +78,7 @@ public class CachedRuleReader implements RuleReaderService {
 
     /**
      * (Re)Init the cache, pulling the configuration from the configurationManager.
-     *
+     * <p>
      * Please use {@link #getCacheInitParams() } to set the cache parameters before <code>init()</code>ting the cache
      */
     public final void init() {
@@ -211,7 +211,7 @@ public class CachedRuleReader implements RuleReaderService {
      */
     @Override
     public AccessInfo getAccessInfo(String userName, String profileName, String instanceName,
-            String sourceAddress, String service, String request, String workspace, String layer) {
+                                    String sourceAddress, String service, String request, String workspace, String layer) {
         LOGGER.severe("DEPRECATED METHODS ARE NOT CACHED");
         return realRuleReaderService.getAccessInfo(userName, profileName, instanceName,
                 sourceAddress, service, request, workspace, layer);
@@ -261,8 +261,8 @@ public class CachedRuleReader implements RuleReaderService {
      */
     @Override
     public List<ShortRule> getMatchingRules(String userName, String profileName,
-            String instanceName, String sourceAddress, String service, String request,
-            String workspace, String layer) {
+                                            String instanceName, String sourceAddress, String service, String request,
+                                            String workspace, String layer) {
         LOGGER.severe("DEPRECATED METHODS ARE NOT CACHED");
         return realRuleReaderService.getMatchingRules(userName, profileName, instanceName,
                 sourceAddress, service, request, workspace, layer);

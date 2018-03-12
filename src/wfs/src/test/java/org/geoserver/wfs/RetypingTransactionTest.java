@@ -18,19 +18,19 @@ import org.w3c.dom.Document;
 public class RetypingTransactionTest extends WFSTestSupport {
 
     @Override
-    protected void setUpInternal(SystemTestData dataDirectory) throws Exception {        
+    protected void setUpInternal(SystemTestData dataDirectory) throws Exception {
         Catalog catalog = getCatalog();
-        
+
         FeatureTypeInfo featureType1 = catalog.getFeatureTypeByName(SystemTestData.POLYGONS.getLocalPart());
-        featureType1.setName( "MyPolygons");
+        featureType1.setName("MyPolygons");
         getCatalog().save(featureType1);
-        
+
         FeatureTypeInfo featureType2 = catalog.getFeatureTypeByName(SystemTestData.LINES.getLocalPart());
-        featureType2.setName( "MyLines");
+        featureType2.setName("MyLines");
         getCatalog().save(featureType2);
-        
+
         FeatureTypeInfo featureType3 = catalog.getFeatureTypeByName(SystemTestData.POINTS.getLocalPart());
-        featureType3.setName( "MyPoints");
+        featureType3.setName("MyPoints");
         getCatalog().save(featureType3);
     }
 
@@ -86,7 +86,7 @@ public class RetypingTransactionTest extends WFSTestSupport {
 
     @Test
     public void testUpdate() throws Exception {
-     // 1. do a getFeature
+        // 1. do a getFeature
         String getFeature = "<wfs:GetFeature " + "service=\"WFS\" "
                 + "version=\"1.0.0\" "
                 + "xmlns:cgf=\"http://www.opengis.net/cite/geometry\" "
@@ -124,7 +124,7 @@ public class RetypingTransactionTest extends WFSTestSupport {
         assertEquals("t0003", dom.getElementsByTagName("cgf:id").item(0)
                 .getFirstChild().getNodeValue());
     }
-    
+
     @Test
     public void testDelete() throws Exception {
 

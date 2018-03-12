@@ -23,7 +23,9 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
 import org.geoserver.catalog.CoverageInfo;
 import org.geoserver.catalog.LayerInfo;
+
 import static org.geoserver.wcs.responses.AscCoverageResponseDelegate.ARCGRID_COVERAGE_FORMAT;
+
 import org.geoserver.web.publish.PublishedConfigurationPanel;
 import org.geoserver.web.wicket.LiveCollectionModel;
 import org.geoserver.web.wicket.SimpleChoiceRenderer;
@@ -34,10 +36,10 @@ import org.geoserver.web.wicket.SimpleChoiceRenderer;
 public class WCSLayerConfig extends PublishedConfigurationPanel<LayerInfo> {
 
     private static final long serialVersionUID = 6120092654147588736L;
-    
-    private static final List<String> WCS_FORMATS = Arrays.asList("GIF","PNG","JPEG","TIFF","GTOPO30","GEOTIFF","IMAGEMOSAIC", ARCGRID_COVERAGE_FORMAT);
-    private static final List<String> INTERPOLATIONS = Arrays.asList("nearest neighbor","bilinear","bicubic");
-    
+
+    private static final List<String> WCS_FORMATS = Arrays.asList("GIF", "PNG", "JPEG", "TIFF", "GTOPO30", "GEOTIFF", "IMAGEMOSAIC", ARCGRID_COVERAGE_FORMAT);
+    private static final List<String> INTERPOLATIONS = Arrays.asList("nearest neighbor", "bilinear", "bicubic");
+
     private List<String> selectedRequestSRSs;
     private List<String> selectedResponseSRSs;
     private List<String> selectedInterpolationMethods;
@@ -45,64 +47,64 @@ public class WCSLayerConfig extends PublishedConfigurationPanel<LayerInfo> {
     private String newResponseSRS;
     private String newInterpolationMethod;
 
-    public WCSLayerConfig(String id, IModel<LayerInfo> model){
+    public WCSLayerConfig(String id, IModel<LayerInfo> model) {
         super(id, model);
 
         final CoverageInfo coverage = (CoverageInfo) getPublishedInfo().getResource();
-        add(new ListMultipleChoice<String>("requestSRS", 
-                    new PropertyModel<List<String>>(this, "selectedRequestSRSs"), 
-                    coverage.getRequestSRS())
+        add(new ListMultipleChoice<String>("requestSRS",
+                new PropertyModel<List<String>>(this, "selectedRequestSRSs"),
+                coverage.getRequestSRS())
         );
 
         add(new TextField<String>("newRequestSRS", new PropertyModel<String>(this, "newRequestSRS")));
 
-        add(new Button("deleteSelectedRequestSRSs"){
+        add(new Button("deleteSelectedRequestSRSs") {
             private static final long serialVersionUID = 8363252127939759315L;
 
-            public void onSubmit(){
+            public void onSubmit() {
                 coverage.getRequestSRS().removeAll(selectedRequestSRSs);
                 selectedRequestSRSs.clear();
             }
         });
 
-        add(new Button("addNewRequestSRS"){
+        add(new Button("addNewRequestSRS") {
             private static final long serialVersionUID = -3493317500980471055L;
 
-            public void onSubmit(){
+            public void onSubmit() {
                 coverage.getRequestSRS().add(newRequestSRS);
                 newRequestSRS = "";
             }
         });
 
-        add (new ListMultipleChoice<String>("responseSRS", 
-                    new PropertyModel<List<String>>(this, "selectedResponseSRSs"),
-                    coverage.getResponseSRS())
+        add(new ListMultipleChoice<String>("responseSRS",
+                new PropertyModel<List<String>>(this, "selectedResponseSRSs"),
+                coverage.getResponseSRS())
         );
 
         add(new TextField<String>("newResponseSRS", new PropertyModel<String>(this, "newResponseSRS")));
 
-        add(new Button("deleteSelectedResponseSRSs"){
+        add(new Button("deleteSelectedResponseSRSs") {
             private static final long serialVersionUID = -8727831157546262491L;
 
-            public void onSubmit(){
+            public void onSubmit() {
                 coverage.getResponseSRS().removeAll(selectedResponseSRSs);
                 selectedResponseSRSs.clear();
             }
         });
 
-        add(new Button("addNewResponseSRS"){
+        add(new Button("addNewResponseSRS") {
             private static final long serialVersionUID = -2888152896129259019L;
 
-            public void onSubmit(){
+            public void onSubmit() {
                 coverage.getResponseSRS().add(newResponseSRS);
                 newResponseSRS = "";
             }
         });
 
-        add(new DropDownChoice<String>("defaultInterpolationMethod", 
+        add(new DropDownChoice<String>("defaultInterpolationMethod",
                 new PropertyModel<String>(coverage, "defaultInterpolationMethod"),
                 new WCSInterpolationModel()));
- 
+
         Palette<String> interpolationMethods = new Palette<String>("interpolationMethods", LiveCollectionModel
                 .list(new PropertyModel<List<String>>(coverage, "interpolationMethods")),
                 new WCSInterpolationModel(), new SimpleChoiceRenderer(), 7, false) {
@@ -159,9 +161,9 @@ public class WCSLayerConfig extends PublishedConfigurationPanel<LayerInfo> {
         };
         formatPalette.add(new DefaultTheme());
         add(formatPalette);
-   }
-    
-    
+    }
+
+
     static class WCSFormatsModel extends LoadableDetachableModel<ArrayList<String>> {
 
         private static final long serialVersionUID = 1802421566341456007L;
@@ -175,7 +177,7 @@ public class WCSLayerConfig extends PublishedConfigurationPanel<LayerInfo> {
             return new ArrayList<String>(WCS_FORMATS);
         }
     }
-    
+
     static class WCSInterpolationModel extends LoadableDetachableModel<ArrayList<String>> {
 
         private static final long serialVersionUID = 7328612985196203413L;

@@ -64,7 +64,7 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
 
-@SuppressWarnings({ "rawtypes", "unchecked" })
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class CatalogStressTester extends GeoServerSecuredPage {
 
     DropDownChoice<Tuple> workspace;
@@ -86,7 +86,6 @@ public class CatalogStressTester extends GeoServerSecuredPage {
     /**
      * DropDown choice model object becuase dbconfig freaks out if using the CatalogInfo objects
      * directly
-     * 
      */
     private static final class Tuple implements Serializable, Comparable<Tuple> {
         private static final long serialVersionUID = 1L;
@@ -252,7 +251,7 @@ public class CatalogStressTester extends GeoServerSecuredPage {
 
         resourceAndLayer.setOutputMarkupId(true);
         form.add(resourceAndLayer);
-        
+
         recursive = new CheckBox("recursive", new Model<Boolean>(Boolean.FALSE));
         form.add(recursive);
 
@@ -363,19 +362,19 @@ public class CatalogStressTester extends GeoServerSecuredPage {
         }
 
 
-        String localizerString = this.getLocalizer().getString("CatalogStressTester.progressStatusMessage", this,  "Inserted {0} copies of {1} in {2}");
+        String localizerString = this.getLocalizer().getString("CatalogStressTester.progressStatusMessage", this, "Inserted {0} copies of {1} in {2}");
         String progressMessage = MessageFormat.format(localizerString, numCopies, original, globalTime);
-        
+
         System.out.println(progressMessage);
         progress.setDefaultModelObject(progressMessage);
-        
+
         target.add(progress);
     }
 
     private Class<? extends CatalogInfo> interfaceOf(CatalogInfo original) {
-        Class<?>[] interfaces = { LayerGroupInfo.class, LayerInfo.class, NamespaceInfo.class,
+        Class<?>[] interfaces = {LayerGroupInfo.class, LayerInfo.class, NamespaceInfo.class,
                 WorkspaceInfo.class, StyleInfo.class, CoverageStoreInfo.class, DataStoreInfo.class,
-                WMSStoreInfo.class, CoverageInfo.class, FeatureTypeInfo.class, WMSLayerInfo.class };
+                WMSStoreInfo.class, CoverageInfo.class, FeatureTypeInfo.class, WMSLayerInfo.class};
         for (Class c : interfaces) {
             if (c.isAssignableFrom(original.getClass())) {
                 return c;
@@ -385,8 +384,8 @@ public class CatalogStressTester extends GeoServerSecuredPage {
     }
 
     private void copyOne(Catalog catalog, final CatalogInfo original,
-            final Class<CatalogInfo> clazz, final LayerInfo layer, final String nameSuffix,
-            final Stopwatch sw, boolean recursive, CatalogInfo parent) {
+                         final Class<CatalogInfo> clazz, final LayerInfo layer, final String nameSuffix,
+                         final Stopwatch sw, boolean recursive, CatalogInfo parent) {
 
         CatalogInfo prototype = prototype(original, catalog);
 
@@ -409,8 +408,8 @@ public class CatalogStressTester extends GeoServerSecuredPage {
                 sw.start();
                 catalog.add(ns2);
                 sw.stop();
-                
-                if(recursive) {
+
+                if (recursive) {
                     for (StoreInfo store : catalog.getStoresByWorkspace((WorkspaceInfo) original, StoreInfo.class)) {
                         copyOne(catalog, store, (Class<CatalogInfo>) interfaceOf(store), (LayerInfo) null, nameSuffix, sw, true, prototype);
                     }
@@ -419,7 +418,7 @@ public class CatalogStressTester extends GeoServerSecuredPage {
 
                 sw.start();
                 final StoreInfo ps = (StoreInfo) prototype;
-                if(parent != null) {
+                if (parent != null) {
                     ps.setWorkspace((WorkspaceInfo) parent);
                 }
                 // reset the cache, or we might stumble into a error about too many connections
@@ -427,10 +426,10 @@ public class CatalogStressTester extends GeoServerSecuredPage {
                 catalog.getResourcePool().dispose();
                 catalog.add(ps);
                 sw.stop();
-                
-                if(recursive) {
+
+                if (recursive) {
                     for (ResourceInfo resource : catalog.getResourcesByStore((StoreInfo) original, ResourceInfo.class)) {
-                        LayerInfo resourceLayer = catalog.getLayerByName(resource.prefixedName()); 
+                        LayerInfo resourceLayer = catalog.getLayerByName(resource.prefixedName());
                         copyOne(catalog, resource, (Class<CatalogInfo>) interfaceOf(resource), resourceLayer, nameSuffix, sw, true, prototype);
                     }
                 }
@@ -438,7 +437,7 @@ public class CatalogStressTester extends GeoServerSecuredPage {
             } else if (prototype instanceof ResourceInfo) {
                 ((ResourceInfo) prototype).setNativeName(((ResourceInfo) original).getNativeName());
                 ((ResourceInfo) prototype).setName(newName);
-                if(parent != null) {
+                if (parent != null) {
                     ((ResourceInfo) prototype).setStore((StoreInfo) parent);
                 }
                 sw.start();

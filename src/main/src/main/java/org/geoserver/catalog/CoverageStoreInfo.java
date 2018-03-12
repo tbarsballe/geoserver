@@ -14,33 +14,33 @@ import org.opengis.util.ProgressListener;
 
 /**
  * A raster or coverage based store.
- * 
+ *
  * @author Justin Deoliveira, The Open Planning project
  */
 public interface CoverageStoreInfo extends StoreInfo {
 
     /**
      * The coverage store url.
-     * 
+     *
      * @uml.property name="url"
      */
     String getURL();
 
     /**
      * Sets the coverage store url.
-     * 
+     *
      * @uml.property name="url"
      */
     void setURL(String url);
-    
+
     /**
      * The grid format.
      */
     AbstractGridFormat getFormat();
 
-    GridCoverageReader getGridCoverageReader( ProgressListener listener, Hints hints ) 
+    GridCoverageReader getGridCoverageReader(ProgressListener listener, Hints hints)
             throws IOException;
-    
+
     /**
      * Returns the coverage resource from the store with the given name.
      */

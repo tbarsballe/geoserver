@@ -11,32 +11,32 @@ import org.jaitools.numeric.Range;
 
 /**
  * Parses a {@link JAITools} range from a string defining it
+ *
  * @author Andrea Aime - GeoSolutions
  * @author Emanuele Tajarol - GeoSolutions
  */
 public class JAIToolsRangePPIO extends LiteralPPIO {
-	
-	static Converter CONVERTER = new JAIToolsRangeConverterFactory().createConverter(String.class, Range.class, null);
+
+    static Converter CONVERTER = new JAIToolsRangeConverterFactory().createConverter(String.class, Range.class, null);
 
     /**
      * Parses a single range from a string
      *
      * @param sRange
-     *
      */
     public static Range<Double> parseRange(String sRange) {
-    	try {
-	        Range<Double> result = CONVERTER.convert(sRange, Range.class);
-	        if(result == null) {
-	        	throw new IllegalArgumentException("Bad range definition '"+sRange+"'");
-	        }
-	        
-	        return result;
-    	} catch(Exception e) {
-    		throw new IllegalArgumentException("Bad range definition '"+sRange+"'", e);
-    	}
+        try {
+            Range<Double> result = CONVERTER.convert(sRange, Range.class);
+            if (result == null) {
+                throw new IllegalArgumentException("Bad range definition '" + sRange + "'");
+            }
+
+            return result;
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Bad range definition '" + sRange + "'", e);
+        }
     }
-    
+
 
     public JAIToolsRangePPIO() {
         super(Range.class);
@@ -52,7 +52,7 @@ public class JAIToolsRangePPIO extends LiteralPPIO {
     /**
      * Encodes the internal object representation of a parameter as a string.
      */
-    public String encode( Object value ) throws Exception {
+    public String encode(Object value) throws Exception {
         throw new UnsupportedOperationException("JaiTools range not supported out of the box");
     }
 }

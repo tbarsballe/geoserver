@@ -26,7 +26,7 @@ public class ScriptSelectionRemovalLink extends AjaxLink<Object> {
     GeoServerDialog dialog;
 
     public ScriptSelectionRemovalLink(String id, GeoServerTablePanel<Script> tablePanel,
-            GeoServerDialog dialog) {
+                                      GeoServerDialog dialog) {
         super(id);
         this.tablePanel = tablePanel;
         this.dialog = dialog;

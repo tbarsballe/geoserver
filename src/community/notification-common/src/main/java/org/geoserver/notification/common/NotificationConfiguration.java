@@ -12,9 +12,8 @@ import com.thoughtworks.xstream.XStream;
 
 /**
  * The root of notification configuration, populated by {@link XStream}
- * 
- * @author Xandros
  *
+ * @author Xandros
  */
 public class NotificationConfiguration implements Serializable {
 

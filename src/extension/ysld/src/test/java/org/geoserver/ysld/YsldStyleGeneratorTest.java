@@ -39,7 +39,6 @@ public class YsldStyleGeneratorTest {
     /**
      * Test integration of {@link YsldHandler#getStyle(org.geoserver.catalog.StyleType, java.awt.Color, String, String)} with the
      * {@link StyleGenerator} by generating a generic style (from {@link YsldHandler#TEMPLATES} for {@link StyleType.GENERIC}).
-     * 
      */
     @Test
     public void testYsldStyleGenerator() throws Exception {
@@ -94,7 +93,9 @@ public class YsldStyleGeneratorTest {
         StyleGenerator gen = new StyleGenerator(cat) {
             protected void randomizeRamp() {
                 // do not randomize for this test
-            };
+            }
+
+            ;
         };
         gen.setWorkspace(ws);
 

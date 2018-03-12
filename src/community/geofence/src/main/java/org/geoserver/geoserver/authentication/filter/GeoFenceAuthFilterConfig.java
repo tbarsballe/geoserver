@@ -23,7 +23,6 @@ import org.geoserver.security.config.SecurityAuthFilterConfig;
 import org.geoserver.security.config.SecurityFilterConfig;
 
 /**
- *
  * @author ETj (etj at geo-solutions.it)
  */
 public class GeoFenceAuthFilterConfig extends SecurityFilterConfig

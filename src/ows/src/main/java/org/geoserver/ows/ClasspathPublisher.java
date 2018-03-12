@@ -28,7 +28,7 @@ import org.springframework.web.servlet.mvc.AbstractController;
  * <p>
  * To use this controller, it should be mapped to a particular url in the url mapping of the spring
  * dispatcher servlet. Example:
- * 
+ * <p>
  * <pre>
  * <code>
  *   &lt;bean id="filePublisher" class="org.geoserver.ows.FilePublisher"/&gt;
@@ -43,7 +43,7 @@ import org.springframework.web.servlet.mvc.AbstractController;
  *   &lt;/bean&gt;
  * </code>
  * </pre>
- * 
+ *
  * @author Justin Deoliveira, The Open Planning Project
  * @author Andrea Aime - GeoSolutions
  */
@@ -52,9 +52,9 @@ public class ClasspathPublisher extends AbstractURLPublisher {
 
     /**
      * Creates the new classpath publisher.
-     * 
+     *
      * @param clazz the class used to perform classpath lookups with
-     *        {@link Class#getResource(String)}
+     *              {@link Class#getResource(String)}
      */
     public ClasspathPublisher(Class clazz) {
         this.clazz = clazz;

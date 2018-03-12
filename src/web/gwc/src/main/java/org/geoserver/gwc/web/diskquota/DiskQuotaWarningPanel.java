@@ -12,9 +12,9 @@ import org.geoserver.web.GeoServerApplication;
 import org.geoserver.web.wicket.ParamResourceModel;
 
 /**
- * Warns the administrator that the 
- * @author Andrea Aime - GeoSolutions
+ * Warns the administrator that the
  *
+ * @author Andrea Aime - GeoSolutions
  */
 public class DiskQuotaWarningPanel extends Panel {
 
@@ -22,10 +22,10 @@ public class DiskQuotaWarningPanel extends Panel {
 
     public DiskQuotaWarningPanel(String id) {
         super(id);
-        
+
         Exception exception = getException();
         Label label = new Label("diskQuotaError", new Model<String>());
-        if(exception != null) {
+        if (exception != null) {
             ParamResourceModel rm = new ParamResourceModel("GWC.diskQuotaLoadFailed", null, exception.getMessage());
             label.setDefaultModelObject(rm.getString());
         } else {

@@ -43,36 +43,36 @@ import com.google.common.collect.Lists;
 
 /**
  * Provides a filtered, sorted view over the catalog layers.
- * 
+ *
  * @author Andrea Aime - OpenGeo
  */
 @SuppressWarnings("serial")
 public class PreviewLayerProvider extends GeoServerDataProvider<PreviewLayer> {
-    
+
     public static final long DEFAULT_CACHE_TIME = 1;
-    
+
     public static final String KEY_SIZE = "key.size";
-    
+
     public static final String KEY_FULL_SIZE = "key.fullsize";
 
-    private final Cache<String,Integer> cache;
+    private final Cache<String, Integer> cache;
 
     private SizeCallable sizeCaller;
 
     private FullSizeCallable fullSizeCaller;
-    
-    public PreviewLayerProvider(){
+
+    public PreviewLayerProvider() {
         super();
         // Initialization of an inner cache in order to avoid to calculate two times
         // the size() method in a time minor than a second
         CacheBuilder<Object, Object> builder = CacheBuilder.newBuilder();
-        
+
         cache = builder.expireAfterWrite(DEFAULT_CACHE_TIME, TimeUnit.SECONDS).build();
         // Callable which internally calls the size method
         sizeCaller = new SizeCallable();
         // Callable which internally calls the fullSize() method
         fullSizeCaller = new FullSizeCallable();
-    }    
+    }
 
     public static final Property<PreviewLayer> TYPE = new BeanProperty<PreviewLayer>(
             "type", "type");
@@ -92,10 +92,10 @@ public class PreviewLayerProvider extends GeoServerDataProvider<PreviewLayer> {
 
     public static final Property<PreviewLayer> TITLE = new BeanProperty<PreviewLayer>(
             "title", "title");
-    
+
     public static final Property<PreviewLayer> ABSTRACT = new BeanProperty<PreviewLayer>(
             "abstract", "abstract", false);
-    
+
     public static final Property<PreviewLayer> KEYWORDS = new BeanProperty<PreviewLayer>(
             "keywords", "keywords", false);
 
@@ -107,7 +107,7 @@ public class PreviewLayerProvider extends GeoServerDataProvider<PreviewLayer> {
 
     public static final List<Property<PreviewLayer>> PROPERTIES = Arrays.asList(TYPE,
             TITLE, NAME, ABSTRACT, KEYWORDS, COMMON, ALL);
-    
+
     @Override
     protected List<PreviewLayer> getItems() {
         // forced to implement this method as its abstract in the super class
@@ -125,13 +125,13 @@ public class PreviewLayerProvider extends GeoServerDataProvider<PreviewLayer> {
     protected IModel<PreviewLayer> newModel(PreviewLayer object) {
         return new PreviewLayerModel(object);
     }
-    
+
     @Override
     public long size() {
         try {
             if (getKeywords() != null && getKeywords().length > 0) {
                 // Use a unique key for different queries
-                return cache.get(KEY_SIZE+"."+String.join(",", getKeywords()), sizeCaller);
+                return cache.get(KEY_SIZE + "." + String.join(",", getKeywords()), sizeCaller);
             }
             return cache.get(KEY_SIZE, sizeCaller);
         } catch (ExecutionException e) {
@@ -158,7 +158,7 @@ public class PreviewLayerProvider extends GeoServerDataProvider<PreviewLayer> {
         Filter filter = Predicates.acceptAll();
         return getCatalog().count(PublishedInfo.class, filter);
     }
-    
+
     @Override
     public Iterator<PreviewLayer> iterator(final long first, final long count) {
         Iterator<PreviewLayer> iterator = filteredItems(first, count);
@@ -215,7 +215,7 @@ public class PreviewLayerProvider extends GeoServerDataProvider<PreviewLayer> {
             }
         });
     }
-    
+
     @Override
     protected Filter getFilter() {
         Filter filter = super.getFilter();
@@ -231,7 +231,7 @@ public class PreviewLayerProvider extends GeoServerDataProvider<PreviewLayer> {
         // return only layer groups that are not containers
         Filter nonContainerGroup = Predicates.or(Predicates.equal("mode", LayerGroupInfo.Mode.EO),
                 Predicates.equal("mode", LayerGroupInfo.Mode.NAMED),
-                Predicates.equal("mode", LayerGroupInfo.Mode.OPAQUE_CONTAINER), 
+                Predicates.equal("mode", LayerGroupInfo.Mode.OPAQUE_CONTAINER),
                 Predicates.equal("mode", LayerGroupInfo.Mode.SINGLE));
 
         // Filter for the Layers
@@ -247,9 +247,8 @@ public class PreviewLayerProvider extends GeoServerDataProvider<PreviewLayer> {
 
     /**
      * Inner class which calls the sizeInternal() method
-     * 
+     *
      * @author Nicpla Lagomarsini geosolutions
-     * 
      */
     class SizeCallable implements Callable<Integer>, Serializable {
         @Override
@@ -260,9 +259,8 @@ public class PreviewLayerProvider extends GeoServerDataProvider<PreviewLayer> {
 
     /**
      * Inner class which calls the fullsizeInternal() method
-     * 
+     *
      * @author Nicpla Lagomarsini geosolutions
-     * 
      */
     class FullSizeCallable implements Callable<Integer>, Serializable {
         @Override

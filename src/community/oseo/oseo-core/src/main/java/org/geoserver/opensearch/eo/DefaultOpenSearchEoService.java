@@ -116,7 +116,7 @@ public class DefaultOpenSearchEoService implements OpenSearchEoService {
 
     /**
      * Returns the complex feature representing a collection by parentId
-     * 
+     *
      * @param parentId
      * @return
      * @throws IOException
@@ -142,7 +142,7 @@ public class DefaultOpenSearchEoService implements OpenSearchEoService {
     }
 
     private List<Parameter<?>> getSearchParametersByClass(ProductClass pc,
-            FeatureType productSchema) {
+                                                          FeatureType productSchema) {
         List<Parameter<?>> result = new ArrayList<>();
         final String targetNamespace = pc.getNamespace();
         for (PropertyDescriptor pd : productSchema.getDescriptors()) {
@@ -219,14 +219,14 @@ public class DefaultOpenSearchEoService implements OpenSearchEoService {
         int totalResults = featureSource.getCount(countQuery);
 
         // get actual features
-        FeatureCollection<FeatureType, Feature> features; 
-        if(resultsQuery.getMaxFeatures() == 0) {
+        FeatureCollection<FeatureType, Feature> features;
+        if (resultsQuery.getMaxFeatures() == 0) {
             // pure count query
             features = new ListComplexFeatureCollection(featureSource.getSchema(), Collections.emptyList());
         } else {
             features = featureSource.getFeatures(resultsQuery);
         }
-        
+
         SearchResults results = new SearchResults(request, features, totalResults);
 
         return results;
@@ -299,6 +299,7 @@ public class DefaultOpenSearchEoService implements OpenSearchEoService {
 
     /**
      * Used to guess the mime type of an encoded image until we start storing the mime in the db
+     *
      * @param payload
      * @return
      */
@@ -326,7 +327,7 @@ public class DefaultOpenSearchEoService implements OpenSearchEoService {
     }
 
     private Object getPropertyFromFirstFeature(FeatureCollection<FeatureType, Feature> features,
-            Name propertyName) {
+                                               Name propertyName) {
         Feature feature = DataUtilities.first(features);
         Property property;
         Object value;

@@ -11,6 +11,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.geoserver.catalog.StyleGenerator.ColorRamp.Entry;
 import org.geotools.styling.StyledLayerDescriptor;
 import org.opengis.feature.type.FeatureType;
@@ -25,9 +26,8 @@ import com.vividsolutions.jts.geom.Polygon;
 
 /**
  * Generates pseudo random styles using a specified color ramp
- * 
+ *
  * @author Andrea Aime - OpenGeo
- * 
  */
 public class StyleGenerator {
 
@@ -42,6 +42,7 @@ public class StyleGenerator {
 
     /**
      * Builds a style generator with the default color ramp
+     *
      * @param catalog
      */
     public StyleGenerator(Catalog catalog) {
@@ -74,6 +75,7 @@ public class StyleGenerator {
 
     /**
      * Set the workspace to generate styles in.
+     *
      * @param workspace
      */
     public void setWorkspace(WorkspaceInfo workspace) {
@@ -82,30 +84,30 @@ public class StyleGenerator {
 
     /**
      * Generate a style for a resource in the catalog, and add the created style to the catalog.
-     * 
-     * @param handler The StyleHandler used to generate the style. Determines the style format.
-     * @param featureType The FeatureType to generate the style for. Determines the style type and 
-     * style name
+     *
+     * @param handler     The StyleHandler used to generate the style. Determines the style format.
+     * @param featureType The FeatureType to generate the style for. Determines the style type and
+     *                    style name
      * @return The StyleInfo referencing the generated style
      * @throws IOException
      */
     public StyleInfo createStyle(StyleHandler handler, FeatureTypeInfo featureType) throws IOException {
         return createStyle(handler, featureType, featureType.getFeatureType());
     }
-    
+
     /**
      * Generate a style for a resource in the catalog, and add the created style to the catalog.
-     * 
-     * @param handler The StyleHandler used to generate the style. Determines the style format.
-     * @param featureType The FeatureType to generate the style for. Determines the style type and 
-     * style name
-     * @param nativeFeatureType The geotools feature type, required in cases where featureType is 
-     * missing content
+     *
+     * @param handler           The StyleHandler used to generate the style. Determines the style format.
+     * @param featureType       The FeatureType to generate the style for. Determines the style type and
+     *                          style name
+     * @param nativeFeatureType The geotools feature type, required in cases where featureType is
+     *                          missing content
      * @return The StyleInfo referencing the generated style
      * @throws IOException
      */
-    public StyleInfo createStyle(StyleHandler handler, FeatureTypeInfo featureType, FeatureType nativeFeatureType) 
-        throws IOException {
+    public StyleInfo createStyle(StyleHandler handler, FeatureTypeInfo featureType, FeatureType nativeFeatureType)
+            throws IOException {
 
         // geometryless, style it randomly
         GeometryDescriptor gd = nativeFeatureType.getGeometryDescriptor();
@@ -131,21 +133,21 @@ public class StyleGenerator {
 
     /**
      * Generate a style for a resource in the catalog, and add the created style to the catalog.
-     * 
-     * @param handler The StyleHandler used to generate the style. Determines the style format.
-     * @param coverage The CoverageInfo to generate the style for. Determines the style type and 
-     * style name
+     *
+     * @param handler  The StyleHandler used to generate the style. Determines the style format.
+     * @param coverage The CoverageInfo to generate the style for. Determines the style type and
+     *                 style name
      * @return The StyleInfo referencing the generated style
      * @throws IOException
      */
     public StyleInfo createStyle(StyleHandler handler, CoverageInfo coverage) throws IOException {
         return doCreateStyle(handler, StyleType.RASTER, coverage);
     }
-    
+
     /**
-     * Generate a style of the give style type. 
-     * 
-     * @param handler The StyleHandler used to generate the style. Determines the style format.
+     * Generate a style of the give style type.
+     *
+     * @param handler   The StyleHandler used to generate the style. Determines the style format.
      * @param styleType The type of template, see {@link org.geoserver.catalog.StyleType}.
      * @param layerName The name of the style/layer; used in comments.
      * @return The generated style, as a String.
@@ -189,7 +191,7 @@ public class StyleGenerator {
      */
     public String generateUniqueStyleName(ResourceInfo resource) {
         return workspace != null ?
-            findUniqueStyleName(resource, workspace) : findUniqueStyleName(resource);
+                findUniqueStyleName(resource, workspace) : findUniqueStyleName(resource);
     }
 
     StyleInfo doCreateStyle(StyleHandler handler, StyleType styleType, ResourceInfo resource) throws IOException {
@@ -209,7 +211,7 @@ public class StyleGenerator {
         }
 
         catalog.getResourcePool().writeStyle(style, new ByteArrayInputStream(styleData.getBytes()));
-        
+
         return style;
     }
 
@@ -217,7 +219,7 @@ public class StyleGenerator {
         String styleName = resource.getStore().getWorkspace().getName() + "_" + resource.getName();
         StyleInfo style = catalog.getStyleByName(styleName);
         int i = 1;
-        while(style != null) {
+        while (style != null) {
             styleName = resource.getStore().getWorkspace().getName() + "_" + resource.getName() + i;
             style = catalog.getStyleByName(styleName);
             i++;
@@ -229,7 +231,7 @@ public class StyleGenerator {
         String styleName = resource.getName();
         StyleInfo style = catalog.getStyleByName(workspace, styleName);
         int i = 1;
-        while(style != null) {
+        while (style != null) {
             styleName = resource.getName() + i;
             style = catalog.getStyleByName(workspace, styleName);
             i++;
@@ -253,29 +255,30 @@ public class StyleGenerator {
 
         List<Entry> entries = new ArrayList<Entry>();
         int position;
-        
+
         /**
          * Builds an empty ramp. Mind, you need to call {@link #add(String, Color)} at least
          * once to make the ramp usable.
          */
         public ColorRamp() {
-            
+
         }
-        
+
         /**
          * Adds a name/color combination
+         *
          * @param name
          * @param color
          */
         public void add(String name, Color color) {
             entries.add(new Entry(name, color));
         }
-        
+
         /**
          * Moves to the next color in the ramp
          */
         public Entry next() {
-            position = (position+1) % entries.size();
+            position = (position + 1) % entries.size();
             return entries.get(position);
         }
 

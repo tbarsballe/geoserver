@@ -21,13 +21,13 @@ import org.apache.wicket.model.IModel;
 
 /**
  * A panel showing the path between the root directory and the current directory as a set
- * of links separated by "/", much like breadcrumbs in a web site. 
- * @author Andrea Aime - OpenGeo
+ * of links separated by "/", much like breadcrumbs in a web site.
  *
+ * @author Andrea Aime - OpenGeo
  */
 public abstract class FileBreadcrumbs extends Panel {
     private static final long serialVersionUID = 2821319341957784628L;
-    
+
     IModel<File> rootFile;
 
     public FileBreadcrumbs(String id, IModel<File> rootFile, IModel<File> currentFile) {
@@ -42,7 +42,7 @@ public abstract class FileBreadcrumbs extends Panel {
             protected void populateItem(ListItem<File> item) {
                 File file = item.getModelObject();
                 boolean last = item.getIndex() == getList().size() - 1;
-                
+
                 // the link to the current path item
                 Label name = new Label("pathItem", file.getName() + "/");
                 Link<File> link = new IndicatingAjaxFallbackLink<File>("pathItemLink", item.getModel()) {
@@ -62,17 +62,17 @@ public abstract class FileBreadcrumbs extends Panel {
 
         });
     }
-    
+
     public void setRootFile(File root) {
         rootFile.setObject(root);
     }
-    
+
     public void setSelection(File selection) {
-    	setDefaultModelObject(selection);
+        setDefaultModelObject(selection);
     }
 
     protected abstract void pathItemClicked(File file,
-            AjaxRequestTarget target);
+                                            AjaxRequestTarget target);
 
     static class BreadcrumbModel implements IModel<List<File>> {
         private static final long serialVersionUID = -3497123851146725406L;
@@ -96,7 +96,7 @@ public abstract class FileBreadcrumbs extends Panel {
                 files.add(current);
                 current = current.getParentFile();
             }
-            if(current != null && current.equals(root))
+            if (current != null && current.equals(root))
                 files.add(root);
             // reverse the order, we want them ordered from root
             // to current

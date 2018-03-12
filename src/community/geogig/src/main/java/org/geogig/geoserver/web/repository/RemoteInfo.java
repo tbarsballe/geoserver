@@ -19,7 +19,6 @@ import com.google.common.base.Objects;
 
 /**
  * A {@link Remote} representation for the presentation layer
- *
  */
 public class RemoteInfo implements Serializable {
 

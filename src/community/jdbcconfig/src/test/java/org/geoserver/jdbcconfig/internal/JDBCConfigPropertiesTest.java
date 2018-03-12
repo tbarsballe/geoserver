@@ -29,15 +29,15 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class JDBCConfigPropertiesTest {
-    
+
     protected static final String CONFIG_FILE = "jdbcconfig.properties";
-            
+
     protected static final String CONFIG_SYSPROP = "jdbcconfig.properties";
-    
+
     protected static final String JDBCURL_SYSPROP = "jdbcconfig.jdbcurl";
-    
+
     protected static final String INITDB_SYSPROP = "jdbcconfig.initdb";
-    
+
     protected static final String IMPORT_SYSPROP = "jdbcconfig.import";
 
     GeoServerResourceLoader loader;
@@ -64,19 +64,19 @@ public class JDBCConfigPropertiesTest {
         //assert files copied over
         assertNotNull(loader.find("jdbcconfig", "jdbcconfig.properties"));
         assertNotNull(loader.find("jdbcconfig", "scripts", "initdb.postgres.sql"));
-        
+
         //assert file location are accessible
         assertNotNull(factory.getFileLocations());
-        
+
         //assert configuration can be stored successfully on another resource loader
         File tmpDir = org.geoserver.jdbcconfig.JDBCConfigTestSupport.createTempDir();
         Resources.directory(Files.asResource(tmpDir).get("jdbcconfig"), true);
-        
+
         GeoServerResourceLoader resourceLoader = new GeoServerResourceLoader(tmpDir);
         factory.saveConfiguration(resourceLoader);
-        
-        assertEquals(factory.getFileLocations().size(), 
-                (resourceLoader.find("jdbcconfig").list().length-1)+(resourceLoader.find("jdbcconfig/scripts").list().length) );
+
+        assertEquals(factory.getFileLocations().size(),
+                (resourceLoader.find("jdbcconfig").list().length - 1) + (resourceLoader.find("jdbcconfig/scripts").list().length));
     }
 
     private File createDummyConfigFile() throws IOException {
@@ -106,8 +106,7 @@ public class JDBCConfigPropertiesTest {
             assertEquals("bar", props.getProperty("foo"));
             assertFalse(props.isInitDb());
             assertFalse(props.isImport());
-        }
-        finally {
+        } finally {
             System.clearProperty(CONFIG_SYSPROP);
         }
     }
@@ -124,8 +123,7 @@ public class JDBCConfigPropertiesTest {
             assertEquals("bar", props.getProperty("foo"));
             assertFalse(props.isInitDb());
             assertFalse(props.isImport());
-        }
-        finally {
+        } finally {
             System.clearProperty(CONFIG_SYSPROP);
         }
     }
@@ -135,16 +133,15 @@ public class JDBCConfigPropertiesTest {
         System.setProperty(JDBCURL_SYSPROP, "jdbc:h2:nofile");
         System.setProperty(INITDB_SYSPROP, "false");
         System.setProperty(IMPORT_SYSPROP, "false");
-        
+
         try {
             JDBCLoaderPropertiesFactoryBean factory = new JDBCConfigPropertiesFactoryBean(loader);
             JDBCConfigProperties props = (JDBCConfigProperties) factory.createProperties();
-    
+
             assertEquals("jdbc:h2:nofile", props.getJdbcUrl().get());
             assertFalse(props.isInitDb());
             assertFalse(props.isImport());
-        }
-        finally {
+        } finally {
             System.clearProperty(JDBCURL_SYSPROP);
             System.clearProperty(INITDB_SYSPROP);
             System.clearProperty(IMPORT_SYSPROP);

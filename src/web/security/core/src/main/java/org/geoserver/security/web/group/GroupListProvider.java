@@ -17,35 +17,34 @@ import org.geoserver.web.wicket.GeoServerDataProvider;
 
 /**
  * Page listing for {@link GeoServerUserGroup} objects
- * 
- * @author christian
  *
+ * @author christian
  */
 @SuppressWarnings("serial")
 public class GroupListProvider extends GeoServerDataProvider<GeoServerUserGroup> {
-    
+
     public static final Property<GeoServerUserGroup> GROUPNAME = new BeanProperty<GeoServerUserGroup>("groupname", "groupname");
     public static final Property<GeoServerUserGroup> ENABLED = new BeanProperty<GeoServerUserGroup>("enabled", "enabled");
     protected String userGroupServiceName;
-    
+
     public GroupListProvider(String userGroupServiceName) {
-        this.userGroupServiceName= userGroupServiceName;
+        this.userGroupServiceName = userGroupServiceName;
     }
 
     @Override
     protected List<GeoServerUserGroup> getItems() {
-        SortedSet<GeoServerUserGroup> groups=null;
+        SortedSet<GeoServerUserGroup> groups = null;
         try {
             GeoServerUserGroupService service = null;
-            if (userGroupServiceName!=null) service = 
+            if (userGroupServiceName != null) service =
                     getApplication().getSecurityManager().loadUserGroupService(userGroupServiceName);
-            
-            if (service==null)
-                groups=new TreeSet<GeoServerUserGroup>();
+
+            if (service == null)
+                groups = new TreeSet<GeoServerUserGroup>();
             else
-                groups=service.getUserGroups();
+                groups = service.getUserGroups();
         } catch (IOException e) {
-            throw new RuntimeException(e); 
+            throw new RuntimeException(e);
         }
         List<GeoServerUserGroup> groupList = new ArrayList<GeoServerUserGroup>();
         groupList.addAll(groups);

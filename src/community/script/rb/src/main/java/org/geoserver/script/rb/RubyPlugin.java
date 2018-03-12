@@ -19,7 +19,7 @@ public class RubyPlugin extends ScriptPlugin {
     public String getId() {
         return "ruby";
     }
-    
+
     @Override
     public String getDisplayName() {
         return "Ruby";

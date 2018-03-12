@@ -118,8 +118,8 @@ public abstract class Dimension {
     public Tuple<Integer, List<String>> getDomainValuesAsStrings(Filter filter) {
         if (dimensionInfo.getPresentation() == DimensionPresentation.LIST) {
             List<Object> domainValues = getDomainValues(filter, true);
-            return Tuple.tuple(domainValues.size(), DimensionsUtils.getDomainValuesAsStrings(dimensionInfo, 
-                            domainValues));
+            return Tuple.tuple(domainValues.size(), DimensionsUtils.getDomainValuesAsStrings(dimensionInfo,
+                    domainValues));
         } else {
             // optimize out and get just the min and max values
             DomainSummary summary = getDomainSummary(filter, false);

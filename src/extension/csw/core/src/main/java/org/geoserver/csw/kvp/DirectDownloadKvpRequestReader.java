@@ -15,7 +15,7 @@ import org.geoserver.platform.ServiceException;
 
 /**
  * DirectDownload KVP request reader
- * 
+ *
  * @author Daniele Romagnoli, GeoSolutions SAS
  */
 public class DirectDownloadKvpRequestReader extends KvpRequestReader {
@@ -29,12 +29,12 @@ public class DirectDownloadKvpRequestReader extends KvpRequestReader {
 
         // Force the ResourceID element to be a simple String instead of an array
         Object resourceId = kvp.get(DownloadLinkHandler.RESOURCE_ID_PARAMETER);
-        if (resourceId != null && resourceId instanceof List && !((List)resourceId).isEmpty()) {
-            kvp.put(DownloadLinkHandler.RESOURCE_ID_PARAMETER, ((List)resourceId).get(0));    
+        if (resourceId != null && resourceId instanceof List && !((List) resourceId).isEmpty()) {
+            kvp.put(DownloadLinkHandler.RESOURCE_ID_PARAMETER, ((List) resourceId).get(0));
         }
         Object fileParameter = kvp.get(DownloadLinkHandler.FILE_PARAMETER);
-        if (fileParameter != null && fileParameter instanceof List && !((List)fileParameter).isEmpty()) {
-            kvp.put(DownloadLinkHandler.FILE_PARAMETER, ((List)fileParameter).get(0));
+        if (fileParameter != null && fileParameter instanceof List && !((List) fileParameter).isEmpty()) {
+            kvp.put(DownloadLinkHandler.FILE_PARAMETER, ((List) fileParameter).get(0));
         }
         DirectDownloadType request = (DirectDownloadType) super.read(req, kvp, rawKvp);
 

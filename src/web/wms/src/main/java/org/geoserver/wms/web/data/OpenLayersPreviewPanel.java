@@ -63,34 +63,34 @@ public class OpenLayersPreviewPanel extends StyleEditTabPanel implements IHeader
 
     private static final long serialVersionUID = -8742721113748106000L;
 
-    static final Logger LOGGER  = Logging.getLogger(OpenLayersPreviewPanel.class);
+    static final Logger LOGGER = Logging.getLogger(OpenLayersPreviewPanel.class);
     final static Configuration templates;
-    
+
     static {
         templates = new Configuration();
         templates.setClassForTemplateLoading(OpenLayersPreviewPanel.class, "");
         templates.setObjectWrapper(new DefaultObjectWrapper());
     }
-    
+
     final Random rand = new Random();
     final Component olPreview;
 
     boolean isPreviewStyleGroup;
     GeoServerDialog dialog;
 
-    
+
     public OpenLayersPreviewPanel(String id, AbstractStylePage parent) {
         super(id, parent);
         this.olPreview = new WebMarkupContainer("olPreview").setOutputMarkupId(true);
-        
+
         // Change layer link
-        PropertyModel<String> layerNameModel = new PropertyModel<String>(parent.getLayerModel(),"prefixedName");
+        PropertyModel<String> layerNameModel = new PropertyModel<String>(parent.getLayerModel(), "prefixedName");
         add(new SimpleAjaxLink<String>("change.layer", layerNameModel) {
             private static final long serialVersionUID = 7341058018479354596L;
 
             public void onClick(AjaxRequestTarget target) {
                 ModalWindow popup = parent.getPopup();
-                
+
                 popup.setInitialHeight(400);
                 popup.setInitialWidth(600);
                 popup.setTitle(new Model<String>("Choose layer to preview"));
@@ -104,30 +104,30 @@ public class OpenLayersPreviewPanel extends StyleEditTabPanel implements IHeader
         CheckBox previewStyleGroup = new CheckBox("previewStyleGroup", new PropertyModel<Boolean>(this, "isPreviewStyleGroup"));
 
         previewStyleGroup.add(new AjaxFormComponentUpdatingBehavior("click") {
-                @Override
-                protected void onUpdate(AjaxRequestTarget target) {
-                    parent.configurationChanged();
-                    parent.addFeedbackPanels(target);
-                    target.add(parent.styleForm);
-                }
-            });
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+                parent.configurationChanged();
+                parent.addFeedbackPanels(target);
+                target.add(parent.styleForm);
+            }
+        });
         add(previewStyleGroup);
 
         add(dialog = new GeoServerDialog("dialog"));
         add(new HelpLink("styleGroupHelp").setDialog(dialog));
-        
+
         try {
             ensureLegendDecoration();
-        } catch(IOException e) {
+        } catch (IOException e) {
             LOGGER.log(Level.WARNING, "Failed to put legend layout file in the data directory, the legend decoration will not appear", e);
         }
-    } 
-    
+    }
+
     private void ensureLegendDecoration() throws IOException {
         GeoServerDataDirectory dd = GeoServerApplication.get().getBeanOfType(GeoServerDataDirectory.class);
         Resource layouts = dd.get("layouts");
         Resource legend = layouts.get("style-editor-legend.xml");
-        if(!Resources.exists(legend)) {
+        if (!Resources.exists(legend)) {
             String legendLayout = IOUtils.toString(OpenLayersPreviewPanel.class.getResourceAsStream("style-editor-legend.xml"));
             OutputStream os = legend.out();
             try {
@@ -136,9 +136,9 @@ public class OpenLayersPreviewPanel extends StyleEditTabPanel implements IHeader
                 os.close();
             }
         }
-        
+
     }
-    
+
     public void renderHead(IHeaderResponse header) {
         super.renderHead(header);
         try {
@@ -150,21 +150,19 @@ public class OpenLayersPreviewPanel extends StyleEditTabPanel implements IHeader
             throw new WicketRuntimeException(e);
         }
     }
-    
-    private void renderHeaderCss(IHeaderResponse header) 
-        throws IOException, TemplateException 
-    {
+
+    private void renderHeaderCss(IHeaderResponse header)
+            throws IOException, TemplateException {
         Map<String, Object> context = new HashMap<String, Object>();
         context.put("id", olPreview.getMarkupId());
         Template template = templates.getTemplate("ol-style.ftl");
         StringWriter css = new java.io.StringWriter();
         template.process(context, css);
-        header.render(CssHeaderItem.forCSS(css.toString(),null));
+        header.render(CssHeaderItem.forCSS(css.toString(), null));
     }
-    
-    private void renderHeaderScript(IHeaderResponse header) 
-        throws IOException, TemplateException 
-    {
+
+    private void renderHeaderScript(IHeaderResponse header)
+            throws IOException, TemplateException {
         Map<String, Object> context = new HashMap<String, Object>();
         ReferencedEnvelope bbox = getStylePage().getLayerInfo().getResource().getLatLonBoundingBox();
         WorkspaceInfo workspace = getStylePage().getStyleInfo().getWorkspace();
@@ -184,7 +182,7 @@ public class OpenLayersPreviewPanel extends StyleEditTabPanel implements IHeader
             if (StringUtils.isEmpty(proxyBaseUrl)) {
                 Request r = getRequest();
                 Url clientUrl = r.getClientUrl();
-                styleUrl = clientUrl.getProtocol()+"://"+clientUrl.getHost()+":"+clientUrl.getPort()+r.getContextPath();
+                styleUrl = clientUrl.getProtocol() + "://" + clientUrl.getHost() + ":" + clientUrl.getPort() + r.getContextPath();
             } else {
                 styleUrl = proxyBaseUrl;
             }
@@ -216,13 +214,12 @@ public class OpenLayersPreviewPanel extends StyleEditTabPanel implements IHeader
         header.render(new JavaScriptUrlReferenceHeaderItem(ResponseUtils.buildURL(base, "/openlayers3/ol.js", null, URLType.RESOURCE), null, false, "UTF-8", null));
         header.render(OnLoadHeaderItem.forScript(script.toString()));
     }
-    
+
     /**
      * Makes sure the url does not end with "/", otherwise we would have URL lik
      * "http://localhost:8080/geoserver//wms?LAYERS=..." and Jetty 6.1 won't digest them...
-     * 
-     * @param baseUrl
      *
+     * @param baseUrl
      */
     private String canonicUrl(String baseUrl) {
         if (baseUrl.endsWith("/")) {
@@ -231,12 +228,12 @@ public class OpenLayersPreviewPanel extends StyleEditTabPanel implements IHeader
             return baseUrl;
         }
     }
-    
+
     public String getUpdateCommand() throws IOException, TemplateException {
         Map<String, Object> context = new HashMap<String, Object>();
         context.put("id", olPreview.getMarkupId());
         context.put("cachebuster", rand.nextInt());
-    
+
         Template template = templates.getTemplate("ol-update.ftl");
         StringWriter script = new java.io.StringWriter();
         template.process(context, script);

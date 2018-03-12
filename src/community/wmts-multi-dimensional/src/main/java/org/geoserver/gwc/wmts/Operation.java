@@ -23,11 +23,10 @@ enum Operation {
      * If the requested operation matches a supported operation we return a conveyor for it otherwise we return NULL.
      *
      * @param operationName name of the operation to match, maybe NULL
-     * @param request received HTTP request
-     * @param response HTTP response that will be send to the client
+     * @param request       received HTTP request
+     * @param response      HTTP response that will be send to the client
      * @param storageBroker GWC storage broker, used to instantiate the conveyor
-     * @param parameters normalized KVP parameters of the received HTTP request
-     *
+     * @param parameters    normalized KVP parameters of the received HTTP request
      * @return NULL if the requested operation is not supported, a conveyor otherwise
      */
     static SimpleConveyor match(String operationName, HttpServletRequest request,

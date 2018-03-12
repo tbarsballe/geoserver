@@ -7,14 +7,13 @@ package org.geoserver.wcs2_0.response;
 
 /**
  * A simple Bean storing Dimension information such as name, unit, symbol, type and dataType.
- * 
- * @author Daniele Romagnoli, GeoSolutions 
+ *
+ * @author Daniele Romagnoli, GeoSolutions
  */
 public class DimensionBean {
 
     /**
-     * Time and elevation have special management. 
-     *
+     * Time and elevation have special management.
      */
     public enum DimensionType {
         TIME, ELEVATION, CUSTOM
@@ -30,14 +29,14 @@ public class DimensionBean {
 
     private DimensionType dimensionType;
 
-    private boolean isRange; 
+    private boolean isRange;
 
     public DimensionBean(
-            final String name, 
-            final String unit, 
-            final String symbol, 
-            final String datatype, 
-            final DimensionType dimensionType, 
+            final String name,
+            final String unit,
+            final String symbol,
+            final String datatype,
+            final DimensionType dimensionType,
             final boolean isRange) {
         this.name = name;
         this.unit = unit;

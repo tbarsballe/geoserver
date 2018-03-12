@@ -35,7 +35,6 @@ import org.quartz.Trigger.TriggerState;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- *
  * @author Niels Charlier
  * @author Timothy De Bock
  */
@@ -154,8 +153,8 @@ public class CopyTableTaskTest extends AbstractTaskManagerTest {
         String[] splitTableName = TABLE_NAME.split("\\.", 2);
 
         int numberOfindexesSource = getNumberOfIndexes(SOURCEDB_NAME, splitTableName[1]);
-        int numberOfindexesTarget = getNumberOfIndexes(TARGETDB_NAME,  splitTargetTableName[1]);
-        assertEquals(numberOfindexesSource , numberOfindexesTarget);
+        int numberOfindexesTarget = getNumberOfIndexes(TARGETDB_NAME, splitTargetTableName[1]);
+        assertEquals(numberOfindexesSource, numberOfindexesTarget);
 
         assertTrue(taskUtil.cleanup(config));
 
@@ -200,7 +199,7 @@ public class CopyTableTaskTest extends AbstractTaskManagerTest {
                 getNumberOfColumns(TARGETDB_NAME, TARGET_TABLE_FROM_VIEW_NAME));
 
 
-        int numberOfindexesTarget = getNumberOfIndexes(TARGETDB_NAME,  split[1]);
+        int numberOfindexesTarget = getNumberOfIndexes(TARGETDB_NAME, split[1]);
 
         int numberOfColumnsTarget = getNumberOfColumns(TARGETDB_NAME, TARGET_TABLE_FROM_VIEW_NAME);
         // We did not add Geometry support on the H2 DB. So only check the index on the shape
@@ -208,7 +207,7 @@ public class CopyTableTaskTest extends AbstractTaskManagerTest {
             assertEquals(2, numberOfindexesTarget);
             assertEquals("shape", getColumnName(TARGETDB_NAME, TARGET_TABLE_FROM_VIEW_NAME, 3));
         } else {
-            assertEquals(1,numberOfindexesTarget);
+            assertEquals(1, numberOfindexesTarget);
         }
 
         assertTrue(taskUtil.cleanup(config));
@@ -381,7 +380,7 @@ public class CopyTableTaskTest extends AbstractTaskManagerTest {
 
 
     private int getNumberOfIndexes(String db, String tableName) throws SQLException {
-        int indexCount=0;
+        int indexCount = 0;
         DbSource ds = dbSources.get(db);
         try (Connection conn = ds.getDataSource().getConnection()) {
             DatabaseMetaData metaData = conn.getMetaData();
@@ -391,10 +390,10 @@ public class CopyTableTaskTest extends AbstractTaskManagerTest {
             } else {
                 rs = metaData.getIndexInfo(null, null, tableName, false, false);
             }
-            while(rs.next()) {
+            while (rs.next()) {
                 indexCount++;
             }
-         }
+        }
         return indexCount;
     }
 

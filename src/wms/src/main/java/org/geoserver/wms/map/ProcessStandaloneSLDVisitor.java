@@ -19,7 +19,7 @@ import java.util.List;
 
 /**
  * Processes a standalone SLD document for use in a WMS GetMap request
- *
+ * <p>
  * Replacement for org.geoserver.wms.map.GetMapKvpRequestReader#processStandaloneSld, using {@link GeoServerSLDVisitor}
  */
 public class ProcessStandaloneSLDVisitor extends GeoServerSLDVisitor {
@@ -45,11 +45,12 @@ public class ProcessStandaloneSLDVisitor extends GeoServerSLDVisitor {
             super.visit(sld);
             request.setLayers(layers);
             request.setStyles(styles);
-        //Convert various more specific exceptions into service exceptions
-        } catch (IllegalStateException  | UncheckedIOException | UnsupportedOperationException e) {
+            //Convert various more specific exceptions into service exceptions
+        } catch (IllegalStateException | UncheckedIOException | UnsupportedOperationException e) {
             throw new ServiceException(e);
         }
     }
+
     @Override
     public PublishedInfo visitNamedLayerInternal(StyledLayer sl) {
         currLayer = null;
@@ -96,7 +97,7 @@ public class ProcessStandaloneSLDVisitor extends GeoServerSLDVisitor {
 
     @Override
     public void visitUserLayerInlineFeature(UserLayer ul) {
-        currLayer = new MapLayerInfo((LayerInfo)info);
+        currLayer = new MapLayerInfo((LayerInfo) info);
     }
 
     @Override
@@ -136,7 +137,7 @@ public class ProcessStandaloneSLDVisitor extends GeoServerSLDVisitor {
             layers.add(currLayer);
             styles.add(userStyle);
         } else if (info != null && info instanceof LayerInfo) {
-            layers.add(new MapLayerInfo((LayerInfo)info));
+            layers.add(new MapLayerInfo((LayerInfo) info));
             styles.add(userStyle);
         }
     }

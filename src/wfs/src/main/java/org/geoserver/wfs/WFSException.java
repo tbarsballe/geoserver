@@ -26,10 +26,12 @@ public class WFSException extends ServiceException {
 
     public enum Code {
         OperationProcessingFailed
-    };
+    }
+
+    ;
 
     public WFSException(RequestObject request, String message) {
-        this(message); 
+        this(message);
         init(request);
     }
 
@@ -57,7 +59,7 @@ public class WFSException extends ServiceException {
         this(cause);
         init(request);
     }
-    
+
     public WFSException(EObject request, String message) {
         this(message);
         init(request);
@@ -120,10 +122,10 @@ public class WFSException extends ServiceException {
         String className = request.getClass().getSimpleName();
         if (request instanceof RequestObject) {
             //request object adapter
-            
+
             className = request.getClass().getSuperclass().getSimpleName();
-            if(className.endsWith("Request")){
-                return className.substring(0, className.length()-"Request".length());
+            if (className.endsWith("Request")) {
+                return className.substring(0, className.length() - "Request".length());
             }
             RequestObject requestObject = (RequestObject) request;
             EObject adaptee = requestObject.getAdaptee();
@@ -132,10 +134,9 @@ public class WFSException extends ServiceException {
                 return className;
             }
             return null;
-        }
-        else if (className.endsWith("TypeImpl")) {
+        } else if (className.endsWith("TypeImpl")) {
             //underlying emf request object
-            return className.substring(0, className.length()-"TypeImpl".length());
+            return className.substring(0, className.length() - "TypeImpl".length());
         }
         return null;
     }

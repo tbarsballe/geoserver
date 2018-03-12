@@ -14,7 +14,6 @@ import org.locationtech.geogig.porcelain.VersionOp;
 
 /**
  * Spring defined bean publishing geogig module status to the web UI and REST API
- *
  */
 public class GeogigModuleStatus implements ModuleStatus {
 
@@ -49,35 +48,43 @@ public class GeogigModuleStatus implements ModuleStatus {
                 version, revision, date, geogigInfo);
     }
 
-    public @Override String getModule() {
+    public @Override
+    String getModule() {
         return "gs-geogig";
     }
 
-    public @Override Optional<String> getComponent() {
+    public @Override
+    Optional<String> getComponent() {
         return Optional.empty();
     }
 
-    public @Override String getName() {
+    public @Override
+    String getName() {
         return "GeoGig GeoServer Plugin";
     }
 
-    public @Override Optional<String> getVersion() {
+    public @Override
+    Optional<String> getVersion() {
         return Optional.of(VERSION);
     }
 
-    public @Override boolean isAvailable() {
+    public @Override
+    boolean isAvailable() {
         return true;
     }
 
-    public @Override boolean isEnabled() {
+    public @Override
+    boolean isEnabled() {
         return true;
     }
 
-    public @Override Optional<String> getMessage() {
+    public @Override
+    Optional<String> getMessage() {
         return Optional.of(MESSAGE);
     }
 
-    public @Override Optional<String> getDocumentation() {
+    public @Override
+    Optional<String> getDocumentation() {
         // not being used as far as I can see
         return Optional.empty();
     }

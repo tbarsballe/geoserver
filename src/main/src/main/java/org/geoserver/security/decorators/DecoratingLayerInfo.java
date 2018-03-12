@@ -23,7 +23,7 @@ import org.geoserver.catalog.impl.AbstractDecorator;
 /**
  * Delegates every method to the wrapped {@link LayerInfo}. Subclasses will
  * override selected methods to perform their "decoration" job
- * 
+ *
  * @author Andrea Aime
  */
 public class DecoratingLayerInfo extends AbstractDecorator<LayerInfo> implements LayerInfo {
@@ -115,7 +115,7 @@ public class DecoratingLayerInfo extends AbstractDecorator<LayerInfo> implements
     public void setAttribution(AttributionInfo attr) {
         delegate.setAttribution(attr);
     }
-    
+
     public void accept(CatalogVisitor visitor) {
         delegate.accept(visitor);
     }
@@ -186,15 +186,15 @@ public class DecoratingLayerInfo extends AbstractDecorator<LayerInfo> implements
     public String getPrefixedName() {
         return delegate.getPrefixedName();
     }
-    
+
     @Override
     public WMSInterpolation getDefaultWMSInterpolationMethod() {
         return delegate.getDefaultWMSInterpolationMethod();
     }
-    
+
     @Override
     public void setDefaultWMSInterpolationMethod(WMSInterpolation interpolationMethod) {
         delegate.setDefaultWMSInterpolationMethod(interpolationMethod);
     }
-    
+
 }

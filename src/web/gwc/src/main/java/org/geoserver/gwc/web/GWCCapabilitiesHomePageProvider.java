@@ -23,7 +23,7 @@ import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 /**
  * Implements the {@link CapabilitiesHomePageLinkProvider} extension point to contribute links to
  * GetCapabilities and other service description documents supported by GeoWebCache.
- * 
+ *
  * @author Gabriel Roldan
  * @see CapabilitiesHomePagePanel
  */
@@ -33,8 +33,7 @@ public class GWCCapabilitiesHomePageProvider implements CapabilitiesHomePageLink
     private final GeoServer geoServer;
 
     /**
-     * @param gwc
-     *            provides access to the {@link GWCConfig configuration} in order to show/hide
+     * @param gwc provides access to the {@link GWCConfig configuration} in order to show/hide
      *            getcaps links based on service enablement.
      */
     public GWCCapabilitiesHomePageProvider(GWC gwc, GeoServer geoServer) {
@@ -44,7 +43,7 @@ public class GWCCapabilitiesHomePageProvider implements CapabilitiesHomePageLink
 
     /**
      * Adds capabilities links for WMS-C, WMTS and TMS, as long as they're available.
-     * 
+     *
      * @see org.geoserver.web.CapabilitiesHomePageLinkProvider#getCapabilitiesComponent
      * @see CapabilitiesHomePagePanel
      */

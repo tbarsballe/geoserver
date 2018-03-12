@@ -25,7 +25,7 @@ import static org.junit.Assert.*;
 
 /**
  * A variant to {@link SecureCatalogImplTest} allowing a per test setup of group nesting and rules
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class SecureCatalogImplGroupsTest extends AbstractAuthorizationTest {
@@ -35,10 +35,10 @@ public class SecureCatalogImplGroupsTest extends AbstractAuthorizationTest {
     private static final String OPAQUE_GROUP_NAME = "opaque";
 
     private static final String SINGLE_GROUP_NAME = "single";
-    
+
     private static final String NESTED_GROUP_NAME = "nested";
 
-    private static final String[] DEFAULT_RULES = new String[] { "*.*.r=*", "*.*.w=*" };
+    private static final String[] DEFAULT_RULES = new String[]{"*.*.r=*", "*.*.w=*"};
 
     @Override
     public void setUp() throws Exception {
@@ -196,7 +196,7 @@ public class SecureCatalogImplGroupsTest extends AbstractAuthorizationTest {
         populateCatalog();
 
         // setup security
-        buildManager(new String[] { "named.r=MILITARY" });
+        buildManager(new String[]{"named.r=MILITARY"});
 
         // try the ro user
         SecurityContextHolder.getContext().setAuthentication(roUser);
@@ -235,7 +235,7 @@ public class SecureCatalogImplGroupsTest extends AbstractAuthorizationTest {
 
         // try the ro user
         SecurityContextHolder.getContext().setAuthentication(roUser);
-        
+
         // ... the only directly available layer should be states, contained in single
         assertNotNull(sc.getLayerByName(statesLayer.prefixedName()));
         assertNull(sc.getLayerByName(forestsLayer.prefixedName()));
@@ -246,7 +246,7 @@ public class SecureCatalogImplGroupsTest extends AbstractAuthorizationTest {
         LayerGroupInfo securedSingleGroup = sc.getLayerGroupByName(single.prefixedName());
         assertNotNull(securedSingleGroup);
         assertEquals(1, securedSingleGroup.getLayers().size());
-        
+
         // however switching to mil user
         SecurityContextHolder.getContext().setAuthentication(milUser);
 
@@ -254,7 +254,7 @@ public class SecureCatalogImplGroupsTest extends AbstractAuthorizationTest {
         assertNotNull(sc.getLayerByName(statesLayer.prefixedName()));
         assertNull(sc.getLayerByName(forestsLayer.prefixedName()));
         assertNull(sc.getLayerByName(roadsLayer.prefixedName()));
-        
+
         // but the opaque group is now visible along with its layers
         securedSingleGroup = sc.getLayerGroupByName(single.prefixedName());
         assertNotNull(securedSingleGroup);
@@ -263,7 +263,7 @@ public class SecureCatalogImplGroupsTest extends AbstractAuthorizationTest {
         assertNotNull(securedOpaqueGroup);
         assertEquals(2, securedOpaqueGroup.getLayers().size());
     }
-    
+
     @Test
     public void testWmsSecuredSingleAndPublicOpaqueGroup() throws Exception {
         setupRequestThreadLocal("WMS");
@@ -281,7 +281,7 @@ public class SecureCatalogImplGroupsTest extends AbstractAuthorizationTest {
 
         // try the ro user
         SecurityContextHolder.getContext().setAuthentication(roUser);
-        
+
         // ... states should be visible since "single" auth does not cascade to contained layers
         assertNotNull(sc.getLayerByName(statesLayer.prefixedName()));
         assertNull(sc.getLayerByName(forestsLayer.prefixedName()));
@@ -293,7 +293,7 @@ public class SecureCatalogImplGroupsTest extends AbstractAuthorizationTest {
         LayerGroupInfo securedOpaqueGroup = sc.getLayerGroupByName(opaque.prefixedName());
         assertNotNull(securedOpaqueGroup);
         assertEquals(2, securedOpaqueGroup.getLayers().size());
-        
+
         // however switching to mil user
         SecurityContextHolder.getContext().setAuthentication(milUser);
 
@@ -301,7 +301,7 @@ public class SecureCatalogImplGroupsTest extends AbstractAuthorizationTest {
         assertNotNull(sc.getLayerByName(statesLayer.prefixedName()));
         assertNull(sc.getLayerByName(forestsLayer.prefixedName()));
         assertNull(sc.getLayerByName(roadsLayer.prefixedName()));
-        
+
         // but the opaque group is now visible along with its layers
         LayerGroupInfo securedSingleGroup = sc.getLayerGroupByName(single.prefixedName());
         assertNotNull(securedSingleGroup);
@@ -351,7 +351,7 @@ public class SecureCatalogImplGroupsTest extends AbstractAuthorizationTest {
         populateCatalog();
 
         // setup security, disallow nested group
-        buildManager(new String[] { OPAQUE_GROUP_NAME + ".r=MILITARY" });
+        buildManager(new String[]{OPAQUE_GROUP_NAME + ".r=MILITARY"});
 
         // try the ro user
         SecurityContextHolder.getContext().setAuthentication(roUser);
@@ -382,7 +382,7 @@ public class SecureCatalogImplGroupsTest extends AbstractAuthorizationTest {
         populateCatalog();
 
         // setup security, disallow nested group
-        buildManager(new String[] { NAMED_GROUP_NAME + ".r=MILITARY" });
+        buildManager(new String[]{NAMED_GROUP_NAME + ".r=MILITARY"});
 
         // try the ro user
         SecurityContextHolder.getContext().setAuthentication(roUser);
@@ -411,7 +411,7 @@ public class SecureCatalogImplGroupsTest extends AbstractAuthorizationTest {
         LayerGroupInfo securedOpaqueGroup = sc.getLayerGroupByName(OPAQUE_GROUP_NAME);
         assertEquals(2, securedOpaqueGroup.layers().size());
     }
-    
+
     /**
      * Same as {@link #testWmsStandaloneOpaqueGroup()} but with a nested group as the testing target
      */
@@ -441,7 +441,7 @@ public class SecureCatalogImplGroupsTest extends AbstractAuthorizationTest {
         assertThat(securedGroup.getLayers(), contains(nested, roadsLayer));
         assertThat(securedGroup.layers(), contains(statesLayer, roadsLayer));
     }
-    
+
     /**
      * Same as {@link #testWmsNamedOpaqueGroup()} but with a nested group as the testing target
      */
@@ -471,21 +471,21 @@ public class SecureCatalogImplGroupsTest extends AbstractAuthorizationTest {
         assertNotNull(securedOpaqueGroup);
         assertEquals(2, securedOpaqueGroup.getLayers().size());
         assertThat(securedOpaqueGroup.getLayers(), contains(nested, roadsLayer));
-        
+
         // and same for named
         LayerGroupInfo securedNamedGroup = sc.getLayerGroupByName(named.prefixedName());
         assertNotNull(securedNamedGroup);
         assertEquals(2, securedNamedGroup.getLayers().size());
         assertThat(securedNamedGroup.getLayers(), contains(nested, roadsLayer));
     }
-    
+
     /**
      * Same as {@link #testWmsSingleAndOpaqueGroup()} but with a nested group as the testing target
      */
     @Test
     public void testWmsNestedInSingleAndOpaqueGroup() throws Exception {
         setupRequestThreadLocal("WMS");
-        
+
         // setup groups
         LayerGroupInfo nested = buildLayerGroup(NESTED_GROUP_NAME, Mode.NAMED, null, statesLayer);
         LayerGroupInfo opaque = buildLayerGroup(OPAQUE_GROUP_NAME, Mode.OPAQUE_CONTAINER, null,
@@ -515,7 +515,7 @@ public class SecureCatalogImplGroupsTest extends AbstractAuthorizationTest {
         assertEquals(2, securedSingleGroup.getLayers().size());
         assertThat(securedSingleGroup.getLayers(), contains(nested, roadsLayer));
     }
-    
+
     /**
      * Same as {@link #testWmsMilitaryNamedAndPublicOpaqueGroup()} but with a nested group as the testing target
      */
@@ -532,7 +532,7 @@ public class SecureCatalogImplGroupsTest extends AbstractAuthorizationTest {
         populateCatalog();
 
         // setup security
-        buildManager(new String[] { "named.r=MILITARY" });
+        buildManager(new String[]{"named.r=MILITARY"});
 
         // try the ro user
         SecurityContextHolder.getContext().setAuthentication(roUser);
@@ -559,6 +559,7 @@ public class SecureCatalogImplGroupsTest extends AbstractAuthorizationTest {
 
     /**
      * Same as {@link #testWmsPublicSingleAndSecuredOpaqueGroup} but with a nested group as the testing target
+     *
      * @throws Exception
      */
     @Test
@@ -579,7 +580,7 @@ public class SecureCatalogImplGroupsTest extends AbstractAuthorizationTest {
 
         // try the ro user
         SecurityContextHolder.getContext().setAuthentication(roUser);
-        
+
         // ... the only directly available layer should be roads, contained in single
         assertNotNull(sc.getLayerByName(roadsLayer.prefixedName()));
         assertNull(sc.getLayerByName(forestsLayer.prefixedName()));
@@ -591,7 +592,7 @@ public class SecureCatalogImplGroupsTest extends AbstractAuthorizationTest {
         LayerGroupInfo securedSingleGroup = sc.getLayerGroupByName(single.prefixedName());
         assertNotNull(securedSingleGroup);
         assertEquals(1, securedSingleGroup.getLayers().size());
-        
+
         // however switching to mil user
         SecurityContextHolder.getContext().setAuthentication(milUser);
 
@@ -600,7 +601,7 @@ public class SecureCatalogImplGroupsTest extends AbstractAuthorizationTest {
         assertNull(sc.getLayerByName(forestsLayer.prefixedName()));
         assertNull(sc.getLayerByName(statesLayer.prefixedName()));
         assertNull(sc.getLayerGroupByName(nested.prefixedName()));
-        
+
         // but the opaque group is now visible along with its layers
         securedSingleGroup = sc.getLayerGroupByName(single.prefixedName());
         assertNotNull(securedSingleGroup);
@@ -609,7 +610,7 @@ public class SecureCatalogImplGroupsTest extends AbstractAuthorizationTest {
         LayerGroupInfo nestedInSingle = (LayerGroupInfo) securedSingleGroup.getLayers().get(1);
         assertEquals(1, nestedInSingle.getLayers().size());
         assertThat(nestedInSingle.getLayers(), contains(statesLayer));
-        
+
         LayerGroupInfo securedOpaqueGroup = sc.getLayerGroupByName(opaque.prefixedName());
         assertNotNull(securedOpaqueGroup);
         assertEquals(2, securedOpaqueGroup.getLayers().size());

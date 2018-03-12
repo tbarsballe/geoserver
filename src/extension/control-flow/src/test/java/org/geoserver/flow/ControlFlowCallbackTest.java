@@ -42,7 +42,7 @@ public class ControlFlowCallbackTest {
         tc.controllers.add(controller);
         callback.provider = new DefaultFlowControllerProvider(tc);
         callback.doFilter(null, null, new FilterChain() {
-            
+
             @Override
             public void doFilter(ServletRequest request, ServletResponse response)
                     throws IOException, ServletException {
@@ -51,11 +51,11 @@ public class ControlFlowCallbackTest {
                 assertEquals(0, controller.requestCompleteCalls);
             }
         });
-        
+
         assertEquals(1, controller.requestIncomingCalls);
         assertEquals(1, controller.requestCompleteCalls);
     }
-    
+
     @Test
     public void testTimeout() {
         ControlFlowCallback callback = new ControlFlowCallback();
@@ -66,11 +66,11 @@ public class ControlFlowCallbackTest {
         tc.controllers.add(c1);
         tc.controllers.add(c2);
         callback.provider = new DefaultFlowControllerProvider(tc);
-        
+
         try {
             callback.operationDispatched(null, null);
             fail("A HTTP 503 should have been raised!");
-        } catch(HttpErrorCodeException e) {
+        } catch (HttpErrorCodeException e) {
             assertEquals(503, e.getErrorCode());
         }
         assertEquals(1, c1.requestIncomingCalls);
@@ -79,7 +79,7 @@ public class ControlFlowCallbackTest {
         assertEquals(0, c1.requestCompleteCalls);
         callback.finished(null);
     }
-    
+
     @Test
     public void testDelayHeader() {
         ControlFlowCallback callback = new ControlFlowCallback();
@@ -110,7 +110,7 @@ public class ControlFlowCallbackTest {
         assertEquals(0, callback.getRunningRequests());
         assertEquals(0, callback.getBlockedRequests());
     }
-    
+
     @Test
     public void testRequestReplaced() {
         // setup a controller hitting on GWC
@@ -119,7 +119,7 @@ public class ControlFlowCallbackTest {
         BasicOWSController controller = new BasicOWSController("GWC", 1);
         tc.controllers.add(controller);
         callback.provider = new DefaultFlowControllerProvider(tc);
-        
+
         Request r1 = new Request();
         r1.setService("GWC");
         MockHttpServletResponse httpResponse = new MockHttpServletResponse();
@@ -146,7 +146,7 @@ public class ControlFlowCallbackTest {
         assertEquals(0, callback.getRunningRequests());
         assertEquals(0, callback.getBlockedRequests());
     }
-    
+
     @Test
     public void testFinishedNotCalled() throws IOException, ServletException {
         // setup a controller hitting on GWC
@@ -155,7 +155,7 @@ public class ControlFlowCallbackTest {
         final BasicOWSController controller = new BasicOWSController("GWC", 1);
         tc.controllers.add(controller);
         callback.provider = new DefaultFlowControllerProvider(tc);
-        
+
         // outer request
         final Request r1 = new Request();
         r1.setService("GWC");
@@ -170,13 +170,13 @@ public class ControlFlowCallbackTest {
             protected void doGet(HttpServletRequest req, HttpServletResponse resp)
                     throws ServletException, IOException {
                 servletCalled.set(true);
-                
+
                 // setup external request
                 callback.operationDispatched(r1, null);
                 assertEquals(1, callback.getRunningRequests());
                 assertEquals(0, callback.getBlockedRequests());
                 assertEquals(1, controller.getRequestsInQueue());
-                
+
                 // fail to call finished
             }
         }, callback);
@@ -188,7 +188,7 @@ public class ControlFlowCallbackTest {
         assertEquals(0, callback.getBlockedRequests());
         assertEquals(0, controller.getRequestsInQueue());
     }
-    
+
     @Test
     public void testFailNestedRequestParse() throws IOException, ServletException {
         // setup a controller hitting on GWC
@@ -197,7 +197,7 @@ public class ControlFlowCallbackTest {
         final BasicOWSController controller = new BasicOWSController("GWC", 1);
         tc.controllers.add(controller);
         callback.provider = new DefaultFlowControllerProvider(tc);
-        
+
         // outer request
         final Request r1 = new Request();
         r1.setService("GWC");
@@ -213,19 +213,19 @@ public class ControlFlowCallbackTest {
             protected void doGet(HttpServletRequest req, HttpServletResponse resp)
                     throws ServletException, IOException {
                 servletCalled.set(true);
-                
+
                 // setup external request
                 callback.operationDispatched(r1, null);
                 assertEquals(1, callback.getRunningRequests());
                 assertEquals(0, callback.getBlockedRequests());
-                
+
                 // call the nested one
                 Request r2 = new Request(r1);
                 callback.operationDispatched(r2, null);
                 assertEquals(1, callback.getRunningRequests());
                 assertEquals(0, callback.getBlockedRequests());
                 assertEquals(1, controller.getRequestsInQueue());
-                
+
                 // fail to call finished on either
             }
         }, callback);
@@ -260,17 +260,17 @@ public class ControlFlowCallbackTest {
         }
 
     }
-    
+
     /**
      * A controller counting requests, can also be used to check for timeouts
      */
     static class CountingController implements FlowController {
-        
+
         int priority;
         long delay;
         int requestCompleteCalls;
         int requestIncomingCalls;
-        
+
 
         public CountingController(int priority, long delay) {
             this.priority = priority;
@@ -282,23 +282,23 @@ public class ControlFlowCallbackTest {
         }
 
         public void requestComplete(Request request) {
-            requestCompleteCalls++;            
+            requestCompleteCalls++;
         }
 
         public boolean requestIncoming(Request request, long timeout) {
             requestIncomingCalls++;
-            if(delay > 0)
-                if(timeout > delay) {
+            if (delay > 0)
+                if (timeout > delay) {
                     try {
                         Thread.sleep(delay);
-                    } catch(InterruptedException e) {
-                        throw new RuntimeException("This is unexpected"); 
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException("This is unexpected");
                     }
                 } else {
                     return false;
                 }
             return true;
         }
-        
+
     }
 }

@@ -16,7 +16,7 @@ import org.geotools.util.logging.Logging;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 /**
- * Interceptor notifying {@link DispatcherCallback} of request processing progress 
+ * Interceptor notifying {@link DispatcherCallback} of request processing progress
  */
 public class CallbackInterceptor extends HandlerInterceptorAdapter {
 
@@ -26,10 +26,10 @@ public class CallbackInterceptor extends HandlerInterceptorAdapter {
     List<DispatcherCallback> getCallbacks() {
         return GeoServerExtensions.extensions(DispatcherCallback.class);
     }
-    
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
-            Object handler) throws Exception {
+                             Object handler) throws Exception {
         List<DispatcherCallback> callbacks = getCallbacks();
         // for semi-backwards compatibility
         for (DispatcherCallback callback : callbacks) {
@@ -44,9 +44,9 @@ public class CallbackInterceptor extends HandlerInterceptorAdapter {
 
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response,
-            Object handler, Exception ex) throws Exception {
+                                Object handler, Exception ex) throws Exception {
         List<DispatcherCallback> callbacks = getCallbacks();
-        
+
         if (ex != null) {
             for (DispatcherCallback callback : callbacks) {
                 callback.exception(request, response, ex);

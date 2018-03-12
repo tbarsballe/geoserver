@@ -22,12 +22,12 @@ public class MonitorServletResponseTest {
     @Test
     public void testOutputStream() throws IOException {
         byte[] data = data();
-        
+
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         ServletOutputStream mock = new DelegatingServletOutputStream(bos);
         MonitorOutputStream out = new MonitorOutputStream(mock);
         out.write(data);
-        
+
         assertEquals(data.length, bos.size());
         assertEquals(data.length, out.getBytesWritten());
     }

@@ -18,12 +18,12 @@ import java.util.Map;
 import static org.junit.Assert.assertEquals;
 
 public class TextDecorationTest {
-    
+
     @After
     public void clearRequest() {
         Dispatcher.REQUEST.remove();
     }
-    
+
     @Test
     public void testExpandRequestVariable() throws Exception {
         // setup environment
@@ -32,7 +32,7 @@ public class TextDecorationTest {
         kvp.put("time", "2008-10-31T00:00:00.000Z");
         request.setRawKvp(kvp);
         Dispatcher.REQUEST.set(request);
-        
+
         TextDecoration decoration = new TextDecoration();
         Map<String, String> options = new HashMap<>();
         options.put("message", "<#setting datetime_format=\"yyyy-MM-dd'T'HH:mm:ss.SSSX\">\n" +

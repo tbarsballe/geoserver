@@ -36,8 +36,8 @@ import com.vividsolutions.jts.geom.Geometry;
  * Converts feature between two feature data sources.
  * <p>
  * </p>
- * @author Justin Deoliveira, OpenGeo
  *
+ * @author Justin Deoliveira, OpenGeo
  */
 public class FeatureDataConverter {
 
@@ -77,8 +77,8 @@ public class FeatureDataConverter {
     private FeatureDataConverter() {
     }
 
-    public SimpleFeatureType convertType(SimpleFeatureType featureType, VectorFormat format, 
-        ImportData data, ImportTask task) {
+    public SimpleFeatureType convertType(SimpleFeatureType featureType, VectorFormat format,
+                                         ImportData data, ImportTask task) {
 
         SimpleFeatureTypeBuilder typeBuilder = new SimpleFeatureTypeBuilder();
         typeBuilder.setName(convertTypeName(task != null && task.getLayer().getName() != null ? task.getLayer().getName() : featureType.getTypeName()));
@@ -88,7 +88,7 @@ public class FeatureDataConverter {
             attBuilder.init(att);
             typeBuilder.add(attBuilder.buildDescriptor(convertAttributeName(att.getLocalName())));
         }
-        
+
         return typeBuilder.buildFeatureType();
     }
 
@@ -130,8 +130,8 @@ public class FeatureDataConverter {
 
     public static FeatureDataConverter TO_SHAPEFILE = new FeatureDataConverter() {
         @Override
-        public SimpleFeatureType convertType(SimpleFeatureType featureType, VectorFormat format, 
-            ImportData data, ImportTask item) {
+        public SimpleFeatureType convertType(SimpleFeatureType featureType, VectorFormat format,
+                                             ImportData data, ImportTask item) {
 
             //for shapefile we always ensure the geometry is the first type, and we have to deal
             // with the max field name length of 10
@@ -151,8 +151,7 @@ public class FeatureDataConverter {
                                     binding = f.getDefaultGeometry().getClass();
                                 }
                             }
-                        }
-                        finally {
+                        } finally {
                             r.close();
                         }
                     } catch (IOException e) {
@@ -176,8 +175,7 @@ public class FeatureDataConverter {
                 Object obj = from.getAttribute(att.getLocalName());
                 if (att instanceof GeometryDescriptor) {
                     to.setDefaultGeometry(obj);
-                }
-                else if (containsAttribute(to, attName(att.getLocalName()))) {
+                } else if (containsAttribute(to, attName(att.getLocalName()))) {
                     to.setAttribute(attName(att.getLocalName()), obj);
                 }
             }
@@ -185,9 +183,9 @@ public class FeatureDataConverter {
 
         String attName(String name) {
             name = convertAttributeName(name);
-            return name.length() > 10 ? name.substring(0,10) : name;
+            return name.length() > 10 ? name.substring(0, 10) : name;
         }
-        
+
         private boolean containsAttribute(SimpleFeature ft, String attName) {
             for (AttributeDescriptor att : ft.getType().getAttributeDescriptors()) {
                 if (att.getLocalName().equals(attName)) {
@@ -197,13 +195,13 @@ public class FeatureDataConverter {
             return false;
         }
     };
-    
+
     public static final FeatureDataConverter TO_POSTGIS = new FeatureDataConverter() {
 
         @Override
         public SimpleFeatureType convertType(SimpleFeatureType featureType, VectorFormat format,
-                ImportData data, ImportTask item) {
-            SimpleFeatureType converted = DEFAULT.convertType(featureType, format, data, item );
+                                             ImportData data, ImportTask item) {
+            SimpleFeatureType converted = DEFAULT.convertType(featureType, format, data, item);
             String featureTypeName = convertTypeName(featureType.getTypeName());
             // trim the length of the name
             // by default, postgis table/index names need to fit in 64 characters
@@ -231,10 +229,12 @@ public class FeatureDataConverter {
                     to.setAttribute(convertAttributeName(toName), from.getAttribute(name));
                 }
             }
-        };
+        }
 
-        public SimpleFeatureType convertType(SimpleFeatureType featureType, VectorFormat format, 
-            ImportData data, ImportTask task) {
+        ;
+
+        public SimpleFeatureType convertType(SimpleFeatureType featureType, VectorFormat format,
+                                             ImportData data, ImportTask task) {
             SimpleFeatureTypeBuilder typeBuilder = new SimpleFeatureTypeBuilder();
             AttributeTypeBuilder attributeBuilder = new AttributeTypeBuilder();
             typeBuilder.setName(ensureOracleSafe(featureType.getTypeName()));

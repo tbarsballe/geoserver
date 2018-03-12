@@ -20,7 +20,6 @@ import org.ocpsoft.pretty.time.PrettyTime;
 
 /**
  * @author Alessio Fabiani, GeoSolutions
- *
  */
 public class BackupRestoreExecutionsTable<T extends AbstractExecutionAdapter> extends GeoServerTablePanel<T> {
 
@@ -40,27 +39,24 @@ public class BackupRestoreExecutionsTable<T extends AbstractExecutionAdapter> ex
     public Class<T> getType() {
         return this.clazz;
     }
-    
+
     @Override
     protected Component getComponentForProperty(String id, IModel itemModel, Property property) {
         if (BackupRestoreExecutionsProvider.ID == property) {
             PageParameters pp = new PageParameters();
             pp.add("id", property.getModel(itemModel).getObject());
             pp.add("clazz", getType().getSimpleName());
-            
+
             return new SimpleBookmarkableLink(id, BackupRestorePage.class, property.getModel(itemModel), pp);
-        }
-        else if (BackupRestoreExecutionsProvider.STARTED == property) {
+        } else if (BackupRestoreExecutionsProvider.STARTED == property) {
             Date date = (Date) property.getModel(itemModel).getObject();
             String pretty = PRETTY_TIME.format(date);
             return new Label(id, pretty);
-        }
-        else if (BackupRestoreExecutionsProvider.STARTED == property) {
+        } else if (BackupRestoreExecutionsProvider.STARTED == property) {
             Date date = (Date) property.getModel(itemModel).getObject();
             String pretty = PRETTY_TIME.format(date);
             return new Label(id, pretty);
-        }
-        else if (BackupRestoreExecutionsProvider.ARCHIVEFILE == property) {
+        } else if (BackupRestoreExecutionsProvider.ARCHIVEFILE == property) {
             String pretty = ((Resource) property.getModel(itemModel).getObject()).name();
             return new Label(id, pretty);
         }

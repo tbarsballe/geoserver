@@ -48,7 +48,6 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.helpers.NamespaceSupport;
 
 /**
- * 
  * @author Gabriel Roldan
  * @version $Id$
  */
@@ -69,7 +68,6 @@ public class GetCapabilitiesTransformerTest {
         }
 
         /**
-         * 
          * @see org.geoserver.wms.ExtendedCapabilitiesProvider#getVendorSpecificCapabilitiesChildDecls()
          */
         public List<String> getVendorSpecificCapabilitiesChildDecls(
@@ -87,7 +85,7 @@ public class GetCapabilitiesTransformerTest {
 
         @Override
         public NumberRange<Double> overrideScaleDenominators(PublishedInfo layer,
-                NumberRange<Double> scaleDenominators) {
+                                                             NumberRange<Double> scaleDenominators) {
             return null;
         }
     }
@@ -107,7 +105,6 @@ public class GetCapabilitiesTransformerTest {
         }
 
         /**
-         * 
          * @see org.geoserver.wms.ExtendedCapabilitiesProvider#getVendorSpecificCapabilitiesChildDecls()
          */
         public List<String> getVendorSpecificCapabilitiesChildDecls(
@@ -127,25 +124,31 @@ public class GetCapabilitiesTransformerTest {
         public void customizeRootCrsList(Set<String> srs) {
             srs.clear();
             srs.add("EPSG:4326");
-            
+
         }
 
         @Override
         public NumberRange<Double> overrideScaleDenominators(PublishedInfo layer,
-                NumberRange<Double> scaleDenominators) {
+                                                             NumberRange<Double> scaleDenominators) {
             return new NumberRange<Double>(Double.class, 0d, 1000d);
         }
     }
 
     private XpathEngine XPATH;
 
-    /** default base url to feed a GetCapabilitiesTransformer with for it to append the DTD location */
+    /**
+     * default base url to feed a GetCapabilitiesTransformer with for it to append the DTD location
+     */
     private static final String baseUrl = "http://localhost/geoserver";
 
-    /** test map formats to feed a GetCapabilitiesTransformer with */
+    /**
+     * test map formats to feed a GetCapabilitiesTransformer with
+     */
     private static final Set<String> mapFormats = Collections.singleton("image/png");
 
-    /** test legend formats to feed a GetCapabilitiesTransformer with */
+    /**
+     * test legend formats to feed a GetCapabilitiesTransformer with
+     */
     private static final Set<String> legendFormats = Collections.singleton("image/png");
 
     /**

@@ -17,7 +17,7 @@ import org.junit.Before;
 
 /**
  * Base class for tests dealing with curve geometry support in WFS
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class WFSCurvesTestSupport extends WFSTestSupport {

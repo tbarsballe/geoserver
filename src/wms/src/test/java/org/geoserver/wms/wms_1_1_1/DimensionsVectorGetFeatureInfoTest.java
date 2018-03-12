@@ -33,8 +33,8 @@ public class DimensionsVectorGetFeatureInfoTest extends WMSDimensionsTestSupport
     XpathEngine xpath;
 
     String baseFeatureInfoStacked;
-    
-    @After 
+
+    @After
     public void cleanup() {
         VectorRenderingLayerIdentifier.RENDERING_FEATUREINFO_ENABLED = true;
     }
@@ -48,7 +48,7 @@ public class DimensionsVectorGetFeatureInfoTest extends WMSDimensionsTestSupport
                 + "&query_layers="
                 + getLayerId(V_TIME_ELEVATION)
                 + "&feature_count=50";
-        
+
         baseFeatureInfoStacked = "wms?service=WMS&version=1.1.1&request=GetFeatureInfo&bbox=-180,-90,180,90"
                 + "&styles=&Format=image/png&width=80&height=40&srs=EPSG:4326&layers="
                 + getLayerId(V_TIME_ELEVATION_STACKED)
@@ -59,14 +59,13 @@ public class DimensionsVectorGetFeatureInfoTest extends WMSDimensionsTestSupport
 
         xpath = XMLUnit.newXpathEngine();
     }
-    
+
     /**
      * Ensures there is at most one feature at the specified location, and returns its feature id
-     * 
+     *
      * @param baseFeatureInfo The GetFeatureInfo request, minus x and y
      * @param x
      * @param y
-     *
      */
     String getFeatureAt(String baseFeatureInfo, int x, int y) throws Exception {
         return getFeatureAt(baseFeatureInfo, x, y, "sf:TimeElevation");
@@ -74,11 +73,10 @@ public class DimensionsVectorGetFeatureInfoTest extends WMSDimensionsTestSupport
 
     /**
      * Ensures there is at most one feature at the specified location, and returns its feature id
-     * 
+     *
      * @param baseFeatureInfo The GetFeatureInfo request, minus x and y
      * @param x
      * @param y
-     *
      */
     String getFeatureAt(String baseFeatureInfo, int x, int y, String typeName) throws Exception {
         MockHttpServletResponse response = getAsServletResponse(baseFeatureInfo
@@ -109,7 +107,7 @@ public class DimensionsVectorGetFeatureInfoTest extends WMSDimensionsTestSupport
 
     @Test
     public void testElevationDefault() throws Exception {
-        setupVectorDimension(ResourceInfo.ELEVATION, "elevation", DimensionPresentation.LIST, 
+        setupVectorDimension(ResourceInfo.ELEVATION, "elevation", DimensionPresentation.LIST,
                 null, UNITS, UNIT_SYMBOL);
 
         // we should get only one square
@@ -121,7 +119,7 @@ public class DimensionsVectorGetFeatureInfoTest extends WMSDimensionsTestSupport
 
     @Test
     public void testElevationSingle() throws Exception {
-        setupVectorDimension(ResourceInfo.ELEVATION, "elevation", DimensionPresentation.LIST, 
+        setupVectorDimension(ResourceInfo.ELEVATION, "elevation", DimensionPresentation.LIST,
                 null, UNITS, UNIT_SYMBOL);
         String base = baseFeatureInfo + "&elevation=1.0";
 
@@ -135,7 +133,7 @@ public class DimensionsVectorGetFeatureInfoTest extends WMSDimensionsTestSupport
 
     @Test
     public void testElevationListMulti() throws Exception {
-        setupVectorDimension(ResourceInfo.ELEVATION, "elevation", DimensionPresentation.LIST, 
+        setupVectorDimension(ResourceInfo.ELEVATION, "elevation", DimensionPresentation.LIST,
                 null, UNITS, UNIT_SYMBOL);
         String base = baseFeatureInfo + "&elevation=1.0,3.0";
 
@@ -149,7 +147,7 @@ public class DimensionsVectorGetFeatureInfoTest extends WMSDimensionsTestSupport
     @Test
     public void testElevationListExtra() throws Exception {
         // adding a extra elevation that is simply not there, should not break
-        setupVectorDimension(ResourceInfo.ELEVATION, "elevation", DimensionPresentation.LIST, 
+        setupVectorDimension(ResourceInfo.ELEVATION, "elevation", DimensionPresentation.LIST,
                 null, UNITS, UNIT_SYMBOL);
         String base = baseFeatureInfo + "&elevation=1.0,3.0,5.0";
 
@@ -163,7 +161,7 @@ public class DimensionsVectorGetFeatureInfoTest extends WMSDimensionsTestSupport
     @Test
     public void testElevationInterval() throws Exception {
         // adding a extra elevation that is simply not there, should not break
-        setupVectorDimension(ResourceInfo.ELEVATION, "elevation", DimensionPresentation.LIST, 
+        setupVectorDimension(ResourceInfo.ELEVATION, "elevation", DimensionPresentation.LIST,
                 null, UNITS, UNIT_SYMBOL);
         String base = baseFeatureInfo + "&elevation=1.0/3.0";
 
@@ -177,7 +175,7 @@ public class DimensionsVectorGetFeatureInfoTest extends WMSDimensionsTestSupport
     @Test
     public void testElevationIntervalResolution() throws Exception {
         // adding a extra elevation that is simply not there, should not break
-        setupVectorDimension(ResourceInfo.ELEVATION, "elevation", DimensionPresentation.LIST, 
+        setupVectorDimension(ResourceInfo.ELEVATION, "elevation", DimensionPresentation.LIST,
                 null, UNITS, UNIT_SYMBOL);
         String base = baseFeatureInfo + "&elevation=1.0/4.0/2.0";
 
@@ -359,15 +357,15 @@ public class DimensionsVectorGetFeatureInfoTest extends WMSDimensionsTestSupport
         assertEquals("TimeElevation.2", getFeatureAt(base, 20, 30));
         assertNull(getFeatureAt(base, 60, 30));
     }
-    
-    @Test 
+
+    @Test
     public void testElevationDefaultAsRange() throws Exception {
         // setup a default 
         DimensionDefaultValueSetting defaultValueSetting = new DimensionDefaultValueSetting();
         defaultValueSetting.setStrategyType(Strategy.FIXED);
         defaultValueSetting.setReferenceValue("1/3");
         setupResourceDimensionDefaultValue(V_TIME_ELEVATION, ResourceInfo.ELEVATION, defaultValueSetting, "elevation");
-        
+
         // the last three show up, the first does not
         assertNull(getFeatureAt(baseFeatureInfo, 20, 10));
         assertEquals("TimeElevation.1", getFeatureAt(baseFeatureInfo, 60, 10));
@@ -375,22 +373,22 @@ public class DimensionsVectorGetFeatureInfoTest extends WMSDimensionsTestSupport
         assertEquals("TimeElevation.3", getFeatureAt(baseFeatureInfo, 60, 30));
     }
 
-    
-    @Test 
+
+    @Test
     public void testTimeDefaultAsRange() throws Exception {
         // setup a default 
         DimensionDefaultValueSetting defaultValueSetting = new DimensionDefaultValueSetting();
         defaultValueSetting.setStrategyType(Strategy.FIXED);
         defaultValueSetting.setReferenceValue("2011-05-02/2011-05-03");
         setupResourceDimensionDefaultValue(V_TIME_ELEVATION, ResourceInfo.TIME, defaultValueSetting, "time");
-        
+
         // the last three show up, the first does not
         assertNull(getFeatureAt(baseFeatureInfo, 20, 10));
         assertEquals("TimeElevation.1", getFeatureAt(baseFeatureInfo, 60, 10));
         assertEquals("TimeElevation.2", getFeatureAt(baseFeatureInfo, 20, 30));
         assertNull(getFeatureAt(baseFeatureInfo, 60, 30));
     }
-    
+
     @Test
     public void testSortTimeElevationAscending() throws Exception {
         // check consistency with the visual output of GetMap
@@ -422,6 +420,6 @@ public class DimensionsVectorGetFeatureInfoTest extends WMSDimensionsTestSupport
                 getFeatureAt(baseFeatureInfoStacked + "&sortBy=time D,elevation D", 20, 10,
                         "sf:TimeElevationStacked"));
     }
-    
+
 
 }

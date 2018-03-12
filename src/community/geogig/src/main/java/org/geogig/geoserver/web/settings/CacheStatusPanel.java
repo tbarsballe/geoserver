@@ -50,7 +50,7 @@ public class CacheStatusPanel extends Panel {
 
         Form<CacheManagerBean> form = new Form<>("settingsForm", model);
         formFragment.add(form);
-        
+
         IModel<Double> absoluteMaximumSizeMB = new PropertyModel<>(model, "absoluteMaximumSizeMB");
         form.add(new Label("absoluteMaximumSizeMB", absoluteMaximumSizeMB));
 

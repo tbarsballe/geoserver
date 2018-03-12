@@ -42,7 +42,7 @@ public class JMSPropertyPlaceholderConfigurer extends PropertyPlaceholderConfigu
     @Override
     public void afterPropertiesSet() throws Exception {
         org.geoserver.platform.resource.Resource properties = Resources.fromPath(
-                config.getConfiguration(EmbeddedBrokerConfiguration.EMBEDDED_BROKER_PROPERTIES_KEY).toString(), 
+                config.getConfiguration(EmbeddedBrokerConfiguration.EMBEDDED_BROKER_PROPERTIES_KEY).toString(),
                 JMSConfiguration.getConfigPathDir());
         if (properties.getType() != Type.RESOURCE) {
             // copy the defaults

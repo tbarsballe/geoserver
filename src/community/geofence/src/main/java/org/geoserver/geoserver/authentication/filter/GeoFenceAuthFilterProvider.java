@@ -27,7 +27,6 @@ import org.geoserver.security.filter.AbstractFilterProvider;
 import org.geoserver.security.filter.GeoServerSecurityFilter;
 
 /**
- *
  * @author ETj (etj at geo-solutions.it)
  */
 public class GeoFenceAuthFilterProvider extends AbstractFilterProvider {

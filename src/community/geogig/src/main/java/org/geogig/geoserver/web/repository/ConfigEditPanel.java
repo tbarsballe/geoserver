@@ -20,16 +20,16 @@ import org.apache.wicket.validation.validator.PatternValidator;
 
 public class ConfigEditPanel extends Panel {
 
-	private static final long serialVersionUID = -1015911960516043997L;
+    private static final long serialVersionUID = -1015911960516043997L;
 
-	Form<ConfigEntry> form;
+    Form<ConfigEntry> form;
 
     TextField<String> name;
 
     TextField<String> value;
 
     ConfigEditPanel(String id, IModel<ConfigEntry> model, final ModalWindow parentWindow,
-            final ConfigListPanel table) {
+                    final ConfigListPanel table) {
         super(id, model);
 
         form = new Form<>("form", model);
@@ -59,7 +59,7 @@ public class ConfigEditPanel extends Panel {
             public void validate(IValidatable<String> validatable) {
                 String name = validatable.getValue();
                 if (ConfigEntry.isRestricted(name)) {
-                	form.error(String.format("Modifying %s through this interface can have unintended consequences and is not allowed.", name));
+                    form.error(String.format("Modifying %s through this interface can have unintended consequences and is not allowed.", name));
                 } else {
                     for (ConfigEntry config : table.getConfigs()) {
                         if (!config.equals(model.getObject())) {
@@ -89,7 +89,7 @@ public class ConfigEditPanel extends Panel {
 
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-            	ConfigEntry newConfig = (ConfigEntry) form.getModelObject();
+                ConfigEntry newConfig = (ConfigEntry) form.getModelObject();
                 if (!isInTable) {
                     table.add(newConfig);
                 }

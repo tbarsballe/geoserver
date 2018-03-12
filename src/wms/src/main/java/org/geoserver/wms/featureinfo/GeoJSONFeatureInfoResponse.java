@@ -16,10 +16,9 @@ import org.geoserver.wms.WMS;
 
 /**
  * A GetFeatureInfo response handler specialized in producing Json and JsonP data for a GetFeatureInfo request.
- * 
+ *
  * @author Simone Giannecchini, GeoSolutions
  * @author Carlo Cancellieri - GeoSolutions
- * 
  */
 public class GeoJSONFeatureInfoResponse extends GetFeatureInfoOutputFormat {
 
@@ -37,19 +36,19 @@ public class GeoJSONFeatureInfoResponse extends GetFeatureInfoOutputFormat {
 
     /**
      * Writes a Json (or Jsonp) response on the passed output stream
-     * 
+     *
      * @see {@link GetFeatureInfoOutputFormat#write(FeatureCollectionType, GetFeatureInfoRequest, OutputStream)}
      */
     @Override
     public void write(FeatureCollectionType features, GetFeatureInfoRequest fInfoReq,
-            OutputStream out) throws IOException {
+                      OutputStream out) throws IOException {
 
         GeoJSONGetFeatureResponse format = new GeoJSONGetFeatureResponse(wms.getGeoServer(), getContentType());
         format.write(features, out, null);
     }
 
     @Override
-    public String getCharset(){ 
+    public String getCharset() {
         return wms.getGeoServer().getSettings().getCharset();
     }
 }

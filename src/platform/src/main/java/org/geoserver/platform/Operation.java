@@ -41,11 +41,10 @@ public final class Operation {
     /**
      * Creates a new operation descriptor.
      *
-     * @param id Id of the operation, must not be <code>null</code>
-     * @param service The service containing the operation, must not be <code>null</code>
-     * @param method THe method implementing the operation.
+     * @param id         Id of the operation, must not be <code>null</code>
+     * @param service    The service containing the operation, must not be <code>null</code>
+     * @param method     THe method implementing the operation.
      * @param parameters The parameters of the operation, may be <code>null</code>
-     *
      */
     public Operation(String id, Service service, Method method, Object[] parameters) {
         this.id = id;

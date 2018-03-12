@@ -23,23 +23,23 @@ public class Category implements Comparable<Category>, Serializable {
      */
     private String namekey;
 
-    public int getOrder(){
+    public int getOrder() {
         return order;
     }
 
-    public void setOrder(int order){
+    public void setOrder(int order) {
         this.order = order;
     }
 
-    public String getNameKey(){
+    public String getNameKey() {
         return namekey;
     }
 
-    public void setNameKey(String namekey){
+    public void setNameKey(String namekey) {
         this.namekey = namekey;
     }
 
-    public int compareTo(Category other){
+    public int compareTo(Category other) {
         return getOrder() - other.getOrder();
     }
 }

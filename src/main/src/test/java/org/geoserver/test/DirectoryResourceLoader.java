@@ -13,9 +13,9 @@ import org.springframework.core.io.Resource;
 
 public class DirectoryResourceLoader extends DefaultResourceLoader {
 
-    
+
     File root;
-    
+
     public DirectoryResourceLoader(File root) {
         super();
         this.root = root;

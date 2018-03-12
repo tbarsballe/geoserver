@@ -62,10 +62,10 @@ public class RepositoriesListPanel extends GeoServerTablePanel<RepositoryInfo> {
         add(dialog = new GeoServerDialog("dialog"));
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings({"unchecked", "rawtypes"})
     @Override
     protected Component getComponentForProperty(String id, IModel<RepositoryInfo> itemModel,
-            Property<RepositoryInfo> property) {
+                                                Property<RepositoryInfo> property) {
 
         if (property == RepositoryProvider.NAME) {
             return nameLink(id, itemModel);
@@ -168,7 +168,7 @@ public class RepositoriesListPanel extends GeoServerTablePanel<RepositoryInfo> {
             WebMarkupContainer removed = new WebMarkupContainer("removedObjects");
             List<CatalogInfo> cascaded = visitor.getObjects(CatalogInfo.class, DELETE);
             // remove the resources, they are cascaded, but won't be show in the UI
-            for (Iterator<CatalogInfo> it = cascaded.iterator(); it.hasNext();) {
+            for (Iterator<CatalogInfo> it = cascaded.iterator(); it.hasNext(); ) {
                 CatalogInfo catalogInfo = it.next();
                 if (catalogInfo instanceof ResourceInfo) {
                     it.remove();

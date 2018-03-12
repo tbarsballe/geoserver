@@ -15,9 +15,9 @@ import org.geotools.xml.AbstractComplexEMFBinding;
 
 /**
  * Binding object for the element http://www.opengis.net/ows:ExceptionReport.
- *
  * <p>
- *        <pre>
+ * <p>
+ * <pre>
  *         <code>
  *  &lt;element name="ExceptionReport"&gt;
  *      &lt;annotation&gt;
@@ -46,14 +46,15 @@ import org.geotools.xml.AbstractComplexEMFBinding;
  *
  *          </code>
  *         </pre>
+ *
  * @generated
  */
 public class ExceptionReportBinding extends AbstractComplexEMFBinding {
-    
+
     public ExceptionReportBinding(Ows10Factory owsfactory) {
         super(owsfactory);
     }
-    
+
     /**
      * @generated
      */

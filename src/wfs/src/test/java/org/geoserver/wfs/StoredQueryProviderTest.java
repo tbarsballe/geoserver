@@ -34,27 +34,27 @@ public class StoredQueryProviderTest {
 
     public static final String MY_STORED_QUERY_DEFINITION =
             "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
-            "<wfs:StoredQueryDescription id='MyStoredQuery'" +
+                    "<wfs:StoredQueryDescription id='MyStoredQuery'" +
                     " xmlns:xlink=\"http://www.w3.org/1999/xlink\"" +
                     " xmlns:ows=\"http://www.opengis.net/ows/1.1\"" +
                     " xmlns:gml=\"http://www.opengis.net/gml/3.2\"" +
                     " xmlns:wfs=\"http://www.opengis.net/wfs/2.0\"" +
                     " xmlns:fes=\"http://www.opengis.net/fes/2.0\">>\n" +
-            "  <wfs:Parameter name='AreaOfInterest' type='gml:Polygon'/>\n" +
-            "  <wfs:QueryExpressionText\n" +
-            "   returnFeatureTypes='topp:states'\n" +
-            "   language='urn:ogc:def:queryLanguage:OGC-WFS::WFS_QueryExpression'\n" +
-            "   isPrivate='false'>\n" +
-            "    <wfs:Query typeNames='topp:states'>\n" +
-            "      <fes:Filter>\n" +
-            "        <fes:Within>\n" +
-            "          <fes:ValueReference>the_geom</fes:ValueReference>\n" +
-            "           ${AreaOfInterest}\n" +
-            "        </fes:Within>\n" +
-            "      </fes:Filter>\n" +
-            "    </wfs:Query>\n" +
-            "  </wfs:QueryExpressionText>\n" +
-            "</wfs:StoredQueryDescription>";
+                    "  <wfs:Parameter name='AreaOfInterest' type='gml:Polygon'/>\n" +
+                    "  <wfs:QueryExpressionText\n" +
+                    "   returnFeatureTypes='topp:states'\n" +
+                    "   language='urn:ogc:def:queryLanguage:OGC-WFS::WFS_QueryExpression'\n" +
+                    "   isPrivate='false'>\n" +
+                    "    <wfs:Query typeNames='topp:states'>\n" +
+                    "      <fes:Filter>\n" +
+                    "        <fes:Within>\n" +
+                    "          <fes:ValueReference>the_geom</fes:ValueReference>\n" +
+                    "           ${AreaOfInterest}\n" +
+                    "        </fes:Within>\n" +
+                    "      </fes:Filter>\n" +
+                    "    </wfs:Query>\n" +
+                    "  </wfs:QueryExpressionText>\n" +
+                    "</wfs:StoredQueryDescription>";
 
     private StoredQueryProvider storedQueryProvider;
 
@@ -167,8 +167,7 @@ public class StoredQueryProviderTest {
         try {
 
             return (StoredQueryDescriptionType) p.parse(reader);
-        }
-        finally {
+        } finally {
             reader.close();
         }
     }

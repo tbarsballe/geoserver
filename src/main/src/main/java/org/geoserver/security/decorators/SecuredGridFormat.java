@@ -14,7 +14,7 @@ import org.geotools.factory.Hints;
 
 /**
  * Secures a format applying the policy
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class SecuredGridFormat extends DecoratingGridFormat {

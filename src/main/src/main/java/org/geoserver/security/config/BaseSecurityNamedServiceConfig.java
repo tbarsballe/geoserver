@@ -12,7 +12,7 @@ import org.geoserver.platform.GeoServerExtensions;
 
 /**
  * Base class for named security service configuration objects.
- * 
+ *
  * @author christian
  */
 public class BaseSecurityNamedServiceConfig implements SecurityNamedServiceConfig {
@@ -63,7 +63,7 @@ public class BaseSecurityNamedServiceConfig implements SecurityNamedServiceConfi
      * The class name of the service to be constructed
      * The class must have a constructor with a string
      * argument, specifying the name of the service
-     * 
+     *
      * @param className
      */
     public void setClassName(String className) {
@@ -85,19 +85,19 @@ public class BaseSecurityNamedServiceConfig implements SecurityNamedServiceConfi
 
     @Override
     public SecurityConfig clone(boolean allowEnvParametrization) {
-        
+
         final GeoServerEnvironment gsEnvironment = GeoServerExtensions.bean(GeoServerEnvironment.class);
-        
+
         BaseSecurityNamedServiceConfig target = (BaseSecurityNamedServiceConfig) SerializationUtils.clone(this);
-        
+
         if (target != null) {
             if (allowEnvParametrization && gsEnvironment != null
                     && GeoServerEnvironment.ALLOW_ENV_PARAMETRIZATION) {
                 target.setName((String) gsEnvironment.resolveValue(name));
             }
         }
-        
+
         return target;
     }
-    
+
 }

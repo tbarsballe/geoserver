@@ -16,9 +16,9 @@ import org.geotools.xml.transform.TransformerBase;
 
 /**
  * Runs the transformer and outputs the capabilities
- * 
+ *
  * @author Andrea Aime, TOPP TODO: This is a blatant copy of WFS GetCapabilities response. Find a
- *         way to share code.
+ * way to share code.
  */
 public class Wcs10GetCapabilitiesResponse extends Response {
     public Wcs10GetCapabilitiesResponse() {

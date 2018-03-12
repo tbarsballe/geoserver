@@ -9,7 +9,7 @@ import org.springframework.validation.Errors;
 
 /**
  * Check there are not too many instances of the input
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class MultiplicityValidator implements WPSInputValidator {

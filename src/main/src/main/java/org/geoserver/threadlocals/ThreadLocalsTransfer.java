@@ -23,9 +23,8 @@ import org.geoserver.platform.GeoServerExtensions;
  * <li>In a finally block wrapping the whole activity of the {@link Runnable}/{@link Callable} call
  * {@link #cleanup()} to clean the current Thread {@link ThreadLocal} variables</li>
  * </ul>
- * 
+ *
  * @author Andrea Aime - GeoSolutions
- * 
  */
 public class ThreadLocalsTransfer {
 

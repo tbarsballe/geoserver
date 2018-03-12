@@ -22,18 +22,18 @@ import org.w3c.dom.Document;
 
 @RunWith(Parameterized.class)
 public class WMSCascadeTest extends WMSCascadeTestSupport {
-    
+
     private final boolean aphEnabled;
 
     @Parameters(name = "{index} APH enabled: {0}")
-    public static Collection<Object[]> getParameters(){ 
-        return Arrays.asList(new Object[]{true},new Object[]{false});
+    public static Collection<Object[]> getParameters() {
+        return Arrays.asList(new Object[]{true}, new Object[]{false});
     }
-    
+
     public WMSCascadeTest(boolean aphEnabled) {
         this.aphEnabled = aphEnabled;
     }
-    
+
     @Before
     public void setupAdvancedProjectionHandling() {
         GeoServer gs = getGeoServer();
@@ -45,12 +45,12 @@ public class WMSCascadeTest extends WMSCascadeTestSupport {
     @Test
     public void testCascadeGetMapOnto130() throws Exception {
         MockHttpServletResponse response = getAsServletResponse("wms?bbox=-180,-90,180,90" +
-        		"&styles=&layers=" + WORLD4326_130 + "&Format=image/png&request=GetMap"
+                "&styles=&layers=" + WORLD4326_130 + "&Format=image/png&request=GetMap"
                 + "&width=180&height=90&srs=EPSG:4326");
         // we'll get a service exception if the requests are not the ones expected
         checkImage(response, "image/png", 180, 90);
     }
-    
+
     @Test
     public void testCascadeGetMapOnto110() throws Exception {
         MockHttpServletResponse response = getAsServletResponse("wms?bbox=-180,-90,180,90" +
@@ -59,15 +59,15 @@ public class WMSCascadeTest extends WMSCascadeTestSupport {
         // we'll get a service exception if the requests are not the ones expected
         checkImage(response, "image/png", 180, 90);
     }
-    
-    
+
+
     @Test
     public void testCascadeCapabilitiesClientNoGetFeatureInfo() throws Exception {
         Document dom = getAsDOM("wms?request=GetCapabilities&version=1.1.0&service=wms");
         //print(dom);
-        
+
         xpath.evaluate("//Layer[name='" + WORLD4326_110_NFI + "']", dom);
     }
-   
-    
+
+
 }

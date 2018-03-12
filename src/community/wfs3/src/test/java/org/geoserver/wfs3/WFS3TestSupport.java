@@ -14,12 +14,11 @@ public class WFS3TestSupport extends GeoServerSystemTestSupport {
     protected List<Filter> getFilters() {
         return Collections.singletonList(new WFS3Filter(getCatalog()));
     }
-    
+
     protected String getEncodedName(QName qName) {
-        if(qName.getPrefix() != null) {
+        if (qName.getPrefix() != null) {
             return qName.getPrefix() + "__" + qName.getLocalPart();
-        }
-        else {
+        } else {
             return qName.getLocalPart();
         }
     }

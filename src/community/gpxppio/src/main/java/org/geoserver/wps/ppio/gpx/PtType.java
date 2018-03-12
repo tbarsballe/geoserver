@@ -13,16 +13,15 @@ package org.geoserver.wps.ppio.gpx;
 import java.util.Calendar;
 
 /**
- * 
  * A geographic point with optional elevation and time. Available for use by other schemas.
- * 
- * 
+ * <p>
+ * <p>
  * <p>
  * Java class for ptType complex type.
- * 
+ * <p>
  * <p>
  * The following schema fragment specifies the expected content contained within this class.
- * 
+ * <p>
  * <pre>
  * &lt;complexType name="ptType">
  *   &lt;complexContent>
@@ -37,8 +36,6 @@ import java.util.Calendar;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 public class PtType {
     protected double ele;
@@ -51,9 +48,8 @@ public class PtType {
 
     /**
      * Gets the value of the ele property.
-     * 
+     *
      * @return possible object is {@link BigDecimal }
-     * 
      */
     public double getEle() {
         return ele;
@@ -61,9 +57,8 @@ public class PtType {
 
     /**
      * Sets the value of the ele property.
-     * 
+     *
      * @param value allowed object is {@link BigDecimal }
-     * 
      */
     public void setEle(double value) {
         this.ele = value;
@@ -71,9 +66,8 @@ public class PtType {
 
     /**
      * Gets the value of the time property.
-     * 
+     *
      * @return possible object is {@link XMLGregorianCalendar }
-     * 
      */
     public Calendar getTime() {
         return time;
@@ -81,9 +75,8 @@ public class PtType {
 
     /**
      * Sets the value of the time property.
-     * 
+     *
      * @param value allowed object is {@link XMLGregorianCalendar }
-     * 
      */
     public void setTime(Calendar value) {
         this.time = value;
@@ -91,9 +84,8 @@ public class PtType {
 
     /**
      * Gets the value of the lat property.
-     * 
+     *
      * @return possible object is {@link BigDecimal }
-     * 
      */
     public double getLat() {
         return lat;
@@ -101,9 +93,8 @@ public class PtType {
 
     /**
      * Sets the value of the lat property.
-     * 
+     *
      * @param value allowed object is {@link BigDecimal }
-     * 
      */
     public void setLat(double value) {
         this.lat = value;
@@ -111,9 +102,8 @@ public class PtType {
 
     /**
      * Gets the value of the lon property.
-     * 
+     *
      * @return possible object is {@link BigDecimal }
-     * 
      */
     public double getLon() {
         return lon;
@@ -121,9 +111,8 @@ public class PtType {
 
     /**
      * Sets the value of the lon property.
-     * 
+     *
      * @param value allowed object is {@link BigDecimal }
-     * 
      */
     public void setLon(double value) {
         this.lon = value;

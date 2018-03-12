@@ -10,10 +10,9 @@ import org.geoserver.security.config.SecurityNamedServiceConfig;
 
 /**
  * Validates {@link CredentialsFromRequestHeaderFilterConfig} objects.
- * 
+ *
  * @author Lorenzo Natali, GeoSolutions
  * @author Mauro Bartolomeoli, GeoSolutions
- *
  */
 public class CredentialsFromRequestHeaderFilterConfigValidator extends FilterConfigValidator {
 
@@ -53,6 +52,6 @@ public class CredentialsFromRequestHeaderFilterConfigValidator extends FilterCon
         }
 
     }
-    
+
 
 }

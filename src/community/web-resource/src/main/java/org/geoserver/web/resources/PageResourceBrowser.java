@@ -38,14 +38,13 @@ import java.util.List;
 
 /**
  * The ResourceBrowser page.
- * 
- * @author Niels Charlier
  *
+ * @author Niels Charlier
  */
 public class PageResourceBrowser extends GeoServerSecuredPage {
-    
+
     private static final long serialVersionUID = 3979040405548783679L;
-        
+
     /**
      * Behaviour for disabled button
      */
@@ -54,32 +53,32 @@ public class PageResourceBrowser extends GeoServerSecuredPage {
     /**
      * The extension that are recognised as simple text resources (and can be edited with simple text editor).
      */
-    private static final String[] TEXTUAL_EXTENSIONS = new String[] {"txt", "properties", "info", "xml", "sld", "rst", "log", "asc", "cfg",
-        "css", "ftl", "htm", "html", "js", "xsd", "prj", "meta", "pgw", "pal", "tfw", "url"};
-        
+    private static final String[] TEXTUAL_EXTENSIONS = new String[]{"txt", "properties", "info", "xml", "sld", "rst", "log", "asc", "cfg",
+            "css", "ftl", "htm", "html", "js", "xsd", "prj", "meta", "pgw", "pal", "tfw", "url"};
+
     /**
      * The expanded states model.
      */
     protected final ResourceExpandedStates expandedStates = new ResourceExpandedStates();
-    
+
     /**
      * The clip board.
      */
     protected final ClipBoard clipBoard;
-          
+
     public PageResourceBrowser() {
         //create the root node
         final ResourceNode rootNode = new ResourceNode(store().get(Paths.BASE), expandedStates);
         rootNode.getExpanded().setObject(true);
-        
+
         //create tree view and clip board
         final TreeView<Resource> treeView = new TreeView<Resource>("treeview", rootNode);
         clipBoard = new ClipBoard(treeView);
-        
+
         //used for all pop-up dialogs.
         final GeoServerDialog dialog = new GeoServerDialog("dialog");
-        dialog.setResizable(false);        
-        
+        dialog.setResizable(false);
+
         //upload button
         final AjaxLink<Void> btnUpload = new AjaxLink<Void>("upload") {
             private static final long serialVersionUID = -6538820444407766106L;
@@ -87,14 +86,14 @@ public class PageResourceBrowser extends GeoServerSecuredPage {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 dialog.setInitialHeight(225);
-                                
+
                 dialog.showOkCancel(target, new DialogDelegate() {
                     private static final long serialVersionUID = 1557172478015946688L;
                     private PanelUpload uploadPanel;
 
                     @Override
                     protected Component getContents(String id) {
-                        uploadPanel = new PanelUpload(id,"/" + treeView.getSelectedNode().getObject().path());
+                        uploadPanel = new PanelUpload(id, "/" + treeView.getSelectedNode().getObject().path());
                         return uploadPanel;
                     }
 
@@ -102,19 +101,18 @@ public class PageResourceBrowser extends GeoServerSecuredPage {
                     protected boolean onSubmit(AjaxRequestTarget target, Component contents) {
                         uploadPanel.getFeedbackMessages().clear();
                         if (uploadPanel.getFileUpload() == null) {
-                            uploadPanel.error(new ParamResourceModel("fileRequired", getPage()).getString());      
+                            uploadPanel.error(new ParamResourceModel("fileRequired", getPage()).getString());
                         } else {
                             String dir = uploadPanel.getDirectory();
-                            Resource dest = store().get(Paths.path(dir, uploadPanel.getFileUpload().getClientFileName()));                            
+                            Resource dest = store().get(Paths.path(dir, uploadPanel.getFileUpload().getClientFileName()));
                             if (Resources.exists(dest)) {
-                                uploadPanel.error(new ParamResourceModel("resourceExists", getPage()).getString().replace("%", "/" + dest.path()));                 
+                                uploadPanel.error(new ParamResourceModel("resourceExists", getPage()).getString().replace("%", "/" + dest.path()));
                             } else {
                                 try (OutputStream os = dest.out()) {
                                     IOUtils.copy(uploadPanel.getFileUpload().getInputStream(), os);
                                     treeView.setSelectedNode(new ResourceNode(dest, expandedStates), target);
                                     return true;
-                                }
-                                catch (IOException | IllegalStateException e) {
+                                } catch (IOException | IllegalStateException e) {
                                     uploadPanel.error(e.getMessage());
                                 }
                             }
@@ -125,7 +123,7 @@ public class PageResourceBrowser extends GeoServerSecuredPage {
                 });
             }
         };
-        
+
         //new resource button
         final AjaxLink<Void> btnNew = new AjaxLink<Void>("new") {
             private static final long serialVersionUID = 8112272759002275843L;
@@ -178,9 +176,9 @@ public class PageResourceBrowser extends GeoServerSecuredPage {
                 });
 
             }
-            
+
         };
-        
+
         //download button
         final Link<Void> btnDownload = new Link<Void>("download") {
             private static final long serialVersionUID = 2746429086122117005L;
@@ -190,12 +188,12 @@ public class PageResourceBrowser extends GeoServerSecuredPage {
                 Resource res = treeView.getSelectedNode().getObject();
                 getRequestCycle().scheduleRequestHandlerAfterCurrent(
                         new ResourceStreamRequestHandler(new WicketResourceAdaptor(res))
-                            .setFileName(res.name())
-                            .setContentDisposition(ContentDisposition.ATTACHMENT));
+                                .setFileName(res.name())
+                                .setContentDisposition(ContentDisposition.ATTACHMENT));
             }
-            
+
         };
-        
+
         //edit button
         final AjaxLink<Void> btnEdit = new AjaxLink<Void>("edit") {
             private static final long serialVersionUID = 6690936054046040647L;
@@ -207,7 +205,7 @@ public class PageResourceBrowser extends GeoServerSecuredPage {
                 final String contents;
                 try (InputStream is = resource.in()) {
                     contents = IOUtils.toString(is);
-                    
+
                     dialog.showOkCancel(target, new DialogDelegate() {
                         private static final long serialVersionUID = -8898887236980594842L;
 
@@ -233,7 +231,7 @@ public class PageResourceBrowser extends GeoServerSecuredPage {
                                 return true;
                             } catch (IOException | IllegalStateException e) {
                                 error(e.getMessage());
-                            }                        
+                            }
                             target.add(editPanel.getFeedbackPanel());
                             return false;
                         }
@@ -245,7 +243,7 @@ public class PageResourceBrowser extends GeoServerSecuredPage {
             }
 
         };
-                
+
         //paste button
         final AjaxLink<Void> btnPaste = new AjaxLink<Void>("paste") {
             private static final long serialVersionUID = 2647829118342823975L;
@@ -253,21 +251,21 @@ public class PageResourceBrowser extends GeoServerSecuredPage {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 dialog.setInitialHeight(240);
-                
+
                 final List<Resource> sources = new ArrayList<Resource>();
                 for (TreeNode<Resource> node : clipBoard.getItems()) {
                     sources.add(node.getObject());
                 }
                 final List<TreeNode<Resource>> newSelected = new ArrayList<TreeNode<Resource>>();
-                
+
                 dialog.showOkCancel(target, new DialogDelegate() {
                     private static final long serialVersionUID = -8898887236980594842L;
-                    
+
                     private PanelPaste pastePanel;
 
                     @Override
                     protected Component getContents(String id) {
-                        pastePanel = new PanelPaste(id, listResources(sources), 
+                        pastePanel = new PanelPaste(id, listResources(sources),
                                 "/" + treeView.getSelectedNode().getObject().path(), clipBoard.isCopy());
                         return pastePanel;
                     }
@@ -277,7 +275,7 @@ public class PageResourceBrowser extends GeoServerSecuredPage {
                         pastePanel.getFeedbackMessages().clear();
 
                         String dir = pastePanel.getDirectory();
-                                                                    
+
                         Iterator<Resource> it = sources.iterator();
                         while (it.hasNext()) {
                             Resource src = it.next();
@@ -285,20 +283,20 @@ public class PageResourceBrowser extends GeoServerSecuredPage {
                             if (clipBoard.isCopy() && Resources.serializable(dest).equals(src)) {
                                 //if we are copying a resource to its own directory, we will give it a new name.
                                 for (int i = 1; Resources.exists(dest); i++) {
-                                    dest = store().get(Paths.path(dir, 
+                                    dest = store().get(Paths.path(dir,
                                             FilenameUtils.getExtension(src.name()).isEmpty() ? src.name() + "." + i :
-                                            FilenameUtils.getBaseName(src.name()) + "." + i + "." + 
-                                                    FilenameUtils.getExtension(src.name())));
+                                                    FilenameUtils.getBaseName(src.name()) + "." + i + "." +
+                                                            FilenameUtils.getExtension(src.name())));
                                 }
                             }
                             if (Resources.exists(dest)) {
                                 pastePanel.error(new ParamResourceModel("resourceExists", getPage()).getString().replace("%", "/" + dest.path()));
                             } else {
-                                try {                                
+                                try {
                                     if (clipBoard.isCopy()) {
                                         try (InputStream is = src.in()) {
                                             try (OutputStream os = dest.out()) {
-                                                IOUtils.copy(is, os);       
+                                                IOUtils.copy(is, os);
                                             }
                                         }
                                     } else {
@@ -316,26 +314,26 @@ public class PageResourceBrowser extends GeoServerSecuredPage {
 
                         //we select all the newly created nodes.
                         treeView.setSelectedNodes(newSelected, target);
-                        
+
                         //clear clipboard from moved resources (copied resources will remain, 
                         //in case user wants to copy them multiple times)
                         clipBoard.clearRemoved();
-                        
+
                         //we leave modal only if operation was complete                        
                         if (!sources.isEmpty()) {
                             pastePanel.getSourceField().setModelObject(listResources(sources));
                             target.add(pastePanel.getFeedbackPanel());
                             target.add(pastePanel.getSourceField());
-                            return  false;
+                            return false;
                         }
-                        
+
                         return true;
                     }
-                });              
+                });
             }
-            
+
         };
-        
+
         //copy button
         final AjaxLink<Void> btnCopy = new AjaxLink<Void>("copy") {
             private static final long serialVersionUID = 3883958793500232081L;
@@ -346,7 +344,7 @@ public class PageResourceBrowser extends GeoServerSecuredPage {
                 target.add(treeView.getSelectedViews());
             }
         };
-        
+
         //cut button
         final AjaxLink<Void> btnCut = new AjaxLink<Void>("cut") {
             private static final long serialVersionUID = 2647829118342823975L;
@@ -358,9 +356,9 @@ public class PageResourceBrowser extends GeoServerSecuredPage {
                 target.add(treeView.getSelectedViews());
                 target.add(btnPaste);
             }
-            
+
         };
-        
+
         //rename button
         final AjaxLink<Void> btnRename = new AjaxLink<Void>("rename") {
             private static final long serialVersionUID = 2647829118342823975L;
@@ -368,10 +366,10 @@ public class PageResourceBrowser extends GeoServerSecuredPage {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 dialog.setInitialHeight(150);
-                
+
                 dialog.showOkCancel(target, new DialogDelegate() {
                     private static final long serialVersionUID = -8898887236980594842L;
-                    
+
                     private PanelRename renamePanel;
 
                     @Override
@@ -389,31 +387,31 @@ public class PageResourceBrowser extends GeoServerSecuredPage {
                         if (Resources.exists(dest)) {
                             renamePanel.error(new ParamResourceModel("resourceExists", getPage()).getString().replace("%", "/" + dest.path()));
                         } else {
-                           Boolean expandedModel = expandedStates.getResourceExpandedState(src).getObject();
-                           if (!src.renameTo(dest)) {
-                               renamePanel.error(new ParamResourceModel("renameFailed", getPage()).getString());
-                           } else {
-                               if (clipBoard.getItems().contains(new ResourceNode(src, expandedStates))) {
-                                   clipBoard.clearRemoved();
-                                   clipBoard.addItem(new ResourceNode(dest, expandedStates), target);
-                               }
-                               
-                               //we have a new expanded state. if the original node was expanded, we expand this one as well.
-                               //(child nodes might still loose their expanded state though)
-                               expandedStates.getResourceExpandedState(dest).setObject(expandedModel);
-                               //select the new node
-                               treeView.setSelectedNode(new ResourceNode(dest, expandedStates), target);
-                               return true;
-                           }
+                            Boolean expandedModel = expandedStates.getResourceExpandedState(src).getObject();
+                            if (!src.renameTo(dest)) {
+                                renamePanel.error(new ParamResourceModel("renameFailed", getPage()).getString());
+                            } else {
+                                if (clipBoard.getItems().contains(new ResourceNode(src, expandedStates))) {
+                                    clipBoard.clearRemoved();
+                                    clipBoard.addItem(new ResourceNode(dest, expandedStates), target);
+                                }
+
+                                //we have a new expanded state. if the original node was expanded, we expand this one as well.
+                                //(child nodes might still loose their expanded state though)
+                                expandedStates.getResourceExpandedState(dest).setObject(expandedModel);
+                                //select the new node
+                                treeView.setSelectedNode(new ResourceNode(dest, expandedStates), target);
+                                return true;
+                            }
                         }
                         target.add(renamePanel.getFeedbackPanel());
                         return false;
                     }
                 });
             }
-            
+
         };
-        
+
         //delete button
         final AjaxLink<Void> btnDelete = new AjaxLink<Void>("delete") {
             private static final long serialVersionUID = -7370119488741589880L;
@@ -432,7 +430,7 @@ public class PageResourceBrowser extends GeoServerSecuredPage {
 
                     @Override
                     protected Component getContents(String id) {
-                        return new Label(id, new ParamResourceModel("confirmDelete", getPage()).getString() + " " + 
+                        return new Label(id, new ParamResourceModel("confirmDelete", getPage()).getString() + " " +
                                 listResources(toBeDeleted));
                     }
 
@@ -446,69 +444,69 @@ public class PageResourceBrowser extends GeoServerSecuredPage {
                         }
                         //if deleted node was on clipboard, remove it form the clipboard                        
                         clipBoard.clearRemoved();
-                        
+
                         //remove selection
                         treeView.setSelectedNodes(Collections.emptySet(), target);
-                        
-                        return true;           
+
+                        return true;
                     }
                 });
             }
-            
+
         };
-                 
+
         //update menu buttons enabled states according to current selection
         treeView.addSelectionListener(target -> {
-                         Collection<TreeNode<Resource>> nodes = treeView.getSelectedNodes();
-                         boolean containsRoot = false;
-                         boolean containsDir = false;
-                         for (TreeNode<Resource> node : nodes) {
-                             if (!node.isLeaf()) {
-                                 containsDir = true;
-                             }
-                             if (node.getObject().path().isEmpty()) {
-                                 containsRoot = true;
-                             }
-                         }
-                         TreeNode<Resource> node = treeView.getSelectedNode();
-                         
-                         enable(btnUpload, node != null && !node.isLeaf());
-                         enable(btnNew, node != null && !node.isLeaf());
-                         enable(btnDownload, node != null && node.isLeaf());
-                         enable(btnEdit, node != null && node.isLeaf() && isTextual(node.getObject()));
-                         enable(btnRename, node != null && !node.getObject().path().isEmpty());
-                         enable(btnPaste, node != null && clipBoard.getItems().size() > 0 && !node.isLeaf());                         
-                         enable(btnCopy, nodes.size() > 0 && !containsDir);
-                         enable(btnCut, nodes.size() > 0 && !containsRoot);
-                         enable(btnDelete, nodes.size() > 0 && !containsRoot);
+            Collection<TreeNode<Resource>> nodes = treeView.getSelectedNodes();
+            boolean containsRoot = false;
+            boolean containsDir = false;
+            for (TreeNode<Resource> node : nodes) {
+                if (!node.isLeaf()) {
+                    containsDir = true;
+                }
+                if (node.getObject().path().isEmpty()) {
+                    containsRoot = true;
+                }
+            }
+            TreeNode<Resource> node = treeView.getSelectedNode();
 
-                         target.add(btnUpload, btnNew, btnDownload, btnEdit, btnCopy, btnCut, btnPaste, btnRename, btnDelete);
-                });
-        
+            enable(btnUpload, node != null && !node.isLeaf());
+            enable(btnNew, node != null && !node.isLeaf());
+            enable(btnDownload, node != null && node.isLeaf());
+            enable(btnEdit, node != null && node.isLeaf() && isTextual(node.getObject()));
+            enable(btnRename, node != null && !node.getObject().path().isEmpty());
+            enable(btnPaste, node != null && clipBoard.getItems().size() > 0 && !node.isLeaf());
+            enable(btnCopy, nodes.size() > 0 && !containsDir);
+            enable(btnCut, nodes.size() > 0 && !containsRoot);
+            enable(btnDelete, nodes.size() > 0 && !containsRoot);
+
+            target.add(btnUpload, btnNew, btnDownload, btnEdit, btnCopy, btnCut, btnPaste, btnRename, btnDelete);
+        });
+
         //initialize and add buttons
         initButtons(btnUpload, btnNew, btnDownload, btnEdit, btnCopy, btnCut, btnPaste, btnRename, btnDelete);
         add(dialog, btnUpload, btnNew, btnDownload, btnEdit, btnCopy, btnCut, btnPaste, btnRename, btnDelete, treeView);
     }
-    
+
     /**
      * The TreeView
-     * 
+     *
      * @return the TreeView
      */
     @SuppressWarnings("unchecked")
     protected TreeView<Resource> treeView() {
         return (TreeView<Resource>) get("treeview");
     }
-       
+
     /**
-     * The resource store 
-     * 
+     * The resource store
+     *
      * @return resource store
      */
     protected ResourceStore store() {
         return getGeoServerApplication().getResourceLoader();
     }
-    
+
     /**
      * Initialize the buttons (start with all disabled)
      */
@@ -519,11 +517,11 @@ public class PageResourceBrowser extends GeoServerSecuredPage {
             button.setOutputMarkupId(true);
         }
     }
-    
+
     /**
      * Enable/disable a button
-     * 
-     * @param button the button
+     *
+     * @param button  the button
      * @param enabled enabled state
      */
     protected static void enable(AbstractLink button, boolean enabled) {
@@ -536,7 +534,7 @@ public class PageResourceBrowser extends GeoServerSecuredPage {
             }
         }
     }
-    
+
     private static String listResources(Collection<Resource> resources) {
         if (resources.isEmpty()) {
             return "";
@@ -545,14 +543,14 @@ public class PageResourceBrowser extends GeoServerSecuredPage {
         for (Resource res : resources) {
             builder.append("/" + res.path());
             builder.append(", ");
-        }        
+        }
         builder.setLength(builder.length() - 2);
         return builder.toString();
     }
-    
+
     /**
      * Guess if a resource is textual or not (by extension)
-     * 
+     *
      * @param resource the resource
      * @return whether that resource is likely textual or not.
      */
@@ -564,13 +562,13 @@ public class PageResourceBrowser extends GeoServerSecuredPage {
         if (i >= 0) {
             String ext = resource.name().substring(i + 1).toLowerCase();
             for (String t : TEXTUAL_EXTENSIONS) {
-                if(ext.equals(t)) {
+                if (ext.equals(t)) {
                     return true;
                 }
             }
             return false;
-        } 
+        }
         return true; //no extension, assume textual
     }
-    
+
 }

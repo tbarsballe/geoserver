@@ -40,12 +40,12 @@ public class WFSKMLOutputFormat extends WFSGetFeatureOutputFormat {
     private KMLEncoder encoder;
 
     public WFSKMLOutputFormat(KMLEncoder encoder, GeoServer gs) {
-        super(gs, new HashSet(Arrays.asList(new String[] { "KML", KMLMapOutputFormat.MIME_TYPE,
+        super(gs, new HashSet(Arrays.asList(new String[]{"KML", KMLMapOutputFormat.MIME_TYPE,
                 // added this one to allow people copying and pasting the format name
                 KMLMapOutputFormat.MIME_TYPE.replace('+', ' ')})));
         this.encoder = encoder;
     }
-    
+
     @Override
     public String getMimeType(Object value, Operation operation) throws ServiceException {
         return KMLMapOutputFormat.MIME_TYPE;
@@ -53,10 +53,10 @@ public class WFSKMLOutputFormat extends WFSGetFeatureOutputFormat {
 
     @Override
     protected void write(FeatureCollectionResponse featureCollection, OutputStream output,
-            Operation getFeature) throws IOException, ServiceException {
+                         Operation getFeature) throws IOException, ServiceException {
 
         // prepare the encoding context
-        List<SimpleFeatureCollection> collections = getFeatureCollections(featureCollection); 
+        List<SimpleFeatureCollection> collections = getFeatureCollections(featureCollection);
         KmlEncodingContext context = new WFSKmlEncodingContext(gs.getService(WFSInfo.class), collections);
 
         // create the document
@@ -79,7 +79,7 @@ public class WFSKMLOutputFormat extends WFSGetFeatureOutputFormat {
             SimpleFeatureCollection fc = (SimpleFeatureCollection) collection;
             Folder folder = document.createAndAddFolder();
             folder.setName(fc.getSchema().getTypeName());
-            
+
             // have it be decorated
             List<KmlDecorator> folderDecorators = context.getDecoratorsForClass(Folder.class);
             for (KmlDecorator decorator : folderDecorators) {
@@ -98,7 +98,7 @@ public class WFSKMLOutputFormat extends WFSGetFeatureOutputFormat {
                     context));
             context.addFeatures(folder, features);
         }
-        
+
         // write out the output
         encoder.encode(kml, output, context);
     }
@@ -116,22 +116,22 @@ public class WFSKMLOutputFormat extends WFSGetFeatureOutputFormat {
             // crs should be
             SimpleFeatureCollection sfc = (SimpleFeatureCollection) fc;
             CoordinateReferenceSystem sourceCRS = sfc.getSchema().getCoordinateReferenceSystem();
-            if(sourceCRS != null && !CRS.equalsIgnoreMetadata(sourceCRS, DefaultGeographicCRS.WGS84)) {
+            if (sourceCRS != null && !CRS.equalsIgnoreMetadata(sourceCRS, DefaultGeographicCRS.WGS84)) {
                 sfc = new ReprojectingFeatureCollection(sfc, DefaultGeographicCRS.WGS84);
             }
             result.add(sfc);
         }
-        
-        return result; 
+
+        return result;
     }
-    
+
     @Override
     public String getAttachmentFileName(Object value, Operation operation) {
         GetFeatureRequest request = GetFeatureRequest.adapt(operation.getParameters()[0]);
         String outputFileName = request.getQueries().get(0).getTypeNames().get(0).getLocalPart();
         return outputFileName + ".kml";
     }
-    
+
     @Override
     public String getCapabilitiesElementName() {
         return "KML";
@@ -139,9 +139,8 @@ public class WFSKMLOutputFormat extends WFSGetFeatureOutputFormat {
 
     /**
      * A special KML encoding context for the WFS case
-     * 
-     * @author Andrea Aime - GeoSolutions
      *
+     * @author Andrea Aime - GeoSolutions
      */
     static class WFSKmlEncodingContext extends KmlEncodingContext {
 
@@ -151,31 +150,31 @@ public class WFSKMLOutputFormat extends WFSGetFeatureOutputFormat {
         public WFSKmlEncodingContext(ServiceInfo si, List<SimpleFeatureCollection> collections) {
             this.service = getService();
             this.collections = collections;
-            
+
             // set some defaults for wfs encoding
             this.descriptionEnabled = false;
             this.kmScore = 100;
             this.extendedDataEnabled = true;
             this.kmz = false;
         }
-        
+
         public List<SimpleFeatureType> getFeatureTypes() {
             List<SimpleFeatureType> results = new ArrayList<SimpleFeatureType>();
-            for(SimpleFeatureCollection fc : collections) {
+            for (SimpleFeatureCollection fc : collections) {
                 results.add(fc.getSchema());
             }
-            
+
             return results;
         }
-        
+
         @Override
         public void setCurrentFeatureCollection(SimpleFeatureCollection currentFeatureCollection) {
             super.setCurrentFeatureCollection(currentFeatureCollection);
             this.layerIndex++;
             this.featureType = currentFeatureCollection.getSchema();
-            
+
         }
-        
+
         @Override
         public SimpleFeatureType getCurrentFeatureType() {
             return featureType;

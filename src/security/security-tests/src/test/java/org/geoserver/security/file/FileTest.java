@@ -25,17 +25,19 @@ import static org.junit.Assert.assertEquals;
 
 /**
  * @author christian
- *
  */
-public  class FileTest {
+public class FileTest {
     static Logger LOGGER = org.geotools.util.logging.Logging.getLogger("org.geoserver.security.xml");
-    int gaCounter=0,ugCounter=0;
-    
+    int gaCounter = 0, ugCounter = 0;
+
     GeoServerRoleService gaService = new AbstractRoleService() {
-        
+
         public String getName() {
             return "TestGAService";
-        };
+        }
+
+        ;
+
         @Override
         protected void deserialize() throws IOException {
             gaCounter++;
@@ -46,13 +48,15 @@ public  class FileTest {
             super.initializeFromConfig(config);
         }
     };
-    
+
     GeoServerUserGroupService ugService = new AbstractUserGroupService() {
-        
+
         public String getName() {
             return "TestUGService";
-        };
-        
+        }
+
+        ;
+
         @Override
         protected void deserialize() throws IOException {
             ugCounter++;
@@ -65,56 +69,55 @@ public  class FileTest {
 
     @Test
     public void testFileWatcher() throws Exception {
-        Files.schedule(100,TimeUnit.MILLISECONDS);
+        Files.schedule(100, TimeUnit.MILLISECONDS);
         try {
             File ugFile = File.createTempFile("users", ".xml");
             ugFile.deleteOnExit();
             File gaFile = File.createTempFile("roles", ".xml");
             gaFile.deleteOnExit();
-            
-            RoleFileWatcher gaWatcher = new RoleFileWatcher(gaFile,gaService);
+
+            RoleFileWatcher gaWatcher = new RoleFileWatcher(gaFile, gaService);
             assertEquals(1, gaCounter);
-                    
+
             gaWatcher.setDelay(10); // 10 millisecs
             gaWatcher.start();
-            
-            UserGroupFileWatcher ugWatcher = new UserGroupFileWatcher(ugFile,ugService);
+
+            UserGroupFileWatcher ugWatcher = new UserGroupFileWatcher(ugFile, ugService);
             assertEquals(1, ugCounter);
             ugWatcher.setDelay(10);
             ugWatcher.start();
-            
+
             LOGGER.info(gaWatcher.toString());
             LOGGER.info(ugWatcher.toString());
-            
+
             // now, modifiy last access
-            ugFile.setLastModified(ugFile.lastModified()+1000);
-            gaFile.setLastModified(gaFile.lastModified()+1000);
-           
+            ugFile.setLastModified(ugFile.lastModified() + 1000);
+            gaFile.setLastModified(gaFile.lastModified() + 1000);
+
             // Try for two seconds
-            int maxTries=10;
+            int maxTries = 10;
             boolean failed = true;
-            for (int i=0; i <maxTries;i++) {
-                if (ugCounter==2 && gaCounter==2) {
-                    failed=false;
+            for (int i = 0; i < maxTries; i++) {
+                if (ugCounter == 2 && gaCounter == 2) {
+                    failed = false;
                     break;
                 }
                 Thread.sleep(100);
             }
             if (failed) {
-                Assert.fail("FileWatchers not working" );
+                Assert.fail("FileWatchers not working");
             }
             ugWatcher.setTerminate(true);
             gaWatcher.setTerminate(true);
             ugFile.delete();
             gaFile.delete();
-        }
-        finally {
+        } finally {
             Files.schedule(10, TimeUnit.SECONDS);
         }
-     
+
     }
-    
-    
+
+
 //    @Test
 //    @Ignore
 //    public void testLockFile() {

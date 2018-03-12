@@ -21,9 +21,9 @@ import org.geotools.xml.Node;
 
 /**
  * Binding object for the type http://www.opengis.net/wfs:LockFeatureType.
- *
  * <p>
- *        <pre>
+ * <p>
+ * <pre>
  *         <code>
  *  &lt;xsd:complexType name="LockFeatureType"&gt;
  *      &lt;xsd:annotation&gt;
@@ -90,6 +90,7 @@ import org.geotools.xml.Node;
  *
  *          </code>
  *         </pre>
+ *
  * @generated
  */
 public class LockFeatureTypeBinding extends AbstractComplexBinding {
@@ -127,7 +128,7 @@ public class LockFeatureTypeBinding extends AbstractComplexBinding {
      * @generated modifiable
      */
     public Object parse(ElementInstance instance, Node node, Object value)
-        throws Exception {
+            throws Exception {
         LockFeatureType lockFeature = wfsfactory.createLockFeatureType();
 
         //&lt;xsd:element maxOccurs="unbounded" name="Lock" type="wfs:LockType"&gt;

@@ -42,9 +42,8 @@ import com.hazelcast.query.TruePredicate;
 
 /**
  * A Hazelcast based implementation of the {@link ProcessStatusStore} interface
- * 
+ *
  * @author Andrea Aime - GeoSolutions
- * 
  */
 public class HazelcastStatusStore implements ProcessStatusStore {
 
@@ -145,11 +144,11 @@ public class HazelcastStatusStore implements ProcessStatusStore {
         Predicate predicate = filterPredicate.predicate;
         Filter postFilter = filterPredicate.postFilter;
 
-        
+
         // Two cases here: if we have post-filtering we are going to run an entry processor,
         // to filter in the cluster and accumulate, otherwise we are going to run the predicate
         // on the cluster and page if we need/can
-        if(postFilter != null && postFilter != Filter.INCLUDE) {
+        if (postFilter != null && postFilter != Filter.INCLUDE) {
             FilteringEntryProcessor filterProcessor = new FilteringEntryProcessor(postFilter);
             Map<String, Object> entries = statuses.executeOnEntries(filterProcessor);
             List<ExecutionStatus> result = new ArrayList(entries.values());
@@ -204,7 +203,7 @@ public class HazelcastStatusStore implements ProcessStatusStore {
     }
 
     private List<ExecutionStatus> postProcessResults(Query query, int maxFeatures,
-            int startIndex, boolean needsSorting, List<ExecutionStatus> result) {
+                                                     int startIndex, boolean needsSorting, List<ExecutionStatus> result) {
         if (needsSorting) {
             Comparator<ExecutionStatus> comparator = getComparator("", query.getSortBy());
             Collections.sort(result, comparator);
@@ -253,9 +252,8 @@ public class HazelcastStatusStore implements ProcessStatusStore {
 
     /**
      * Splits an OGC filter into a Hazelcast predicate and post-query Filter
-     * 
+     *
      * @author Andrea Aime - GeoSolutions
-     * 
      */
     private static class FilterPredicate {
         Filter postFilter;
@@ -323,9 +321,8 @@ public class HazelcastStatusStore implements ProcessStatusStore {
 
     /**
      * Evaluates a filter on map entries, and removes them on match
-     * 
+     *
      * @author Andrea Aime - GeoSolutions
-     * 
      */
     private static class RemovingEntryProcessor extends AbstractFilteringEntryProcessor implements
             HazelcastInstanceAware {
@@ -357,9 +354,8 @@ public class HazelcastStatusStore implements ProcessStatusStore {
 
     /**
      * Evaluates a filter on map entries, and returns them
-     * 
+     *
      * @author Andrea Aime - GeoSolutions
-     * 
      */
     private static class FilteringEntryProcessor extends AbstractFilteringEntryProcessor {
 
@@ -388,7 +384,7 @@ public class HazelcastStatusStore implements ProcessStatusStore {
 
     @Override
     public boolean supportsPaging() {
-        
+
         return true;
     }
 

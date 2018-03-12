@@ -31,6 +31,7 @@ import com.vividsolutions.jts.util.Assert;
 
 /**
  * A test for proper ISO8601 formatting.
+ *
  * @author Ian Schneider <ischneider@opengeo.org>
  */
 public class DimensionHelperTest {
@@ -39,7 +40,7 @@ public class DimensionHelperTest {
 
     @Before
     public void setUp() {
-        
+
         dimensionHelper = new DimensionHelper(Mode.WMS13, WMS.get()) {
 
             @Override
@@ -53,27 +54,27 @@ public class DimensionHelperTest {
             }
         };
     }
-    
+
     @Test
     public void testGetCustomDomainRepresentation() {
-        final String[] vals=new String[]{"value with spaces", "value", "  other values "}; 
-        final List<String> values=new ArrayList<String>();
+        final String[] vals = new String[]{"value with spaces", "value", "  other values "};
+        final List<String> values = new ArrayList<String>();
         for (String val : vals)
             values.add(val);
-        DimensionInfo dimensionInfo=new DimensionInfoImpl();
+        DimensionInfo dimensionInfo = new DimensionInfoImpl();
         dimensionInfo.setPresentation(DimensionPresentation.LIST);
         dimensionInfo.setResolution(new BigDecimal(1));
-        String customDimRepr=dimensionHelper.getCustomDomainRepresentation(dimensionInfo, values);
+        String customDimRepr = dimensionHelper.getCustomDomainRepresentation(dimensionInfo, values);
         //value with spaces,value
-        Assert.equals(customDimRepr, vals[0]+","+vals[1]+","+vals[2].trim());
+        Assert.equals(customDimRepr, vals[0] + "," + vals[1] + "," + vals[2].trim());
         //System.out.print(vals.toString());
 
     }
-    
+
     @Test
     public void testNegativeYears() {
         ISO8601Formatter fmt = new ISO8601Formatter();
-        
+
         GregorianCalendar cal = new GregorianCalendar();
         cal.setTimeZone(TimeZone.getTimeZone("GMT"));
         cal.clear();
@@ -81,34 +82,34 @@ public class DimensionHelperTest {
         // base assertion
         cal.set(Calendar.YEAR, 1);
         assertEquals("0001-01-01T00:00:00.000Z", fmt.format(cal.getTime()));
-        
+
         // according to the spec, the year before is year 0000
         cal.add(Calendar.YEAR, -1);
         assertEquals("0000-01-01T00:00:00.000Z", fmt.format(cal.getTime()));
-        
+
         // and now where negative territory
         cal.add(Calendar.YEAR, -1);
         assertEquals("-0001-01-01T00:00:00.000Z", fmt.format(cal.getTime()));
-        
+
         // and real negative
         cal.set(Calendar.YEAR, 265000001);
         assertEquals("-265000000-01-01T00:00:00.000Z", fmt.format(cal.getTime()));
     }
-    
+
     /**
      * The goal if this test is to verify behavior of a similar, but not complete,
      * format provided by the standard libraries. The incomplete pattern does
      * not support BC dates properly, so we will not test compliance here.
-     * 
+     * <p>
      * The random seed is not specified to allow various test runs broader coverage.
      */
     @Test
     public void testFormatterFuzz() {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
         df.setTimeZone(TimeZone.getTimeZone("GMT"));
-        
+
         ISO8601Formatter fmt = new ISO8601Formatter();
-        
+
         GregorianCalendar cal = new GregorianCalendar();
         Random r = new Random();
         for (int i = 0; i < 1000; i++) {
@@ -127,10 +128,10 @@ public class DimensionHelperTest {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
         df.setTimeZone(TimeZone.getTimeZone("GMT"));
         ISO8601Formatter fmt = new ISO8601Formatter();
-        
+
         assertEquals("0010-01-01T00:01:10.001Z", fmt.format(df.parse("0010-01-01T00:01:10.001")));
         assertEquals("0100-01-01T00:01:10.011Z", fmt.format(df.parse("0100-01-01T00:01:10.011")));
         assertEquals("1000-01-01T00:01:10.111Z", fmt.format(df.parse("1000-01-01T00:01:10.111")));
     }
-    
+
 }

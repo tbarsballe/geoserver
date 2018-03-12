@@ -45,7 +45,7 @@ import org.geotools.arcsde.session.UnavailableConnectionException;
  * A panel for {@link ArcSDECoverageStoreEditPanel} that shows a drop down list where to choose the
  * raster table to create the coverage store for, and a refresh button to populate the list of
  * available raster tables based on the form's connection input fields.
- * 
+ *
  * @author Gabriel Roldan
  */
 public class RasterTableSelectionPanel extends Panel {
@@ -76,8 +76,8 @@ public class RasterTableSelectionPanel extends Panel {
     private FormComponent<?> passwordComponent;
 
     public RasterTableSelectionPanel(final String id, final IModel<Map<String, Object>> paramsModel,
-            final Form<?> storeEditForm, FormComponent<?> server, FormComponent<?> port,
-            FormComponent<?> instance, FormComponent<?> user, FormComponent<?> password) {
+                                     final Form<?> storeEditForm, FormComponent<?> server, FormComponent<?> port,
+                                     FormComponent<?> instance, FormComponent<?> user, FormComponent<?> password) {
 
         super(id);
         this.serverComponent = server;
@@ -189,18 +189,16 @@ public class RasterTableSelectionPanel extends Panel {
     }
 
     /**
-     * 
      * @param server
      * @param port
      * @param instance
      * @param user
      * @param password
      * @param sessionFac
-     *
      * @throws IllegalArgumentException
      */
     List<String> getRasterColumns(final String server, final String port, final String instance,
-            final String user, final String password, final ISessionPoolFactory sessionFac)
+                                  final String user, final String password, final ISessionPoolFactory sessionFac)
             throws IllegalArgumentException {
 
         final ISessionPool pool;

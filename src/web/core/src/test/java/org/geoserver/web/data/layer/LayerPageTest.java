@@ -43,7 +43,7 @@ public class LayerPageTest extends GeoServerWicketTestSupport {
 
         testData.addVectorLayer(BUILDINGS, getCatalog());
 
-        Map<LayerProperty,Object> props = new HashMap();
+        Map<LayerProperty, Object> props = new HashMap();
         props.put(LayerProperty.STYLE, BUILDINGS.getLocalPart());
         testData.addVectorLayer(GS_BUILDINGS, props, getCatalog());
     }
@@ -56,27 +56,27 @@ public class LayerPageTest extends GeoServerWicketTestSupport {
         tester.startPage(new LayerPage());
         tester.assertRenderedPage(LayerPage.class);
         tester.assertNoErrorMessage();
-        
+
         // check it has two layers
         GeoServerTablePanel table = (GeoServerTablePanel) tester.getComponentFromLastRenderedPage("table");
         assertEquals(2, table.getDataProvider().size());
         List<String> workspaces = getWorkspaces(table);
         assertTrue(workspaces.contains("cite"));
         assertTrue(workspaces.contains("gs"));
-        
+
         // sort on workspace once (top to bottom)
         String wsSortPath = "table:listContainer:sortableLinks:3:header:link";
         tester.clickLink(wsSortPath, true);
         workspaces = getWorkspaces(table);
         assertEquals("cite", workspaces.get(0));
         assertEquals("gs", workspaces.get(1));
-        
+
         // sort on workspace twice (bottom to top)
         tester.clickLink(wsSortPath, true);
         workspaces = getWorkspaces(table);
         assertEquals("gs", workspaces.get(0));
         assertEquals("cite", workspaces.get(1));
-        
+
         // select second layer
         String checkBoxPath = "table:listContainer:items:6:selectItemContainer:selectItem";
         CheckBox selector = (CheckBox) tester.getComponentFromLastRenderedPage(checkBoxPath);
@@ -89,9 +89,9 @@ public class LayerPageTest extends GeoServerWicketTestSupport {
     }
 
     private List<String> getWorkspaces(GeoServerTablePanel table) {
-        Iterator it  = table.getDataProvider().iterator(0, 2);
+        Iterator it = table.getDataProvider().iterator(0, 2);
         List<String> workspaces = new ArrayList<String>();
-        while(it.hasNext()) {
+        while (it.hasNext()) {
             LayerInfo li = (LayerInfo) it.next();
             String wsName = li.getResource().getStore().getWorkspace().getName();
             workspaces.add(wsName);

@@ -50,35 +50,35 @@ import org.opengis.feature.type.PropertyDescriptor;
 
 /**
  * Edits a {@link DimensionInfo} object for the specified resource
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 @SuppressWarnings("serial")
 public class DimensionEditor extends FormComponentPanel<DimensionInfo> {
-    
+
     static final Logger LOGGER = Logging.getLogger(DimensionEditor.class);
 
     List<DimensionPresentation> presentationModes;
-    
+
     List<DimensionDefaultValueSetting.Strategy> defaultValueStrategies;
 
     private CheckBox enabled;
 
     private DropDownChoice<String> attribute;
-    
+
     private DropDownChoice<String> endAttribute;
 
     private DropDownChoice<DimensionPresentation> presentation;
-    
+
     private DropDownChoice<DimensionDefaultValueSetting.Strategy> defaultValueStrategy;
 
     private TextField<String> referenceValue;
-    
-    
+
+
     private TextField<String> units;
-    
+
     private TextField<String> unitSymbol;
-    
+
     private PeriodEditor resTime;
 
     private TextField<BigDecimal> resElevation;
@@ -86,13 +86,13 @@ public class DimensionEditor extends FormComponentPanel<DimensionInfo> {
     private final CheckBox nearestMatch;
 
     private final TextField<String> acceptableInterval;
-    
+
     boolean time;
 
     public DimensionEditor(String id, IModel<DimensionInfo> model, ResourceInfo resource, Class<?> type) {
-        this(id, model, resource, type, false);   
+        this(id, model, resource, type, false);
     }
-    
+
     public DimensionEditor(String id, IModel<DimensionInfo> model, ResourceInfo resource, Class<?> type, boolean editNearestMatch) {
         super(id, model);
 
@@ -124,7 +124,7 @@ public class DimensionEditor extends FormComponentPanel<DimensionInfo> {
         // error message label
         Label noAttributeMessage = new Label("noAttributeMsg", "");
         add(noAttributeMessage);
-        
+
         // the attribute label and dropdown container
         WebMarkupContainer attContainer = new WebMarkupContainer("attributeContainer");
         configs.add(attContainer);
@@ -132,11 +132,11 @@ public class DimensionEditor extends FormComponentPanel<DimensionInfo> {
         // check the attributes and show a dropdown
         List<String> attributes = getAttributesOfType(resource, type);
         attribute = new DropDownChoice<String>("attribute", new PropertyModel<String>(model,
-		        "attribute"), attributes);
-		attribute.setOutputMarkupId(true);
-		attribute.setRequired(true);
-		attContainer.add(attribute);
-        
+                "attribute"), attributes);
+        attribute.setOutputMarkupId(true);
+        attribute.setRequired(true);
+        attContainer.add(attribute);
+
         List<String> endAttributes = new ArrayList<String>(attributes);
         endAttributes.add(0, "-");
         endAttribute = new DropDownChoice<String>("endAttribute", new PropertyModel<String>(model,
@@ -146,33 +146,33 @@ public class DimensionEditor extends FormComponentPanel<DimensionInfo> {
         attContainer.add(endAttribute);
 
         // do we show it?
-        if(resource instanceof FeatureTypeInfo) { 
+        if (resource instanceof FeatureTypeInfo) {
             if (attributes.isEmpty()) {
                 disableDimension(type, configs, noAttributeMessage);
             } else {
                 noAttributeMessage.setVisible(false);
             }
-        } else if(resource instanceof CoverageInfo) {
+        } else if (resource instanceof CoverageInfo) {
             attContainer.setVisible(false);
             attribute.setRequired(false);
             try {
                 GridCoverageReader reader = ((CoverageInfo) resource).getGridCoverageReader(null, null);
-                if(Number.class.isAssignableFrom(type)) {
+                if (Number.class.isAssignableFrom(type)) {
                     String elev = reader.getMetadataValue(GridCoverage2DReader.HAS_ELEVATION_DOMAIN);
-                    if(!Boolean.parseBoolean(elev)) {
+                    if (!Boolean.parseBoolean(elev)) {
                         disableDimension(type, configs, noAttributeMessage);
                     }
-                } else if(Date.class.isAssignableFrom(type)) {
+                } else if (Date.class.isAssignableFrom(type)) {
                     String time = reader.getMetadataValue(GridCoverage2DReader.HAS_TIME_DOMAIN);
-                    if(!Boolean.parseBoolean(time)) {
+                    if (!Boolean.parseBoolean(time)) {
                         disableDimension(type, configs, noAttributeMessage);
                     }
                 }
-            } catch(IOException e) {
+            } catch (IOException e) {
                 throw new WicketRuntimeException(e);
             }
         }
-        
+
         // units block
         final WebMarkupContainer unitsContainer = new WebMarkupContainer("unitsContainer");
         configs.add(unitsContainer);
@@ -181,7 +181,7 @@ public class DimensionEditor extends FormComponentPanel<DimensionInfo> {
         unitsContainer.add(units);
         IModel<String> usModel = new PropertyModel<String>(model, "unitSymbol");
         unitSymbol = new TextField<String>("unitSymbol", usModel);
-        unitsContainer.add(unitSymbol);        
+        unitsContainer.add(unitSymbol);
         // set defaults for elevation if units have never been set
         if ("elevation".equals(id) && uModel.getObject() == null) {
             uModel.setObject(DimensionInfo.ELEVATION_UNITS);
@@ -197,7 +197,7 @@ public class DimensionEditor extends FormComponentPanel<DimensionInfo> {
                 .setVisible(model.getObject().getPresentation() == DimensionPresentation.DISCRETE_INTERVAL);
         resolutions.setOutputMarkupId(true);
         resContainer.add(resolutions);
-        
+
         presentationModes = new ArrayList<DimensionPresentation>(Arrays.asList(DimensionPresentation.values()));
         presentation = new DropDownChoice<DimensionPresentation>("presentation",
                 new PropertyModel<DimensionPresentation>(model, "presentation"),
@@ -221,7 +221,7 @@ public class DimensionEditor extends FormComponentPanel<DimensionInfo> {
         resElevation = new TextField<BigDecimal>("resElevation", rmodel);
         resolutions.add(resElevation);
         time = Date.class.isAssignableFrom(type);
-        if(time) {
+        if (time) {
             resElevation.setVisible(false);
             resTime.setRequired(true);
             unitsContainer.setVisible(false);
@@ -229,25 +229,25 @@ public class DimensionEditor extends FormComponentPanel<DimensionInfo> {
             resTime.setVisible(false);
             resElevation.setRequired(true);
         }
-        
+
         //default value block
         DimensionDefaultValueSetting defValueSetting = model.getObject().getDefaultValue();
-        if (defValueSetting == null){
-        	defValueSetting = new DimensionDefaultValueSetting();
-        	model.getObject().setDefaultValue(defValueSetting);
+        if (defValueSetting == null) {
+            defValueSetting = new DimensionDefaultValueSetting();
+            model.getObject().setDefaultValue(defValueSetting);
         }
         final WebMarkupContainer defValueContainer = new WebMarkupContainer("defaultValueContainer");
         defValueContainer.setOutputMarkupId(true);
         configs.add(defValueContainer);
         final WebMarkupContainer referenceValueContainer = new WebMarkupContainer("referenceValueContainer");
-        referenceValueContainer.setOutputMarkupId(true);               
-        referenceValueContainer.setVisible((defValueSetting.getStrategyType() == Strategy.FIXED) || (defValueSetting.getStrategyType() == Strategy.NEAREST));          
+        referenceValueContainer.setOutputMarkupId(true);
+        referenceValueContainer.setVisible((defValueSetting.getStrategyType() == Strategy.FIXED) || (defValueSetting.getStrategyType() == Strategy.NEAREST));
         defValueContainer.add(referenceValueContainer);
-        
+
         defaultValueStrategies = new ArrayList<DimensionDefaultValueSetting.Strategy>(Arrays.asList(DimensionDefaultValueSetting.Strategy.values()));
-        IModel<DimensionDefaultValueSetting.Strategy> strategyModel =  new PropertyModel<DimensionDefaultValueSetting.Strategy>(model.getObject().getDefaultValue(), "strategy");
+        IModel<DimensionDefaultValueSetting.Strategy> strategyModel = new PropertyModel<DimensionDefaultValueSetting.Strategy>(model.getObject().getDefaultValue(), "strategy");
         defaultValueStrategy = new DropDownChoice<DimensionDefaultValueSetting.Strategy>("strategy",
-               strategyModel, defaultValueStrategies, new DefaultValueStrategyRenderer());
+                strategyModel, defaultValueStrategies, new DefaultValueStrategyRenderer());
         configs.add(defaultValueStrategy);
         defaultValueStrategy.add(new AjaxFormComponentUpdatingBehavior("change") {
 
@@ -260,14 +260,14 @@ public class DimensionEditor extends FormComponentPanel<DimensionInfo> {
 
         });
         defValueContainer.add(defaultValueStrategy);
-        
+
         final Label refValueValidationMessage = new Label("refValueValidationMsg", "");
         refValueValidationMessage.setVisible(false);
-        
-        IModel<String> refValueModel = new PropertyModel<String>(model.getObject().getDefaultValue(), "referenceValue");        
+
+        IModel<String> refValueModel = new PropertyModel<String>(model.getObject().getDefaultValue(), "referenceValue");
         referenceValue = new TextField<>("referenceValue", refValueModel);
         referenceValue.add(new AjaxFormComponentUpdatingBehavior("change") {
-            
+
             protected void onUpdate(AjaxRequestTarget target) {
                 refValueValidationMessage.setDefaultModelObject(null);
                 refValueValidationMessage.setVisible(false);
@@ -276,22 +276,22 @@ public class DimensionEditor extends FormComponentPanel<DimensionInfo> {
 
             @Override
             protected void onError(AjaxRequestTarget target, RuntimeException e) {
-                super.onError(target, e);               
-                if (referenceValue.hasErrorMessage()){
+                super.onError(target, e);
+                if (referenceValue.hasErrorMessage()) {
                     refValueValidationMessage.setDefaultModelObject(referenceValue.getFeedbackMessages().first());
                     refValueValidationMessage.setVisible(true);
-                }                
+                }
                 target.add(referenceValueContainer);
             }
         });
         referenceValue.add(new ReferenceValueValidator(id, strategyModel));
-              
+
         referenceValueContainer.add(referenceValue);
         referenceValueContainer.add(refValueValidationMessage);
-        
+
         // set "current" for reference value if dimension is time, strategy is NEAREST and value has never been set
         if ("time".equals(id) && refValueModel.getObject() == null && strategyModel.getObject() == Strategy.NEAREST) {
-            refValueModel.setObject(DimensionDefaultValueSetting.TIME_CURRENT);            
+            refValueModel.setObject(DimensionDefaultValueSetting.TIME_CURRENT);
         }
 
         // add support for nearest match specification
@@ -318,27 +318,28 @@ public class DimensionEditor extends FormComponentPanel<DimensionInfo> {
             try {
                 AcceptableRange.getAcceptableRange(validatable.getValue(), type);
             } catch (Exception e) {
-                    String messageKey = "invalidAcceptableInterval";
+                String messageKey = "invalidAcceptableInterval";
                 validatable.error(new ValidationError(messageKey).addKey(messageKey).setVariable("actual", validatable.getValue()));
             }
         });
     }
-    
+
     /**
      * Allows to remove presentation modes from the editor. If only a single presentation mode
      * is left the editor will setup in non enabled mode and will return that fixed value
+     *
      * @param mode
      */
     public void disablePresentationMode(DimensionPresentation mode) {
         presentationModes.remove(mode);
-        if(presentationModes.size() <= 1) {
+        if (presentationModes.size() <= 1) {
             presentation.setModelObject(presentationModes.get(0));
             presentation.setEnabled(false);
         }
     }
 
     private void disableDimension(Class<?> type, final WebMarkupContainer configs,
-            Label noAttributeMessage) {
+                                  Label noAttributeMessage) {
         // no attributes of the required type, no party
         enabled.setEnabled(false);
         enabled.setModelObject(false);
@@ -362,7 +363,7 @@ public class DimensionEditor extends FormComponentPanel<DimensionInfo> {
         } else {
             //To keep the original values for attributes not editable in UI:
             DimensionInfoImpl info = new DimensionInfoImpl(this.getModelObject());
-            
+
             info.setEnabled(true);
             attribute.processInput();
             endAttribute.processInput();
@@ -384,7 +385,7 @@ public class DimensionEditor extends FormComponentPanel<DimensionInfo> {
             info.setUnitSymbol(unitSymbol.getModelObject());
             info.setPresentation(presentation.getModelObject());
             if (info.getPresentation() == DimensionPresentation.DISCRETE_INTERVAL) {
-                if(time) {
+                if (time) {
                     resTime.processInput();
                     info.setResolution(resTime.getModelObject());
                 } else {
@@ -393,22 +394,21 @@ public class DimensionEditor extends FormComponentPanel<DimensionInfo> {
                 }
             }
             DimensionDefaultValueSetting defValueSetting = new DimensionDefaultValueSetting();
-            defaultValueStrategy.processInput();            
+            defaultValueStrategy.processInput();
             defValueSetting.setStrategyType(defaultValueStrategy.getModelObject());
-            if (defValueSetting.getStrategyType() == Strategy.FIXED || defValueSetting.getStrategyType() == Strategy.NEAREST){
+            if (defValueSetting.getStrategyType() == Strategy.FIXED || defValueSetting.getStrategyType() == Strategy.NEAREST) {
                 referenceValue.processInput();
-                if (referenceValue.hasErrorMessage()){
-                    LOGGER.log(Level.SEVERE, "About to accept erroneous value "+referenceValue.getModelObject());
+                if (referenceValue.hasErrorMessage()) {
+                    LOGGER.log(Level.SEVERE, "About to accept erroneous value " + referenceValue.getModelObject());
                 }
                 defValueSetting.setReferenceValue(referenceValue.getModelObject());
             }
-            if (defValueSetting.getStrategyType() != Strategy.BUILTIN){
-                info.setDefaultValue(defValueSetting);                
-            }
-            else {
+            if (defValueSetting.getStrategyType() != Strategy.BUILTIN) {
+                info.setDefaultValue(defValueSetting);
+            } else {
                 info.setDefaultValue(null);
             }
-            
+
             // nearest match
             nearestMatch.processInput();
             acceptableInterval.processInput();
@@ -419,20 +419,20 @@ public class DimensionEditor extends FormComponentPanel<DimensionInfo> {
                 info.setNearestMatchEnabled(false);
                 info.setAcceptableInterval(null);
             }
-            
-            
+
+
             setConvertedInput(info);
         }
-    };
-    
-    
+    }
+
+    ;
+
 
     /**
      * Returns all attributes conforming to the specified type
-     * 
+     *
      * @param resource
      * @param type
-     *
      */
     List<String> getAttributesOfType(ResourceInfo resource, Class<?> type) {
         List<String> result = new ArrayList<String>();
@@ -456,7 +456,7 @@ public class DimensionEditor extends FormComponentPanel<DimensionInfo> {
 
     /**
      * Renders a presentation mode into a human readable form
-     * 
+     *
      * @author Alessio
      */
     public class PresentationModeRenderer extends ChoiceRenderer<DimensionPresentation> {
@@ -473,10 +473,10 @@ public class DimensionEditor extends FormComponentPanel<DimensionInfo> {
             return String.valueOf(object.ordinal());
         }
     }
-    
+
     /**
      * Renders a default value strategy into a human readable form
-     * 
+     *
      * @author Ilkka Rinne / Spatineo Inc for the Finnish Meteorological Institute
      */
     public class DefaultValueStrategyRenderer extends ChoiceRenderer<DimensionDefaultValueSetting.Strategy> {
@@ -493,35 +493,34 @@ public class DimensionEditor extends FormComponentPanel<DimensionInfo> {
             return String.valueOf(object.ordinal());
         }
     }
-    
+
     /**
      * Validator for dimension default value reference values.
-     * 
-     * @author Ilkka Rinne / Spatineo Inc for the Finnish Meteorological Institute
      *
+     * @author Ilkka Rinne / Spatineo Inc for the Finnish Meteorological Institute
      */
     public class ReferenceValueValidator implements IValidator<String> {
         String dimension;
         IModel<DimensionDefaultValueSetting.Strategy> strategyModel;
-        
-        public ReferenceValueValidator(String dimensionId, IModel<DimensionDefaultValueSetting.Strategy> strategyModel){
+
+        public ReferenceValueValidator(String dimensionId, IModel<DimensionDefaultValueSetting.Strategy> strategyModel) {
             this.dimension = dimensionId;
             this.strategyModel = strategyModel;
         }
-        
+
         @Override
         public void validate(IValidatable<String> value) {
             String stringValue = value.getValue();
-            if ( ((strategyModel.getObject() == Strategy.FIXED) || (strategyModel.getObject() == Strategy.NEAREST)) && stringValue == null){
+            if (((strategyModel.getObject() == Strategy.FIXED) || (strategyModel.getObject() == Strategy.NEAREST)) && stringValue == null) {
                 value.error(new ValidationError("emptyReferenceValue").addKey("emptyReferenceValue"));
             } else if (dimension.equals("time")) {
-                if(!isValidTimeReference(stringValue, strategyModel.getObject())) {
-                    String messageKey = strategyModel.getObject() == Strategy.NEAREST ?  "invalidNearestTimeReferenceValue" : "invalidTimeReferenceValue";
+                if (!isValidTimeReference(stringValue, strategyModel.getObject())) {
+                    String messageKey = strategyModel.getObject() == Strategy.NEAREST ? "invalidNearestTimeReferenceValue" : "invalidTimeReferenceValue";
                     value.error(new ValidationError(messageKey).addKey(messageKey));
                 }
-                
+
             } else if (dimension.equals("elevation")) {
-                if(!isValidElevationReference(stringValue)) {
+                if (!isValidElevationReference(stringValue)) {
                     value.error(new ValidationError("invalidElevationReferenceValue")
                             .addKey("invalidElevationReferenceValue"));
                 }
@@ -535,7 +534,7 @@ public class DimensionEditor extends FormComponentPanel<DimensionInfo> {
                 // the KVP parser accepts also lists of values, we want a single one 
                 return values.size() == 1;
             } catch (Exception e) {
-                if(LOGGER.isLoggable(Level.FINER)) {
+                if (LOGGER.isLoggable(Level.FINER)) {
                     LOGGER.log(Level.FINER, "Invalid elevation value " + stringValue, e);
                 }
                 return false;
@@ -547,10 +546,10 @@ public class DimensionEditor extends FormComponentPanel<DimensionInfo> {
                 TimeParser parser = new TimeParser();
                 List values = (List) parser.parse(stringValue);
                 // the KVP parser accepts also lists of values, we want a single one
-                if(strategy == Strategy.FIXED) {
+                if (strategy == Strategy.FIXED) {
                     // point or range, but just one
                     return values.size() == 1;
-                } else if(strategy == Strategy.NEAREST) {
+                } else if (strategy == Strategy.NEAREST) {
                     // only point value, no ranges allowed
                     return values.size() == 1 && !(values.get(0) instanceof Range);
                 } else {
@@ -559,12 +558,12 @@ public class DimensionEditor extends FormComponentPanel<DimensionInfo> {
                     return false;
                 }
             } catch (Exception e) {
-                if(LOGGER.isLoggable(Level.FINER)) {
+                if (LOGGER.isLoggable(Level.FINER)) {
                     LOGGER.log(Level.FINER, "Invalid time value " + stringValue, e);
                 }
                 return false;
             }
         }
     }
-    
+
 }

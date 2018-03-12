@@ -28,30 +28,30 @@ import org.geoserver.web.wicket.GeoServerDataProvider;
 
 public class EditGroupPage extends AbstractGroupPage {
 
-    public EditGroupPage(String userGroupServiceName,final GeoServerUserGroup group) {
+    public EditGroupPage(String userGroupServiceName, final GeoServerUserGroup group) {
         super(userGroupServiceName, group.copy()); //copy before passing into parent
 
         //name not changeable on edit 
         get("form:groupname").setEnabled(false);
 
-        ((Form)get("form")).add(new UserTablePanel("users", userGroupServiceName, 
-            new GeoServerDataProvider<GeoServerUser>() {
-            @Override
-            protected List<GeoServerDataProvider.Property<GeoServerUser>> getProperties() {
-                return Arrays.asList(UserListProvider.USERNAME);
-            }
+        ((Form) get("form")).add(new UserTablePanel("users", userGroupServiceName,
+                new GeoServerDataProvider<GeoServerUser>() {
+                    @Override
+                    protected List<GeoServerDataProvider.Property<GeoServerUser>> getProperties() {
+                        return Arrays.asList(UserListProvider.USERNAME);
+                    }
 
-            @Override
-            protected List<GeoServerUser> getItems() {
-                GeoServerUserGroupService ugService = 
-                        getUserGroupService(EditGroupPage.this.userGroupServiceName);
-                try {
-                    return new ArrayList<GeoServerUser>(ugService.getUsersForGroup(group));
-                } catch (IOException e) {
-                    throw new WicketRuntimeException(e);
-                } 
-            }
-        }).setFilterable(false));
+                    @Override
+                    protected List<GeoServerUser> getItems() {
+                        GeoServerUserGroupService ugService =
+                                getUserGroupService(EditGroupPage.this.userGroupServiceName);
+                        try {
+                            return new ArrayList<GeoServerUser>(ugService.getUsersForGroup(group));
+                        } catch (IOException e) {
+                            throw new WicketRuntimeException(e);
+                        }
+                    }
+                }).setFilterable(false));
     }
 
     @Override
@@ -62,12 +62,15 @@ public class EditGroupPage extends AbstractGroupPage {
                 store = new UserGroupStoreValidationWrapper(getUserGroupStore(userGroupServiceName));
                 store.updateGroup(group);
                 store.store();
-            };
+            }
+            ;
         } catch (IOException ex) {
             try {
                 //try to reload the store
-                store.load(); 
-            } catch (IOException ex2) {};
+                store.load();
+            } catch (IOException ex2) {
+            }
+            ;
             throw ex;
         }
 
@@ -85,11 +88,15 @@ public class EditGroupPage extends AbstractGroupPage {
                 for (GeoServerRole role : add)
                     gaStore.associateRoleToGroup(role, group.getGroupname());
                 for (GeoServerRole role : remove)
-                    gaStore.disAssociateRoleFromGroup(role, group.getGroupname());        
+                    gaStore.disAssociateRoleFromGroup(role, group.getGroupname());
                 gaStore.store();
-            }        
+            }
         } catch (IOException ex) {
-            try {gaStore.load(); } catch (IOException ex2) {};
+            try {
+                gaStore.load();
+            } catch (IOException ex2) {
+            }
+            ;
             throw ex;
         }
 

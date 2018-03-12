@@ -22,9 +22,9 @@ import org.geotools.xml.Node;
 
 /**
  * Binding object for the type http://www.opengis.net/wfs:GetFeatureType.
- *
  * <p>
- *        <pre>
+ * <p>
+ * <pre>
  *         <code>
  *  &lt;xsd:complexType name="GetFeatureType"&gt;       &lt;xsd:annotation&gt;
  *              &lt;xsd:documentation&gt;             A GetFeature element
@@ -70,6 +70,7 @@ import org.geotools.xml.Node;
  *
  *          </code>
  *         </pre>
+ *
  * @generated
  */
 public class GetFeatureTypeBinding extends AbstractComplexBinding {
@@ -103,7 +104,7 @@ public class GetFeatureTypeBinding extends AbstractComplexBinding {
      * @generated modifiable
      */
     public Object parse(ElementInstance instance, Node node, Object value)
-        throws Exception {
+            throws Exception {
         GetFeatureType getFeature = wfsfactory.createGetFeatureType();
 
         WFSBindingUtils.service(getFeature, node);
@@ -119,18 +120,18 @@ public class GetFeatureTypeBinding extends AbstractComplexBinding {
         if (number != null) {
             getFeature.setMaxFeatures(WFSBindingUtils.asBigInteger(number));
         }
-        
+
         //startIndex (wfs 2.0)
         if (node.hasAttribute("startIndex")) {
             //convert manually since this is not standard schema for wfs 1.1
-            BigInteger startIndex = 
-                Converters.convert(node.getAttributeValue("startIndex"), BigInteger.class);
+            BigInteger startIndex =
+                    Converters.convert(node.getAttributeValue("startIndex"), BigInteger.class);
             getFeature.setStartIndex(startIndex);
         }
-        
+
         //queries
         getFeature.getQuery().addAll(node.getChildValues(QueryType.class));
-        
+
         // viewParams
         SqlViewParamsExtractor.viewParams(getFeature, node);
 

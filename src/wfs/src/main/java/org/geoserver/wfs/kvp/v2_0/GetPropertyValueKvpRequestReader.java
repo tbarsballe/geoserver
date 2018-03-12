@@ -20,16 +20,16 @@ import org.opengis.filter.FilterFactory;
 public class GetPropertyValueKvpRequestReader extends EMFKvpRequestReader {
 
     GetFeatureKvpRequestReader delegate;
-    
+
     public GetPropertyValueKvpRequestReader(GeoServer geoServer, FilterFactory filterFactory) {
         super(GetPropertyValueType.class, Wfs20Factory.eINSTANCE);
         delegate = new GetFeatureKvpRequestReader(GetFeatureType.class, geoServer, filterFactory);
     }
-    
+
     @Override
     public Object read(Object request, Map kvp, Map rawKvp) throws Exception {
         GetPropertyValueType gpv = (GetPropertyValueType) super.read(request, kvp, rawKvp);
-        
+
         //parse a GetFeature and copy the query
         GetFeatureType gf = Wfs20Factory.eINSTANCE.createGetFeatureType();
         delegate.read(gf, kvp, rawKvp);

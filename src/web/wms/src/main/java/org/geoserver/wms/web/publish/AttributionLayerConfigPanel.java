@@ -31,52 +31,52 @@ public class AttributionLayerConfigPanel extends PublishedConfigurationPanel<Pub
 
     private static final long serialVersionUID = -5229831547353122190L;
 
-    public AttributionLayerConfigPanel(String id, IModel<? extends PublishedInfo> model){
+    public AttributionLayerConfigPanel(String id, IModel<? extends PublishedInfo> model) {
         super(id, model);
 
         PublishedInfo layer = model.getObject();
 
         if (layer.getAttribution() == null) {
             layer.setAttribution(
-                GeoServerApplication.get().getCatalog().getFactory().createAttribution()
+                    GeoServerApplication.get().getCatalog().getFactory().createAttribution()
             );
         }
 
-        add(new TextField<String>("wms.attribution.title", 
-            new PropertyModel<String>(model, "attribution.title")
+        add(new TextField<String>("wms.attribution.title",
+                new PropertyModel<String>(model, "attribution.title")
         ));
 
-        final TextField<String> href = new TextField<String>("wms.attribution.href", 
-            new PropertyModel<String>(model, "attribution.href")
+        final TextField<String> href = new TextField<String>("wms.attribution.href",
+                new PropertyModel<String>(model, "attribution.href")
         );
         href.add(new UrlValidator());
         href.setOutputMarkupId(true);
         add(href);
 
-        final TextField<String> logo = new TextField<String>("wms.attribution.logo", 
-            new PropertyModel<String>(model, "attribution.logoURL")
+        final TextField<String> logo = new TextField<String>("wms.attribution.logo",
+                new PropertyModel<String>(model, "attribution.logoURL")
         );
         logo.add(new UrlValidator());
         logo.setOutputMarkupId(true);
         add(logo);
 
         final TextField<String> type = new TextField<String>("wms.attribution.type",
-            new PropertyModel<String>(model, "attribution.logoType")
+                new PropertyModel<String>(model, "attribution.logoType")
         );
         type.setOutputMarkupId(true);
         add(type);
 
-        final TextField<Integer> height = new TextField<Integer>("wms.attribution.height", 
-            new PropertyModel<Integer>(model, "attribution.logoHeight"),
-            Integer.class
+        final TextField<Integer> height = new TextField<Integer>("wms.attribution.height",
+                new PropertyModel<Integer>(model, "attribution.logoHeight"),
+                Integer.class
         );
         height.add(RangeValidator.minimum(0));
         height.setOutputMarkupId(true);
         add(height);
 
         final TextField<Integer> width = new TextField<Integer>("wms.attribution.width",
-            new PropertyModel<Integer>(model, "attribution.logoWidth"),
-            Integer.class
+                new PropertyModel<Integer>(model, "attribution.logoWidth"),
+                Integer.class
         );
         width.add(RangeValidator.minimum(0));
         width.setOutputMarkupId(true);
@@ -87,13 +87,13 @@ public class AttributionLayerConfigPanel extends PublishedConfigurationPanel<Pub
 
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 if (logo.getDefaultModelObjectAsString() != null) {
-                    try { 
+                    try {
                         URL url = new URL(logo.getDefaultModelObjectAsString());
                         URLConnection conn = url.openConnection();
                         type.getModel().setObject(conn.getContentType());
                         BufferedImage image = ImageIO.read(conn.getInputStream());
-                        height.setModelValue(new String[] {"" + image.getHeight()});
-                        width.setModelValue(new String[] {"" + image.getWidth()});
+                        height.setModelValue(new String[]{"" + image.getHeight()});
+                        width.setModelValue(new String[]{"" + image.getWidth()});
                     } catch (Exception e) {
                     }
                 }

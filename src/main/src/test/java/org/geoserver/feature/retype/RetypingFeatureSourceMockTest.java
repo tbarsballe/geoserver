@@ -23,7 +23,7 @@ public class RetypingFeatureSourceMockTest {
         SimpleFeatureType orig = createNiceMock(SimpleFeatureType.class);
         expect(orig.getTypeName()).andReturn("orig").anyTimes();
         replay(orig);
-        
+
         SimpleFeatureType wrapped = createNiceMock(SimpleFeatureType.class);
         expect(wrapped.getTypeName()).andReturn("wrapped").anyTimes();
         replay(wrapped);
@@ -36,9 +36,9 @@ public class RetypingFeatureSourceMockTest {
         expect(fs.getDataStore()).andReturn(ds).anyTimes();
         expect(fs.getFeatures(new Query(orig.getTypeName(), Filter.INCLUDE))).andReturn(null).once();
         replay(fs);
-        
+
         SimpleFeatureSource rts = RetypingFeatureSource.getRetypingSource(fs, wrapped);
         rts.getFeatures();
-        
+
     }
 }

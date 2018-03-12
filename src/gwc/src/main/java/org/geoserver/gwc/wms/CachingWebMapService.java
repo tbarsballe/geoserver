@@ -48,9 +48,8 @@ import org.geowebcache.layer.TileLayer;
 /**
  * {@link WebMapService#getMap(GetMapRequest)} Spring's AOP method interceptor to serve cached tiles
  * whenever the request matches a GeoWebCache tile.
- * 
+ *
  * @author Gabriel Roldan
- * 
  */
 public class CachingWebMapService implements MethodInterceptor {
 
@@ -64,7 +63,7 @@ public class CachingWebMapService implements MethodInterceptor {
 
     /**
      * Wraps {@link WebMapService#getMap(GetMapRequest)}, called by the {@link Dispatcher}
-     * 
+     *
      * @see WebMapService#getMap(GetMapRequest)
      * @see org.aopalliance.intercept.MethodInterceptor#invoke(org.aopalliance.intercept.MethodInvocation)
      */

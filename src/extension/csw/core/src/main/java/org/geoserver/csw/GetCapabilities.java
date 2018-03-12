@@ -73,9 +73,8 @@ import org.xml.sax.helpers.NamespaceSupport;
 
 /**
  * The CSW GetCapabilities implementation
- * 
+ *
  * @author Alessio Fabiani - GeoSolutions
- * 
  */
 @SuppressWarnings("unchecked")
 public class GetCapabilities {
@@ -83,20 +82,19 @@ public class GetCapabilities {
     static final Logger LOGGER = Logging.getLogger(GetCapabilities.class);
     static Csw20Factory cswf = Csw20Factory.eINSTANCE;
     static Ows10Factory owsf = Ows10Factory.eINSTANCE;
-    
+
     private static final String version = CSW_VERSION;
 
     static public Map<String, List<DomainType>> operationParameters = new HashMap<String, List<DomainType>>();
     static public Map<String, List<DomainType>> operationConstraints = new HashMap<String, List<DomainType>>();
 
-    static
-    {
-        /** 
+    static {
+        /**
          * OperationMetadata 
          **/
         operationParameters.put("OperationsMetadata", new LinkedList<DomainType>());
         operationConstraints.put("OperationsMetadata", new LinkedList<DomainType>());
-        
+
         // - Parameters
         DomainType opMetadataParam1 = owsf.createDomainType();
         DomainType opMetadataParam2 = owsf.createDomainType();
@@ -106,14 +104,14 @@ public class GetCapabilities {
         opMetadataParam2.getValue().add(version);
         operationParameters.get("OperationsMetadata").add(opMetadataParam1);
         operationParameters.get("OperationsMetadata").add(opMetadataParam2);
-        
+
         // - Constraints
         DomainType opMetadataConstraint1 = owsf.createDomainType();
         opMetadataConstraint1.setName("PostEncoding");
         opMetadataConstraint1.getValue().add("XML");
         operationConstraints.get("OperationsMetadata").add(opMetadataConstraint1);
-        
-        /** 
+
+        /**
          * GetCapabilities 
          **/
         operationParameters.put("GetCapabilities", new LinkedList<DomainType>());
@@ -134,12 +132,12 @@ public class GetCapabilities {
         getCapabilitiesConstraint.getValue().add("XML");
         operationConstraints.get("GetCapabilities").add(getCapabilitiesConstraint);
 
-        /** 
+        /**
          * DescribeRecord 
          **/
         operationParameters.put("DescribeRecord", new LinkedList<DomainType>());
         operationConstraints.put("DescribeRecord", new LinkedList<DomainType>());
-        
+
         // - Parameters
         DomainType describeRecordParam1 = owsf.createDomainType();
         DomainType describeRecordParam2 = owsf.createDomainType();
@@ -160,13 +158,13 @@ public class GetCapabilities {
         describeRecordConstraint.setName("PostEncoding");
         describeRecordConstraint.getValue().add("XML");
         operationConstraints.get("DescribeRecord").add(describeRecordConstraint);
-        
-        /** 
+
+        /**
          * GetRecords 
          **/
         operationParameters.put("GetRecords", new LinkedList<DomainType>());
         operationConstraints.put("GetRecords", new LinkedList<DomainType>());
-        
+
         // - Parameters
         DomainType getRecordsParam1 = owsf.createDomainType();
         DomainType getRecordsParam2 = owsf.createDomainType();
@@ -199,13 +197,13 @@ public class GetCapabilities {
         getRecordConstraint1.setName("PostEncoding");
         getRecordConstraint1.getValue().add("XML");
         operationConstraints.get("GetRecords").add(getRecordConstraint1);
-        
-        /** 
+
+        /**
          * GetRecordById 
          **/
         operationParameters.put("GetRecordById", new LinkedList<DomainType>());
         operationConstraints.put("GetRecordById", new LinkedList<DomainType>());
-        
+
         // - Parameters
         DomainType getRecordByIdParam1 = owsf.createDomainType();
         DomainType getRecordByIdParam2 = owsf.createDomainType();
@@ -235,12 +233,12 @@ public class GetCapabilities {
         getRecordByIdConstraint1.getValue().add("XML");
         operationConstraints.get("GetRecordById").add(getRecordByIdConstraint1);
 
-        /** 
+        /**
          * GetDomain 
          **/
         operationParameters.put("GetDomain", new LinkedList<DomainType>());
         operationConstraints.put("GetDomain", new LinkedList<DomainType>());
-        
+
         // - Parameters
         DomainType getDomainParam1 = owsf.createDomainType();
         DomainType getDomainParam2 = owsf.createDomainType();
@@ -250,13 +248,13 @@ public class GetCapabilities {
         getDomainParam2.getValue().add("xsd:anyURI");
         operationParameters.get("GetDomain").add(getDomainParam1);
         operationParameters.get("GetDomain").add(getDomainParam2);
-        
-        /** 
+
+        /**
          * Transaction 
          **/
         operationParameters.put("Transaction", new LinkedList<DomainType>());
         operationConstraints.put("Transaction", new LinkedList<DomainType>());
-        
+
     }
 
     private static final boolean logicalOperators = true;
@@ -393,17 +391,15 @@ public class GetCapabilities {
             if (store.getCapabilities().supportsTransactions()) {
                 OperationMetadata_Transaction(owsf, baseUrl, operationsMetadata);
             }
-            
+
             // - Parameters
-            for (DomainType param : operationParameters.get("OperationsMetadata"))
-            {
+            for (DomainType param : operationParameters.get("OperationsMetadata")) {
                 // clone the object, as the caps decorators might want to modify it
                 operationsMetadata.getParameter().add(EcoreUtil.copy(param));
             }
 
             // - Constraints
-            for (DomainType constraint : operationConstraints.get("OperationsMetadata"))
-            {
+            for (DomainType constraint : operationConstraints.get("OperationsMetadata")) {
                 // clone the object, as the caps decorators might want to modify it
                 operationsMetadata.getConstraint().add(EcoreUtil.copy(constraint));
             }
@@ -415,30 +411,30 @@ public class GetCapabilities {
         // - Spatial Capabilities
         //SpatialCapabilities spatialCapabilities = ffFactory.spatialCapabilities(geometryOperands, spatialOperands);
         SpatialCapabilities spatialCapabilities = new CSWSpatialCapabilities();
-            
+
         // - Scalar Capabilities
-        Operator[] operators = new Operator[] { ffFactory.operator("EqualTo"),
+        Operator[] operators = new Operator[]{ffFactory.operator("EqualTo"),
                 ffFactory.operator("Like"), ffFactory.operator("LessThan"),
                 ffFactory.operator("GreaterThan"), ffFactory.operator("LessThanEqualTo"),
                 ffFactory.operator("GreaterThanEqualTo"), ffFactory.operator("NotEqualTo"),
-                ffFactory.operator("Between"), ffFactory.operator("NullCheck") };
+                ffFactory.operator("Between"), ffFactory.operator("NullCheck")};
         ComparisonOperators comparisonOperators = ffFactory.comparisonOperators(operators);
         ArithmeticOperators arithmeticOperators = ffFactory.arithmeticOperators(true, null);
         ScalarCapabilities scalarCapabilities = ffFactory.scalarCapabilities(
                 comparisonOperators, arithmeticOperators, logicalOperators);
         // - removing Arithmetic Operators...
-        ((ScalarCapabilitiesImpl)scalarCapabilities).setArithmeticOperators(null);
+        ((ScalarCapabilitiesImpl) scalarCapabilities).setArithmeticOperators(null);
 
         // - Id Capabilities
         IdCapabilities id = ffFactory.idCapabilities(eid, fid);
 
         FilterCapabilities filterCapabilities = ffFactory.capabilities("1.1.0",
                 scalarCapabilities, spatialCapabilities, id);
-        
-        ((FilterCapabilitiesImpl)filterCapabilities).setScalar(scalarCapabilities);
-        ((FilterCapabilitiesImpl)filterCapabilities).setSpatial(spatialCapabilities);
-        ((FilterCapabilitiesImpl)filterCapabilities).setId(id);
-        
+
+        ((FilterCapabilitiesImpl) filterCapabilities).setScalar(scalarCapabilities);
+        ((FilterCapabilitiesImpl) filterCapabilities).setSpatial(spatialCapabilities);
+        ((FilterCapabilitiesImpl) filterCapabilities).setId(id);
+
         caps.setFilterCapabilities(filterCapabilities);
 
         return caps;
@@ -462,7 +458,7 @@ public class GetCapabilities {
      * @param operationsMetadata
      */
     private void OperationMetadata_GetCapabilities(Ows10Factory owsf, final String baseUrl,
-            OperationsMetadataType operationsMetadata) {
+                                                   OperationsMetadataType operationsMetadata) {
         // - GetCapabilities
         OperationType getCapabilities = owsf.createOperationType();
         operationsMetadata.getOperation().add(getCapabilities);
@@ -486,28 +482,25 @@ public class GetCapabilities {
         getCapabilitiesHTTP.getPost().add(getCapabilitiesPost);
 
         // - Parameters
-        for (DomainType param : operationParameters.get("GetCapabilities"))
-        {
+        for (DomainType param : operationParameters.get("GetCapabilities")) {
             // clone the object, as the caps decorators might want to modify it
             getCapabilities.getParameter().add(EcoreUtil.copy(param));
         }
 
         // - Constraints
-        for (DomainType constraint : operationConstraints.get("GetCapabilities"))
-        {
+        for (DomainType constraint : operationConstraints.get("GetCapabilities")) {
             // clone the object, as the caps decorators might want to modify it
             getCapabilities.getConstraint().add(EcoreUtil.copy(constraint));
         }
     }
 
     /**
-     * 
      * @param owsf
      * @param baseUrl
      * @param operationsMetadata
      */
     private void OperationMetadata_DescribeRecord(Ows10Factory owsf, String baseUrl,
-            OperationsMetadataType operationsMetadata) {
+                                                  OperationsMetadataType operationsMetadata) {
         // - DescribeRecord
         OperationType describeRecord = owsf.createOperationType();
         operationsMetadata.getOperation().add(describeRecord);
@@ -538,28 +531,25 @@ public class GetCapabilities {
         describeRecordHTTP.getPost().add(describeRecordPost);
 
         // - Parameters
-        for (DomainType param : operationParameters.get("DescribeRecord"))
-        {
+        for (DomainType param : operationParameters.get("DescribeRecord")) {
             // clone the object, as the caps decorators might want to modify it
             describeRecord.getParameter().add(EcoreUtil.copy(param));
         }
 
         // - Constraints
-        for (DomainType constraint : operationConstraints.get("DescribeRecord"))
-        {
+        for (DomainType constraint : operationConstraints.get("DescribeRecord")) {
             // clone the object, as the caps decorators might want to modify it
             describeRecord.getConstraint().add(EcoreUtil.copy(constraint));
         }
     }
 
     /**
-     * 
      * @param owsf
      * @param baseUrl
      * @param operationsMetadata
      */
     private void OperationMetadata_GetRecords(Ows10Factory owsf, String baseUrl,
-            OperationsMetadataType operationsMetadata) {
+                                              OperationsMetadataType operationsMetadata) {
         // - GetRecords
         OperationType getRecords = owsf.createOperationType();
         operationsMetadata.getOperation().add(getRecords);
@@ -590,55 +580,52 @@ public class GetCapabilities {
         getRecordsHTTP.getPost().add(getRecordsPost);
 
         // - Parameters
-        for (DomainType param : operationParameters.get("GetRecords"))
-        {
+        for (DomainType param : operationParameters.get("GetRecords")) {
             // clone the object, as the caps decorators might want to modify it
             getRecords.getParameter().add(EcoreUtil.copy(param));
         }
 
         // - Constraints
-        for (DomainType constraint : operationConstraints.get("GetRecords"))
-        {
+        for (DomainType constraint : operationConstraints.get("GetRecords")) {
             // clone the object, as the caps decorators might want to modify it
             getRecords.getConstraint().add(EcoreUtil.copy(constraint));
         }
-        
+
         // the additional queriables based on the store
         try {
-            for(RecordDescriptor rd : store.getRecordDescriptors()) {               
-                List<Name> queriables = store.getCapabilities().getQueriables(rd.getFeatureDescriptor().getName() );
-                if(queriables != null && queriables.size() > 0) {
+            for (RecordDescriptor rd : store.getRecordDescriptors()) {
+                List<Name> queriables = store.getCapabilities().getQueriables(rd.getFeatureDescriptor().getName());
+                if (queriables != null && queriables.size() > 0) {
                     DomainType dt = owsf.createDomainType();
-                    dt.setName(rd.getQueryablesDescription());                    
+                    dt.setName(rd.getQueryablesDescription());
                     NamespaceSupport nss = rd.getNamespaceSupport();
-                        
-                    for (Name q : queriables) {                       
+
+                    for (Name q : queriables) {
                         String prefix = nss.getPrefix(q.getNamespaceURI());
-                        dt.getValue().add(prefix==null? q.getLocalPart() : prefix + ":" + q.getLocalPart());
-                    }                        
+                        dt.getValue().add(prefix == null ? q.getLocalPart() : prefix + ":" + q.getLocalPart());
+                    }
                     getRecords.getConstraint().add(dt);
                 }
-                
+
             }
-            
+
             DomainType dt = owsf.createDomainType();
             dt.setName("XPathQueryables");
             dt.getValue().add("allowed");
             getRecords.getConstraint().add(dt);
-            
+
         } catch (IOException e) {
             LOGGER.log(Level.WARNING, "Failed to encode getRecords additional queriables", e);
         }
     }
 
     /**
-     * 
      * @param owsf
      * @param baseUrl
      * @param operationsMetadata
      */
     private void OperationMetadata_GetRecordById(Ows10Factory owsf, String baseUrl,
-            OperationsMetadataType operationsMetadata) {
+                                                 OperationsMetadataType operationsMetadata) {
         // - GetRecordById
         OperationType getRecordById = owsf.createOperationType();
         operationsMetadata.getOperation().add(getRecordById);
@@ -667,30 +654,27 @@ public class GetCapabilities {
 
         getRecordByIdPost.getConstraint().add(getRecordByIdPostConstraints);
         getRecordByIdHTTP.getPost().add(getRecordByIdPost);
-        
+
         // - Parameters
-        for (DomainType param : operationParameters.get("GetRecordById"))
-        {
+        for (DomainType param : operationParameters.get("GetRecordById")) {
             // clone the object, as the caps decorators might want to modify it
             getRecordById.getParameter().add(EcoreUtil.copy(param));
         }
 
         // - Constraints
-        for (DomainType constraint : operationConstraints.get("GetRecordById"))
-        {
+        for (DomainType constraint : operationConstraints.get("GetRecordById")) {
             // clone the object, as the caps decorators might want to modify it
             getRecordById.getConstraint().add(EcoreUtil.copy(constraint));
         }
     }
 
     /**
-     * 
      * @param owsf
      * @param baseUrl
      * @param operationsMetadata
      */
     private void OperationMetadata_GetDomain(Ows10Factory owsf, String baseUrl,
-            OperationsMetadataType operationsMetadata) {
+                                             OperationsMetadataType operationsMetadata) {
         // - GetDomain
         OperationType getDomain = owsf.createOperationType();
         operationsMetadata.getOperation().add(getDomain);
@@ -721,12 +705,11 @@ public class GetCapabilities {
         getDomainHTTP.getPost().add(getDomainPost);
 
         // - Fixed Parameters
-        for (DomainType param : operationParameters.get("GetDomain"))
-        {
+        for (DomainType param : operationParameters.get("GetDomain")) {
             // clone the object, as the caps decorators might want to modify it
             getDomain.getParameter().add(EcoreUtil.copy(param));
         }
-        
+
         // The domain queriables list from the catalog store
         try {
             Set<String> summary = new HashSet<String>();
@@ -735,15 +718,15 @@ public class GetCapabilities {
 
                 if (queriables != null && queriables.size() > 0) {
                     NamespaceSupport nss = rd.getNamespaceSupport();
-                    for (Name q : queriables) {                        
+                    for (Name q : queriables) {
                         String prefix = nss.getPrefix(q.getNamespaceURI());
-                        summary.add(prefix==null? q.getLocalPart() : prefix + ":" + q.getLocalPart());
+                        summary.add(prefix == null ? q.getLocalPart() : prefix + ":" + q.getLocalPart());
                     }
 
                 }
             }
-                
-            if(summary.size() > 0) {
+
+            if (summary.size() > 0) {
                 List<String> sorted = new ArrayList<String>(summary);
                 Collections.sort(sorted);
                 DomainType dt = owsf.createDomainType();
@@ -758,20 +741,18 @@ public class GetCapabilities {
         }
 
         // - Constraints
-        for (DomainType constraint : operationConstraints.get("GetDomain"))
-        {
+        for (DomainType constraint : operationConstraints.get("GetDomain")) {
             getDomain.getConstraint().add(EcoreUtil.copy(constraint));
         }
     }
 
     /**
-     * 
      * @param owsf
      * @param baseUrl
      * @param operationsMetadata
      */
     private void OperationMetadata_Transaction(Ows10Factory owsf, String baseUrl,
-            OperationsMetadataType operationsMetadata) {
+                                               OperationsMetadataType operationsMetadata) {
         // - Transaction
         OperationType transaction = owsf.createOperationType();
         operationsMetadata.getOperation().add(transaction);
@@ -800,136 +781,114 @@ public class GetCapabilities {
 
         transactionPost.getConstraint().add(transactionPostConstraints);
         transactionHTTP.getPost().add(transactionPost);
-        
+
         // - Parameters
-        for (DomainType param : operationParameters.get("Transaction"))
-        {
+        for (DomainType param : operationParameters.get("Transaction")) {
             // clone the object, as the caps decorators might want to modify it
             transaction.getParameter().add(EcoreUtil.copy(param));
         }
 
         // - Constraints
-        for (DomainType constraint : operationConstraints.get("Transaction"))
-        {
+        for (DomainType constraint : operationConstraints.get("Transaction")) {
             // clone the object, as the caps decorators might want to modify it
             transaction.getConstraint().add(EcoreUtil.copy(constraint));
         }
-        
+
     }
 
 }
 
 class CSWSpatialCapabilities extends SpatialCapabiltiesImpl {
-    static final SpatialOperator[] spatialOperators = new SpatialOperator[] {
-        spatialOperator("BBOX"),
-        spatialOperator("Equals"),
-        spatialOperator("Overlaps"),
-        spatialOperator("Disjoint"),
-        spatialOperator("Intersects"),
-        spatialOperator("Touches"),
-        spatialOperator("Crosses"),
-        spatialOperator("Within"),
-        spatialOperator("Contains"),
-        spatialOperator("Beyond"),
-        spatialOperator("DWithin") };
+    static final SpatialOperator[] spatialOperators = new SpatialOperator[]{
+            spatialOperator("BBOX"),
+            spatialOperator("Equals"),
+            spatialOperator("Overlaps"),
+            spatialOperator("Disjoint"),
+            spatialOperator("Intersects"),
+            spatialOperator("Touches"),
+            spatialOperator("Crosses"),
+            spatialOperator("Within"),
+            spatialOperator("Contains"),
+            spatialOperator("Beyond"),
+            spatialOperator("DWithin")};
 
-    static final GeometryOperand[] geometryOpertors = new GeometryOperand[] { 
-        GeometryOperand.get("http://www.opengis.net/gml", "Envelope"),
-        GeometryOperand.get("http://www.opengis.net/gml", "Point"), 
-        GeometryOperand.get("http://www.opengis.net/gml", "LineString"), 
-        GeometryOperand.get("http://www.opengis.net/gml", "Polygon") };
-    
+    static final GeometryOperand[] geometryOpertors = new GeometryOperand[]{
+            GeometryOperand.get("http://www.opengis.net/gml", "Envelope"),
+            GeometryOperand.get("http://www.opengis.net/gml", "Point"),
+            GeometryOperand.get("http://www.opengis.net/gml", "LineString"),
+            GeometryOperand.get("http://www.opengis.net/gml", "Polygon")};
+
     SpatialOperators spatialOperands = new SpatialOperatorsImpl();
-    
+
     List<GeometryOperand> geometryOperands = new LinkedList<GeometryOperand>();
-    
+
     @Override
     public Collection<GeometryOperand> getGeometryOperands() {
-        synchronized(geometryOperands)
-        {
-            if(geometryOperands == null || geometryOperands.isEmpty())
-            {
+        synchronized (geometryOperands) {
+            if (geometryOperands == null || geometryOperands.isEmpty()) {
                 // - sorting Geometry Operands
-                for (GeometryOperand operator : geometryOpertors)
-                {
+                for (GeometryOperand operator : geometryOpertors) {
                     geometryOperands.add(operator);
                 }
                 Collections.sort(geometryOperands, new Comparator<GeometryOperand>() {
 
                     @Override
                     public int compare(GeometryOperand o1, GeometryOperand o2) {
-                        if (o2.getLocalPart().contains("Envelope"))
-                        {
+                        if (o2.getLocalPart().contains("Envelope")) {
                             return -1;
                         }
 
-                        if (o2.getLocalPart().contains("Point"))
-                        {
-                            if (o1.getLocalPart().contains("Envelope"))
-                            {
+                        if (o2.getLocalPart().contains("Point")) {
+                            if (o1.getLocalPart().contains("Envelope")) {
                                 return -1;
-                            }
-                            else
-                            {
+                            } else {
                                 return 1;
                             }
                         }
 
-                        if (o2.getLocalPart().contains("LineString"))
-                        {
-                            if (o1.getLocalPart().contains("Point"))
-                            {
+                        if (o2.getLocalPart().contains("LineString")) {
+                            if (o1.getLocalPart().contains("Point")) {
                                 return -1;
-                            }
-                            else
-                            {
+                            } else {
                                 return 1;
                             }
                         }
-                        
-                        if (o2.getLocalPart().contains("Polygon"))
-                        {
-                            if (o1.getLocalPart().contains("LineString"))
-                            {
+
+                        if (o2.getLocalPart().contains("Polygon")) {
+                            if (o1.getLocalPart().contains("LineString")) {
                                 return -1;
-                            }
-                            else
-                            {
+                            } else {
                                 return 1;
                             }
                         }
-                        
+
                         return 0;
                     }
                 });
             }
         }
-        
+
         return geometryOperands;
     }
 
     @Override
     public SpatialOperatorsImpl getSpatialOperators() {
-        synchronized(spatialOperands)
-        {
-            if (spatialOperands == null || spatialOperands.getOperators() == null || spatialOperands.getOperators().size() == 0)
-            {
+        synchronized (spatialOperands) {
+            if (spatialOperands == null || spatialOperands.getOperators() == null || spatialOperands.getOperators().size() == 0) {
                 spatialOperands = new SpatialOperatorsImpl();
-                
-                for (SpatialOperator operator : spatialOperators)
-                {
-                    if(((SpatialOperatorsImpl)spatialOperands).getOperators() == null)
-                    {
-                        ((SpatialOperatorsImpl)spatialOperands).setOperators(new HashSet<SpatialOperator>());
+
+                for (SpatialOperator operator : spatialOperators) {
+                    if (((SpatialOperatorsImpl) spatialOperands).getOperators() == null) {
+                        ((SpatialOperatorsImpl) spatialOperands).setOperators(new HashSet<SpatialOperator>());
                     }
-                    ((SpatialOperatorsImpl)spatialOperands).getOperators().add(operator);
+                    ((SpatialOperatorsImpl) spatialOperands).getOperators().add(operator);
                 }
             }
         }
-        
+
         return (SpatialOperatorsImpl) spatialOperands;
     }
-    
+
     private static SpatialOperator spatialOperator(final String name) {
         return new SpatialOperator() {
 

@@ -21,11 +21,11 @@ import org.geowebcache.filter.parameters.CaseNormalizer;
 
 /**
  * Subform that displays basic information about a ParameterFilter
- * @author Kevin Smith, OpenGeo
  *
+ * @author Kevin Smith, OpenGeo
  */
-public class RegexParameterFilterSubform 
-    extends AbstractParameterFilterSubform<RegexParameterFilter> {
+public class RegexParameterFilterSubform
+        extends AbstractParameterFilterSubform<RegexParameterFilter> {
 
     static final private IValidator<String> REGEXP_VALIDATOR = new IValidator<String>() {
 
@@ -34,7 +34,7 @@ public class RegexParameterFilterSubform
         @Override
         public void validate(IValidatable<String> validatable) {
             final String regex = validatable.getValue();
-            try{
+            try {
                 Pattern.compile(regex);
             } catch (PatternSyntaxException ex) {
                 ValidationError error = new ValidationError();
@@ -43,32 +43,34 @@ public class RegexParameterFilterSubform
                 validatable.error(error);
             }
         }
-        
+
     };
 
-    /** serialVersionUID */
+    /**
+     * serialVersionUID
+     */
     private static final long serialVersionUID = 1L;
-    
+
     private Component normalize;
 
     public RegexParameterFilterSubform(String id,
-            IModel<RegexParameterFilter> model) {
+                                       IModel<RegexParameterFilter> model) {
         super(id, model);
-        
+
         final Component defaultValue;
-        
-        defaultValue = new TextField<String>("defaultValue", 
+
+        defaultValue = new TextField<String>("defaultValue",
                 new PropertyModel<String>(model, "defaultValue"));
         add(defaultValue);
-        
+
         final TextField<String> regex;
-        
+
         regex = new TextField<String>("regex", new PropertyModel<String>(model, "regex"));
-        
+
         regex.add(REGEXP_VALIDATOR);
-        
+
         add(regex);
-        
+
         normalize = new CaseNormalizerSubform("normalize", new PropertyModel<CaseNormalizer>(model, "normalize"));
         add(normalize);
     }

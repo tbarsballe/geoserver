@@ -10,16 +10,14 @@ import org.geoserver.test.onlineTest.setup.ReferenceDataOracleSetup;
 import org.geoserver.test.onlineTest.support.AbstractReferenceDataSetup;
 
 /**
- * 
  * @author Victor Tey(CSIRO Earth Science and Resource Engineering)
- *
  */
 public class DataReferenceWfsOracleWithJoiningTest extends DataReferenceWfsOnlineTest {
 
     public DataReferenceWfsOracleWithJoiningTest() throws Exception {
         super();
     }
-    
+
     @Override
     protected AppSchemaReferenceMockData createTestData() {
         return new AppSchemaReferenceMockData();

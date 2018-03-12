@@ -18,9 +18,8 @@ import org.springframework.mock.web.MockHttpServletResponse;
 
 /**
  * Tests the NcWMS GetTimeSeries method
- * 
- * @author Cesar Martinez Izquierdo
  *
+ * @author Cesar Martinez Izquierdo
  */
 public class NcWmsGetTimeSeriesTest extends WMSDimensionsTestSupport {
 
@@ -42,7 +41,6 @@ public class NcWmsGetTimeSeriesTest extends WMSDimensionsTestSupport {
 
     /**
      * Tests the number of output lines, the CSV headers and the returned date and value per each CSV record.
-     * 
      */
     @Test
     public void testCsvOutput() throws Exception {
@@ -106,7 +104,7 @@ public class NcWmsGetTimeSeriesTest extends WMSDimensionsTestSupport {
     }
 
     private void assertCsvLine(String message, String line, String expectedDate,
-            double expectedValue, double delta) {
+                               double expectedValue, double delta) {
         String[] lineSplit = line.split(",");
         String date = lineSplit[0];
         double value = Double.parseDouble(lineSplit[1]);
@@ -116,7 +114,6 @@ public class NcWmsGetTimeSeriesTest extends WMSDimensionsTestSupport {
 
     /**
      * Ensures we get the right results with shorter or wider time ranges
-     * 
      */
     @Test
     public void testTimeRanges() throws Exception {
@@ -151,7 +148,6 @@ public class NcWmsGetTimeSeriesTest extends WMSDimensionsTestSupport {
 
     /**
      * Tests the chart output
-     * 
      */
     @Test
     public void testChartOutput() throws Exception {

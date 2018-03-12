@@ -30,20 +30,20 @@ public class GdalTestUtil {
 
     static final String TEST_RESOURCE = "/org/geoserver/data/test/tazdem.tiff";
 
-    static final double[][] TEST_XYZ_DATA = new double[][] {
-            { 145.004166666664673, -41.004166666654271, 75 },
-            { 145.012499999997999, -41.004166666654271, 64 },
-            { 145.020833333331325, -41.004166666654271, 66 },
-            { 145.029166666664679, -41.004166666654271, 52 },
-            { 145.037499999998005, -41.004166666654271, 53 } };
+    static final double[][] TEST_XYZ_DATA = new double[][]{
+            {145.004166666664673, -41.004166666654271, 75},
+            {145.012499999997999, -41.004166666654271, 64},
+            {145.020833333331325, -41.004166666654271, 66},
+            {145.029166666664679, -41.004166666654271, 52},
+            {145.037499999998005, -41.004166666654271, 53}};
 
     static final int TEST_GRID_COLS = 120;
     static final double TEST_GRID_NODATA = -9999;
-    static final String[] TEST_GRID_HEADER_LABEL = new String[] {
-        "ncols", "nrows", "xllcorner", "yllcorner", "cellsize", "NODATA_value"
+    static final String[] TEST_GRID_HEADER_LABEL = new String[]{
+            "ncols", "nrows", "xllcorner", "yllcorner", "cellsize", "NODATA_value"
     };
-    static final double[] TEST_GRID_HEADER_DATA = new double[] {
-        TEST_GRID_COLS, 240, 144.999999999998, -42.999999999987, 0.008333333333, TEST_GRID_NODATA
+    static final double[] TEST_GRID_HEADER_DATA = new double[]{
+            TEST_GRID_COLS, 240, 144.999999999998, -42.999999999987, 0.008333333333, TEST_GRID_NODATA
     };
 
     static final double EQUALS_TOLERANCE = 1E-12;
@@ -62,13 +62,13 @@ public class GdalTestUtil {
                 if (conf != null) {
                     p.load(conf);
                 }
-                
+
                 GDAL_TRANSLATE = p.getProperty("gdal_translate");
                 // assume it's in the path if the property file hasn't been configured
-                if(GDAL_TRANSLATE == null)
+                if (GDAL_TRANSLATE == null)
                     GDAL_TRANSLATE = "gdal_translate";
                 GDAL_DATA = p.getProperty("gdalData");
-                
+
                 GdalWrapper gdal = new GdalWrapper(GDAL_TRANSLATE, Collections.singletonMap("GDAL_DATA", GDAL_DATA));
                 IS_GDAL_AVAILABLE = gdal.isAvailable();
             } catch (Exception e) {
@@ -81,21 +81,21 @@ public class GdalTestUtil {
 
         return IS_GDAL_AVAILABLE;
     }
-    
+
     public static String getGdalTranslate() {
-        if(isGdalAvailable())
+        if (isGdalAvailable())
             return GDAL_TRANSLATE;
         else
             return null;
     }
-    
+
     public static Map<String, String> getGdalData() {
-        if(isGdalAvailable())
+        if (isGdalAvailable())
             return Collections.singletonMap("GDAL_DATA", GDAL_DATA);
         else
             return Collections.emptyMap();
     }
-    
+
 
     public static void checkXyzData(InputStream is) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));

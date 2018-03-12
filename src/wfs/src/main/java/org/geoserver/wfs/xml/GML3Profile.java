@@ -22,7 +22,7 @@ public class GML3Profile extends TypeMappingProfile {
         // set with guaranteed iteration order, so that we can put deprecated elements only
         // after the ones that replaced them
         Set profile = new LinkedHashSet();
-        
+
         //basic
         profile.add(new NameImpl(GML.NAMESPACE, GML.MeasureType.getLocalPart()));
 
@@ -58,8 +58,8 @@ public class GML3Profile extends TypeMappingProfile {
         //profile.add( new NameImpl(  GML.NAMESPACE, GML.AbstractGeometryType.getLocalPart() ) );
         profile.add(new NameImpl(GML.NAMESPACE, GML.GeometryPropertyType.getLocalPart()));
         profile.add(new NameImpl(GML.NAMESPACE, GML.MultiGeometryPropertyType.getLocalPart()));
-        
-        profiles.add( new ProfileImpl( new GMLSchema(), profile ) );
+
+        profiles.add(new ProfileImpl(new GMLSchema(), profile));
     }
 
     public GML3Profile() {

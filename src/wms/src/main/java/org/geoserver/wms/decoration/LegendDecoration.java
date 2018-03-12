@@ -50,11 +50,11 @@ public class LegendDecoration extends AbstractDispatcherCallback implements MapD
     private List<String> layers;
     private boolean useSldTitle;
 
-    public LegendDecoration(WMS wms){
+    public LegendDecoration(WMS wms) {
         this.wms = wms;
         this.layers = new ArrayList<String>();
     }
-    
+
     @Override
     public void finished(Request request) {
         this.legends.remove();
@@ -69,7 +69,7 @@ public class LegendDecoration extends AbstractDispatcherCallback implements MapD
         }
 
         String sldTitle = this.options.remove("sldTitle");
-        if("true".equalsIgnoreCase(sldTitle) || "on".equalsIgnoreCase(sldTitle)) {
+        if ("true".equalsIgnoreCase(sldTitle) || "on".equalsIgnoreCase(sldTitle)) {
             useSldTitle = true;
         }
     }
@@ -81,7 +81,7 @@ public class LegendDecoration extends AbstractDispatcherCallback implements MapD
         double scaleFactor = dpi / standardDpi;
 
         List<LayerLegend> layerLegends = new ArrayList<LayerLegend>();
-        for(Layer layer : mapContext.layers()) {
+        for (Layer layer : mapContext.layers()) {
             Rule[] applicableRules = LegendUtils.getApplicableRules(layer.getStyle().featureTypeStyles().toArray(new FeatureTypeStyle[0]), scaleDenominator);
             if ((!layers.isEmpty() && !layers.contains(layer.getTitle())) || applicableRules.length == 0) {
                 continue;
@@ -95,15 +95,15 @@ public class LegendDecoration extends AbstractDispatcherCallback implements MapD
             request.setStyle(layer.getStyle());
             request.setWms(wms);
             final Request dispatcherRequest = Dispatcher.REQUEST.get();
-            if(dispatcherRequest != null) {
+            if (dispatcherRequest != null) {
                 request.setKvp(dispatcherRequest.getKvp());
                 request.setRawKvp(dispatcherRequest.getRawKvp());
             }
-            
+
 
             Map legendOptions = new CaseInsensitiveMap(options);
             legendOptions.putAll(mapContext.getRequest().getFormatOptions());
-            if(dispatcherRequest != null && dispatcherRequest.getKvp().get("legend_options") != null) {
+            if (dispatcherRequest != null && dispatcherRequest.getKvp().get("legend_options") != null) {
                 legendOptions.putAll((Map) dispatcherRequest.getKvp().get("legend_options"));
             }
             request.setLegendOptions(legendOptions);
@@ -143,7 +143,7 @@ public class LegendDecoration extends AbstractDispatcherCallback implements MapD
 
         int width = 0;
         int height = 0;
-        for(LayerLegend legend : layerLegends) {
+        for (LayerLegend legend : layerLegends) {
             int legendHeight = legend.legend.getHeight();
             int legendWidth = legend.legend.getWidth();
             int titleWidth = 0;
@@ -182,7 +182,7 @@ public class LegendDecoration extends AbstractDispatcherCallback implements MapD
         int heightOffset = 0;
 
         Iterator<LayerLegend> imageIterator = legends.iterator();
-        while(imageIterator.hasNext()) {
+        while (imageIterator.hasNext()) {
             LayerLegend legend = imageIterator.next();
 
             int height = legend.legend.getHeight();
@@ -201,66 +201,66 @@ public class LegendDecoration extends AbstractDispatcherCallback implements MapD
 
             // output image
             BufferedImage finalLegend =
-                ImageUtils.createImage(
-                    strokeWidth,
-                    strokeHeight,
-                    (IndexColorModel) null,
-                    false
-                );
+                    ImageUtils.createImage(
+                            strokeWidth,
+                            strokeHeight,
+                            (IndexColorModel) null,
+                            false
+                    );
             Graphics2D finalGraphics =
-                ImageUtils.prepareTransparency(
-                    false,
-                    LegendUtils.getBackgroundColor(legend.request),
-                    finalLegend,
-                    new HashMap<RenderingHints.Key, Object>()
-                );
+                    ImageUtils.prepareTransparency(
+                            false,
+                            LegendUtils.getBackgroundColor(legend.request),
+                            finalLegend,
+                            new HashMap<RenderingHints.Key, Object>()
+                    );
 
             // title
             int titleHeightOffset = 0;
             if (legend.title != null) {
                 finalGraphics.drawImage(
-                    legend.title,
-                    ((strokeWidth - legend.title.getWidth()) / 2), // center
-                    (strokeHeight - height),
-                    null
+                        legend.title,
+                        ((strokeWidth - legend.title.getWidth()) / 2), // center
+                        (strokeHeight - height),
+                        null
                 );
                 titleHeightOffset += legend.title.getHeight();
             }
 
             // legend
             finalGraphics.drawImage(
-                legend.legend,
-                (strokeWidth - width) / 2, // place on the left
-                //(strokeWidth - legend.legend.getWidth()) / 2, // center
-                (strokeHeight - height) + titleHeightOffset,
-                null
+                    legend.legend,
+                    (strokeWidth - width) / 2, // place on the left
+                    //(strokeWidth - legend.legend.getWidth()) / 2, // center
+                    (strokeHeight - height) + titleHeightOffset,
+                    null
             );
 
             // border
             finalGraphics.setColor(LegendUtils.DEFAULT_BORDER_COLOR);
             finalGraphics.fill(
-                new BasicStroke((float) scaleFactor).createStrokedShape(
-                    new Rectangle(
-                        0,
-                        0,
-                        strokeWidth - 1,
-                        strokeHeight - 1
+                    new BasicStroke((float) scaleFactor).createStrokedShape(
+                            new Rectangle(
+                                    0,
+                                    0,
+                                    strokeWidth - 1,
+                                    strokeHeight - 1
+                            )
                     )
-                )
             );
 
             // draw output image
             g2d.drawImage(
-                finalLegend,
-                mainClip.x + (int) Math.ceil((paintArea.getWidth() - strokeWidth) / 2),
-                mainClip.y + heightOffset,
-                null
+                    finalLegend,
+                    mainClip.x + (int) Math.ceil((paintArea.getWidth() - strokeWidth) / 2),
+                    mainClip.y + heightOffset,
+                    null
             );
 
             heightOffset += strokeHeight + (strokeHeight * BETWEEN_LEGENDS_PERCENT_INDENT);
         }
     }
-    
+
     private String findTitle(Layer layer, Catalog catalog) {
         if (layer.getTitle() == null) {
             return null;
@@ -271,10 +271,11 @@ public class LegendDecoration extends AbstractDispatcherCallback implements MapD
                 nameparts[1], ResourceInfo.class) : catalog.getResourceByName(nameparts[0],
                 ResourceInfo.class);
 
-        if (useSldTitle && layer.getStyle() != null && layer.getStyle().getDescription() 
+        if (useSldTitle && layer.getStyle() != null && layer.getStyle().getDescription()
                 != null && layer.getStyle().getDescription().getTitle() != null) {
             return layer.getStyle().getDescription().getTitle().toString();
-        } if (resource != null) {
+        }
+        if (resource != null) {
             return resource.getTitle();
         } else {
             return layer.getTitle();

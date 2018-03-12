@@ -56,7 +56,7 @@ public class GeoJSONFormat extends VectorFormat {
     @Override
     public FeatureReader read(ImportData data, ImportTask item) throws IOException {
         final SimpleFeatureType featureType =
-            (SimpleFeatureType) item.getMetadata().get(FeatureType.class);
+                (SimpleFeatureType) item.getMetadata().get(FeatureType.class);
         FeatureJSON json = new FeatureJSON();
         json.setFeatureType(featureType);
         final FeatureIterator it = json.streamFeatureCollection(file(data, item));
@@ -90,17 +90,17 @@ public class GeoJSONFormat extends VectorFormat {
     public void dispose(FeatureReader reader, ImportTask item) throws IOException {
         reader.close();
     }
-    
+
     @Override
     public int getFeatureCount(ImportData data, ImportTask item) throws IOException {
         return -1;
     }
-    
+
     @Override
     public String getName() {
         return "GeoJSON";
     }
-    
+
     @Override
     public boolean canRead(ImportData data) throws IOException {
         Optional<File> file = maybeFile(data);
@@ -118,8 +118,7 @@ public class GeoJSONFormat extends VectorFormat {
                 if (it.hasNext()) {
                     return (SimpleFeature) it.next();
                 }
-            }
-            finally {
+            } finally {
                 it.close();
             }
         } catch (Exception e) {
@@ -129,24 +128,23 @@ public class GeoJSONFormat extends VectorFormat {
     }
 
     @Override
-    public StoreInfo createStore(ImportData data, WorkspaceInfo workspace, Catalog catalog) 
-        throws IOException {
+    public StoreInfo createStore(ImportData data, WorkspaceInfo workspace, Catalog catalog)
+            throws IOException {
         // direct import not supported
         return null;
     }
-    
+
     @Override
-    public List<ImportTask> list(ImportData data, Catalog catalog, ProgressMonitor monitor) 
-        throws IOException {
+    public List<ImportTask> list(ImportData data, Catalog catalog, ProgressMonitor monitor)
+            throws IOException {
 
         if (data instanceof Directory) {
             List<ImportTask> tasks = new ArrayList<ImportTask>();
-            for (FileData file : ((Directory)data).getFiles()) {
+            for (FileData file : ((Directory) data).getFiles()) {
                 tasks.add(task(file, catalog));
             }
             return tasks;
-        }
-        else {
+        } else {
             return Arrays.asList(task(data, catalog));
         }
     }
@@ -185,8 +183,7 @@ public class GeoJSONFormat extends VectorFormat {
         }
         try {
             crs = crs != null ? crs : CRS.decode("EPSG:4326");
-        } 
-        catch (Exception e) {
+        } catch (Exception e) {
             throw new IOException(e);
         }
 
@@ -218,11 +215,10 @@ public class GeoJSONFormat extends VectorFormat {
                 @Override
                 public boolean apply(FileData input) {
                     return FilenameUtils.getBaseName(input.getFile().getName())
-                        .equals(item.getLayer().getName());
+                            .equals(item.getLayer().getName());
                 }
             }).getFile();
-        }
-        else {
+        } else {
             return maybeFile(data).get();
         }
     }
@@ -236,14 +232,13 @@ public class GeoJSONFormat extends VectorFormat {
 
     String srs(CoordinateReferenceSystem crs) {
         Integer epsg = null;
-        
+
         try {
             epsg = CRS.lookupEpsgCode(crs, false);
             if (epsg == null) {
                 epsg = CRS.lookupEpsgCode(crs, true);
             }
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             LOG.log(Level.FINER, "Error looking up epsg code", e);
         }
         return epsg != null ? "EPSG:" + epsg : null;

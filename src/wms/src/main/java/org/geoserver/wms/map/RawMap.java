@@ -16,7 +16,7 @@ import org.geoserver.wms.WebMap;
 
 /**
  * An already encoded {@link WebMap} that holds the raw response content in a byte array.
- * 
+ *
  * @author Gabriel Roldan
  * @see RawMapResponse
  */
@@ -35,7 +35,7 @@ public class RawMap extends WebMap {
     }
 
     public RawMap(final WMSMapContent mapContent, final ByteArrayOutputStream buff,
-            final String mimeType) {
+                  final String mimeType) {
         super(mapContent);
         this.buffer = buff;
         setMimeType(mimeType);
@@ -58,7 +58,7 @@ public class RawMap extends WebMap {
             throw new IllegalStateException();
         }
     }
-    
+
     @Override
     public void disposeInternal() {
         buffer = null;

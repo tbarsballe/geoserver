@@ -18,7 +18,7 @@ import org.opengis.util.InternationalString;
 
 /**
  * A process factory wrapper that applies the choices of a given {@link ProcessSelector}
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class SelectingProcessFactory extends DelegatingProcessFactory {
@@ -34,7 +34,7 @@ public class SelectingProcessFactory extends DelegatingProcessFactory {
     public Set<Name> getNames() {
         // filter out the processes we want to hide
         Set<Name> names = new LinkedHashSet<Name>(super.getNames());
-        for (Iterator<Name> it = names.iterator(); it.hasNext();) {
+        for (Iterator<Name> it = names.iterator(); it.hasNext(); ) {
             Name name = (Name) it.next();
             if (!selector.allowProcess(name)) {
                 it.remove();

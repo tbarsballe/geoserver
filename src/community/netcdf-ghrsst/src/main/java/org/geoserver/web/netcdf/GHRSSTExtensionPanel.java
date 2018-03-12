@@ -32,14 +32,14 @@ public class GHRSSTExtensionPanel extends NetCDFExtensionPanel {
 
     static final List<String> PROCESSING_LEVELS = Arrays.asList("L0", "L1A", "L1B", "L2P", "L3U", "L3C", "L3S", "L4");
 
-    static final List<String> SST_TYPES = Arrays.asList("SSTint", "SSTskin", "SSTsubskin", "SSTdepth", "SSTfnd", 
+    static final List<String> SST_TYPES = Arrays.asList("SSTint", "SSTskin", "SSTsubskin", "SSTdepth", "SSTfnd",
             "SSTblend");
 
     /**
      * Product Strings. This list is incomplete and conteplates only L3, the actual list is much larger and depends
      * on the RDAC, so some complex autocomplete code should be written instead (TODO)
      */
-    static final List<String> PRODUCT_STRINGS = Arrays.asList("AVHRR7_D", "AVHRR9_D", "AVHRR10_D", "AVHRR11_D", 
+    static final List<String> PRODUCT_STRINGS = Arrays.asList("AVHRR7_D", "AVHRR9_D", "AVHRR10_D", "AVHRR11_D",
             "AVHRR12_D", "AVHRR14_D", "AVHRR15_D", "AVHRR16_D", "AVHRR17_D", "AVHRR18_D", "AVHRR19_D", "AVHRR_Pathfinder",
             "AVHRR_METOP_A", "AATSR", "ATSR1", "ATSR2");
 
@@ -62,14 +62,14 @@ public class GHRSSTExtensionPanel extends NetCDFExtensionPanel {
         WebMarkupContainer settings = new WebMarkupContainer("settings");
         settings.setOutputMarkupId(true);
         add(settings);
-        this.rdac = getAutocompleter("rdac", new MetadataMapModel<>(metadataModel, 
+        this.rdac = getAutocompleter("rdac", new MetadataMapModel<>(metadataModel,
                 GHRSSTEncoder
-                .SETTINGS_RDAC_KEY, String.class), RDACS);
+                        .SETTINGS_RDAC_KEY, String.class), RDACS);
         rdac.setRequired(true);
         settings.add(rdac);
         this.processingLevel = getAutocompleter("processingLevel", new MetadataMapModel<>
                 (metadataModel,
-                GHRSSTEncoder.SETTINGS_PROCESSING_LEVEL_KEY, String.class), PROCESSING_LEVELS);
+                        GHRSSTEncoder.SETTINGS_PROCESSING_LEVEL_KEY, String.class), PROCESSING_LEVELS);
         processingLevel.setRequired(true);
         settings.add(processingLevel);
         this.sstType = getAutocompleter("sstType", new MetadataMapModel<>(metadataModel, GHRSSTEncoder
@@ -80,7 +80,7 @@ public class GHRSSTExtensionPanel extends NetCDFExtensionPanel {
                 GHRSSTEncoder.SETTINGS_PRODUCT_STRING, String.class), PRODUCT_STRINGS);
         productString.setRequired(true);
         settings.add(productString);
-        
+
         // enable/disable on open 
         settings.visitChildren((component, visit) -> {
             component.setEnabled(Boolean.TRUE.equals(enabled.getModelObject()));

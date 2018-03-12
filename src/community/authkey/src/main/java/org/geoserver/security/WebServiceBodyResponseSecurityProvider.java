@@ -13,9 +13,8 @@ import org.geotools.util.logging.Logging;
 
 /**
  * Security Provider to support {@linkplain WebServiceBodyResponseUserGroupService}
- * 
- * @author Alessio Fabiani, GeoSolutions S.A.S.
  *
+ * @author Alessio Fabiani, GeoSolutions S.A.S.
  */
 public class WebServiceBodyResponseSecurityProvider extends GeoServerSecurityProvider {
 

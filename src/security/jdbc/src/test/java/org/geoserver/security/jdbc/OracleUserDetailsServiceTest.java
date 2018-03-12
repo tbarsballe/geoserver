@@ -9,10 +9,10 @@ package org.geoserver.security.jdbc;
 
 public class OracleUserDetailsServiceTest extends JDBCUserDetailsServiceTest {
 
-    
+
     @Override
     protected String getFixtureId() {
         return "oracle";
     }
-        
+
 }

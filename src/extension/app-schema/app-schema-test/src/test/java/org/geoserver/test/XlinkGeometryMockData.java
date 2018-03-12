@@ -7,13 +7,11 @@
 package org.geoserver.test;
 
 /**
- * 
  * @author Niels Charlier, Curtin University Of Technology
- * 
  */
 
 public class XlinkGeometryMockData extends AbstractAppSchemaMockData {
-    
+
     /**
      * Prefix for ex namespace.
      */
@@ -31,7 +29,7 @@ public class XlinkGeometryMockData extends AbstractAppSchemaMockData {
     @Override
     public void addContent() {
         putNamespace(EX_PREFIX, EX_URI);
-        
+
         addFeatureType(EX_PREFIX, "MyTestFeature", "XlinkGeometry.xml", "XlinkGeometry.properties", "XlinkGeometry.xsd");
 
     }

@@ -24,7 +24,7 @@ public class RuleMapJSONConverter extends MapJSONConverter {
         // pretty specific, but leave some room for more specific converters just in case
         return (ExtensionPriority.HIGHEST + ExtensionPriority.LOWEST) / 2;
     }
-    
+
     @Override
     protected boolean supports(Class<?> clazz) {
         return RuleMap.class.isAssignableFrom(clazz);
@@ -34,7 +34,7 @@ public class RuleMapJSONConverter extends MapJSONConverter {
     public Map<?, ?> readInternal(Class<? extends Map<?, ?>> clazz, HttpInputMessage inputMessage)
             throws IOException, HttpMessageNotReadableException {
         // superclass generates a generic JSON map, we need a specific one to please Spring
-        
+
         @SuppressWarnings("unchecked")
         Map<String, String> source = (Map<String, String>) super.readInternal(clazz, inputMessage);
         return new RuleMap<>(source);

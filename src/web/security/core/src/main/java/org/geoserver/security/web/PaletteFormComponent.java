@@ -34,8 +34,8 @@ public class PaletteFormComponent<T> extends FormComponentPanel {
      */
     List<Behavior> toAdd = new ArrayList<>();
 
-    public PaletteFormComponent(String id, IModel<List<T>> model, IModel<Collection<T>> choicesModel, 
-            ChoiceRenderer<T> renderer) {
+    public PaletteFormComponent(String id, IModel<List<T>> model, IModel<Collection<T>> choicesModel,
+                                ChoiceRenderer<T> renderer) {
         super(id, new Model());
 
         add(palette = new Palette<T>("palette", model, choicesModel, renderer, 10, false) {
@@ -48,13 +48,13 @@ public class PaletteFormComponent<T> extends FormComponentPanel {
                 toAdd.clear();
                 return rec;
             }
-            
+
             /**
              * Override otherwise the header is not i18n'ized
              */
             @Override
             public Component newSelectedHeader(final String componentId) {
-                
+
                 return new Label(componentId, new ResourceModel(getSelectedHeaderPropertyKey()));
             }
 
@@ -73,7 +73,7 @@ public class PaletteFormComponent<T> extends FormComponentPanel {
 
     /**
      * @return the default key, subclasses may override, if "Selected" is not
-     *         illustrative enough
+     * illustrative enough
      */
     protected String getSelectedHeaderPropertyKey() {
         return "PaletteFormComponent.selectedHeader";
@@ -81,19 +81,18 @@ public class PaletteFormComponent<T> extends FormComponentPanel {
 
     /**
      * @return the default key, subclasses may override, if "Available" is not
-     *         illustrative enough
+     * illustrative enough
      */
     protected String getAvaliableHeaderPropertyKey() {
         return "PaletteFormComponent.availableHeader";
     }
-    
+
     @Override
     public Component add(Behavior... behaviors) {
         if (palette.getRecorderComponent() == null) {
             //stage for them for later
             toAdd.addAll(Arrays.asList(behaviors));
-        }
-        else {
+        } else {
             //add them now
             palette.getRecorderComponent().add(behaviors);
         }

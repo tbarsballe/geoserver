@@ -41,7 +41,6 @@ import org.geotools.arcsde.session.UnavailableConnectionException;
 import org.junit.Test;
 
 /**
- * 
  * @author Gabriel Roldan
  */
 public class ArcSDECoverageStoreEditPanelTest extends GeoServerWicketTestSupport {
@@ -53,7 +52,7 @@ public class ArcSDECoverageStoreEditPanelTest extends GeoServerWicketTestSupport
     private Form<CoverageStoreInfo> editForm;
 
     @SuppressWarnings("unchecked")
-	private ArcSDECoverageStoreEditPanel startPanelToEditStore() {
+    private ArcSDECoverageStoreEditPanel startPanelToEditStore() {
         final Catalog catalog = getCatalog();
         storeInfo = catalog.getFactory().createCoverageStore();
         storeInfo.setDescription("fake arcsde store");
@@ -80,7 +79,7 @@ public class ArcSDECoverageStoreEditPanelTest extends GeoServerWicketTestSupport
     }
 
     @SuppressWarnings("unchecked")
-	private ArcSDECoverageStoreEditPanel startPanelForNewStore() {
+    private ArcSDECoverageStoreEditPanel startPanelForNewStore() {
         login();
         page = new CoverageStoreNewPage(ArcSDERasterFormat.getInstance().getName());
         tester.startPage(page);
@@ -197,6 +196,7 @@ public class ArcSDECoverageStoreEditPanelTest extends GeoServerWicketTestSupport
                     public ISession getSession() throws IOException, UnavailableConnectionException {
                         return getSession(true);
                     }
+
                     public ISession getSession(final boolean transactional) throws IOException, UnavailableConnectionException {
                         return new SessionWrapper(null) {
                             @Override

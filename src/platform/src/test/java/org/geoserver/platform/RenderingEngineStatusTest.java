@@ -3,7 +3,7 @@
  * application directory.
  */
 package org.geoserver.platform;
- 
+
 import static org.junit.Assert.*;
 
 import java.util.Optional;
@@ -52,9 +52,9 @@ public class RenderingEngineStatusTest {
         }
         String config = System.getProperty("sun.java2d.renderer");
         if (config != null) {
-             msg = String.format("Java 2D configured with %s.\nProvider: %s\nConfiguration: -Dsun.java2d.renderer=%s", engine,provider,config);
+            msg = String.format("Java 2D configured with %s.\nProvider: %s\nConfiguration: -Dsun.java2d.renderer=%s", engine, provider, config);
         } else {
-             msg = String.format("Java 2D configured with %s.\nProvider: %s\n", engine,provider);
+            msg = String.format("Java 2D configured with %s.\nProvider: %s\n", engine, provider);
         }
         if (provider.equals("Marlin") || provider.equals("OracleJDK") || provider.equals("OpenJDK")) {
             assertEquals(msg, statusMessage.get());

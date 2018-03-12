@@ -12,7 +12,6 @@ import org.geotools.filter.expression.PropertyAccessorFactory;
 
 /**
  * Property accessor for GeoServer {@link Info} configuration objects.
- * 
  */
 public class CatalogPropertyAccessorFactory implements PropertyAccessorFactory {
 
@@ -20,7 +19,7 @@ public class CatalogPropertyAccessorFactory implements PropertyAccessorFactory {
 
     @Override
     public PropertyAccessor createPropertyAccessor(Class<?> type, String xpath, Class<?> target,
-            Hints hints) {
+                                                   Hints hints) {
         if (Info.class.isAssignableFrom(type)) {
             return INSTANCE;
         }

@@ -27,7 +27,7 @@ public class GeoServerRoleFilterTest extends GeoServerSecurityTestSupport {
 
     @Test
     public void testFilterChainWithEnabled() throws Exception {
-        
+
         GeoServerSecurityManager secMgr = getSecurityManager();
         RoleFilterConfig config = new RoleFilterConfig();
         config.setName("roleConverter");
@@ -36,31 +36,31 @@ public class GeoServerRoleFilterTest extends GeoServerSecurityTestSupport {
         config.setHttpResponseHeaderAttrForIncludedRoles("ROLES");
         secMgr.saveFilter(config);
 
-        
+
         MockHttpServletRequest request = createRequest("/foo");
-        
+
         MockHttpServletResponse response = new MockHttpServletResponse();
         Servlet servlet = EasyMock.createNiceMock(Servlet.class);
         MockFilterChain chain = new MockFilterChain(servlet, getSecurityManager().loadFilter("roleConverter"));
-        
-        GeoServerSecurityFilterChainProxy filterChainProxy = 
-            GeoServerExtensions.bean(GeoServerSecurityFilterChainProxy.class);
+
+        GeoServerSecurityFilterChainProxy filterChainProxy =
+                GeoServerExtensions.bean(GeoServerSecurityFilterChainProxy.class);
         filterChainProxy.doFilter(request, response, chain);
-        assertEquals(GeoServerRole.ANONYMOUS_ROLE.getAuthority(),response.getHeader("ROLES"));        
+        assertEquals(GeoServerRole.ANONYMOUS_ROLE.getAuthority(), response.getHeader("ROLES"));
     }
 
     @Test
     public void testFilterChainWithDisabled() throws Exception {
 
         MockHttpServletRequest request = createRequest("/foo");
-        
+
         MockHttpServletResponse response = new MockHttpServletResponse();
         MockFilterChain chain = new MockFilterChain();
-        
-        GeoServerSecurityFilterChainProxy filterChainProxy = 
-            GeoServerExtensions.bean(GeoServerSecurityFilterChainProxy.class);
+
+        GeoServerSecurityFilterChainProxy filterChainProxy =
+                GeoServerExtensions.bean(GeoServerSecurityFilterChainProxy.class);
         filterChainProxy.doFilter(request, response, chain);
         assertNull(response.getHeader("ROLES"));
-        
+
     }
 }

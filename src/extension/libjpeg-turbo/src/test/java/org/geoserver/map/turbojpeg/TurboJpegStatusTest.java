@@ -6,6 +6,7 @@
 package org.geoserver.map.turbojpeg;
 
 import static org.junit.Assert.*;
+
 import org.junit.Test;
 
 public class TurboJpegStatusTest {

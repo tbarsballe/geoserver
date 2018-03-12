@@ -8,11 +8,11 @@ package org.geoserver.security.config;
 
 /**
  * Base class for named security service configuration objects.
- * 
+ * <p>
  * In general, developers seeking to implement this interface should start from
  * {@link BaseSecurityNamedServiceConfig } which provides valid default
  * implementations for all methods in this interface.
- * 
+ *
  * @author christian
  */
 public interface SecurityNamedServiceConfig extends SecurityConfig {
@@ -28,7 +28,7 @@ public interface SecurityNamedServiceConfig extends SecurityConfig {
 
     /**
      * Sets internal id of the config object.
-     * 
+     * <p>
      * <p>
      * This method is generally not useful to client code; the ID property is
      * used within the configuration persistence system.
@@ -60,7 +60,7 @@ public interface SecurityNamedServiceConfig extends SecurityConfig {
      * Method for the config object to initialize any properties before being saved for the first
      * time.
      * <p>
-     * This method would typically be used to initialize properties not explicitly set by the 
+     * This method would typically be used to initialize properties not explicitly set by the
      * user, but that can be set based on other user initialized properties.
      * </p>
      */

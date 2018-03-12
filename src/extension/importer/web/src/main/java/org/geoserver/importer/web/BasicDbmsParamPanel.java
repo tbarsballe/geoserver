@@ -17,7 +17,8 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.PropertyModel;
 
 /**
- * Panel for the basic dbms parameters 
+ * Panel for the basic dbms parameters
+ *
  * @author Andrea Aime - OpenGeo
  */
 @SuppressWarnings("serial")
@@ -37,11 +38,11 @@ class BasicDbParamPanel extends Panel {
     public BasicDbParamPanel(String id, String host, int port, boolean databaseRequired) {
         this(id, host, port, null, null, null, databaseRequired);
     }
-    
+
     public BasicDbParamPanel(String id, String host, int port, String database, String schema,
-        String username, boolean databaseRequired) {
+                             String username, boolean databaseRequired) {
         super(id);
-        
+
         this.host = host;
         this.port = port;
         this.database = database;
@@ -56,10 +57,10 @@ class BasicDbParamPanel extends Panel {
         add(new TextField("database", new PropertyModel(this, "database"))
                 .setRequired(databaseRequired));
         add(new TextField("schema", new PropertyModel(this, "schema")));
-        
+
         connPoolLink = toggleConnectionPoolLink();
         add(connPoolLink);
-        
+
         connPoolPanelContainer = new WebMarkupContainer("connPoolPanelContainer");
         connPoolPanelContainer.setOutputMarkupId(true);
         connPoolPanel = new ConnectionPoolParamPanel("connPoolPanel", true);
@@ -67,11 +68,9 @@ class BasicDbParamPanel extends Panel {
         connPoolPanelContainer.add(connPoolPanel);
         add(connPoolPanelContainer);
     }
-    
+
     /**
      * Toggles the connection pool param panel
-     * 
-     *
      */
     Component toggleConnectionPoolLink() {
         AjaxLink connPoolLink = new AjaxLink("connectionPoolLink") {
@@ -84,7 +83,7 @@ class BasicDbParamPanel extends Panel {
             }
         };
         connPoolLink.add(new AttributeModifier("class", new AbstractReadOnlyModel() {
-            
+
             @Override
             public Object getObject() {
                 return connPoolPanel.isVisible() ? "expanded" : "collapsed";

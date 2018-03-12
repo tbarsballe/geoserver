@@ -16,6 +16,7 @@ import org.vfny.geoserver.wcs.WcsException.WcsExceptionCode;
 /**
  * Parses the grid origin into a double[]
  * TODO: consider use a {@link DirectPosition} instead?
+ *
  * @author Andrea Aime
  */
 public class GridOriginKvpParser extends KvpParser {
@@ -41,7 +42,7 @@ public class GridOriginKvpParser extends KvpParser {
                         WcsExceptionCode.InvalidParameterValue, "GridOrigin");
             }
         }
-        
+
         return origins;
     }
 }

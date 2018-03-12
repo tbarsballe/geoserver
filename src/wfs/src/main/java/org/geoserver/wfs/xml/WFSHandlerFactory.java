@@ -31,7 +31,6 @@ import org.geotools.xml.impl.ParserHandler;
  * defined as wfs feature types.
  *
  * @author Justin Deoliveira, The Open Planning Project
- *
  */
 public class WFSHandlerFactory implements HandlerFactory {
     static Logger logger = org.geotools.util.logging.Logging.getLogger("org.geoserver.wfs");
@@ -65,13 +64,13 @@ public class WFSHandlerFactory implements HandlerFactory {
 
         try {
             //look for a FeatureType
-            FeatureTypeInfo meta = catalog.getFeatureTypeByName( namespaceURI, name.getLocalPart() );
+            FeatureTypeInfo meta = catalog.getFeatureTypeByName(namespaceURI, name.getLocalPart());
 
             if (meta != null) {
                 //found it
                 XSDSchema schema = schemaBuilder.build(meta, null);
 
-                for (Iterator e = schema.getElementDeclarations().iterator(); e.hasNext();) {
+                for (Iterator e = schema.getElementDeclarations().iterator(); e.hasNext(); ) {
                     XSDElementDeclaration element = (XSDElementDeclaration) e.next();
 
                     if (name.getLocalPart().equals(element.getName())) {
@@ -87,12 +86,12 @@ public class WFSHandlerFactory implements HandlerFactory {
     }
 
     public ElementHandler createElementHandler(XSDElementDeclaration e, Handler parent,
-        ParserHandler parser) {
+                                               ParserHandler parser) {
         return null;
     }
 
     public AttributeHandler createAttributeHandler(XSDAttributeDeclaration a, Handler parent,
-        ParserHandler parser) {
+                                                   ParserHandler parser) {
         return null;
     }
 }

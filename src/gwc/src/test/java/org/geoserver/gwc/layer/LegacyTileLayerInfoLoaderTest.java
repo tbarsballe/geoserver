@@ -43,7 +43,7 @@ public class LegacyTileLayerInfoLoaderTest {
         assertNull(LegacyTileLayerInfoLoader.load(layer));
 
         TileLayerInfoUtil.checkAutomaticStyles(layer, defaultVectorInfo);
-        
+
         LegacyTileLayerInfoLoader.save(defaultVectorInfo, layer.getMetadata());
 
         GeoServerTileLayerInfo info2 = LegacyTileLayerInfoLoader.load(layer);

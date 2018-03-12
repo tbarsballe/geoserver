@@ -24,7 +24,7 @@ import org.opengis.filter.sort.SortOrder;
 
 /**
  * In memory implementation of the {@link ProcessStatusStore} interface
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class MemoryProcessStatusStore implements ProcessStatusStore {
@@ -104,11 +104,11 @@ public class MemoryProcessStatusStore implements ProcessStatusStore {
                 } else {
                     String property = sort.getPropertyName().getPropertyName();
                     //map property to ExecutionStatus values
-                    if("node".equalsIgnoreCase(property)) {
+                    if ("node".equalsIgnoreCase(property)) {
                         property = "nodeId";
-                    }else if("user".equalsIgnoreCase(property)) {
+                    } else if ("user".equalsIgnoreCase(property)) {
                         property = "userName";
-                    }else if("task".equalsIgnoreCase(property)) {
+                    } else if ("task".equalsIgnoreCase(property)) {
                         property = "task";
                     }
                     Comparator<ExecutionStatus> comparator = new BeanComparator(property);

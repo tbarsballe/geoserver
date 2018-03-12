@@ -34,11 +34,9 @@ import static org.geoserver.data.test.MockData.LAKES;
 import static org.junit.Assert.*;
 
 /**
- * 
  * Test For WMS GetMap Output Format for GeoPackage
- * 
- * @author Justin Deoliveira, Boundless
  *
+ * @author Justin Deoliveira, Boundless
  */
 public class GeoPackageGetMapOutputFormatTest extends WMSTestSupport {
 
@@ -59,8 +57,8 @@ public class GeoPackageGetMapOutputFormatTest extends WMSTestSupport {
     public void testTileEntries() throws Exception {
         WMSMapContent mapContent = createMapContent(WORLD, LAKES);
         mapContent.getRequest().setBbox(
-            new Envelope(-0.17578125, -0.087890625, 0.17578125, 0.087890625));
-        
+                new Envelope(-0.17578125, -0.087890625, 0.17578125, 0.087890625));
+
         WebMap map = format.produceMap(mapContent);
         GeoPackage geopkg = createGeoPackage(map);
 
@@ -109,9 +107,9 @@ public class GeoPackageGetMapOutputFormatTest extends WMSTestSupport {
         File f = File.createTempFile("temp", ".gpkg", new File("target"));
         FileOutputStream fout = new FileOutputStream(f);
         rawMap.writeTo(fout);
-        fout.flush(); 
+        fout.flush();
         fout.close();
-        
+
         return new GeoPackage(f);
 //        File f = File.createTempFile("geopkg", "zip", new File("target"));
 //        FileOutputStream fout = new FileOutputStream(f);
@@ -134,10 +132,12 @@ public class GeoPackageGetMapOutputFormatTest extends WMSTestSupport {
 
     protected GetMapRequest createGetMapRequest(QName[] layerNames) {
         GetMapRequest request = super.createGetMapRequest(layerNames);
-        request.setBbox(new Envelope(-180,180,-90,90));
+        request.setBbox(new Envelope(-180, 180, -90, 90));
         return request;
-    };
-    
+    }
+
+    ;
+
     WMSMapContent createMapContent(QName... layers) throws IOException {
         GetMapRequest mapRequest = createGetMapRequest(layers);
         WMSMapContent map = new WMSMapContent(mapRequest);

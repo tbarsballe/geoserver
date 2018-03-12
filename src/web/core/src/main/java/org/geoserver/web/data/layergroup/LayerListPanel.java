@@ -38,30 +38,30 @@ import com.google.common.collect.Lists;
  * Base class for a layer listing table with clickable layer names
  */
 public abstract class LayerListPanel extends GeoServerTablePanel<LayerInfo> {
-    
+
     protected static abstract class LayerListProvider extends LayerProvider {
 
         private static final long serialVersionUID = -4793382279386643262L;
 
         @Override
         protected List<Property<LayerInfo>> getProperties() {
-            return Arrays.asList( NAME, STORE, WORKSPACE );
+            return Arrays.asList(NAME, STORE, WORKSPACE);
         }
     }
 
     private static final long serialVersionUID = 3638205114048153057L;
 
-    static Property<LayerInfo> NAME = 
-        new BeanProperty<LayerInfo>("name", "name");
-    
-    static Property<LayerInfo> STORE = 
-        new BeanProperty<LayerInfo>("store", "resource.store.name");
-    
-    static Property<LayerInfo> WORKSPACE = 
-        new BeanProperty<LayerInfo>("workspace", "resource.store.workspace.name");
-    
-    public LayerListPanel( String id, final WorkspaceInfo workspace ) {
-        this( id, new LayerListProvider(){
+    static Property<LayerInfo> NAME =
+            new BeanProperty<LayerInfo>("name", "name");
+
+    static Property<LayerInfo> STORE =
+            new BeanProperty<LayerInfo>("store", "resource.store.name");
+
+    static Property<LayerInfo> WORKSPACE =
+            new BeanProperty<LayerInfo>("workspace", "resource.store.workspace.name");
+
+    public LayerListPanel(String id, final WorkspaceInfo workspace) {
+        this(id, new LayerListProvider() {
 
             private static final long serialVersionUID = 426375054014475107L;
 
@@ -80,7 +80,7 @@ public abstract class LayerListPanel extends GeoServerTablePanel<LayerInfo> {
                     return iterator;
                 }
             }
-            
+
             @Override
             protected Filter getFilter() {
                 FilterFactory ff = CommonFactoryFinder.getFilterFactory2();
@@ -88,7 +88,7 @@ public abstract class LayerListPanel extends GeoServerTablePanel<LayerInfo> {
                 if (workspace == null) {
                     filter = super.getFilter();
                 } else {
-                    filter = ff.and(super.getFilter(), ff.equal(ff.property("resource.store.workspace.id"), ff.literal(workspace.getId()),true));
+                    filter = ff.and(super.getFilter(), ff.equal(ff.property("resource.store.workspace.id"), ff.literal(workspace.getId()), true));
                 }
                 return filter;
             }
@@ -106,8 +106,8 @@ public abstract class LayerListPanel extends GeoServerTablePanel<LayerInfo> {
 
                 SortBy sortOrder = null;
                 if (sort != null) {
-                    if(property instanceof BeanProperty){
-                        final String sortProperty = ((BeanProperty<LayerInfo>)property).getPropertyPath();
+                    if (property instanceof BeanProperty) {
+                        final String sortProperty = ((BeanProperty<LayerInfo>) property).getPropertyPath();
                         sortOrder = sortBy(sortProperty, sort.isAscending());
                     }
                 }
@@ -120,34 +120,33 @@ public abstract class LayerListPanel extends GeoServerTablePanel<LayerInfo> {
             }
         });
     }
-    
+
     protected LayerListPanel(String id, GeoServerDataProvider<LayerInfo> provider) {
         super(id, provider);
         getTopPager().setVisible(false);
     }
-    
-    
+
+
     @SuppressWarnings("unchecked")
-	@Override
+    @Override
     protected Component getComponentForProperty(String id, final IModel<LayerInfo> itemModel,
-            Property<LayerInfo> property) {
-        IModel<?> model = property.getModel( itemModel );
-        if ( NAME == property ) {
-            return new SimpleAjaxLink<String>(id, (IModel<String>) model ) {
+                                                Property<LayerInfo> property) {
+        IModel<?> model = property.getModel(itemModel);
+        if (NAME == property) {
+            return new SimpleAjaxLink<String>(id, (IModel<String>) model) {
                 private static final long serialVersionUID = -2968338284881141281L;
 
                 @Override
                 protected void onClick(AjaxRequestTarget target) {
                     LayerInfo layer = (LayerInfo) itemModel.getObject();
-                    handleLayer( layer, target );
+                    handleLayer(layer, target);
                 }
             };
-        }
-        else {
-            return new Label( id, model );
+        } else {
+            return new Label(id, model);
         }
     }
-    
-    protected void handleLayer( LayerInfo layer, AjaxRequestTarget target ) {
+
+    protected void handleLayer(LayerInfo layer, AjaxRequestTarget target) {
     }
 }

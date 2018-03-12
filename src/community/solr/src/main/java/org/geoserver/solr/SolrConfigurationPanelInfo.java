@@ -10,12 +10,10 @@ import org.geoserver.platform.ExtensionPriority;
 import org.geoserver.web.data.resource.ResourceConfigurationPanelInfo;
 
 /**
- * 
  * Implements ResourceConfigurationPanelInfo extension point to add SOLR attribute configuration
  * link on resource page. <br>
  * Priority is reduced under standard {@link ExtensionPriority.LOWEST} to shows the SOLR link after
  * other panels.
- * 
  */
 public class SolrConfigurationPanelInfo extends ResourceConfigurationPanelInfo implements
         ExtensionPriority {

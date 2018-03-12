@@ -39,7 +39,7 @@ import com.google.common.collect.Iterables;
 public class Directory extends FileData {
 
     private static final Logger LOGGER = Logging.getLogger(Directory.class);
-    
+
     private static final long serialVersionUID = 1L;
 
     /**
@@ -64,7 +64,8 @@ public class Directory extends FileData {
 
     public static Directory createNew(File parent) throws IOException {
         File directory = File.createTempFile("tmp", "", parent);
-        if (!directory.delete() || !directory.mkdir()) throw new IOException("Error creating temp directory at " + directory.getAbsolutePath());
+        if (!directory.delete() || !directory.mkdir())
+            throw new IOException("Error creating temp directory at " + directory.getAbsolutePath());
         return new Directory(directory);
     }
 
@@ -105,7 +106,7 @@ public class Directory extends FileData {
             }
         }
     }
-    
+
     public File child(String name) {
         if (name == null) {
             //create random
@@ -116,7 +117,7 @@ public class Directory extends FileData {
             }
         }
 
-        return new File(this.file,name);
+        return new File(this.file, name);
     }
 
     public void setName(String name) {
@@ -136,7 +137,7 @@ public class Directory extends FileData {
         LinkedList<File> q = new LinkedList<File>();
         q.add(file);
 
-        while(!q.isEmpty()) {
+        while (!q.isEmpty()) {
             File dir = q.poll();
 
             if (m.isCanceled()) {
@@ -193,7 +194,7 @@ public class Directory extends FileData {
 
                 if (format != null) {
                     SpatialFile sf = newSpatialFile(f, format);
-                    
+
                     //gather up the related files
                     sf.prepare(m);
 
@@ -243,8 +244,8 @@ public class Directory extends FileData {
 
     /**
      * Creates a new spatial file.
-     * 
-     * @param f The raw file.
+     *
+     * @param f      The raw file.
      * @param format The spatial format of the file.
      */
     protected SpatialFile newSpatialFile(File f, DataFormat format) {
@@ -258,7 +259,7 @@ public class Directory extends FileData {
 
         LinkedList<Directory> q = new LinkedList<Directory>();
         q.addLast(this);
-        while(!q.isEmpty()) {
+        while (!q.isEmpty()) {
             Directory dir = q.removeFirst();
             flat.add(dir);
 
@@ -332,7 +333,7 @@ public class Directory extends FileData {
 //    }
 
     /**
-     * Returns the data format of the files in the directory iff all the files are of the same 
+     * Returns the data format of the files in the directory iff all the files are of the same
      * format, if they are not this returns null.
      */
     public DataFormat format() throws IOException {
@@ -401,7 +402,7 @@ public class Directory extends FileData {
 
     public void accept(String childName, InputStream in) throws IOException {
         File dest = child(childName);
-        
+
         IOUtils.copy(in, dest);
 
         try {
@@ -419,17 +420,16 @@ public class Directory extends FileData {
 
         try {
             unpack(dest);
-        } 
-        catch (IOException e) {
+        } catch (IOException e) {
             // problably should delete on error
             LOGGER.warning("Possible invalid file uploaded to " + dest.getAbsolutePath());
             throw e;
         }
     }
-    
+
     public void archive(File output) throws IOException {
         File archiveDir = output.getAbsoluteFile().getParentFile();
-        String outputName = output.getName().replace(".zip","");
+        String outputName = output.getName().replace(".zip", "");
         int id = 0;
         while (output.exists()) {
             output = new File(archiveDir, outputName + id + ".zip");
@@ -452,8 +452,8 @@ public class Directory extends FileData {
             output.delete();
             if (ex instanceof IOException) throw (IOException) ex;
             throw (IOException) new IOException("Error archiving").initCause(ex);
-        } 
-        
+        }
+
         // if we get here, the zip is properly written
         try {
             zout.close();
@@ -466,7 +466,7 @@ public class Directory extends FileData {
     public void cleanup() throws IOException {
         File[] files = file.listFiles();
         if (files != null) {
-            for (File f: files) {
+            for (File f : files) {
                 if (f.isDirectory()) {
                     new Directory(f).cleanup();
                 } else {
@@ -486,7 +486,7 @@ public class Directory extends FileData {
     public FileData part(final String name) {
         List<FileData> files = this.files;
         if (this instanceof Filtered) {
-            files = ((Filtered)this).filter;
+            files = ((Filtered) this).filter;
         }
 
         try {
@@ -496,8 +496,7 @@ public class Directory extends FileData {
                     return name.equals(input.getName());
                 }
             });
-        }
-        catch(NoSuchElementException e) {
+        } catch (NoSuchElementException e) {
             return null;
         }
     }

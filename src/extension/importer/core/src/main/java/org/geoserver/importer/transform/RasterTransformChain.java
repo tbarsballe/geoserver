@@ -8,10 +8,10 @@ package org.geoserver.importer.transform;
 
 /**
  * A raster transformation chain
- * 
+ *
  * @author Ian Schneider <ischneider@opengeo.org>
  */
 public class RasterTransformChain extends TransformChain<RasterTransform> {
 
-    
+
 }

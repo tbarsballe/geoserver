@@ -29,13 +29,13 @@ public class Ogr2OgrTestUtil {
                 File props = new File("./src/test/resources/ogr2ogr.properties");
                 Properties p = new Properties();
                 p.load(new FileInputStream(props));
-                
+
                 OGR2OGR = p.getProperty("ogr2ogr");
                 // assume it's in the path if the property file hasn't been configured
-                if(OGR2OGR == null)
+                if (OGR2OGR == null)
                     OGR2OGR = "ogr2ogr";
                 GDAL_DATA = p.getProperty("gdalData");
-                
+
                 OGRWrapper ogr = new OGRWrapper(OGR2OGR, Collections.singletonMap("GDAL_DATA", GDAL_DATA));
                 IS_OGR_AVAILABLE = ogr.isAvailable();
             } catch (Exception e) {
@@ -48,20 +48,20 @@ public class Ogr2OgrTestUtil {
 
         return IS_OGR_AVAILABLE;
     }
-    
+
     public static String getOgr2Ogr() {
-        if(isOgrAvailable())
+        if (isOgrAvailable())
             return OGR2OGR;
         else
             return null;
     }
-    
+
     public static String getGdalData() {
-        if(isOgrAvailable())
+        if (isOgrAvailable())
             return GDAL_DATA;
         else
             return null;
     }
-    
-    
+
+
 }

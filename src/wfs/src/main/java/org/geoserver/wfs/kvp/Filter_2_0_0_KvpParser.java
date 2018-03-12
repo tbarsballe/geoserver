@@ -15,7 +15,7 @@ import org.geotools.xml.Configuration;
  * This kvp parser is meant to be configured in the spring context to parse
  * filters when a GetFeature request is sent conforming to the WFS 2.0 spec.
  * </p>
- * 
+ *
  * @author Justin Deoliveira
  */
 public class Filter_2_0_0_KvpParser extends FilterKvpParser {

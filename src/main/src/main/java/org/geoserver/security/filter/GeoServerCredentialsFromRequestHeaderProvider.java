@@ -14,10 +14,9 @@ import org.geoserver.security.validation.SecurityConfigValidator;
 /**
  * Security provider to extract user credentials (username and password)
  * from Request Headers in a configurable way.
- * 
+ *
  * @author Lorenzo Natali, GeoSolutions
  * @author Mauro Bartolomeoli, GeoSolutions
- *
  */
 public class GeoServerCredentialsFromRequestHeaderProvider extends
         AbstractFilterProvider {

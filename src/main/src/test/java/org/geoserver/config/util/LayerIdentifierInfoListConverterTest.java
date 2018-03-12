@@ -16,7 +16,7 @@ import org.junit.Test;
 
 public class LayerIdentifierInfoListConverterTest {
 
-    @Test 
+    @Test
     public void testFromString() {
         final String serialized = "[{\"authority\":\"auth1\",\"identifier\":\"IDENTIFIER_1\"},{\"authority\":\"auth2\",\"identifier\":\"IDENTIFIER_2\"}]";
         List<LayerIdentifierInfo> expected = new ArrayList<LayerIdentifierInfo>();
@@ -33,7 +33,7 @@ public class LayerIdentifierInfoListConverterTest {
 
         List<LayerIdentifierInfo> actual;
         actual = LayerIdentifierInfoListConverter.fromString(serialized);
-        
+
         assertEquals(expected, actual);
     }
 

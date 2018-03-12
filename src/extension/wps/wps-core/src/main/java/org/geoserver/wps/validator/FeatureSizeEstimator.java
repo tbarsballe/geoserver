@@ -17,7 +17,7 @@ import com.vividsolutions.jts.geom.Point;
 /**
  * Estimates the size of a feature collection by guessing how bit an average feature will be by
  * checking its feature type
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class FeatureSizeEstimator implements ObjectSizeEstimator {

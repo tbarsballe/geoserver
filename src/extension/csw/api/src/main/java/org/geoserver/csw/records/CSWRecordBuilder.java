@@ -7,15 +7,15 @@ package org.geoserver.csw.records;
 
 /**
  * A helper that builds CSW Dublin core records as GeoTools features
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
-public class CSWRecordBuilder extends GenericRecordBuilder{
+public class CSWRecordBuilder extends GenericRecordBuilder {
 
     public CSWRecordBuilder() {
         super(CSWRecordDescriptor.getInstance());
     }
-   
+
     /**
      * Adds an element to the current record
      */

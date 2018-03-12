@@ -15,7 +15,7 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 
 /**
  * Common base class for user group and role services.
- * 
+ *
  * @author Justin Deoliveira, OpenGeo
  */
 public abstract class AbstractGeoServerSecurityService implements GeoServerSecurityService {
@@ -27,9 +27,11 @@ public abstract class AbstractGeoServerSecurityService implements GeoServerSecur
     // Default for local group administrator role mapped to system role ROLE_GROUP_ADMIN
     // TODO Justin, feel free to change the name
     public static String DEFAULT_LOCAL_GROUP_ADMIN_ROLE = "GROUP_ADMIN";
-    /** logger */
-    protected static Logger LOGGER = 
-        org.geotools.util.logging.Logging.getLogger("org.geoserver.security");
+    /**
+     * logger
+     */
+    protected static Logger LOGGER =
+            org.geotools.util.logging.Logging.getLogger("org.geoserver.security");
 
     protected String name;
     protected GeoServerSecurityManager securityManager;
@@ -56,11 +58,11 @@ public abstract class AbstractGeoServerSecurityService implements GeoServerSecur
     public void setSecurityManager(GeoServerSecurityManager securityManager) {
         this.securityManager = securityManager;
     }
-    
+
     @Override
     public void initializeFromConfig(SecurityNamedServiceConfig config) throws IOException {
-        if (config!=null)
-            this.name=config.getName();
+        if (config != null)
+            this.name = config.getName();
     }
 
     @Override
@@ -70,9 +72,7 @@ public abstract class AbstractGeoServerSecurityService implements GeoServerSecur
 
     /**
      * Authentication filters with an {@link AuthenticationEntryPoint} must
-     * return their entry point 
-     * 
-     *
+     * return their entry point
      */
     public AuthenticationEntryPoint getAuthenticationEntryPoint() {
         return null;

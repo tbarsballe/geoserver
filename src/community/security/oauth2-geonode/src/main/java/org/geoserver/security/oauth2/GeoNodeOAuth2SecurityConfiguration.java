@@ -56,14 +56,14 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
  * <li>Logout URI: <b>https://geonode_host_port/account/logout/</b></li>
  * <li>Scopes: <b>read,write,groups</b></li>
  * </ul>
- * 
+ *
  * @author Alessio Fabiani, GeoSolutions S.A.S.
  */
-@Configuration(value="geoNodeOAuth2SecurityConfiguration")
+@Configuration(value = "geoNodeOAuth2SecurityConfiguration")
 @EnableOAuth2Client
 class GeoNodeOAuth2SecurityConfiguration extends GeoServerOAuth2SecurityConfiguration {
 
-    @Bean(name="geoNodeOAuth2Resource")
+    @Bean(name = "geoNodeOAuth2Resource")
     public OAuth2ProtectedResourceDetails geoServerOAuth2Resource() {
         AuthorizationCodeResourceDetails details = new AuthorizationCodeResourceDetails();
         details.setId("geonode-oauth2-client");
@@ -74,11 +74,11 @@ class GeoNodeOAuth2SecurityConfiguration extends GeoServerOAuth2SecurityConfigur
 
         return details;
     }
-    
+
     /**
      * Must have "session" scope
      */
-    @Bean(name="geoNodeOauth2RestTemplate")
+    @Bean(name = "geoNodeOauth2RestTemplate")
     @Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
     public OAuth2RestTemplate geoServerOauth2RestTemplate() {
 
@@ -89,7 +89,7 @@ class GeoNodeOAuth2SecurityConfiguration extends GeoServerOAuth2SecurityConfigur
         authorizationCodeAccessTokenProvider.setStateMandatory(false);
 
         AccessTokenProvider accessTokenProviderChain = new AccessTokenProviderChain(
-                Arrays.<AccessTokenProvider> asList(authorizationCodeAccessTokenProvider,
+                Arrays.<AccessTokenProvider>asList(authorizationCodeAccessTokenProvider,
                         new ImplicitAccessTokenProvider(),
                         new ResourceOwnerPasswordAccessTokenProvider(),
                         new ClientCredentialsAccessTokenProvider()));

@@ -39,7 +39,7 @@ public class MimeTypesFormComponent extends FormComponentPanel {
     List<Behavior> toAdd = new ArrayList<Behavior>();
 
     public MimeTypesFormComponent(String id, IModel<List<String>> model,
-            IModel<Collection<String>> choicesModel,final boolean isMimeTypeCheckingEnabled) {
+                                  IModel<Collection<String>> choicesModel, final boolean isMimeTypeCheckingEnabled) {
         super(id, new Model<String>());
 
         add(new AjaxCheckBox("mimeTypeCheckingEnabled", new Model(isMimeTypeCheckingEnabled)) {
@@ -50,7 +50,6 @@ public class MimeTypesFormComponent extends FormComponentPanel {
                 target.add(palette);
             }
         });
-
 
 
         add(palette = new Palette<String>("palette", model, choicesModel,
@@ -67,8 +66,8 @@ public class MimeTypesFormComponent extends FormComponentPanel {
                 return rec;
             }
 
-            
-             // Override otherwise the header is not i18n'ized            
+
+            // Override otherwise the header is not i18n'ized
             @Override
             public Component newSelectedHeader(final String componentId) {
                 return new Label(componentId, new ResourceModel(getSelectedHeaderPropertyKey()));
@@ -88,16 +87,16 @@ public class MimeTypesFormComponent extends FormComponentPanel {
 
     void toggleVisibility(boolean visible) {
         palette.setVisible(visible);
-        if (visible==false)
-            palette.getModelCollection().clear();        
+        if (visible == false)
+            palette.getModelCollection().clear();
     }
-    
-    
+
+
     public void setMimeTypeCheckingEnabled(boolean enabled) {
         get("mimeTypeCheckingEnabled").setDefaultModelObject(enabled);
         //palette.setEnabled(enabled);
         toggleVisibility(enabled);
-        
+
     }
 
     public boolean isMimeTypeCheckingEnabled() {
@@ -142,7 +141,7 @@ public class MimeTypesFormComponent extends FormComponentPanel {
     @Override
     public void updateModel() {
         super.updateModel();
-        if (palette.getRecorderComponent()!=null)
+        if (palette.getRecorderComponent() != null)
             palette.getRecorderComponent().updateModel();
     }
 }

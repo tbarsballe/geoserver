@@ -71,10 +71,10 @@ public class ProcessGroupInfoImpl implements ProcessGroupInfo {
         clone.setEnabled(enabled);
         clone.setFactoryClass(factoryClass);
         clone.setRoles(roles);
-        if(filteredProcesses != null) {
+        if (filteredProcesses != null) {
             clone.setFilteredProcesses(new ArrayList<ProcessInfo>(filteredProcesses));
-        } 
-        if(metadata != null) {
+        }
+        if (metadata != null) {
             clone.metadata = new MetadataMap(new HashMap<String, Serializable>(metadata));
         }
 
@@ -88,7 +88,7 @@ public class ProcessGroupInfoImpl implements ProcessGroupInfo {
 
     @Override
     public void setRoles(List<String> roles) {
-        this.roles = roles;        
+        this.roles = roles;
     }
 
     @Override

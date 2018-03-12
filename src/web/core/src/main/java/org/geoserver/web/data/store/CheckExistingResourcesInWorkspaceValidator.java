@@ -21,7 +21,6 @@ import org.geoserver.web.GeoServerApplication;
  * As per GEOS-3256, validates that upon a workspace change there are no conflicting layer names
  * between the already registered resources for the datastore being edited and any other resource
  * configured for the workspace
- * 
  */
 public class CheckExistingResourcesInWorkspaceValidator implements IValidator {
     private static final long serialVersionUID = -3520867380372087997L;

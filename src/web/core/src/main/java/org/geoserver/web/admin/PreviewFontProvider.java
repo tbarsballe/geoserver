@@ -15,10 +15,10 @@ import org.geoserver.web.wicket.GeoServerDataProvider;
 
 /**
  * Provides a filtered, sorted view over the fonts that are available to the JVM
- * 
+ *
  * @author Miles Jordan, Australian Antarctic Division
  */
-@SuppressWarnings( { "serial" })
+@SuppressWarnings({"serial"})
 public class PreviewFontProvider extends GeoServerDataProvider<PreviewFont> {
     public static final Property<PreviewFont> NAME = new BeanProperty<PreviewFont>("name",
             "fontName");

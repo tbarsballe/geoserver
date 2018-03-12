@@ -22,7 +22,7 @@ import java.util.regex.Pattern;
  * for static import.
  * <p>
  * Resource paths are consistent with file URLs. The base location is represented with "", relative paths are not supported.
- * 
+ *
  * @author Jody Garnett
  */
 public class Paths {
@@ -59,8 +59,10 @@ public class Paths {
             return item;
         }
     }
-    
-    /** Used to quickly check path extension */
+
+    /**
+     * Used to quickly check path extension
+     */
     static String extension(String path) {
         String name = name(path);
         if (name == null) {
@@ -88,7 +90,7 @@ public class Paths {
 
     /**
      * Path construction.
-     * 
+     *
      * @param path Items defining a Path
      * @return path Path used to identify a Resource
      */
@@ -96,11 +98,11 @@ public class Paths {
         return path(STRICT_PATH, path);
     }
 
-     /**
+    /**
      * Path construction.
-     * 
+     *
      * @param strictPath whether problematic characters are an error
-     * @param path Items defining a Path
+     * @param path       Items defining a Path
      * @return path Path used to identify a Resource
      */
     static String path(boolean strictPath, String... path) {
@@ -113,11 +115,11 @@ public class Paths {
         }
         return toPath(strictPath, names);
     }
-    
+
     // runtime flag which, if true, throws an error for the WARN characters
-    static final boolean STRICT_PATH = 
+    static final boolean STRICT_PATH =
             Boolean.valueOf(System.getProperty("STRICT_PATH", "false"));
-    
+
     /**
      * Pattern used to check for invalid file characters.
      * <ul>
@@ -138,7 +140,7 @@ public class Paths {
      * <li> less than
      * <li> greater than
      * <li> bar
-     * </ul> 
+     * </ul>
      * These characters can cause problems for different protocols.
      */
     static final Pattern WARN = Pattern.compile("^[^:*,\'&?\"<>|]*$");
@@ -146,13 +148,13 @@ public class Paths {
      * Set of invalid resource names (currently used to quickly identify relative paths).
      */
     static final Set<String> INVALID = new HashSet<String>(
-            Arrays.asList(new String[] { "..", "." }));
-    
+            Arrays.asList(new String[]{"..", "."}));
+
     /**
      * Internal method used to convert a list of names to a normal Resource path.
-     * 
+     *
      * @param strictPath whether problematic characters are an error
-     * @param names List of resource names forming a path
+     * @param names      List of resource names forming a path
      * @return resource path composed of provided names
      * @throws IllegalArgumentException If names includes any {@link #INVALID} chracters
      */
@@ -185,7 +187,7 @@ public class Paths {
 
     /**
      * Quick check of path for invalid characters
-     * 
+     *
      * @param path
      * @return path
      * @throws IllegalArgumentException If path fails {@link #VALID} check
@@ -196,7 +198,7 @@ public class Paths {
 
     /**
      * Quick check of path for invalid characters
-     * 
+     *
      * @param strictPath whether problematic characters are an error
      * @param path
      * @return path
@@ -206,7 +208,7 @@ public class Paths {
         if (path == null) {
             throw new NullPointerException("Resource path required");
         }
-        if( path.contains("..") || ".".equals(path)) {
+        if (path.contains("..") || ".".equals(path)) {
             throw new IllegalArgumentException("Relative paths not supported " + path);
         }
         if (!VALID.matcher(path).matches()) {
@@ -249,7 +251,7 @@ public class Paths {
 
     /**
      * Convert to file to resource path.
-     * 
+     *
      * @param base directory location
      * @param file relative file reference
      * @return relative path used for Resource lookup
@@ -279,10 +281,9 @@ public class Paths {
 
     /**
      * Convert to file to resource path, allows for relative references (but is limited to content within the provided base directory).
-     * 
-     * 
-     * @param base directory location
-     * @param folder context for relative path (may be "." or null for base directory)
+     *
+     * @param base         directory location
+     * @param folder       context for relative path (may be "." or null for base directory)
      * @param fileLocation File path (using {@link File#separator}) allowing for relative references
      * @return relative path used for Resource lookup
      */
@@ -317,10 +318,9 @@ public class Paths {
 
     /**
      * Convert to file to resource path, allows for relative references (but is limited to content within the provided base directory).
-     * 
-     * 
-     * @param base directory location
-     * @param folder context for relative path (may be "." or null for base directory)
+     *
+     * @param base     directory location
+     * @param folder   context for relative path (may be "." or null for base directory)
      * @param location File path (using {@link File#separator}) allowing for relative references
      * @return relative path used for Resource lookup
      */
@@ -355,9 +355,9 @@ public class Paths {
 
     /**
      * Convert a filePath to resource path (supports absolute paths).
-     * 
+     * <p>
      * This method converts file paths (using {@link File#separator}) to the URL style paths used for {@link ResourceStore#get(String)}.
-     * 
+     *
      * @param filePath File path using {@link File#separator}
      * @return Resource path suitable for use with {@link ResourceStore#get(String)} or null for absolute path
      */
@@ -378,10 +378,10 @@ public class Paths {
     /**
      * Convert a filePath to resource path (starting from the provided path). Absolute file paths are not supported, and the final resource must still
      * be within the data directory.
-     * 
+     * <p>
      * This method converts file paths (using {@link File#separator}) to the URL style paths used for {@link ResourceStore#get(String)}.
-     * 
-     * @param path Initial path used resolve relative reference lookup
+     *
+     * @param path     Initial path used resolve relative reference lookup
      * @param filename File path (using {@link File#separator})
      * @return Resource path suitable for use with {@link ResourceStore#get(String)} or null for absolute path
      */
@@ -420,15 +420,15 @@ public class Paths {
      * This method requires the base directory of the ResourceStore.
      * Note ResourceStore implementations may not create the file until needed.
      * In the case of an absolute path, base should be null.
-     * 
+     *
      * @param base Base directory, often GeoServer Data Directory
      * @param path Resource path reference
      * @return File reference
      */
-    public static File toFile( File base, String path ){
-        for( String item : Paths.names(path) ){
-            base = new File( base, item );
-        }        
+    public static File toFile(File base, String path) {
+        for (String item : Paths.names(path)) {
+            base = new File(base, item);
+        }
         return base;
     }
 

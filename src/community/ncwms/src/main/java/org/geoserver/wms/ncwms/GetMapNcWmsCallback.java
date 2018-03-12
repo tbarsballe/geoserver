@@ -103,7 +103,7 @@ public class GetMapNcWmsCallback extends AbstractDispatcherCallback {
      * Maps a parameter needing at most a simple type conversion from the kvp map to the env function
      */
     private void mapParameter(Map kvp, Map rawKvp, String ncWmsParameter, String paletteParameter,
-            Class targetClass) {
+                              Class targetClass) {
         if (kvp.containsKey(ncWmsParameter)) {
             String str = (String) rawKvp.get(ncWmsParameter);
             Object value = Converters.convert(str, targetClass);

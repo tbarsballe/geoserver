@@ -23,11 +23,11 @@ public class WeeklyActivityPanel extends ActivityChartBasePanel {
     @Override
     protected Date[] getDateRange() {
         Date now = new Date();
-        
+
         Calendar then = Calendar.getInstance();
         then.setTime(now);
         then.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
-        
+
         return new Date[]{then.getTime(), now};
     }
 

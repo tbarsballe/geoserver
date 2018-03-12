@@ -20,10 +20,14 @@ import org.xml.sax.helpers.XMLFilterImpl;
  * @version $Id$
  */
 public class FilterHandlerImpl extends XMLFilterImpl implements ContentHandler, FilterHandler {
-    /** Class logger */
+    /**
+     * Class logger
+     */
     private static Logger LOGGER = org.geotools.util.logging.Logging.getLogger("org.vfny.geoserver.requests");
 
-    /** Tracks current filter */
+    /**
+     * Tracks current filter
+     */
     private Filter currentFilter = null;
 
     /**

@@ -49,26 +49,26 @@ import org.geoserver.wms.featureinfo.GetFeatureInfoOutputFormat;
 import org.geoserver.wms.web.publish.LayerAuthoritiesAndIdentifiersPanel;
 
 /**
- * Edits the WMS service details 
+ * Edits the WMS service details
  */
 @SuppressWarnings("serial")
 public class WMSAdminPage extends BaseServiceAdminPage<WMSInfo> {
-    
-    static final List<String> SVG_RENDERERS = Arrays.asList(new String[] {WMS.SVG_BATIK, WMS.SVG_SIMPLE});
-    
-    static final List<String> KML_REFLECTOR_MODES = Arrays.asList(new String[] {WMS.KML_REFLECTOR_MODE_REFRESH, 
+
+    static final List<String> SVG_RENDERERS = Arrays.asList(new String[]{WMS.SVG_BATIK, WMS.SVG_SIMPLE});
+
+    static final List<String> KML_REFLECTOR_MODES = Arrays.asList(new String[]{WMS.KML_REFLECTOR_MODE_REFRESH,
             WMS.KML_REFLECTOR_MODE_SUPEROVERLAY, WMS.KML_REFLECTOR_MODE_DOWNLOAD});
-    
-    static final List<String> KML_SUPEROVERLAY_MODES = Arrays.asList(new String[] {WMS.KML_SUPEROVERLAY_MODE_AUTO, 
+
+    static final List<String> KML_SUPEROVERLAY_MODES = Arrays.asList(new String[]{WMS.KML_SUPEROVERLAY_MODE_AUTO,
             WMS.KML_SUPEROVERLAY_MODE_RASTER, WMS.KML_SUPEROVERLAY_MODE_OVERVIEW, WMS.KML_SUPEROVERLAY_MODE_HYBRID, WMS.KML_SUPEROVERLAY_MODE_CACHED});
-    
+
     static final List<String> DISPOSAL_METHODS = new ArrayList<String>(Arrays.asList(WMS.DISPOSAL_METHODS));
-    
+
     ModalWindow modal;
-    MimeTypesFormComponent getMapMimeTypesComponent,getFeatureInfoMimeTypesComponent;
+    MimeTypesFormComponent getMapMimeTypesComponent, getFeatureInfoMimeTypesComponent;
     TreeSet<String> getMapAvailable;
     TreeSet<String> getFeatureInfoAvailable;
-    
+
     public WMSAdminPage() {
         super();
     }
@@ -84,16 +84,16 @@ public class WMSAdminPage extends BaseServiceAdminPage<WMSInfo> {
     protected Class<WMSInfo> getServiceClass() {
         return WMSInfo.class;
     }
-    
+
     @SuppressWarnings("unchecked")
     protected void build(IModel info, Form form) {
         // popups support
         form.add(modal = new ModalWindow("modal"));
-        
+
         // new text field for the title of the root node
         form.add(new TextField<String>("rootLayerTitle"));
         form.add(new TextArea<String>("rootLayerAbstract"));
-        
+
         // authority URLs and Identifiers for the root layer
         LayerAuthoritiesAndIdentifiersPanel authAndIds;
         authAndIds = new LayerAuthoritiesAndIdentifiersPanel("authoritiesAndIds", true, info);
@@ -107,9 +107,9 @@ public class WMSAdminPage extends BaseServiceAdminPage<WMSInfo> {
         form.add(new AjaxLink("bBOXForEachCRSHelp") {
             @Override
             public void onClick(AjaxRequestTarget target) {
-                dialog.showInfo(target, 
-                    new StringResourceModel("bboxForEachCRSHelp.title",WMSAdminPage.this, null), 
-                    new StringResourceModel("bboxForEachCRSHelp.message",WMSAdminPage.this, null));
+                dialog.showInfo(target,
+                        new StringResourceModel("bboxForEachCRSHelp.title", WMSAdminPage.this, null),
+                        new StringResourceModel("bboxForEachCRSHelp.message", WMSAdminPage.this, null));
             }
         });
         // advanced projection handling
@@ -147,7 +147,7 @@ public class WMSAdminPage extends BaseServiceAdminPage<WMSInfo> {
         form.add(watermarkUrlField);
         form.add(chooserButton("chooser", new ParamResourceModel("chooseWatermark", this).getString(), watermarkUrlField));
         TextField<Integer> transparency = new TextField<Integer>("watermark.transparency");
-        transparency.add(new RangeValidator<Integer>(0,100));
+        transparency.add(new RangeValidator<Integer>(0, 100));
         form.add(transparency);
         form.add(new DropDownChoice("watermark.position", Arrays.asList(Position.values()), new WatermarkPositionRenderer()));
         // svg
@@ -161,7 +161,7 @@ public class WMSAdminPage extends BaseServiceAdminPage<WMSInfo> {
         // jpeg compression levels
         MapModel jpegCompression = defaultedModel(metadataModel, WMS.JPEG_COMPRESSION, WMS.JPEG_COMPRESSION_DEFAULT);
         TextField<Integer> jpegCompressionField = new TextField<Integer>("jpeg.compression", jpegCompression, Integer.class);
-        jpegCompressionField.add(new RangeValidator<Integer>(0,100));
+        jpegCompressionField.add(new RangeValidator<Integer>(0, 100));
         form.add(jpegCompressionField);
         // GIF animated
         // MAX_ALLOWED_FRAMES
@@ -189,88 +189,88 @@ public class WMSAdminPage extends BaseServiceAdminPage<WMSInfo> {
         MapModel loopContinuously = defaultedModel(metadataModel, WMS.LOOP_CONTINUOUSLY, WMS.LOOP_CONTINUOUSLY_DEFAULT);
         CheckBox loopContinuouslyField = new CheckBox("anim.loopcontinuously", loopContinuously);
         form.add(loopContinuouslyField);
-        
+
         // kml handling
         MapModel kmlReflectorMode = defaultedModel(metadataModel, WMS.KML_REFLECTOR_MODE, WMS.KML_REFLECTOR_MODE_DEFAULT);
         form.add(new DropDownChoice("kml.defaultReflectorMode", kmlReflectorMode, KML_REFLECTOR_MODES));
-        
+
         MapModel kmlSuperoverlayMode = defaultedModel(metadataModel, WMS.KML_SUPEROVERLAY_MODE, WMS.KML_SUPEROVERLAY_MODE_DEFAULT);
         form.add(new DropDownChoice("kml.superoverlayMode", kmlSuperoverlayMode, KML_SUPEROVERLAY_MODES));
-        
+
         form.add(new CheckBox("kml.kmattr", defaultedModel(metadataModel, WMS.KML_KMLATTR, WMS.KML_KMLATTR_DEFAULT)));
         form.add(new CheckBox("kml.kmlplacemark", defaultedModel(metadataModel, WMS.KML_KMLPLACEMARK, WMS.KML_KMLPLACEMARK_DEFAULT)));
-        
+
         MapModel kmScore = defaultedModel(metadataModel, WMS.KML_KMSCORE, WMS.KML_KMSCORE_DEFAULT);
         TextField<Integer> kmScoreField = new TextField<Integer>("kml.kmscore", kmScore, Integer.class);
         kmScoreField.add(new RangeValidator<Integer>(0, 100));
         form.add(kmScoreField);
-        
+
         //scalehint
-        form.add(new CheckBox("scalehint.mapunitsPixel",defaultedModel(metadataModel, WMS.SCALEHINT_MAPUNITS_PIXEL, WMS.SCALEHINT_MAPUNITS_PIXEL_DEFAULT)));
-        
+        form.add(new CheckBox("scalehint.mapunitsPixel", defaultedModel(metadataModel, WMS.SCALEHINT_MAPUNITS_PIXEL, WMS.SCALEHINT_MAPUNITS_PIXEL_DEFAULT)));
+
         // mime types for GetMap
         getMapAvailable = new TreeSet<String>(String.CASE_INSENSITIVE_ORDER);
         for (GetMapOutputFormat format : GeoServerExtensions.extensions(GetMapOutputFormat.class)) {
             getMapAvailable.add(format.getMimeType());
-        }        
-        
+        }
+
         List<String> getMapSelected = new ArrayList<String>();
         getMapSelected.addAll(new PropertyModel<Set<String>>(info, "getMapMimeTypes").getObject());
         List<String> getMapChoices = new ArrayList<String>();
         getMapChoices.addAll(getMapAvailable);
-                               
-        form.add(getMapMimeTypesComponent= new MimeTypesFormComponent("getMapMimeTypes",
-                new ListModel<String>(getMapSelected),new CollectionModel<String>(getMapChoices),
+
+        form.add(getMapMimeTypesComponent = new MimeTypesFormComponent("getMapMimeTypes",
+                new ListModel<String>(getMapSelected), new CollectionModel<String>(getMapChoices),
                 new PropertyModel<Boolean>(info, "getMapMimeTypeCheckingEnabled").getObject()));
-        
+
         // mime types for GetFeatueInfo
         getFeatureInfoAvailable = new TreeSet<String>(String.CASE_INSENSITIVE_ORDER);
         for (GetFeatureInfoOutputFormat format : GeoServerExtensions.extensions(GetFeatureInfoOutputFormat.class)) {
             getFeatureInfoAvailable.add(format.getContentType());
         }
-                    
+
         List<String> getFeatureInfoSelected = new ArrayList<String>();
         getFeatureInfoSelected.addAll(new PropertyModel<Set<String>>(info, "getFeatureInfoMimeTypes").getObject());
         List<String> getFeatureInfoChoices = new ArrayList<String>();
         getFeatureInfoChoices.addAll(getFeatureInfoAvailable);
-                               
-        form.add(getFeatureInfoMimeTypesComponent =new MimeTypesFormComponent("getFeatureInfoMimeTypes",
-                new ListModel<String>(getFeatureInfoSelected),new CollectionModel<String>(getFeatureInfoChoices),
+
+        form.add(getFeatureInfoMimeTypesComponent = new MimeTypesFormComponent("getFeatureInfoMimeTypes",
+                new ListModel<String>(getFeatureInfoSelected), new CollectionModel<String>(getFeatureInfoChoices),
                 new PropertyModel<Boolean>(info, "getFeatureInfoMimeTypeCheckingEnabled").getObject()));
 
         //dynamicStylingDisabled
-        form.add(new CheckBox("dynamicStyling.disabled",new PropertyModel<Boolean>(info, WMS.DYNAMIC_STYLING_DISABLED)));
+        form.add(new CheckBox("dynamicStyling.disabled", new PropertyModel<Boolean>(info, WMS.DYNAMIC_STYLING_DISABLED)));
 
         // disable the reprojection of GetFeatureInfo results
         form.add(new CheckBox("disableFeaturesReproject", new PropertyModel<>(info, WMS.FEATURES_REPROJECTION_DISABLED)));
     }
-    
+
     @Override
     protected void handleSubmit(WMSInfo info) {
 
         info.setGetMapMimeTypeCheckingEnabled(getMapMimeTypesComponent.isMimeTypeCheckingEnabled());
         if (info.isGetMapMimeTypeCheckingEnabled())
             info.getGetMapMimeTypes().addAll(getMapMimeTypesComponent.getPalette().getModelCollection());
-        else 
+        else
             info.getGetMapMimeTypes().clear();
-        
+
         info.setGetFeatureInfoMimeTypeCheckingEnabled(getFeatureInfoMimeTypesComponent.isMimeTypeCheckingEnabled());
         if (info.isGetFeatureInfoMimeTypeCheckingEnabled())
             info.getGetFeatureInfoMimeTypes().addAll(getFeatureInfoMimeTypesComponent.getPalette().getModelCollection());
         else
             info.getGetFeatureInfoMimeTypes().clear();
-        
+
         super.handleSubmit(info);
     }
-    
+
     protected Component chooserButton(String linkId, final String windowTitle, final TextField<String> textField) {
         AjaxSubmitLink link = new AjaxSubmitLink(linkId) {
-            
+
             @Override
             public boolean getDefaultFormProcessing() {
                 return false;
             }
-            
+
             @Override
             public void onSubmit(AjaxRequestTarget target, Form form) {
                 File file = null;
@@ -282,13 +282,15 @@ public class WMSAdminPage extends BaseServiceAdminPage<WMSInfo> {
 
                 GeoServerFileChooser chooser = new GeoServerFileChooser(modal.getContentId(), new Model(file)) {
                     protected void fileClicked(File file, AjaxRequestTarget target) {
-                      // clear the raw input of the field won't show the new model value
-                      textField.clearInput();
-                      textField.setModelObject(file.getAbsolutePath());
+                        // clear the raw input of the field won't show the new model value
+                        textField.clearInput();
+                        textField.setModelObject(file.getAbsolutePath());
 
-                      target.add(textField);
-                      dialog.close(target);
-                    };
+                        target.add(textField);
+                        dialog.close(target);
+                    }
+
+                    ;
                 };
                 chooser.setFileTableHeight(null);
                 modal.setContent(chooser);
@@ -300,18 +302,18 @@ public class WMSAdminPage extends BaseServiceAdminPage<WMSInfo> {
         return link;
     }
 
-    
+
     MapModel defaultedModel(IModel baseModel, String key, Object defaultValue) {
         MapModel model = new MapModel(baseModel, key);
-        if(model.getObject() == null)
+        if (model.getObject() == null)
             model.setObject(defaultValue);
         return model;
     }
-    
-    protected String getServiceName(){
+
+    protected String getServiceName() {
         return "WMS";
     }
-    
+
     private class WatermarkPositionRenderer extends ChoiceRenderer {
 
         public Object getDisplayValue(Object object) {
@@ -321,9 +323,9 @@ public class WMSAdminPage extends BaseServiceAdminPage<WMSInfo> {
         public String getIdValue(Object object, int index) {
             return ((Position) object).name();
         }
-        
+
     }
-    
+
     private class InterpolationRenderer extends ChoiceRenderer {
 
         public Object getDisplayValue(Object object) {
@@ -333,9 +335,9 @@ public class WMSAdminPage extends BaseServiceAdminPage<WMSInfo> {
         public String getIdValue(Object object, int index) {
             return ((WMSInterpolation) object).name();
         }
-        
+
     }
-    
+
     private class SVGMethodRenderer extends ChoiceRenderer {
 
         public Object getDisplayValue(Object object) {
@@ -345,8 +347,8 @@ public class WMSAdminPage extends BaseServiceAdminPage<WMSInfo> {
         public String getIdValue(Object object, int index) {
             return (String) object;
         }
-        
+
     }
-    
-    
+
+
 }

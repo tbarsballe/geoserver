@@ -46,7 +46,7 @@ import org.geoserver.platform.ServiceException;
  * The methods {@link #setDTDLocation(String)} and {@link #setSchemaLocation(String)}
  * can be used to override this behaviour. Only one of these methods should be
  * set per instance of this class.
- *
+ * <p>
  * The supplied value should be relative, and will be appended to the result
  * of {@link OWS#getSchemaBaseURL()}.
  * </p>
@@ -57,7 +57,6 @@ import org.geoserver.platform.ServiceException;
  * </p>
  *
  * @author Justin Deoliveira, The Open Planning Project
- *
  */
 public class LegacyServiceExceptionHandler extends ServiceExceptionHandler {
     /**
@@ -127,7 +126,7 @@ public class LegacyServiceExceptionHandler extends ServiceExceptionHandler {
 
         // dtd location
         if (dtdLocation != null) {
-            String fullDtdLocation =  buildSchemaURL(baseURL(request.getHttpRequest()), dtdLocation);
+            String fullDtdLocation = buildSchemaURL(baseURL(request.getHttpRequest()), dtdLocation);
             sb.append("<!DOCTYPE ServiceExceptionReport SYSTEM \"" + fullDtdLocation + "\"> ");
         }
 
@@ -136,12 +135,12 @@ public class LegacyServiceExceptionHandler extends ServiceExceptionHandler {
 
         //xml schema location
         if ((schemaLocation != null) && (dtdLocation == null)) {
-            String fullSchemaLocation =  buildSchemaURL(baseURL(request.getHttpRequest()), schemaLocation); 
+            String fullSchemaLocation = buildSchemaURL(baseURL(request.getHttpRequest()), schemaLocation);
 
             sb.append("xmlns=\"http://www.opengis.net/ogc\" ");
             sb.append("xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" ");
             sb.append("xsi:schemaLocation=\"http://www.opengis.net/ogc " + fullSchemaLocation
-                + "\"");
+                    + "\"");
         }
 
         sb.append(">");
@@ -166,7 +165,7 @@ public class LegacyServiceExceptionHandler extends ServiceExceptionHandler {
             sb.append("\n" + tab + tab);
             OwsUtils.dumpExceptionMessages(exception, sb, true);
 
-            if(geoServer.getSettings().isVerboseExceptions()) {
+            if (geoServer.getSettings().isVerboseExceptions()) {
                 ByteArrayOutputStream stackTrace = new ByteArrayOutputStream();
                 exception.printStackTrace(new PrintStream(stackTrace));
 

@@ -11,16 +11,15 @@
 package org.geoserver.wps.ppio.gpx;
 
 /**
- * 
  * An email address. Broken into two parts (id and domain) to help prevent email harvesting.
- * 
- * 
+ * <p>
+ * <p>
  * <p>
  * Java class for emailType complex type.
- * 
+ * <p>
  * <p>
  * The following schema fragment specifies the expected content contained within this class.
- * 
+ * <p>
  * <pre>
  * &lt;complexType name="emailType">
  *   &lt;complexContent>
@@ -31,8 +30,6 @@ package org.geoserver.wps.ppio.gpx;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 public class EmailType {
     protected String domain;
@@ -41,9 +38,8 @@ public class EmailType {
 
     /**
      * Gets the value of the domain property.
-     * 
+     *
      * @return possible object is {@link String }
-     * 
      */
     public String getDomain() {
         return domain;
@@ -51,9 +47,8 @@ public class EmailType {
 
     /**
      * Sets the value of the domain property.
-     * 
+     *
      * @param value allowed object is {@link String }
-     * 
      */
     public void setDomain(String value) {
         this.domain = value;
@@ -61,9 +56,8 @@ public class EmailType {
 
     /**
      * Gets the value of the id property.
-     * 
+     *
      * @return possible object is {@link String }
-     * 
      */
     public String getId() {
         return id;
@@ -71,9 +65,8 @@ public class EmailType {
 
     /**
      * Sets the value of the id property.
-     * 
+     *
      * @param value allowed object is {@link String }
-     * 
      */
     public void setId(String value) {
         this.id = value;

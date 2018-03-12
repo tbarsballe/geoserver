@@ -33,21 +33,20 @@ public class MetaTileOutputFormatTest {
     MapKey mapKey = new MapKey("abcd", 0.01, new Point2D.Double(0, 0));
     MetaTileKey key = new MetaTileKey(mapKey, new Point(0, 0), new ReferencedEnvelope(0, 10, 0, 10, DefaultEngineeringCRS.GENERIC_2D));
     RasterCleaner cleaner = new RasterCleaner();
-    
+
     @After
     public void cleanup() {
         cleaner.finished(null);
     }
-    
-    
-    
+
+
     @Test
     public void testReleaseOnBufferedImage() throws Exception {
         BufferedImage bi = new BufferedImage(768, 768, BufferedImage.TYPE_4BYTE_ABGR);
         MetatileMapOutputFormat.split(key, bi);
         assertEquals(1, cleaner.getImages().size());
     }
-    
+
     @Test
     public void testReleaseOnPlanarImage() throws Exception {
         BufferedImage bi = new BufferedImage(256, 256, BufferedImage.TYPE_4BYTE_ABGR);
@@ -58,7 +57,7 @@ public class MetaTileOutputFormatTest {
 
     @Test
     public void testPlanarImageTranslatedChild() throws Exception {
-        SampleModel sm = new ComponentSampleModel(DataBuffer.TYPE_BYTE, 128, 128, 1, 128, new int[] {0});
+        SampleModel sm = new ComponentSampleModel(DataBuffer.TYPE_BYTE, 128, 128, 1, 128, new int[]{0});
         TiledImage source = new TiledImage(0, 0, 512, 512, 0, 0, sm, PlanarImage.createColorModel(sm));
         Raster[] tiles = source.getTiles();
         assertEquals(16, tiles.length);

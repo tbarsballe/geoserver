@@ -53,9 +53,8 @@ import org.springframework.context.event.ContextRefreshedEvent;
 
 /**
  * Manages the process runs for both synchronous and asynchronous processes
- * 
+ *
  * @author Andrea Aime - GeoSolutions
- * 
  */
 public class WPSExecutionManager implements ApplicationContextAware,
         ApplicationListener<ApplicationEvent> {
@@ -120,7 +119,7 @@ public class WPSExecutionManager implements ApplicationContextAware,
     private GeoServer geoServer;
 
     public WPSExecutionManager(GeoServer geoServer, WPSResourceManager resourceManager,
-            ProcessStatusTracker statusTracker) {
+                               ProcessStatusTracker statusTracker) {
         this.resourceManager = resourceManager;
         this.statusTracker = statusTracker;
         this.geoServer = geoServer;
@@ -133,10 +132,9 @@ public class WPSExecutionManager implements ApplicationContextAware,
     /**
      * This call should only be used by process chaining to avoid deadlocking due to execution
      * threads starvation
-     * 
+     *
      * @param request
      * @param listener
-     *
      */
     Map<String, Object> submitChained(ExecuteRequest request, ProgressListener listener) {
         Name processName = request.getProcessName();
@@ -157,9 +155,9 @@ public class WPSExecutionManager implements ApplicationContextAware,
     /**
      * Process submission, not blocking. Returns an id that can be used to get the process status
      * and result later.
-     * 
+     *
      * @param ExecuteType The request to be executed
-     * @param inputs The process inputs
+     * @param inputs      The process inputs
      * @return The execution id
      * @throws ProcessException
      */
@@ -245,8 +243,6 @@ public class WPSExecutionManager implements ApplicationContextAware,
 
     /**
      * Returns the HTTP connection timeout for remote resource fetching
-     * 
-     *
      */
     public int getConnectionTimeout() {
         return connectionTimeout;
@@ -254,7 +250,7 @@ public class WPSExecutionManager implements ApplicationContextAware,
 
     /**
      * Sets the HTTP connection timeout for remote resource fetching
-     * 
+     *
      * @param connectionTimeout
      */
     public void setConnectionTimeout(int connectionTimeout) {
@@ -264,7 +260,7 @@ public class WPSExecutionManager implements ApplicationContextAware,
     /**
      * Sets the heartbeat delay for the processes that are running (to make sure we tell the rest of
      * the cluster the process is actually still running, even if it does not update its status)
-     * 
+     *
      * @param i
      */
     public void setHeartbeatDelay(int heartbeatDelay) {
@@ -298,7 +294,7 @@ public class WPSExecutionManager implements ApplicationContextAware,
 
     /**
      * Linearly runs input decoding, execution and output encoding
-     * 
+     *
      * @author Andrea Aime - GeoSolutions
      */
     private final class Executor implements Callable<ExecuteResponseType> {
@@ -321,8 +317,8 @@ public class WPSExecutionManager implements ApplicationContextAware,
         private long maxTotalTime;
 
         private Executor(ExecuteRequest request, ProcessManager processManager, Name processName,
-                LazyInputMap inputs, boolean synchronous, ExecutionStatus status,
-                WPSResourceManager resources, long maxExecutionTime, long maxTotalTime) {
+                         LazyInputMap inputs, boolean synchronous, ExecutionStatus status,
+                         WPSResourceManager resources, long maxExecutionTime, long maxTotalTime) {
 
             this.request = request;
             this.processManager = processManager;
@@ -517,7 +513,7 @@ public class WPSExecutionManager implements ApplicationContextAware,
      * Touches the running processes, making sure we don't end up cleaning their resources by
      * mistake while they are still running (this is required for processes that are not reporting
      * progress)
-     * 
+     *
      * @author Andrea Aime - GeoSolutions
      */
     private class HeartbeatTask extends TimerTask {
@@ -534,7 +530,7 @@ public class WPSExecutionManager implements ApplicationContextAware,
 
     /**
      * Cancels the execution of the given process, notifying the process managers if needs be
-     * 
+     *
      * @param executionId
      */
     public void cancel(String executionId) {
@@ -552,14 +548,14 @@ public class WPSExecutionManager implements ApplicationContextAware,
                 status.setPhase(ProcessState.DISMISSING);
                 statusTracker.dismissing(new ProcessEvent(status, null, null));
             }
-            
+
             // did it manage to complete while we were notifying dismiss?
             status = statusTracker.getStatus(executionId);
-            if(!status.getPhase().isExecutionCompleted()) {
+            if (!status.getPhase().isExecutionCompleted()) {
                 return;
             }
-        } 
-        
+        }
+
         // alredy completed, clean it up
         ProcessEvent event = new ProcessEvent(status, null);
         statusTracker.dismissed(event);

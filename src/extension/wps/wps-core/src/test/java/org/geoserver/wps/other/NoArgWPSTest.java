@@ -16,7 +16,7 @@ import org.geoserver.wps.WPSTestSupport;
 import org.junit.Test;
 
 public class NoArgWPSTest extends WPSTestSupport {
-    
+
     @Override
     protected void setUpSpring(List<String> springContextLocations) {
         super.setUpSpring(springContextLocations);
@@ -30,7 +30,6 @@ public class NoArgWPSTest extends WPSTestSupport {
 
     /**
      * This test runs a no-argument WPS Process and checks the result.
-     * 
      */
     @Test
     public void NoArgumentProcessTest() throws Exception {

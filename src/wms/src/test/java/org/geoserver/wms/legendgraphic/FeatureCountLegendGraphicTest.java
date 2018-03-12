@@ -48,7 +48,7 @@ public class FeatureCountLegendGraphicTest extends WMSTestSupport {
         Catalog catalog = getCatalog();
         testData.addStyle("Population", "Population.sld", GetMapIntegrationTest.class, catalog);
         testData.addStyle("PopulationElse", "PopulationElse.sld", FeatureCountLegendGraphicTest.class, catalog);
-        testData.addStyle("scaleDependent","scaleDependent.sld",  GetLegendGraphicTest.class, catalog);
+        testData.addStyle("scaleDependent", "scaleDependent.sld", GetLegendGraphicTest.class, catalog);
         testData.addVectorLayer(SF_STATES, Collections.EMPTY_MAP, "states.properties",
                 GetMapIntegrationTest.class, catalog);
 
@@ -64,7 +64,7 @@ public class FeatureCountLegendGraphicTest extends WMSTestSupport {
 
             @Override
             protected Rule[] updateRuleTitles(FeatureCountProcessor processor, LegendRequest legend,
-                    Rule[] applicableRules) {
+                                              Rule[] applicableRules) {
                 Rule[] updatedRules = super.updateRuleTitles(processor, legend, applicableRules);
                 FeatureCountLegendGraphicTest.this.ruleSets.add(updatedRules);
                 return updatedRules;
@@ -116,7 +116,7 @@ public class FeatureCountLegendGraphicTest extends WMSTestSupport {
         assertEquals(1, rules.length);
         assertLabel("(2)", rules[0]);
     }
-    
+
     @Test
     public void testBasicPolygonsTwoFeaturesWms13() throws Exception {
         runGetLegendGraphics("wms?service=WMS&version=1.3.0&request=GetLegendGraphic" + "&layer="
@@ -284,7 +284,7 @@ public class FeatureCountLegendGraphicTest extends WMSTestSupport {
         // map but Washington DC is and it's not a state (50 - 2 + 1)
         assertLabel("(49)", rules[3]);
     }
-    
+
     @Test
     public void testStatesMissingHeightWidthBboxSrsOnWMS13() throws Exception {
         runGetLegendGraphics(
@@ -347,7 +347,9 @@ public class FeatureCountLegendGraphicTest extends WMSTestSupport {
                 FeatureTypeStyle copy = (FeatureTypeStyle) pages.peek();
                 copy.getOptions().put(FeatureTypeStyle.KEY_EVALUATION_MODE,
                         FeatureTypeStyle.VALUE_EVALUATION_MODE_FIRST);
-            };
+            }
+
+            ;
         };
         style.accept(matchFirstCloner);
         legend.setStyle((Style) matchFirstCloner.getCopy());
@@ -373,16 +375,16 @@ public class FeatureCountLegendGraphicTest extends WMSTestSupport {
                 + "&srs=epsg:4326&bbox=-0.002,-0.003,0.005,0.002" + "&legend_options="
                 + GetLegendGraphicRequest.COUNT_MATCHED_KEY + ":true";
         runGetLegendGraphics(url);
-        
+
         for (Rule[] rules : ruleSets) {
-            logLabels(rules);    
+            logLabels(rules);
         }
-        
+
         // two layers, one rule each
         assertEquals(2, ruleSets.size());
         assertEquals(1, ruleSets.get(0).length);
         assertEquals(1, ruleSets.get(1).length);
-        
+
         // boring case, the title is just title
         assertLabel("title (1)", ruleSets.get(0)[0]);
         assertLabel("title (1)", ruleSets.get(1)[0]);

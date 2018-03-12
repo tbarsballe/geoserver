@@ -23,23 +23,24 @@ public class ConfirmRemovalServicePanelTest extends AbstractConfirmRemovalPanelT
     @Test
     public void testRemoveRule() throws Exception {
         initializeForXML();
-        removeObject();        
+        removeObject();
     }
 
-    
+
     @Override
     protected void setupPanel(final List<ServiceAccessRule> roots) {
         tester.startPage(new FormTestPage(new ComponentBuilder() {
             private static final long serialVersionUID = 1L;
-            public Component buildComponent(String id) {                
+
+            public Component buildComponent(String id) {
                 return new ConfirmRemovalServicePanel(id, roots) {
                     @Override
                     protected IModel<String> canRemove(ServiceAccessRule data) {
-                        SelectionServiceRemovalLink link = new SelectionServiceRemovalLink("XXX",null,null);
+                        SelectionServiceRemovalLink link = new SelectionServiceRemovalLink("XXX", null, null);
                         return link.canRemove(data);
                     }
 
-                    private static final long serialVersionUID = 1L;                    
+                    private static final long serialVersionUID = 1L;
                 };
             }
         }));
@@ -68,8 +69,8 @@ public class ConfirmRemovalServicePanelTest extends AbstractConfirmRemovalPanelT
     @Override
     protected String getRemoveableObjectRegExp() throws Exception {
         ServiceAccessRule rule = getRemoveableObject();
-        return ".*"+rule.getService() + ".*" + rule.getMethod()
-                +".*" + "ROLE_AUTHENTICATED"+".*";                
+        return ".*" + rule.getService() + ".*" + rule.getMethod()
+                + ".*" + "ROLE_AUTHENTICATED" + ".*";
     }
 
 }

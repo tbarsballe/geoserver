@@ -47,14 +47,12 @@ public abstract class AbstractStoreUploadController extends AbstractCatalogContr
     }
 
     /**
-     *
      * @param store
      * @param format
      * @param directory
-     *
      */
     protected List<Resource> handleFileUpload(String store, String workspace, String filename, UploadMethod method,
-            String format, Resource directory, HttpServletRequest request) {
+                                              String format, Resource directory, HttpServletRequest request) {
 
         List<Resource> files = new ArrayList<>();
 
@@ -149,10 +147,8 @@ public abstract class AbstractStoreUploadController extends AbstractCatalogContr
     }
 
     /**
-     * 
      * @param directory
      * @param format
-     *
      */
     protected Resource findPrimaryFile(Resource directory, String format) {
         for (Resource f : Resources.list(directory,

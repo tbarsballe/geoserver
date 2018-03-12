@@ -17,19 +17,20 @@ import org.geoserver.web.publish.LayerEditTabPanelInfo;
 
 /**
  * {@link LayerEditTabPanelInfo} implementation for the NetCDF output settings configuration
- * 
  */
 public class NetCDFOutEditTabPanelInfo extends LayerEditTabPanelInfo {
 
-    /** serialVersionUID */
+    /**
+     * serialVersionUID
+     */
     private static final long serialVersionUID = 1L;
-    
+
     public boolean supports(PublishedInfo pi) {
         return super.supports(pi) && ((LayerInfo) pi).getResource() instanceof CoverageInfo;
     }
 
     @Override
-    public IModel<CoverageInfo> createOwnModel(IModel<? extends LayerInfo> layerModel, boolean isNew) {        
+    public IModel<CoverageInfo> createOwnModel(IModel<? extends LayerInfo> layerModel, boolean isNew) {
         CoverageInfo info = (CoverageInfo) layerModel.getObject().getResource();
         // Check if the MetadataMap already contains the NetCDF Settings
         MetadataMap map = info.getMetadata();
@@ -51,7 +52,7 @@ public class NetCDFOutEditTabPanelInfo extends LayerEditTabPanelInfo {
             container = new NetCDFLayerSettingsContainer(globalContainer);
             map.put(NetCDFSettingsContainer.NETCDFOUT_KEY, container);
         }
-    
+
         return new Model<>(info);
     }
 }

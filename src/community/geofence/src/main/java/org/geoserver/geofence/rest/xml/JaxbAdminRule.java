@@ -7,6 +7,7 @@ package org.geoserver.geofence.rest.xml;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+
 import org.geoserver.geofence.core.model.AdminRule;
 import org.geoserver.geofence.core.model.IPAddressRange;
 

@@ -14,7 +14,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 /**
  * The key and value pair
  */
-@XmlRootElement(name="Parameter")
+@XmlRootElement(name = "Parameter")
 public class Parameter {
     @XmlAttribute
     public String key;

@@ -77,28 +77,31 @@ import it.geosolutions.jaiext.utilities.ImageLayout2;
 
 /**
  * A {@link CoverageView} reader which takes care of doing underlying coverage read operations and recompositions.
- * 
+ *
  * @author Daniele Romagnoli, GeoSolutions SAS
- * 
  */
 public class CoverageViewReader implements GridCoverage2DReader {
-    
+
     private static final int HETEROGENEOUS_RASTER_GUTTER = 10;
 
     public final static FilterFactory2 FF = CommonFactoryFinder.getFilterFactory2();
 
     private static final CoverageProcessor PROCESSOR = CoverageProcessor.getInstance();
-    
+
     private static final Logger LOGGER = Logging.getLogger(CoverageViewReader.class);
 
-    /** The CoverageView containing definition */
+    /**
+     * The CoverageView containing definition
+     */
     CoverageView coverageView;
 
     private CoverageViewHandler handler;
 
     boolean canSupportHeterogeneousCoverages = false;
 
-    /** The name of the reference coverage, we can remove/revisit it once we relax some constraint */
+    /**
+     * The name of the reference coverage, we can remove/revisit it once we relax some constraint
+     */
     String referenceName;
 
     private String coverageName;
@@ -112,7 +115,7 @@ public class CoverageViewReader implements GridCoverage2DReader {
     private ImageLayout imageLayout;
 
     public CoverageViewReader(GridCoverage2DReader delegate, CoverageView coverageView,
-            CoverageInfo coverageInfo, Hints hints) {
+                              CoverageInfo coverageInfo, Hints hints) {
         this.coverageName = coverageView.getName();
         this.delegate = delegate;
         this.coverageView = coverageView;
@@ -139,19 +142,19 @@ public class CoverageViewReader implements GridCoverage2DReader {
                     originalSampleModel.getWidth(), originalSampleModel.getHeight(), coverageView.getCoverageBands().size());
 
             ColorModel colorModel = ImageIOUtilities.createColorModel(sampleModel);
-            this.imageLayout = new ImageLayout2(layout.getMinX(null), layout.getMinY(null), originalSampleModel.getWidth(), 
+            this.imageLayout = new ImageLayout2(layout.getMinX(null), layout.getMinY(null), originalSampleModel.getWidth(),
                     originalSampleModel.getHeight());
             imageLayout.setSampleModel(sampleModel);
             imageLayout.setColorModel(colorModel);
         } catch (IOException e) {
-           throw new RuntimeException(e);
+            throw new RuntimeException(e);
         }
     }
 
     @Override
     public GridCoverage2D read(GeneralParameterValue[] parameters) throws IllegalArgumentException,
             IOException {
-        
+
         // did we get a request within the bounds of the coverage?
         Optional<GeneralParameterValue> ggParameter = Optional.empty();
         if (parameters != null) {
@@ -180,10 +183,10 @@ public class CoverageViewReader implements GridCoverage2DReader {
                 } catch (TransformException | FactoryException e) {
                     LOGGER.log(Level.FINE, "Cannot determine if the requested BBOX intersects the "
                             + "data one, continuing", e);
-                    
+
                 }
             }
-            
+
             // expand the read area if we are in the heterogeneous case... it's a resampling
             // one similar to reprojection, prone to off-by-one issues at the borders
             if (!handler.isHomogeneousCoverages()) {
@@ -205,13 +208,13 @@ public class CoverageViewReader implements GridCoverage2DReader {
         CoveragesConsistencyChecker checker = null;
 
         int coverageBandsSize = bands.size();
-        
+
         // Check params, populate band indices to read if BANDS param has been defined
         ArrayList<Integer> selectedBandIndices = new ArrayList<Integer>();
         for (int m = 0; m < coverageBandsSize; m++) {
             selectedBandIndices.add(m);
         }
-        
+
         if (parameters != null) {
             for (int i = 0; i < parameters.length; i++) {
                 final ParameterValue param = (ParameterValue) parameters[i];
@@ -227,7 +230,7 @@ public class CoverageViewReader implements GridCoverage2DReader {
                 }
             }
         }
-        
+
         // Since composition of a raster band using a formula applied on individual bands has not
         // been implemented, the normal case is that each CoverageBand is in fact a single band from
         // an input coverage. When band composition will be implemented, this will be the point where
@@ -262,7 +265,7 @@ public class CoverageViewReader implements GridCoverage2DReader {
                 }
                 GridCoverage2D coverage = reader.read(filteredParameters);
                 if (coverage == null) {
-                    if (handler.isHomogeneousCoverages() || 
+                    if (handler.isHomogeneousCoverages() ||
                             handler.getEnvelopeCompositionType() == EnvelopeCompositionType.INTERSECTION) {
                         return null;
                     }
@@ -275,12 +278,12 @@ public class CoverageViewReader implements GridCoverage2DReader {
                 inputCoverages.put(coverageName, coverage);
             }
         }
-        
+
         // all readers returned null?
         if (nonNullCoverages == 0 || inputCoverages.isEmpty()) {
             return null;
         }
-        
+
         // some returned null?
         if (nonNullCoverages < inputCoverages.size()) {
             float width, height;
@@ -305,7 +308,7 @@ public class CoverageViewReader implements GridCoverage2DReader {
                 ConstantDescriptor.create(width, height, bandValues, new RenderingHints(JAI.KEY_IMAGE_LAYOUT, layout));
             }
         }
-        
+
         // Group together bands that come from the same coverage
         ArrayList<CoverageBand> mergedBands = new ArrayList<CoverageBand>();
 
@@ -323,7 +326,7 @@ public class CoverageViewReader implements GridCoverage2DReader {
             // peek to the next band. Is it from the same coverage?
             String coverageName = bands.get(selectedBandIndices.get(idx)).getInputCoverageBands()
                     .get(0).getCoverageName();
-            
+
             if (idx + 1 < selectedBandIndices.size() && bands.get(selectedBandIndices.get(idx + 1))
                     .getInputCoverageBands().get(0).getCoverageName().equals(coverageName)) {
                 // Same coverage, add its bands to the previous
@@ -339,20 +342,20 @@ public class CoverageViewReader implements GridCoverage2DReader {
             idx++;
         }
 
-        
+
         // perform the band selects as needed
         int index = 0;
         int transformationChoice = index;
         CoverageViewHandler.CoverageResolutionChooser resolutionChooser = handler.getCoverageResolutionChooser();
         for (CoverageBand band : mergedBands) {
             List<InputCoverageBand> selectedBands = band.getInputCoverageBands();
-            
+
             // Peek for coverage name
             String coverageName = selectedBands.get(0).getCoverageName();
-            
+
             // Get band indices for band selection
             ArrayList<Integer> bandIndices = new ArrayList<Integer>(selectedBands.size());
-            for (InputCoverageBand icb:selectedBands) {
+            for (InputCoverageBand icb : selectedBands) {
                 int bandIdx = 0;
                 final String bandString = icb.getBand();
                 if (bandString != null && !bandString.isEmpty()) {
@@ -360,7 +363,7 @@ public class CoverageViewReader implements GridCoverage2DReader {
                 }
                 bandIndices.add(bandIdx);
             }
-            
+
             GridCoverage2D coverage = inputCoverages.get(coverageName);
 
             // special case for dynamic alpha on single input, no need to actually select away the alpha
@@ -402,7 +405,7 @@ public class CoverageViewReader implements GridCoverage2DReader {
                     addAlphaColorModelHint(localHints, currentBandCount);
                 }
             }
-            
+
             // perform final band merge
             String operationName = "BandMerge";
             final ParameterValueGroup param = PROCESSOR.getOperation(operationName).getParameters();
@@ -416,7 +419,7 @@ public class CoverageViewReader implements GridCoverage2DReader {
             // optimize out, no need to do a band merge
             result = coverages.get(0);
         }
-        
+
         return result;
     }
 
@@ -474,19 +477,20 @@ public class CoverageViewReader implements GridCoverage2DReader {
         final ParameterValueGroup param = PROCESSOR.getOperation("SelectSampleDimension").getParameters();
         param.parameter("Source").setValue(coverage);
         final int[] sampleDimensionArray = ArrayUtils.toPrimitive(bandIndices.toArray(new Integer[bandIndices.size()]));
-        param.parameter("SampleDimensions").setValue( sampleDimensionArray);
+        param.parameter("SampleDimensions").setValue(sampleDimensionArray);
         coverage = (GridCoverage2D) PROCESSOR.doOperation(param, hints);
         return coverage;
     }
 
     /**
      * Checks if a reader added a alpha channel on the fly as a result of a read parameter. We want to preserve
-     * this alpha channel because the user never got a chance to select its presence in the output (e.g. 
+     * this alpha channel because the user never got a chance to select its presence in the output (e.g.
      * footprint management in mosaic)
+     *
      * @param coverage
      * @param reader
      * @return
-     * @throws IOException 
+     * @throws IOException
      */
     private boolean hasDynamicAlpha(GridCoverage2D coverage, GridCoverage2DReader reader) throws IOException {
         // check if we have an alpha band in the coverage to stat with
@@ -535,7 +539,7 @@ public class CoverageViewReader implements GridCoverage2DReader {
      * Get a {@link GridCoverage2DReader} wrapping the provided delegate reader
      */
     public static GridCoverage2DReader wrap(GridCoverage2DReader reader, CoverageView coverageView,
-            CoverageInfo coverageInfo, Hints hints) {
+                                            CoverageInfo coverageInfo, Hints hints) {
         if (reader instanceof StructuredGridCoverage2DReader) {
             return new StructuredCoverageViewReader((StructuredGridCoverage2DReader) reader,
                     coverageView, coverageInfo, hints);
@@ -546,7 +550,7 @@ public class CoverageViewReader implements GridCoverage2DReader {
 
     @Override
     public Format getFormat() {
-        return new Format(){
+        return new Format() {
 
             private final Format delegateFormat = delegate.getFormat();
 
@@ -554,17 +558,17 @@ public class CoverageViewReader implements GridCoverage2DReader {
             public ParameterValueGroup getWriteParameters() {
                 return delegateFormat.getWriteParameters();
             }
-            
+
             @Override
             public String getVersion() {
                 return delegateFormat.getVersion();
             }
-            
+
             @Override
             public String getVendor() {
                 return delegateFormat.getVendor();
             }
-            
+
             @Override
             public ParameterValueGroup getReadParameters() {
                 HashMap<String, String> info = new HashMap<String, String>();
@@ -574,32 +578,32 @@ public class CoverageViewReader implements GridCoverage2DReader {
                 info.put("vendor", getVendor());
                 info.put("docURL", getDocURL());
                 info.put("version", getVersion());
-                
-                List<GeneralParameterDescriptor> delegateFormatParams 
-                    = new ArrayList<GeneralParameterDescriptor>();
+
+                List<GeneralParameterDescriptor> delegateFormatParams
+                        = new ArrayList<GeneralParameterDescriptor>();
                 delegateFormatParams.addAll(
                         delegateFormat.getReadParameters().getDescriptor().descriptors());
                 // add bands parameter descriptor only if the delegate reader doesn't have it already
                 if (!checkIfDelegateReaderSupportsBands()) {
                     delegateFormatParams.add(AbstractGridFormat.BANDS);
                 }
-                
+
                 return new ParameterGroup(new DefaultParameterDescriptorGroup(
                         info,
                         delegateFormatParams.toArray(
                                 new GeneralParameterDescriptor[delegateFormatParams.size()])));
             }
-            
+
             @Override
             public String getName() {
                 return delegateFormat.getName();
             }
-            
+
             @Override
             public String getDocURL() {
                 return delegateFormat.getDocURL();
             }
-            
+
             @Override
             public String getDescription() {
                 return delegateFormat.getDescription();
@@ -708,7 +712,7 @@ public class CoverageViewReader implements GridCoverage2DReader {
 
     @Override
     public double[] getReadingResolutions(String coverageName, OverviewPolicy policy,
-            double[] requestedResolution) throws IOException {
+                                          double[] requestedResolution) throws IOException {
         checkCoverageName(coverageName);
         return delegate.getReadingResolutions(referenceName, policy, requestedResolution);
     }

@@ -28,9 +28,8 @@ import org.geoserver.web.wicket.ParamResourceModel;
 
 /**
  * Supports coverage store configuration
- * 
+ *
  * @author Emanuele Tajariol (etj at geo-solutions dot it)
- * 
  * @see StoreEditPanel
  */
 @SuppressWarnings("serial")
@@ -39,7 +38,7 @@ abstract class AbstractWMTSStorePage extends GeoServerSecuredPage {
     protected WorkspacePanel workspacePanel;
 
     private Form form;
-    
+
     GeoServerDialog dialog;
 
     TextParamPanel capabilitiesURL;
@@ -49,10 +48,10 @@ abstract class AbstractWMTSStorePage extends GeoServerSecuredPage {
 
     protected TextParamPanel headerNamePanel;
     protected TextParamPanel headerValuePanel;
-    
+
     void initUI(final WMTSStoreInfo store) {
         IModel model = new Model(store);
-        
+
         add(dialog = new GeoServerDialog("dialog"));
 
         // build the form
@@ -76,7 +75,7 @@ abstract class AbstractWMTSStorePage extends GeoServerSecuredPage {
                 new PropertyModel(model, "workspace"), new ResourceModel("workspace", "Workspace"),
                 true);
         form.add(workspacePanel);
-        
+
         capabilitiesURL = new TextParamPanel("capabilitiesURL", new PropertyModel(model, "capabilitiesURL"),
                 new ParamResourceModel("capabilitiesURL", AbstractWMTSStorePage.this), true);
         form.add(capabilitiesURL);
@@ -109,7 +108,7 @@ abstract class AbstractWMTSStorePage extends GeoServerSecuredPage {
                 "useConnectionPooling");
         CheckBoxParamPanel useConnectionPooling = new CheckBoxParamPanel(
                 "useConnectionPoolingPanel", useHttpConnectionPoolModel, new ResourceModel(
-                        "AbstractWMTSStorePage.useHttpConnectionPooling"));
+                "AbstractWMTSStorePage.useHttpConnectionPooling"));
         form.add(useConnectionPooling);
 
         PropertyModel<String> connectionsModel = new PropertyModel<String>(model, "maxConnections");
@@ -129,7 +128,7 @@ abstract class AbstractWMTSStorePage extends GeoServerSecuredPage {
                 target.add(maxConnections);
             }
         });
-        
+
         // connect timeout
         PropertyModel<Integer> connectTimeoutModel = new PropertyModel<Integer>(model, "connectTimeout");
         form.add(new TextParamPanel("connectTimeoutPanel", connectTimeoutModel, new ResourceModel(
@@ -179,12 +178,10 @@ abstract class AbstractWMTSStorePage extends GeoServerSecuredPage {
     /**
      * Template method for subclasses to take the appropriate action when the coverage store page
      * "save" button is pressed.
-     * 
-     * @param info
-     *            the StoreInfo to save
-     * @throws IllegalArgumentException
-     *             with an appropriate error message if the save action can't be successfully
-     *             performed
+     *
+     * @param info the StoreInfo to save
+     * @throws IllegalArgumentException with an appropriate error message if the save action can't be successfully
+     *                                  performed
      */
     protected abstract void onSave(WMTSStoreInfo info, AjaxRequestTarget target)
             throws IllegalArgumentException;

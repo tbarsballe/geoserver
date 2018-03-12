@@ -22,7 +22,7 @@ import org.opengis.filter.sort.SortBy;
 
 /**
  * A feature collection reading record files from the specified directory
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 class RecordsFeatureCollection extends AbstractFeatureCollection<FeatureType, Feature> {

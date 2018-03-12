@@ -76,7 +76,7 @@ import org.springframework.context.ApplicationContextAware;
 /**
  * A {@link DimensionDefaultValueSelectionStrategyFactory} implementation using the dynamic default
  * values configurations, is present
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class DynamicDefaultValueSelectionFactory extends AbstractDispatcherCallback implements
@@ -86,7 +86,9 @@ public class DynamicDefaultValueSelectionFactory extends AbstractDispatcherCallb
     static final ThreadLocal<Map<String, Map<String, Object>>> DYNAMIC_DEFAULTS = new ThreadLocal<Map<String, Map<String, Object>>>() {
         protected java.util.Map<String, java.util.Map<String, Object>> initialValue() {
             return new HashMap<String, Map<String, Object>>();
-        };
+        }
+
+        ;
     };
 
     FilterFactory ff = CommonFactoryFinder.getFilterFactory();
@@ -97,13 +99,13 @@ public class DynamicDefaultValueSelectionFactory extends AbstractDispatcherCallb
 
     @Override
     public DimensionDefaultValueSelectionStrategy getStrategy(ResourceInfo resource,
-            String dimensionName, DimensionInfo dimension) {
+                                                              String dimensionName, DimensionInfo dimension) {
         Request request = Dispatcher.REQUEST.get();
         DefaultValueConfigurations config = getConfigurations(resource);
         if (config != null
                 && request != null
                 && ("GetMap".equalsIgnoreCase(request.getRequest()) || "GetFeatureInfo"
-                        .equalsIgnoreCase(request.getRequest()))) {
+                .equalsIgnoreCase(request.getRequest()))) {
             GetMapRequest getMap = getGetMap(request);
             try {
                 Map<String, Object> defaults = getDefaultValues(resource, getMap, config);
@@ -133,9 +135,8 @@ public class DynamicDefaultValueSelectionFactory extends AbstractDispatcherCallb
     /**
      * Returns the default values configuration if present, not empty, and has at least a dynamic
      * dimension to compute
-     * 
-     * @param resource
      *
+     * @param resource
      */
     private DefaultValueConfigurations getConfigurations(ResourceInfo resource) {
         DefaultValueConfigurations configurations = resource.getMetadata().get(
@@ -177,7 +178,7 @@ public class DynamicDefaultValueSelectionFactory extends AbstractDispatcherCallb
     }
 
     private Map<String, Object> getDefaultValues(ResourceInfo resource, GetMapRequest getMap,
-            DefaultValueConfigurations configurations) throws IOException {
+                                                 DefaultValueConfigurations configurations) throws IOException {
 
         Map<String, Map<String, Object>> defaults = DYNAMIC_DEFAULTS.get();
         String resourceKey = resource.getId();
@@ -200,7 +201,7 @@ public class DynamicDefaultValueSelectionFactory extends AbstractDispatcherCallb
     }
 
     private Map<String, Object> buildDynamicDefaults(ResourceInfo resource, GetMapRequest getMap,
-            DefaultValueConfigurations configsBean) throws IOException {
+                                                     DefaultValueConfigurations configsBean) throws IOException {
 
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.fine("Building dynamic defaults for resource " + resource.prefixedName());
@@ -331,7 +332,7 @@ public class DynamicDefaultValueSelectionFactory extends AbstractDispatcherCallb
     }
 
     private boolean hasDynamicConfiguration(List<DefaultValueConfiguration> configurations,
-            String dimensionName) {
+                                            String dimensionName) {
         for (DefaultValueConfiguration config : configurations) {
             if (dimensionName.equals(config.getDimension())) {
                 return true;
@@ -367,14 +368,14 @@ public class DynamicDefaultValueSelectionFactory extends AbstractDispatcherCallb
     /**
      * Separates values provided by the user that do not need defaulting, from those where the user
      * asked explicitly for a default value
-     * 
+     *
      * @param dimensionName
      * @param values
      * @param completeSpecs
      * @param incompleteSpecs
      */
     private void addExplicitValues(String dimensionName, List<? extends Object> values,
-            Map<String, Object> completeSpecs, Map<String, List<? extends Object>> incompleteSpecs) {
+                                   Map<String, Object> completeSpecs, Map<String, List<? extends Object>> incompleteSpecs) {
         if (values.contains(null)) {
             incompleteSpecs.put(dimensionName, values);
         } else {
@@ -384,7 +385,7 @@ public class DynamicDefaultValueSelectionFactory extends AbstractDispatcherCallb
     }
 
     private Object getDynamicDefault(ResourceInfo resource, Map<String, Object> result,
-            DefaultValueConfiguration config, String dimensionName) throws IOException {
+                                     DefaultValueConfiguration config, String dimensionName) throws IOException {
         // get the dimension info
         DimensionInfo di = resource.getMetadata().get(
                 getDimensionMetadataKey(config.getDimension()), DimensionInfo.class);
@@ -404,7 +405,7 @@ public class DynamicDefaultValueSelectionFactory extends AbstractDispatcherCallb
                     LOGGER.fine("Computed default value for dimension " + dimensionName
                             + " using standard policy " + strategy + " which resulted in: " + value);
                 }
-                
+
                 return value;
             }
         } else if (config.policy == DefaultValuePolicy.EXPRESSION) {
@@ -430,7 +431,7 @@ public class DynamicDefaultValueSelectionFactory extends AbstractDispatcherCallb
     }
 
     private Object applyExpression(Map<String, Object> result, DefaultValueConfiguration config,
-            String dimensionName, Class<?> dimensionClass) {
+                                   String dimensionName, Class<?> dimensionClass) {
         Expression expression;
         String expressionStr = config.getDefaultValueExpression();
         try {
@@ -472,9 +473,8 @@ public class DynamicDefaultValueSelectionFactory extends AbstractDispatcherCallb
     /**
      * Dimension values are often wrapped in list and/or using ranges, unwrap them to get a single
      * value
-     * 
-     * @param value
      *
+     * @param value
      */
     private Object getSimpleValue(Object value) {
         if (value instanceof List) {
@@ -494,8 +494,8 @@ public class DynamicDefaultValueSelectionFactory extends AbstractDispatcherCallb
     }
 
     private Object getRasterDefaultValue(CoverageInfo resource, DefaultValueConfiguration config,
-            Map<String, Object> restrictions,
-            DimensionDefaultValueSelectionStrategy delegateStrategy) throws IOException {
+                                         Map<String, Object> restrictions,
+                                         DimensionDefaultValueSelectionStrategy delegateStrategy) throws IOException {
         String dimensionName = config.getDimension();
         DimensionInfo di = resource.getMetadata().get(
                 getDimensionMetadataKey(config.getDimension()), DimensionInfo.class);
@@ -602,15 +602,14 @@ public class DynamicDefaultValueSelectionFactory extends AbstractDispatcherCallb
 
     /**
      * Applies the normal policy, but restricted to the
-     * 
+     *
      * @param resource
      * @param config
      * @param restrictions
-     *
      * @throws IOException
      */
     private Object getVectorDefaultValue(FeatureTypeInfo resource,
-            DefaultValueConfiguration config, Map<String, Object> restrictions) throws IOException {
+                                         DefaultValueConfiguration config, Map<String, Object> restrictions) throws IOException {
         DimensionInfo di = resource.getMetadata().get(
                 getDimensionMetadataKey(config.getDimension()), DimensionInfo.class);
         DimensionDefaultValueSelectionStrategy strategy = delegate.getStrategy(resource,
@@ -666,9 +665,8 @@ public class DynamicDefaultValueSelectionFactory extends AbstractDispatcherCallb
 
     /**
      * If the object is not a List, it wraps it into one
-     * 
-     * @param value
      *
+     * @param value
      */
     private List<Object> wrapIntoList(Object value) {
         List<Object> values;

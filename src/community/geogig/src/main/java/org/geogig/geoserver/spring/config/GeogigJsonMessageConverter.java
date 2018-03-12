@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class GeogigJsonMessageConverter extends AbstractDelegatingGeogigMessageConverter {
-    
+
     public GeogigJsonMessageConverter() {
         super(new GsonHttpMessageConverter());
     }

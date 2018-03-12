@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 /**
  * Pull in Geogig exception handling, but only apply it to geogig controllers.
  */
-@ControllerAdvice(basePackages={"org.locationtech.geogig.spring.controller","org.geogig.geoserver.spring.controller"})
+@ControllerAdvice(basePackages = {"org.locationtech.geogig.spring.controller", "org.geogig.geoserver.spring.controller"})
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class GeogigExceptionHandler extends RequestExceptionHandler {
 }

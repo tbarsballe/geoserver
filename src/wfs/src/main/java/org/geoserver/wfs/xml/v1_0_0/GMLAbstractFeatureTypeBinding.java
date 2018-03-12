@@ -27,16 +27,17 @@ import com.vividsolutions.jts.geom.Polygon;
 public final class GMLAbstractFeatureTypeBinding extends org.geotools.gml2.bindings.GMLAbstractFeatureTypeBinding {
     GeometryFactory geometryFactory;
     Catalog catalog;
+
     //SchemaIndex schemaIndex;
     public GMLAbstractFeatureTypeBinding(FeatureTypeCache featureTypeCache,
-        BindingWalkerFactory bwFactory, SchemaIndex schemaIndex, GeometryFactory geometryFactory, Catalog catalog, Configuration configuration) {
+                                         BindingWalkerFactory bwFactory, SchemaIndex schemaIndex, GeometryFactory geometryFactory, Catalog catalog, Configuration configuration) {
         super(featureTypeCache, bwFactory, schemaIndex, configuration);
         this.geometryFactory = geometryFactory;
         this.catalog = catalog;
     }
 
     public Object parse(ElementInstance instance, Node node, Object value)
-        throws Exception {
+            throws Exception {
         //pre process parsee tree to make sure types match up
         FeatureTypeInfo meta = catalog.getFeatureTypeByName(instance.getNamespace(), instance.getName());
         if (meta != null) {
@@ -62,7 +63,7 @@ public final class GMLAbstractFeatureTypeBinding extends org.geotools.gml2.bindi
                                 Polygon polygon = polygon(bounds);
                                 boundedByNode.setValue(polygon);
                             } else if (type.isAssignableFrom(MultiPolygon.class)) {
-                                MultiPolygon multiPolygon = geometryFactory.createMultiPolygon(new Polygon[] {
+                                MultiPolygon multiPolygon = geometryFactory.createMultiPolygon(new Polygon[]{
                                         polygon(bounds)
                                 });
                                 boundedByNode.setValue(multiPolygon);
@@ -79,12 +80,12 @@ public final class GMLAbstractFeatureTypeBinding extends org.geotools.gml2.bindi
 
     Polygon polygon(Envelope bounds) {
         return geometryFactory.createPolygon(geometryFactory.createLinearRing(
-                new Coordinate[] {
-                    new Coordinate(bounds.getMinX(), bounds.getMinY()),
-                    new Coordinate(bounds.getMinX(), bounds.getMaxY()),
-                    new Coordinate(bounds.getMaxX(), bounds.getMaxY()),
-                    new Coordinate(bounds.getMaxX(), bounds.getMinY()),
-                    new Coordinate(bounds.getMinX(), bounds.getMinY())
+                new Coordinate[]{
+                        new Coordinate(bounds.getMinX(), bounds.getMinY()),
+                        new Coordinate(bounds.getMinX(), bounds.getMaxY()),
+                        new Coordinate(bounds.getMaxX(), bounds.getMaxY()),
+                        new Coordinate(bounds.getMaxX(), bounds.getMinY()),
+                        new Coordinate(bounds.getMinX(), bounds.getMinY())
                 }), null);
     }
 }

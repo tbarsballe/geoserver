@@ -18,7 +18,7 @@ public interface TransactionCallback extends ExtensionPriority {
      * Check/alter the transaction request elements
      */
     TransactionRequest beforeTransaction(TransactionRequest request)
-        throws WFSException;
+            throws WFSException;
 
     /**
      * Say the last word before we actually commit the transaction
@@ -27,16 +27,12 @@ public interface TransactionCallback extends ExtensionPriority {
 
     /**
      * Notification the transaction ended
-     * 
-     * @param request
-     *            the originating transaction request
-     * @param result
-     *            {@code null} if {@code committed == false}, the transaction result object to be
-     *            sent back to the client otherwise.
-     * 
-     * @param committed
-     *            true if the transaction was successful, false if the transaction was aborted for
-     *            any reason
+     *
+     * @param request   the originating transaction request
+     * @param result    {@code null} if {@code committed == false}, the transaction result object to be
+     *                  sent back to the client otherwise.
+     * @param committed true if the transaction was successful, false if the transaction was aborted for
+     *                  any reason
      */
     void afterTransaction(TransactionRequest request, TransactionResponse result, boolean committed);
 

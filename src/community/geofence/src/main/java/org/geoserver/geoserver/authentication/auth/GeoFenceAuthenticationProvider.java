@@ -42,7 +42,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 /**
  * Authentication provider that delegates to GeoFence
- * 
+ *
  * @author ETj (etj at geo-solutions.it)
  */
 public class GeoFenceAuthenticationProvider extends GeoServerAuthenticationProvider
@@ -89,7 +89,7 @@ public class GeoFenceAuthenticationProvider extends GeoServerAuthenticationProvi
 
             if (authUser != null) {
                 LOGGER.log(Level.FINE, "User {0} authenticated: {1}",
-                        new Object[] { inTok.getPrincipal(), authUser });
+                        new Object[]{inTok.getPrincipal(), authUser});
 
                 List<GrantedAuthority> roles = new ArrayList<GrantedAuthority>();
                 roles.addAll(inTok.getAuthorities());

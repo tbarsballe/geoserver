@@ -9,9 +9,8 @@ import java.util.Comparator;
 
 /**
  * Sorts the flow controllers based on their priority (lower number means higher priority)
- * 
+ *
  * @author Andrea Aime - OpenGeo
- * 
  */
 public class ControllerPriorityComparator implements Comparator<FlowController> {
 

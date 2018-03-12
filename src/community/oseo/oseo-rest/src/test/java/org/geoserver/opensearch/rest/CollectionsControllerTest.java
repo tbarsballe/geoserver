@@ -373,7 +373,7 @@ public class CollectionsControllerTest extends OSEORestTestSupport {
             testCreateCollectionAsZip(parts);
         }
     }
-    
+
     @Test
     public void testGetCollectionLayer() throws Exception {
         DocumentContext json = getAsJSONPath("/rest/oseo/collections/SENTINEL2/layer", 200);
@@ -387,7 +387,7 @@ public class CollectionsControllerTest extends OSEORestTestSupport {
         assertEquals(Boolean.TRUE, json.read("$.heterogeneousCRS"));
         assertEquals("EPSG:4326", json.read("$.mosaicCRS"));
     }
-    
+
     @Test
     public void testDeleteCollectionLayer() throws Exception {
         // remove
@@ -398,33 +398,33 @@ public class CollectionsControllerTest extends OSEORestTestSupport {
         response = getAsServletResponse("/rest/oseo/collections/SENTINEL2/layer");
         assertEquals(404, response.getStatus());
     }
-    
+
     private void testCreateCollectionAsZip(Set<CollectionPart> parts) throws Exception {
         LOGGER.info("Testing: " + parts);
         byte[] zip = null;
         try (final ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                ZipOutputStream zos = new ZipOutputStream(bos)) {
+             ZipOutputStream zos = new ZipOutputStream(bos)) {
             for (CollectionPart part : parts) {
                 String resource, name;
                 switch (part) {
-                case Collection:
-                    resource = "/collection.json";
-                    name = "collection.json";
-                    break;
-                case Description:
-                    resource = "/test123-description.html";
-                    name = "description.html";
-                    break;
-                case Metadata:
-                    resource = "/test123-metadata.xml";
-                    name = "metadata.xml";
-                    break;
-                case OwsLinks:
-                    resource = "/test123-links.json";
-                    name = "owsLinks.json";
-                    break;
-                default:
-                    throw new RuntimeException("Unexpected part " + part);
+                    case Collection:
+                        resource = "/collection.json";
+                        name = "collection.json";
+                        break;
+                    case Description:
+                        resource = "/test123-description.html";
+                        name = "description.html";
+                        break;
+                    case Metadata:
+                        resource = "/test123-metadata.xml";
+                        name = "metadata.xml";
+                        break;
+                    case OwsLinks:
+                        resource = "/test123-links.json";
+                        name = "owsLinks.json";
+                        break;
+                    default:
+                        throw new RuntimeException("Unexpected part " + part);
                 }
 
                 ZipEntry entry = new ZipEntry(name);
@@ -442,7 +442,7 @@ public class CollectionsControllerTest extends OSEORestTestSupport {
             assertEquals("http://localhost:8080/geoserver/rest/oseo/collections/TEST123",
                     response.getHeader("location"));
 
-            assertTest123CollectionCreated();            
+            assertTest123CollectionCreated();
         } else {
             assertEquals(400, response.getStatus());
             assertThat(response.getContentAsString(), containsString("collection.json"));
@@ -472,10 +472,10 @@ public class CollectionsControllerTest extends OSEORestTestSupport {
         assertEquals("A", json.read("$.properties['eo:platformSerialIdentifier']"));
         assertEquals("MSI", json.read("$.properties['eo:instrument']"));
         assertEquals("2012-04-23T18:25:43.511+0000", json.read("$.properties['timeStart']"));
-        
+
         SimpleFeature sf = new FeatureJSON().readFeature(json.jsonString());
         ReferencedEnvelope bounds = ReferencedEnvelope.reference(sf.getBounds());
-        assertTrue(new Envelope(-180,180,-90,90).equals(bounds));
+        assertTrue(new Envelope(-180, 180, -90, 90).equals(bounds));
 
     }
 

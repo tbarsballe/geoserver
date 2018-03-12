@@ -17,9 +17,8 @@ import org.geoserver.web.GeoServerApplication;
 
 /**
  * Drop down choice widget for {@link PasswordPolicy} configurations.
- * 
- * @author Justin Deoliveira, OpenGeo
  *
+ * @author Justin Deoliveira, OpenGeo
  */
 public class PasswordPolicyChoice extends DropDownChoice<String> {
 
@@ -34,7 +33,7 @@ public class PasswordPolicyChoice extends DropDownChoice<String> {
         PasswordPolicyNamesModel() {
             try {
                 policyNames = new ArrayList<String>(
-                    GeoServerApplication.get().getSecurityManager().listPasswordValidators());
+                        GeoServerApplication.get().getSecurityManager().listPasswordValidators());
             } catch (IOException e) {
                 throw new WicketRuntimeException(e);
             }
@@ -61,6 +60,7 @@ public class PasswordPolicyChoice extends DropDownChoice<String> {
         public Object getDisplayValue(String object) {
             return object;
         }
+
         @Override
         public String getIdValue(String object, int index) {
             return object;

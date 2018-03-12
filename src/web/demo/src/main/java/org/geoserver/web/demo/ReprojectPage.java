@@ -30,7 +30,7 @@ import com.vividsolutions.jts.geom.Geometry;
 /**
  * A simple reprojection console panel, shows details about a SRS1 -> SRS2 transformation
  * and allows to reproject simple points or WKT geometries
- *  
+ *
  * @author Andrea Aime - GeoSolutions
  */
 @SuppressWarnings("serial")
@@ -44,7 +44,9 @@ public class ReprojectPage extends GeoServerBasePage {
 
     GeometryTextArea targetGeom;
 
-    /** pop-up window for transformation details **/
+    /**
+     * pop-up window for transformation details
+     **/
     ModalWindow popupWindow;
 
     GeoServerAjaxFormLink wktLink;
@@ -54,12 +56,12 @@ public class ReprojectPage extends GeoServerBasePage {
     SimpleAjaxLink<Void> targetDetails;
 
     public ReprojectPage(PageParameters params) {
-        if(params != null) {
+        if (params != null) {
             // get the params, if any
             sourceCRS = params.get("fromSRS").toOptionalString();
             targetCRS = params.get("toSRS").toOptionalString();
         }
-        
+
         // the popup for transformation details
         popupWindow = new ModalWindow("popup");
         add(popupWindow);
@@ -74,11 +76,13 @@ public class ReprojectPage extends GeoServerBasePage {
             protected void onSRSUpdated(String srs, AjaxRequestTarget target) {
                 sourceCRS = srs;
                 updateTransformation(target);
-            };
+            }
+
+            ;
         };
         sourcePanel.setRequired(true);
         form.add(sourcePanel);
-        
+
         // the target CRS
         CRSPanel targetPanel = new CRSPanel("targetCRS", new SRSToCRSModel(new PropertyModel(this,
                 "targetCRS"))) {
@@ -86,11 +90,13 @@ public class ReprojectPage extends GeoServerBasePage {
                 targetCRS = srs;
                 updateTransformation(target);
 
-            };
+            }
+
+            ;
         };
         targetPanel.setRequired(true);
         form.add(targetPanel);
-        
+
         // The link showing
         wktLink = new GeoServerAjaxFormLink("wkt", form) {
             @Override
@@ -118,7 +124,7 @@ public class ReprojectPage extends GeoServerBasePage {
             protected void onSubmit(AjaxRequestTarget at, Form<?> form) {
                 Geometry source = sourceGeom.getModelObject();
                 if (source == null) {
-                    error(getLocalizer().getString("ReprojectPage.sourcePointNotSpecifiedError", 
+                    error(getLocalizer().getString("ReprojectPage.sourcePointNotSpecifiedError",
                             ReprojectPage.this, "Source Geometry is not specified"));
                 } else {
                     MathTransform mt = getTransform();
@@ -148,7 +154,7 @@ public class ReprojectPage extends GeoServerBasePage {
             protected void onSubmit(AjaxRequestTarget at, Form<?> form) {
                 Geometry target = targetGeom.getModelObject();
                 if (target == null) {
-                    error(getLocalizer().getString("ReprojectPage.targetPointNotSpecifiedError", 
+                    error(getLocalizer().getString("ReprojectPage.targetPointNotSpecifiedError",
                             ReprojectPage.this, "Target Geometry is not specified"));
                 } else {
                     MathTransform mt = getTransform();

@@ -10,13 +10,12 @@ import java.util.List;
 
 /**
  * Defines LayerGroup visibility policy, used by AdvertisedCatalog.
- * 
+ *
  * @author Davide Savazzi - GeoSolutions
  */
 public interface LayerGroupVisibilityPolicy {
 
     /**
-     * 
      * @param group
      * @param filteredLayers
      * @return true if LayerGroup must be hidden, false otherwise
@@ -30,9 +29,9 @@ public interface LayerGroupVisibilityPolicy {
         @Override
         public boolean hideLayerGroup(LayerGroupInfo group, List<PublishedInfo> filteredLayers) {
             return false;
-        }       
+        }
     };
-    
+
     /**
      * Hide a LayerGroup if it doesn't contain Layers or if its Layers are all hidden
      */
@@ -40,9 +39,9 @@ public interface LayerGroupVisibilityPolicy {
         @Override
         public boolean hideLayerGroup(LayerGroupInfo group, List<PublishedInfo> filteredLayers) {
             return filteredLayers.size() == 0;
-        }       
-    };    
-    
+        }
+    };
+
     /**
      * Hide a LayerGroup if its Layers are all hidden
      */
@@ -50,6 +49,6 @@ public interface LayerGroupVisibilityPolicy {
         @Override
         public boolean hideLayerGroup(LayerGroupInfo group, List<PublishedInfo> filteredLayers) {
             return filteredLayers.size() == 0 && group.getLayers().size() > 0;
-        }       
+        }
     };
 }

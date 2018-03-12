@@ -39,10 +39,10 @@ public class EventHzSynchronizerSendTest extends HzSynchronizerSendTest {
             @Override
             ScheduledExecutorService getNewExecutor() {
                 return getMockExecutor();
-            }            
-            
+            }
+
             @Override
-            public boolean isStarted(){
+            public boolean isStarted() {
                 return true;
             }
         };
@@ -56,33 +56,34 @@ public class EventHzSynchronizerSendTest extends HzSynchronizerSendTest {
         final String storeName = "testStore";
         final String storeId = "Store-TEST";
         final String storeWorkspace = "Workspace-TEST";
-        
+
         final Capture<ConfigChangeEvent> capture = new Capture<ConfigChangeEvent>();
-        
+
         {
             info = createMock(DataStoreInfo.class);
             wsInfo = createMock(WorkspaceInfo.class);
-    
+
             expect(info.getName()).andStubReturn(storeName);
             expect(info.getId()).andStubReturn(storeId);
             expect(info.getWorkspace()).andStubReturn(wsInfo);
-            
+
             expect(wsInfo.getId()).andStubReturn(storeWorkspace);
-            
-			topic.publish(capture(capture));expectLastCall();
+
+            topic.publish(capture(capture));
+            expectLastCall();
         }
         replay(info, wsInfo);
         {
             HzSynchronizer sync = getSynchronizer();
-            
+
             // Mock the result of doing this:
             // getCatalog().remove(info);
-            
+
             CatalogRemoveEventImpl event = new CatalogRemoveEventImpl();
-    
+
             event.setSource(info);
-            
-            for(CatalogListener listener: catListenerCapture.getValues()) {
+
+            for (CatalogListener listener : catListenerCapture.getValues()) {
                 listener.handleRemoveEvent(event);
             }
 

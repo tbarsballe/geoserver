@@ -55,7 +55,7 @@ import com.vividsolutions.jts.io.ParseException;
  * WMS tests utility class to set up a mocked up catalog and geoserver environment so unit tests
  * does not depend on a fully configured geoserver instance, and also they run fast due to no data
  * directory set up required.
- * 
+ *
  * @author Gabriel Roldan
  * @version $Id$
  */
@@ -165,7 +165,7 @@ public class WMSMockData {
     /**
      * This dummy producer adds no functionality to DefaultRasterMapProducer, just implements a void
      * formatImageOutputStream
-     * 
+     *
      * @author Gabriel Roldan
      * @version $Id$
      */
@@ -209,7 +209,7 @@ public class WMSMockData {
 
         /**
          * @see org.geoserver.ows.Response#getMimeType(java.lang.Object,
-         *      org.geoserver.platform.Operation)
+         * org.geoserver.platform.Operation)
          */
         @Override
         public String getMimeType(Object value, Operation operation) throws ServiceException {
@@ -218,7 +218,7 @@ public class WMSMockData {
 
         /**
          * @see org.geoserver.ows.Response#write(java.lang.Object, java.io.OutputStream,
-         *      org.geoserver.platform.Operation)
+         * org.geoserver.platform.Operation)
          */
         @Override
         public void write(Object value, OutputStream output, Operation operation)
@@ -262,7 +262,7 @@ public class WMSMockData {
      * given type and two attributes: name:String and geom:geometryType
      */
     public MapLayerInfo addFeatureTypeLayer(final String name,
-            Class<? extends Geometry> geometryType) throws IOException {
+                                            Class<? extends Geometry> geometryType) throws IOException {
 
         final DataStore dataStore = this.dataStore;
         FeatureTypeInfoImpl featureTypeInfo = new FeatureTypeInfoImpl(catalog) {

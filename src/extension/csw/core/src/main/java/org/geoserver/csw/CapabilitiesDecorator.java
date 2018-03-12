@@ -11,11 +11,11 @@ import org.geoserver.csw.store.CatalogStore;
 
 /**
  * The CSW GetCapabilities decorator extension interface
- * 
+ *
  * @author Alessio Fabiani - GeoSolutions
  */
 public interface CapabilitiesDecorator {
 
     CapabilitiesType decorate(CapabilitiesType caps, CatalogStore store);
-    
+
 }

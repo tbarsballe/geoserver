@@ -21,6 +21,7 @@ import java.util.Map;
  * This class contains properties common to many types of open web services. It
  * is intended to be subclassed by services who require addional properties.
  * </p>
+ *
  * @author Justin Deoliveira, The Open Planning Project, jdeolive@openplans.org
  * @deprecated use {@link org.geoserver.config.ServiceInfo}
  */
@@ -127,13 +128,13 @@ public interface OWS {
     //}
 
     /**
-    * <p>
-    * Returns whether is service is enabled.
-    * </p>
-    *
-    * @return true when enabled.
-    */
-    public boolean isEnabled(); 
+     * <p>
+     * Returns whether is service is enabled.
+     * </p>
+     *
+     * @return true when enabled.
+     */
+    public boolean isEnabled();
     //{
     //    return enabled;
     //}
@@ -167,7 +168,7 @@ public interface OWS {
      *
      * @return String This Service's abstract.
      */
-    public String getAbstract(); 
+    public String getAbstract();
     //{
     //    return serverAbstract;
     //}

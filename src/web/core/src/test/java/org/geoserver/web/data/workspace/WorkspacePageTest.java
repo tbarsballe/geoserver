@@ -19,15 +19,15 @@ public class WorkspacePageTest extends GeoServerWicketTestSupport {
     public void init() {
         login();
         tester.startPage(WorkspacePage.class);
-        
+
         // print(tester.getLastRenderedPage(), true, true);
     }
-    
+
     @Test
     public void testLoad() {
         tester.assertRenderedPage(WorkspacePage.class);
         tester.assertNoErrorMessage();
-        
+
         DataView dv = (DataView) tester.getComponentFromLastRenderedPage("table:listContainer:items");
         assertEquals(dv.size(), getCatalog().getWorkspaces().size());
         WorkspaceInfo ws = (WorkspaceInfo) dv.getDataProvider().iterator(0, 1).next();

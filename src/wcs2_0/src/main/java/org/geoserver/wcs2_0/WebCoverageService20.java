@@ -21,12 +21,11 @@ import org.opengis.coverage.grid.GridCoverage;
  * by the Web Coverage Specification. See {@link "http://www.opengeospatial.org/standards/wcs"}
  * for more details.
  * </p>
- * 
- * @author Emanuele Tajariol (etj) - GeoSolutions
  *
+ * @author Emanuele Tajariol (etj) - GeoSolutions
  */
 public interface WebCoverageService20 {
-    
+
     /**
      * A key that can be be used to identify the originating CoverageInfo attached to the output GridCoverage,
      * which can be used to retrieve extra metadata about the coverage
@@ -37,17 +36,17 @@ public interface WebCoverageService20 {
      * WCS service info.
      */
     WCSInfo getServiceInfo();
-    
+
     /**
-    * GetCapabilities operation.
-    */
+     * GetCapabilities operation.
+     */
     TransformerBase getCapabilities(GetCapabilitiesType request);
 
     /**
      * DescribeCoverage operation.
      */
     WCS20DescribeCoverageTransformer describeCoverage(DescribeCoverageType request);
-    
+
     /**
      * The WCS EO desscribe coverage set operation (available only if the wcs-eo plugin is installed)
      */

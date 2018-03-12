@@ -18,7 +18,7 @@ import org.geoserver.wms.WebMapService;
  * values to each frame.<br/>
  * Notice that the catalog is not delegated to the frame production, it just
  * handles the frames metadata.
- * 
+ *
  * @author Alessio Fabiani, GeoSolutions S.A.S., alessio.fabiani@geo-solutions.it
  * @author Andrea Aime, GeoSolutions S.A.S., andrea.aime@geo-solutions.it
  */
@@ -42,9 +42,9 @@ public class FrameCatalog {
 
     /**
      * Frame Catalog Constructor.
-     * 
+     *
      * @param request
-     * @param wmsConfiguration 
+     * @param wmsConfiguration
      */
     public FrameCatalog(GetMapRequest request, WebMapService wms, WMS wmsConfiguration) {
         this();
@@ -65,7 +65,7 @@ public class FrameCatalog {
             throw new RuntimeException(
                     "Missing \"animator\" mandatory params \"aparam\" and \"avalues\".");
         }
-        
+
         if (this.values.length > this.getWmsConfiguration().getMaxAllowedFrames()) {
             dispose();
             throw new RuntimeException(
@@ -110,6 +110,7 @@ public class FrameCatalog {
 
     /**
      * Creates Frames visitors. Still not producing any image here.
+     *
      * @param visitor
      */
     void getFrames(FrameCatalogVisitor visitor) {

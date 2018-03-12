@@ -42,7 +42,7 @@ public class OseoGeoJSONFeatureConverter extends BaseMessageConverter<Object> {
             throws IOException, HttpMessageNotReadableException {
         return new FeatureJSON().readFeature(inputMessage.getBody());
     }
-    
+
     public int getPriority() {
         return ExtensionPriority.HIGHEST;
     }

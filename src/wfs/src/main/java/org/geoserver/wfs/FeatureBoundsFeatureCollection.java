@@ -22,19 +22,20 @@ import org.opengis.feature.type.GeometryDescriptor;
 import com.vividsolutions.jts.geom.Geometry;
 
 /**
- * A feature collection wrapping a base collection, returning features that do 
+ * A feature collection wrapping a base collection, returning features that do
  * conform to the specified type (which has have a subset of the attributes in the
  * original schema), and that do use the wrapped features to compute their bounds (so that
- * the SimpleFeature bounds can be computed even if the visible attributes do not include geometries) 
- * @author Andrea Aime - TOPP
+ * the SimpleFeature bounds can be computed even if the visible attributes do not include geometries)
  *
+ * @author Andrea Aime - TOPP
  */
 class FeatureBoundsFeatureCollection extends AbstractFeatureCollection {
     SimpleFeatureCollection wrapped;
 
     /**
      * Builds a new BoundsFeatureCollection
-     * @param wrapped the wrapped feature collection
+     *
+     * @param wrapped      the wrapped feature collection
      * @param targetSchema the target schema
      */
     public FeatureBoundsFeatureCollection(
@@ -45,9 +46,7 @@ class FeatureBoundsFeatureCollection extends AbstractFeatureCollection {
     }
 
     /**
-     * 
      * @author Andrea Aime - TOPP
-     *
      */
     private static class BoundsIterator implements Iterator<SimpleFeature>, Closeable {
         SimpleFeatureIterator wrapped;
@@ -75,9 +74,9 @@ class FeatureBoundsFeatureCollection extends AbstractFeatureCollection {
             throw new UnsupportedOperationException("Removal is not supported");
         }
     }
-    
+
     protected Iterator openIterator() {
-        return  new BoundsIterator(wrapped.features(), schema);
+        return new BoundsIterator(wrapped.features(), schema);
     }
 
     protected void closeIterator(Iterator close) {
@@ -87,32 +86,32 @@ class FeatureBoundsFeatureCollection extends AbstractFeatureCollection {
     public int size() {
         return wrapped.size();
     }
-    
+
     @Override
     public ReferencedEnvelope getBounds() {
         return wrapped.getBounds();
     }
 
     /**
-     * Wraps a SimpleFeature shaving off all attributes not included in the original type, but 
+     * Wraps a SimpleFeature shaving off all attributes not included in the original type, but
      * delegates bounds computation to the original feature.
-     * @author Andrea Aime - TOPP
      *
+     * @author Andrea Aime - TOPP
      */
     private static class BoundedFeature extends DecoratingFeature {
-        
+
         private SimpleFeatureType type;
-        
+
         public BoundedFeature(SimpleFeature wrapped, SimpleFeatureType type) {
-            super( wrapped );
-            
+            super(wrapped);
+
             this.type = type;
         }
 
         public Object getAttribute(int index) {
             return delegate.getAttribute(type.getDescriptor(index).getName());
         }
-        
+
         @Override
         public int getAttributeCount() {
             return type.getAttributeCount();
@@ -135,17 +134,18 @@ class FeatureBoundsFeatureCollection extends AbstractFeatureCollection {
         public ReferencedEnvelope getBounds() {
             // we may not have the default geometry around in the reduced feature type,
             // so let's output a referenced envelope if possible
-            return  new ReferencedEnvelope( delegate.getBounds() );
+            return new ReferencedEnvelope(delegate.getBounds());
         }
 
         public Geometry getDefaultGeometry() {
-           return getPrimaryGeometry();
+            return getPrimaryGeometry();
         }
+
         public Geometry getPrimaryGeometry() {
-        	 GeometryDescriptor defaultGeometry = type.getGeometryDescriptor();
-             if(defaultGeometry == null)
-                 return null;
-             return (Geometry) delegate.getAttribute(defaultGeometry.getName());
+            GeometryDescriptor defaultGeometry = type.getGeometryDescriptor();
+            if (defaultGeometry == null)
+                return null;
+            return (Geometry) delegate.getAttribute(defaultGeometry.getName());
         }
 
         public SimpleFeatureType getFeatureType() {
@@ -177,12 +177,11 @@ class FeatureBoundsFeatureCollection extends AbstractFeatureCollection {
         public void setDefaultGeometry(Geometry geometry) throws IllegalAttributeException {
             setPrimaryGeometry(geometry);
         }
-        public void setPrimaryGeometry(Geometry geometry) throws IllegalAttributeException  {
+
+        public void setPrimaryGeometry(Geometry geometry) throws IllegalAttributeException {
             throw new UnsupportedOperationException("This feature wrapper is read only");
         }
     }
-    
-       
-    
+
 
 }

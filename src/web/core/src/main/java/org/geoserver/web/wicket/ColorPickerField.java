@@ -17,11 +17,11 @@ import org.apache.wicket.request.resource.PackageResourceReference;
 
 /**
  * A text field linked to some javascript bits that make it a color picker.
- * @author Andrea Aime - OpenGeo
  *
+ * @author Andrea Aime - OpenGeo
  */
 public class ColorPickerField extends TextField<String> {
-    
+
     private static final long serialVersionUID = -5126346882014020980L;
     private static final PackageResourceReference JSCOLOR_JS = new PackageResourceReference(
             ColorPickerField.class, "js/jscolor/jscolor.js");
@@ -48,5 +48,5 @@ public class ColorPickerField extends TextField<String> {
         });
         add(new AttributeAppender("class", new Model<String>("color {required:false}"), ","));
     }
-    
+
 }

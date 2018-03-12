@@ -52,7 +52,7 @@ public class GetCoverageTest extends AbstractGetCoverageTest {
             MockData.SF_PREFIX);
 
     private static final QName RAIN = new QName(MockData.SF_URI, "rain", MockData.SF_PREFIX);
-    
+
     private static final QName SPATIO_TEMPORAL = new QName(MockData.SF_URI, "spatio-temporal", MockData.SF_PREFIX);
 
     @Override
@@ -232,7 +232,7 @@ public class GetCoverageTest extends AbstractGetCoverageTest {
         assertEquals(360, range.getSpan(0));
         assertEquals(499, range.getSpan(1));
     }
-    
+
     @Test
     public void testRotated() throws Exception {
         final String layerId = getLayerId(MockData.ROTATED_CAD);
@@ -279,7 +279,7 @@ public class GetCoverageTest extends AbstractGetCoverageTest {
         checkOws11Exception(dom, "InvalidParameterValue", "identifier");
     }
 
-    
+
     @Test
     public void testLayerQualified() throws Exception {
         String queryString = "&request=getcoverage&service=wcs&version=1.1.1&&format=image/geotiff"
@@ -438,21 +438,21 @@ public class GetCoverageTest extends AbstractGetCoverageTest {
     @Test
     public void testReadNoGridCRS() throws Exception {
         String request = //
-        "  <wcs:GetCoverage service=\"WCS\" version=\"1.1.1\" "
-                + "                   xmlns:wcs=\"http://www.opengis.net/wcs/1.1.1\" "
-                + "                   xmlns:gml=\"http://www.opengis.net/gml\""
-                + "                   xmlns:ows=\"http://www.opengis.net/ows/1.1\" >\n"
-                + "   <ows:Identifier>"
-                + getLayerId(MockData.TASMANIA_DEM)
-                + "   </ows:Identifier>\n"
-                + "            <wcs:DomainSubset>\n"
-                + "              <ows:BoundingBox crs=\"http://www.opengis.net/gml/srs/epsg.xml#4326\">\n"
-                + "                <ows:LowerCorner>-180.0 -90.0</ows:LowerCorner>\n"
-                + "                <ows:UpperCorner>180.0 90.0</ows:UpperCorner>\n"
-                + "              </ows:BoundingBox>\n" //
-                + "            </wcs:DomainSubset>\n"
-                + "            <wcs:Output format=\"image/tiff\"/>\n"
-                + "          </wcs:GetCoverage>";
+                "  <wcs:GetCoverage service=\"WCS\" version=\"1.1.1\" "
+                        + "                   xmlns:wcs=\"http://www.opengis.net/wcs/1.1.1\" "
+                        + "                   xmlns:gml=\"http://www.opengis.net/gml\""
+                        + "                   xmlns:ows=\"http://www.opengis.net/ows/1.1\" >\n"
+                        + "   <ows:Identifier>"
+                        + getLayerId(MockData.TASMANIA_DEM)
+                        + "   </ows:Identifier>\n"
+                        + "            <wcs:DomainSubset>\n"
+                        + "              <ows:BoundingBox crs=\"http://www.opengis.net/gml/srs/epsg.xml#4326\">\n"
+                        + "                <ows:LowerCorner>-180.0 -90.0</ows:LowerCorner>\n"
+                        + "                <ows:UpperCorner>180.0 90.0</ows:UpperCorner>\n"
+                        + "              </ows:BoundingBox>\n" //
+                        + "            </wcs:DomainSubset>\n"
+                        + "            <wcs:Output format=\"image/tiff\"/>\n"
+                        + "          </wcs:GetCoverage>";
 
         MockHttpServletResponse response = postAsServletResponse("wcs", request);
 
@@ -468,7 +468,7 @@ public class GetCoverageTest extends AbstractGetCoverageTest {
         reader.setInput(ImageIO.createImageInputStream(coveragePart.getInputStream()));
         RenderedImage image = reader.read(0);
     }
-    
+
     @Test
     public void testEntityExpansion() throws Exception {
         String request = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
@@ -489,7 +489,7 @@ public class GetCoverageTest extends AbstractGetCoverageTest {
         // print(dom);
         String error = xpath.evaluate("//ows:ExceptionText", dom);
         assertTrue(error.contains(PreventLocalEntityResolver.ERROR_MESSAGE_BASE));
-        
+
         request = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
                 + "<!DOCTYPE wcs:GetCoverage [<!ELEMENT wcs:GetCoverage (ows:Identifier) >\n"
                 + "  <!ATTLIST wcs:GetCoverage\n"
@@ -513,29 +513,28 @@ public class GetCoverageTest extends AbstractGetCoverageTest {
     /**
      * This tests just ended up throwing an exception as the coverage being encoded
      * was too large due to a bug in the scales estimation
-     * 
      */
     @Test
     public void testRotatedPost() throws Exception {
-        String request = "<GetCoverage xmlns=\"http://www.opengis.net/wcs/1.1.1\" xmlns:gml=\"http://www.opengis.net/gml\"\n" + 
-                "             xmlns:ows11=\"http://www.opengis.net/ows/1.1\"\n" + 
+        String request = "<GetCoverage xmlns=\"http://www.opengis.net/wcs/1.1.1\" xmlns:gml=\"http://www.opengis.net/gml\"\n" +
+                "             xmlns:ows11=\"http://www.opengis.net/ows/1.1\"\n" +
                 "             xmlns:ows=\"http://www.opengis.net/ows/1.1\"\n" +
                 "             xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" \r\n" + //
-                "             xmlns:wcs=\"http://schemas.opengis.net/wcs/1.1.1\"\n" + 
-                "             xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n" + 
-                "             service=\"WCS\"\n" + 
-                "             version=\"1.1.1\"\n" + 
-                "             xsi:schemaLocation=\"http://www.opengis.net/wcs/1.1.1 http://schemas.opengis.net/wcs/1.1.1/wcsAll.xsd\">\n" + 
-                "   <ows11:Identifier>RotatedCad</ows11:Identifier>\n" + 
-                "   <DomainSubset>\n" + 
-                "      <ows11:BoundingBox crs=\"urn:ogc:def:crs:OGC:1.3:CRS84\">\n" + 
-                "         <ows11:LowerCorner>7.7634301664746515 45.14713380418506</ows11:LowerCorner>\n" + 
-                "         <ows11:UpperCorner>7.764350661575157 45.14763319238466</ows11:UpperCorner>\n" + 
-                "      </ows11:BoundingBox>\n" + 
-                "   </DomainSubset>\n" + 
-                "   <Output format=\"image/tiff\"/>\n" + 
+                "             xmlns:wcs=\"http://schemas.opengis.net/wcs/1.1.1\"\n" +
+                "             xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n" +
+                "             service=\"WCS\"\n" +
+                "             version=\"1.1.1\"\n" +
+                "             xsi:schemaLocation=\"http://www.opengis.net/wcs/1.1.1 http://schemas.opengis.net/wcs/1.1.1/wcsAll.xsd\">\n" +
+                "   <ows11:Identifier>RotatedCad</ows11:Identifier>\n" +
+                "   <DomainSubset>\n" +
+                "      <ows11:BoundingBox crs=\"urn:ogc:def:crs:OGC:1.3:CRS84\">\n" +
+                "         <ows11:LowerCorner>7.7634301664746515 45.14713380418506</ows11:LowerCorner>\n" +
+                "         <ows11:UpperCorner>7.764350661575157 45.14763319238466</ows11:UpperCorner>\n" +
+                "      </ows11:BoundingBox>\n" +
+                "   </DomainSubset>\n" +
+                "   <Output format=\"image/tiff\"/>\n" +
                 "</GetCoverage>";
-        
+
         MockHttpServletResponse response = postAsServletResponse("wcs", request);
 
         // parse the multipart, check there are two parts
@@ -549,16 +548,15 @@ public class GetCoverageTest extends AbstractGetCoverageTest {
         ImageReader reader = ImageIO.getImageReadersByFormatName("tiff").next();
         reader.setInput(ImageIO.createImageInputStream(coveragePart.getInputStream()));
         RenderedImage image = reader.read(0);
-        
+
         // check the image is suitably small (without requiring an exact size)
         assertTrue(image.getWidth() < 1000);
         assertTrue(image.getHeight() < 1000);
     }
-    
+
     /**
      * This tests just ended up throwing an exception as the coverage being encoded
      * was too large due to a bug in the scales estimation
-     * 
      */
     @Test
     public void testRotatedGet() throws Exception {
@@ -576,7 +574,7 @@ public class GetCoverageTest extends AbstractGetCoverageTest {
         ImageReader reader = ImageIO.getImageReadersByFormatName("tiff").next();
         reader.setInput(ImageIO.createImageInputStream(coveragePart.getInputStream()));
         RenderedImage image = reader.read(0);
-        
+
         // check the image is suitably small (without requiring an exact size)
         assertTrue(image.getWidth() < 1000);
         assertTrue(image.getHeight() < 1000);
@@ -606,7 +604,7 @@ public class GetCoverageTest extends AbstractGetCoverageTest {
     public void testEmptyInterpolation() throws Exception {
         this.testInterpolationMethods("");
     }
-    
+
     @Test
     public void testDeferredLoading() throws Exception {
         Map<String, Object> raw = baseMap();

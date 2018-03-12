@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.logging.Level;
 
 import javax.servlet.http.HttpServletResponse;
+
 import net.opengis.ows20.ExceptionType;
 
 import net.opengis.ows20.ExceptionReportType;
@@ -41,7 +42,6 @@ import org.geotools.xml.Encoder;
  * </p>
  *
  * @author Justin Deoliveira, The Open Planning Project
- *
  */
 public class OWS20ServiceExceptionHandler extends ServiceExceptionHandler {
     /**
@@ -63,7 +63,6 @@ public class OWS20ServiceExceptionHandler extends ServiceExceptionHandler {
 
     /**
      * Constructor to be called if the exception is not for a particular service.
-     *
      */
     public OWS20ServiceExceptionHandler() {
         super(Collections.EMPTY_LIST);
@@ -77,7 +76,7 @@ public class OWS20ServiceExceptionHandler extends ServiceExceptionHandler {
     public OWS20ServiceExceptionHandler(List services) {
         super(services);
     }
-    
+
     /**
      * Constructor to be called if the exception is for a particular service.
      *
@@ -98,8 +97,8 @@ public class OWS20ServiceExceptionHandler extends ServiceExceptionHandler {
             version = request.getServiceDescriptor().getVersion().toString();
         }
 
-        ExceptionReportType report = exceptionReport( exception, verboseExceptions, version );
-        
+        ExceptionReportType report = exceptionReport(exception, verboseExceptions, version);
+
         HttpServletResponse response = request.getHttpResponse();
         if (!request.isSOAP()) {
             //there will already be a SOAP mime type
@@ -107,15 +106,15 @@ public class OWS20ServiceExceptionHandler extends ServiceExceptionHandler {
         }
 
         OWS20Exception ows2ex;
-        if(exception instanceof OWS20Exception) {
-            ows2ex = (OWS20Exception)exception;
-        } else if ( exception.getCause() != null && exception.getCause() instanceof OWS20Exception) {
-            ows2ex = (OWS20Exception)exception.getCause();
+        if (exception instanceof OWS20Exception) {
+            ows2ex = (OWS20Exception) exception;
+        } else if (exception.getCause() != null && exception.getCause() instanceof OWS20Exception) {
+            ows2ex = (OWS20Exception) exception.getCause();
         } else {
             // try to infer if it's a standard exception
             String code = exception.getCode();
             OWSExceptionCode exCode = OWS20Exception.OWSExceptionCode.getByCode(code);
-            if(exCode != null) {
+            if (exCode != null) {
                 ows2ex = new OWS20Exception(exception.getMessage(), exception, exCode, exception.getLocator());
             } else {
                 ows2ex = new OWS20Exception(exception.getMessage(), exception, OWSExceptionCode.NoApplicableCode, exception.getLocator());
@@ -130,7 +129,7 @@ public class OWS20ServiceExceptionHandler extends ServiceExceptionHandler {
         encoder.setIndentSize(2);
         encoder.setLineWidth(60);
         encoder.setOmitXMLDeclaration(request.isSOAP());
-        
+
         // String schemaLocation = buildSchemaURL(baseURL(request.getHttpRequest()), "ows/2.0/owsAll.xsd");
         String schemaLocation = "http://schemas.opengis.net/ows/2.0/owsExceptionReport.xsd";
         encoder.setSchemaLocation(OWS.NAMESPACE, schemaLocation);
@@ -138,15 +137,15 @@ public class OWS20ServiceExceptionHandler extends ServiceExceptionHandler {
         try {
 
 //            if(ows2ex != null) {
-                if(ows2ex.getHttpCode() != null) {
-                    response.setStatus(ows2ex.getHttpCode());
-                }
+            if (ows2ex.getHttpCode() != null) {
+                response.setStatus(ows2ex.getHttpCode());
+            }
 
-                if(force200httpcode) {
-                    response.setStatus(200);
-                }
+            if (force200httpcode) {
+                response.setStatus(200);
+            }
 
-                encoder.encode(report, OWS.ExceptionReport, response.getOutputStream());
+            encoder.encode(report, OWS.ExceptionReport, response.getOutputStream());
 //            }
 
         } catch (Exception ex) {
@@ -172,7 +171,7 @@ public class OWS20ServiceExceptionHandler extends ServiceExceptionHandler {
     }
 
     public static ExceptionReportType exceptionReport(ServiceException exception,
-        boolean verboseExceptions, String version) {
+                                                      boolean verboseExceptions, String version) {
 
         ExceptionType e = Ows20Factory.eINSTANCE.createExceptionType();
 
@@ -193,7 +192,7 @@ public class OWS20ServiceExceptionHandler extends ServiceExceptionHandler {
 //        e.getExceptionText().add(sb.toString());
 //        e.getExceptionText().addAll(exception.getExceptionText());
 
-        if(verboseExceptions) {
+        if (verboseExceptions) {
             //add the entire stack trace
             //exception.
             sb.append("\nDetails:\n");

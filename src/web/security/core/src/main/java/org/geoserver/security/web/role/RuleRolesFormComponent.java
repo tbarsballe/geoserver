@@ -28,7 +28,7 @@ import org.geoserver.web.GeoServerApplication;
  */
 @SuppressWarnings("serial")
 public class RuleRolesFormComponent extends RolePaletteFormComponent {
-    
+
     static final Set<String> ANY_ROLE = Collections.singleton("*");
 
     public RuleRolesFormComponent(String id, IModel<Collection<String>> roleNamesModel) {
@@ -59,13 +59,13 @@ public class RuleRolesFormComponent extends RolePaletteFormComponent {
     protected String getSelectedHeaderPropertyKey() {
         return "RuleRolesFormComponent.selectedHeader";
     }
-    
+
     @Override
     protected String getAvaliableHeaderPropertyKey() {
         return "RuleRolesFormComponent.availableHeader";
     }
 
-//    
+    //
 //        add(hasAnyBox);
 //        if (hasStoredAnyRole(rootObject)) {
 //            rolePalette.setEnabled(false);
@@ -90,8 +90,7 @@ public class RuleRolesFormComponent extends RolePaletteFormComponent {
         Set<GeoServerRole> result = new HashSet<GeoServerRole>();
         if (isHasAnyRole()) {
             result.add(GeoServerRole.ANY_ROLE);
-        }
-        else { 
+        } else {
             result.addAll(getSelectedRoles());
         }
         return result;
@@ -105,10 +104,10 @@ public class RuleRolesFormComponent extends RolePaletteFormComponent {
         return result;
     }
 
-    static class RolesModel extends LoadableDetachableModel<List<GeoServerRole>>{
+    static class RolesModel extends LoadableDetachableModel<List<GeoServerRole>> {
 
         IModel<Collection<String>> roleNamesModel;
-         
+
 
         RolesModel(IModel<Collection<String>> roleNamesModel) {
             this.roleNamesModel = roleNamesModel;
@@ -116,21 +115,21 @@ public class RuleRolesFormComponent extends RolePaletteFormComponent {
 
         @Override
         protected List<GeoServerRole> load() {
-        	
-        	Map<String,GeoServerRole> roleMap;
-            roleMap=new HashMap<String,GeoServerRole>();
+
+            Map<String, GeoServerRole> roleMap;
+            roleMap = new HashMap<String, GeoServerRole>();
             try {
-	            for (GeoServerRole role : GeoServerApplication.get().getSecurityManager().getRolesForAccessControl())
-	            	roleMap.put(role.getAuthority(), role);
-	        } catch (IOException e) {
-	            throw new RuntimeException(e);
-	        }
-        	
-        	List<GeoServerRole> roles = new ArrayList<GeoServerRole>();
+                for (GeoServerRole role : GeoServerApplication.get().getSecurityManager().getRolesForAccessControl())
+                    roleMap.put(role.getAuthority(), role);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+            List<GeoServerRole> roles = new ArrayList<GeoServerRole>();
             for (String roleName : roleNamesModel.getObject()) {
-            	GeoServerRole role = roleMap.get(roleName);
-            	if (role!=null)
-            		roles.add(role);
+                GeoServerRole role = roleMap.get(roleName);
+                if (role != null)
+                    roles.add(role);
             }
             return roles;
         }
@@ -142,7 +141,7 @@ public class RuleRolesFormComponent extends RolePaletteFormComponent {
             //set back to the delegate model
             Collection<String> roleNames = roleNamesModel.getObject();
             roleNames.clear();
-            
+
             for (GeoServerRole role : object) {
                 roleNames.add(role.getAuthority());
             }

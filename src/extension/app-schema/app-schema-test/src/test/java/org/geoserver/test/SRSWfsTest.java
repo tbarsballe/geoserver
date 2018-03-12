@@ -30,7 +30,7 @@ import com.vividsolutions.jts.geom.Polygon;
 
 /**
  * This is to test encoding of SRS information and reprojection values in app-schema features.
- * 
+ *
  * @author Rini Angreani, Curtin University of Technology
  */
 public class SRSWfsTest extends AbstractAppSchemaTestSupport {
@@ -63,7 +63,7 @@ public class SRSWfsTest extends AbstractAppSchemaTestSupport {
         Hints.putSystemDefault(Hints.FORCE_AXIS_ORDER_HONORING, "http");
         // apply changes
         CRS.reset("all");
-        
+
         super.setUpTestData(testData);
     }
 
@@ -87,7 +87,7 @@ public class SRSWfsTest extends AbstractAppSchemaTestSupport {
         // make sure we are really working in lat/lon order
         CoordinateReferenceSystem crs = CRS.decode("EPSG:4326");
         assertEquals(AxisOrder.NORTH_EAST, CRS.getAxisOrder(crs));
-        
+
         Document doc = getAsDOM("wfs?request=GetFeature&typename=ex:geomContainer&version=1.1.0");
         LOGGER.info("WFS GetFeature&typename=ex:geomContainer response:\n" + prettyString(doc));
         assertXpathEvaluatesTo("2", "/wfs:FeatureCollection/@numberOfFeatures", doc);
@@ -236,9 +236,9 @@ public class SRSWfsTest extends AbstractAppSchemaTestSupport {
         GeometryFactory factory = new GeometryFactory();
         Polygon srcPolygon = factory.createPolygon(factory.createLinearRing(factory
                 .getCoordinateSequenceFactory().create(
-                        new Coordinate[] { new Coordinate(-1.2, 52.5), new Coordinate(-1.2, 52.6),
+                        new Coordinate[]{new Coordinate(-1.2, 52.5), new Coordinate(-1.2, 52.6),
                                 new Coordinate(-1.1, 52.6), new Coordinate(-1.1, 52.5),
-                                new Coordinate(-1.2, 52.5) })), null);
+                                new Coordinate(-1.2, 52.5)})), null);
         Polygon targetPolygon = (Polygon) JTS.transform(srcPolygon, transform);
         StringBuffer polygonBuffer = new StringBuffer();
         for (Coordinate coord : targetPolygon.getCoordinates()) {
@@ -252,7 +252,7 @@ public class SRSWfsTest extends AbstractAppSchemaTestSupport {
                 + targetPoint.getCoordinate().y;
 
         Document doc = getAsDOM("wfs?request=GetFeature&version=1.1.0&typename=ex:geomContainer" +
-            "&srsname=urn:x-ogc:def:crs:EPSG::4326");
+                "&srsname=urn:x-ogc:def:crs:EPSG::4326");
         LOGGER
                 .info("WFS GetFeature&typename=ex:geomContainer&srsname=urn:x-ogc:def:crs:EPSG::4326 response:\n"
                         + prettyString(doc));
@@ -394,7 +394,7 @@ public class SRSWfsTest extends AbstractAppSchemaTestSupport {
     @Test
     public void testFilters() {
         Document doc = getAsDOM("wfs?request=GetFeature&version=1.1.0&typename=ex:geomContainer" +
-            "&srsname=urn:x-ogc:def:crs:EPSG::4326&featureid=1");
+                "&srsname=urn:x-ogc:def:crs:EPSG::4326&featureid=1");
         LOGGER
                 .info("WFS GetFeature&typename=ex:geomContainer&srsname=urn:x-ogc:def:crs:EPSG::4326&featureid=1"
                         + "response:\n" + prettyString(doc));

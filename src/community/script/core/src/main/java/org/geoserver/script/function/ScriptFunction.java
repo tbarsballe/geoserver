@@ -24,22 +24,26 @@ import org.opengis.filter.expression.VolatileFunction;
 /**
  * Implementation of {@link org.opengis.filter.expression.Function} backed by a script.
  * <p>
- * This class does its work by delegating all methods to the {@link FunctionHook} interface. This 
- * class maintains a link to the backing script {@link File} and uses a {@link FileWatcher} to 
- * detect changes to the underlying script. When changed a new {@link ScriptEngine} is created and 
- * the underlying script is reloaded. 
+ * This class does its work by delegating all methods to the {@link FunctionHook} interface. This
+ * class maintains a link to the backing script {@link File} and uses a {@link FileWatcher} to
+ * detect changes to the underlying script. When changed a new {@link ScriptEngine} is created and
+ * the underlying script is reloaded.
  * </p>
- * @author Justin Deoliveira, OpenGeo
  *
+ * @author Justin Deoliveira, OpenGeo
  */
 public class ScriptFunction {
 
-    /** the hook for interacting with the script */
+    /**
+     * the hook for interacting with the script
+     */
     FunctionHook hook;
 
-    /** watcher for changes */
+    /**
+     * watcher for changes
+     */
     ScriptFileWatcher watcher;
-    
+
     public ScriptFunction(Resource file, ScriptManager scriptMgr) {
         watcher = new ScriptFileWatcher(file, scriptMgr);
         hook = scriptMgr.lookupFilterHook(file);
@@ -56,7 +60,7 @@ public class ScriptFunction {
     }
 
     class Function extends FunctionImpl implements VolatileFunction {
-    
+
         Function(Name name, List<Expression> params) {
             setName(name.getLocalPart());
             setParameters(params);
@@ -72,8 +76,7 @@ public class ScriptFunction {
                     args.add(e.evaluate(object));
                 }
                 return hook.run(object, args, watcher.readIfModified());
-            }
-            catch(Exception e) {
+            } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         }

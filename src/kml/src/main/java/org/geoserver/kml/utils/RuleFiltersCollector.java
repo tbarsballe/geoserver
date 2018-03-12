@@ -19,21 +19,21 @@ import org.opengis.filter.FilterFactory;
 /**
  * Collects all the filters in the style and builds a summary filter that matches every feature
  * matched by at least one rule in the style
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class RuleFiltersCollector extends AbstractStyleVisitor {
 
     List<Filter> filters = new ArrayList<Filter>();
-    
+
     @Override
     public void visit(FeatureTypeStyle fts) {
-        for(Rule rule : fts.rules()) {
-            if(rule.isElseFilter()) {
+        for (Rule rule : fts.rules()) {
+            if (rule.isElseFilter()) {
                 filters.add(Filter.INCLUDE);
             } else {
                 Filter filter = rule.getFilter();
-                if(filter == null) {
+                if (filter == null) {
                     filters.add(Filter.INCLUDE);
                 } else {
                     filters.add(filter);
@@ -41,15 +41,14 @@ public class RuleFiltersCollector extends AbstractStyleVisitor {
             }
         }
     }
-    
+
     /**
      * Returns a filter that includes all the visited rules
-     *
      */
     Filter getSummaryFilter() {
-        if(filters.size() == 0) {
+        if (filters.size() == 0) {
             return Filter.INCLUDE;
-        } else if(filters.size() == 1) {
+        } else if (filters.size() == 1) {
             return filters.get(0);
         } else {
             FilterFactory ff = CommonFactoryFinder.getFilterFactory();
@@ -58,6 +57,6 @@ public class RuleFiltersCollector extends AbstractStyleVisitor {
             return (Filter) or.accept(simplifier, null);
         }
     }
-    
-    
+
+
 }

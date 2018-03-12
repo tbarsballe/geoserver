@@ -53,11 +53,11 @@ import java.util.logging.Logger;
 
 /**
  * Visitor for standalone {@link org.geotools.styling.StyledLayerDescriptor}s
- *
+ * <p>
  * Visits each {@link StyledLayer}s of an SLD.
  * Resolves LayerGroups, Remote OWS references, and inline features into individual layers
  * Visits each {@link Style} in each{@link StyledLayer}, alongside each of these resolved layers
- *
+ * <p>
  * Intended to provide a definitive, extensible approach to parsing standalone
  * {@link org.geotools.styling.StyledLayerDescriptor}s, including style groups and external SLDs.
  */
@@ -77,7 +77,7 @@ public abstract class GeoServerSLDVisitor extends AbstractStyleVisitor {
     /**
      * Constructs a new GeoServerSLDVisitor
      *
-     * @param catalog GeoServer catalog to use for looking up catalog objects (Layers, LayerGroups, Styles)
+     * @param catalog     GeoServer catalog to use for looking up catalog objects (Layers, LayerGroups, Styles)
      * @param fallbackCrs The CRS to use for inline features if it is not specified in the feature. Defaults to
      *                    {@link DefaultGeographicCRS#WGS84}.
      */
@@ -88,7 +88,7 @@ public abstract class GeoServerSLDVisitor extends AbstractStyleVisitor {
 
     /**
      * Called on each named layer in the style
-     *
+     * <p>
      * Implementations should resolve and return the corresponding PublishedInfo
      *
      * @param namedLayer The named layer
@@ -114,7 +114,7 @@ public abstract class GeoServerSLDVisitor extends AbstractStyleVisitor {
      * Called on each named style for each styled layer. In cases where the styled layer references multiple layers,
      * such as a remote OWS user layer exposing multiple layers, this will be called for once of each of these layers,
      * which will be passed in through the info argument.
-     *
+     * <p>
      * Implementations may resolve and return the corresponding StyleInfo
      *
      * @param namedStyle The named style
@@ -126,17 +126,17 @@ public abstract class GeoServerSLDVisitor extends AbstractStyleVisitor {
      * Called on each named style for each styled layer. In cases where the styled layer references multiple layers,
      * such as a named layer referencing a layer group, or remote OWS user layer exposing multiple layers, this will
      * be called for once of each of these layers, which will be passed in through the info argument.
-     *
+     * <p>
      * Note: currently, in the case of a named layer referencing a layer group, any styles defined in the SLD will be
      * ignored, and the layer groups defined styles will be used instead, being handled as user layers.
-     *  @param userStyle The user style
      *
+     * @param userStyle The user style
      */
     public abstract void visitUserStyleInternal(Style userStyle);
 
     /**
      * Visit the SLD
-     *
+     * <p>
      * Visit each layer.
      * Construct temporary stores for inline features and remote OWS layers.
      * After visiting a layer, visit each style in that layer. In cases where the styled layer references multiple
@@ -144,13 +144,12 @@ public abstract class GeoServerSLDVisitor extends AbstractStyleVisitor {
      * each style for each of these sublayers instead.
      *
      * @param sld The sld the visitor is applied to
-     *
      * @throws UnsupportedOperationException, If the sld uses features not supported by GeoServer, such as if an OWS
-     *         service other than WFS is specified for a UserLayer
-     * @throws IllegalStateException If the sld is somehow invalid, such as if there is a NamedLayer without a name
-     * @throws ServiceException if there was a problem accessing a remote OWS service
-     * @throws UncheckedIOException if there is an underlying {@link IOException} when reading {@link Style} objects
-     *         from the catalog
+     *                                        service other than WFS is specified for a UserLayer
+     * @throws IllegalStateException          If the sld is somehow invalid, such as if there is a NamedLayer without a name
+     * @throws ServiceException               if there was a problem accessing a remote OWS service
+     * @throws UncheckedIOException           if there is an underlying {@link IOException} when reading {@link Style} objects
+     *                                        from the catalog
      */
     @Override
     public void visit(StyledLayerDescriptor sld) {
@@ -165,7 +164,7 @@ public abstract class GeoServerSLDVisitor extends AbstractStyleVisitor {
         if (null == layer.getName()) {
             throw new ServiceException("A UserLayer or NamedLayer without layer name was passed");
         }
-        setLayerState(visitNamedLayerInternal(layer) , layer);
+        setLayerState(visitNamedLayerInternal(layer), layer);
         if (!handleLayerGroup()) {
             super.visit(layer);
         }
@@ -285,7 +284,7 @@ public abstract class GeoServerSLDVisitor extends AbstractStyleVisitor {
      * @return The list of layers wrapping the exposed features
      * @throws UnsupportedOperationException, if an OWS service other than WFS is specified
      * @throws IllegalStateException
-     * @throws ServiceException if there was a problem accessing the remote service
+     * @throws ServiceException               if there was a problem accessing the remote service
      */
     protected List<LayerInfo> getRemoteLayersFromUserLayer(UserLayer ul) throws ServiceException {
         try {
@@ -425,6 +424,7 @@ public abstract class GeoServerSLDVisitor extends AbstractStyleVisitor {
 
         return layerInfo;
     }
+
     protected static class FeatureSourceWrappingFeatureTypeInfoImpl extends FeatureTypeInfoImpl {
         FeatureSource featureSource;
 
@@ -435,44 +435,53 @@ public abstract class GeoServerSLDVisitor extends AbstractStyleVisitor {
             setEnabled(true);
             setLatLonBoundingBox(featureSource.getBounds().transform(DefaultGeographicCRS.WGS84, true));
         }
+
         @Override
         public FeatureSource getFeatureSource(ProgressListener listener, Hints hints) {
             return featureSource;
         }
+
         @Override
         public FeatureType getFeatureType() throws IOException {
             return featureSource.getSchema();
         }
+
         @Override
         public Name getQualifiedName() {
             return featureSource.getName();
         }
+
         @Override
         public String prefixedName() {
             return featureSource.getName().getNamespaceURI() + ":" + getName();
         }
+
         @Override
         public boolean enabled() {
             return true;
         }
+
         @Override
         public DataStoreInfo getStore() {
             return new DataStoreInfoImpl() {
                 @Override
                 public DataAccess<? extends FeatureType, ? extends Feature> getDataStore(
                         ProgressListener listener) throws IOException {
-                    return DataUtilities.dataStore((SimpleFeatureSource)featureSource);
+                    return DataUtilities.dataStore((SimpleFeatureSource) featureSource);
                 }
             };
         }
     }
+
     protected static class StyleWrappingStyleInfoImpl extends StyleInfoImpl {
         Style style;
+
         public StyleWrappingStyleInfoImpl(Style style) {
             super();
             this.style = style;
             setName(style.getName());
         }
+
         @Override
         public Style getStyle() {
             return style;

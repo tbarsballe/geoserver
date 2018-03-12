@@ -25,7 +25,7 @@ public class GetMapHandler extends RequestObjectHandler {
 
     static Logger LOGGER = Logging.getLogger("org.geoserver.monitor");
 
-   public GetMapHandler(MonitorConfig config) {
+    public GetMapHandler(MonitorConfig config) {
         super("org.geoserver.wms.GetMapRequest", config);
     }
 
@@ -36,12 +36,12 @@ public class GetMapHandler extends RequestObjectHandler {
         if (mapLayers == null) {
             return null;
         }
-        
+
         List<String> layers = new ArrayList<String>();
         for (int i = 0; i < mapLayers.size(); i++) {
             layers.add((String) OwsUtils.get(mapLayers.get(i), "name"));
         }
-        
+
         return layers;
     }
 
@@ -49,11 +49,11 @@ public class GetMapHandler extends RequestObjectHandler {
     protected BoundingBox getBBox(Object request) {
         CoordinateReferenceSystem crs = (CoordinateReferenceSystem) OwsUtils.get(request, "crs");
         Envelope env = (Envelope) OwsUtils.get(request, "bbox");
-        if(env == null) {
+        if (env == null) {
             return null;
         }
         BoundingBox bbox = new ReferencedEnvelope(env, crs);
-        
+
         try {
             return bbox.toBounds(monitorConfig.getBboxCrs());
         } catch (TransformException e) {

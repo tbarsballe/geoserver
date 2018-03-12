@@ -16,6 +16,7 @@ import org.geotools.xml.transform.TransformerBase;
 
 /**
  * Runs the transformer and outputs the describe coverage response
+ *
  * @author Andrea Aime, TOPP
  * TODO: This is a blatant copy of WFS GetCapabilities response. Find a way to share code.
  */
@@ -29,7 +30,7 @@ public class DescribeCoverageResponse extends Response {
     }
 
     public void write(Object value, OutputStream output, Operation operation)
-        throws IOException {
+            throws IOException {
         TransformerBase tx = (TransformerBase) value;
 
         try {

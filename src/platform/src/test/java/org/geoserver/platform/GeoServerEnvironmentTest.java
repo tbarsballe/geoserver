@@ -24,7 +24,7 @@ import org.springframework.context.ApplicationContext;
 
 /**
  * Unit test suite for {@link GeoServerEnvironment}
- * 
+ *
  * @author Alessio Fabiani, GeoSolutions
  */
 public class GeoServerEnvironmentTest {
@@ -33,7 +33,7 @@ public class GeoServerEnvironmentTest {
      * logger
      */
     protected static final Logger LOGGER = Logging.getLogger("org.geoserver.platform");
-    
+
     @Before
     public void setUp() throws Exception {
         Assume.assumeThat(System.getenv("GEOSERVER_DATA_DIR"), CoreMatchers.nullValue());
@@ -60,11 +60,11 @@ public class GeoServerEnvironmentTest {
 
         ApplicationContext appContext = EasyMock.createMock(ApplicationContext.class);
         EasyMock.expect(appContext.getBeanNamesForType(ExtensionFilter.class))
-                .andReturn(new String[] {}).anyTimes();
+                .andReturn(new String[]{}).anyTimes();
         EasyMock.expect(appContext.getBeanNamesForType(ExtensionProvider.class))
-                .andReturn(new String[] {}).anyTimes();
+                .andReturn(new String[]{}).anyTimes();
         EasyMock.expect(appContext.getBeanNamesForType(GeoServerResourceLoader.class))
-                .andReturn(new String[] { "geoServerLoader" }).anyTimes();
+                .andReturn(new String[]{"geoServerLoader"}).anyTimes();
         Map<String, GeoServerResourceLoader> genvMap = new HashMap<>();
         genvMap.put("geoServerLoader", loader);
         EasyMock.expect(appContext.getBeansOfType(GeoServerResourceLoader.class)).andReturn(genvMap)

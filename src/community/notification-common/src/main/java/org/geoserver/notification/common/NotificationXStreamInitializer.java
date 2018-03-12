@@ -9,9 +9,8 @@ import com.thoughtworks.xstream.XStream;
 
 /**
  * Allows Xstream to map notification configuration objects
- * 
- * @author Xandros
  *
+ * @author Xandros
  */
 public interface NotificationXStreamInitializer {
 

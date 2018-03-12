@@ -26,21 +26,23 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class CSVMonitorConverter extends BaseMonitorConverter {
-    
+
     static Pattern ESCAPE_REQUIRED = Pattern.compile("[\\,\\s\"]");
-    
+
     private static final class CSVRequestDataVisitor implements RequestDataVisitor {
         private BufferedWriter writer;
         private String[] fields;
-        CSVRequestDataVisitor( BufferedWriter writer, String fields[]){
+
+        CSVRequestDataVisitor(BufferedWriter writer, String fields[]) {
             this.writer = writer;
             this.fields = fields;
         }
+
         @Override
         public void visit(RequestData data, Object... aggregates) {
             try {
                 StringBuffer sb = new StringBuffer();
-    
+
                 for (String fld : fields) {
                     Object val = OwsUtils.get(data, fld);
                     if (val instanceof Date) {
@@ -83,14 +85,15 @@ public class CSVMonitorConverter extends BaseMonitorConverter {
         OutputStream os = outputMessage.getBody();
         writeCSVfile(result, fields, monitor, os);
     }
-    
-    
+
+
     /**
      * Write CSV file (also called by {@link ZIPMonitorConverter}
-     * @param result Query, List or individual RequestData)
+     *
+     * @param result  Query, List or individual RequestData)
      * @param fields
      * @param monitor used to cancel output process
-     * @param os Output stream (not closed by this method allowing use of zipfile)
+     * @param os      Output stream (not closed by this method allowing use of zipfile)
      */
     void writeCSVfile(Object result, String[] fields, Monitor monitor, OutputStream os)
             throws IOException {

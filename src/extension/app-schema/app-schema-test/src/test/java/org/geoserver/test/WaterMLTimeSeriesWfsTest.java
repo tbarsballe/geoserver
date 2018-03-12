@@ -15,7 +15,7 @@ import org.w3c.dom.Document;
 /**
  * This is to test using isList to group multiple values as a concatenated single value with
  * proposed waterml timeseries schema. It involves QuantityList as a simple type.
- * 
+ *
  * @author Rini Angreani (CSIRO Earth Science and Resource Engineering)
  */
 

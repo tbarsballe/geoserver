@@ -16,12 +16,11 @@ import org.geotools.util.logging.Logging;
 
 /**
  * Configuration panel for {@link GeoServerCredentialsFromRequestHeaderAuthenticationFilter}.
- * 
+ *
  * @author Lorenzo Natali, GeoSolutions
  * @author Mauro Bartolomeoli, GeoSolutions
- *
  */
-public class CredentialsFromRequestHeaderFilterPanel  extends AuthenticationFilterPanel<CredentialsFromRequestHeaderFilterConfig>{
+public class CredentialsFromRequestHeaderFilterPanel extends AuthenticationFilterPanel<CredentialsFromRequestHeaderFilterConfig> {
     private static final long serialVersionUID = 1;
 
     static Logger LOGGER = Logging.getLogger("org.geoserver.security");
@@ -31,7 +30,7 @@ public class CredentialsFromRequestHeaderFilterPanel  extends AuthenticationFilt
     IModel<CredentialsFromRequestHeaderFilterConfig> model;
 
     public CredentialsFromRequestHeaderFilterPanel(String id,
-            IModel<CredentialsFromRequestHeaderFilterConfig> model) {
+                                                   IModel<CredentialsFromRequestHeaderFilterConfig> model) {
         super(id, model);
 
         dialog = (GeoServerDialog) get("dialog");

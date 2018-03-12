@@ -196,8 +196,8 @@ public final class MultiDimensionalExtension extends WMTSExtensionImpl {
         // compute the bounding box
         ReferencedEnvelope spatialDomain = null;
         if (requestedDomains == ALL_DOMAINS || requestedDomains.contains(SPACE_DIMENSION)) {
-            spatialDomain = DimensionsUtils.getBounds(resource, filter);  
-        } 
+            spatialDomain = DimensionsUtils.getBounds(resource, filter);
+        }
         // encode the domains
         return new Domains(dimensions, layerInfo, spatialDomain, SimplifyingFilterVisitor.simplify(filter));
     }

@@ -18,21 +18,18 @@ import javax.xml.namespace.QName;
  * An ObjectFactory allows you to programatically construct new instances of the Java representation for XML content. The Java representation of XML
  * content can consist of schema derived interfaces and classes representing the binding of schema type definitions, element declarations and model
  * groups. Factory methods for each of these are provided in this class.
- * 
  */
 public class ObjectFactory {
     private final static QName _Gpx_QNAME = new QName("http://www.topografix.com/GPX/1/1", "gpx");
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: org.geotools.gpx.bean
-     * 
      */
     public ObjectFactory() {
     }
 
     /**
      * Create an instance of {@link CopyrightType }
-     * 
      */
     public CopyrightType createCopyrightType() {
         return new CopyrightType();
@@ -40,7 +37,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link PtType }
-     * 
      */
     public PtType createPtType() {
         return new PtType();
@@ -48,7 +44,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link PtsegType }
-     * 
      */
     public PtsegType createPtsegType() {
         return new PtsegType();
@@ -56,7 +51,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link MetadataType }
-     * 
      */
     public MetadataType createMetadataType() {
         return new MetadataType();
@@ -64,7 +58,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link EmailType }
-     * 
      */
     public EmailType createEmailType() {
         return new EmailType();
@@ -72,7 +65,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link TrksegType }
-     * 
      */
     public TrksegType createTrksegType() {
         return new TrksegType();
@@ -80,7 +72,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link WptType }
-     * 
      */
     public WptType createWptType() {
         return new WptType();
@@ -88,7 +79,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link LinkType }
-     * 
      */
     public LinkType createLinkType() {
         return new LinkType();
@@ -96,7 +86,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link TrkType }
-     * 
      */
     public TrkType createTrkType() {
         return new TrkType();
@@ -104,7 +93,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link PersonType }
-     * 
      */
     public PersonType createPersonType() {
         return new PersonType();
@@ -112,7 +100,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link GpxType }
-     * 
      */
     public GpxType createGpxType() {
         return new GpxType();
@@ -120,7 +107,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link BoundsType }
-     * 
      */
     public BoundsType createBoundsType() {
         return new BoundsType();
@@ -128,7 +114,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link RteType }
-     * 
      */
     public RteType createRteType() {
         return new RteType();
@@ -136,7 +121,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ExtensionsType }
-     * 
      */
     public ExtensionsType createExtensionsType() {
         return new ExtensionsType();
@@ -144,7 +128,7 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link GpxType }{@code >}
-     * 
+     *
      */
     /*
      * @XmlElementDecl(namespace = "http://www.topografix.com/GPX/1/1", name = "gpx") public JAXBElement<GpxType> createGpx(GpxType value) { return

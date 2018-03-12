@@ -24,13 +24,14 @@ import org.junit.Test;
 import org.w3c.dom.Document;
 
 import org.springframework.mock.web.MockHttpServletResponse;
+
 public class GetCoverageMultipartEncodingTest extends WCSTestSupport {
 
     // @Override
     // protected String getDefaultLogConfiguration() {
     // return "/DEFAULT_LOGGING.properties";
     // }
-	
+
     @Test
     public void testKvpBasic() throws Exception {
         String request = "wcs?service=WCS&version=1.1.1&request=GetCoverage" + "&identifier="
@@ -71,7 +72,6 @@ public class GetCoverageMultipartEncodingTest extends WCSTestSupport {
     /**
      * ArcGrid cannot encode rotate coverages, yet due to a bug the output was a garbled mime multipart instead of a service exception. This makes
      * sure an exception is returned instead.
-     * 
      */
     @Test
     public void testArcgridException() throws Exception {
@@ -100,7 +100,7 @@ public class GetCoverageMultipartEncodingTest extends WCSTestSupport {
         // make sure we can read the coverage back
         ImageReader reader = ImageIO.getImageReadersByFormatName("tiff").next();
         ImageInputStream iis = ImageIO.createImageInputStream(coveragePart.getInputStream());
-		reader.setInput(iis);
+        reader.setInput(iis);
         reader.read(0);
         iis.close();
     }

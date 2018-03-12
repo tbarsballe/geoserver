@@ -25,7 +25,7 @@ public class ProcessEvent implements Cloneable {
     }
 
     public ProcessEvent(ExecutionStatus status, Map<String, Object> inputs,
-            Map<String, Object> outputs) {
+                        Map<String, Object> outputs) {
         this.status = status;
         this.inputs = inputs;
         this.outputs = outputs;
@@ -33,8 +33,6 @@ public class ProcessEvent implements Cloneable {
 
     /**
      * The process status. This is always available.
-     * 
-     *
      */
     public ExecutionStatus getStatus() {
         return status;
@@ -42,8 +40,6 @@ public class ProcessEvent implements Cloneable {
 
     /**
      * The process inputs. This field is available only when the inputs have been parsed already
-     * 
-     *
      */
     public Map<String, Object> getInputs() {
         return inputs;
@@ -51,8 +47,6 @@ public class ProcessEvent implements Cloneable {
 
     /**
      * The process outputs. The field is available only when the process is complete
-     * 
-     *
      */
     public Map<String, Object> getOutputs() {
         return outputs;

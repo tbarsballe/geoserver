@@ -19,18 +19,17 @@ import org.geoserver.web.GeoServerApplication;
 
 /**
  * Drop down choice widget for {@link GeoServerRoleService} configurations.
- * 
- * @author Justin Deoliveira, OpenGeo
  *
+ * @author Justin Deoliveira, OpenGeo
  */
 public class RoleServiceChoice extends DropDownChoice<String> {
 
     public RoleServiceChoice(String id) {
-        super(id,new RoleServiceNamesModel(), new RoleServiceChoiceRenderer());
+        super(id, new RoleServiceNamesModel(), new RoleServiceChoiceRenderer());
     }
 
     public RoleServiceChoice(String id, IModel<String> model) {
-        super(id, model, new RoleServiceNamesModel(), new RoleServiceChoiceRenderer()); 
+        super(id, model, new RoleServiceNamesModel(), new RoleServiceChoiceRenderer());
     }
 
     static class RoleServiceNamesModel implements IModel<List<String>> {
@@ -40,7 +39,7 @@ public class RoleServiceChoice extends DropDownChoice<String> {
         RoleServiceNamesModel() {
             try {
                 this.serviceNames = new ArrayList(
-                    GeoServerApplication.get().getSecurityManager().listRoleServices());
+                        GeoServerApplication.get().getSecurityManager().listRoleServices());
             } catch (IOException e) {
                 throw new WicketRuntimeException(e);
             }
@@ -72,6 +71,7 @@ public class RoleServiceChoice extends DropDownChoice<String> {
             //do a resource lookup
             return new ResourceModel(object, object).getObject();
         }
+
         @Override
         public String getIdValue(String object, int index) {
             return object;

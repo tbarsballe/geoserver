@@ -21,26 +21,26 @@ import org.apache.wicket.model.Model;
 public abstract class AbstractConfirmRemovalPanel<T> extends Panel {
 
     private static final long serialVersionUID = 1L;
-    
+
     List<T> roots;
     List<IModel<String>> problems;
 
     public AbstractConfirmRemovalPanel(String id, T... roots) {
-        this(id, null,Arrays.asList(roots));
-    }
-    
-    public AbstractConfirmRemovalPanel(String id, Model<?> model,T... roots) {
-        this(id, model, Arrays.asList(roots));
-    }
-    
-    public AbstractConfirmRemovalPanel(String id, List<T> roots) {
-        this(id,null,roots);
+        this(id, null, Arrays.asList(roots));
     }
 
-    public AbstractConfirmRemovalPanel(String id,  Model<?> model,List<T> rootObjects) {
-        super(id,model);
+    public AbstractConfirmRemovalPanel(String id, Model<?> model, T... roots) {
+        this(id, model, Arrays.asList(roots));
+    }
+
+    public AbstractConfirmRemovalPanel(String id, List<T> roots) {
+        this(id, null, roots);
+    }
+
+    public AbstractConfirmRemovalPanel(String id, Model<?> model, List<T> rootObjects) {
+        super(id, model);
         setRootObjectsAndProblems(rootObjects);
-        
+
 
         // add roots
         WebMarkupContainer root = new WebMarkupContainer("rootObjects");
@@ -54,7 +54,7 @@ public abstract class AbstractConfirmRemovalPanel<T> extends Panel {
 
         // removed 
         WebMarkupContainer rulesRemoved = new WebMarkupContainer("rulesRemoved");
-        removed.add(rulesRemoved);        
+        removed.add(rulesRemoved);
         if (roots.size() == 0)
             removed.setVisible(false);
         else {
@@ -71,7 +71,7 @@ public abstract class AbstractConfirmRemovalPanel<T> extends Panel {
 
         WebMarkupContainer rulesNotRemoved = new WebMarkupContainer("rulesNotRemoved");
         problematic.add(rulesNotRemoved);
-        if (problems.size()==0)
+        if (problems.size() == 0)
             problematic.setVisible(false);
         else {
             rulesNotRemoved.add(new ListView<String>("problems", problems(problems)) {
@@ -85,15 +85,15 @@ public abstract class AbstractConfirmRemovalPanel<T> extends Panel {
 
     void setRootObjectsAndProblems(List<T> rootObjects) {
         roots = new ArrayList<T>();
-        problems= new ArrayList<IModel<String>>();
+        problems = new ArrayList<IModel<String>>();
         for (T obj : rootObjects) {
             IModel<String> model = canRemove(obj);
-            if (model==null)
+            if (model == null)
                 roots.add(obj);
-            else    
+            else
                 problems.add(model);
         }
-                
+
     }
 
     List<String> problems(List<IModel<String>> objects) {
@@ -116,7 +116,7 @@ public abstract class AbstractConfirmRemovalPanel<T> extends Panel {
         try {
             return getConfirmationMessage(object);
         } catch (IOException ioEx) {
-            throw new RuntimeException(ioEx);  
+            throw new RuntimeException(ioEx);
         } catch (Exception e) {
             throw new RuntimeException("A data object that does not have "
                     + "a 'name' property has been used, this is unexpected", e);
@@ -126,10 +126,10 @@ public abstract class AbstractConfirmRemovalPanel<T> extends Panel {
     protected IModel<String> canRemove(T data) {
         return null;
     }
-    
+
     abstract protected String getConfirmationMessage(T object) throws Exception;
 
     public List<T> getRoots() {
         return roots;
-    }        
+    }
 }

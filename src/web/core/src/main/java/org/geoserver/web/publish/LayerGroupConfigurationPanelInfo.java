@@ -7,11 +7,9 @@ package org.geoserver.web.publish;
 import org.geoserver.catalog.LayerGroupInfo;
 
 /**
- * 
  * Extension point for sections of the configuration pages for layergroups.
- * 
- * @author Niels Charlier
  *
+ * @author Niels Charlier
  */
 public class LayerGroupConfigurationPanelInfo extends PublishedConfigurationPanelInfo<LayerGroupInfo> {
 

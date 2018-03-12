@@ -17,7 +17,7 @@ import org.geoserver.web.GeoServerApplication;
 
 /**
  * Simple detachable model listing all the available namespaces
- * 
+ *
  * @author Gabriel Roldan
  */
 @SuppressWarnings("serial")

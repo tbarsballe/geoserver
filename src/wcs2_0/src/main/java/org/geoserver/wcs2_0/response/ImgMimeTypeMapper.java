@@ -22,9 +22,8 @@ import org.geotools.util.logging.Logging;
 
 /**
  * A mapper specifically thought for formats that do have a corresponding JAI image reader
- * 
+ *
  * @author Andrea Aime - GeoSolutions
- * 
  */
 public class ImgMimeTypeMapper implements CoverageMimeTypeMapper {
 
@@ -34,7 +33,7 @@ public class ImgMimeTypeMapper implements CoverageMimeTypeMapper {
     public String getMimeType(CoverageInfo cInfo) throws IOException {
         // no mapping let's go with the ImageIO reader code
         GeoServerResourceLoader loader = GeoServerExtensions.bean(GeoServerResourceLoader.class);
-        
+
         final File sourceFile = loader.url(cInfo.getStore().getURL());
         if (sourceFile == null) {
             if (LOGGER.isLoggable(Level.FINE)) {
@@ -64,7 +63,7 @@ public class ImgMimeTypeMapper implements CoverageMimeTypeMapper {
                 // the native format rules says "the range set values can be obtained unaltered", 
                 // so we cannot allow lossy compressions (which would alter the range set values)
                 String lcMime = mime.toLowerCase();
-                if(lcMime.contains("jpeg") || lcMime.contains("mrsid") || lcMime.contains("ecw")) {
+                if (lcMime.contains("jpeg") || lcMime.contains("mrsid") || lcMime.contains("ecw")) {
                     return null;
                 }
             }

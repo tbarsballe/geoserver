@@ -7,10 +7,14 @@ package org.geoserver.importer;
 
 public class Table extends ImportData {
 
-    /** table name */
+    /**
+     * table name
+     */
     String name;
 
-    /** the database */
+    /**
+     * the database
+     */
     Database db;
 
     public Table(String name, Database db) {

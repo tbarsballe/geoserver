@@ -29,7 +29,7 @@ public class RolesRestController {
 
     @ExceptionHandler(IllegalArgumentException.class)
     public void somethingNotFound(IllegalArgumentException exception, HttpServletResponse response) throws IOException {
-    	response.sendError(404, exception.getMessage());
+        response.sendError(404, exception.getMessage());
     }
 
     @GetMapping(value = "", produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
@@ -44,26 +44,30 @@ public class RolesRestController {
     }
 
     @PostMapping(value = "/role/{role}", produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
-    public @ResponseStatus(HttpStatus.CREATED) void insert(@PathVariable("role") String roleName)
+    public @ResponseStatus(HttpStatus.CREATED)
+    void insert(@PathVariable("role") String roleName)
             throws IOException {
         insert(securityManager.getActiveRoleService(), roleName);
     }
 
     @DeleteMapping(value = "/role/{role}", produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
-    public @ResponseStatus(HttpStatus.OK) void delete(@PathVariable("role") String roleName)
+    public @ResponseStatus(HttpStatus.OK)
+    void delete(@PathVariable("role") String roleName)
             throws IOException {
         delete(securityManager.getActiveRoleService(), roleName);
     }
 
     @PostMapping(value = "/role/{role}/user/{user}")
-    public @ResponseStatus(HttpStatus.OK) void associate(@PathVariable("role") String roleName,
-            @PathVariable("user") String userName) throws IOException {
+    public @ResponseStatus(HttpStatus.OK)
+    void associate(@PathVariable("role") String roleName,
+                   @PathVariable("user") String userName) throws IOException {
         associate(securityManager.getActiveRoleService(), roleName, userName);
     }
 
     @DeleteMapping(value = "/role/{role}/user/{user}")
-    public @ResponseStatus(HttpStatus.OK) void disassociate(@PathVariable("role") String roleName,
-            @PathVariable("user") String userName) throws IOException {
+    public @ResponseStatus(HttpStatus.OK)
+    void disassociate(@PathVariable("role") String roleName,
+                      @PathVariable("user") String userName) throws IOException {
         disassociate(securityManager.getActiveRoleService(), roleName, userName);
     }
 
@@ -75,33 +79,37 @@ public class RolesRestController {
 
     @GetMapping(value = "/service/{serviceName}/user/{user}", produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
     protected JaxbRoleList getUser(@PathVariable("serviceName") String serviceName,
-            @PathVariable("user") String userName) throws IOException {
+                                   @PathVariable("user") String userName) throws IOException {
         return getUser(getService(serviceName), userName);
     }
 
     @PostMapping(value = "/service/{serviceName}/role/{role}")
-    public @ResponseStatus(HttpStatus.CREATED) void insert(
+    public @ResponseStatus(HttpStatus.CREATED)
+    void insert(
             @PathVariable("serviceName") String serviceName, @PathVariable("role") String roleName)
             throws IOException {
         insert(getService(serviceName), roleName);
     }
 
     @DeleteMapping(value = "/service/{serviceName}/role/{role}")
-    public @ResponseStatus(HttpStatus.OK) void delete(
+    public @ResponseStatus(HttpStatus.OK)
+    void delete(
             @PathVariable("serviceName") String serviceName, @PathVariable("role") String roleName)
             throws IOException {
         delete(getService(serviceName), roleName);
     }
 
     @PostMapping(value = "/service/{serviceName}/role/{role}/user/{user}")
-    public @ResponseStatus(HttpStatus.OK) void associate(
+    public @ResponseStatus(HttpStatus.OK)
+    void associate(
             @PathVariable("serviceName") String serviceName, @PathVariable("role") String roleName,
             @PathVariable("user") String userName) throws IOException {
         associate(getService(serviceName), roleName, userName);
     }
 
     @DeleteMapping(value = "/service/{serviceName}/role/{role}/user/{user}")
-    public @ResponseStatus(HttpStatus.OK) void disassociate(
+    public @ResponseStatus(HttpStatus.OK)
+    void disassociate(
             @PathVariable("serviceName") String serviceName, @PathVariable("role") String roleName,
             @PathVariable("user") String userName) throws IOException {
         disassociate(getService(serviceName), roleName, userName);
@@ -153,7 +161,7 @@ public class RolesRestController {
             store.store();
         }
     }
-    
+
     protected GeoServerRoleStore getStore(GeoServerRoleService roleService) throws IOException {
         if (roleService.canCreateStore()) {
             return roleService.createStore();
@@ -161,7 +169,7 @@ public class RolesRestController {
             throw new IOException("Provided roleservice is read-only: " + roleService.getName());
         }
     }
-    
+
     protected GeoServerRoleService getService(String serviceName) throws IOException {
         GeoServerRoleService roleService = securityManager.loadRoleService(serviceName);
         if (roleService == null) {
@@ -169,7 +177,7 @@ public class RolesRestController {
         }
         return roleService;
     }
-    
+
     protected GeoServerRole getRole(GeoServerRoleService service, String roleName) throws IOException {
         GeoServerRole role = service.getRoleByName(roleName);
         if (role == null) {

@@ -52,9 +52,8 @@ import com.yammer.metrics.Metrics;
  * <p>
  * This synchronizer events messages received from the same source.
  * </p>
- * 
- * @author Justin Deoliveira, OpenGeo
  *
+ * @author Justin Deoliveira, OpenGeo
  */
 public abstract class HzSynchronizer extends GeoServerSynchronizer implements
         MessageListener<Event> {
@@ -65,10 +64,14 @@ public abstract class HzSynchronizer extends GeoServerSynchronizer implements
 
     protected final ITopic<Event> topic;
 
-    /** event processor */
+    /**
+     * event processor
+     */
     private final ScheduledExecutorService executor;
 
-    /** geoserver configuration */
+    /**
+     * geoserver configuration
+     */
     protected final GeoServer gs;
 
     private volatile boolean started;
@@ -159,7 +162,7 @@ public abstract class HzSynchronizer extends GeoServerSynchronizer implements
         String name = (String) (OwsUtils.has(subj, "name") ? OwsUtils.get(subj, "name") : null);
         WorkspaceInfo ws = (WorkspaceInfo) (OwsUtils.has(subj, "workspace") ? OwsUtils.get(subj,
                 "workspace") : null);
-        
+
         StoreInfo store = (StoreInfo) (OwsUtils.has(subj, "store") ? OwsUtils.get(subj,
                 "store") : null);
 
@@ -167,8 +170,8 @@ public abstract class HzSynchronizer extends GeoServerSynchronizer implements
         if (ws != null) {
             ev.setWorkspaceId(ws.getId());
         }
-        if (store !=null) {
-        	ev.setStoreId(store.getId());
+        if (store != null) {
+            ev.setStoreId(store.getId());
         }
         if (subj instanceof ResourceInfo) {
             ev.setNativeName(((ResourceInfo) subj).getNativeName());
@@ -193,7 +196,7 @@ public abstract class HzSynchronizer extends GeoServerSynchronizer implements
 
     @Override
     public void handleGlobalChange(GeoServerInfo global, List<String> propertyNames,
-            List<Object> oldValues, List<Object> newValues) {
+                                   List<Object> oldValues, List<Object> newValues) {
         // optimization for update sequence
         if (propertyNames.size() == 1 && propertyNames.contains("updateSequence")) {
             return;

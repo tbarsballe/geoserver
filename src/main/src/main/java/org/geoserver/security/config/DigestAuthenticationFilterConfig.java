@@ -9,26 +9,27 @@ import org.geoserver.security.filter.GeoServerDigestAuthenticationFilter;
 
 /**
  * {@link GeoServerDigestAuthenticationFilter} configuration object.
- * 
+ * <p>
  * <p>
  * The user group service must have a plain text or an encrypting password encoder.
  * </p>
  * <p>
- * The default value for {@link #nonceValiditySeconds} is 300 
+ * The default value for {@link #nonceValiditySeconds} is 300
  * </p>
- * @author mcr
  *
+ * @author mcr
  */
-public class DigestAuthenticationFilterConfig extends SecurityFilterConfig 
-    implements SecurityAuthFilterConfig{
+public class DigestAuthenticationFilterConfig extends SecurityFilterConfig
+        implements SecurityAuthFilterConfig {
 
     private static final long serialVersionUID = 1L;
     private String userGroupServiceName;
-    private int nonceValiditySeconds =300;
+    private int nonceValiditySeconds = 300;
 
     public int getNonceValiditySeconds() {
         return nonceValiditySeconds;
     }
+
     public void setNonceValiditySeconds(int nonceValiditySeconds) {
         this.nonceValiditySeconds = nonceValiditySeconds;
     }
@@ -36,6 +37,7 @@ public class DigestAuthenticationFilterConfig extends SecurityFilterConfig
     public String getUserGroupServiceName() {
         return userGroupServiceName;
     }
+
     public void setUserGroupServiceName(String userGroupServiceName) {
         this.userGroupServiceName = userGroupServiceName;
     }

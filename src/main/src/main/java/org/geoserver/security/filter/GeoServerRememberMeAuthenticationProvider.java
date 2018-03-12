@@ -12,7 +12,7 @@ import org.geoserver.security.config.SecurityNamedServiceConfig;
 
 /**
  * Security provider for remember me
- * 
+ *
  * @author mcr
  */
 public class GeoServerRememberMeAuthenticationProvider extends AbstractFilterProvider {

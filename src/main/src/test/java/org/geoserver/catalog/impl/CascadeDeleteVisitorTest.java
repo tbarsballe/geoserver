@@ -90,14 +90,14 @@ public class CascadeDeleteVisitorTest extends CascadeVisitorAbstractTest {
         assertEquals(1, nestedGroup.getLayers().size());
         assertEquals(1, nestedGroup.getStyles().size());
     }
-    
+
     @Test
     public void testCascadeLayerDuplicate() {
         Catalog catalog = getCatalog();
         String name = toString(LAKES);
         LayerInfo layer = catalog.getLayerByName(name);
         assertNotNull(layer);
-        
+
         LayerGroupInfo group = catalog.getLayerGroupByName(LAKES_GROUP);
         group.getLayers().add(layer);
         group.getStyles().add(null);

@@ -44,20 +44,20 @@ public class DataPanel extends Panel {
     private static final long serialVersionUID = -2635691554700860434L;
 
     static final Logger LOGGER = Logging.getLogger(DataPanel.class);
-    
+
     String featureTypeId;
-    
+
     public DataPanel(String id, FeatureTypeInfo ft) {
         super(id, new Model<FeatureTypeInfo>(ft));
         this.featureTypeId = ft.getId();
-        
+
         add(new Label("summary-message",
-            "For reference, here is a listing of the attributes in this data set."
+                "For reference, here is a listing of the attributes in this data set."
         )); // TODO: I18N
         final WebMarkupContainer attsContainer = new WebMarkupContainer("attributes-container");
         attsContainer.setOutputMarkupId(true);
         add(attsContainer);
-        
+
         Feature sample;
         try {
             sample = getSampleFeature(ft);
@@ -67,15 +67,15 @@ public class DataPanel extends Panel {
             return;
         }
         DataAttributesProvider summaries = new DataAttributesProvider(sample);
-        
+
         final GeoServerTablePanel<DataAttribute> attributes = new GeoServerTablePanel<DataAttribute>("attributes", summaries) {
 
             private static final long serialVersionUID = 7753093373969576568L;
 
             @Override
             protected Component getComponentForProperty(String id, final IModel<DataAttribute> itemModel,
-                    Property<DataAttribute> property) {
-                if(DataAttributesProvider.COMPUTE_STATS.equals(property.getName())) {
+                                                        Property<DataAttribute> property) {
+                if (DataAttributesProvider.COMPUTE_STATS.equals(property.getName())) {
                     Fragment f = new Fragment(id, "computeStatsFragment", DataPanel.this);
                     f.add(new AjaxLink<Void>("computeStats") {
 
@@ -88,15 +88,15 @@ public class DataPanel extends Panel {
                                 updateAttributeStats(attribute);
                             } catch (IOException e) {
                                 error("Failed to compute stats for the attribute: " + e.getMessage());
-                                
+
                             }
                             target.add(attsContainer);
                         }
                     });
-                    
+
                     return f;
                 }
-                
+
                 return null;
             }
         };
@@ -105,22 +105,22 @@ public class DataPanel extends Panel {
         attributes.setSortable(false);
         attsContainer.add(attributes);
     }
-    
+
     protected void updateAttributeStats(DataAttribute attribute) throws IOException {
         FeatureTypeInfo featureType = GeoServerApplication.get().getCatalog().getFeatureType(featureTypeId);
         FeatureSource<?, ?> fs = featureType.getFeatureSource(null, null);
-        
+
         // check we can compute min and max
         PropertyDescriptor pd = fs.getSchema().getDescriptor(attribute.getName());
         Class<?> binding = pd.getType().getBinding();
-        if(pd == null || !Comparable.class.isAssignableFrom(binding) || Geometry.class.isAssignableFrom(binding)) {
+        if (pd == null || !Comparable.class.isAssignableFrom(binding) || Geometry.class.isAssignableFrom(binding)) {
             return;
         }
-        
+
         // grab the feature collection and run the min/max visitors (this will move the
         // query to the dbms in case of such data source)
         Query q = new Query();
-        q.setPropertyNames(new String[] {attribute.getName()});
+        q.setPropertyNames(new String[]{attribute.getName()});
         FeatureCollection<?, ?> fc = fs.getFeatures(q);
         MinVisitor minVisitor = new MinVisitor(attribute.getName());
         MaxVisitor maxVisitor = new MaxVisitor(attribute.getName());

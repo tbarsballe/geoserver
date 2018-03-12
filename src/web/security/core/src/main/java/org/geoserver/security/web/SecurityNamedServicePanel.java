@@ -22,12 +22,11 @@ import org.geotools.util.logging.Logging;
 
 /**
  * Base class for configuration panels of a specific class of named security service.
- * 
- * @author Justin Deoliveira, OpenGeo
  *
+ * @author Justin Deoliveira, OpenGeo
  */
-public abstract class SecurityNamedServicePanel<T extends SecurityNamedServiceConfig> 
-    extends FormComponentPanel {
+public abstract class SecurityNamedServicePanel<T extends SecurityNamedServiceConfig>
+        extends FormComponentPanel {
 
     /**
      * logger
@@ -39,7 +38,7 @@ public abstract class SecurityNamedServicePanel<T extends SecurityNamedServiceCo
      */
     protected IModel<T> configModel;
 
-    /** 
+    /**
      * pop-up dialog
      */
     protected GeoServerDialog dialog;
@@ -52,8 +51,8 @@ public abstract class SecurityNamedServicePanel<T extends SecurityNamedServiceCo
         boolean isAdmin = getSecurityManager().checkAuthenticationForAdminRole();
         setEnabled(isAdmin);
 
-        add(new Label("message", 
-            isAdmin ? new Model() : new StringResourceModel("notAdmin", this, null)));
+        add(new Label("message",
+                isAdmin ? new Model() : new StringResourceModel("notAdmin", this, null)));
         if (!isAdmin) {
             get("message").add(new AttributeAppender("class", new Model("info-link"), " "));
         }
@@ -69,7 +68,7 @@ public abstract class SecurityNamedServicePanel<T extends SecurityNamedServiceCo
     }
 
     /**
-     * Determines if the configuration object represents a new configuration, or an existing one. 
+     * Determines if the configuration object represents a new configuration, or an existing one.
      */
     protected boolean isNew() {
         return configModel.getObject().getId() == null;

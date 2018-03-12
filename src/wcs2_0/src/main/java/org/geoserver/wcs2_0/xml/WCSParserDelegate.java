@@ -10,7 +10,7 @@ import org.geotools.xml.XSDParserDelegate;
 
 /**
  * Allows WCS requests embedded in other documents to be parsed (mostly used by WPS)
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class WCSParserDelegate extends XSDParserDelegate {

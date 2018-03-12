@@ -43,7 +43,7 @@ public class GWCSettingsPageTest extends GeoServerWicketTestSupport {
 
         // print(page, true, true);
     }
-    
+
     @Before
     public void cleanup() throws IOException {
         GWC gwc = GWC.get();
@@ -158,12 +158,12 @@ public class GWCSettingsPageTest extends GeoServerWicketTestSupport {
 
         FormTester form = tester.newFormTester("form");
         final boolean replace = true;// tell selectMultiple to first set all options to false
-        form.selectMultiple("cachingOptionsPanel:container:configs:vectorFormatsGroup", new int[] {
-                1, 3 }, replace);
-        form.selectMultiple("cachingOptionsPanel:container:configs:rasterFormatsGroup", new int[] {
-                1, 3 }, replace);
-        form.selectMultiple("cachingOptionsPanel:container:configs:otherFormatsGroup", new int[] {
-                1, 3 }, replace);
+        form.selectMultiple("cachingOptionsPanel:container:configs:vectorFormatsGroup", new int[]{
+                1, 3}, replace);
+        form.selectMultiple("cachingOptionsPanel:container:configs:rasterFormatsGroup", new int[]{
+                1, 3}, replace);
+        form.selectMultiple("cachingOptionsPanel:container:configs:otherFormatsGroup", new int[]{
+                1, 3}, replace);
         // print(page, true, true);
         form.submit("submit");
 
@@ -178,7 +178,7 @@ public class GWCSettingsPageTest extends GeoServerWicketTestSupport {
     }
 
     private void testEditCheckboxOption(final String pagePath, final String formPath,
-            final Boolean initialValue) {
+                                        final Boolean initialValue) {
 
         GWCSettingsPage page = new GWCSettingsPage();
 
@@ -195,43 +195,43 @@ public class GWCSettingsPageTest extends GeoServerWicketTestSupport {
 
         tester.assertRenderedPage(GeoServerHomePage.class);
     }
-    
+
     @SuppressWarnings("unchecked")
-	@Test
+    @Test
     public void testEditLockProvider() {
         GWC gwc = GWC.get();
         ConfigurableLockProvider lockProvider = (ConfigurableLockProvider) gwc.getLockProvider();
         assertTrue(lockProvider.getDelegate() instanceof MemoryLockProvider);
-        
+
         GWCSettingsPage page = new GWCSettingsPage();
         tester.startPage(page);
         tester.assertRenderedPage(GWCSettingsPage.class);
-        
+
         // determine in a future proof way which item contains nioLock
         DropDownChoice<String> lockDropDown = (DropDownChoice<String>) tester.getComponentFromLastRenderedPage("form:cachingOptionsPanel:container:configs:lockProvider");
         List<String> choices = (List<String>) lockDropDown.getChoices();
         int nioLockIndex = -1;
         for (int i = 0; i < choices.size(); i++) {
-            if("nioLock".equals(choices.get(i))) {
+            if ("nioLock".equals(choices.get(i))) {
                 nioLockIndex = i;
                 break;
             }
         }
         assertTrue(nioLockIndex >= 0);
-        
+
         FormTester form = tester.newFormTester("form");
         form.select("cachingOptionsPanel:container:configs:lockProvider", nioLockIndex);
         form.submit("submit");
-        
+
         tester.assertNoErrorMessage();
-        
+
         // check the lock provider has been changed
         lockProvider = (ConfigurableLockProvider) gwc.getLockProvider();
         assertTrue(lockProvider.getDelegate() instanceof NIOLockProvider);
     }
 
     @SuppressWarnings("unchecked")
-	@Test
+    @Test
     public void testNewDefaultGridSet() throws IOException {
         GWC gwc = GWC.get();
         GWCConfig config = gwc.getConfig();
@@ -308,26 +308,26 @@ public class GWCSettingsPageTest extends GeoServerWicketTestSupport {
         // Check the GWCConfig
         config = gwc.getConfig();
         assertTrue(config.isInnerCachingEnabled());
-        
+
         // Start the page
         tester.startPage(new GWCSettingsPage());
         // Ensure the page is correctly rendered
         tester.assertRenderedPage(GWCSettingsPage.class);
-        
+
         // Check if the Cache Provider is GuavaCacheProvider
         tester.assertComponent("form:cachingOptionsPanel:container:configs:blobstores:container:caches",
                 DropDownChoice.class);
         @SuppressWarnings("unchecked")
-		DropDownChoice<String> choice = (DropDownChoice<String>) tester.getComponentFromLastRenderedPage("form:cachingOptionsPanel:container:configs:blobstores:container:caches");
+        DropDownChoice<String> choice = (DropDownChoice<String>) tester.getComponentFromLastRenderedPage("form:cachingOptionsPanel:container:configs:blobstores:container:caches");
         assertTrue(choice.getChoices().get(0).equalsIgnoreCase(GuavaCacheProvider.class.toString()));
-        
+
         // Ensure that the other fields are enabled
         Component comp1 = tester.getComponentFromLastRenderedPage("form:cachingOptionsPanel:container:configs:blobstores:container:cacheConfContainer:hardMemoryLimit");
         Component comp2 = tester.getComponentFromLastRenderedPage("form:cachingOptionsPanel:container:configs:blobstores:container:cacheConfContainer:concurrencyLevel");
-        
+
         assertTrue(comp1.isEnabled());
         assertTrue(comp2.isEnabled());
-        
+
         // Selection of the form tests
         form = tester.newFormTester("form");
         form.setValue("cachingOptionsPanel:container:configs:blobstores:container:persistenceEnabled", true);
@@ -344,7 +344,7 @@ public class GWCSettingsPageTest extends GeoServerWicketTestSupport {
         assertTrue(config.isPersistenceEnabled());
         assertEquals(config.getCacheConfigurations().get(GuavaCacheProvider.class.toString()).getConcurrencyLevel(), 1);
         assertEquals(config.getCacheConfigurations().get(GuavaCacheProvider.class.toString()).getHardMemoryLimit(), 1);
-        
+
         // Start the page
         tester.startPage(new GWCSettingsPage());
         // Ensure the page is correctly rendered
@@ -355,7 +355,7 @@ public class GWCSettingsPageTest extends GeoServerWicketTestSupport {
         form.setValue("cachingOptionsPanel:container:configs:blobstores:innerCachingEnabled", false);
         // Save the changes
         form.submit("submit");
-        
+
         // Start the page
         tester.startPage(new GWCSettingsPage());
         // Ensure the page is correctly rendered
@@ -396,7 +396,7 @@ public class GWCSettingsPageTest extends GeoServerWicketTestSupport {
         assertTrue(evictionPolicies.contains(CacheConfiguration.EvictionPolicy.EXPIRE_AFTER_ACCESS));
         assertTrue(evictionPolicies.contains(CacheConfiguration.EvictionPolicy.EXPIRE_AFTER_WRITE));
     }
-    
+
     @SuppressWarnings("unchecked")
     @Test
     public void testMemoryCachePanelOpen() throws IOException {

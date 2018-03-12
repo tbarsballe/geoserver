@@ -17,11 +17,10 @@ import org.geoserver.wfs.GMLInfo.SrsNameStyle;
 import com.thoughtworks.xstream.XStream;
 
 /**
- * Loads and persist the {@link WFSInfo} object to and from xstream 
+ * Loads and persist the {@link WFSInfo} object to and from xstream
  * persistence.
- * 
- * @author Justin Deoliveira, The Open Planning Project
  *
+ * @author Justin Deoliveira, The Open Planning Project
  */
 public class WFSXStreamLoader extends XStreamServiceLoader<WFSInfo> {
 
@@ -37,17 +36,18 @@ public class WFSXStreamLoader extends XStreamServiceLoader<WFSInfo> {
 
     /**
      * Sets up aliases and allowed types for the xstream persister
+     *
      * @param xs
      */
     public static void initXStreamPersister(XStreamPersister xp) {
         XStream xs = xp.getXStream();
-        xs.alias( "wfs", WFSInfo.class, WFSInfoImpl.class );
-        xs.alias( "version", WFSInfo.Version.class);
-        xs.alias( "gml", GMLInfo.class, GMLInfoImpl.class );
+        xs.alias("wfs", WFSInfo.class, WFSInfoImpl.class);
+        xs.alias("version", WFSInfo.Version.class);
+        xs.alias("gml", GMLInfo.class, GMLInfoImpl.class);
         // modify the WFSSettingsResource when 
-        xs.allowTypes(new Class[] { WFSInfo.Version.class, GMLInfo.class, GMLInfoImpl.class });
+        xs.allowTypes(new Class[]{WFSInfo.Version.class, GMLInfo.class, GMLInfoImpl.class});
     }
-    
+
     protected WFSInfo createServiceFromScratch(GeoServer gs) {
         WFSInfoImpl wfs = new WFSInfoImpl();
         wfs.setName("WFS");
@@ -55,10 +55,10 @@ public class WFSXStreamLoader extends XStreamServiceLoader<WFSInfo> {
 
         //gml2
         addGml(wfs, WFSInfo.Version.V_10, GMLInfo.SrsNameStyle.XML, true);
-        
+
         //gml3
         addGml(wfs, WFSInfo.Version.V_11, GMLInfo.SrsNameStyle.URN, false);
-        
+
         //gml3.2
         addGml(wfs, WFSInfo.Version.V_20, SrsNameStyle.URN2, false);
         return wfs;
@@ -67,11 +67,11 @@ public class WFSXStreamLoader extends XStreamServiceLoader<WFSInfo> {
     public Class<WFSInfo> getServiceClass() {
         return WFSInfo.class;
     }
-    
+
     @Override
     protected WFSInfo initialize(WFSInfo service) {
         super.initialize(service);
-        if ( service.getVersions().isEmpty() ) {
+        if (service.getVersions().isEmpty()) {
             service.getVersions().add(WFSInfo.Version.V_10.getVersion());
             service.getVersions().add(WFSInfo.Version.V_11.getVersion());
         }
@@ -79,19 +79,19 @@ public class WFSXStreamLoader extends XStreamServiceLoader<WFSInfo> {
         if (!service.getVersions().contains(WFSInfo.Version.V_20.getVersion())) {
             service.getVersions().add(WFSInfo.Version.V_20.getVersion());
         }
-        
+
         //set the defaults for GMLInfo if they are not set
-        if(service.getGML() == null) {
-            ((WFSInfoImpl) service).setGML(new HashMap<WFSInfo.Version, GMLInfo>());           
+        if (service.getGML() == null) {
+            ((WFSInfoImpl) service).setGML(new HashMap<WFSInfo.Version, GMLInfo>());
         }
         GMLInfo gml = service.getGML().get(WFSInfo.Version.V_10);
-        if(gml == null) {
+        if (gml == null) {
             addGml(service, WFSInfo.Version.V_10, SrsNameStyle.URL, false);
         } else if (gml.getOverrideGMLAttributes() == null) {
             gml.setOverrideGMLAttributes(true);
         }
         gml = service.getGML().get(WFSInfo.Version.V_11);
-        if(gml == null) {
+        if (gml == null) {
             addGml(service, WFSInfo.Version.V_11, SrsNameStyle.URN, false);
         } else if (gml.getOverrideGMLAttributes() == null) {
             gml.setOverrideGMLAttributes(false);

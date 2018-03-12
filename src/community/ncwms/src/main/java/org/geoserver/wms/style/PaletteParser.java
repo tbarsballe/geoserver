@@ -25,7 +25,7 @@ import org.opengis.filter.FilterFactory;
  * <li>A comment, started with %</li>
  * <li>A #RRGGBB or 0xRRGGBB color</li>
  * <li>A #AARRGGBB or 0xAARRGGBB color</li>
- * 
+ *
  * @author Andrea Aime
  */
 public class PaletteParser {
@@ -156,7 +156,7 @@ public class PaletteParser {
 
         public InvalidColorException(String color, Throwable cause) {
             super("Invalid color '" + color
-                    + "', supported syntaxes are #RRGGBB, 0xRRGGBB, #AARRGGBB and 0xAARRGGBB",
+                            + "', supported syntaxes are #RRGGBB, 0xRRGGBB, #AARRGGBB and 0xAARRGGBB",
                     cause);
         }
     }

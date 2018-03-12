@@ -6,13 +6,13 @@
 
 
 package org.geoserver.security.impl;
+
 import org.geoserver.security.GeoServerUserGroupService;
 
 /**
  * Needed to test if subclassing works
- * 
- * @author christian
  *
+ * @author christian
  */
 public class MemoryGeoserverUser extends GeoServerUser {
 
@@ -30,7 +30,7 @@ public class MemoryGeoserverUser extends GeoServerUser {
     public GeoServerUser copy() {
         return new MemoryGeoserverUser(this);
     }
-    
+
     @Override
     public void eraseCredentials() {
         // do nothing

@@ -15,5 +15,7 @@ public class ProgressMonitor extends DefaultProgressListener implements Serializ
 
     public void setTask(String message) {
         super.setTask(new SimpleInternationalString(message));
-    };
+    }
+
+    ;
 }

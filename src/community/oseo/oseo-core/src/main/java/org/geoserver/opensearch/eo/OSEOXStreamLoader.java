@@ -18,7 +18,7 @@ import com.thoughtworks.xstream.XStream;
 
 /**
  * Loads the OpenSearch EO configuration from XML
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class OSEOXStreamLoader extends XStreamServiceLoader<OSEOInfo> {
@@ -52,7 +52,7 @@ public class OSEOXStreamLoader extends XStreamServiceLoader<OSEOInfo> {
 
     /**
      * Sets up aliases and allowed types for the xstream persister
-     * 
+     *
      * @param xs
      */
     public static void initXStreamPersister(XStreamPersister xp) {

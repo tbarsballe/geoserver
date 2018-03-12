@@ -26,13 +26,13 @@ public class OSEODispatcherCallback extends AbstractDispatcherCallback {
     public Service serviceDispatched(Request request, Service service) throws ServiceException {
         final Map kvp = request.getKvp();
         final Map rawKvp = request.getRawKvp();
-        if("oseo".equalsIgnoreCase(request.getService()) ) {
-            if(kvp.isEmpty()) {
-                if("description".equals(request.getRequest())) {
+        if ("oseo".equalsIgnoreCase(request.getService())) {
+            if (kvp.isEmpty()) {
+                if ("description".equals(request.getRequest())) {
                     kvp.put("service", "oseo");
                     // the raw kvp is normally not even initialized
                     request.setRawKvp(kvp);
-                } else if("search".equals(request.getRequest())) {
+                } else if ("search".equals(request.getRequest())) {
                     kvp.put("service", "oseo");
                     kvp.put("httpAccept", AtomSearchResponse.MIME);
                 }
@@ -44,7 +44,7 @@ public class OSEODispatcherCallback extends AbstractDispatcherCallback {
                 // (clients following the template to the letter will create keys with empty value)
                 for (String key : new HashSet<String>(request.getRawKvp().keySet())) {
                     Object value = rawKvp.get(key);
-                    if(!(value instanceof String) || StringUtils.isEmpty((String) value)) {
+                    if (!(value instanceof String) || StringUtils.isEmpty((String) value)) {
                         rawKvp.remove(key);
                         kvp.remove(key);
                     }

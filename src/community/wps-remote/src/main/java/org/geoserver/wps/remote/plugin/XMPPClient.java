@@ -89,21 +89,26 @@ import net.razorvine.pickle.Unpickler;
 
 /**
  * XMPP implementation of the {@link RemoteProcessClient}
- * 
+ *
  * @author Alessio Fabiani, GeoSolutions
- * 
  */
 public class XMPPClient extends RemoteProcessClient {
 
-    /** The LOGGER */
+    /**
+     * The LOGGER
+     */
     public static final Logger LOGGER = Logging.getLogger(XMPPClient.class.getPackage().getName());
 
     private static final int DEFAULT_PACKET_REPLY_TIMEOUT = 500; // millis
 
-    /** The XMPP Server endpoint */
+    /**
+     * The XMPP Server endpoint
+     */
     private String server;
 
-    /** The XMPP Server port */
+    /**
+     * The XMPP Server port
+     */
     private int port;
 
     /**
@@ -146,65 +151,71 @@ public class XMPPClient extends RemoteProcessClient {
 
     protected MultiUserChat mucManagementChannel;
 
-    /** Primitive type name -> class map. */
+    /**
+     * Primitive type name -> class map.
+     */
     public static final Map<String, Object> PRIMITIVE_NAME_TYPE_MAP = new HashMap<String, Object>();
 
-    /** Default Thresholds indicating overloaded resources */
+    /**
+     * Default Thresholds indicating overloaded resources
+     */
     private static double DEFAULT_CPU_PERCENT_THRESHOLD = 82.0;
 
     private static double DEFAULT_MEM_PERCENT_THRESHOLD = 82.0;
-    
+
     private static Boolean DEFAULT_XMPP_FORCE_EXECUTION = Boolean.FALSE;
 
-    /** Setup the primitives map. */
+    /**
+     * Setup the primitives map.
+     */
     static enum CType {
         SIMPLE, COMPLEX
     }
 
     /**
-     * 
+     *
      * STATIC MAP of the available mime-types.
-     * 
+     *
      * Those are the available key-strigns which the remote client can specify on the XMPP message in order to declare which kind of output objects it
      * is able to produce.
-     * 
-     * 
+     *
+     *
      */
 
     static {
         // ----
         PRIMITIVE_NAME_TYPE_MAP.put("string",
-                new Object[] { String.class, CType.SIMPLE, null, "text/plain" });
+                new Object[]{String.class, CType.SIMPLE, null, "text/plain"});
         PRIMITIVE_NAME_TYPE_MAP.put("url",
-                new Object[] { String.class, CType.SIMPLE, null, "text/plain" });
+                new Object[]{String.class, CType.SIMPLE, null, "text/plain"});
         PRIMITIVE_NAME_TYPE_MAP.put("boolean",
-                new Object[] { Boolean.TYPE, CType.SIMPLE, Boolean.TRUE, "" });
-        PRIMITIVE_NAME_TYPE_MAP.put("byte", new Object[] { Byte.TYPE, CType.SIMPLE, null, "" });
+                new Object[]{Boolean.TYPE, CType.SIMPLE, Boolean.TRUE, ""});
+        PRIMITIVE_NAME_TYPE_MAP.put("byte", new Object[]{Byte.TYPE, CType.SIMPLE, null, ""});
         PRIMITIVE_NAME_TYPE_MAP.put("char",
-                new Object[] { Character.TYPE, CType.SIMPLE, null, "text/plain" });
-        PRIMITIVE_NAME_TYPE_MAP.put("short", new Object[] { Short.TYPE, CType.SIMPLE, null, "" });
-        PRIMITIVE_NAME_TYPE_MAP.put("int", new Object[] { Integer.TYPE, CType.SIMPLE, null, "" });
-        PRIMITIVE_NAME_TYPE_MAP.put("long", new Object[] { Long.TYPE, CType.SIMPLE, null, "" });
-        PRIMITIVE_NAME_TYPE_MAP.put("float", new Object[] { Float.TYPE, CType.SIMPLE, null, "" });
-        PRIMITIVE_NAME_TYPE_MAP.put("double", new Object[] { Double.TYPE, CType.SIMPLE, null, "" });
+                new Object[]{Character.TYPE, CType.SIMPLE, null, "text/plain"});
+        PRIMITIVE_NAME_TYPE_MAP.put("short", new Object[]{Short.TYPE, CType.SIMPLE, null, ""});
+        PRIMITIVE_NAME_TYPE_MAP.put("int", new Object[]{Integer.TYPE, CType.SIMPLE, null, ""});
+        PRIMITIVE_NAME_TYPE_MAP.put("long", new Object[]{Long.TYPE, CType.SIMPLE, null, ""});
+        PRIMITIVE_NAME_TYPE_MAP.put("float", new Object[]{Float.TYPE, CType.SIMPLE, null, ""});
+        PRIMITIVE_NAME_TYPE_MAP.put("double", new Object[]{Double.TYPE, CType.SIMPLE, null, ""});
         PRIMITIVE_NAME_TYPE_MAP.put("datetime",
-                new Object[] { Date.class, CType.SIMPLE, null, "" });
+                new Object[]{Date.class, CType.SIMPLE, null, ""});
 
         // Complex and Raw data types
         // ----
         PRIMITIVE_NAME_TYPE_MAP.put("application/xml",
-                new Object[] { RawData.class, CType.COMPLEX,
+                new Object[]{RawData.class, CType.COMPLEX,
                         new StringRawData("", "application/xml"), "application/xml,text/xml",
-                        ".xml" });
-        PRIMITIVE_NAME_TYPE_MAP.put("text/xml", new Object[] { RawData.class, CType.COMPLEX,
-                new StringRawData("", "text/xml"), "application/xml,text/xml", ".xml" });
+                        ".xml"});
+        PRIMITIVE_NAME_TYPE_MAP.put("text/xml", new Object[]{RawData.class, CType.COMPLEX,
+                new StringRawData("", "text/xml"), "application/xml,text/xml", ".xml"});
 
         // ----
         PRIMITIVE_NAME_TYPE_MAP.put("text/xml;subtype",
-                new Object[] { RawData.class, CType.COMPLEX,
+                new Object[]{RawData.class, CType.COMPLEX,
                         new StringRawData("", "application/gml-3.1.1"),
                         "application/xml,application/gml-3.1.1,application/gml-2.1.2,text/xml; subtype=gml/3.1.1,text/xml; subtype=gml/2.1.2",
-                        ".xml" });
+                        ".xml"});
         PRIMITIVE_NAME_TYPE_MAP.put("text/xml;subtype=gml/3.1.1",
                 PRIMITIVE_NAME_TYPE_MAP.get("text/xml;subtype"));
         PRIMITIVE_NAME_TYPE_MAP.put("text/xml;subtype=gml/2.1.2",
@@ -216,56 +227,56 @@ public class XMPPClient extends RemoteProcessClient {
 
         // ----
         PRIMITIVE_NAME_TYPE_MAP.put("application/json",
-                new Object[] { RawData.class, CType.COMPLEX,
+                new Object[]{RawData.class, CType.COMPLEX,
                         new StringRawData("", "application/vnd.geo+json"), "application/vnd.geo+json",
-                        ".json" });
+                        ".json"});
 
         // ----
         PRIMITIVE_NAME_TYPE_MAP.put("application/owc",
-                new Object[] { RawData.class, CType.COMPLEX,
+                new Object[]{RawData.class, CType.COMPLEX,
                         new StringRawData("", "application/vnd.geo+json"), "application/vnd.geo+json",
-                        ".json" });
+                        ".json"});
 
         // ----
         PRIMITIVE_NAME_TYPE_MAP.put("image/geotiff",
-                new Object[] { RawData.class, CType.COMPLEX,
+                new Object[]{RawData.class, CType.COMPLEX,
                         new ResourceRawData(null, "image/geotiff", "tif"),
-                        "image/geotiff,image/tiff", ".tif" });
+                        "image/geotiff,image/tiff", ".tif"});
         PRIMITIVE_NAME_TYPE_MAP.put("image/geotiff;stream",
-                new Object[] { RawData.class, CType.COMPLEX,
+                new Object[]{RawData.class, CType.COMPLEX,
                         new StreamRawData("image/geotiff", null, "tif"), "image/geotiff,image/tiff",
-                        ".tif" });
+                        ".tif"});
 
         // ----
         PRIMITIVE_NAME_TYPE_MAP.put("application/zip",
-                new Object[] { RawData.class, CType.COMPLEX,
+                new Object[]{RawData.class, CType.COMPLEX,
                         new ResourceRawData(null, "application/zip", "zip"), "application/zip",
-                        ".zip" });
+                        ".zip"});
         PRIMITIVE_NAME_TYPE_MAP.put("application/zip;stream",
-                new Object[] { RawData.class, CType.COMPLEX,
+                new Object[]{RawData.class, CType.COMPLEX,
                         new StreamRawData("application/zip", null, "zip"), "application/zip",
-                        ".zip" });
+                        ".zip"});
 
         // ----
         PRIMITIVE_NAME_TYPE_MAP.put("application/x-netcdf",
-                new Object[] { RawData.class, CType.COMPLEX,
+                new Object[]{RawData.class, CType.COMPLEX,
                         new ResourceRawData(null, "application/x-netcdf", "nc"),
-                        "application/x-netcdf", ".nc" });
+                        "application/x-netcdf", ".nc"});
         PRIMITIVE_NAME_TYPE_MAP.put("application/x-netcdf;stream",
-                new Object[] { RawData.class, CType.COMPLEX,
+                new Object[]{RawData.class, CType.COMPLEX,
                         new StreamRawData("application/x-netcdf", null, "nc"),
-                        "application/x-netcdf", ".nc" });
+                        "application/x-netcdf", ".nc"});
 
         // ----
-        PRIMITIVE_NAME_TYPE_MAP.put("video/mp4", new Object[] { RawData.class, CType.COMPLEX,
-                new ResourceRawData(null, "video/mp4", "mp4"), "video/mp4", ".mp4" });
-        PRIMITIVE_NAME_TYPE_MAP.put("video/mp4;stream", new Object[] { RawData.class, CType.COMPLEX,
-                new StreamRawData("video/mp4", null, "mp4"), "video/mp4", ".mp4" });
+        PRIMITIVE_NAME_TYPE_MAP.put("video/mp4", new Object[]{RawData.class, CType.COMPLEX,
+                new ResourceRawData(null, "video/mp4", "mp4"), "video/mp4", ".mp4"});
+        PRIMITIVE_NAME_TYPE_MAP.put("video/mp4;stream", new Object[]{RawData.class, CType.COMPLEX,
+                new StreamRawData("video/mp4", null, "mp4"), "video/mp4", ".mp4"});
     }
 
     /**
      * Default Constructor
-     * 
+     *
      * @param remoteProcessFactoryConfigurationWatcher
      * @param enabled
      */
@@ -307,9 +318,9 @@ public class XMPPClient extends RemoteProcessClient {
         SmackConfiguration.setDefaultPacketReplyTimeout(packetReplyTimeout);
 
         config = new ConnectionConfiguration(server, port);
-        
+
         checkSecured(getConfiguration());
-        
+
         // Trust own CA and all self-signed certs
         SSLContext sslcontext = null;
         if (this.certificateFile != null && this.certificatePassword != null) {
@@ -320,12 +331,12 @@ public class XMPPClient extends RemoteProcessClient {
             } finally {
                 instream.close();
             }
-            
+
             sslcontext = SSLContexts.custom()
                     .loadTrustMaterial(trustStore, new TrustSelfSignedStrategy()).build();
 
         }
-        
+
         if (sslcontext != null) {
             // config.setSASLAuthenticationEnabled(false);
             config.setSecurityMode(SecurityMode.enabled);
@@ -335,30 +346,30 @@ public class XMPPClient extends RemoteProcessClient {
         }
 
         // Actually performs the connection to the XMPP Server
-        for (int testConn=0; testConn<5; testConn++) {
+        for (int testConn = 0; testConn < 5; testConn++) {
             try {
                 // Try first the TCP Endpoint
                 connection = new XMPPTCPConnection(config);
                 connection.connect();
                 break;
-            } catch(NoResponseException e) {
+            } catch (NoResponseException e) {
                 connection = null;
                 if (testConn >= 5) {
                     LOGGER.warning("No XMPP TCP Endpoint available or could not get any response from the Server. Falling back to BOSH Endpoint.");
                 } else {
-                    LOGGER.log(Level.WARNING, "Tentative #" + (testConn+1) + " - Error while trying to connect to XMPP TCP Endpoint.", e);
+                    LOGGER.log(Level.WARNING, "Tentative #" + (testConn + 1) + " - Error while trying to connect to XMPP TCP Endpoint.", e);
                     Thread.sleep(500);
                 }
             }
         }
 
         if (connection == null || !connection.isConnected()) {
-            for (int testConn=0; testConn<5; testConn++) {
+            for (int testConn = 0; testConn < 5; testConn++) {
                 try {
                     // Falling back to BOSH Endpoint
-                    BOSHConfiguration boshConfig = 
+                    BOSHConfiguration boshConfig =
                             new BOSHConfiguration((sslcontext != null), server, port, null, getConfiguration().get("xmpp_domain"));
-                    
+
                     if (sslcontext != null) {
                         // boshConfig.setSASLAuthenticationEnabled(false);
                         boshConfig.setSecurityMode(SecurityMode.enabled);
@@ -366,22 +377,22 @@ public class XMPPClient extends RemoteProcessClient {
                     } else {
                         boshConfig.setSecurityMode(SecurityMode.disabled);
                     }
-                    
+
                     connection = new XMPPBOSHConnection(boshConfig);
                     connection.connect();
                     break;
-                } catch(NoResponseException e) {
+                } catch (NoResponseException e) {
                     connection = null;
                     if (testConn >= 5) {
                         LOGGER.warning("No XMPP BOSH Endpoint available or could not get any response from the Server. The XMPP Client won't be available.");
                     } else {
-                        LOGGER.log(Level.WARNING, "Tentative #" + (testConn+1) + " - Error while trying to connect to XMPP BOSH Endpoint.", e);
+                        LOGGER.log(Level.WARNING, "Tentative #" + (testConn + 1) + " - Error while trying to connect to XMPP BOSH Endpoint.", e);
                         Thread.sleep(500);
                     }
                 }
             }
         }
-        
+
         LOGGER.info("Connected: " + connection.isConnected());
 
         // Check if the connection to the XMPP server is successful; the login
@@ -417,12 +428,12 @@ public class XMPPClient extends RemoteProcessClient {
     private void checkSecured(RemoteProcessFactoryConfiguration configuration) {
         final String xmppServerEmbeddedSecure = configuration.get("xmpp_server_embedded_secure");
         final String xmppServerEmbeddedCertFile = configuration.get("xmpp_server_embedded_certificate_file");
-        final String xmppServerEmbeddedCertPwd = configuration.get("xmpp_server_embedded_certificate_password");        
+        final String xmppServerEmbeddedCertPwd = configuration.get("xmpp_server_embedded_certificate_password");
 
         if (xmppServerEmbeddedSecure != null && Boolean.valueOf(xmppServerEmbeddedSecure.trim())) {
             // Override XML properties
             if (xmppServerEmbeddedCertFile != null && xmppServerEmbeddedCertPwd != null) {
-                final org.geoserver.platform.resource.Resource certFileResource = 
+                final org.geoserver.platform.resource.Resource certFileResource =
                         Resources.fromURL(xmppServerEmbeddedCertFile.trim());
                 if (certFileResource != null) {
                     this.certificateFile = certFileResource.file();
@@ -434,8 +445,8 @@ public class XMPPClient extends RemoteProcessClient {
                         // Copy the default property file into the data directory
                         //URL url = RemoteProcessFactoryConfigurationWatcher.class.getResource(xmppServerEmbeddedCertFile.trim());
                         //if (url != null) {
-                            this.certificateFile = loader.createFile(xmppServerEmbeddedCertFile.trim());
-                            loader.copyFromClassPath(xmppServerEmbeddedCertFile.trim(), this.certificateFile/*,
+                        this.certificateFile = loader.createFile(xmppServerEmbeddedCertFile.trim());
+                        loader.copyFromClassPath(xmppServerEmbeddedCertFile.trim(), this.certificateFile/*,
                                     RemoteProcessFactoryConfigurationWatcher.class*/);
                         //}
                         this.certificateFile = loader.find(xmppServerEmbeddedCertFile.trim());
@@ -452,7 +463,7 @@ public class XMPPClient extends RemoteProcessClient {
 
     @Override
     public String execute(Name serviceName, Map<String, Object> input, Map<String, Object> metadata,
-            ProgressListener monitor) throws Exception {
+                          ProgressListener monitor) throws Exception {
 
         // Check for a free machine...
 
@@ -533,9 +544,8 @@ public class XMPPClient extends RemoteProcessClient {
 
     /**
      * Utility method to extract the process inputs accordingly to whatever declared from the endpoint.
-     * 
-     * @param input
      *
+     * @param input
      * @throws IOException
      */
     private Object getFixedInputs(Map<String, Object> input) throws IOException {
@@ -582,7 +592,7 @@ public class XMPPClient extends RemoteProcessClient {
 
     /**
      * Logins as manager to the XMPP Server and registers to the service channels management chat rooms
-     * 
+     *
      * @param username
      * @param password
      */
@@ -618,7 +628,7 @@ public class XMPPClient extends RemoteProcessClient {
                 } catch (Exception e) {
                     serviceChannel.join(username, managementChannelPassword);
                 }
-                
+
                 mucServiceChannels.add(serviceChannel);
             }
 
@@ -632,9 +642,8 @@ public class XMPPClient extends RemoteProcessClient {
 
     /**
      * Generate the XMPP JID
-     * 
-     * @param username
      *
+     * @param username
      */
     private String getJID(String username) {
         // final String id = md5Java(username + "@" + this.domain + "/" + System.nanoTime());
@@ -643,9 +652,8 @@ public class XMPPClient extends RemoteProcessClient {
 
     /**
      * Generate a unique Server JID Resource
-     * 
-     * @param username
      *
+     * @param username
      */
     private String getResource(String username) {
         final String id = md5Java(username + "@" + this.domain + "/" + System.nanoTime());
@@ -658,7 +666,7 @@ public class XMPPClient extends RemoteProcessClient {
 
     /**
      * Declare the status on the XMPP Chat
-     * 
+     *
      * @param available
      * @param status
      */
@@ -681,8 +689,6 @@ public class XMPPClient extends RemoteProcessClient {
     }
 
     /**
-     * 
-     * 
      * @param user
      * @param name
      */
@@ -708,7 +714,7 @@ public class XMPPClient extends RemoteProcessClient {
 
     /**
      * Conversation setup!
-     * 
+     * <p>
      * Messages should be moved here once we get this working properly
      */
     public Chat setupChat(final String origin) {
@@ -749,7 +755,7 @@ public class XMPPClient extends RemoteProcessClient {
 
     /**
      * Close the XMPP connection
-     * 
+     *
      * @throws NotConnectedException
      */
     public void disconnect() throws NotConnectedException {
@@ -758,10 +764,8 @@ public class XMPPClient extends RemoteProcessClient {
 
     /**
      * Utility method to extract the Service Name from the XMPP JID
-     * 
-     * @param person
-     * 
      *
+     * @param person
      */
     public static NameImpl extractServiceName(String person) throws Exception {
         String occupantFlatName = null;
@@ -783,7 +787,6 @@ public class XMPPClient extends RemoteProcessClient {
 
     /**
      * Send an invitation to the new logged in member
-     * 
      */
     protected void sendInvitations() throws Exception {
         synchronized (registeredServices) {
@@ -808,7 +811,7 @@ public class XMPPClient extends RemoteProcessClient {
 
     /**
      * Scan Remote Processing Machines availability and average load
-     * 
+     *
      * @throws Exception
      */
     protected void getEndpointsLoadAverages() throws Exception {
@@ -839,7 +842,7 @@ public class XMPPClient extends RemoteProcessClient {
 
     /**
      * Scan pending requests queue; try to find a free remote node suitable for processing or abort the request if expired.
-     * 
+     *
      * @throws Exception
      */
     protected void checkPendingRequests() throws Exception {
@@ -900,9 +903,8 @@ public class XMPPClient extends RemoteProcessClient {
 
     /**
      * A new member joined one of the service chat-rooms; send an invitation and see if it is a remote service. If so, register it
-     * 
+     *
      * @param p
-     * 
      */
     protected void handleMemberJoin(Presence p) throws Exception {
         synchronized (registeredServices) {
@@ -925,9 +927,8 @@ public class XMPPClient extends RemoteProcessClient {
 
     /**
      * A member leaved one of the service chat-rooms; lets remove the service declaration and de-register it
-     * 
+     *
      * @param p
-     * 
      */
     protected void handleMemberLeave(Packet p) throws Exception {
         final Name serviceName = extractServiceName(p.getFrom());
@@ -944,14 +945,11 @@ public class XMPPClient extends RemoteProcessClient {
 
     /**
      * Find the service by name with the smallest amount of processes running, channel is decoded in service name
-     * 
+     * <p>
      * e.g. debug.foo@bar/service@localhost
-     * 
-     * @param service name
-     * 
-     * @param candidateServiceJID
-     * 
      *
+     * @param service             name
+     * @param candidateServiceJID
      */
     private String getFlattestMachine(Name serviceName) {
         // The candidate remote processing node
@@ -961,15 +959,15 @@ public class XMPPClient extends RemoteProcessClient {
         Double cpuLoadPercThreshold = DEFAULT_CPU_PERCENT_THRESHOLD;
         Double vmemPercThreshold = DEFAULT_MEM_PERCENT_THRESHOLD;
         Boolean forceExecutionIfNoCandidate = DEFAULT_XMPP_FORCE_EXECUTION;
-        
+
         if (getConfiguration().get("xmpp_cpu_perc_threshold") != null) {
             cpuLoadPercThreshold = Double.valueOf(getConfiguration().get("xmpp_cpu_perc_threshold"));
         }
-        
+
         if (getConfiguration().get("xmpp_mem_perc_threshold") != null) {
             vmemPercThreshold = Double.valueOf(getConfiguration().get("xmpp_mem_perc_threshold"));
         }
-        
+
         if (getConfiguration().get("xmpp_force_execution") != null) {
             forceExecutionIfNoCandidate = Boolean.valueOf(getConfiguration().get("xmpp_force_execution"));
         }
@@ -989,7 +987,7 @@ public class XMPPClient extends RemoteProcessClient {
                     if (candidateNode == null || (node.getLoadAverage() <= candidateNode
                             .getLoadAverage()
                             && (node.getLoadAverage() < candidateNode.getLoadAverage()
-                                    || node.getMemPercUsed() < candidateNode.getMemPercUsed()))) {
+                            || node.getMemPercUsed() < candidateNode.getMemPercUsed()))) {
                         candidateNode = node;
                     }
                 }
@@ -1006,12 +1004,12 @@ public class XMPPClient extends RemoteProcessClient {
 
         LOGGER.info(
                 "XMPPClient::getFlattestMachine - ... no candidate found!");
-        
+
         if (forceExecutionIfNoCandidate) {
             if (registeredProcessingMachines.size() > 0) {
                 LOGGER.info(
                         "XMPPClient::getFlattestMachine - Forced Execution: falling back to first machine!");
-                
+
                 candidateNode = registeredProcessingMachines.get(0);
                 return candidateNode.getNodeJID();
             } else {
@@ -1063,7 +1061,7 @@ public class XMPPClient extends RemoteProcessClient {
         private Thread thread;
 
         /**
-         * 
+         *
          */
         public PingTask() {
             this.delay = DEFAULT_PING_INTERVAL;
@@ -1086,7 +1084,6 @@ public class XMPPClient extends RemoteProcessClient {
         }
 
         /**
-         * 
          * @param thread
          */
         protected void setThread(Thread thread) {
@@ -1094,8 +1091,6 @@ public class XMPPClient extends RemoteProcessClient {
         }
 
         /**
-         * 
-         *
          * @throws NotConnectedException
          */
         private boolean sendPing() throws NotConnectedException {
@@ -1119,7 +1114,7 @@ public class XMPPClient extends RemoteProcessClient {
         }
 
         /**
-         * 
+         *
          */
         public void run() {
             try {
@@ -1205,9 +1200,8 @@ public class XMPPClient extends RemoteProcessClient {
 
     /**
      * Utility method to "pickle" (compress) the input parameters to be attached to the XMPP message
-     * 
-     * @param unpickled
      *
+     * @param unpickled
      * @throws PickleException
      * @throws IOException
      */
@@ -1218,9 +1212,8 @@ public class XMPPClient extends RemoteProcessClient {
 
     /**
      * Utility method to "un-pickle" (decompress) the input parameters attached to the XMPP message
-     * 
-     * @param strdata
      *
+     * @param strdata
      * @throws PickleException
      * @throws IOException
      */
@@ -1230,9 +1223,8 @@ public class XMPPClient extends RemoteProcessClient {
 
     /**
      * Utility method to "un-pickle" (decompress) the input parameters attached to the XMPP message
-     * 
-     * @param data
      *
+     * @param data
      * @throws PickleException
      * @throws IOException
      */
@@ -1245,9 +1237,8 @@ public class XMPPClient extends RemoteProcessClient {
 
     /**
      * Utility method to get bytes out of a String
-     * 
-     * @param s
      *
+     * @param s
      * @throws IOException
      */
     static byte[] toBytes(String s) throws IOException {
@@ -1267,9 +1258,8 @@ public class XMPPClient extends RemoteProcessClient {
 
     /**
      * Utility method to get bytes out of a short array
-     * 
-     * @param shorts
      *
+     * @param shorts
      */
     static byte[] toBytes(short[] shorts) {
         byte[] result = new byte[shorts.length + 3];
@@ -1284,9 +1274,8 @@ public class XMPPClient extends RemoteProcessClient {
 
     /**
      * Utility method to generate a unique md5
-     * 
-     * @param message
      *
+     * @param message
      */
     public static String md5Java(String message) {
         String digest = null;
@@ -1309,7 +1298,7 @@ public class XMPPClient extends RemoteProcessClient {
 
     /**
      * Convert a byte array to a URL encoded string
-     * 
+     *
      * @param in byte[]
      * @return String
      */
@@ -1319,8 +1308,8 @@ public class XMPPClient extends RemoteProcessClient {
         if (in == null || in.length <= 0)
             return null;
 
-        String pseudo[] = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D",
-                "E", "F" };
+        String pseudo[] = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D",
+                "E", "F"};
         StringBuffer out = new StringBuffer(in.length * 2);
 
         while (i < in.length) {
@@ -1352,12 +1341,10 @@ public class XMPPClient extends RemoteProcessClient {
 
     /**
      * Convert a list of Strings from an Interator into an array of Classes (the Strings are taken as classnames).
-     * 
+     *
      * @param it A java.util.Iterator pointing to a Collection of Strings
      * @param cl The ClassLoader to use
-     * 
      * @return Array of Classes
-     * 
      * @throws ClassNotFoundException When a class could not be loaded from the specified ClassLoader
      */
     public final static Class<?>[] convertToJavaClasses(Iterator<String> it, ClassLoader cl)
@@ -1371,18 +1358,16 @@ public class XMPPClient extends RemoteProcessClient {
 
     /**
      * Convert a given String into the appropriate Class.
-     * 
-     * @param name Name of class
-     * @param cl ClassLoader to use
+     *
+     * @param name   Name of class
+     * @param cl     ClassLoader to use
      * @param object
      * @param sample
-     * 
      * @return The class for the given name
-     * 
      * @throws ClassNotFoundException When the class could not be found by the specified ClassLoader
      */
     final static ParameterTemplate convertToJavaClass(String name, ClassLoader cl,
-            Object defaultValue) throws ClassNotFoundException {
+                                                      Object defaultValue) throws ClassNotFoundException {
         int arraySize = 0;
         while (name.endsWith("[]")) {
             name = name.substring(0, name.length() - 2);
@@ -1439,15 +1424,16 @@ public class XMPPClient extends RemoteProcessClient {
 
 /**
  * Actual implementation of a "PacketListener".
- * 
+ * <p>
  * Listen to the service channels and handles the "registration" and "de-registration" of the available services (alias available WPS Processes)
- * 
+ *
  * @author Alessio Fabiani, GeoSolutions
- * 
  */
 class XMPPPacketListener implements PacketListener {
 
-    /** The LOGGER */
+    /**
+     * The LOGGER
+     */
     public static final Logger LOGGER = Logging
             .getLogger(XMPPPacketListener.class.getPackage().getName());
 
@@ -1498,7 +1484,7 @@ class XMPPPacketListener implements PacketListener {
                                         String[] serviceJIDParts = occupant.split("/");
                                         if (serviceJIDParts.length == 3
                                                 && (serviceJIDParts[2].startsWith("master")
-                                                        || serviceJIDParts[2].indexOf("@") < 0)) {
+                                                || serviceJIDParts[2].indexOf("@") < 0)) {
                                             if (serviceName.equals(occupantServiceName)) {
                                                 mustDeregisterService = false;
                                                 break;
@@ -1552,9 +1538,8 @@ class XMPPPacketListener implements PacketListener {
 
 /**
  * Just an utility class helping us to convert a parameter to a Java class.
- * 
+ *
  * @author Alessio Fabiani, GeoSolutions
- * 
  */
 class ParameterTemplate {
 
@@ -1572,7 +1557,7 @@ class ParameterTemplate {
         this.clazz = clazz;
         this.defaultValue = defaultValue;
         this.meta.put("mimeTypes", mimeTypes);
-        if (mimeTypes != null && mimeTypes.split(",").length>0) {
+        if (mimeTypes != null && mimeTypes.split(",").length > 0) {
             this.meta.put("chosenMimeType", mimeTypes.split(",")[0]);
         }
     }

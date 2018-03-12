@@ -22,14 +22,14 @@ public class GetCapabilitiesResponse extends Response {
     public GetCapabilitiesResponse() {
         super(TransformerBase.class);
     }
-    
+
     /**
      * Makes sure this triggers only
      * </p>
      */
     public boolean canHandle(Operation operation) {
         // is this a wfs capabilities request?
-        return "GetCapabilities".equalsIgnoreCase(operation.getId()) && 
+        return "GetCapabilities".equalsIgnoreCase(operation.getId()) &&
                 operation.getService().getId().equals("wfs");
     }
 
@@ -40,7 +40,7 @@ public class GetCapabilitiesResponse extends Response {
             //look for an accepted format
             List formats = request.getAcceptFormats();
 
-            for (Iterator f = formats.iterator(); f.hasNext();) {
+            for (Iterator f = formats.iterator(); f.hasNext(); ) {
                 String format = (String) f.next();
 
                 if (format.endsWith("/xml")) {
@@ -54,7 +54,7 @@ public class GetCapabilitiesResponse extends Response {
     }
 
     public void write(Object value, OutputStream output, Operation operation)
-        throws IOException {
+            throws IOException {
         TransformerBase tx = (TransformerBase) value;
 
         try {

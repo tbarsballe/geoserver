@@ -149,7 +149,7 @@ public class GetFeatureCurvesTest extends WFSCurvesTestSupport {
                         "count(//cite:curvemultilines[@gml:id='cp.1']/cite:geom/gml:MultiCurve/gml:curveMember/gml:Curve/gml:segments/gml:ArcString)",
                         dom));
     }
-    
+
     @Test
     public void testCurvePolygons() throws Exception {
         Document dom = getAsDOM("wfs?service=wfs&version=1.1&request=GetFeature&typeName="

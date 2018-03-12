@@ -28,7 +28,7 @@ import java.util.logging.Logger;
 
 /**
  * A coverageView reader using a structured coverage readers implementation
- * 
+ *
  * @author Daniele Romagnoli - GeoSolutions
  */
 public class StructuredCoverageViewReader extends CoverageViewReader implements
@@ -54,7 +54,7 @@ public class StructuredCoverageViewReader extends CoverageViewReader implements
         private boolean readOnly;
 
         public GranuleStoreView(StructuredGridCoverage2DReader structuredDelegate,
-                String referenceName, CoverageView coverageView, boolean readOnly)
+                                String referenceName, CoverageView coverageView, boolean readOnly)
                 throws UnsupportedOperationException, IOException {
             this.reader = structuredDelegate;
             this.coverageView = coverageView;
@@ -62,7 +62,7 @@ public class StructuredCoverageViewReader extends CoverageViewReader implements
             this.readOnly = readOnly;
         }
 
-        @Override 
+        @Override
         public SimpleFeatureCollection getGranules(Query q) throws IOException {
             List<CoverageBand> bands = coverageView.getCoverageBands();
             Query renamedQuery = q != null ? new Query(q) : new Query();
@@ -158,7 +158,7 @@ public class StructuredCoverageViewReader extends CoverageViewReader implements
     private StructuredGridCoverage2DReader structuredDelegate;
 
     public StructuredCoverageViewReader(StructuredGridCoverage2DReader delegate,
-            CoverageView coverageView, CoverageInfo coverageInfo, Hints hints) {
+                                        CoverageView coverageView, CoverageInfo coverageInfo, Hints hints) {
         super(delegate, coverageView, coverageInfo, hints);
         structuredDelegate = delegate;
     }

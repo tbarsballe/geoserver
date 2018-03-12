@@ -20,7 +20,7 @@ import org.opengis.coverage.grid.GridCoverageReader;
 
 /**
  * This class is used for testing the {@link GranuleCoverageExtensionTest} class.
- * 
+ *
  * @author Nicola Lagomarsini
  */
 public class GranuleCoverageExtensionTest extends WCSEOTestSupport {

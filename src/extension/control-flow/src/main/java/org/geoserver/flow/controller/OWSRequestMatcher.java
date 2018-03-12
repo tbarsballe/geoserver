@@ -10,7 +10,7 @@ import com.google.common.base.Predicate;
 
 /**
  * Matches OWS requests based on service, method and output format
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class OWSRequestMatcher implements Predicate<Request> {
@@ -91,8 +91,6 @@ public class OWSRequestMatcher implements Predicate<Request> {
 
     /**
      * Returns the matched service (case insensitive)
-     * 
-     *
      */
     public String getService() {
         return service;
@@ -100,8 +98,6 @@ public class OWSRequestMatcher implements Predicate<Request> {
 
     /**
      * Returns the matched method (case insensitive)
-     * 
-     *
      */
     public String getMethod() {
         return method;
@@ -109,8 +105,6 @@ public class OWSRequestMatcher implements Predicate<Request> {
 
     /**
      * Returns the matched output format (case insensitive)
-     * 
-     *
      */
     public String getOutputFormat() {
         return outputFormat;

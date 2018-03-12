@@ -19,11 +19,9 @@ import org.springframework.context.ApplicationEvent;
 
 /**
  * JMS MASTER (Producer) Listener used to provide basic functionalities to the producer implementations
- * 
- * @see {@link JMSAbstractProducer}
- * 
+ *
  * @author Carlo Cancellieri - carlo.cancellieri@geo-solutions.it
- * 
+ * @see {@link JMSAbstractProducer}
  */
 public abstract class JMSAbstractGeoServerProducer extends JMSAbstractProducer {
     private final static java.util.logging.Logger LOGGER = Logging
@@ -37,9 +35,9 @@ public abstract class JMSAbstractGeoServerProducer extends JMSAbstractProducer {
 
     /**
      * This should be called before each message send to add options (coming form the dispatcher callback) to the message
-     * 
+     *
      * @return a copy of the configuration object updated with others options coming from the RestDispatcherCallback<br/>
-     *         TODO use also options coming from the the GUI DispatcherCallback
+     * TODO use also options coming from the the GUI DispatcherCallback
      */
     protected Properties getProperties() {
         // append options

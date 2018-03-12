@@ -40,9 +40,8 @@ import com.vividsolutions.jts.geom.Polygon;
 /**
  * Base class for WFS-T curve test, it expects to find the test requests in the same package as its
  * implementing subclasses
- * 
- * @author Andrea Aime - GeoSolutions
  *
+ * @author Andrea Aime - GeoSolutions
  */
 public abstract class AbstractTransactionCurveTest extends WFSCurvesTestSupport {
 
@@ -61,7 +60,7 @@ public abstract class AbstractTransactionCurveTest extends WFSCurvesTestSupport 
         assertTrue(g instanceof SingleCurvedGeometry);
         SingleCurvedGeometry<?> curved = (SingleCurvedGeometry<?>) g;
         double[] cp = curved.getControlPoints();
-        assertArrayEquals(new double[] { 10, 15, 15, 20, 20, 15 }, cp, 0d);
+        assertArrayEquals(new double[]{10, 15, 15, 20, 20, 15}, cp, 0d);
     }
 
     @Test
@@ -87,7 +86,7 @@ public abstract class AbstractTransactionCurveTest extends WFSCurvesTestSupport 
         assertEquals(new Coordinate(20, 45), ls1.getCoordinateN(1));
 
         CircularString cs = (CircularString) components.get(1);
-        assertArrayEquals(new double[] { 20.0, 45.0, 23.0, 48.0, 20.0, 51.0 },
+        assertArrayEquals(new double[]{20.0, 45.0, 23.0, 48.0, 20.0, 51.0},
                 cs.getControlPoints(), 0d);
 
         LineString ls2 = components.get(2);
@@ -95,7 +94,7 @@ public abstract class AbstractTransactionCurveTest extends WFSCurvesTestSupport 
         assertEquals(new Coordinate(20, 51), ls2.getCoordinateN(0));
         assertEquals(new Coordinate(10, 51), ls2.getCoordinateN(1));
     }
-    
+
     @Test
     public void testInsertCurvePolygon() throws Exception {
         String xml = IOUtils.toString(getClass().getResourceAsStream("insertCurvePolygon.xml"));
@@ -141,7 +140,7 @@ public abstract class AbstractTransactionCurveTest extends WFSCurvesTestSupport 
         assertEquals(new Coordinate(5, 5), ls.getCoordinateN(1));
 
         CircularString cs = (CircularString) mc.getGeometryN(1);
-        assertArrayEquals(new double[] { 4, 0, 4, 4, 8, 4 }, cs.getControlPoints(), 0d);
+        assertArrayEquals(new double[]{4, 0, 4, 4, 8, 4}, cs.getControlPoints(), 0d);
     }
 
     private SimpleFeature getSingleFeature(QName typeName, String featureName) throws IOException,

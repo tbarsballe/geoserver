@@ -14,13 +14,13 @@ import org.geoserver.web.security.config.SecurityNamedConfigModelHelper;
 /**
  * A form component that can be used for xml configurations
  */
-public class JDBCAuthProviderConfigDetailsPanel extends AbstractAuthenticationProviderDetailsPanel{
+public class JDBCAuthProviderConfigDetailsPanel extends AbstractAuthenticationProviderDetailsPanel {
     private static final long serialVersionUID = 1L;
     TextField<String> driverNameComponent;
     TextField<String> connectURLComponent;
-    
+
     public JDBCAuthProviderConfigDetailsPanel(String id, CompoundPropertyModel<SecurityNamedConfigModelHelper> model) {
-        super(id,model);
+        super(id, model);
     }
 
     @Override
@@ -30,14 +30,16 @@ public class JDBCAuthProviderConfigDetailsPanel extends AbstractAuthenticationPr
         add(driverNameComponent);
         connectURLComponent = new TextField<String>("config.connectURL");
         add(connectURLComponent);
-    };
-        
-    
+    }
+
+    ;
+
+
     @Override
     protected SecurityNamedServiceConfig createNewConfigObject() {
         return new JDBCConnectAuthProviderConfig();
     }
- 
+
     @Override
     public void updateModel() {
         super.updateModel();

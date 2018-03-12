@@ -14,18 +14,17 @@ import org.geoserver.security.web.SecurityNamedServiceProvider;
 
 /**
  * Data provider for role service configurations.
- * 
- * @author Justin Deoliveira, OpenGeo
  *
+ * @author Justin Deoliveira, OpenGeo
  */
 public class RoleServiceProvider extends SecurityNamedServiceProvider<SecurityRoleServiceConfig> {
 
-    public static final Property<SecurityRoleServiceConfig> ADMIN_ROLE = 
+    public static final Property<SecurityRoleServiceConfig> ADMIN_ROLE =
             new BeanProperty("adminRoleName", "adminRoleName");
-    
+
     @Override
     protected List<SecurityRoleServiceConfig> getItems() {
-        List <SecurityRoleServiceConfig> result = new ArrayList<SecurityRoleServiceConfig>();
+        List<SecurityRoleServiceConfig> result = new ArrayList<SecurityRoleServiceConfig>();
         try {
             for (String name : getSecurityManager().listRoleServices()) {
                 result.add(getSecurityManager().loadRoleServiceConfig(name));

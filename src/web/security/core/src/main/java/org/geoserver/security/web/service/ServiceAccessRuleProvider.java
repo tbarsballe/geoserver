@@ -13,11 +13,11 @@ import org.geoserver.security.impl.ServiceAccessRuleDAO;
 import org.geoserver.web.wicket.GeoServerDataProvider;
 
 /**
- * Page listing the rules contained in the service.properties file 
+ * Page listing the rules contained in the service.properties file
  */
 @SuppressWarnings("serial")
 public class ServiceAccessRuleProvider extends GeoServerDataProvider<ServiceAccessRule> {
-    
+
     public static final Property<ServiceAccessRule> RULEKEY = new BeanProperty<ServiceAccessRule>("key", "key");
     public static final Property<ServiceAccessRule> ROLES = new BeanProperty<ServiceAccessRule>("roles", "value");
 

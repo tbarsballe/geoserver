@@ -15,9 +15,8 @@ import org.opengis.util.ProgressListener;
 
 /**
  * A InputProvider that handles a list of simple providers (used for multi-valued inputs)
- * 
+ *
  * @author Andrea Aime - GeoSolutions
- * 
  */
 class ListInputProvider implements InputProvider {
 
@@ -85,7 +84,7 @@ class ListInputProvider implements InputProvider {
         for (InputProvider ip : providers) {
             count += ip.longStepCount();
         }
-        
+
         return count;
     }
 

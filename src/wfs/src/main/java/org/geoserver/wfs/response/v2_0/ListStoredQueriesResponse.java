@@ -26,20 +26,20 @@ public class ListStoredQueriesResponse extends WFSResponse {
     }
 
     @Override
-    protected void encode(Encoder encoder, Object value, OutputStream output, Operation op) 
-        throws IOException, ServiceException {
+    protected void encode(Encoder encoder, Object value, OutputStream output, Operation op)
+            throws IOException, ServiceException {
         // check the returned types, they are qnames and we need to declare their prefixes
         ListStoredQueriesResponseType response = (ListStoredQueriesResponseType) value;
         for (StoredQueryListItemType sq : response.getStoredQuery()) {
-            if(sq.getReturnFeatureType() != null) {
+            if (sq.getReturnFeatureType() != null) {
                 for (QName qName : sq.getReturnFeatureType()) {
-                    if(qName.getNamespaceURI() != null && qName.getPrefix() != null) {
+                    if (qName.getNamespaceURI() != null && qName.getPrefix() != null) {
                         encoder.getNamespaces().declarePrefix(qName.getPrefix(), qName.getNamespaceURI());
                     }
                 }
             }
         }
-        
+
         encoder.encode(value, WFS.ListStoredQueriesResponse, output);
     }
 

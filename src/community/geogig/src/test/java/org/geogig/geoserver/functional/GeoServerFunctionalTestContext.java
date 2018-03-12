@@ -96,7 +96,6 @@ public class GeoServerFunctionalTestContext extends FunctionalTestContext {
      * Return the {@link GeoGIG} that corresponds to the given repository name.
      *
      * @param name the repository to get
-     *
      * @return the repository
      */
     @Override
@@ -109,7 +108,6 @@ public class GeoServerFunctionalTestContext extends FunctionalTestContext {
      * associate it to a DataStore.
      *
      * @param name the repository name
-     *
      * @throws Exception
      */
     void initRepo(String name) throws Exception {
@@ -134,9 +132,7 @@ public class GeoServerFunctionalTestContext extends FunctionalTestContext {
      * Create a repository with the given name for testing.
      *
      * @param name the repository name
-     *
      * @return a newly created {@link TestData} for the repository.
-     *
      * @throws Exception
      */
     @Override
@@ -185,9 +181,9 @@ public class GeoServerFunctionalTestContext extends FunctionalTestContext {
     /**
      * Issue a POST request to the provided URL with the given file passed as form data.
      *
-     * @param resourceUri the url to issue the request to
+     * @param resourceUri   the url to issue the request to
      * @param formFieldName the form field name for the file to be posted
-     * @param file the file to post
+     * @param file          the file to post
      */
     @Override
     protected void postFileInternal(String resourceUri, String formFieldName, File file) {
@@ -202,7 +198,7 @@ public class GeoServerFunctionalTestContext extends FunctionalTestContext {
     /**
      * Issue a request with the given {@link HttpMethod} to the provided resource URI.
      *
-     * @param method the http method to use
+     * @param method      the http method to use
      * @param resourceUri the uri to issue the request to
      */
     @Override
@@ -266,7 +262,6 @@ public class GeoServerFunctionalTestContext extends FunctionalTestContext {
 
     /**
      * @return the content of the last response as an {@link InputStream}
-     *
      * @throws Exception
      */
     @Override
@@ -293,15 +288,15 @@ public class GeoServerFunctionalTestContext extends FunctionalTestContext {
 
     /**
      * Invokes URI request with specified Content-Type.
-     * 
-     * @param method HTTP Method to invoke
+     *
+     * @param method      HTTP Method to invoke
      * @param resourceUri URI address to which to send the request
-     * @param payload payload to encode into the request
+     * @param payload     payload to encode into the request
      * @param contentType Specific Content-Type header value to send
      */
     @Override
     public void callInternal(HttpMethod method, String resourceUri, String payload,
-            String contentType) {
+                             String contentType) {
         try {
             resourceUri = replaceVariables(resourceUri);
             this.lastResponse = helper.callWithContentTypeInternal(method, "/geogig" + resourceUri,

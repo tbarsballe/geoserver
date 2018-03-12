@@ -10,28 +10,28 @@ import org.geoserver.security.filter.GeoServerSSLFilter;
 
 /**
  * Configuration for {@link GeoServerSSLFilter}
- * 
- * @author mcr
  *
+ * @author mcr
  */
 
 public class SSLFilterConfig extends SecurityFilterConfig {
 
     private static final long serialVersionUID = 1L;
-    
-    
+
+
     /**
      * The SSL port to use for a HTTP redirect
      * Default is 443
      */
-    private Integer sslPort=443;
-    
+    private Integer sslPort = 443;
+
     public Integer getSslPort() {
         return sslPort;
     }
+
     public void setSslPort(Integer sslPort) {
         this.sslPort = sslPort;
     }
-    
-        
+
+
 }

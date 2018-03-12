@@ -80,13 +80,13 @@ public class ScriptEditPage extends GeoServerSecuredPage {
         form.add(nameLabel);
         HiddenField<?> name = new HiddenField<Object>("name", new PropertyModel<Object>(scriptModel, "name"));
         form.add(name);
-        
+
         // Type
         Label typeLabel = new Label("typeLabel", new PropertyModel<Object>(scriptModel, "type"));
         form.add(typeLabel);
         HiddenField<?> type = new HiddenField<Object>("type", new PropertyModel<Object>(scriptModel, "type"));
         form.add(type);
-        
+
         // Extension
         Label extensionLabel = new Label("extensionLabel", new PropertyModel<Object>(scriptModel, "extension"));
         form.add(extensionLabel);
@@ -112,7 +112,7 @@ public class ScriptEditPage extends GeoServerSecuredPage {
 
     private void saveScript() {
         Script script = (Script) scriptModel.getObject();
-        OutputStream out = script.getResource().out();        
+        OutputStream out = script.getResource().out();
         try {
             IOUtils.write(script.getContents(), out);
         } catch (IOException e) {

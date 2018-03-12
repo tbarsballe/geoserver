@@ -14,9 +14,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 /**
  * Moves the Spring Authentication thread local to another thread
- * 
+ *
  * @author Andrea Aime - GeoSolutions
- * 
  */
 public class AuthenticationThreadLocalTransfer implements ThreadLocalTransfer {
 

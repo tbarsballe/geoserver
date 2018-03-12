@@ -9,21 +9,22 @@ import java.io.Serializable;
 
 /**
  * Setting for dimension default value selection.
- * 
- * @author Ilkka Rinne / Spatineo Inc. for Finnish Meteorological Institute
  *
+ * @author Ilkka Rinne / Spatineo Inc. for Finnish Meteorological Institute
  */
 public class DimensionDefaultValueSetting implements Serializable {
 
-    /** serialVersionUID */
+    /**
+     * serialVersionUID
+     */
     private static final long serialVersionUID = 7964431537211881227L;
 
     public static String TIME_CURRENT = "current";
-    
+
     public enum Strategy {MINIMUM, MAXIMUM, NEAREST, FIXED, BUILTIN}
-    
+
     Strategy strategy;
-    
+
     String referenceValue;
 
     /**
@@ -53,7 +54,6 @@ public class DimensionDefaultValueSetting implements Serializable {
     public void setReferenceValue(String referenceValue) {
         this.referenceValue = referenceValue;
     }
- 
-    
-    
+
+
 }

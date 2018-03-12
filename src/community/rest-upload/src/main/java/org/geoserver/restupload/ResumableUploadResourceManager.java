@@ -39,10 +39,14 @@ import org.restlet.resource.Representation;
  */
 
 public class ResumableUploadResourceManager {
-    /** LOGGER class */
+    /**
+     * LOGGER class
+     */
     private static final Logger LOGGER = Logging.getLogger(ResumableUploadResourceManager.class);
 
-    /** Resource folder for the temporary uploads */
+    /**
+     * Resource folder for the temporary uploads
+     */
     private static Resource tmpUploadFolder;
 
     public ResumableUploadResourceManager(String tmpFolder) {
@@ -107,7 +111,7 @@ public class ResumableUploadResourceManager {
      * if successive start position index matches actual partial file length
      */
     public Boolean validateUpload(String uploadId, Long totalByteToUpload, Long startPosition,
-            Long endPosition, Long totalFileSize) {
+                                  Long endPosition, Long totalFileSize) {
         Boolean validated = false;
         ResumableUploadResource uploadResource = getResource(uploadId);
         if (uploadResource != null && uploadResource.getFile().exists()) {
@@ -134,7 +138,7 @@ public class ResumableUploadResourceManager {
     public void cleanExpiredResources(long expirationThreshold) {
         Collection<File> files = FileUtils.listFiles(tmpUploadFolder.dir(), new WildcardFileFilter(
                 "*.*"), TrueFileFilter.INSTANCE);
-        for (Iterator<File> i = files.iterator(); i.hasNext();) {
+        for (Iterator<File> i = files.iterator(); i.hasNext(); ) {
             File file = i.next();
             if (file.lastModified() < expirationThreshold) {
                 file.delete();

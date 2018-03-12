@@ -39,9 +39,8 @@ import org.opengis.util.InternationalString;
 
 /**
  * Tests some processes that do not require integration with the application context
- * 
+ *
  * @author Andrea Aime - OpenGeo
- * 
  */
 public class BeanProcessFactoryTest extends WPSTestSupport {
 

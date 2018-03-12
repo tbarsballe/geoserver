@@ -64,11 +64,11 @@ public abstract class AbstractUserPage extends AbstractSecurityPage {
     protected String ugServiceName;
 
     protected AbstractUserPage(String ugServiceName, final GeoServerUser user) {
-        this.ugServiceName=ugServiceName;
+        this.ugServiceName = ugServiceName;
 
         GeoServerUserGroupService ugService = getUserGroupService(ugServiceName);
-        boolean emptyPasswd = getSecurityManager().loadPasswordEncoder(ugService.getPasswordEncoderName()) 
-            instanceof GeoServerEmptyPasswordEncoder;
+        boolean emptyPasswd = getSecurityManager().loadPasswordEncoder(ugService.getPasswordEncoderName())
+                instanceof GeoServerEmptyPasswordEncoder;
         boolean hasUserGroupStore = ugService.canCreateStore();
         boolean hasRoleStore = hasRoleStore(getSecurityManager().getActiveRoleService().getName());
 
@@ -89,15 +89,15 @@ public abstract class AbstractUserPage extends AbstractSecurityPage {
         pw1.setResetPassword(false);
         pw1.setEnabled(hasUserGroupStore && !emptyPasswd);
 
-        PasswordTextField pw2 = new PasswordTextField("confirmPassword", 
-            new Model(user.getPassword())) {
+        PasswordTextField pw2 = new PasswordTextField("confirmPassword",
+                new Model(user.getPassword())) {
             @Override
             public boolean isRequired() {
                 return isFinalSubmit(this);
             }
         };
         form.add(pw2);
-        pw2.setResetPassword(false);                
+        pw2.setResetPassword(false);
         pw2.setEnabled(hasUserGroupStore && !emptyPasswd);
 
         form.add(new PropertyEditorFormComponent("properties").setEnabled(hasUserGroupStore));
@@ -114,18 +114,18 @@ public abstract class AbstractUserPage extends AbstractSecurityPage {
         List<GeoServerRole> roles;
         try {
             roles = new ArrayList(
-                getSecurityManager().getActiveRoleService().getRolesForUser(user.getUsername()));
+                    getSecurityManager().getActiveRoleService().getRolesForUser(user.getUsername()));
         } catch (IOException e) {
             throw new WicketRuntimeException(e);
         }
-        
+
         form.add(rolePalette = new RolePaletteFormComponent("roles", new ListModel(roles)));
         rolePalette.add(new AjaxFormComponentUpdatingBehavior("change") {
-           @Override
-           protected void onUpdate(AjaxRequestTarget target) {
-               updateCalculatedRoles(target);
-               updateGroupAdminList(target);
-           }
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+                updateCalculatedRoles(target);
+                updateGroupAdminList(target);
+            }
         });
         rolePalette.setOutputMarkupId(true);
         rolePalette.setEnabled(hasRoleStore);
@@ -142,8 +142,8 @@ public abstract class AbstractUserPage extends AbstractSecurityPage {
             }
         }
 
-        form.add(adminGroupChoice = new UserGroupListMultipleChoice("adminGroups", 
-            new ListModel(adminGroups), new GroupsModel(ugServiceName)));
+        form.add(adminGroupChoice = new UserGroupListMultipleChoice("adminGroups",
+                new ListModel(adminGroups), new GroupsModel(ugServiceName)));
         adminGroupChoice.setOutputMarkupId(true);
         adminGroupChoice.setEnabled(hasUserGroupStore && isGroupAdmin);
 
@@ -151,22 +151,22 @@ public abstract class AbstractUserPage extends AbstractSecurityPage {
         form.add(container);
         container.setOutputMarkupId(true);
 
-        container.add(calculatedRoles = 
-            new ListView<GeoServerRole>("calculatedRoles", new CalculatedRoleModel(user)) {
-            @Override
-            @SuppressWarnings("unchecked")
-            protected void populateItem(ListItem<GeoServerRole> item) {
-                IModel<GeoServerRole> model = item.getModel();
-                item.add(new SimpleAjaxLink("role", model, RoleListProvider.ROLENAME.getModel(model)) {
+        container.add(calculatedRoles =
+                new ListView<GeoServerRole>("calculatedRoles", new CalculatedRoleModel(user)) {
                     @Override
-                    protected void onClick(AjaxRequestTarget target) {
-                        setResponsePage(
-                            new EditRolePage(getSecurityManager().getActiveRoleService().getName(),
-                                (GeoServerRole) getDefaultModelObject()).setReturnPage(this.getPage()));
+                    @SuppressWarnings("unchecked")
+                    protected void populateItem(ListItem<GeoServerRole> item) {
+                        IModel<GeoServerRole> model = item.getModel();
+                        item.add(new SimpleAjaxLink("role", model, RoleListProvider.ROLENAME.getModel(model)) {
+                            @Override
+                            protected void onClick(AjaxRequestTarget target) {
+                                setResponsePage(
+                                        new EditRolePage(getSecurityManager().getActiveRoleService().getName(),
+                                                (GeoServerRole) getDefaultModelObject()).setReturnPage(this.getPage()));
+                            }
+                        });
                     }
                 });
-            }
-        });
         calculatedRoles.setOutputMarkupId(true);
 
         form.add(new SubmitLink("save") {
@@ -183,15 +183,13 @@ public abstract class AbstractUserPage extends AbstractSecurityPage {
                         }
 
                         GroupAdminProperty.set(user.getProperties(), groupNames);
-                    }
-                    else {
+                    } else {
                         GroupAdminProperty.del(user.getProperties());
                     }
 
                     onFormSubmit(user);
                     setReturnPageDirtyAndReturn(true);
-                }
-                catch(Exception e) {
+                } catch (Exception e) {
                     handleSubmitError(e);
                 }
             }
@@ -201,13 +199,14 @@ public abstract class AbstractUserPage extends AbstractSecurityPage {
         // add the validators
         form.add(new EqualInputValidator(pw1, pw2) {
             private static final long serialVersionUID = 1L;
-            
+
             @Override
             public void validate(Form<?> form) {
                 if (isFinalSubmit(form)) {
                     super.validate(form);
                 }
             }
+
             @Override
             protected String resourceKey() {
                 return "AbstractUserPage.passwordMismatch";
@@ -234,25 +233,24 @@ public abstract class AbstractUserPage extends AbstractSecurityPage {
 
     void updateGroupAdminList(AjaxRequestTarget target) {
         adminGroupChoice.setEnabled(
-            rolePalette.getSelectedRoles().contains(GeoServerRole.GROUP_ADMIN_ROLE));
+                rolePalette.getSelectedRoles().contains(GeoServerRole.GROUP_ADMIN_ROLE));
         target.add(adminGroupChoice);
     }
 
     void handleSubmitError(Exception e) {
         LOGGER.log(Level.SEVERE, "Error occurred while saving user", e);
-        
+
         if (e instanceof RuntimeException && e.getCause() instanceof Exception) {
             e = (Exception) e.getCause();
         }
-        
+
         if (e instanceof IOException && e.getCause() instanceof AbstractSecurityException) {
             e = (Exception) e.getCause();
         }
 
         if (e instanceof AbstractSecurityException) {
             error(e);
-        }
-        else {
+        } else {
             error(new ParamResourceModel("saveError", getPage(), e.getMessage()).getObject());
         }
     }
@@ -292,7 +290,7 @@ public abstract class AbstractUserPage extends AbstractSecurityPage {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-        
+
             Collections.sort(result);
             return result;
         }
@@ -306,7 +304,7 @@ public abstract class AbstractUserPage extends AbstractSecurityPage {
 
         @Override
         public FormComponent<?>[] getDependentFormComponents() {
-            return new FormComponent[] {adminGroupChoice};
+            return new FormComponent[]{adminGroupChoice};
         }
 
         @Override
@@ -324,6 +322,6 @@ public abstract class AbstractUserPage extends AbstractSecurityPage {
      * Implements the actual save action.
      */
     protected abstract void onFormSubmit(GeoServerUser user)
-        throws IOException, PasswordPolicyException;
+            throws IOException, PasswordPolicyException;
 
 }

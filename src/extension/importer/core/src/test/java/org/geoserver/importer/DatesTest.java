@@ -18,14 +18,14 @@ public class DatesTest {
 
     @Test
     public void testParse() {
-        doTestParse( date(2012, FEBRUARY, 6, 13, 12, 59, 123), "2012-02-06T13:12:59.123Z");
-        doTestParse( date(2012, FEBRUARY, 6, 13, 12, 59, 0), "2012-02-06T13:12:59Z");
-        doTestParse( date(2012, FEBRUARY, 6, 13, 12, 123, 0), "2012-02-06T13:12:123Z");
-        doTestParse( date(2012, FEBRUARY, 6, 13, 12, 0, 0), "2012-02-06T13:12Z");
-        doTestParse( date(2012, FEBRUARY, 6, 13, 0, 0, 0), "2012-02-06T13Z");
-        doTestParse( date(2012, FEBRUARY, 6, 0, 0, 0, 0), "2012-02-06");
-        doTestParse( date(2012, FEBRUARY, 1, 0, 0, 0, 0), "2012-02");
-        doTestParse( date(2012, JANUARY, 1, 0, 0, 0, 0), "2012");
+        doTestParse(date(2012, FEBRUARY, 6, 13, 12, 59, 123), "2012-02-06T13:12:59.123Z");
+        doTestParse(date(2012, FEBRUARY, 6, 13, 12, 59, 0), "2012-02-06T13:12:59Z");
+        doTestParse(date(2012, FEBRUARY, 6, 13, 12, 123, 0), "2012-02-06T13:12:123Z");
+        doTestParse(date(2012, FEBRUARY, 6, 13, 12, 0, 0), "2012-02-06T13:12Z");
+        doTestParse(date(2012, FEBRUARY, 6, 13, 0, 0, 0), "2012-02-06T13Z");
+        doTestParse(date(2012, FEBRUARY, 6, 0, 0, 0, 0), "2012-02-06");
+        doTestParse(date(2012, FEBRUARY, 1, 0, 0, 0, 0), "2012-02");
+        doTestParse(date(2012, JANUARY, 1, 0, 0, 0, 0), "2012");
     }
 
     void doTestParse(Date expected, String str) {
@@ -36,14 +36,14 @@ public class DatesTest {
         assertEquals(expected, Dates.matchAndParse("foo_" + str + ".bar"));
     }
 
-    Date date(int year, int month, int dayOfMonth, int hourOfDay, int minute, int second, 
-        int millisecond) {
-        return date(year, month, dayOfMonth, hourOfDay, minute, second, millisecond, 
-            TimeZone.getTimeZone("GMT"));
+    Date date(int year, int month, int dayOfMonth, int hourOfDay, int minute, int second,
+              int millisecond) {
+        return date(year, month, dayOfMonth, hourOfDay, minute, second, millisecond,
+                TimeZone.getTimeZone("GMT"));
     }
-    
-    Date date(int year, int month, int dayOfMonth, int hourOfDay, int minute, int second, 
-            int millisecond, TimeZone tz) {
+
+    Date date(int year, int month, int dayOfMonth, int hourOfDay, int minute, int second,
+              int millisecond, TimeZone tz) {
         Calendar c = Calendar.getInstance();
         c.set(YEAR, year);
         c.set(MONTH, month);

@@ -23,11 +23,11 @@ public abstract class LayerGroupBaseTest extends GeoServerWicketTestSupport {
         String lakes = MockData.LAKES.getLocalPart();
         String forests = MockData.FORESTS.getLocalPart();
         String bridges = MockData.BRIDGES.getLocalPart();
-        
+
         setNativeBox(catalog, lakes);
         setNativeBox(catalog, forests);
         setNativeBox(catalog, bridges);
-        
+
         LayerGroupInfo lg = catalog.getFactory().createLayerGroup();
         lg.setName("lakes");
         lg.getLayers().add(catalog.getLayerByName(lakes));
@@ -39,10 +39,10 @@ public abstract class LayerGroupBaseTest extends GeoServerWicketTestSupport {
         CatalogBuilder builder = new CatalogBuilder(catalog);
         builder.calculateLayerGroupBounds(lg);
         catalog.add(lg);
-        
+
         WorkspaceInfo ws = catalog.getWorkspaceByName("cite");
         LayerGroupInfo wslg = catalog.getFactory().createLayerGroup();
-      
+
         wslg.setName("bridges");
         wslg.setWorkspace(ws);
         wslg.getLayers().add(catalog.getLayerByName(bridges));
@@ -66,7 +66,7 @@ public abstract class LayerGroupBaseTest extends GeoServerWicketTestSupport {
         builder.calculateLayerGroupBounds(lg);
         catalog.add(lg);
     }
-    
+
     public void setNativeBox(Catalog catalog, String name) throws Exception {
         FeatureTypeInfo fti = catalog.getFeatureTypeByName(name);
         fti.setNativeBoundingBox(fti.getFeatureSource(null, null).getBounds());

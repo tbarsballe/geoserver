@@ -17,16 +17,16 @@ import org.geoserver.platform.ServiceException;
 /**
  * The Response interface serves as a common denominator for all service
  * operations that generates content.
- *
+ * <p>
  * <p>
  * The work flow for this kind of objects is divided in two parts: the first is
  * executing a request and the second writing the result to an OuputStream.
  * </p>
- *
+ * <p>
  * <ol>
  * <li>
  * Execute: execute(Request)
- *
+ * <p>
  * <ul>
  * <li>
  * Executing the request means taking a Request object and, based on it's set
@@ -49,22 +49,22 @@ import org.geoserver.platform.ServiceException;
  * Transaction Document with provisions for reporting error information.
  * </li>
  * </ul>
- *
+ * <p>
  * </li>
  * <li>
  * ContentType: getContentType()
- *
+ * <p>
  * <ul>
  * <li>
  * Called to set the response type. Depending on the stratagy used by
  * AbstractService the framework may be commited to returning this type.
  * </li>
  * </ul>
- *
+ * <p>
  * </li>
  * <li>
  * Writing: writeTo(OutputStream)
- *
+ * <p>
  * <ul>
  * <li>
  * Write the response to the provided output stream.
@@ -74,23 +74,23 @@ import org.geoserver.platform.ServiceException;
  * useable form. You should assume you are writing directly to the client.
  * </li>
  * </ul>
- *
+ * <p>
  * </li>
  * </ol>
- *
+ * <p>
  * <p>
  * <b>Note:</b> abort() will be called as part of error handling giving your
  * response subclass a chance to clean up any temporary resources it may have
  * required in execute() for use in writeTo().
  * </p>
- *
+ * <p>
  * <p>
  * This is specially usefull for streamed responses such as wfs GetFeature or
  * WMS GetMap, where the execution process can be used to parse parameters,
  * execute queries upon the corresponding data sources and leave things ready
  * to generate a streamed response when the consumer calls writeTo.
  * </p>
- *
+ * <p>
  * <p></p>
  *
  * @author Gabriel Rold?n
@@ -104,7 +104,7 @@ public interface Response {
      * content through the writeTo method with the minimal posible risk of
      * failure other than not beeing able to write to the output stream due to
      * external reassons
-     *
+     * <p>
      * <p>
      * We should clarify when a ServiceException is thrown? I would assume that
      * a "failed" request should still result in a Response that we could
@@ -112,27 +112,26 @@ public interface Response {
      * </p>
      *
      * @param request a Request object that implementations should cast to it's
-     *        Request specialization, wich must contain the parsed and ready
-     *        to use parameters sent by the calling client. In general, such a
-     *        Request will be created by either a KVP or XML request reader;
-     *        resulting in a Request object more usefull than a set of raw
-     *        parameters, as can be the list of feature types requested as a
-     *        set of FeatureTypeInfo objects rather than just a list of String
-     *        type names
-     *
+     *                Request specialization, wich must contain the parsed and ready
+     *                to use parameters sent by the calling client. In general, such a
+     *                Request will be created by either a KVP or XML request reader;
+     *                resulting in a Request object more usefull than a set of raw
+     *                parameters, as can be the list of feature types requested as a
+     *                set of FeatureTypeInfo objects rather than just a list of String
+     *                type names
      * @throws ServiceException
      */
     public void execute(Request request) throws ServiceException;
 
     /**
      * MIME type of this Response - example <code>"text/xml"</code>.
-     *
+     * <p>
      * <p>
      * thinked to be called after excecute(), this method must return the MIME
      * type of the response content that will be writen when writeTo were
      * called
      * </p>
-     *
+     * <p>
      * <p>
      * an implementation of this interface is required to throw an
      * IllegalStateException if execute has not been called yet, to indicate
@@ -144,10 +143,10 @@ public interface Response {
      * requested, so it would be impossible to it knowing the exact MIME
      * response type if it has not processed the request yet.
      * </p>
-     *
+     * <p>
      * <p>
      * There is some MIME stuff in JDK for reference:
-     *
+     * <p>
      * <ul>
      * <li>
      * java.awt.datatransfer package
@@ -162,10 +161,9 @@ public interface Response {
      * </p>
      *
      * @return the MIME type of the generated or ready to generate response
-     *         content
-     *
+     * content
      * @throws IllegalStateException if this method is called and execute has
-     *         not been called yet
+     *                               not been called yet
      */
     public String getContentType(GeoServer gs) throws IllegalStateException;
 
@@ -182,7 +180,6 @@ public interface Response {
      * contents to, such as "filename" and "attachement"
      *
      * @return the content disposition writeTo will encode with, or null if none
-     *
      * @uml.property name="contentDisposition" multiplicity="(0 1)"
      */
     public String getContentDisposition();
@@ -190,17 +187,16 @@ public interface Response {
     /**
      * Returns any extra headers that this Response might wish to have set in the
      * HTTP response object.
-     *
+     * <p>
      * In particular, a WMS might wish to have some external caching information added
      * to the HTTP response, so that caches can hang onto this map for a while and ligten
      * the load on geoserver.
-     *
      */
     public HashMap<String, String> getResponseHeaders();
 
     /**
      * Writes this respone to the provided output stream.
-     *
+     * <p>
      * <p>
      * To implememt streaming, execution is sometimes delayed until the write
      * opperation (for example of this see FeatureResponse). Hopefully this is
@@ -219,27 +215,26 @@ public interface Response {
      * response.
      *
      * @param out
-     *
      * @throws ServiceException wrapping of any unchecked exception or other
-     *         predictable exception except an IO error while writing to
-     *         <code>out</code>
-     * @throws IOException ONLY if an error occurs trying to write content to
-     *         the passed OutputStream. By this way, we'll can control the
-     *         very common situation of a java.net.SocketException product of
-     *         the client closing the connection (like a user pressing it's
-     *         refresh browser button many times)
+     *                          predictable exception except an IO error while writing to
+     *                          <code>out</code>
+     * @throws IOException      ONLY if an error occurs trying to write content to
+     *                          the passed OutputStream. By this way, we'll can control the
+     *                          very common situation of a java.net.SocketException product of
+     *                          the client closing the connection (like a user pressing it's
+     *                          refresh browser button many times)
      */
     public void writeTo(OutputStream out) throws ServiceException, IOException;
 
     /**
      * Called when things go horriably wrong.
-     *
+     * <p>
      * <p>
      * Used try and restore application state when things go wrong. This is
      * called by AbstractAction to try and recover when sending out a
      * ServiceException.
      * </p>
-     *
+     * <p>
      * <p>
      * Allows a Response a chance to clean up after its self when
      * AbstractionAction is error handling.

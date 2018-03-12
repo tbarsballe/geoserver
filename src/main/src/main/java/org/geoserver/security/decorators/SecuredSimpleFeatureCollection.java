@@ -26,21 +26,21 @@ import org.opengis.filter.sort.SortBy;
 
 /**
  * Simple version of {@link SecuredFeatureCollection}
- * @author Andrea Aime - GeoSolutions
  *
+ * @author Andrea Aime - GeoSolutions
  */
 public class SecuredSimpleFeatureCollection extends
         SecuredFeatureCollection<SimpleFeatureType, SimpleFeature> implements
         SimpleFeatureCollection {
-    
+
     SimpleFeatureType readSchema;
 
     SecuredSimpleFeatureCollection(FeatureCollection<SimpleFeatureType, SimpleFeature> delegate,
-            WrapperPolicy policy) {
+                                   WrapperPolicy policy) {
         super(delegate, policy);
-        if(policy.getLimits() instanceof VectorAccessLimits) {
+        if (policy.getLimits() instanceof VectorAccessLimits) {
             List<PropertyName> properties = ((VectorAccessLimits) policy.getLimits()).getReadAttributes();
-            if(properties == null) {
+            if (properties == null) {
                 this.readSchema = getSchema();
             } else {
                 List<String> names = new ArrayList<String>();
@@ -68,21 +68,21 @@ public class SecuredSimpleFeatureCollection extends
     public SimpleFeatureCollection subCollection(Filter filter) {
         return (SimpleFeatureCollection) super.subCollection(filter);
     }
-    
+
     @Override
     public SimpleFeatureIterator features() {
         return (SimpleFeatureIterator) super.features();
     }
-    
+
     public void accepts(org.opengis.feature.FeatureVisitor visitor,
-            org.opengis.util.ProgressListener progress) throws IOException {
+                        org.opengis.util.ProgressListener progress) throws IOException {
         if (canDelegate(visitor)) {
             delegate.accepts(visitor, progress);
         } else {
             super.accepts(visitor, progress);
         }
     }
-    
+
     protected boolean canDelegate(FeatureVisitor visitor) {
         return ReTypingFeatureCollection.isTypeCompatible(visitor, readSchema);
     }

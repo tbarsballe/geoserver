@@ -22,8 +22,8 @@ public class ProxifyingURLMangler implements URLMangler {
     }
 
     public void mangleURL(StringBuilder baseURL, StringBuilder path, Map<String, String> kvp,
-            URLType type) {
-        
+                          URLType type) {
+
         //first check the system property
         String proxyBase = GeoServerExtensions.getProperty("PROXY_BASE_URL");
         if (proxyBase == null) {

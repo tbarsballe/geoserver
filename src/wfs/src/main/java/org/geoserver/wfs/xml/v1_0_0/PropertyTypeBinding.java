@@ -21,9 +21,9 @@ import org.geotools.xs.bindings.XSQNameBinding;
 
 /**
  * Binding object for the type http://www.opengis.net/wfs:PropertyType.
- *
  * <p>
- *        <pre>
+ * <p>
+ * <pre>
  *         <code>
  *  &lt;xsd:complexType name="PropertyType"&gt;
  *      &lt;xsd:sequence&gt;
@@ -48,6 +48,7 @@ import org.geotools.xs.bindings.XSQNameBinding;
  *
  *          </code>
  *         </pre>
+ *
  * @generated
  */
 public class PropertyTypeBinding extends AbstractComplexBinding {
@@ -90,7 +91,7 @@ public class PropertyTypeBinding extends AbstractComplexBinding {
      * @generated modifiable
      */
     public Object parse(ElementInstance instance, Node node, Object value)
-        throws Exception {
+            throws Exception {
         PropertyType property = wfsfactory.createPropertyType();
 
         //&lt;xsd:element name="Name" type="xsd:string"&gt;

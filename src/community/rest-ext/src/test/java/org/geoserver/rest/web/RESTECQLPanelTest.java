@@ -26,7 +26,9 @@ import org.junit.Test;
  */
 public class RESTECQLPanelTest extends GeoServerWicketTestSupport {
 
-    /** Workspace info object called "cite" */
+    /**
+     * Workspace info object called "cite"
+     */
     private WorkspaceInfo citeWorkspace;
 
     @Before
@@ -88,7 +90,7 @@ public class RESTECQLPanelTest extends GeoServerWicketTestSupport {
         tester.startPage(new GlobalSettingsPage());
         tester.assertRenderedPage(GlobalSettingsPage.class);
         tester.assertNoErrorMessage();
-        
+
         // Get GeoServer object for searching the global settings
         GeoServer gs = getGeoServer();
 

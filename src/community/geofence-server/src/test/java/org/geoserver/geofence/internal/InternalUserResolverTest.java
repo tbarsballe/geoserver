@@ -28,7 +28,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 /***
- * 
+ *
  * @author Niels Charlier
  *
  */
@@ -99,7 +99,7 @@ public class InternalUserResolverTest extends AbstractSecurityServiceTest {
     }
 
     protected void addTestUser(String username, List<String> roles, GeoServerRoleService service,
-            GeoServerRoleStore store) throws Exception {
+                               GeoServerRoleStore store) throws Exception {
 
         if (roles != null && !roles.isEmpty()) {
             for (String roleName : roles) {

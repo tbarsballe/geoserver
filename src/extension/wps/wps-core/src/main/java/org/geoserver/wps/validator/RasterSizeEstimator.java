@@ -11,7 +11,7 @@ import org.geotools.coverage.grid.GridCoverage2D;
 
 /**
  * Estimates the size of a raster as an uncompressed in memory grid
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class RasterSizeEstimator implements ObjectSizeEstimator {

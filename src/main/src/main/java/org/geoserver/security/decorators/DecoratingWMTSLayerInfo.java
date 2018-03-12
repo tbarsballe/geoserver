@@ -28,13 +28,13 @@ import org.opengis.util.ProgressListener;
 
 /**
  * Delegates every method to the delegate wmts layer info.
- *
+ * <p>
  * Subclasses will override selected methods to perform their "decoration" job
- * 
+ *
  * @author Emanuele Tajariol (etj at geo-solutions dot it)
  */
 public class DecoratingWMTSLayerInfo extends AbstractDecorator<WMTSLayerInfo> implements WMTSLayerInfo {
-    
+
     public DecoratingWMTSLayerInfo(WMTSLayerInfo delegate) {
         super(delegate);
     }
@@ -225,7 +225,7 @@ public class DecoratingWMTSLayerInfo extends AbstractDecorator<WMTSLayerInfo> im
     public boolean isAdvertised() {
         return delegate.isAdvertised();
     }
-    
+
     @Override
     public void setAdvertised(boolean advertised) {
         delegate.setAdvertised(advertised);

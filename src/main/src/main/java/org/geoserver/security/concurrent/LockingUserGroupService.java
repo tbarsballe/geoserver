@@ -26,26 +26,25 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 /**
  * This is a wrapper class for a {@link GeoServerUserGroupService}
  * This wrapper protects internal data structures using read/write locks
- * 
- * @author christian
  *
+ * @author christian
  */
 public class LockingUserGroupService extends AbstractLockingService implements
         GeoServerUserGroupService, UserGroupLoadedListener {
 
-    protected Set<UserGroupLoadedListener> listeners = 
-        Collections.synchronizedSet(new HashSet<UserGroupLoadedListener>());
+    protected Set<UserGroupLoadedListener> listeners =
+            Collections.synchronizedSet(new HashSet<UserGroupLoadedListener>());
 
     /**
      * Constructor for the locking wrapper
-     * 
+     *
      * @param service
      */
     public LockingUserGroupService(GeoServerUserGroupService service) {
         super(service);
         service.registerUserGroupLoadedListener(this);
     }
-    
+
     /**
      * @return the wrapped service
      */
@@ -61,33 +60,36 @@ public class LockingUserGroupService extends AbstractLockingService implements
 
     /**
      * READ_LOCK
+     *
      * @see org.geoserver.security.GeoServerUserGroupService#getGroupByGroupname(java.lang.String)
      */
-    public GeoServerUserGroup getGroupByGroupname(String groupname) throws IOException{
+    public GeoServerUserGroup getGroupByGroupname(String groupname) throws IOException {
         readLock();
         try {
             return getService().getGroupByGroupname(groupname);
         } finally {
             readUnLock();
-        }            
+        }
     }
 
 
     /**
      * READ_LOCK
+     *
      * @see org.geoserver.security.GeoServerUserGroupService#createUserObject(java.lang.String, java.lang.String, boolean)
      */
-    public GeoServerUser createUserObject(String username, String password, boolean isEnabled) throws IOException{
+    public GeoServerUser createUserObject(String username, String password, boolean isEnabled) throws IOException {
         readLock();
         try {
             return getService().createUserObject(username, password, isEnabled);
         } finally {
             readUnLock();
-        }            
+        }
     }
 
     /**
      * WRITE_LOCK
+     *
      * @see org.geoserver.security.GeoServerUserGroupService#load()
      */
     public void load() throws IOException {
@@ -96,11 +98,12 @@ public class LockingUserGroupService extends AbstractLockingService implements
             getService().load();
         } finally {
             writeUnLock();
-        }            
+        }
     }
 
     /**
      * READ_LOCK
+     *
      * @see org.geoserver.security.GeoServerUserGroupService#getUserByUsername(java.lang.String)
      */
     public GeoServerUser getUserByUsername(String username) throws IOException {
@@ -109,73 +112,78 @@ public class LockingUserGroupService extends AbstractLockingService implements
             return getService().getUserByUsername(username);
         } finally {
             readUnLock();
-        }            
+        }
     }
 
 
     /**
      * READ_LOCK
+     *
      * @see org.geoserver.security.GeoServerUserGroupService#createGroupObject(java.lang.String, boolean)
      */
-    public GeoServerUserGroup createGroupObject(String groupname, boolean isEnabled) throws IOException{
+    public GeoServerUserGroup createGroupObject(String groupname, boolean isEnabled) throws IOException {
         readLock();
-        try {        
+        try {
             return getService().createGroupObject(groupname, isEnabled);
         } finally {
             readUnLock();
-        }            
+        }
     }
 
     /**
      * READ_LOCK
+     *
      * @see org.geoserver.security.GeoServerUserGroupService#getUsers()
      */
-    public SortedSet<GeoServerUser> getUsers() throws IOException{
+    public SortedSet<GeoServerUser> getUsers() throws IOException {
         readLock();
         try {
             return getService().getUsers();
         } finally {
             readUnLock();
-        }            
+        }
     }
 
     /**
      * READ_LOCK
+     *
      * @see org.geoserver.security.GeoServerUserGroupService#getUserGroups()
      */
-    public SortedSet<GeoServerUserGroup> getUserGroups() throws IOException{
+    public SortedSet<GeoServerUserGroup> getUserGroups() throws IOException {
         readLock();
         try {
             return getService().getUserGroups();
         } finally {
             readUnLock();
-        }            
+        }
     }
 
     /**
      * READ_LOCK
+     *
      * @see org.geoserver.security.GeoServerUserGroupService#getUsersForGroup(org.geoserver.security.impl.GeoServerUserGroup)
      */
-    public SortedSet<GeoServerUser> getUsersForGroup(GeoServerUserGroup group) throws IOException{
+    public SortedSet<GeoServerUser> getUsersForGroup(GeoServerUserGroup group) throws IOException {
         readLock();
         try {
             return getService().getUsersForGroup(group);
         } finally {
             readUnLock();
-        }            
+        }
     }
 
     /**
      * READ_LOCK
+     *
      * @see org.geoserver.security.GeoServerUserGroupService#getGroupsForUser(org.geoserver.security.impl.GeoServerUser)
      */
-    public SortedSet<GeoServerUserGroup> getGroupsForUser(GeoServerUser user) throws IOException{
+    public SortedSet<GeoServerUserGroup> getGroupsForUser(GeoServerUser user) throws IOException {
         readLock();
         try {
             return getService().getGroupsForUser(user);
         } finally {
             readUnLock();
-        }            
+        }
     }
 
     /**
@@ -190,6 +198,7 @@ public class LockingUserGroupService extends AbstractLockingService implements
 
     /**
      * NO_LOCK
+     *
      * @see org.geoserver.security.GeoServerUserGroupService#registerUserGroupChangedListener(org.geoserver.security.event.UserGroupChangedListener)
      */
     public void registerUserGroupLoadedListener(UserGroupLoadedListener listener) {
@@ -198,6 +207,7 @@ public class LockingUserGroupService extends AbstractLockingService implements
 
     /**
      * NO_LOCK
+     *
      * @see org.geoserver.security.GeoServerUserGroupService#unregisterUserGroupChangedListener(org.geoserver.security.event.UserGroupChangedListener)
      */
     public void unregisterUserGroupLoadedListener(UserGroupLoadedListener listener) {
@@ -206,6 +216,7 @@ public class LockingUserGroupService extends AbstractLockingService implements
 
     /**
      * NO_LOCK
+     *
      * @see org.geoserver.security.event.UserGroupChangedListener#usersAndGroupsChanged(org.geoserver.security.event.UserGroupChangedEvent)
      */
     public void usersAndGroupsChanged(UserGroupLoadedEvent event) {
@@ -218,6 +229,7 @@ public class LockingUserGroupService extends AbstractLockingService implements
 
     /**
      * WRITE_LOCK
+     *
      * @see org.geoserver.security.GeoServerUserGroupService#initializeFromConfig(org.geoserver.security.config.SecurityNamedServiceConfig)
      */
     @Override
@@ -230,9 +242,10 @@ public class LockingUserGroupService extends AbstractLockingService implements
         }
     }
 
-    
-    /** 
+
+    /**
      * READ_LOCK
+     *
      * @see org.springframework.security.core.userdetails.UserDetailsService#loadUserByUsername(java.lang.String)
      */
     @Override
@@ -243,7 +256,7 @@ public class LockingUserGroupService extends AbstractLockingService implements
             return getService().loadUserByUsername(username);
         } finally {
             readUnLock();
-        }            
+        }
     }
 
     /**
@@ -253,7 +266,7 @@ public class LockingUserGroupService extends AbstractLockingService implements
     public String getPasswordEncoderName() {
         return getService().getPasswordEncoderName();
     }
-    
+
     /**
      * NO_LOCK
      */
@@ -262,31 +275,34 @@ public class LockingUserGroupService extends AbstractLockingService implements
         return getService().getPasswordValidatorName();
     }
 
-    /** 
+    /**
      * READ_LOCK
+     *
      * @see org.geoserver.security.GeoServerUserGroupService#getUserCount()
      */
-    public int getUserCount() throws IOException{
+    public int getUserCount() throws IOException {
         readLock();
         try {
             return getService().getUserCount();
         } finally {
             readUnLock();
-        }            
+        }
     }
 
     /**
      * READ_LOCK
+     *
      * @see org.geoserver.security.GeoServerUserGroupService#getGroupCount()
      */
-    public int getGroupCount() throws IOException{
+    public int getGroupCount() throws IOException {
         readLock();
         try {
             return getService().getGroupCount();
         } finally {
             readUnLock();
-        }            
+        }
     }
+
     /**
      * READ_LOCK
      */
@@ -297,9 +313,9 @@ public class LockingUserGroupService extends AbstractLockingService implements
             return getService().getUsersHavingProperty(propname);
         } finally {
             readUnLock();
-        }            
+        }
     }
-    
+
     /**
      * READ_LOCK
      */
@@ -310,7 +326,7 @@ public class LockingUserGroupService extends AbstractLockingService implements
             return getService().getUserCountHavingProperty(propname);
         } finally {
             readUnLock();
-        }            
+        }
     }
 
     /**
@@ -323,7 +339,7 @@ public class LockingUserGroupService extends AbstractLockingService implements
             return getService().getUsersNotHavingProperty(propname);
         } finally {
             readUnLock();
-        }            
+        }
     }
 
     /**
@@ -336,7 +352,7 @@ public class LockingUserGroupService extends AbstractLockingService implements
             return getService().getUserCountNotHavingProperty(propname);
         } finally {
             readUnLock();
-        }            
+        }
     }
 
     /**
@@ -350,7 +366,7 @@ public class LockingUserGroupService extends AbstractLockingService implements
             return getService().getUsersHavingPropertyValue(propname, propvalue);
         } finally {
             readUnLock();
-        }            
+        }
     }
 
     /**
@@ -364,7 +380,7 @@ public class LockingUserGroupService extends AbstractLockingService implements
             return getService().getUserCountHavingPropertyValue(propname, propvalue);
         } finally {
             readUnLock();
-        }            
+        }
     }
 
 }

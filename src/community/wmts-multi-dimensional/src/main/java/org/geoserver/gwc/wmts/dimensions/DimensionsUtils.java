@@ -57,7 +57,7 @@ import static org.geoserver.gwc.wmts.MultiDimensionalExtension.ALL_DOMAINS;
  * Some utils methods useful to interact with dimensions.
  */
 public final class DimensionsUtils {
-    
+
     static final FilterFactory2 FF = CommonFactoryFinder.getFilterFactory2();
 
     /**
@@ -122,7 +122,7 @@ public final class DimensionsUtils {
                 result = result.stream().filter(d -> requestedDimensions.contains(d.getDimensionName())).collect(Collectors.toList());
             }
         }
-        
+
         return result;
     }
 
@@ -316,6 +316,7 @@ public final class DimensionsUtils {
 
     /**
      * Compute the resource bounds based on the provided filter
+     *
      * @param resource
      * @param filter
      * @return
@@ -339,9 +340,9 @@ public final class DimensionsUtils {
     }
 
     /**
-     * Builds a bounding box filter, or returns {@link Filter#INCLUDE} if the bounding box is null 
+     * Builds a bounding box filter, or returns {@link Filter#INCLUDE} if the bounding box is null
      */
-    public static Filter getBoundingBoxFilter(ResourceInfo resource, ReferencedEnvelope boundingBox, FilterFactory 
+    public static Filter getBoundingBoxFilter(ResourceInfo resource, ReferencedEnvelope boundingBox, FilterFactory
             filterFactory) {
         String geometryName = getGeometryPropertyName(resource);
         if (boundingBox == null || geometryName == null) {
@@ -369,7 +370,7 @@ public final class DimensionsUtils {
         }
     }
 
-    public static Tuple<String,String> getAttributes(ResourceInfo resource, Dimension dimension) {
+    public static Tuple<String, String> getAttributes(ResourceInfo resource, Dimension dimension) {
         if (resource instanceof FeatureTypeInfo) {
             DimensionInfo di = dimension.getDimensionInfo();
             return Tuple.tuple(di.getAttribute(), di.getEndAttribute());

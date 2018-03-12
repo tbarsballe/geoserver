@@ -48,16 +48,16 @@ public class RasterAsPointCollectionTest extends WPSTestSupport {
     @Override
     protected void onSetUp(SystemTestData testData) throws Exception {
         super.onSetUp(testData);
-        
+
         addWcs11Coverages(testData);
-        
+
         Map<LayerProperty, Object> props = new HashMap<SystemTestData.LayerProperty, Object>();
         props.put(LayerProperty.ENVELOPE, new ReferencedEnvelope(181985.7630, 818014.2370, 1973809.4640, 8894102.4298, CRS.decode("EPSG:26713", true)));
 
         testData.addVectorLayer(TASMANIA_BM_ZONES, props, "tazdem_zones.properties", getClass(), getCatalog());
         testData.addVectorLayer(RESTRICTED, props, "restricted.properties", getClass(), getCatalog());
     }
-    
+
     @Test
     public void testStatisticsTazDem() throws Exception {
         String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
@@ -97,15 +97,15 @@ public class RasterAsPointCollectionTest extends WPSTestSupport {
         FeatureCollection fc = (FeatureCollection) fct.getFeature().get(0);
 
         assertEquals(36, fc.size());
-        
+
         // get first feature
         SimpleFeature sf = (SimpleFeature) fc.features().next();
         Geometry simplified = ((Geometry) sf.getDefaultGeometry());
         assertTrue(simplified instanceof Point);
-        assertEquals(sf.getID(),"0");	
+        assertEquals(sf.getID(), "0");
         assertEquals(sf.getAttributeCount(), 5);
-        assertEquals("75",sf.getProperty("GRAY_INDEX").getValue());
-        
+        assertEquals("75", sf.getProperty("GRAY_INDEX").getValue());
+
         // the latter would work only with shapefile or if we had a target schema
 //        assertEquals(Short.class,sf.getFeatureType().getDescriptor("GRAY_INDEX").getType().getBinding());
 //        assertEquals((short)75,sf.getProperty("GRAY_INDEX"));

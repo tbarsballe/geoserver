@@ -18,9 +18,8 @@ import org.springframework.security.ldap.SpringSecurityLdapTemplate;
 /**
  * Alternative SpringSecurityLdapTemplate, executing authentication without
  * a prior search that could raise errors by some LDAP servers.
- * 
+ *
  * @author "Mauro Bartolomeoli - mauro.bartolomeoli@geo-solutions.it"
- * 
  */
 public class BindingLdapTemplate extends SpringSecurityLdapTemplate {
 
@@ -34,9 +33,9 @@ public class BindingLdapTemplate extends SpringSecurityLdapTemplate {
      */
     @Override
     public boolean authenticate(Name base, String username,
-            String password,
-            final AuthenticatedLdapEntryContextCallback callback,
-            AuthenticationErrorCallback errorCallback) {
+                                String password,
+                                final AuthenticatedLdapEntryContextCallback callback,
+                                AuthenticationErrorCallback errorCallback) {
 
         try {
             DirContext ctx = getContextSource().getContext(username,
@@ -53,7 +52,7 @@ public class BindingLdapTemplate extends SpringSecurityLdapTemplate {
             } catch (javax.naming.NamingException e) {
                 throw LdapUtils.convertLdapException(e);
             } catch (Exception e) {
-               throw e;
+                throw e;
             } finally {
                 if (ctx != null) {
                     try {

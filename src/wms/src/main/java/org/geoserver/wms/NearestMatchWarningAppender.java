@@ -37,7 +37,7 @@ public class NearestMatchWarningAppender extends AbstractDispatcherCallback {
      * @param unit        The measure unit of measure
      * @param warningType
      */
-    public static void addWarning(String layerName, String dimension, Object value, String unit, WarningType 
+    public static void addWarning(String layerName, String dimension, Object value, String unit, WarningType
             warningType) {
         List<String> warnings = WARNINGS.get();
         if (warningType == WarningType.NotFound) {

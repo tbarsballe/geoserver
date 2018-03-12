@@ -33,9 +33,10 @@ public class ImportContextProvider extends GeoServerDataProvider<ImportContext> 
     protected List<Property<ImportContext>> getProperties() {
         return Arrays.asList(ID, STATE, CREATED, UPDATED);
     }
+
     @Override
     protected List<ImportContext> getItems() {
-        return IteratorUtils.toList(ImporterWebUtils.importer().getAllContexts() );
+        return IteratorUtils.toList(ImporterWebUtils.importer().getAllContexts());
     }
 
     @Override

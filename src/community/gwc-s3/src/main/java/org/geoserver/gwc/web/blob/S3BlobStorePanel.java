@@ -13,7 +13,6 @@ import org.apache.wicket.model.ResourceModel;
 import org.geowebcache.s3.S3BlobStoreInfo;
 
 /**
- *
  * Panel for S3BlobStore
  *
  * @author Niels Charlier

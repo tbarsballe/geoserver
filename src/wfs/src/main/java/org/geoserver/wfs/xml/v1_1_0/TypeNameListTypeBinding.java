@@ -18,9 +18,9 @@ import org.geotools.xml.InstanceComponent;
 
 /**
  * Binding object for the type http://www.opengis.net/wfs:TypeNameListType.
- *
  * <p>
- *        <pre>
+ * <p>
+ * <pre>
  *         <code>
  *  &lt;xsd:simpleType name="TypeNameListType"&gt;
  *      &lt;xsd:restriction base="wfs:Base_TypeNameListType"&gt;
@@ -41,6 +41,7 @@ import org.geotools.xml.InstanceComponent;
  *
  *          </code>
  *         </pre>
+ *
  * @generated
  */
 public class TypeNameListTypeBinding extends AbstractSimpleBinding {
@@ -76,7 +77,7 @@ public class TypeNameListTypeBinding extends AbstractSimpleBinding {
      * @generated modifiable
      */
     public Object parse(InstanceComponent instance, Object value)
-        throws Exception {
+            throws Exception {
         //TODO: implement list support in parser so that passed in value is a list
         //&lt;xsd:pattern value="((\w:)?\w(=\w)?){1,}"&gt;
 

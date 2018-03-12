@@ -58,38 +58,41 @@ public class QueryBuilderTest extends TestCase {
                 .build();
 
     }
-    
+
     public void testSort1() {
         Filter filter = Predicates.acceptAll();
         StringBuilder build = QueryBuilder.forIds(dialect, WorkspaceInfo.class, dbMappings)
                 .filter(filter)
                 .sortOrder(Predicates.asc("foo"))
                 .build();
-        
+
     }
+
     public void testSort2() {
         Filter filter = Predicates.acceptAll();
         StringBuilder build = QueryBuilder.forIds(dialect, WorkspaceInfo.class, dbMappings)
                 .filter(filter)
-                .sortOrder(Predicates.asc("foo"),Predicates.desc("bar"))
+                .sortOrder(Predicates.asc("foo"), Predicates.desc("bar"))
                 .build();
-        
+
     }
+
     public void testSort3() {
         Filter filter = Predicates.acceptAll();
         StringBuilder build = QueryBuilder.forIds(dialect, WorkspaceInfo.class, dbMappings)
                 .filter(filter)
-                .sortOrder(Predicates.asc("foo"),Predicates.desc("bar"),Predicates.asc("baz"))
+                .sortOrder(Predicates.asc("foo"), Predicates.desc("bar"), Predicates.asc("baz"))
                 .build();
-        
+
     }
+
     public void testSort3WithFilter() {
         Filter filter = Predicates.equal("name", "quux");
         StringBuilder build = QueryBuilder.forIds(dialect, WorkspaceInfo.class, dbMappings)
                 .filter(filter)
-                .sortOrder(Predicates.asc("foo"),Predicates.desc("bar"),Predicates.asc("baz"))
+                .sortOrder(Predicates.asc("foo"), Predicates.desc("bar"), Predicates.asc("baz"))
                 .build();
-        
+
     }
 
     @Test
@@ -142,7 +145,7 @@ public class QueryBuilderTest extends TestCase {
                 .filter(filter).build();
         String sql = build.toString();
 
-        String sqlNil = "oid IN (select oid from object_property where property_type in (:" + 
+        String sqlNil = "oid IN (select oid from object_property where property_type in (:" +
                 "ptype0) and value IS NULL)";
         // Ensure the following sql is present
         assertTrue(sql.contains(sqlNil));

@@ -94,7 +94,6 @@ public class SQLViewTest extends WFSTestSupport {
 
     /**
      * Checks the setup did the expected job
-     *
      */
     @Test
     public void testStoreSetup() throws Exception {
@@ -175,9 +174,9 @@ public class SQLViewTest extends WFSTestSupport {
         Document doc = postAsDOM("wfs", xml);
         assertEquals("wfs:FeatureCollection", doc.getDocumentElement().getNodeName());
 
-        NodeList features = doc.getElementsByTagName("gs:pgeo_view");      
-        assertEquals( 1, features.getLength() );
+        NodeList features = doc.getElementsByTagName("gs:pgeo_view");
+        assertEquals(1, features.getLength());
         assertEquals(features.item(0).getFirstChild().getNodeName(), "gml:name");
-        assertEquals(features.item(0).getFirstChild().getTextContent(), "name-f003");  
+        assertEquals(features.item(0).getFirstChild().getTextContent(), "name-f003");
     }
 }

@@ -15,33 +15,32 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
  * This model operates by persisting the wkt ({@link CoordinateReferenceSystem#toWKT()}) for
  * a crs.
  * </p>
- * @author Justin Deoliveira, OpenGeo
  *
+ * @author Justin Deoliveira, OpenGeo
  */
 @SuppressWarnings("serial")
 public class CRSModel implements IModel<CoordinateReferenceSystem> {
 
     transient CoordinateReferenceSystem crs;
     String wkt;
-    
+
     public CRSModel(CoordinateReferenceSystem crs) {
         setObject(crs);
     }
 
     public CoordinateReferenceSystem getObject() {
-        if ( crs != null ) {
+        if (crs != null) {
             return crs;
         }
-        
-        if(wkt == null) {
+
+        if (wkt == null) {
             return null;
         }
-        
+
         try {
-            crs = CRS.parseWKT( wkt );
+            crs = CRS.parseWKT(wkt);
             return crs;
-        } 
-        catch (Exception e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }

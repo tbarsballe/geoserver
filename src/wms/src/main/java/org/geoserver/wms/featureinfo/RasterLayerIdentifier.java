@@ -68,19 +68,19 @@ import java.util.stream.Collectors;
 
 /**
  * Layer identifier specifialized for raster layers
- * @author Andrea Aime - GeoSolutions
  *
+ * @author Andrea Aime - GeoSolutions
  */
 public class RasterLayerIdentifier implements LayerIdentifier {
-    
+
     static final Logger LOGGER = Logging.getLogger(RasterLayerIdentifier.class);
 
     private WMS wms;
-    
+
     public RasterLayerIdentifier(final WMS wms) {
         this.wms = wms;
     }
-    
+
     public boolean canHandle(MapLayerInfo layer) {
         int type = layer.getType();
         return type == MapLayerInfo.TYPE_RASTER;
@@ -94,8 +94,8 @@ public class RasterLayerIdentifier implements LayerIdentifier {
         final GridCoverage2DReader reader = (GridCoverage2DReader) cinfo
                 .getGridCoverageReader(new NullProgressListener(),
                         GeoTools.getDefaultHints());
-        
-        
+
+
         // set the requested position in model space for this request
         final Coordinate middle = WMS.pixelToWorld(params.getX(), params.getY(), params.getRequestedBounds(), params.getWidth(), params.getHeight());
         double x = middle.x;
@@ -143,7 +143,7 @@ public class RasterLayerIdentifier implements LayerIdentifier {
         if (requestedCRS != null) {
             final TransformedDirectPosition arbitraryToInternal = new TransformedDirectPosition(
                     requestedCRS, targetCRS, new Hints(Hints.LENIENT_DATUM_SHIFT,
-                            Boolean.TRUE));
+                    Boolean.TRUE));
             try {
                 arbitraryToInternal.transform(position);
             } catch (TransformException exception) {
@@ -175,10 +175,10 @@ public class RasterLayerIdentifier implements LayerIdentifier {
 
         // read from the request
         GetMapRequest getMap = params.getGetMapRequest();
-        GeneralParameterValue[] parameters = wms.getWMSReadParameters(getMap, 
+        GeneralParameterValue[] parameters = wms.getWMSReadParameters(getMap,
                 layer, filter, sort, params.getTimes(), params.getElevations(), reader, true);
-        
-        
+
+
         // now get the position in raster space using the world to grid related to
         // corner
         final MathTransform worldToGrid = reader.getOriginalGridToWorld(PixelInCell.CELL_CORNER)
@@ -254,15 +254,15 @@ public class RasterLayerIdentifier implements LayerIdentifier {
         } finally {
             RenderedImage ri = coverage.getRenderedImage();
             coverage.dispose(true);
-            if(ri instanceof PlanarImage) {
+            if (ri instanceof PlanarImage) {
                 ImageUtilities.disposePlanarImageChain((PlanarImage) ri);
             }
         }
         return Collections.singletonList(pixel);
     }
-    
+
     private SimpleFeatureCollection wrapPixelInFeatureCollection(GridCoverage2D coverage,
-            double[] pixelValues, Name coverageName) throws SchemaException {
+                                                                 double[] pixelValues, Name coverageName) throws SchemaException {
 
         GridSampleDimension[] sampleDimensions = coverage.getSampleDimensions();
 
@@ -291,11 +291,11 @@ public class RasterLayerIdentifier implements LayerIdentifier {
 
     /**
      * Convert sample dimension description to a valid XML NCName by replacing invalid characters with underscores (<code>'_'</code>).
-     * 
      * <p>
-     * 
+     * <p>
+     * <p>
      * If the description is null or has zero length, the NCName "Unknown" is returned.
-     * 
+     *
      * @param description sample dimension description
      * @return valid XML NCName
      */

@@ -29,7 +29,7 @@ import org.springframework.mock.web.MockServletContext;
 
 public class GZipFilterTest {
 
-    
+
     @Test
     public void testRetrieveSameOutputStream() throws Exception {
         MockHttpServletRequest request = new MockHttpServletRequest("GET", "http://www.geoserver.org");
@@ -70,7 +70,7 @@ public class GZipFilterTest {
         };
         filter.doFilter(request, response, chain);
     }
-    
+
     @Test
     public void testGZipRemovesContentLength() throws Exception {
         MockHttpServletRequest request = new MockHttpServletRequest("GET", "http://www.geoserver.org");
@@ -80,7 +80,7 @@ public class GZipFilterTest {
 
         // run the filter
         GZIPFilter filter = new GZIPFilter();
-        
+
         MockServletContext context = new MockServletContext();
         MockFilterConfig config = new MockFilterConfig(context);
         config.addInitParameter("compressed-types", "text/plain");
@@ -93,7 +93,7 @@ public class GZipFilterTest {
                 response.setContentLength(1000);
                 AlternativesResponseStream alternatives = (AlternativesResponseStream) response
                         .getOutputStream();
-                
+
                 ServletOutputStream gzipStream = alternatives.getStream();
                 gzipStream.write(1);
             }
@@ -101,7 +101,7 @@ public class GZipFilterTest {
         filter.doFilter(request, response, chain);
         assertFalse(response.containsHeader("Content-Length"));
     }
-    
+
     @Test
     public void testNotGZippedMantainsContentLength() throws Exception {
         MockHttpServletRequest request = new MockHttpServletRequest("GET", "http://www.geoserver.org");
@@ -123,7 +123,7 @@ public class GZipFilterTest {
                 response.setContentLength(1000);
                 AlternativesResponseStream alternatives = (AlternativesResponseStream) response
                         .getOutputStream();
-                
+
                 ServletOutputStream gzipStream = alternatives.getStream();
                 gzipStream.write(1);
             }

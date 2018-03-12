@@ -15,7 +15,7 @@ import org.geotools.coverage.grid.GridCoverage2D;
 
 /**
  * A {@link WebMap} where the map is given by a {@link RenderedImage}
- * 
+ *
  * @author Gabriel Roldan
  */
 public class RenderedImageMap extends WebMap {
@@ -25,7 +25,7 @@ public class RenderedImageMap extends WebMap {
     private List<GridCoverage2D> renderedCoverages;
 
     public RenderedImageMap(final WMSMapContent mapContent, final RenderedImage image,
-            final String mimeType) {
+                            final String mimeType) {
         super(mapContent);
         this.image = image;
         setMimeType(mimeType);
@@ -44,7 +44,7 @@ public class RenderedImageMap extends WebMap {
      * Returns the list of rendered coverages to produce this map, needed so they're disposed after
      * writing them down to the destination output stream when their rendered images are used
      * directly instead of pre-rendered to a buffered image or such.
-     * 
+     *
      * @return the list of rendered coverages or {@code null}
      */
     @SuppressWarnings("unchecked")

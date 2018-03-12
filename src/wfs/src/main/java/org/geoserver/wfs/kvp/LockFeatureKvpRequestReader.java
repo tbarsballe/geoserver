@@ -42,12 +42,12 @@ public class LockFeatureKvpRequestReader extends BaseFeatureKvpRequestReader {
         if (values == null) {
             return;
         }
-        
+
         if ("typeName".equalsIgnoreCase(property)) {
             // in lock typename is not a list, it's a single qname
             values = (List) values.stream().map(o -> ((List) o).get(0)).collect(Collectors.toList());
         }
-        
+
         LockFeatureType lockFeature = (LockFeatureType) request;
         EList lock = lockFeature.getLock();
 
@@ -120,5 +120,5 @@ public class LockFeatureKvpRequestReader extends BaseFeatureKvpRequestReader {
             lock.setFilter(filter);
         }
     }
-    
+
 }

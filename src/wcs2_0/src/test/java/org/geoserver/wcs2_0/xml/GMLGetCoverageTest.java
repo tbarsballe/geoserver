@@ -16,29 +16,29 @@ import org.junit.Test;
 import org.w3c.dom.Document;
 
 import org.springframework.mock.web.MockHttpServletResponse;
+
 /**
  * Testing {@link GMLCoverageResponseDelegate}
- * 
- * @author Simone Giannecchini, GeoSolutions SAS
  *
+ * @author Simone Giannecchini, GeoSolutions SAS
  */
 public class GMLGetCoverageTest extends WCSTestSupport {
 
-   
-    @Test 
+
+    @Test
     public void testGMLExtension() throws Exception {
-        final File xml= new File("./src/test/resources/requestGetCoverageGML.xml");
-        final String request= FileUtils.readFileToString(xml);
+        final File xml = new File("./src/test/resources/requestGetCoverageGML.xml");
+        final String request = FileUtils.readFileToString(xml);
 
         MockHttpServletResponse response = postAsServletResponse("wcs", request);
-        
+
         assertEquals("application/gml+xml", response.getContentType());
-        Document dom = dom(new ByteArrayInputStream(response.getContentAsString().getBytes()));     
+        Document dom = dom(new ByteArrayInputStream(response.getContentAsString().getBytes()));
 //        print(dom);
-        
+
         // validate
 //        checkValidationErrors(dom, WCS20_SCHEMA);
-        
+
         // check it is good
 //        assertXpathEvaluatesTo("wcs__BlueMarble", "//wcs:CoverageDescription//wcs:CoverageId", dom);
 //        assertXpathEvaluatesTo("3", "count(//wcs:CoverageDescription//gmlcov:rangeType//swe:DataRecord//swe:field)", dom);

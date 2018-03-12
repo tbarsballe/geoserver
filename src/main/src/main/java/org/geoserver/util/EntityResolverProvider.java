@@ -12,11 +12,11 @@ import org.xml.sax.EntityResolver;
 
 /**
  * Creates an EntityResolver using geoserver configuration settings.
- * 
+ *
  * @author Davide Savazzi - geo-solutions.it
  */
 public class EntityResolverProvider {
-    
+
     private static EntityResolver entityResolver = PreventLocalEntityResolver.INSTANCE;
 
     /**
@@ -30,11 +30,11 @@ public class EntityResolverProvider {
     public EntityResolverProvider(GeoServer geoServer) {
         this.geoServer = geoServer;
     }
-    
+
     public static void setEntityResolver(EntityResolver resolver) {
         entityResolver = resolver;
     }
-    
+
     public EntityResolver getEntityResolver() {
         if (geoServer != null) {
             Boolean externalEntitiesEnabled = geoServer.getGlobal().isXmlExternalEntitiesEnabled();
@@ -43,7 +43,7 @@ public class EntityResolverProvider {
                 return null;
             }
         }
-        
+
         return entityResolver;
-    } 
+    }
 }

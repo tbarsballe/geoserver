@@ -21,19 +21,19 @@ import de.micromata.opengis.kml.v_2_2_0.Placemark;
 
 /**
  * Adds LookAt elements on Document, Folder and Placemark
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class LookAtDecoratorFactory implements KmlDecoratorFactory {
 
     @Override
     public KmlDecorator getDecorator(Class<? extends Feature> featureClass,
-            KmlEncodingContext context) {
+                                     KmlEncodingContext context) {
         // this decorator makes sense only for WMS
-        if(!(context.getService() instanceof WMSInfo)) {
+        if (!(context.getService() instanceof WMSInfo)) {
             return null;
         }
-        
+
         if (Placemark.class.isAssignableFrom(featureClass)) {
             return new PlacemarkLookAtDecorator();
         } else if (Folder.class.isAssignableFrom(featureClass) || NetworkLink.class.isAssignableFrom(featureClass)) {
@@ -111,11 +111,11 @@ public class LookAtDecoratorFactory implements KmlDecoratorFactory {
 
         double R_EARTH = 6.371 * 1000000; // meters
         double VIEWER_WIDTH = 22 * Math.PI / 180; // The field of view of the google maps
-                                                  // camera, in radians
+        // camera, in radians
         double[] p1 = getRect(lon1, lat1, R_EARTH);
         double[] p2 = getRect(lon2, lat2, R_EARTH);
-        double[] midpoint = new double[] { (p1[0] + p2[0]) / 2, (p1[1] + p2[1]) / 2,
-                (p1[2] + p2[2]) / 2 };
+        double[] midpoint = new double[]{(p1[0] + p2[0]) / 2, (p1[1] + p2[1]) / 2,
+                (p1[2] + p2[2]) / 2};
 
         midpoint = getGeographic(midpoint[0], midpoint[1], midpoint[2]);
 
@@ -151,19 +151,19 @@ public class LookAtDecoratorFactory implements KmlDecoratorFactory {
         double x = radius * Math.sin(phi) * Math.cos(theta);
         double y = radius * Math.sin(phi) * Math.sin(theta);
         double z = radius * Math.cos(phi);
-        return new double[] { x, y, z };
+        return new double[]{x, y, z};
     }
 
     private double[] getGeographic(double x, double y, double z) {
         double theta, phi, radius;
-        radius = distance(new double[] { x, y, z }, new double[] { 0, 0, 0 });
+        radius = distance(new double[]{x, y, z}, new double[]{0, 0, 0});
         theta = Math.atan2(Math.sqrt(x * x + y * y), z);
         phi = Math.atan2(y, x);
 
         double lat = 90 - (theta * 180 / Math.PI);
         double lon = 90 - (phi * 180 / Math.PI);
 
-        return new double[] { (lon > 180 ? lon - 360 : lon), lat, radius };
+        return new double[]{(lon > 180 ? lon - 360 : lon), lat, radius};
     }
 
     private double distance(double[] p1, double[] p2) {

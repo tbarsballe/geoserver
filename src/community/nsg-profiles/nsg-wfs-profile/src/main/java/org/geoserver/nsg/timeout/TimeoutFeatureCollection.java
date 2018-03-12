@@ -24,6 +24,7 @@ import java.util.Collection;
 /**
  * A {@link FeatureCollection} decorator that checks if the timeout expired, and throws an exception
  * in case it is
+ *
  * @param <T>
  * @param <F>
  */

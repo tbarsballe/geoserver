@@ -29,7 +29,7 @@ public class ValidationResult {
     }
 
     public void throwIfInvalid() {
-        if (!isValid()){
+        if (!isValid()) {
             int n = errorList.size();
             String msg = errorList.get(0).getMessage();
             throw new RuntimeException("Validation failed with " + n + " errors.  First error message is: " + msg);

@@ -45,7 +45,7 @@ public class CatalogFeatureTypeCache extends FeatureTypeCache {
 
                     // throw into the cache
                     put(featureType);
-                } catch(Exception e) {
+                } catch (Exception e) {
                     LOGGER.log(Level.WARNING, "Could not load underlying feature type for type "
                             + meta.getName(), e);
                 }

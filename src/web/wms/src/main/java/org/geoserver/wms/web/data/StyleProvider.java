@@ -31,18 +31,18 @@ import com.google.common.collect.Lists;
 @SuppressWarnings("serial")
 public class StyleProvider extends GeoServerDataProvider<StyleInfo> {
 
-    public static Property<StyleInfo> NAME = 
-        new BeanProperty<StyleInfo>( "name", "name" );
+    public static Property<StyleInfo> NAME =
+            new BeanProperty<StyleInfo>("name", "name");
 
-    public static Property<StyleInfo> WORKSPACE = 
-            new BeanProperty<StyleInfo>( "workspace", "workspace.name" );
+    public static Property<StyleInfo> WORKSPACE =
+            new BeanProperty<StyleInfo>("workspace", "workspace.name");
 
     static List<Property<StyleInfo>> PROPERTIES = Arrays.asList(NAME, WORKSPACE);
-    
+
     public StyleProvider() {
         setSort(new SortParam<Object>(NAME.getName(), true));
     }
-    
+
     @Override
     protected List<StyleInfo> getItems() {
         throw new UnsupportedOperationException(
@@ -56,9 +56,9 @@ public class StyleProvider extends GeoServerDataProvider<StyleInfo> {
     }
 
     public IModel<StyleInfo> newModel(StyleInfo object) {
-        return new StyleDetachableModel(object );
+        return new StyleDetachableModel(object);
     }
-    
+
     @Override
     public long size() {
         Filter filter = getFilter();
@@ -72,7 +72,7 @@ public class StyleProvider extends GeoServerDataProvider<StyleInfo> {
         int count = getCatalog().count(StyleInfo.class, filter);
         return count;
     }
-    
+
     @Override
     public Iterator<StyleInfo> iterator(final long first, final long count) {
         Iterator<StyleInfo> iterator = filteredItems((int) first, (int) count);
@@ -102,8 +102,8 @@ public class StyleProvider extends GeoServerDataProvider<StyleInfo> {
 
         SortBy sortOrder = null;
         if (sort != null) {
-            if(property instanceof BeanProperty){
-                final String sortProperty = ((BeanProperty<StyleInfo>)property).getPropertyPath();
+            if (property instanceof BeanProperty) {
+                final String sortProperty = ((BeanProperty<StyleInfo>) property).getPropertyPath();
                 sortOrder = sortBy(sortProperty, sort.isAscending());
             }
         }

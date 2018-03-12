@@ -22,11 +22,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.util.WebUtils;
 
 /**
- * 
  * Abstract class to store and load configuration from global var or temp webapp directory
- * 
+ *
  * @author carlo cancellieri - GeoSolutions SAS
- * 
  */
 final public class JMSConfiguration {
     public static final String DEFAULT_GROUP = "geoserver-cluster";
@@ -77,7 +75,7 @@ final public class JMSConfiguration {
 
     /**
      * Initialize configuration
-     * 
+     *
      * @throws IOException
      */
     @PostConstruct
@@ -121,7 +119,7 @@ final public class JMSConfiguration {
 
     /**
      * Initialize configuration with default parameters
-     * 
+     *
      * @throws IOException
      */
     public void initDefaults() throws IOException {
@@ -139,7 +137,7 @@ final public class JMSConfiguration {
 
     /**
      * check if instance name is changed since last application boot, if so set the overridden value into configuration and returns true
-     * 
+     *
      * @return true if some parameter is overridden by an Extension property
      */
     public boolean override() {

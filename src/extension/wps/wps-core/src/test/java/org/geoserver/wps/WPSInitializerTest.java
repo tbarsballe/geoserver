@@ -57,7 +57,7 @@ public class WPSInitializerTest {
         WPSInfo wps = createNiceMock(WPSInfo.class);
         expect(wps.getProcessGroups()).andReturn(procGroups).anyTimes();
         replay(wps);
-        
+
         expect(gs.getService(WPSInfo.class)).andReturn(wps).anyTimes();
         replay(gs);
 
@@ -74,7 +74,7 @@ public class WPSInitializerTest {
 
     @Test
     public void testSingleSave() throws Exception {
-        
+
         GeoServer gs = createMock(GeoServer.class);
 
         List<ConfigurationListener> listeners = new ArrayList();
@@ -87,7 +87,7 @@ public class WPSInitializerTest {
         WPSInfo wps = createNiceMock(WPSInfo.class);
         expect(wps.getProcessGroups()).andReturn(procGroups).anyTimes();
         replay(wps);
-        
+
         expect(gs.getService(WPSInfo.class)).andReturn(wps).anyTimes();
         gs.save(wps);
         expectLastCall().once();
@@ -116,6 +116,7 @@ public class WPSInitializerTest {
         public ListenerCapture(List<ConfigurationListener> listeners) {
             this.listeners = listeners;
         }
+
         @Override
         public boolean matches(Object argument) {
             if (argument instanceof ConfigurationListener) {
@@ -129,6 +130,6 @@ public class WPSInitializerTest {
         public void appendTo(StringBuffer buffer) {
             buffer.append("ListenerCapture");
         }
-    
+
     }
 }

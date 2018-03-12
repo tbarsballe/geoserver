@@ -23,10 +23,10 @@ class ConnectionPoolParamPanel extends Panel {
     int timeout = 20;
     boolean validate = true;
     boolean preparedStatements = true;
-    
+
     public ConnectionPoolParamPanel(String id, boolean preparedStatements) {
         super(id);
-        
+
         add(new TextField("minConnection", new PropertyModel(this, "minConnection")).setRequired(true));
         add(new TextField("maxConnection", new PropertyModel(this, "maxConnection")).setRequired(true));
         add(new TextField("fetchSize", new PropertyModel(this, "fetchSize")).setRequired(true));
@@ -37,5 +37,5 @@ class ConnectionPoolParamPanel extends Panel {
         psContainer.setVisible(preparedStatements);
         add(psContainer);
     }
-    
+
 }

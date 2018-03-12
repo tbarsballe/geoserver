@@ -22,13 +22,13 @@ public class ErrorThrowingResponse extends Response {
     }
 
     public void write(Object value, OutputStream output, Operation operation)
-        throws IOException {
+            throws IOException {
         Message message = (Message) value;
         output.write(message.message.getBytes());
         throw new ServiceException("Whoops, something gone wrong!");
     }
 
     public void abort(Object value, OutputStream output, Operation operation)
-        throws IOException {
+            throws IOException {
     }
 }

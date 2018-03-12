@@ -42,7 +42,7 @@ public class ExcelOutputFormatTest extends WFSTestSupport {
                 resp.getHeader("Content-Disposition"));
 
         HSSFWorkbook wb = new HSSFWorkbook(in);
-        testExcelOutputFormat( wb );
+        testExcelOutputFormat(wb);
     }
 
     @Test
@@ -60,10 +60,10 @@ public class ExcelOutputFormatTest extends WFSTestSupport {
                 resp.getHeader("Content-Disposition"));
 
         XSSFWorkbook wb = new XSSFWorkbook(in);
-        testExcelOutputFormat( wb );
+        testExcelOutputFormat(wb);
     }
 
-    private void testExcelOutputFormat( Workbook wb ) throws IOException{
+    private void testExcelOutputFormat(Workbook wb) throws IOException {
         Sheet sheet = wb.getSheet("PrimitiveGeoFeature");
         assertNotNull(sheet);
 
@@ -90,29 +90,29 @@ public class ExcelOutputFormatTest extends WFSTestSupport {
 
         // ... a string cell
         Cell cell = sheet.getRow(1).getCell(1);
-        assertEquals( Cell.CELL_TYPE_STRING, cell.getCellType() );
+        assertEquals(Cell.CELL_TYPE_STRING, cell.getCellType());
         assertEquals(sf.getAttribute(0), cell.getRichStringCellValue().toString());
         // ... a geom cell
         cell = sheet.getRow(1).getCell(4);
-        assertEquals( Cell.CELL_TYPE_STRING, cell.getCellType() );
+        assertEquals(Cell.CELL_TYPE_STRING, cell.getCellType());
         assertEquals(sf.getAttribute(3).toString(), cell.getRichStringCellValue().toString());
         // ... a number cell
         cell = sheet.getRow(1).getCell(6);
-        assertEquals( Cell.CELL_TYPE_NUMERIC, cell.getCellType() );
+        assertEquals(Cell.CELL_TYPE_NUMERIC, cell.getCellType());
         assertEquals(((Number) sf.getAttribute(5)).doubleValue(), cell.getNumericCellValue());
         // ... a date cell (they are mapped as numeric in xms?)
         cell = sheet.getRow(1).getCell(10);
-        assertEquals( Cell.CELL_TYPE_NUMERIC, cell.getCellType() );
+        assertEquals(Cell.CELL_TYPE_NUMERIC, cell.getCellType());
         assertEquals(sf.getAttribute(9), cell.getDateCellValue());
         // ... a boolean cell (they are mapped as numeric in xms?)
         cell = sheet.getRow(1).getCell(12);
-        assertEquals( Cell.CELL_TYPE_BOOLEAN, cell.getCellType() );
+        assertEquals(Cell.CELL_TYPE_BOOLEAN, cell.getCellType());
         assertEquals(sf.getAttribute(11), cell.getBooleanCellValue());
         // ... an empty cell (original value is null -> no cell)
         cell = sheet.getRow(1).getCell(3);
-        assertNull(cell);    	
+        assertNull(cell);
     }
-    
+
     @Test
     public void testExcel97MultipleFeatureTypes() throws Exception {
         // grab the real binary stream, avoiding mangling to due char conversion
@@ -120,7 +120,7 @@ public class ExcelOutputFormatTest extends WFSTestSupport {
         InputStream in = getBinaryInputStream(resp);
 
         Workbook wb = new HSSFWorkbook(in);
-        testMultipleFeatureTypes( wb );        
+        testMultipleFeatureTypes(wb);
     }
 
     @Test
@@ -130,12 +130,12 @@ public class ExcelOutputFormatTest extends WFSTestSupport {
         InputStream in = getBinaryInputStream(resp);
 
         Workbook wb = new XSSFWorkbook(in);
-        testMultipleFeatureTypes( wb );
+        testMultipleFeatureTypes(wb);
     }
-    
-    private void testMultipleFeatureTypes( Workbook wb ) throws IOException{
+
+    private void testMultipleFeatureTypes(Workbook wb) throws IOException {
         // check we have the expected sheets
-    	Sheet sheet = wb.getSheet("PrimitiveGeoFeature");
+        Sheet sheet = wb.getSheet("PrimitiveGeoFeature");
         assertNotNull(sheet);
 
         // check the number of rows in the output
@@ -147,6 +147,6 @@ public class ExcelOutputFormatTest extends WFSTestSupport {
 
         // check the number of rows in the output
         fs = getFeatureSource(MockData.GENERICENTITY);
-        assertEquals(fs.getCount(Query.ALL) + 1, sheet.getPhysicalNumberOfRows());    	
+        assertEquals(fs.getCount(Query.ALL) + 1, sheet.getPhysicalNumberOfRows());
     }
 }

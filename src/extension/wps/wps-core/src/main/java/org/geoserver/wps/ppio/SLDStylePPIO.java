@@ -23,7 +23,7 @@ import org.xml.sax.ContentHandler;
 
 /**
  * Handles SLD 1.0 styles
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class SLDStylePPIO extends XMLPPIO {
@@ -52,12 +52,12 @@ public class SLDStylePPIO extends XMLPPIO {
         NamedLayer nl = sf.createNamedLayer();
         nl.setName("");
         nl.styles().add((Style) obj);
-        sld.setStyledLayers(new StyledLayer[] { nl });
+        sld.setStyledLayers(new StyledLayer[]{nl});
 
         Encoder e = new Encoder(sldConfiguration);
         e.encode(sld, element, handler);
     }
-    
+
     @Override
     public Object decode(Object input) throws Exception {
         Parser p = getParser(sldConfiguration);

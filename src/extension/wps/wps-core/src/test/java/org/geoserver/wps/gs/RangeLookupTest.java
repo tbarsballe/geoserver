@@ -26,13 +26,13 @@ import com.vividsolutions.jts.geom.Envelope;
  * @author Daniele Romagnoli, GeoSolutions
  */
 public class RangeLookupTest extends WPSTestSupport {
-    
+
     private final static double DELTA = 1E-6;
-    
+
     @Override
     protected void onSetUp(SystemTestData testData) throws Exception {
         super.onSetUp(testData);
-        
+
         addWcs11Coverages(testData);
     }
 
@@ -63,70 +63,70 @@ public class RangeLookupTest extends WPSTestSupport {
                 + "      <ows:Identifier>ranges</ows:Identifier>\n"
                 + "      <wps:Data>\n"
                 + "        <wps:LiteralData>[1;100]</wps:LiteralData>\n"
-                + "      </wps:Data>\n" 
-                + "    </wps:Input>\n" 
+                + "      </wps:Data>\n"
+                + "    </wps:Input>\n"
                 + "    <wps:Input>\n"
                 + "      <ows:Identifier>ranges</ows:Identifier>\n"
                 + "      <wps:Data>\n"
                 + "        <wps:LiteralData>[101;300]</wps:LiteralData>\n"
-                + "      </wps:Data>\n" 
-                + "    </wps:Input>\n" 
+                + "      </wps:Data>\n"
+                + "    </wps:Input>\n"
                 + "    <wps:Input>\n"
                 + "      <ows:Identifier>ranges</ows:Identifier>\n"
                 + "      <wps:Data>\n"
                 + "        <wps:LiteralData>[301;700]</wps:LiteralData>\n"
-                + "      </wps:Data>\n" 
-                + "    </wps:Input>\n" 
+                + "      </wps:Data>\n"
+                + "    </wps:Input>\n"
                 + "    <wps:Input>\n"
                 + "      <ows:Identifier>ranges</ows:Identifier>\n"
                 + "      <wps:Data>\n"
                 + "        <wps:LiteralData>[701;1500]</wps:LiteralData>\n"
-                + "      </wps:Data>\n" 
-                + "    </wps:Input>\n" 
+                + "      </wps:Data>\n"
+                + "    </wps:Input>\n"
                 + "    <wps:Input>\n"
                 + "      <ows:Identifier>ranges</ows:Identifier>\n"
                 + "      <wps:Data>\n"
                 + "        <wps:LiteralData>[1401;30000]</wps:LiteralData>\n"
-                + "      </wps:Data>\n" 
-                + "    </wps:Input>\n" 
+                + "      </wps:Data>\n"
+                + "    </wps:Input>\n"
 
                 + "    <wps:Input>\n"
                 + "      <ows:Identifier>outputPixelValues</ows:Identifier>\n"
                 + "      <wps:Data>\n"
                 + "        <wps:LiteralData>5</wps:LiteralData>\n"
-                + "      </wps:Data>\n" 
-                + "    </wps:Input>\n" 
+                + "      </wps:Data>\n"
+                + "    </wps:Input>\n"
                 + "    <wps:Input>\n"
                 + "      <ows:Identifier>outputPixelValues</ows:Identifier>\n"
                 + "      <wps:Data>\n"
                 + "        <wps:LiteralData>20</wps:LiteralData>\n"
-                + "      </wps:Data>\n" 
-                + "    </wps:Input>\n" 
+                + "      </wps:Data>\n"
+                + "    </wps:Input>\n"
                 + "    <wps:Input>\n"
                 + "      <ows:Identifier>outputPixelValues</ows:Identifier>\n"
                 + "      <wps:Data>\n"
                 + "        <wps:LiteralData>50</wps:LiteralData>\n"
-                + "      </wps:Data>\n" 
-                + "    </wps:Input>\n" 
+                + "      </wps:Data>\n"
+                + "    </wps:Input>\n"
                 + "    <wps:Input>\n"
                 + "      <ows:Identifier>outputPixelValues</ows:Identifier>\n"
                 + "      <wps:Data>\n"
                 + "        <wps:LiteralData>110</wps:LiteralData>\n"
-                + "      </wps:Data>\n" 
-                + "    </wps:Input>\n" 
+                + "      </wps:Data>\n"
+                + "    </wps:Input>\n"
                 + "    <wps:Input>\n"
                 + "      <ows:Identifier>outputPixelValues</ows:Identifier>\n"
                 + "      <wps:Data>\n"
                 + "        <wps:LiteralData>255</wps:LiteralData>\n"
-                + "      </wps:Data>\n" 
-                + "    </wps:Input>\n" 
+                + "      </wps:Data>\n"
+                + "    </wps:Input>\n"
                 + "    <wps:Input>\n"
                 + "      <ows:Identifier>noData</ows:Identifier>\n"
                 + "      <wps:Data>\n"
                 + "        <wps:LiteralData>0</wps:LiteralData>\n"
-                + "      </wps:Data>\n" 
-                + "    </wps:Input>\n" 
-                
+                + "      </wps:Data>\n"
+                + "    </wps:Input>\n"
+
                 + "  </wps:DataInputs>\n"
                 + "  <wps:ResponseForm>\n"
                 + "    <wps:RawDataOutput mimeType=\"application/arcgrid\">\n"
@@ -136,16 +136,16 @@ public class RangeLookupTest extends WPSTestSupport {
         MockHttpServletResponse response = postAsServletResponse(root(), xml);
         //System.out.println(response.getOutputStreamContent());
         InputStream is = getBinaryInputStream(response);
-        
+
         ArcGridFormat format = new ArcGridFormat();
         GridCoverage gc = format.getReader(is).read(null);
-        
+
         assertTrue(new Envelope(144.9, 146.1, -40.9, -43.1).contains(new ReferencedEnvelope(gc.getEnvelope())));
-        
+
         double[] valueOnRangeA = (double[]) gc.evaluate(new DirectPosition2D(145.55, -42));
         double[] valueOnRangeB = (double[]) gc.evaluate(new DirectPosition2D(145.9584, -41.6587));
         double[] valueOutsideRange = (double[]) gc.evaluate(new DirectPosition2D(145.22, -42.66));
-        
+
         assertEquals(50.0, valueOnRangeA[0], DELTA);
         assertEquals(110.0, valueOnRangeB[0], DELTA);
         assertEquals(0.0, valueOutsideRange[0], DELTA);

@@ -11,16 +11,15 @@ import java.io.IOException;
 import org.geoserver.util.IOUtils;
 
 /**
- * Test data for migration from 2.2 -> 2.3 
- * 
- * @author mcr
+ * Test data for migration from 2.2 -> 2.3
  *
+ * @author mcr
  */
-public class Security_2_2_TestData extends SystemTestData{
-    
+public class Security_2_2_TestData extends SystemTestData {
+
     public Security_2_2_TestData() throws IOException {
         super();
-        
+
     }
 
     @Override

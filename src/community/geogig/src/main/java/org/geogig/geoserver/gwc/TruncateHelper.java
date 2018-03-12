@@ -50,7 +50,7 @@ class TruncateHelper {
     private static final Logger LOGGER = LoggerFactory.getLogger(TruncateHelper.class);
 
     public static void issueTruncateTasks(Context context, Optional<Ref> oldRef,
-            Optional<Ref> newRef, GeoServerTileLayer tileLayer, TileBreeder breeder) {
+                                          Optional<Ref> newRef, GeoServerTileLayer tileLayer, TileBreeder breeder) {
 
         final ObjectId oldCommit = oldRef.isPresent() ? oldRef.get().getObjectId() : ObjectId.NULL;
         final ObjectId newCommit = newRef.isPresent() ? newRef.get().getObjectId() : ObjectId.NULL;
@@ -123,7 +123,7 @@ class TruncateHelper {
     }
 
     private static Geometry bufferAndSimplifyBySizeOfSmallerTile(Geometry geomInGridsetCrs,
-            CoordinateReferenceSystem gridSetCrs, GridSubset gridSubset) {
+                                                                 CoordinateReferenceSystem gridSetCrs, GridSubset gridSubset) {
 
         double bufferRatio;
         // try {
@@ -178,7 +178,7 @@ class TruncateHelper {
     }
 
     private static void truncate(final GeoServerTileLayer tileLayer, final String gridsetId,
-            final Geometry geomInGridsetCrs, final TileBreeder breeder) {
+                                 final Geometry geomInGridsetCrs, final TileBreeder breeder) {
 
         final List<MimeType> mimeTypes = tileLayer.getMimeTypes();
         final Set<String> cachedStyles = getCachedStyles(tileLayer);
@@ -202,8 +202,8 @@ class TruncateHelper {
     }
 
     private static void truncate(TileBreeder breeder, GeoServerTileLayer tileLayer,
-            GridSubset gridSubset, MimeType mimeType, Map<String, String> parameters,
-            Geometry geomInGridsetCrs) {
+                                 GridSubset gridSubset, MimeType mimeType, Map<String, String> parameters,
+                                 Geometry geomInGridsetCrs) {
 
         Integer zoomStart = gridSubset.getMinCachedZoom();
         Integer zoomStop = gridSubset.getMaxCachedZoom();
@@ -237,7 +237,7 @@ class TruncateHelper {
     }
 
     private static Geometry transformToGridsetCrs(Geometry minimalBounds,
-            CoordinateReferenceSystem defaultCrs, CoordinateReferenceSystem gridSetCrs) {
+                                                  CoordinateReferenceSystem defaultCrs, CoordinateReferenceSystem gridSetCrs) {
 
         Geometry geomInGridsetCrs;
         try {

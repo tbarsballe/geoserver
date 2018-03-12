@@ -33,7 +33,7 @@ import org.springframework.context.ApplicationContextAware;
 
 /**
  * The default CSW implementation
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class DefaultWebCatalogService implements WebCatalogService, ApplicationContextAware {
@@ -50,7 +50,7 @@ public class DefaultWebCatalogService implements WebCatalogService, ApplicationC
         this.csw = gs.getService(CSWInfo.class);
         this.gs = gs;
     }
-    
+
     public CSWInfo getServiceInfo() {
         return gs.getService(CSWInfo.class);
     }
@@ -59,13 +59,12 @@ public class DefaultWebCatalogService implements WebCatalogService, ApplicationC
     public CapabilitiesType getCapabilities(GetCapabilitiesType request) throws ServiceException {
         checkStore();
         CapabilitiesType caps = new GetCapabilities(getServiceInfo(), this.store, context).run(request);
-        
+
         // check for decorator extensions
-        for(CapabilitiesDecorator decorator : GeoServerExtensions.extensions(CapabilitiesDecorator.class))
-        {
+        for (CapabilitiesDecorator decorator : GeoServerExtensions.extensions(CapabilitiesDecorator.class)) {
             caps = decorator.decorate(caps, this.store);
         }
-        
+
         return caps;
     }
 
@@ -119,7 +118,7 @@ public class DefaultWebCatalogService implements WebCatalogService, ApplicationC
         checkStore();
         return new DirectDownload(getServiceInfo(), this.store).run(request);
     }
-    
+
     /**
      * Checks we have a store to use
      */
@@ -136,21 +135,21 @@ public class DefaultWebCatalogService implements WebCatalogService, ApplicationC
         this.context = applicationContext;
         // pick the implementation of CatalogStore that has the higher priority
         List<CatalogStore> storeCandidates = GeoServerExtensions.extensions(CatalogStore.class, applicationContext);
-        
+
         if (storeCandidates != null && storeCandidates.size() > 0) {
-        	String defaultStore = System.getProperty("DefaultCatalogStore");            
-	        if (defaultStore != null) {
-		        for (CatalogStore store : storeCandidates) {
-		        	if (store.getClass().getName().equals(defaultStore)) {
-		        		this.store = store;
-		        		break;
-		        	}
-		        }
-	        }
-	        
-	        if (store == null) {
-	        	store = storeCandidates.get(0);
-	        }
+            String defaultStore = System.getProperty("DefaultCatalogStore");
+            if (defaultStore != null) {
+                for (CatalogStore store : storeCandidates) {
+                    if (store.getClass().getName().equals(defaultStore)) {
+                        this.store = store;
+                        break;
+                    }
+                }
+            }
+
+            if (store == null) {
+                store = storeCandidates.get(0);
+            }
         }
     }
 

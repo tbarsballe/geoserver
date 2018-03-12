@@ -22,16 +22,15 @@ import org.geoserver.security.impl.RoleCalculator;
 
 /**
  * Basic implementation for filters supporting J2EE as a {@link org.geoserver.security.config.RoleSource}
- * 
- * @author Mauro Bartolomeoli (mauro.bartolomeoli@geo-solutions.it)
  *
+ * @author Mauro Bartolomeoli (mauro.bartolomeoli@geo-solutions.it)
  */
 public abstract class GeoServerJ2eeBaseAuthenticationFilter extends
         GeoServerPreAuthenticatedUserNameFilter {
 
     @Override
-    protected Collection<GeoServerRole> getRoles(HttpServletRequest request, String principal) throws IOException{
-        if(J2eeAuthenticationBaseFilterConfig.J2EERoleSource.J2EE.equals(getRoleSource())) {
+    protected Collection<GeoServerRole> getRoles(HttpServletRequest request, String principal) throws IOException {
+        if (J2eeAuthenticationBaseFilterConfig.J2EERoleSource.J2EE.equals(getRoleSource())) {
             return getRolesFromJ2EE(request, principal);
         }
         return super.getRoles(request, principal);
@@ -39,27 +38,26 @@ public abstract class GeoServerJ2eeBaseAuthenticationFilter extends
 
     /**
      * Implements roles retrieval from the J2EE container.
-     * 
+     *
      * @param request
      * @param principal
-     *
      * @throws IOException
      */
     protected Collection<GeoServerRole> getRolesFromJ2EE(
             HttpServletRequest request, String principal) throws IOException {
-        
+
         Collection<GeoServerRole> roles = new ArrayList<GeoServerRole>();
-        boolean useActiveService = getRoleServiceName()==null || 
-                getRoleServiceName().trim().length()==0;
-      
+        boolean useActiveService = getRoleServiceName() == null ||
+                getRoleServiceName().trim().length() == 0;
+
         GeoServerRoleService service = useActiveService ?
-              getSecurityManager().getActiveRoleService() :
-              getSecurityManager().loadRoleService(getRoleServiceName());
-                                
-        for (GeoServerRole role: service.getRoles())
-          if (request.isUserInRole(role.getAuthority()))
-              roles.add(role);
-      
+                getSecurityManager().getActiveRoleService() :
+                getSecurityManager().loadRoleService(getRoleServiceName());
+
+        for (GeoServerRole role : service.getRoles())
+            if (request.isUserInRole(role.getAuthority()))
+                roles.add(role);
+
         RoleCalculator calc = new RoleCalculator(service);
         calc.addInheritedRoles(roles);
         calc.addMappedSystemRoles(roles);

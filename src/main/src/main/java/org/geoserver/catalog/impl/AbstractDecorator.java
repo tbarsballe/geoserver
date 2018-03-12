@@ -15,6 +15,7 @@ import org.geoserver.catalog.Wrapper;
  * {@link #toString()} to the delegate</li>
  * <li>implements the Wrapper interface for programmatic extraction</li>
  * </ul>
+ *
  * @deprecated use org.geotools.decorate.AbstractDecorator
  */
 public abstract class AbstractDecorator<D> extends org.geotools.decorate.AbstractDecorator<D>

@@ -23,7 +23,7 @@ import org.vfny.geoserver.wcs.WcsException.WcsExceptionCode;
  * <p>
  * The parser validates the coverage requested on a WCS 1.0.0 GetCoverage request.
  * </p>
- * 
+ *
  * @author Alessio Fabiani, GeoSolutions
  */
 public class CoverageKvpParser extends KvpParser {
@@ -37,9 +37,9 @@ public class CoverageKvpParser extends KvpParser {
     }
 
     @SuppressWarnings("unchecked")
-	@Override
+    @Override
     public Object parse(String value) throws Exception {
-    	final List<String> coverages = new ArrayList<String>();
+        final List<String> coverages = new ArrayList<String>();
         final List<String> identifiers = KvpUtils.readFlat(value);
         if (identifiers == null || identifiers.size() == 0) {
             throw new WcsException("Required paramer, coverage, missing",
@@ -49,7 +49,7 @@ public class CoverageKvpParser extends KvpParser {
         for (String coverage : identifiers) {
             final LayerInfo layer = catalog.getLayerByName(coverage);
             if (layer == null || layer.getType() != PublishedType.RASTER)
-                throw new WcsException("Could not find coverage '" + coverage + "'",InvalidParameterValue, "coverage");
+                throw new WcsException("Could not find coverage '" + coverage + "'", InvalidParameterValue, "coverage");
             coverages.add(coverage);
         }
 

@@ -57,9 +57,8 @@ import org.geotools.util.logging.Logging;
 
 /**
  * Provides the form components for the arcsde coverage edit page
- * 
+ *
  * @author Gabriel Roldan
- * 
  */
 public final class ArcSDECoverageStoreEditPanel extends StoreEditPanel {
 
@@ -120,7 +119,7 @@ public final class ArcSDECoverageStoreEditPanel extends StoreEditPanel {
             private static final long serialVersionUID = 1L;
 
             public FormComponent<?>[] getDependentFormComponents() {
-                return new FormComponent<?>[] { server, port, instance, user, password, table };
+                return new FormComponent<?>[]{server, port, instance, user, password, table};
             }
 
             public void validate(final Form<?> form) {
@@ -158,11 +157,10 @@ public final class ArcSDECoverageStoreEditPanel extends StoreEditPanel {
     }
 
     /**
-     * 
      * @param paramsModel
      * @param isNew
      * @return a combobox set up to display the list of available raster tables if the StoreInfo is
-     *         new, or a non editable text box if we're editing an existing StoreInfo
+     * new, or a non editable text box if we're editing an existing StoreInfo
      */
     private FormComponent<String> addTableNameComponent(final IModel<Map<String, Object>> paramsModel, final boolean isNew) {
 
@@ -307,7 +305,7 @@ public final class ArcSDECoverageStoreEditPanel extends StoreEditPanel {
 
                 StoreInfo store;
                 String type;
-                for (Iterator<StoreInfo> it = stores.iterator(); it.hasNext();) {
+                for (Iterator<StoreInfo> it = stores.iterator(); it.hasNext(); ) {
                     store = it.next();
                     type = store.getType();
                     if (arcsdeCoverageType.equals(type) || arcsdeVectorType.equals(type)) {

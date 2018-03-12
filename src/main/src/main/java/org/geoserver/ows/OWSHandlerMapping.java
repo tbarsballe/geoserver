@@ -18,9 +18,9 @@ import org.geotools.util.logging.Logging;
 import org.springframework.web.servlet.handler.SimpleUrlHandlerMapping;
 
 /**
- * Handler mapping for OWS services. 
+ * Handler mapping for OWS services.
  * <p>
- * This handler mapping extends a set of mappings to allow for a request to specifying a 
+ * This handler mapping extends a set of mappings to allow for a request to specifying a
  * local workspace. Consider the following mappings:</p>
  * <pre>
  *   &lt;property name="mappings"&gt;
@@ -37,20 +37,20 @@ import org.springframework.web.servlet.handler.SimpleUrlHandlerMapping;
  * </pre>
  * <p>
  * Where "topp" and "nurc" are workspaces.
- *  </p>
- * @author Justin Deoliveira, OpenGeo
+ * </p>
  *
+ * @author Justin Deoliveira, OpenGeo
  */
 public class OWSHandlerMapping extends SimpleUrlHandlerMapping {
-    
+
     static final Logger LOGGER = Logging.getLogger(OWSHandlerMapping.class);
 
     Catalog catalog;
-    
+
     public OWSHandlerMapping(Catalog catalog) {
         this.catalog = catalog;
     }
-    
+
     @Override
     protected Object lookupHandler(String urlPath, HttpServletRequest request) throws Exception {
         Object h = super.lookupHandler(urlPath, request);
@@ -61,7 +61,7 @@ public class OWSHandlerMapping extends SimpleUrlHandlerMapping {
             if (j > i) {
                 String first = urlPath.substring(i, j);
                 String last = urlPath.substring(j);
-                
+
                 WorkspaceInfo ws = catalog.getWorkspaceByName(first);
                 if ((ws == null) && LOGGER.isLoggable(Level.FINEST)) {
                     LOGGER.fine("Could not find workspace " + first + ", trying a layer group lookup");
@@ -75,7 +75,7 @@ public class OWSHandlerMapping extends SimpleUrlHandlerMapping {
                         NamespaceInfo ns = catalog.getNamespaceByPrefix(wsName);
                         if (ns != null) {
                             final boolean layerFound = catalog.getLayerByName(new NameImpl(ns.getURI(), first)) != null;
-                            if(!layerFound && LOGGER.isLoggable(Level.FINEST)) {
+                            if (!layerFound && LOGGER.isLoggable(Level.FINEST)) {
                                 LOGGER.fine("Could not find layer " + first + ", trying a layer group lookup");
                             }
                             if (layerFound) {
@@ -89,20 +89,20 @@ public class OWSHandlerMapping extends SimpleUrlHandlerMapping {
                             }
                         }
                     }
-                    
+
                     h = super.lookupHandler(last, request);
-                } else if(catalog.getLayerGroupByName((WorkspaceInfo) null, first) != null) {
+                } else if (catalog.getLayerGroupByName((WorkspaceInfo) null, first) != null) {
                     h = super.lookupHandler(last, request);
                 } else {
                     LOGGER.fine("Could not a layer group named " + first);
                 }
-                
+
             }
         }
-        
+
         return h;
     }
-    
+
     @Override
     public String toString() {
         return "OWSHandlerMapping[" + this.getHandlerMap() + "]";

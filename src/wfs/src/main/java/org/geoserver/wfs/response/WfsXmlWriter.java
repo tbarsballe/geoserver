@@ -48,8 +48,8 @@ import org.xml.sax.helpers.NamespaceSupport;
  *  writer.close();
  * </pre>
  * </p>
- * @author Justin Deoliveira, The Open Planning Project
  *
+ * @author Justin Deoliveira, The Open Planning Project
  */
 public abstract class WfsXmlWriter {
     /**
@@ -102,7 +102,7 @@ public abstract class WfsXmlWriter {
         namespaceSupport.declarePrefix("xs", XS.NAMESPACE);
         namespaceSupport.declarePrefix("ogc", OGC.NAMESPACE);
         namespaceSupport.declarePrefix("gml", GML.NAMESPACE);
-        
+
         namespaceSupport.declarePrefix("wfs", org.geoserver.wfs.xml.v1_0_0.WFS.NAMESPACE);
         namespaceSupport.declarePrefix("", org.geoserver.wfs.xml.v1_0_0.WFS.NAMESPACE);
     }
@@ -117,7 +117,7 @@ public abstract class WfsXmlWriter {
 
     private void init() throws IOException {
         //namespace declarations
-        for (Enumeration e = namespaceSupport.getDeclaredPrefixes(); e.hasMoreElements();) {
+        for (Enumeration e = namespaceSupport.getDeclaredPrefixes(); e.hasMoreElements(); ) {
             String pre = (String) e.nextElement();
             String uri = namespaceSupport.getURI(pre);
 
@@ -132,7 +132,7 @@ public abstract class WfsXmlWriter {
         if (!schemaLocations.isEmpty()) {
             StringBuffer buffer = new StringBuffer();
 
-            for (Iterator e = schemaLocations.entrySet().iterator(); e.hasNext();) {
+            for (Iterator e = schemaLocations.entrySet().iterator(); e.hasNext(); ) {
                 Map.Entry entry = (Entry) e.next();
                 String uri = (String) entry.getKey();
                 String location = (String) entry.getValue();
@@ -157,12 +157,12 @@ public abstract class WfsXmlWriter {
     }
 
     public void openTag(String prefix, String name, String[] attributes)
-        throws IOException {
+            throws IOException {
         boolean root = writer == null;
 
         if (root) {
-            writer = new BufferedWriter(new OutputStreamWriter(output, 
-                wfs.getGeoServer().getSettings().getCharset()));
+            writer = new BufferedWriter(new OutputStreamWriter(output,
+                    wfs.getGeoServer().getSettings().getCharset()));
 
             //write the processing instruction
             writer.write("<?xml version=\"1.0\" encoding=\"" + charSetEncoding + "\"?>");
@@ -215,7 +215,7 @@ public abstract class WfsXmlWriter {
 
             //set the schema location
             schemaLocations.put(org.geoserver.wfs.xml.v1_0_0.WFS.NAMESPACE,
-                ResponseUtils.appendPath(wfs.getSchemaBaseURL(), "wfs/1.0.0/WFS-transaction.xsd"));
+                    ResponseUtils.appendPath(wfs.getSchemaBaseURL(), "wfs/1.0.0/WFS-transaction.xsd"));
 
             version = "1.0.0";
         }
@@ -230,7 +230,7 @@ public abstract class WfsXmlWriter {
 
             //set the schema location
             schemaLocations.put(org.geoserver.wfs.xml.v1_1_0.WFS.NAMESPACE,
-                ResponseUtils.appendPath(wfs.getSchemaBaseURL(), "wfs/1.1.0/wfs.xsd"));
+                    ResponseUtils.appendPath(wfs.getSchemaBaseURL(), "wfs/1.1.0/wfs.xsd"));
 
             version = "1.1.0";
         }

@@ -29,51 +29,50 @@ import org.springframework.util.StringUtils;
 
 /**
  * Named Digest Authentication Filter
- * 
- * @author mcr
  *
+ * @author mcr
  */
 public class GeoServerDigestAuthenticationFilter extends GeoServerCompositeFilter
-    implements AuthenticationCachingFilter, GeoServerAuthenticationFilter {
-    
+        implements AuthenticationCachingFilter, GeoServerAuthenticationFilter {
+
     private DigestAuthenticationEntryPoint aep;
+
     @Override
     public void initializeFromConfig(SecurityNamedServiceConfig config) throws IOException {
         super.initializeFromConfig(config);
 
 
-        
-        DigestAuthenticationFilterConfig authConfig = 
+        DigestAuthenticationFilterConfig authConfig =
                 (DigestAuthenticationFilterConfig) config;
 
         aep = new DigestAuthenticationEntryPoint();
         aep.setKey(config.getName());
         aep.setNonceValiditySeconds(
-                authConfig.getNonceValiditySeconds()<=0 ? 300 : authConfig.getNonceValiditySeconds());
+                authConfig.getNonceValiditySeconds() <= 0 ? 300 : authConfig.getNonceValiditySeconds());
         aep.setRealmName(GeoServerSecurityManager.REALM);
         try {
             aep.afterPropertiesSet();
         } catch (Exception e) {
             throw new IOException(e);
         }
-        
+
         DigestAuthenticationFilter filter = new DigestAuthenticationFilter();
 
         filter.setCreateAuthenticatedToken(true);
         filter.setPasswordAlreadyEncoded(true);
-        
+
 
         filter.setAuthenticationEntryPoint(aep);
-        
-        
-        HttpDigestUserDetailsServiceWrapper wrapper = 
+
+
+        HttpDigestUserDetailsServiceWrapper wrapper =
                 new HttpDigestUserDetailsServiceWrapper(
                         getSecurityManager().loadUserGroupService(authConfig.getUserGroupServiceName()),
-                        Charset.defaultCharset()); 
+                        Charset.defaultCharset());
         filter.setUserDetailsService(wrapper);
-        
+
         filter.afterPropertiesSet();
-        getNestedFilters().add(filter);        
+        getNestedFilters().add(filter);
     }
 
     @Override
@@ -82,11 +81,11 @@ public class GeoServerDigestAuthenticationFilter extends GeoServerCompositeFilte
         req.setAttribute(GeoServerSecurityFilter.AUTHENTICATION_ENTRY_POINT_HEADER, aep);
         Integer validity = aep.getNonceValiditySeconds();
         // upper limits in the cache, makes no sense to cache an expired authentication token
-        req.setAttribute(GeoServerCompositeFilter.CACHE_KEY_IDLE_SECS,validity);
-        req.setAttribute(GeoServerCompositeFilter.CACHE_KEY_LIVE_SECS,validity);
-        
-        super.doFilter(req, res, chain);                
-    }            
+        req.setAttribute(GeoServerCompositeFilter.CACHE_KEY_IDLE_SECS, validity);
+        req.setAttribute(GeoServerCompositeFilter.CACHE_KEY_LIVE_SECS, validity);
+
+        super.doFilter(req, res, chain);
+    }
 
     @Override
     public AuthenticationEntryPoint getAuthenticationEntryPoint() {
@@ -95,8 +94,8 @@ public class GeoServerDigestAuthenticationFilter extends GeoServerCompositeFilte
 
     @Override
     public String getCacheKey(HttpServletRequest request) {
-        
-        if (request.getSession(false)!=null) // no caching if there is an HTTP session
+
+        if (request.getSession(false) != null) // no caching if there is an HTTP session
             return null;
 
         String header = request.getHeader("Authorization");
@@ -105,22 +104,22 @@ public class GeoServerDigestAuthenticationFilter extends GeoServerCompositeFilte
             String section212response = header.substring(7);
 
             String[] headerEntries = DigestAuthUtils.splitIgnoringQuotes(section212response, ',');
-            Map<String,String> headerMap = DigestAuthUtils.splitEachArrayElementAndCreateMap(headerEntries, "=", "\"");
-            
+            Map<String, String> headerMap = DigestAuthUtils.splitEachArrayElementAndCreateMap(headerEntries, "=", "\"");
+
             String username = headerMap.get("username");
             String realm = headerMap.get("realm");
             String nonce = headerMap.get("nonce");
             String responseDigest = headerMap.get("response");
-            
-            if (StringUtils.hasLength(username)== false || 
-                StringUtils.hasLength(realm)== false ||
-                StringUtils.hasLength(nonce)== false ||
-                StringUtils.hasLength(responseDigest)== false)
+
+            if (StringUtils.hasLength(username) == false ||
+                    StringUtils.hasLength(realm) == false ||
+                    StringUtils.hasLength(nonce) == false ||
+                    StringUtils.hasLength(responseDigest) == false)
                 return null;
-            
+
             if (GeoServerUser.ROOT_USERNAME.equals(username))
                 return null;
-            
+
             StringBuffer buff = new StringBuffer();
             buff.append(username).append(":");
             buff.append(realm).append(":");
@@ -130,8 +129,9 @@ public class GeoServerDigestAuthenticationFilter extends GeoServerCompositeFilte
         } else {
             return null;
         }
-            
+
     }
+
     /**
      * @see org.geoserver.security.filter.GeoServerAuthenticationFilter#applicableForHtml()
      */

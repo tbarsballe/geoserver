@@ -33,11 +33,11 @@ public class FinalizeBackupTasklet extends AbstractCatalogBackupRestoreTasklet {
 
     @Override
     RepeatStatus doExecute(StepContribution contribution, ChunkContext chunkContext, JobExecution jobExecution)
-        throws Exception {
+            throws Exception {
 
         BackupExecutionAdapter backupExecution = backupFacade.getBackupExecutions().get(jobExecution.getId());
         boolean bestEffort = Boolean.parseBoolean(
-            jobExecution.getJobParameters().getString(Backup.PARAM_BEST_EFFORT_MODE, "false"));
+                jobExecution.getJobParameters().getString(Backup.PARAM_BEST_EFFORT_MODE, "false"));
 
         final Long executionId = jobExecution.getId();
 

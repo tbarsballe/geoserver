@@ -60,17 +60,19 @@ import com.vividsolutions.jts.geom.GeometryFactory;
 
 /**
  * Handles a GetMap request that spects a map in PDF format.
- * 
+ *
  * @author Pierre-Emmanuel Balageas, ALCER (http://www.alcer.com)
  * @author Simone Giannecchini - GeoSolutions
  * @author Gabriel Roldan
  * @version $Id$
  */
 public class PDFMapResponse extends AbstractMapResponse {
-    /** A logger for this class. */
+    /**
+     * A logger for this class.
+     */
     private static final Logger LOGGER = org.geotools.util.logging.Logging
             .getLogger("org.vfny.geoserver.responses.wms.map.pdf");
-    
+
     /**
      * Whether to apply the new vector hatch fill optimization, or not (on by default, this is just a safeguard)
      */
@@ -95,9 +97,9 @@ public class PDFMapResponse extends AbstractMapResponse {
      * {@code output} once we call {@link Document#close()}. If there's no other way to do so, it'd
      * be better to actually split out the process into produceMap/write?
      * </p>
-     * 
+     *
      * @see org.geoserver.ows.Response#write(java.lang.Object, java.io.OutputStream,
-     *      org.geoserver.platform.Operation)
+     * org.geoserver.platform.Operation)
      */
     @Override
     public void write(Object value, OutputStream output, Operation operation) throws IOException,
@@ -166,7 +168,7 @@ public class PDFMapResponse extends AbstractMapResponse {
             Rectangle paintArea = new Rectangle(width, height);
 
             StreamingRenderer renderer;
-            if(ENCODE_TILING_PATTERNS) {
+            if (ENCODE_TILING_PATTERNS) {
                 renderer = new PDFStreamingRenderer();
             } else {
                 renderer = new StreamingRenderer();
@@ -258,21 +260,21 @@ public class PDFMapResponse extends AbstractMapResponse {
             throw new ServiceException("Error setting up the PDF", t, "internalError");
         }
     }
-    
+
     private static class PDFStreamingRenderer extends StreamingRenderer {
-        
+
         public PDFStreamingRenderer() {
             this.painter = new PDFStyledPainter(labelCache);
         }
-        
+
     }
-    
+
     /**
      * Optimized StyledShapePainter that can optimize painting repeated external graphics
-     * by encoding them in a native PDF pattern painter, with no repetition 
+     * by encoding them in a native PDF pattern painter, with no repetition
      */
     private static class PDFStyledPainter extends StyledShapePainter {
-        
+
         /**
          * Re-creating the patterns is expensive and would increase the overall
          * document size, keep a cache of them instead
@@ -282,12 +284,12 @@ public class PDFMapResponse extends AbstractMapResponse {
         public PDFStyledPainter(LabelCache labelCache) {
             super(labelCache);
         }
-        
+
         @Override
         protected void paintGraphicFill(Graphics2D graphics, Shape shape, Style2D graphicFill,
-                double scale) {
-            
-            if(graphics instanceof PdfGraphics2D && (graphicFill instanceof IconStyle2D || isMarkNonHatchFill(graphicFill))) {
+                                        double scale) {
+
+            if (graphics instanceof PdfGraphics2D && (graphicFill instanceof IconStyle2D || isMarkNonHatchFill(graphicFill))) {
                 fillShapeAsPattern((PdfGraphics2D) graphics, shape, graphicFill, scale);
             } else {
                 super.paintGraphicFill(graphics, shape, graphicFill, scale);
@@ -295,18 +297,18 @@ public class PDFMapResponse extends AbstractMapResponse {
         }
 
         private boolean isMarkNonHatchFill(Style2D graphicFill) {
-            if(!(graphicFill instanceof MarkStyle2D)) {
+            if (!(graphicFill instanceof MarkStyle2D)) {
                 return false;
             }
-            
-            if(OPTIMIZE_VECTOR_HATCH_FILLS) {
+
+            if (OPTIMIZE_VECTOR_HATCH_FILLS) {
                 MarkStyle2D ms = (MarkStyle2D) graphicFill;
                 ParallelLinesFiller filler = ParallelLinesFiller.fromStipple(ms.getShape());
-                if(filler != null) {
+                if (filler != null) {
                     return false;
                 }
             }
-            
+
             return true;
         }
 
@@ -332,26 +334,26 @@ public class PDFMapResponse extends AbstractMapResponse {
                         int segtype = pathIterator.currentSegment(coords);
                         switch (segtype) {
 
-                        case PathIterator.SEG_MOVETO:
-                            cb.moveTo(coords[0], coords[1]);
-                            break;
+                            case PathIterator.SEG_MOVETO:
+                                cb.moveTo(coords[0], coords[1]);
+                                break;
 
-                        case PathIterator.SEG_LINETO:
-                            cb.lineTo(coords[0], coords[1]);
-                            break;
+                            case PathIterator.SEG_LINETO:
+                                cb.lineTo(coords[0], coords[1]);
+                                break;
 
-                        case PathIterator.SEG_QUADTO:
-                            cb.curveTo(coords[0], coords[1], coords[2], coords[3]);
-                            break;
+                            case PathIterator.SEG_QUADTO:
+                                cb.curveTo(coords[0], coords[1], coords[2], coords[3]);
+                                break;
 
-                        case PathIterator.SEG_CUBICTO:
-                            cb.curveTo(coords[0], coords[1], coords[2], coords[3], coords[4],
-                                    coords[5]);
-                            break;
+                            case PathIterator.SEG_CUBICTO:
+                                cb.curveTo(coords[0], coords[1], coords[2], coords[3], coords[4],
+                                        coords[5]);
+                                break;
 
-                        case PathIterator.SEG_CLOSE:
-                            cb.closePath();
-                            break;
+                            case PathIterator.SEG_CLOSE:
+                                cb.closePath();
+                                break;
 
                         }
                         pathIterator.next();
@@ -370,10 +372,10 @@ public class PDFMapResponse extends AbstractMapResponse {
         }
 
         private PdfPatternPainter getPatternPainter(Style2D graphicFill,
-                final PdfContentByte content, double scale) {
+                                                    final PdfContentByte content, double scale) {
             PdfPatternPainter pattern = patternCache.get(graphicFill);
             if (pattern == null) {
-                
+
                 pattern = buildPattern(graphicFill, content, scale);
                 patternCache.put(graphicFill, pattern);
             }
@@ -382,7 +384,7 @@ public class PDFMapResponse extends AbstractMapResponse {
 
         private PdfPatternPainter buildPattern(Style2D graphicFill, final PdfContentByte content, double scale) {
             PdfPatternPainter pattern;
-            if(graphicFill instanceof IconStyle2D) {
+            if (graphicFill instanceof IconStyle2D) {
                 final Icon icon = ((IconStyle2D) graphicFill).getIcon();
                 int width = icon.getIconWidth();
                 int height = icon.getIconHeight();
@@ -390,7 +392,7 @@ public class PDFMapResponse extends AbstractMapResponse {
                 Graphics2D patternGraphic = pattern.createGraphics(width, height);
                 icon.paintIcon(null, patternGraphic, 0, 0);
                 patternGraphic.dispose();
-            } else if(graphicFill instanceof MarkStyle2D) {
+            } else if (graphicFill instanceof MarkStyle2D) {
                 MarkStyle2D mark = (MarkStyle2D) graphicFill;
                 int size = (int) Math.round(mark.getSize());
                 pattern = content.createPattern(size, size);
@@ -402,7 +404,7 @@ public class PDFMapResponse extends AbstractMapResponse {
                 AffineTransform2D identityTransf = new AffineTransform2D(new AffineTransform());
                 try {
                     paint(patternGraphic, new LiteShape2(stipplePoint, identityTransf, nullDecimator, false), mark, scale);
-                } catch(TransformException | FactoryException e) {
+                } catch (TransformException | FactoryException e) {
                     // this should not happen given the arguments passed to the lite shape
                     throw new RuntimeException(e);
                 }

@@ -42,14 +42,13 @@ import com.vividsolutions.jts.geom.Envelope;
  * Processes standard Delete elements
  *
  * @author Andrea Aime - TOPP
- *
  */
 public class DeleteElementHandler extends AbstractTransactionElementHandler {
     /**
      * logger
      */
     static Logger LOGGER = org.geotools.util.logging.Logging.getLogger("org.geoserver.wfs");
-    
+
     FilterFactory factory = CommonFactoryFinder.getFilterFactory(null);
 
     public DeleteElementHandler(GeoServer gs) {
@@ -68,25 +67,25 @@ public class DeleteElementHandler extends AbstractTransactionElementHandler {
     }
 
     public void checkValidity(TransactionElement delete, Map featureTypeInfos)
-        throws WFSTransactionException {
+            throws WFSTransactionException {
         if (!getInfo().getServiceLevel().getOps().contains(WFSInfo.Operation.TRANSACTION_DELETE)) {
             throw new WFSException(delete, "Transaction Delete support is not enabled");
         }
 
         Filter f = delete.getFilter();
-        
+
         if ((f == null) || Filter.INCLUDE.equals(f)) {
             throw new WFSTransactionException("Must specify filter for delete",
-                "MissingParameterValue");
+                    "MissingParameterValue");
         }
     }
 
-    public void execute(TransactionElement delete, TransactionRequest request, Map featureStores, 
-        TransactionResponse response, TransactionListener listener) throws WFSTransactionException {
-        
+    public void execute(TransactionElement delete, TransactionRequest request, Map featureStores,
+                        TransactionResponse response, TransactionListener listener) throws WFSTransactionException {
+
         QName elementName = delete.getTypeName();
         String handle = delete.getHandle();
-        
+
         long deleted = response.getTotalDeleted().longValue();
 
         SimpleFeatureStore store = DataUtilities.simple((FeatureStore) featureStores.get(elementName));
@@ -100,18 +99,18 @@ public class DeleteElementHandler extends AbstractTransactionElementHandler {
 
         try {
             Filter filter = delete.getFilter();
-            
+
             // make sure all geometric elements in the filter have a crs, and that the filter
             // is reprojected to store's native crs as well
             CoordinateReferenceSystem declaredCRS = WFSReprojectionUtil.getDeclaredCrs(
                     store.getSchema(), request.getVersion());
             filter = WFSReprojectionUtil.normalizeFilterCRS(filter, store.getSchema(), declaredCRS);
-            
+
             // notify listeners
             TransactionEvent event = new TransactionEvent(TransactionEventType.PRE_DELETE, request,
                     elementName, store.getFeatures(filter));
-            event.setSource( Delete.WFS11.unadapt((Delete)delete));
-            listener.dataStoreChange( event );
+            event.setSource(Delete.WFS11.unadapt((Delete) delete));
+            listener.dataStoreChange(event);
 
             // compute damaged area
             Envelope damaged = store.getBounds(new Query(elementName.getLocalPart(), filter));
@@ -174,19 +173,19 @@ public class DeleteElementHandler extends AbstractTransactionElementHandler {
                 }
             } else {
                 // We don't have to worry about locking right now
-            	int deletedCount = store.getFeatures(filter).size();
-            	if(deletedCount > 0)
-            		deleted += deletedCount;
+                int deletedCount = store.getFeatures(filter).size();
+                if (deletedCount > 0)
+                    deleted += deletedCount;
                 store.removeFeatures(filter);
             }
         } catch (IOException e) {
             String msg = e.getMessage();
             String eHandle = delete.getHandle();
             String code = null;
-            
+
             //check case of feature lock exception and set appropriate exception
             //code
-            if ( e instanceof FeatureLockException ) {
+            if (e instanceof FeatureLockException) {
                 code = "MissingParameterValue";
             }
             throw new WFSTransactionException(msg, e, code, eHandle, handle);

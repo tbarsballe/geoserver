@@ -31,9 +31,8 @@ import org.opengis.filter.spatial.BBOX;
  * An attribute based regionating strategy assuming it's possible (and fast) to
  * sort on the user specified attribute. Features with higher values of the
  * attribute will be found in higher tiles.
- * 
+ *
  * @author Andrea Aime
- * 
  */
 public class NativeSortRegionatingStrategy extends
         CachedHierarchyRegionatingStrategy {
@@ -58,7 +57,7 @@ public class NativeSortRegionatingStrategy extends
         Map options = con.getRequest().getFormatOptions();
         attribute = (String) options.get("regionateAttr");
         if (attribute == null)
-            attribute = MapLayerInfo.getRegionateAttribute( featureType );
+            attribute = MapLayerInfo.getRegionateAttribute(featureType);
         if (attribute == null)
             throw new ServiceException("Regionating attribute has not been specified");
 
@@ -68,12 +67,12 @@ public class NativeSortRegionatingStrategy extends
             throw new ServiceException("Could not find regionating attribute "
                     + attribute + " in layer " + featureType.getName());
         }
-        
+
         // check we can actually sort on that attribute
-        if(!fs.getQueryCapabilities().supportsSorting(new SortBy[] {ff.sort(attribute, SortOrder.DESCENDING)}))
-            throw new ServiceException("Native sorting on the " + attribute 
+        if (!fs.getQueryCapabilities().supportsSorting(new SortBy[]{ff.sort(attribute, SortOrder.DESCENDING)}))
+            throw new ServiceException("Native sorting on the " + attribute
                     + " is not possible for layer " + featureType.getName());
-            
+
 
         // make sure a special db for this layer and attribute will be created
         return super.getDatabaseName(con, layer) + "_" + attribute;
@@ -81,12 +80,12 @@ public class NativeSortRegionatingStrategy extends
 
     @Override
     protected String getDatabaseName(FeatureTypeInfo cfg) throws Exception {
-        return super.getDatabaseName(cfg) + "_" +  MapLayerInfo.getRegionateAttribute(cfg);
+        return super.getDatabaseName(cfg) + "_" + MapLayerInfo.getRegionateAttribute(cfg);
     }
 
     public FeatureIterator getSortedFeatures(GeometryDescriptor geom,
-    		ReferencedEnvelope latLongEnv, ReferencedEnvelope nativeEnv, 
-    		Connection cacheConn) throws Exception {
+                                             ReferencedEnvelope latLongEnv, ReferencedEnvelope nativeEnv,
+                                             Connection cacheConn) throws Exception {
         // build the bbox filter
         FilterFactory ff = CommonFactoryFinder.getFilterFactory(null);
         BBOX filter = ff.bbox(geom.getLocalName(), nativeEnv.getMinX(),
@@ -95,13 +94,13 @@ public class NativeSortRegionatingStrategy extends
         // build an optimized query (only the necessary attributes
         Query q = new Query();
         q.setFilter(filter);
-        q.setPropertyNames(new String[] { geom.getLocalName(), attribute });
+        q.setPropertyNames(new String[]{geom.getLocalName(), attribute});
         // TODO: enable this when JTS learns how to compute centroids
         // without triggering the
         // generation of Coordinate[] out of the sequences...
         // q.setHints(new Hints(Hints.JTS_COORDINATE_SEQUENCE_FACTORY,
         // PackedCoordinateSequenceFactory.class));
-        q.setSortBy(new SortBy[] { ff.sort(attribute, SortOrder.DESCENDING) });
+        q.setSortBy(new SortBy[]{ff.sort(attribute, SortOrder.DESCENDING)});
 
         // return the reader
         return fs.getFeatures(q).features();

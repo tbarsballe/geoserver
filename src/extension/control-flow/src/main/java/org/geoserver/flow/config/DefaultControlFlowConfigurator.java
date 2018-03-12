@@ -40,7 +40,7 @@ import org.geotools.util.logging.Logging;
 
 /**
  * Basic property file based {@link ControlFlowConfigurator} implementation
- * 
+ *
  * @author Andrea Aime - OpenGeo
  * @author Juan Marin, OpenGeo
  */
@@ -48,13 +48,12 @@ public class DefaultControlFlowConfigurator implements ControlFlowConfigurator, 
     static final Pattern RATE_PATTERN = Pattern.compile("(\\d+)/([smhd])(;(\\d+)s)?");
 
     static final Logger LOGGER = Logging.getLogger(DefaultControlFlowConfigurator.class);
-    static final String PROPERTYFILENAME="controlflow.properties";
+    static final String PROPERTYFILENAME = "controlflow.properties";
 
     /**
      * Factors out the code to build a rate flow controller
-     * 
+     *
      * @author Andrea Aime - GeoSolutions
-     * 
      */
     static abstract class RateControllerBuilder {
         public FlowController build(String[] keys, String value) {
@@ -72,7 +71,7 @@ public class DefaultControlFlowConfigurator implements ControlFlowConfigurator, 
             if (userDelay != null) {
                 delay = Integer.parseInt(userDelay) * 1000;
             }
-            
+
             String service = keys.length >= 3 ? keys[2] : null;
             String request = keys.length >= 4 ? keys[3] : null;
             String format = keys.length >= 5 ? keys[4] : null;
@@ -83,20 +82,23 @@ public class DefaultControlFlowConfigurator implements ControlFlowConfigurator, 
 
         protected abstract KeyGenerator buildKeyGenerator(String[] keys, String value);
     }
+
     PropertyFileWatcher configFile;
 
     long timeout = -1;
 
-    /** Default watches controlflow.properties */
+    /**
+     * Default watches controlflow.properties
+     */
     public DefaultControlFlowConfigurator() {
         GeoServerResourceLoader loader = GeoServerExtensions.bean(GeoServerResourceLoader.class);
         Resource controlflow = loader.get(PROPERTYFILENAME);
-        configFile = new PropertyFileWatcher(controlflow);        
+        configFile = new PropertyFileWatcher(controlflow);
     }
 
     /**
      * Constructor used for testing purposes
-     * 
+     *
      * @param watcher
      */
     DefaultControlFlowConfigurator(PropertyFileWatcher watcher) {
@@ -119,7 +121,7 @@ public class DefaultControlFlowConfigurator implements ControlFlowConfigurator, 
             StringTokenizer tokenizer = new StringTokenizer(value, ",");
             try {
                 // some properties are not integers
-                if("ip.blacklist".equals(key) || "ip.whitelist".equals(key)) {
+                if ("ip.blacklist".equals(key) || "ip.whitelist".equals(key)) {
                     continue;
                 } else {
                     if (!key.startsWith("user.ows") && !key.startsWith("ip.ows")) {
@@ -129,7 +131,7 @@ public class DefaultControlFlowConfigurator implements ControlFlowConfigurator, 
                             queueSize = Integer.parseInt(tokenizer.nextToken());
                         }
                     }
-                } 
+                }
             } catch (NumberFormatException e) {
                 LOGGER.severe("Rules should be assigned just a queue size, instead " + key
                         + " is associated to " + value);
@@ -178,10 +180,10 @@ public class DefaultControlFlowConfigurator implements ControlFlowConfigurator, 
 
                     }.build(keys, value);
                 } else if (keys.length > 1) {
-                	if(!"blacklist".equals(keys[1]) && !"whitelist".equals(keys[1])){
-                		String ip = key.substring("ip.".length());
-                		controller = new SingleIpFlowController(queueSize, ip);
-                	}
+                    if (!"blacklist".equals(keys[1]) && !"whitelist".equals(keys[1])) {
+                        String ip = key.substring("ip.".length());
+                        controller = new SingleIpFlowController(queueSize, ip);
+                    }
                 }
             }
             if (controller == null) {
@@ -208,7 +210,7 @@ public class DefaultControlFlowConfigurator implements ControlFlowConfigurator, 
         GeoServerResourceLoader loader = GeoServerExtensions.bean(GeoServerResourceLoader.class);
         if (loader != null) {
             Resource controlflow = loader.get(PROPERTYFILENAME);
-        
+
             configurationFiles.add(controlflow);
         } else if (this.configFile != null && this.configFile.getResource() != null) {
             configurationFiles.add(this.configFile.getResource());
@@ -220,10 +222,10 @@ public class DefaultControlFlowConfigurator implements ControlFlowConfigurator, 
     public void saveConfiguration(GeoServerResourceLoader resourceLoader) throws IOException {
         GeoServerResourceLoader loader = GeoServerExtensions.bean(GeoServerResourceLoader.class);
         if (loader != null) {
-            for(Resource controlflow : getFileLocations()) {
-                Resource targetDir = 
+            for (Resource controlflow : getFileLocations()) {
+                Resource targetDir =
                         Files.asResource(resourceLoader.findOrCreateDirectory(Paths.convert(loader.getBaseDirectory(), controlflow.parent().dir())));
-                
+
                 Resources.copy(controlflow.file(), targetDir);
             }
         } else if (this.configFile != null && this.configFile.getResource() != null) {

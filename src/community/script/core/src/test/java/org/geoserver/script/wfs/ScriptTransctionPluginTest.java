@@ -54,41 +54,41 @@ public class ScriptTransctionPluginTest extends TestCase {
 
         TransactionType t = WfsFactory.eINSTANCE.createTransactionType();
         TransactionEvent e1 = new TransactionEvent(TransactionEventType.PRE_INSERT,
-            TransactionRequest.adapt(t), PRIMITIVEGEOFEATURE, inserted);
+                TransactionRequest.adapt(t), PRIMITIVEGEOFEATURE, inserted);
         TransactionEvent e2 = new TransactionEvent(TransactionEventType.PRE_UPDATE,
-            TransactionRequest.adapt(t), PRIMITIVEGEOFEATURE, updated);
+                TransactionRequest.adapt(t), PRIMITIVEGEOFEATURE, updated);
         TransactionEvent e3 = new TransactionEvent(TransactionEventType.PRE_DELETE,
-            TransactionRequest.adapt(t), PRIMITIVEGEOFEATURE, deleted);
+                TransactionRequest.adapt(t), PRIMITIVEGEOFEATURE, deleted);
 
         ScriptTransactionPlugin plugin = new ScriptTransactionPlugin(scriptMgr);
         plugin.dataStoreChange(e1);
         plugin.dataStoreChange(e2);
         plugin.dataStoreChange(e3);
 
-        TransactionDetail detail = 
-            (TransactionDetail) t.getExtendedProperties().get(TransactionDetail.class);
+        TransactionDetail detail =
+                (TransactionDetail) t.getExtendedProperties().get(TransactionDetail.class);
         assertNotNull(detail);
 
         Multimap<QName, Entry> entries = detail.getEntries();
         assertTrue(entries.containsKey(PRIMITIVEGEOFEATURE));
 
         Iterator<Entry> it = entries.get(PRIMITIVEGEOFEATURE).iterator();
-        
+
         assertTrue(it.hasNext());
         Entry e = it.next();
         assertEquals(TransactionEventType.PRE_INSERT, e.type);
         assertEquals(inserted, e.features);
-        
+
         assertTrue(it.hasNext());
         e = it.next();
         assertEquals(TransactionEventType.PRE_UPDATE, e.type);
         assertEquals(updated, e.features);
-        
+
         assertTrue(it.hasNext());
         e = it.next();
         assertEquals(TransactionEventType.PRE_DELETE, e.type);
         assertEquals(deleted, e.features);
-        
+
         assertFalse(it.hasNext());
     }
 }

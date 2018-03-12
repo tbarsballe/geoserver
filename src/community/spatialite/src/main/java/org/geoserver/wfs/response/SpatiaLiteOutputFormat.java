@@ -4,7 +4,7 @@
  * application directory.
  */
 package org.geoserver.wfs.response;
- 
+
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -33,24 +33,20 @@ import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.AttributeDescriptor;
 
 /**
- *
  * WFS output format for a GetFeature operation in which the outputFormat is "spatialite".
  * The reference documentation for this format can be found in this link:
- * @link:http://www.gaia-gis.it/spatialite/docs.html.
- * 
- * Based on CSVOutputFormat.java and ShapeZipOutputFormat.java from geoserver 2.2.x
  *
  * @author Pablo Velazquez, Geotekne, info@geotekne.com
  * @author Jose Macchi, Geotekne, jmacchi@geotekne.com
- *
+ * @link:http://www.gaia-gis.it/spatialite/docs.html. Based on CSVOutputFormat.java and ShapeZipOutputFormat.java from geoserver 2.2.x
  */
 
 public class SpatiaLiteOutputFormat extends WFSGetFeatureOutputFormat {
-    
-    
+
+
     public SpatiaLiteOutputFormat(GeoServer gs) {
-        super(gs,"SpatiaLite");
-        
+        super(gs, "SpatiaLite");
+
     }
 
     /**
@@ -64,13 +60,13 @@ public class SpatiaLiteOutputFormat extends WFSGetFeatureOutputFormat {
     }
 
     @Override
-    protected void write(FeatureCollectionResponse featureCollection, OutputStream output, 
-        Operation getFeature) throws IOException, ServiceException {
+    protected void write(FeatureCollectionResponse featureCollection, OutputStream output,
+                         Operation getFeature) throws IOException, ServiceException {
 
         SpatiaLiteDataStoreFactory dsFactory = new SpatiaLiteDataStoreFactory();
         if (!dsFactory.isAvailable()) {
             throw new ServiceException("SpatiaLite support not avaialable, ensure all required " +
-                "native libraries are installed");
+                    "native libraries are installed");
         }
 
         /**

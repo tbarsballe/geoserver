@@ -34,7 +34,7 @@ public class TransactionDetail {
         public TransactionEventType type;
         public FeatureCollection features;
 
-        public Entry (TransactionEventType type, FeatureCollection features) {
+        public Entry(TransactionEventType type, FeatureCollection features) {
             this.type = type;
             this.features = features;
         }

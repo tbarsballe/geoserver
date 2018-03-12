@@ -38,15 +38,15 @@ public class UserPasswordControllerTest extends GeoServerSystemTestSupport {
 
     protected static XpathEngine xp;
 
-    String xmlTemplate=
-         "<"+UserPasswordController.XML_ROOT_ELEM+">"+
-           "<"+UserPasswordController.UP_NEW_PW+">{0}</"+UserPasswordController.UP_NEW_PW+">" +
-          "</"+UserPasswordController.XML_ROOT_ELEM+">";
+    String xmlTemplate =
+            "<" + UserPasswordController.XML_ROOT_ELEM + ">" +
+                    "<" + UserPasswordController.UP_NEW_PW + ">{0}</" + UserPasswordController.UP_NEW_PW + ">" +
+                    "</" + UserPasswordController.XML_ROOT_ELEM + ">";
 
-    String xmlBadTemplate=
-         "<"+UserPasswordController.XML_ROOT_ELEM+">"+
-           "<not_the_right_element>{0}</not_the_right_element>" +
-          "</"+UserPasswordController.XML_ROOT_ELEM+">";
+    String xmlBadTemplate =
+            "<" + UserPasswordController.XML_ROOT_ELEM + ">" +
+                    "<not_the_right_element>{0}</not_the_right_element>" +
+                    "</" + UserPasswordController.XML_ROOT_ELEM + ">";
 
     @Override
     protected void onSetUp(SystemTestData testData) throws Exception {
@@ -56,7 +56,7 @@ public class UserPasswordControllerTest extends GeoServerSystemTestSupport {
         GeoServerUserGroupService service = getSecurityManager().loadUserGroupService(
                 XMLUserGroupService.DEFAULT_NAME);
 
-        if (service.getUserByUsername(USERNAME)==null) {
+        if (service.getUserByUsername(USERNAME) == null) {
             GeoServerUser user = service.createUserObject(USERNAME, USERPW, true);
             GeoServerUserGroupStore store = service.createStore();
 
@@ -93,16 +93,16 @@ public class UserPasswordControllerTest extends GeoServerSystemTestSupport {
     public void testGetAsAuthorized() throws Exception {
         login();
 
-        assertEquals( HttpStatus.METHOD_NOT_ALLOWED,
-                      HttpStatus.valueOf(getAsServletResponse(UP_URI).getStatus()) );
+        assertEquals(HttpStatus.METHOD_NOT_ALLOWED,
+                HttpStatus.valueOf(getAsServletResponse(UP_URI).getStatus()));
     }
 
     @Test
     public void testGetAsNotAuthorized() throws Exception {
         logout();
 
-        assertEquals( HttpStatus.METHOD_NOT_ALLOWED,
-                HttpStatus.valueOf(getAsServletResponse(UP_URI).getStatus()) );
+        assertEquals(HttpStatus.METHOD_NOT_ALLOWED,
+                HttpStatus.valueOf(getAsServletResponse(UP_URI).getStatus()));
     }
 
     @Test
@@ -110,7 +110,7 @@ public class UserPasswordControllerTest extends GeoServerSystemTestSupport {
         logout();
 
         String body = MessageFormat.format(xmlTemplate, "new01");
-        assertEquals( 405, putAsServletResponse(UP_URI, body, "text/xml").getStatus() );
+        assertEquals(405, putAsServletResponse(UP_URI, body, "text/xml").getStatus());
     }
 
     @Test
@@ -118,8 +118,8 @@ public class UserPasswordControllerTest extends GeoServerSystemTestSupport {
         login();
 
         String body = MessageFormat.format(xmlTemplate, "   ");
-        assertEquals( HttpStatus.BAD_REQUEST.value(),
-                      putAsServletResponse(UP_URI, body, "text/xml").getStatus() );
+        assertEquals(HttpStatus.BAD_REQUEST.value(),
+                putAsServletResponse(UP_URI, body, "text/xml").getStatus());
     }
 
     @Test
@@ -127,8 +127,8 @@ public class UserPasswordControllerTest extends GeoServerSystemTestSupport {
         login();
 
         String body = MessageFormat.format(xmlBadTemplate, "newpw42");
-        assertEquals( HttpStatus.BAD_REQUEST.value(),
-                      putAsServletResponse(UP_URI, body, "text/xml").getStatus() );
+        assertEquals(HttpStatus.BAD_REQUEST.value(),
+                putAsServletResponse(UP_URI, body, "text/xml").getStatus());
     }
 
     @Test
@@ -136,7 +136,7 @@ public class UserPasswordControllerTest extends GeoServerSystemTestSupport {
         login();
 
         String body = MessageFormat.format(xmlTemplate, "pw01");
-        assertEquals( 200, putAsServletResponse(UP_URI,body,"text/xml").getStatus() );
+        assertEquals(200, putAsServletResponse(UP_URI, body, "text/xml").getStatus());
     }
 
     @Test
@@ -153,7 +153,7 @@ public class UserPasswordControllerTest extends GeoServerSystemTestSupport {
         String originalPw = user.getPassword();
 
         String body = MessageFormat.format(xmlTemplate, "pw01");
-        assertEquals( 200, putAsServletResponse(UP_URI,body,"text/xml").getStatus() );
+        assertEquals(200, putAsServletResponse(UP_URI, body, "text/xml").getStatus());
 
         // check pw has been updated
         service.load();
@@ -162,7 +162,7 @@ public class UserPasswordControllerTest extends GeoServerSystemTestSupport {
         assertNotEquals(originalPw, pw1);
 
         body = MessageFormat.format(xmlTemplate, "pw02");
-        assertEquals( 200, putAsServletResponse(UP_URI,body,"text/xml").getStatus() );
+        assertEquals(200, putAsServletResponse(UP_URI, body, "text/xml").getStatus());
 
         // check pw has been updated
         service.load();

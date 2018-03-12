@@ -18,16 +18,16 @@ public class CatalogObjectConverter implements Converter {
     public boolean canConvert(Class type) {
         return Info.class.isAssignableFrom(type);
     }
-    
+
     public void marshal(Object source, HierarchicalStreamWriter writer,
-            MarshallingContext context) {
+                        MarshallingContext context) {
 
     }
-    
-    public Object unmarshal(HierarchicalStreamReader reader,
-            UnmarshallingContext context) {
 
-        
+    public Object unmarshal(HierarchicalStreamReader reader,
+                            UnmarshallingContext context) {
+
+
         return null;
     }
 

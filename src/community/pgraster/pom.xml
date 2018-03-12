@@ -5,56 +5,56 @@
  application directory.
  -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-   <modelVersion>4.0.0</modelVersion>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-   <parent>
-      <groupId>org.geoserver</groupId>
-      <artifactId>community</artifactId>
-      <version>2.14-SNAPSHOT</version>
-   </parent>
+    <parent>
+        <groupId>org.geoserver</groupId>
+        <artifactId>community</artifactId>
+        <version>2.14-SNAPSHOT</version>
+    </parent>
 
-   <groupId>org.geoserver.community</groupId>
-   <artifactId>gs-pgraster</artifactId>
-   <packaging>jar</packaging>
-   <name>PGRaster DataStore Extension for automatic configuration</name>
+    <groupId>org.geoserver.community</groupId>
+    <artifactId>gs-pgraster</artifactId>
+    <packaging>jar</packaging>
+    <name>PGRaster DataStore Extension for automatic configuration</name>
 
-   <dependencies>
-      <dependency>
-         <groupId>org.geoserver.web</groupId>
-         <artifactId>gs-web-core</artifactId>
-         <version>${project.version}</version>
-      </dependency>
-      <dependency>
-         <groupId>org.geoserver.web</groupId>
-         <artifactId>gs-web-core</artifactId>
-         <version>${project.version}</version>
-         <classifier>tests</classifier>
-         <scope>test</scope>
-      </dependency>
-      <dependency>
-         <groupId>org.springframework</groupId>
-         <artifactId>spring-test</artifactId>
-         <scope>test</scope>
-      </dependency>
-      <dependency>
-         <groupId>org.geoserver</groupId>
-         <artifactId>gs-main</artifactId>
-         <version>${project.version}</version>
-         <classifier>tests</classifier>
-         <scope>test</scope>
-      </dependency>
-      <dependency>
-         <groupId>org.geotools</groupId>
-         <artifactId>gt-imagemosaic-jdbc</artifactId>
-      </dependency>
-       <dependency>
-         <groupId>org.apache.ant</groupId>
-         <artifactId>ant</artifactId>
-      </dependency>
-      <dependency>
-         <groupId>com.ibm.icu</groupId>
-         <artifactId>icu4j</artifactId>
-      </dependency>
-   </dependencies>
+    <dependencies>
+        <dependency>
+            <groupId>org.geoserver.web</groupId>
+            <artifactId>gs-web-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.geoserver.web</groupId>
+            <artifactId>gs-web-core</artifactId>
+            <version>${project.version}</version>
+            <classifier>tests</classifier>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.geoserver</groupId>
+            <artifactId>gs-main</artifactId>
+            <version>${project.version}</version>
+            <classifier>tests</classifier>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.geotools</groupId>
+            <artifactId>gt-imagemosaic-jdbc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.ant</groupId>
+            <artifactId>ant</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.ibm.icu</groupId>
+            <artifactId>icu4j</artifactId>
+        </dependency>
+    </dependencies>
 </project>

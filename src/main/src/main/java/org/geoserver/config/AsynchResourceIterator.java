@@ -86,13 +86,13 @@ public class AsynchResourceIterator<T> implements Iterator<T>, Closeable {
 
     /**
      * Builds an asynchronous {@link Resource} iterator
-     * 
-     * @param root The directory resource
+     *
+     * @param root   The directory resource
      * @param filter The filter getting specific child resources out of the root
      * @param mapper The mapper performing work on the resources found
      */
     public AsynchResourceIterator(Resource root, Filter<Resource> filter,
-            ResourceMapper<T> mapper) {
+                                  ResourceMapper<T> mapper) {
         // parallelize filtering (this is still synch'ed, cannot do anything in parallel with this)
         List<Resource> resources = root.list().parallelStream().filter(r -> filter.accept(r))
                 .collect(Collectors.toList());

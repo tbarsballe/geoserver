@@ -75,7 +75,7 @@ public abstract class NearestMatchFinder {
                 if (reader instanceof StructuredGridCoverage2DReader && ENABLE_STRUCTURED_READER_SUPPORT) {
                     StructuredGridCoverage2DReader structured = (StructuredGridCoverage2DReader) reader;
                     DimensionDescriptor dd = getDimensionDescriptor(structured, dimensionName);
-                    return new StructuredReader(structured, dd.getStartAttribute(), dd.getEndAttribute(), 
+                    return new StructuredReader(structured, dd.getStartAttribute(), dd.getEndAttribute(),
                             acceptableRange, dataType);
                 } else if (reader instanceof GridCoverage2DReader) {
                     return new Reader((GridCoverage2DReader) reader, acceptableRange, dimensionName, dataType);
@@ -103,14 +103,16 @@ public abstract class NearestMatchFinder {
             return Date.class;
         } else if (dimensionName.equalsIgnoreCase(ResourceInfo.ELEVATION)) {
             return Double.class;
-        } 
+        }
 
         // if it's a custome dimension do custom logic based on the resourceinfo, e.g. pick the attributes
         // from featuretype/structured readers and use strings for anything else
         throw new IllegalArgumentException("Dimension " + dimensionName + " not supported for nearest match yet");
     }
 
-    enum FilterDirection {HIGHEST_AMONG_LOWERS, LOWEST_AMONG_HIGHER};
+    enum FilterDirection {HIGHEST_AMONG_LOWERS, LOWEST_AMONG_HIGHER}
+
+    ;
 
     static final FilterFactory FF = CommonFactoryFinder.getFilterFactory();
 
@@ -119,7 +121,7 @@ public abstract class NearestMatchFinder {
     AcceptableRange acceptableRange;
     Class dataType;
 
-    public NearestMatchFinder(String startAttribute, String endAttribute, AcceptableRange acceptableRange, Class 
+    public NearestMatchFinder(String startAttribute, String endAttribute, AcceptableRange acceptableRange, Class
             dataType) {
         this.attribute = FF.property(startAttribute);
         this.endAttribute = endAttribute == null ? null : FF.property(endAttribute);
@@ -134,15 +136,15 @@ public abstract class NearestMatchFinder {
      *
      * @param value The reference value
      * @return The nearest value, or null if the domain was empty. If the nearest value matches/overlaps the original value,
-     *         then the original one is returned instead (this allows to tell apart no match vs exact match vs nearest match 
-     *         and eventually set the WMS HTTP warning head)
+     * then the original one is returned instead (this allows to tell apart no match vs exact match vs nearest match
+     * and eventually set the WMS HTTP warning head)
      * @throws IOException
      */
     public Object getNearest(Object value) throws IOException {
         // simple point vs point comparison?
-        if (endAttribute == null && 
-                (!(value instanceof Range) || ((Range) value).getMinValue().equals(((Range) 
-                value).getMaxValue()))) {
+        if (endAttribute == null &&
+                (!(value instanceof Range) || ((Range) value).getMinValue().equals(((Range)
+                        value).getMaxValue()))) {
             Date date = (Date) (value instanceof Range ? ((Range) value).getMinValue() : value);
             NearestVisitor visitor = new NearestVisitor(attribute, date);
             Filter filter = Filter.INCLUDE;
@@ -294,7 +296,7 @@ public abstract class NearestMatchFinder {
 
         public Vector(FeatureTypeInfo ftInfo, String attribute, String endAttribute, AcceptableRange acceptableRange,
                       Class
-                dataType) throws IOException {
+                              dataType) throws IOException {
             super(attribute, endAttribute, acceptableRange, dataType);
             this.featureSource = ftInfo.getFeatureSource(null, null);
         }
@@ -334,7 +336,7 @@ public abstract class NearestMatchFinder {
         private final GridCoverage2DReader reader;
         private final String dimensionName;
 
-        public Reader(GridCoverage2DReader reader, AcceptableRange acceptableRange, String dimensionName, Class 
+        public Reader(GridCoverage2DReader reader, AcceptableRange acceptableRange, String dimensionName, Class
                 dataType) {
             super(null, null, acceptableRange, dataType);
             this.reader = reader;
@@ -351,7 +353,7 @@ public abstract class NearestMatchFinder {
             // find the two closest to the specified object
             Object maxOfSmallers = null;
             Object minOfGreater = null;
-            
+
             Range rangeFilter = this.acceptableRange != null ? this.acceptableRange.getSearchRange(value) : null;
 
             for (Object d : domain) {

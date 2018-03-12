@@ -58,7 +58,9 @@ public class DefaultWebFeatureService20 implements WebFeatureService20, Applicat
      */
     protected GeoServer geoServer;
 
-    /** filter factory */
+    /**
+     * filter factory
+     */
     protected FilterFactory2 filterFactory;
 
     /**
@@ -74,42 +76,42 @@ public class DefaultWebFeatureService20 implements WebFeatureService20, Applicat
     public void setFilterFactory(FilterFactory2 filterFactory) {
         this.filterFactory = filterFactory;
     }
-    
+
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.context = applicationContext;
     }
-    
+
     public WFSInfo getServiceInfo() {
         return geoServer.getService(WFSInfo.class);
     }
-    
+
     public Catalog getCatalog() {
         return geoServer.getCatalog();
     }
-    
+
     public StoredQueryProvider getStoredQueryProvider() {
         return new StoredQueryProvider(getCatalog());
     }
 
     public TransformerBase getCapabilities(GetCapabilitiesType request) throws WFSException {
         return new GetCapabilities(getServiceInfo(), getCatalog(), WFSExtensions.findExtendedCapabilitiesProviders(context))
-        .run(new GetCapabilitiesRequest.WFS20(request));
+                .run(new GetCapabilitiesRequest.WFS20(request));
     }
-    
+
     public FeatureTypeInfo[] describeFeatureType(DescribeFeatureTypeType request)
             throws WFSException {
         return new DescribeFeatureType(getServiceInfo(), getCatalog())
-            .run(new DescribeFeatureTypeRequest.WFS20(request));
+                .run(new DescribeFeatureTypeRequest.WFS20(request));
     }
 
     public FeatureCollectionResponse getFeature(GetFeatureType request) throws WFSException {
         GetFeature gf = new GetFeature(getServiceInfo(), getCatalog());
         gf.setFilterFactory(filterFactory);
         gf.setStoredQueryProvider(getStoredQueryProvider());
-        
+
         return gf.run(new GetFeatureRequest.WFS20(request));
     }
-    
+
     public FeatureCollectionResponse getFeatureWithLock(GetFeatureWithLockType request)
             throws WFSException {
         return getFeature(request);
@@ -117,7 +119,7 @@ public class DefaultWebFeatureService20 implements WebFeatureService20, Applicat
 
     @Override
     public ValueCollectionType getPropertyValue(GetPropertyValueType request) throws WFSException {
-    	return new GetPropertyValue(getServiceInfo(), getCatalog(), filterFactory).run(request);
+        return new GetPropertyValue(getServiceInfo(), getCatalog(), filterFactory).run(request);
     }
 
     public LockFeatureResponseType lockFeature(LockFeatureType request) throws WFSException {
@@ -152,8 +154,8 @@ public class DefaultWebFeatureService20 implements WebFeatureService20, Applicat
             if (obj instanceof QueryType) {
                 QueryType query = (QueryType) queries.get(0);
 
-                
-                if(query.getTypeNames().size() > 1) {
+
+                if (query.getTypeNames().size() > 1) {
                     List<QueryType> expanded = new ArrayList<>();
                     for (Object typeName : query.getTypeNames()) {
                         QueryType copy = EcoreUtil.copy(query);
@@ -163,7 +165,7 @@ public class DefaultWebFeatureService20 implements WebFeatureService20, Applicat
                     }
                     queries.remove(i);
                     queries.addAll(i, expanded);
-                    i+= expanded.size();
+                    i += expanded.size();
                 }
             }
         }
@@ -172,30 +174,30 @@ public class DefaultWebFeatureService20 implements WebFeatureService20, Applicat
     public TransactionResponseType transaction(TransactionType request) throws WFSException {
         Transaction tx = new Transaction(getServiceInfo(), getCatalog(), context);
         tx.setFilterFactory(filterFactory);
-        
-        return (TransactionResponseType) 
-            tx.transaction(new TransactionRequest.WFS20(request)).getAdaptee();
+
+        return (TransactionResponseType)
+                tx.transaction(new TransactionRequest.WFS20(request)).getAdaptee();
     }
-    
-    public ListStoredQueriesResponseType listStoredQueries(ListStoredQueriesType request) 
-        throws WFSException {
+
+    public ListStoredQueriesResponseType listStoredQueries(ListStoredQueriesType request)
+            throws WFSException {
         return new ListStoredQueries(getServiceInfo(), getCatalog(), getStoredQueryProvider()).run(request);
     }
-    
+
     public DescribeStoredQueriesResponseType describeStoredQueries(DescribeStoredQueriesType request)
             throws WFSException {
         return new DescribeStoredQueries(getServiceInfo(), getStoredQueryProvider()).run(request);
     }
-    
+
     public CreateStoredQueryResponseType createStoredQuery(CreateStoredQueryType request)
             throws WFSException {
         return new CreateStoredQuery(getServiceInfo(), getStoredQueryProvider()).run(request);
     }
-    
+
     public ExecutionStatusType dropStoredQuery(DropStoredQueryType request) throws WFSException {
         return new DropStoredQuery(getServiceInfo(), getStoredQueryProvider()).run(request);
     }
-    
+
     //the following operations are not part of the spec
     public void releaseLock(String lockId) throws WFSException {
         new LockFeature(getServiceInfo(), getCatalog()).release(lockId);

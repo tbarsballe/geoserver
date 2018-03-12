@@ -12,7 +12,7 @@ import org.w3c.dom.Document;
 
 /**
  * Test that srsName and bbox in a WFS request results in the expected features, srsName, and axis order in the response.
- * 
+ *
  * @author Ben Caradoc-Davies (CSIRO Earth Science and Resource Engineering)
  */
 public class SrsNameRequestTest extends WFS20TestSupport {
@@ -101,15 +101,15 @@ public class SrsNameRequestTest extends WFS20TestSupport {
      * Test that, for a given request srsName and bbox, the expected number of features are returned, the response contains the expected feature
      * PrimitiveGeoFeature.f015, and the pointProperty of PrimitiveGeoFeature.f015 in the response has the expected srsName and data axis order
      * (longitude/latitude or latitude/Longitude).
-     * 
-     * @param requestSrsName the srsName request parameter
-     * @param requestBbox the bbox request parameter or null if none
+     *
+     * @param requestSrsName         the srsName request parameter
+     * @param requestBbox            the bbox request parameter or null if none
      * @param expectedNumberReturned the expected number of features returned in the response
-     * @param expectedSrsName the expected pointProperty srsName of PrimitiveGeoFeature.f015 in the response or null if no features are expected
-     * @param expectedData the expected pointProperty data of PrimitiveGeoFeature.f015 in the response or null if no features are expected
+     * @param expectedSrsName        the expected pointProperty srsName of PrimitiveGeoFeature.f015 in the response or null if no features are expected
+     * @param expectedData           the expected pointProperty data of PrimitiveGeoFeature.f015 in the response or null if no features are expected
      */
     private void runTest(String requestSrsName, String requestBbox, int expectedNumberReturned,
-            String expectedSrsName, String expectedData) throws Exception {
+                         String expectedSrsName, String expectedData) throws Exception {
         StringBuilder requestBuilder = new StringBuilder("wfs");
         requestBuilder.append("?version=2.0.0");
         requestBuilder.append("&request=GetFeature");
@@ -135,12 +135,12 @@ public class SrsNameRequestTest extends WFS20TestSupport {
 
     /**
      * Encode srsName (or a five-parameter bbox) so that it can be used in a GET request. Safe to use (and has no effect on) a four-parameter bbox.
-     * 
      * <p>
-     * 
+     * <p>
+     * <p>
      * This implementation encodes only "#" so HTTP_URL_SRSNAME works. It could do full URL encoding but that would not be representative of common
      * use.
-     * 
+     *
      * @param srsName unencoded srsName (or a five-parameter bbox)
      * @return srsName encoded srsName (or a five-parameter bbox)
      */
@@ -150,8 +150,8 @@ public class SrsNameRequestTest extends WFS20TestSupport {
 
     /**
      * Build a five parameter bbox from a bbox and srsName
-     * 
-     * @param bbox four-parameter bbox
+     *
+     * @param bbox    four-parameter bbox
      * @param srsName srsName for the bbox
      * @return five-parameter bbox with encoded srsName
      */

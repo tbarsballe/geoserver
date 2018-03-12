@@ -62,9 +62,9 @@ public class OSEOTestSupport extends GeoServerSystemTestSupport {
             throw new RuntimeException("Could not parse the OpenSearch schemas", e);
         }
     }
-    
+
     private static Schema getOsSchema() {
-        if(OS_SCHEMA == null) {
+        if (OS_SCHEMA == null) {
             final SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
             try {
                 OS_SCHEMA = factory
@@ -72,14 +72,14 @@ public class OSEOTestSupport extends GeoServerSystemTestSupport {
             } catch (Exception e) {
                 throw new RuntimeException("Could not parse the OpenSearch schemas", e);
             }
-            
+
         }
-        
+
         return OS_SCHEMA;
     }
 
     private static Schema getAtomSchema() {
-        if(ATOM_SCHEMA == null) {
+        if (ATOM_SCHEMA == null) {
             final SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
             try {
                 ATOM_SCHEMA = factory.newSchema(OSEOTestSupport.class.getResource("/schemas/searchResults.xsd"));
@@ -90,7 +90,7 @@ public class OSEOTestSupport extends GeoServerSystemTestSupport {
         return ATOM_SCHEMA;
     }
 
-    
+
     protected List<Filter> getFilters() {
         return Collections.singletonList(new OSEOFilter());
     }
@@ -109,6 +109,7 @@ public class OSEOTestSupport extends GeoServerSystemTestSupport {
 
     /**
      * Allows subclasses to decide if to populate the granules table, or not
+     *
      * @return
      */
     protected boolean populateGranulesTable() {
@@ -117,7 +118,7 @@ public class OSEOTestSupport extends GeoServerSystemTestSupport {
 
     /**
      * Sets up a H2 based OpenSearchAccess and configures OpenSearch for EO to use it
-     * 
+     *
      * @param testData
      * @param cat
      * @param gs
@@ -184,7 +185,7 @@ public class OSEOTestSupport extends GeoServerSystemTestSupport {
         namespaceContext.bindNamespaceUri("eo", OpenSearchAccess.EO_NAMESPACE);
         namespaceContext.bindNamespaceUri("geo", OpenSearchAccess.GEO_NAMESPACE);
         namespaceContext.bindNamespaceUri("gmi", "http://www.isotc211.org/2005/gmi");
-        namespaceContext.bindNamespaceUri("gmd", "http://www.isotc211.org/2005/gmd"); 
+        namespaceContext.bindNamespaceUri("gmd", "http://www.isotc211.org/2005/gmd");
         namespaceContext.bindNamespaceUri("gco", "http://www.isotc211.org/2005/gco");
         namespaceContext.bindNamespaceUri("time", "http://a9.com/-/opensearch/extensions/time/1.0");
         namespaceContext.bindNamespaceUri("owc", "http://www.opengis.net/owc/1.0");
@@ -215,7 +216,7 @@ public class OSEOTestSupport extends GeoServerSystemTestSupport {
 
     /**
      * Checks the response is a RSS and
-     * 
+     *
      * @param path
      * @param i
      * @return
@@ -227,7 +228,7 @@ public class OSEOTestSupport extends GeoServerSystemTestSupport {
 
     /**
      * Returns the DOM after checking the status code is 200 and the returned mime type is the expected one
-     * 
+     *
      * @param path
      * @param expectedMimeType
      * @return

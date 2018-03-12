@@ -20,8 +20,8 @@ import org.junit.experimental.categories.Category;
  * </code>
  * </pre>
  * </p>
- * @author Justin Deoliveira, OpenGeo
  *
+ * @author Justin Deoliveira, OpenGeo
  */
 public interface SystemTest {
 

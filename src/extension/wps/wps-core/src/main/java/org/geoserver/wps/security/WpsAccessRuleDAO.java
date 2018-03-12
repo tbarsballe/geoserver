@@ -31,7 +31,6 @@ import org.opengis.feature.type.Name;
 
 /**
  * Allows to manage the rules used by the WPS security subsystem
- * 
  */
 public class WpsAccessRuleDAO extends ConfigurationListenerAdapter {
 

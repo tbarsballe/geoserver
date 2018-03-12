@@ -35,15 +35,14 @@ import org.geoserver.web.GeoServerApplication;
 /**
  * Edit page for specific class of named security service.
  * <p>
- *  Most of the work is delegated to {@link SecurityNamedServicePanelInfo} and 
- *   {@link SecurityNamedServicePanel}. 
+ * Most of the work is delegated to {@link SecurityNamedServicePanelInfo} and
+ * {@link SecurityNamedServicePanel}.
  * </p>
- * 
+ *
  * @author Justin Deoliveira, OpenGeo
- * 
  */
-public class SecurityNamedServiceEditPage<T extends SecurityNamedServiceConfig> 
-    extends SecurityNamedServicePage<T> {
+public class SecurityNamedServiceEditPage<T extends SecurityNamedServiceConfig>
+        extends SecurityNamedServicePage<T> {
 
     SecurityNamedServicePanelInfo panelInfo;
 
@@ -57,11 +56,10 @@ public class SecurityNamedServiceEditPage<T extends SecurityNamedServiceConfig>
         add(new Label("title", createTitleModel(panelInfo)));
         add(new Label("description", createDescriptionModel(panelInfo)));
 
-        if (SecurityNamedServiceTabbedPanel.class.isAssignableFrom(panelInfo.getComponentClass())) { 
+        if (SecurityNamedServiceTabbedPanel.class.isAssignableFrom(panelInfo.getComponentClass())) {
             //this panel supports tabs, layout in tabbed mode
             add(new TabbedLayoutPanel("panel", config));
-        }
-        else {
+        } else {
             //else layout in basic mode
             add(new BasicLayoutPanel("panel", config));
         }
@@ -75,7 +73,7 @@ public class SecurityNamedServiceEditPage<T extends SecurityNamedServiceConfig>
             Form form = new Form("form", new CompoundPropertyModel<T>(config));
             add(form);
             form.add(panel = createPanel("panel", panelInfo, config));
-            
+
             form.add(new SubmitLink("save", form) {
                 @Override
                 public void onSubmit() {
@@ -115,7 +113,7 @@ public class SecurityNamedServiceEditPage<T extends SecurityNamedServiceConfig>
             List<ITab> tabs = new ArrayList<ITab>();
 
             //add the primary panel to the first tab
-            tabs.add(new AbstractTab(new StringResourceModel("settings", (IModel<?>)null)) {
+            tabs.add(new AbstractTab(new StringResourceModel("settings", (IModel<?>) null)) {
                 @Override
                 public Panel getPanel(String panelId) {
                     return new ContentPanel(panelId, config);
@@ -123,15 +121,14 @@ public class SecurityNamedServiceEditPage<T extends SecurityNamedServiceConfig>
             });
 
             //add tabs contributed by the server
-            tabs.addAll(((SecurityNamedServiceTabbedPanel)panel).createTabs(config));
+            tabs.addAll(((SecurityNamedServiceTabbedPanel) panel).createTabs(config));
 
             //add the error tab that displays any exceptions currently associated with the service
             try {
                 panel.doLoad(config.getObject());
-            }
-            catch(final Exception e) {
+            } catch (final Exception e) {
                 //add the error tab
-                tabs.add(new AbstractTab(new StringResourceModel("error", (IModel<?>)null)) {
+                tabs.add(new AbstractTab(new StringResourceModel("error", (IModel<?>) null)) {
                     @Override
                     public Panel getPanel(String panelId) {
                         return new ErrorPanel(panelId, e);
@@ -140,14 +137,14 @@ public class SecurityNamedServiceEditPage<T extends SecurityNamedServiceConfig>
             }
             add(new TabbedPanel("panel", tabs));
         }
-        
+
     }
 
     class ErrorPanel extends Panel {
 
         public ErrorPanel(String id, final Exception error) {
             super(id, new Model());
-            
+
             add(new Label("message", new PropertyModel(error, "message")));
             add(new TextArea("stackTrace", new Model(handleStackTrace(error))));
             add(new AjaxLink("copy") {
@@ -160,18 +157,20 @@ public class SecurityNamedServiceEditPage<T extends SecurityNamedServiceConfig>
 
         public String getLabelKey() {
             return "error";
-        };
+        }
+
+        ;
 
         String handleStackTrace(Exception error) {
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             PrintWriter writer = new PrintWriter(out);
             error.printStackTrace(writer);
             writer.flush();
-            
+
             return new String(out.toByteArray());
         }
     }
-    
+
     void copyToClipBoard(String text) {
         StringSelection selection = new StringSelection(text);
         Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, selection);
@@ -187,21 +186,21 @@ public class SecurityNamedServiceEditPage<T extends SecurityNamedServiceConfig>
         }
 
         List<SecurityNamedServicePanelInfo> panelInfos = new ArrayList();
-        for (SecurityNamedServicePanelInfo pageInfo : 
-            GeoServerApplication.get().getBeansOfType(SecurityNamedServicePanelInfo.class)) {
+        for (SecurityNamedServicePanelInfo pageInfo :
+                GeoServerApplication.get().getBeansOfType(SecurityNamedServicePanelInfo.class)) {
             if (pageInfo.getServiceClass().isAssignableFrom(serviceClass)) {
                 panelInfos.add(pageInfo);
             }
         }
 
         if (panelInfos.isEmpty()) {
-            throw new RuntimeException("Unable to find panel info for service config: " + config 
-                + ", service class: " + serviceClass);
+            throw new RuntimeException("Unable to find panel info for service config: " + config
+                    + ", service class: " + serviceClass);
         }
         if (panelInfos.size() > 1) {
             //filter by strict equals
             List<SecurityNamedServicePanelInfo> l = new ArrayList(panelInfos);
-            for (Iterator<SecurityNamedServicePanelInfo> it = l.iterator(); it.hasNext();) {
+            for (Iterator<SecurityNamedServicePanelInfo> it = l.iterator(); it.hasNext(); ) {
                 final SecurityNamedServicePanelInfo targetPanelInfo = it.next();
                 if (!targetPanelInfo.getServiceClass().equals(serviceClass)) {
                     it.remove();
@@ -213,8 +212,8 @@ public class SecurityNamedServiceEditPage<T extends SecurityNamedServiceConfig>
                 //filter down to one match
                 return l.get(0);
             }
-            throw new RuntimeException("Found multiple panel infos for service config: " + config 
-                + ", service class: " + serviceClass);
+            throw new RuntimeException("Found multiple panel infos for service config: " + config
+                    + ", service class: " + serviceClass);
         }
 
         //found just one

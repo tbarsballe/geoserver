@@ -20,14 +20,14 @@ import org.junit.Test;
 import org.opengis.filter.Filter;
 
 public class StylePageTest extends GeoServerWicketTestSupport {
-    
+
     @Test
     public void testPageLoad() {
         login();
         tester.startPage(StylePage.class);
         tester.assertRenderedPage(StylePage.class);
     }
-    
+
     @Test
     public void testStyleProvider() {
         login();

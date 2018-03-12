@@ -57,7 +57,7 @@ public class WMSDynamicDimensionTestSupport extends WMSDimensionsTestSupport {
         removeDynamicDimensions("TimeElevation");
         removeDynamicDimensions(getLayerId(TIME_ELEVATION_CUSTOM));
     }
-    
+
     public void removeDynamicDimensions(String resourceName) throws Exception {
         ResourceInfo ri = getCatalog().getResourceByName(resourceName, ResourceInfo.class);
         ri.getMetadata().remove(DefaultValueConfigurations.KEY);
@@ -65,7 +65,7 @@ public class WMSDynamicDimensionTestSupport extends WMSDimensionsTestSupport {
     }
 
     protected void setupDynamicDimensions(String resourceName,
-            DefaultValueConfiguration... configurations) {
+                                          DefaultValueConfiguration... configurations) {
         ResourceInfo info = getCatalog().getResourceByName(resourceName, ResourceInfo.class);
         DefaultValueConfigurations configs = new DefaultValueConfigurations(
                 Arrays.asList(configurations));
@@ -74,7 +74,7 @@ public class WMSDynamicDimensionTestSupport extends WMSDimensionsTestSupport {
     }
 
     protected void setupDynamicDimensions(QName resourceName,
-            DefaultValueConfiguration... configurations) {
+                                          DefaultValueConfiguration... configurations) {
         setupDynamicDimensions(getLayerId(resourceName), configurations);
     }
 

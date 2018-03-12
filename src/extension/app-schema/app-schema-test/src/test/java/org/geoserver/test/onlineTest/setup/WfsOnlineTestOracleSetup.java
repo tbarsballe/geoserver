@@ -16,7 +16,7 @@ import org.geotools.jdbc.JDBCDataStoreFactory;
 
 /**
  * Postgis data setup for the data reference set online test
- * 
+ *
  * @author Victor Tey, CSIRO Earth Science and Resource Engineering
  */
 public class WfsOnlineTestOracleSetup extends AbstractReferenceDataSetup {
@@ -63,9 +63,9 @@ public class WfsOnlineTestOracleSetup extends AbstractReferenceDataSetup {
     private void runSqlInsertScript() throws Exception {
         DatabaseUtil du = new DatabaseUtil();
         List<String> sqls = du.splitOracleSQLScript(script);
-        for (String sql : sqls) {          
+        for (String sql : sqls) {
             if (sql.startsWith("CALL")) {
-                String formattedSP = "{" + sql + "}";            
+                String formattedSP = "{" + sql + "}";
                 this.run(formattedSP);
                 continue;
             }

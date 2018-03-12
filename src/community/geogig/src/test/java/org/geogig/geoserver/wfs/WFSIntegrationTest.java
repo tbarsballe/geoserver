@@ -263,7 +263,7 @@ public class WFSIntegrationTest extends WFSTestSupport {
     /**
      * Test case to expose issue https://github.com/boundlessgeo/geogig/issues/310 "Editing Features
      * changes the feature type"
-     * 
+     *
      * @see #testUpdateDoesntChangeFeatureType()
      */
     @Test
@@ -325,7 +325,7 @@ public class WFSIntegrationTest extends WFSTestSupport {
     /**
      * Test case to expose issue https://github.com/boundlessgeo/geogig/issues/310 "Editing Features
      * changes the feature type"
-     * 
+     *
      * @see #testInsertDoesntChangeFeatureType()
      */
     @Test

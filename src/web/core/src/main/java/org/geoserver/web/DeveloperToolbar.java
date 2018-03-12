@@ -34,7 +34,7 @@ public class DeveloperToolbar extends Panel {
                 GeoServerApplication.get().clearWicketCaches();
             }
         });
-        
+
         // Reloads the whole catalog and config from the file system
         add(new IndicatingAjaxLink("reload") {
             @Override
@@ -45,7 +45,7 @@ public class DeveloperToolbar extends Panel {
                         loader.reload();
                     }
                     info("Catalog and configuration reloaded");
-                } catch(Exception e) {
+                } catch (Exception e) {
                     error(e);
                 }
             }
@@ -65,7 +65,7 @@ public class DeveloperToolbar extends Panel {
         };
         wicketPaths.setOutputMarkupId(true);
         add(wicketPaths);
-        
+
         // controls whether wicket ids are being generated
         wicketIds = new AjaxCheckBox("wicketIds", new PropertyModel(gsApp,
                 "markupSettings.stripWicketTags")) {
@@ -79,7 +79,7 @@ public class DeveloperToolbar extends Panel {
         };
         wicketIds.setOutputMarkupId(true);
         add(wicketIds);
-        
+
         // controls whether the ajax debug is enabled or not
         add(new AjaxCheckBox("ajaxDebug", new PropertyModel(gsApp, "debugSettings.ajaxDebugModeEnabled")) {
 
@@ -87,7 +87,7 @@ public class DeveloperToolbar extends Panel {
             protected void onUpdate(AjaxRequestTarget target) {
                 // nothing to do, the property binding does the work for us
             }
-            
+
         });
 
     }
@@ -104,6 +104,6 @@ public class DeveloperToolbar extends Panel {
         }
 
     }
-    
+
 
 }

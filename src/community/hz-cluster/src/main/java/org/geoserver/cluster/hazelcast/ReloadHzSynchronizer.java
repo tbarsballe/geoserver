@@ -28,12 +28,14 @@ import com.yammer.metrics.Metrics;
  * <p>
  * This synchronizer assumes a shared data directory among nodes in the cluster.
  * </p>
- * 
+ *
  * @author Justin Deoliveira, OpenGeo
  */
 public class ReloadHzSynchronizer extends HzSynchronizer {
 
-    /** lock during reload */
+    /**
+     * lock during reload
+     */
     protected AtomicBoolean eventLock = new AtomicBoolean();
 
     final ExecutorService reloadService;

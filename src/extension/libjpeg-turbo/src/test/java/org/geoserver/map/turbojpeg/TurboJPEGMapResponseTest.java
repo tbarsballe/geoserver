@@ -17,32 +17,31 @@ import org.junit.Test;
 
 /**
  * Specific {@link RenderedImageMapResponse} for JPEG using LibJPEGTurbo.
- * 
+ *
  * @author Simone Giannecchini, GeoSolutions SAS
  * @author Daniele Romagnoli, GeoSolutions SAS
- *
  */
 public class TurboJPEGMapResponseTest extends WMSTestSupport {
 
     protected RenderedImageMapOutputFormat getProducerInstance() {
-        return new RenderedImageMapOutputFormat("image/jpeg",new String[]{"image/jpeg"}, getWMS());
+        return new RenderedImageMapOutputFormat("image/jpeg", new String[]{"image/jpeg"}, getWMS());
     }
-    
+
     /**
      * Make sure we find the {@link TurboJPEGMapResponse}.
      */
     @Test
-    public void testFindTurboJPEGMapResponse(){
-        
+    public void testFindTurboJPEGMapResponse() {
+
         // look for the turbojpegmapresponses
         final Collection<RenderedImageMapResponse> responses = getWMS().getAvailableMapResponses();
-        for(RenderedImageMapResponse response:responses){
-            if(response instanceof TurboJPEGMapResponse){
+        for (RenderedImageMapResponse response : responses) {
+            if (response instanceof TurboJPEGMapResponse) {
                 return;
             }
         }
-        
+
         // we did not find it
-        Assert.assertFalse("Unable to find TurboJPEGMapResponse",false);
+        Assert.assertFalse("Unable to find TurboJPEGMapResponse", false);
     }
 }

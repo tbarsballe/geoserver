@@ -57,7 +57,7 @@ public class ImportLayerJSONMessageConverter extends BaseMessageConverter<LayerI
     //
     @Override
     protected LayerInfo readInternal(Class<? extends LayerInfo> clazz,
-            HttpInputMessage inputMessage) throws IOException, HttpMessageNotReadableException {
+                                     HttpInputMessage inputMessage) throws IOException, HttpMessageNotReadableException {
         try (InputStream in = inputMessage.getBody()) {
             ImportJSONReader reader = new ImportJSONReader(importer);
             JSONObject json = reader.parse(in);
@@ -71,7 +71,7 @@ public class ImportLayerJSONMessageConverter extends BaseMessageConverter<LayerI
     // writing
     //
     @Override
-    protected void writeInternal(LayerInfo layer , HttpOutputMessage outputMessage)
+    protected void writeInternal(LayerInfo layer, HttpOutputMessage outputMessage)
             throws IOException, HttpMessageNotWritableException {
 
         throw new UnsupportedOperationException();

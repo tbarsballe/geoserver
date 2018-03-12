@@ -88,7 +88,7 @@ public class InformixDbSourceImpl extends NamedImpl implements DbSource {
 
     @Override
     public Map<String, Object> getParameters() {
-      throw new UnsupportedOperationException("Informix datasource cannot be used as a store.");
+        throw new UnsupportedOperationException("Informix datasource cannot be used as a store.");
     }
 
     @Override

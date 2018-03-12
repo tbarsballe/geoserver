@@ -24,9 +24,8 @@ import net.sf.json.JSONObject;
 
 /**
  * Test for {@link DataAccessController},{@link ServiceAccessController} and {@link RestAccessController}
- * 
- * @author christian
  *
+ * @author christian
  */
 @TestSetup(run = TestSetupFrequency.REPEAT)
 public class AccessControllersTest extends SecurityRESTTestSupport {
@@ -101,12 +100,11 @@ public class AccessControllersTest extends SecurityRESTTestSupport {
 
     /**
      * Checks role strings for equality
-     * 
+     * <p>
      * e. g. ROLE1,ROLE2 is equal to ROLE2,ROLE1
-     * 
+     *
      * @param roleString1
      * @param roleString2
-     *
      */
     boolean checkRolesStringsForEquality(String roleString1, String roleString2) {
         String[] roleArray1 = roleString1.split(",");
@@ -139,19 +137,19 @@ public class AccessControllersTest extends SecurityRESTTestSupport {
     }
 
     String[][] getDefaultLayerRules() {
-        return new String[][] { { "*.*.r", "*" }, { "*.*.w", "*" } };
+        return new String[][]{{"*.*.r", "*"}, {"*.*.w", "*"}};
     }
 
     String[][] getDefaultServiceRules() {
-        return new String[][] { { "*.*", "*" } };
+        return new String[][]{{"*.*", "*"}};
     }
 
     String[][] getDefaultRestRules() {
-        return new String[][] { { "/**:GET", "ADMIN" }, { "/**:POST,DELETE,PUT", "ADMIN" } };
+        return new String[][]{{"/**:GET", "ADMIN"}, {"/**:POST,DELETE,PUT", "ADMIN"}};
     }
 
     String[][] getDefaultRestRulesForDelete() {
-        return new String[][] { { "%2F**:GET", "ADMIN" }, { "%2F**:POST,DELETE,PUT", "ADMIN" } };
+        return new String[][]{{"%2F**:GET", "ADMIN"}, {"%2F**:POST,DELETE,PUT", "ADMIN"}};
     }
 
     @Test
@@ -202,7 +200,7 @@ public class AccessControllersTest extends SecurityRESTTestSupport {
 
         // layer rules
         String[][] rules = getDefaultLayerRules();
-        String[][] toBeAdded = { rules[0], { "ws.layer1.r", TEST_ROLELIST } }; // conflict
+        String[][] toBeAdded = {rules[0], {"ws.layer1.r", TEST_ROLELIST}}; // conflict
         assertEquals(409, postAsServletResponse(DATA_URI_XML, createXMLBody(toBeAdded), "text/xml")
                 .getStatus());
 
@@ -211,8 +209,8 @@ public class AccessControllersTest extends SecurityRESTTestSupport {
         checkXMLResponse(dom, rules);
 
         // add
-        String[][] toBeAdded2 = { { "ws.layer1.w", TEST_ROLE1 }, { "ws.layer1.r", TEST_ROLELIST } };
-        String[][] expected = { rules[0], rules[1], toBeAdded2[0], toBeAdded2[1] };
+        String[][] toBeAdded2 = {{"ws.layer1.w", TEST_ROLE1}, {"ws.layer1.r", TEST_ROLELIST}};
+        String[][] expected = {rules[0], rules[1], toBeAdded2[0], toBeAdded2[1]};
         assertEquals(200, postAsServletResponse(DATA_URI_XML, createXMLBody(toBeAdded2), "text/xml")
                 .getStatus());
 
@@ -222,11 +220,11 @@ public class AccessControllersTest extends SecurityRESTTestSupport {
         // service rules
 
         rules = getDefaultServiceRules();
-        toBeAdded2 = new String[][] { { "ws.*", TEST_ROLE1 }, { "ws2.GetFeature", TEST_ROLELIST } };
+        toBeAdded2 = new String[][]{{"ws.*", TEST_ROLE1}, {"ws2.GetFeature", TEST_ROLELIST}};
         assertEquals(200,
                 postAsServletResponse(SERVICE_URI_XML, createXMLBody(toBeAdded2), "text/xml")
                         .getStatus());
-        expected = new String[][] { rules[0], toBeAdded2[0], toBeAdded2[1] };
+        expected = new String[][]{rules[0], toBeAdded2[0], toBeAdded2[1]};
 
         dom = getAsDOM(SERVICE_URI_XML);
         checkXMLResponse(dom, expected);
@@ -239,7 +237,7 @@ public class AccessControllersTest extends SecurityRESTTestSupport {
         // REST rules
 
         rules = getDefaultRestRules();
-        toBeAdded = new String[][] { rules[0], { "/myworkspace/**:GET", TEST_ROLELIST } }; // conflict
+        toBeAdded = new String[][]{rules[0], {"/myworkspace/**:GET", TEST_ROLELIST}}; // conflict
         assertEquals(409, postAsServletResponse(REST_URI_XML, createXMLBody(toBeAdded), "text/xml")
                 .getStatus());
 
@@ -248,9 +246,9 @@ public class AccessControllersTest extends SecurityRESTTestSupport {
         checkXMLResponse(dom, rules);
 
         // add
-        toBeAdded2 = new String[][] { { "/myworkspace/**:PUT,POST", TEST_ROLE1 },
-                { "/myworkspace/**:GET", TEST_ROLELIST } };
-        expected = new String[][] { rules[0], rules[1], toBeAdded2[0], toBeAdded2[1] };
+        toBeAdded2 = new String[][]{{"/myworkspace/**:PUT,POST", TEST_ROLE1},
+                {"/myworkspace/**:GET", TEST_ROLELIST}};
+        expected = new String[][]{rules[0], rules[1], toBeAdded2[0], toBeAdded2[1]};
         assertEquals(200, postAsServletResponse(REST_URI_XML, createXMLBody(toBeAdded2), "text/xml")
                 .getStatus());
 
@@ -264,7 +262,7 @@ public class AccessControllersTest extends SecurityRESTTestSupport {
 
         // layer rules
         String[][] rules = getDefaultLayerRules();
-        String[][] toBeAdded = { rules[0], { "ws.layer1.r", TEST_ROLELIST } }; // conflict
+        String[][] toBeAdded = {rules[0], {"ws.layer1.r", TEST_ROLELIST}}; // conflict
         assertEquals(409,
                 postAsServletResponse(DATA_URI_JSON, createJSONBody(toBeAdded), "text/json")
                         .getStatus());
@@ -274,8 +272,8 @@ public class AccessControllersTest extends SecurityRESTTestSupport {
         checkJSONResponse(json, rules);
 
         // add
-        String[][] toBeAdded2 = { { "ws.layer1.w", TEST_ROLE1 }, { "ws.layer1.r", TEST_ROLELIST } };
-        String[][] expected = { rules[0], rules[1], toBeAdded2[0], toBeAdded2[1] };
+        String[][] toBeAdded2 = {{"ws.layer1.w", TEST_ROLE1}, {"ws.layer1.r", TEST_ROLELIST}};
+        String[][] expected = {rules[0], rules[1], toBeAdded2[0], toBeAdded2[1]};
         assertEquals(200,
                 postAsServletResponse(DATA_URI_JSON, createJSONBody(toBeAdded2), "text/json")
                         .getStatus());
@@ -286,11 +284,11 @@ public class AccessControllersTest extends SecurityRESTTestSupport {
         // service rules
 
         rules = getDefaultServiceRules();
-        toBeAdded2 = new String[][] { { "ws.*", TEST_ROLE1 }, { "ws2.GetFeature", TEST_ROLELIST } };
+        toBeAdded2 = new String[][]{{"ws.*", TEST_ROLE1}, {"ws2.GetFeature", TEST_ROLELIST}};
         assertEquals(200,
                 postAsServletResponse(SERVICE_URI_JSON, createJSONBody(toBeAdded2), "text/json")
                         .getStatus());
-        expected = new String[][] { rules[0], toBeAdded2[0], toBeAdded2[1] };
+        expected = new String[][]{rules[0], toBeAdded2[0], toBeAdded2[1]};
 
         json = (JSONObject) getAsJSON(SERVICE_URI_JSON);
         checkJSONResponse(json, expected);
@@ -303,7 +301,7 @@ public class AccessControllersTest extends SecurityRESTTestSupport {
         // REST rules
 
         rules = getDefaultRestRules();
-        toBeAdded = new String[][] { rules[0], { "/myworkspace/**:GET", TEST_ROLELIST } }; // conflict
+        toBeAdded = new String[][]{rules[0], {"/myworkspace/**:GET", TEST_ROLELIST}}; // conflict
         assertEquals(409,
                 postAsServletResponse(REST_URI_JSON, createJSONBody(toBeAdded), "text/json")
                         .getStatus());
@@ -313,9 +311,9 @@ public class AccessControllersTest extends SecurityRESTTestSupport {
         checkJSONResponse(json, rules);
 
         // add
-        toBeAdded2 = new String[][] { { "/myworkspace/**:PUT,POST", TEST_ROLE1 },
-                { "/myworkspace/**:GET", TEST_ROLELIST } };
-        expected = new String[][] { rules[0], rules[1], toBeAdded2[0], toBeAdded2[1] };
+        toBeAdded2 = new String[][]{{"/myworkspace/**:PUT,POST", TEST_ROLE1},
+                {"/myworkspace/**:GET", TEST_ROLELIST}};
+        expected = new String[][]{rules[0], rules[1], toBeAdded2[0], toBeAdded2[1]};
         assertEquals(200,
                 postAsServletResponse(REST_URI_JSON, createJSONBody(toBeAdded2), "text/json")
                         .getStatus());
@@ -330,7 +328,7 @@ public class AccessControllersTest extends SecurityRESTTestSupport {
 
         // layer rules
         String[][] rules = getDefaultLayerRules();
-        String[][] toBeModified = { rules[0], { "ws.layer1.r", TEST_ROLELIST } }; // conflict
+        String[][] toBeModified = {rules[0], {"ws.layer1.r", TEST_ROLELIST}}; // conflict
         assertEquals(409,
                 putAsServletResponse(DATA_URI_JSON, createJSONBody(toBeModified), "text/json")
                         .getStatus());
@@ -340,7 +338,7 @@ public class AccessControllersTest extends SecurityRESTTestSupport {
         checkJSONResponse(json, rules);
 
         // modify
-        String[][] toBeModified2 = { { rules[0][0], TEST_ROLE1 }, { rules[1][0], TEST_ROLELIST } };
+        String[][] toBeModified2 = {{rules[0][0], TEST_ROLE1}, {rules[1][0], TEST_ROLELIST}};
         assertEquals(200,
                 putAsServletResponse(DATA_URI_JSON, createJSONBody(toBeModified2), "text/json")
                         .getStatus());
@@ -351,8 +349,8 @@ public class AccessControllersTest extends SecurityRESTTestSupport {
         // service rules
 
         rules = getDefaultServiceRules();
-        toBeModified2 = new String[][] { { "ws.*", TEST_ROLE1 },
-                { "ws2.GetFeature", TEST_ROLELIST } }; // conflict
+        toBeModified2 = new String[][]{{"ws.*", TEST_ROLE1},
+                {"ws2.GetFeature", TEST_ROLELIST}}; // conflict
         assertEquals(409,
                 putAsServletResponse(SERVICE_URI_JSON, createJSONBody(toBeModified2), "text/json")
                         .getStatus());
@@ -360,13 +358,13 @@ public class AccessControllersTest extends SecurityRESTTestSupport {
         json = (JSONObject) getAsJSON(SERVICE_URI_JSON);
         checkJSONResponse(json, rules);
 
-        assertEquals(200, putAsServletResponse(SERVICE_URI_JSON, createJSONBody(new String[][] {}),
+        assertEquals(200, putAsServletResponse(SERVICE_URI_JSON, createJSONBody(new String[][]{}),
                 "text/json").getStatus());
 
         // REST rules
 
         rules = getDefaultRestRules();
-        toBeModified = new String[][] { rules[0], { "/myworkspace/**:GET", TEST_ROLELIST } }; // conflict
+        toBeModified = new String[][]{rules[0], {"/myworkspace/**:GET", TEST_ROLELIST}}; // conflict
         assertEquals(409,
                 putAsServletResponse(REST_URI_JSON, createJSONBody(toBeModified), "text/json")
                         .getStatus());
@@ -376,8 +374,8 @@ public class AccessControllersTest extends SecurityRESTTestSupport {
         checkJSONResponse(json, rules);
 
         // modify
-        toBeModified2 = new String[][] { { rules[0][0], TEST_ROLE1 },
-                { rules[1][0], TEST_ROLELIST } };
+        toBeModified2 = new String[][]{{rules[0][0], TEST_ROLE1},
+                {rules[1][0], TEST_ROLELIST}};
         assertEquals(200,
                 putAsServletResponse(REST_URI_JSON, createJSONBody(toBeModified2), "text/json")
                         .getStatus());
@@ -392,7 +390,7 @@ public class AccessControllersTest extends SecurityRESTTestSupport {
 
         // layer rules
         String[][] rules = getDefaultLayerRules();
-        String[][] toBeModified = { rules[0], { "ws.layer1.r", TEST_ROLELIST } }; // conflict
+        String[][] toBeModified = {rules[0], {"ws.layer1.r", TEST_ROLELIST}}; // conflict
         assertEquals(409,
                 putAsServletResponse(DATA_URI_XML, createXMLBody(toBeModified), "text/xml")
                         .getStatus());
@@ -402,7 +400,7 @@ public class AccessControllersTest extends SecurityRESTTestSupport {
         checkXMLResponse(dom, rules);
 
         // modify
-        String[][] toBeModified2 = { { rules[0][0], TEST_ROLE1 }, { rules[1][0], TEST_ROLELIST } };
+        String[][] toBeModified2 = {{rules[0][0], TEST_ROLE1}, {rules[1][0], TEST_ROLELIST}};
         assertEquals(200,
                 putAsServletResponse(DATA_URI_XML, createXMLBody(toBeModified2), "text/xml")
                         .getStatus());
@@ -413,8 +411,8 @@ public class AccessControllersTest extends SecurityRESTTestSupport {
         // service rules
 
         rules = getDefaultServiceRules();
-        toBeModified2 = new String[][] { { "ws.*", TEST_ROLE1 },
-                { "ws2.GetFeature", TEST_ROLELIST } }; // conflict
+        toBeModified2 = new String[][]{{"ws.*", TEST_ROLE1},
+                {"ws2.GetFeature", TEST_ROLELIST}}; // conflict
         assertEquals(409,
                 putAsServletResponse(SERVICE_URI_XML, createXMLBody(toBeModified2), "text/xml")
                         .getStatus());
@@ -423,13 +421,13 @@ public class AccessControllersTest extends SecurityRESTTestSupport {
         checkXMLResponse(dom, rules);
 
         assertEquals(200,
-                putAsServletResponse(SERVICE_URI_XML, createXMLBody(new String[][] {}), "text/xml")
+                putAsServletResponse(SERVICE_URI_XML, createXMLBody(new String[][]{}), "text/xml")
                         .getStatus());
 
         // REST rules
 
         rules = getDefaultRestRules();
-        toBeModified = new String[][] { rules[0], { "/myworkspace/**:GET", TEST_ROLELIST } }; // conflict
+        toBeModified = new String[][]{rules[0], {"/myworkspace/**:GET", TEST_ROLELIST}}; // conflict
         assertEquals(409,
                 putAsServletResponse(REST_URI_XML, createXMLBody(toBeModified), "text/xml")
                         .getStatus());
@@ -439,8 +437,8 @@ public class AccessControllersTest extends SecurityRESTTestSupport {
         checkXMLResponse(dom, rules);
 
         // modify
-        toBeModified2 = new String[][] { { rules[0][0], TEST_ROLE1 },
-                { rules[1][0], TEST_ROLELIST } };
+        toBeModified2 = new String[][]{{rules[0][0], TEST_ROLE1},
+                {rules[1][0], TEST_ROLELIST}};
         assertEquals(200,
                 putAsServletResponse(REST_URI_XML, createXMLBody(toBeModified2), "text/xml")
                         .getStatus());
@@ -502,28 +500,28 @@ public class AccessControllersTest extends SecurityRESTTestSupport {
         // layer rules
 
         String[][] rules = getDefaultLayerRules();
-        String[][] toBeAdded = { { "ws.layer1.r.c", TEST_ROLELIST } };
+        String[][] toBeAdded = {{"ws.layer1.r.c", TEST_ROLELIST}};
         assertEquals(422, postAsServletResponse(DATA_URI_XML, createXMLBody(toBeAdded), "text/xml")
                 .getStatus());
         // check if nothing changed
         Document dom = getAsDOM(DATA_URI_XML);
         checkXMLResponse(dom, rules);
 
-        toBeAdded = new String[][] { { "ws.layer1.x", TEST_ROLELIST } }; // conflict
+        toBeAdded = new String[][]{{"ws.layer1.x", TEST_ROLELIST}}; // conflict
         assertEquals(422, postAsServletResponse(DATA_URI_XML, createXMLBody(toBeAdded), "text/xml")
                 .getStatus());
         // check if nothing changed
         dom = getAsDOM(DATA_URI_XML);
         checkXMLResponse(dom, rules);
 
-        toBeAdded = new String[][] { { "*.layer1.r", TEST_ROLELIST } }; // conflict
+        toBeAdded = new String[][]{{"*.layer1.r", TEST_ROLELIST}}; // conflict
         assertEquals(422, postAsServletResponse(DATA_URI_XML, createXMLBody(toBeAdded), "text/xml")
                 .getStatus());
         // check if nothing changed
         dom = getAsDOM(DATA_URI_XML);
         checkXMLResponse(dom, rules);
 
-        toBeAdded = new String[][] { { "ws.layer1.a", TEST_ROLELIST } }; // conflict
+        toBeAdded = new String[][]{{"ws.layer1.a", TEST_ROLELIST}}; // conflict
         assertEquals(422, postAsServletResponse(DATA_URI_XML, createXMLBody(toBeAdded), "text/xml")
                 .getStatus());
         // check if nothing changed
@@ -532,7 +530,7 @@ public class AccessControllersTest extends SecurityRESTTestSupport {
 
         // services
         rules = getDefaultServiceRules();
-        toBeAdded = new String[][] { { "ws.getMap.c", TEST_ROLELIST } }; // conflict
+        toBeAdded = new String[][]{{"ws.getMap.c", TEST_ROLELIST}}; // conflict
         assertEquals(422,
                 postAsServletResponse(SERVICE_URI_XML, createXMLBody(toBeAdded), "text/xml")
                         .getStatus());
@@ -540,7 +538,7 @@ public class AccessControllersTest extends SecurityRESTTestSupport {
         dom = getAsDOM(SERVICE_URI_XML);
         checkXMLResponse(dom, rules);
 
-        toBeAdded = new String[][] { { "*.getMap", TEST_ROLELIST } }; // conflict
+        toBeAdded = new String[][]{{"*.getMap", TEST_ROLELIST}}; // conflict
         assertEquals(422,
                 postAsServletResponse(SERVICE_URI_XML, createXMLBody(toBeAdded), "text/xml")
                         .getStatus());
@@ -549,7 +547,7 @@ public class AccessControllersTest extends SecurityRESTTestSupport {
         checkXMLResponse(dom, rules);
 
         rules = getDefaultRestRules();
-        toBeAdded = new String[][] { rules[0], { "/myworkspace/**!!!GET", TEST_ROLELIST } }; // conflict
+        toBeAdded = new String[][]{rules[0], {"/myworkspace/**!!!GET", TEST_ROLELIST}}; // conflict
         assertEquals(422, postAsServletResponse(REST_URI_XML, createXMLBody(toBeAdded), "text/xml")
                 .getStatus());
 
@@ -571,10 +569,10 @@ public class AccessControllersTest extends SecurityRESTTestSupport {
         assertEquals(403, getAsServletResponse(REST_URI_JSON).getStatus());
 
         // layer rules
-        String[][] dataRules = { { "ws.layer1.w", TEST_ROLE1 }, { "ws.layer1.r", TEST_ROLELIST } };
-        String[][] serviceRules = new String[][] { { "ws.*", TEST_ROLE1 },
-                { "ws2.GetFeature", TEST_ROLELIST } };
-        String[][] restRules = new String[][] { { "/myworkspace/**:GET", TEST_ROLELIST } }; // conflict
+        String[][] dataRules = {{"ws.layer1.w", TEST_ROLE1}, {"ws.layer1.r", TEST_ROLELIST}};
+        String[][] serviceRules = new String[][]{{"ws.*", TEST_ROLE1},
+                {"ws2.GetFeature", TEST_ROLELIST}};
+        String[][] restRules = new String[][]{{"/myworkspace/**:GET", TEST_ROLELIST}}; // conflict
 
         assertEquals(403, putAsServletResponse(DATA_URI_XML, createXMLBody(dataRules), "text/xml")
                 .getStatus());
@@ -614,7 +612,7 @@ public class AccessControllersTest extends SecurityRESTTestSupport {
         assertEquals(403, deleteAsServletResponse(SERVICE_URI + "/fakerule").getStatus());
         assertEquals(403, deleteAsServletResponse(REST_URI + "/fakerule").getStatus());
 
-        
+
         String jsonTemplate = "{\"" + CatalogModeController.MODE_ELEMENT + "\":\"MIXED\"}";
         String xmlTemplate = "<" + CatalogModeController.XML_ROOT_ELEM + ">" + "\n";
         xmlTemplate += " <" + CatalogModeController.MODE_ELEMENT + ">MIXED";

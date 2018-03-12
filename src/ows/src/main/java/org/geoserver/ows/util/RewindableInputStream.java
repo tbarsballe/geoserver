@@ -101,7 +101,7 @@ public class RewindableInputStream extends InputStream {
      * buffer of default size and default value of chunked reading flag (which
      * is _currently_ <code>true</code>).
      *
-     * @param  is  InputStream that needs basic reset/rewind functionality.
+     * @param is InputStream that needs basic reset/rewind functionality.
      */
     public RewindableInputStream(InputStream is) {
         this(is, true, DEFAULT_XMLDECL_BUFFER_SIZE);
@@ -111,10 +111,9 @@ public class RewindableInputStream extends InputStream {
      * Creates new RewindableInputStream with internal buffer of specified size
      * and no chunk reading beyound the buffer limits allowed.
      *
-     * @param  is  InputStream that needs some reset/rewind functionality.
-     *
-     * @param  chunkedMode  See the <code>RewindableInputStream(InputStream,
-     *                      boolean, int)</code> constructor description.
+     * @param is          InputStream that needs some reset/rewind functionality.
+     * @param chunkedMode See the <code>RewindableInputStream(InputStream,
+     *                    boolean, int)</code> constructor description.
      */
     public RewindableInputStream(InputStream is, boolean chunkedMode) {
         this(is, chunkedMode, DEFAULT_XMLDECL_BUFFER_SIZE);
@@ -125,20 +124,16 @@ public class RewindableInputStream extends InputStream {
      * affecting class work (initial size of the internal buffer and
      * chunk read mode).
      *
-     * @param  is  InputStream that needs some reset/rewind functionality.
-     *
-     * @param  chunkedMode
-     *
-     *         Initial value of <code>fMayReadChunks</code> flag which determines
-     *         whether multiple bytes can be read from the underlying stream in
-     *         single reading operation or not. This value can be changed using
-     *         <code>setChunkedMode</code> (or its aliases). For specific
-     *         purpose of inferring encoding/charset of XML document typical
-     *         usage policy is to disable chunked reads while obtaining XML
-     *         declaration and then enable it to speed up reading the rest of
-     *         document.
-     *
-     * @param  initialSize  Initial size of the internal buffer array.
+     * @param is          InputStream that needs some reset/rewind functionality.
+     * @param chunkedMode Initial value of <code>fMayReadChunks</code> flag which determines
+     *                    whether multiple bytes can be read from the underlying stream in
+     *                    single reading operation or not. This value can be changed using
+     *                    <code>setChunkedMode</code> (or its aliases). For specific
+     *                    purpose of inferring encoding/charset of XML document typical
+     *                    usage policy is to disable chunked reads while obtaining XML
+     *                    declaration and then enable it to speed up reading the rest of
+     *                    document.
+     * @param initialSize Initial size of the internal buffer array.
      */
     public RewindableInputStream(InputStream is, boolean chunkedMode, int initialSize) {
         if (0 >= initialSize) {
@@ -161,7 +156,7 @@ public class RewindableInputStream extends InputStream {
      * will be reset after <code>rewind</code> invocation. By default this
      * position is the beginning of the stream.
      *
-     * @param  offset  New value for "fStartOffset".
+     * @param offset New value for "fStartOffset".
      */
     public void setStartOffset(int offset) {
         fStartOffset = offset;
@@ -173,7 +168,7 @@ public class RewindableInputStream extends InputStream {
      * the stream, you better forget about <code>reset</code>ting or
      * <code>rewind</code>ing it after that.
      *
-     * @param  chunkedMode  New value for <code>fMayReadChunks</code>.
+     * @param chunkedMode New value for <code>fMayReadChunks</code>.
      */
     public void setChunkedMode(boolean chunkedMode) {
         fMayReadChunks = chunkedMode;
@@ -212,7 +207,6 @@ public class RewindableInputStream extends InputStream {
      * already read at some point before.
      *
      * @return Next byte of data or <code>-1</code> if end of stream is reached.
-     *
      * @throws IOException in case of any I/O errors.
      */
     public int read() throws IOException {
@@ -269,7 +263,7 @@ public class RewindableInputStream extends InputStream {
      * the buffer, each invocation of this method will read exactly 1 byte
      * then. In "chunked" mode this method <em>may</em> return more than 1
      * byte, but it doesn't buffer the result.
-     *
+     * <p>
      * <p>From the other hand, for the task of reading xml declaration, such
      * behavior may be desirable, as we probably don't need reset/rewind
      * functionality after we finished with charset deduction. It is good
@@ -278,12 +272,10 @@ public class RewindableInputStream extends InputStream {
      * of the data.
      *
      * @return Total number of bytes actually read or <code>-1</code> if end
-     *         of stream has been reached.
-     *
-     * @throws IOException  when an I/O error occurs while reading data
-     *
-     * @throws IndexOutOfBoundsException  in case of invalid <code>off</code>,
-     *                 <code>len</code> and <code>b.length</code> combination
+     * of stream has been reached.
+     * @throws IOException               when an I/O error occurs while reading data
+     * @throws IndexOutOfBoundsException in case of invalid <code>off</code>,
+     *                                   <code>len</code> and <code>b.length</code> combination
      */
     public int read(byte[] b, int off, int len) throws IOException {
         if (null == b) {
@@ -369,10 +361,8 @@ public class RewindableInputStream extends InputStream {
      * number of bytes skipped is returned. If <code>n</code> is negative, no
      * bytes are skipped.
      *
-     * @param  n  Number of bytes to be skipped.
-     *
+     * @param n Number of bytes to be skipped.
      * @return Number of bytes actually skipped.
-     *
      * @throws IOException if an I/O error occurs.
      */
     public long skip(long n) throws IOException {
@@ -416,25 +406,24 @@ public class RewindableInputStream extends InputStream {
      * Returns the number of bytes that can be read (or skipped over) from this
      * input stream without blocking by the next caller of a method for this
      * input stream. For <code>RewindableInputStream</code> this can be:
-     *
+     * <p>
      * <ul>
-     *   <li>
-     *    Number of unread bytes in the <code>fData</code> buffer, i.e. those
-     *    between current position (fOffset) and total bytes quantity in the
-     *    buffer (fLength).
-     *   </li>
-     *   <li>
-     *    Result of underlying InputStream's <code>available</code> call
-     *    if there are no unread bytes in the buffer.
-     *   </li>
-     *   <li>
-     *    <code>-1</code> if end of stream is reached.
-     *   </li>
+     * <li>
+     * Number of unread bytes in the <code>fData</code> buffer, i.e. those
+     * between current position (fOffset) and total bytes quantity in the
+     * buffer (fLength).
+     * </li>
+     * <li>
+     * Result of underlying InputStream's <code>available</code> call
+     * if there are no unread bytes in the buffer.
+     * </li>
+     * <li>
+     * <code>-1</code> if end of stream is reached.
+     * </li>
      * </ul>
      *
      * @return the number of bytes that can be read from this input stream
-     *         without blocking.
-     *
+     * without blocking.
      * @throws IOException when an I/O error occurs.
      */
     public int available() throws IOException {
@@ -464,7 +453,7 @@ public class RewindableInputStream extends InputStream {
     /**
      * Sets a mark to the current position in the stream.
      *
-     * @param  howMuch  Not used in this implementation I guess.
+     * @param howMuch Not used in this implementation I guess.
      */
     public void mark(int howMuch) {
         fMark = fOffset;
@@ -484,7 +473,7 @@ public class RewindableInputStream extends InputStream {
      * This one definitely supports it :)
      *
      * @return <code>true</code> if this stream instance supports the mark
-     *         and reset methods; <code>false</code> otherwise.
+     * and reset methods; <code>false</code> otherwise.
      */
     public boolean markSupported() {
         return true;

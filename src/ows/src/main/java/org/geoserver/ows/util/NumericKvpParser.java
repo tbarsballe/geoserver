@@ -15,16 +15,16 @@ import org.geotools.util.Converters;
  * The type of the number is determined by {@link #getBinding()}. It must be
  * assignable from {@link Number}.
  * </p>
- * @author Justin Deoliveira, The Open Planning Project, jdeolive@openplans.org
  *
+ * @author Justin Deoliveira, The Open Planning Project, jdeolive@openplans.org
  */
 public class NumericKvpParser extends KvpParser {
     /**
      * Constructs a numeric kvp parser with the specified key and binding.
      *
-     * @param key The key to bind to.
+     * @param key     The key to bind to.
      * @param binding The resulting type of parsed object, must be a subclass
-     * of {@link Number}.
+     *                of {@link Number}.
      */
     public NumericKvpParser(String key, Class binding) {
         super(key, binding);

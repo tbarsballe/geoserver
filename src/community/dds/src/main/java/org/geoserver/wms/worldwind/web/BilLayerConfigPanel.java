@@ -26,17 +26,15 @@ import org.geotools.util.logging.Logging;
 /**
  * UI panel to configure a the BIL output format for a layer. This panel appears
  * in the Publishing tab of the layer configuration for a raster layer.
- * 
+ *
  * @author Parker Abercrombie
  */
-public class BilLayerConfigPanel extends PublishedConfigurationPanel<LayerInfo>
-{
+public class BilLayerConfigPanel extends PublishedConfigurationPanel<LayerInfo> {
     private static final long serialVersionUID = -7082211085566621848L;
-    
+
     private static final Logger LOGGER = Logging.getLogger(BilLayerConfigPanel.class);
 
-    public BilLayerConfigPanel(String id, IModel<LayerInfo> model)
-    {
+    public BilLayerConfigPanel(String id, IModel<LayerInfo> model) {
         super(id, model);
 
         PropertyModel<Object> metadata = new PropertyModel<Object>(model,
@@ -63,28 +61,24 @@ public class BilLayerConfigPanel extends PublishedConfigurationPanel<LayerInfo>
     /**
      * Renderer to display a localized string for the Byte Order drop down.
      */
-    private class ByteOrderRenderer extends ChoiceRenderer<String>
-    {
+    private class ByteOrderRenderer extends ChoiceRenderer<String> {
 
         private static final long serialVersionUID = 9198622236589910965L;
 
-        public Object getDisplayValue(String str)
-    	{
-    	    IStringResourceLoader loader = new GeoServerStringResourceLoader();
-    	    if (ByteOrder.LITTLE_ENDIAN.toString().equals(str))
-        	{
-    	            return new StringResourceModel("byteOrderLittleEndian", BilLayerConfigPanel.this).getObject();
-        	} else if (ByteOrder.BIG_ENDIAN.toString().equals(str)) {
-                    return new StringResourceModel("byteOrderBigEndian", BilLayerConfigPanel.this).getObject();
-        	}
+        public Object getDisplayValue(String str) {
+            IStringResourceLoader loader = new GeoServerStringResourceLoader();
+            if (ByteOrder.LITTLE_ENDIAN.toString().equals(str)) {
+                return new StringResourceModel("byteOrderLittleEndian", BilLayerConfigPanel.this).getObject();
+            } else if (ByteOrder.BIG_ENDIAN.toString().equals(str)) {
+                return new StringResourceModel("byteOrderBigEndian", BilLayerConfigPanel.this).getObject();
+            }
 
-    	    LOGGER.warning("Unknown byte order: " + str);
-        	return str;
+            LOGGER.warning("Unknown byte order: " + str);
+            return str;
         }
 
-        public String getIdValue(String str, int index)
-        {
-        	return str;
+        public String getIdValue(String str, int index) {
+            return str;
         }
     }
 }

@@ -48,10 +48,10 @@ public class StyleEditPageWorkspaceRenameAndEditTest extends GeoServerWicketTest
         login();
 
         buildingsStyle = catalog.getStyleByName(MockData.BUILDINGS.getLocalPart());
-        if(buildingsStyle == null) {
+        if (buildingsStyle == null) {
             // undo the rename performed in one of the test methods
             StyleInfo si = catalog.getStyleByName("BuildingsNew");
-            if(si != null) {
+            if (si != null) {
                 si.setName(MockData.BUILDINGS.getLocalPart());
                 catalog.save(si);
             }

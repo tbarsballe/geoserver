@@ -15,47 +15,49 @@ import org.geoserver.catalog.DimensionPresentation;
 /**
  * Configuration about a dimension, such as time or elevation (theoretically could be a custom one
  * too)
- * 
+ *
  * @author Andrea Aime - GeoSolutions
- * 
  */
 public class DimensionInfoImpl implements DimensionInfo {
 
-    /** serialVersionUID */
+    /**
+     * serialVersionUID
+     */
     private static final long serialVersionUID = -2978192474130857785L;
 
     boolean enabled;
 
     String attribute;
-    
+
     String endAttribute;
 
     DimensionPresentation presentation;
 
     BigDecimal resolution;
-    
+
     String units;
-    
+
     String unitSymbol;
 
     DimensionDefaultValueSetting defaultValue;
-    
+
     Boolean nearestMatchEnabled;
-    
+
     String acceptableInterval;
-    
+
     /**
      * The default constructor
      */
-    public DimensionInfoImpl(){
+    public DimensionInfoImpl() {
         super();
     }
-    
+
     /**
      * Creates a shallow copy of the given Dimension object
+     *
      * @param info
      */
-    public DimensionInfoImpl(DimensionInfo info){
+    public DimensionInfoImpl(DimensionInfo info) {
         super();
         this.enabled = info.isEnabled();
         this.attribute = info.getAttribute();
@@ -67,7 +69,7 @@ public class DimensionInfoImpl implements DimensionInfo {
         this.defaultValue = info.getDefaultValue();
         this.enabled = info.isEnabled();
     }
-    
+
     public boolean isEnabled() {
         return enabled;
     }
@@ -83,7 +85,7 @@ public class DimensionInfoImpl implements DimensionInfo {
     public void setAttribute(String attribute) {
         this.attribute = attribute;
     }
-        
+
     public String getEndAttribute() {
         return this.endAttribute;
     }
@@ -107,7 +109,7 @@ public class DimensionInfoImpl implements DimensionInfo {
     public void setResolution(BigDecimal resolution) {
         this.resolution = resolution;
     }
-    
+
     public String getUnits() {
         return units;
     }
@@ -199,7 +201,7 @@ public class DimensionInfoImpl implements DimensionInfo {
 
     @Override
     public void setDefaultValue(DimensionDefaultValueSetting defaultValue) {
-       this.defaultValue = defaultValue;        
+        this.defaultValue = defaultValue;
     }
 
 }

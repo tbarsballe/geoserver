@@ -50,7 +50,7 @@ class WritableDataView extends DefaultView implements SimpleFeatureStore {
     public void removeFeatures(Filter filter) throws IOException {
         Filter mixedFilter = mixFilter(filter);
         delegate.removeFeatures(mixedFilter);
-        
+
     }
 
     private Filter mixFilter(Filter filter) {
@@ -80,7 +80,7 @@ class WritableDataView extends DefaultView implements SimpleFeatureStore {
             throws IOException {
         Filter mixedFilter = mixFilter(filter);
         delegate.modifyFeatures(attributeName, attributeValue, mixedFilter);
-        
+
     }
 
     @Override

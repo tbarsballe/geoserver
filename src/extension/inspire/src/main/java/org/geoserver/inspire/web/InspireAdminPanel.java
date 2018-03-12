@@ -75,7 +75,7 @@ public class InspireAdminPanel extends AdminPagePanel {
 
         final CheckBox createInspireExtendedCapabilities
                 = new CheckBox("createExtendedCapabilities",
-                        new MetadataMapModel(metadata, CREATE_EXTENDED_CAPABILITIES.key, Boolean.class));
+                new MetadataMapModel(metadata, CREATE_EXTENDED_CAPABILITIES.key, Boolean.class));
         add(createInspireExtendedCapabilities);
 
         final WebMarkupContainer container = new WebMarkupContainer("container");

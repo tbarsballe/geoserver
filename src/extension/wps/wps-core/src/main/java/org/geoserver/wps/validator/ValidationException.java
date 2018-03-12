@@ -11,7 +11,7 @@ import org.springframework.validation.ObjectError;
 
 /**
  * A WPS exception occurring when validation on a certain input fails
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class ValidationException extends WPSException {

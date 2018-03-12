@@ -27,19 +27,19 @@ public class GeoserverTablePanelTestPage extends WebPage {
     public static final String FORM = "form";
 
     private String componentId;
-    
+
     public String getComponentId() {
         return componentId;
     }
-    
+
     public String getWicketPath() {
-        return FORM+":"+getComponentId();
+        return FORM + ":" + getComponentId();
     }
 
     public GeoserverTablePanelTestPage(ComponentBuilder builder) {
         Form<Serializable> form = new Form<Serializable>(FORM);
         Component c = builder.buildComponent(TABLE);
-        componentId =c.getId();
+        componentId = c.getId();
         form.add(c);
         add(form);
     }

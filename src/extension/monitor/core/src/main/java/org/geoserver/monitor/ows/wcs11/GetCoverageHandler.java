@@ -27,44 +27,44 @@ import org.opengis.referencing.operation.TransformException;
 public class GetCoverageHandler extends RequestObjectHandler {
 
     static Logger LOGGER = Logging.getLogger("org.geoserver.monitor");
-    
+
     public GetCoverageHandler(MonitorConfig config) {
         super("net.opengis.wcs11.GetCoverageType", config);
     }
-    
+
     @Override
     public List<String> getLayers(Object request) {
-        CodeType id = (CodeType)EMFUtils.get((EObject)request, "identifier");
-        return id != null ? Arrays.asList(id.getValue()) : null; 
+        CodeType id = (CodeType) EMFUtils.get((EObject) request, "identifier");
+        return id != null ? Arrays.asList(id.getValue()) : null;
     }
-    
+
     @Override
     protected BoundingBox getBBox(Object request) {
-        
+
         Object domainSubset = OwsUtils.get(request, "domainSubset");
         Object wcsBbox = OwsUtils.get(domainSubset, "boundingBox");
-        
+
         @SuppressWarnings("unchecked")
-            List<Double> upperCorner = (List<Double>) OwsUtils.get(wcsBbox, "upperCorner");
+        List<Double> upperCorner = (List<Double>) OwsUtils.get(wcsBbox, "upperCorner");
         @SuppressWarnings("unchecked")
-            List<Double> lowerCorner = (List<Double>) OwsUtils.get(wcsBbox, "lowerCorner");
-        
+        List<Double> lowerCorner = (List<Double>) OwsUtils.get(wcsBbox, "lowerCorner");
+
         CoordinateReferenceSystem crs = null;
-        String crsName= (String) OwsUtils.get(wcsBbox, "crs");
+        String crsName = (String) OwsUtils.get(wcsBbox, "crs");
         try {
-            crs= CRS.decode(crsName);
+            crs = CRS.decode(crsName);
         } catch (Exception e) {
             LOGGER.log(Level.WARNING, String.format("Could not decode CRS ID: %s", crsName), e);
             return null;
         }
-        
-        
-        double minX =  lowerCorner.get(0);
-        double maxX =  upperCorner.get(0);
-        double minY =  lowerCorner.get(1);
-        double maxY =  upperCorner.get(1);
-        
-        try{
+
+
+        double minX = lowerCorner.get(0);
+        double maxX = upperCorner.get(0);
+        double minY = lowerCorner.get(1);
+        double maxY = upperCorner.get(1);
+
+        try {
             // Turn into a class that implements BoundingBox
             return new ReferencedEnvelope(minX, maxX, minY, maxY, crs).toBounds(monitorConfig.getBboxCrs());
         } catch (TransformException e) {

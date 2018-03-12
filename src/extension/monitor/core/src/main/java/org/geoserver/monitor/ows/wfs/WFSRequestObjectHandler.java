@@ -27,20 +27,20 @@ import org.opengis.referencing.operation.TransformException;
 public abstract class WFSRequestObjectHandler extends RequestObjectHandler {
 
     static final Logger LOGGER = Logging.getLogger(WFSRequestObjectHandler.class);
-    
+
     // TODO: this should probably be handled as an update or extension to ExtractBoundsFilterVisitor
     ExtractBoundsFilterVisitor visitor = new ExtractBoundsFilterVisitor() {
-        public Object visit( BBOX filter, Object data ) {
-            if(data == null) {
+        public Object visit(BBOX filter, Object data) {
+            if (data == null) {
                 return null;
             }
-            
+
             BoundingBox bbox = (BoundingBox) data;
-                    
+
             BoundingBox bounds;
             try {
                 bounds = filter.getBounds();
-                if(bounds.getCoordinateReferenceSystem()==null){
+                if (bounds.getCoordinateReferenceSystem() == null) {
                     bounds = ReferencedEnvelope.create(bounds, bbox.getCoordinateReferenceSystem());
                 }
                 bounds.toBounds(monitorConfig.getBboxCrs());
@@ -48,7 +48,7 @@ public abstract class WFSRequestObjectHandler extends RequestObjectHandler {
                 // We're stuck so give up.
                 return null;
             }
-            
+
             bbox.include(bounds);
             return bbox;
         }
@@ -56,6 +56,7 @@ public abstract class WFSRequestObjectHandler extends RequestObjectHandler {
     };
 
     Catalog catalog;
+
     protected WFSRequestObjectHandler(String reqObjClassName, MonitorConfig config, Catalog catalog) {
         super(reqObjClassName, config);
         this.catalog = catalog;
@@ -73,29 +74,29 @@ public abstract class WFSRequestObjectHandler extends RequestObjectHandler {
             }
 
             return prefix != null ? prefix + ":" + qName.getLocalPart() : qName.getLocalPart();
-        }
-        else {
+        } else {
             return name.toString();
         }
-         
+
     }
-    
+
     /**
      * Look up the CRS of the specified FeatureType
      */
     protected CoordinateReferenceSystem crsFromTypeName(QName typeName) {
-            FeatureTypeInfo featureType = catalog.getFeatureTypeByName(typeName.getNamespaceURI(), typeName.getLocalPart());
-            
-            return featureType.getCRS();
+        FeatureTypeInfo featureType = catalog.getFeatureTypeByName(typeName.getNamespaceURI(), typeName.getLocalPart());
+
+        return featureType.getCRS();
     }
-    
+
     // There are two slight differences between the different WFS requests in how they store
     // their filters.  These methods are overridden to regularize these differences.
     protected abstract List<Object> getElements(Object request);
-    
-    protected Object unwrapElement(Object element){
+
+    protected Object unwrapElement(Object element) {
         return element;
     }
+
     protected CoordinateReferenceSystem getCrsFromElement(Object element) {
         if (OwsUtils.has(element, "typeName")) {
             return crsFromTypeName((QName) OwsUtils.get(element, "typeName"));
@@ -109,16 +110,16 @@ public abstract class WFSRequestObjectHandler extends RequestObjectHandler {
 
     @Override
     protected BoundingBox getBBox(Object request) {
-        if(monitorConfig.getBboxMode()!=MonitorConfig.BboxMode.FULL){
+        if (monitorConfig.getBboxMode() != MonitorConfig.BboxMode.FULL) {
             return null;
         }
 
         List<Object> elements = getElements(request);
-        if (elements==null) return null;
+        if (elements == null) return null;
 
         try {
             BoundingBox result = new ReferencedEnvelope(monitorConfig.getBboxCrs());
-            for(Object e : elements){
+            for (Object e : elements) {
                 e = unwrapElement(e);
 
                 //first ask for a bounding box directly
@@ -132,7 +133,7 @@ public abstract class WFSRequestObjectHandler extends RequestObjectHandler {
                     }
 
                     Filter f = OwsUtils.has(e, "filter") ? (Filter) OwsUtils.get(e, "filter") : null;
-                    if(f != null) {
+                    if (f != null) {
                         ReferencedEnvelope startingBbox = new ReferencedEnvelope(defaultCrs);
                         bbox = (ReferencedEnvelope) f.accept(visitor, startingBbox);
                     }

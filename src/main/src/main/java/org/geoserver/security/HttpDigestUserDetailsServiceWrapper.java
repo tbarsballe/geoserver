@@ -26,31 +26,30 @@ import org.springframework.security.crypto.codec.Hex;
 import org.springframework.security.web.authentication.www.DigestAuthenticationFilter;
 
 /**
- * {@link UserDetailsService} implementation to be used for 
+ * {@link UserDetailsService} implementation to be used for
  * HTTP digest authentication
- * 
+ * <p>
  * {@link UserDetails} objects have their password alreay md5a1 encoded.
- * 
- *  {@link DigestAuthenticationFilter#setPasswordAlreadyEncoded(boolean)} must
- *  be called with a value of <code>true</code>
- * 
- * @author christian
+ * <p>
+ * {@link DigestAuthenticationFilter#setPasswordAlreadyEncoded(boolean)} must
+ * be called with a value of <code>true</code>
  *
+ * @author christian
  */
 public class HttpDigestUserDetailsServiceWrapper implements UserDetailsService {
-    
-    static public class DigestUserDetails extends UserDetailsWrapper {        
+
+    static public class DigestUserDetails extends UserDetailsWrapper {
         private static final long serialVersionUID = 1L;
 
         private String password;
         private Collection<GrantedAuthority> roles;
-        
+
         public DigestUserDetails(UserDetails details, String password, Collection<GrantedAuthority> roles) {
             super(details);
-            this.password=password;
-            this.roles=roles;
+            this.password = password;
+            this.roles = roles;
         }
-        
+
         @Override
         public Collection<GrantedAuthority> getAuthorities() {
             return roles;
@@ -62,107 +61,106 @@ public class HttpDigestUserDetailsServiceWrapper implements UserDetailsService {
         }
 
     }
-    
+
     private GeoServerSecurityManager manager;
     protected GeoServerUserGroupService service;
     protected Charset charSet;
-    protected final char[] delimArray= new char[] {':' };
+    protected final char[] delimArray = new char[]{':'};
     protected MessageDigest digest;
     protected GeoServerMultiplexingPasswordEncoder enc;
-    
-    public HttpDigestUserDetailsServiceWrapper(GeoServerUserGroupService service,Charset charSet) {
-       this.service= service;
-       this.charSet=charSet;
-       manager = service.getSecurityManager();
-       enc = new GeoServerMultiplexingPasswordEncoder(service.getSecurityManager(),service);                         
+
+    public HttpDigestUserDetailsServiceWrapper(GeoServerUserGroupService service, Charset charSet) {
+        this.service = service;
+        this.charSet = charSet;
+        manager = service.getSecurityManager();
+        enc = new GeoServerMultiplexingPasswordEncoder(service.getSecurityManager(), service);
         try {
             digest = MessageDigest.getInstance("MD5");
         } catch (NoSuchAlgorithmException e) {
             throw new IllegalStateException("No MD5 algorithm available!");
-        } 
+        }
     }
 
-    
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException,
             DataAccessException {
-        
+
         if (GeoServerUser.ROOT_USERNAME.equals(username))
-            return prepareForRootUser ();
-        
-        GeoServerUser user = (GeoServerUser) service.loadUserByUsername(username);            
+            return prepareForRootUser();
+
+        GeoServerUser user = (GeoServerUser) service.loadUserByUsername(username);
         return prepareForUser(user);
     }
 
-    UserDetails prepareForUser (GeoServerUser user) {
+    UserDetails prepareForUser(GeoServerUser user) {
         char[] pw = null;
-        try {            
+        try {
             pw = enc.decodeToCharArray(user.getPassword());
         } catch (UnsupportedOperationException ex) {
             pw = user.getPassword().toCharArray();
-        }    
-             
-        String a1 = encodePasswordInA1Format(user.getUsername(), 
-                    GeoServerSecurityManager.REALM, pw);
-        manager.disposePassword(pw);    
+        }
+
+        String a1 = encodePasswordInA1Format(user.getUsername(),
+                GeoServerSecurityManager.REALM, pw);
+        manager.disposePassword(pw);
         List<GrantedAuthority> roles = new ArrayList<GrantedAuthority>();
         roles.addAll(user.getAuthorities());
-        roles.add(GeoServerRole.AUTHENTICATED_ROLE);                
-        return new DigestUserDetails(user, a1,roles);
+        roles.add(GeoServerRole.AUTHENTICATED_ROLE);
+        return new DigestUserDetails(user, a1, roles);
     }
-    
-    UserDetails prepareForRootUser () {
-        
+
+    UserDetails prepareForRootUser() {
+
         char[] mpw = null;
         try {
-            mpw= manager.getMasterPassword();
-            String a1 = encodePasswordInA1Format(GeoServerUser.ROOT_USERNAME, 
+            mpw = manager.getMasterPassword();
+            String a1 = encodePasswordInA1Format(GeoServerUser.ROOT_USERNAME,
                     GeoServerSecurityManager.REALM, mpw);
-            
+
             return new UserDetailsPasswordWrapper(
                     GeoServerUser.createRoot(), a1);
-        }
-        finally {
-            if (mpw!=null)
+        } finally {
+            if (mpw != null)
                 manager.disposePassword(mpw);
         }
     }
-    
+
     String encodePasswordInA1Format(String username, String realm, char[] password) {
         char[] array = null;
         try {
             char[] usernameArray = username.toCharArray();
             char[] realmArray = realm.toCharArray();
-            
-            array = new char[usernameArray.length+realmArray.length+password.length+2];
-            int pos=0;
-            
+
+            array = new char[usernameArray.length + realmArray.length + password.length + 2];
+            int pos = 0;
+
             System.arraycopy(usernameArray, 0, array, pos, usernameArray.length);
-            pos+=usernameArray.length;
-            
+            pos += usernameArray.length;
+
             System.arraycopy(delimArray, 0, array, pos, 1);
             pos++;
-    
+
             System.arraycopy(realmArray, 0, array, pos, realmArray.length);
-            pos+=realmArray.length;
-            
+            pos += realmArray.length;
+
             System.arraycopy(delimArray, 0, array, pos, 1);
             pos++;
-    
+
             System.arraycopy(password, 0, array, pos, password.length);
-                        
-            MessageDigest md=null;
+
+            MessageDigest md = null;
             try {
                 md = (MessageDigest) digest.clone(); // thread safe
             } catch (CloneNotSupportedException e) {
                 throw new RuntimeException(e);
             }
             return new String(Hex.encode(md.digest(SecurityUtils.toBytes(array, charSet))));
-            
+
         } finally {
-            if (array!=null)
+            if (array != null)
                 manager.disposePassword(array);
-        }                        
+        }
     }
-    
+
 }

@@ -51,14 +51,13 @@ import org.opengis.filter.expression.Function;
 import org.opengis.parameter.Parameter;
 
 /**
- * Extracts the active raster symbolizers, as long as there are some, and only raster symbolizers 
+ * Extracts the active raster symbolizers, as long as there are some, and only raster symbolizers
  * are available, without rendering transformations in place.
  * In the case of mixed symbolizers it will return null
  * TODO: extend this class so that it handles the case of other symbolizers applied after a raster
  * symbolizer one (e.g., to draw a rectangle around a coverage)
- * 
- * @author Andrea Aime
  *
+ * @author Andrea Aime
  */
 public class RasterSymbolizerVisitor implements StyleVisitor {
 
@@ -67,32 +66,32 @@ public class RasterSymbolizerVisitor implements StyleVisitor {
     FeatureType featureType;
 
     List<RasterSymbolizer> symbolizers = new ArrayList<RasterSymbolizer>();
-    
+
     boolean otherSymbolizers = false;
-    
+
     Expression rasterTransformation = null;
-    
+
     boolean otherRenderingTransformations = false;
 
     public RasterSymbolizerVisitor(double scaleDenominator, FeatureType featureType) {
         this.scaleDenominator = scaleDenominator;
         this.featureType = featureType;
     }
-    
+
     public void reset() {
         symbolizers.clear();
         otherSymbolizers = false;
         rasterTransformation = null;
         otherRenderingTransformations = false;
     }
-    
+
     public List<RasterSymbolizer> getRasterSymbolizers() {
-        if(otherSymbolizers || otherRenderingTransformations)
+        if (otherSymbolizers || otherRenderingTransformations)
             return Collections.emptyList();
         else
             return symbolizers;
     }
-    
+
     public Expression getRasterRenderingTransformation() {
         return rasterTransformation;
     }
@@ -130,32 +129,32 @@ public class RasterSymbolizerVisitor implements StyleVisitor {
     public void visit(Rule rule) {
         if (rule.getMinScaleDenominator() < scaleDenominator
                 && rule.getMaxScaleDenominator() > scaleDenominator) {
-            for(Symbolizer s : rule.symbolizers())
+            for (Symbolizer s : rule.symbolizers())
                 s.accept(this);
         }
     }
 
     public void visit(FeatureTypeStyle fts) {
         // use the same logic as streaming renderer to decide if a fts is active
-        if(featureType == null || (featureType.getName().getLocalPart() != null)
-                && (featureType.getName().getLocalPart().equalsIgnoreCase(fts.getFeatureTypeName()) || 
-                        FeatureTypes.isDecendedFrom(featureType, null, fts.getFeatureTypeName()))) {
+        if (featureType == null || (featureType.getName().getLocalPart() != null)
+                && (featureType.getName().getLocalPart().equalsIgnoreCase(fts.getFeatureTypeName()) ||
+                FeatureTypes.isDecendedFrom(featureType, null, fts.getFeatureTypeName()))) {
             Expression tx = fts.getTransformation();
-            if(tx != null) {
+            if (tx != null) {
                 boolean rasterTransformation = false;
-                if(tx instanceof Function) {
+                if (tx instanceof Function) {
                     Function f = (Function) tx;
                     FunctionName name = f.getFunctionName();
-                    if(name != null) {
+                    if (name != null) {
                         Parameter<?> result = name.getReturn();
-                        if(result != null) {
-                            if(GridCoverage2D.class.isAssignableFrom(result.getType())) {
+                        if (result != null) {
+                            if (GridCoverage2D.class.isAssignableFrom(result.getType())) {
                                 rasterTransformation = true;
                                 this.rasterTransformation = tx;
                             }
-                        } 
+                        }
                     }
-                } 
+                }
                 otherRenderingTransformations |= !rasterTransformation;
             }
             for (Rule r : fts.rules()) {

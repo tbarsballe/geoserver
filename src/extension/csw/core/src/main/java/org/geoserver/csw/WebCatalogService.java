@@ -27,7 +27,7 @@ import org.opengis.feature.type.AttributeDescriptor;
 
 /**
  * The interface representing a Catalog Service for the Web implementation
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public interface WebCatalogService {
@@ -35,7 +35,7 @@ public interface WebCatalogService {
      * The configuration of the service.
      */
     CSWInfo getServiceInfo();
-    
+
     /**
      * Returns a object model representing the capabilities document
      */
@@ -55,12 +55,12 @@ public interface WebCatalogService {
      * Returns the records matching the specified request
      */
     CSWRecordsResult getRecordById(GetRecordByIdType request) throws ServiceException;
-    
+
     /**
      * Returns the list of possible values for the specified parameter/property
      */
     CloseableIterator<String> getDomain(GetDomainType request) throws ServiceException;
-    
+
     /**
      * The optional GetRepositoryItem request, used for ebRIM but could be useful for
      * a general catalog that wants the data to be made available for download as well
@@ -69,25 +69,25 @@ public interface WebCatalogService {
 
     /**
      * Runs a harvest request
-     * 
+     *
      * @param request
      * @param response
      * @throws CSWException
      */
     HarvestResponseType harvest(HarvestType request) throws ServiceException;
-    
+
     /**
      * Runs a transaction request
-     * 
+     *
      * @param request
      * @param response
      * @throws CSWException
      */
     HarvestResponseType transaction(TransactionType request) throws ServiceException;
-    
+
     /**
      * Runs a direct download request
-     * 
+     *
      * @param request
      * @param response
      * @throws CSWException

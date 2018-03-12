@@ -12,13 +12,13 @@ import java.util.TreeMap;
 
 /**
  * Mock data for {@link Gsml32BoreholeWfsTest}.
- * 
+ *
  * @author Rini Angreani (CSIRO Earth Science and Resource Engineering)
  */
 public class Gsml32BoreholeMockData extends AbstractAppSchemaMockData {
 
     public static final String GSMLBH_PREFIX = "gsmlbh";
-    
+
     protected static final Map<String, String> GSML32_NAMESPACES = Collections
             .unmodifiableMap(new TreeMap<String, String>() {
                 /** serialVersionUID */
@@ -39,7 +39,7 @@ public class Gsml32BoreholeMockData extends AbstractAppSchemaMockData {
                     put("xlink", "http://www.w3.org/1999/xlink");
                 }
             });
-    
+
     public Gsml32BoreholeMockData() {
         super(GSML32_NAMESPACES);
     }

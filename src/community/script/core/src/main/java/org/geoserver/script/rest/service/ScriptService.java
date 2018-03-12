@@ -1,4 +1,5 @@
-/** (c) 2014 Open Source Geospatial Foundation - all rights reserved
+/**
+ * (c) 2014 Open Source Geospatial Foundation - all rights reserved
  * (c) 2001 - 2013 OpenPlans
  * This code is licensed under the GPL 2.0 license, available at the root
  * application directory.
@@ -75,7 +76,7 @@ public class ScriptService {
                     if (f.getType() == Type.DIRECTORY) {
                         String namespace = f.name();
                         List<Resource> files = f.list();
-                        for(Resource file: files) {
+                        for (Resource file : files) {
                             String name = namespace + ":" + file.name();
                             scripts.add(new Script(name));
                         }
@@ -97,7 +98,7 @@ public class ScriptService {
 
         try {
             if (path.contains(":")) {
-                path = path.replace(":","/");
+                path = path.replace(":", "/");
             }
             script = scriptMgr.script(path);
         } catch (IllegalStateException e) {
@@ -125,10 +126,10 @@ public class ScriptService {
 
         try {
             if (path.contains(":")) {
-                path = path.replace(":","/");
+                path = path.replace(":", "/");
             }
             script = scriptMgr.script(path);
-        } catch(IllegalStateException e) {
+        } catch (IllegalStateException e) {
             throw new RestException(format("Error creating script file %s", path),
                     HttpStatus.INTERNAL_SERVER_ERROR, e);
         }
@@ -143,7 +144,7 @@ public class ScriptService {
             } finally {
                 IOUtils.closeQuietly(w);
             }
-        } catch(IOException e) {
+        } catch (IOException e) {
             throw new RestException(format("Error writing script file %s", path),
                     HttpStatus.INTERNAL_SERVER_ERROR, e);
         }
@@ -156,7 +157,7 @@ public class ScriptService {
 
         try {
             if (path.contains(":")) {
-                path = path.replace(":","/");
+                path = path.replace(":", "/");
             }
             script = scriptMgr.script(path);
             if (!Resources.exists(script)) {

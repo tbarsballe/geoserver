@@ -85,13 +85,13 @@ public class GetCoverageRequestReader extends EMFKvpRequestReader {
         // set the other gridcrs properties
         final GridCrsType gridCRS = output.getGridCRS();
         gridCRS.setGridBaseCRS((String) kvp.get("gridBaseCrs"));
-        
+
         String gridType = (String) kvp.get("gridType");
         if (gridType == null) {
             gridType = gridCRS.getGridType();
         }
         gridCRS.setGridType(gridType);
-        
+
         String gridCS = (String) kvp.get("gridCS");
         if (gridCS == null) {
             gridCS = gridCRS.getGridCS();

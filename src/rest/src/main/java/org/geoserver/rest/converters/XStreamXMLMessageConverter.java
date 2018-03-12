@@ -34,7 +34,7 @@ public class XStreamXMLMessageConverter extends XStreamMessageConverter<Object> 
         // we can only read RestWrapper, not RestListWrapper
         return !RestWrapper.class.isAssignableFrom(clazz) || !RestListWrapper.class.isAssignableFrom(clazz);
     }
-    
+
     //
     // reading
     //
@@ -43,7 +43,7 @@ public class XStreamXMLMessageConverter extends XStreamMessageConverter<Object> 
 //        return !RestListWrapper.class.isAssignableFrom(clazz) && canRead(mediaType);
 //    }
 
-    
+
     @Override
     protected Object readInternal(Class<?> clazz, HttpInputMessage inputMessage)
             throws IOException, HttpMessageNotReadableException {
@@ -54,7 +54,7 @@ public class XStreamXMLMessageConverter extends XStreamMessageConverter<Object> 
         p.setCatalog(catalog);
         return p.load(inputMessage.getBody(), clazz);
     }
-    
+
     //
     // writing
     //
@@ -63,6 +63,7 @@ public class XStreamXMLMessageConverter extends XStreamMessageConverter<Object> 
         // we can only write RestWrapper, not RestListWrapper
         return !RestListWrapper.class.isAssignableFrom(clazz) && RestWrapper.class.isAssignableFrom(clazz) && canWrite(mediaType);
     }
+
     @Override
     protected void writeInternal(Object o, HttpOutputMessage outputMessage)
             throws IOException, HttpMessageNotWritableException {
@@ -82,12 +83,12 @@ public class XStreamXMLMessageConverter extends XStreamMessageConverter<Object> 
     public String getExtension() {
         return "xml";
     }
-    
+
     @Override
     public String getMediaType() {
         return MediaType.APPLICATION_XML_VALUE;
     }
-    
+
     @Override
     protected XStream createXStreamInstance() {
         return new SecureXStream();
@@ -97,7 +98,7 @@ public class XStreamXMLMessageConverter extends XStreamMessageConverter<Object> 
     public void encodeLink(String link, HierarchicalStreamWriter writer) {
         encodeAlternateAtomLink(link, writer);
     }
-    
+
     @Override
     public void encodeCollectionLink(String link, HierarchicalStreamWriter writer) {
         encodeAlternateAtomLink(link, writer);

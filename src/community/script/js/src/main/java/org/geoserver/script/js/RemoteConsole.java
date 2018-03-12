@@ -22,7 +22,7 @@ import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.mozilla.javascript.Context;
 
 public class RemoteConsole {
-    
+
     private HttpClient client;
     private String sessionId;
     private BufferedReader in;
@@ -38,7 +38,7 @@ public class RemoteConsole {
         UsernamePasswordCredentials creds = new UsernamePasswordCredentials(user, password);
         client.getState().setCredentials(scope, creds);
         client.getParams().setAuthenticationPreemptive(true);
-        
+
         sessionId = createSession();
         try {
             processInput();
@@ -46,7 +46,7 @@ public class RemoteConsole {
             throw new RuntimeException(e);
         }
     }
-    
+
     private String collectInput(Context cx) throws IOException {
         String source = "";
         // Collect lines of source to compile.
@@ -65,7 +65,7 @@ public class RemoteConsole {
         }
         return source;
     }
-    
+
     private void processInput() throws IOException {
         boolean hitEOF = false;
         Context cx = Context.enter();
@@ -88,7 +88,7 @@ public class RemoteConsole {
         }
 
     }
-    
+
     private String eval(String input) {
         BufferedReader reader;
         String sessionUrl = url.toString() + sessionId;
@@ -100,7 +100,7 @@ public class RemoteConsole {
             client.executeMethod(method);
             reader = new BufferedReader(new InputStreamReader(method.getResponseBodyAsStream()));
             String line;
-            while(((line = reader.readLine()) != null)) {
+            while (((line = reader.readLine()) != null)) {
                 result = result + line;
             }
         } catch (HttpException e) {
@@ -112,7 +112,7 @@ public class RemoteConsole {
         }
         return result;
     }
-    
+
     private String createSession() {
         String sessionUrl = url.toString();
         PostMethod method = new PostMethod(sessionUrl);
@@ -128,9 +128,9 @@ public class RemoteConsole {
             method.releaseConnection();
         }
         return id;
-        
+
     }
-    
+
     public static void main(String args[]) throws MalformedURLException {
         URL url = new URL(args[0]);
         BufferedReader input = new BufferedReader(new InputStreamReader(System.in));

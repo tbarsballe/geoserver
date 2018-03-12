@@ -54,7 +54,7 @@ public class ThreadLocalsTransferTest extends GeoServerSystemTestSupport {
     public void stopExecutor() {
         executor.shutdown();
     }
-    
+
     @After
     public void cleanupThreadLocals() {
         Dispatcher.REQUEST.remove();
@@ -63,7 +63,7 @@ public class ThreadLocalsTransferTest extends GeoServerSystemTestSupport {
         LocalWorkspace.remove();
         SecurityContextHolder.getContext().setAuthentication(null);
     }
-    
+
 
     @Test
     public void testThreadLocalTransfer() throws InterruptedException, ExecutionException {
@@ -147,5 +147,7 @@ public class ThreadLocalsTransferTest extends GeoServerSystemTestSupport {
 
         abstract void assertThreadLocalApplied();
 
-    };
+    }
+
+    ;
 }

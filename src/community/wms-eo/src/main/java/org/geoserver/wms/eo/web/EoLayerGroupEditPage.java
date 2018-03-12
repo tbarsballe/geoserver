@@ -23,20 +23,20 @@ public class EoLayerGroupEditPage extends EoLayerGroupAbstractPage {
         String groupName = parameters.get(GROUP).toString();
         String wsName = parameters.get(WORKSPACE).toOptionalString();
 
-        LayerGroupInfo lg = wsName != null ? getCatalog().getLayerGroupByName(wsName, groupName) :  
-            getCatalog().getLayerGroupByName(groupName);
-        
-        if(lg == null) {
+        LayerGroupInfo lg = wsName != null ? getCatalog().getLayerGroupByName(wsName, groupName) :
+                getCatalog().getLayerGroupByName(groupName);
+
+        if (lg == null) {
             error(new ParamResourceModel("LayerGroupEditPage.notFound", this, groupName).getString());
             doReturn(LayerGroupPage.class);
             return;
         }
-        
+
         initUI(lg);
 
         if (!isAuthenticatedAsAdmin()) {
-            Form f = (Form)get("form");
-    
+            Form f = (Form) get("form");
+
             //global layer groups only editable by full admin
             if (lg.getWorkspace() == null) {
                 //disable all form components but cancel
@@ -47,7 +47,7 @@ public class EoLayerGroupEditPage extends EoLayerGroupAbstractPage {
                     visit.dontGoDeeper();
                 });
                 f.get("save").setVisible(false);
-                
+
                 info(new StringResourceModel("globalLayerGroupReadOnly", this, null).getString());
             }
 
@@ -55,9 +55,9 @@ public class EoLayerGroupEditPage extends EoLayerGroupAbstractPage {
             f.get("workspace").setEnabled(false);
         }
     }
-    
+
     protected void onSubmit(LayerGroupInfo lg) {
-        getCatalog().save( lg );
+        getCatalog().save(lg);
         doReturn();
     }
 

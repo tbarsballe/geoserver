@@ -18,11 +18,10 @@ import javax.servlet.http.HttpServletResponse;
  * public folder of the web application
  *
  * @author aaime
- *
  */
 public class FileHiderServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
+            throws ServletException, IOException {
         response.sendError(404);
     }
 }

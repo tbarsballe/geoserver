@@ -17,7 +17,6 @@ import org.eclipse.emf.ecore.EObject;
  * an instance of {@link net.opengis.ows.v1_1_0.AcceptVersionsType}.
  *
  * @author Justin Deoliveira, OpenGeo
- *
  */
 public class AcceptVersionsKvpParser extends org.geoserver.ows.kvp.AcceptVersionsKvpParser {
     public AcceptVersionsKvpParser() {

@@ -24,9 +24,8 @@ import org.xml.sax.helpers.NamespaceSupport;
  * Using the {@link PrefixNamespaceSeparator#COMMA} it's also possible to handle
  * the WFS 2.0 suggested syntax, {@code
  * <xmlns(foo,http://name.space1)[,xmlns(bar,http://name.space2)]+> }
- * 
+ *
  * @author groldan
- * 
  */
 public class NamespaceKvpParser extends KvpParser {
 
@@ -42,10 +41,8 @@ public class NamespaceKvpParser extends KvpParser {
     }
 
     /**
-     * @param value
-     *            a list of namespace declarations of the form {@code
-     *            <xmlns(foo=http://name.space1)[,xmlns(bar=http://name.space2)]+> }
-     *
+     * @param value a list of namespace declarations of the form {@code
+     *              <xmlns(foo=http://name.space1)[,xmlns(bar=http://name.space2)]+> }
      */
     @SuppressWarnings("unchecked")
     @Override

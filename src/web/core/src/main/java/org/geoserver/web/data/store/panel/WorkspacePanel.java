@@ -21,15 +21,15 @@ import org.geoserver.web.data.workspace.WorkspacesModel;
 public class WorkspacePanel extends Panel implements ParamPanel {
 
     private DropDownChoice choice;
-    
+
     public WorkspacePanel(final String id, final IModel workspaceModel,
-            final IModel paramLabelModel, final boolean required) {
+                          final IModel paramLabelModel, final boolean required) {
         // make the value of the combo field the model of this panel, for easy
         // value retriaval
         super(id, workspaceModel);
 
         // the label
-        String requiredMark = required ? " *" : ""; 
+        String requiredMark = required ? " *" : "";
         Label label = new Label("paramName", paramLabelModel.getObject() + requiredMark);
         add(label);
 
@@ -49,8 +49,6 @@ public class WorkspacePanel extends Panel implements ParamPanel {
     /**
      * Returns the form component used in the panel in case it is needed for related form components
      * validation
-     * 
-     *
      */
     public FormComponent getFormComponent() {
         return choice;

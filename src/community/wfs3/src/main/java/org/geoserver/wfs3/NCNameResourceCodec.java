@@ -18,7 +18,7 @@ import java.util.logging.Logger;
 /**
  * Copy of NCNameResourceCodec found in WCS 2.0.
  * <p>
- * TODO: move the class in main and share (there is one static method there that's WCS 2.0 specific, needs first to 
+ * TODO: move the class in main and share (there is one static method there that's WCS 2.0 specific, needs first to
  * be moved somewhere else)
  */
 public class NCNameResourceCodec {

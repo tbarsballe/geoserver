@@ -19,7 +19,7 @@ import org.w3c.dom.Document;
 import static org.custommonkey.xmlunit.XMLAssert.assertXpathEvaluatesTo;
 import static org.junit.Assert.*;
 
-public class SettingsControllerTest  extends CatalogRESTTestSupport {
+public class SettingsControllerTest extends CatalogRESTTestSupport {
 
     protected GeoServer geoServer;
 
@@ -66,7 +66,7 @@ public class SettingsControllerTest  extends CatalogRESTTestSupport {
     @Test
     public void testGetContactAsJSON() throws Exception {
         initContact();
-        JSON json = getAsJSON(RestBaseController.ROOT_PATH+"/settings/contact.json");
+        JSON json = getAsJSON(RestBaseController.ROOT_PATH + "/settings/contact.json");
         JSONObject jsonObject = (JSONObject) json;
         assertNotNull(jsonObject);
         JSONObject contactInfo = jsonObject.getJSONObject("contact");
@@ -83,7 +83,7 @@ public class SettingsControllerTest  extends CatalogRESTTestSupport {
     @Test
     public void testGetContactAsXML() throws Exception {
         initContact();
-        Document dom = getAsDOM(RestBaseController.ROOT_PATH+"/settings/contact.xml");
+        Document dom = getAsDOM(RestBaseController.ROOT_PATH + "/settings/contact.xml");
         assertEquals("contact", dom.getDocumentElement().getLocalName());
         assertXpathEvaluatesTo("United States", "/contact/addressCountry", dom);
         assertXpathEvaluatesTo("Washington", "/contact/addressCity", dom);
@@ -96,7 +96,7 @@ public class SettingsControllerTest  extends CatalogRESTTestSupport {
 
     @Test
     public void testGetContactAsHTML() throws Exception {
-        Document dom = getAsDOM(RestBaseController.ROOT_PATH+"/settings/contact.html",200);
+        Document dom = getAsDOM(RestBaseController.ROOT_PATH + "/settings/contact.html", 200);
     }
 
     @Test
@@ -111,10 +111,10 @@ public class SettingsControllerTest  extends CatalogRESTTestSupport {
                 "    'addressState':'PA'," +
                 "    'addressDeliveryPoint':'The White House'," +
                 "    'addressElectronicMailAddress':'info@whitehouse.gov'}}";
-        MockHttpServletResponse response = putAsServletResponse(RestBaseController.ROOT_PATH+"/settings/contact",
+        MockHttpServletResponse response = putAsServletResponse(RestBaseController.ROOT_PATH + "/settings/contact",
                 inputJson, "text/json");
         assertEquals(200, response.getStatus());
-        JSON jsonMod = getAsJSON(RestBaseController.ROOT_PATH+"/settings/contact.json");
+        JSON jsonMod = getAsJSON(RestBaseController.ROOT_PATH + "/settings/contact.json");
         JSONObject jsonObject = (JSONObject) jsonMod;
         assertNotNull(jsonObject);
         JSONObject contactInfo = jsonObject.getJSONObject("contact");
@@ -141,11 +141,11 @@ public class SettingsControllerTest  extends CatalogRESTTestSupport {
                 + "<contactOrganization>GeoServer</contactOrganization>"
                 + "<contactPerson>ContactPerson</contactPerson>"
                 + "<contactPosition>Chief Geographer</contactPosition> </contact>";
-        MockHttpServletResponse response = putAsServletResponse(RestBaseController.ROOT_PATH+"/settings/contact", xml,
+        MockHttpServletResponse response = putAsServletResponse(RestBaseController.ROOT_PATH + "/settings/contact", xml,
                 "text/xml");
         assertEquals(200, response.getStatus());
 
-        Document dom = getAsDOM(RestBaseController.ROOT_PATH+"/settings/contact.xml");
+        Document dom = getAsDOM(RestBaseController.ROOT_PATH + "/settings/contact.xml");
         assertEquals("contact", dom.getDocumentElement().getLocalName());
         assertXpathEvaluatesTo("United States", "/contact/addressCountry", dom);
         assertXpathEvaluatesTo("1600 Pennsylvania Avenue", "/contact/address", dom);
@@ -160,7 +160,7 @@ public class SettingsControllerTest  extends CatalogRESTTestSupport {
 
     @Test
     public void testGetGlobalAsJSON() throws Exception {
-        JSON json = getAsJSON(RestBaseController.ROOT_PATH+"/settings.json");
+        JSON json = getAsJSON(RestBaseController.ROOT_PATH + "/settings.json");
         print(json);
         JSONObject jsonObject = (JSONObject) json;
         assertNotNull(jsonObject);
@@ -189,7 +189,7 @@ public class SettingsControllerTest  extends CatalogRESTTestSupport {
 
     @Test
     public void testGetGlobalAsXML() throws Exception {
-        Document dom = getAsDOM(RestBaseController.ROOT_PATH+"/settings.xml");
+        Document dom = getAsDOM(RestBaseController.ROOT_PATH + "/settings.xml");
         assertEquals("global", dom.getDocumentElement().getLocalName());
         assertXpathEvaluatesTo("UTF-8", "/global/settings/charset", dom);
         assertXpathEvaluatesTo("8", "/global/settings/numDecimals", dom);
@@ -216,10 +216,10 @@ public class SettingsControllerTest  extends CatalogRESTTestSupport {
                 + "'queueType': 'UNBOUNDED'," + "'imageIOCacheThreshold': '10240'" + "},"
                 + "'updateSequence': '0'," + "'featureTypeCacheSize': '0',"
                 + "'globalServices': 'true'," + "'xmlPostRequestLogBufferSize': '2048'" + "}}";
-        MockHttpServletResponse response = putAsServletResponse(RestBaseController.ROOT_PATH+"/settings/", inputJson,
+        MockHttpServletResponse response = putAsServletResponse(RestBaseController.ROOT_PATH + "/settings/", inputJson,
                 "text/json");
         assertEquals(200, response.getStatus());
-        JSON json = getAsJSON(RestBaseController.ROOT_PATH+"/settings.json");
+        JSON json = getAsJSON(RestBaseController.ROOT_PATH + "/settings.json");
         JSONObject jsonObject = (JSONObject) json;
         assertNotNull(jsonObject);
         JSONObject global = jsonObject.getJSONObject("global");
@@ -248,7 +248,7 @@ public class SettingsControllerTest  extends CatalogRESTTestSupport {
 
     @Test
     public void testGetGlobalAsHTML() throws Exception {
-        Document dom = getAsDOM(RestBaseController.ROOT_PATH+"/settings.html",200);
+        Document dom = getAsDOM(RestBaseController.ROOT_PATH + "/settings.html", 200);
     }
 
     @Test
@@ -273,9 +273,9 @@ public class SettingsControllerTest  extends CatalogRESTTestSupport {
                 + "<globalServices>false</globalServices>"
                 + "<xmlPostRequestLogBufferSize>2048</xmlPostRequestLogBufferSize>" + "</global>";
 
-        MockHttpServletResponse response = putAsServletResponse(RestBaseController.ROOT_PATH+"/settings/", xml, "text/xml");
+        MockHttpServletResponse response = putAsServletResponse(RestBaseController.ROOT_PATH + "/settings/", xml, "text/xml");
         assertEquals(200, response.getStatus());
-        Document dom = getAsDOM(RestBaseController.ROOT_PATH+"/settings.xml");
+        Document dom = getAsDOM(RestBaseController.ROOT_PATH + "/settings.xml");
         assertEquals("global", dom.getDocumentElement().getLocalName());
         assertXpathEvaluatesTo("false", "/global/globalServices", dom);
         assertXpathEvaluatesTo("2048", "/global/xmlPostRequestLogBufferSize", dom);
@@ -290,7 +290,7 @@ public class SettingsControllerTest  extends CatalogRESTTestSupport {
 
     @Test
     public void testGetLocalAsJSON() throws Exception {
-        JSON json = getAsJSON(RestBaseController.ROOT_PATH+"/workspaces/sf/settings.json");
+        JSON json = getAsJSON(RestBaseController.ROOT_PATH + "/workspaces/sf/settings.json");
         JSONObject jsonObject = (JSONObject) json;
         assertNotNull(jsonObject);
         JSONObject settings = jsonObject.getJSONObject("settings");
@@ -309,7 +309,7 @@ public class SettingsControllerTest  extends CatalogRESTTestSupport {
 
     @Test
     public void testGetLocalAsXML() throws Exception {
-        Document dom = getAsDOM(RestBaseController.ROOT_PATH+"/workspaces/sf/settings.xml");
+        Document dom = getAsDOM(RestBaseController.ROOT_PATH + "/workspaces/sf/settings.xml");
         assertEquals("settings", dom.getDocumentElement().getLocalName());
         assertXpathEvaluatesTo("sf", "/settings/workspace/name", dom);
         assertXpathEvaluatesTo("UTF-8", "/settings/charset", dom);
@@ -321,7 +321,7 @@ public class SettingsControllerTest  extends CatalogRESTTestSupport {
 
     @Test
     public void testGetLocalAsHTML() throws Exception {
-        Document dom = getAsDOM(RestBaseController.ROOT_PATH+"/workspaces/sf/settings.html",200);
+        Document dom = getAsDOM(RestBaseController.ROOT_PATH + "/workspaces/sf/settings.html", 200);
     }
 
     @Test
@@ -334,10 +334,10 @@ public class SettingsControllerTest  extends CatalogRESTTestSupport {
                 + "'contactPerson':'Claudius Ptolomaeus','contactPosition':'Chief geographer'},"
                 + "'charset':'UTF-8','numDecimals':10,'onlineResource':'http://geoserver.org',"
                 + "'proxyBaseUrl':'http://proxy.url','verbose':false,'verboseExceptions':'true'}}";
-        MockHttpServletResponse response = postAsServletResponse(RestBaseController.ROOT_PATH+"/workspaces/sf/settings",
+        MockHttpServletResponse response = postAsServletResponse(RestBaseController.ROOT_PATH + "/workspaces/sf/settings",
                 json, "text/json");
         assertEquals(201, response.getStatus());
-        JSON jsonMod = getAsJSON(RestBaseController.ROOT_PATH+"/workspaces/sf/settings.json");
+        JSON jsonMod = getAsJSON(RestBaseController.ROOT_PATH + "/workspaces/sf/settings.json");
         JSONObject jsonObject = (JSONObject) jsonMod;
         assertNotNull(jsonObject);
         JSONObject settings = jsonObject.getJSONObject("settings");
@@ -372,11 +372,11 @@ public class SettingsControllerTest  extends CatalogRESTTestSupport {
                 + "<proxyBaseUrl>http://proxy.url</proxyBaseUrl>"
                 + "<verbose>false</verbose>" + "<verboseExceptions>false</verboseExceptions>"
                 + "</settings>";
-        MockHttpServletResponse response = postAsServletResponse(RestBaseController.ROOT_PATH+"/workspaces/sf/settings",
+        MockHttpServletResponse response = postAsServletResponse(RestBaseController.ROOT_PATH + "/workspaces/sf/settings",
                 xml, "text/xml");
         assertEquals(201, response.getStatus());
 
-        Document dom = getAsDOM(RestBaseController.ROOT_PATH+"/workspaces/sf/settings.xml");
+        Document dom = getAsDOM(RestBaseController.ROOT_PATH + "/workspaces/sf/settings.xml");
         assertEquals("settings", dom.getDocumentElement().getLocalName());
         assertXpathEvaluatesTo("sf", "/settings/workspace/name", dom);
         assertXpathEvaluatesTo("false", "/settings/verbose", dom);
@@ -406,11 +406,11 @@ public class SettingsControllerTest  extends CatalogRESTTestSupport {
                 + "<proxyBaseUrl>http://proxy.url</proxyBaseUrl>"
                 + "<verbose>false</verbose>" + "<verboseExceptions>false</verboseExceptions>"
                 + "</settings>";
-        MockHttpServletResponse response = postAsServletResponse(RestBaseController.ROOT_PATH+"/workspaces/sf/settings",
+        MockHttpServletResponse response = postAsServletResponse(RestBaseController.ROOT_PATH + "/workspaces/sf/settings",
                 xml, "text/xml");
         assertEquals(201, response.getStatus());
 
-        response = postAsServletResponse(RestBaseController.ROOT_PATH+"/workspaces/sf/settings",
+        response = postAsServletResponse(RestBaseController.ROOT_PATH + "/workspaces/sf/settings",
                 xml, "text/xml");
         assertEquals(500, response.getStatus());
     }
@@ -424,10 +424,10 @@ public class SettingsControllerTest  extends CatalogRESTTestSupport {
                 + "'charset':'UTF-8','numDecimals':8,'onlineResource':'http://geoserver2.org',"
                 + "'proxyBaseUrl':'http://proxy2.url','verbose':true,'verboseExceptions':'true'}}";
 
-        MockHttpServletResponse response = putAsServletResponse(RestBaseController.ROOT_PATH+"/workspaces/sf/settings",
+        MockHttpServletResponse response = putAsServletResponse(RestBaseController.ROOT_PATH + "/workspaces/sf/settings",
                 inputJson, "text/json");
         assertEquals(200, response.getStatus());
-        JSON jsonMod = getAsJSON(RestBaseController.ROOT_PATH+"/workspaces/sf/settings.json");
+        JSON jsonMod = getAsJSON(RestBaseController.ROOT_PATH + "/workspaces/sf/settings.json");
         JSONObject jsonObject = (JSONObject) jsonMod;
         assertNotNull(jsonObject);
         JSONObject settings = jsonObject.getJSONObject("settings");
@@ -460,10 +460,10 @@ public class SettingsControllerTest  extends CatalogRESTTestSupport {
                 + "<proxyBaseUrl>http://proxy2.url</proxyBaseUrl>"
                 + "<verbose>true</verbose>" + "<verboseExceptions>true</verboseExceptions>"
                 + "</settings>";
-        MockHttpServletResponse response = putAsServletResponse(RestBaseController.ROOT_PATH+"/workspaces/sf/settings",
+        MockHttpServletResponse response = putAsServletResponse(RestBaseController.ROOT_PATH + "/workspaces/sf/settings",
                 xml, "text/xml");
         assertEquals(200, response.getStatus());
-        Document dom = getAsDOM(RestBaseController.ROOT_PATH+"/workspaces/sf/settings.xml");
+        Document dom = getAsDOM(RestBaseController.ROOT_PATH + "/workspaces/sf/settings.xml");
         assertEquals("settings", dom.getDocumentElement().getLocalName());
         assertXpathEvaluatesTo("sf", "/settings/workspace/name", dom);
         assertXpathEvaluatesTo("true", "/settings/verbose", dom);
@@ -479,11 +479,11 @@ public class SettingsControllerTest  extends CatalogRESTTestSupport {
 
     @Test
     public void testDeleteLocal() throws Exception {
-        JSON json = getAsJSON(RestBaseController.ROOT_PATH+"/workspaces/sf/settings.json");
+        JSON json = getAsJSON(RestBaseController.ROOT_PATH + "/workspaces/sf/settings.json");
         JSONObject jsonObject = (JSONObject) json;
         assertNotNull(jsonObject);
-        assertEquals(200, deleteAsServletResponse(RestBaseController.ROOT_PATH+"/workspaces/sf/settings").getStatus());
-        json = getAsJSON(RestBaseController.ROOT_PATH+"/workspaces/sf/settings.json");
+        assertEquals(200, deleteAsServletResponse(RestBaseController.ROOT_PATH + "/workspaces/sf/settings").getStatus());
+        json = getAsJSON(RestBaseController.ROOT_PATH + "/workspaces/sf/settings.json");
         JSONObject deletedJson = (JSONObject) json;
         assertNull(deletedJson.get("workspace"));
     }

@@ -10,16 +10,15 @@ import org.junit.Test;
 import static org.junit.Assert.fail;
 
 public class GeoServerMultiplexingPasswordEncoderTest
-    extends GeoServerMockTestSupport {
+        extends GeoServerMockTestSupport {
 
     @Test
     public void testEncode() {
         GeoServerMultiplexingPasswordEncoder pwe =
-            new GeoServerMultiplexingPasswordEncoder(getSecurityManager());
+                new GeoServerMultiplexingPasswordEncoder(getSecurityManager());
         try {
             pwe.encodePassword("foo", null);
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             fail("Multiplexing encoder should be capabile of encoding");
         }
     }

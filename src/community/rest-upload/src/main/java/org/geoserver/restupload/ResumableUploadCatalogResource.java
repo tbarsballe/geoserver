@@ -38,20 +38,20 @@ import org.restlet.util.Series;
  * GET request can be used to retrieve informations about upload status.
  * <p>
  * The uploaded resource is stored to temporary folder until the upload is not completed or the
- *  {@link ResumableUploadResourceCleaner#expirationDelay} time is elapsed.</br>
- *  When the upload is terminated the file is moved to REST main folder by
- *  {@link ResumableUploadPathMapper}
- *
+ * {@link ResumableUploadResourceCleaner#expirationDelay} time is elapsed.</br>
+ * When the upload is terminated the file is moved to REST main folder by
+ * {@link ResumableUploadPathMapper}
  *
  * @author Nicola Lagomarsini
- *
  */
 
 public class ResumableUploadCatalogResource extends Resource {
 
     private static final Logger LOGGER = Logging.getLogger(ResumableUploadCatalogResource.class);
 
-    /** Manager for the Resumable REST upload */
+    /**
+     * Manager for the Resumable REST upload
+     */
     private ResumableUploadResourceManager resumableUploadResourceManager;
 
     /**
@@ -62,7 +62,7 @@ public class ResumableUploadCatalogResource extends Resource {
     public static final Status RESUME_INCOMPLETE = new Status(308);
 
     public ResumableUploadCatalogResource(Context context, Request request, Response response,
-            Catalog catalog, ResumableUploadResourceManager resumableUploadResourceManager) {
+                                          Catalog catalog, ResumableUploadResourceManager resumableUploadResourceManager) {
         super(context, request, response);
         this.resumableUploadResourceManager = resumableUploadResourceManager;
     }
@@ -105,11 +105,11 @@ public class ResumableUploadCatalogResource extends Resource {
 
             String uploadId = resumableUploadResourceManager.createUploadResource(filePath);
 
-            Representation output = new StringRepresentation("-----TO USE IN PUT-----\n"+baseURL+"/"+uploadId+"\n-----------------------\n", MediaType.TEXT_PLAIN);
+            Representation output = new StringRepresentation("-----TO USE IN PUT-----\n" + baseURL + "/" + uploadId + "\n-----------------------\n", MediaType.TEXT_PLAIN);
             Response response = getResponse();
 
             Series<Parameter> headers = new Form();
-            headers.add("Location", baseURL+uploadId);
+            headers.add("Location", baseURL + uploadId);
             getResponse().getAttributes().put("org.restlet.http.headers", headers);
             response.setEntity(output);
             response.setStatus(Status.SUCCESS_CREATED);
@@ -126,8 +126,8 @@ public class ResumableUploadCatalogResource extends Resource {
      * If the PUT request is the first, it must contains the header parameters "Content-Length: {total file size in bytes}"
      * Successive resume PUT request must contains the header parameters:</br>
      * <ul>
-     *  <li>Content-Length:{total size of bytes which must be uploaded}
-     *  <li>Content-Range:{resume byte start byte index}-{file end byte index}/{total file size in bytes}
+     * <li>Content-Length:{total size of bytes which must be uploaded}
+     * <li>Content-Range:{resume byte start byte index}-{file end byte index}/{total file size in bytes}
      * </ul>
      * If the upload is incomplete, the PUT return the RANGE header attribute:</br>
      * Range: 0-{uploded end byte index}.
@@ -149,7 +149,7 @@ public class ResumableUploadCatalogResource extends Resource {
         }
         if (!resumableUploadResourceManager.resourceExists(uploadId)) {
             getResponse()
-            .setStatus(new Status(Status.CLIENT_ERROR_BAD_REQUEST, "Unknow upload ID"));
+                    .setStatus(new Status(Status.CLIENT_ERROR_BAD_REQUEST, "Unknow upload ID"));
             return;
         }
         Long totalByteToUpload = getContentLength();

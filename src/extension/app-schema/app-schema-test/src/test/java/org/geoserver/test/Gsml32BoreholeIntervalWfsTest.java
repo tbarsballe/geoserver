@@ -12,7 +12,7 @@ import org.w3c.dom.Document;
 
 /**
  * WFS test based on GeoSciML 3.2 Borehole type, a GML 3.2 application schema.
- * 
+ *
  * @author Rini Angreani (CSIRO Earth Science and Resource Engineering)
  */
 public class Gsml32BoreholeIntervalWfsTest extends AbstractAppSchemaTestSupport {
@@ -30,18 +30,18 @@ public class Gsml32BoreholeIntervalWfsTest extends AbstractAppSchemaTestSupport 
      */
     @Test
     public void testGetFeatureContent() throws Exception {
-        String path = "wfs?request=GetFeature&typename=gsmlbh:Borehole&outputFormat=gml32";               
+        String path = "wfs?request=GetFeature&typename=gsmlbh:Borehole&outputFormat=gml32";
         String newline = System.getProperty("line.separator");
         Document doc = getAsDOM(path);
         LOGGER.info("Response for " + path + " :" + newline + prettyString(doc));
-        
+
         assertXpathEvaluatesTo("2", "/wfs:FeatureCollection/@numberReturned", doc);
         assertXpathEvaluatesTo("unknown", "/wfs:FeatureCollection/@numberMatched", doc);
         assertXpathCount(2, "//gsmlbh:Borehole", doc);
-        
+
         // #First linestring
         // 1. First borehole
-        assertXpathCount(1, "//gsmlbh:Borehole[@gml:id='borehole.GA.17322']", doc);        
+        assertXpathCount(1, "//gsmlbh:Borehole[@gml:id='borehole.GA.17322']", doc);
         // Ensure fabricated LineString works as expected
         // Also custom srsName and 1D posList works
         String lineStringPath = "gsmlbh:downholeDrillingDetails/gsmlbh:DrillingDetails/gsmlbh:interval/gml:LineString";
@@ -49,14 +49,14 @@ public class Gsml32BoreholeIntervalWfsTest extends AbstractAppSchemaTestSupport 
         assertXpathEvaluatesTo("#borehole.shape.GA.17322", "//gsmlbh:Borehole[@gml:id='borehole.GA.17322']/" + lineStringPath + "/@srsName", doc);
         assertXpathEvaluatesTo("1", "//gsmlbh:Borehole[@gml:id='borehole.GA.17322']/" + lineStringPath + "/@srsDimension", doc);
         assertXpathEvaluatesTo("m", "//gsmlbh:Borehole[@gml:id='borehole.GA.17322']/" + lineStringPath + "/@uomLabels", doc);
-        assertXpathEvaluatesTo("0.0 153.92", "//gsmlbh:Borehole[@gml:id='borehole.GA.17322']/" + lineStringPath + "/gml:posList", doc);   
+        assertXpathEvaluatesTo("0.0 153.92", "//gsmlbh:Borehole[@gml:id='borehole.GA.17322']/" + lineStringPath + "/gml:posList", doc);
         // 2. Second borehole
         assertXpathEvaluatesTo("borehole.drillingDetails.interval.17338", "//gsmlbh:Borehole[@gml:id='borehole.GA.17338']/" + lineStringPath + "/@gml:id", doc);
         assertXpathEvaluatesTo("#borehole.shape.GA.17338", "//gsmlbh:Borehole[@gml:id='borehole.GA.17338']/" + lineStringPath + "/@srsName", doc);
         assertXpathEvaluatesTo("1", "//gsmlbh:Borehole[@gml:id='borehole.GA.17338']/" + lineStringPath + "/@srsDimension", doc);
         assertXpathEvaluatesTo("m", "//gsmlbh:Borehole[@gml:id='borehole.GA.17338']/" + lineStringPath + "/@uomLabels", doc);
-        assertXpathEvaluatesTo("0.0 91.55", "//gsmlbh:Borehole[@gml:id='borehole.GA.17338']/" + lineStringPath + "/gml:posList", doc);      
-        
+        assertXpathEvaluatesTo("0.0 91.55", "//gsmlbh:Borehole[@gml:id='borehole.GA.17338']/" + lineStringPath + "/gml:posList", doc);
+
         // #Second LineString
         // 1. First borehole
         lineStringPath = "gsmlbh:logElement/gsmlbh:MappedInterval/gsml:shape/gml:LineString";
@@ -64,19 +64,19 @@ public class Gsml32BoreholeIntervalWfsTest extends AbstractAppSchemaTestSupport 
         assertXpathEvaluatesTo("#borehole.shape.GA.17322", "//gsmlbh:Borehole[@gml:id='borehole.GA.17322']/" + lineStringPath + "/@srsName", doc);
         assertXpathEvaluatesTo("1", "//gsmlbh:Borehole[@gml:id='borehole.GA.17322']/" + lineStringPath + "/@srsDimension", doc);
         assertXpathEvaluatesTo("m", "//gsmlbh:Borehole[@gml:id='borehole.GA.17322']/" + lineStringPath + "/@uomLabels", doc);
-        assertXpathEvaluatesTo("57.9 66.4", "//gsmlbh:Borehole[@gml:id='borehole.GA.17322']/" + lineStringPath + "/gml:posList", doc);      
+        assertXpathEvaluatesTo("57.9 66.4", "//gsmlbh:Borehole[@gml:id='borehole.GA.17322']/" + lineStringPath + "/gml:posList", doc);
         // 2. Second borehole
         lineStringPath = "gsmlbh:logElement/gsmlbh:MappedInterval/gsml:shape/gml:LineString";
         assertXpathEvaluatesTo("borehole.mappedInterval.shape.102", "//gsmlbh:Borehole[@gml:id='borehole.GA.17338']/" + lineStringPath + "/@gml:id", doc);
         assertXpathEvaluatesTo("#borehole.shape.GA.17338", "//gsmlbh:Borehole[@gml:id='borehole.GA.17338']/" + lineStringPath + "/@srsName", doc);
         assertXpathEvaluatesTo("1", "//gsmlbh:Borehole[@gml:id='borehole.GA.17338']/" + lineStringPath + "/@srsDimension", doc);
         assertXpathEvaluatesTo("m", "//gsmlbh:Borehole[@gml:id='borehole.GA.17338']/" + lineStringPath + "/@uomLabels", doc);
-        assertXpathEvaluatesTo("85.3 89.6", "//gsmlbh:Borehole[@gml:id='borehole.GA.17338']/" + lineStringPath + "/gml:posList", doc);            
-        
+        assertXpathEvaluatesTo("85.3 89.6", "//gsmlbh:Borehole[@gml:id='borehole.GA.17338']/" + lineStringPath + "/gml:posList", doc);
+
         // test empty Curve
         assertXpathEvaluatesTo("borehole.shape.GA.17322", "//gsmlbh:Borehole[@gml:id='borehole.GA.17322']/sams:shape/gml:Curve/@gml:id", doc);
         assertXpathCount(0, "/gsmlbh:Borehole[@gml:id='borehole.GA.17322']/sams:shape/gml:Curve/@srsName", doc);
-        assertXpathCount(0, "/gsmlbh:Borehole[@gml:id='borehole.GA.17322']/sams:shape/gml:Curve/@srsDimension", doc);  
+        assertXpathCount(0, "/gsmlbh:Borehole[@gml:id='borehole.GA.17322']/sams:shape/gml:Curve/@srsDimension", doc);
         assertXpathEvaluatesTo("borehole.shape.GA.17338", "//gsmlbh:Borehole[@gml:id='borehole.GA.17338']/sams:shape/gml:Curve/@gml:id", doc);
         assertXpathCount(0, "/gsmlbh:Borehole[@gml:id='borehole.GA.17338']/sams:shape/gml:Curve/@srsName", doc);
         assertXpathCount(0, "/gsmlbh:Borehole[@gml:id='borehole.GA.17338']/sams:shape/gml:Curve/@srsDimension", doc);

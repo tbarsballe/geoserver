@@ -35,15 +35,16 @@ import org.geoserver.ows.util.KvpUtils;
  * of which contains instances of {@link #getBinding()}. The {@link #parseTokenSet(List)}
  * method may be overidden to return a differnt type of object.
  * </p>
- * @author Justin Deoliveira, The Open Planning Project, jdeolive@openplans.org
  *
+ * @author Justin Deoliveira, The Open Planning Project, jdeolive@openplans.org
+ * <p>
  * TODO: add a method to convert return value as to not force returning a list
  */
 public class NestedKvpParser extends KvpParser {
     /**
      * Constructs the nested kvp parser specifying the key and class binding.
      *
-     * @param key The key to bind to.
+     * @param key     The key to bind to.
      * @param binding The class of each token in the value.
      */
     public NestedKvpParser(String key, Class binding) {
@@ -78,10 +79,9 @@ public class NestedKvpParser extends KvpParser {
      * Subclasses should override this method, the default implementation
      * just returns token passed in.
      * </p>
+     *
      * @param token Part of the value being parsed.
-     *
      * @return The token parsed into an object.
-     *
      */
     protected Object parseToken(String token) throws Exception {
         return token;
@@ -93,8 +93,8 @@ public class NestedKvpParser extends KvpParser {
      * Subclasses may choose to override this method. The default implementation
      * just return the list passed in.
      * </p>
-     * @param tokenSet The parsed tokens, each value is an instance of {@link #getBinding()}.
      *
+     * @param tokenSet The parsed tokens, each value is an instance of {@link #getBinding()}.
      * @return The final object.
      */
     protected Object parseTokenSet(List tokenSet) throws Exception {
@@ -107,9 +107,9 @@ public class NestedKvpParser extends KvpParser {
      * Subclasses may choose to override this method. The default implementation
      * just return the list passed in.
      * </p>
-     * @param values The parsed token sets, each value is an instance of the
-     * class returned from {@link #parseTokenSet(List)}.
      *
+     * @param values The parsed token sets, each value is an instance of the
+     *               class returned from {@link #parseTokenSet(List)}.
      * @return The final object.
      */
     protected Object parse(List values) throws Exception {

@@ -29,7 +29,7 @@ import junit.framework.TestCase;
 
 
 public class DefaultServiceExceptionHandlerTest extends TestCase {
-    
+
     private DefaultServiceExceptionHandler handler;
     private MockHttpServletRequest request;
     private MockHttpServletResponse response;
@@ -37,15 +37,15 @@ public class DefaultServiceExceptionHandlerTest extends TestCase {
 
     protected void setUp() throws Exception {
         super.setUp();
-        
+
         HelloWorld helloWorld = new HelloWorld();
-        Service service = new Service("hello", helloWorld, new Version("1.0.0"),Collections.singletonList("hello"));
+        Service service = new Service("hello", helloWorld, new Version("1.0.0"), Collections.singletonList("hello"));
 
         request = new MockHttpServletRequest() {
-                public int getServerPort() {
-                    return 8080;
-                }
-            };
+            public int getServerPort() {
+                return 8080;
+            }
+        };
 
         request.setScheme("http");
         request.setServerName("localhost");
@@ -55,7 +55,7 @@ public class DefaultServiceExceptionHandlerTest extends TestCase {
         response = new MockHttpServletResponse();
 
         handler = new DefaultServiceExceptionHandler();
-        
+
         requestInfo = new Request();
         requestInfo.setHttpRequest(request);
         requestInfo.setHttpResponse(response);
@@ -82,7 +82,7 @@ public class DefaultServiceExceptionHandlerTest extends TestCase {
 
     public void testHandleServiceExceptionEncoding() throws Exception {
         String message = "foo & <foo> \"foo's\"";
-        
+
         ServiceException exception = new ServiceException(message);
         exception.setLocator("test-locator");
 
@@ -94,12 +94,12 @@ public class DefaultServiceExceptionHandlerTest extends TestCase {
         docBuilderFactory.setNamespaceAware(true);
 
         Document doc = docBuilderFactory.newDocumentBuilder().parse(input);
-        
+
         Node exceptionText = XPathAPI.selectSingleNode(doc, "ows:ExceptionReport/ows:Exception/ows:ExceptionText/text()");
         assertNotNull(exceptionText);
         assertEquals("round-tripped through character entities", message, exceptionText.getTextContent());
     }
-    
+
     @SuppressWarnings("unchecked")
     public void testHandleServiceExceptionEncodingMore() throws Exception {
         String message1 = "foo & <foo> \"foo's\"";
@@ -117,7 +117,7 @@ public class DefaultServiceExceptionHandlerTest extends TestCase {
         docBuilderFactory.setNamespaceAware(true);
 
         Document doc = docBuilderFactory.newDocumentBuilder().parse(input);
-        
+
         Node exceptionText = XPathAPI.selectSingleNode(doc, "ows:ExceptionReport/ows:Exception/ows:ExceptionText/text()");
         assertNotNull(exceptionText);
         String message = message1 + "\n" + message2;

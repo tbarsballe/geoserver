@@ -37,13 +37,13 @@ import org.geotools.util.logging.Logging;
 
 /**
  * Shows the log file contents
- * 
+ *
  * @author Andrea Aime - OpenGeo
  */
 public class LogPage extends GeoServerSecuredPage {
-    
+
     static final Logger LOGGER = Logging.getLogger(LogPage.class);
-    
+
     private static final long serialVersionUID = 4742103132576413211L;
 
     static final String LINES = "lines";
@@ -57,18 +57,18 @@ public class LogPage extends GeoServerSecuredPage {
         @SuppressWarnings("rawtypes")
         Form<?> form = new Form("form");
         add(form);
-        
+
         /**
          * take geoserver log file location from Config as absolute path and only use if valid, 
          * otherwise fallback to (geoserver-root)/logs/geoserver.log as default.
          */
         String location = GeoServerExtensions.getProperty(LoggingUtils.GEOSERVER_LOG_LOCATION);
-        if(location == null) {
-            location= getGeoServerApplication().getGeoServer().getLogging().getLocation();
+        if (location == null) {
+            location = getGeoServerApplication().getGeoServer().getLogging().getLocation();
         }
         if (location == null) {
             GeoServerResourceLoader loader = getGeoServerApplication().getResourceLoader();
-            logFile = loader.get("logs").get("geoserver.log").file();         
+            logFile = loader.get("logs").get("geoserver.log").file();
             location = logFile.getAbsolutePath();
         } else {
             logFile = new File(location);
@@ -79,8 +79,8 @@ public class LogPage extends GeoServerSecuredPage {
                 logFile = dd.get(Paths.convert(logFile.getPath())).file();
             }
         }
-        
-        
+
+
         if (!logFile.exists()) {
             error("Could not find the GeoServer log file: " + logFile.getAbsolutePath());
         }
@@ -115,7 +115,7 @@ public class LogPage extends GeoServerSecuredPage {
 
             @Override
             public void onClick() {
-                IResourceStream stream = new FileResourceStream(logFile){
+                IResourceStream stream = new FileResourceStream(logFile) {
                     public String getContentType() {
                         return "text/plain";
                     }
@@ -138,7 +138,7 @@ public class LogPage extends GeoServerSecuredPage {
             try {
                 // load the logs line by line, keep only the last 1000 lines
                 LinkedList<String> lineList = new LinkedList<String>();
-                
+
                 if (!logFile.exists()) {
                     return "";
                 }

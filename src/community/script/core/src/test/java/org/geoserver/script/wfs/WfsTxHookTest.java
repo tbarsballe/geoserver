@@ -71,7 +71,7 @@ public abstract class WfsTxHookTest extends ScriptIntTestSupport {
 
     public void testHookError() throws Exception {
         File script = copyOverFile("tx-error");
-        
+
         TransactionRequest tx = new TransactionRequest.WFS11(null);
         TransactionResponse res = new TransactionResponse.WFS11(null);
 
@@ -84,8 +84,7 @@ public abstract class WfsTxHookTest extends ScriptIntTestSupport {
         try {
             hook.handleBefore(eng, tx, context);
             fail("exected WFS exception");
-        }
-        catch(WFSException e) {
+        } catch (WFSException e) {
             assertEquals("before exception", e.getMessage());
         }
     }

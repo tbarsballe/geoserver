@@ -20,7 +20,6 @@ import org.springframework.core.io.UrlResource;
 import com.google.common.base.Ticker;
 
 /**
- *
  * @author ETj (etj at geo-solutions.it)
  */
 public class CacheReaderTest extends GeofenceBaseTest {

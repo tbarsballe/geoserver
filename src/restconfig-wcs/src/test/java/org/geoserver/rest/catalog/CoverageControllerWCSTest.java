@@ -38,7 +38,7 @@ import static org.junit.Assert.*;
 public class CoverageControllerWCSTest extends CatalogRESTTestSupport {
 
     private final static double DELTA = 1E-6;
-    
+
     @Override
     protected void setUpTestData(SystemTestData testData) throws Exception {
         testData.setUpDefaultRasterLayers();
@@ -50,51 +50,51 @@ public class CoverageControllerWCSTest extends CatalogRESTTestSupport {
     }
 
     void addCoverageStore(boolean autoConfigureCoverage) throws Exception {
-        URL zip = getClass().getResource( "test-data/usa.zip" );
-        byte[] bytes = FileUtils.readFileToByteArray( URLs.urlToFile(zip)  );
-        
-        MockHttpServletResponse response = 
-            putAsServletResponse( RestBaseController.ROOT_PATH + "/workspaces/gs/coveragestores/usaWorldImage/file.worldimage" +
-                (!autoConfigureCoverage ? "?configure=none" : ""), bytes, "application/zip");
-        assertEquals( 201, response.getStatus() );
+        URL zip = getClass().getResource("test-data/usa.zip");
+        byte[] bytes = FileUtils.readFileToByteArray(URLs.urlToFile(zip));
+
+        MockHttpServletResponse response =
+                putAsServletResponse(RestBaseController.ROOT_PATH + "/workspaces/gs/coveragestores/usaWorldImage/file.worldimage" +
+                        (!autoConfigureCoverage ? "?configure=none" : ""), bytes, "application/zip");
+        assertEquals(201, response.getStatus());
     }
 
     @Test
     public void testGetAllByCoverageStore() throws Exception {
         removeStore("gs", "usaWorldImage");
         String req = "wcs?service=wcs&request=getcoverage&version=1.1.1&identifier=gs:usa" +
-            "&boundingbox=-100,30,-80,44,EPSG:4326&format=image/tiff" +
-            "&gridbasecrs=EPSG:4326&store=true";
+                "&boundingbox=-100,30,-80,44,EPSG:4326&format=image/tiff" +
+                "&gridbasecrs=EPSG:4326&store=true";
 
-        Document dom = getAsDOM( req );
-        assertEquals( "ows:ExceptionReport", dom.getDocumentElement().getNodeName());
+        Document dom = getAsDOM(req);
+        assertEquals("ows:ExceptionReport", dom.getDocumentElement().getNodeName());
 
         addCoverageStore(true);
-        dom = getAsDOM( RestBaseController.ROOT_PATH + "/workspaces/gs/coveragestores/usaWorldImage/coverages.xml");
-        assertEquals( 1, dom.getElementsByTagName( "coverage").getLength() );
-        assertXpathEvaluatesTo( "1", "count(//coverage/name[text()='usa'])", dom );
+        dom = getAsDOM(RestBaseController.ROOT_PATH + "/workspaces/gs/coveragestores/usaWorldImage/coverages.xml");
+        assertEquals(1, dom.getElementsByTagName("coverage").getLength());
+        assertXpathEvaluatesTo("1", "count(//coverage/name[text()='usa'])", dom);
     }
 
-  @Test
-  public void testPostAsXML() throws Exception {
+    @Test
+    public void testPostAsXML() throws Exception {
         removeStore("gs", "usaWorldImage");
         String req = "wcs?service=wcs&request=getcoverage&version=1.1.1&identifier=gs:usa" +
-            "&boundingbox=-100,30,-80,44,EPSG:4326&format=image/tiff" +
-            "&gridbasecrs=EPSG:4326&store=true";
-        
-        Document dom = getAsDOM( req );
-        assertEquals( "ows:ExceptionReport", dom.getDocumentElement().getNodeName());
-        
+                "&boundingbox=-100,30,-80,44,EPSG:4326&format=image/tiff" +
+                "&gridbasecrs=EPSG:4326&store=true";
+
+        Document dom = getAsDOM(req);
+        assertEquals("ows:ExceptionReport", dom.getDocumentElement().getNodeName());
+
         addCoverageStore(false);
-        dom = getAsDOM( RestBaseController.ROOT_PATH + "/workspaces/gs/coveragestores/usaWorldImage/coverages.xml");
-        assertEquals( 0, dom.getElementsByTagName( "coverage").getLength() );
-        
-        String xml = 
-            "<coverage>" +
-                "<name>usa</name>"+
-                "<title>usa is a A raster file accompanied by a spatial data file</title>" + 
-                "<description>Generated from WorldImage</description>" + 
-                "<srs>EPSG:4326</srs>" +
+        dom = getAsDOM(RestBaseController.ROOT_PATH + "/workspaces/gs/coveragestores/usaWorldImage/coverages.xml");
+        assertEquals(0, dom.getElementsByTagName("coverage").getLength());
+
+        String xml =
+                "<coverage>" +
+                        "<name>usa</name>" +
+                        "<title>usa is a A raster file accompanied by a spatial data file</title>" +
+                        "<description>Generated from WorldImage</description>" +
+                        "<srs>EPSG:4326</srs>" +
                 /*"<latLonBoundingBox>"+
                   "<minx>-130.85168</minx>"+
                   "<maxx>-62.0054</maxx>"+
@@ -123,35 +123,35 @@ public class CoverageControllerWCSTest extends CatalogRESTTestSupport {
                     "</transform>"+
                     "<crs>EPSG:4326</crs>"+
                 "</grid>"+*/
-                "<supportedFormats>"+
-                  "<string>PNG</string>"+
-                  "<string>GEOTIFF</string>"+
-                "</supportedFormats>"+
-                "<requestSRS>"+
-                  "<string>EPSG:4326</string>"+
-                "</requestSRS>"+
-                "<responseSRS>"+
-                  "<string>EPSG:4326</string>"+
-                "</responseSRS>"+
-                "<store>usaWorldImage</store>"+
-                "<namespace>gs</namespace>"+
-              "</coverage>";
-        MockHttpServletResponse response = 
-            postAsServletResponse( RestBaseController.ROOT_PATH + "/workspaces/gs/coveragestores/usaWorldImage/coverages/", xml, "text/xml");
-        
-        assertEquals( 201, response.getStatus() );
-        assertNotNull( response.getHeader( "Location") );
-        assertTrue( response.getHeader("Location").endsWith( "/workspaces/gs/coveragestores/usaWorldImage/coverages/usa" ) );
+                        "<supportedFormats>" +
+                        "<string>PNG</string>" +
+                        "<string>GEOTIFF</string>" +
+                        "</supportedFormats>" +
+                        "<requestSRS>" +
+                        "<string>EPSG:4326</string>" +
+                        "</requestSRS>" +
+                        "<responseSRS>" +
+                        "<string>EPSG:4326</string>" +
+                        "</responseSRS>" +
+                        "<store>usaWorldImage</store>" +
+                        "<namespace>gs</namespace>" +
+                        "</coverage>";
+        MockHttpServletResponse response =
+                postAsServletResponse(RestBaseController.ROOT_PATH + "/workspaces/gs/coveragestores/usaWorldImage/coverages/", xml, "text/xml");
 
-        dom = getAsDOM( req );
-        assertEquals( "wcs:Coverages", dom.getDocumentElement().getNodeName() );
+        assertEquals(201, response.getStatus());
+        assertNotNull(response.getHeader("Location"));
+        assertTrue(response.getHeader("Location").endsWith("/workspaces/gs/coveragestores/usaWorldImage/coverages/usa"));
+
+        dom = getAsDOM(req);
+        assertEquals("wcs:Coverages", dom.getDocumentElement().getNodeName());
 
         dom = getAsDOM(RestBaseController.ROOT_PATH + "/workspaces/gs/coveragestores/usaWorldImage/coverages/usa.xml");
         assertXpathEvaluatesTo("-130.85168", "/coverage/latLonBoundingBox/minx", dom);
         assertXpathEvaluatesTo("983 598", "/coverage/grid/range/high", dom);
 
-        dom = getAsDOM( RestBaseController.ROOT_PATH + "/workspaces/gs/coveragestores/usaWorldImage/coverages.xml");
-        assertEquals( 1, dom.getElementsByTagName( "coverage").getLength() );
+        dom = getAsDOM(RestBaseController.ROOT_PATH + "/workspaces/gs/coveragestores/usaWorldImage/coverages.xml");
+        assertEquals(1, dom.getElementsByTagName("coverage").getLength());
     }
 
     @Test
@@ -161,7 +161,7 @@ public class CoverageControllerWCSTest extends CatalogRESTTestSupport {
         String request = "wcs?service=wcs&request=getcoverage&version=1.1.1&identifier=gs:usa" +
                 "&boundingbox=-100,30,-80,44,EPSG:4326&format=image/tiff&gridbasecrs=EPSG:4326&store=true";
         Document document = getAsDOM(request);
-        assertEquals( "ows:ExceptionReport", document.getDocumentElement().getNodeName());
+        assertEquals("ows:ExceptionReport", document.getDocumentElement().getNodeName());
         // add the test store, no coverages should be available
         addCoverageStore(false);
         JSONObject json = (JSONObject) getAsJSON(RestBaseController.ROOT_PATH + "/workspaces/gs/coveragestores/usaWorldImage/coverages.json");
@@ -197,8 +197,8 @@ public class CoverageControllerWCSTest extends CatalogRESTTestSupport {
         MockHttpServletResponse response = postAsServletResponse(
                 RestBaseController.ROOT_PATH + "/workspaces/gs/coveragestores/usaWorldImage/coverages/", content, "application/json");
         assertEquals(201, response.getStatus());
-        assertNotNull(response.getHeader( "Location"));
-        assertTrue(response.getHeader("Location").endsWith("/workspaces/gs/coveragestores/usaWorldImage/coverages/usa" ));
+        assertNotNull(response.getHeader("Location"));
+        assertTrue(response.getHeader("Location").endsWith("/workspaces/gs/coveragestores/usaWorldImage/coverages/usa"));
         // check that the coverage exists using the WCS service
         document = getAsDOM(request);
         assertEquals("wcs:Coverages", document.getDocumentElement().getNodeName());
@@ -218,45 +218,45 @@ public class CoverageControllerWCSTest extends CatalogRESTTestSupport {
     public void testPostAsXMLWithNativeName() throws Exception {
         removeStore("gs", "usaWorldImage");
         String req = "wcs?service=wcs&request=getcoverage&version=1.1.1&identifier=gs:differentName" +
-            "&boundingbox=-100,30,-80,44,EPSG:4326&format=image/tiff" +
-            "&gridbasecrs=EPSG:4326&store=true";
-        
-        Document dom = getAsDOM( req );
-        assertEquals( "ows:ExceptionReport", dom.getDocumentElement().getNodeName());
-        
-        addCoverageStore(false);
-        dom = getAsDOM( RestBaseController.ROOT_PATH + "/workspaces/gs/coveragestores/usaWorldImage/coverages.xml");
-        assertEquals( 0, dom.getElementsByTagName( "coverage").getLength() );
-        
-        String xml = 
-            "<coverage>" +
-                "<name>differentName</name>"+
-                "<title>usa is a A raster file accompanied by a spatial data file</title>" + 
-                "<description>Generated from WorldImage</description>" + 
-                "<srs>EPSG:4326</srs>" +
-                "<supportedFormats>"+
-                  "<string>PNG</string>"+
-                  "<string>GEOTIFF</string>"+
-                "</supportedFormats>"+
-                "<requestSRS>"+
-                  "<string>EPSG:4326</string>"+
-                "</requestSRS>"+
-                "<responseSRS>"+
-                  "<string>EPSG:4326</string>"+
-                "</responseSRS>"+
-                "<store>usaWorldImage</store>"+
-                "<namespace>gs</namespace>"+
-                "<nativeCoverageName>usa</nativeCoverageName>"+
-              "</coverage>";
-        MockHttpServletResponse response = 
-            postAsServletResponse( RestBaseController.ROOT_PATH + "/workspaces/gs/coveragestores/usaWorldImage/coverages/", xml, "text/xml");
-        
-        assertEquals( 201, response.getStatus() );
-        assertNotNull( response.getHeader( "Location") );
-        assertTrue( response.getHeader("Location").endsWith( "/workspaces/gs/coveragestores/usaWorldImage/coverages/differentName" ) );
+                "&boundingbox=-100,30,-80,44,EPSG:4326&format=image/tiff" +
+                "&gridbasecrs=EPSG:4326&store=true";
 
-        dom = getAsDOM( req );
-        assertEquals( "wcs:Coverages", dom.getDocumentElement().getNodeName() );
+        Document dom = getAsDOM(req);
+        assertEquals("ows:ExceptionReport", dom.getDocumentElement().getNodeName());
+
+        addCoverageStore(false);
+        dom = getAsDOM(RestBaseController.ROOT_PATH + "/workspaces/gs/coveragestores/usaWorldImage/coverages.xml");
+        assertEquals(0, dom.getElementsByTagName("coverage").getLength());
+
+        String xml =
+                "<coverage>" +
+                        "<name>differentName</name>" +
+                        "<title>usa is a A raster file accompanied by a spatial data file</title>" +
+                        "<description>Generated from WorldImage</description>" +
+                        "<srs>EPSG:4326</srs>" +
+                        "<supportedFormats>" +
+                        "<string>PNG</string>" +
+                        "<string>GEOTIFF</string>" +
+                        "</supportedFormats>" +
+                        "<requestSRS>" +
+                        "<string>EPSG:4326</string>" +
+                        "</requestSRS>" +
+                        "<responseSRS>" +
+                        "<string>EPSG:4326</string>" +
+                        "</responseSRS>" +
+                        "<store>usaWorldImage</store>" +
+                        "<namespace>gs</namespace>" +
+                        "<nativeCoverageName>usa</nativeCoverageName>" +
+                        "</coverage>";
+        MockHttpServletResponse response =
+                postAsServletResponse(RestBaseController.ROOT_PATH + "/workspaces/gs/coveragestores/usaWorldImage/coverages/", xml, "text/xml");
+
+        assertEquals(201, response.getStatus());
+        assertNotNull(response.getHeader("Location"));
+        assertTrue(response.getHeader("Location").endsWith("/workspaces/gs/coveragestores/usaWorldImage/coverages/differentName"));
+
+        dom = getAsDOM(req);
+        assertEquals("wcs:Coverages", dom.getDocumentElement().getNodeName());
 
         dom = getAsDOM(RestBaseController.ROOT_PATH + "/workspaces/gs/coveragestores/usaWorldImage/coverages/differentName.xml");
         assertXpathEvaluatesTo("-130.85168", "/coverage/latLonBoundingBox/minx", dom);
@@ -268,30 +268,30 @@ public class CoverageControllerWCSTest extends CatalogRESTTestSupport {
     public void testPostNewAsXMLWithNativeCoverageName() throws Exception {
         removeStore("gs", "usaWorldImage");
         String req = "wcs?service=wcs&request=getcoverage&version=1.1.1&identifier=gs:differentName" +
-            "&boundingbox=-100,30,-80,44,EPSG:4326&format=image/tiff" +
-            "&gridbasecrs=EPSG:4326&store=true";
+                "&boundingbox=-100,30,-80,44,EPSG:4326&format=image/tiff" +
+                "&gridbasecrs=EPSG:4326&store=true";
 
-        Document dom = getAsDOM( req );
-        assertEquals( "ows:ExceptionReport", dom.getDocumentElement().getNodeName());
+        Document dom = getAsDOM(req);
+        assertEquals("ows:ExceptionReport", dom.getDocumentElement().getNodeName());
 
         addCoverageStore(false);
-        dom = getAsDOM( RestBaseController.ROOT_PATH + "/workspaces/gs/coveragestores/usaWorldImage/coverages.xml");
-        assertEquals( 0, dom.getElementsByTagName( "coverage").getLength() );
+        dom = getAsDOM(RestBaseController.ROOT_PATH + "/workspaces/gs/coveragestores/usaWorldImage/coverages.xml");
+        assertEquals(0, dom.getElementsByTagName("coverage").getLength());
 
         String xml =
-            "<coverage>" +
-                "<name>differentName</name>"+
-                "<nativeCoverageName>usa</nativeCoverageName>"+
-              "</coverage>";
+                "<coverage>" +
+                        "<name>differentName</name>" +
+                        "<nativeCoverageName>usa</nativeCoverageName>" +
+                        "</coverage>";
         MockHttpServletResponse response =
-            postAsServletResponse( RestBaseController.ROOT_PATH + "/workspaces/gs/coveragestores/usaWorldImage/coverages/", xml, "text/xml");
+                postAsServletResponse(RestBaseController.ROOT_PATH + "/workspaces/gs/coveragestores/usaWorldImage/coverages/", xml, "text/xml");
 
-        assertEquals( 201, response.getStatus() );
-        assertNotNull( response.getHeader( "Location") );
-        assertTrue( response.getHeader("Location").endsWith( "/workspaces/gs/coveragestores/usaWorldImage/coverages/differentName" ) );
+        assertEquals(201, response.getStatus());
+        assertNotNull(response.getHeader("Location"));
+        assertTrue(response.getHeader("Location").endsWith("/workspaces/gs/coveragestores/usaWorldImage/coverages/differentName"));
 
-        dom = getAsDOM( req );
-        assertEquals( "wcs:Coverages", dom.getDocumentElement().getNodeName() );
+        dom = getAsDOM(req);
+        assertEquals("wcs:Coverages", dom.getDocumentElement().getNodeName());
 
         dom = getAsDOM(RestBaseController.ROOT_PATH + "/workspaces/gs/coveragestores/usaWorldImage/coverages/differentName.xml");
         assertXpathEvaluatesTo("differentName", "/coverage/name", dom);
@@ -303,30 +303,30 @@ public class CoverageControllerWCSTest extends CatalogRESTTestSupport {
     public void testPostNewAsXMLWithNativeNameFallback() throws Exception {
         removeStore("gs", "usaWorldImage");
         String req = "wcs?service=wcs&request=getcoverage&version=1.1.1&identifier=gs:differentName" +
-            "&boundingbox=-100,30,-80,44,EPSG:4326&format=image/tiff" +
-            "&gridbasecrs=EPSG:4326&store=true";
+                "&boundingbox=-100,30,-80,44,EPSG:4326&format=image/tiff" +
+                "&gridbasecrs=EPSG:4326&store=true";
 
-        Document dom = getAsDOM( req );
-        assertEquals( "ows:ExceptionReport", dom.getDocumentElement().getNodeName());
+        Document dom = getAsDOM(req);
+        assertEquals("ows:ExceptionReport", dom.getDocumentElement().getNodeName());
 
         addCoverageStore(false);
-        dom = getAsDOM( RestBaseController.ROOT_PATH + "/workspaces/gs/coveragestores/usaWorldImage/coverages.xml");
-        assertEquals( 0, dom.getElementsByTagName( "coverage").getLength() );
+        dom = getAsDOM(RestBaseController.ROOT_PATH + "/workspaces/gs/coveragestores/usaWorldImage/coverages.xml");
+        assertEquals(0, dom.getElementsByTagName("coverage").getLength());
 
         String xml =
-            "<coverage>" +
-                "<name>differentName</name>"+
-                "<nativeName>usa</nativeName>"+
-              "</coverage>";
+                "<coverage>" +
+                        "<name>differentName</name>" +
+                        "<nativeName>usa</nativeName>" +
+                        "</coverage>";
         MockHttpServletResponse response =
-            postAsServletResponse( RestBaseController.ROOT_PATH + "/workspaces/gs/coveragestores/usaWorldImage/coverages/", xml, "text/xml");
+                postAsServletResponse(RestBaseController.ROOT_PATH + "/workspaces/gs/coveragestores/usaWorldImage/coverages/", xml, "text/xml");
 
-        assertEquals( 201, response.getStatus() );
-        assertNotNull( response.getHeader( "Location") );
-        assertTrue( response.getHeader("Location").endsWith( "/workspaces/gs/coveragestores/usaWorldImage/coverages/differentName" ) );
+        assertEquals(201, response.getStatus());
+        assertNotNull(response.getHeader("Location"));
+        assertTrue(response.getHeader("Location").endsWith("/workspaces/gs/coveragestores/usaWorldImage/coverages/differentName"));
 
-        dom = getAsDOM( req );
-        assertEquals( "wcs:Coverages", dom.getDocumentElement().getNodeName() );
+        dom = getAsDOM(req);
+        assertEquals("wcs:Coverages", dom.getDocumentElement().getNodeName());
 
         dom = getAsDOM(RestBaseController.ROOT_PATH + "/workspaces/gs/coveragestores/usaWorldImage/coverages/differentName.xml");
         assertXpathEvaluatesTo("differentName", "/coverage/name", dom);

@@ -19,7 +19,7 @@ import org.geotools.util.logging.Logging;
 public class BeanPropertyAccessor implements PropertyAccessor {
 
     private static final Logger LOGGER = Logging.getLogger(BeanPropertyAccessor.class);
-    
+
     @Override
     public boolean canHandle(Object object, String xpath, Class<?> target) {
         return true;

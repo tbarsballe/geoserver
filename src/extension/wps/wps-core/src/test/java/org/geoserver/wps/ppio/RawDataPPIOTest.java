@@ -24,8 +24,8 @@ public class RawDataPPIOTest {
     @Test
     public void testInputStreamClosed() throws Exception {
         try (
-            TestInputStream is = new TestInputStream();
-            OutputStream os = new ByteArrayOutputStream();
+                TestInputStream is = new TestInputStream();
+                OutputStream os = new ByteArrayOutputStream();
         ) {
             RawDataPPIO ppio = buildRawDataPPIOWithMockManager();
             RawData rawData = mockRawDataWithInputStream(is);
@@ -55,7 +55,7 @@ public class RawDataPPIOTest {
         public TestInputStream() {
             super("Test data".getBytes());
         }
-        
+
         public boolean isClosed() {
             return isClosed;
         }

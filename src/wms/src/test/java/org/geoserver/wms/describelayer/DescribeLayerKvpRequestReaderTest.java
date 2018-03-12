@@ -31,7 +31,7 @@ import org.junit.Test;
 
 /**
  * Unit test suite for {@link DescribeLayerKvpRequestReader}
- * 
+ *
  * @author Gabriel Roldan
  * @version $Id$
  */

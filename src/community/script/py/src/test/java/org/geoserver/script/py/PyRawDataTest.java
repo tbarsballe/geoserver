@@ -44,7 +44,7 @@ public class PyRawDataTest extends ScriptProcessTestSupport {
         Parameter<?> param = checkParameter(inputs, "input", RawData.class, "The raw data input", 1, 1);
         assertEquals("application/json,text/xml", param.metadata.get("mimeTypes"));
         checkParameter(inputs, "outputMimeType", String.class, "The user chosen output mime type", 0, 1);
-        
+
         // check outputs
         Map<String, Parameter<?>> resultInfo = pf.getResultInfo(raw, null);
         assertEquals(1, resultInfo.size());
@@ -54,8 +54,8 @@ public class PyRawDataTest extends ScriptProcessTestSupport {
     }
 
     public Parameter<?> checkParameter(Map<String, Parameter<?>> parameters, String name,
-            Class type,
-            String description, int minOccurs, int maxOccurs) {
+                                       Class type,
+                                       String description, int minOccurs, int maxOccurs) {
         assertTrue(parameters.containsKey(name));
         Parameter<?> param = parameters.get(name);
         assertTrue(type.isAssignableFrom(param.type));
@@ -66,9 +66,9 @@ public class PyRawDataTest extends ScriptProcessTestSupport {
         return param;
 
     }
-    
+
     public static void main(String[] args) {
-		System.out.println(Integer.MAX_VALUE);
-	}
+        System.out.println(Integer.MAX_VALUE);
+    }
 
 }

@@ -16,7 +16,7 @@ import org.opengis.parameter.GeneralParameterValue;
 
 /**
  * Applies access limits policies around the wrapped reader
- * 
+ *
  * @author Daniele Romagnoli - GeoSolutions
  */
 public class SecuredStructuredGridCoverage2DReader extends DecoratingStructuredGridCoverage2DReader {

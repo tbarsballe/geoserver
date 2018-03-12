@@ -15,10 +15,9 @@ import org.geoserver.config.ConfigurationListenerAdapter;
 
 /**
  * Base class for synchronising catalog changes across a cluster.
- *
  */
-public class GeoServerSynchronizer extends ConfigurationListenerAdapter 
-    implements CatalogListener {
+public class GeoServerSynchronizer extends ConfigurationListenerAdapter
+        implements CatalogListener {
 
     protected ClusterConfigWatcher configWatcher;
 

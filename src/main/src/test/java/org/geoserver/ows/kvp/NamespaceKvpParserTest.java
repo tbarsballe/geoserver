@@ -84,11 +84,11 @@ public class NamespaceKvpParserTest {
     }
 
     @Test
-    public void testDefaultNamespace() throws Exception{
+    public void testDefaultNamespace() throws Exception {
         NamespaceSupport ctx = parser.parse("xmlns(http://default.namespace.com)");
         assertEquals("http://default.namespace.com", ctx.getURI(XMLConstants.DEFAULT_NS_PREFIX));
     }
-    
+
     @SuppressWarnings("unchecked")
     private List<String> getPrefixes(NamespaceSupport ctx) {
         Enumeration<String> prefixes = ctx.getPrefixes();
@@ -98,7 +98,7 @@ public class NamespaceKvpParserTest {
         }
         return l;
     }
-    
+
     @Test
     public void testWfs20Syntax() throws Exception {
         NamespaceKvpParser parser = new NamespaceKvpParser("namespaces", true);

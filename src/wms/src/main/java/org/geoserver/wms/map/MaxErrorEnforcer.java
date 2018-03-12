@@ -12,6 +12,7 @@ import org.opengis.feature.simple.SimpleFeature;
 /**
  * Attaches itself to the renderer and ensures no more than a certain amount of errors occur, if
  * they do, the rendering process is stopped
+ *
  * @author Andrea Aime - OpenGeo
  */
 public class MaxErrorEnforcer {
@@ -21,12 +22,12 @@ public class MaxErrorEnforcer {
     int maxErrors;
 
     int errors;
-    
+
     Exception lastException;
 
     /**
      * Builds a new max errors enforcer. If maxErrors is not positive the enforcer will do nothing
-     * 
+     *
      * @param renderer
      * @param maxErrors
      */
@@ -54,15 +55,13 @@ public class MaxErrorEnforcer {
 
     /**
      * True if the max error threshold was exceeded
-     *
      */
     public boolean exceedsMaxErrors() {
         return maxErrors > 0 && errors > maxErrors;
     }
-    
+
     /**
      * Returns the last exception occurred (or null if none happened)
-     *
      */
     public Exception getLastException() {
         return lastException;

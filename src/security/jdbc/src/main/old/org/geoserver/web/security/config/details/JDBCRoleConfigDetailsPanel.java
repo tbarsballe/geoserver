@@ -19,52 +19,54 @@ import org.geoserver.web.security.config.SecurityNamedConfigModelHelper;
 /**
  * A form component that can be used for xml configurations
  */
-public class JDBCRoleConfigDetailsPanel extends AbstractRoleDetailsPanel{
+public class JDBCRoleConfigDetailsPanel extends AbstractRoleDetailsPanel {
     private static final long serialVersionUID = 1L;
     JDBCConnectFormComponent comp;
     TextField<String> propertyFileNameDDLComponent;
     TextField<String> propertyFileNameDMLComponent;
     CheckBox creatingTablesComponent;
 
-    
+
     public JDBCRoleConfigDetailsPanel(String id, CompoundPropertyModel<SecurityNamedConfigModelHelper> model) {
-        super(id,model);
+        super(id, model);
     }
 
     @Override
     protected void initializeComponents() {
         super.initializeComponents();
         if (configHelper.isNew()) {
-            comp = new JDBCConnectFormComponent("jdbcConnectFormComponent",Mode.DYNAMIC);
+            comp = new JDBCConnectFormComponent("jdbcConnectFormComponent", Mode.DYNAMIC);
         } else {
-            JDBCSecurityServiceConfig config = (JDBCSecurityServiceConfig) configHelper.getConfig(); 
-           if (config.isJndi()) {
-               comp = new JDBCConnectFormComponent("jdbcConnectFormComponent",Mode.DYNAMIC,config.getJndiName());
-           } else {
-               comp = new JDBCConnectFormComponent("jdbcConnectFormComponent",Mode.DYNAMIC,
-                       config.getDriverClassName(),config.getConnectURL(),
-                       config.getUserName(),config.getPassword()
-                       );
-           }
-        }        
-        addOrReplace(comp);        
-        
-        add(creatingTablesComponent=new CheckBox("config.creatingTables"));
-        
+            JDBCSecurityServiceConfig config = (JDBCSecurityServiceConfig) configHelper.getConfig();
+            if (config.isJndi()) {
+                comp = new JDBCConnectFormComponent("jdbcConnectFormComponent", Mode.DYNAMIC, config.getJndiName());
+            } else {
+                comp = new JDBCConnectFormComponent("jdbcConnectFormComponent", Mode.DYNAMIC,
+                        config.getDriverClassName(), config.getConnectURL(),
+                        config.getUserName(), config.getPassword()
+                );
+            }
+        }
+        addOrReplace(comp);
+
+        add(creatingTablesComponent = new CheckBox("config.creatingTables"));
+
         propertyFileNameDDLComponent = new TextField<String>("config.propertyFileNameDDL");
         add(propertyFileNameDDLComponent);
         propertyFileNameDMLComponent = new TextField<String>("config.propertyFileNameDML");
         add(propertyFileNameDMLComponent);
-        
-        
-    };
-        
-    
+
+
+    }
+
+    ;
+
+
     @Override
     protected SecurityNamedServiceConfig createNewConfigObject() {
         return new JDBCRoleServiceConfig();
     }
-          
+
     @Override
     public void updateModel() {
         super.updateModel();
@@ -80,7 +82,7 @@ public class JDBCRoleConfigDetailsPanel extends AbstractRoleDetailsPanel{
         config.setConnectURL(null);
         config.setUserName(null);
         config.setPassword(null);
-        
+
         config.setJndi(c.getType().equals(JDBCConnectConfig.TYPEJNDI));
         if (config.isJndi()) {
             config.setJndiName(c.getJndiName());

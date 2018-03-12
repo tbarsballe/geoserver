@@ -16,7 +16,7 @@ public class JDBCRoleListPageTest extends RoleListPageTest {
     public void testRemove() throws Exception {
         //insertValues();
         addAdditonalData();
-        doRemove(getTabbedPanelPath()+":panel:header:removeSelected");
+        doRemove(getTabbedPanelPath() + ":panel:header:removeSelected");
     }
 
     @Override
@@ -27,7 +27,7 @@ public class JDBCRoleListPageTest extends RoleListPageTest {
     void initializeForJDBC() throws Exception {
         initialize(new H2UserGroupServiceTest(), new H2RoleServiceTest());
     }
-    
+
     @Override
     public String getRoleServiceName() {
         return "h2";

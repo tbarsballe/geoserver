@@ -48,7 +48,7 @@ import org.opengis.style.GraphicalSymbol;
  * with the same shape, but it's hard, so we use a square instead)</li>
  * <li>Removes all text symbolizers</li>
  * </ul>
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 class UTFGridStyleVisitor extends DuplicatingStyleVisitor {
@@ -74,7 +74,7 @@ class UTFGridStyleVisitor extends DuplicatingStyleVisitor {
         super.visit(style);
         Style copy = (Style) pages.pop();
         List<FeatureTypeStyle> featureTypeStyles = new ArrayList(copy.featureTypeStyles());
-        for (Iterator<FeatureTypeStyle> it = featureTypeStyles.iterator(); it.hasNext();) {
+        for (Iterator<FeatureTypeStyle> it = featureTypeStyles.iterator(); it.hasNext(); ) {
             FeatureTypeStyle fts = it.next();
             if (fts.rules().isEmpty()) {
                 it.remove();
@@ -93,7 +93,7 @@ class UTFGridStyleVisitor extends DuplicatingStyleVisitor {
 
         // clean up empty rules
         List<Rule> rules = new ArrayList<>(copy.rules());
-        for (Iterator<Rule> it = rules.iterator(); it.hasNext();) {
+        for (Iterator<Rule> it = rules.iterator(); it.hasNext(); ) {
             Rule rule = it.next();
             if (rule.symbolizers().isEmpty()) {
                 it.remove();
@@ -131,7 +131,7 @@ class UTFGridStyleVisitor extends DuplicatingStyleVisitor {
         // clean up removed symbolizers
         Rule copy = (Rule) pages.pop();
         List<Symbolizer> symbolizers = new ArrayList(copy.symbolizers());
-        for (Iterator<Symbolizer> it = symbolizers.iterator(); it.hasNext();) {
+        for (Iterator<Symbolizer> it = symbolizers.iterator(); it.hasNext(); ) {
             Symbolizer symbolizer = it.next();
             if (symbolizer == null) {
                 it.remove();
@@ -140,13 +140,14 @@ class UTFGridStyleVisitor extends DuplicatingStyleVisitor {
         copy.symbolizers().clear();
         copy.symbolizers().addAll(symbolizers);
         pages.push(copy);
-    };
+    }
+
+    ;
 
     /**
      * Returns the function return type, or {@link Object} if it could not be determined
-     * 
-     * @param f
      *
+     * @param f
      */
     Class getFunctionReturnType(Function f) {
         FunctionName name = f.getFunctionName();
@@ -205,7 +206,7 @@ class UTFGridStyleVisitor extends DuplicatingStyleVisitor {
     }
 
     private Literal estimateGraphicSize(ExternalGraphic eg) {
-        Graphic testGraphic = sf.createGraphic(new ExternalGraphic[] { eg }, null, null,
+        Graphic testGraphic = sf.createGraphic(new ExternalGraphic[]{eg}, null, null,
                 LITERAL_ONE, Expression.NIL, ff.literal(0));
         PointSymbolizer testSymbolizer = sf.createPointSymbolizer(testGraphic, null);
         Style2D style = sldFactory.createStyle(null, testSymbolizer);

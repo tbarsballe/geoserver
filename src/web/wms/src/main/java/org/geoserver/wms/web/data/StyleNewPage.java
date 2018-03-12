@@ -9,6 +9,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.logging.Level;
+
 import org.apache.wicket.WicketRuntimeException;
 import org.geoserver.catalog.Catalog;
 import org.geoserver.catalog.CatalogBuilder;
@@ -36,7 +37,7 @@ public class StyleNewPage extends AbstractStylePage {
         if (!isAuthenticatedAsAdmin()) {
             //initialize the workspace drop down
             //default to first available workspace
-            List<WorkspaceInfo> ws = getCatalog().getWorkspaces(); 
+            List<WorkspaceInfo> ws = getCatalog().getWorkspaces();
             if (!ws.isEmpty()) {
                 styleModel.getObject().setWorkspace(ws.get(0));
             }
@@ -51,7 +52,7 @@ public class StyleNewPage extends AbstractStylePage {
         //Duplicate the model style so that values are preserved as models are detached
         StyleInfo s = catalog.getFactory().createStyle();
         CatalogBuilder builder = new CatalogBuilder(catalog);
-        builder.updateStyle(s,  model);
+        builder.updateStyle(s, model);
 
         StyleHandler styleHandler = styleHandler();
 
@@ -66,21 +67,21 @@ public class StyleNewPage extends AbstractStylePage {
         try {
             if (s.getFilename() == null) {
                 // TODO: check that this does not override any existing files
-                s.setFilename(s.getName() + "."+styleHandler.getFileExtension());
+                s.setFilename(s.getName() + "." + styleHandler.getFileExtension());
             }
             catalog.getResourcePool().writeStyle(s,
                     new ByteArrayInputStream(rawStyle.getBytes()));
         } catch (IOException e) {
             throw new WicketRuntimeException(e);
         }
-        
+
         // store in the catalog
         try {
             Version version = styleHandler.version(rawStyle);
             s.setFormatVersion(version);
             catalog.add(s);
             styleForm.info("Style saved");
-            
+
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Error occurred saving the style", e);
             error(e.getMessage());

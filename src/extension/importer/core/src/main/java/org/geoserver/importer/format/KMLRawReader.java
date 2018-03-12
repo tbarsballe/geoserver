@@ -40,7 +40,7 @@ public class KMLRawReader implements Iterable<Object>, Iterator<Object> {
     }
 
     public KMLRawReader(InputStream inputStream, KMLRawReader.ReadType readType,
-            SimpleFeatureType featureType) {
+                        SimpleFeatureType featureType) {
         if (KMLRawReader.ReadType.SCHEMA_AND_FEATURES.equals(readType)) {
             if (featureType == null) {
                 parser = new PullParser(new KMLConfiguration(), inputStream, KML.Placemark,

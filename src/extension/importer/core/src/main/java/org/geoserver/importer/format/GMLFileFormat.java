@@ -61,14 +61,13 @@ import com.vividsolutions.jts.geom.Geometry;
 
 /**
  * Supports reading GML simple features from a file with ".gml" extension
- * 
- * @author Andrea Aime - GeoSolutions
  *
+ * @author Andrea Aime - GeoSolutions
  */
 public class GMLFileFormat extends VectorFormat {
 
-    private static final Class[] TYPE_GUESS_TARGETS = new Class[] { Integer.class, Long.class,
-            Double.class, Boolean.class, Date.class };
+    private static final Class[] TYPE_GUESS_TARGETS = new Class[]{Integer.class, Long.class,
+            Double.class, Boolean.class, Date.class};
 
     private static final HashSet<Class> VALID_ATTRIBUTE_TYPES = new HashSet<>(Arrays.asList(
             (Class) Geometry.class, Number.class, Date.class, Boolean.class, String.class));
@@ -102,7 +101,9 @@ public class GMLFileFormat extends VectorFormat {
         public Configuration getConfiguration() {
             return configuration;
         }
-    };
+    }
+
+    ;
 
     @Override
     public FeatureReader read(ImportData data, ImportTask task) throws IOException {
@@ -202,6 +203,7 @@ public class GMLFileFormat extends VectorFormat {
 
         return Collections.singletonList(task);
     }
+
     SimpleFeatureType getSchema(File file) throws IOException {
         // do we have a schema location?
         boolean hasSchema = false;
@@ -335,7 +337,7 @@ public class GMLFileFormat extends VectorFormat {
     }
 
     private void updateSimpleTypeGuess(String name, Object value,
-            Map<String, AttributeDescriptor> guessedTypes) {
+                                       Map<String, AttributeDescriptor> guessedTypes) {
         if (value == null) {
             return;
         }

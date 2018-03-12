@@ -48,9 +48,9 @@ public class RulesModel extends GeoServerDataProvider<RuleModel> {
     }
 
     public static void saveOrUpdate(RuleModel ruleModel) {
-        if(!ruleModel.isEchoOnly()) {
+        if (!ruleModel.isEchoOnly()) {
             RulesDao.saveOrUpdateRule(ruleModel.toRule());
-            if(!ruleModel.getEcho()) {
+            if (!ruleModel.getEcho()) {
                 EchoParametersDao.deleteEchoParameters(ruleModel.getId());
             }
         }

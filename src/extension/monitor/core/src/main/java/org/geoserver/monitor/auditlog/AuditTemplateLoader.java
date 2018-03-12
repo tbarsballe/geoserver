@@ -19,9 +19,8 @@ import freemarker.cache.TemplateLoader;
 /**
  * Similar to the {@link GeoServerTemplateLoader}, but does not work relative to the resource
  * directories
- * 
+ *
  * @author Andrea Aime - GeoSolutions
- * 
  */
 public class AuditTemplateLoader implements TemplateLoader {
 
@@ -103,9 +102,8 @@ public class AuditTemplateLoader implements TemplateLoader {
      * <p>
      * Used to store the intial path so the template can be copied to the data directory.
      * </p>
-     * 
+     *
      * @author Justin Deoliveira, The Open Planning Project, jdeolive@openplans.org
-     * 
      */
     static class ClassTemplateSource {
         /**

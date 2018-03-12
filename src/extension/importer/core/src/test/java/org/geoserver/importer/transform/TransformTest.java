@@ -9,10 +9,13 @@ import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.Point;
+
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
+
 import static junit.framework.Assert.assertEquals;
+
 import org.geoserver.importer.ImportTask;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
@@ -23,7 +26,6 @@ import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 /**
- *
  * @author Ian Schneider <ischneider@boundlessgeo.com>
  */
 public class TransformTest {
@@ -69,7 +71,7 @@ public class TransformTest {
         sftb.add("geom", Geometry.class, CRS.decode("EPSG:4326"));
         SimpleFeatureType type = sftb.buildFeatureType();
         SimpleFeature f = transformType(new ReprojectTransform(crs), (SimpleFeatureType) type,
-                    new GeometryFactory().createPoint(new Coordinate(1d, 1d))
+                new GeometryFactory().createPoint(new Coordinate(1d, 1d))
         );
         Point p = (Point) f.getAttribute("geom");
         assertEquals(111319.49079327357, p.getX());
@@ -78,7 +80,7 @@ public class TransformTest {
 
     private SimpleFeature transform(InlineVectorTransform transform, Object... values) throws Exception {
         Object[] args = new Object[values.length / 3];
-        for (int i = 0; i < values.length; i+=3) {
+        for (int i = 0; i < values.length; i += 3) {
             args[i] = values[i + 2];
         }
         return transformType(transform, buildType(values), args);

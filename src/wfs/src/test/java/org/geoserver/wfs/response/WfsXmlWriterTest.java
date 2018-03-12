@@ -11,6 +11,7 @@ import static org.junit.Assert.assertNotNull;
 import java.io.File;
 import java.io.FileOutputStream;
 import javax.xml.parsers.DocumentBuilderFactory;
+
 import org.geoserver.wfs.WFSTestSupport;
 import org.junit.Test;
 import org.w3c.dom.Document;
@@ -19,7 +20,7 @@ import org.w3c.dom.NodeList;
 
 public class WfsXmlWriterTest extends WFSTestSupport {
 
-	@Test
+    @Test
     public void test() throws Exception {
         File tmp = File.createTempFile("wfs", "xml");
         tmp.deleteOnExit();
@@ -27,8 +28,8 @@ public class WfsXmlWriterTest extends WFSTestSupport {
         WfsXmlWriter writer = new WfsXmlWriter.WFS1_0(getWFS(),
                 new FileOutputStream(tmp));
         writer.openTag("wfs", "FeatureCollection");
-        writer.openTag("gml", "Feature", new String[] { "id", "foo", "srs",
-                "4326" });
+        writer.openTag("gml", "Feature", new String[]{"id", "foo", "srs",
+                "4326"});
         writer.text("some text");
         writer.closeTag("gml", "Feature");
         writer.closeTag("wfs", "FeatureCollection");

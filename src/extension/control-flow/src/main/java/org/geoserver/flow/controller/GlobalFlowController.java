@@ -8,7 +8,7 @@ package org.geoserver.flow.controller;
 /**
  * A flow controller matching all requests, can be used for globally controlling the number of
  * incoming requests
- * 
+ *
  * @author Andrea Aime - OpenGeo
  */
 public class GlobalFlowController extends SingleQueueFlowController {

@@ -17,9 +17,8 @@ import org.geotools.util.logging.Logging;
 
 /**
  * Model providing a list of DataStoreInfo backed by a {@link OpenSearchAccess}
- * 
+ *
  * @author Andrea Aime - GeoSolutions
- * 
  */
 public class OpenSearchAccessListModel extends LoadableDetachableModel<List<DataStoreInfo>> {
     private static final long serialVersionUID = -7742496075623731474L;

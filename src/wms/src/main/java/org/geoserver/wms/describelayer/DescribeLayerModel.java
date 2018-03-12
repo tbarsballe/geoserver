@@ -24,7 +24,7 @@ import org.geotools.util.logging.Logging;
 
 /**
  * DescribeLayerModel the model object used to handle a DescribeLayer response
- * 
+ *
  * @author carlo cancellieri - Geosolutions
  */
 public class DescribeLayerModel {

@@ -10,9 +10,8 @@ import org.geoserver.catalog.StoreInfo;
 
 /**
  * Renders a StoreInfo into a public name
- * 
+ *
  * @author Andrea Aime - GeoSolutions
- * 
  */
 public class StoreListChoiceRenderer extends ChoiceRenderer<StoreInfo> {
 

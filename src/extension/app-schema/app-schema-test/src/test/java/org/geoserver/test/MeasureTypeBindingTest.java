@@ -14,7 +14,6 @@ import org.w3c.dom.Node;
 
 /**
  * @author Xiangtan Lin, CSIRO Information Management and Technology
- * 
  */
 public class MeasureTypeBindingTest extends AbstractAppSchemaTestSupport {
 
@@ -39,7 +38,7 @@ public class MeasureTypeBindingTest extends AbstractAppSchemaTestSupport {
 
         Node feature = doc.getElementsByTagName("ex:PolymorphicFeature").item(0);
         assertEquals("ex:PolymorphicFeature", feature.getNodeName());
-       
+
         //gml:id
         assertXpathEvaluatesTo("f1", "//ex:PolymorphicFeature/@gml:id", doc);
 

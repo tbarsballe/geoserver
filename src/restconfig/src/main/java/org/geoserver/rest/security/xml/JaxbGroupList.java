@@ -13,25 +13,25 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.geoserver.security.impl.GeoServerUserGroup;
 
-@XmlRootElement(name="groups")
+@XmlRootElement(name = "groups")
 public class JaxbGroupList {
-	
-	protected List<String> groupNames;
 
-	public JaxbGroupList() {
-		
-	}
+    protected List<String> groupNames;
 
-	public JaxbGroupList( Collection<GeoServerUserGroup> groups ) {
-		groupNames = new ArrayList<String>();
-		for (GeoServerUserGroup group: groups) {
-			groupNames.add(group.getGroupname());
-		}
-	}
+    public JaxbGroupList() {
 
-	@XmlElement(name="group")
-	public List<String> getGroups() {
-		return groupNames;
-	}
+    }
+
+    public JaxbGroupList(Collection<GeoServerUserGroup> groups) {
+        groupNames = new ArrayList<String>();
+        for (GeoServerUserGroup group : groups) {
+            groupNames.add(group.getGroupname());
+        }
+    }
+
+    @XmlElement(name = "group")
+    public List<String> getGroups() {
+        return groupNames;
+    }
 
 }

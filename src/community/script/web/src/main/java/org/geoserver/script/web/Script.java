@@ -38,7 +38,7 @@ public class Script implements Serializable {
 
     public Script() {
     }
-    
+
     public Script(Resource file) {
         this.file = file;
         this.name = getNameFromFile(file);
@@ -73,7 +73,7 @@ public class Script implements Serializable {
         ScriptManager scriptManager = (ScriptManager) GeoServerExtensions.bean("scriptManager");
         try {
             if (name.contains(":")) {
-                name = name.replace(":",File.separator);
+                name = name.replace(":", File.separator);
             }
             Resource f = scriptManager.scriptFile(name, ScriptType.getByLabel(type), extension);
             return f;

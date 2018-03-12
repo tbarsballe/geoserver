@@ -29,12 +29,12 @@ public class JsonStringConverter extends BaseMessageConverter<String> {
     protected boolean supports(Class clazz) {
         return String.class.isAssignableFrom(clazz);
     }
-    
+
     @Override
     public boolean canRead(Class<?> clazz, MediaType mediaType) {
         return String.class.isAssignableFrom(clazz) && canRead(mediaType);
     }
-    
+
     @Override
     public boolean canWrite(Class<?> clazz, MediaType mediaType) {
         return false;
@@ -42,10 +42,10 @@ public class JsonStringConverter extends BaseMessageConverter<String> {
 
     @Override
     protected String readInternal(Class<? extends String> clazz,
-            HttpInputMessage inputMessage) throws IOException, HttpMessageNotReadableException {
+                                  HttpInputMessage inputMessage) throws IOException, HttpMessageNotReadableException {
         return IOUtils.getStringFromStream(inputMessage.getBody());
     }
-    
+
     public int getPriority() {
         return ExtensionPriority.HIGHEST;
     }

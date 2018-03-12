@@ -13,56 +13,55 @@ import org.w3c.dom.NodeList;
 
 /**
  * Abstract base class declaring abstract methods for
- * needed XPath expressions 
- * 
- * @author christian
+ * needed XPath expressions
  *
+ * @author christian
  */
-public abstract class RoleXMLXpath  extends XMLXpath {
-       
+public abstract class RoleXMLXpath extends XMLXpath {
+
     /**
      * @return absolute expression for {@link NodeList} for roles
      */
     abstract public XPathExpression getRoleListExpression();
-    
+
     /**
      * @return relative expression for parent role
      */
     abstract public XPathExpression getParentExpression();
-        
+
     /**
      * @return relative expression for username attribute
      */
     abstract public XPathExpression getRoleNameExpression();
-    
-        
+
+
     /**
      * @return relative expression for {@link NodeList} of role properties
      */
     abstract public XPathExpression getRolePropertiesExpression();
-    
+
     /**
      * @return relative expression for property name attribute
      */
     abstract public XPathExpression getPropertyNameExpression();
-    
+
     /**
      * @return relative expression for property value attribute
      */
     abstract public XPathExpression getPropertyValueExpression();
 
     /**
-     * @return absolute expression for {@link NodeList} of user/role 
+     * @return absolute expression for {@link NodeList} of user/role
      * assignment nodes
      */
-    abstract public XPathExpression getUserRolesExpression();   
-    
+    abstract public XPathExpression getUserRolesExpression();
+
     /**
      * @return relative expression for user name attribute
-     */    
+     */
     abstract public XPathExpression getUserNameExpression();
-    
-    
+
+
     /**
      * @return relative expression for {@link NodeList} of roles for
      * a user
@@ -73,19 +72,19 @@ public abstract class RoleXMLXpath  extends XMLXpath {
      * @return relative expression for role name  of role reference element
      */
     abstract public XPathExpression getUserRolRefNameExpression();
-    
+
     /**
-     * @return absolute expression for {@link NodeList} of group/role 
+     * @return absolute expression for {@link NodeList} of group/role
      * assignment nodes
      */
-    abstract public XPathExpression getGroupRolesExpression();   
-    
+    abstract public XPathExpression getGroupRolesExpression();
+
     /**
      * @return relative expression for group name attribute
-     */    
+     */
     abstract public XPathExpression getGroupNameExpression();
-    
-    
+
+
     /**
      * @return relative expression for {@link NodeList} of roles for
      * a group
@@ -97,5 +96,5 @@ public abstract class RoleXMLXpath  extends XMLXpath {
      */
     abstract public XPathExpression getGroupRolRefNameExpression();
 
-    
+
 }

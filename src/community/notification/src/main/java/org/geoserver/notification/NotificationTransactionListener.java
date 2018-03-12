@@ -64,7 +64,7 @@ public class NotificationTransactionListener extends NotificationListener implem
 
     @Override
     public void afterTransaction(TransactionType request, TransactionResponseType result,
-            boolean committed) {
+                                 boolean committed) {
         if (committed) {
             String handle = request.getHandle();
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();

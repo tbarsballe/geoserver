@@ -34,7 +34,7 @@ import org.springframework.web.servlet.mvc.AbstractController;
  * Controller which publishes files through a web interface.
  * <p>
  * To use this controller, it should be mapped to a particular url in the url mapping of the spring dispatcher servlet. Example:
- * 
+ * <p>
  * <pre>
  * <code>
  *   &lt;bean id="filePublisher" class="org.geoserver.ows.FilePublisher"/&gt;
@@ -49,8 +49,7 @@ import org.springframework.web.servlet.mvc.AbstractController;
  *   &lt;/bean&gt;
  * </code>
  * </pre>
- * 
- * 
+ *
  * @author Justin Deoliveira, The Open Planning Project
  */
 public class FilePublisher extends AbstractURLPublisher {
@@ -66,7 +65,7 @@ public class FilePublisher extends AbstractURLPublisher {
 
     /**
      * Creates the new file publisher.
-     * 
+     *
      * @param loader The loader used to locate files.
      */
     public FilePublisher(GeoServerResourceLoader loader) {
@@ -106,8 +105,8 @@ public class FilePublisher extends AbstractURLPublisher {
                 file = resource.getFile();
             }
         }
-        
-        if(file != null) {
+
+        if (file != null) {
             return URLs.fileToUrl(file);
         } else {
             return null;

@@ -13,9 +13,8 @@ import it.geosolutions.geoserver.rest.GeoServerRESTManager;
 
 /**
  * External GeoServer.
- * 
- * @author Niels Charlier
  *
+ * @author Niels Charlier
  */
 public interface ExternalGS extends Named {
 
@@ -24,7 +23,7 @@ public interface ExternalGS extends Named {
     String getUsername();
 
     String getPassword();
-        
+
     default GeoServerRESTManager getRESTManager() throws MalformedURLException {
         return new GeoServerRESTManager(new URL(getUrl()), getUsername(), getPassword());
     }

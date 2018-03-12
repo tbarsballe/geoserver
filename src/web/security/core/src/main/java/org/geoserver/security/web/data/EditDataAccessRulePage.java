@@ -34,7 +34,7 @@ public class EditDataAccessRulePage extends AbstractDataAccessRulePage {
             // we cannot update the original because it might have been serialized
             // and thus detached, we'll update the rule that is the same as the original one instead
             dao.getRules().forEach(r -> {
-                if(r.equals(orig)) {
+                if (r.equals(orig)) {
                     r.setRoot(rule.getRoot());
                     r.setGlobalGroupRule(rule.isGlobalGroupRule());
                     r.setLayer(rule.getLayer());

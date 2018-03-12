@@ -14,7 +14,6 @@ import org.geoserver.ows.Dispatcher;
  * to make a call to a GWC service fit into the GeoServer {@link Dispatcher} framework.
  * <p>
  * See the package documentation for more insights on how these all fit together.
- * 
  */
 public class GwcOperationProxy {
 

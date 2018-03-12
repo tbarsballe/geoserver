@@ -10,9 +10,9 @@ import org.geoserver.data.test.MockData;
 
 /**
  * Mock data for testing SRS reprojection in app-schema {@link SRSReprojectionTest}
- * 
+ * <p>
  * Inspired by {@link MockData}.
- * 
+ *
  * @author Victor Tey, CSIRO Exploration and Mining
  */
 public class SRSReprojectionMockData extends AbstractAppSchemaMockData {

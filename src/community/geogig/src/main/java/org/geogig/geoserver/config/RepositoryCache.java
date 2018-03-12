@@ -84,10 +84,10 @@ class RepositoryCache {
 
     /**
      * @implNote: the returned repository's close() method does nothing. Closing the repository
-     *            happens when it's evicted from the cache or is removed. This avoids several errors
-     *            as GeoSever can aggressively create and dispose DataStores, whose dispose() method
-     *            would otherwise close the repository and produce unexpected exceptions for any
-     *            other code using it.
+     * happens when it's evicted from the cache or is removed. This avoids several errors
+     * as GeoSever can aggressively create and dispose DataStores, whose dispose() method
+     * would otherwise close the repository and produce unexpected exceptions for any
+     * other code using it.
      */
     public Repository get(final String repositoryId) throws IOException {
         try {

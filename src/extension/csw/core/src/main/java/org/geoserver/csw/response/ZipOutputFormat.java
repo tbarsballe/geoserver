@@ -21,12 +21,11 @@ import org.geoserver.platform.ServiceException;
 import org.geotools.util.logging.Logging;
 
 /**
-*
-* This class returns a zip encoded results of the users's query.
-* 
-* Currently supported type of values are instances of {@link File} or 
-* {@link List} of {@link File}. 
-*/
+ * This class returns a zip encoded results of the users's query.
+ * <p>
+ * Currently supported type of values are instances of {@link File} or
+ * {@link List} of {@link File}.
+ */
 public class ZipOutputFormat extends Response {
 
     private static final Logger LOGGER = Logging.getLogger(ZipOutputFormat.class);
@@ -53,13 +52,13 @@ public class ZipOutputFormat extends Response {
             if (value instanceof List) {
                 files = (List<File>) value;
             } else if (value instanceof File) {
-                files = Collections.singletonList((File)value);
+                files = Collections.singletonList((File) value);
             } else {
                 throw new IllegalArgumentException(value.getClass() + " type isn't supported yet");
             }
 
             // Copying files to the temp folder
-            for (File file: files) {
+            for (File file : files) {
                 FileUtils.copyFile(file, new File(tempDir, file.getName()));
             }
             ZipOutputStream zipOut = new ZipOutputStream(output);

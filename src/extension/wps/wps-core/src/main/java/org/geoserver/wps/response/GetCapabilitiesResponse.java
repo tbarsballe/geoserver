@@ -27,7 +27,7 @@ public class GetCapabilitiesResponse extends Response {
     public boolean canHandle(Operation operation) {
         // is this a wps capabilities request?
         return "GetCapabilities".equalsIgnoreCase(operation.getId()) &&
-            operation.getService().getId().equals("wps");
+                operation.getService().getId().equals("wps");
     }
 
     public String getMimeType(Object value, Operation operation) {
@@ -35,12 +35,12 @@ public class GetCapabilitiesResponse extends Response {
     }
 
     public void write(Object value, OutputStream output, Operation operation) throws IOException {
-        TransformerBase tx = (TransformerBase)value;
+        TransformerBase tx = (TransformerBase) value;
 
         try {
             tx.transform(operation.getParameters()[0], output);
         } catch (TransformerException e) {
-            throw (IOException)new IOException().initCause(e);
+            throw (IOException) new IOException().initCause(e);
         }
 
         return;

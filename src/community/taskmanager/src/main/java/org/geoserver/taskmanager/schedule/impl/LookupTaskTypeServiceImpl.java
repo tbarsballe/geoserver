@@ -13,13 +13,12 @@ import org.springframework.stereotype.Service;
 
 /**
  * Implementation of the task service.
- * 
- * @author Niels Charlier
  *
+ * @author Niels Charlier
  */
 @Service
 public class LookupTaskTypeServiceImpl extends LookupServiceImpl<TaskType> {
-    
+
     @Autowired
     public void setTaskTypes(List<TaskType> taskTypes) {
         setNamed(taskTypes);

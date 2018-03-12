@@ -9,9 +9,8 @@ import java.io.Serializable;
 
 /**
  * Interface implemented by all catalog and configuration objects.
- * 
- * @author Justin Deoliveira, OpenGeo
  *
+ * @author Justin Deoliveira, OpenGeo
  */
 public interface Info extends Serializable {
 

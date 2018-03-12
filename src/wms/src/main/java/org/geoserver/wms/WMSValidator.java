@@ -16,11 +16,11 @@ import org.geotools.factory.GeoTools;
 
 /**
  * Configuration validator for Web Map Service.
- * 
+ *
  * @author David Winslow, OpenGeo
  */
 public class WMSValidator extends AbstractCatalogValidator {
-    
+
     public void validate(LayerInfo lyr, boolean isNew) {
         if (lyr.isEnabled() == false) {
             // short-circuit - for disabled layers we don't need to validate
@@ -29,13 +29,13 @@ public class WMSValidator extends AbstractCatalogValidator {
         }
 
         if (
-            lyr.getResource() == null ||
-            ((lyr.getResource().getSRS() == null ||
-                 lyr.getResource().getLatLonBoundingBox() == null) && WMS.isWmsExposable(lyr))
-        ) {
-            throw new RuntimeException( "Layer's resource is not fully configured");
+                lyr.getResource() == null ||
+                        ((lyr.getResource().getSRS() == null ||
+                                lyr.getResource().getLatLonBoundingBox() == null) && WMS.isWmsExposable(lyr))
+                ) {
+            throw new RuntimeException("Layer's resource is not fully configured");
         }
-      
+
         // Resource-dependent checks
         if (lyr.getType() == PublishedType.RASTER) {
             if (!(lyr.getResource() instanceof CoverageInfo))
@@ -52,11 +52,11 @@ public class WMSValidator extends AbstractCatalogValidator {
                 throw new RuntimeException("Layer with type VECTOR doesn't have a featuretype associated");
             FeatureTypeInfo ftinfo = (FeatureTypeInfo) lyr.getResource();
         } else if (lyr.getType() == PublishedType.WMTS) { // this is mostly to avoid throwing a not RASTER nor VECTOR exception
-            if (!(lyr.getResource() instanceof WMTSLayerInfo )) {
+            if (!(lyr.getResource() instanceof WMTSLayerInfo)) {
                 throw new RuntimeException("WMTS Layer doesn't have the correct resource");
             }
         } else if (lyr.getType() == PublishedType.WMS) { // this is mostly to avoid throwing a not RASTER nor VECTOR exception
-            if (!(lyr.getResource() instanceof WMSLayerInfo )) {
+            if (!(lyr.getResource() instanceof WMSLayerInfo)) {
                 throw new RuntimeException("WMS Layer doesn't have the correct resource");
             }
         } else throw new RuntimeException("Layer is neither RASTER nor VECTOR type");
@@ -68,5 +68,5 @@ public class WMSValidator extends AbstractCatalogValidator {
         }
     }
 
-    
+
 }

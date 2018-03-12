@@ -26,13 +26,12 @@ public interface KeyStoreProvider {
 
     /**
      * @return the default key store {@link Resource} object
-     * 
      */
     Resource getResource();
-    
+
     /**
      * Forces a reload of the key store
-     * 
+     *
      * @throws IOException
      */
     void reloadKeyStore() throws IOException;
@@ -41,9 +40,8 @@ public interface KeyStoreProvider {
      * Gets the {@link Key} object for this alias
      * <code>null</code> if the alias does not
      * exist
-     * 
-     * @param alias
      *
+     * @param alias
      * @throws IOException
      */
     Key getKey(String alias) throws IOException;
@@ -51,7 +49,6 @@ public interface KeyStoreProvider {
     /**
      * Gets the key for encrypting passwords stored
      * in configuration files, may be <code>null</code>
-     * 
      *
      * @throws IOException
      */
@@ -60,7 +57,6 @@ public interface KeyStoreProvider {
     /**
      * Checks if a such a key is available
      * without presenting the key itself
-     * 
      *
      * @throws IOException
      */
@@ -69,21 +65,20 @@ public interface KeyStoreProvider {
 
     /**
      * Test it the key store contains a alias
-     * 
-     * @param alias
      *
+     * @param alias
      * @throws IOException
      */
     boolean containsAlias(String alias) throws IOException;
 
     /**
-     * Returns the key for a {@link GeoServerUserGroupService} 
+     * Returns the key for a {@link GeoServerUserGroupService}
      * service Name. Needed if the service uses symmetric password
-     * encryption 
-     * 
+     * encryption
+     * <p>
      * may be <code>null</code>
-     * @param serviceName
      *
+     * @param serviceName
      * @throws IOException
      */
     byte[] getUserGroupKey(String serviceName) throws IOException;
@@ -91,7 +86,6 @@ public interface KeyStoreProvider {
     /**
      * Checks if a such a key is available
      * without presenting the key itself
-     * 
      *
      * @throws IOException
      */
@@ -101,8 +95,8 @@ public interface KeyStoreProvider {
      * Gets the {@link SecretKey} object for this alias
      * <code>null</code> if the alias does not
      * exist
-     * @param name
      *
+     * @param name
      * @throws IOException if the key exists but has the wrong type
      */
     SecretKey getSecretKey(String name) throws IOException;
@@ -111,8 +105,8 @@ public interface KeyStoreProvider {
      * Gets the {@link SecretKey} object for this alias
      * <code>null</code> if the alias does not
      * exist
-     * @param name
      *
+     * @param name
      * @throws IOException if the key exists but has the wrong type
      */
     PublicKey getPublicKey(String name) throws IOException;
@@ -121,14 +115,13 @@ public interface KeyStoreProvider {
      * Gets the {@link PrivateKey} object for this alias
      * <code>null</code> if the alias does not
      * exist
-     * @param name
      *
+     * @param name
      * @throws IOException if the key exists but has the wrong type
      */
     PrivateKey getPrivateKey(String name) throws IOException;
 
     /**
-     * 
      * @param serviceName for a {@link GeoServerUserGroupService}
      * @return the following String
      * {@link #USERGROUP_PREFIX}+serviceName+{@value #USERGROUP_POSTFIX}
@@ -137,16 +130,15 @@ public interface KeyStoreProvider {
 
     /**
      * Tests if the password is the key store password
-     * 
-     * @param password
      *
+     * @param password
      * @throws IOException
      */
     boolean isKeyStorePassword(char[] password) throws IOException;
 
     /**
      * Adds/replaces a {@link SecretKey} with its alias
-     * 
+     *
      * @param alias
      * @param key
      */
@@ -154,6 +146,7 @@ public interface KeyStoreProvider {
 
     /**
      * Sets  a secret for the name of a {@link GeoServerUserGroupService}
+     *
      * @param serviceName
      * @param password
      * @throws IOException
@@ -162,7 +155,7 @@ public interface KeyStoreProvider {
 
     /**
      * Remove a key belonging to the alias
-     * 
+     *
      * @param alias
      * @throws IOException
      */
@@ -170,22 +163,21 @@ public interface KeyStoreProvider {
 
     /**
      * Stores the key store to {@link #ks}
-     * 
+     *
      * @throws IOException
      */
     void storeKeyStore() throws IOException;
 
     /**
      * Prepares a master password change. The new password is used to encrypt
-     * the {@link KeyStore} and each {@link Entry}; 
-     * 
+     * the {@link KeyStore} and each {@link Entry};
+     * <p>
      * The new password is assumed to be already validated by the {@link PasswordValidator} named
      * {@link PasswordValidator#MASTERPASSWORD_NAME}
-     * 
+     * <p>
      * A new key store named {@link #PREPARED_FILE_NAME} is created. All keys
      * a re-encrypted with the new password and stored in the new key store.
-     *  
-     *  
+     *
      * @param oldPassword
      * @param newPassword
      * @throws IOException
@@ -196,7 +188,6 @@ public interface KeyStoreProvider {
     /**
      * Aborts the master password change by removing
      * the file named {@link #PREPARED_FILE_NAME}
-     * 
      */
     void abortMasterPasswordChange();
 
@@ -204,13 +195,13 @@ public interface KeyStoreProvider {
      * if {@link #DEFAULT_FILE_NAME} and {@link #PREPARED_FILE_NAME} exist,
      * this method checks if {@link #PREPARED_FILE_NAME} can be used
      * with new {@link MasterPasswordProvider#getMasterPassword()} method.
-     * 
+     * <p>
      * YES: replace the old keystore with the new one
-     * 
+     * <p>
      * NO: Do nothing, log the problem and use the old configuration
      * A reason may be that the new master password is not properly injected
-     * at startup 
-     * 
+     * at startup
+     *
      * @throws IOException
      */
     void commitMasterPasswordChange() throws IOException;

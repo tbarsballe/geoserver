@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 /**
  * A collection of INSPIRE unique resource identifiers, from code to namespace
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class UniqueResourceIdentifiers extends ArrayList<UniqueResourceIdentifier> {

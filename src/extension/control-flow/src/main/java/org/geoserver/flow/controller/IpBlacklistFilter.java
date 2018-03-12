@@ -30,25 +30,24 @@ import org.geotools.util.logging.Logging;
 
 /**
  * A class that allows the configuration of an ip black list, rejecting requests from ip addresses configured in the controlflow.properties file
- * 
+ *
  * @author Juan Marin, OpenGeo
- * 
  */
 
 public class IpBlacklistFilter implements GeoServerFilter {
 
     static final Logger LOGGER = Logging.getLogger(IpBlacklistFilter.class);
-    static final String PROPERTYFILENAME="controlflow.properties";
-    static final String BLPROPERTY="ip.blacklist";
-    static final String WLPROPERTY="ip.whitelist";
+    static final String PROPERTYFILENAME = "controlflow.properties";
+    static final String BLPROPERTY = "ip.blacklist";
+    static final String WLPROPERTY = "ip.whitelist";
     private Set<String> blackListedAddresses;
     private Set<String> whiteListedAddresses;
 
     private final PropertyFileWatcher configFile;
-    
+
     /**
      * Constructor used for testing purposes
-     * 
+     *
      * @param props configuraiton properties
      */
     public IpBlacklistFilter(Properties props) {
@@ -81,13 +80,13 @@ public class IpBlacklistFilter implements GeoServerFilter {
             throws IOException, ServletException {
 
         HttpServletRequest httpRequest = (HttpServletRequest) request;
-        
+
         if (isBlackListed(httpRequest)) {
             if (response instanceof HttpServletResponse) {
                 HttpServletResponse httpResponse = (HttpServletResponse) response;
-                    httpResponse.sendError(HttpServletResponse.SC_FORBIDDEN,
-                            "This IP has been blocked. Please contact the server administrator");
-                    return;
+                httpResponse.sendError(HttpServletResponse.SC_FORBIDDEN,
+                        "This IP has been blocked. Please contact the server administrator");
+                return;
             }
         }
 
@@ -95,34 +94,34 @@ public class IpBlacklistFilter implements GeoServerFilter {
     }
 
     private boolean isBlackListed(HttpServletRequest httpRequest) throws IOException {
-        if(configFile != null && configFile.isStale()){
-            synchronized(configFile){
-                if(configFile.isStale()){
+        if (configFile != null && configFile.isStale()) {
+            synchronized (configFile) {
+                if (configFile.isStale()) {
                     this.blackListedAddresses = reloadConfiguration(BLPROPERTY);
                     this.whiteListedAddresses = reloadConfiguration(WLPROPERTY);
                 }
             }
         }
-        if(blackListedAddresses.isEmpty()){
+        if (blackListedAddresses.isEmpty()) {
             return false;
         }
         String incomingIp = IpFlowController.getRemoteAddr(httpRequest);
-        boolean blocked=false;
+        boolean blocked = false;
         //Check IP on blackList roles (to block)
-        for(String blackListRole: blackListedAddresses){
-        	if(incomingIp.matches(blackListRole)){ 
-        		blocked=true;
-        		break;
-        	}
+        for (String blackListRole : blackListedAddresses) {
+            if (incomingIp.matches(blackListRole)) {
+                blocked = true;
+                break;
+            }
         }
-        
+
         //Check IP (if blocked) on whiteList roles (to unlock)
-        if(blocked && !whiteListedAddresses.isEmpty()){
-        	for(String whiteListRole: whiteListedAddresses){
-            	if(incomingIp.matches(whiteListRole)){ 
-            		blocked=false;
-            		break;
-            	}
+        if (blocked && !whiteListedAddresses.isEmpty()) {
+            for (String whiteListRole : whiteListedAddresses) {
+                if (incomingIp.matches(whiteListRole)) {
+                    blocked = false;
+                    break;
+                }
             }
         }
         return blocked;
@@ -130,21 +129,21 @@ public class IpBlacklistFilter implements GeoServerFilter {
 
     private Set<String> reloadConfiguration(String property) throws IOException {
         Properties props = configFile.getProperties();
-        if(props == null){
+        if (props == null) {
             //file doesn't exist
             return Collections.emptySet();
         }
-        return loadConfiguration(props,property);
+        return loadConfiguration(props, property);
     }
 
     private Set<String> loadConfiguration(Properties props, String property) {
         String rawList = props.getProperty(property);
-        if(null == rawList){
+        if (null == rawList) {
             return Collections.emptySet();
         }
         Set<String> ipAddresses = new HashSet<String>();
-        for(String ip : rawList.split(",")){
-            ipAddresses.add(ip.trim().replaceAll("\\*","(.{0,1}[0-9]+.{0,1}){0,4}"));
+        for (String ip : rawList.split(",")) {
+            ipAddresses.add(ip.trim().replaceAll("\\*", "(.{0,1}[0-9]+.{0,1}){0,4}"));
         }
         return ipAddresses;
     }

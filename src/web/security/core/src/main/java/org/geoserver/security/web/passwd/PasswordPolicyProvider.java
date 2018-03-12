@@ -14,15 +14,14 @@ import org.geoserver.security.web.SecurityNamedServiceProvider;
 
 /**
  * Data provider for password policy configurations.
- * 
- * @author Justin Deoliveira, OpenGeo
  *
+ * @author Justin Deoliveira, OpenGeo
  */
 public class PasswordPolicyProvider extends SecurityNamedServiceProvider<PasswordPolicyConfig> {
 
     @Override
     protected List<PasswordPolicyConfig> getItems() {
-        List <PasswordPolicyConfig> result = new ArrayList<PasswordPolicyConfig>();
+        List<PasswordPolicyConfig> result = new ArrayList<PasswordPolicyConfig>();
         try {
             for (String name : getSecurityManager().listPasswordValidators()) {
                 result.add((PasswordPolicyConfig) getSecurityManager().loadPasswordPolicyConfig(name));

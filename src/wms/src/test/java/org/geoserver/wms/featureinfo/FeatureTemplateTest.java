@@ -19,31 +19,29 @@ import org.junit.Test;
 import org.opengis.feature.simple.SimpleFeature;
 
 public class FeatureTemplateTest extends WMSTestSupport {
-    
-  
+
+
     @Test
     public void testWithDateAndBoolean() throws Exception {
 
-        SimpleFeatureSource source = getFeatureSource( MockData.PRIMITIVEGEOFEATURE );
+        SimpleFeatureSource source = getFeatureSource(MockData.PRIMITIVEGEOFEATURE);
         SimpleFeatureCollection fc = source.getFeatures();
         SimpleFeatureIterator i = fc.features();
         try {
             SimpleFeature f = (SimpleFeature) i.next();
-            
+
             FeatureTemplate template = new FeatureTemplate();
             try {
-                template.description( f );    
-            }
-            catch ( Exception e ) {
+                template.description(f);
+            } catch (Exception e) {
                 e.printStackTrace();
                 fail("template threw exception on null value");
             }
-        }
-        finally {
+        } finally {
             i.close();
         }
     }
-     
+
     @Test
     public void testRawValue() throws Exception {
         SimpleFeatureSource source = getFeatureSource(MockData.PRIMITIVEGEOFEATURE);
@@ -57,7 +55,7 @@ public class FeatureTemplateTest extends WMSTestSupport {
                 template.template(f, "rawValues.ftl", FeatureTemplateTest.class);
             } catch (Exception e) {
                 e.printStackTrace();
-                throw(e);
+                throw (e);
             }
         } finally {
             i.close();
@@ -66,50 +64,48 @@ public class FeatureTemplateTest extends WMSTestSupport {
 
     @Test
     public void testWithNull() throws Exception {
-        
-        SimpleFeatureSource source = getFeatureSource( MockData.BASIC_POLYGONS );
+
+        SimpleFeatureSource source = getFeatureSource(MockData.BASIC_POLYGONS);
         SimpleFeatureCollection fc = source.getFeatures();
         SimpleFeatureIterator i = fc.features();
         try {
             SimpleFeature f = (SimpleFeature) i.next();
-            
+
             FeatureTemplate template = new FeatureTemplate();
-            template.description( f );
-            
+            template.description(f);
+
             //set a value to null
-            f.setAttribute(1,null);
+            f.setAttribute(1, null);
             try {
-                template.description( f );    
-            }
-            catch ( Exception e ) {
+                template.description(f);
+            } catch (Exception e) {
                 e.printStackTrace();
                 fail("template threw exception on null value");
             }
-            
-        }
-        finally {
+
+        } finally {
             i.close();
         }
-      
+
     }
-    
+
     @Test
     public void testAlternateLookup() throws Exception {
-        SimpleFeatureSource source = getFeatureSource( MockData.PRIMITIVEGEOFEATURE );
+        SimpleFeatureSource source = getFeatureSource(MockData.PRIMITIVEGEOFEATURE);
         SimpleFeatureCollection fc = source.getFeatures();
         SimpleFeatureIterator features = fc.features();
         try {
-			SimpleFeature f = features.next();
-	        
-	        FeatureTemplate template = new FeatureTemplate();
-	        String result = template.template(f, "dummy.ftl", Dummy.class );
-	        
-	        assertEquals( "dummy", result );
+            SimpleFeature f = features.next();
+
+            FeatureTemplate template = new FeatureTemplate();
+            String result = template.template(f, "dummy.ftl", Dummy.class);
+
+            assertEquals("dummy", result);
         } finally {
-        	features.close();
+            features.close();
         }
     }
-    
+
     @Test
     public void testEmptyTemplate() throws Exception {
         SimpleFeatureSource source = getFeatureSource(MockData.PRIMITIVEGEOFEATURE);

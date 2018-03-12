@@ -1,4 +1,3 @@
-
 /* (c) 2014 Open Source Geospatial Foundation - all rights reserved
  * (c) 2001 - 2013 OpenPlans
  * This code is licensed under the GPL 2.0 license, available at the root
@@ -21,7 +20,7 @@ public class MonitorServletRequest extends HttpServletRequestWrapper {
      * Don't restrict the maximum length of a request body.
      */
     public static final long BODY_SIZE_UNBOUNDED = -1;
-    
+
     MonitorInputStream input;
 
     long maxSize;
@@ -36,7 +35,7 @@ public class MonitorServletRequest extends HttpServletRequestWrapper {
         return stream.getData();
     }
 
-    public long getBytesRead(){
+    public long getBytesRead() {
         try {
             MonitorInputStream stream = getInputStream();
             return stream.getBytesRead();
@@ -53,7 +52,7 @@ public class MonitorServletRequest extends HttpServletRequestWrapper {
         }
         return input;
     }
-    
+
     @Override
     public BufferedReader getReader() throws IOException {
         String encoding = getCharacterEncoding();
@@ -114,8 +113,8 @@ public class MonitorServletRequest extends HttpServletRequestWrapper {
                 buffer.write((byte) b);
             }
 
-            
-            if(b>=0) nbytes += 1; // Increment byte count unless EoF marker
+
+            if (b >= 0) nbytes += 1; // Increment byte count unless EoF marker
             return b;
         }
 

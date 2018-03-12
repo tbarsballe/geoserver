@@ -8,9 +8,8 @@ package org.geoserver.platform;
 /**
  * Black lists a bean by class. By default filters out only the object of the specified class, but
  * it can be configured to match an entire inheritance tree
- * 
+ *
  * @author Andrea Aime - OpenGeo
- * 
  */
 public class ClassExclusionFilter implements ExtensionFilter {
     Class beanClass;
@@ -23,6 +22,7 @@ public class ClassExclusionFilter implements ExtensionFilter {
 
     /**
      * Specifies which class to be filtered away
+     *
      * @param beanClass bean to be filtered
      */
     public void setBeanClass(Class beanClass) {
@@ -42,7 +42,7 @@ public class ClassExclusionFilter implements ExtensionFilter {
 
     public boolean exclude(String beanId, Object bean) {
         if (this.beanClass != null && bean != null) {
-            if(matchSubclasses)
+            if (matchSubclasses)
                 return this.beanClass.isAssignableFrom(bean.getClass());
             else
                 return this.beanClass.equals(bean.getClass());

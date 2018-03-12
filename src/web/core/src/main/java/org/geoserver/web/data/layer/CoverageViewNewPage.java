@@ -22,7 +22,9 @@ import org.geoserver.web.wicket.ParamResourceModel;
 
 public class CoverageViewNewPage extends CoverageViewAbstractPage {
 
-    /** serialVersionUID */
+    /**
+     * serialVersionUID
+     */
     private static final long serialVersionUID = -4030117120916582767L;
 
     public CoverageViewNewPage(PageParameters params) throws IOException {
@@ -30,7 +32,7 @@ public class CoverageViewNewPage extends CoverageViewAbstractPage {
     }
 
     public CoverageViewNewPage(String workspaceName, String storeName, String coverageName,
-            CoverageInfo coverageInfo) throws IOException {
+                               CoverageInfo coverageInfo) throws IOException {
         super(workspaceName, storeName, coverageName, coverageInfo);
     }
 
@@ -44,7 +46,7 @@ public class CoverageViewNewPage extends CoverageViewAbstractPage {
             final CoverageStoreInfo coverageStoreInfo = catalog.getCoverageStore(storeId);
             CoverageInfo coverageInfo = null;
             final CoverageView coverageView = buildCoverageView();
-            List<CoverageBand> coverageBands = coverageView.getCoverageBands(); 
+            List<CoverageBand> coverageBands = coverageView.getCoverageBands();
             if (coverageBands == null || coverageBands.isEmpty()) {
                 throw new IllegalArgumentException("No output bands have been specified ");
             }

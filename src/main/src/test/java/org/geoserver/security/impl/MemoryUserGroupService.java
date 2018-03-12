@@ -22,23 +22,21 @@ import java.util.TreeMap;
 
 
 /**
- * 
- *  Implementation for testing
- *  uses serialization into a byte array
- * 
- * @author christian
+ * Implementation for testing
+ * uses serialization into a byte array
  *
+ * @author christian
  */
 public class MemoryUserGroupService extends AbstractUserGroupService {
 
     byte[] byteArray;
     protected String toBeEncrypted;
-    
+
     public String getToBeEncrypted() {
         return toBeEncrypted;
     }
 
-    
+
     public MemoryUserGroupService() {
     }
 
@@ -53,60 +51,60 @@ public class MemoryUserGroupService extends AbstractUserGroupService {
         store.initializeFromService(this);
         return store;
     }
-    
+
     @SuppressWarnings("unchecked")
     @Override
     protected void deserialize() throws IOException {
         clearMaps();
-        if (byteArray==null) return;
+        if (byteArray == null) return;
         ByteArrayInputStream in = new ByteArrayInputStream(byteArray);
         ObjectInputStream oin = new ObjectInputStream(in);
         try {
-            helper.userMap = (TreeMap<String,GeoServerUser>) oin.readObject();
-            helper.groupMap =(TreeMap<String,GeoServerUserGroup>) oin.readObject();
-            helper.user_groupMap = (TreeMap<GeoServerUser,SortedSet<GeoServerUserGroup>>)oin.readObject();
-            helper.group_userMap = (TreeMap<GeoServerUserGroup,SortedSet<GeoServerUser>>)oin.readObject();
-            helper.propertyMap = (TreeMap<String,SortedSet<GeoServerUser>>)oin.readObject();
+            helper.userMap = (TreeMap<String, GeoServerUser>) oin.readObject();
+            helper.groupMap = (TreeMap<String, GeoServerUserGroup>) oin.readObject();
+            helper.user_groupMap = (TreeMap<GeoServerUser, SortedSet<GeoServerUserGroup>>) oin.readObject();
+            helper.group_userMap = (TreeMap<GeoServerUserGroup, SortedSet<GeoServerUser>>) oin.readObject();
+            helper.propertyMap = (TreeMap<String, SortedSet<GeoServerUser>>) oin.readObject();
         } catch (ClassNotFoundException e) {
             throw new IOException(e);
         }
     }
 
     @Override
-    public GeoServerUser createUserObject(String username,String password, boolean isEnabled) throws IOException{
+    public GeoServerUser createUserObject(String username, String password, boolean isEnabled) throws IOException {
         GeoServerUser user = new MemoryGeoserverUser(username, this);
         user.setEnabled(isEnabled);
         user.setPassword(password);
         return user;
-     }
-     
+    }
+
     @Override
-     public GeoServerUserGroup createGroupObject(String groupname, boolean isEnabled) throws IOException{
-         GeoServerUserGroup group = new MemoryGeoserverUserGroup(groupname);
-         group.setEnabled(isEnabled);
-         return group;
-     }
+    public GeoServerUserGroup createGroupObject(String groupname, boolean isEnabled) throws IOException {
+        GeoServerUserGroup group = new MemoryGeoserverUserGroup(groupname);
+        group.setEnabled(isEnabled);
+        return group;
+    }
 
     @Override
     public void initializeFromConfig(SecurityNamedServiceConfig config) throws IOException {
-        this.name=config.getName();
-        SecurityUserGroupServiceConfig ugConfig =(SecurityUserGroupServiceConfig) config;        
-        passwordEncoderName=ugConfig.getPasswordEncoderName();
+        this.name = config.getName();
+        SecurityUserGroupServiceConfig ugConfig = (SecurityUserGroupServiceConfig) config;
+        passwordEncoderName = ugConfig.getPasswordEncoderName();
         GeoServerPasswordEncoder enc = getSecurityManager().loadPasswordEncoder(passwordEncoderName);
 
-        if (enc.getEncodingType()==PasswordEncodingType.ENCRYPT) {
+        if (enc.getEncodingType() == PasswordEncodingType.ENCRYPT) {
             KeyStoreProvider prov = getSecurityManager().getKeyStoreProvider();
             String alias = prov.aliasForGroupService(name);
-            if (prov.containsAlias(alias)==false) {
+            if (prov.containsAlias(alias) == false) {
                 prov.setUserGroupKey(name,
-                    getSecurityManager().getRandomPassworddProvider().getRandomPasswordWithDefaultLength());
+                        getSecurityManager().getRandomPassworddProvider().getRandomPasswordWithDefaultLength());
                 prov.storeKeyStore();
             }
         }
         enc.initializeFor(this);
-        passwordValidatorName=ugConfig.getPasswordPolicyName();
-        toBeEncrypted = (((MemoryUserGroupServiceConfigImpl)config).getToBeEncrypted());
+        passwordValidatorName = ugConfig.getPasswordPolicyName();
+        toBeEncrypted = (((MemoryUserGroupServiceConfigImpl) config).getToBeEncrypted());
     }
-    
+
 
 }

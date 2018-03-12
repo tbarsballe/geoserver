@@ -244,7 +244,7 @@ public final class JmsStylesTest extends GeoServerSystemTestSupport {
         assertThat(event.getPropertyNames().size(), is(event.getNewValues().size()));
         // find the property we want
         Object propertyValue = null;
-        for(int i = 0; i < event.getPropertyNames().size(); i++) {
+        for (int i = 0; i < event.getPropertyNames().size(); i++) {
             String candidatePropertyName = event.getPropertyNames().get(i);
             if (candidatePropertyName != null && candidatePropertyName.equalsIgnoreCase(propertyName)) {
                 propertyValue = event.getNewValues().get(i);

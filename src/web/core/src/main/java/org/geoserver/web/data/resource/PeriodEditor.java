@@ -82,7 +82,7 @@ public class PeriodEditor extends FormComponentPanel<BigDecimal> {
     private void updateFields() {
         final BigDecimal modelObject = getModelObject();
         long time;
-        if(modelObject != null) {
+        if (modelObject != null) {
             time = modelObject.longValue();
         } else {
             time = 0;

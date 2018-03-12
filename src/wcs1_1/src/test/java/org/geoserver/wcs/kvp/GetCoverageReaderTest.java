@@ -291,7 +291,6 @@ public class GetCoverageReaderTest extends WCSTestSupport {
 
     /**
      * Tests Bicubic (also called cubic) interpolation with a RangeSubset.
-     *
      */
     @Test
     public void testInterpolationBicubic() throws Exception {
@@ -300,7 +299,6 @@ public class GetCoverageReaderTest extends WCSTestSupport {
 
     /**
      * Tests Bilinear (also called linear) interpolation with a RangeSubset.
-     *
      */
     @Test
     public void testInterpolationBilinear() throws Exception {
@@ -309,7 +307,6 @@ public class GetCoverageReaderTest extends WCSTestSupport {
 
     /**
      * Tests Nearest neighbor (also called nearest) interpolation with a RangeSubset.
-     *
      */
     @Test
     public void testInterpolationNearest() throws Exception {
@@ -329,7 +326,7 @@ public class GetCoverageReaderTest extends WCSTestSupport {
     protected Map caseInsensitiveKvp(HashMap input) {
         // make it case insensitive like the servlet+dispatcher maps
         Map result = new HashMap();
-        for (Iterator it = input.keySet().iterator(); it.hasNext();) {
+        for (Iterator it = input.keySet().iterator(); it.hasNext(); ) {
             String key = (String) it.next();
             result.put(key.toUpperCase(), input.get(key));
         }

@@ -23,7 +23,9 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Executor;
 
-/** Sample wrapper for testing */
+/**
+ * Sample wrapper for testing
+ */
 class WrapperConnection implements Connection {
 
     private WrapperConnectionData data = new WrapperConnectionData();
@@ -31,9 +33,11 @@ class WrapperConnection implements Connection {
     WrapperConnection(Connection conn) {
         this.data.conn = conn;
     }
-    public Connection getUnderlyingConnection(){
+
+    public Connection getUnderlyingConnection() {
         return data.conn;
     }
+
     public <T> T unwrap(Class<T> iface) throws SQLException {
         if (iface.isInstance(data.conn)) {
             return iface.cast(data.conn);
@@ -130,7 +134,7 @@ class WrapperConnection implements Connection {
     }
 
     public PreparedStatement prepareStatement(String sql, int resultSetType,
-            int resultSetConcurrency) throws SQLException {
+                                              int resultSetConcurrency) throws SQLException {
         return data.conn.prepareStatement(sql, resultSetType, resultSetConcurrency);
     }
 
@@ -172,18 +176,18 @@ class WrapperConnection implements Connection {
     }
 
     public Statement createStatement(int resultSetType, int resultSetConcurrency,
-            int resultSetHoldability) throws SQLException {
+                                     int resultSetHoldability) throws SQLException {
         return data.conn.createStatement(resultSetType, resultSetConcurrency, resultSetHoldability);
     }
 
     public PreparedStatement prepareStatement(String sql, int resultSetType,
-            int resultSetConcurrency, int resultSetHoldability) throws SQLException {
+                                              int resultSetConcurrency, int resultSetHoldability) throws SQLException {
         return data.conn
                 .prepareStatement(sql, resultSetType, resultSetConcurrency, resultSetHoldability);
     }
 
     public CallableStatement prepareCall(String sql, int resultSetType, int resultSetConcurrency,
-            int resultSetHoldability) throws SQLException {
+                                         int resultSetHoldability) throws SQLException {
         return data.conn.prepareCall(sql, resultSetType, resultSetConcurrency, resultSetHoldability);
     }
 

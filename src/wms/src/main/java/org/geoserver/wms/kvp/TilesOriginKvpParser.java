@@ -32,7 +32,7 @@ public class TilesOriginKvpParser extends KvpParser {
             return new Point2D.Double(minx, miny);
         } catch (NumberFormatException ex) {
             throw new ServiceException(ex, "Illegal value for TILESORIGIN parameter: " + value,
-                getClass().getName() + "::parseTilesOrigin()");
+                    getClass().getName() + "::parseTilesOrigin()");
         }
     }
 }

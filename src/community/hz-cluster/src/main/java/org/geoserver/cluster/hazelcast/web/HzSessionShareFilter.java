@@ -30,8 +30,8 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 
 /**
  * Creates and delegates to a WebFilter if clustering is enabled.  The delegate is created lazily.
- * @author Kevin Smith, OpenGeo
  *
+ * @author Kevin Smith, OpenGeo
  */
 public class HzSessionShareFilter implements Filter {
     // Need to use a delegator because WebFilter#doFilter is final and assumes that a Hazelcast
@@ -50,45 +50,45 @@ public class HzSessionShareFilter implements Filter {
     }
 
     protected HzCluster getCluster() {
-        if(cluster==null) {
-            ApplicationContext ac = 
+        if (cluster == null) {
+            ApplicationContext ac =
                     WebApplicationContextUtils.getRequiredWebApplicationContext(srvCtx);
             cluster = ac.getBean("hzCluster", HzCluster.class);
         }
         return cluster;
     }
-    
+
     private void createDelegate() throws ServletException {
-        
+
         // Stop if clustering is not enabled
-        if(!getCluster().isSessionSharing()) return;
-        
+        if (!getCluster().isSessionSharing()) return;
+
         // Don't bother if we already have one
-        if(delegate!=null) return;
-        
+        if (delegate != null) return;
+
         // Create the delegate and override its getInstance method to use the cluster's instance
-        delegate = new WebFilter(){
+        delegate = new WebFilter() {
 
             @Override
             protected HazelcastInstance getInstance(Properties properties)
                     throws ServletException {
                 return getCluster().getHz();
             }
-            
+
         };
-        
+
         initDelegate();
     }
-    
+
     private void initDelegate() throws ServletException {
 
         // Set up init-params for the delegate instance
         // TODO Maybe make these configurable in cluster.properties
-        final Map<String, String> params = new HashMap<String,String>();
+        final Map<String, String> params = new HashMap<String, String>();
         params.put("map-name", "geoserver-sessions");
         params.put("sticky-session", Boolean.toString(getCluster().isStickySession()));
-        params.put("instance-name",  getCluster().getHz().getConfig().getInstanceName());
-        
+        params.put("instance-name", getCluster().getHz().getConfig().getInstanceName());
+
         FilterConfig config = new FilterConfig() {
 
             @Override
@@ -110,21 +110,20 @@ public class HzSessionShareFilter implements Filter {
             public Enumeration<String> getInitParameterNames() {
                 return Iterators.asEnumeration(params.keySet().iterator());
             }
-            
+
         };
-        
+
         delegate.init(config);
     }
-    
-    
-    
+
+
     @Override
     public void doFilter(ServletRequest request, ServletResponse response,
-            FilterChain chain) throws IOException, ServletException {
-        
+                         FilterChain chain) throws IOException, ServletException {
+
         createDelegate();
-        
-        if(delegate!=null){
+
+        if (delegate != null) {
             delegate.doFilter(request, response, chain);
         } else {
             chain.doFilter(request, response);
@@ -133,7 +132,7 @@ public class HzSessionShareFilter implements Filter {
 
     @Override
     public void destroy() {
-        if(delegate!=null) delegate.destroy();
+        if (delegate != null) delegate.destroy();
     }
 
 }

@@ -14,9 +14,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
- * 
  * Configures the dispatcher to log XML Post requests with configurable size
- * 
  */
 public class XmlPostRequestLogBufferSize implements HandlerInterceptor {
 
@@ -27,11 +25,11 @@ public class XmlPostRequestLogBufferSize implements HandlerInterceptor {
     }
 
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
-            Object handler) throws Exception {
+                             Object handler) throws Exception {
         if (handler instanceof Dispatcher) {
             Dispatcher dispatcher = (Dispatcher) handler;
-            Integer xmlLogBufferSize = 
-                getInfo().getGeoServer().getGlobal().getXmlPostRequestLogBufferSize();
+            Integer xmlLogBufferSize =
+                    getInfo().getGeoServer().getGlobal().getXmlPostRequestLogBufferSize();
             if (xmlLogBufferSize != null) {
                 dispatcher.setXMLPostRequestLogBufferSize(xmlLogBufferSize);
             }
@@ -41,12 +39,12 @@ public class XmlPostRequestLogBufferSize implements HandlerInterceptor {
     }
 
     public void postHandle(HttpServletRequest request, HttpServletResponse response,
-            Object handler, ModelAndView modelAndView) throws Exception {
+                           Object handler, ModelAndView modelAndView) throws Exception {
         // TODO Auto-generated method stub
     }
 
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response,
-            Object handler, Exception ex) throws Exception {
+                                Object handler, Exception ex) throws Exception {
         // do nothing
     }
 

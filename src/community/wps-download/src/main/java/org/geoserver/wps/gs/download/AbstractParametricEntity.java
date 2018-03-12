@@ -22,7 +22,7 @@ public abstract class AbstractParametricEntity {
     List<Parameter> parameters = new ArrayList<>();
 
 
-    @XmlElement(name="Name")
+    @XmlElement(name = "Name")
     @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
     public String getName() {
         return name;
@@ -32,7 +32,7 @@ public abstract class AbstractParametricEntity {
         this.name = name;
     }
 
-    @XmlElement(name="Parameter")
+    @XmlElement(name = "Parameter")
     public List<Parameter> getParameters() {
         return parameters;
     }
@@ -41,12 +41,12 @@ public abstract class AbstractParametricEntity {
         this.parameters = parameters;
     }
 
-    public Map<String,String> getParametersMap() {
+    public Map<String, String> getParametersMap() {
         Map<String, String> result = new HashMap<>();
         for (Parameter parameter : parameters) {
             result.put(parameter.key, parameter.value);
         }
-        
+
         return result;
     }
 

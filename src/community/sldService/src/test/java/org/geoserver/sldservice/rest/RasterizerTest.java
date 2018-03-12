@@ -89,7 +89,7 @@ public class RasterizerTest extends SLDServiceBaseTest {
     }
 
     private void checkColorEntry(ColorMapEntry firstEntry, String color, String label,
-            String opacity) {
+                                 String opacity) {
         assertEquals(color, firstEntry.getColor().toString());
         assertEquals(label, firstEntry.getLabel());
         assertEquals(opacity, firstEntry.getOpacity().toString());

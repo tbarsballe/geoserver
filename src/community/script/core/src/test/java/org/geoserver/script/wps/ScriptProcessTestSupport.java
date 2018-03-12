@@ -14,18 +14,17 @@ import org.geoserver.script.ScriptIntTestSupport;
 
 /**
  * Base class to perform tests against a single process
- * 
+ *
  * @author Andrea Aime - GeoSolutions
- * 
  */
 public abstract class ScriptProcessTestSupport extends ScriptIntTestSupport {
 
     protected File script;
-    
+
     @Override
     protected void oneTimeSetUp() throws Exception {
         super.oneTimeSetUp();
-    
+
         script = copyScriptIfExists(getProcessName());
     }
 

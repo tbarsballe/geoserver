@@ -24,26 +24,24 @@ import org.geotools.util.logging.Logging;
 /**
  * An abstract parent class for a  DefaultValueSelectionStrategy implementations
  * that use a {@link FeatureCalc} instances for finding the matching default value.
- *  
- * @author Ilkka Rinne / Spatineo Inc for the Finnish Meteorological Institute
  *
+ * @author Ilkka Rinne / Spatineo Inc for the Finnish Meteorological Institute
  */
 public abstract class AbstractFeatureAttributeVisitorSelectionStrategy extends AbstractDefaultValueSelectionStrategy {
 
     private static Logger LOGGER = Logging.getLogger(AbstractFeatureAttributeVisitorSelectionStrategy.class);
-    
+
     /**
      * Return the result of iterating through the dimension collection
      * of the given dimension using given calculator as the attribute
      * value calculator.
-     * 
+     *
      * @param typeInfo
      * @param dimension
      * @param calculator
-     *
      */
     protected CalcResult getCalculatedResult(FeatureTypeInfo typeInfo, DimensionInfo dimension,
-            FeatureCalc calculator) {
+                                             FeatureCalc calculator) {
         CalcResult retval = null;
         try {
             FeatureCollection<?, ?> dimensionCollection = getDimensionCollection(typeInfo,
@@ -56,13 +54,13 @@ public abstract class AbstractFeatureAttributeVisitorSelectionStrategy extends A
             dimensionCollection.accepts(calculator, null);
             retval = calculator.getResult();
         } catch (IOException e) {
-           LOGGER.log(Level.FINER, e.getMessage(), e);
+            LOGGER.log(Level.FINER, e.getMessage(), e);
         }
         return retval;
     }
 
     private FeatureCollection<?, ?> getDimensionCollection(FeatureTypeInfo typeInfo,
-            DimensionInfo dimension) throws IOException {
+                                                           DimensionInfo dimension) throws IOException {
         // grab the feature source
         FeatureSource<?, ?> source = null;
         try {

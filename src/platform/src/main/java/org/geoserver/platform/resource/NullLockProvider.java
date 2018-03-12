@@ -12,7 +12,7 @@ package org.geoserver.platform.resource;
 /**
  * A no-op implementation of LockProvider. It does not actually lock anything, can be used to test if the other subsystems continue to work properly
  * in face of absence of locks
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class NullLockProvider implements LockProvider {
@@ -22,9 +22,10 @@ public class NullLockProvider implements LockProvider {
             public void release() {
                 // nothing to do
             }
+
             @Override
             public String toString() {
-                return "NullLock "+lockKey;
+                return "NullLock " + lockKey;
             }
         };
     }

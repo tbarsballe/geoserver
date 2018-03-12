@@ -26,7 +26,7 @@ import org.geoserver.web.wicket.ParamResourceModel;
 
 public class SelectionRoleRemovalLink extends AjaxLink<Object> {
 
-    
+
     private static final long serialVersionUID = 1L;
 
     GeoServerTablePanel<GeoServerRole> roles;
@@ -34,15 +34,15 @@ public class SelectionRoleRemovalLink extends AjaxLink<Object> {
     GeoServerDialog.DialogDelegate delegate;
     ConfirmRemovalRolePanel removePanel;
     String roleServiceName;
-    
 
-    public SelectionRoleRemovalLink(String roleServiceName,String id, GeoServerTablePanel<GeoServerRole> roles,
-            GeoServerDialog dialog) {
+
+    public SelectionRoleRemovalLink(String roleServiceName, String id, GeoServerTablePanel<GeoServerRole> roles,
+                                    GeoServerDialog dialog) {
         super(id);
         this.roles = roles;
         this.dialog = dialog;
-        this.roleServiceName=roleServiceName;
-        
+        this.roleServiceName = roleServiceName;
+
     }
 
     @Override
@@ -55,11 +55,12 @@ public class SelectionRoleRemovalLink extends AjaxLink<Object> {
 
         // if there is something to cancel, let's warn the user about what
         // could go wrong, and if the user accepts, let's delete what's needed
-        dialog.showOkCancel(target,delegate=new GeoServerDialog.DialogDelegate() {
+        dialog.showOkCancel(target, delegate = new GeoServerDialog.DialogDelegate() {
             private static final long serialVersionUID = 1L;
+
             protected Component getContents(String id) {
                 // show a confirmation panel for all the objects we have to remove
-                return removePanel= new ConfirmRemovalRolePanel(id, selection) {
+                return removePanel = new ConfirmRemovalRolePanel(id, selection) {
                     private static final long serialVersionUID = 1L;
 
                     @Override
@@ -72,18 +73,22 @@ public class SelectionRoleRemovalLink extends AjaxLink<Object> {
             protected boolean onSubmit(AjaxRequestTarget target, Component contents) {
                 // cascade delete the whole selection
 
-                
+
                 GeoServerRoleStore gaStore = null;
                 try {
                     GeoServerRoleService gaService =
                             GeoServerApplication.get().getSecurityManager().loadRoleService(roleServiceName);
                     gaStore = new RoleStoreValidationWrapper(gaService.createStore());
-                    for (GeoServerRole role : removePanel.getRoots()) {                     
-                         gaStore.removeRole(role);
+                    for (GeoServerRole role : removePanel.getRoots()) {
+                        gaStore.removeRole(role);
                     }
                     gaStore.store();
                 } catch (IOException ex) {
-                    try {gaStore.load(); } catch (IOException ex2) {};
+                    try {
+                        gaStore.load();
+                    } catch (IOException ex2) {
+                    }
+                    ;
                     throw new RuntimeException(ex);
                 }
                 // the deletion will have changed what we see in the page
@@ -103,27 +108,27 @@ public class SelectionRoleRemovalLink extends AjaxLink<Object> {
                 }
             }
         });
-        
+
     }
 
     protected IModel<String> canRemove(GeoServerRole role) {
-        
-        GeoServerRoleService gaService=null;
+
+        GeoServerRoleService gaService = null;
         try {
             gaService = GeoServerApplication.get().getSecurityManager().loadRoleService(roleServiceName);
             boolean isActive = GeoServerApplication.get().getSecurityManager().
-                    getActiveRoleService().getName().equals(roleServiceName);                    
-            RoleServiceValidationWrapper valService = new RoleServiceValidationWrapper(gaService,isActive);
+                    getActiveRoleService().getName().equals(roleServiceName);
+            RoleServiceValidationWrapper valService = new RoleServiceValidationWrapper(gaService, isActive);
             valService.checkRoleIsMapped(role);
-            valService.checkRoleIsUsed(role);            
+            valService.checkRoleIsUsed(role);
         } catch (IOException e) {
             if (e.getCause() instanceof AbstractSecurityException) {
                 return new Model(e.getCause().getMessage());
             } else {
                 throw new RuntimeException(e);
-            }            
+            }
         }
-        
+
         return null;
     }
 

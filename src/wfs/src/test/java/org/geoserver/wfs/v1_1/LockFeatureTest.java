@@ -20,12 +20,12 @@ public class LockFeatureTest extends WFSTestSupport {
 
     @Override
     protected void setUpInternal(SystemTestData data) throws Exception {
-        Service service = (Service) GeoServerExtensions.bean( "wfsService-1.1.0" );
+        Service service = (Service) GeoServerExtensions.bean("wfsService-1.1.0");
         // register fake operation to ease testing
-        service.getOperations().add( "ReleaseLock");
+        service.getOperations().add("ReleaseLock");
     }
 
-	@Test
+    @Test
     public void testLock() throws Exception {
         String xml = "<wfs:LockFeature xmlns:sf=\"http://cite.opengeospatial.org/gmlsf\" xmlns:wfs=\"http://www.opengis.net/wfs\" expiry=\"5\" handle=\"LockFeature-tc1\" "
                 + " lockAction=\"ALL\" "

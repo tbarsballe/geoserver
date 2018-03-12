@@ -15,17 +15,16 @@ import java.util.Calendar;
 import java.util.List;
 
 /**
- * 
  * Information about the GPX file, author, and copyright restrictions goes in the metadata section. Providing rich, meaningful information about your
  * GPX files allows others to search for and use your GPS data.
- * 
- * 
+ * <p>
+ * <p>
  * <p>
  * Java class for metadataType complex type.
- * 
+ * <p>
  * <p>
  * The following schema fragment specifies the expected content contained within this class.
- * 
+ * <p>
  * <pre>
  * &lt;complexType name="metadataType">
  *   &lt;complexContent>
@@ -45,8 +44,6 @@ import java.util.List;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 public class MetadataType {
     protected String name;
@@ -69,7 +66,6 @@ public class MetadataType {
 
     /**
      * Gets the value of the name property.
-     * 
      */
     public String getName() {
         return name;
@@ -77,7 +73,6 @@ public class MetadataType {
 
     /**
      * Sets the value of the name property.
-     * 
      */
     public void setName(String value) {
         this.name = value;
@@ -85,7 +80,6 @@ public class MetadataType {
 
     /**
      * Gets the value of the desc property.
-     * 
      */
     public String getDesc() {
         return desc;
@@ -93,7 +87,6 @@ public class MetadataType {
 
     /**
      * Sets the value of the desc property.
-     * 
      */
     public void setDesc(String value) {
         this.desc = value;
@@ -101,7 +94,6 @@ public class MetadataType {
 
     /**
      * Gets the value of the author property.
-     * 
      */
     public PersonType getAuthor() {
         return author;
@@ -109,7 +101,6 @@ public class MetadataType {
 
     /**
      * Sets the value of the author property.
-     * 
      */
     public void setAuthor(PersonType value) {
         this.author = value;
@@ -117,7 +108,6 @@ public class MetadataType {
 
     /**
      * Gets the value of the copyright property.
-     * 
      */
     public CopyrightType getCopyright() {
         return copyright;
@@ -125,7 +115,6 @@ public class MetadataType {
 
     /**
      * Sets the value of the copyright property.
-     * 
      */
     public void setCopyright(CopyrightType value) {
         this.copyright = value;
@@ -133,23 +122,21 @@ public class MetadataType {
 
     /**
      * Gets the value of the link property.
-     * 
+     * <p>
      * <p>
      * This accessor method returns a reference to the live list, not a snapshot. Therefore any modification you make to the returned list will be
      * present inside the JAXB object. This is why there is not a <CODE>set</CODE> method for the link property.
-     * 
+     * <p>
      * <p>
      * For example, to add a new item, do as follows:
-     * 
+     * <p>
      * <pre>
      * getLink().add(newItem);
      * </pre>
-     * 
-     * 
+     * <p>
+     * <p>
      * <p>
      * Objects of the following type(s) are allowed in the list {@link LinkType }
-     * 
-     * 
      */
     public List<LinkType> getLink() {
         if (link == null) {
@@ -161,7 +148,6 @@ public class MetadataType {
 
     /**
      * Gets the value of the time property.
-     * 
      */
     public Calendar getTime() {
         return time;
@@ -169,7 +155,6 @@ public class MetadataType {
 
     /**
      * Sets the value of the time property.
-     * 
      */
     public void setTime(Calendar value) {
         this.time = value;
@@ -177,7 +162,6 @@ public class MetadataType {
 
     /**
      * Gets the value of the keywords property.
-     * 
      */
     public String getKeywords() {
         return keywords;
@@ -185,7 +169,6 @@ public class MetadataType {
 
     /**
      * Sets the value of the keywords property.
-     * 
      */
     public void setKeywords(String value) {
         this.keywords = value;
@@ -193,7 +176,6 @@ public class MetadataType {
 
     /**
      * Gets the value of the bounds property.
-     * 
      */
     public BoundsType getBounds() {
         return bounds;
@@ -201,7 +183,6 @@ public class MetadataType {
 
     /**
      * Sets the value of the bounds property.
-     * 
      */
     public void setBounds(BoundsType value) {
         this.bounds = value;
@@ -209,7 +190,6 @@ public class MetadataType {
 
     /**
      * Gets the value of the extensions property.
-     * 
      */
     public ExtensionsType getExtensions() {
         return extensions;
@@ -217,7 +197,6 @@ public class MetadataType {
 
     /**
      * Sets the value of the extensions property.
-     * 
      */
     public void setExtensions(ExtensionsType value) {
         this.extensions = value;

@@ -43,7 +43,7 @@ public class GeometrylessWriteTest extends WFSTestSupport {
         assertEquals("AnotherName", dom.getElementsByTagName("cite:name").item(0)
                 .getFirstChild().getNodeValue());
     }
-    
+
     @Test
     public void testDelete() throws Exception {
         // perform an update
@@ -52,7 +52,7 @@ public class GeometrylessWriteTest extends WFSTestSupport {
                 + "xmlns:ogc=\"http://www.opengis.net/ogc\" "
                 + "xmlns:wfs=\"http://www.opengis.net/wfs\" "
                 + "xmlns:gml=\"http://www.opengis.net/gml\"> "
-                + "<wfs:Delete typeName=\"cite:Geometryless\" > " 
+                + "<wfs:Delete typeName=\"cite:Geometryless\" > "
                 + "<ogc:Filter>"
                 + "<ogc:FeatureId fid=\"Geometryless.2\"/>"
                 + "</ogc:Filter>"
@@ -65,7 +65,7 @@ public class GeometrylessWriteTest extends WFSTestSupport {
         dom = getAsDOM("wfs?request=GetFeature&typename=cite:Geometryless&version=1.0.0&service=wfs&featureId=Geometryless.2");
         assertEquals(0, dom.getElementsByTagName("cite:Geometryless").getLength());
     }
-    
+
     @Test
     public void testInsert() throws Exception {
         // perform an insert

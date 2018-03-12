@@ -16,7 +16,7 @@ import org.geoserver.web.GeoServerApplication;
 
 /**
  * Dynamically loads the current list of coverage names from the catalog
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class CoverageNamesModel extends LoadableDetachableModel<List<String>> {

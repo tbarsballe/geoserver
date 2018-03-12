@@ -30,7 +30,7 @@ public class FlatteningFeatureCollection extends DecoratingSimpleFeatureCollecti
     private SimpleFeatureType flattenedType;
 
     private FlatteningFeatureCollection(SimpleFeatureCollection delegate,
-            SimpleFeatureType flattenedType) {
+                                        SimpleFeatureType flattenedType) {
         super(delegate);
         this.flattenedType = flattenedType;
     }
@@ -38,10 +38,10 @@ public class FlatteningFeatureCollection extends DecoratingSimpleFeatureCollecti
     /**
      * Flattens a SimpleFeatureCollection that may contain SimpleFeatures as attributes of other
      * features.
-     * 
+     *
      * @param collection The input SimpleFeatureCollection
      * @return A SimpleFeatureCollection whose features have no SimpleFeature attributes, or the
-     *         original one, if no SimpleFeature attributes were found
+     * original one, if no SimpleFeature attributes were found
      */
     public static SimpleFeatureCollection flatten(SimpleFeatureCollection collection) {
         SimpleFeatureType schema = collection.getSchema();
@@ -68,13 +68,13 @@ public class FlatteningFeatureCollection extends DecoratingSimpleFeatureCollecti
     /**
      * Recursively scans a SimpleFeature for SimpleFeature attributes in order to build a
      * "flattened" list of attributes
-     * 
+     *
      * @param attributeDescriptors A List of attribute descriptors, populated recursively
-     * @param featuretype The feature type to scan
-     * @param attrAlias An alias for adding as a prefix to the simple attribute names
+     * @param featuretype          The feature type to scan
+     * @param attrAlias            An alias for adding as a prefix to the simple attribute names
      */
     private static void scanAttributeDescriptors(List<AttributeDescriptor> attributeDescriptors,
-            SimpleFeatureType featureType, String attrAlias) {
+                                                 SimpleFeatureType featureType, String attrAlias) {
         List<AttributeDescriptor> descriptors = featureType.getAttributeDescriptors();
         for (int i = 0; i < descriptors.size(); i++) {
             AttributeDescriptor ad = descriptors.get(i);
@@ -113,7 +113,7 @@ public class FlatteningFeatureCollection extends DecoratingSimpleFeatureCollecti
         private SimpleFeatureBuilder builder;
 
         public FlatteningFeatureIterator(SimpleFeatureIterator delegate,
-                SimpleFeatureType flattenedType) {
+                                         SimpleFeatureType flattenedType) {
             this.delegate = delegate;
             this.builder = new SimpleFeatureBuilder(flattenedType);
         }
@@ -139,9 +139,9 @@ public class FlatteningFeatureCollection extends DecoratingSimpleFeatureCollecti
         /**
          * Recursively breaks down SimpleFeatures that may contain other features as attributes to
          * accumulate simple attribute values to a List
-         * 
+         *
          * @param attributeValues The List of attribute values
-         * @param feature A SimpleFeature to harvest attributes
+         * @param feature         A SimpleFeature to harvest attributes
          */
 
         private void accumulateAttributes(SimpleFeature feature) {

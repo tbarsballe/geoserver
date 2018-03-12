@@ -23,6 +23,7 @@ public class DecimalConverter extends DoubleConverter {
 
     /**
      * Returns the maximum number of fraction digits allowed in the configuration
+     *
      * @return
      */
     public int getMaximumFractionDigits() {
@@ -39,12 +40,12 @@ public class DecimalConverter extends DoubleConverter {
             return null;
         }
         final NumberFormat format = getNumberFormat(locale);
-        final DecimalFormatSymbols symbols = ((DecimalFormat)format).getDecimalFormatSymbols();
+        final DecimalFormatSymbols symbols = ((DecimalFormat) format).getDecimalFormatSymbols();
         if (value.equals(symbols.getNaN())) {
             return new Double(Double.NaN);
         } else if (value.equals(symbols.getInfinity())) {
             return new Double(Double.POSITIVE_INFINITY);
-        } else if (value.equals("-"+symbols.getInfinity())) {
+        } else if (value.equals("-" + symbols.getInfinity())) {
             return new Double(Double.NEGATIVE_INFINITY);
         } else {
             return super.convertToObject(value, locale);

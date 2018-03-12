@@ -36,7 +36,6 @@ import com.vividsolutions.jts.geom.Envelope;
 
 /**
  * Integration test for GeoServer cached layers using the GWC REST API
- * 
  */
 @TestSetup(run = TestSetupFrequency.ONCE)
 public class GWCIntegrationTest extends GeoServerSystemTestSupport {
@@ -102,10 +101,10 @@ public class GWCIntegrationTest extends GeoServerSystemTestSupport {
         assertNotNull(lineLayerInfo);
 
     }
-    
+
     @Override
     protected void onTearDown(SystemTestData testData) throws Exception {
-    	getCatalog().dispose();
+        getCatalog().dispose();
     }
 
     /**

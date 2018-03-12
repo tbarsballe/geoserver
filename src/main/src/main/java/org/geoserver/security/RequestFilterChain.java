@@ -20,66 +20,65 @@ import org.springframework.util.StringUtils;
 
 /**
  * List of filters applied to a pattern matching a set of requests.
- * 
- * @author Justin Deoliveira, OpenGeo
  *
+ * @author Justin Deoliveira, OpenGeo
  */
-public abstract class RequestFilterChain implements Serializable,Cloneable {
+public abstract class RequestFilterChain implements Serializable, Cloneable {
 
     /**
-     * 
-     */        
+     *
+     */
     private static final long serialVersionUID = 1L;
     protected static Logger LOGGER = Logging.getLogger("org.geoserver.security");
-    
+
     /**
      * The unique name of the chain
      */
     String name;
-    
+
     /**
      * The ANT patterns for this chain
      */
-    List<String> patterns; 
-    
+    List<String> patterns;
+
     /**
      * The filter names
      */
     List<String> filterNames;
-    
+
     /**
      * Chain disabled ?
      */
     boolean disabled;
-    
+
     /**
      * Is this chain allowed to create an HTTP session ?
      */
     boolean allowSessionCreation;
-    
+
     /**
-     * Does this chain accept SSL requests only 
+     * Does this chain accept SSL requests only
      */
     boolean requireSSL;
-    
+
     /**
-     * Is this chain matching individual HTTP methods 
+     * Is this chain matching individual HTTP methods
      */
     boolean matchHTTPMethod;
-    
-    
+
+
     /**
-     * The set of HTTP methods to match against 
+     * The set of HTTP methods to match against
      * if {@link #matchHTTPMethod} is <code>true</code>
      */
     Set<HTTPMethod> httpMethods;
-    
+
     String roleFilterName;
 
     public RequestFilterChain(String... patterns) {
         this.patterns = new ArrayList<String>(Arrays.asList((patterns)));
         filterNames = new ArrayList<String>();
-        httpMethods=new TreeSet<HTTPMethod>();
+        httpMethods = new TreeSet<HTTPMethod>();
     }
 
     public void setName(String name) {
@@ -98,9 +97,9 @@ public abstract class RequestFilterChain implements Serializable,Cloneable {
         return filterNames;
     }
 
-    public abstract boolean isConstant(); 
+    public abstract boolean isConstant();
 
-    
+
     public void setFilterNames(String... filterNames) {
         setFilterNames(new ArrayList<String>(Arrays.asList(filterNames)));
     }
@@ -109,7 +108,7 @@ public abstract class RequestFilterChain implements Serializable,Cloneable {
         this.filterNames = filterNames;
     }
 
-    
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -125,9 +124,9 @@ public abstract class RequestFilterChain implements Serializable,Cloneable {
         result = prime * result + (isAllowSessionCreation() ? 17 : 19);
         result = prime * result + (isDisabled() ? 23 : 29);
         result = prime * result + (isRequireSSL() ? 31 : 37);
-        result = prime * result + (isMatchHTTPMethod()? 41 : 49);
-        result  = prime * ((roleFilterName == null) ? 1 : roleFilterName.hashCode());
-        result = prime * result 
+        result = prime * result + (isMatchHTTPMethod() ? 41 : 49);
+        result = prime * ((roleFilterName == null) ? 1 : roleFilterName.hashCode());
+        result = prime * result
                 + ((httpMethods == null) ? 0 : httpMethods.hashCode());
         result = prime * result
                 + ((filterNames == null) ? 0 : filterNames.hashCode());
@@ -146,13 +145,13 @@ public abstract class RequestFilterChain implements Serializable,Cloneable {
         if (getClass() != obj.getClass())
             return false;
         RequestFilterChain other = (RequestFilterChain) obj;
-        
-        if (this.roleFilterName ==null && other.roleFilterName!=null)
+
+        if (this.roleFilterName == null && other.roleFilterName != null)
             return false;
-        if (this.roleFilterName !=null && this.roleFilterName.equals(other.roleFilterName)==false)
+        if (this.roleFilterName != null && this.roleFilterName.equals(other.roleFilterName) == false)
             return false;
 
-        
+
         if (this.isAllowSessionCreation() != other.isAllowSessionCreation())
             return false;
         if (this.isDisabled() != other.isDisabled())
@@ -161,7 +160,7 @@ public abstract class RequestFilterChain implements Serializable,Cloneable {
             return false;
         if (this.isMatchHTTPMethod() != other.isMatchHTTPMethod())
             return false;
-        
+
         if (filterNames == null) {
             if (other.filterNames != null)
                 return false;
@@ -173,7 +172,7 @@ public abstract class RequestFilterChain implements Serializable,Cloneable {
                 return false;
         } else if (!httpMethods.equals(other.httpMethods))
             return false;
-                
+
         if (name == null) {
             if (other.name != null)
                 return false;
@@ -189,10 +188,10 @@ public abstract class RequestFilterChain implements Serializable,Cloneable {
 
     @Override
     public Object clone() throws CloneNotSupportedException {
-        RequestFilterChain chain =  (RequestFilterChain) super.clone();
+        RequestFilterChain chain = (RequestFilterChain) super.clone();
         chain.setFilterNames(new ArrayList<String>(filterNames));
-        chain.patterns=new ArrayList<String>(patterns);
-        chain.httpMethods=new TreeSet<HTTPMethod>(httpMethods);
+        chain.patterns = new ArrayList<String>(patterns);
+        chain.httpMethods = new TreeSet<HTTPMethod>(httpMethods);
         return chain;
     }
 
@@ -205,26 +204,26 @@ public abstract class RequestFilterChain implements Serializable,Cloneable {
     }
 
     public List<String> getCompiledFilterNames() {
-        if (isDisabled()==true)
+        if (isDisabled() == true)
             return Collections.emptyList();
-        
+
         List<String> result = new ArrayList<String>();
-        
+
         if (isRequireSSL())
             result.add(GeoServerSecurityFilterChain.SSL_FILTER);
-        
+
         if (isAllowSessionCreation())
             result.add(GeoServerSecurityFilterChain.SECURITY_CONTEXT_ASC_FILTER);
-         else   
+        else
             result.add(GeoServerSecurityFilterChain.SECURITY_CONTEXT_NO_ASC_FILTER);
-        
+
         if (StringUtils.hasLength(getRoleFilterName()))
             result.add(getRoleFilterName());
-        
+
         createCompiledFilterList(result);
         return result;
     }
- 
+
     void createCompiledFilterList(List<String> list) {
         list.addAll(getFilterNames());
     }
@@ -264,7 +263,7 @@ public abstract class RequestFilterChain implements Serializable,Cloneable {
     public void setPatterns(List<String> patterns) {
         this.patterns = patterns;
     }
-    
+
     public String getRoleFilterName() {
         return roleFilterName;
     }

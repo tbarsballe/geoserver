@@ -54,19 +54,24 @@ import org.w3c.dom.NodeList;
 
 /**
  * Base class for legendURL support in GetCapabilities tests.
- * 
- * @author Mauro Bartolomeoli (mauro.bartolomeoli at geo-solutions.it)
  *
+ * @author Mauro Bartolomeoli (mauro.bartolomeoli at geo-solutions.it)
  */
 public abstract class GetCapabilitiesLegendURLTest extends WMSTestSupport {
 
-    /** default base url to feed a GetCapabilitiesTransformer with for it to append the DTD location */
+    /**
+     * default base url to feed a GetCapabilitiesTransformer with for it to append the DTD location
+     */
     protected static final String baseUrl = "http://localhost/geoserver";
-    
-    /** test map formats to feed a GetCapabilitiesTransformer with */
+
+    /**
+     * test map formats to feed a GetCapabilitiesTransformer with
+     */
     protected static final Set<String> mapFormats = Collections.singleton("image/png");
-    
-    /** test legend formats to feed a GetCapabilitiesTransformer with */
+
+    /**
+     * test legend formats to feed a GetCapabilitiesTransformer with
+     */
     protected static final Set<String> legendFormats = Collections.singleton("image/png");
 
     /**
@@ -75,37 +80,39 @@ public abstract class GetCapabilitiesLegendURLTest extends WMSTestSupport {
      * content as needed
      */
     protected GeoServerImpl geosConfig;
-    
+
     /**
      * a mocked up {@link GeoServerInfo} for {@link #geosConfig}. Specific tests should set its
      * properties as needed
      */
     protected GeoServerInfoImpl geosInfo;
-    
+
     /**
      * a mocked up {@link WMSInfo} for {@link #geosConfig}, empty except for the WMSInfo after
      * setUp(), Specific tests should set its properties as needed
      */
     protected WMSInfoImpl wmsInfo;
-    
+
     /**
      * a mocked up {@link Catalog} for {@link #geosConfig}, empty after setUp(), Specific tests
      * should add content as needed
      */
     protected Catalog catalog;
-    
+
     protected GetCapabilitiesRequest req;
-    
+
     protected WMS wmsConfig;
-    
+
     protected XpathEngine XPATH;
-    
-    /** Test layers */
+
+    /**
+     * Test layers
+     */
     public static QName SQUARES = new QName(MockData.CITE_URI, "squares", MockData.CITE_PREFIX);
     public static QName STATES = new QName(MockData.CITE_URI, "states", MockData.CITE_PREFIX);
     public static QName WORLD = new QName("http://www.geo-solutions.it", "world", "gs");
-    
-    
+
+
     /**
      * Adds required styles to test the selection of maximum and minimum denominator from style's rules.
      */
@@ -117,18 +124,18 @@ public abstract class GetCapabilitiesLegendURLTest extends WMSTestSupport {
         // create legendsamples folder
         new File(dataDirRoot.getAbsolutePath() + File.separator
                 + LegendSampleImpl.LEGEND_SAMPLES_FOLDER).mkdir();
-        
-        
-        testData.addStyle("squares","squares.sld",GetFeatureInfoTest.class,catalog);
-        testData.addVectorLayer(SQUARES,Collections.EMPTY_MAP,"squares.properties",
-                GetCapabilitiesLegendURLTest.class,catalog);
+
+
+        testData.addStyle("squares", "squares.sld", GetFeatureInfoTest.class, catalog);
+        testData.addVectorLayer(SQUARES, Collections.EMPTY_MAP, "squares.properties",
+                GetCapabilitiesLegendURLTest.class, catalog);
         WorkspaceInfo workspaceInfo = catalog.getWorkspaceByName(MockData.CITE_PREFIX);
-        testData.addStyle(workspaceInfo, "states","Population.sld",GetCapabilitiesLegendURLTest.class,catalog);
+        testData.addStyle(workspaceInfo, "states", "Population.sld", GetCapabilitiesLegendURLTest.class, catalog);
         Map<LayerProperty, Object> properties = new HashMap<LayerProperty, Object>();
         properties.put(LayerProperty.STYLE, "states");
         LocalWorkspace.set(workspaceInfo);
-        testData.addVectorLayer(STATES,properties,"states.properties",
-                GetCapabilitiesLegendURLTest.class,catalog);
+        testData.addVectorLayer(STATES, properties, "states.properties",
+                GetCapabilitiesLegendURLTest.class, catalog);
         LocalWorkspace.set(null);
 
         testData.addStyle("temperature", "temperature.sld", WMSTestSupport.class, catalog);
@@ -136,11 +143,11 @@ public abstract class GetCapabilitiesLegendURLTest extends WMSTestSupport {
         properties.put(LayerProperty.STYLE, "temperature");
         testData.addRasterLayer(WORLD, "world.tiff", null, properties, SystemTestData.class, catalog);
     }
-    
+
     @Before
     public void internalSetUp() throws IOException {
-        
-        
+
+
         this.catalog = getCatalog();
         geosConfig = new GeoServerImpl();
 
@@ -164,7 +171,7 @@ public abstract class GetCapabilitiesLegendURLTest extends WMSTestSupport {
                 LegendSampleImpl.LEGEND_SAMPLES_FOLDER + "/BasicPolygons.png");
         getTestData().copyTo(getClass().getResourceAsStream("/legendURL/Bridges.png"),
                 LegendSampleImpl.LEGEND_SAMPLES_FOLDER + "/Bridges.png");
-        
+
         Map<String, String> namespaces = new HashMap<String, String>();
         namespaces.put("xlink", "http://www.w3.org/1999/xlink");
         namespaces.put("wms", "http://www.opengis.net/wms");
@@ -172,25 +179,25 @@ public abstract class GetCapabilitiesLegendURLTest extends WMSTestSupport {
         XMLUnit.setXpathNamespaceContext(new SimpleNamespaceContext(namespaces));
         XPATH = XMLUnit.newXpathEngine();
     }
-    
+
     /**
      * Accessor for global catalog instance from the test application context.
      */
     protected Catalog getCatalog() {
         return (Catalog) applicationContext.getBean("catalog");
     }
-    
+
     /**
      * Tests that already cached icons are read from disk and
      * used to calculate size.
      */
     @Test
     public void testCachedLegendURLSize() throws Exception {
-        
+
         TransformerBase tr = createTransformer();
         tr.setIndentation(2);
         Document dom = WMSTestSupport.transform(req, tr);
-        
+
         NodeList legendURLs = XPATH.getMatchingNodes(
                 getLegendURLXPath("cite:BasicPolygons"), dom);
         assertEquals(1, legendURLs.getLength());
@@ -200,27 +207,26 @@ public abstract class GetCapabilitiesLegendURLTest extends WMSTestSupport {
         assertTrue(legendURL.hasAttribute("height"));
         assertEquals("10", legendURL.getAttribute("height"));
     }
-    
+
     /**
      * Tests that folder for legend samples is created, if missing.
      */
     @Test
     public void testCachedLegendURLFolderCreated() throws Exception {
         GeoServerResourceLoader loader = GeoServerExtensions.bean(GeoServerResourceLoader.class);
-        
+
         File samplesFolder = new File(loader.getBaseDirectory().getAbsolutePath() + File.separator
                 + LegendSampleImpl.LEGEND_SAMPLES_FOLDER);
         removeFileOrFolder(samplesFolder);
         TransformerBase tr = createTransformer();
         tr.setIndentation(2);
         Document dom = WMSTestSupport.transform(req, tr);
-        
+
         assertTrue(samplesFolder.exists());
     }
 
     /**
      * Tests the layer names are workspace qualified
-     * 
      */
     @Test
     public void testLayerWorkspaceQualified() throws Exception {
@@ -242,22 +248,22 @@ public abstract class GetCapabilitiesLegendURLTest extends WMSTestSupport {
      */
     @Test
     public void testCreatedLegendURLSize() throws Exception {
-        
+
         TransformerBase tr = createTransformer();
         tr.setIndentation(2);
         Document dom = WMSTestSupport.transform(req, tr);
-        
+
 
         NodeList legendURLs = XPATH.getMatchingNodes(
-                getLegendURLXPath("cite:squares"), dom); 
-                
+                getLegendURLXPath("cite:squares"), dom);
+
         assertEquals(1, legendURLs.getLength());
         Element legendURL = (Element) legendURLs.item(0);
         assertTrue(legendURL.hasAttribute("width"));
         assertFalse("20".equals(legendURL.getAttribute("width")));
         assertTrue(legendURL.hasAttribute("height"));
         assertFalse("20".equals(legendURL.getAttribute("height")));
-        
+
         File sampleFile = getSampleFile("squares");
         assertTrue(sampleFile.exists());
     }
@@ -286,33 +292,33 @@ public abstract class GetCapabilitiesLegendURLTest extends WMSTestSupport {
                 + File.separator + LegendSampleImpl.LEGEND_SAMPLES_FOLDER + File.separator
                 + sampleName + ".png");
     }
-    
+
     /**
      * Tests that not existing icons for workspace bound styles are created on disk
      * in the workspace styles folder.
      */
     @Test
     public void testCreatedLegendURLFromWorkspaceSize() throws Exception {
-        
+
         TransformerBase tr = createTransformer();
         tr.setIndentation(2);
         Document dom = WMSTestSupport.transform(req, tr);
-        
+
 
         NodeList legendURLs = XPATH.getMatchingNodes(
-                getLegendURLXPath("cite:states"), dom); 
-                
+                getLegendURLXPath("cite:states"), dom);
+
         assertEquals(1, legendURLs.getLength());
         Element legendURL = (Element) legendURLs.item(0);
         assertTrue(legendURL.hasAttribute("width"));
         assertFalse("20".equals(legendURL.getAttribute("width")));
         assertTrue(legendURL.hasAttribute("height"));
         assertFalse("20".equals(legendURL.getAttribute("height")));
-        
+
         File sampleFile = getSampleFile("cite_states");
         assertTrue(sampleFile.exists());
     }
-    
+
     /**
      * Tests that already cached icons are recreated if related
      * SLD is newer.
@@ -322,19 +328,19 @@ public abstract class GetCapabilitiesLegendURLTest extends WMSTestSupport {
         GeoServerResourceLoader loader = GeoServerExtensions.bean(GeoServerResourceLoader.class);
         Resource sldResource = loader.get(Paths.path("styles", "Bridges.sld"));
         File sampleFile = getSampleFile("Bridges");
-        
+
         long lastTime = sampleFile.lastModified();
         long lastLength = sampleFile.length();
         long previousTime = sldResource.lastmodified();
         sldResource.file().setLastModified(lastTime + 1000);
-        
+
         // force cleaning of samples cache, to get updates on files
-        ((LegendSampleImpl)GeoServerExtensions.bean(LegendSample.class)).reloaded();
-        
+        ((LegendSampleImpl) GeoServerExtensions.bean(LegendSample.class)).reloaded();
+
         TransformerBase tr = createTransformer();
         tr.setIndentation(2);
         Document dom = WMSTestSupport.transform(req, tr);
-        
+
         NodeList legendURLs = XPATH.getMatchingNodes(
                 getLegendURLXPath("cite:Bridges"), dom);
         assertEquals(1, legendURLs.getLength());
@@ -346,7 +352,7 @@ public abstract class GetCapabilitiesLegendURLTest extends WMSTestSupport {
         assertFalse(getSampleFile("Bridges").length() == lastLength);
         sldResource.file().setLastModified(previousTime);
     }
-    
+
     /**
      * Tests that already cached icons are recreated if related
      * SLD is newer (using Catalog events).
@@ -356,18 +362,18 @@ public abstract class GetCapabilitiesLegendURLTest extends WMSTestSupport {
         GeoServerResourceLoader loader = GeoServerExtensions.bean(GeoServerResourceLoader.class);
         Resource sldResource = loader.get(Paths.path("styles", "Bridges.sld"));
         File sampleFile = getSampleFile("Bridges");
-        
+
         long lastTime = sampleFile.lastModified();
         long lastLength = sampleFile.length();
         long previousTime = sldResource.lastmodified();
         sldResource.file().setLastModified(lastTime + 1000);
-        
+
         catalog.firePostModified(catalog.getStyleByName("Bridges"), new ArrayList<String>(), new ArrayList(), new ArrayList());
-        
+
         TransformerBase tr = createTransformer();
         tr.setIndentation(2);
         Document dom = WMSTestSupport.transform(req, tr);
-        
+
         NodeList legendURLs = XPATH.getMatchingNodes(
                 getLegendURLXPath("cite:Bridges"), dom);
         assertEquals(1, legendURLs.getLength());
@@ -379,18 +385,18 @@ public abstract class GetCapabilitiesLegendURLTest extends WMSTestSupport {
         assertFalse(getSampleFile("Bridges").length() == lastLength);
         sldResource.file().setLastModified(previousTime);
     }
-    
+
     /**
      * Tests that already cached icons are read from disk and
      * used to calculate size.
      */
     @Test
     public void testOnlineResourceWidthHeight() throws Exception {
-        
+
         TransformerBase tr = createTransformer();
         tr.setIndentation(2);
         Document dom = WMSTestSupport.transform(req, tr);
-        
+
         NodeList onlineResources = XPATH.getMatchingNodes(
                 getOnlineResourceXPath("cite:BasicPolygons"), dom);
         assertEquals(1, onlineResources.getLength());
@@ -400,13 +406,13 @@ public abstract class GetCapabilitiesLegendURLTest extends WMSTestSupport {
         assertTrue(href.contains("width=20"));
         assertTrue(href.contains("height=20"));
     }
-    
+
     private String getLegendURLXPath(String layerName) {
-        return "/"+ getElementPrefix() + getRootElement() + "/"+ getElementPrefix() + "Capability/"+ getElementPrefix() + "Layer/"+ getElementPrefix() + "Layer["+ getElementPrefix() + "Name/text()='"+layerName+"']/"+ getElementPrefix() + "Style/"+ getElementPrefix() + "LegendURL";
+        return "/" + getElementPrefix() + getRootElement() + "/" + getElementPrefix() + "Capability/" + getElementPrefix() + "Layer/" + getElementPrefix() + "Layer[" + getElementPrefix() + "Name/text()='" + layerName + "']/" + getElementPrefix() + "Style/" + getElementPrefix() + "LegendURL";
     }
-    
+
     private String getOnlineResourceXPath(String layerName) {
-        return "/"+ getElementPrefix() + getRootElement() + "/"+ getElementPrefix() + "Capability/"+ getElementPrefix() + "Layer/"+ getElementPrefix() + "Layer["+ getElementPrefix() + "Name/text()='"+layerName+"']/"+ getElementPrefix() + "Style/"+ getElementPrefix() + "LegendURL/"+getElementPrefix()+"OnlineResource";
+        return "/" + getElementPrefix() + getRootElement() + "/" + getElementPrefix() + "Capability/" + getElementPrefix() + "Layer/" + getElementPrefix() + "Layer[" + getElementPrefix() + "Name/text()='" + layerName + "']/" + getElementPrefix() + "Style/" + getElementPrefix() + "LegendURL/" + getElementPrefix() + "OnlineResource";
     }
 
     private void removeFileOrFolder(File file) {
@@ -417,35 +423,29 @@ public abstract class GetCapabilitiesLegendURLTest extends WMSTestSupport {
         if (!file.isDirectory()) {
             file.delete();
         } else {
-    
+
             String[] list = file.list();
             for (int i = 0; i < list.length; i++) {
                 removeFileOrFolder(new File(file.getAbsolutePath() + File.separator + list[i]));
             }
-    
+
             file.delete();
         }
-        
+
     }
-    
+
     /**
      * Each WMS version suite of tests has its own TransformerBase implementation.
-     *  
-     *
      */
     protected abstract TransformerBase createTransformer();
 
     /**
      * Each WMS version has a different root name for the Capabilities XML document.
-     *  
-     *
      */
     protected abstract String getRootElement();
-    
+
     /**
      * Each WMS version uses a different element prefix.
-     *  
-     *
      */
     protected abstract String getElementPrefix();
 

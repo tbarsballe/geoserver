@@ -9,7 +9,7 @@ import org.springframework.validation.Errors;
 
 /**
  * Validates numbers against a range of validity
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class NumberRangeValidator implements WPSInputValidator {

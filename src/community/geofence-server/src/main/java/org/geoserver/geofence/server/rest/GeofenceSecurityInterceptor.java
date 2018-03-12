@@ -13,15 +13,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 /**
- * 
  * @author Niels Charlier
- *
  */
 public class GeofenceSecurityInterceptor extends HandlerInterceptorAdapter {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
-            Object handler) throws Exception {
+                             Object handler) throws Exception {
         if (request.getServletPath().equalsIgnoreCase("/geofence")) {
             if (!SecurityContextHolder.getContext().getAuthentication().getAuthorities()
                     .contains(GeoServerRole.ADMIN_ROLE)) {

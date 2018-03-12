@@ -21,7 +21,7 @@ import org.geoserver.security.rememberme.RememberMeServicesConfig;
 
 /**
  * {@link GeoServerSecurityManager} configuration object.
- * 
+ *
  * @author christian
  */
 public class SecurityManagerConfig implements SecurityConfig {
@@ -42,10 +42,10 @@ public class SecurityManagerConfig implements SecurityConfig {
 
     public SecurityManagerConfig(SecurityManagerConfig config) {
         this.roleServiceName = config.getRoleServiceName();
-        this.authProviderNames = config.getAuthProviderNames() != null ? 
-            new ArrayList<String>(config.getAuthProviderNames()) : null;
-        this.filterChain = config.getFilterChain() != null ? 
-            new GeoServerSecurityFilterChain(config.getFilterChain()) : null;
+        this.authProviderNames = config.getAuthProviderNames() != null ?
+                new ArrayList<String>(config.getAuthProviderNames()) : null;
+        this.filterChain = config.getFilterChain() != null ?
+                new GeoServerSecurityFilterChain(config.getFilterChain()) : null;
         this.rememberMeService = new RememberMeServicesConfig(config.getRememberMeService());
         this.bruteForcePrevention = new BruteForcePreventionConfig(config.getBruteForcePrevention());
         this.encryptingUrlParams = config.isEncryptingUrlParams();
@@ -68,6 +68,7 @@ public class SecurityManagerConfig implements SecurityConfig {
     public String getRoleServiceName() {
         return roleServiceName;
     }
+
     public void setRoleServiceName(String roleServiceName) {
         this.roleServiceName = roleServiceName;
     }
@@ -118,36 +119,37 @@ public class SecurityManagerConfig implements SecurityConfig {
     public boolean isEncryptingUrlParams() {
         return encryptingUrlParams;
     }
-    
+
     public void setEncryptingUrlParams(boolean encryptingUrlParams) {
         this.encryptingUrlParams = encryptingUrlParams;
     }
 
     /**
-     * The name of the password encrypter for encrypting password in configuration files. 
+     * The name of the password encrypter for encrypting password in configuration files.
      */
     public String getConfigPasswordEncrypterName() {
         return configPasswordEncrypterName;
     }
+
     public void setConfigPasswordEncrypterName(String configPasswordEncrypterName) {
         this.configPasswordEncrypterName = configPasswordEncrypterName;
     }
 
     @Override
     public SecurityConfig clone(boolean allowEnvParametrization) {
-        
+
         final GeoServerEnvironment gsEnvironment = GeoServerExtensions.bean(GeoServerEnvironment.class);
-        
+
         SecurityManagerConfig target = (SecurityManagerConfig) SerializationUtils.clone(this);
-        
+
         if (target != null) {
             if (allowEnvParametrization && gsEnvironment != null
                     && GeoServerEnvironment.ALLOW_ENV_PARAMETRIZATION) {
                 target.setConfigPasswordEncrypterName((String) gsEnvironment.resolveValue(configPasswordEncrypterName));
-                target.setRoleServiceName((String)gsEnvironment.resolveValue(roleServiceName));
+                target.setRoleServiceName((String) gsEnvironment.resolveValue(roleServiceName));
             }
         }
-        
+
         return target;
     }
 

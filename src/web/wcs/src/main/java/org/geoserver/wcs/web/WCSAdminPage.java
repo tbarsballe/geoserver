@@ -25,7 +25,7 @@ import org.geoserver.web.wicket.SRSListTextArea;
 import org.geotools.coverage.grid.io.OverviewPolicy;
 
 public class WCSAdminPage extends BaseServiceAdminPage<WCSInfo> {
-    
+
     public WCSAdminPage() {
         super();
     }
@@ -41,16 +41,16 @@ public class WCSAdminPage extends BaseServiceAdminPage<WCSInfo> {
     protected Class<WCSInfo> getServiceClass() {
         return WCSInfo.class;
     }
-    
+
     protected void build(IModel info, Form form) {
         // overview policy
         form.add(new DropDownChoice("overviewPolicy", Arrays.asList(OverviewPolicy.values()), new OverviewPolicyRenderer()));
         form.add(new CheckBox("subsamplingEnabled"));
-        
+
         // limited srs list
         TextArea srsList = new SRSListTextArea("srs", LiveCollectionModel.list(new PropertyModel(info, "sRS")));
         form.add(srsList);
-        
+
         // resource limits
         TextField maxInputMemory = new TextField("maxInputMemory");
         maxInputMemory.add(RangeValidator.minimum(0l));
@@ -58,16 +58,16 @@ public class WCSAdminPage extends BaseServiceAdminPage<WCSInfo> {
         TextField maxOutputMemory = new TextField("maxOutputMemory");
         maxOutputMemory.add(RangeValidator.minimum(0l));
         form.add(maxOutputMemory);
-        
+
         // lat-lon VS lon-lat
         form.add(new CheckBox("latLon"));
-        
+
     }
 
-    protected String getServiceName(){
+    protected String getServiceName() {
         return "WCS";
     }
-    
+
     private class OverviewPolicyRenderer extends ChoiceRenderer {
 
         public Object getDisplayValue(Object object) {
@@ -78,5 +78,5 @@ public class WCSAdminPage extends BaseServiceAdminPage<WCSInfo> {
             return ((OverviewPolicy) object).name();
         }
     }
-        
+
 }

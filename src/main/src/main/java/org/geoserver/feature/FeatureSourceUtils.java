@@ -19,7 +19,6 @@ import org.opengis.feature.type.FeatureType;
  * Set of utility methods for {@link org.geotools.data.FeatureSource}.
  *
  * @author Justin Deoliveira, The Open Planning Project, jdeolive@openplans.org
- *
  */
 public class FeatureSourceUtils {
     protected static final Logger LOGGER = org.geotools.util.logging.Logging.getLogger("org.vfny.geoserver.feature");
@@ -34,13 +33,11 @@ public class FeatureSourceUtils {
      * </p>
      *
      * @param fs The feature source.
-     *
      * @return The bounds.
-     *
      * @throws IOException Execption calculating bounds on feature source.
      */
     public static ReferencedEnvelope getBoundingBoxEnvelope(FeatureSource<? extends FeatureType, ? extends Feature> fs)
-        throws IOException {
+            throws IOException {
         ReferencedEnvelope ev = fs.getBounds();
 
         if ((ev == null) || ev.isNull()) {
@@ -48,7 +45,7 @@ public class FeatureSourceUtils {
                 ev = fs.getFeatures().getBounds();
             } catch (Throwable t) {
                 LOGGER.log(Level.FINE,
-                    "Could not compute the data bounding box. Returning an empty envelope", t);
+                        "Could not compute the data bounding box. Returning an empty envelope", t);
                 ev = new ReferencedEnvelope(fs.getSchema().getCoordinateReferenceSystem());
             }
         }

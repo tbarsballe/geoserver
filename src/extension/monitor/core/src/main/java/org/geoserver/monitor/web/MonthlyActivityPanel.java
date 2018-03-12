@@ -23,14 +23,14 @@ public class MonthlyActivityPanel extends ActivityChartBasePanel {
     @Override
     protected Date[] getDateRange() {
         Date now = new Date();
-        
+
         Calendar then = Calendar.getInstance();
         then.set(Calendar.DAY_OF_MONTH, 0);
         then.set(Calendar.HOUR_OF_DAY, 0);
         then.set(Calendar.MINUTE, 0);
         then.set(Calendar.SECOND, 0);
-        
-        return new Date[]{then.getTime(),now}; 
+
+        return new Date[]{then.getTime(), now};
     }
 
     @Override

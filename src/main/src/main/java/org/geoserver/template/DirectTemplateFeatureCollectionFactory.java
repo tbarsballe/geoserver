@@ -23,13 +23,11 @@ import freemarker.template.TemplateModelIterator;
 import freemarker.template.TemplateSequenceModel;
 
 /**
- * 
  * Create FeatureCollection Template Model without copying features to memory
  * When using this in a FeatureWrapper, it is necessary to call purge() method after
  * processing template, to close any open database connections
- * 
+ *
  * @author Niels Charlier, Curtin University of Technology
- * 
  */
 public class DirectTemplateFeatureCollectionFactory implements FeatureWrapper.TemplateFeatureCollectionFactory<DirectTemplateFeatureCollectionFactory.TemplateFeatureCollection> {
 
@@ -38,7 +36,7 @@ public class DirectTemplateFeatureCollectionFactory implements FeatureWrapper.Te
     /**
      * thread local to track open iterators
      */
-    static ThreadLocal<List<TemplateFeatureIterator>> ITERATORS = 
+    static ThreadLocal<List<TemplateFeatureIterator>> ITERATORS =
             new ThreadLocal<List<TemplateFeatureIterator>>();
 
     public void purge() {
@@ -47,8 +45,7 @@ public class DirectTemplateFeatureCollectionFactory implements FeatureWrapper.Te
             for (TemplateFeatureIterator it : its) {
                 try {
                     it.close();
-                }
-                catch(Throwable t) {
+                } catch (Throwable t) {
                     LOGGER.log(Level.WARNING, "Error closing iterator", t);
                 }
             }
@@ -56,24 +53,24 @@ public class DirectTemplateFeatureCollectionFactory implements FeatureWrapper.Te
             ITERATORS.remove();
         }
     }
-    
+
     public DirectTemplateFeatureCollectionFactory() {
     }
 
     public TemplateCollectionModel createTemplateFeatureCollection(FeatureCollection collection,
-            BeansWrapper wrapper) {
+                                                                   BeansWrapper wrapper) {
         return new TemplateFeatureCollection(collection, wrapper);
     }
-    
+
     protected class TemplateFeatureCollection implements TemplateCollectionModel, TemplateSequenceModel {
         protected BeansWrapper wrapper;
 
         protected FeatureCollection collection;
-        
+
         protected TemplateFeatureIterator indexIterator = null;
-        
+
         protected int currentIndex = -1;
-        
+
         protected TemplateModel currentItem = null;
 
         public TemplateFeatureCollection(FeatureCollection collection, BeansWrapper wrapper) {
@@ -94,14 +91,13 @@ public class DirectTemplateFeatureCollectionFactory implements FeatureWrapper.Te
 
         @Override
         public TemplateModel get(int index) throws TemplateModelException {
-            if (currentIndex > index ) {
+            if (currentIndex > index) {
                 //we have gone backwards, close iterator and clean up as we will need to start over
                 if (indexIterator != null) {
                     ITERATORS.get().remove(indexIterator);
                     try {
                         indexIterator.close();
-                    }
-                    catch(Throwable t) {
+                    } catch (Throwable t) {
                         LOGGER.log(Level.WARNING, "Error closing iterator", t);
                     }
                     indexIterator = null;

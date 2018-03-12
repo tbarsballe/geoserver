@@ -24,7 +24,7 @@ public class TeradataQueryBandFilter implements Filter {
 
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
-        
+
         // set some thread local query band info
         if (request instanceof HttpServletRequest) {
             HttpServletRequest req = (HttpServletRequest) request;
@@ -37,8 +37,7 @@ public class TeradataQueryBandFilter implements Filter {
         }
         try {
             chain.doFilter(request, response);
-        }
-        finally {
+        } finally {
             QueryBand.remove();
         }
 

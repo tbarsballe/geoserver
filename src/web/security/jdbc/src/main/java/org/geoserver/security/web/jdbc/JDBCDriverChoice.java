@@ -17,9 +17,8 @@ import org.apache.wicket.model.IModel;
 
 /**
  * Drop down choice widget for available JDBC drivers.
- * 
- * @author Justin Deoliveira, OpenGeo
  *
+ * @author Justin Deoliveira, OpenGeo
  */
 public class JDBCDriverChoice extends DropDownChoice<String> {
 
@@ -28,22 +27,22 @@ public class JDBCDriverChoice extends DropDownChoice<String> {
     }
 
     static class JDBCDriverClassNamesModel implements IModel<List<String>> {
-    
+
         @Override
         public List<String> getObject() {
             List<String> driverClassNames = new ArrayList<String>();
-            Enumeration<Driver> e = DriverManager.getDrivers(); 
-            while(e.hasMoreElements()) {
+            Enumeration<Driver> e = DriverManager.getDrivers();
+            while (e.hasMoreElements()) {
                 driverClassNames.add(e.nextElement().getClass().getCanonicalName());
             }
             return driverClassNames;
         }
-    
+
         @Override
         public void detach() {
             //do nothing
         }
-    
+
         @Override
         public void setObject(List<String> object) {
             throw new UnsupportedOperationException();
@@ -55,6 +54,7 @@ public class JDBCDriverChoice extends DropDownChoice<String> {
         public Object getDisplayValue(String object) {
             return object;
         }
+
         @Override
         public String getIdValue(String object, int index) {
             return object;

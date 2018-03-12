@@ -17,11 +17,9 @@ import org.geoserver.platform.resource.Resources;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- * 
  * Configuration class used to override the default config dir (GEOSERVER_DATA_DIR/cluster/)
- * 
+ *
  * @author carlo cancellieri - GeoSolutions SAS
- * 
  */
 final public class ConfigDirConfiguration implements JMSConfigurationExt {
 
@@ -32,6 +30,7 @@ final public class ConfigDirConfiguration implements JMSConfigurationExt {
 
     /**
      * Override the global config dir
+     *
      * @throws IOException
      */
     @PostConstruct

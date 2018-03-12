@@ -22,15 +22,20 @@ import org.geoserver.wms.map.XMLTransformerMap;
 
 public class RSSGeoRSSMapOutputFormat implements GetMapOutputFormat {
 
-    /** the actual mime type for the response header */
+    /**
+     * the actual mime type for the response header
+     */
     private static String MIME_TYPE = "application/rss+xml";
-    
+
     static final MapProducerCapabilities RSS_CAPABILITIES = new MapProducerCapabilities(false, false, false, true, null);
 
-    /** format names/aliases */
+    /**
+     * format names/aliases
+     */
     public static final Set<String> FORMAT_NAMES;
+
     static {
-        String[] FORMATS = { "application/rss+xml", "rss", "application/rss xml" };
+        String[] FORMATS = {"application/rss+xml", "rss", "application/rss xml"};
         Set<String> names = new TreeSet<String>(String.CASE_INSENSITIVE_ORDER);
         names.addAll(Arrays.asList(FORMATS));
         FORMAT_NAMES = Collections.unmodifiableSet(names);

@@ -35,37 +35,39 @@ import org.geotools.util.logging.Logging;
 /**
  * Map response handler for GeoTiff output format. It basically relies on the GeoTiff module of
  * geotools.
- * 
- * 
+ *
  * @author Simone Giannecchini, GeoSolutions
- * 
  */
 public class GeoTIFFMapResponse extends RenderedImageMapResponse {
 
-    /** A logger for this class. */
+    /**
+     * A logger for this class.
+     */
     private static final Logger LOGGER = Logging.getLogger(GeoTIFFMapResponse.class);
 
     private static final String IMAGE_GEOTIFF = "image/geotiff";
 
     private static final String IMAGE_GEOTIFF8 = "image/geotiff8";
 
-    private static final String[] OUTPUT_FORMATS = { IMAGE_GEOTIFF, IMAGE_GEOTIFF8 };
+    private static final String[] OUTPUT_FORMATS = {IMAGE_GEOTIFF, IMAGE_GEOTIFF8};
 
-    /** GridCoverageFactory. */
+    /**
+     * GridCoverageFactory.
+     */
     private final static GridCoverageFactory factory = CoverageFactoryFinder
             .getGridCoverageFactory(null);
-    
-    /** 
+
+    /**
      * Default capabilities for GEOTIFF.
-     * 
+     * <p>
      * <p>
      * <ol>
-     *         <li>tiled = supported</li>
-     *         <li>multipleValues = unsupported</li>
-     *         <li>paletteSupported = supported</li>
-     *         <li>transparency = supported</li>
+     * <li>tiled = supported</li>
+     * <li>multipleValues = unsupported</li>
+     * <li>paletteSupported = supported</li>
+     * <li>transparency = supported</li>
      * </ol>
-     * 
+     * <p>
      * <p>
      * We should soon support multipage tiff.
      */
@@ -77,7 +79,7 @@ public class GeoTIFFMapResponse extends RenderedImageMapResponse {
 
     @Override
     public void formatImageOutputStream(RenderedImage image, OutputStream outStream,
-            WMSMapContent mapContent) throws ServiceException, IOException {
+                                        WMSMapContent mapContent) throws ServiceException, IOException {
         // tiff
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.fine("Writing tiff image ...");
@@ -85,19 +87,19 @@ public class GeoTIFFMapResponse extends RenderedImageMapResponse {
 
         // do we want it to be 8 bits?
         image = applyPalette(image, mapContent, IMAGE_GEOTIFF8, false);
-        
+
         // crating a grid coverage
         GridCoverage2D gc = factory.create("geotiff", image,
                 new GeneralEnvelope(mapContent.getRenderingArea()));
-        
+
         // NoData stuff
-        if(image instanceof PlanarImage){
+        if (image instanceof PlanarImage) {
             Map properties = gc.getProperties();
-            if(properties == null){
+            if (properties == null) {
                 properties = new HashMap();
             }
-            Object property = ((PlanarImage)image).getProperty(NoDataContainer.GC_NODATA);
-            if(property != null){
+            Object property = ((PlanarImage) image).getProperty(NoDataContainer.GC_NODATA);
+            if (property != null) {
                 CoverageUtilities.setNoDataProperty(properties, property);
                 gc = factory.create(gc.getName(), gc.getRenderedImage(), gc.getEnvelope(), gc.getSampleDimensions(), null, properties);
             }
@@ -132,7 +134,7 @@ public class GeoTIFFMapResponse extends RenderedImageMapResponse {
                 if (LOGGER.isLoggable(Level.FINEST))
                     LOGGER.log(Level.FINEST, "Unable to properly dispose writer", e);
             }
-            
+
             // let go of the chain behind the coverage
             RasterCleaner.addCoverage(gc);
         }

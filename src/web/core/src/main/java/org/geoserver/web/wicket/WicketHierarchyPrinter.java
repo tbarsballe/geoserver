@@ -32,11 +32,12 @@ public class WicketHierarchyPrinter {
     boolean valueDumpEnabled;
 
     boolean classDumpEnabled;
-    
+
     boolean pathDumpEnabled;
-    
+
     /**
      * Utility method to dump a single component/page to standard output
+     *
      * @param c
      * @param dumpClass
      * @param dumpValue
@@ -46,15 +47,16 @@ public class WicketHierarchyPrinter {
         printer.setPathDumpEnabled(dumpClass);
         printer.setClassDumpEnabled(dumpClass);
         printer.setValueDumpEnabled(dumpValue);
-        if(c instanceof Page) {
+        if (c instanceof Page) {
             printer.print((Page) c);
         } else {
             printer.print(c);
         }
     }
-    
+
     /**
      * Utility method to dump a single component/page to standard output
+     *
      * @param c
      * @param dumpClass
      * @param dumpValue
@@ -79,7 +81,7 @@ public class WicketHierarchyPrinter {
 
     /**
      * Set to true if you want to see the model values in the dump
-     * 
+     *
      * @param valueDumpEnabled
      */
     public void setValueDumpEnabled(boolean valueDumpEnabled) {
@@ -88,7 +90,7 @@ public class WicketHierarchyPrinter {
 
     /**
      * Set to true if you want to see the component classes in the dump
-     * 
+     *
      * @param classDumpEnabled
      */
     public void setClassDumpEnabled(boolean classDumpEnabled) {
@@ -97,7 +99,7 @@ public class WicketHierarchyPrinter {
 
     /**
      * Prints the component containment hierarchy
-     * 
+     *
      * @param c
      */
     public void print(Component c) {
@@ -111,7 +113,7 @@ public class WicketHierarchyPrinter {
         printComponent(c, level);
         if (c instanceof MarkupContainer) {
             MarkupContainer mc = (MarkupContainer) c;
-            for (Iterator<?> it = mc.iterator(); it.hasNext();) {
+            for (Iterator<?> it = mc.iterator(); it.hasNext(); ) {
                 walkHierarchy((Component) it.next(), level + 1);
             }
         }
@@ -121,37 +123,36 @@ public class WicketHierarchyPrinter {
      * Prints a single component
      */
     private void printComponent(Component c, int level) {
-        if(c instanceof Page)
+        if (c instanceof Page)
             out.print(tab(level) + "PAGE_ROOT");
         else
             out.print(tab(level) + c.getId());
-            
-        if(pathDumpEnabled) {
+
+        if (pathDumpEnabled) {
             out.print(" " + c.getPageRelativePath());
         }
-        
+
         if (classDumpEnabled) {
             String className;
-            if(c.getClass().isAnonymousClass()) {
+            if (c.getClass().isAnonymousClass()) {
                 className = c.getClass().getSuperclass().getName();
             } else {
                 className = c.getClass().getName();
             }
-                
+
             out.print("(" + className + ")");
         }
-        
+
         if (valueDumpEnabled) {
             try {
                 String value = NEWLINE.matcher(c.getDefaultModelObjectAsString()).replaceAll("\\\\n");
                 out.print(" '" + value + "'");
-            } catch(Exception e) {
+            } catch (Exception e) {
                 out.print(" 'ERROR_RETRIEVING_MODEL " + e.getMessage() + "'");
             }
         }
-        
-        
-            
+
+
         out.println();
     }
 
@@ -166,7 +167,6 @@ public class WicketHierarchyPrinter {
 
     /**
      * If the page relative path dumping is enabled
-     *
      */
     public boolean isPathDumpEnabled() {
         return pathDumpEnabled;
@@ -174,6 +174,7 @@ public class WicketHierarchyPrinter {
 
     /**
      * Sets/unsets the relative path dumping
+     *
      * @param pathDumpEnabled
      */
     public void setPathDumpEnabled(boolean pathDumpEnabled) {

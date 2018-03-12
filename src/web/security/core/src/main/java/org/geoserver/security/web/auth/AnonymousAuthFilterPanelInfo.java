@@ -10,11 +10,11 @@ import org.geoserver.security.filter.GeoServerAnonymousAuthenticationFilter;
 
 /**
  * Configuration panel extension for {@link GeoServerAnonymousAuthenticationFilter}.
- * 
+ *
  * @author Justin Deoliveira, OpenGeo
  */
-public class AnonymousAuthFilterPanelInfo 
-    extends AuthenticationFilterPanelInfo<AnonymousAuthenticationFilterConfig, AnonymousAuthFilterPanel> {
+public class AnonymousAuthFilterPanelInfo
+        extends AuthenticationFilterPanelInfo<AnonymousAuthenticationFilterConfig, AnonymousAuthFilterPanel> {
 
     public AnonymousAuthFilterPanelInfo() {
         setServiceClass(GeoServerAnonymousAuthenticationFilter.class);

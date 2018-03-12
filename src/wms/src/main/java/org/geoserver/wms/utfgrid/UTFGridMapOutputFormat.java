@@ -38,26 +38,28 @@ import org.geotools.util.logging.Logging;
 
 /**
  * Handles a GetMap request that spects a map in UTFGrid format.
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class UTFGridMapOutputFormat extends AbstractMapOutputFormat {
-    
+
     static final Logger LOGGER = Logging.getLogger(UTFGridMapOutputFormat.class);
 
-    /** the only MIME type this map producer supports */
+    /**
+     * the only MIME type this map producer supports
+     */
     static final String MIME_TYPE = "application/json;type=utfgrid";
 
     static final String OUTPUT_FORMAT_NAME = "utfgrid";
-    
+
     /**
      * Default scale-down factor for the output grid size
      */
-    static final int DEFAULT_UTFRESOLUTION = 4; 
+    static final int DEFAULT_UTFRESOLUTION = 4;
 
     /**
      * Default capabilities for UTFGrid format.
-     * 
+     * <p>
      * <p>
      * <ol>
      * <li>tiled = unsupported</li>
@@ -72,7 +74,7 @@ public class UTFGridMapOutputFormat extends AbstractMapOutputFormat {
     private WMS wms;
 
     public UTFGridMapOutputFormat(WMS wms) {
-        super(MIME_TYPE, new String[] { OUTPUT_FORMAT_NAME });
+        super(MIME_TYPE, new String[]{OUTPUT_FORMAT_NAME});
         this.wms = wms;
     }
 
@@ -91,7 +93,7 @@ public class UTFGridMapOutputFormat extends AbstractMapOutputFormat {
 
             @Override
             protected RenderedImage prepareImage(int width, int height, IndexColorModel palette,
-                    boolean transparent) {
+                                                 boolean transparent) {
                 // each color is a feature index
                 return new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
             }
@@ -101,7 +103,7 @@ public class UTFGridMapOutputFormat extends AbstractMapOutputFormat {
                 // disable antialiasing, numbers signify ids, we cannot have "half tints"
                 renderer.getJava2DHints().put(RenderingHints.KEY_ANTIALIASING,
                         RenderingHints.VALUE_ANTIALIAS_OFF);
-                
+
                 Map hints = renderer.getRendererHints();
                 double dpi = RendererUtilities.getDpi(hints);
                 dpi = dpi / DEFAULT_UTFRESOLUTION;
@@ -117,7 +119,7 @@ public class UTFGridMapOutputFormat extends AbstractMapOutputFormat {
     }
 
     private UTFGridMapContent buildUTFGridMapContent(WMSMapContent original,
-            UTFGridEntries entries) {
+                                                     UTFGridEntries entries) {
         UTFGridColorFunction colorFunction = new UTFGridColorFunction(entries);
 
         UTFGridMapContent result = new UTFGridMapContent(original, entries, DEFAULT_UTFRESOLUTION);
@@ -152,18 +154,18 @@ public class UTFGridMapOutputFormat extends AbstractMapOutputFormat {
                         new UTFGridFeatureSource(layer.getFeatureSource(), null), copy);
                 fl.setQuery(layer.getQuery());
                 sl = fl;
-            } else if(layer instanceof GridCoverageLayer) {
+            } else if (layer instanceof GridCoverageLayer) {
                 GridCoverageLayer gc = (GridCoverageLayer) sl;
                 sl = new GridCoverageLayer(gc.getCoverage(), copy);
-            } else if(layer instanceof WMSLayer) {
+            } else if (layer instanceof WMSLayer) {
                 // these are pure raster, we cannot do a UTFGrid out of them... although
                 // we could try a cascading if the remote server also supports UTFGrid,
                 // in the future
                 continue;
-            } else if(layer instanceof CachedGridReaderLayer) {
+            } else if (layer instanceof CachedGridReaderLayer) {
                 CachedGridReaderLayer gr = (CachedGridReaderLayer) sl;
                 sl = new CachedGridReaderLayer(gr.getReader(), copy);
-            } else if(layer instanceof GridReaderLayer) {
+            } else if (layer instanceof GridReaderLayer) {
                 GridReaderLayer gr = (GridReaderLayer) sl;
                 sl = new GridReaderLayer(gr.getReader(), copy);
             } else {

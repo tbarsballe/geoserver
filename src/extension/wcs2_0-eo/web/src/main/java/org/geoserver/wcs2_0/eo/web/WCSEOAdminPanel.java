@@ -25,7 +25,7 @@ public class WCSEOAdminPanel extends AdminPagePanel {
         CheckBox enabled = new CheckBox("enabled", new MapModel(metadata,
                 WCSEOMetadata.ENABLED.key));
         add(enabled);
-        
+
         TextField<Integer> defaultCount = new TextField<Integer>("defaultCount", new MapModel(metadata,
                 WCSEOMetadata.COUNT_DEFAULT.key), Integer.class);
         defaultCount.add(RangeValidator.minimum(1));

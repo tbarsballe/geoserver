@@ -36,7 +36,7 @@ public class UTFGridMap extends RawMap {
         super(mapContent, (byte[]) null, UTFGridMapOutputFormat.MIME_TYPE);
         this.image = image;
     }
-    
+
     public void writeTo(java.io.OutputStream out) throws java.io.IOException {
         UTFGridEntries entries = getEntries();
 
@@ -46,11 +46,11 @@ public class UTFGridMap extends RawMap {
         List<UTFGridEntry> encodedEntries = writeGrid(pw, image, entries);
         pw.println("],");
         pw.println("\"keys\": [");
-        if(encodedEntries.isEmpty()) {
+        if (encodedEntries.isEmpty()) {
             pw.println("  \"\"");
         } else {
             pw.println("  \"\",");
-            for (Iterator<UTFGridEntry> it = encodedEntries.iterator(); it.hasNext();) {
+            for (Iterator<UTFGridEntry> it = encodedEntries.iterator(); it.hasNext(); ) {
                 UTFGridEntry entry = (UTFGridEntry) it.next();
                 pw.print("  \"");
                 pw.print(entry.getKey());
@@ -63,7 +63,7 @@ public class UTFGridMap extends RawMap {
         }
         pw.println("],");
         pw.println("\"data\": {");
-        for (Iterator<UTFGridEntry> it = encodedEntries.iterator(); it.hasNext();) {
+        for (Iterator<UTFGridEntry> it = encodedEntries.iterator(); it.hasNext(); ) {
             UTFGridEntry entry = (UTFGridEntry) it.next();
             pw.print("  \"");
             pw.print(entry.getKey());
@@ -117,14 +117,13 @@ public class UTFGridMap extends RawMap {
     /**
      * Writes the grid, and maps the original values into a compact sequence of keys (the original values might be sparse due to features being fully
      * overwritten by other features)
-     * 
+     *
      * @param pw
      * @param image
      * @param entries
-     *
      */
     private List<UTFGridEntry> writeGrid(PrintWriter pw, RenderedImage image,
-            UTFGridEntries entries) {
+                                         UTFGridEntries entries) {
         Map<Integer, UTFGridEntry> keyToFeature = entries.getEntryMap();
         List<UTFGridEntry> result = new ArrayList<UTFGridEntry>();
 
@@ -194,7 +193,7 @@ public class UTFGridMap extends RawMap {
         return (char) result;
     }
 
-    
+
     UTFGridEntries getEntries() {
         UTFGridMapContent mc = (UTFGridMapContent) mapContent;
         return mc.getEntries();

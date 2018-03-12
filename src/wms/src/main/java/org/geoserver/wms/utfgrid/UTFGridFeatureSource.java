@@ -18,7 +18,7 @@ import org.opengis.feature.type.FeatureType;
 
 /**
  * A tiny wrapper that forces the attributes needed by UTFGrid
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 class UTFGridFeatureSource extends DecoratingFeatureSource<FeatureType, Feature> {

@@ -27,7 +27,6 @@ import org.geoserver.platform.resource.Resources;
 
 /**
  * @author Alessio Fabiani, GeoSolutions
- *
  */
 public class ImageMosaicAdditionalResourceReader extends ImageMosaicAdditionalResource
         implements CatalogAdditionalResourcesReader<StoreInfo> {
@@ -50,25 +49,25 @@ public class ImageMosaicAdditionalResourceReader extends ImageMosaicAdditionalRe
         final Resource sourceBackupFolder = BackupUtils.dir(base.parent(),
                 IMAGEMOSAIC_INDEXES_FOLDER);
 
-        final CoverageStoreInfo mosaicCoverageStore = 
+        final CoverageStoreInfo mosaicCoverageStore =
                 backupFacade.getCatalog().getResourcePool().clone((CoverageStoreInfo) item, true);
         final String mosaicName = mosaicCoverageStore.getName();
         final String mosaicUrlBase = mosaicCoverageStore.getURL();
 
         final Resource mosaicIndexBase = Resources.fromURL(mosaicUrlBase);
-        
+
         List<Resource> mosaicIndexerResources = Resources.list(sourceBackupFolder,
                 resources.get("properties"), true);
 
         mosaicIndexerResources.addAll(Resources.list(sourceBackupFolder,
                 resources.get("info"), true));
-        
+
         boolean datastoreAlreadyPresent = true;
         for (Resource res : mosaicIndexerResources) {
             if (!FilenameUtils.getBaseName(res.name()).equals(mosaicName) && Resources.exists(res)
                     && Resources.canRead(res)) {
                 boolean result = copyFile(sourceBackupFolder, mosaicIndexBase, res, false);
-                
+
                 if (result && FilenameUtils.getBaseName(res.name()).equals("datastore")) {
                     // The copy of the new "datastore.properties" was successful, meaning that
                     // there wasn't an other copy of that file on the target folder.
@@ -89,22 +88,22 @@ public class ImageMosaicAdditionalResourceReader extends ImageMosaicAdditionalRe
                 }
             }
         }
-        
+
         if (!datastoreAlreadyPresent) {
             // Sine there wasn't already a "datasotre.properties" on the target folder
             // we assume this is a new mosaic.
             // We need to be sure the property "CanBeEmpty=true" is present on the
             // "indexer.properties"
             final File indexerFile = new File(mosaicIndexBase.dir(), "indexer.properties");
-            
+
             Properties indexerProperties = new Properties();
-            
+
             if (indexerFile.exists() && indexerFile.canRead()) {
                 indexerProperties.load(new FileInputStream(indexerFile));
             }
-            
+
             indexerProperties.setProperty("CanBeEmpty", "true");
-            
+
             indexerProperties.store(new FileOutputStream(indexerFile), null);
         }
     }
@@ -117,7 +116,7 @@ public class ImageMosaicAdditionalResourceReader extends ImageMosaicAdditionalRe
      * @throws FileNotFoundException
      */
     private void resolveTemplate(final Resource sourceBackupFolder, final Resource mosaicIndexBase,
-            Resource res) throws IOException, FileNotFoundException {
+                                 Resource res) throws IOException, FileNotFoundException {
         // Overwrite target .properties file by resolving template placeholders
         Properties templateProperties = new Properties();
         templateProperties.load(res.in());
@@ -152,7 +151,7 @@ public class ImageMosaicAdditionalResourceReader extends ImageMosaicAdditionalRe
      * @throws IOException
      */
     private boolean copyFile(final Resource sourceBackupFolder, final Resource mosaicIndexBase,
-            Resource res, boolean overwrite) throws IOException {
+                             Resource res, boolean overwrite) throws IOException {
         final String relative = sourceBackupFolder.dir().toURI().relativize(res.file().toURI())
                 .getPath();
 
@@ -162,12 +161,12 @@ public class ImageMosaicAdditionalResourceReader extends ImageMosaicAdditionalRe
             if (!targetFtl.parent().dir().exists()) {
                 targetFtl.parent().dir().mkdirs();
             }
-    
+
             Resources.copy(res.file(), targetFtl.parent());
-            
+
             return true;
         }
-        
+
         return false;
     }
 

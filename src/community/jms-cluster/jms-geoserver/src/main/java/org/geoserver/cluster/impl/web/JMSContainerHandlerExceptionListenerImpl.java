@@ -10,9 +10,7 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.geoserver.cluster.client.JMSContainerHandlerExceptionListener;
 
 /**
- * 
  * @author carlo cancellieri - geosolutions sas
- *
  */
 public class JMSContainerHandlerExceptionListenerImpl
         implements JMSContainerHandlerExceptionListener {

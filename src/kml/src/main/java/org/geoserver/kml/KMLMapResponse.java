@@ -32,9 +32,8 @@ import de.micromata.opengis.kml.v_2_2_0.Kml;
 
 /**
  * A map response that handles KML documents and writes them out either as KML or as KMZ
- * 
+ *
  * @author Andrea Aime - GeoSolutions
- * 
  */
 public class KMLMapResponse extends AbstractMapResponse {
 
@@ -70,7 +69,7 @@ public class KMLMapResponse extends AbstractMapResponse {
     }
 
     private void encodeAsKmz(Kml kml, KmlEncodingContext context, Operation operation,
-            OutputStream output) throws IOException {
+                             OutputStream output) throws IOException {
         // wrap the output stream in a zipped one
         ZipOutputStream zip = new ZipOutputStream(output);
 
@@ -109,7 +108,7 @@ public class KMLMapResponse extends AbstractMapResponse {
             RenderedImageMap imageMap;
             try {
                 imageMap = pngProducer.produceMap(subContext);
-    
+
                 // write it to the zip stream
                 entry = new ZipEntry(path);
                 zip.putNextEntry(entry);
@@ -142,6 +141,5 @@ public class KMLMapResponse extends AbstractMapResponse {
 
     }
 
-    
 
 }

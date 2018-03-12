@@ -131,12 +131,12 @@ public class GeoServerDialog extends Panel {
     /**
      * Shows an information style dialog box.
      *
-     * @param heading The heading of the information topic.
+     * @param heading  The heading of the information topic.
      * @param messages A list of models, displayed each as a separate paragraphs, containing the
-     *   information dialog content.
+     *                 information dialog content.
      */
     public void showInfo(AjaxRequestTarget target, final IModel<String> heading,
-            @SuppressWarnings("unchecked") final IModel<String>... messages) {
+                         @SuppressWarnings("unchecked") final IModel<String>... messages) {
         window.setPageCreator(new ModalWindow.PageCreator() {
             public Page createPage() {
                 return new InfoPage(heading, messages);
@@ -173,8 +173,6 @@ public class GeoServerDialog extends Panel {
 
     /**
      * Submit link that will forward to the {@link DialogDelegate}
-     *
-     *
      */
     AjaxSubmitLink sumbitLink(Component contents) {
         AjaxSubmitLink link = new AjaxSubmitLink("submit") {
@@ -196,8 +194,6 @@ public class GeoServerDialog extends Panel {
 
     /**
      * Link that will forward to the {@link DialogDelegate}
-     *
-     *
      */
     Component cancelLink() {
         return new AjaxLink<Void>("cancel") {
@@ -262,7 +258,6 @@ public class GeoServerDialog extends Panel {
          * Builds the contents for this dialog
          *
          * @param id
-         *
          */
         protected abstract Component getContents(String id);
 

@@ -11,13 +11,13 @@ import org.opengis.feature.Feature;
 
 /**
  * Creates a "color" for each feature
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 class UTFGridColorFunction extends InternalVolatileFunction {
-    
+
     UTFGridEntries entries;
-    
+
     public UTFGridColorFunction(UTFGridEntries entries) {
         this.entries = entries;
     }
@@ -25,7 +25,7 @@ class UTFGridColorFunction extends InternalVolatileFunction {
 
     @Override
     public Object evaluate(Object object) {
-        if(!(object instanceof Feature)) {
+        if (!(object instanceof Feature)) {
             // cannot handle this, make it "transparent"
             return Color.BLACK;
         }
@@ -34,6 +34,5 @@ class UTFGridColorFunction extends InternalVolatileFunction {
         return new Color(key, false);
     }
 
-    
 
 }

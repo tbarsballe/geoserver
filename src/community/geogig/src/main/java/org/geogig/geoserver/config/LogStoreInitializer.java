@@ -130,7 +130,7 @@ class LogStoreInitializer {
     }
 
     private static void createDefaultPropertiesFile(final Resource propertiesResource,
-            final String driverClassName, final String jdbcUrl) {
+                                                    final String driverClassName, final String jdbcUrl) {
         Properties props = new Properties();
         props.setProperty(PROP_ENABLED, "true");
         props.setProperty(PROP_DRIVER_CLASS, driverClassName);
@@ -158,32 +158,32 @@ class LogStoreInitializer {
     private static String configComments() {
         String comments = new StringBuilder(
                 "Connection information for the geogig security logs database.\n#")//
-                        .append("enabled true|false whether to enable security logging\n#")
-                        .append(PROP_DRIVER_CLASS)//
-                        .append(": JDBC Driver class name\n#").append(PROP_URL)//
-                        .append(": JDBC URL for the connections\n#").append(PROP_USER)//
-                        .append(": database user name\n#")//
-                        .append(PROP_PASSWORD)//
-                        .append(": database user password\n#")//
-                        .append(PROP_MAX_CONNECTIONS)//
-                        .append(": max number of connections in the pool\n#")//
-                        .append(PROP_SCRIPT)//
-                        .append(": Database initialization DDL script file\n#")//
-                        .append(PROP_RUN_SCRIPT)//
-                        .append(": Boolean indicating whether to execute the init script. If true, and succeeded, its value will automatically be set to false afterwards\n#")//
-                        .append("If using SQLite, the ")//
-                        .append(PROP_MAX_CONNECTIONS)//
-                        .append(" option has no effect and a single connection is used among all threads.\n")//
-                        .append("If not using SQLite (for which the tables are created automatically), make sure to first run the\n#")//
-                        .append("appropriate DDL script on the database. Some sample ones accompany this file. There are\n#")//
-                        .append("more init scripts at https://github.com/qos-ch/logback/tree/master/logback-classic/src/main/resources/ch/qos/logback/classic/db/script")//
-                        .toString();
+                .append("enabled true|false whether to enable security logging\n#")
+                .append(PROP_DRIVER_CLASS)//
+                .append(": JDBC Driver class name\n#").append(PROP_URL)//
+                .append(": JDBC URL for the connections\n#").append(PROP_USER)//
+                .append(": database user name\n#")//
+                .append(PROP_PASSWORD)//
+                .append(": database user password\n#")//
+                .append(PROP_MAX_CONNECTIONS)//
+                .append(": max number of connections in the pool\n#")//
+                .append(PROP_SCRIPT)//
+                .append(": Database initialization DDL script file\n#")//
+                .append(PROP_RUN_SCRIPT)//
+                .append(": Boolean indicating whether to execute the init script. If true, and succeeded, its value will automatically be set to false afterwards\n#")//
+                .append("If using SQLite, the ")//
+                .append(PROP_MAX_CONNECTIONS)//
+                .append(" option has no effect and a single connection is used among all threads.\n")//
+                .append("If not using SQLite (for which the tables are created automatically), make sure to first run the\n#")//
+                .append("appropriate DDL script on the database. Some sample ones accompany this file. There are\n#")//
+                .append("more init scripts at https://github.com/qos-ch/logback/tree/master/logback-classic/src/main/resources/ch/qos/logback/classic/db/script")//
+                .toString();
         return comments;
     }
 
     static void copySampleInitSript(Resource configDirectory, String scriptName) throws IOException {
-    	Resource resource = configDirectory.get(scriptName);
-    	if (!resource.getType().equals(Resource.Type.UNDEFINED)) {
+        Resource resource = configDirectory.get(scriptName);
+        if (!resource.getType().equals(Resource.Type.UNDEFINED)) {
             return;
         }
         try (OutputStream out = resource.out()) {

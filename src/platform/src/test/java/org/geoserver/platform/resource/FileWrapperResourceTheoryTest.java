@@ -22,8 +22,8 @@ public class FileWrapperResourceTheoryTest extends ResourceTheoryTest {
 
     @DataPoints
     public static String[] testPaths() {
-        return new String[] { "FileA", "FileB", "DirC", "DirE", "DirC/FileD", "UndefF",
-                "DirC/UndefF", "DirE/UndefF" };
+        return new String[]{"FileA", "FileB", "DirC", "DirE", "DirC/FileD", "UndefF",
+                "DirC/UndefF", "DirE/UndefF"};
     }
 
     @Override
@@ -72,14 +72,15 @@ public class FileWrapperResourceTheoryTest extends ResourceTheoryTest {
 
     @Override
     protected Resource getUndefined() {
-        return Files.asResource(new File(folder.getRoot(),"NonTestUndef"));
+        return Files.asResource(new File(folder.getRoot(), "NonTestUndef"));
     }
-    
+
     // paths for file wrapper are special so ignore this test
-    @Override @Ignore
+    @Override
+    @Ignore
     public void theoryHaveSamePath(String path)
             throws Exception {
-        
+
     }
-    
+
 }

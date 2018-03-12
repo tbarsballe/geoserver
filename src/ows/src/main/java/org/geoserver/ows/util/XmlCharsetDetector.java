@@ -53,20 +53,18 @@ public class XmlCharsetDetector {
      * @param istream Byte stream (most probably obtained with
      *                <code>HttpServletRequest.getInputStream</code>
      *                that gives access to XML document in question).
-     *
      * @param encInfo Instance of EncodingInfo where information about
      *                detected charset will be stored. You can then
      *                use it, for example, to form a response encoded
      *                with this charset.
-     *
-     * @throws IOException in case of any unrecoverable I/O errors.
+     * @throws IOException                 in case of any unrecoverable I/O errors.
      * @throws UnsupportedCharsetException <code>InputStreamReader</code>'s
-     *             constructor will probably throw this exception if
-     *             inferred charset of XML document is not supported by
-     *             current JVM.
+     *                                     constructor will probably throw this exception if
+     *                                     inferred charset of XML document is not supported by
+     *                                     current JVM.
      */
     public static Reader getCharsetAwareReader(InputStream istream, EncodingInfo encInfo)
-        throws IOException, UnsupportedCharsetException {
+            throws IOException, UnsupportedCharsetException {
         RewindableInputStream stream;
         stream = new RewindableInputStream(istream, false);
 
@@ -90,12 +88,12 @@ public class XmlCharsetDetector {
             // Such number of concatenating strings makes me sick.
             // But using StringBuffer will make this uglier, not?
             LOGGER.finer("First 4 bytes of XML doc are : "
-                + Integer.toHexString((int) b4[0] & 0xff).toUpperCase() + " ('" + (char) b4[0]
-                + "') " + Integer.toHexString((int) b4[1] & 0xff).toUpperCase() + " ('"
-                + (char) b4[1] + "') " + Integer.toHexString((int) b4[2] & 0xff).toUpperCase()
-                + " ('" + (char) b4[2] + "') "
-                + Integer.toHexString((int) b4[3] & 0xff).toUpperCase() + " ('" + (char) b4[3]
-                + "')");
+                    + Integer.toHexString((int) b4[0] & 0xff).toUpperCase() + " ('" + (char) b4[0]
+                    + "') " + Integer.toHexString((int) b4[1] & 0xff).toUpperCase() + " ('"
+                    + (char) b4[1] + "') " + Integer.toHexString((int) b4[2] & 0xff).toUpperCase()
+                    + " ('" + (char) b4[2] + "') "
+                    + Integer.toHexString((int) b4[3] & 0xff).toUpperCase() + " ('" + (char) b4[3]
+                    + "')");
         }
 
         /*
@@ -201,7 +199,7 @@ public class XmlCharsetDetector {
 
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.fine("Charset detection phase 2. Charset in XML declaration " + "is `"
-                + declEncoding + "`.");
+                    + declEncoding + "`.");
         }
 
         stream.reset();
@@ -227,7 +225,7 @@ public class XmlCharsetDetector {
             if (!declEncoding.equals("ISO-10646-UCS-2")) {
                 if (LOGGER.isLoggable(Level.FINE)) {
                     LOGGER.fine("Declared charset differs from inferred one. "
-                        + "Trying to construct InputStreamReader for `" + declEncoding + "`.");
+                            + "Trying to construct InputStreamReader for `" + declEncoding + "`.");
                 }
 
                 reader = new InputStreamReader(stream, declEncoding);
@@ -243,11 +241,10 @@ public class XmlCharsetDetector {
      * want to get a suitable reader for incoming request.
      *
      * @param istream See <code>getCharsetAwareReader(InputStream,
-     *                              EncodingInfo)</code>.
-     *
+     *                EncodingInfo)</code>.
      */
     public static Reader getCharsetAwareReader(InputStream istream)
-        throws IOException, UnsupportedCharsetException {
+            throws IOException, UnsupportedCharsetException {
         return getCharsetAwareReader(istream, new EncodingInfo());
     }
 
@@ -264,15 +261,13 @@ public class XmlCharsetDetector {
      * @param istream byte-stream containing textual (presumably XML) data
      * @param encInfo correctly initialized object which holds information of
      *                the above byte-stream's contents charset.
-     *
-     * @throws IllegalArgumentException      if charset name is not specified
-     * @throws UnsupportedEncodingException  in cases when specified charset is
-     *             not supported by platform or due to invalid byte order for
-     *             <code>ISO-10646-UCS-2|4</code> charsets.
-     *
+     * @throws IllegalArgumentException     if charset name is not specified
+     * @throws UnsupportedEncodingException in cases when specified charset is
+     *                                      not supported by platform or due to invalid byte order for
+     *                                      <code>ISO-10646-UCS-2|4</code> charsets.
      */
     public static Reader createReader(InputStream istream, EncodingInfo encInfo)
-        throws IllegalArgumentException, UnsupportedEncodingException {
+            throws IllegalArgumentException, UnsupportedEncodingException {
         String charset = encInfo.getEncoding();
         Boolean isBigEndian = encInfo.isBigEndian();
 
@@ -285,7 +280,7 @@ public class XmlCharsetDetector {
 
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.fine("Trying to create reader basing on existing charset " + "information: `"
-                + encInfo + "`.");
+                    + encInfo + "`.");
         }
 
         Reader reader = null;
@@ -436,9 +431,8 @@ public class XmlCharsetDetector {
      *
      * @param reader This character stream is supposed to contain XML data
      *               (i.e. it should start with valid XML declaration).
-     *
      * @return The encoding specified in the xml header read from the supplied
-     *         character stream.
+     * character stream.
      */
     protected static String getXmlEncoding(Reader reader) {
         try {
@@ -476,8 +470,8 @@ public class XmlCharsetDetector {
              * megabytes of useless data :)
              */
             for (;
-                    (MAX_XMLDECL_SIZE > count) && (-1 != (c = reader.read()))
-                    && (RIGHT_ANGLE_BRACKET != (char) c); count++) {
+                 (MAX_XMLDECL_SIZE > count) && (-1 != (c = reader.read()))
+                         && (RIGHT_ANGLE_BRACKET != (char) c); count++) {
                 sw.write(c);
             }
 
@@ -493,7 +487,7 @@ public class XmlCharsetDetector {
         } catch (IOException e) {
             if (LOGGER.isLoggable(Level.WARNING)) {
                 LOGGER.warning("Failed to extract charset info from XML "
-                    + "declaration due to IOException: " + e.getMessage());
+                        + "declaration due to IOException: " + e.getMessage());
             }
 
             return null;

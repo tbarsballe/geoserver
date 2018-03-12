@@ -12,13 +12,12 @@ import org.springframework.stereotype.Service;
 
 /**
  * Lookup service for external geoservers.
- * 
- * @author Niels Charlier
  *
+ * @author Niels Charlier
  */
 @Service
 public class LookupGSServiceImpl extends LookupServiceImpl<ExternalGS> {
-    
+
     @Autowired
     public void setExternalGS(List<ExternalGS> externalGS) {
         setNamed(externalGS);

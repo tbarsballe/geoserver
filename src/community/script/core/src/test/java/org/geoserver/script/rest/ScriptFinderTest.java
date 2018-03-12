@@ -316,7 +316,7 @@ public class ScriptFinderTest extends ScriptIntTestSupport {
         assertEquals(200, resp.getStatus());
         assertEquals("print 'foo'", resp.getContentAsString());
     }
-    
+
     public void testPutWps() throws Exception {
         assertNull(scriptMgr.findScriptFile("wps/bar.py"));
 
@@ -338,7 +338,7 @@ public class ScriptFinderTest extends ScriptIntTestSupport {
 
         assertNotNull(scriptMgr.findScriptFile("wps/foo/bar.py"));
     }
-    
+
     public void testGetAllWps() throws Exception {
         // Make sure we get an empty response
         JSON json = getAsJSON("/script/scripts/wps.json");
@@ -351,7 +351,7 @@ public class ScriptFinderTest extends ScriptIntTestSupport {
         // Add WPS script with custom namespace
         File subDir = new File(dir, "custom");
         FileUtils.writeStringToFile(new File(subDir, "buffer.py"), "print 'buffer'");
-        
+
         // JSON
         json = getAsJSON("/script/scripts/wps.json");
         JSONArray scripts = ((JSONObject) json).getJSONObject("scripts").getJSONArray("script");
@@ -402,7 +402,7 @@ public class ScriptFinderTest extends ScriptIntTestSupport {
         resp = getAsServletResponse("/script/scripts/wps/foo.py");
         assertEquals(404, resp.getStatus());
     }
-    
+
     public void testDeleteWpsWithNamespace() throws Exception {
         MockHttpServletResponse resp = getAsServletResponse("/script/scripts/wps/bar:foo.py");
         assertEquals(404, resp.getStatus());

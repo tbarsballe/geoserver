@@ -82,7 +82,7 @@ public class GeoServerBasicAuthenticationFilterTest {
         request.setContextPath("/geoserver");
         request.setRemoteAddr("127.0.0.1");
         String token = "admin:" + PASSWORD;
-        request.addHeader("Authorization",  "Basic " + new String(Base64.encodeBase64(token.getBytes())));
+        request.addHeader("Authorization", "Basic " + new String(Base64.encodeBase64(token.getBytes())));
         return request;
     }
 

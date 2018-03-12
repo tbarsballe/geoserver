@@ -41,7 +41,7 @@ public class DbUtils {
                 if (value instanceof Collection) {
                     Collection<?> c = (Collection<?>) value;
                     StringBuilder cv = new StringBuilder();
-                    for (Iterator<?> it = c.iterator(); it.hasNext();) {
+                    for (Iterator<?> it = c.iterator(); it.hasNext(); ) {
                         Object v = it.next();
                         if (v == null) {
                             cv.append("null");

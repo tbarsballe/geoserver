@@ -62,7 +62,7 @@ public class GeofenceServerAdminPage extends GeoServerSecuredPage {
 
             @Override
             protected Component getComponentForProperty(String id, IModel<ShortAdminRule> itemModel,
-                    Property<ShortAdminRule> property) {
+                                                        Property<ShortAdminRule> property) {
                 if (property == GeofenceAdminRulesModel.BUTTONS) {
                     return new ButtonPanel(id, (ShortAdminRule) itemModel.getObject());
                 }

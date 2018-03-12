@@ -32,7 +32,7 @@ public class CapabilitiesAuthorityURLAndIdentifierTest extends WMSTestSupport {
     }
 
     private void addIdentifier(final String authName, final String id,
-            List<LayerIdentifierInfo> target) {
+                               List<LayerIdentifierInfo> target) {
         LayerIdentifierInfo identifier = new LayerIdentifier();
         identifier.setAuthority(authName);
         identifier.setIdentifier(id);
@@ -44,7 +44,7 @@ public class CapabilitiesAuthorityURLAndIdentifierTest extends WMSTestSupport {
         namespaces.put("wms", "http://www.opengis.net/wms");
         namespaces.put("ows", "http://www.opengis.net/ows");
     }
-    
+
     @Test
     public void testRootLayer() throws Exception {
         WMSInfo serviceInfo = getWMS().getServiceInfo();

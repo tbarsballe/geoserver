@@ -26,7 +26,7 @@ public class StoresModel extends LoadableDetachableModel<List<StoreInfo>> {
     public StoresModel(IModel workspaceModel) {
         this.workspace = workspaceModel;
     }
-    
+
     @Override
     protected List<StoreInfo> load() {
         Catalog catalog = GeoServerApplication.get().getCatalog();
@@ -35,7 +35,7 @@ public class StoresModel extends LoadableDetachableModel<List<StoreInfo>> {
         Collections.sort(stores, new StoreNameComparator());
         return stores;
     }
-    
+
     @Override
     public void detach() {
         super.detach();

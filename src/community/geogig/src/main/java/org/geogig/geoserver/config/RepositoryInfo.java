@@ -24,13 +24,13 @@ public class RepositoryInfo implements Serializable, Cloneable {
 
     /**
      * @deprecated field to support deserialization of old format when it only allowed file:
-     *             repositories
+     * repositories
      */
     private String parentDirectory;
 
     /**
      * @deprecated field to support deserialization of old format when it only allowed file:
-     *             repositories
+     * repositories
      */
     private String name;
 
@@ -56,7 +56,8 @@ public class RepositoryInfo implements Serializable, Cloneable {
         this.id = id;
     }
 
-    public @Override RepositoryInfo clone() {
+    public @Override
+    RepositoryInfo clone() {
         try {
             return (RepositoryInfo) super.clone();
         } catch (CloneNotSupportedException e) {

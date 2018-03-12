@@ -18,13 +18,13 @@ import org.geoserver.wms.eo.EoStyles;
 /**
  * A style picker that takes into account which styles make sense for specific types of layers in a
  * EO group
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public abstract class EoStyleListPanel extends StyleListPanel {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = -8296533423160059140L;
 

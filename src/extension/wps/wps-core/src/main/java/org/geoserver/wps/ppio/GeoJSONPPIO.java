@@ -16,9 +16,8 @@ import org.geotools.geojson.geom.GeometryJSON;
 
 /**
  * Inputs and outputs feature collections in GeoJSON format using gt-geojson
- * 
+ *
  * @author Andrea Aime - OpenGeo
- * 
  */
 public abstract class GeoJSONPPIO extends CDataPPIO {
 
@@ -34,7 +33,7 @@ public abstract class GeoJSONPPIO extends CDataPPIO {
 
     @Override
     public abstract Object decode(String input) throws Exception;
-    
+
     @Override
     public final String getFileExtension() {
         return "json";

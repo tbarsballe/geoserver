@@ -81,31 +81,31 @@ public class StyleAdminPanel extends StyleEditTabPanel {
     private static final Logger LOGGER = Logging.getLogger(StyleAdminPanel.class);
 
     protected TextField<String> nameTextField;
-    
+
     protected DropDownChoice<WorkspaceInfo> wsChoice;
-    
+
     protected DropDownChoice<String> formatChoice;
     protected MarkupContainer formatReadOnlyMessage;
-    
+
     protected WebMarkupContainer legendContainer;
     protected ExternalGraphicPanel legendPanel;
     protected Image legendImg;
-    
+
     protected DropDownChoice<StyleType> templates;
     protected AjaxSubmitLink generateLink;
-    
+
     protected DropDownChoice<StyleInfo> styles;
     protected AjaxSubmitLink copyLink;
-    
+
     protected FileUploadField fileUploadField;
     protected AjaxSubmitLink uploadLink;
-    
+
     transient BufferedImage legendImage;
-    
+
     public StyleAdminPanel(String id, AbstractStylePage parent) {
         super(id, parent);
         initUI(parent.getStyleModel());
-        
+
         if (stylePage instanceof StyleEditPage) {
             //global styles only editable by full admin
             if (!stylePage.isAuthenticatedAsAdmin() && parent.getStyleInfo().getWorkspace() == null) {
@@ -121,19 +121,19 @@ public class StyleAdminPanel extends StyleEditTabPanel {
             formatReadOnlyMessage.setVisible(true);
         }
     }
-    
+
     public void initUI(CompoundPropertyModel<StyleInfo> styleModel) {
-        
+
         StyleInfo style = getStylePage().getStyleInfo();
-        
+
         IModel<String> nameBinding = styleModel.bind("name");
-        
+
         add(nameTextField = new TextField<String>("name", nameBinding));
         nameTextField.setRequired(true);
-        
+
         IModel<WorkspaceInfo> wsBinding = styleModel.bind("workspace");
-        wsChoice = 
-            new Select2DropDownChoice<WorkspaceInfo>("workspace", wsBinding, new WorkspacesModel(), new WorkspaceChoiceRenderer());
+        wsChoice =
+                new Select2DropDownChoice<WorkspaceInfo>("workspace", wsBinding, new WorkspacesModel(), new WorkspaceChoiceRenderer());
         wsChoice.setNullValid(true);
         if (!stylePage.isAuthenticatedAsAdmin()) {
             wsChoice.setNullValid(false);
@@ -144,10 +144,12 @@ public class StyleAdminPanel extends StyleEditTabPanel {
         if (StylePage.isDefaultStyle(style)) {
             nameTextField.add(new IValidator<String>() {
                 String originalName = style.getName();
-                @Override public void validate(IValidatable<String> validatable) {
+
+                @Override
+                public void validate(IValidatable<String> validatable) {
                     if (originalName != null && !originalName.equals(validatable.getValue())) {
                         ValidationError error = new ValidationError();
-                        error.setMessage( "Can't change the name of default styles." );
+                        error.setMessage("Can't change the name of default styles.");
                         error.addKey("editDefaultStyleNameDisallowed");
                         validatable.error(error);
                     }
@@ -156,7 +158,7 @@ public class StyleAdminPanel extends StyleEditTabPanel {
             wsChoice.add((IValidator<WorkspaceInfo>) validatable -> {
                 if (validatable.getValue() != null) {
                     ValidationError error = new ValidationError();
-                    error.setMessage( "Can't change the workspace of default styles." );
+                    error.setMessage("Can't change the workspace of default styles.");
                     error.addKey("editDefaultStyleWorkspaceDisallowed");
                     validatable.error(error);
                 }
@@ -164,28 +166,28 @@ public class StyleAdminPanel extends StyleEditTabPanel {
         }
 
         add(wsChoice);
-        
+
         //disable the workspace toggle on edit if not admin (can only be set upon creation)
         if (stylePage instanceof StyleEditPage && !stylePage.isAuthenticatedAsAdmin()) {
             wsChoice.setEnabled(false);
         }
 
         IModel<String> formatBinding = styleModel.bind("format");
-        formatChoice = new Select2DropDownChoice<String>("format", formatBinding, new StyleFormatsModel(), 
+        formatChoice = new Select2DropDownChoice<String>("format", formatBinding, new StyleFormatsModel(),
                 new ChoiceRenderer<String>() {
 
-            private static final long serialVersionUID = 2064887235303504013L;
+                    private static final long serialVersionUID = 2064887235303504013L;
 
-            @Override
-            public String getIdValue(String object, int index) {
-                return object;
-            }
+                    @Override
+                    public String getIdValue(String object, int index) {
+                        return object;
+                    }
 
-            @Override
-            public Object getDisplayValue(String object) {
-                return Styles.handler(object).getName();
-            }
-        });
+                    @Override
+                    public Object getDisplayValue(String object) {
+                        return Styles.handler(object).getName();
+                    }
+                });
         formatChoice.add(new AjaxFormComponentUpdatingBehavior("change") {
 
             private static final long serialVersionUID = -8372146231225388561L;
@@ -193,7 +195,7 @@ public class StyleAdminPanel extends StyleEditTabPanel {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
                 target.appendJavaScript(String.format(
-                    "if (document.gsEditors) { document.gsEditors.editor.setOption('mode', '%s'); }", stylePage.styleHandler().getCodeMirrorEditMode()));
+                        "if (document.gsEditors) { document.gsEditors.editor.setOption('mode', '%s'); }", stylePage.styleHandler().getCodeMirrorEditMode()));
             }
         });
         add(formatChoice);
@@ -213,7 +215,7 @@ public class StyleAdminPanel extends StyleEditTabPanel {
                 Session.get().error(new ParamResourceModel("styleNotFound", this, style.getFilename()).getString());
             }
         }
-        
+
         // style generation functionality
         templates = new Select2DropDownChoice<StyleType>("templates", new Model<StyleType>(), new StyleTypeModel(), new StyleTypeChoiceRenderer());
         templates.setOutputMarkupId(true);
@@ -260,7 +262,7 @@ public class StyleAdminPanel extends StyleEditTabPanel {
         //Explicitly set model so this doesn't use the form model
         fileUploadField.setDefaultModel(new Model<String>(""));
         add(fileUploadField);
-        
+
         add(previewLink());
 
         legendContainer = new WebMarkupContainer("legendContainer");
@@ -281,7 +283,8 @@ public class StyleAdminPanel extends StyleEditTabPanel {
                     }
                 });
                 return rr;
-            }});
+            }
+        });
         legendContainer.add(this.legendImg);
         this.legendImg.setVisible(false);
         this.legendImg.setOutputMarkupId(true);
@@ -289,7 +292,7 @@ public class StyleAdminPanel extends StyleEditTabPanel {
 
     /**
      * Clears validation messages from form input elements.
-     * Called when it is necessary to submit the form without needing to show validation, 
+     * Called when it is necessary to submit the form without needing to show validation,
      * such as when you are generating a new style
      */
     protected void clearFeedbackMessages() {
@@ -298,6 +301,7 @@ public class StyleAdminPanel extends StyleEditTabPanel {
         formatChoice.getFeedbackMessages().clear();
         stylePage.editor.getFeedbackMessages().clear();
     }
+
     protected Component previewLink() {
         return new GeoServerAjaxFormLink("preview", stylePage.styleForm) {
 
@@ -310,9 +314,9 @@ public class StyleAdminPanel extends StyleEditTabPanel {
 
                 clearFeedbackMessages();
                 legendImg.setVisible(false);
-                
+
                 // Generate the legend
-                
+
                 //Try External Legend
                 URLConnection conn = legendPanel.getExternalGraphic(target, form);
                 String onlineResource = legendPanel.getOnlineResource();
@@ -340,7 +344,7 @@ public class StyleAdminPanel extends StyleEditTabPanel {
                     Resource styleResource = null;
                     try {
                         styleResource = dd.style(si);
-                        try(OutputStream os = styleResource.out()) {
+                        try (OutputStream os = styleResource.out()) {
                             IOUtils.write(stylePage.editor.getInput(), os);
                         }
                         // guess the version, the style in the editor might be using one that's different from the
@@ -368,7 +372,7 @@ public class StyleAdminPanel extends StyleEditTabPanel {
                         legendContainer.error("Failed to build legend preview. Check to see if the style is valid.");
                         LOGGER.log(Level.WARNING, "Failed to build legend preview", e);
                     } finally {
-                        if(styleResource != null) {
+                        if (styleResource != null) {
                             styleResource.delete();
                         }
                     }
@@ -383,6 +387,7 @@ public class StyleAdminPanel extends StyleEditTabPanel {
             }
         };
     }
+
     protected AjaxSubmitLink generateLink() {
         return new ConfirmOverwriteSubmitLink("generate") {
 
@@ -405,7 +410,7 @@ public class StyleAdminPanel extends StyleEditTabPanel {
                         stylePage.setRawStyle(new StringReader(styleGen.generateStyle(
                                 stylePage.styleHandler(), template, getStylePage().getStyleInfo().getName())));
                         target.appendJavaScript(String.format(
-                                "if (document.gsEditors) { document.gsEditors.editor.setOption('mode', '%s'); }", 
+                                "if (document.gsEditors) { document.gsEditors.editor.setOption('mode', '%s'); }",
                                 stylePage.styleHandler().getCodeMirrorEditMode()));
                         clearFeedbackMessages();
                     } catch (Exception e) {
@@ -414,12 +419,13 @@ public class StyleAdminPanel extends StyleEditTabPanel {
                         stylePage.error("Errors occurred generating the style");
                         LOGGER.log(Level.WARNING, "Errors occured generating the style", e);
                     }
-                    
+
                     target.add(stylePage);
                 }
             }
         };
     }
+
     protected AjaxSubmitLink copyLink() {
         return new ConfirmOverwriteSubmitLink("copy") {
 
@@ -438,7 +444,7 @@ public class StyleAdminPanel extends StyleEditTabPanel {
                         stylePage.setRawStyle(stylePage.readFile(style));
                         stylePage.getStyleInfo().setFormat(style.getFormat());
                         target.appendJavaScript(String.format(
-                                "if (document.gsEditors) { document.gsEditors.editor.setOption('mode', '%s'); }", 
+                                "if (document.gsEditors) { document.gsEditors.editor.setOption('mode', '%s'); }",
                                 stylePage.styleHandler().getCodeMirrorEditMode()));
                         clearFeedbackMessages();
                     } catch (Exception e) {
@@ -451,6 +457,7 @@ public class StyleAdminPanel extends StyleEditTabPanel {
             }
         };
     }
+
     AjaxSubmitLink uploadLink() {
         return new ConfirmOverwriteSubmitLink("upload", stylePage.styleForm) {
 
@@ -469,7 +476,7 @@ public class StyleAdminPanel extends StyleEditTabPanel {
                     stylePage.editor.reset();
                     stylePage.setRawStyle(new InputStreamReader(new ByteArrayInputStream(bout.toByteArray()), "UTF-8"));
                     target.appendJavaScript(String.format(
-                            "if (document.gsEditors) { document.gsEditors.editor.setOption('mode', '%s'); }", 
+                            "if (document.gsEditors) { document.gsEditors.editor.setOption('mode', '%s'); }",
                             stylePage.styleHandler().getCodeMirrorEditMode()));
                     clearFeedbackMessages();
                 } catch (IOException e) {
@@ -484,7 +491,7 @@ public class StyleAdminPanel extends StyleEditTabPanel {
                 StyleInfo s = getStylePage().getStyleInfo();
                 if (s.getName() == null || "".equals(s.getName().trim())) {
                     // set it
-                    nameTextField.setModelValue(new String[] {ResponseUtils.stripExtension(upload
+                    nameTextField.setModelValue(new String[]{ResponseUtils.stripExtension(upload
                             .getClientFileName())});
                     nameTextField.modelChanged();
                 }
@@ -500,9 +507,11 @@ public class StyleAdminPanel extends StyleEditTabPanel {
         public ConfirmOverwriteSubmitLink(String id) {
             super(id);
         }
+
         public ConfirmOverwriteSubmitLink(String id, Form<?> form) {
             super(id, form);
         }
+
         @Override
         protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
             super.updateAjaxAttributes(attributes);

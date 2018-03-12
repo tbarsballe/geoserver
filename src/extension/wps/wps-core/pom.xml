@@ -5,7 +5,7 @@
  application directory.
  -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
 
@@ -20,7 +20,7 @@
     <packaging>jar</packaging>
     <version>${gs.version}</version>
     <name>Web Processing Service Module</name>
-    
+
     <dependencies>
         <dependency>
             <groupId>org.geoserver</groupId>
@@ -52,7 +52,7 @@
             <artifactId>gt-xsd-wps</artifactId>
             <version>${gt.version}</version>
         </dependency>
-         <dependency>
+        <dependency>
             <groupId>org.geotools.xsd</groupId>
             <artifactId>gt-xsd-sld</artifactId>
             <version>${gt.version}</version>
@@ -76,7 +76,7 @@
             <groupId>org.geotools</groupId>
             <artifactId>gt-process-feature</artifactId>
             <version>${gt.version}</version>
-        </dependency>        
+        </dependency>
         <dependency>
             <groupId>org.geotools</groupId>
             <artifactId>gt-arcgrid</artifactId>
@@ -98,60 +98,60 @@
             <version>${gt.version}</version>
         </dependency>
         <dependency>
-          <groupId>com.google.guava</groupId>
-          <artifactId>guava</artifactId>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
         </dependency>
-        
+
         <!-- test dependencies -->
         <dependency>
-          <groupId>xmlunit</groupId>
-          <artifactId>xmlunit</artifactId>
-          <scope>test</scope>
+            <groupId>xmlunit</groupId>
+            <artifactId>xmlunit</artifactId>
+            <scope>test</scope>
         </dependency>
         <dependency>
-          <groupId>org.easymock</groupId>
-          <artifactId>easymockclassextension</artifactId>
-          <scope>test</scope>
+            <groupId>org.easymock</groupId>
+            <artifactId>easymockclassextension</artifactId>
+            <scope>test</scope>
         </dependency>
         <dependency>
-          <groupId>org.springframework</groupId>
-          <artifactId>spring-test</artifactId>
-          <scope>test</scope>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <scope>test</scope>
         </dependency>
         <dependency>
-          <groupId>org.mockito</groupId>
-          <artifactId>mockito-core</artifactId>
-          <scope>test</scope>
-        </dependency>    
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <scope>test</scope>
+        </dependency>
         <dependency>
-           <groupId>org.geoserver</groupId>
-           <artifactId>gs-main</artifactId>
-           <version>${gs.version}</version>
-           <classifier>tests</classifier>
-           <scope>test</scope>
+            <groupId>org.geoserver</groupId>
+            <artifactId>gs-main</artifactId>
+            <version>${gs.version}</version>
+            <classifier>tests</classifier>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.geoserver</groupId>
             <artifactId>gs-wcs2_0</artifactId>
             <version>${gs.version}</version>
-           <classifier>tests</classifier>
-           <scope>test</scope>
+            <classifier>tests</classifier>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
     <build>
-      <plugins>
-        <plugin>
-          <artifactId>maven-jar-plugin</artifactId>
-          <executions>
-            <execution>
-              <phase>package</phase>
-              <goals>
-                <goal>test-jar</goal>
-              </goals>
-            </execution>
-          </executions>
-        </plugin>
-      </plugins>
+        <plugins>
+            <plugin>
+                <artifactId>maven-jar-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>test-jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
     </build>
 </project>

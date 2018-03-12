@@ -7,7 +7,7 @@ package org.geoserver.test;
 
 /**
  * Mock data for testing App-Schema connection usage.
- * 
+ *
  * @author Stefano Costa, GeoSolutions
  */
 public class ConnectionUsageMockData extends AbstractAppSchemaMockData {

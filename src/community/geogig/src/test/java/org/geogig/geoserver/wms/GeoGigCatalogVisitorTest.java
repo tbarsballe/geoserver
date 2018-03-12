@@ -70,7 +70,7 @@ public class GeoGigCatalogVisitorTest extends CatalogRESTTestSupport {
     }
 
     private List<IndexInfo> waitForIndexes(final IndexDatabase indexDb, final String layerName,
-            final int expectedSize) throws InterruptedException {
+                                           final int expectedSize) throws InterruptedException {
         assertNotNull("Expected a non null Layer Name", layerName);
         List<IndexInfo> indexInfos = indexDb.getIndexInfos(layerName);
         assertNotNull("Expected IndexInfo objects from Index database", indexInfos);

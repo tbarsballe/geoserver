@@ -26,7 +26,7 @@ public class OwsRequestResource extends MonitorRequestController {
         super(monitor);
     }
 
-    @GetMapping(produces = { CSV_MEDIATYPE_VALUE, EXCEL_MEDIATYPE_VALUE, ZIP_MEDIATYPE_VALUE })
+    @GetMapping(produces = {CSV_MEDIATYPE_VALUE, EXCEL_MEDIATYPE_VALUE, ZIP_MEDIATYPE_VALUE})
     @ResponseBody
     protected RestWrapper handleObjectGetRestWrapper(
             @PathVariable(name = "request", required = false) String req,
@@ -42,8 +42,8 @@ public class OwsRequestResource extends MonitorRequestController {
                 fieldsSpec);
     }
 
-    @GetMapping(produces = { MediaType.TEXT_HTML_VALUE, CSV_MEDIATYPE_VALUE, EXCEL_MEDIATYPE_VALUE,
-            ZIP_MEDIATYPE_VALUE })
+    @GetMapping(produces = {MediaType.TEXT_HTML_VALUE, CSV_MEDIATYPE_VALUE, EXCEL_MEDIATYPE_VALUE,
+            ZIP_MEDIATYPE_VALUE})
     @ResponseBody
     protected MonitorQueryResults handleObjectGet(
             @PathVariable(name = "request", required = false) String req,

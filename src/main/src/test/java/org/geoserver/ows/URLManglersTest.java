@@ -20,9 +20,9 @@ import org.junit.experimental.categories.Category;
 
 @Category(SystemTest.class)
 public class URLManglersTest extends GeoServerSystemTestSupport {
-    
+
     private static final String BASEURL = "http://localhost:8080/geoserver";
-    
+
     @Before
     public void setup() {
         GeoServerInfo gi = getGeoServer().getGlobal();
@@ -32,13 +32,13 @@ public class URLManglersTest extends GeoServerSystemTestSupport {
 
     @Test
     public void testBasic() {
-        String url =  buildURL(BASEURL, "test", null, URLType.SERVICE);
+        String url = buildURL(BASEURL, "test", null, URLType.SERVICE);
         assertEquals("http://localhost:8080/geoserver/test", url);
     }
 
     @Test
     public void testKVP() {
-        String url =  buildURL(BASEURL, "test", Collections.singletonMap("param", "value()"), URLType.SERVICE);
+        String url = buildURL(BASEURL, "test", Collections.singletonMap("param", "value()"), URLType.SERVICE);
         assertEquals("http://localhost:8080/geoserver/test?param=value%28%29", url);
     }
 
@@ -47,12 +47,10 @@ public class URLManglersTest extends GeoServerSystemTestSupport {
         GeoServerInfo gi = getGeoServer().getGlobal();
         gi.getSettings().setProxyBaseUrl("http://geoserver.org/");
         getGeoServer().save(gi);
-        
-        String url =  buildURL(BASEURL, "test", null, URLType.SERVICE);
+
+        String url = buildURL(BASEURL, "test", null, URLType.SERVICE);
         assertEquals("http://geoserver.org/test", url);
     }
-    
-    
-    
-    
+
+
 }

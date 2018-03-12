@@ -21,7 +21,7 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
 public class FlushSafeFilterTest {
-    
+
     @Test
     public void testRetrieveSameOutputStream() throws Exception {
         MockHttpServletRequest request = new MockHttpServletRequest();
@@ -38,7 +38,7 @@ public class FlushSafeFilterTest {
                 assertTrue(os1 instanceof FlushSafeResponse.FlushSafeServletOutputStream);
             }
         };
-        
+
         // run the filter
         FlushSafeFilter filter = new FlushSafeFilter();
         filter.init(new MockFilterConfig());
@@ -98,12 +98,12 @@ public class FlushSafeFilterTest {
                 os.flush();
             }
         };
-        
+
         // run the filter
         FlushSafeFilter filter = new FlushSafeFilter();
         filter.init(new MockFilterConfig());
         filter.doFilter(request, response, chain);
-        
+
         // if we got here without exception, it's already a good sign. Let's check the output
         assertEquals("Some random text", response.getContentAsString());
     }

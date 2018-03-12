@@ -18,34 +18,33 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 /**
- *
  * Tests the functionality of the {@link TestWfsPost} servlet on a running geoserver.
- *
+ * <p>
  * This test assumes a running GeoServer on port 8080 with the release data dir.
  *
  * @author Torben Barsballe
- *
  */
 public class TestWfsPostOnlineIntegrationTest {
 
     public static final String WFS_REQUEST =
             "<wfs:GetFeature service=\"WFS\" version=\"1.1.0\"\n" +
-            "  xmlns:ne=\"http://www.naturalearthdata.com\"\n" +
-            "  xmlns:wfs=\"http://www.opengis.net/wfs\"\n" +
-            "  xmlns:ogc=\"http://www.opengis.net/ogc\"\n" +
-            "  xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n" +
-            "  xsi:schemaLocation=\"http://www.opengis.net/wfs\n" +
-            "                      http://schemas.opengis.net/wfs/1.1.0/wfs.xsd\">\n" +
-            "  <wfs:Query typeName=\"states\">\n" +
-            "    <ogc:Filter>\n" +
-            "       <ogc:FeatureId fid=\"states.3\"/>\n" +
-            "    </ogc:Filter>\n" +
-            "    </wfs:Query>\n" +
-            "</wfs:GetFeature>";
+                    "  xmlns:ne=\"http://www.naturalearthdata.com\"\n" +
+                    "  xmlns:wfs=\"http://www.opengis.net/wfs\"\n" +
+                    "  xmlns:ogc=\"http://www.opengis.net/ogc\"\n" +
+                    "  xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n" +
+                    "  xsi:schemaLocation=\"http://www.opengis.net/wfs\n" +
+                    "                      http://schemas.opengis.net/wfs/1.1.0/wfs.xsd\">\n" +
+                    "  <wfs:Query typeName=\"states\">\n" +
+                    "    <ogc:Filter>\n" +
+                    "       <ogc:FeatureId fid=\"states.3\"/>\n" +
+                    "    </ogc:Filter>\n" +
+                    "    </wfs:Query>\n" +
+                    "</wfs:GetFeature>";
 
     protected MockHttpServletResponse doWfsPost() throws ServletException, IOException {
         return doWfsPost(null, null);
     }
+
     protected MockHttpServletResponse doWfsPost(String username, String password) throws ServletException, IOException {
         TestWfsPost servlet = new TestWfsPost();
         MockHttpServletRequest request = TestWfsPostTest.buildMockRequest();
@@ -67,7 +66,7 @@ public class TestWfsPostOnlineIntegrationTest {
     private boolean isOnline() {
         try {
             URL u = new URL("http://localhost:8080/geoserver");
-            HttpURLConnection huc =  (HttpURLConnection)  u.openConnection();
+            HttpURLConnection huc = (HttpURLConnection) u.openConnection();
             huc.setRequestMethod("HEAD");
             huc.connect();
             return huc.getResponseCode() == 200;

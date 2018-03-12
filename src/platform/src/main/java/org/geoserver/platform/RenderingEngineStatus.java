@@ -5,6 +5,7 @@
 package org.geoserver.platform;
 
 import java.util.Optional;
+
 import sun.java2d.pipe.RenderingEngine;
 
 /**

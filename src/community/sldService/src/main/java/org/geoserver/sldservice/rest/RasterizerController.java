@@ -61,11 +61,15 @@ public class RasterizerController extends AbstractCatalogController {
 
     public enum COLORRAMP_TYPE {
         RED, BLUE, GRAY, JET, RANDOM, CUSTOM
-    };
+    }
+
+    ;
 
     public enum COLORMAP_TYPE {
         RAMP, INTERVALS, VALUES
-    };
+    }
+
+    ;
 
     private static final String DEFAULT_MIN = "0.0";
 
@@ -84,18 +88,18 @@ public class RasterizerController extends AbstractCatalogController {
         super(catalog);
     }
 
-    @GetMapping(path = "/{layerName}/rasterize", produces = { MediaType.APPLICATION_JSON_VALUE,
-            MediaType.APPLICATION_XML_VALUE, MediaType.TEXT_HTML_VALUE })
+    @GetMapping(path = "/{layerName}/rasterize", produces = {MediaType.APPLICATION_JSON_VALUE,
+            MediaType.APPLICATION_XML_VALUE, MediaType.TEXT_HTML_VALUE})
     public Object rasterize(@PathVariable String layerName,
-            @RequestParam(value = "min", required = false, defaultValue = DEFAULT_MIN) double min,
-            @RequestParam(value = "max", required = false, defaultValue = DEFAULT_MAX) double max,
-            @RequestParam(value = "classes", required = false, defaultValue = DEFAULT_CLASSES) int classes,
-            @RequestParam(value = "digits", required = false, defaultValue = DEFAULT_DIGITS) int digits,
-            @RequestParam(value = "type", required = false) String type,
-            @RequestParam(value = "startColor", required = false) String startColor,
-            @RequestParam(value = "endColor", required = false) String endColor,
-            @RequestParam(value = "midColor", required = false) String midColor,
-            @RequestParam(value = "ramp", required = false) String ramp) {
+                            @RequestParam(value = "min", required = false, defaultValue = DEFAULT_MIN) double min,
+                            @RequestParam(value = "max", required = false, defaultValue = DEFAULT_MAX) double max,
+                            @RequestParam(value = "classes", required = false, defaultValue = DEFAULT_CLASSES) int classes,
+                            @RequestParam(value = "digits", required = false, defaultValue = DEFAULT_DIGITS) int digits,
+                            @RequestParam(value = "type", required = false) String type,
+                            @RequestParam(value = "startColor", required = false) String startColor,
+                            @RequestParam(value = "endColor", required = false) String endColor,
+                            @RequestParam(value = "midColor", required = false) String midColor,
+                            @RequestParam(value = "ramp", required = false) String ramp) {
 
         if (layerName == null) {
             return wrapList(new ArrayList(), ArrayList.class);
@@ -153,19 +157,17 @@ public class RasterizerController extends AbstractCatalogController {
     }
 
     /**
-     * 
      * @param defaultStyle
      * @param rasterSymbolizer
      * @param layerName
      * @param midColor
      * @param endColor
      * @param startColor
-     *
      * @throws Exception
      */
     private Style remapStyle(StyleInfo defaultStyle, RasterSymbolizer rasterSymbolizer, double min,
-            double max, int classes, COLORRAMP_TYPE ramp, String layerName, final int digits,
-            final int colorMapType, String startColor, String endColor, String midColor)
+                             double max, int classes, COLORRAMP_TYPE ramp, String layerName, final int digits,
+                             final int colorMapType, String startColor, String endColor, String midColor)
             throws Exception {
         StyleBuilder sb = new StyleBuilder();
 
@@ -193,34 +195,34 @@ public class RasterizerController extends AbstractCatalogController {
             }
 
             switch (ramp) {
-            case RED:
-                colorRamp = new RedColorRamp();
-                break;
-            case BLUE:
-                colorRamp = new BlueColorRamp();
-                break;
-            case GRAY:
-                colorRamp = new GrayColorRamp();
-                break;
-            case JET:
-                colorRamp = new JetColorRamp();
-                break;
-            case RANDOM:
-                colorRamp = new RandomColorRamp();
-                break;
-            case CUSTOM:
-                colorRamp = new CustomColorRamp();
-                CustomColorRamp customRamp = (CustomColorRamp) colorRamp;
-                if (startColor != null) {
-                    customRamp.setStartColor(Color.decode(startColor));
-                }
-                if (endColor != null) {
-                    customRamp.setEndColor(Color.decode(endColor));
-                }
-                if (midColor != null) {
-                    customRamp.setMid(Color.decode(midColor));
-                }
-                break;
+                case RED:
+                    colorRamp = new RedColorRamp();
+                    break;
+                case BLUE:
+                    colorRamp = new BlueColorRamp();
+                    break;
+                case GRAY:
+                    colorRamp = new GrayColorRamp();
+                    break;
+                case JET:
+                    colorRamp = new JetColorRamp();
+                    break;
+                case RANDOM:
+                    colorRamp = new RandomColorRamp();
+                    break;
+                case CUSTOM:
+                    colorRamp = new CustomColorRamp();
+                    CustomColorRamp customRamp = (CustomColorRamp) colorRamp;
+                    if (startColor != null) {
+                        customRamp.setStartColor(Color.decode(startColor));
+                    }
+                    if (endColor != null) {
+                        customRamp.setEndColor(Color.decode(endColor));
+                    }
+                    if (midColor != null) {
+                        customRamp.setMid(Color.decode(midColor));
+                    }
+                    break;
             }
             colorRamp.setNumClasses(classes);
 
@@ -243,9 +245,7 @@ public class RasterizerController extends AbstractCatalogController {
     }
 
     /**
-     * 
      * @param defaultStyle
-     *
      */
     private RasterSymbolizer getRasterSymbolizer(StyleInfo sInfo) {
         RasterSymbolizer rasterSymbolizer = null;

@@ -13,9 +13,9 @@ import org.geoserver.taskmanager.util.SqlUtil;
 
 /**
  * Default implementation for the Dialect interface.
- * 
+ * <p>
  * This should work with most databases, but it also limits the functionality of the task manager.
- * 
+ *
  * @author Timothy De Bock
  */
 public class DefaultDialectImpl implements Dialect {

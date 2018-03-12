@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class GeogigXmlMessageConverter extends AbstractDelegatingGeogigMessageConverter {
-    
+
     public GeogigXmlMessageConverter() {
         super(new Jaxb2RootElementHttpMessageConverter());
     }

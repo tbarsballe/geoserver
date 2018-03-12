@@ -13,7 +13,7 @@ import org.geotools.feature.FeatureCollection;
 
 /**
  * The full response to a GetRecords request
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class CSWRecordsResult {
@@ -33,8 +33,8 @@ public class CSWRecordsResult {
     Date timestamp;
 
     public CSWRecordsResult(ElementSetType elementSet, String recordSchema,
-            int numberOfRecordsMatched, int numberOfRecordsReturned, int nextRecord,
-            Date timestamp, FeatureCollection records) {
+                            int numberOfRecordsMatched, int numberOfRecordsReturned, int nextRecord,
+                            Date timestamp, FeatureCollection records) {
         super();
         this.elementSet = elementSet;
         this.recordSchema = recordSchema;

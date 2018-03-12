@@ -20,10 +20,10 @@ import java.io.IOException;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public  class GeoServerJ2eeRoleServiceTest extends AbstractSecurityServiceTest {
-         
+public class GeoServerJ2eeRoleServiceTest extends AbstractSecurityServiceTest {
 
-   @Override 
+
+    @Override
     public GeoServerRoleService createRoleService(String name) throws Exception {
         J2eeRoleServiceConfig config = new J2eeRoleServiceConfig();
         config.setName(name);
@@ -33,7 +33,7 @@ public  class GeoServerJ2eeRoleServiceTest extends AbstractSecurityServiceTest {
         return null;
     }
 
-    
+
     @Override
     protected void onSetUp(SystemTestData testData) throws Exception {
         super.onSetUp(testData);
@@ -43,17 +43,17 @@ public  class GeoServerJ2eeRoleServiceTest extends AbstractSecurityServiceTest {
 
 
     @Test
-    public void testNoRoles() throws Exception{
+    public void testNoRoles() throws Exception {
         copyWebXML("web1.xml");
-        GeoServerRoleService service =  getSecurityManager().loadRoleService("test1");
-        checkEmpty(service);        
+        GeoServerRoleService service = getSecurityManager().loadRoleService("test1");
+        checkEmpty(service);
     }
-    
+
     @Test
-    public void testRoles() throws Exception{
+    public void testRoles() throws Exception {
         copyWebXML("web2.xml");
-        GeoServerRoleService service =  getSecurityManager().loadRoleService("test2");
-        assertEquals(4,service.getRoleCount());
+        GeoServerRoleService service = getSecurityManager().loadRoleService("test2");
+        assertEquals(4, service.getRoleCount());
         assertTrue(service.getRoles().contains(new GeoServerRole("role1")));
         assertTrue(service.getRoles().contains(new GeoServerRole("role2")));
         assertTrue(service.getRoles().contains(new GeoServerRole("employee")));
@@ -62,9 +62,9 @@ public  class GeoServerJ2eeRoleServiceTest extends AbstractSecurityServiceTest {
 
 
     protected void copyWebXML(String name) throws IOException {
-        File dataDir = getDataDirectory().root();        
-        File to = new File(dataDir,"WEB-INF");
-        to = new File(to,"web.xml");
+        File dataDir = getDataDirectory().root();
+        File to = new File(dataDir, "WEB-INF");
+        to = new File(to, "web.xml");
         IOUtils.copy(getClass().getResourceAsStream(name), to);
     }
 }

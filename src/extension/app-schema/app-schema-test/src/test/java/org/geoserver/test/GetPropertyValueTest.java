@@ -11,7 +11,7 @@ import org.w3c.dom.Document;
 
 /**
  * Test GetPropertyValue request, combined with local resolves
- * 
+ *
  * @author Niels Charlier
  */
 public class GetPropertyValueTest extends AbstractAppSchemaTestSupport {

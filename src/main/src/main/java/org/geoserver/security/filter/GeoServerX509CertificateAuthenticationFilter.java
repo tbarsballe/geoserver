@@ -17,14 +17,12 @@ import org.springframework.security.web.authentication.preauth.x509.X509Principa
 
 /**
  * X509 Authentication Filter
- * 
- * @author mcr
  *
+ * @author mcr
  */
 public class GeoServerX509CertificateAuthenticationFilter extends GeoServerJ2eeBaseAuthenticationFilter {
-    
-    private X509PrincipalExtractor principalExtractor;
 
+    private X509PrincipalExtractor principalExtractor;
 
 
     @Override
@@ -35,26 +33,25 @@ public class GeoServerX509CertificateAuthenticationFilter extends GeoServerJ2eeB
 //        X509CertificateAuthenticationFilterConfig authConfig = 
 //                (X509CertificateAuthenticationFilterConfig) config;
         setPrincipalExtractor(new SubjectDnX509PrincipalExtractor());
-        
+
     }
 
     @Override
     protected String getPreAuthenticatedPrincipalName(HttpServletRequest request) {
         X509Certificate[] certs = (X509Certificate[]) request.getAttribute("javax.servlet.request.X509Certificate");
-        if (certs == null || certs.length == 0) 
+        if (certs == null || certs.length == 0)
             return null;
-        
+
         X509Certificate cert = certs[0];
-        String principal= (String) principalExtractor.extractPrincipal(cert);
+        String principal = (String) principalExtractor.extractPrincipal(cert);
 
-        if (principal!=null && principal.trim().length()==0)
-            principal=null;
+        if (principal != null && principal.trim().length() == 0)
+            principal = null;
 
-        return principal;    
+        return principal;
 
-    }     
+    }
 
-        
 
     public X509PrincipalExtractor getPrincipalExtractor() {
         return principalExtractor;
@@ -63,8 +60,6 @@ public class GeoServerX509CertificateAuthenticationFilter extends GeoServerJ2eeB
     public void setPrincipalExtractor(X509PrincipalExtractor principalExtractor) {
         this.principalExtractor = principalExtractor;
     }
-    
-
 
 
 }

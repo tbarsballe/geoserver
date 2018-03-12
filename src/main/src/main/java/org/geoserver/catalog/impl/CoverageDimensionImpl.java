@@ -15,11 +15,11 @@ import org.opengis.coverage.SampleDimensionType;
 public class CoverageDimensionImpl implements CoverageDimensionInfo {
 
     /**
-	 * 
-	 */
-	private static final long serialVersionUID = 2993765933856195894L;
+     *
+     */
+    private static final long serialVersionUID = 2993765933856195894L;
 
-	String id;
+    String id;
 
     String name;
 
@@ -28,18 +28,18 @@ public class CoverageDimensionImpl implements CoverageDimensionInfo {
     NumberRange range;
 
     List<Double> nullValues = new ArrayList<Double>();
-    
+
     String unit;
-    
+
     SampleDimensionType dimensionType;
-    
+
     public CoverageDimensionImpl() {
     }
 
     public CoverageDimensionImpl(String id) {
         this.id = id;
     }
-    
+
     public CoverageDimensionImpl(CoverageDimensionInfo other) {
         this.id = other.getId();
         this.name = other.getName();
@@ -58,7 +58,7 @@ public class CoverageDimensionImpl implements CoverageDimensionInfo {
     public String getId() {
         return id;
     }
-    
+
     public String getName() {
         return name;
     }
@@ -90,7 +90,7 @@ public class CoverageDimensionImpl implements CoverageDimensionInfo {
     public void setNullValues(List<Double> nullValues) {
         this.nullValues = nullValues;
     }
-    
+
     public String getUnit() {
         return unit;
     }
@@ -176,6 +176,6 @@ public class CoverageDimensionImpl implements CoverageDimensionInfo {
             return false;
         return true;
     }
-    
-    
+
+
 }

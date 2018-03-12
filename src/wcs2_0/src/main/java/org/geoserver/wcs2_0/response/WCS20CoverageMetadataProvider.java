@@ -14,12 +14,12 @@ import org.xml.sax.helpers.NamespaceSupport;
 
 /**
  * A provider for wcs:Metadata contents as found in the DescribeCoverage response
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public interface WCS20CoverageMetadataProvider {
 
-    
+
     /**
      * Returns the locations of any references schema for the extended capabilities.
      * <p>
@@ -31,7 +31,7 @@ public interface WCS20CoverageMetadataProvider {
      * bundled within the server the location can be a relative path such as <tt>foo/foo.xsd</tt>. In the latter case the path will be appended to the
      * base url from which the capabilities document is being requested from.
      * </p>
-     * 
+     *
      * @param schemaBaseURL
      */
     String[] getSchemaLocations(String schemaBaseURL);
@@ -43,8 +43,8 @@ public interface WCS20CoverageMetadataProvider {
 
     /**
      * Encodes the extended coverage metadata
-     * 
-     * @param tx the translator used to encode the extended capabilities to
+     *
+     * @param tx      the translator used to encode the extended capabilities to
      * @param context the encoding context, either a {@link GridCoverage2DReader} or a {@link GridCoverage2D} depending on what is available on the caller side
      */
     void encode(Translator tx, Object context) throws IOException;
@@ -56,29 +56,29 @@ public interface WCS20CoverageMetadataProvider {
 
         /**
          * Starts an element creating the opening tag.
-         * 
+         *
          * @param element The name of the element.
          */
         void start(String element);
 
         /**
          * Starts an element with attributes, creating the opening tag.
-         * 
-         * @param element The name of the element.
+         *
+         * @param element    The name of the element.
          * @param attributes The attributes of the element.
          */
         void start(String element, Attributes attributes);
 
         /**
          * Creates a text node within an element.
-         * 
+         *
          * @param text The character text.
          */
         void chars(String text);
 
         /**
          * Ends an element creating a closing tag.
-         * 
+         *
          * @param element
          */
         void end(String element);

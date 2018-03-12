@@ -30,7 +30,7 @@ import org.geoserver.web.wicket.ParamResourceModel;
 public class SelectionUserRemovalLink extends AjaxLink<Object> {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 1L;
 
@@ -42,13 +42,13 @@ public class SelectionUserRemovalLink extends AjaxLink<Object> {
     GeoServerDialog.DialogDelegate delegate;
     String userGroupsServiceName;
 
-    public SelectionUserRemovalLink(String userGroupsServiceName,String id, GeoServerTablePanel<GeoServerUser> users,
-            GeoServerDialog dialog,boolean disassociateRoles) {
+    public SelectionUserRemovalLink(String userGroupsServiceName, String id, GeoServerTablePanel<GeoServerUser> users,
+                                    GeoServerDialog dialog, boolean disassociateRoles) {
         super(id);
         this.users = users;
         this.dialog = dialog;
-        this.disassociateRoles=disassociateRoles;
-        this.userGroupsServiceName=userGroupsServiceName;
+        this.disassociateRoles = disassociateRoles;
+        this.userGroupsServiceName = userGroupsServiceName;
     }
     //return new ConfirmRemovalPanel<GeoserverUserGroup>(id,"username", selection) {                //return new ConfirmRemovalPanel<GeoserverUserGroup>(id,"username", selection) {
 
@@ -63,11 +63,11 @@ public class SelectionUserRemovalLink extends AjaxLink<Object> {
 
         // if there is something to cancel, let's warn the user about what
         // could go wrong, and if the user accepts, let's delete what's needed
-        dialog.showOkCancel(target, delegate=new GeoServerDialog.DialogDelegate() {
+        dialog.showOkCancel(target, delegate = new GeoServerDialog.DialogDelegate() {
             protected Component getContents(String id) {
                 // show a confirmation panel for all the objects we have to remove
                 Model<Boolean> model = new Model<Boolean>(SelectionUserRemovalLink.this.disassociateRoles);
-                return removePanel= new ConfirmRemovalUserPanel(id,model ,selection) {
+                return removePanel = new ConfirmRemovalUserPanel(id, model, selection) {
                     @Override
                     protected IModel<String> canRemove(GeoServerUser user) {
                         return SelectionUserRemovalLink.this.canRemove(user);
@@ -84,37 +84,45 @@ public class SelectionUserRemovalLink extends AjaxLink<Object> {
                     GeoServerUserGroupService ugService = GeoServerApplication.get()
                             .getSecurityManager().loadUserGroupService(userGroupsServiceName);
                     ugStore = new UserGroupStoreValidationWrapper(ugService.createStore());
-                    for (GeoServerUser user : removePanel.getRoots()) {                     
+                    for (GeoServerUser user : removePanel.getRoots()) {
                         ugStore.removeUser(user);
                     }
                     ugStore.store();
                 } catch (IOException ex) {
-                    try {ugStore.load(); } catch (IOException ex2) {};
+                    try {
+                        ugStore.load();
+                    } catch (IOException ex2) {
+                    }
+                    ;
                     throw new RuntimeException(ex);
                 }
-                
+
                 GeoServerRoleStore gaStore = null;
                 if (disassociateRoles) {
                     try {
-                        gaStore = 
+                        gaStore =
                                 GeoServerApplication.get().getSecurityManager()
-                                    .getActiveRoleService().createStore();
-                        gaStore=new RoleStoreValidationWrapper(gaStore);
-    
-                        for (GeoServerUser user : removePanel.getRoots()) {                                                                         
-                                List<GeoServerRole> list= new ArrayList<GeoServerRole>();
-                                list.addAll(gaStore.getRolesForUser(user.getUsername()));
-                                for (GeoServerRole role: list)
-                                    gaStore.disAssociateRoleFromUser(role, user.getUsername());
-                            
+                                        .getActiveRoleService().createStore();
+                        gaStore = new RoleStoreValidationWrapper(gaStore);
+
+                        for (GeoServerUser user : removePanel.getRoots()) {
+                            List<GeoServerRole> list = new ArrayList<GeoServerRole>();
+                            list.addAll(gaStore.getRolesForUser(user.getUsername()));
+                            for (GeoServerRole role : list)
+                                gaStore.disAssociateRoleFromUser(role, user.getUsername());
+
                         }
-                        gaStore.store();        
+                        gaStore.store();
                     } catch (IOException ex) {
-                        try {gaStore.load(); } catch (IOException ex2) {};
+                        try {
+                            gaStore.load();
+                        } catch (IOException ex2) {
+                        }
+                        ;
                         throw new RuntimeException(ex);
                     }
                 }
-                                                
+
                 // the deletion will have changed what we see in the page
                 // so better clear out the selection
                 users.clearSelection();

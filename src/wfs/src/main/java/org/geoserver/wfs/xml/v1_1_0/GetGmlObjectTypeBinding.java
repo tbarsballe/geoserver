@@ -20,9 +20,9 @@ import org.opengis.filter.identity.GmlObjectId;
 
 /**
  * Binding object for the type http://www.opengis.net/wfs:GetGmlObjectType.
- *
  * <p>
- *        <pre>
+ * <p>
+ * <pre>
  *         <code>
  *  &lt;xsd:complexType name="GetGmlObjectType"&gt;
  *      &lt;xsd:annotation&gt;
@@ -76,6 +76,7 @@ import org.opengis.filter.identity.GmlObjectId;
  *
  *          </code>
  *         </pre>
+ *
  * @generated
  */
 public class GetGmlObjectTypeBinding extends AbstractComplexBinding {
@@ -109,29 +110,29 @@ public class GetGmlObjectTypeBinding extends AbstractComplexBinding {
      * @generated modifiable
      */
     public Object parse(ElementInstance instance, Node node, Object value)
-        throws Exception {
-        
+            throws Exception {
+
         GetGmlObjectType getGmlObject = wfsfactory.createGetGmlObjectType();
-        
+
         //&lt;xsd:element ref="ogc:GmlObjectId"/&gt;
         getGmlObject.setGmlObjectId((GmlObjectId) node.getChildValue(GmlObjectId.class));
-        
+
         //&lt;xsd:attribute default="GML3" name="outputFormat"
         //    type="xsd:string" use="optional"/&gt;
-        if ( node.hasAttribute("outputFormat") ) {
-            getGmlObject.setOutputFormat((String)node.getAttributeValue("outputFormat") );
+        if (node.hasAttribute("outputFormat")) {
+            getGmlObject.setOutputFormat((String) node.getAttributeValue("outputFormat"));
         }
 
         //&lt;xsd:attribute name="traverseXlinkDepth" 
         //    type="xsd:string" use="required"&gt;
-        getGmlObject.setTraverseXlinkDepth( (String)node.getAttributeValue("traverseXlinkDepth") );
-        
+        getGmlObject.setTraverseXlinkDepth((String) node.getAttributeValue("traverseXlinkDepth"));
+
         //&lt;xsd:attribute name="traverseXlinkExpiry"
         //    type="xsd:positiveInteger" use="optional"&gt;
-        if ( node.hasAttribute( "traverseXlinkExpiry" ) ) {
-            getGmlObject.setTraverseXlinkExpiry( (BigInteger) node.getAttributeValue("traverseXlinkExpiry"));
+        if (node.hasAttribute("traverseXlinkExpiry")) {
+            getGmlObject.setTraverseXlinkExpiry((BigInteger) node.getAttributeValue("traverseXlinkExpiry"));
         }
-        
+
         return getGmlObject;
     }
 }

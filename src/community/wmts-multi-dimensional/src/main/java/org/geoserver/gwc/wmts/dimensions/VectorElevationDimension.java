@@ -22,5 +22,5 @@ public class VectorElevationDimension extends VectorDimension {
     protected String getDefaultValueFallbackAsString() {
         return "0";
     }
-   
+
 }

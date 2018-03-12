@@ -45,16 +45,15 @@ import com.vividsolutions.jts.geom.Point;
 
 /**
  * Utility to render a point symbol as a stand alone icon.
- * 
+ *
  * @author David Winslow, OpenGeo
  * @author Kevin Smith, OpenGeo
- *
  */
 public final class IconRenderer {
     private final static ReferencedEnvelope sampleArea = new ReferencedEnvelope(-1, 1, -1, 1, null);
     private final static SimpleFeatureCollection sampleData;
     static Logger LOGGER = org.geotools.util.logging.Logging.getLogger("org.geoserver.kml.icons");
-    
+
     static {
         SimpleFeatureTypeBuilder typeBuilder = new SimpleFeatureTypeBuilder();
         typeBuilder.setName("example");
@@ -69,21 +68,20 @@ public final class IconRenderer {
         temp.add(featureBuilder.buildFeature(null));
         sampleData = temp;
     }
-    
+
     /**
      * Render a point icon for the given style. This operation will fail if any
      * style properties in the given style are dynamic. This method is intended
      * to work with styles that have been preprocessed by IconPropertyExtractor
      * and IconPropertyInjector.
-     * 
-     * @param style
      *
+     * @param style
      */
     public static BufferedImage renderIcon(Style style) {
-        int size = findIconSize(style)+2; // size is an int because icons are always square
+        int size = findIconSize(style) + 2; // size is an int because icons are always square
         MapContent mapContent = new MapContent();
         mapContent.addLayer(new FeatureLayer(sampleData, style));
-        BufferedImage image = new BufferedImage(size * Icons.RENDER_SCALE_FACTOR, 
+        BufferedImage image = new BufferedImage(size * Icons.RENDER_SCALE_FACTOR,
                 size * Icons.RENDER_SCALE_FACTOR, BufferedImage.TYPE_INT_ARGB);
         Graphics2D graphics = image.createGraphics();
         graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -104,7 +102,8 @@ public final class IconRenderer {
 
     private static int findIconSize(Style style) {
         int size = 0;
-        if (style.featureTypeStyles().isEmpty()) throw new IllegalArgumentException("Feature type style list was empty");
+        if (style.featureTypeStyles().isEmpty())
+            throw new IllegalArgumentException("Feature type style list was empty");
         for (FeatureTypeStyle ftStyle : style.featureTypeStyles()) {
             if (ftStyle.rules().isEmpty()) throw new IllegalArgumentException("Rule list was empty");
             for (Rule rule : ftStyle.rules()) {
@@ -124,10 +123,10 @@ public final class IconRenderer {
         }
         return size;
     }
-    
+
     private static int getGraphicSize(Graphic g, Double rotation) {
         Double result = Icons.graphicSize(g, rotation, null);
-        if(result==null) {
+        if (result == null) {
             return (int) Icons.DEFAULT_SYMBOL_SIZE;
         } else {
             return (int) Math.ceil(result);

@@ -26,21 +26,21 @@ import org.opengis.feature.type.Name;
  * This is a special binding for wfs 1.1 cite tests. Its is a type defined in
  * the application schema for the test suite.
  * </p>
- * 
  * <p>
- * 
+ * <p>
+ * <p>
  * <pre>
- *	 <code>
+ * 	 <code>
  *  &lt;xsd:complexType name=&quot;FeatureReferenceType&quot;&gt;
  *     &lt;xsd:sequence minOccurs=&quot;0&quot;&gt;
  *       &lt;xsd:element ref=&quot;gml:_Feature&quot; /&gt;
  *     &lt;/xsd:sequence&gt;
  *    &lt;xsd:attributeGroup ref=&quot;gml:AssociationAttributeGroup&quot;/&gt;
  *  &lt;/xsd:complexType&gt;
- * 	
+ *
  * </code>
- *	 </pre>
- * 
+ * 	 </pre>
+ *
  * @generated
  */
 public class FeatureReferenceTypeBinding extends AbstractComplexBinding {
@@ -57,7 +57,7 @@ public class FeatureReferenceTypeBinding extends AbstractComplexBinding {
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
+     *
      * @generated modifiable
      */
     public Class getType() {
@@ -66,7 +66,7 @@ public class FeatureReferenceTypeBinding extends AbstractComplexBinding {
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
+     *
      * @generated modifiable
      */
     public Object parse(ElementInstance instance, Node node, Object value)
@@ -108,11 +108,11 @@ public class FeatureReferenceTypeBinding extends AbstractComplexBinding {
                 List properties = new ArrayList();
 
                 // return a comment which is hte xlink href
-                properties.add(new Object[] { Encoder.COMMENT,
-                        "#" + feature.getID() });
+                properties.add(new Object[]{Encoder.COMMENT,
+                        "#" + feature.getID()});
 
                 // first return the feature
-                properties.add(new Object[] { name, feature });
+                properties.add(new Object[]{name, feature});
 
                 return properties;
             }

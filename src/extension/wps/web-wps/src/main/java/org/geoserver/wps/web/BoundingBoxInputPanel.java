@@ -26,7 +26,7 @@ import org.geotools.geometry.jts.ReferencedEnvelope;
 
 /**
  * Allows the user to edit a bounding box parameter
- * 
+ *
  * @author Andrea Aime - OpenGeo
  */
 @SuppressWarnings("serial")

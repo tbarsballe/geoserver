@@ -66,13 +66,12 @@ public class AuthencationKeyOWSTest extends GeoServerSystemTestSupport {
         }
 
     }
-    
+
     @Override
     protected void onSetUp(SystemTestData testData) throws Exception {
         super.onSetUp(testData);
 
 
-        
         Map<String, String> namespaces = new HashMap<String, String>();
         namespaces.put("wms", "http://www.opengis.net/wms");
         namespaces.put("ows", "http://www.opengis.net/ows");
@@ -89,60 +88,59 @@ public class AuthencationKeyOWSTest extends GeoServerSystemTestSupport {
         WMSInfo wms = gs.getService(WMSInfo.class);
         wms.getSRS().add("EPSG:4326");
         gs.save(wms);
-        
+
         GeoServerUserGroupService service = getSecurityManager().loadUserGroupService("default");
-        GeoServerUserGroupStore store  = service.createStore();
+        GeoServerUserGroupStore store = service.createStore();
         store.load();
-        store.addUser(store.createUserObject("cite","cite",true));
+        store.addUser(store.createUserObject("cite", "cite", true));
         store.store();
 
         GeoServerRoleService rservice = getSecurityManager().loadRoleService("default");
-        GeoServerRoleStore rstore  = rservice.createStore();
+        GeoServerRoleStore rstore = rservice.createStore();
         rstore.load();
-        GeoServerRole no_one=rstore.createRoleObject("NO_ONE");
+        GeoServerRole no_one = rstore.createRoleObject("NO_ONE");
         rstore.addRole(no_one);
-        GeoServerRole rcite=rstore.createRoleObject("cite");
+        GeoServerRole rcite = rstore.createRoleObject("cite");
         rstore.addRole(rcite);
         rstore.associateRoleToUser(rstore.createRoleObject("cite"), "cite");
         rstore.store();
 
-                
-        
+
         String authKeyUrlParam = "authkey";
         String filterName = "testAuthKeyFilter1";
-        
-        AuthenticationKeyFilterConfig config = new AuthenticationKeyFilterConfig();         
-        config.setClassName(GeoServerAuthenticationKeyFilter.class.getName());                
-        config.setName(filterName);        
+
+        AuthenticationKeyFilterConfig config = new AuthenticationKeyFilterConfig();
+        config.setClassName(GeoServerAuthenticationKeyFilter.class.getName());
+        config.setName(filterName);
         config.setUserGroupServiceName("default");
         config.setAuthKeyParamName(authKeyUrlParam);
-        config.setAuthKeyMapperName("propertyMapper");                 
+        config.setAuthKeyMapperName("propertyMapper");
         getSecurityManager().saveFilter(config);
 
         SecurityManagerConfig mconfig = getSecurityManager().getSecurityConfig();
         GeoServerSecurityFilterChain filterChain = mconfig.getFilterChain();
-        VariableFilterChain chain = (VariableFilterChain)filterChain.getRequestChainByName("default");
-        chain.getFilterNames().add(0,filterName);
+        VariableFilterChain chain = (VariableFilterChain) filterChain.getRequestChainByName("default");
+        chain.getFilterNames().add(0, filterName);
         getSecurityManager().saveSecurityConfig(mconfig);
 
-        GeoServerAuthenticationKeyFilter authKeyFilter =  (GeoServerAuthenticationKeyFilter)
+        GeoServerAuthenticationKeyFilter authKeyFilter = (GeoServerAuthenticationKeyFilter)
                 getSecurityManager().loadFilter(filterName);
         PropertyAuthenticationKeyMapper mapper = (PropertyAuthenticationKeyMapper)
                 authKeyFilter.getMapper();
         mapper.synchronize();
-        
-        for (Entry<Object,Object> entry: mapper.authKeyProps.entrySet()) {
-            if ("admin".equals(entry.getValue()))
-                adminKey=(String)entry.getKey();
-            if ("cite".equals(entry.getValue()))
-                citeKey=(String)entry.getKey();
-        }
-        if (adminKey==null)
-            throw new RuntimeException ("Missing admin key");
-        if (citeKey==null)
-            throw new RuntimeException ("Missing cite key");
 
-        
+        for (Entry<Object, Object> entry : mapper.authKeyProps.entrySet()) {
+            if ("admin".equals(entry.getValue()))
+                adminKey = (String) entry.getKey();
+            if ("cite".equals(entry.getValue()))
+                citeKey = (String) entry.getKey();
+        }
+        if (adminKey == null)
+            throw new RuntimeException("Missing admin key");
+        if (citeKey == null)
+            throw new RuntimeException("Missing cite key");
+
+
     }
 
 
@@ -152,10 +150,10 @@ public class AuthencationKeyOWSTest extends GeoServerSystemTestSupport {
      */
     @Override
     protected List<javax.servlet.Filter> getFilters() {
-        
+
         SecurityManagerConfig mconfig = getSecurityManager().getSecurityConfig();
         GeoServerSecurityFilterChain filterChain = mconfig.getFilterChain();
-        VariableFilterChain chain = (VariableFilterChain)filterChain.getRequestChainByName("default");
+        VariableFilterChain chain = (VariableFilterChain) filterChain.getRequestChainByName("default");
         List<Filter> result = new ArrayList<Filter>();
         for (String filterName : chain.getCompiledFilterNames()) {
             try {
@@ -169,7 +167,7 @@ public class AuthencationKeyOWSTest extends GeoServerSystemTestSupport {
 
     @Test
     public void testAnonymousCapabilities() throws Exception {
-                
+
         Document doc = getAsDOM("wms?request=GetCapabilities&version=1.1.0");
         //print(doc);
 
@@ -251,7 +249,7 @@ public class AuthencationKeyOWSTest extends GeoServerSystemTestSupport {
         String url = engine.evaluate("//wfs:FeatureCollection/@xsi:schemaLocation", doc);
         assertTrue(url.contains("&authkey=" + citeKey));
     }
-    
+
     @Test
     public void testCiteGetFeatureCaseInsensitive() throws Exception {
         Document doc = getAsDOM("wfs?service=WFS&version=1.0.0&request=GetFeature&typeName="

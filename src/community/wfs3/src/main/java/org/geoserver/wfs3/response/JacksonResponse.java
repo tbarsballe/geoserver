@@ -78,6 +78,7 @@ public abstract class JacksonResponse extends WFSResponse {
 
     /**
      * Just the name of the file to be returned (no extension)
+     *
      * @return
      */
     protected abstract String getFileName(Object value, Operation operation);

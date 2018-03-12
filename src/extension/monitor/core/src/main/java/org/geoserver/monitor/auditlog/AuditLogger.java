@@ -42,7 +42,7 @@ import freemarker.template.Template;
 /**
  * Writes all requests to a log file. The log file can be configured in the MonitorConfig, as well
  * as a Freemarker template to drive its contents
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class AuditLogger implements RequestDataListener, ApplicationListener<ApplicationEvent> {
@@ -82,7 +82,7 @@ public class AuditLogger implements RequestDataListener, ApplicationListener<App
             // prepare the config
             rollLimit = getProperty("roll_limit", Integer.class, DEFAULT_ROLLING_LIMIT);
             path = System.getProperty("GEOSERVER_AUDIT_PATH");
-            if(path == null || "".equals(path.trim())) {
+            if (path == null || "".equals(path.trim())) {
                 path = config.getProperty(AUDIT, "path", String.class);
             }
             headerTemplate = getProperty("ftl.header", String.class, null);
@@ -91,7 +91,7 @@ public class AuditLogger implements RequestDataListener, ApplicationListener<App
 
             // check the path
             Resource loggingDir = Resources.fromPath(path);
-            
+
             path = config.getProperty(AUDIT, "path", String.class);
 
             // setup the dumper
@@ -151,8 +151,8 @@ public class AuditLogger implements RequestDataListener, ApplicationListener<App
                     // config, invalid templates)
                     if (newLimit != rollLimit || newPath != path
                             || newHeaderTemplate != headerTemplate
-                            || newContentTemplate != contentTemplate 
-                            || newFooterTemplate != footerTemplate 
+                            || newContentTemplate != contentTemplate
+                            || newFooterTemplate != footerTemplate
                             || !dumper.isAlive()) {
                         // config changed, close the current dumper and create a new one
                         closeDumper(dumper);
@@ -203,11 +203,12 @@ public class AuditLogger implements RequestDataListener, ApplicationListener<App
         /**
          * We use a {@link BlockingQueue} to decouple to incoming flux of {@link RequestData} to
          * audit with the thread that writes to disk.
-         * 
          */
         BlockingQueue<RequestData> queue = new ArrayBlockingQueue<RequestData>(10000);
 
-        /** The {@link File} where we audit to. */
+        /**
+         * The {@link File} where we audit to.
+         */
         private File logFile;
 
         private File path;
@@ -228,7 +229,7 @@ public class AuditLogger implements RequestDataListener, ApplicationListener<App
          * enqueded.
          */
         private RequestDumper(final File path, final int lineRollingLimit, String headerTemplate,
-                String contentTemplate, String footerTemplate) {
+                              String contentTemplate, String footerTemplate) {
             super("RequestDumper");
 
             // save path to use
@@ -261,7 +262,7 @@ public class AuditLogger implements RequestDataListener, ApplicationListener<App
 
                     // roll the writer if necessary
                     writer = rollWriter(writer);
-                    
+
                     // get the template
                     Template template = templateConfig.getTemplate(contentTemplate);
 
@@ -298,9 +299,8 @@ public class AuditLogger implements RequestDataListener, ApplicationListener<App
 
         /**
          * Performs log-rolling if necessary
-         * 
-         * @param writer
          *
+         * @param writer
          * @throws IOException
          */
         BufferedWriter rollWriter(BufferedWriter writer) throws Exception {

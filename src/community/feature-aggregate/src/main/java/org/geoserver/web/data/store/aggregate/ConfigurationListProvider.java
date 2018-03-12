@@ -44,8 +44,10 @@ class ConfigurationListProvider extends GeoServerDataProvider<AggregateTypeConfi
                     // read only                    
                 }
             };
-        };
-        
+        }
+
+        ;
+
         @Override
         public String getPropertyValue(AggregateTypeConfiguration item) {
             if (item.getSourceTypes() == null || item.getSourceTypes().size() == 0) {
@@ -61,9 +63,9 @@ class ConfigurationListProvider extends GeoServerDataProvider<AggregateTypeConfi
             }
         }
     };
-    
-    public static Property<AggregateTypeConfiguration> REMOVE = 
-        new PropertyPlaceholder<AggregateTypeConfiguration>( "remove" );
+
+    public static Property<AggregateTypeConfiguration> REMOVE =
+            new PropertyPlaceholder<AggregateTypeConfiguration>("remove");
 
     static List<org.geoserver.web.wicket.GeoServerDataProvider.Property<AggregateTypeConfiguration>> PROPERTIES = Arrays.asList(NAME, SOURCES, REMOVE);
 

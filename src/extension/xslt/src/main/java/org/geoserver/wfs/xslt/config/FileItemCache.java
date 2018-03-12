@@ -14,10 +14,9 @@ import org.geotools.util.SoftValueHashMap;
 /**
  * An abstract cache for resources that need to be loaded from files. Loads the resources
  * autonomously, making sure the returned items are fresh compared to the file system
- * 
- * @author Andrea Aime - GeoSolutions
- * 
+ *
  * @param <T>
+ * @author Andrea Aime - GeoSolutions
  */
 abstract class FileItemCache<T> {
 
@@ -29,7 +28,7 @@ abstract class FileItemCache<T> {
     public FileItemCache(int maxHardReferences) {
         cache = new SoftValueHashMap<String, CacheItem<T>>(maxHardReferences);
     }
-    
+
     /**
      * Clears the cache contents
      */
@@ -47,7 +46,7 @@ abstract class FileItemCache<T> {
 
         // if not, load and cache
         T item = loadItem(file);
-        if(item == null) {
+        if (item == null) {
             return null;
         }
         ci = new CacheItem<T>(item, file);
@@ -55,7 +54,7 @@ abstract class FileItemCache<T> {
 
         return item;
     }
-    
+
     public boolean removeItem(Resource file) {
         String key = getFileKey(file);
         return cache.remove(key) != null;
@@ -65,9 +64,8 @@ abstract class FileItemCache<T> {
      * The key used in the item cache to represent this file. It uses the file name, assuming we are
      * going to cache files originating from the same directory. Subclasses may override to get a
      * different behavior
-     * 
-     * @param file
      *
+     * @param file
      */
     protected String getFileKey(Resource file) {
         return file.name();
@@ -75,15 +73,14 @@ abstract class FileItemCache<T> {
 
     /**
      * Loads an item from the file
-     * 
-     * @param file
      *
+     * @param file
      */
     protected abstract T loadItem(Resource file) throws IOException;
 
     /**
      * Manually updates the contents of the cache
-     * 
+     *
      * @param item
      * @param file
      */
@@ -93,6 +90,5 @@ abstract class FileItemCache<T> {
         cache.put(key, ci);
     }
 
-    
 
 }

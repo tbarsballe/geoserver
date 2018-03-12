@@ -11,7 +11,7 @@ import org.apache.wicket.markup.html.form.ChoiceRenderer;
  * A choice renderer in which each displayed value is also the id
  */
 @SuppressWarnings("serial")
-public class SimpleChoiceRenderer<T> extends ChoiceRenderer<T> { 
+public class SimpleChoiceRenderer<T> extends ChoiceRenderer<T> {
 
     public Object getDisplayValue(T object) {
         return object;

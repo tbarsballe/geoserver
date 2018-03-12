@@ -10,9 +10,8 @@ import bsh.BshScriptEngineFactory;
 
 /**
  * Script plugin for BeanShell.
- * 
- * @author Justin Deoliveira, OpenGeo
  *
+ * @author Justin Deoliveira, OpenGeo
  */
 public class BeanShellPlugin extends ScriptPlugin {
 

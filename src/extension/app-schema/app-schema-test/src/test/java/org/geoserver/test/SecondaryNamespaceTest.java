@@ -11,7 +11,7 @@ import org.w3c.dom.Document;
 
 /**
  * Test encoding of secondary (transitively imported) namespace.
- * 
+ *
  * @author Jacqui Githaiga, Curtin University of Technology
  */
 public class SecondaryNamespaceTest extends AbstractAppSchemaTestSupport {

@@ -15,7 +15,7 @@ import org.geoserver.importer.ImportData;
 
 /**
  * Runs gdal_translate on a input raster file
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class GdalTranslateTransform extends AbstractCommandLineTransform implements RasterTransform {
@@ -23,7 +23,6 @@ public class GdalTranslateTransform extends AbstractCommandLineTransform impleme
 
     /**
      * Checks if gdal_translate is available
-     * 
      *
      * @throws IOException
      */

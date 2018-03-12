@@ -58,7 +58,7 @@ import org.opengis.feature.type.Name;
 /**
  * Small embedded WPS client enabling users to visually build a WPS Execute request (and as a side
  * effect also showing what capabilities and describe process would provide)
- * 
+ *
  * @author Andrea Aime - OpenGeo
  */
 @SuppressWarnings("serial")
@@ -82,9 +82,9 @@ public class WPSRequestBuilderPanel extends Panel {
     private ListView<InputParameterValues> inputView;
 
     private ListView<OutputParameter> outputView;
-    
+
     String username;
-    
+
     String password;
 
     boolean authenticate;
@@ -96,11 +96,11 @@ public class WPSRequestBuilderPanel extends Panel {
      * <li>an empty executeRequest, which displays only the process dropdown
      * <li<an executeRequest with the processName set, which displays the process and parameters
      * </ul>
-     * 
-     * @param id id of the panel
+     *
+     * @param id             id of the panel
      * @param executeRequest execute request, possibly with processName set
      */
-    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @SuppressWarnings({"rawtypes", "unchecked"})
     public WPSRequestBuilderPanel(String id, ExecuteRequest executeRequest) {
         super(id);
         setOutputMarkupId(true);
@@ -120,7 +120,7 @@ public class WPSRequestBuilderPanel extends Panel {
                 "description"));
         descriptionContainer.add(descriptionLabel);
         // description value is set later in initProcessView()
-        
+
         inputContainer = new WebMarkupContainer("inputContainer");
         inputContainer.setVisible(false);
         add(inputContainer);
@@ -146,7 +146,7 @@ public class WPSRequestBuilderPanel extends Panel {
                     EnumPanel panel = new EnumPanel("paramValue", ((Class<Enum>) pv.getParameter().type),
                             property);
                     item.add(panel);
-                } else if(pv.isComplex()) {
+                } else if (pv.isComplex()) {
                     ComplexInputPanel input = new ComplexInputPanel("paramValue", pv, 0);
                     item.add(input);
                 } else {
@@ -231,7 +231,7 @@ public class WPSRequestBuilderPanel extends Panel {
             protected void onUpdate(AjaxRequestTarget target) {
                 initProcessView();
                 target.add(WPSRequestBuilderPanel.this);
-                
+
                 // ensure the parent page feedback panel gets refreshed to clear any existing err msg
                 // check for GeoServerBasePage, because parent page can also be a SubProcessBuilder
                 WebPage page = getWebPage();
@@ -243,33 +243,33 @@ public class WPSRequestBuilderPanel extends Panel {
         // handle process name submitted as request param
         if (execute.processName != null)
             initProcessView();
-        
+
         // username and password for authenticated requests
         final WebMarkupContainer authenticationContainer = new WebMarkupContainer("authenticationContainer");
         authenticationContainer.setOutputMarkupId(true);
         add(authenticationContainer);
-        
+
         final WebMarkupContainer userpwdContainer = new WebMarkupContainer("userpwdContainer");
         userpwdContainer.setOutputMarkupId(true);
         userpwdContainer.setVisible(false);
         authenticationContainer.add(userpwdContainer);
-        
+
         final TextField username = new TextField("username", new PropertyModel(this, "username"));
         userpwdContainer.add(username);
 
         final PasswordTextField password = new PasswordTextField("password", new PropertyModel(this, "password"));
         password.setRequired(false);
         userpwdContainer.add(password);
-        
+
         CheckBox checkbox = new CheckBox("authenticate", new PropertyModel(this, "authenticate"));
         checkbox.add(new AjaxFormComponentUpdatingBehavior("change") {
 
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
                 userpwdContainer.setVisible(authenticate);
-                target.add(authenticationContainer);                
+                target.add(authenticationContainer);
             }
-            
+
         });
         authenticationContainer.add(checkbox);
     }
@@ -344,8 +344,6 @@ public class WPSRequestBuilderPanel extends Panel {
 
     /**
      * Builds a list of process ids
-     * 
-     *
      */
     List<String> buildProcessList() {
         List<String> result = new ArrayList<String>();

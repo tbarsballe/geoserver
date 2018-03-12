@@ -39,7 +39,7 @@ import org.opengis.style.GraphicalSymbol;
 
 /**
  * Extract the portion of the style whose sizes depend on attribute values
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 class DynamicSizeStyleExtractor extends DuplicatingStyleVisitor {
@@ -66,7 +66,7 @@ class DynamicSizeStyleExtractor extends DuplicatingStyleVisitor {
             copy.symbolizers().addAll(nonNullCopies);
         }
     }
-    
+
     @Override
     public void visit(Fill fill) {
         // whatever goes on in a Fill does not affect the search area of fills
@@ -147,13 +147,13 @@ class DynamicSizeStyleExtractor extends DuplicatingStyleVisitor {
             pages.push(null);
         }
     }
-    
+
     @Override
     public void visit(RasterSymbolizer raster) {
         // nothing to do, this style cannot make the buffer grow
         pages.push(null);
     }
-    
+
     @Override
     public void visit(TextSymbolizer text) {
         // nothing to do, this style cannot make the buffer grow
@@ -164,7 +164,7 @@ class DynamicSizeStyleExtractor extends DuplicatingStyleVisitor {
     public void visit(Graphic gr) {
         super.visit(gr);
         Expression sizeExpression = gr.getSize();
-        if(!dynamic) {
+        if (!dynamic) {
             dynamic = !(sizeExpression != null && (sizeExpression instanceof Literal || sizeExpression instanceof NilExpression)) || hasDynamicGraphic(gr);
         }
     }

@@ -29,13 +29,13 @@ import org.geoserver.web.wicket.SRSListTextArea;
 public class WFSLayerConfig extends PublishedConfigurationPanel<LayerInfo> {
 
     private static final long serialVersionUID = 4264296611272179367L;
-    
+
     protected GeoServerDialog dialog;
 
-    public WFSLayerConfig(String id, IModel<LayerInfo> model){
+    public WFSLayerConfig(String id, IModel<LayerInfo> model) {
         super(id, model);
 
-        TextField<Integer> maxFeatures = new TextField<Integer>("perReqFeatureLimit", 
+        TextField<Integer> maxFeatures = new TextField<Integer>("perReqFeatureLimit",
                 new PropertyModel<Integer>(model, "resource.maxFeatures"));
         maxFeatures.add(RangeValidator.minimum(0));
         Border mfb = new FormComponentFeedbackBorder("perReqFeaturesBorder");
@@ -61,7 +61,7 @@ public class WFSLayerConfig extends PublishedConfigurationPanel<LayerInfo> {
         final TextArea<List<String>> srsList = new SRSListTextArea("srs", LiveCollectionModel.list(
                 new PropertyModel<List<String>>(model, "resource.responseSRS")));
         srsList.setOutputMarkupId(true);
-        srsList.setVisible(Boolean.TRUE.equals(overrideServiceSRSModel.getObject())); 
+        srsList.setVisible(Boolean.TRUE.equals(overrideServiceSRSModel.getObject()));
         otherSrsContainer.add(srsList);
         overrideServiceSRS.add(new AjaxFormComponentUpdatingBehavior("change") {
             private static final long serialVersionUID = -6590810763209350915L;
@@ -88,9 +88,9 @@ public class WFSLayerConfig extends PublishedConfigurationPanel<LayerInfo> {
 
             @Override
             public void onClick(AjaxRequestTarget target) {
-                dialog.showInfo(target, 
-                    new StringResourceModel("otherSRS", WFSLayerConfig.this, null), 
-                    new StringResourceModel("otherSRS.message", WFSLayerConfig.this, null));
+                dialog.showInfo(target,
+                        new StringResourceModel("otherSRS", WFSLayerConfig.this, null),
+                        new StringResourceModel("otherSRS.message", WFSLayerConfig.this, null));
             }
         });
 

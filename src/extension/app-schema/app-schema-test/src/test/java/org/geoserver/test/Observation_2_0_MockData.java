@@ -8,7 +8,7 @@ package org.geoserver.test;
 
 /**
  * Mock data for {@link Observation_2_0_WfsTest}.
- * 
+ *
  * @author Rini Angreani (CSIRO Earth Science and Resource Engineering)
  */
 public class Observation_2_0_MockData extends AbstractAppSchemaMockData {
@@ -22,7 +22,7 @@ public class Observation_2_0_MockData extends AbstractAppSchemaMockData {
      * URI for om namespace.
      */
     protected static final String OM_URI = "http://www.opengis.net/om/2.0";
-    
+
     public Observation_2_0_MockData() {
         super(GML32_NAMESPACES);
         // add SchemaCatalog so validateGet() would work with unpublished schemas

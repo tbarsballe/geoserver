@@ -9,7 +9,9 @@ import java.io.Serializable;
 
 public abstract class KombuSource implements Serializable {
 
-    /** serialVersionUID */
+    /**
+     * serialVersionUID
+     */
     private static final long serialVersionUID = -8997506545819486027L;
 
     private String id;

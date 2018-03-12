@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+
 import org.geotools.feature.FeatureCollection;
 import org.geotools.feature.FeatureIterator;
 import org.geotools.feature.collection.DelegateFeatureIterator;
@@ -20,16 +21,15 @@ import org.opengis.feature.type.FeatureType;
 /**
  * A derivation of GeoTools {@link org.geotools.feature.collection.AbstractFeatureCollection} that
  * works on top of complex features
- * 
+ *
  * @author Jody Garnett (Refractions Research Inc)
  * @author Andrea Aime - GeoSolutions
- * 
  * @source $URL$
  */
 public abstract class AbstractFeatureCollection<T extends FeatureType, F extends Feature> implements
         FeatureCollection<T, F> {
-	    
-	    
+
+
     /**
      * id used when serialized to gml
      */
@@ -55,7 +55,7 @@ public abstract class AbstractFeatureCollection<T extends FeatureType, F extends
     /**
      * Clean up after any resources associated with this iteartor in a manner similar to JDO
      * collections. </p> Example (safe) use:
-     * 
+     * <p>
      * <pre>
      * <code>
      * Iterator iterator = collection.iterator();
@@ -70,9 +70,9 @@ public abstract class AbstractFeatureCollection<T extends FeatureType, F extends
      * }
      * </code>
      * </pre>
-     * 
+     * <p>
      * </p>
-     * 
+     *
      * @param close iterator to close
      */
     @SuppressWarnings("unchecked")
@@ -100,7 +100,7 @@ public abstract class AbstractFeatureCollection<T extends FeatureType, F extends
      * Please subclass to provide your own iterator for the the ResourceCollection, note
      * <code>iterator()</code> is implemented to call <code>open()</code> and track the results in
      * for later <code>purge()</code>.
-     * 
+     *
      * @return Iterator based on resource use
      */
     abstract protected Iterator<F> openIterator();
@@ -113,7 +113,7 @@ public abstract class AbstractFeatureCollection<T extends FeatureType, F extends
      * <p>
      * Subclass must call super.close( close ) to allow the list of open iterators to be adjusted.
      * </p>
-     * 
+     *
      * @param close Iterator, will not be <code>null</code>
      */
     abstract protected void closeIterator(Iterator<F> close);
@@ -127,17 +127,17 @@ public abstract class AbstractFeatureCollection<T extends FeatureType, F extends
      * </p>
      * <p>
      * Example of using a normal Collections utility method:
-     * 
+     * <p>
      * <pre>
      * <code>
      * Collections.sort( collection );
-     * collection.purge(); 
+     * collection.purge();
      * </code>
      * </pre>
      */
     @SuppressWarnings("unchecked")
     public void purge() {
-        for (Iterator i = open.iterator(); i.hasNext();) {
+        for (Iterator i = open.iterator(); i.hasNext(); ) {
             Object resource = i.next();
             if (resource instanceof Iterator) {
                 Iterator resourceIterator = (Iterator) resource;
@@ -154,9 +154,9 @@ public abstract class AbstractFeatureCollection<T extends FeatureType, F extends
 
     /**
      * Removes all of the elements from this collection (optional operation).
-     * 
+     *
      * @throws UnsupportedOperationException if the <tt>clear</tt> method is not supported by this
-     *         collection.
+     *                                       collection.
      */
     public void clear() {
         Iterator<F> e = iterator();
@@ -173,10 +173,10 @@ public abstract class AbstractFeatureCollection<T extends FeatureType, F extends
     /**
      * Returns <tt>true</tt> if this collection contains the specified element. <tt></tt>.
      * <p>
-     * 
+     * <p>
      * This implementation iterates over the elements in the collection, checking each element in
      * turn for equality with the specified element.
-     * 
+     *
      * @param o object to be checked for containment in this collection.
      * @return <tt>true</tt> if this collection contains the specified element.
      */
@@ -203,12 +203,11 @@ public abstract class AbstractFeatureCollection<T extends FeatureType, F extends
      * Returns <tt>true</tt> if this collection contains all of the elements in the specified
      * collection.
      * <p>
-     * 
+     *
      * @param c collection to be checked for containment in this collection.
      * @return <tt>true</tt> if this collection contains all of the elements in the specified
-     *         collection.
+     * collection.
      * @throws NullPointerException if the specified collection is null.
-     * 
      * @see #contains(Object)
      */
     public boolean containsAll(Collection<?> c) {
@@ -227,7 +226,9 @@ public abstract class AbstractFeatureCollection<T extends FeatureType, F extends
     // Contents
     //
     //
-    /** Set of open resource iterators */
+    /**
+     * Set of open resource iterators
+     */
     @SuppressWarnings("unchecked")
     protected final Set open = new HashSet<Iterator<F>>();
 
@@ -246,7 +247,6 @@ public abstract class AbstractFeatureCollection<T extends FeatureType, F extends
      * <p>
      * Note: If you return a ResourceIterator, the default implemntation of close( Iterator ) will
      * know what to do.
-     * 
      */
     @SuppressWarnings("unchecked")
     final public Iterator<F> iterator() {
@@ -269,7 +269,7 @@ public abstract class AbstractFeatureCollection<T extends FeatureType, F extends
 
     /**
      * Array of all the elements.
-     * 
+     *
      * @return an array containing all of the elements in this collection.
      */
     public Object[] toArray() {
@@ -306,7 +306,7 @@ public abstract class AbstractFeatureCollection<T extends FeatureType, F extends
     }
 
     public void accepts(org.opengis.feature.FeatureVisitor visitor,
-            org.opengis.util.ProgressListener progress) {
+                        org.opengis.util.ProgressListener progress) {
         Iterator<F> iterator = null;
         if (progress == null)
             progress = new NullProgressListener();
@@ -314,7 +314,7 @@ public abstract class AbstractFeatureCollection<T extends FeatureType, F extends
             float size = size();
             float position = 0;
             progress.started();
-            for (iterator = iterator(); !progress.isCanceled() && iterator.hasNext();) {
+            for (iterator = iterator(); !progress.isCanceled() && iterator.hasNext(); ) {
                 if (size > 0)
                     progress.progress(position++ / size);
                 try {

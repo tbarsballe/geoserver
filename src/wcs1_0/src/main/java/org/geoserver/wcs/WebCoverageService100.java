@@ -19,18 +19,17 @@ import org.opengis.coverage.grid.GridCoverage;
  * Each of the methods on this class corresponds to an operation as defined by the Web Coverage
  * Specification. See {@link "http://www.opengeospatial.org/standards/wcs"} for more details.
  * </p>
- * 
+ *
  * @author Andrea Aime, TOPP
  * @author Alessio Fabiani, GeoSolutions
- * 
  */
 public interface WebCoverageService100 {
-    
+
     /**
      * WCS service info.
      */
     WCSInfo getServiceInfo();
-    
+
     /**
      * GetCapabilities operation.
      */

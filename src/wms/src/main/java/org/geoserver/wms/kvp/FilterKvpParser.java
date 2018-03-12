@@ -42,10 +42,10 @@ import org.xml.sax.helpers.ParserAdapter;
  * This parser makes a best effort to parse the provided filter by trying with the
  * parsers for the different supported OGC filter spec versions.
  * </p>
- * 
- * @authod Justin Deoliveira
+ *
  * @author Gabriel Roldan
  * @version $Id$
+ * @authod Justin Deoliveira
  * @since 1.7.x
  */
 public class FilterKvpParser extends KvpParser {
@@ -58,7 +58,7 @@ public class FilterKvpParser extends KvpParser {
     }
 
     /**
-     * @return a {@code List<Filter>} with the parsed filters from the 
+     * @return a {@code List<Filter>} with the parsed filters from the
      * {@code FILTER=} request parameter
      */
     @SuppressWarnings("unchecked")
@@ -71,13 +71,13 @@ public class FilterKvpParser extends KvpParser {
 
         while (i.hasNext()) {
             String string = (String) i.next();
-            if("".equals(string.trim())){
+            if ("".equals(string.trim())) {
                 filters.add(Filter.INCLUDE);
-            }else{
+            } else {
                 Filter filter;
                 final byte[] rawContent = string.getBytes();
                 InputStream input = new ByteArrayInputStream(rawContent);
-    
+
                 try {
                     //create the parser
                     Configuration configuration = new OGCConfiguration();
@@ -86,23 +86,23 @@ public class FilterKvpParser extends KvpParser {
                     filter = (Filter) parser_1_0_0.parse(input);
                 } catch (Exception e) {
                     //parsing failed, try with a Filter 1.1.0 parser
-                    try{
+                    try {
                         input = new ByteArrayInputStream(rawContent);
                         Configuration configuration = new org.geotools.filter.v1_1.OGCConfiguration();
                         Parser parser_1_1_0 = new Parser(configuration);
                         parser_1_1_0.setEntityResolver(resolverProvider.getEntityResolver());
                         filter = (Filter) parser_1_1_0.parse(input);
-                        
+
                         filters.add(filter);
                     } catch (Exception e2) {
                         //parsing failed, fall back to old parser
                         String msg = "Unable to parse filter: " + string;
                         LOGGER.log(Level.WARNING, msg, e);
-        
+
                         filter = parseXMLFilterWithOldParser(new StringReader(string));
                     }
                 }
-                
+
                 if (filter == null) {
                     throw new NullPointerException();
                 }
@@ -123,13 +123,11 @@ public class FilterKvpParser extends KvpParser {
      * </p>
      *
      * @param rawRequest The plain POST text from the client.
-     *
      * @return The geotools filter constructed from rawRequest.
-     *
      * @throws WfsException For any problems reading the request.
      */
     protected Filter parseXMLFilterWithOldParser(Reader rawRequest)
-        throws ServiceException {
+            throws ServiceException {
         // translate string into a proper SAX input source
         InputSource requestSource = new InputSource(rawRequest);
 
@@ -152,13 +150,13 @@ public class FilterKvpParser extends KvpParser {
             LOGGER.fine("just parsed: " + requestSource);
         } catch (SAXException e) {
             throw new ServiceException(e, "XML getFeature request SAX parsing error",
-                XmlRequestReader.class.getName());
+                    XmlRequestReader.class.getName());
         } catch (IOException e) {
             throw new ServiceException(e, "XML get feature request input error",
-                XmlRequestReader.class.getName());
+                    XmlRequestReader.class.getName());
         } catch (ParserConfigurationException e) {
             throw new ServiceException(e, "Some sort of issue creating parser",
-                XmlRequestReader.class.getName());
+                    XmlRequestReader.class.getName());
         }
 
         LOGGER.fine("passing filter: " + contentHandler.getFilter());

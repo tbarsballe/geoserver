@@ -12,7 +12,7 @@ import org.geotools.filter.function.EnvFunction;
 
 /**
  * WMS GetLegendGraphic operation default implementation.
- * 
+ *
  * @author Gabriel Roldan
  */
 public class GetLegendGraphic {
@@ -31,7 +31,7 @@ public class GetLegendGraphic {
      * for the whole OWS operation to succeed is that there exist a {@link Response} object (in the
      * application context) that can handle the returned object.
      * </p>
-     * 
+     *
      * @param request
      * @return an Object representing the produced legend graphic
      * @throws ServiceException

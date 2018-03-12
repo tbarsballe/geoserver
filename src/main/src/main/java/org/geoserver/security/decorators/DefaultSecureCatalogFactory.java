@@ -15,9 +15,8 @@ import org.geoserver.security.WrapperPolicy;
 
 /**
  * Creates security wrappers for the most common catalog objects
- * 
+ *
  * @author Andrea Aime - TOPP
- * 
  */
 public class DefaultSecureCatalogFactory implements SecuredObjectFactory {
 

@@ -53,7 +53,7 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
  */
 @RestController
 @ControllerAdvice
-@RequestMapping(path = {RestBaseController.ROOT_PATH+"/layers", RestBaseController.ROOT_PATH+"/workspaces/{workspaceName}/layers"})
+@RequestMapping(path = {RestBaseController.ROOT_PATH + "/layers", RestBaseController.ROOT_PATH + "/workspaces/{workspaceName}/layers"})
 public class LayerController extends AbstractCatalogController {
     private static final Logger LOGGER = Logging.getLogger(LayerController.class);
 
@@ -64,13 +64,13 @@ public class LayerController extends AbstractCatalogController {
 
     /**
      * All layers as JSON, XML or HTML.
-     * 
+     *
      * @return All layers
      */
     @GetMapping(produces = {
             MediaType.APPLICATION_JSON_VALUE,
             MediaType.APPLICATION_XML_VALUE,
-            MediaType.TEXT_HTML_VALUE })
+            MediaType.TEXT_HTML_VALUE})
     public RestWrapper<LayerInfo> layersGet(@PathVariable(required = false) String workspaceName) {
 
         List<LayerInfo> layers;
@@ -87,14 +87,14 @@ public class LayerController extends AbstractCatalogController {
 
     /**
      * A single layer as JSON, XML or HTML.
-     * 
+     *
      * @param layerName
      * @return A single layer
      */
     @GetMapping(path = "/{layerName}", produces = {
             MediaType.APPLICATION_JSON_VALUE,
             MediaType.APPLICATION_XML_VALUE,
-            MediaType.TEXT_HTML_VALUE })
+            MediaType.TEXT_HTML_VALUE})
     public RestWrapper<LayerInfo> layerGet(@PathVariable String layerName,
                                            @PathVariable(required = false) String workspaceName) {
 
@@ -103,7 +103,7 @@ public class LayerController extends AbstractCatalogController {
         }
         LayerInfo layer = catalog.getLayerByName(layerName);
         if (layer == null) {
-            throw new ResourceNotFoundException("No such layer: "+layerName);
+            throw new ResourceNotFoundException("No such layer: " + layerName);
         }
         return wrapObject(layer, LayerInfo.class);
     }
@@ -117,21 +117,20 @@ public class LayerController extends AbstractCatalogController {
         if (workspaceName != null) {
             layerName = workspaceName + ":" + layerName;
         }
-        
+
         LayerInfo layer = catalog.getLayerByName(layerName);
-        if(layer == null) {
+        if (layer == null) {
             throw new ResourceNotFoundException(layerName);
         }
         if (!recurse) {
             catalog.remove(layer);
-            LOGGER.info( "DELETE layer '" + layerName+"'");
-        }
-        else {
+            LOGGER.info("DELETE layer '" + layerName + "'");
+        } else {
             new CascadeDeleteVisitor(catalog).visit(layer);
-            LOGGER.info( "DELETE layer '" + layerName + "' recurse=true");
+            LOGGER.info("DELETE layer '" + layerName + "' recurse=true");
         }
     }
-    
+
     @PutMapping(value = "/{layerName}")
     public void layerPut(@RequestBody LayerInfo layer,
                          @PathVariable String layerName,
@@ -142,28 +141,28 @@ public class LayerController extends AbstractCatalogController {
         }
 
         LayerInfo original = catalog.getLayerByName(layerName);
-        
+
         // ensure this is not a name change
         // TODO: Uncomment this when the resource/layer split is not, now by definition 
         // we cannot rename a layer, it's just not possible and it's not un-marshalled either
 //        if ( layer.getName() != null && !layer.getName().equals( original.getName() ) ) {
 //            throw new RestletException( "Can't change name of a layer", Status.CLIENT_ERROR_FORBIDDEN );
 //        }
-        
+
         // force in the same resource otherwise the update will simply fail as we cannot reach the name
         layer.setResource(original.getResource());
-        
-        CatalogBuilder session = new CatalogBuilder( catalog );
-        session.updateLayer( original, layer );
-        catalog.save( original );
-        
-        LOGGER.info( "PUT layer " + layerName);
+
+        CatalogBuilder session = new CatalogBuilder(catalog);
+        session.updateLayer(original, layer);
+        catalog.save(original);
+
+        LOGGER.info("PUT layer " + layerName);
     }
-    
+
     public boolean supports(MethodParameter methodParameter, Type targetType, Class<? extends HttpMessageConverter<?>> converterType) {
         return LayerInfo.class.isAssignableFrom(methodParameter.getParameterType());
     }
-    
+
     //
     // Configuration and Settings
     //
@@ -190,7 +189,7 @@ public class LayerController extends AbstractCatalogController {
 
             @Override
             protected void postEncodeReference(Object obj, String ref, String prefix,
-                    HierarchicalStreamWriter writer, MarshallingContext context) {
+                                               HierarchicalStreamWriter writer, MarshallingContext context) {
                 if (obj instanceof StyleInfo) {
                     StyleInfo style = (StyleInfo) obj;
                     StringBuilder link = new StringBuilder();

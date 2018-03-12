@@ -11,9 +11,9 @@ import org.geotools.data.complex.AppSchemaDataAccess;
 
 /**
  * Mock data for testing integration of {@link AppSchemaDataAccess} with GeoServer.
- * 
+ * <p>
  * Inspired by {@link MockData}.
- * 
+ *
  * @author Ben Caradoc-Davies, CSIRO Exploration and Mining
  */
 public class FeatureChainingMockData extends AbstractAppSchemaMockData {
@@ -42,7 +42,7 @@ public class FeatureChainingMockData extends AbstractAppSchemaMockData {
      * Schema URL for observation and measurements
      */
     protected static final String OM_SCHEMA_LOCATION_URL = "http://schemas.opengis.net/om/1.0.0/observation.xsd";
-    
+
     /**
      * @see org.geoserver.test.AbstractAppSchemaMockData#addContent()
      */
@@ -57,9 +57,9 @@ public class FeatureChainingMockData extends AbstractAppSchemaMockData {
                 "CompositionPart.properties", "ControlledConcept.xml",
                 "ControlledConcept.properties");
         // this is a mock type to test encoding complex type with simple content
-        addFeatureType(EX_PREFIX, "FirstParentFeature", "FirstParentFeature.xml", 
+        addFeatureType(EX_PREFIX, "FirstParentFeature", "FirstParentFeature.xml",
                 "ControlledConcept.properties", "simpleContent.xsd", "SimpleContent.properties");
-        addFeatureType(EX_PREFIX, "SecondParentFeature", "SecondParentFeature.xml", 
+        addFeatureType(EX_PREFIX, "SecondParentFeature", "SecondParentFeature.xml",
                 "ControlledConcept.properties", "simpleContent.xsd", "SimpleContent.properties");
         // used for testing the nesting of features mapped to complex types that doesn't respect the GML object-property model
         addFeatureType(EX_PREFIX, "ParentFeature", "NonValidNestedGML.xml",

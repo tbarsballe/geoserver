@@ -20,10 +20,9 @@ import org.geoserver.template.GeoServerTemplateLoader;
 /**
  * On a {@link CatalogFireWriter} firePostWrite event call, dumps additional
  * resources related to the {@link ResourceInfo}, like for instance the "ftl"
- * Freemarker Templates definitions. 
- * 
- * @author Alessio Fabiani, GeoSolutions
+ * Freemarker Templates definitions.
  *
+ * @author Alessio Fabiani, GeoSolutions
  */
 public class ResourceInfoAdditionalResourceWriter
         implements CatalogAdditionalResourcesWriter<ResourceInfo> {
@@ -49,7 +48,7 @@ public class ResourceInfoAdditionalResourceWriter
         templates.add("time.ftl");
 
         templates.add("shapezip.ftl");
-        
+
         templates.add("schema.xsd"); // http://docs.geoserver.org/latest/en/user/services/wfs/schemamapping.html
     }
 

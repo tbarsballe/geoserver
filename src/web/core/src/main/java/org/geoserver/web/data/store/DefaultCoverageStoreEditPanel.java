@@ -15,7 +15,7 @@ import org.geoserver.web.wicket.FileExistsValidator;
 
 /**
  * Provides the URL form component to edit a {@link CoverageStoreInfo}
- * 
+ *
  * @author Gabriel Roldan
  * @see AbstractCoverageStorePage
  */

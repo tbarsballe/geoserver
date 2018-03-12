@@ -38,6 +38,7 @@ import org.geoserver.wms.map.RenderedImageMapResponse;
  * The Frame Visitor contains the logic to produce frame images.<br/>
  * The "visit" method initializes the runnables and the animatorExecutor service, while
  * the "produce" method runs the tasks and generated the frames images.
+ *
  * @author Alessio Fabiani, GeoSolutions S.A.S., alessio.fabiani@geo-solutions.it
  * @author Andrea Aime, GeoSolutions S.A.S., andrea.aime@geo-solutions.it
  */
@@ -54,7 +55,8 @@ public class FrameCatalogVisitor {
     List<Future<RenderedImage>> tasks;
 
     /**
-     * Adds a new visitor to the runnables list and initializes the animatorExecutor service is not yet initialied. 
+     * Adds a new visitor to the runnables list and initializes the animatorExecutor service is not yet initialied.
+     *
      * @param request
      * @param wms
      * @param wmsConfiguration
@@ -67,8 +69,8 @@ public class FrameCatalogVisitor {
         }
 
         FrameLoader loader = new FrameLoader(request, wms, wmsConfiguration, aparam, avalue);
-        
-        
+
+
         final FutureTask<RenderedImage> task = new FutureTask<RenderedImage>(loader);
         this.tasks.add(task);
         this.framesNumber++;
@@ -79,8 +81,8 @@ public class FrameCatalogVisitor {
 
     /**
      * Invokes the Executor service and produces the frames images.
-     * @param wmsConfiguration
      *
+     * @param wmsConfiguration
      * @throws IOException
      */
     public RenderedImageList produce(WMS wmsConfiguration) throws IOException {
@@ -141,7 +143,7 @@ public class FrameCatalogVisitor {
 
         if (this.tasks != null)
             this.tasks.clear();
-        
+
         this.tasks = null;
     }
 
@@ -149,9 +151,8 @@ public class FrameCatalogVisitor {
 
 /**
  * FrameLoader Callable task.
- * 
+ *
  * @author Alessio
- * 
  */
 class FrameLoader implements Callable<RenderedImage> {
 
@@ -163,7 +164,7 @@ class FrameLoader implements Callable<RenderedImage> {
     private GetMapRequest request;
 
     private WebMapService wms;
-    
+
     private WMS wmsConfiguration;
 
     private String aparam;
@@ -172,7 +173,7 @@ class FrameLoader implements Callable<RenderedImage> {
 
     /**
      * Default constructor.
-     * 
+     *
      * @param request
      * @param wms
      * @param wmsConfiguration
@@ -193,27 +194,27 @@ class FrameLoader implements Callable<RenderedImage> {
 
         // Making a shallow copy of the original request and replacing param's values
         GetMapRequest frameRequest = replaceRequestParams(this.request, this.aparam, this.avalue);
-        
+
         // set rest of the wms defaults
         frameRequest = DefaultWebMapService.autoSetMissingProperties(frameRequest);
 
         // Setup Frame OUTputFormat
         String outFormat = frameRequest.getFormat();
-        
+
         // the capabilities of this produce are actually linked to the map response that is going to
         // be used, this class just generates a rendered image
         final Collection<RenderedImageMapResponse> responses = this.wmsConfiguration.getAvailableMapResponses();
-        for(RenderedImageMapResponse response: responses){
+        for (RenderedImageMapResponse response : responses) {
             if (response.getOutputFormats().contains(outFormat)) {
-                MapProducerCapabilities cap=response.getCapabilities(outFormat);
-                if(cap!=null && cap.getFramesMimeType()!=null) {
+                MapProducerCapabilities cap = response.getCapabilities(outFormat);
+                if (cap != null && cap.getFramesMimeType() != null) {
                     frameRequest.setFormat(cap.getFramesMimeType());
                 } else {
                     frameRequest.setFormat(GIF_FORMAT);
                 }
             }
         }
-        
+
         wmsResponse = this.wms.getMap(frameRequest);
 
         return ((RenderedImageMap) wmsResponse).getImage();
@@ -221,15 +222,14 @@ class FrameLoader implements Callable<RenderedImage> {
 
     /**
      * Replacing WMS Request parameter's value
-     * 
+     *
      * @param theRequest
      * @param param
      * @param value
-     *
-     * @throws Exception 
+     * @throws Exception
      */
     private static GetMapRequest replaceRequestParams(GetMapRequest theRequest, String param,
-            String value) throws Exception {
+                                                      String value) throws Exception {
         // look for the GetMapRequest reader
         GetMapKvpRequestReader kvpRequestReader = (GetMapKvpRequestReader) Dispatcher.findKvpRequestReader(GetMapRequest.class);
         // clone the original request object using the reflection
@@ -269,31 +269,31 @@ class FrameLoader implements Callable<RenderedImage> {
             // insert the frame one
             rawKvp.put(param, value);
         }
-        
+
         // setting up the right RAW-KVP map for the single frame request
         request.setRawKvp(rawKvp);
-        
+
         // building the request KVP map using the reflection
         HashMap<String, String> kvp = new HashMap<String, String>(rawKvp);
         KvpUtils.parse(kvp);
-        
+
         // finally building the request
         request = kvpRequestReader.read(new GetMapRequest(), kvp, rawKvp);
 
         // add the param value for text decorations to use
         request.getEnv().put("avalue", value);
-        
+
         return request;
     }
 
     private static String mergeParams(List<String> kvps) {
         StringBuilder sb = new StringBuilder();
-        
+
         for (String k : kvps) {
             sb.append(k).append(";");
         }
         sb.deleteCharAt(sb.lastIndexOf(";"));
         return sb.toString();
     }
-    
+
 }

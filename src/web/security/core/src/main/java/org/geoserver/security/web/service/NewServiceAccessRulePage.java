@@ -22,8 +22,8 @@ public class NewServiceAccessRulePage extends AbstractServiceAccessRulePage {
 
     public NewServiceAccessRulePage() {
         super(new ServiceAccessRule());
-        
-        ((Form)get("form")).add(new DuplicateRuleValidator());
+
+        ((Form) get("form")).add(new DuplicateRuleValidator());
     }
 
     @Override
@@ -43,10 +43,10 @@ public class NewServiceAccessRulePage extends AbstractServiceAccessRulePage {
      * Checks the same rule has not been entered before
      */
     class DuplicateRuleValidator extends AbstractFormValidator {
-    
+
         public void validate(Form<?> form) {
             // only validate on final submit
-            if (form.findSubmittingButton() != form.get("save")) { 
+            if (form.findSubmittingButton() != form.get("save")) {
                 return;
             }
 
@@ -59,7 +59,7 @@ public class NewServiceAccessRulePage extends AbstractServiceAccessRulePage {
         }
 
         public FormComponent<?>[] getDependentFormComponents() {
-            return new FormComponent[] { serviceChoice, methodChoice, rolesFormComponent };
+            return new FormComponent[]{serviceChoice, methodChoice, rolesFormComponent};
         }
     }
 

@@ -33,18 +33,18 @@ import java.time.format.TextStyle;
 public class FrequencyPanel extends Panel implements IFormModelUpdateListener {
 
     private static final long serialVersionUID = -1661388086707143932L;
-    
+
     private static final Pattern TIME_PATTERN = Pattern.compile("^(\\d\\d?):(\\d\\d?)$");
-    
+
     protected enum Type {
         NEVER, DAILY, WEEKLY, MONTHLY, CUSTOM
     }
-    
+
     protected IModel<Type> typeModel = new Model<Type>();
     private IModel<Integer> dayOfMonthModel = new Model<Integer>();
     private IModel<DayOfWeek> dayOfWeekModel = new Model<DayOfWeek>();
     private IModel<String> timeModel = new Model<String>();
-     
+
     public FrequencyPanel(String id, IModel<String> model) {
         super(id, model);
 
@@ -55,7 +55,7 @@ public class FrequencyPanel extends Panel implements IFormModelUpdateListener {
             typeModel.setObject(Type.NEVER);
         } else {
             typeModel.setObject(Type.CUSTOM);
-            
+
             Matcher matcher = FrequencyUtil.DAILY_PATTERN.matcher(model.getObject());
             if (matcher.matches()) {
                 int minutes = Integer.parseInt(matcher.group(1));
@@ -97,9 +97,9 @@ public class FrequencyPanel extends Panel implements IFormModelUpdateListener {
     public void onInitialize() {
         super.onInitialize();
         add(new DropDownChoice<Type>("type", typeModel, Arrays.asList(Type.values()), new EnumChoiceRenderer<Type>(this))
-            .add(new AjaxFormSubmitBehavior("change") {                    
+                .add(new AjaxFormSubmitBehavior("change") {
                     private static final long serialVersionUID = -7698014209707408962L;
-        
+
                     @Override
                     protected void onSubmit(AjaxRequestTarget target) {
                         updateVisibility();
@@ -107,7 +107,7 @@ public class FrequencyPanel extends Panel implements IFormModelUpdateListener {
                     }
 
                 }));
-        
+
         add(new WebMarkupContainer("dayOfWeekLabel"));
         add(new DropDownChoice<DayOfWeek>("dayOfWeek", dayOfWeekModel, Arrays.asList(DayOfWeek.values()),
                 new EnumChoiceRenderer<DayOfWeek>() {
@@ -117,11 +117,11 @@ public class FrequencyPanel extends Panel implements IFormModelUpdateListener {
                     public Object getDisplayValue(DayOfWeek object) {
                         return object.getDisplayName(TextStyle.FULL, getLocale());
                     }
-            
+
                 }));
         add(new WebMarkupContainer("dayOfMonthLabel"));
-        add(new DropDownChoice<Integer>("dayOfMonth", dayOfMonthModel, 
-                Arrays.asList(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28)));
+        add(new DropDownChoice<Integer>("dayOfMonth", dayOfMonthModel,
+                Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28)));
         add(new WebMarkupContainer("timeLabel"));
         add(new TextField<String>("time", timeModel)
                 .add(new IValidator<String>() {
@@ -131,14 +131,14 @@ public class FrequencyPanel extends Panel implements IFormModelUpdateListener {
                     public void validate(IValidatable<String> validatable) {
                         if (findParent(Form.class).findSubmittingButton() != null) {
                             Matcher matcher = TIME_PATTERN.matcher(validatable.getValue());
-    
+
                             if (!(matcher.matches() && Integer.parseInt(matcher.group(1)) < 24
                                     && Integer.parseInt(matcher.group(2)) < 60)) {
                                 error(new ParamResourceModel("timeFormatError", FrequencyPanel.this).getString());
                             }
                         }
                     }
-                    
+
                 }));
         add(new TextField<String>("custom", (IModel<String>) getDefaultModel())
                 .add(new IValidator<String>() {
@@ -154,12 +154,12 @@ public class FrequencyPanel extends Panel implements IFormModelUpdateListener {
                             }
                         }
                     }
-                    
+
                 }));
-        
+
         setOutputMarkupId(true);
         updateVisibility();
-        
+
     }
 
     private void updateVisibility() {
@@ -175,12 +175,12 @@ public class FrequencyPanel extends Panel implements IFormModelUpdateListener {
         get("timeLabel").setVisible(timeVisible);
         get("custom").setVisible(typeModel.getObject().equals(Type.CUSTOM));
     }
-    
+
     @SuppressWarnings("unchecked")
     @Override
     public void updateModel() {
         if (findParent(Form.class).findSubmittingButton() != null
-                && typeModel.getObject() != Type.CUSTOM 
+                && typeModel.getObject() != Type.CUSTOM
                 && timeModel.getObject() != null) {
             if (typeModel.getObject() == Type.NEVER) {
                 ((IModel<String>) getDefaultModel()).setObject(null);
@@ -189,11 +189,11 @@ public class FrequencyPanel extends Panel implements IFormModelUpdateListener {
                 if (matcher.matches()) {
                     String hour = matcher.group(1);
                     String minute = matcher.group(2);
-                    
+
                     if (typeModel.getObject() == Type.DAILY) {
                         ((IModel<String>) getDefaultModel()).setObject("0 " + minute + " " + hour + " * * ?");
                     } else if (typeModel.getObject() == Type.WEEKLY) {
-                        ((IModel<String>) getDefaultModel()).setObject("0 " + minute + " " + hour + " ? * " + 
+                        ((IModel<String>) getDefaultModel()).setObject("0 " + minute + " " + hour + " ? * " +
                                 dayOfWeekModel.getObject().getDisplayName(TextStyle.SHORT, Locale.ENGLISH));
                     } else if (typeModel.getObject() == Type.MONTHLY) {
                         ((IModel<String>) getDefaultModel()).setObject("0 " + minute + " " + hour + " " +

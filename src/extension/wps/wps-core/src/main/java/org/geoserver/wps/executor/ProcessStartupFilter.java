@@ -21,16 +21,15 @@ import org.opengis.util.ProgressListener;
 /**
  * A process filter making sure the {@link ProgressListener#started()} method is called upon execution
  * no matter if the process has inputs or not
- * 
- * @author Andrea Aime - GeoSolutions
  *
+ * @author Andrea Aime - GeoSolutions
  */
 public class ProcessStartupFilter implements ProcessFilter, ExtensionPriority {
 
     public class ProcessStartupWrapper implements Process {
-        
+
         Process delegate;
-        
+
         public ProcessStartupWrapper(Process delegate) {
             super();
             this.delegate = delegate;
@@ -39,7 +38,7 @@ public class ProcessStartupFilter implements ProcessFilter, ExtensionPriority {
         @Override
         public Map<String, Object> execute(Map<String, Object> input, ProgressListener monitor)
                 throws ProcessException {
-            if(monitor != null) {
+            if (monitor != null) {
                 monitor.started();
                 monitor = new DelegateProgressListener(monitor) {
                     @Override
@@ -65,7 +64,7 @@ public class ProcessStartupFilter implements ProcessFilter, ExtensionPriority {
         public ProcessStartupFactory(ProcessFactory delegate) {
             super(delegate);
         }
-        
+
         @Override
         public Process create(Name name) {
             Process process = delegate.create(name);

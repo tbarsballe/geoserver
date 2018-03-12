@@ -15,12 +15,11 @@ import org.vfny.geoserver.wcs.WcsException;
 
 /**
  * Parsing a BBOX for WCS.
- * 
+ * <p>
  * <p>
  * Notice that we make sure tht the BBOX is 2D since we support elevation only as a band of the range!
- * 
- * @author Simone Giannecchini, GeoSolutions SAS
  *
+ * @author Simone Giannecchini, GeoSolutions SAS
  */
 public class BBoxKvpParser extends Wcs10KvpParser {
     public BBoxKvpParser() {
@@ -28,7 +27,7 @@ public class BBoxKvpParser extends Wcs10KvpParser {
     }
 
     @SuppressWarnings("unchecked")
-	public GeneralEnvelope parse(String value) throws Exception {
+    public GeneralEnvelope parse(String value) throws Exception {
         List unparsed = KvpUtils.readFlat(value, KvpUtils.INNER_DELIMETER);
         final int size = unparsed.size();
         // check to make sure that the bounding box has 4 coordinates
@@ -67,16 +66,16 @@ public class BBoxKvpParser extends Wcs10KvpParser {
             throw new WcsException("illegal bbox, minY: " + miny + " is "
                     + "greater than maxY: " + maxy, InvalidParameterValue, "bbox");
         }
-        
+
 //        if (size== 6 &&minz > maxz) {
 //            throw new ServiceException("illegal bbox, minz: " + minz + " is "
 //                    + "greater than maxz: " + maxz);
 //        }        
 
         // build the final envelope with no CRS
-        final GeneralEnvelope envelope= new GeneralEnvelope(size/2);
+        final GeneralEnvelope envelope = new GeneralEnvelope(size / 2);
 //        if(size==4)
-        	envelope.setEnvelope(minx,miny,maxx,maxy);
+        envelope.setEnvelope(minx, miny, maxx, maxy);
 //        else
 //        	envelope.setEnvelope(minx,miny,minz,maxx,maxy,maxz);
         return envelope;

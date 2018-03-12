@@ -16,12 +16,12 @@ import org.geoserver.ows.KvpParser;
  * Allowable values are "hits", and "results", which get parsed into
  * the following respectivley.
  * <ul>
- *         <li>{@link net.opengis.wfs.ResultTypeType#HITS_LITERAL}
- *  <li>{@link net.opengis.wfs.ResultTypeType#RESULTS_LITERAL}
+ * <li>{@link net.opengis.wfs.ResultTypeType#HITS_LITERAL}
+ * <li>{@link net.opengis.wfs.ResultTypeType#RESULTS_LITERAL}
  * </ul>
  * </p>
- * @author Justin Deoliveira, The Open Planning Project
  *
+ * @author Justin Deoliveira, The Open Planning Project
  */
 public class ResultTypeKvpParser extends KvpParser {
     public ResultTypeKvpParser() {

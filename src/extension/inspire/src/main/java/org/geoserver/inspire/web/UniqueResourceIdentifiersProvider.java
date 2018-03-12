@@ -30,7 +30,7 @@ public class UniqueResourceIdentifiersProvider extends
                 new BeanProperty<UniqueResourceIdentifier>("namespace", "namespace"),
                 new BeanProperty<UniqueResourceIdentifier>("metadataURL", "metadataURL"),
                 new PropertyPlaceholder<UniqueResourceIdentifier>("remove")
-                );
+        );
     }
 
     @Override

@@ -12,7 +12,7 @@ import org.geoserver.security.validation.SecurityConfigValidator;
 
 /**
  * Base provider class for filters
- * 
+ *
  * @author mcr
  */
 public class AbstractFilterProvider extends GeoServerSecurityProvider {

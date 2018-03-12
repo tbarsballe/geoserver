@@ -29,7 +29,7 @@ import org.w3c.dom.Document;
 
 /**
  * Test whether nested Id's can be used in a filter.
- * 
+ *
  * @author Niels Charlier, Curtin University Of Technology *
  */
 
@@ -74,7 +74,7 @@ public class NestedIdSupportTest extends AbstractAppSchemaTestSupport {
 
     /**
      * Test Nested Id with InlineMapping
-     * */
+     */
     @Test
     public void testNestedIdInlineMapping() {
         String xml = "<wfs:GetFeature " //
@@ -125,7 +125,7 @@ public class NestedIdSupportTest extends AbstractAppSchemaTestSupport {
          */
         PropertyIsEqualTo nestedIdFilter = ff
                 .equals(ff
-                        .property("gsml:specification/gsml:GeologicUnit/gsml:composition/gsml:CompositionPart/gsml:lithology/gsml:ControlledConcept/@gml:id"),
+                                .property("gsml:specification/gsml:GeologicUnit/gsml:composition/gsml:CompositionPart/gsml:lithology/gsml:ControlledConcept/@gml:id"),
                         ff.literal("cc.1"));
 
         // Filter involves a single nested attribute --> can be encoded

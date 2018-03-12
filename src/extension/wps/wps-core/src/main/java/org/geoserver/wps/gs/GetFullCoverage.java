@@ -25,7 +25,7 @@ import org.opengis.parameter.ParameterValueGroup;
 
 /**
  * A process that returns a coverage fully (something which is un-necessarily hard in WCS)
- * 
+ *
  * @author Daniele Romagnoli, GeoSolutions SAS
  * @author Andrea Aime, GeoSolutions SAS
  */

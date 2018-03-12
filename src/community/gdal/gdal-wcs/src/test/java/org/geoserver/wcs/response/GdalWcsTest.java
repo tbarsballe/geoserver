@@ -20,11 +20,11 @@ import org.w3c.dom.Document;
 import org.springframework.mock.web.MockHttpServletResponse;
 
 public class GdalWcsTest extends WCSKVPTestSupport {
-    
+
     private static final QName GRAYALPHA = new QName(MockData.SF_URI, "grayAlpha", MockData.SF_PREFIX);
     private static final QName PALETTED = new QName(MockData.SF_URI, "paletted", MockData.SF_PREFIX);
 
-    
+
     @Override
     protected void onSetUp(SystemTestData testData) throws Exception {
         super.onSetUp(testData);
@@ -80,7 +80,7 @@ public class GdalWcsTest extends WCSKVPTestSupport {
 
         assertEquals("application/pdf", response.getContentType());
     }
-    
+
     @Test
     public void testGrayAlphaGetCoveragePdf() throws Exception {
         MockHttpServletResponse response = getAsServletResponse("wcs?request=GetCoverage&service=WCS&version=2.0.1"
@@ -88,7 +88,7 @@ public class GdalWcsTest extends WCSKVPTestSupport {
 
         assertEquals("application/pdf", response.getContentType());
     }
-    
+
     @Test
     public void testPalettedGetCoveragePdf() throws Exception {
         MockHttpServletResponse response = getAsServletResponse("wcs?request=GetCoverage&service=WCS&version=2.0.1"

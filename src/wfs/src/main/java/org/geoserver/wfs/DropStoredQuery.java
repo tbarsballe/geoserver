@@ -14,28 +14,31 @@ import org.geoserver.platform.ServiceException;
  * Web Feature Service DropStoredQuery operation.
  *
  * @author Justin Deoliveira, OpenGeo
- *
  * @version $Id$
  */
 public class DropStoredQuery {
 
-    /** service config */
+    /**
+     * service config
+     */
     WFSInfo wfs;
-    
-    /** stored query provider */
+
+    /**
+     * stored query provider
+     */
     StoredQueryProvider storedQueryProvider;
-    
+
     public DropStoredQuery(WFSInfo wfs, StoredQueryProvider storedQueryProvider) {
         this.wfs = wfs;
         this.storedQueryProvider = storedQueryProvider;
     }
-    
+
     public ExecutionStatusType run(DropStoredQueryType request) throws WFSException {
-        
+
         if (request.getId() == null) {
             throw new WFSException(request, "No stored query id specified");
         }
-        
+
         StoredQuery query = storedQueryProvider.getStoredQuery(request.getId());
         if (query != null) {
             storedQueryProvider.removeStoredQuery(query);
@@ -47,7 +50,7 @@ public class DropStoredQuery {
             exception.setLocator("id");
             throw exception;
         }
-        
+
         Wfs20Factory factory = Wfs20Factory.eINSTANCE;
         ExecutionStatusType response = factory.createExecutionStatusType();
         response.setStatus("OK");

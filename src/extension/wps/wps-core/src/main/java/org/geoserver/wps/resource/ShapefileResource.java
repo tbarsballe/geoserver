@@ -14,9 +14,8 @@ import org.geotools.data.shapefile.ShapefileDataStore;
 
 /**
  * Tracks and cleans up a shapefile store contained in its own private directory
- * 
+ *
  * @author Andrea Aime - OpenGeo
- * 
  */
 public class ShapefileResource implements WPSResource {
     Resource directory;
@@ -26,7 +25,7 @@ public class ShapefileResource implements WPSResource {
     String name;
 
     public ShapefileResource(ShapefileDataStore store, File directory) throws IOException {
-        this(store, Files.asResource(directory));   
+        this(store, Files.asResource(directory));
     }
 
     public ShapefileResource(ShapefileDataStore store, Resource directory) throws IOException {

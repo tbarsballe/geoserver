@@ -42,7 +42,6 @@ public class SLDNamedLayerRenameHelper {
     }
 
     /**
-     *
      * @param catalog
      * @param skipErrors Skip styles that throw an exception when visited
      */
@@ -58,7 +57,7 @@ public class SLDNamedLayerRenameHelper {
      *
      * @param catalog
      * @param updatedInfo The {@link StyleInfo}, {@link LayerInfo}, or {@link LayerGroupInfo} that has been renamed
-     * @param doRename should the styles which have been found be renamed
+     * @param doRename    should the styles which have been found be renamed
      * @return List of styles to be renamed / which have been renamed
      * @throws IOException, UnsupportedOperationException
      */
@@ -112,7 +111,7 @@ public class SLDNamedLayerRenameHelper {
      * @return List of styles to be renamed / which have been renamed
      * @throws IOException, UnsupportedOperationException
      */
-    public List<StyleInfo> visitStyles(boolean doRename) throws IOException{
+    public List<StyleInfo> visitStyles(boolean doRename) throws IOException {
         List<StyleInfo> stylesToUpdate = new ArrayList<>();
         for (StyleInfo style : catalog.getStyles()) {
             SLDNamedLayerRenameVisitor visitor = new SLDNamedLayerRenameVisitor(catalog, doRename);
@@ -128,7 +127,7 @@ public class SLDNamedLayerRenameHelper {
                 }
             } catch (IOException | ServiceException e) {
                 if (skipErrors) {
-                    LOGGER.log(Level.INFO, "Skipping style '"+style.getName()+"'.", e);
+                    LOGGER.log(Level.INFO, "Skipping style '" + style.getName() + "'.", e);
                 } else {
                     throw e;
                 }
@@ -145,7 +144,7 @@ public class SLDNamedLayerRenameHelper {
 
         // find a unique name for the style
         String name = findUniqueStyleName(s.getWorkspace() == null ? null : s.getWorkspace().getName(),
-                s.getName()+"_BACKUP");
+                s.getName() + "_BACKUP");
         backup.setName(name);
 
         // update it's file name

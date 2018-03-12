@@ -15,7 +15,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class WriterHelperTest {
-    
+
     private ByteArrayOutputStream bos;
     private WriterHelper helper;
 
@@ -25,21 +25,21 @@ public class WriterHelperTest {
         Writer writer = new OutputStreamWriter(bos);
         helper = new WriterHelper(writer);
     }
-    
+
     @Test
     public void testNoEscape() throws Exception {
         helper.textTag("title", "$%()");
         String result = bos.toString();
         assertEquals("<title>$%()</title>\n", result);
     }
-    
+
     @Test
     public void testEscapePlain() throws Exception {
         helper.textTag("title", "Test < > & ' \"");
         String result = bos.toString();
         assertEquals("<title>Test &lt; &gt; &amp; &apos; &quot;</title>\n", result);
     }
-    
+
     @Test
     public void testEscapeNewlines() throws Exception {
         helper.textTag("title", "<\n>\n");

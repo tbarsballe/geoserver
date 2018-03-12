@@ -30,7 +30,7 @@ import com.vividsolutions.jts.io.WKTWriter;
 
 /**
  * Oracle data setup for app-schema-test with online mode.
- * 
+ *
  * @author Rini Angreani (CSIRO Earth Science and Resource Engineering)
  */
 @SuppressWarnings("deprecation")
@@ -40,48 +40,47 @@ public class AppSchemaTestOracleSetup extends ReferenceDataOracleSetup {
      * Mapping file database parameters
      */
     public static String DB_PARAMS = "<parameters>" //
-        + "\n<Parameter>\n" //
-        + "<name>dbtype</name>\n" //
-        + "<value>Oracle</value>" //
-        + "\n</Parameter>" //
-        + "\n<Parameter>\n" //
-        + "<name>host</name>\n" //
-        + "<value>${host}</value>" //
-        + "\n</Parameter>" //
-        + "\n<Parameter>\n" //
-        + "<name>port</name>\n" //
-        + "<value>${port}</value>" //
-        + "\n</Parameter>" //
-        + "\n<Parameter>\n" //
-        + "<name>database</name>\n" //
-        + "<value>${database}</value>" //
-        + "\n</Parameter>" //
-        + "\n<Parameter>\n" //
-        + "<name>user</name>\n" //
-        + "<value>${user}</value>" //
-        + "\n</Parameter>" //
-        + "\n<Parameter>\n" //
-        + "<name>passwd</name>\n" //
-        + "<value>${passwd}</value>" //
-        + "\n</Parameter>" //
-        + "\n<Parameter>\n"
-        + "<name>Expose primary keys</name>"
-        + "<value>true</value>"
-        + "\n</Parameter>" //
-        + "\n</parameters>"; //
-    
+            + "\n<Parameter>\n" //
+            + "<name>dbtype</name>\n" //
+            + "<value>Oracle</value>" //
+            + "\n</Parameter>" //
+            + "\n<Parameter>\n" //
+            + "<name>host</name>\n" //
+            + "<value>${host}</value>" //
+            + "\n</Parameter>" //
+            + "\n<Parameter>\n" //
+            + "<name>port</name>\n" //
+            + "<value>${port}</value>" //
+            + "\n</Parameter>" //
+            + "\n<Parameter>\n" //
+            + "<name>database</name>\n" //
+            + "<value>${database}</value>" //
+            + "\n</Parameter>" //
+            + "\n<Parameter>\n" //
+            + "<name>user</name>\n" //
+            + "<value>${user}</value>" //
+            + "\n</Parameter>" //
+            + "\n<Parameter>\n" //
+            + "<name>passwd</name>\n" //
+            + "<value>${passwd}</value>" //
+            + "\n</Parameter>" //
+            + "\n<Parameter>\n"
+            + "<name>Expose primary keys</name>"
+            + "<value>true</value>"
+            + "\n</Parameter>" //
+            + "\n</parameters>"; //
+
     /**
      * Default WKT parser for non 3D tests.
      */
     private static String DEFAULT_PARSER = "SDO_GEOMETRY";
 
     private String sql;
-    
+
     /**
      * Factory method with no 3D support.
-     * 
-     * @param propertyFiles
-     *            Property file name and its parent directory map
+     *
+     * @param propertyFiles Property file name and its parent directory map
      * @return This class instance.
      */
     public static AppSchemaTestOracleSetup getInstance(Map<String, File> propertyFiles)
@@ -91,7 +90,7 @@ public class AppSchemaTestOracleSetup extends ReferenceDataOracleSetup {
 
     /**
      * Factory method with 3D enabled.
-     * 
+     *
      * @param propertyFiles Property file name and its parent directory map
      * @return This class instance.
      */
@@ -103,9 +102,9 @@ public class AppSchemaTestOracleSetup extends ReferenceDataOracleSetup {
     /**
      * Ensure the app-schema properties file is loaded with the database parameters. Also create corresponding tables on the database based on data
      * from properties files.
-     * 
+     *
      * @param propertyFiles Property file name and its feature type directory map
-     * @param is3D True if this is a 3D test and needs a particular WKT parser
+     * @param is3D          True if this is a 3D test and needs a particular WKT parser
      */
     public AppSchemaTestOracleSetup(Map<String, File> propertyFiles, boolean is3D) throws Exception {
         configureFixture();
@@ -127,18 +126,16 @@ public class AppSchemaTestOracleSetup extends ReferenceDataOracleSetup {
 
     /**
      * Write SQL string to create tables in the test database based on the property files.
-     * 
-     * @param propertyFiles
-     *            Property files from app-schema-test suite.
-     * @param parser
-     *            The parser (WKT or an SC4O one for 3D tests)
+     *
+     * @param propertyFiles Property files from app-schema-test suite.
+     * @param parser        The parser (WKT or an SC4O one for 3D tests)
      * @throws IllegalAttributeException
      * @throws NoSuchElementException
      * @throws IOException
      */
-	private void createTables(Map<String, File> propertyFiles, String parser)
+    private void createTables(Map<String, File> propertyFiles, String parser)
             throws IllegalAttributeException, NoSuchElementException, IOException {
-    	
+
         StringBuffer buf = new StringBuffer();
         StringBuffer spatialIndex = new StringBuffer();
         // drop table procedure I copied from Victor's Oracle_Data_ref_set.sql
@@ -150,19 +147,19 @@ public class AppSchemaTestOracleSetup extends ReferenceDataOracleSetup {
                 .append("BEGIN select count(*) into temp from user_tables where TABLE_NAME = tes;")
                 .append("if temp = 1 then drp_stmt := 'Drop Table '||tes;")
                 .append("EXECUTE IMMEDIATE drp_stmt;")
-                 // drop views too
-                .append("else select count(*) into temp from user_views where VIEW_NAME = tes;") 
+                // drop views too
+                .append("else select count(*) into temp from user_views where VIEW_NAME = tes;")
                 .append("if temp = 1 then drp_stmt := 'Drop VIEW '||tes;")
-                .append("EXECUTE IMMEDIATE drp_stmt;end if;end if;")    
+                .append("EXECUTE IMMEDIATE drp_stmt;end if;end if;")
                 .append("EXCEPTION WHEN OTHERS THEN ")
                 .append(
                         "raise_application_error(-20001,'An error was encountered - '||SQLCODE||' -ERROR- '||SQLERRM);")
-                .append("END DROP_TABLE_OR_VIEW;\n"); 
+                .append("END DROP_TABLE_OR_VIEW;\n");
 
         for (String fileName : propertyFiles.keySet()) {
             File file = new File(propertyFiles.get(fileName), fileName);
-            
-            try ( PropertyFeatureReader reader = new PropertyFeatureReader("test", file ) ){            
+
+            try (PropertyFeatureReader reader = new PropertyFeatureReader("test", file)) {
                 SimpleFeatureType schema = reader.getFeatureType();
                 String tableName = schema.getName().getLocalPart().toUpperCase();
                 // drop table if exists
@@ -184,10 +181,10 @@ public class AppSchemaTestOracleSetup extends ReferenceDataOracleSetup {
                         type = "SDO_GEOMETRY";
                         // Update spatial index
                         int srid = getSrid(((GeometryType) desc.getType()));
-                        
+
                         spatialIndex.append("DELETE FROM user_sdo_geom_metadata WHERE table_name = '")
                                 .append(tableName).append("'\n");
-    		
+
                         spatialIndex
                                 .append("Insert into user_sdo_geom_metadata ")
                                 .append("(TABLE_NAME,COLUMN_NAME,DIMINFO,SRID)")
@@ -199,11 +196,11 @@ public class AppSchemaTestOracleSetup extends ReferenceDataOracleSetup {
                                         "',MDSYS.SDO_DIM_ARRAY(MDSYS.SDO_DIM_ELEMENT('X',140.962,144.909,0.00001),")
                                 .append("MDSYS.SDO_DIM_ELEMENT('Y',-38.858,-33.98,0.00001)")
                                 .append( //support 3d index
-                                		((GeometryDescriptor) desc).getCoordinateReferenceSystem() != null
-                                		&& ((GeometryDescriptor) desc).getCoordinateReferenceSystem().getCoordinateSystem().getDimension() == 3 ?
-                                		", MDSYS.SDO_DIM_ELEMENT('Z',-100000, 100000, 1) )," : "),")
+                                        ((GeometryDescriptor) desc).getCoordinateReferenceSystem() != null
+                                                && ((GeometryDescriptor) desc).getCoordinateReferenceSystem().getCoordinateSystem().getDimension() == 3 ?
+                                                ", MDSYS.SDO_DIM_ELEMENT('Z',-100000, 100000, 1) )," : "),")
                                 .append(srid).append(")\n");
-    
+
                         // ensure it's <= 30 characters to avoid Oracle exception
                         String indexName = (tableName.length() <= 26 ? tableName : tableName.substring(
                                 0, 26)) + "_IDX";
@@ -211,10 +208,10 @@ public class AppSchemaTestOracleSetup extends ReferenceDataOracleSetup {
                             // to avoid duplicate index name when there are > 1 geometry in the same table
                             indexName += spatialIndexCounter;
                         }
-    
+
                         spatialIndex.append("CREATE INDEX \"").append(indexName).append("\" ON \"")
                                 .append(tableName).append("\"(\"").append(field).append("\") ").append(
-                                        "INDEXTYPE IS \"MDSYS\".\"SPATIAL_INDEX\"\n");
+                                "INDEXTYPE IS \"MDSYS\".\"SPATIAL_INDEX\"\n");
                         spatialIndexCounter++;
                     } else {
                         type = Classes.getShortName(desc.getType().getBinding());
@@ -249,9 +246,9 @@ public class AppSchemaTestOracleSetup extends ReferenceDataOracleSetup {
                     for (Property prop : properties) {
                         Object value = prop.getValue();
                         if (value instanceof Geometry) {
-                        	//use wkt writer to convert geometry to string, so third dimension can be supported if present.
-                        	Geometry geom = (Geometry) value;
-                        	value = new WKTWriter(geom.getCoordinate().z == Double.NaN? 2 : 3).write(geom);
+                            //use wkt writer to convert geometry to string, so third dimension can be supported if present.
+                            Geometry geom = (Geometry) value;
+                            value = new WKTWriter(geom.getCoordinate().z == Double.NaN ? 2 : 3).write(geom);
                         }
                         if (value == null || value.toString().equalsIgnoreCase("null")) {
                             values[valueIndex] = "null";
@@ -272,7 +269,7 @@ public class AppSchemaTestOracleSetup extends ReferenceDataOracleSetup {
                         }
                         valueIndex++;
                     }
-                    id = feature.getIdentifier();                
+                    id = feature.getIdentifier();
                     // insert primary key
                     values[valueIndex] = "'" + id.toString() + "'";
                     buf.append(StringUtils.join(values, ","));

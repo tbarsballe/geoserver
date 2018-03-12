@@ -20,7 +20,7 @@ import org.geotools.util.Version;
 
 /**
  * Unit test suite for {@link GetRepositoryItemKvpRequestReader}
- * 
+ *
  * @version $Id$
  */
 public class GetRepositoryItemKvpRequestReaderTest extends TestCase {
@@ -34,7 +34,7 @@ public class GetRepositoryItemKvpRequestReaderTest extends TestCase {
     protected void setUp() throws Exception {
         geoServerImpl = new GeoServerImpl();
         List<String> operations = new ArrayList<String>();
-        csw = new Service("csw", new DefaultWebCatalogService(geoServerImpl), new Version("2.0.2"), operations); 
+        csw = new Service("csw", new DefaultWebCatalogService(geoServerImpl), new Version("2.0.2"), operations);
 
         params = new HashMap<String, String>();
     }
@@ -66,7 +66,7 @@ public class GetRepositoryItemKvpRequestReaderTest extends TestCase {
             assertEquals("id", e.getLocator());
         }
     }
-    
+
     public void testParseValidRequest() throws Exception {
         params.put("service", "csw");
         params.put("VERSION", "2.0.2");

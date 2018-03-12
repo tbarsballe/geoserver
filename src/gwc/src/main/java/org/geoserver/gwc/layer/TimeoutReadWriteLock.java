@@ -12,7 +12,7 @@ import org.geoserver.platform.ServiceException;
 
 /**
  * A wrapper around a ReadWriteLock that will perform all locking operations under a timeout to prevent deadlocks.
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 class TimeoutReadWriteLock {
@@ -20,11 +20,12 @@ class TimeoutReadWriteLock {
     ReadWriteLock lock = new ReentrantReadWriteLock();
 
     int timeoutMs;
-    
+
     String name;
 
     /**
      * Builds the {@link ReadWriteLock} wrapper with a given timeout, in milliseconds
+     *
      * @param timeoutMs
      */
     public TimeoutReadWriteLock(int timeoutMs, String name) {

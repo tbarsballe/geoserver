@@ -33,8 +33,7 @@ public class ResourceStoreFactory implements FactoryBean<ResourceStore>, Applica
         try {
             resourceStore = (ResourceStore) GeoServerExtensions.bean(
                     "resourceStoreImpl", applicationContext);
-        }
-        catch (NoSuchBeanDefinitionException e) {
+        } catch (NoSuchBeanDefinitionException e) {
             LOGGER.log(Level.FINER, "No resourceStoreImpl beans found, "
                     + "falling back to DataDirectoryResourceStore");
         }

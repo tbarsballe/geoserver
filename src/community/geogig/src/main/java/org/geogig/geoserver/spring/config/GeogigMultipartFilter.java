@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class GeogigMultipartFilter  extends MultipartFilter implements GeoServerFilter {
+public class GeogigMultipartFilter extends MultipartFilter implements GeoServerFilter {
 
     public GeogigMultipartFilter() {
         setMultipartResolverBeanName(GeogigSpringConfig.FILTER_MULTIPART_RESOLVER_NAME);

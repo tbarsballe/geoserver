@@ -40,9 +40,8 @@ import org.xml.sax.helpers.AttributesImpl;
 
 /**
  * Helper class to turn a {@link ExecuteRequest} into the corresponding WPS 1.0 Execute xml
- * 
+ *
  * @author Andrea Aime - OpenGeo
- * 
  */
 class WPSExecuteTransformer extends TransformerBase {
 
@@ -65,14 +64,18 @@ class WPSExecuteTransformer extends TransformerBase {
 
     public class ExecuteRequestTranslator extends TranslatorSupport {
 
-        /** wfs namespace */
+        /**
+         * wfs namespace
+         */
         protected static final String WFS_URI = "http://www.opengis.net/wfs";
 
         protected static final String WPS_URI = "http://www.opengis.net/wps/1.0.0";
 
         protected static final String WCS_URI = "http://www.opengis.net/wcs/1.1.1";
 
-        /** xml schema namespace + prefix */
+        /**
+         * xml schema namespace + prefix
+         */
         protected static final String XSI_PREFIX = "xsi";
 
         protected static final String XSI_URI = "http://www.w3.org/2001/XMLSchema-instance";
@@ -111,9 +114,8 @@ class WPSExecuteTransformer extends TransformerBase {
 
         /**
          * Helper to build a set of attributes out of a list of key/value pairs
-         * 
-         * @param nameValues
          *
+         * @param nameValues
          */
         AttributesImpl attributes(String... nameValues) {
             AttributesImpl atts = new AttributesImpl();
@@ -147,7 +149,7 @@ class WPSExecuteTransformer extends TransformerBase {
                             try {
                                 crs = "EPSG:"
                                         + CRS.lookupEpsgCode(env.getCoordinateReferenceSystem(),
-                                                false);
+                                        false);
                             } catch (Exception e) {
                                 LOGGER.log(Level.WARNING, "Could not get EPSG code for " + crs);
                             }
@@ -236,8 +238,8 @@ class WPSExecuteTransformer extends TransformerBase {
                     "http://geoserver/wfs", "method", "POST"));
             start("wps:Body");
 
-            AttributesImpl atts = 
-                attributes("service", "WFS", "version", "1.0.0", "outputFormat", "GML2");
+            AttributesImpl atts =
+                    attributes("service", "WFS", "version", "1.0.0", "outputFormat", "GML2");
 
             //if the layer name is qualfiied we should include a namespace mapping on the 
             // GetFeature request

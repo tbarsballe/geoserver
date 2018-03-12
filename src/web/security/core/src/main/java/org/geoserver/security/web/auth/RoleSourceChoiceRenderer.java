@@ -11,12 +11,14 @@ import org.geoserver.security.config.RoleSource;
 
 /**
  * ChoiceRenderer for RoleSource enums
- * 
+ *
  * @author Mauro Bartolomeoli (mauro.bartolomeoli@geo-solutions.it)
  */
 public class RoleSourceChoiceRenderer extends ChoiceRenderer<RoleSource> {
 
-    /** serialVersionUID */
+    /**
+     * serialVersionUID
+     */
     private static final long serialVersionUID = 1L;
 
     @Override

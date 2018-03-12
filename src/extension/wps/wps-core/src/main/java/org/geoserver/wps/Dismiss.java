@@ -16,7 +16,7 @@ import org.springframework.context.ApplicationContext;
 
 /**
  * Cancels the execution of a given process, indentified by executionid
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class Dismiss {
@@ -42,7 +42,7 @@ public class Dismiss {
     private WPSExecutionManager executionManager;
 
     public Dismiss(WPSExecutionManager executionManager, ProcessStatusTracker statusTracker,
-            WPSResourceManager resources, ApplicationContext ctx) {
+                   WPSResourceManager resources, ApplicationContext ctx) {
         this.executionManager = executionManager;
         this.statusTracker = statusTracker;
         this.resources = resources;

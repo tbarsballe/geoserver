@@ -14,28 +14,26 @@ import org.geoserver.cluster.events.ToggleSwitch;
 import com.thoughtworks.xstream.XStream;
 
 /**
- * 
  * @author Carlo Cancellieri - carlo.cancellieri@geo-solutions.it
- *
  */
-public class JMSCatalogAddEventHandlerSPI extends JMSCatalogEventHandlerSPI{
-	
-	public JMSCatalogAddEventHandlerSPI(final int priority, Catalog cat, XStream xstream, ToggleSwitch producer) {
-		super(priority,cat,xstream,producer);
-	}
+public class JMSCatalogAddEventHandlerSPI extends JMSCatalogEventHandlerSPI {
 
-	@Override
-	public boolean canHandle(final Object event) {
-		if (event instanceof CatalogAddEvent)
-			return true;
-		else
-			return false;
-	}
+    public JMSCatalogAddEventHandlerSPI(final int priority, Catalog cat, XStream xstream, ToggleSwitch producer) {
+        super(priority, cat, xstream, producer);
+    }
 
-	@Override
-	public JMSEventHandler<String,CatalogEvent> createHandler() {
-		return new JMSCatalogAddEventHandler(catalog,xstream,this.getClass(),producer);
-	}
+    @Override
+    public boolean canHandle(final Object event) {
+        if (event instanceof CatalogAddEvent)
+            return true;
+        else
+            return false;
+    }
+
+    @Override
+    public JMSEventHandler<String, CatalogEvent> createHandler() {
+        return new JMSCatalogAddEventHandler(catalog, xstream, this.getClass(), producer);
+    }
 
 
 }

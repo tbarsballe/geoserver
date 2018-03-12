@@ -34,7 +34,7 @@ public class GeoServerResourceStreamLocatorTest {
 
         it = l.newResourceNameIterator("org/geoserver/Foo", Locale.US, null, null, "js", false);
         assertEquals(1, Iterators.size(it));
-        
+
         it = l.newResourceNameIterator("org/geoserver/Foo", Locale.US, null, null, "baz", false);
         assertTrue(Iterators.size(it) > 1);
 

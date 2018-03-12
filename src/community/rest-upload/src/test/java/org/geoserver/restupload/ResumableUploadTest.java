@@ -40,21 +40,28 @@ import org.springframework.mock.web.MockHttpServletResponse;
 
 /**
  * Test class for checking REST resumable upload
- * 
- * @author Nicola Lagomarsini
  *
+ * @author Nicola Lagomarsini
  */
 public class ResumableUploadTest extends CatalogRESTTestSupport {
-    /** Resource used for storing temporary uploads */
+    /**
+     * Resource used for storing temporary uploads
+     */
     private Resource tmpUploadFolder;
 
-    /** Size for partial uploads */
+    /**
+     * Size for partial uploads
+     */
     private long partialSize = 50;
 
-    /** Relative path of the file to upload */
+    /**
+     * Relative path of the file to upload
+     */
     private String fileName = "/relative/resumableUploadTest.shp";
 
-    /** Root folder */
+    /**
+     * Root folder
+     */
     private String root;
 
     @Before
@@ -192,7 +199,7 @@ public class ResumableUploadTest extends CatalogRESTTestSupport {
         request.addHeader("Content-type", "application/octet-stream");
         request.addHeader("Content-Length", String.valueOf(partialFile2.length));
         request.addHeader("Content-Range", "bytes " + partialSize + "-" + partialSize * 2 + "/"
-        + bigFile.length);
+                + bigFile.length);
         MockHttpServletResponse response = dispatch(request);
         assertEquals(ResumableUploadCatalogResource.RESUME_INCOMPLETE.getCode(),
                 response.getStatus());
@@ -231,7 +238,7 @@ public class ResumableUploadTest extends CatalogRESTTestSupport {
         request.addHeader("Content-type", "application/octet-stream");
         request.addHeader("Content-Length", String.valueOf(partialFile2.length));
         request.addHeader("Content-Range", "bytes " + partialSize + "-" + bigFile.length + "/"
-        + bigFile.length);
+                + bigFile.length);
         MockHttpServletResponse response = dispatch(request);
         assertEquals(Status.SUCCESS_OK.getCode(), response.getStatus());
 

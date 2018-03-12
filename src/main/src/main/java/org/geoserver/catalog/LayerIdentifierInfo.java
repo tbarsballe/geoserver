@@ -15,7 +15,7 @@ import org.geoserver.catalog.impl.LayerIdentifier;
  * ID numbers or labels defined by a particular Authority. For example, the Global Change Master
  * Directory (gcmd.gsfc.nasa.gov) defines a DIF_ID label for every dataset.
  * </p>
- * 
+ *
  * @author groldan
  * @see LayerIdentifier
  * @see LayerInfo#getIdentifiers()
@@ -30,8 +30,7 @@ public interface LayerIdentifierInfo extends Serializable {
     public String getAuthority();
 
     /**
-     * @param authorityName
-     *            name of the authority for this identifier
+     * @param authorityName name of the authority for this identifier
      */
     public void setAuthority(String authorityName);
 
@@ -41,8 +40,7 @@ public interface LayerIdentifierInfo extends Serializable {
     public String getIdentifier();
 
     /**
-     * @param identifier
-     *            the identifier for a specific authority on a published WMS layer
+     * @param identifier the identifier for a specific authority on a published WMS layer
      */
     public void setIdentifier(String identifier);
 }

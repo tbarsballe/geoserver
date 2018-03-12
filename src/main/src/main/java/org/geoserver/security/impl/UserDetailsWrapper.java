@@ -14,24 +14,23 @@ import org.springframework.security.core.userdetails.UserDetails;
 /**
  * Simple wrapper class for a {@link UserDetails} object.
  * Subclasses should override individual methods.
- * 
- * @author christian
  *
+ * @author christian
  */
 public class UserDetailsWrapper implements UserDetails {
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     private UserDetails details;
 
     public UserDetails getWrappedObject() {
         return details;
     }
-    
+
     public UserDetailsWrapper(UserDetails details) {
         this.details = details;
     }
-    
+
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return details.getAuthorities();
     }

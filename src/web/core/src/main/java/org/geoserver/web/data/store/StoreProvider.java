@@ -42,12 +42,12 @@ import com.google.common.collect.Lists;
  */
 @SuppressWarnings("serial")
 public class StoreProvider extends GeoServerDataProvider<StoreInfo> {
-    
+
     static final Property<StoreInfo> DATA_TYPE = new AbstractProperty<StoreInfo>("datatype") {
 
         public IModel getModel(final IModel itemModel) {
             return new Model(itemModel) {
-                
+
                 @Override
                 public Serializable getObject() {
                     StoreInfo si = (StoreInfo) itemModel.getObject();
@@ -71,49 +71,49 @@ public class StoreProvider extends GeoServerDataProvider<StoreInfo> {
             "name");
 
     final Property<StoreInfo> TYPE = new AbstractProperty<StoreInfo>("type") {
-        
+
         public Object getPropertyValue(StoreInfo item) {
             String type = item.getType();
-            if(type != null) {
+            if (type != null) {
                 return type;
             }
             try {
                 ResourcePool resourcePool = getCatalog().getResourcePool();
-                if(item instanceof DataStoreInfo) {
+                if (item instanceof DataStoreInfo) {
                     DataStoreInfo dsInfo = (DataStoreInfo) item;
                     DataAccessFactory factory = resourcePool.getDataStoreFactory(dsInfo);
-                    if(factory != null) {
+                    if (factory != null) {
                         return factory.getDisplayName();
                     }
-                } else if(item instanceof CoverageStoreInfo) {
+                } else if (item instanceof CoverageStoreInfo) {
                     Format format = resourcePool.getGridCoverageFormat((CoverageStoreInfo) item);
-                    if(format != null) {
+                    if (format != null) {
                         return format.getName();
                     }
-                } 
-            } catch(Exception e) {
+                }
+            } catch (Exception e) {
                 // fine, we tried
             }
             return "?";
         }
     };
-    
+
     static final Property<StoreInfo> ENABLED = new BeanProperty<StoreInfo>(
             "enabled", "enabled");
-    
+
     final List<Property<StoreInfo>> PROPERTIES = Arrays.asList(DATA_TYPE,
             WORKSPACE, NAME, TYPE, ENABLED);
 
     WorkspaceInfo workspace;
-    
+
     public StoreProvider() {
         this(null);
     }
-    
+
     public StoreProvider(WorkspaceInfo workspace) {
         this.workspace = workspace;
     }
-    
+
     @Override
     protected List<StoreInfo> getItems() {
         throw new UnsupportedOperationException(
@@ -130,7 +130,7 @@ public class StoreProvider extends GeoServerDataProvider<StoreInfo> {
     protected Comparator<StoreInfo> getComparator(SortParam sort) {
         return super.getComparator(sort);
     }
-    
+
     public IModel newModel(StoreInfo object) {
         return new StoreInfoDetachableModel((StoreInfo) object);
     }
@@ -158,7 +158,7 @@ public class StoreProvider extends GeoServerDataProvider<StoreInfo> {
             return storeInfo;
         }
     }
-    
+
     @Override
     public long size() {
         Filter filter = getFilter();
@@ -174,7 +174,7 @@ public class StoreProvider extends GeoServerDataProvider<StoreInfo> {
         int count = getCatalog().count(StoreInfo.class, filter);
         return count;
     }
-    
+
     @Override
     public Iterator<StoreInfo> iterator(final long first, final long count) {
         Iterator<StoreInfo> iterator = filteredItems(first, count);
@@ -218,14 +218,14 @@ public class StoreProvider extends GeoServerDataProvider<StoreInfo> {
 
         final Filter filter = getWorkspaceFilter(getFilter());
         //our already filtered and closeable iterator
-        Iterator<StoreInfo> items = catalog.list(StoreInfo.class, filter, (int)first, (int)count, sortOrder);
+        Iterator<StoreInfo> items = catalog.list(StoreInfo.class, filter, (int) first, (int) count, sortOrder);
 
         return items;
     }
-    
-    private Filter getWorkspaceFilter(Filter filter){
+
+    private Filter getWorkspaceFilter(Filter filter) {
         // Filter by workspace if present
-        if(workspace != null){
+        if (workspace != null) {
             FilterFactory2 ff = CommonFactoryFinder.getFilterFactory2();
             Filter workspaceFilter = ff.equal(ff.property("workspace.id"), ff.literal(workspace.getId()));
             filter = ff.and(filter, workspaceFilter);

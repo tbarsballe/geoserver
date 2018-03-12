@@ -18,9 +18,9 @@ import org.opengis.filter.Filter;
 
 /**
  * Binding object for the type http://www.opengis.net/wfs:DeleteElementType.
- *
  * <p>
- *        <pre>
+ * <p>
+ * <pre>
  *         <code>
  *  &lt;xsd:complexType name="DeleteElementType"&gt;
  *      &lt;xsd:sequence&gt;
@@ -47,6 +47,7 @@ import org.opengis.filter.Filter;
  *
  *          </code>
  *         </pre>
+ *
  * @generated
  */
 public class DeleteElementTypeBinding extends AbstractComplexEMFBinding {
@@ -81,7 +82,7 @@ public class DeleteElementTypeBinding extends AbstractComplexEMFBinding {
      * @generated modifiable
      */
     public Object parse(ElementInstance instance, Node node, Object value)
-        throws Exception {
+            throws Exception {
         DeleteElementType deleteElement = wfsfactory.createDeleteElementType();
 
         //&lt;xsd:element maxOccurs="1" minOccurs="1" ref="ogc:Filter"&gt;

@@ -49,9 +49,7 @@ import org.opengis.feature.simple.SimpleFeatureType;
 import com.vividsolutions.jts.io.WKTReader;
 
 /**
- * 
  * @author Alessio Fabiani, GeoSolutions
- *
  */
 public class BackupRestoreTestSupport extends GeoServerSystemTestSupport {
 
@@ -90,7 +88,7 @@ public class BackupRestoreTestSupport extends GeoServerSystemTestSupport {
     @Override
     protected void onTearDown(SystemTestData testData) throws Exception {
         super.onTearDown(testData);
-        
+
         cleanCatalog();
     }
 

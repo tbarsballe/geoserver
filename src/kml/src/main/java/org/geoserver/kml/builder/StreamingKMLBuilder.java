@@ -20,16 +20,15 @@ import de.micromata.opengis.kml.v_2_2_0.Kml;
 
 /**
  * Builds a lazily evaluated KML document given a encoding context
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class StreamingKMLBuilder {
 
     /**
      * Builds a lazily evaluated KML document given a encoding context
-     * 
-     * @param context
      *
+     * @param context
      */
     public Kml buildKMLDocument(KmlEncodingContext context) {
         // prepare kml, document and folder
@@ -57,5 +56,5 @@ public class StreamingKMLBuilder {
         return kml;
     }
 
-    
+
 }

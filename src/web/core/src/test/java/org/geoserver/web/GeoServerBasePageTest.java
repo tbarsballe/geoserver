@@ -45,7 +45,7 @@ public class GeoServerBasePageTest extends GeoServerWicketTestSupport {
         TagTester tagTester = TagTester.createTagByAttribute(responseTxt, "form");
         assertEquals("../j_spring_security_logout", tagTester.getAttribute("action"));
     }
-    
+
     @Test
     public void testDefaultNodeInfoLoggedOut() throws Exception {
         logout();
@@ -72,5 +72,5 @@ public class GeoServerBasePageTest extends GeoServerWicketTestSupport {
         // assertTrue(style.contains("background:red;"));
         // assertTrue(style.contains("color:black;"));
     }
-    
+
 }

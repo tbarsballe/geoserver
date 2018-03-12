@@ -77,17 +77,16 @@ import es.unex.sextante.parameters.ParameterVectorLayer;
 /**
  * A process factory that wraps a SEXTANTE algorithm and can be used to get information about it and
  * create the corresponding process
- * 
+ *
  * @author volaya
- * 
  */
 public class SextanteProcessFactory implements ProcessFactory {
     public static final String SEXTANTE_NAMESPACE = "sxt";
-    public static final String SEXTANTE_GRID_ENVELOPE = "gridEnvelope";    
+    public static final String SEXTANTE_GRID_ENVELOPE = "gridEnvelope";
     public static final String SEXTANTE_GRID_CELL_SIZE = "gridCellSize";
-    
+
     private static final Logger LOGGER = Logging.getLogger(SextanteProcessFactory.class);
-    
+
     private Set<Name> names = new HashSet<Name>();
 
     /**
@@ -95,47 +94,44 @@ public class SextanteProcessFactory implements ProcessFactory {
      */
     public SextanteProcessFactory() {
         Sextante.initialize();
-        
+
         int algorithmsCount = Sextante.getAlgorithmsCount();
         LOGGER.info("Sextante loaded; it provides " + algorithmsCount + " algorithms!");
-        
+
         // Register the algorithms loaded.
-        HashMap<String,HashMap<String,GeoAlgorithm>>algorithmsHash = Sextante.getAlgorithms();
-		Set<Name> result = new HashSet<Name>();
-		
-		for (HashMap<String,GeoAlgorithm> itemOb : algorithmsHash.values())
-		{
-			for (Entry<String,GeoAlgorithm> entry : itemOb.entrySet())
-			{
-				result.add(new NameImpl(SEXTANTE_NAMESPACE, entry.getValue().getCommandLineName()));
-			}
-		}
+        HashMap<String, HashMap<String, GeoAlgorithm>> algorithmsHash = Sextante.getAlgorithms();
+        Set<Name> result = new HashSet<Name>();
+
+        for (HashMap<String, GeoAlgorithm> itemOb : algorithmsHash.values()) {
+            for (Entry<String, GeoAlgorithm> entry : itemOb.entrySet()) {
+                result.add(new NameImpl(SEXTANTE_NAMESPACE, entry.getValue().getCommandLineName()));
+            }
+        }
         names = Collections.unmodifiableSet(result);
-        
+
         // Register this factory in the singleton Processors manager. 
         org.geotools.process.Processors.addProcessFactory(this);
     }
 
     public InternationalString getTitle() {
-    	return new SimpleInternationalString("Sextante");
+        return new SimpleInternationalString("Sextante");
     }
-    
+
     public Set<Name> getNames() {
-        return names; 
+        return names;
     }
-    
+
     void checkName(Name name) {
-        if(name == null)
+        if (name == null)
             throw new NullPointerException("Process name cannot be null");
-        if(!names.contains(name))
+        if (!names.contains(name))
             throw new IllegalArgumentException("Unknown process '" + name + "'");
     }
 
     /**
      * Creates a geotools process which wraps a SEXTANTE geoalgorithm
-     * 
-     * @param alg
-     *            the SEXTANTE geoalgorithm to wrap
+     *
+     * @param alg the SEXTANTE geoalgorithm to wrap
      * @throws IllegalArgumentException
      */
     public Process create(Name name) throws IllegalArgumentException {
@@ -193,23 +189,23 @@ public class SextanteProcessFactory implements ProcessFactory {
             String title = param.getParameterDescription();
             String description = title;
             try {
-            	String td = param.getParameterAdditionalInfo().getTextDescription();
-            	if(td != null) {
-            		description += " - " + td;
-            	}
-            	
-            	// TODO: for numeric data we can specify default value and 
-            	// range, that should be useful
-            } catch(NullParameterAdditionalInfoException e) {
-            	// fine
+                String td = param.getParameterAdditionalInfo().getTextDescription();
+                if (td != null) {
+                    description += " - " + td;
+                }
+
+                // TODO: for numeric data we can specify default value and
+                // range, that should be useful
+            } catch (NullParameterAdditionalInfoException e) {
+                // fine
             }
-            
+
             hasRasterInput = hasRasterInput || IRasterLayer.class.isAssignableFrom(param.getParameterClass());
             paramInfo.put(param.getParameterName(), new Parameter(param.getParameterName(),
                     mapToGeoTools(param.getParameterClass()), Text.text(title),
                     Text.text(description), getAdditionalInfoMap(param)));
         }
-        
+
         // check if there is any raster output
         boolean hasRasterOutput = false;
         OutputObjectsSet ooset = algorithm.getOutputObjects();
@@ -224,29 +220,29 @@ public class SextanteProcessFactory implements ProcessFactory {
         // if there is any input or output raster we also need the user to specify
         // the grid structure, though we can get it from the first raster if there
         // are raster inputs, meaning in that case we'll grab it from 
-        if(hasRasterInput || hasRasterOutput) {
+        if (hasRasterInput || hasRasterOutput) {
             // create a grid envelope, required only if there is no raster input we can
             // get the same info from
-            if(hasRasterInput) {
-                paramInfo.put(SEXTANTE_GRID_ENVELOPE, new Parameter(SEXTANTE_GRID_ENVELOPE, 
-                        Envelope.class, Text.text("Grid bounds (defaults to the bounds of the inputs)"), 
-                        Text.text("The real world coordinates bounding the grid"), 
+            if (hasRasterInput) {
+                paramInfo.put(SEXTANTE_GRID_ENVELOPE, new Parameter(SEXTANTE_GRID_ENVELOPE,
+                        Envelope.class, Text.text("Grid bounds (defaults to the bounds of the inputs)"),
+                        Text.text("The real world coordinates bounding the grid"),
                         false, 0, 1, null, null));
-                paramInfo.put(SEXTANTE_GRID_CELL_SIZE, new Parameter(SEXTANTE_GRID_CELL_SIZE, 
-                        Double.class, Text.text("Cell size (defaults to the size of the first input)"), 
-                        Text.text("The cell size in real world units"), 
+                paramInfo.put(SEXTANTE_GRID_CELL_SIZE, new Parameter(SEXTANTE_GRID_CELL_SIZE,
+                        Double.class, Text.text("Cell size (defaults to the size of the first input)"),
+                        Text.text("The cell size in real world units"),
                         false, 0, 1, null, null));
             } else {
-                paramInfo.put(SEXTANTE_GRID_ENVELOPE, new Parameter(SEXTANTE_GRID_ENVELOPE, 
-                        Envelope.class, Text.text("Grid bounds"), 
-                        Text.text("The real world coordinates bounding the grid"), 
+                paramInfo.put(SEXTANTE_GRID_ENVELOPE, new Parameter(SEXTANTE_GRID_ENVELOPE,
+                        Envelope.class, Text.text("Grid bounds"),
+                        Text.text("The real world coordinates bounding the grid"),
                         true, 1, 1, null, null));
-                paramInfo.put(SEXTANTE_GRID_CELL_SIZE, new Parameter(SEXTANTE_GRID_CELL_SIZE, 
-                        Double.class, Text.text("Cell size"), 
-                        Text.text("The cell size in real world units"), 
+                paramInfo.put(SEXTANTE_GRID_CELL_SIZE, new Parameter(SEXTANTE_GRID_CELL_SIZE,
+                        Double.class, Text.text("Cell size"),
+                        Text.text("The cell size in real world units"),
                         true, 1, 1, null, null));
             }
-            
+
         }
 
         return paramInfo;
@@ -254,9 +250,8 @@ public class SextanteProcessFactory implements ProcessFactory {
 
     /**
      * Map Sextante common types into GeoTools common types
-     * 
-     * @param parameterClass
      *
+     * @param parameterClass
      */
     protected Class mapToGeoTools(Class parameterClass) {
         if (IVectorLayer.class.isAssignableFrom(parameterClass)) {
@@ -273,11 +268,10 @@ public class SextanteProcessFactory implements ProcessFactory {
     /**
      * Returns a map with additional info about a given parameter. It takes a SEXTANTE parameter and
      * produces a map suitable to be added to a GeoTools parameter
-     * 
-     * @param param
-     *            the parameter to take the additional information from
+     *
+     * @param param the parameter to take the additional information from
      * @return a Map with additional info about the parameter. Keys used to identify each element
-     *         are defined in {@see SextanteProcessFactoryConstants}
+     * are defined in {@see SextanteProcessFactoryConstants}
      */
     private Map getAdditionalInfoMap(es.unex.sextante.parameters.Parameter param) {
 
@@ -377,11 +371,11 @@ public class SextanteProcessFactory implements ProcessFactory {
         return "SextanteFactory";
     }
 
-	public boolean isAvailable() {
-		return true;
-	}
+    public boolean isAvailable() {
+        return true;
+    }
 
-	public Map<Key, ?> getImplementationHints() {
-		return Collections.EMPTY_MAP;
-	}
+    public Map<Key, ?> getImplementationHints() {
+        return Collections.EMPTY_MAP;
+    }
 }

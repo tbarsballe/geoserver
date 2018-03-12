@@ -17,7 +17,7 @@ import org.geotools.process.ProcessFactory;
  * </p>
  * The implementation must be registered as a bean in the Spring context for GeoServer to pick it up
  * and use it.
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public interface ProcessFilter {
@@ -32,9 +32,8 @@ public interface ProcessFilter {
      * {@link DelegatingProcessFactory#getInnermostDelegate()} method can be used to reach the
      * original factory
      * </p>
-     * 
-     * @param pf
      *
+     * @param pf
      */
     ProcessFactory filterFactory(ProcessFactory pf);
 

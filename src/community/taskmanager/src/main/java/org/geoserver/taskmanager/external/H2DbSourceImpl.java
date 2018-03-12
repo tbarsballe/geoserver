@@ -9,6 +9,7 @@ import org.geoserver.taskmanager.util.NamedImpl;
 import org.h2.tools.RunScript;
 import org.springframework.core.io.Resource;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+
 import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 import java.io.BufferedReader;

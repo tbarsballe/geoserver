@@ -20,12 +20,11 @@ import org.geoserver.platform.resource.Resources;
 
 /**
  * Wrapper for Spring's ServletWrappingController to allow use of GeoServer's config dir.
- * 
- * @author Alan Gerber, The Open Planning Project
  *
+ * @author Alan Gerber, The Open Planning Project
  */
 public class PrintingServletWrappingController extends
-ServletWrappingController {
+        ServletWrappingController {
 
     private Logger LOG = org.geotools.util.logging.Logging.getLogger("org.geoserver.printing");
 

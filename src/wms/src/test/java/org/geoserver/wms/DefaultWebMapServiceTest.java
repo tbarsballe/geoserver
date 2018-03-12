@@ -21,12 +21,11 @@ import com.vividsolutions.jts.geom.Envelope;
 
 public class DefaultWebMapServiceTest extends WMSTestSupport {
 
-   
+
     /**
      * This is just a very basic test, mostly testing defaults
-     * 
      */
-    @Test 
+    @Test
     public void testBasic() throws Exception {
         GetMapRequest mockGMR = createGetMapRequest(MockData.BASIC_POLYGONS);
 
@@ -61,9 +60,8 @@ public class DefaultWebMapServiceTest extends WMSTestSupport {
 
     /**
      * Tests basic reprojection
-     * 
      */
-    @Test 
+    @Test
     public void testReprojection() throws Exception {
         GetMapRequest mockGMR = createGetMapRequest(MockData.BASIC_POLYGONS);
 
@@ -103,7 +101,6 @@ public class DefaultWebMapServiceTest extends WMSTestSupport {
     /**
      * This test is incomplete because I (arneke) had trouble finding mock data with proper bounding
      * boxes
-     * 
      */
     @Test
     public void testAutoSetWidthHeight() throws Exception {
@@ -149,7 +146,6 @@ public class DefaultWebMapServiceTest extends WMSTestSupport {
     /**
      * This test is incomplete because I (arneke) had trouble finding mock data with proper bounding
      * boxes
-     * 
      */
     @Test
     public void testAutoSetWidthHeightOL() throws Exception {

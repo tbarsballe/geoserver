@@ -38,8 +38,8 @@ public abstract class AbstractGroupPage extends AbstractSecurityPage {
 
         boolean hasUserGroupStore = hasUserGroupStore(userGroupServiceName);
         boolean hasRoleStore = hasRoleStore(getSecurityManager().getActiveRoleService().getName());
-        
-        Form form =new Form("form", new CompoundPropertyModel(group));
+
+        Form form = new Form("form", new CompoundPropertyModel(group));
         add(form);
 
         form.add(new TextField<String>("groupname").setEnabled(hasUserGroupStore));
@@ -48,14 +48,14 @@ public abstract class AbstractGroupPage extends AbstractSecurityPage {
         List<GeoServerRole> roles;
         try {
             roles = new ArrayList(
-                getSecurityManager().getActiveRoleService().getRolesForGroup(group.getGroupname()));
+                    getSecurityManager().getActiveRoleService().getRolesForGroup(group.getGroupname()));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        
-        form.add(rolePalette = new RolePaletteFormComponent("roles", new Model((Serializable)roles)));
+
+        form.add(rolePalette = new RolePaletteFormComponent("roles", new Model((Serializable) roles)));
         rolePalette.setEnabled(hasRoleStore);
-        
+
         form.add(new SubmitLink("save") {
             @Override
             public void onSubmit() {
@@ -72,7 +72,7 @@ public abstract class AbstractGroupPage extends AbstractSecurityPage {
                 }
 
             }
-        }.setEnabled(hasUserGroupStore 
+        }.setEnabled(hasUserGroupStore
                 || hasRoleStore(getSecurityManager().getActiveRoleService().getName())));
 
         // build the submit/cancel

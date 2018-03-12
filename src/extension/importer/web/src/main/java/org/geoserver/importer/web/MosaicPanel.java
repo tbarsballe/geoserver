@@ -24,7 +24,7 @@ public class MosaicPanel extends SpatialFilePanel {
 
     @Override
     protected void initFileChooser(GeoServerFileChooser fileChooser) {
-        fileChooser.setFilter(new Model((Serializable)DirectoryFileFilter.DIRECTORY));
+        fileChooser.setFilter(new Model((Serializable) DirectoryFileFilter.DIRECTORY));
     }
 
     @Override

@@ -18,17 +18,15 @@ import org.opengis.coverage.grid.Format;
 
 /**
  * Supports coverage store configuration
- * 
+ *
  * @author Andrea Aime
  * @author Gabriel Roldan
  */
 public class CoverageStoreNewPage extends AbstractCoverageStorePage {
 
     /**
-     * 
-     * @param coverageFactoryName
-     *            the {@link Format#getName() name} of the format to create a new raster coverage
-     *            for
+     * @param coverageFactoryName the {@link Format#getName() name} of the format to create a new raster coverage
+     *                            for
      */
     public CoverageStoreNewPage(final String coverageFactoryName) {
         Catalog catalog = getCatalog();
@@ -52,7 +50,7 @@ public class CoverageStoreNewPage extends AbstractCoverageStorePage {
          */
         CoverageStoreInfo expandedStore = getCatalog().getResourcePool().clone(info, true);
         CoverageStoreInfo savedStore = catalog.getFactory().createCoverageStore();
-        
+
         // GR: this shouldn't fail, the Catalog.save(StoreInfo) API does not declare any action in
         // case
         // of a failure!... strange, why a save can't fail?
@@ -60,7 +58,7 @@ public class CoverageStoreNewPage extends AbstractCoverageStorePage {
         try {
             // GeoServer Env substitution; validate first
             catalog.validate(expandedStore, false).throwIfInvalid();
-            
+
             // GeoServer Env substitution; force to *AVOID* resolving env placeholders...
             savedStore = catalog.getResourcePool().clone(info, false);
             // ... and save
@@ -75,7 +73,7 @@ public class CoverageStoreNewPage extends AbstractCoverageStorePage {
     }
 
     protected void onSuccessfulSave(final CoverageStoreInfo info, final Catalog catalog,
-            CoverageStoreInfo savedStore) {
+                                    CoverageStoreInfo savedStore) {
         // the StoreInfo save succeeded... try to present the list of coverages (well, _the_
         // coverage while the getotools coverage api does not allow for more than one
         NewLayerPage layerChooserPage;

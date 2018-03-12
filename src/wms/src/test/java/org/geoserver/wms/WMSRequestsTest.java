@@ -33,13 +33,13 @@ public class WMSRequestsTest extends WMSTestSupport {
         request.setFormat(DefaultWebMapService.FORMAT);
         DefaultWebMapService.autoSetBoundsAndSize(request);
         String url = WMSRequests.getGetMapUrl(request,
-            request.getLayers().get(0).getName(), 0, null, null, null);
+                request.getLayers().get(0).getName(), 0, null, null, null);
         url = URLDecoder.decode(url, "UTF-8");
         assertTrue("Missing time in GetMap URL: " + url,
-            url.contains("&time=2017-04-07T19:56:00.000Z"));
+                url.contains("&time=2017-04-07T19:56:00.000Z"));
         assertTrue("Missing elevation in GetMap URL: " + url,
-            url.contains("&elevation=1013.2"));
+                url.contains("&elevation=1013.2"));
         assertTrue("Missing custom dimension in GetMap URL: " + url,
-            url.contains("&dim_my_dimension=010"));
+                url.contains("&dim_my_dimension=010"));
     }
 }

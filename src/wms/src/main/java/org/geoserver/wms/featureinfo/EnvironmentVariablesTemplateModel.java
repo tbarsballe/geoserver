@@ -23,6 +23,5 @@ public class EnvironmentVariablesTemplateModel implements TemplateHashModel {
         return false;
     }
 
-    
 
 }

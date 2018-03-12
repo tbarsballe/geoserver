@@ -37,13 +37,15 @@ import org.opengis.util.InternationalString;
  */
 public class ScriptProcessFactory extends ScriptFactory implements ProcessFactory {
 
-    /** logger */
+    /**
+     * logger
+     */
     static Logger LOGGER = Logging.getLogger(ScriptProcessFactory.class);
 
     /**
      * softly cached process objects
      */
-    SoftValueHashMap<Name, ScriptProcess> processes = new SoftValueHashMap<Name,ScriptProcess>(10);
+    SoftValueHashMap<Name, ScriptProcess> processes = new SoftValueHashMap<Name, ScriptProcess>(10);
 
     public ScriptProcessFactory() {
         super(null);
@@ -109,8 +111,7 @@ public class ScriptProcessFactory extends ScriptFactory implements ProcessFactor
                     }
                 };
             }
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             LOGGER.log(Level.WARNING, "Error looking up processes", e);
         }
         return names;
@@ -149,7 +150,7 @@ public class ScriptProcessFactory extends ScriptFactory implements ProcessFactor
         }
         return desc != null ? new SimpleInternationalString(desc) : null;
     }
-    
+
     public Map<String, Parameter<?>> getParameterInfo(Name name) {
         try {
             return process(name).getInputs();
@@ -157,24 +158,24 @@ public class ScriptProcessFactory extends ScriptFactory implements ProcessFactor
             throw new RuntimeException(e);
         }
     }
-    
+
     public Map<String, Parameter<?>> getResultInfo(Name name, Map<String, Object> parameters)
-        throws IllegalArgumentException {
+            throws IllegalArgumentException {
         try {
             return process(name).getOutputs();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
-    
+
     public boolean supportsProgress(Name name) {
         return false;
     }
-    
+
     public Process create(Name name) {
         return process(name);
     }
-    
+
     public boolean isAvailable() {
         return true;
     }
@@ -186,7 +187,7 @@ public class ScriptProcessFactory extends ScriptFactory implements ProcessFactor
     ScriptProcess process(Name name) {
         ScriptProcess process = processes.get(name);
         if (process == null) {
-            synchronized(this) {
+            synchronized (this) {
                 process = processes.get(name);
                 if (process == null) {
                     try {
@@ -206,7 +207,7 @@ public class ScriptProcessFactory extends ScriptFactory implements ProcessFactor
                             }
                             Resource script = null;
                             for (Resource file : directory.list()) {
-                                if(Resources.isHidden(file) || file.getType() != Type.RESOURCE) {
+                                if (Resources.isHidden(file) || file.getType() != Type.RESOURCE) {
                                     continue;
                                 }
                                 if (localName.equals(getBaseName(file.name()))) {
@@ -222,8 +223,7 @@ public class ScriptProcessFactory extends ScriptFactory implements ProcessFactor
                         }
 
                         process = new ScriptProcess(name, f, scriptMgr);
-                    } 
-                    catch (IOException e) {
+                    } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
                     processes.put(name, process);

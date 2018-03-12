@@ -17,33 +17,33 @@ import org.geoserver.wms.map.ProcessStandaloneSLDVisitor;
 import org.geotools.styling.StyledLayerDescriptor;
 
 /**
- * Reads 
- * @author Justin Deoliveira, The Open Planning Project, jdeolive@openplans.org
+ * Reads
  *
+ * @author Justin Deoliveira, The Open Planning Project, jdeolive@openplans.org
  */
 public class SLDXmlRequestReader extends XmlRequestReader {
 
     private WMS wms;
-    
+
     public SLDXmlRequestReader(WMS wms) {
-        super("http://www.opengis.net/sld", "StyledLayerDescriptor" );
+        super("http://www.opengis.net/sld", "StyledLayerDescriptor");
         this.wms = wms;
     }
 
     public Object read(Object request, Reader reader, Map kvp) throws Exception {
-        if ( request == null ) {
-            throw new IllegalArgumentException( "request must be not null" );
+        if (request == null) {
+            throw new IllegalArgumentException("request must be not null");
         }
-        
+
         GetMapRequest getMap = (GetMapRequest) request;
         StyledLayerDescriptor sld =
-            Styles.handler(getMap.getStyleFormat()).parse(reader, getMap.styleVersion(), null, null);
+                Styles.handler(getMap.getStyleFormat()).parse(reader, getMap.styleVersion(), null, null);
 
         //process the sld
         sld.accept(new ProcessStandaloneSLDVisitor(wms, getMap));
         //GetMapKvpRequestReader.processStandaloneSld(wms, getMap, sld);
-    
+
         return getMap;
     }
-    
+
 }

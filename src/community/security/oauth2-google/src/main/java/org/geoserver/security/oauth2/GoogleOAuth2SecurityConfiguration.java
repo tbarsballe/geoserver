@@ -60,14 +60,14 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
  * <li>Logout URI: <b>https://accounts.google.com/logout</b></li>
  * <li>Scopes: <b>https://www.googleapis.com/auth/userinfo.email,https://www.googleapis.com/auth/userinfo.profile</b></li>
  * </ul>
- * 
+ *
  * @author Alessio Fabiani, GeoSolutions S.A.S.
  */
-@Configuration(value="googleOAuth2SecurityConfiguration")
+@Configuration(value = "googleOAuth2SecurityConfiguration")
 @EnableOAuth2Client
 class GoogleOAuth2SecurityConfiguration extends GeoServerOAuth2SecurityConfiguration {
 
-    @Bean(name="googleOAuth2Resource")
+    @Bean(name = "googleOAuth2Resource")
     public OAuth2ProtectedResourceDetails geoServerOAuth2Resource() {
         AuthorizationCodeResourceDetails details = new AuthorizationCodeResourceDetails();
         details.setId("oauth2-client");
@@ -80,11 +80,11 @@ class GoogleOAuth2SecurityConfiguration extends GeoServerOAuth2SecurityConfigura
 
         return details;
     }
-    
+
     /**
      * Must have "session" scope
      */
-    @Bean(name="googleOauth2RestTemplate")
+    @Bean(name = "googleOauth2RestTemplate")
     @Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
     public OAuth2RestTemplate geoServerOauth2RestTemplate() {
 
@@ -95,7 +95,7 @@ class GoogleOAuth2SecurityConfiguration extends GeoServerOAuth2SecurityConfigura
         authorizationCodeAccessTokenProvider.setStateMandatory(false);
 
         AccessTokenProvider accessTokenProviderChain = new AccessTokenProviderChain(
-                Arrays.<AccessTokenProvider> asList(authorizationCodeAccessTokenProvider,
+                Arrays.<AccessTokenProvider>asList(authorizationCodeAccessTokenProvider,
                         new ImplicitAccessTokenProvider(),
                         new ResourceOwnerPasswordAccessTokenProvider(),
                         new ClientCredentialsAccessTokenProvider()));

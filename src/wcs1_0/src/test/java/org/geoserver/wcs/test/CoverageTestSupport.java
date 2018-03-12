@@ -15,9 +15,8 @@ import org.geoserver.wcs.WCSInfo;
 
 /**
  * Base support class for wcs tests.
- * 
+ *
  * @author Andrea Aime, TOPP
- * 
  */
 public abstract class CoverageTestSupport extends GeoServerSystemTestSupport {
     protected static final String BASEPATH = "wcs";
@@ -25,7 +24,7 @@ public abstract class CoverageTestSupport extends GeoServerSystemTestSupport {
     protected static final boolean SpatioTemporalRasterTests = false;
 
     public static QName WATTEMP = new QName(MockData.WCS_URI, "watertemp", MockData.WCS_PREFIX);
-    
+
     protected static QName TIMERANGES = new QName(MockData.SF_URI, "timeranges", MockData.SF_PREFIX);
 
     /**
@@ -40,7 +39,7 @@ public abstract class CoverageTestSupport extends GeoServerSystemTestSupport {
     protected void setUpTestData(SystemTestData testData) throws Exception {
         testData.setUpSecurity();
         testData.setUpDefaultRasterLayers();
-        if(SpatioTemporalRasterTests) {
+        if (SpatioTemporalRasterTests) {
             testData.setUpRasterLayer(WATTEMP, "watertemp.zip", null, null, TestData.class);
 //            dataDirectory.addCoverage(WATTEMP, TestData.class.getResource("watertemp.zip"),
 //                    null, styleName);

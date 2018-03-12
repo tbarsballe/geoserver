@@ -17,7 +17,7 @@ import org.geoserver.security.validation.SecurityConfigValidator;
 
 /**
  * Security provider for auth-key authentication
- * 
+ *
  * @author mcr
  */
 
@@ -39,7 +39,7 @@ public class GeoServerAuthenticationKeyProvider extends AbstractFilterProvider {
     public GeoServerSecurityFilter createFilter(SecurityNamedServiceConfig config) {
         return new GeoServerAuthenticationKeyFilter();
     }
-    
+
     @Override
     public SecurityConfigValidator createConfigurationValidator(
             GeoServerSecurityManager securityManager) {

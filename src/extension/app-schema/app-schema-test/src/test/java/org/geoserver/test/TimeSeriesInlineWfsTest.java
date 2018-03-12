@@ -15,19 +15,19 @@ import org.junit.Test;
 /**
  * This is to test using isList to group multiple values as a concatenated single value without
  * feature chaining.
- * 
+ *
  * @author Rini Angreani (CSIRO Earth Science and Resource Engineering)
  */
 
 public class TimeSeriesInlineWfsTest extends TimeSeriesWfsTest {
-    
+
     protected TimeSeriesInlineMockData createTestData() {
         // only the test data is different since the config is slightly different (not using feature
         // chaining)
         // but the test cases from TimeSeriesWfsTest are the same
         return new TimeSeriesInlineMockData();
-    }  
-       
+    }
+
     /**
      * Test subsetting timePositionList.
      */

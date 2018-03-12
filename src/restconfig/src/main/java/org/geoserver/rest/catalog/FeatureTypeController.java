@@ -83,7 +83,7 @@ public class FeatureTypeController extends AbstractCatalogController {
     @GetMapping(produces = {
             MediaType.TEXT_HTML_VALUE,
             MediaType.APPLICATION_JSON_VALUE,
-            MediaType.APPLICATION_XML_VALUE })
+            MediaType.APPLICATION_XML_VALUE})
     public Object featureTypesGet(
             @PathVariable String workspaceName,
             @PathVariable(required = false) String storeName,
@@ -152,7 +152,7 @@ public class FeatureTypeController extends AbstractCatalogController {
             MediaTypeExtensions.TEXT_JSON_VALUE,
             MediaType.APPLICATION_JSON_VALUE,
             MediaType.TEXT_XML_VALUE,
-            MediaType.APPLICATION_XML_VALUE })
+            MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity featureTypePost(
             @PathVariable String workspaceName,
             @PathVariable(required = false) String storeName,
@@ -276,7 +276,7 @@ public class FeatureTypeController extends AbstractCatalogController {
     @GetMapping(path = "/{featureTypeName}", produces = {
             MediaType.TEXT_HTML_VALUE,
             MediaType.APPLICATION_JSON_VALUE,
-            MediaType.APPLICATION_XML_VALUE })
+            MediaType.APPLICATION_XML_VALUE})
     public RestWrapper featureTypeGet(
             @PathVariable String workspaceName,
             @PathVariable(required = false) String storeName,
@@ -293,7 +293,7 @@ public class FeatureTypeController extends AbstractCatalogController {
     @PutMapping(path = "/{featureTypeName}", produces = {
             MediaType.TEXT_HTML_VALUE,
             MediaType.APPLICATION_JSON_VALUE,
-            MediaType.APPLICATION_XML_VALUE })
+            MediaType.APPLICATION_XML_VALUE})
     public void featureTypePut(
             @PathVariable String workspaceName,
             @PathVariable(required = false) String storeName,
@@ -333,7 +333,7 @@ public class FeatureTypeController extends AbstractCatalogController {
     @DeleteMapping(path = "{featureTypeName}", produces = {
             MediaType.TEXT_HTML_VALUE,
             MediaType.APPLICATION_JSON_VALUE,
-            MediaType.APPLICATION_XML_VALUE })
+            MediaType.APPLICATION_XML_VALUE})
     public void featureTypeDelete(
             @PathVariable String workspaceName,
             @PathVariable(required = false) String storeName,
@@ -422,7 +422,7 @@ public class FeatureTypeController extends AbstractCatalogController {
 
     @Override
     public boolean supports(MethodParameter methodParameter, Type targetType,
-            Class<? extends HttpMessageConverter<?>> converterType) {
+                            Class<? extends HttpMessageConverter<?>> converterType) {
         return FeatureTypeInfo.class.isAssignableFrom(methodParameter.getParameterType());
     }
 
@@ -465,7 +465,7 @@ public class FeatureTypeController extends AbstractCatalogController {
 
             @Override
             protected void postEncodeReference(Object obj, String ref, String prefix,
-                    HierarchicalStreamWriter writer, MarshallingContext context) {
+                                               HierarchicalStreamWriter writer, MarshallingContext context) {
                 if (obj instanceof NamespaceInfo) {
                     NamespaceInfo ns = (NamespaceInfo) obj;
                     converter.encodeLink("/namespaces/" + converter.encode(ns.getPrefix()), writer);
@@ -482,7 +482,7 @@ public class FeatureTypeController extends AbstractCatalogController {
 
             @Override
             protected void postEncodeFeatureType(FeatureTypeInfo ft,
-                    HierarchicalStreamWriter writer, MarshallingContext context) {
+                                                 HierarchicalStreamWriter writer, MarshallingContext context) {
                 try {
                     writer.startNode("attributes");
                     context.convertAnother(ft.attributes());

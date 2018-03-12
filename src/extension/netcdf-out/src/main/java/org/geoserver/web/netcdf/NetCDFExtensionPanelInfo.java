@@ -9,10 +9,10 @@ import org.geoserver.web.ComponentInfo;
 import org.geoserver.web.services.AdminPagePanel;
 
 /**
- * Extension point for plugins to contribute additional panels to the NetCDF 
+ * Extension point for plugins to contribute additional panels to the NetCDF
  * page
  */
 public class NetCDFExtensionPanelInfo extends ComponentInfo<NetCDFExtensionPanel> {
 
-    
+
 }

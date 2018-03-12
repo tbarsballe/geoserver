@@ -16,7 +16,7 @@ import org.geotools.xml.Node;
 
 /**
  * Binding object for the type http://www.opengis.net/ows:AddressType.
- *        <pre>
+ * <pre>
  *         <code>
  *  &lt;complexType name="AddressType"&gt;
  *      &lt;annotation&gt;
@@ -94,7 +94,7 @@ public class AddressTypeBinding extends AbstractComplexBinding {
      * @generated modifiable
      */
     public Object parse(ElementInstance instance, Node node, Object value)
-        throws Exception {
+            throws Exception {
         //TODO: implement
         return null;
     }

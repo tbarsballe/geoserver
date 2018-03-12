@@ -35,7 +35,7 @@ public class UserPanel extends Panel {
 
     protected GeoServerTablePanel<GeoServerUser> users;
     protected GeoServerDialog dialog;
-    protected SelectionUserRemovalLink removal,removalWithRoles;
+    protected SelectionUserRemovalLink removal, removalWithRoles;
     protected Link<NewUserPage> add;
     protected String serviceName;
 
@@ -47,11 +47,11 @@ public class UserPanel extends Panel {
             throw new RuntimeException(e);
         }
     }
-    
+
     public UserPanel(String id, String serviceName) {
         super(id);
-        
-        this.serviceName=serviceName;
+
+        this.serviceName = serviceName;
         UserListProvider provider = new UserListProvider(this.serviceName);
         add(users = new UserTablePanel("table", serviceName, provider, true) {
             @Override
@@ -65,7 +65,7 @@ public class UserPanel extends Panel {
         users.setOutputMarkupId(true);
         add(dialog = new GeoServerDialog("dialog"));
         headerComponents();
-        
+
     }
 
     public UserPanel setHeaderVisible(boolean visible) {
@@ -81,49 +81,48 @@ public class UserPanel extends Panel {
 
     protected void headerComponents() {
 
-        
-        boolean canCreateStore=getService().canCreateStore();
+
+        boolean canCreateStore = getService().canCreateStore();
 
         WebMarkupContainer h = new WebMarkupContainer("header");
         add(h);
 
         if (!canCreateStore) {
             h.add(new Label("message", new StringResourceModel("noCreateStore", this, null))
-                .add(new AttributeAppender("class", new Model("info-link"), " ")));
-        }
-        else {
+                    .add(new AttributeAppender("class", new Model("info-link"), " ")));
+        } else {
             h.add(new Label("message", new Model())
-                .add(new AttributeAppender("class", new Model("displayNone"), " ")));
+                    .add(new AttributeAppender("class", new Model("displayNone"), " ")));
         }
 
         // the add button
-        h.add(add=new Link("addNew") {
+        h.add(add = new Link("addNew") {
             @Override
             public void onClick() {
                 setResponsePage(new NewUserPage(serviceName).setReturnPage(this.getPage()));
             }
         });
-        
+
         //<NewUserPage><NewUserPage>("addNew", NewUserPage.class));
         //add.setParameter(AbstractSecurityPage.ServiceNameKey, serviceName);
         add.setVisible(canCreateStore);
 
         // the removal button
-        h.add(removal = new SelectionUserRemovalLink(serviceName,"removeSelected", users, dialog,false));
+        h.add(removal = new SelectionUserRemovalLink(serviceName, "removeSelected", users, dialog, false));
         removal.setOutputMarkupId(true);
         removal.setEnabled(false);
         removal.setVisible(canCreateStore);
-        
 
-        h.add(removalWithRoles = new SelectionUserRemovalLink(serviceName,"removeSelectedWithRoles", users, dialog,true));
+
+        h.add(removalWithRoles = new SelectionUserRemovalLink(serviceName, "removeSelectedWithRoles", users, dialog, true));
         removalWithRoles.setOutputMarkupId(true);
         removalWithRoles.setEnabled(false);
-        removalWithRoles.setVisible(canCreateStore && 
+        removalWithRoles.setVisible(canCreateStore &&
                 GeoServerApplication.get().getSecurityManager().
-                    getActiveRoleService().canCreateStore());
-        
+                        getActiveRoleService().canCreateStore());
+
     }
-    
+
     protected void onBeforeRender() {
         users.clearSelection();
         removal.setEnabled(false);

@@ -9,14 +9,16 @@ package org.geoserver.security.impl;
 /**
  * Property stored as a user property.
  * <p>
- * This class sets/unsets values from {@Link GeoServerUser#getProperties()} 
+ * This class sets/unsets values from {@Link GeoServerUser#getProperties()}
  * </p>
- * @author Justin Deoliveira, OpenGeo
  *
+ * @author Justin Deoliveira, OpenGeo
  */
 public abstract class UserProperty<T> {
 
-    /** the property key */
+    /**
+     * the property key
+     */
     String key;
 
     protected UserProperty(String key) {

@@ -24,7 +24,7 @@ public class SecuredCoverageStoreInfo extends DecoratingCoverageStoreInfo {
     @Override
     public AbstractGridFormat getFormat() {
         Request request = Dispatcher.REQUEST.get();
-        if(policy.level == AccessLevel.METADATA && 
+        if (policy.level == AccessLevel.METADATA &&
                 (request == null || !"GetCapabilities".equalsIgnoreCase(request.getRequest()))) {
             throw SecureCatalogImpl.unauthorizedAccess(this.getName());
         }

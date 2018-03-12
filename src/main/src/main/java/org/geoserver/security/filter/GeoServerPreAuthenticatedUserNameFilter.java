@@ -32,19 +32,18 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 /**
  * J2EE Authentication Filter
- * 
- * @author mcr
  *
+ * @author mcr
  */
 public abstract class GeoServerPreAuthenticatedUserNameFilter extends GeoServerPreAuthenticationFilter {
-    
+
     private RoleSource roleSource;
     private String rolesHeaderAttribute;
     private String userGroupServiceName;
     private String roleConverterName;
     private String roleServiceName;
     private GeoServerRoleConverter converter;
-    
+
     protected final static String UserNameAlreadyRetrieved = "org.geoserver.security.filter.usernameAlreadyRetrieved";
     protected final static String UserName = "org.geoserver.security.filter.username";
 
@@ -81,11 +80,10 @@ public abstract class GeoServerPreAuthenticatedUserNameFilter extends GeoServerP
     }
 
 
-    
     public String getRoleServiceName() {
         return roleServiceName;
     }
-    
+
     public void setRoleServiceName(String roleServiceName) {
         this.roleServiceName = roleServiceName;
     }
@@ -93,164 +91,159 @@ public abstract class GeoServerPreAuthenticatedUserNameFilter extends GeoServerP
     @Override
     public void initializeFromConfig(SecurityNamedServiceConfig config) throws IOException {
         super.initializeFromConfig(config);
-                        
-        PreAuthenticatedUserNameFilterConfig authConfig = 
+
+        PreAuthenticatedUserNameFilterConfig authConfig =
                 (PreAuthenticatedUserNameFilterConfig) config;
 
-        roleSource=authConfig.getRoleSource();
-        rolesHeaderAttribute=authConfig.getRolesHeaderAttribute();
-        userGroupServiceName=authConfig.getUserGroupServiceName();
-        roleConverterName=authConfig.getRoleConverterName();
-        roleServiceName=authConfig.getRoleServiceName();     
-        
+        roleSource = authConfig.getRoleSource();
+        rolesHeaderAttribute = authConfig.getRolesHeaderAttribute();
+        userGroupServiceName = authConfig.getUserGroupServiceName();
+        roleConverterName = authConfig.getRoleConverterName();
+        roleServiceName = authConfig.getRoleServiceName();
+
         // TODO, Justin, is this ok ?
         if (PreAuthenticatedUserNameRoleSource.Header.equals(getRoleSource())) {
             String converterName = authConfig.getRoleConverterName();
-            if (converterName==null || converterName.length()==0)
+            if (converterName == null || converterName.length() == 0)
                 setConverter(GeoServerExtensions.bean(GeoServerRoleConverter.class));
             else
-                setConverter((GeoServerRoleConverter) 
-                    GeoServerExtensions.bean(converterName));
-        }        
+                setConverter((GeoServerRoleConverter)
+                        GeoServerExtensions.bean(converterName));
+        }
     }
 
 
     @Override
     protected String getPreAuthenticatedPrincipal(HttpServletRequest request) {
         // avoid retrieving the user name more than once
-        if (request.getAttribute(UserNameAlreadyRetrieved)!=null)
+        if (request.getAttribute(UserNameAlreadyRetrieved) != null)
             return (String) request.getAttribute(UserName);
-        
+
         String principal = getPreAuthenticatedPrincipalName(request);
-        if (principal!=null && principal.trim().length()==0)
-            principal=null;        
+        if (principal != null && principal.trim().length() == 0)
+            principal = null;
         try {
-            if (principal!=null && PreAuthenticatedUserNameRoleSource.UserGroupService.equals(getRoleSource())) {
+            if (principal != null && PreAuthenticatedUserNameRoleSource.UserGroupService.equals(getRoleSource())) {
                 GeoServerUserGroupService service = getSecurityManager().loadUserGroupService(getUserGroupServiceName());
                 GeoServerUser u = service.getUserByUsername(principal);
-                if (u!=null && u.isEnabled()==false) {
-                    principal=null;
+                if (u != null && u.isEnabled() == false) {
+                    principal = null;
                     handleDisabledUser(u, request);
                 }
-                
+
             }
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
         request.setAttribute(UserNameAlreadyRetrieved, Boolean.TRUE);
-        if (principal!=null)
-            request.setAttribute(UserName,principal);
-        return principal;    
+        if (principal != null)
+            request.setAttribute(UserName, principal);
+        return principal;
     }
 
-    
-    protected void handleDisabledUser(GeoServerUser u,HttpServletRequest request) {
+
+    protected void handleDisabledUser(GeoServerUser u, HttpServletRequest request) {
         // do nothing
     }
 
     @Override
-    protected Collection<GeoServerRole> getRoles(HttpServletRequest request, String principal) throws IOException{
+    protected Collection<GeoServerRole> getRoles(HttpServletRequest request, String principal) throws IOException {
 
-        if (PreAuthenticatedUserNameRoleSource.RoleService.equals(getRoleSource())) 
+        if (PreAuthenticatedUserNameRoleSource.RoleService.equals(getRoleSource()))
             return getRolesFromRoleService(request, principal);
-        if (PreAuthenticatedUserNameRoleSource.UserGroupService.equals(getRoleSource())) 
+        if (PreAuthenticatedUserNameRoleSource.UserGroupService.equals(getRoleSource()))
             return getRolesFromUserGroupService(request, principal);
-        if (PreAuthenticatedUserNameRoleSource.Header.equals(getRoleSource())) 
+        if (PreAuthenticatedUserNameRoleSource.Header.equals(getRoleSource()))
             return getRolesFromHttpAttribute(request, principal);
-        
+
         throw new RuntimeException("Never should reach this point");
 
     }
 
-    
-    
+
     /**
      * Calculates roles from a {@link GeoServerRoleService}
      * The default service is {@link GeoServerSecurityManager#getActiveRoleService()}
-     * 
+     * <p>
      * The result contains all inherited roles, but no personalized roles
-     * 
+     *
      * @param request
      * @param principal
-     *
      * @throws IOException
      */
-    protected Collection<GeoServerRole> getRolesFromRoleService(HttpServletRequest request, String principal) throws IOException{
-        boolean useActiveService = getRoleServiceName()==null || 
-                getRoleServiceName().trim().length()==0;
-      
+    protected Collection<GeoServerRole> getRolesFromRoleService(HttpServletRequest request, String principal) throws IOException {
+        boolean useActiveService = getRoleServiceName() == null ||
+                getRoleServiceName().trim().length() == 0;
+
         GeoServerRoleService service = useActiveService ?
-              getSecurityManager().getActiveRoleService() :
-              getSecurityManager().loadRoleService(getRoleServiceName());
-              
+                getSecurityManager().getActiveRoleService() :
+                getSecurityManager().loadRoleService(getRoleServiceName());
+
         RoleCalculator calc = new RoleCalculator(service);
         return calc.calculateRoles(principal);
     }
-    
+
     /**
      * Calculates roles using a {@link GeoServerUserGroupService}
      * if the principal is not found, an empty collection is returned
-     * 
+     *
      * @param request
      * @param principal
-     *
      * @throws IOException
      */
-    protected Collection<GeoServerRole> getRolesFromUserGroupService(HttpServletRequest request, String principal) throws IOException{
+    protected Collection<GeoServerRole> getRolesFromUserGroupService(HttpServletRequest request, String principal) throws IOException {
         Collection<GeoServerRole> roles = new ArrayList<GeoServerRole>();
-        
+
         GeoServerUserGroupService service = getSecurityManager().loadUserGroupService(getUserGroupServiceName());
-        UserDetails details=null;
+        UserDetails details = null;
         try {
-             details = service.loadUserByUsername(principal);
+            details = service.loadUserByUsername(principal);
         } catch (UsernameNotFoundException ex) {
-            LOGGER.log(Level.WARNING,"User "+ principal + " not found in " + getUserGroupServiceName());
+            LOGGER.log(Level.WARNING, "User " + principal + " not found in " + getUserGroupServiceName());
         }
-        
-        if (details!=null) {
+
+        if (details != null) {
             for (GrantedAuthority auth : details.getAuthorities())
-                roles.add((GeoServerRole)auth);
+                roles.add((GeoServerRole) auth);
         }
-        return roles;        
+        return roles;
     }
-    
+
     /**
      * Calculates roles using the String found in the http header attribute
      * if no role string is found, anempty collection is returned
-     * 
+     * <p>
      * The result contains personalized roles
-     * 
+     *
      * @param request
      * @param principal
-     *
      * @throws IOException
      */
-    protected Collection<GeoServerRole> getRolesFromHttpAttribute(HttpServletRequest request, String principal) throws IOException{
+    protected Collection<GeoServerRole> getRolesFromHttpAttribute(HttpServletRequest request, String principal) throws IOException {
         Collection<GeoServerRole> roles = new ArrayList<GeoServerRole>();
 
-        String rolesString =request.getHeader(getRolesHeaderAttribute());
-        if (rolesString ==null || rolesString.trim().length()==0) {
-            LOGGER.log(Level.WARNING,"No roles in header attribute: " + getRolesHeaderAttribute());
+        String rolesString = request.getHeader(getRolesHeaderAttribute());
+        if (rolesString == null || rolesString.trim().length() == 0) {
+            LOGGER.log(Level.WARNING, "No roles in header attribute: " + getRolesHeaderAttribute());
             return roles;
         }
 
         roles.addAll(getConverter().convertRolesFromString(rolesString, principal));
-        LOGGER.log(Level.FINE,"for principal " + principal + " found roles " + StringUtils.collectionToCommaDelimitedString(roles) + " in header " + getRolesHeaderAttribute());
-        return roles;        
+        LOGGER.log(Level.FINE, "for principal " + principal + " found roles " + StringUtils.collectionToCommaDelimitedString(roles) + " in header " + getRolesHeaderAttribute());
+        return roles;
     }
 
 
     @Override
     public String getCacheKey(HttpServletRequest request) {
-        
+
         // caching does not make sense if everything is in the header
-        if (PreAuthenticatedUserNameRoleSource.Header.equals(getRoleSource())) 
-            return null;        
+        if (PreAuthenticatedUserNameRoleSource.Header.equals(getRoleSource()))
+            return null;
         return super.getCacheKey(request);
     }
 
 
-    
     public GeoServerRoleConverter getConverter() {
         return converter;
     }

@@ -9,8 +9,8 @@ package org.geoserver.security.xml;
 import org.geoserver.security.config.SecurityRoleServiceConfig;
 
 
-public class XMLRoleServiceConfig extends XMLSecurityServiceConfig 
-    implements SecurityRoleServiceConfig {
+public class XMLRoleServiceConfig extends XMLSecurityServiceConfig
+        implements SecurityRoleServiceConfig {
 
     private static final long serialVersionUID = 1L;
 
@@ -19,13 +19,13 @@ public class XMLRoleServiceConfig extends XMLSecurityServiceConfig
 
     public XMLRoleServiceConfig() {
     }
-    
+
     public XMLRoleServiceConfig(XMLRoleServiceConfig other) {
         super(other);
         adminRoleName = other.getAdminRoleName();
         groupAdminRoleName = other.getGroupAdminRoleName();
     }
-    
+
     public String getGroupAdminRoleName() {
         return groupAdminRoleName;
     }
@@ -41,7 +41,7 @@ public class XMLRoleServiceConfig extends XMLSecurityServiceConfig
 
     @Override
     public void setAdminRoleName(String name) {
-        adminRoleName=name;
+        adminRoleName = name;
     }
 
 }

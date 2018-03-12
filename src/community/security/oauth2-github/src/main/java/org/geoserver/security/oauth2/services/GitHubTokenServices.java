@@ -25,7 +25,7 @@ import org.springframework.web.client.RestTemplate;
 
 /**
  * Remote Token Services for GitHub token details.
- * 
+ *
  * @author Alessio Fabiani, GeoSolutions S.A.S.
  */
 public class GitHubTokenServices extends GeoServerOAuthRemoteTokenServices {
@@ -49,7 +49,7 @@ public class GitHubTokenServices extends GeoServerOAuthRemoteTokenServices {
             throws AuthenticationException, InvalidTokenException {
         Map<String, Object> checkTokenResponse = checkToken(accessToken);
 
-        if (checkTokenResponse.containsKey("message") && 
+        if (checkTokenResponse.containsKey("message") &&
                 checkTokenResponse.get("message").toString().startsWith("Problems")) {
             logger.debug("check_token returned error: " + checkTokenResponse.get("message"));
             throw new InvalidTokenException(accessToken);
@@ -79,13 +79,13 @@ public class GitHubTokenServices extends GeoServerOAuthRemoteTokenServices {
         map.put("user_name", map.get("login")); // GitHub sends 'user_name' as 'login'
         LOGGER.debug("Transformed = " + map);
     }
-    
+
     private String getAuthorizationHeader(String accessToken) {
         return "Bearer " + accessToken;
     }
 
     private Map<String, Object> postForMap(String path, MultiValueMap<String, String> formData,
-            HttpHeaders headers) {
+                                           HttpHeaders headers) {
         if (headers.getContentType() == null) {
             headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
         }

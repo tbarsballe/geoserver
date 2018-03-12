@@ -26,6 +26,7 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -33,7 +34,6 @@ import static org.junit.Assert.assertTrue;
  * Test if we temp values are use for consecutive views.
  *
  * @author Timothy De Bock
- *
  */
 public class CreateComplexViewConsecutiveTest extends AbstractTaskManagerTest {
 
@@ -42,7 +42,7 @@ public class CreateComplexViewConsecutiveTest extends AbstractTaskManagerTest {
     private static final String TABLE_NAME = "gw_beleid.grondwaterlichamen_new";
     private static final String VIEW_NAME = "gw_beleid.vw_grondwaterlichamen_test";
     private static final String DEFINITION = " select * from ${table_name} where gwl like 'BL%'";
-    
+
     private static final String DEFINITION_STEP2 = " select dataengine_id from ${table_name_step2} where gwl like 'BL%'";
     private static final String VIEW_NAME_STEP2 = "gw_beleid.vw_grondwaterlichamen_from_view";
 
@@ -58,13 +58,13 @@ public class CreateComplexViewConsecutiveTest extends AbstractTaskManagerTest {
 
     @Autowired
     private TaskManagerDao dao;
-    
+
     @Autowired
     private TaskManagerFactory fac;
-    
+
     @Autowired
     private TaskManagerDataUtil dataUtil;
-    
+
     @Autowired
     private TaskManagerTaskUtil taskUtil;
 
@@ -73,17 +73,17 @@ public class CreateComplexViewConsecutiveTest extends AbstractTaskManagerTest {
 
     @Autowired
     private LookupService<DbSource> dbSources;
-        
+
     @Autowired
     private Scheduler scheduler;
-    
+
     private Configuration config;
-    
+
     private Batch batch;
 
     @Before
     public void setupBatch() {
-        config = fac.createConfiguration();  
+        config = fac.createConfiguration();
         config.setName("my_config");
         config.setWorkspace("some_ws");
 
@@ -131,7 +131,8 @@ public class CreateComplexViewConsecutiveTest extends AbstractTaskManagerTest {
         scheduler.scheduleJob(trigger);
 
         while (scheduler.getTriggerState(trigger.getKey()) != TriggerState.COMPLETE
-                && scheduler.getTriggerState(trigger.getKey()) != TriggerState.NONE) {}
+                && scheduler.getTriggerState(trigger.getKey()) != TriggerState.NONE) {
+        }
 
         assertTrue(viewExists(SqlUtil.schema(VIEW_NAME), SqlUtil.notQualified(VIEW_NAME)));
 
@@ -141,16 +142,16 @@ public class CreateComplexViewConsecutiveTest extends AbstractTaskManagerTest {
         assertTrue(taskUtil.cleanup(config));
         assertFalse(viewExists(SqlUtil.schema(VIEW_NAME_STEP2), SqlUtil.notQualified(VIEW_NAME_STEP2)));
     }
-    
+
     private boolean viewExists(String schema, String pattern) throws SQLException {
         DbSource ds = dbSources.get(DB_NAME);
         try (Connection conn = ds.getDataSource().getConnection()) {
             DatabaseMetaData md = conn.getMetaData();
-            if(md.storesUpperCaseIdentifiers()){
+            if (md.storesUpperCaseIdentifiers()) {
                 schema = schema.toUpperCase();
                 pattern = pattern.toUpperCase();
             }
-            ResultSet rs = md.getTables(null, schema, pattern, new String[] {"VIEW"});
+            ResultSet rs = md.getTables(null, schema, pattern, new String[]{"VIEW"});
             return (rs.next());
         }
     }

@@ -11,9 +11,7 @@ import org.junit.Test;
 import org.w3c.dom.Document;
 
 /**
- * 
  * @author Niels Charlier
- *
  */
 public class DescribeRecordTest extends CSWInternalTestSupport {
 
@@ -22,7 +20,7 @@ public class DescribeRecordTest extends CSWInternalTestSupport {
         Document dom = getAsDOM("csw?service=CSW&version=2.0.2&request=DescribeRecord&typeName=csw:Record");
         checkValidationErrors(dom);
         //print(dom);
-        
+
         assertXpathEvaluatesTo("1", "count(//csw:SchemaComponent)", dom);
         assertXpathExists("//csw:SchemaComponent/xsd:schema[@targetNamespace='http://www.opengis.net/cat/csw/2.0.2']", dom);
 
@@ -33,27 +31,27 @@ public class DescribeRecordTest extends CSWInternalTestSupport {
                 "//xsd:import[@namespace = 'http://purl.org/dc/terms/']/@schemaLocation", dom);
 
     }
-    
+
     @Test
     public void testBasicGetLocalSchemaMetaData() throws Exception {
         Document dom = getAsDOM("csw?service=CSW&version=2.0.2&request=DescribeRecord&typeName=gmd:MD_Metadata");
         checkValidationErrors(dom);
         //print(dom);
-        
+
         assertXpathEvaluatesTo("2", "count(//csw:SchemaComponent)", dom);
         assertXpathExists("//csw:SchemaComponent/xsd:schema[@targetNamespace='http://www.isotc211.org/2005/gmd']", dom);
         assertXpathExists("//csw:SchemaComponent/xsd:schema[@targetNamespace='http://www.isotc211.org/2005/srv']", dom);
-        
+
         assertXpathExists("//xs:element[@name='AbstractMD_Identification']", dom);
         assertXpathExists("//xs:element[@name='MD_Keywords']", dom);
     }
-    
+
     @Test
     public void testBasicGetLocalSchemaAll() throws Exception {
         Document dom = getAsDOM("csw?service=CSW&version=2.0.2&request=DescribeRecord");
         checkValidationErrors(dom);
         //print(dom);
-        
+
         assertXpathEvaluatesTo("3", "count(//csw:SchemaComponent)", dom);
         assertXpathExists("//csw:SchemaComponent/xsd:schema[@targetNamespace='http://www.opengis.net/cat/csw/2.0.2']", dom);
         assertXpathExists("//csw:SchemaComponent/xsd:schema[@targetNamespace='http://www.isotc211.org/2005/gmd']", dom);

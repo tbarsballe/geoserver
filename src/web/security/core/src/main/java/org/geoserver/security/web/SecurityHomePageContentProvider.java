@@ -48,49 +48,50 @@ public class SecurityHomePageContentProvider implements
         }
         return null;
     }
-   
+
     // PasswordChangeWarningPanel
     static class SecurityWarningsPanel extends Panel {
 
         public SecurityWarningsPanel(String id) {
             super(id);
 
-            GeoServerSecurityManager manager = GeoServerApplication.get().getSecurityManager(); 
-            
+            GeoServerSecurityManager manager = GeoServerApplication.get().getSecurityManager();
+
             // warn in case of an existing masterpw.info
             Resource mpInfo = null;
-            Label mpInfoLabel=null;
+            Label mpInfoLabel = null;
             try {
                 mpInfo = manager.get("security").get(GeoServerSecurityManager.MASTER_PASSWD_INFO_FILENAME);
-                mpInfoLabel=new Label("mpfile", new StringResourceModel("masterPasswordFile", (Component)this).setParameters(mpInfo.path()));
+                mpInfoLabel = new Label("mpfile", new StringResourceModel("masterPasswordFile", (Component) this).setParameters(mpInfo.path()));
                 mpInfoLabel.setEscapeModelStrings(false);
-                add(mpInfoLabel);            
+                add(mpInfoLabel);
                 mpInfoLabel.setVisible(Resources.exists(mpInfo));
             } catch (Exception ex) {
-                throw new RuntimeException (ex);
+                throw new RuntimeException(ex);
             }
-            
+
             // warn in case of an existing user.properties.old
             Resource userprops = null;
-            Label userpropsLabel=null;
+            Label userpropsLabel = null;
             try {
                 userprops = manager.get("security").get("users.properties.old");
-                userpropsLabel=new Label("userpropsold", new StringResourceModel("userPropertiesOldFile", (Component)this).setParameters(userprops.path()));
+                userpropsLabel = new Label("userpropsold", new StringResourceModel("userPropertiesOldFile", (Component) this).setParameters(userprops.path()));
                 userpropsLabel.setEscapeModelStrings(false);
-                add(userpropsLabel);            
+                add(userpropsLabel);
                 userpropsLabel.setVisible(Resources.exists(userprops));
             } catch (Exception ex) {
-                throw new RuntimeException (ex);
+                throw new RuntimeException(ex);
             }
 
             // check for default master password
-            boolean visibility = manager.checkMasterPassword( DEFAULT_ADMIN_PASSWD);
+            boolean visibility = manager.checkMasterPassword(DEFAULT_ADMIN_PASSWD);
 
-            Label label=new Label("mpmessage", new StringResourceModel("changeMasterPassword", (Component)this, null));
+            Label label = new Label("mpmessage", new StringResourceModel("changeMasterPassword", (Component) this, null));
             label.setEscapeModelStrings(false);
             add(label);
-            Link link=null;;                        
-            add(link=new Link("mplink") {
+            Link link = null;
+            ;
+            add(link = new Link("mplink") {
                 @Override
                 public void onClick() {
                     setResponsePage(new MasterPasswordChangePage());
@@ -98,15 +99,14 @@ public class SecurityHomePageContentProvider implements
             });
             label.setVisible(visibility);
             link.setVisible(visibility);
-            
-                        
-            
+
+
             // check for default admin password
-            visibility= manager.checkForDefaultAdminPassword();
+            visibility = manager.checkForDefaultAdminPassword();
             Page changeItPage = null;
-            String passwordEncoderName=null;
+            String passwordEncoderName = null;
             try {
-                GeoServerUserGroupService ugService = manager.loadUserGroupService(XMLUserGroupService.DEFAULT_NAME);                
+                GeoServerUserGroupService ugService = manager.loadUserGroupService(XMLUserGroupService.DEFAULT_NAME);
                 if (ugService != null) {
                     passwordEncoderName = ugService.getPasswordEncoderName();
                     GeoServerUser user = ugService.getUserByUsername(ADMIN_USERNAME);
@@ -121,12 +121,12 @@ public class SecurityHomePageContentProvider implements
                 changeItPage = new UserGroupRoleServicesPage();
             }
 
-            
+
             final Page linkPage = changeItPage;
-            label=new Label("adminmessage", new StringResourceModel("changeAdminPassword", (Component)this, null));
+            label = new Label("adminmessage", new StringResourceModel("changeAdminPassword", (Component) this, null));
             label.setEscapeModelStrings(false);
-            add(label);                                   
-            add(link=new Link("adminlink") {
+            add(label);
+            add(link = new Link("adminlink") {
                 @Override
                 public void onClick() {
                     setResponsePage(linkPage);
@@ -134,30 +134,29 @@ public class SecurityHomePageContentProvider implements
             });
             label.setVisible(visibility);
             link.setVisible(visibility);
-            
+
             // inform about strong encryption
-            if (manager.isStrongEncryptionAvailable()) {                
+            if (manager.isStrongEncryptionAvailable()) {
                 add(new Label("strongEncryptionMsg", new StringResourceModel("strongEncryption", new SecuritySettingsPage(), null))
-                    .add(new AttributeAppender("class", new Model("info-link"), " "))); 
-            }
-            else {
+                        .add(new AttributeAppender("class", new Model("info-link"), " ")));
+            } else {
                 add(new Label("strongEncryptionMsg", new StringResourceModel("noStrongEncryption", new SecuritySettingsPage(), null))
-                .add(new AttributeAppender("class", new Model("warning-link"), " ")));
+                        .add(new AttributeAppender("class", new Model("warning-link"), " ")));
             }
-            
+
             // check for password encoding in the default user group service
-            visibility=false;
-            if (passwordEncoderName!=null) {
+            visibility = false;
+            if (passwordEncoderName != null) {
                 GeoServerPasswordEncoder encoder = manager.loadPasswordEncoder(passwordEncoderName);
-                if (encoder!=null) {
+                if (encoder != null) {
                     visibility = encoder.isReversible();
                 }
             }
-            
-            label=new Label("digestEncoding", new StringResourceModel("digestEncoding", (Component)this, null));
+
+            label = new Label("digestEncoding", new StringResourceModel("digestEncoding", (Component) this, null));
             add(label);
             label.setVisible(visibility);
-                       
+
         }
     }
 }

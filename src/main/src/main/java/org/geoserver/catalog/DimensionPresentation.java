@@ -7,7 +7,7 @@ package org.geoserver.catalog;
 
 /**
  * The presentation mode for time/elevation lists
- * 
+ *
  * @author Simone Giannecchini - GeoSolutions
  */
 public enum DimensionPresentation {

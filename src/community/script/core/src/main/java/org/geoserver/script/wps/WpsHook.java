@@ -21,7 +21,7 @@ import org.opengis.util.InternationalString;
 /**
  * Handles wps / process requests.
  * <p>
- * This class is a bridge between the GeoTools/GeoServer process api and the api for process 
+ * This class is a bridge between the GeoTools/GeoServer process api and the api for process
  * scripts.
  * </p>
  * <p>
@@ -31,8 +31,8 @@ import org.opengis.util.InternationalString;
  * <p>
  * Instances of this class must be thread safe.
  * </p>
- * @author Justin Deoliveira, OpenGeo
  *
+ * @author Justin Deoliveira, OpenGeo
  */
 public class WpsHook extends ScriptHook {
 
@@ -44,7 +44,7 @@ public class WpsHook extends ScriptHook {
      * The title of the process.
      * <p>
      * Subclasses may override this method, the default behavior is to look for a defined object
-     * named "title" in the script engine and return its string representation.  
+     * named "title" in the script engine and return its string representation.
      * </p>
      */
     public String getTitle(ScriptEngine engine) throws ScriptException {
@@ -59,7 +59,7 @@ public class WpsHook extends ScriptHook {
      * object exists {@link #getTitle(ScriptEngine)} is returned.
      * </p>
      */
-    public String getDescription(ScriptEngine engine) throws ScriptException{
+    public String getDescription(ScriptEngine engine) throws ScriptException {
         Object d = engine.get("description");
         if (d != null) {
             return d.toString();
@@ -70,10 +70,10 @@ public class WpsHook extends ScriptHook {
     /**
      * The version of the process.
      * <p>
-     * Subclasses should override this method, the default behavior is simply to return "1.0.0". 
+     * Subclasses should override this method, the default behavior is simply to return "1.0.0".
      * </p>
      */
-    public String getVersion(ScriptEngine engine) throws ScriptException{
+    public String getVersion(ScriptEngine engine) throws ScriptException {
         return "1.0.0";
     }
 
@@ -87,13 +87,13 @@ public class WpsHook extends ScriptHook {
      *  'arg1': {
      *    'title', ...
      *    'type': ...,
-     *  }, 
+     *  },
      *  'arg2: {
      *    'title', ...
      *    'type': ...,
      *  }
      * }
-     * </pre>  
+     * </pre>
      * </p>
      */
     public Map<String, Parameter<?>> getInputs(ScriptEngine engine) throws ScriptException {
@@ -110,13 +110,13 @@ public class WpsHook extends ScriptHook {
      *  'result1': {
      *    'title', ...
      *    'type': ...,
-     *  }, 
+     *  },
      *  'result2: {
      *    'title', ...
      *    'type': ...,
      *  }
      * }
-     * </pre>  
+     * </pre>
      * </p>
      */
     public Map<String, Parameter<?>> getOutputs(ScriptEngine engine) throws ScriptException {
@@ -125,19 +125,19 @@ public class WpsHook extends ScriptHook {
 
 
     /**
-     * Helper method to create parameter map. 
+     * Helper method to create parameter map.
      */
     protected Map<String, Parameter<?>> params(Map map) {
         Map params = new HashMap();
         for (Map.Entry e : (Set<Map.Entry>) map.entrySet()) {
-            params.put(e.getKey(), param((String)e.getKey(), e.getValue()));
+            params.put(e.getKey(), param((String) e.getKey(), e.getValue()));
         }
         return params;
     }
 
     /**
-     * Helper method to morph input into a Parameter instance, will throw exception if can't 
-     * convert. 
+     * Helper method to morph input into a Parameter instance, will throw exception if can't
+     * convert.
      */
     protected Parameter<?> param(String name, Object o) {
         if (o instanceof Parameter) {
@@ -145,19 +145,18 @@ public class WpsHook extends ScriptHook {
         }
         if (o instanceof Map) {
             Map m = (Map) o;
-            
+
             InternationalString title = null, desc = null;
             boolean required = true;
             int min = 1, max = 1;
             Object sample = null;
 
             if (m.containsKey("title")) {
-                title = new SimpleInternationalString((String)m.get("title"));
+                title = new SimpleInternationalString((String) m.get("title"));
             }
             if (m.containsKey("description")) {
-                desc = new SimpleInternationalString((String)m.get("description"));
-            }
-            else {
+                desc = new SimpleInternationalString((String) m.get("description"));
+            } else {
                 desc = title;
             }
             if (m.containsKey("required")) {
@@ -172,7 +171,7 @@ public class WpsHook extends ScriptHook {
             sample = m.get("default");
 
             return new Parameter(
-                name, (Class)m.get("type"), title, desc, required, min, max, sample, null);
+                    name, (Class) m.get("type"), title, desc, required, min, max, sample, null);
 
         }
         throw new IllegalArgumentException("Unable to turn " + o + " into " + Parameter.class.getName());
@@ -181,8 +180,8 @@ public class WpsHook extends ScriptHook {
     /**
      * Executes the process.
      */
-    public Map<String, Object> run(Map<String, Object> input, ScriptEngine engine) 
-        throws ScriptException {
+    public Map<String, Object> run(Map<String, Object> input, ScriptEngine engine)
+            throws ScriptException {
 
         return (Map<String, Object>) invoke(engine, "run", input);
     }

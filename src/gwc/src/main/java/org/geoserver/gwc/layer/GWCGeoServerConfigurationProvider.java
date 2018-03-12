@@ -18,7 +18,6 @@ import com.thoughtworks.xstream.XStream;
  * Note this provider is to store the tile layer configuration representations, which is different
  * from the {@link GWCGeoServerRESTConfigurationProvider REST provider}, which helps in marshaling
  * and unmarshaling {@link GeoServerTileLayer} objects for the GWC REST API.
- * 
  */
 public class GWCGeoServerConfigurationProvider implements ContextualConfigurationProvider {
 
@@ -33,16 +32,15 @@ public class GWCGeoServerConfigurationProvider implements ContextualConfiguratio
 
     @Override
     public boolean appliesTo(Context ctxt) {
-        return Context.PERSIST==ctxt;
+        return Context.PERSIST == ctxt;
     }
 
     /**
-     * @see ContextualConfigurationProvider#canSave(Info)
-     *
-     * Always returns false, as persistence is done by GeoServer's own Configuration, not XMLConfiguration
-     *
      * @param i Info to save
      * @return <code>false</code>
+     * @see ContextualConfigurationProvider#canSave(Info)
+     * <p>
+     * Always returns false, as persistence is done by GeoServer's own Configuration, not XMLConfiguration
      */
     @Override
     public boolean canSave(Info i) {

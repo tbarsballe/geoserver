@@ -24,16 +24,16 @@ import org.geoserver.security.impl.ServiceAccessRuleDAO;
 
 /**
  * This callback performs security access checks at the service/method
- * level based on rules provided by the {@link ServiceAccessRuleDAO} 
+ * level based on rules provided by the {@link ServiceAccessRuleDAO}
  */
 public class OperationSecurityCallback implements DispatcherCallback {
-    
+
     ServiceAccessRuleDAO dao;
 
     public OperationSecurityCallback(ServiceAccessRuleDAO dao) {
         this.dao = dao;
     }
-    
+
 
     public void finished(Request request) {
         // nothing to do
@@ -53,50 +53,50 @@ public class OperationSecurityCallback implements DispatcherCallback {
         List<ServiceAccessRule> rules = dao.getRules();
         ServiceAccessRule bestMatch = null;
         for (ServiceAccessRule rule : rules) {
-            if(rule.getService().equals(ServiceAccessRule.ANY) || rule.getService().equalsIgnoreCase(service)) {
-                if(rule.getMethod().equals(ServiceAccessRule.ANY) || rule.getMethod().equalsIgnoreCase(method)) {
+            if (rule.getService().equals(ServiceAccessRule.ANY) || rule.getService().equalsIgnoreCase(service)) {
+                if (rule.getMethod().equals(ServiceAccessRule.ANY) || rule.getMethod().equalsIgnoreCase(method)) {
                     bestMatch = rule;
                 }
             }
         }
-        
+
         // if there is a matching rule apply it
-        if(bestMatch != null) {
+        if (bestMatch != null) {
             Set<String> allowedRoles = bestMatch.getRoles();
             // if the rule is not the kind that allows everybody in check if the current
             // user is authenticated and has one of the required roles
-            if(!allowedRoles.contains(ServiceAccessRule.ANY) && !allowedRoles.isEmpty()) {
+            if (!allowedRoles.contains(ServiceAccessRule.ANY) && !allowedRoles.isEmpty()) {
                 Authentication user = SecurityContextHolder.getContext().getAuthentication();
-                
+
                 if (user == null || user.getAuthorities().size() == 0)
                     throw new InsufficientAuthenticationException("Cannot access "
                             + service + "." + method + " as anonymous");
-                
+
                 boolean roleFound = false;
                 for (GrantedAuthority role : user.getAuthorities()) {
-                    if(allowedRoles.contains(role.getAuthority())) {
+                    if (allowedRoles.contains(role.getAuthority())) {
                         roleFound = true;
                         break;
                     }
                 }
-                
-                if(!roleFound) {
-                    throw new AccessDeniedException("Cannot access " 
+
+                if (!roleFound) {
+                    throw new AccessDeniedException("Cannot access "
                             + service + "." + method + " with the current privileges");
                 }
             }
         }
-        
+
         return operation;
     }
-    
+
     public Object operationExecuted(Request request, Operation operation, Object result) {
         // nothing to do
         return result;
     }
 
     public Response responseDispatched(Request request, Operation operation, Object result,
-            Response response) {
+                                       Response response) {
         return response;
     }
 

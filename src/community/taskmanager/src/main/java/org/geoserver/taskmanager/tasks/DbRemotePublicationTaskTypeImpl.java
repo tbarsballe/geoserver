@@ -48,7 +48,7 @@ public class DbRemotePublicationTaskTypeImpl extends AbstractRemotePublicationTa
 
     @Override
     protected boolean createStore(ExternalGS extGS, GeoServerRESTManager restManager,
-            StoreInfo store, Map<String, Object> parameterValues) throws IOException, TaskException {
+                                  StoreInfo store, Map<String, Object> parameterValues) throws IOException, TaskException {
         try {
             final DbSource db = (DbSource) parameterValues.get(PARAM_DB_NAME);
             final DbTable table = (DbTable) parameterValues.get(PARAM_TABLE_NAME);

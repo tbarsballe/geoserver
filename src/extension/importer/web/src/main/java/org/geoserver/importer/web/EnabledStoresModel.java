@@ -24,7 +24,7 @@ public class EnabledStoresModel extends LoadableDetachableModel {
     @Override
     protected Object load() {
         List<StoreInfo> stores = model.getObject();
-        for (Iterator<StoreInfo> it = stores.iterator(); it.hasNext();) {
+        for (Iterator<StoreInfo> it = stores.iterator(); it.hasNext(); ) {
             if (!it.next().isEnabled()) {
                 it.remove();
             }
@@ -39,5 +39,5 @@ public class EnabledStoresModel extends LoadableDetachableModel {
             model.detach();
         }
     }
-    
+
 }

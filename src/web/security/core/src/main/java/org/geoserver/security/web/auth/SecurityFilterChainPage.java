@@ -37,12 +37,11 @@ import org.geotools.util.logging.Logging;
 
 /**
  * Class for configuration panels of {@link RequestFilterChain} objects
- * 
- * @author christan
  *
+ * @author christan
  */
-public  class SecurityFilterChainPage 
-    extends AbstractSecurityPage {
+public class SecurityFilterChainPage
+        extends AbstractSecurityPage {
 
     private static final long serialVersionUID = 1L;
 
@@ -54,56 +53,57 @@ public  class SecurityFilterChainPage
     protected RequestFilterChainWrapper chainWrapper;
     SecurityManagerConfig secMgrConfig;
 
-    /** 
+    /**
      * pop-up dialog
      */
     protected GeoServerDialog dialog;
     Form<? extends RequestFilterChainWrapper> form;
-    CheckBox methodList[]=new CheckBox[7];;
-           
+    CheckBox methodList[] = new CheckBox[7];
+    ;
+
     protected boolean isNew;
 
-    public SecurityFilterChainPage( RequestFilterChain chain, 
-            SecurityManagerConfig secMgrConfig,
-            boolean isNew) {
-        
+    public SecurityFilterChainPage(RequestFilterChain chain,
+                                   SecurityManagerConfig secMgrConfig,
+                                   boolean isNew) {
+
         RequestFilterChainWrapper wrapper = new RequestFilterChainWrapper(chain);
-        Form<RequestFilterChainWrapper> theForm = new Form<RequestFilterChainWrapper>("form",new 
+        Form<RequestFilterChainWrapper> theForm = new Form<RequestFilterChainWrapper>("form", new
                 CompoundPropertyModel<RequestFilterChainWrapper>(wrapper));
-                
+
 
         initialize(chain, secMgrConfig, isNew, theForm, wrapper);
-        
+
     }
-    
+
     protected SecurityFilterChainPage() {
         super();
-     }
-    
-    protected void initialize(RequestFilterChain chain, 
-            SecurityManagerConfig secMgrConfig,
-            boolean isNew,Form<? extends RequestFilterChainWrapper> theForm,RequestFilterChainWrapper wrapper) {
-        
+    }
+
+    protected void initialize(RequestFilterChain chain,
+                              SecurityManagerConfig secMgrConfig,
+                              boolean isNew, Form<? extends RequestFilterChainWrapper> theForm, RequestFilterChainWrapper wrapper) {
+
         this.chainWrapper = wrapper;
-        this.isNew=isNew;
-        this.secMgrConfig=secMgrConfig;
-        
-        form = theForm;                 
+        this.isNew = isNew;
+        this.secMgrConfig = secMgrConfig;
+
+        form = theForm;
         add(form);
 
-        
+
         //check for administrator, if not disable the panel and emit warning message
         boolean isAdmin = getSecurityManager().checkAuthenticationForAdminRole();
         setEnabled(isAdmin);
 
-        form.add(new Label("message", 
-            isAdmin ? new Model() : new StringResourceModel("notAdmin", this, null)));
+        form.add(new Label("message",
+                isAdmin ? new Model() : new StringResourceModel("notAdmin", this, null)));
         if (!isAdmin) {
             form.get("message").add(new AttributeAppender("class", new Model("info-link"), " "));
         }
 
         setOutputMarkupId(true);
-        
+
         form.add(new TextField<String>("name").setEnabled(isNew));
         form.add(new TextField<String>("patternString"));
         form.add(new CheckBox("disabled"));
@@ -111,50 +111,50 @@ public  class SecurityFilterChainPage
         form.add(new CheckBox("requireSSL"));
         form.add(new CheckBox("matchHTTPMethod").add(
                 new OnChangeAjaxBehavior() {
-                @Override
-                protected void onUpdate(AjaxRequestTarget target) {
-                    for (CheckBox cb : methodList) {
-                        cb.setEnabled(chainWrapper.isMatchHTTPMethod());
-                        target.add(cb);
+                    @Override
+                    protected void onUpdate(AjaxRequestTarget target) {
+                        for (CheckBox cb : methodList) {
+                            cb.setEnabled(chainWrapper.isMatchHTTPMethod());
+                            target.add(cb);
+                        }
                     }
-                }                        
-            }));              
-                
-        
-        List<String> filterNames=new ArrayList<String>();
+                }));
+
+
+        List<String> filterNames = new ArrayList<String>();
         try {
             filterNames.addAll(getSecurityManager().listFilters(GeoServerRoleFilter.class));
-            for (GeoServerRoleFilter filter :GeoServerExtensions.extensions(GeoServerRoleFilter.class)){
+            for (GeoServerRoleFilter filter : GeoServerExtensions.extensions(GeoServerRoleFilter.class)) {
                 filterNames.add(filter.getName());
             }
-            form.add(new DropDownChoice<String>("roleFilterName", 
+            form.add(new DropDownChoice<String>("roleFilterName",
                     new PropertyModel<String>(chainWrapper.getChain(), "roleFilterName"),
                     filterNames).setNullValid(true));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
-        
-        form.add(methodList[0]=new CheckBox("GET"));
-        form.add(methodList[1]=new CheckBox("POST"));
-        form.add(methodList[2]=new CheckBox("PUT"));
-        form.add(methodList[3]=new CheckBox("DELETE"));
-        form.add(methodList[4]=new CheckBox("OPTIONS"));
-        form.add(methodList[5]=new CheckBox("HEAD"));
-        form.add(methodList[6]=new CheckBox("TRACE"));
+
+        form.add(methodList[0] = new CheckBox("GET"));
+        form.add(methodList[1] = new CheckBox("POST"));
+        form.add(methodList[2] = new CheckBox("PUT"));
+        form.add(methodList[3] = new CheckBox("DELETE"));
+        form.add(methodList[4] = new CheckBox("OPTIONS"));
+        form.add(methodList[5] = new CheckBox("HEAD"));
+        form.add(methodList[6] = new CheckBox("TRACE"));
 
         for (CheckBox cb : methodList) {
             cb.setOutputMarkupPlaceholderTag(true);
             cb.setEnabled(chain.isMatchHTTPMethod());
         }
-        
-                
-        form.add(dialog = new GeoServerDialog("dialog"));        
 
-        
+
+        form.add(dialog = new GeoServerDialog("dialog"));
+
+
         form.add(new HelpLink("chainConfigHelp").setDialog(dialog));
         form.add(new HelpLink("chainConfigMethodHelp").setDialog(dialog));
-        
+
         form.add(new SubmitLink("close", form) {
             @Override
             public void onSubmit() {
@@ -168,14 +168,14 @@ public  class SecurityFilterChainPage
             }
         });
 
-        
+
     }
 
     protected void handleSubmit(Form<?> form) {
-        RequestFilterChain chain =chainWrapper.getChain();
+        RequestFilterChain chain = chainWrapper.getChain();
         try {
             new SecurityConfigValidator(getSecurityManager()).
-                validateRequestFilterChain(chainWrapper.getChain());
+                    validateRequestFilterChain(chainWrapper.getChain());
             if (isNew)
                 secMgrConfig.getFilterChain().getRequestChains().add(chain);
             //getSecurityManager().saveSecurityConfig(secMgrConfig);
@@ -185,17 +185,19 @@ public  class SecurityFilterChainPage
             error(e);
         }
     }
-    
-    
-    protected void doReturn() {   
+
+
+    protected void doReturn() {
         ((AuthenticationPage) returnPage).updateChainComponents();
         super.doReturn();
-    };
-    
+    }
+
+    ;
+
 
     protected boolean isNew() {
         return isNew;
     }
-            
+
 
 }

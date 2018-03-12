@@ -70,7 +70,7 @@ public class GWCSettingsPage extends GeoServerSecuredPage {
                 }
                 // Update ConfigurableBlobStore
                 ConfigurableBlobStore blobstore = GeoServerExtensions.bean(ConfigurableBlobStore.class);
-                if(blobstore != null){
+                if (blobstore != null) {
                     blobstore.setChanged(gwcConfig, false);
                 }
                 // Do return
@@ -107,7 +107,7 @@ public class GWCSettingsPage extends GeoServerSecuredPage {
     static CheckBox checkbox(String id, IModel<Boolean> model, String titleKey) {
         CheckBox checkBox = new CheckBox(id, model);
         if (null != titleKey) {
-            AttributeModifier attributeModifier = new AttributeModifier("title", 
+            AttributeModifier attributeModifier = new AttributeModifier("title",
                     new StringResourceModel(titleKey, (Component) null, null));
             checkBox.add(attributeModifier);
         }

@@ -36,7 +36,7 @@ import org.w3c.dom.Element;
 
 /**
  * Unit test suite for {@link DescribeLayerTransformer}
- * 
+ *
  * @author Gabriel Roldan
  * @version $Id$
  */
@@ -76,7 +76,7 @@ public class DescribeLayerTransformerTest {
         GeoServerImpl geoServerImpl = new GeoServerImpl();
         catalog = new CatalogImpl();
         geoServerImpl.setCatalog(catalog);
-        
+
         NamespaceInfoImpl ns = new NamespaceInfoImpl();
         ns.setPrefix("fakeWs");
         ns.setURI("http://fakews.org");
@@ -163,7 +163,6 @@ public class DescribeLayerTransformerTest {
      * does not care since checking the mandatory arguments shall be done prior to using the
      * transformer, so it'll return an empty root element in this case.
      * </p>
-     * 
      */
     @Test
     public void testRootElement() throws Exception {

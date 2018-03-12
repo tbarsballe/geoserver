@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.logging.Level;
 
 import javax.naming.AuthenticationException;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
@@ -33,7 +34,7 @@ import org.springframework.security.core.Authentication;
 
 /**
  * Configuration panel for {@link LDAPAuthenticationProvider}.
- *  
+ *
  * @author Justin Deoliveira, OpenGeo
  */
 public class LDAPAuthProviderPanel extends AuthenticationProviderPanel<LDAPSecurityServiceConfig> {
@@ -44,7 +45,7 @@ public class LDAPAuthProviderPanel extends AuthenticationProviderPanel<LDAPSecur
         super(id, model);
 
         add(new TextField<String>("serverURL").setRequired(true));
-        add(new CheckBox("useTLS"));        
+        add(new CheckBox("useTLS"));
         add(new TextField<String>("userDnPattern"));
         add(new TextField<String>("userFilter"));
         add(new TextField<String>("userFormat"));
@@ -56,23 +57,23 @@ public class LDAPAuthProviderPanel extends AuthenticationProviderPanel<LDAPSecur
 
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
-                WebMarkupContainer c = (WebMarkupContainer) 
-                    LDAPAuthProviderPanel.this.get("authorizationPanelContainer");
+                WebMarkupContainer c = (WebMarkupContainer)
+                        LDAPAuthProviderPanel.this.get("authorizationPanelContainer");
 
                 //reset any values that were set
-                ((AuthorizationPanel)c.get("authorizationPanel")).resetModel();
+                ((AuthorizationPanel) c.get("authorizationPanel")).resetModel();
 
                 //remove the old panel
                 c.remove("authorizationPanel");
-                
+
                 //add the new panel
                 c.add(createAuthorizationPanel("authorizationPanel", getModelObject()));
-                
+
                 target.add(c);
             }
         });
         add(new WebMarkupContainer("authorizationPanelContainer")
-            .add(createAuthorizationPanel("authorizationPanel", useLdapAuth)).setOutputMarkupId(true));
+                .add(createAuthorizationPanel("authorizationPanel", useLdapAuth)).setOutputMarkupId(true));
 
         add(new TestLDAPConnectionPanel("testCx"));
 
@@ -149,19 +150,19 @@ public class LDAPAuthProviderPanel extends AuthenticationProviderPanel<LDAPSecur
                 protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                     //since this is not a regular form submit we have to manually update models 
                     // of form components we care about
-                    ((FormComponent<?>)TestLDAPConnectionPanel.this.get("username")).processInput();
-                    ((FormComponent<?>)TestLDAPConnectionPanel.this.get("password")).processInput();
+                    ((FormComponent<?>) TestLDAPConnectionPanel.this.get("username")).processInput();
+                    ((FormComponent<?>) TestLDAPConnectionPanel.this.get("password")).processInput();
 
-                    ((FormComponent<?>)LDAPAuthProviderPanel.this.get("serverURL")).processInput();
-                    ((FormComponent<?>)LDAPAuthProviderPanel.this.get("useTLS")).processInput();
+                    ((FormComponent<?>) LDAPAuthProviderPanel.this.get("serverURL")).processInput();
+                    ((FormComponent<?>) LDAPAuthProviderPanel.this.get("useTLS")).processInput();
 
-                    ((FormComponent<?>)LDAPAuthProviderPanel.this.get("userDnPattern")).processInput();
-                    ((FormComponent<?>)LDAPAuthProviderPanel.this.get("userFilter")).processInput();
-                    ((FormComponent<?>)LDAPAuthProviderPanel.this.get("userFormat")).processInput();
-                    
-                    String username = (String)((FormComponent<?>)TestLDAPConnectionPanel.this.get("username")).getConvertedInput();
-                    String password = (String)((FormComponent<?>)TestLDAPConnectionPanel.this.get("password")).getConvertedInput();
-                    
+                    ((FormComponent<?>) LDAPAuthProviderPanel.this.get("userDnPattern")).processInput();
+                    ((FormComponent<?>) LDAPAuthProviderPanel.this.get("userFilter")).processInput();
+                    ((FormComponent<?>) LDAPAuthProviderPanel.this.get("userFormat")).processInput();
+
+                    String username = (String) ((FormComponent<?>) TestLDAPConnectionPanel.this.get("username")).getConvertedInput();
+                    String password = (String) ((FormComponent<?>) TestLDAPConnectionPanel.this.get("password")).getConvertedInput();
+
                     LDAPSecurityServiceConfig ldapConfig = (LDAPSecurityServiceConfig) getForm().getModelObject();
                     doTest(ldapConfig, username, password);
 
@@ -169,39 +170,38 @@ public class LDAPAuthProviderPanel extends AuthenticationProviderPanel<LDAPSecur
                 }
 
                 void doTest(LDAPSecurityServiceConfig ldapConfig, String username,
-                        String password) {
+                            String password) {
 
-                    
+
                     try {
-                        
+
                         if (ldapConfig.getUserDnPattern() == null && ldapConfig.getUserFilter() == null) {
                             error("Neither user dn pattern or user filter specified");
                             return;
                         }
-                        
+
                         LDAPSecurityProvider provider = new LDAPSecurityProvider(getSecurityManager());
                         LDAPAuthenticationProvider authProvider = (LDAPAuthenticationProvider) provider
                                 .createAuthenticationProvider(ldapConfig);
                         Authentication authentication = authProvider
                                 .authenticate(new UsernamePasswordAuthenticationToken(
                                         username, password));
-                        if(authentication == null || !authentication.isAuthenticated()) {
+                        if (authentication == null || !authentication.isAuthenticated()) {
                             throw new AuthenticationException("Cannot authenticate " + username);
                         }
 
                         provider.destroy(null);
-                        info(new StringResourceModel(LDAPAuthProviderPanel.class.getSimpleName() + 
-                            ".connectionSuccessful").getObject());
+                        info(new StringResourceModel(LDAPAuthProviderPanel.class.getSimpleName() +
+                                ".connectionSuccessful").getObject());
                     } catch (Exception e) {
                         error(e);
                         LOGGER.log(Level.WARNING, e.getMessage(), e);
+                    } finally {
+
                     }
-                    finally {
-                        
-                    }
-                    
+
                 }
-                
+
             }.setDefaultFormProcessing(false));
         }
     }

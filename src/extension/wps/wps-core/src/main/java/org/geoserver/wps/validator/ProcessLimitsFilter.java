@@ -36,9 +36,8 @@ import com.google.common.collect.Multimap;
 /**
  * A process filter that applies the well known input validators to the process parameters, so that
  * DescribeFeatureType can advertise them to the world
- * 
- * @author Andrea Aime - GeoSolutions
  *
+ * @author Andrea Aime - GeoSolutions
  */
 public class ProcessLimitsFilter implements ProcessFilter, ApplicationContextAware,
         ExtensionPriority {
@@ -97,7 +96,7 @@ public class ProcessLimitsFilter implements ProcessFilter, ApplicationContextAwa
             int maxComplexInputSize = wps.getMaxComplexInputSize();
             if (maxComplexInputSize <= 0
                     && (processInfo == null || processInfo.getValidators() == null || processInfo
-                            .getValidators().isEmpty())) {
+                    .getValidators().isEmpty())) {
                 return result;
             } else {
                 Multimap<String, WPSInputValidator> validatorsMap = processInfo != null ? processInfo
@@ -110,10 +109,10 @@ public class ProcessLimitsFilter implements ProcessFilter, ApplicationContextAwa
                     // can we skip to build a clone?
                     if (validators == null
                             && (maxComplexInputSize <= 0 || !ProcessParameterIO.isComplex(param,
-                                    applicationContext))) {
+                            applicationContext))) {
                         continue;
                     }
-                    
+
                     // setup the global size limits. non complex params will just ignore it
                     Map<String, Object> metadataClone = new HashMap(param.metadata);
                     if (wps.getMaxComplexInputSize() > 0) {
@@ -123,7 +122,7 @@ public class ProcessLimitsFilter implements ProcessFilter, ApplicationContextAwa
 
                     // collect all validator overrides
                     int maxOccurs = param.getMaxOccurs();
-                    if(validators != null) {
+                    if (validators != null) {
                         metadataClone.put(VALIDATORS_KEY, validators);
                         for (Validator validator : validators) {
                             if (validator instanceof MaxSizeValidator) {

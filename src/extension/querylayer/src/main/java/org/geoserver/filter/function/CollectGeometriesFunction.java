@@ -21,9 +21,8 @@ import com.vividsolutions.jts.geom.GeometryFactory;
 /**
  * Collects all geometries provided in a list into a single {@link GeometryCollection} object (a
  * type specific subclass of it if possible)
- * 
+ *
  * @author Andrea Aime - GeoSolutions
- * 
  */
 public class CollectGeometriesFunction extends FunctionImpl {
 
@@ -53,7 +52,7 @@ public class CollectGeometriesFunction extends FunctionImpl {
         GeometryCollector collector = new GeometryCollector();
         collector.setFactory(null);
         collector.setMaxCoordinates(maxCoordinates);
-        for (Iterator it = geometries.iterator(); it.hasNext();) {
+        for (Iterator it = geometries.iterator(); it.hasNext(); ) {
             Geometry geometry = (Geometry) it.next();
             collector.add(geometry);
         }

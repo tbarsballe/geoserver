@@ -77,9 +77,9 @@ public class AbstractLogStoreTest {
         SecurityContextHolder.clearContext();
         setUpConfigFile();
     }
-    
+
     protected ResourceStore getResourceStore() {
-    	return new HeapResourceStore();
+        return new HeapResourceStore();
     }
 
     @After
@@ -251,7 +251,7 @@ public class AbstractLogStoreTest {
     }
 
     protected void runScript(String driverClassName, String jdbcUrl, URL script, String user,
-            String password) {
+                             String password) {
         List<String> statements = parseStatements(script);
 
         Connection connection;

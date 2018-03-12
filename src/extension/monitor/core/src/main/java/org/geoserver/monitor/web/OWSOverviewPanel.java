@@ -26,38 +26,37 @@ public class OWSOverviewPanel extends OWSSummaryChartBasePanel {
     protected String getChartTitle() {
         return "OWS Request Summary";
     }
-    
+
     @Override
-    protected Map<String,Integer> gatherData(Monitor monitor) {
+    protected Map<String, Integer> gatherData(Monitor monitor) {
         Query q = new Query();
         q.properties("service").filter("service", null, Comparison.NEQ);
-        
+
         DataGatherer g = new DataGatherer();
         monitor.query(q, g);
-        
+
         return g.getData();
     }
-    
+
     class DataGatherer implements RequestDataVisitor {
 
-        HashMap<String,Integer> data = new HashMap<String, Integer>();
-        
+        HashMap<String, Integer> data = new HashMap<String, Integer>();
+
         public void visit(RequestData req, Object... aggregates) {
             String service = req.getService();
             Integer count = data.get(service);
             if (count == null) {
                 count = new Integer(1);
+            } else {
+                count = new Integer(count + 1);
             }
-            else {
-                count = new Integer(count+1);
-            }
-            
+
             data.put(service, count);
         }
-        
+
         public HashMap<String, Integer> getData() {
             return data;
         }
-        
+
     }
 }

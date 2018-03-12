@@ -15,11 +15,9 @@ import java.util.Random;
 import org.junit.Test;
 
 /**
- * 
  * Test rounding
- * 
- * @author Dean Povey
  *
+ * @author Dean Povey
  */
 public class RoundingUtilTest {
 
@@ -31,7 +29,7 @@ public class RoundingUtilTest {
             assertThat(RoundingUtil.round(Double.POSITIVE_INFINITY, numDecimals), is(equalTo(Double.POSITIVE_INFINITY)));
         }
     }
-    
+
     @Test
     public void testSpecificCases() {
         assertThat(RoundingUtil.round(0d, 0), is(equalTo(0d)));
@@ -46,7 +44,7 @@ public class RoundingUtilTest {
         assertThat(RoundingUtil.round(1E-3, 7), is(equalTo(0.001)));
         assertThat(RoundingUtil.round(1E-4, 3), is(equalTo(0d)));
         assertThat(RoundingUtil.round(1E-10, 10), is(equalTo(1E-10)));
-        
+
     }
 
     @Test
@@ -68,18 +66,18 @@ public class RoundingUtilTest {
         assertThat(RoundingUtil.round(Double.MIN_VALUE, 15), is(equalTo(0d)));
         assertThat(RoundingUtil.round(Double.MAX_VALUE, 1), is(equalTo(Double.MAX_VALUE)));
     }
-    
+
     @Test
     public void testRandomRoundingVsBigDecimal() {
         Random r = new Random();
         for (int i = 0; i < 10000; i++) {
             double value = r.nextDouble();
             for (int numDecimals = 0; numDecimals <= 8; numDecimals++) {
-                double expected = new BigDecimal(Double.toString(value)).setScale(numDecimals, RoundingMode.HALF_UP).doubleValue();                
+                double expected = new BigDecimal(Double.toString(value)).setScale(numDecimals, RoundingMode.HALF_UP).doubleValue();
                 double actual = RoundingUtil.round(value, numDecimals);
                 assertThat(actual, is(equalTo(expected)));
             }
         }
-    
+
     }
 }

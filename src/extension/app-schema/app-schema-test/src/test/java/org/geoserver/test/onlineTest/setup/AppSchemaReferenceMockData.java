@@ -8,11 +8,9 @@ package org.geoserver.test.onlineTest.setup;
 import org.geoserver.test.AbstractAppSchemaMockData;
 
 /**
- * 
  * @author Niels Charlier
- * 
+ * <p>
  * Mock data for Wms Online tests - uses some different mappings to accomodate wms
- * 
  */
 public class AppSchemaReferenceMockData extends AbstractAppSchemaMockData {
     @Override

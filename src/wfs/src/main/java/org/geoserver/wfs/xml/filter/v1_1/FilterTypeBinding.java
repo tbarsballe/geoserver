@@ -22,7 +22,7 @@ public class FilterTypeBinding extends org.geotools.filter.v1_1.FilterTypeBindin
     }
 
     public Object parse(ElementInstance instance, Node node, Object value)
-        throws Exception {
+            throws Exception {
         Filter filter = (Filter) super.parse(instance, node, value);
 
         //some checks, these should perhaps be made part of the Filter binding
@@ -33,7 +33,7 @@ public class FilterTypeBinding extends org.geotools.filter.v1_1.FilterTypeBindin
                 //there should only be one type of id specified
                 HashSet types = new HashSet();
 
-                for (Iterator i = idFilter.getIdentifiers().iterator(); i.hasNext();) {
+                for (Iterator i = idFilter.getIdentifiers().iterator(); i.hasNext(); ) {
                     Identifier id = (Identifier) i.next();
                     types.add(id.getClass());
                 }

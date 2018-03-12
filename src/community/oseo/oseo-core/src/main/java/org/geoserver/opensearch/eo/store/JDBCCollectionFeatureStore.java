@@ -21,7 +21,7 @@ public class JDBCCollectionFeatureStore extends AbstractMappingStore {
     static final Logger LOGGER = Logging.getLogger(JDBCCollectionFeatureStore.class);
 
     public JDBCCollectionFeatureStore(JDBCOpenSearchAccess openSearchAccess,
-            FeatureType collectionFeatureType) throws IOException {
+                                      FeatureType collectionFeatureType) throws IOException {
         super(openSearchAccess, collectionFeatureType);
     }
 

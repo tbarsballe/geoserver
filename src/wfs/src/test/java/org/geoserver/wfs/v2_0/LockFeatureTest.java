@@ -25,53 +25,53 @@ public class LockFeatureTest extends WFS20TestSupport {
 
     @Override
     protected void setUpInternal(SystemTestData data) throws Exception {
-        getServiceDescriptor20().getOperations().add( "ReleaseLock");
+        getServiceDescriptor20().getOperations().add("ReleaseLock");
     }
-        
-	@Test
+
+    @Test
     public void testLock() throws Exception {
-        String xml = 
-            "<wfs:LockFeature xmlns:sf=\"http://cite.opengeospatial.org/gmlsf\" " +
-            "   xmlns:wfs='" + WFS.NAMESPACE + "' expiry=\"5\" handle=\"LockFeature-tc1\" "
-                + " lockAction=\"ALL\" "
-                + " service=\"WFS\" "
-                + " version=\"2.0.0\">"
-                + "<wfs:Query handle=\"lock-1\" typeNames=\"sf:PrimitiveGeoFeature\"/>"
-            + "</wfs:LockFeature>";
+        String xml =
+                "<wfs:LockFeature xmlns:sf=\"http://cite.opengeospatial.org/gmlsf\" " +
+                        "   xmlns:wfs='" + WFS.NAMESPACE + "' expiry=\"5\" handle=\"LockFeature-tc1\" "
+                        + " lockAction=\"ALL\" "
+                        + " service=\"WFS\" "
+                        + " version=\"2.0.0\">"
+                        + "<wfs:Query handle=\"lock-1\" typeNames=\"sf:PrimitiveGeoFeature\"/>"
+                        + "</wfs:LockFeature>";
 
         Document dom = postAsDOM("wfs", xml);
         assertEquals("wfs:LockFeatureResponse", dom.getDocumentElement().getNodeName());
         assertEquals(5, dom.getElementsByTagNameNS(FES.NAMESPACE, "ResourceId").getLength());
-        
+
         // release the lock
         // print(dom);
-        String lockId = dom.getDocumentElement().getAttribute("lockId");        
+        String lockId = dom.getDocumentElement().getAttribute("lockId");
         get("wfs?request=ReleaseLock&version=2.0&lockId=" + lockId);
     }
-	
-	@Test
+
+    @Test
     public void testSOAP() throws Exception {
-        String xml = 
-           "<soap:Envelope xmlns:soap='http://www.w3.org/2003/05/soap-envelope'> " + 
-                " <soap:Header/> " + 
-                " <soap:Body>"
-             +   "<wfs:LockFeature xmlns:sf=\"http://cite.opengeospatial.org/gmlsf\" "
-             +   "   xmlns:wfs='" + WFS.NAMESPACE + "' expiry=\"5\" handle=\"LockFeature-tc1\" "
-                    + " lockAction=\"ALL\" "
-                    + " service=\"WFS\" "
-                    + " version=\"2.0.0\">"
-                    + "<wfs:Query handle=\"lock-1\" typeNames=\"sf:PrimitiveGeoFeature\"/>"
-                + "</wfs:LockFeature>" + 
-                " </soap:Body> " + 
-            "</soap:Envelope> "; 
-              
+        String xml =
+                "<soap:Envelope xmlns:soap='http://www.w3.org/2003/05/soap-envelope'> " +
+                        " <soap:Header/> " +
+                        " <soap:Body>"
+                        + "<wfs:LockFeature xmlns:sf=\"http://cite.opengeospatial.org/gmlsf\" "
+                        + "   xmlns:wfs='" + WFS.NAMESPACE + "' expiry=\"5\" handle=\"LockFeature-tc1\" "
+                        + " lockAction=\"ALL\" "
+                        + " service=\"WFS\" "
+                        + " version=\"2.0.0\">"
+                        + "<wfs:Query handle=\"lock-1\" typeNames=\"sf:PrimitiveGeoFeature\"/>"
+                        + "</wfs:LockFeature>" +
+                        " </soap:Body> " +
+                        "</soap:Envelope> ";
+
         MockHttpServletResponse resp = postAsServletResponse("wfs", xml, "application/soap+xml");
         assertEquals("application/soap+xml", resp.getContentType());
-        
+
         Document dom = dom(new ByteArrayInputStream(resp.getContentAsString().getBytes()));
         assertEquals("soap:Envelope", dom.getDocumentElement().getNodeName());
         assertEquals(1, dom.getElementsByTagName("wfs:LockFeatureResponse").getLength());
-        
+
         // release the lock
         String lockId = XMLUnit.newXpathEngine().evaluate("//wfs:LockFeatureResponse/@lockId", dom);
         get("wfs?request=ReleaseLock&version=2.0&lockId=" + lockId);
@@ -93,17 +93,17 @@ public class LockFeatureTest extends WFS20TestSupport {
         assertEquals("wfs:LockFeatureResponse", dom.getDocumentElement().getNodeName());
         assertEquals(5, dom.getElementsByTagNameNS(FES.NAMESPACE, "ResourceId").getLength());
         String lockId = XMLUnit.newXpathEngine().evaluate("//wfs:LockFeatureResponse/@lockId", dom);
-        
+
         // wait a couple of seconds, the lock was acquired only for one
         Thread.sleep(2 * 1000);
-        
+
         // try to reset the expired lock, it should fail
         xml =
                 "<wfs:LockFeature xmlns:sf=\"http://cite.opengeospatial.org/gmlsf\" " +
                         "   xmlns:wfs='" + WFS.NAMESPACE + "' expiry=\"1\" handle=\"LockFeature-tc1\" "
                         + " lockAction=\"ALL\" "
                         + " service=\"WFS\" "
-                        + " version=\"2.0.0\"" 
+                        + " version=\"2.0.0\""
                         + " lockId=\"" + lockId + "\"/>";
         MockHttpServletResponse response = postAsServletResponse("wfs", xml);
         assertEquals(403, response.getStatus());
@@ -174,10 +174,10 @@ public class LockFeatureTest extends WFS20TestSupport {
         String lockId = dom.getDocumentElement().getAttribute("lockId");
         get("wfs?request=ReleaseLock&version=2.0&lockId=" + lockId);
     }
-    
+
     @Test
     public void testLockWithStoredQueryGet() throws Exception {
-        Document dom = getAsDOM("wfs?service=WFS&version=2.0.0&request=LockFeature&storedQueryId=" + 
+        Document dom = getAsDOM("wfs?service=WFS&version=2.0.0&request=LockFeature&storedQueryId=" +
                 StoredQuery.DEFAULT.getName() + "&ID=PrimitiveGeoFeature.f001", 200);
 
         // print(dom);
@@ -188,7 +188,7 @@ public class LockFeatureTest extends WFS20TestSupport {
         String lockId = dom.getDocumentElement().getAttribute("lockId");
         get("wfs?request=ReleaseLock&version=2.0&lockId=" + lockId);
     }
-    
+
     @Test
     public void testLockByBBOX() throws Exception {
         Document dom = getAsDOM("wfs?service=WFS&version=2.0.0&request=LockFeature&typeName=sf:PrimitiveGeoFeature" +
@@ -213,7 +213,7 @@ public class LockFeatureTest extends WFS20TestSupport {
         assertEquals("wfs:LockFeatureResponse", dom.getDocumentElement().getNodeName());
         assertEquals(1, dom.getElementsByTagNameNS(FES.NAMESPACE, "ResourceId").getLength());
         String lockId = dom.getDocumentElement().getAttribute("lockId");
-        
+
         // try to lock all now
         dom = getAsDOM("wfs?service=WFS&version=2.0.0&request=LockFeature&typeNames=sf:PrimitiveGeoFeature", 400);
         checkOws11Exception(dom, "2.0.0", WFSException.CANNOT_LOCK_ALL_FEATURES, "GeoServer");

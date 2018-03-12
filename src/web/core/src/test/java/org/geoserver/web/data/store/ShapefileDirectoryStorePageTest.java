@@ -23,7 +23,7 @@ import org.junit.Test;
 
 /**
  * Test for the shapefile directory ppanel
- * 
+ *
  * @author Andrea Aime
  */
 public class ShapefileDirectoryStorePageTest extends GeoServerWicketTestSupport {
@@ -78,6 +78,5 @@ public class ShapefileDirectoryStorePageTest extends GeoServerWicketTestSupport 
         assertEquals(getCatalog().getNamespaceByPrefix(ws.getName()).getURI(), store.getConnectionParameters().get("namespace"));
     }
 
-   
 
 }

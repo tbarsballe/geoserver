@@ -162,7 +162,7 @@ public class HeapResourceStore implements ResourceStore {
         private Type type;
 
         private byte[] bytes;
-        
+
         private long lastModified;
 
         final private HeapResourceStore store;
@@ -391,7 +391,7 @@ public class HeapResourceStore implements ResourceStore {
             this.path = dest.path();
             this.name = dest.name();
             this.parent = (HeapResource) dest.parent();
-            this.parent.children.remove((HeapResource)dest);
+            this.parent.children.remove((HeapResource) dest);
             this.parent.children.add(this);
             dispatcher.changed(new ResourceNotification(path(),
                     ResourceNotification.Kind.ENTRY_DELETE,

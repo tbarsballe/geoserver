@@ -46,7 +46,6 @@ import com.google.common.collect.ImmutableSet;
 
 /**
  * @author groldan
- * 
  */
 public class CatalogLayerEventListenerTest {
 
@@ -69,7 +68,7 @@ public class CatalogLayerEventListenerTest {
     private LayerGroupInfo mockLayerGroupInfo;
 
     private CatalogLayerEventListener listener;
-    
+
     private StyleInfo mockDefaultStyle;
     private Set<StyleInfo> mockStyles;
 
@@ -96,7 +95,7 @@ public class CatalogLayerEventListenerTest {
 
         mockResourceInfo = mock(FeatureTypeInfo.class);
         mockNamespaceInfo = mock(NamespaceInfo.class);
-        
+
         mockDefaultStyle = mock(StyleInfo.class);
         when(mockDefaultStyle.prefixedName()).thenReturn("defaultStyle");
 
@@ -117,7 +116,8 @@ public class CatalogLayerEventListenerTest {
         listener = new CatalogLayerEventListener(mockMediator, mockCatalog);
     }
 
-    @Test public void testLayerInfoAdded() throws Exception {
+    @Test
+    public void testLayerInfoAdded() throws Exception {
         CatalogAddEventImpl event = new CatalogAddEventImpl();
         event.setSource(mockLayerInfo);
 
@@ -126,7 +126,8 @@ public class CatalogLayerEventListenerTest {
         verify(mockMediator).add(Mockito.any(GeoServerTileLayer.class));
     }
 
-    @Test public void testLayerGroupInfoAdded() throws Exception {
+    @Test
+    public void testLayerGroupInfoAdded() throws Exception {
 
         CatalogAddEventImpl event = new CatalogAddEventImpl();
         event.setSource(mockLayerGroupInfo);
@@ -136,7 +137,8 @@ public class CatalogLayerEventListenerTest {
         verify(mockMediator).add(Mockito.any(GeoServerTileLayer.class));
     }
 
-    @Test public void testLayerInfoRemoved() throws Exception {
+    @Test
+    public void testLayerInfoRemoved() throws Exception {
         CatalogRemoveEventImpl event = new CatalogRemoveEventImpl();
         event.setSource(mockLayerInfo);
 
@@ -146,7 +148,8 @@ public class CatalogLayerEventListenerTest {
         verify(mockMediator).removeTileLayers(eq(Arrays.asList(mockResourceInfo.prefixedName())));
     }
 
-    @Test public void testLayerGroupInfoRemoved() throws Exception {
+    @Test
+    public void testLayerGroupInfoRemoved() throws Exception {
         CatalogRemoveEventImpl event = new CatalogRemoveEventImpl();
         event.setSource(mockLayerGroupInfo);
 
@@ -157,7 +160,8 @@ public class CatalogLayerEventListenerTest {
                 eq(Arrays.asList(GWC.tileLayerName(mockLayerGroupInfo))));
     }
 
-    @Test public void testResourceInfoRenamed() throws Exception {
+    @Test
+    public void testResourceInfoRenamed() throws Exception {
 
         final String oldTileLayerName = mockResourceInfo.prefixedName();
         final String renamedResouceName = RESOURCE_NAME + "_Renamed";
@@ -236,7 +240,8 @@ public class CatalogLayerEventListenerTest {
         verify(mockMediator).truncate(eq(resourceName));
     }
 
-    @Test public void testLayerGroupInfoRenamed() throws Exception {
+    @Test
+    public void testLayerGroupInfoRenamed() throws Exception {
         final String oldGroupName = LAYER_GROUP_NAME;
         final String renamedGroupName = LAYER_GROUP_NAME + "_Renamed";
 
@@ -279,7 +284,8 @@ public class CatalogLayerEventListenerTest {
         assertEquals(renamedGroupName, savedInfo.getName());
     }
 
-    @Test public void testLayerGroupInfoRenamedDueToWorkspaceChanged() throws Exception {
+    @Test
+    public void testLayerGroupInfoRenamedDueToWorkspaceChanged() throws Exception {
 
         WorkspaceInfo workspace = mock(WorkspaceInfo.class);
         when(workspace.getName()).thenReturn("mockWs");
@@ -329,7 +335,8 @@ public class CatalogLayerEventListenerTest {
         assertEquals(tileLayerName, actual);
     }
 
-    @Test public void testResourceInfoNamespaceChanged() throws Exception {
+    @Test
+    public void testResourceInfoNamespaceChanged() throws Exception {
         NamespaceInfo newNamespace = mock(NamespaceInfo.class);
         when(newNamespace.getPrefix()).thenReturn("newMock");
 
@@ -373,7 +380,8 @@ public class CatalogLayerEventListenerTest {
         assertEquals(newPrefixedName, savedInfo.getName());
     }
 
-    @Test public void testLayerGroupInfoLayersChanged() throws Exception {
+    @Test
+    public void testLayerGroupInfoLayersChanged() throws Exception {
         CatalogModifyEvent modifyEvent = mock(CatalogModifyEvent.class);
         when(modifyEvent.getSource()).thenReturn(mockLayerGroupInfo);
         when(modifyEvent.getPropertyNames()).thenReturn(Arrays.asList("layers"));
@@ -405,7 +413,8 @@ public class CatalogLayerEventListenerTest {
         verify(mockMediator).truncate(eq(LAYER_GROUP_NAME));
     }
 
-    @Test public void testLayerGroupInfoStylesChanged() throws Exception {
+    @Test
+    public void testLayerGroupInfoStylesChanged() throws Exception {
 
         CatalogModifyEvent modifyEvent = mock(CatalogModifyEvent.class);
         when(modifyEvent.getSource()).thenReturn(mockLayerGroupInfo);
@@ -435,7 +444,8 @@ public class CatalogLayerEventListenerTest {
         verify(mockMediator).truncate(eq(LAYER_GROUP_NAME));
     }
 
-    @Test public void testLayerInfoDefaultStyleChanged() throws Exception {
+    @Test
+    public void testLayerInfoDefaultStyleChanged() throws Exception {
         final String oldName = "oldStyle";
         final String newName = "newStyle";
 
@@ -461,7 +471,7 @@ public class CatalogLayerEventListenerTest {
         GeoServerTileLayerInfo info = TileLayerInfoUtil.loadOrCreate(mockLayerInfo,
                 GWCConfig.getOldDefaults());
         when(tileLayer.getInfo()).thenReturn(info);
-        
+
         // same goes for the group layer
         GeoServerTileLayerInfo groupInfo = TileLayerInfoUtil.loadOrCreate(mockLayerGroupInfo,
                 GWCConfig.getOldDefaults());
@@ -480,13 +490,14 @@ public class CatalogLayerEventListenerTest {
         verify(mockMediator).truncateByLayerAndStyle(eq(PREFIXED_RESOURCE_NAME), eq(oldName));
         // both the layer group and the layer got saved
         verify(mockMediator, times(2)).save(any(GeoServerTileLayer.class));
-        
+
         // verify the layer group was also truncated 
         verify(mockMediator).truncate(LAYER_GROUP_NAME);
 
     }
 
-    @Test public void testLayerInfoAlternateStylesChanged() throws Exception {
+    @Test
+    public void testLayerInfoAlternateStylesChanged() throws Exception {
 
         StyleInfo removedStyle = mock(StyleInfo.class);
         when(removedStyle.prefixedName()).thenReturn("removedStyleName");

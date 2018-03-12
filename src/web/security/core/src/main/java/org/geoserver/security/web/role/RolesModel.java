@@ -23,8 +23,7 @@ public class RolesModel extends LoadableDetachableModel<Collection<GeoServerRole
         GeoServerSecurityManager secMgr = GeoServerApplication.get().getSecurityManager();
         try {
             return new ArrayList(secMgr.getActiveRoleService().getRoles());
-        }
-        catch(IOException e) {
+        } catch (IOException e) {
             throw new WicketRuntimeException(e);
         }
     }

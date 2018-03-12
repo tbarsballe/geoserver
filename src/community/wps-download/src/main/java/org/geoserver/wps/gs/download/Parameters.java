@@ -14,7 +14,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-@XmlRootElement(name="Parameters")
+@XmlRootElement(name = "Parameters")
 public class Parameters {
 
     public static final String NAMESPACE = "http://geoserver.org/wps/download";

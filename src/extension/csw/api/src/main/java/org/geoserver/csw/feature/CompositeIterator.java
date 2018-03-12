@@ -17,7 +17,7 @@ import org.opengis.feature.type.FeatureType;
 
 /**
  * A feature iterator wrapping N feature collections with the same feature type
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class CompositeIterator implements Iterator<Feature>, Closeable {

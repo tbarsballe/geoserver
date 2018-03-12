@@ -12,9 +12,8 @@ import java.io.RandomAccessFile;
 
 /**
  * Polls a file watching for modifications.
- * 
+ *
  * @author Justin Deoliveira, OpenGEO
- * 
  */
 public class FileWatcher implements Runnable {
 
@@ -49,15 +48,15 @@ public class FileWatcher implements Runnable {
     byte[] buffer = new byte[1024];
 
     public FileWatcher() {
-        
+
     }
-    
+
     public void setFile(File file) throws IOException {
         this.file = file;
         lastModified = file.lastModified();
         lastSize = size();
-    } 
-    
+    }
+
     public void setInterval(long interval) {
         this.interval = interval;
     }

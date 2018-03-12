@@ -19,7 +19,6 @@ import org.geotools.xml.EMFUtils;
  * the subclasses bind it to a specific OWS version.
  *
  * @author Justin Deoliveira, The Open Planning Project
- *
  */
 public abstract class AcceptVersionsKvpParser extends KvpParser {
 
@@ -29,7 +28,7 @@ public abstract class AcceptVersionsKvpParser extends KvpParser {
 
     public Object parse(String value) throws Exception {
         EObject acceptVersions = createObject();
-        ((Collection)EMFUtils.get(acceptVersions, "version")).addAll(KvpUtils.readFlat(value, KvpUtils.INNER_DELIMETER));
+        ((Collection) EMFUtils.get(acceptVersions, "version")).addAll(KvpUtils.readFlat(value, KvpUtils.INNER_DELIMETER));
         return acceptVersions;
     }
 

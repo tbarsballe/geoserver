@@ -16,7 +16,7 @@ public class NotificationPropertyAccessorFactory implements PropertyAccessorFact
 
     @Override
     public PropertyAccessor createPropertyAccessor(Class<?> type, String xpath, Class<?> target,
-            Hints hints) {
+                                                   Hints hints) {
         if (Notification.class.isAssignableFrom(type)) {
             return INSTANCE;
         }

@@ -21,7 +21,7 @@ import org.vfny.geoserver.wcs.WcsException;
 
 /**
  * Xml reader for wcs EO 2.0.1 xml requests.
- * 
+ *
  * @author Andrea Aime, GeoSolutions
  */
 public class WcsEOXmlReader extends XmlRequestReader {
@@ -34,13 +34,13 @@ public class WcsEOXmlReader extends XmlRequestReader {
         this.configuration = new WCSEOConfiguration();
         this.resolverProvider = resolverProvider;
     }
-    
+
     @SuppressWarnings("rawtypes")
     public Object read(Object request, Reader reader, Map kvp) throws Exception {
         // create the parser instance
         Parser parser = new Parser(configuration);
         parser.setEntityResolver(resolverProvider.getEntityResolver());
-        
+
         // uncomment this once we have a working validator (now it fails due to
         // xlink issues)
         //        parser.setValidating(true);

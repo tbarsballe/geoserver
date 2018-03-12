@@ -22,23 +22,23 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class RESTMonitorCallback extends DispatcherCallbackAdapter {
-    
+
     static final Logger LOGGER = Logging.getLogger(RESTMonitorCallback.class);
 
     Monitor monitor;
-    
+
     @Autowired
     public RESTMonitorCallback(Monitor monitor) {
         this.monitor = monitor;
     }
-    
+
     public void init(HttpServletRequest request, HttpServletResponse response) {
         RequestData data = monitor.current();
         if (data == null) {
             //will happen in cases where the filter is not active
             return;
         }
-        
+
         data.setCategory(Category.REST);
         if (request.getPathInfo() != null) {
             String resource = request.getPathInfo();
@@ -54,7 +54,7 @@ public class RESTMonitorCallback extends DispatcherCallbackAdapter {
             // will happen in cases where the filter is not active
             return;
         }
-        
+
         try {
             // do not import these classes, dynamic lookup allows to break the dependency
             // on restconfig at runtime
@@ -63,11 +63,11 @@ public class RESTMonitorCallback extends DispatcherCallbackAdapter {
                     || controllerBean instanceof org.geoserver.rest.AbstractGeoServerController) {
                 data.setService("RESTConfig");
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             // no problem, happens if restconfig is not in the classpath
             LOGGER.log(Level.FINE, "Error finding out if the call is a restconfig one", e);
         }
-        
+
         monitor.update();
     }
 }

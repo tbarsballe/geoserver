@@ -33,7 +33,7 @@ abstract class SqliteBlobStorePanel<T extends SqliteInfo> extends Panel {
 
         // the root directory of this blob store
         DirectoryParamPanel directoryPanel = new DirectoryParamPanel("rootDirectory", new PropertyModel<>(
-                getDefaultModel().getObject(), "rootDirectory"), new ParamResourceModel("rootDirectory",this), true);
+                getDefaultModel().getObject(), "rootDirectory"), new ParamResourceModel("rootDirectory", this), true);
         add(directoryPanel);
         directoryPanel.getFormComponent().setModel(new PropertyModel<>(getDefaultModel().getObject(), "rootDirectory"));
         directoryPanel.setFileFilter(new Model<>((DirectoryFileFilter) DirectoryFileFilter.INSTANCE));

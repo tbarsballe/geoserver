@@ -51,10 +51,10 @@ public class StyleEditPageRenameTest extends GeoServerWicketTestSupport {
         login();
 
         buildingsStyle = catalog.getStyleByName(MockData.BUILDINGS.getLocalPart());
-        if(buildingsStyle == null) {
+        if (buildingsStyle == null) {
             // undo the rename performed in one of the test methods
             StyleInfo si = catalog.getStyleByName("BuildingsNew");
-            if(si != null) {
+            if (si != null) {
                 si.setName(MockData.BUILDINGS.getLocalPart());
                 catalog.save(si);
             }
@@ -83,8 +83,8 @@ public class StyleEditPageRenameTest extends GeoServerWicketTestSupport {
 
         GeoServerDataDirectory dataDir = new GeoServerDataDirectory(catalog.getResourceLoader());
         //verify move to workspace was successful
-        assertEquals(Resource.Type.UNDEFINED, dataDir.get("styles/"+STYLE_TO_MOVE_FILENAME).getType());
-        assertEquals(Resource.Type.RESOURCE, dataDir.get("workspaces/sf/styles/"+STYLE_TO_MOVE_FILENAME).getType());
+        assertEquals(Resource.Type.UNDEFINED, dataDir.get("styles/" + STYLE_TO_MOVE_FILENAME).getType());
+        assertEquals(Resource.Type.RESOURCE, dataDir.get("workspaces/sf/styles/" + STYLE_TO_MOVE_FILENAME).getType());
 
         // test moving back to default workspace using the UI
         edit = new StyleEditPage(si);
@@ -111,8 +111,8 @@ public class StyleEditPageRenameTest extends GeoServerWicketTestSupport {
         assertNull(si.getWorkspace());
 
         //verify move out of the workspace was successful
-        assertEquals(Resource.Type.RESOURCE, dataDir.get("styles/"+STYLE_TO_MOVE_FILENAME).getType());
-        assertEquals(Resource.Type.UNDEFINED, dataDir.get("workspaces/sf/styles/"+STYLE_TO_MOVE_FILENAME).getType());
+        assertEquals(Resource.Type.RESOURCE, dataDir.get("styles/" + STYLE_TO_MOVE_FILENAME).getType());
+        assertEquals(Resource.Type.UNDEFINED, dataDir.get("workspaces/sf/styles/" + STYLE_TO_MOVE_FILENAME).getType());
     }
 
     @Test

@@ -21,7 +21,7 @@ import org.geotools.util.logging.Logging;
  * many queues are accumulated a scan starts that purges all queues that are empty and have not been
  * touched within a given amount of time: the idea is that a past that time we're assuming the
  * client is no more working actively against the server and the queue can thus be removed.
- * 
+ *
  * @author Andrea Aime - OpenGeo
  * @author Juan Marin, OpenGeo
  */
@@ -54,7 +54,7 @@ public class UserConcurrentFlowController extends QueueController {
     /**
      * Builds a UserFlowController that will trigger stale queue expiration once 100 queues have
      * been accumulated and
-     * 
+     *
      * @param queueSize the maximum amount of per user concurrent requests
      */
     public UserConcurrentFlowController(int queueSize) {
@@ -63,10 +63,10 @@ public class UserConcurrentFlowController extends QueueController {
 
     /**
      * Builds a new {@link UserConcurrentFlowController}
-     * 
+     *
      * @param queueSize the maximum amount of per user concurrent requests
      * @param maxQueues the number of accumulated user queues that will trigger a queue cleanup
-     * @param maxAge the max quiet time for an empty queue to be considered stale and removed
+     * @param maxAge    the max quiet time for an empty queue to be considered stale and removed
      */
     public UserConcurrentFlowController(int queueSize, int maxQueues, int maxAge) {
         this.queueSize = queueSize;

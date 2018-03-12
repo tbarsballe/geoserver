@@ -26,7 +26,7 @@ import org.opengis.feature.type.AttributeDescriptor;
 
 /**
  * Encodes the DescribeRecord response
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class DescribeRecordResponse extends Response {

@@ -20,9 +20,8 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 /**
  * Class representing the coverage request in terms that can be directly applied to the internal
  * GridCoverage2D/GridReader model
- * 
+ *
  * @author Andrea Aime - GeoSolutions
- * 
  */
 public class GridCoverageRequest {
 
@@ -43,7 +42,7 @@ public class GridCoverageRequest {
     OverviewPolicy overviewPolicy;
 
     Filter filter;
-    
+
     List<SortBy> sortBy;
 
     public WCSEnvelope getSpatialSubset() {
@@ -101,7 +100,7 @@ public class GridCoverageRequest {
     public void setFilter(Filter filter) {
         this.filter = filter;
     }
-    
+
     public List<SortBy> getSortBy() {
         return sortBy;
     }

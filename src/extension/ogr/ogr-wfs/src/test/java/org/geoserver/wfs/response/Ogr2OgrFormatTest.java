@@ -65,7 +65,7 @@ public class Ogr2OgrFormatTest {
     public void setUp() throws Exception {
         // check if we can run the tests
         Assume.assumeTrue(Ogr2OgrTestUtil.isOgrAvailable());
-        
+
         // the data source we'll use for the tests
         dataStore = new PropertyDataStore(new File("./src/test/java/org/geoserver/wfs/response"));
 
@@ -76,15 +76,15 @@ public class Ogr2OgrFormatTest {
         ogr.addFormat(new OgrFormat("CSV", "OGR-CSV", ".csv", true, "text/csv"));
         ogr.addFormat(new OgrFormat("SHP", "OGR-SHP", ".shp", false, null));
         ogr.addFormat(new OgrFormat("MapInfo File", "OGR-MIF", ".mif", false, null, "-dsco", "FORMAT=MIF"));
-        
+
         ogr.setExecutable(Ogr2OgrTestUtil.getOgr2Ogr());
         ogr.setEnvironment(Collections.singletonMap("GDAL_DATA", Ogr2OgrTestUtil.getGdalData()));
 
         // the EMF objects used to talk with the output format
         gft = WfsFactory.eINSTANCE.createGetFeatureType();
         fct = WfsFactory.eINSTANCE.createFeatureCollectionType();
-        op = new Operation("GetFeature", new Service("WFS", null, new Version("1.0.0"), 
-                Arrays.asList("GetFeature")), null, new Object[] { gft });
+        op = new Operation("GetFeature", new Service("WFS", null, new Version("1.0.0"),
+                Arrays.asList("GetFeature")), null, new Object[]{gft});
     }
 
     @Test
@@ -102,7 +102,7 @@ public class Ogr2OgrFormatTest {
         gft.setOutputFormat("OGR-SHP");
         assertEquals("application/zip", ogr.getMimeType(null, op));
     }
-    
+
     @Test
     public void testContentTypeKml() {
         gft.setOutputFormat("OGR-KML");
@@ -130,7 +130,7 @@ public class Ogr2OgrFormatTest {
         assertEquals("kml", dom.getDocumentElement().getTagName());
         assertEquals(2, dom.getElementsByTagName("Placemark").getLength());
     }
-    
+
     @Test
     public void testZippedKML() throws Exception {
         // prepare input
@@ -141,21 +141,21 @@ public class Ogr2OgrFormatTest {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         gft.setOutputFormat("OGR-KML-ZIP");
         ogr.write(fct, bos, op);
-        
+
         // unzip the result
         ZipInputStream zis = new ZipInputStream(new ByteArrayInputStream(bos.toByteArray()));
         Document dom = null;
-        ZipEntry entry = zis.getNextEntry(); 
+        ZipEntry entry = zis.getNextEntry();
         assertEquals("Buildings.kml", entry.getName());
         dom = dom(zis);
-        
+
         // some very light assumptions on the contents, since we
         // cannot control how ogr encodes the kml... let's just assess
         // it's kml with the proper number of features
         assertEquals("kml", dom.getDocumentElement().getTagName());
         assertEquals(2, dom.getElementsByTagName("Placemark").getLength());
     }
-    
+
     @Test
     public void testEmptyKML() throws Exception {
         // prepare input
@@ -177,7 +177,7 @@ public class Ogr2OgrFormatTest {
         assertEquals("kml", dom.getDocumentElement().getTagName());
         assertEquals(0, dom.getElementsByTagName("Placemark").getLength());
     }
-    
+
     @Test
     public void testSimpleCSV() throws Exception {
         // prepare input
@@ -191,14 +191,14 @@ public class Ogr2OgrFormatTest {
 
         // read back
         String csv = read(new ByteArrayInputStream(bos.toByteArray()));
-        
+
         // couple simple checks
         String[] lines = csv.split("\n");
         // headers and the two lines
         assertEquals(3, lines.length);
         assertTrue(csv.contains("123 Main Street"));
     }
-    
+
     @Test
     public void testSimpleMIF() throws Exception {
         // prepare input
@@ -212,17 +212,17 @@ public class Ogr2OgrFormatTest {
 
         // read back
         ZipInputStream zis = new ZipInputStream(new ByteArrayInputStream(bos.toByteArray()));
-        
+
         // we should get two files at least, a .mif and a .mid
         Set<String> fileNames = new HashSet<String>();
         ZipEntry entry = null;
-        while((entry = zis.getNextEntry()) != null) {
+        while ((entry = zis.getNextEntry()) != null) {
             fileNames.add(entry.getName());
         }
         assertTrue(fileNames.contains("Buildings.mif"));
         assertTrue(fileNames.contains("Buildings.mid"));
     }
-    
+
     @Test
     public void testGeometrylessCSV() throws Exception {
         // prepare input
@@ -236,7 +236,7 @@ public class Ogr2OgrFormatTest {
 
         // read back
         String csv = read(new ByteArrayInputStream(bos.toByteArray()));
-        
+
         // couple simple checks
         String[] lines = csv.split("\n");
         // headers and the feature lines
@@ -244,7 +244,7 @@ public class Ogr2OgrFormatTest {
         // let's see if one of the expected lines is there
         assertTrue(csv.contains("Alessia"));
     }
-    
+
     @Test
     public void testAllTypesKML() throws Exception {
         // prepare input
@@ -285,12 +285,12 @@ public class Ogr2OgrFormatTest {
         tx.transform(new DOMSource(dom), new StreamResult(new OutputStreamWriter(System.out,
                 "utf-8")));
     }
-    
+
     protected String read(InputStream is) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(is));
         String line = null;
         StringBuilder sb = new StringBuilder();
-        while((line = br.readLine()) != null) {
+        while ((line = br.readLine()) != null) {
             sb.append(line);
             sb.append("\n");
         }
@@ -299,11 +299,10 @@ public class Ogr2OgrFormatTest {
 
     /**
      * Parses a stream into a dom.
-     * 
+     *
      * @param input
-     * @param skipDTD
-     *            If true, will skip loading and validating against the
-     *            associated DTD
+     * @param skipDTD If true, will skip loading and validating against the
+     *                associated DTD
      */
     protected Document dom(InputStream input) throws ParserConfigurationException, SAXException,
             IOException {

@@ -47,7 +47,6 @@ import com.google.common.base.Preconditions;
 
 /**
  * @author groldan
- * 
  */
 @ParametersAreNonnullByDefault
 public class JDBCCatalogFacade implements CatalogFacade {
@@ -129,25 +128,25 @@ public class JDBCCatalogFacade implements CatalogFacade {
 
     /**
      * @see org.geoserver.catalog.CatalogFacade#getStoreByName(org.geoserver.catalog.WorkspaceInfo,
-     *      java.lang.String, java.lang.Class)
+     * java.lang.String, java.lang.Class)
      */
     @Override
     public <T extends StoreInfo> T getStoreByName(WorkspaceInfo workspace, String name,
-            Class<T> clazz) {
+                                                  Class<T> clazz) {
         if (workspace == null || workspace == ANY_WORKSPACE) {
             return db.getByIdentity(clazz, "name", name);
-        } else {        
+        } else {
             return db.getByIdentity(clazz, "workspace.id", workspace.getId(), "name", name);
         }
     }
 
     /**
      * @see org.geoserver.catalog.CatalogFacade#getStoresByWorkspace(org.geoserver.catalog.WorkspaceInfo,
-     *      java.lang.Class)
+     * java.lang.Class)
      */
     @Override
     public <T extends StoreInfo> List<T> getStoresByWorkspace(WorkspaceInfo workspace,
-            Class<T> clazz) {
+                                                              Class<T> clazz) {
 
         Filter filter = acceptAll();
         if (null != workspace && ANY_WORKSPACE != workspace) {
@@ -178,7 +177,7 @@ public class JDBCCatalogFacade implements CatalogFacade {
 
     /**
      * @see org.geoserver.catalog.CatalogFacade#setDefaultDataStore(org.geoserver.catalog.WorkspaceInfo,
-     *      org.geoserver.catalog.DataStoreInfo)
+     * org.geoserver.catalog.DataStoreInfo)
      */
     @Override
     public void setDefaultDataStore(WorkspaceInfo workspace, @Nullable DataStoreInfo store) {
@@ -238,14 +237,14 @@ public class JDBCCatalogFacade implements CatalogFacade {
 
     /**
      * @see org.geoserver.catalog.CatalogFacade#getResourceByName(org.geoserver.catalog.NamespaceInfo,
-     *      java.lang.String, java.lang.Class)
+     * java.lang.String, java.lang.Class)
      */
     @Override
     public <T extends ResourceInfo> T getResourceByName(NamespaceInfo namespace, String name,
-            Class<T> clazz) {
+                                                        Class<T> clazz) {
         if (namespace == null || namespace == ANY_NAMESPACE) {
             return db.getByIdentity(clazz, "name", name);
-        } else {        
+        } else {
             return db.getByIdentity(clazz, "namespace.id", namespace.getId(), "name", name);
         }
     }
@@ -260,11 +259,11 @@ public class JDBCCatalogFacade implements CatalogFacade {
 
     /**
      * @see org.geoserver.catalog.CatalogFacade#getResourcesByNamespace(org.geoserver.catalog.NamespaceInfo,
-     *      java.lang.Class)
+     * java.lang.Class)
      */
     @Override
     public <T extends ResourceInfo> List<T> getResourcesByNamespace(NamespaceInfo namespace,
-            Class<T> clazz) {
+                                                                    Class<T> clazz) {
 
         Filter filter = acceptAll();
         if (null != namespace && ANY_NAMESPACE != namespace) {
@@ -276,11 +275,11 @@ public class JDBCCatalogFacade implements CatalogFacade {
 
     /**
      * @see org.geoserver.catalog.CatalogFacade#getResourceByStore(org.geoserver.catalog.StoreInfo,
-     *      java.lang.String, java.lang.Class)
+     * java.lang.String, java.lang.Class)
      */
     @Override
     public <T extends ResourceInfo> T getResourceByStore(StoreInfo store, String name,
-            Class<T> clazz) {
+                                                         Class<T> clazz) {
 
         Filter filter = equal("name", name);
         Filter storeFilter = equal("store.id", store.getId());
@@ -297,7 +296,7 @@ public class JDBCCatalogFacade implements CatalogFacade {
 
     /**
      * @see org.geoserver.catalog.CatalogFacade#getResourcesByStore(org.geoserver.catalog.StoreInfo,
-     *      java.lang.Class)
+     * java.lang.Class)
      */
     @Override
     public <T extends ResourceInfo> List<T> getResourcesByStore(StoreInfo store, Class<T> clazz) {
@@ -814,7 +813,7 @@ public class JDBCCatalogFacade implements CatalogFacade {
         checkNotNull(workspace,
                 "workspace is null. Did you mean CatalogFacade.ANY_WORKSPACE or CatalogFacade.NO_WORKSPACE?");
         checkNotNull(name, "name");
-        
+
         if (workspace == ANY_WORKSPACE) {
             return db.getByIdentity(StyleInfo.class, "name", name);
         } else {
@@ -892,7 +891,7 @@ public class JDBCCatalogFacade implements CatalogFacade {
             throws IllegalArgumentException {
 
         final Integer count = Integer.valueOf(2);
-        CloseableIterator<T> it = list(type, filter, null, count, (SortBy[])null);
+        CloseableIterator<T> it = list(type, filter, null, count, (SortBy[]) null);
         T result = null;
         try {
             if (it.hasNext()) {
@@ -910,7 +909,7 @@ public class JDBCCatalogFacade implements CatalogFacade {
 
     /**
      * @see org.geoserver.catalog.CatalogFacade#count(java.lang.Class,
-     *      org.geoserver.catalog.Predicate)
+     * org.geoserver.catalog.Predicate)
      */
     @Override
     public <T extends CatalogInfo> int count(Class<T> of, Filter filter) {
@@ -925,21 +924,21 @@ public class JDBCCatalogFacade implements CatalogFacade {
 
     @Override
     public <T extends CatalogInfo> CloseableIterator<T> list(Class<T> of,
-            Filter filter, Integer offset, Integer count, SortBy sortOrder) {
-        return list(of, filter, offset, count, sortOrder != null ? new SortBy[]{sortOrder}:null);
+                                                             Filter filter, Integer offset, Integer count, SortBy sortOrder) {
+        return list(of, filter, offset, count, sortOrder != null ? new SortBy[]{sortOrder} : null);
     }
 
     /**
      * @see org.geoserver.catalog.CatalogFacade#list(java.lang.Class,
-     *      org.geoserver.catalog.Predicate, java.lang.Integer, java.lang.Integer)
+     * org.geoserver.catalog.Predicate, java.lang.Integer, java.lang.Integer)
      */
     @Override
     public <T extends CatalogInfo> CloseableIterator<T> list(final Class<T> of,
-            final Filter filter, @Nullable final Integer offset, @Nullable final Integer count,
-            @Nullable final SortBy... sortBy) {
+                                                             final Filter filter, @Nullable final Integer offset, @Nullable final Integer count,
+                                                             @Nullable final SortBy... sortBy) {
 
-        if(sortBy!=null) {
-            for(SortBy sortOrder: sortBy){
+        if (sortBy != null) {
+            for (SortBy sortOrder : sortBy) {
                 Preconditions.checkArgument(
                         null == sortOrder || canSort(of, sortOrder.getPropertyName().getPropertyName()),
                         "Can't sort objects of type %s by %s", of, sortOrder);
@@ -955,7 +954,6 @@ public class JDBCCatalogFacade implements CatalogFacade {
 
         // this object is a proxy
         ModificationProxy h = (ModificationProxy) Proxy.getInvocationHandler(info);
-
 
 
         // fire out what changed

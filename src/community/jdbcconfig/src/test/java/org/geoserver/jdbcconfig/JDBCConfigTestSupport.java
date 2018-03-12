@@ -126,11 +126,12 @@ public class JDBCConfigTestSupport {
     }
 
     private static List<Object[]> parameterizedDBConfigs;
+
     public static final List<Object[]> parameterizedDBConfigs() {
         if (parameterizedDBConfigs == null) {
             parameterizedDBConfigs = new ArrayList<Object[]>();
-            for (DBConfig conf: getDBConfigurations()) {
-                parameterizedDBConfigs.add(new Object[] {conf});
+            for (DBConfig conf : getDBConfigurations()) {
+                parameterizedDBConfigs.add(new Object[]{conf});
             }
         }
         return parameterizedDBConfigs;
@@ -221,7 +222,7 @@ public class JDBCConfigTestSupport {
 
         GeoServerExtensionsHelper.init(appContext);
         GeoServerExtensionsHelper.singleton("JDBCConfigXStreamPersisterInitializer", new JDBCConfigXStreamPersisterInitializer(), XStreamPersisterInitializer.class);
-        
+
 //        final File testDbDir = new File("target", "jdbcconfig");
 //        FileUtils.deleteDirectory(testDbDir);
 //        testDbDir.mkdirs();
@@ -247,10 +248,10 @@ public class JDBCConfigTestSupport {
         expect(appContext.containsBean("JDBCConfigXStreamPersisterInitializer")).andStubReturn(true);
 
         expect(appContext.getBeansOfType((Class) anyObject()))
-            .andReturn(Collections.EMPTY_MAP).anyTimes();
+                .andReturn(Collections.EMPTY_MAP).anyTimes();
         expect(appContext.getBeanNamesForType((Class) anyObject()))
-            .andReturn(new String[] {}).anyTimes();
-        
+                .andReturn(new String[]{}).anyTimes();
+
 
         ServletContext servletContext = createNiceMock(ServletContext.class);
         replay(servletContext);
@@ -330,7 +331,7 @@ public class JDBCConfigTestSupport {
                     }
                 });
             }
-        }        
+        }
     }
 
     public DataSource getDataSource() {
@@ -368,7 +369,7 @@ public class JDBCConfigTestSupport {
         @Bean
         public ConfigDatabase configDatabase() {
             return new ConfigDatabase(dataSource(), new XStreamInfoSerialBinding(
-                new XStreamPersisterFactory()));
+                    new XStreamPersisterFactory()));
         }
 
         @Bean

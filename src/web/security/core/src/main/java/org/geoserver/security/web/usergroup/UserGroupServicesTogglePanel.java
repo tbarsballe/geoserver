@@ -13,11 +13,11 @@ import org.geoserver.security.web.user.UserPanel;
 
 /**
  * Toggle panel for user group services.
- * 
+ *
  * @author Justin Deoliveira, OpenGeo
  */
-public class UserGroupServicesTogglePanel 
-    extends SecurityNamedServicesTogglePanel<SecurityUserGroupServiceConfig> {
+public class UserGroupServicesTogglePanel
+        extends SecurityNamedServicesTogglePanel<SecurityUserGroupServiceConfig> {
 
     public UserGroupServicesTogglePanel(String id) {
         super(id, new UserGroupServiceConfigListModel());
@@ -35,9 +35,9 @@ public class UserGroupServicesTogglePanel
 
             SecurityUserGroupServiceConfig config = model.getObject();
             add(new UserPanel("users", config.getName())
-                .setHeaderVisible(true).setPagersVisible(false, true));
+                    .setHeaderVisible(true).setPagersVisible(false, true));
             add(new GroupPanel("groups", config.getName())
-                .setHeaderVisible(true).setPagersVisible(false, true));
+                    .setHeaderVisible(true).setPagersVisible(false, true));
         }
     }
 }

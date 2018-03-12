@@ -32,14 +32,13 @@ import org.xml.sax.helpers.NamespaceSupport;
 /**
  * Implementation of the {@link ExtendedCapabilitiesProvider} extension point to contribute WMS-C
  * DTD elements and TileSet definitions to the capabilities document of the regular GeoServer WMS.
- * 
+ * <p>
  * <p>
  * A {@code TileSet} is added at {@link #encode} for each GWC {@link TileLayer}, but respecting the
  * {@link GetCapabilitiesRequest#getNamespace() namespace} filter if set.
  * </p>
- * 
+ *
  * @author Gabriel Roldan
- * 
  */
 public class CachingExtendedCapabilitiesProvider implements ExtendedCapabilitiesProvider {
 
@@ -91,7 +90,7 @@ public class CachingExtendedCapabilitiesProvider implements ExtendedCapabilities
 
     /**
      * Empty implementation, no namespaces to add until we support the WMS-C 1.3 profile
-     * 
+     *
      * @see org.geoserver.wms.ExtendedCapabilitiesProvider#registerNamespaces(org.xml.sax.helpers.NamespaceSupport)
      */
     public void registerNamespaces(NamespaceSupport namespaces) {
@@ -143,7 +142,7 @@ public class CachingExtendedCapabilitiesProvider implements ExtendedCapabilities
     }
 
     private void vendorSpecificTileset(final Translator tx, final TileLayer layer,
-            final String advertisedLayerName, final GridSubset grid, final String format) {
+                                       final String advertisedLayerName, final GridSubset grid, final String format) {
 
         String srsStr = grid.getSRS().toString();
         StringBuilder resolutionsStr = new StringBuilder();
@@ -199,8 +198,8 @@ public class CachingExtendedCapabilitiesProvider implements ExtendedCapabilities
     }
 
     String[] boundsPrep(BoundingBox bbox) {
-        String[] bs = { Double.toString(bbox.getMinX()), Double.toString(bbox.getMinY()),
-                Double.toString(bbox.getMaxX()), Double.toString(bbox.getMaxY()) };
+        String[] bs = {Double.toString(bbox.getMinX()), Double.toString(bbox.getMinY()),
+                Double.toString(bbox.getMaxX()), Double.toString(bbox.getMaxY())};
         return bs;
     }
 
@@ -211,7 +210,7 @@ public class CachingExtendedCapabilitiesProvider implements ExtendedCapabilities
 
     @Override
     public NumberRange<Double> overrideScaleDenominators(PublishedInfo layer,
-            NumberRange<Double> scaleDenominators) {
+                                                         NumberRange<Double> scaleDenominators) {
         return scaleDenominators;
     }
 }

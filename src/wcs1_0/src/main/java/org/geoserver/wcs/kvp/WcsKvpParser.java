@@ -13,7 +13,7 @@ import org.geotools.util.Version;
  * <p>
  * This class should be extended by kvp parsers which should only engage on a wcs 1.0.0 request.
  * </p>
- * 
+ *
  * @author Justin Deoliveira, The Open Planning Project
  * @author Alessio Fabiani, GeoSolutions
  */

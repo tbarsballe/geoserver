@@ -70,7 +70,7 @@ public class VectorTileMapOutputFormatTest {
 
     private VectorTileBuilder tileBuilderMock;
 
-    private FeatureLayer pointLayer, lineLayer, polygonLayer,scaleDependentPolygonLayer;
+    private FeatureLayer pointLayer, lineLayer, polygonLayer, scaleDependentPolygonLayer;
     private List<MapContent> mapContents = new ArrayList<>();
 
     @BeforeClass
@@ -117,9 +117,9 @@ public class VectorTileMapOutputFormatTest {
         ds.addFeature(feature(pointType, "point1", "StringProp1_1", 1000, "POINT(1 1)"));
         ds.addFeature(feature(pointType, "point2", "StringProp1_2", 2000, "POINT(2 2)"));
         ds.addFeature(feature(pointType, "point3", "StringProp1_3", 3000, "POINT(3 3)"));
-        double bufferBoundary = -180.0/256*32;
-        ds.addFeature(feature(pointType, "pointNear", "StringProp1_4", 3000, String.format("POINT(3 %s)", bufferBoundary+0.1)));
-        ds.addFeature(feature(pointType, "pointFar", "StringProp1_5", 3000, String.format("POINT(3 %s)", bufferBoundary-1.0)));
+        double bufferBoundary = -180.0 / 256 * 32;
+        ds.addFeature(feature(pointType, "pointNear", "StringProp1_4", 3000, String.format("POINT(3 %s)", bufferBoundary + 0.1)));
+        ds.addFeature(feature(pointType, "pointFar", "StringProp1_5", 3000, String.format("POINT(3 %s)", bufferBoundary - 1.0)));
 
         ds.addFeature(feature(lineType, "line1", "StringProp2_1", 1000, "LINESTRING (1 1, 2 2)"));
         ds.addFeature(feature(lineType, "line1", "StringProp2_2", 2000, "LINESTRING (3 3, 4 4)"));
@@ -137,7 +137,7 @@ public class VectorTileMapOutputFormatTest {
         polygonLayer = new FeatureLayer(ds.getFeatureSource("polygons"), defaultPolygonStyle);
         scaleDependentPolygonLayer = new FeatureLayer(ds.getFeatureSource("polygons"), scaleDependentPolygonStyle);
     }
-    
+
     @After
     public void disposeMapContents() {
         // just to avoid nagging logs
@@ -166,7 +166,7 @@ public class VectorTileMapOutputFormatTest {
         mapBounds = new ReferencedEnvelope(0, 0.05, 0, 0.05, WGS84);
         renderingArea = new Rectangle(256, 256);
 
-        mapContent = createMapContent(mapBounds, renderingArea,0, scaleDependentPolygonLayer);
+        mapContent = createMapContent(mapBounds, renderingArea, 0, scaleDependentPolygonLayer);
 
         q = getStyleQuery(scaleDependentPolygonLayer, mapContent);
         assertTrue(q.getFilter() == Filter.EXCLUDE);
@@ -204,8 +204,8 @@ public class VectorTileMapOutputFormatTest {
         Rectangle renderingArea = new Rectangle(256, 256);
 
         ReferencedEnvelope qbounds = new ReferencedEnvelope(mapBounds);
-        qbounds.expandBy(20_037_508.34/256*32);
-        
+        qbounds.expandBy(20_037_508.34 / 256 * 32);
+
         WMSMapContent mapContent = createMapContent(mapBounds, renderingArea, 32, pointLayer);
 
         WebMap mockMap = mock(WebMap.class);
@@ -224,7 +224,7 @@ public class VectorTileMapOutputFormatTest {
         verify(tileBuilderMock, times(1)).addFeature(eq("points"), eq("pointNear"), eq("geom"),
                 any(Geometry.class), any(Map.class));
     }
-    
+
     @Test
     public void testSimple() throws Exception {
 
@@ -276,8 +276,8 @@ public class VectorTileMapOutputFormatTest {
                 any(Geometry.class), any(Map.class));
     }
 
-    private WMSMapContent createMapContent(ReferencedEnvelope mapBounds, Rectangle renderingArea, 
-            Integer buffer, Layer... layers) throws Exception {
+    private WMSMapContent createMapContent(ReferencedEnvelope mapBounds, Rectangle renderingArea,
+                                           Integer buffer, Layer... layers) throws Exception {
 
         GetMapRequest mapRequest = createGetMapRequest(mapBounds, renderingArea, buffer);
 
@@ -293,14 +293,14 @@ public class VectorTileMapOutputFormatTest {
         if (Objects.nonNull(buffer)) {
             map.setBuffer(buffer);
         }
-        
+
         mapContents.add(map);
 
         return map;
     }
 
     protected GetMapRequest createGetMapRequest(ReferencedEnvelope requestEnvelope,
-            Rectangle renderingArea, Integer buffer) {
+                                                Rectangle renderingArea, Integer buffer) {
         GetMapRequest request = new GetMapRequest();
         request.setBaseUrl("http://localhost:8080/geoserver");
 

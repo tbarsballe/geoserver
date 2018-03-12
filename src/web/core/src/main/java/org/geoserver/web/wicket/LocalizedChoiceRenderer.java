@@ -15,7 +15,7 @@ import org.geotools.util.logging.Logging;
 /**
  * A choice renderer assuming the display value of a particular string will be found in the
  * GeoServer i18n files, under the key <code>componentName.rawString</code>
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class LocalizedChoiceRenderer extends ChoiceRenderer<String> {

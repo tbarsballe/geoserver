@@ -11,12 +11,11 @@ import org.geoserver.security.web.SecurityNamedServicePanelInfo;
 
 /**
  * Extension point for authentication filter configuration panels.
- * 
- * @author Justin Deoliveira, OpenGeo
  *
+ * @author Justin Deoliveira, OpenGeo
  */
-public class AuthenticationFilterPanelInfo 
-    <C extends SecurityAuthFilterConfig, T extends AuthenticationFilterPanel<C>>
-    extends SecurityNamedServicePanelInfo<C,T>{
+public class AuthenticationFilterPanelInfo
+        <C extends SecurityAuthFilterConfig, T extends AuthenticationFilterPanel<C>>
+        extends SecurityNamedServicePanelInfo<C, T> {
 
 }

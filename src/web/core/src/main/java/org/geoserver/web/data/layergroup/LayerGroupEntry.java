@@ -36,12 +36,12 @@ public class LayerGroupEntry implements Serializable {
             return type;
         }
     }
-	
+
     String styleId;
     String layerId;
     String layerGroupId;
-    
-    public LayerGroupEntry(PublishedInfo layer, StyleInfo style ) {
+
+    public LayerGroupEntry(PublishedInfo layer, StyleInfo style) {
         setLayer(layer);
         setStyle(style);
     }
@@ -50,51 +50,51 @@ public class LayerGroupEntry implements Serializable {
         if (layerId == null && layerGroupId == null) {
             return Type.STYLE_GROUP;
         } else if (layerGroupId != null) {
-            return  Type.LAYER_GROUP;
+            return Type.LAYER_GROUP;
         } else {
             return Type.LAYER;
         }
     }
-    
+
     public StyleInfo getStyle() {
-        if(styleId == null)
+        if (styleId == null)
             return null;
         else
-            return GeoServerApplication.get().getCatalog().getStyle( styleId );
+            return GeoServerApplication.get().getCatalog().getStyle(styleId);
     }
-    
+
     public boolean isDefaultStyle() {
         return styleId == null;
     }
-    
+
     public void setDefaultStyle(boolean defaultStyle) {
         if (getLayer() == null) {
             setStyle(getStyle());
-        } else if(defaultStyle || (getLayer() instanceof LayerGroupInfo)) {
+        } else if (defaultStyle || (getLayer() instanceof LayerGroupInfo)) {
             setStyle(null);
         } else {
             setStyle(((LayerInfo) getLayer()).getDefaultStyle());
         }
     }
-    
-    public void setStyle( StyleInfo style ) {
-        if(style == null)
+
+    public void setStyle(StyleInfo style) {
+        if (style == null)
             styleId = null;
         else
             styleId = style.getId();
     }
-    
+
     public PublishedInfo getLayer() {
         if (layerGroupId != null) {
-            return GeoServerApplication.get().getCatalog().getLayerGroup( layerGroupId );
-        } else if (layerId != null){
-            return GeoServerApplication.get().getCatalog().getLayer( layerId );
+            return GeoServerApplication.get().getCatalog().getLayerGroup(layerGroupId);
+        } else if (layerId != null) {
+            return GeoServerApplication.get().getCatalog().getLayer(layerId);
         } else {
             return null;
         }
     }
-    
-    public void setLayer( PublishedInfo publishedInfo ) {
+
+    public void setLayer(PublishedInfo publishedInfo) {
         if (publishedInfo != null) {
             if (publishedInfo instanceof LayerGroupInfo) {
                 layerGroupId = publishedInfo.getId();
@@ -140,6 +140,6 @@ public class LayerGroupEntry implements Serializable {
             return false;
         return true;
     }
-    
-    
+
+
 }

@@ -44,11 +44,11 @@ import org.opengis.filter.Filter;
 /**
  * A simple data store that can be used to rename feature types (despite the name, the only retyping
  * considered is the name change, thought it would not be that hard to extend it so that it
- * could shave off some attribute too) 
+ * could shave off some attribute too)
  */
 public class RetypingDataStore extends DecoratingDataStore {
     static final Logger LOGGER = Logging.getLogger(RetypingDataStore.class);
-    
+
     private DataStore wrapped;
 
     protected volatile Map<String, FeatureTypeMap> forwardMap = new ConcurrentHashMap<String, FeatureTypeMap>();
@@ -61,7 +61,7 @@ public class RetypingDataStore extends DecoratingDataStore {
         // force update of type mapping maps
         getTypeNames();
     }
-    
+
     public DataStore getWrapped() {
         return unwrap(DataStore.class);
     }
@@ -82,7 +82,7 @@ public class RetypingDataStore extends DecoratingDataStore {
     }
 
     public FeatureWriter<SimpleFeatureType, SimpleFeature> getFeatureWriter(String typeName,
-            Filter filter, Transaction transaction) throws IOException {
+                                                                            Filter filter, Transaction transaction) throws IOException {
         FeatureTypeMap map = getTypeMapBackwards(typeName, true);
         updateMap(map, false);
         FeatureWriter<SimpleFeatureType, SimpleFeature> writer = wrapped.getFeatureWriter(map.getOriginalName(), filter, transaction);
@@ -115,8 +115,8 @@ public class RetypingDataStore extends DecoratingDataStore {
 
     public SimpleFeatureType getSchema(String typeName) throws IOException {
         FeatureTypeMap map = getTypeMapBackwards(typeName, false);
-        if(map == null)
-        	throw new IOException("Unknown type " + typeName);
+        if (map == null)
+            throw new IOException("Unknown type " + typeName);
         updateMap(map, true);
         return map.getFeatureType();
     }
@@ -127,17 +127,17 @@ public class RetypingDataStore extends DecoratingDataStore {
         String[] names = wrapped.getTypeNames();
         List<String> transformedNames = new ArrayList<String>();
         Map<String, FeatureTypeMap> backup = new HashMap<String, FeatureTypeMap>(forwardMap);
-        
+
         // Populate local hashmaps with new values.
         Map<String, FeatureTypeMap> forwardMapLocal = new ConcurrentHashMap<String, FeatureTypeMap>();
         Map<String, FeatureTypeMap> backwardsMapLocal = new ConcurrentHashMap<String, FeatureTypeMap>();
-        
+
         for (int i = 0; i < names.length; i++) {
             String original = names[i];
             String transformedName = transformFeatureTypeName(original);
-            if(transformedName != null) {
+            if (transformedName != null) {
                 transformedNames.add(transformedName);
-                
+
                 FeatureTypeMap map = backup.get(original);
                 if (map == null) {
                     map = new FeatureTypeMap(original, transformedName);
@@ -146,16 +146,16 @@ public class RetypingDataStore extends DecoratingDataStore {
                 backwardsMapLocal.put(map.getName(), map);
             }
         }
-        
+
         // Replace the member variables.
         forwardMap = forwardMapLocal;
         backwardsMap = backwardsMapLocal;
-        
+
         return (String[]) transformedNames.toArray(new String[transformedNames.size()]);
     }
 
     public FeatureReader<SimpleFeatureType, SimpleFeature> getFeatureReader(Query query,
-            Transaction transaction) throws IOException {
+                                                                            Transaction transaction) throws IOException {
         FeatureTypeMap map = getTypeMapBackwards(query.getTypeName(), true);
         updateMap(map, false);
         FeatureReader<SimpleFeatureType, SimpleFeature> reader;
@@ -187,9 +187,8 @@ public class RetypingDataStore extends DecoratingDataStore {
 
     /**
      * Returns the type map given the external type name
-     * 
-     * @param externalTypeName
      *
+     * @param externalTypeName
      * @throws IOException
      */
     FeatureTypeMap getTypeMapBackwards(String externalTypeName, boolean checkMap) throws IOException {
@@ -204,7 +203,7 @@ public class RetypingDataStore extends DecoratingDataStore {
 
     /**
      * Make sure the FeatureTypeMap is fully loaded
-     * 
+     *
      * @param map
      * @throws IOException
      */
@@ -216,7 +215,7 @@ public class RetypingDataStore extends DecoratingDataStore {
                 map.setFeatureTypes(original, transformed);
             }
         } catch (IOException e) {
-            LOGGER.log(Level.INFO, "Failure to remap feature type " + map.getOriginalName() 
+            LOGGER.log(Level.INFO, "Failure to remap feature type " + map.getOriginalName()
                     + ". The type will be ignored", e);
             // if the feature type cannot be found in the original data store,
             // remove it from the map
@@ -229,9 +228,8 @@ public class RetypingDataStore extends DecoratingDataStore {
      * Transforms the original feature type into a destination one according to
      * the renaming rules. For the moment, it's just a feature type name
      * replacement
-     * 
-     * @param original
      *
+     * @param original
      * @throws IOException
      */
     protected SimpleFeatureType transformFeatureType(SimpleFeatureType original) throws IOException {
@@ -252,24 +250,23 @@ public class RetypingDataStore extends DecoratingDataStore {
     /**
      * Just transform the feature type name, or return null if the original type name is
      * to be hidden
-     * 
-     * @param originalName
      *
+     * @param originalName
      */
     protected String transformFeatureTypeName(String originalName) {
-         return originalName.replaceAll(":", "_");
+        return originalName.replaceAll(":", "_");
     }
 
     public void dispose() {
         wrapped.dispose();
     }
-    
+
     /**
      * Retypes a query from the extenal type to the internal one using the
      * provided typemap
+     *
      * @param q
      * @param typeMap
-     *
      * @throws IOException
      */
     Query retypeQuery(Query q, FeatureTypeMap typeMap) throws IOException {
@@ -277,11 +274,11 @@ public class RetypingDataStore extends DecoratingDataStore {
         modified.setTypeName(typeMap.getOriginalName());
         modified.setFilter(retypeFilter(q.getFilter(), typeMap));
         List<Join> joins = q.getJoins();
-        if(!joins.isEmpty()) {
+        if (!joins.isEmpty()) {
             modified.getJoins().clear();
             for (Join join : joins) {
                 FeatureTypeMap map = (FeatureTypeMap) backwardsMap.get(join.getTypeName());
-                if(map == null) {
+                if (map == null) {
                     // nothing we can do about it
                     modified.getJoins().add(join);
                 } else {
@@ -295,16 +292,16 @@ public class RetypingDataStore extends DecoratingDataStore {
                     modified.getJoins().add(mj);
                 }
             }
-            
+
         }
         return modified;
     }
 
     /**
      * Retypes a filter making sure the fids are using the internal typename prefix
+     *
      * @param filter
      * @param typeMap
-     *
      */
     Filter retypeFilter(Filter filter, FeatureTypeMap typeMap) {
         FidTransformeVisitor visitor = new FidTransformeVisitor(typeMap);
@@ -314,25 +311,25 @@ public class RetypingDataStore extends DecoratingDataStore {
     public ServiceInfo getInfo() {
         return wrapped.getInfo();
     }
-    
+
     /**
      * Delegates to {@link #getFeatureSource(String)} with
      * {@code name.getLocalPart()}
-     * 
-     * @since 2.5
+     *
      * @see DataAccess#getFeatureSource(Name)
+     * @since 2.5
      */
     public SimpleFeatureSource getFeatureSource(Name typeName)
             throws IOException {
         return getFeatureSource(typeName.getLocalPart());
     }
-    
+
     /**
      * Returns the same list of names than {@link #getTypeNames()} meaning the
      * returned Names have no namespace set.
-     * 
-     * @since 1.7
+     *
      * @see DataAccess#getNames()
+     * @since 1.7
      */
     public List<Name> getNames() throws IOException {
         String[] typeNames = getTypeNames();
@@ -345,9 +342,9 @@ public class RetypingDataStore extends DecoratingDataStore {
 
     /**
      * Delegates to {@link #getSchema(String)} with {@code name.getLocalPart()}
-     * 
-     * @since 1.7
+     *
      * @see DataAccess#getSchema(Name)
+     * @since 1.7
      */
     public SimpleFeatureType getSchema(Name name) throws IOException {
         return getSchema(name.getLocalPart());
@@ -356,17 +353,16 @@ public class RetypingDataStore extends DecoratingDataStore {
     /**
      * Delegates to {@link #updateSchema(String, SimpleFeatureType)} with
      * {@code name.getLocalPart()}
-     * 
-     * @since 1.7
+     *
      * @see DataAccess#getFeatureSource(Name)
+     * @since 1.7
      */
     public void updateSchema(Name typeName, SimpleFeatureType featureType) throws IOException {
         updateSchema(typeName.getLocalPart(), featureType);
-    }    
+    }
 
     /**
      * Delegates to {@link #removeSchema(String)} with {@code name.getLocalPart()}
-     *
      */
     public void removeSchema(Name typeName) throws IOException {
         removeSchema(typeName.getLocalPart());

@@ -20,9 +20,9 @@ import org.geotools.xml.Node;
 
 /**
  * Binding object for the type http://www.opengis.net/wfs:GetFeatureWithLockType.
- *
  * <p>
- *        <pre>
+ * <p>
+ * <pre>
  *         <code>
  *  &lt;xsd:complexType name="GetFeatureWithLockType"&gt;
  *      &lt;xsd:annotation&gt;
@@ -49,6 +49,7 @@ import org.geotools.xml.Node;
  *
  *          </code>
  *         </pre>
+ *
  * @generated
  */
 public class GetFeatureWithLockTypeBinding extends AbstractComplexBinding {
@@ -82,9 +83,9 @@ public class GetFeatureWithLockTypeBinding extends AbstractComplexBinding {
      * @generated modifiable
      */
     public Object parse(ElementInstance instance, Node node, Object value)
-        throws Exception {
+            throws Exception {
         GetFeatureWithLockType getFeatureWithLock = wfsfactory
-            .createGetFeatureWithLockType();
+                .createGetFeatureWithLockType();
 
         WFSBindingUtils.service(getFeatureWithLock, node);
         WFSBindingUtils.version(getFeatureWithLock, node);
@@ -96,7 +97,7 @@ public class GetFeatureWithLockTypeBinding extends AbstractComplexBinding {
 
         //get the max features
         BigInteger maxFeatures = WFSBindingUtils.asBigInteger((Number) node.getAttributeValue(
-                    "maxFeatures"));
+                "maxFeatures"));
 
         if (maxFeatures != null) {
             getFeatureWithLock.setMaxFeatures(maxFeatures);

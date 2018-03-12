@@ -25,9 +25,9 @@ import org.picocontainer.MutablePicoContainer;
 
 /**
  * Binding object for the type http://www.opengis.net/wfs:UpdateElementType.
- *
  * <p>
- *        <pre>
+ * <p>
+ * <pre>
  *         <code>
  *  &lt;xsd:complexType name="UpdateElementType"&gt;
  *      &lt;xsd:sequence&gt;
@@ -113,6 +113,7 @@ import org.picocontainer.MutablePicoContainer;
  *
  *          </code>
  *         </pre>
+ *
  * @generated
  */
 public class UpdateElementTypeBinding extends AbstractComplexEMFBinding {
@@ -142,13 +143,13 @@ public class UpdateElementTypeBinding extends AbstractComplexEMFBinding {
     public void initializeChildContext(ElementInstance childInstance, Node node, MutablePicoContainer context) {
         // if an srsName is set for this geometry, put it in the context for
         // children, so they can use it as well
-        if ( node.hasAttribute("srsName") ) {
+        if (node.hasAttribute("srsName")) {
             try {
                 CoordinateReferenceSystem crs = GML2ParsingUtils.crs(node);
-                if ( crs != null ) {
+                if (crs != null) {
                     context.registerComponentInstance(CoordinateReferenceSystem.class, crs);
                 }
-            } catch(Exception e) {
+            } catch (Exception e) {
                 throw new WFSException(e, "InvalidParameterValue");
             }
         }
@@ -161,7 +162,7 @@ public class UpdateElementTypeBinding extends AbstractComplexEMFBinding {
      * @generated modifiable
      */
     public Object parse(ElementInstance instance, Node node, Object value)
-        throws Exception {
+            throws Exception {
         UpdateElementType updateElement = wfsfactory.createUpdateElementType();
 
         //&lt;xsd:element maxOccurs="unbounded" ref="wfs:Property"&gt;
@@ -193,7 +194,7 @@ public class UpdateElementTypeBinding extends AbstractComplexEMFBinding {
     }
 
     public Object getProperty(Object arg0, QName arg1)
-        throws Exception {
+            throws Exception {
         Object result = super.getProperty(arg0, arg1);
 
         //System.out.println("Being asked for " + arg1);

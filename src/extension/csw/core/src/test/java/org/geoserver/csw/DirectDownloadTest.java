@@ -74,7 +74,9 @@ public class DirectDownloadTest extends GeoServerSystemTestSupport {
         TEST_NAMESPACES.put("xs", "http://www.w3.org/2001/XMLSchema");
 
         XMLUnit.setXpathNamespaceContext(new SimpleNamespaceContext(TEST_NAMESPACES));
-    };
+    }
+
+    ;
 
     public static String CSW_PREFIX = "csw";
 
@@ -242,7 +244,7 @@ public class DirectDownloadTest extends GeoServerSystemTestSupport {
         MockHttpServletResponse response = getAsServletResponse(link);
         assertEquals("application/zip", response.getContentType());
     }
-    
+
     private XpathEngine getXpathEngine() {
         if (xpathEngine == null) {
             xpathEngine = XMLUnit.newXpathEngine();
@@ -255,11 +257,9 @@ public class DirectDownloadTest extends GeoServerSystemTestSupport {
 
     /**
      * Return the flattened value corresponding to an XPath expression from a document.
-     * 
-     * @param xpath
-     *            XPath expression
-     * @param document
-     *            the document under test
+     *
+     * @param xpath    XPath expression
+     * @param document the document under test
      * @return flattened string value
      */
     protected String evaluate(String xpath, Document document) {
@@ -272,11 +272,9 @@ public class DirectDownloadTest extends GeoServerSystemTestSupport {
 
     /**
      * Return the list of nodes in a document that match an XPath expression.
-     * 
-     * @param xpath
-     *            XPath expression
-     * @param document
-     *            the document under test
+     *
+     * @param xpath    XPath expression
+     * @param document the document under test
      * @return list of matching nodes
      */
     protected NodeList getMatchingNodes(String xpath, Document document) {
@@ -286,7 +284,7 @@ public class DirectDownloadTest extends GeoServerSystemTestSupport {
             throw new RuntimeException(e);
         }
     }
-    
+
     @AfterClass
     public static void resetStore() {
         System.setProperty("DefaultCatalogStore", "org.geoserver.csw.store.simple.GeoServerSimpleCatalogStore");

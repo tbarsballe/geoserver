@@ -11,10 +11,9 @@ import org.geoserver.security.config.SecurityRoleServiceConfig;
 import org.geoserver.security.impl.GeoServerJ2eeRoleService;
 
 /**
- * Configuration class for {@link GeoServerJ2eeRoleService} 
- * 
- * @author christian
+ * Configuration class for {@link GeoServerJ2eeRoleService}
  *
+ * @author christian
  */
 public class J2eeRoleServiceConfig extends BaseSecurityNamedServiceConfig
         implements SecurityRoleServiceConfig {
@@ -40,7 +39,7 @@ public class J2eeRoleServiceConfig extends BaseSecurityNamedServiceConfig
 
     @Override
     public void setAdminRoleName(String name) {
-        adminRoleName=name;
+        adminRoleName = name;
     }
 
     public String getGroupAdminRoleName() {

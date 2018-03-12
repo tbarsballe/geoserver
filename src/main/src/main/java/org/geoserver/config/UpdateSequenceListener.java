@@ -18,23 +18,23 @@ import org.geoserver.catalog.event.CatalogRemoveEvent;
  * Updates the updateSequence on Catalog events.
  */
 class UpdateSequenceListener implements CatalogListener, ConfigurationListener {
-    
+
     GeoServer geoServer;
     boolean updating = false;
-    
+
     public UpdateSequenceListener(GeoServer geoServer) {
         this.geoServer = geoServer;
-        
+
         geoServer.getCatalog().addListener(this);
         geoServer.addListener(this);
     }
-    
+
     synchronized void incrementSequence() {
         // prevent infinite loop on configuration update
-        if(updating)
+        if (updating)
             return;
-        
-        try { 
+
+        try {
             updating = true;
             GeoServerInfo gsInfo = geoServer.getGlobal();
             gsInfo.setUpdateSequence(gsInfo.getUpdateSequence() + 1);
@@ -65,9 +65,9 @@ class UpdateSequenceListener implements CatalogListener, ConfigurationListener {
     }
 
     public void handleGlobalChange(GeoServerInfo global, List<String> propertyNames,
-            List<Object> oldValues, List<Object> newValues) {
+                                   List<Object> oldValues, List<Object> newValues) {
         // we use the post event
-        
+
     }
 
     @Override
@@ -77,7 +77,7 @@ class UpdateSequenceListener implements CatalogListener, ConfigurationListener {
 
     @Override
     public void handleSettingsModified(SettingsInfo settings, List<String> propertyNames,
-            List<Object> oldValues, List<Object> newValues) {
+                                       List<Object> oldValues, List<Object> newValues) {
         // we use post event
     }
 
@@ -92,7 +92,7 @@ class UpdateSequenceListener implements CatalogListener, ConfigurationListener {
     }
 
     public void handleLoggingChange(LoggingInfo logging, List<String> propertyNames,
-            List<Object> oldValues, List<Object> newValues) {
+                                    List<Object> oldValues, List<Object> newValues) {
         // we don't update the sequence for a logging change, the client cannot notice it   
     }
 
@@ -109,7 +109,7 @@ class UpdateSequenceListener implements CatalogListener, ConfigurationListener {
     }
 
     public void handleServiceChange(ServiceInfo service, List<String> propertyNames,
-            List<Object> oldValues, List<Object> newValues) {
+                                    List<Object> oldValues, List<Object> newValues) {
         // we use the post version        
     }
 

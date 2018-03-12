@@ -23,9 +23,8 @@ import org.springframework.security.core.Authentication;
 
 /**
  * Adapts a {@link DataAccessManager} to the {@link ResourceAccessManager} interface
- * 
+ *
  * @author Andrea Aime - GeoSolutions
- * 
  */
 public class DataAccessManagerAdapter extends AbstractResourceAccessManager {
     static final Logger LOGGER = Logging.getLogger(DataAccessManagerAdapter.class);
@@ -34,7 +33,7 @@ public class DataAccessManagerAdapter extends AbstractResourceAccessManager {
 
     /**
      * Builds a new adapter
-     * 
+     *
      * @param delegate
      */
     public DataAccessManagerAdapter(DataAccessManager delegate) {
@@ -63,9 +62,9 @@ public class DataAccessManagerAdapter extends AbstractResourceAccessManager {
         // allow the secure catalog to avoid any kind of wrapping if there are no limits
         if ((readFilter == null || readFilter == Filter.INCLUDE)
                 && (writeFilter == null || writeFilter == Filter.INCLUDE
-                        || WMSLayerInfo.class.isAssignableFrom(resourceClass)
-                        || WMTSLayerInfo.class.isAssignableFrom(resourceClass)
-                        || CoverageInfo.class.isAssignableFrom(resourceClass))) {
+                || WMSLayerInfo.class.isAssignableFrom(resourceClass)
+                || WMTSLayerInfo.class.isAssignableFrom(resourceClass)
+                || CoverageInfo.class.isAssignableFrom(resourceClass))) {
             return null;
         }
 
@@ -90,7 +89,7 @@ public class DataAccessManagerAdapter extends AbstractResourceAccessManager {
         boolean readable = delegate.canAccess(user, workspace, AccessMode.READ);
         boolean writable = delegate.canAccess(user, workspace, AccessMode.WRITE);
         boolean adminable = delegate.canAccess(user, workspace, AccessMode.ADMIN);
-        
+
         CatalogMode mode = delegate.getMode();
 
         if (readable && writable) {
@@ -105,9 +104,9 @@ public class DataAccessManagerAdapter extends AbstractResourceAccessManager {
     @SuppressWarnings("deprecation")
     @Override
     public Filter getSecurityFilter(Authentication user,
-            Class<? extends CatalogInfo> clazz) {
-        
-        if(delegate.getMode()==CatalogMode.CHALLENGE)
+                                    Class<? extends CatalogInfo> clazz) {
+
+        if (delegate.getMode() == CatalogMode.CHALLENGE)
             // If we're in CHALLENGE mode, everything should be visible
             return Predicates.acceptAll();
         else

@@ -13,17 +13,14 @@ import org.springframework.security.core.Authentication;
 /**
  * Data access manager provides the {@link SecureCatalogImpl} with directives on what the specified
  * user can access.
- * 
+ *
  * @author Andrea Aime - TOPP
- * 
  * @deprecated Use {@link ResourceAccessManager} instead
  */
 public interface DataAccessManager {
 
     /**
      * Returns the security mode in which the secure catalog must operate
-     * 
-     *
      */
     public CatalogMode getMode();
 

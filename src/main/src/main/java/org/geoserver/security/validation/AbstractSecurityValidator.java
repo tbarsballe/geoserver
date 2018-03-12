@@ -21,11 +21,11 @@ public abstract class AbstractSecurityValidator {
     }
 
     protected boolean isNotEmpty(String aString) {
-        return aString !=null && aString.length()> 0;
+        return aString != null && aString.length() > 0;
     }
 
     protected boolean isNotEmpty(char[] aString) {
-        return aString !=null && aString.length> 0;
+        return aString != null && aString.length > 0;
     }
 
     /*
@@ -41,18 +41,16 @@ public abstract class AbstractSecurityValidator {
 
     /**
      * Gets the temp directory, null if not found or not
-     * writable 
-     * 
-     *
+     * writable
      */
     public File getTempDir() {
         String tempPath = System.getProperty("java.io.tmpdir");
-        if (tempPath==null)
+        if (tempPath == null)
             return null;
         File tempDir = new File(tempPath);
-        if (tempDir.exists()==false) return null;
-        if (tempDir.isDirectory()==false) return null;
-        if (tempDir.canWrite()==false) return null;
+        if (tempDir.exists() == false) return null;
+        if (tempDir.isDirectory() == false) return null;
+        if (tempDir.canWrite() == false) return null;
         return tempDir;
     }
 
@@ -60,28 +58,27 @@ public abstract class AbstractSecurityValidator {
     /**
      * Checks if the file can be created. For relative file names,
      * {@link #getTempDir()} is used (if there is a temp dir)
-     * 
+     * <p>
      * returns true if file can be created or if the test
      * is not possible due to a missing temp dir
-     * 
+     * <p>
      * false if file creation causes an {@link IOException}
-     * 
-     * @param file
      *
+     * @param file
      * @throws SecurityConfigException
      */
     protected boolean checkFile(File file) throws SecurityConfigException {
         File testFile = null;
-        try {            
+        try {
             if (file.isAbsolute()) {
-                testFile=file;
+                testFile = file;
             } else {
                 File tempDir = getTempDir();
-                if (tempDir==null) return true; // cannot check relative file name
-                testFile=new File(tempDir,file.getPath());
+                if (tempDir == null) return true; // cannot check relative file name
+                testFile = new File(tempDir, file.getPath());
             }
-         
-            if (testFile.exists()==false) {
+
+            if (testFile.exists() == false) {
                 testFile.createNewFile();
                 testFile.delete();
             }
@@ -90,5 +87,5 @@ public abstract class AbstractSecurityValidator {
             return false;
         }
     }
-    
+
 }

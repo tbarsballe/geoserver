@@ -34,7 +34,7 @@ public class WpsXmlReader extends XmlRequestReader {
     private EntityResolverProvider resolverProvider;
 
     public WpsXmlReader(String element, String version, WPSConfiguration configuration,
-            EntityResolverProvider resolverProvider) {
+                        EntityResolverProvider resolverProvider) {
         super(new QName(org.geotools.wps.WPS.NAMESPACE, element), new Version("1.0.0"), "wps");
         this.configuration = configuration;
         this.resolverProvider = resolverProvider;
@@ -49,15 +49,15 @@ public class WpsXmlReader extends XmlRequestReader {
         Object parsed;
         try {
             parsed = parser.parse(reader);
-        } catch(Exception e) {
+        } catch (Exception e) {
             throw new WPSException("Could not parse XML request.", e);
         }
 
         if (!parser.getValidationErrors().isEmpty()) {
             WPSException exception = new WPSException("Invalid request", "InvalidParameterValue");
 
-            for(Exception error : (List<Exception>)parser.getValidationErrors()) {
-                LOGGER.warning( error.getLocalizedMessage() );
+            for (Exception error : (List<Exception>) parser.getValidationErrors()) {
+                LOGGER.warning(error.getLocalizedMessage());
                 exception.getExceptionText().add(error.getLocalizedMessage());
             }
         }

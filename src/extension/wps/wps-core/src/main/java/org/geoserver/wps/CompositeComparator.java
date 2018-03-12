@@ -9,10 +9,9 @@ import java.util.List;
 
 /**
  * Applies N comparators cascading from one to the next until one returning non zero is found
- * 
- * @author Andrea Aime - GeoSolutions
- * 
+ *
  * @param <T>
+ * @author Andrea Aime - GeoSolutions
  */
 public class CompositeComparator<T> implements Comparator<T> {
     List<Comparator<T>> comparators;

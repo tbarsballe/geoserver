@@ -22,7 +22,7 @@ public class AuditTemplateLoaderTest {
         AuditTemplateLoader tloader = new AuditTemplateLoader(rloader);
         Configuration config = new Configuration();
         config.setTemplateLoader(tloader);
-        
+
         assertNotNull(config.getTemplate("header.ftl"));
         assertNotNull(config.getTemplate("content.ftl"));
         assertNotNull(config.getTemplate("footer.ftl"));

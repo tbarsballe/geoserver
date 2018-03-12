@@ -108,7 +108,7 @@ public class JDBCOpenSearchAccessTest {
                 + "(\"cid\", \"workspace\", \"layer\", \"separateBands\", \"bands\", \"browseBands\", \"heterogeneousCRS\", \"mosaicCRS\")\n"
                 + "VALUES(17, 'gs', 'sentinel2', true, 'B01,B02,B03,B04,B05,B06,B07,B08,B09,B10,B11,B12', 'B04,B03,B02', true, 'EPSG:4326')";
         try (Connection conn = h2.getConnection(Transaction.AUTO_COMMIT);
-                Statement st = conn.createStatement()) {
+             Statement st = conn.createStatement()) {
             st.execute(s1);
             st.execute(s2);
         }
@@ -117,7 +117,7 @@ public class JDBCOpenSearchAccessTest {
     public static void populateTestDatabase(JDBCDataStore h2, boolean addGranuleTable)
             throws SQLException, IOException {
         try (Connection conn = h2.getConnection(Transaction.AUTO_COMMIT);
-                Statement st = conn.createStatement()) {
+             Statement st = conn.createStatement()) {
             // setup for fast import
 
             // SET CACHE_SIZE (a large cache is faster)
@@ -211,7 +211,7 @@ public class JDBCOpenSearchAccessTest {
 
     /**
      * Adds the granules table
-     * 
+     *
      * @param conn
      * @throws SQLException
      * @throws IOException
@@ -387,8 +387,8 @@ public class JDBCOpenSearchAccessTest {
         assertEquals("sentinel2", getAttribute(layerValue, "layer"));
         assertEquals(Boolean.TRUE, getAttribute(layerValue, "separateBands"));
         assertThat(getAttribute(layerValue, "bands"),
-                equalTo(new String[] { "B01", "B02", "B03", "B04", "B05", "B06", "B07", "B08", "B09", "B10", "B11", "B12" }));
-        assertThat(getAttribute(layerValue, "browseBands"), equalTo(new String[] { "B04", "B03", "B02" }));
+                equalTo(new String[]{"B01", "B02", "B03", "B04", "B05", "B06", "B07", "B08", "B09", "B10", "B11", "B12"}));
+        assertThat(getAttribute(layerValue, "browseBands"), equalTo(new String[]{"B04", "B03", "B02"}));
         assertEquals(Boolean.TRUE, getAttribute(layerValue, "heterogeneousCRS"));
         assertEquals("EPSG:4326", getAttribute(layerValue, "mosaicCRS"));
     }
@@ -412,20 +412,20 @@ public class JDBCOpenSearchAccessTest {
         setAttribute(layerValue, "workspace", "gs2");
         setAttribute(layerValue, "layer", "sentinel12345");
         setAttribute(layerValue, "separateBands", false);
-        setAttribute(layerValue, "bands", new String[] { "B01", "B04", "B06" });
+        setAttribute(layerValue, "bands", new String[]{"B01", "B04", "B06"});
         setAttribute(layerValue, "browseBands", null);
         setAttribute(layerValue, "heterogeneousCRS", false);
         setAttribute(layerValue, "mosaicCRS", "EPSG:3857");
 
         // update the feature
-        store.modifyFeatures(new Name[] { LAYER_NAME }, new Object[] { layerValue }, filter);
+        store.modifyFeatures(new Name[]{LAYER_NAME}, new Object[]{layerValue}, filter);
 
         // read it back and check
         final Feature layerValue2 = getLayerPropertyFromCollection(store.getFeatures(q));
         assertEquals("gs2", getAttribute(layerValue2, "workspace"));
         assertEquals("sentinel12345", getAttribute(layerValue2, "layer"));
         assertEquals(Boolean.FALSE, getAttribute(layerValue2, "separateBands"));
-        assertArrayEquals(new String[] { "B01", "B04", "B06" }, (String[]) getAttribute(layerValue2, "bands"));
+        assertArrayEquals(new String[]{"B01", "B04", "B06"}, (String[]) getAttribute(layerValue2, "bands"));
         assertThat(getAttribute(layerValue2, "browseBands"), nullValue());
         assertEquals(Boolean.FALSE, getAttribute(layerValue2, "heterogeneousCRS"));
         assertEquals("EPSG:3857", getAttribute(layerValue2, "mosaicCRS"));
@@ -475,7 +475,7 @@ public class JDBCOpenSearchAccessTest {
         q.setFilter(filter);
 
         // update the feature to remove the layer information
-        store.modifyFeatures(new Name[] { LAYER_NAME }, new Object[] { null }, filter);
+        store.modifyFeatures(new Name[]{LAYER_NAME}, new Object[]{null}, filter);
 
         // read it back and check it's not set
         Feature collection = DataUtilities.first(store.getFeatures(q));

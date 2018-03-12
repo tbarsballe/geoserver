@@ -102,7 +102,7 @@ public class SearchRequestKvpReader extends KvpRequestReader {
     private OpenSearchEoService oseo;
 
     private GeoServer gs;
-    
+
     OpenSearchBBoxKvpParser bboxParser = new OpenSearchBBoxKvpParser();
 
     public SearchRequestKvpReader(GeoServer gs, OpenSearchEoService service) {
@@ -177,7 +177,7 @@ public class SearchRequestKvpReader extends KvpRequestReader {
     }
 
     private Map<Parameter, String> getSearchParameterValues(Map rawKvp,
-            Collection<Parameter<?>> parameters) {
+                                                            Collection<Parameter<?>> parameters) {
         Map<Parameter, String> result = new LinkedHashMap<>();
         for (Parameter<?> parameter : parameters) {
             Object value = rawKvp.get(parameter.key);
@@ -219,10 +219,10 @@ public class SearchRequestKvpReader extends KvpRequestReader {
         if (timeFilter != null) {
             filters.add(timeFilter);
         }
-        
+
         // handle geometry filter (2 params)
         Filter geoFilter = buildGeometryFilter(rawKvp);
-        if(geoFilter != null) {
+        if (geoFilter != null) {
             filters.add(geoFilter);
         }
 
@@ -277,76 +277,76 @@ public class SearchRequestKvpReader extends KvpRequestReader {
         final PropertyName startProperty = FF.property("timeStart");
         final PropertyName endProperty = FF.property("timeEnd");
         switch (relation) {
-        case contains:
-            // the resource contains the specified range
-            Filter fStart;
-            if (start == null) {
-                fStart = FF.isNull(startProperty);
-            } else {
-                fStart = FF.lessOrEqual(startProperty, FF.literal(start));
-            }
-            Filter fEnd;
-            if (end == null) {
-                fEnd = FF.isNull(endProperty);
-            } else {
-                fEnd = FF.greaterOrEqual(endProperty, FF.literal(end));
-            }
+            case contains:
+                // the resource contains the specified range
+                Filter fStart;
+                if (start == null) {
+                    fStart = FF.isNull(startProperty);
+                } else {
+                    fStart = FF.lessOrEqual(startProperty, FF.literal(start));
+                }
+                Filter fEnd;
+                if (end == null) {
+                    fEnd = FF.isNull(endProperty);
+                } else {
+                    fEnd = FF.greaterOrEqual(endProperty, FF.literal(end));
+                }
 
-            return FF.and(fStart, fEnd);
-        case during:
-            // the resource is contained in the specified range
-            fStart = FF.greaterOrEqual(startProperty, FF.literal(start));
-            fEnd = FF.lessOrEqual(endProperty, FF.literal(end));
-            if (start == null) {
-                return fEnd;
-            } else if (end == null) {
-                return fStart;
-            } else {
                 return FF.and(fStart, fEnd);
-            }
+            case during:
+                // the resource is contained in the specified range
+                fStart = FF.greaterOrEqual(startProperty, FF.literal(start));
+                fEnd = FF.lessOrEqual(endProperty, FF.literal(end));
+                if (start == null) {
+                    return fEnd;
+                } else if (end == null) {
+                    return fStart;
+                } else {
+                    return FF.and(fStart, fEnd);
+                }
 
-        case disjoint:
-            // the resource is not overlapping the specified range
-            fStart = FF.less(endProperty, FF.literal(start));
-            fEnd = FF.greater(startProperty, FF.literal(end));
-            if (start == null) {
-                return fEnd;
-            } else if (end == null) {
-                return fStart;
-            } else {
-                return FF.or(fStart, fEnd);
-            }
+            case disjoint:
+                // the resource is not overlapping the specified range
+                fStart = FF.less(endProperty, FF.literal(start));
+                fEnd = FF.greater(startProperty, FF.literal(end));
+                if (start == null) {
+                    return fEnd;
+                } else if (end == null) {
+                    return fStart;
+                } else {
+                    return FF.or(fStart, fEnd);
+                }
 
-        case intersects:
-            // the resource overlaps the specified range
-            fStart = FF.or(FF.greaterOrEqual(endProperty, FF.literal(start)),
-                    FF.isNull(endProperty));
-            fEnd = FF.or(FF.lessOrEqual(startProperty, FF.literal(end)), FF.isNull(startProperty));
+            case intersects:
+                // the resource overlaps the specified range
+                fStart = FF.or(FF.greaterOrEqual(endProperty, FF.literal(start)),
+                        FF.isNull(endProperty));
+                fEnd = FF.or(FF.lessOrEqual(startProperty, FF.literal(end)), FF.isNull(startProperty));
 
-            if (start == null) {
-                return fEnd;
-            } else if (end == null) {
-                return fStart;
-            } else {
+                if (start == null) {
+                    return fEnd;
+                } else if (end == null) {
+                    return fStart;
+                } else {
+                    return FF.and(fStart, fEnd);
+                }
+
+            case equals:
+                // the resource has the same range as requested
+                if (start == null) {
+                    fStart = FF.isNull(startProperty);
+                } else {
+                    fStart = FF.equals(startProperty, FF.literal(start));
+                }
+                if (end == null) {
+                    fEnd = FF.isNull(endProperty);
+                } else {
+                    fEnd = FF.equals(endProperty, FF.literal(end));
+                }
                 return FF.and(fStart, fEnd);
-            }
 
-        case equals:
-            // the resource has the same range as requested
-            if (start == null) {
-                fStart = FF.isNull(startProperty);
-            } else {
-                fStart = FF.equals(startProperty, FF.literal(start));
-            }
-            if (end == null) {
-                fEnd = FF.isNull(endProperty);
-            } else {
-                fEnd = FF.equals(endProperty, FF.literal(end));
-            }
-            return FF.and(fStart, fEnd);
-
-        default:
-            throw new RuntimeException("Time relation of type " + relation + " not covered yet");
+            default:
+                throw new RuntimeException("Time relation of type " + relation + " not covered yet");
         }
     }
 
@@ -391,9 +391,9 @@ public class SearchRequestKvpReader extends KvpRequestReader {
     private Filter buildBoundingBoxFilter(Object value) throws Exception {
         Filter filter;
         Object parsed = bboxParser.parse((String) value);
-        if(parsed instanceof ReferencedEnvelope) {
+        if (parsed instanceof ReferencedEnvelope) {
             filter = FF.bbox(DEFAULT_GEOMETRY, (ReferencedEnvelope) parsed, MatchAction.ANY);
-        } else if(parsed instanceof ReferencedEnvelope[]) {
+        } else if (parsed instanceof ReferencedEnvelope[]) {
             ReferencedEnvelope[] envelopes = (ReferencedEnvelope[]) parsed;
             BBOX bbox1 = FF.bbox(DEFAULT_GEOMETRY, envelopes[0], MatchAction.ANY);
             BBOX bbox2 = FF.bbox(DEFAULT_GEOMETRY, envelopes[1], MatchAction.ANY);
@@ -403,19 +403,19 @@ public class SearchRequestKvpReader extends KvpRequestReader {
         }
         return filter;
     }
-    
+
     private Filter buildGeometryFilter(Map rawKvp) {
         String rawGeometry = (String) rawKvp.get(GEO_GEOMETRY.key);
         String rawRelation = Converters.convert(rawKvp.get(GEO_RELATION.key), String.class);
-        
-        if(rawGeometry == null && rawRelation == null) {
+
+        if (rawGeometry == null && rawRelation == null) {
             return null;
         }
-        
+
         Geometry geometry;
         try {
             geometry = new WKTReader().read(rawGeometry);
-        } catch(Exception e) {
+        } catch (Exception e) {
             throw new OWS20Exception(
                     "Could not parse geometry parameter, expecting valid WKT syntax: " + e.getMessage(), e,
                     OWS20Exception.OWSExceptionCode.InvalidParameterValue, "geometry");
@@ -430,22 +430,22 @@ public class SearchRequestKvpReader extends KvpRequestReader {
                     "Invalid value for relation, possible values are " + geoRelationNames,
                     OWS20Exception.OWSExceptionCode.InvalidParameterValue, GEO_RELATION.key);
         }
-        if(relation == null) {
+        if (relation == null) {
             relation = GeometryRelation.intersects;
         }
 
         // build the filter
-        switch(relation) {
-        case intersects:
-            return FF.intersects(DEFAULT_GEOMETRY, FF.literal(geometry));
-        case contains:
-            return FF.contains(FF.literal(geometry), DEFAULT_GEOMETRY);
-        case disjoint:
-            return FF.disjoint(DEFAULT_GEOMETRY, FF.literal(geometry));
-        default:
-            throw new RuntimeException("Geometry relation of type " + relation + " not covered yet"); 
+        switch (relation) {
+            case intersects:
+                return FF.intersects(DEFAULT_GEOMETRY, FF.literal(geometry));
+            case contains:
+                return FF.contains(FF.literal(geometry), DEFAULT_GEOMETRY);
+            case disjoint:
+                return FF.disjoint(DEFAULT_GEOMETRY, FF.literal(geometry));
+            default:
+                throw new RuntimeException("Geometry relation of type " + relation + " not covered yet");
         }
-        
+
     }
 
     private PropertyIsEqualTo buildUidFilter(Object value) {

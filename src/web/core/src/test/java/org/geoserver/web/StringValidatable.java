@@ -24,7 +24,7 @@ public class StringValidatable implements IValidatable<String> {
     }
 
     public void error(IValidationError error) {
-        errors.add(error);            
+        errors.add(error);
     }
 
     public String getValue() {
@@ -42,5 +42,5 @@ public class StringValidatable implements IValidatable<String> {
     public IModel<String> getModel() {
         return null;
     }
-    
+
 }

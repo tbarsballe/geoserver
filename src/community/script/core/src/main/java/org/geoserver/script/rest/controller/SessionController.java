@@ -1,4 +1,5 @@
-/** (c) 2014 Open Source Geospatial Foundation - all rights reserved
+/**
+ * (c) 2014 Open Source Geospatial Foundation - all rights reserved
  * (c) 2001 - 2013 OpenPlans
  * This code is licensed under the GPL 2.0 license, available at the root
  * application directory.
@@ -42,8 +43,8 @@ public class SessionController extends RestBaseController {
      */
     @GetMapping(path = "/sessions/{language}/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public void getScriptSession(HttpServletRequest request, HttpServletResponse response,
-                                           @PathVariable String language,
-                                           @PathVariable int id) {
+                                 @PathVariable String language,
+                                 @PathVariable int id) {
         sessionService.getScriptSession(request, response, language, id);
     }
 
@@ -55,7 +56,7 @@ public class SessionController extends RestBaseController {
      */
     @PostMapping(path = "/sessions/{language}", produces = MediaType.TEXT_PLAIN_VALUE)
     public void postScriptSession(HttpServletRequest request, HttpServletResponse response,
-                                            @PathVariable String language) {
+                                  @PathVariable String language) {
         sessionService.createScriptingSession(request, response, language);
     }
 
@@ -68,8 +69,8 @@ public class SessionController extends RestBaseController {
      */
     @PutMapping(path = "/sessions/{language}/{id}", produces = MediaType.TEXT_PLAIN_VALUE)
     public void putScriptSession(HttpServletRequest request, HttpServletResponse response,
-                                           @PathVariable String language,
-                                           @PathVariable int id) {
+                                 @PathVariable String language,
+                                 @PathVariable int id) {
         sessionService.executeScript(request, response, language, id);
     }
 

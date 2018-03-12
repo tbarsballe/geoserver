@@ -23,146 +23,142 @@ import es.unex.sextante.outputs.IOutputChannel;
 import es.unex.sextante.outputs.StreamOutputChannel;
 
 public class GTOutputFactory
-         extends
-            OutputFactory {
+        extends
+        OutputFactory {
 
-   @Override
-   public IVectorLayer getNewVectorLayer(final String sName,
-                                         final int iShapeType,
-                                         final Class[] types,
-                                         final String[] sFields,
-                                         final IOutputChannel channel,
-                                         final Object crs,
-                                         final int[] fieldSize) throws UnsupportedOutputChannelException {
+    @Override
+    public IVectorLayer getNewVectorLayer(final String sName,
+                                          final int iShapeType,
+                                          final Class[] types,
+                                          final String[] sFields,
+                                          final IOutputChannel channel,
+                                          final Object crs,
+                                          final int[] fieldSize) throws UnsupportedOutputChannelException {
 
-      return getNewVectorLayer(sName, iShapeType, types, sFields, channel, crs);
-   }
-
-
-   @Override
-   public IVectorLayer getNewVectorLayer(final String sName,
-                                         final int iShapeType,
-                                         final Class[] types,
-                                         final String[] sFields,
-                                         final IOutputChannel channel,
-                                         final Object crs) throws UnsupportedOutputChannelException {
-
-      if (channel instanceof FileOutputChannel) {
-         final String sFilename = ((FileOutputChannel) channel).getFilename();
-         createBaseDir(sFilename);
-         final GTVectorLayer vectorLayer = new GTVectorLayer();
-         vectorLayer.create(sName, iShapeType, types, sFields, sFilename, crs);
-         return vectorLayer;
-      }
-      else if (channel instanceof StreamOutputChannel) {
-         return new StreamOutputLayer(((StreamOutputChannel) channel).getStream());
-      }
-      else {
-         throw new UnsupportedOutputChannelException();
-      }
-
-   }
+        return getNewVectorLayer(sName, iShapeType, types, sFields, channel, crs);
+    }
 
 
-   @Override
-   public IRasterLayer getNewRasterLayer(final String sName,
-                                         final int iDataType,
-                                         final AnalysisExtent extent,
-                                         final int iBands,
-                                         final IOutputChannel channel,
-                                         final Object crs) throws UnsupportedOutputChannelException {
+    @Override
+    public IVectorLayer getNewVectorLayer(final String sName,
+                                          final int iShapeType,
+                                          final Class[] types,
+                                          final String[] sFields,
+                                          final IOutputChannel channel,
+                                          final Object crs) throws UnsupportedOutputChannelException {
 
-      if (channel instanceof FileOutputChannel) {
-         final String sFilename = ((FileOutputChannel) channel).getFilename();
-         createBaseDir(sFilename);
-         final GTRasterLayer layer = new GTRasterLayer();
-         layer.create(sName, sFilename, extent, iDataType, iBands, crs, this.getDefaultNoDataValue());
-         return layer;
-      }
-      else {
-         throw new UnsupportedOutputChannelException();
-      }
+        if (channel instanceof FileOutputChannel) {
+            final String sFilename = ((FileOutputChannel) channel).getFilename();
+            createBaseDir(sFilename);
+            final GTVectorLayer vectorLayer = new GTVectorLayer();
+            vectorLayer.create(sName, iShapeType, types, sFields, sFilename, crs);
+            return vectorLayer;
+        } else if (channel instanceof StreamOutputChannel) {
+            return new StreamOutputLayer(((StreamOutputChannel) channel).getStream());
+        } else {
+            throw new UnsupportedOutputChannelException();
+        }
 
-   }
-
-
-   @Override
-   public ITable getNewTable(final String sName,
-                             final Class types[],
-                             final String[] sFields,
-                             final IOutputChannel channel) throws UnsupportedOutputChannelException {
-
-      if (channel instanceof FileOutputChannel) {
-         final String sFilename = ((FileOutputChannel) channel).getFilename();
-         createBaseDir(sFilename);
-         final GTTable table = new GTTable();
-         table.create(sName, sFilename, types, sFields);
-         return table;
-      }
-      else {
-         throw new UnsupportedOutputChannelException();
-      }
-
-   }
+    }
 
 
-   protected void createBaseDir(final String fileName) {
-      // creates the base dir if it does not exist
-      final File file = new File(fileName);
-      if (!file.getParentFile().exists()) {
-         file.getParentFile().mkdirs();
-      }
-   }
+    @Override
+    public IRasterLayer getNewRasterLayer(final String sName,
+                                          final int iDataType,
+                                          final AnalysisExtent extent,
+                                          final int iBands,
+                                          final IOutputChannel channel,
+                                          final Object crs) throws UnsupportedOutputChannelException {
+
+        if (channel instanceof FileOutputChannel) {
+            final String sFilename = ((FileOutputChannel) channel).getFilename();
+            createBaseDir(sFilename);
+            final GTRasterLayer layer = new GTRasterLayer();
+            layer.create(sName, sFilename, extent, iDataType, iBands, crs, this.getDefaultNoDataValue());
+            return layer;
+        } else {
+            throw new UnsupportedOutputChannelException();
+        }
+
+    }
 
 
-   @Override
-   public String getTempFolder() {
+    @Override
+    public ITable getNewTable(final String sName,
+                              final Class types[],
+                              final String[] sFields,
+                              final IOutputChannel channel) throws UnsupportedOutputChannelException {
 
-      return System.getProperty("java.io.tmpdir");
+        if (channel instanceof FileOutputChannel) {
+            final String sFilename = ((FileOutputChannel) channel).getFilename();
+            createBaseDir(sFilename);
+            final GTTable table = new GTTable();
+            table.create(sName, sFilename, types, sFields);
+            return table;
+        } else {
+            throw new UnsupportedOutputChannelException();
+        }
 
-   }
-
-
-   @Override
-   public String[] getRasterLayerOutputExtensions() {
-
-      return new String[] { "tif", "asc" };
-
-   }
-
-
-   @Override
-   public String[] getVectorLayerOutputExtensions() {
-
-      return new String[] { "shp" };
-
-   }
+    }
 
 
-   @Override
-   public String[] getTableOutputExtensions() {
-
-      return new String[] { "dbf" };
-
-   }
-
-
-   @Override
-   public DefaultTaskMonitor getTaskMonitor(final String sTitle,
-                                            final boolean bDeterminate,
-                                            final JDialog parent) {
-
-      return new DefaultTaskMonitor(sTitle, bDeterminate, parent);
-
-   }
+    protected void createBaseDir(final String fileName) {
+        // creates the base dir if it does not exist
+        final File file = new File(fileName);
+        if (!file.getParentFile().exists()) {
+            file.getParentFile().mkdirs();
+        }
+    }
 
 
-   @Override
-   public Object getDefaultCRS() {
+    @Override
+    public String getTempFolder() {
 
-      return DefaultGeographicCRS.WGS84;
+        return System.getProperty("java.io.tmpdir");
 
-   }
+    }
+
+
+    @Override
+    public String[] getRasterLayerOutputExtensions() {
+
+        return new String[]{"tif", "asc"};
+
+    }
+
+
+    @Override
+    public String[] getVectorLayerOutputExtensions() {
+
+        return new String[]{"shp"};
+
+    }
+
+
+    @Override
+    public String[] getTableOutputExtensions() {
+
+        return new String[]{"dbf"};
+
+    }
+
+
+    @Override
+    public DefaultTaskMonitor getTaskMonitor(final String sTitle,
+                                             final boolean bDeterminate,
+                                             final JDialog parent) {
+
+        return new DefaultTaskMonitor(sTitle, bDeterminate, parent);
+
+    }
+
+
+    @Override
+    public Object getDefaultCRS() {
+
+        return DefaultGeographicCRS.WGS84;
+
+    }
 
 
 }

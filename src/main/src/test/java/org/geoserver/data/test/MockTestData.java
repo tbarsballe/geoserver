@@ -95,15 +95,15 @@ import org.springframework.context.ApplicationContext;
 /**
  * Test setup uses for GeoServer mock tests.
  * <p>
- * This is the default test setup used by {@link GeoServerMockTestSupport}. During setup this 
+ * This is the default test setup used by {@link GeoServerMockTestSupport}. During setup this
  * class creates a catalog whose contents contain all the layers defined by {@link CiteTestData}
  * </p>
  * <p>
- * Customizing the setup, adding layers, etc... is done from 
- * {@link GeoServerSystemTestSupport#setUpTestData}. 
+ * Customizing the setup, adding layers, etc... is done from
+ * {@link GeoServerSystemTestSupport#setUpTestData}.
  * </p>
- * @author Justin Deoliveira, OpenGeo
  *
+ * @author Justin Deoliveira, OpenGeo
  */
 public class MockTestData extends CiteTestData {
 
@@ -159,17 +159,17 @@ public class MockTestData extends CiteTestData {
     @Override
     public void setUp() throws Exception {
     }
- 
+
     @Override
     public void tearDown() throws Exception {
         FileUtils.deleteDirectory(data);
     }
-    
+
     @Override
     public File getDataDirectoryRoot() {
         return data;
     }
-    
+
     @Override
     public boolean isTestDataAvailable() {
         return true;

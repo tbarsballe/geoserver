@@ -126,7 +126,7 @@ public class GdalFormatTest {
     private File prepareInput() throws IOException {
         File tempFile = File.createTempFile("gdal_wcs_", "_test_data");
         IOUtils.copy(getClass().getResourceAsStream(TEST_RESOURCE), new FileOutputStream(tempFile));
-        
+
         return tempFile;
     }
 

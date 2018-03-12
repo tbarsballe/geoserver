@@ -29,10 +29,10 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
 public class LocalWorkspaceSecureCatalogTest extends AbstractAuthorizationTest {
-    
+
     @Rule
     public PropertyRule inheritance = PropertyRule.system("GEOSERVER_GLOBAL_LAYER_GROUP_INHERIT");
-    
+
     @Before
     public void setUp() throws Exception {
         LocalWorkspaceCatalogFilter.groupInherit = null;
@@ -47,13 +47,15 @@ public class LocalWorkspaceSecureCatalogTest extends AbstractAuthorizationTest {
         mgr.setDelegate(defAsResourceManager);
         return mgr;
     }
+
     @Test
     public void testAccessToLayer() throws Exception {
         CatalogFilterAccessManager mgr = setupAccessManager();
-        
-        SecureCatalogImpl sc = new SecureCatalogImpl(catalog, mgr) {};
+
+        SecureCatalogImpl sc = new SecureCatalogImpl(catalog, mgr) {
+        };
         assertNotNull(sc.getLayerByName("topp:states"));
-        
+
         WorkspaceInfo ws = sc.getWorkspaceByName("nurc");
         LocalWorkspace.set(ws);
         assertNull(sc.getWorkspaceByName("topp"));
@@ -65,7 +67,8 @@ public class LocalWorkspaceSecureCatalogTest extends AbstractAuthorizationTest {
     public void testAccessToStyle() throws Exception {
         CatalogFilterAccessManager mgr = setupAccessManager();
 
-        SecureCatalogImpl sc = new SecureCatalogImpl(catalog, mgr) {};
+        SecureCatalogImpl sc = new SecureCatalogImpl(catalog, mgr) {
+        };
         assertEquals(2, sc.getStyles().size());
 
         WorkspaceInfo ws = sc.getWorkspaceByName("topp");
@@ -78,12 +81,13 @@ public class LocalWorkspaceSecureCatalogTest extends AbstractAuthorizationTest {
         assertEquals(1, sc.getStyles().size());
     }
 
-    @SuppressWarnings({ "unchecked" })
+    @SuppressWarnings({"unchecked"})
     @Test
     public void testAccessToLayerGroup() throws Exception {
         CatalogFilterAccessManager mgr = setupAccessManager();
 
-        SecureCatalogImpl sc = new SecureCatalogImpl(catalog, mgr) {};
+        SecureCatalogImpl sc = new SecureCatalogImpl(catalog, mgr) {
+        };
         assertEquals(catalog.getLayerGroups().size(), sc.getLayerGroups().size());
 
         // all groups in this one or global
@@ -108,7 +112,8 @@ public class LocalWorkspaceSecureCatalogTest extends AbstractAuthorizationTest {
         CatalogFilterAccessManager mgr = setupAccessManager();
         inheritance.setValue("false");
 
-        SecureCatalogImpl sc = new SecureCatalogImpl(catalog, mgr) {};
+        SecureCatalogImpl sc = new SecureCatalogImpl(catalog, mgr) {
+        };
         assertThat(sc.getLayerGroups(), hasItem(equalTo(layerGroupGlobal)));
         assertThat(sc.getLayerGroups(), hasItem(equalTo(layerGroupTopp)));
         WorkspaceInfo ws = sc.getWorkspaceByName("topp");

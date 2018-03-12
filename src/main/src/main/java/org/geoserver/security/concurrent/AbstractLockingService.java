@@ -14,9 +14,8 @@ import org.geoserver.security.GeoServerSecurityService;
 
 /**
  * Abstract base class for locking support.
- * 
- * @author christian
  *
+ * @author christian
  */
 public abstract class AbstractLockingService implements GeoServerSecurityService {
 
@@ -37,9 +36,10 @@ public abstract class AbstractLockingService implements GeoServerSecurityService
         return service;
     }
 
-    
+
     /**
      * NO_LOCK
+     *
      * @see org.geoserver.security.GeoServerRoleService#getName()
      */
     public String getName() {
@@ -82,38 +82,38 @@ public abstract class AbstractLockingService implements GeoServerSecurityService
         return getService().canCreateStore();
     }
 
-   @Override
+    @Override
     public String toString() {
-        return "Locking "+ getName();
+        return "Locking " + getName();
     }
 
     /**
-     *  get a read lock
+     * get a read lock
      */
-    protected void  readLock() {
+    protected void readLock() {
         readLock.lock();
     }
 
     /**
-     *  free read lock
+     * free read lock
      */
-    protected void  readUnLock() {
+    protected void readUnLock() {
         readLock.unlock();
     }
 
     /**
-     *  get a write lock
+     * get a write lock
      */
-    protected void  writeLock() {
+    protected void writeLock() {
         writeLock.lock();
     }
 
     /**
-     *  free write lock
+     * free write lock
      */
-    protected void  writeUnLock() {
+    protected void writeUnLock() {
         writeLock.unlock();
     }
 
-    
+
 }

@@ -12,7 +12,7 @@ import org.geoserver.ows.KvpParser;
 
 /**
  * Parses url kvp's of the form 'key=&lt;url&gt;'.
- * 
+ *
  * @author Justin Deoliveira, The Open Planning Project, jdeolive@openplans.org
  */
 public class URLKvpParser extends KvpParser {
@@ -32,8 +32,8 @@ public class URLKvpParser extends KvpParser {
     /**
      * URLEncoder.encode does not respect the RFC 2396, so we rolled our own little
      * encoder. It's not complete, but should work in most cases
-     * @param url
      *
+     * @param url
      */
     public static String fixURL(String url) {
         StringBuffer sb = new StringBuffer();

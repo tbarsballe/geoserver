@@ -17,7 +17,7 @@ import org.xml.sax.helpers.XMLFilterImpl;
 /**
  * Uses SAX to extact a GetFeature query from and incoming GetFeature request
  * XML stream.
- *
+ * <p>
  * <p>
  * Note that this Handler extension ignores Filters completely and must be
  * chained as a parent to the PredicateFilter method in order to recognize
@@ -29,22 +29,34 @@ import org.xml.sax.helpers.XMLFilterImpl;
  * @version $Id$
  */
 public class DispatcherHandler extends XMLFilterImpl implements ContentHandler {
-    /** Class logger */
+    /**
+     * Class logger
+     */
     private static Logger LOGGER = org.geotools.util.logging.Logging.getLogger("org.vfny.geoserver.requests");
 
-    /** Stores internal request type */
+    /**
+     * Stores internal request type
+     */
     private int requestType = Dispatcher.UNKNOWN;
 
-    /** Stores internal service type. */
+    /**
+     * Stores internal service type.
+     */
     private int serviceType = Dispatcher.UNKNOWN;
 
-    /** Stores the internal request type as string */
+    /**
+     * Stores the internal request type as string
+     */
     private String request = null;
 
-    /** Stores hte internal service type as string */
+    /**
+     * Stores hte internal service type as string
+     */
     private String service = null;
 
-    /** Flags whether or not type has been set */
+    /**
+     * Flags whether or not type has been set
+     */
     private boolean gotType = false;
 
     /**
@@ -87,14 +99,13 @@ public class DispatcherHandler extends XMLFilterImpl implements ContentHandler {
      * Notes the start of the element and checks for request type.
      *
      * @param namespaceURI URI for namespace appended to element.
-     * @param localName Local name of element.
-     * @param rawName Raw name of element.
-     * @param atts Element attributes.
-     *
+     * @param localName    Local name of element.
+     * @param rawName      Raw name of element.
+     * @param atts         Element attributes.
      * @throws SAXException DOCUMENT ME!
      */
     public void startElement(String namespaceURI, String localName, String rawName, Attributes atts)
-        throws SAXException {
+            throws SAXException {
         if (gotType) {
             return;
         }

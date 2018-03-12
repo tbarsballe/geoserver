@@ -53,7 +53,6 @@ import de.micromata.opengis.kml.v_2_2_0.Kml;
 
 /**
  * PPIO for KML 2.2.
- * 
  */
 public class KMLPPIO extends CDataPPIO {
     private static final Logger LOGGER = Logging.getLogger(KMLPPIO.class);
@@ -207,9 +206,8 @@ public class KMLPPIO extends CDataPPIO {
 
     /**
      * A special KML encoding context for the WFS case
-     * 
+     *
      * @author Andrea Aime - GeoSolutions
-     * 
      */
     static class WFSKmlEncodingContext extends KmlEncodingContext {
 

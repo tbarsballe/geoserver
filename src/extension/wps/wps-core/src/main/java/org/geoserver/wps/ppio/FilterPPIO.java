@@ -20,7 +20,7 @@ import org.xml.sax.ContentHandler;
 
 /**
  * Parses and encodes an OGC filter using ECQL
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class FilterPPIO extends XMLPPIO {
@@ -29,15 +29,15 @@ public class FilterPPIO extends XMLPPIO {
     protected FilterPPIO(Class type, String mimeType, QName element) {
         super(type, type, mimeType, element);
     }
-    
+
     @Override
     public Object decode(Object input) throws Exception {
-        if(input == null) {
+        if (input == null) {
             return null;
-        } else if(input instanceof Filter) {
+        } else if (input instanceof Filter) {
             return input;
-        } else if(input instanceof String) {
-            return decode(IOUtils.toInputStream((String) input)); 
+        } else if (input instanceof String) {
+            return decode(IOUtils.toInputStream((String) input));
         } else {
             throw new IllegalArgumentException("Cannot convert " + input + " into a Filter object");
         }

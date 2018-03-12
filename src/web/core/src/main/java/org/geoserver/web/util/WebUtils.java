@@ -33,51 +33,48 @@ import freemarker.template.TemplateModel;
 
 /**
  * Collection of utilities for GeoServer web application components.
- * 
+ *
  * @author Justin Deoliveira, The Open Planning Project
- * 
  */
 public class WebUtils {
 
     static final Logger LOGGER = Logging.getLogger(WebUtils.class);
-    
+
     /**
      * Utility method for localizing strings using Wicket i18n subsystem. Useful if your model
      * needs to be localized and you don't have access to a Component instance.
-     * Use with care, in most cases you should be able to localize your messages directly in 
+     * Use with care, in most cases you should be able to localize your messages directly in
      * pages or components.
+     *
      * @param key
      * @param model
      * @param params
-     *
      */
     public static String localize(String key, IModel<?> model, Object... params) {
-        StringResourceModel rm = new StringResourceModel(key, (Component)null) {
+        StringResourceModel rm = new StringResourceModel(key, (Component) null) {
             private static final long serialVersionUID = 7276431319922312811L;
+
             @Override
             public Localizer getLocalizer() {
                 return GeoServerApplication.get().getResourceSettings().getLocalizer();
             }
         }.setModel(model).setParameters(params);
-        
+
         return rm.getString();
     }
 
     /**
      * Returns a resource stream based on a freemarker template.
      * <p>
-     * 
+     * <p>
      * </p>
-     * 
-     * @param c
-     *                The component being marked up.
-     * @param model
-     *                The template model to pass to the freemarker template.
-     * 
+     *
+     * @param c     The component being marked up.
+     * @param model The template model to pass to the freemarker template.
      * @return The resource stream.
      */
     public static IResourceStream getFreemakerMarkupStream(Component c,
-            TemplateModel model) {
+                                                           TemplateModel model) {
         return new FreemarkerResourceStream(c.getClass(), model);
     }
 
@@ -142,7 +139,7 @@ public class WebUtils {
                 source = cfg.getTemplateLoader().findTemplateSource(
                         templateName);
             } catch (IOException e) {
-                LOGGER.log(Level.WARNING, "Error getting last modified time from template \""+templateName+"\"", e);
+                LOGGER.log(Level.WARNING, "Error getting last modified time from template \"" + templateName + "\"", e);
                 return null;
             }
 

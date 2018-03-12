@@ -53,7 +53,7 @@ import org.opengis.feature.type.Name;
 
 /**
  * This class tests checks if the RemoteProcess class behaves correctly.
- * 
+ *
  * @author "Alessio Fabiani - alessio.fabiani@geo-solutions.it"
  */
 public class RemoteProcessTest extends WPSTestSupport {
@@ -163,19 +163,19 @@ public class RemoteProcessTest extends WPSTestSupport {
             Thread.sleep(1000);
             Presence presence = getPresence(server, adminJID);
             assertNotNull(presence);
-            
+
             assertTrue(presence.isAvailable());
             assertTrue("Orchestrator Active".equals(presence.getStatus()));
-            
+
             List<RemoteMachineDescriptor> remoteMachines = xmppRemoteClient.getRegisteredProcessingMachines();
             assertNotNull(remoteMachines);
             assertTrue(remoteMachines.size() > 0);
-            
+
             for (RemoteMachineDescriptor machine : remoteMachines) {
-                if(!"test".equals(machine.getServiceName().getNamespaceURI())) {
+                if (!"test".equals(machine.getServiceName().getNamespaceURI())) {
                     assertTrue(xmppUserName.equals(machine.getServiceName().getLocalPart()));
                     assertTrue(Arrays.asList(serviceChannels).contains(machine.getServiceName().getNamespaceURI()));
-                
+
                     assertTrue(machine.getNodeJID().equals(machine.getServiceName().getNamespaceURI() + "@" + configuration.get("xmpp_bus") + "." + xmppDomain + "/" + xmppUserName));
                 }
             }
@@ -217,7 +217,7 @@ public class RemoteProcessTest extends WPSTestSupport {
             }
         }
     }
-    
+
     private PresenceStanza presenceStanza(Entity userJID, Presence presence, Entity to) throws XMLSemanticError {
         Entity from = userJID;
         String lang = null;
@@ -249,7 +249,7 @@ public class RemoteProcessTest extends WPSTestSupport {
         signalArgs.put("service", "test.Service");
         /**
          * JSON URL Encoded Body
-         * 
+         *
          * { "title": "test.Service", "description": "This is a test Service!", "input": [ ["simpleType",
          * "{\"type\": \"string\", \"description\": \"A simple string parameter\", \"max\": 1}"], ["complexType",
          * "{\"type\": \"complex\", \"description\": \"A complex parameter\", \"min\": 1, \"max\": 10}"] ] }
@@ -280,11 +280,11 @@ public class RemoteProcessTest extends WPSTestSupport {
                 .getBean("xmppRemoteProcessClient");
         assertNotNull(xmppRemoteClient);
 
-        
+
         List<RemoteMachineDescriptor> registeredProcessingMachines = new ArrayList<RemoteMachineDescriptor>();
         registeredProcessingMachines.add(new RemoteMachineDescriptor("test@geoserver.org", new NameImpl("test", "Service"), true, 90.0, 90.0));
         xmppRemoteClient.setRegisteredProcessingMachines(registeredProcessingMachines);
-        
+
         XMPPMessage msg = new XMPPLoadAverageMessage();
 
         // build register body
@@ -296,7 +296,7 @@ public class RemoteProcessTest extends WPSTestSupport {
 
         /**
          * JSON URL Encoded Body
-         * 
+         *
          * { "title": "test.Service", "description": "This is a test Service!", "input": [ ["simpleType",
          * "{\"type\": \"string\", \"description\": \"A simple string parameter\", \"max\": 1}"], ["complexType",
          * "{\"type\": \"complex\", \"description\": \"A complex parameter\", \"min\": 1, \"max\": 10}"] ] }
@@ -320,13 +320,13 @@ public class RemoteProcessTest extends WPSTestSupport {
             }
         };
         msg.handleSignal(xmppRemoteClient, packet, null, signalArgs);
-        
+
         assertTrue("LoadAverage does not match!", registeredProcessingMachines.get(0).getLoadAverage().equals(14.6));
         assertTrue("MemoryPerc does not match!", registeredProcessingMachines.get(0).getMemPercUsed().equals(89.3));
     }
 
     /**
-     * 
+     *
      */
     protected void setupFactory() {
         if (factory == null) {
@@ -348,9 +348,7 @@ public class RemoteProcessTest extends WPSTestSupport {
     }
 
     /**
-     * 
      * @param fname
-     *
      * @throws IOException
      */
     private static InputStream fullStream(File fname) throws IOException {

@@ -35,7 +35,7 @@ public class GML2Profile extends TypeMappingProfile {
         profile.add(new NameImpl(GML.NAMESPACE, GML.MultiPolygonPropertyType.getLocalPart()));
 
         profile.add(new NameImpl(GML.NAMESPACE, GML.GeometryPropertyType.getLocalPart()));
-        profiles.add( new ProfileImpl( new GMLSchema(), profile ) );
+        profiles.add(new ProfileImpl(new GMLSchema(), profile));
     }
 
     public GML2Profile() {

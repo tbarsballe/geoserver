@@ -14,7 +14,7 @@ import org.geoserver.catalog.StyleInfo;
 import org.geoserver.web.GeoServerApplication;
 
 /**
- * A loadable model for the registered style list that does sort the styles too 
+ * A loadable model for the registered style list that does sort the styles too
  */
 @SuppressWarnings("serial")
 public class StylesModel extends LoadableDetachableModel<List<StyleInfo>> {

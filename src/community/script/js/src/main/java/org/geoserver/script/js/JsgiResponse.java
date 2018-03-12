@@ -23,9 +23,9 @@ public class JsgiResponse {
     private ScriptableObject headers;
     private Scriptable body;
     private Function forEach;
-    
+
     static Logger LOGGER = Logging.getLogger("org.geoserver.script.js");
-        
+
     public JsgiResponse(Scriptable obj, Scriptable scope) {
 
         // extract status
@@ -33,13 +33,13 @@ public class JsgiResponse {
         if (statusObj instanceof Integer) {
             status = (Integer) statusObj;
         }
-        
+
         // extract headers
         Object headersObj = obj.get("headers", obj);
         if (headersObj instanceof ScriptableObject) {
             headers = (ScriptableObject) headersObj;
         }
-        
+
         // extract body
         Object bodyObj = obj.get("body", obj);
         if (bodyObj instanceof String) {
@@ -67,13 +67,13 @@ public class JsgiResponse {
                 }
             }
         }
-        
+
         if (forEach == null) {
             throw new RuntimeException("JSGI app must return an object with a 'body' member that has a 'forEach' function.");
         }
 
     }
-    
+
     public void commit(HttpServletResponse response, final Scriptable scope) throws SecurityException, NoSuchMethodException {
 
         // set response status
@@ -89,7 +89,7 @@ public class JsgiResponse {
                 }
             }
         }
-        
+
         // write response body
         MediaType mediaType;
         String type = response.getContentType();
@@ -110,7 +110,7 @@ public class JsgiResponse {
     private void writeFunction(OutputStream outputStream, Method writeMethod, Scriptable scope) throws IOException {
         Context cx = CommonJSEngine.enterContext();
         FunctionObject writeFunc = new FunctionObject("bodyWriter", writeMethod, scope);
-        BoundFunction boundWrite = new BoundFunction(cx, scope, writeFunc, body, new Object[] {outputStream});
+        BoundFunction boundWrite = new BoundFunction(cx, scope, writeFunc, body, new Object[]{outputStream});
         Object[] args = {boundWrite};
         try {
             forEach.call(cx, scope, body, args);
@@ -119,7 +119,7 @@ public class JsgiResponse {
             outputStream.close();
         }
     }
-    
+
     public static Object write(Context cx, Scriptable thisObj, Object[] args, Function func) throws ScriptException {
         OutputStream outputStream = (OutputStream) args[0];
         Object part = args[1];

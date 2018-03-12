@@ -10,7 +10,6 @@ import org.junit.Test;
 
 /**
  * Tests for {@link RasterLayerIdentifier}.
- *
  */
 public class RasterLayerIdentifierTest {
 

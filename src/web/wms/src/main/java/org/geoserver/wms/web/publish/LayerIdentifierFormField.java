@@ -27,7 +27,7 @@ public class LayerIdentifierFormField extends FormComponentPanel<LayerIdentifier
     private TextField<String> identifier;
 
     public LayerIdentifierFormField(final String id,
-            final IModel<List<LayerIdentifierInfo>> identifierModel) {
+                                    final IModel<List<LayerIdentifierInfo>> identifierModel) {
         super(id);
 
         add((authority = new TextField<String>("authority", new PropertyModel<String>(

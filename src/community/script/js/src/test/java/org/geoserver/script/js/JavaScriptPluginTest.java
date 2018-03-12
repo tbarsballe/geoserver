@@ -22,7 +22,7 @@ import org.mozilla.javascript.NativeArray;
 import org.mozilla.javascript.Scriptable;
 
 public class JavaScriptPluginTest extends ScriptIntTestSupport {
-    
+
     JavaScriptPlugin getPlugin() {
         JavaScriptPlugin plugin = null;
         List<ScriptPlugin> plugins = getScriptManager().getPlugins();
@@ -37,7 +37,8 @@ public class JavaScriptPluginTest extends ScriptIntTestSupport {
 
     /**
      * Test method for {@link org.geoserver.script.js.JavaScriptPlugin#getModulePaths()}.
-     * @throws URISyntaxException 
+     *
+     * @throws URISyntaxException
      */
     public void testGetModulePaths() throws URISyntaxException {
         JavaScriptPlugin plugin = getPlugin();
@@ -57,7 +58,8 @@ public class JavaScriptPluginTest extends ScriptIntTestSupport {
 
     /**
      * Test method for {@link org.geoserver.geoscript.javascript.JavaScriptModules#require()}.
-     * @throws ScriptException 
+     *
+     * @throws ScriptException
      */
     public void testRequireGeoScript() throws ScriptException {
         ScriptManager scriptMgr = getScriptManager();
@@ -74,7 +76,8 @@ public class JavaScriptPluginTest extends ScriptIntTestSupport {
 
     /**
      * Test method for {@link org.geoserver.geoscript.javascript.JavaScriptModules#require()}.
-     * @throws ScriptException 
+     *
+     * @throws ScriptException
      */
     public void testRequireGeoServer() throws ScriptException {
         ScriptManager scriptMgr = getScriptManager();
@@ -89,10 +92,11 @@ public class JavaScriptPluginTest extends ScriptIntTestSupport {
 
     /**
      * Test for catalog access through the geoserver.js module.
-     * @throws ScriptException 
+     *
+     * @throws ScriptException
      */
     public void testGeoServerCatalogNamespaces() throws ScriptException {
-        
+
         ScriptEngine engine = getScriptManager().createNewEngine("js");
 
         // get list of namespaces in catalog
@@ -118,17 +122,18 @@ public class JavaScriptPluginTest extends ScriptIntTestSupport {
 
     /**
      * Test for catalog access through the geoserver.js module.
-     * @throws ScriptException 
+     *
+     * @throws ScriptException
      */
     public void testGeoServerCatalogGetVectorLayer() throws ScriptException {
-        
+
         ScriptEngine engine = getScriptManager().createNewEngine("js");
-        
-        String script = 
-            "var catalog = require('geoserver/catalog');" + 
-            "var Layer = require('geoscript/layer').Layer;" +
-            "var buildings = catalog.getVectorLayer('cite:Buildings');" +
-            "buildings instanceof Layer";
+
+        String script =
+                "var catalog = require('geoserver/catalog');" +
+                        "var Layer = require('geoscript/layer').Layer;" +
+                        "var buildings = catalog.getVectorLayer('cite:Buildings');" +
+                        "buildings instanceof Layer";
 
         // get a layer from the catalog
         Object result = engine.eval(script);
@@ -136,5 +141,5 @@ public class JavaScriptPluginTest extends ScriptIntTestSupport {
         assertEquals("got layer", result, true);
     }
 
-    
+
 }

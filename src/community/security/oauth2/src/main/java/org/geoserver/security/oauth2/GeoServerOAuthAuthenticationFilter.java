@@ -52,9 +52,8 @@ import org.springframework.web.client.ResourceAccessException;
 
 /**
  * OAuth2 Authentication filter receiving/validating proxy tickets and service tickets.
- * 
- * @author Alessio Fabiani, GeoSolutions
  *
+ * @author Alessio Fabiani, GeoSolutions
  */
 public abstract class GeoServerOAuthAuthenticationFilter
         extends GeoServerPreAuthenticatedUserNameFilter
@@ -74,9 +73,9 @@ public abstract class GeoServerOAuthAuthenticationFilter
     GeoServerOAuth2SecurityConfiguration oauth2SecurityConfiguration;
 
     public GeoServerOAuthAuthenticationFilter(SecurityNamedServiceConfig config,
-            RemoteTokenServices tokenServices,
-            GeoServerOAuth2SecurityConfiguration oauth2SecurityConfiguration,
-            OAuth2RestOperations oauth2RestTemplate) {
+                                              RemoteTokenServices tokenServices,
+                                              GeoServerOAuth2SecurityConfiguration oauth2SecurityConfiguration,
+                                              OAuth2RestOperations oauth2RestTemplate) {
         this.filterConfig = (OAuth2FilterConfig) config;
         this.tokenServices = tokenServices;
         this.oauth2SecurityConfiguration = oauth2SecurityConfiguration;
@@ -127,9 +126,9 @@ public abstract class GeoServerOAuthAuthenticationFilter
 
         if (accessToken == null && customSessionCookie == null
                 && (authentication != null
-                        && (authentication instanceof PreAuthenticatedAuthenticationToken)
-                        && !(authorities.size() == 1
-                                && authorities.contains(GeoServerRole.ANONYMOUS_ROLE)))) {
+                && (authentication instanceof PreAuthenticatedAuthenticationToken)
+                && !(authorities.size() == 1
+                && authorities.contains(GeoServerRole.ANONYMOUS_ROLE)))) {
             final AccessTokenRequest accessTokenRequest = restTemplate.getOAuth2ClientContext()
                     .getAccessTokenRequest();
             if (accessTokenRequest != null && accessTokenRequest.getStateKey() != null) {
@@ -154,7 +153,7 @@ public abstract class GeoServerOAuthAuthenticationFilter
 
         if ((authentication == null && accessToken != null) || authentication == null
                 || (authentication != null && authorities.size() == 1
-                        && authorities.contains(GeoServerRole.ANONYMOUS_ROLE))) {
+                && authorities.contains(GeoServerRole.ANONYMOUS_ROLE))) {
 
             doAuthenticate((HttpServletRequest) request, (HttpServletResponse) response);
 
@@ -171,9 +170,9 @@ public abstract class GeoServerOAuthAuthenticationFilter
     }
 
     protected String getParameterValue(String paramName, ServletRequest request) {
-        for (Enumeration<String> iterator = request.getParameterNames(); iterator.hasMoreElements();) {
+        for (Enumeration<String> iterator = request.getParameterNames(); iterator.hasMoreElements(); ) {
             final String param = iterator.nextElement();
-            if(paramName.equalsIgnoreCase(param)) {
+            if (paramName.equalsIgnoreCase(param)) {
                 return request.getParameter(param);
             }
         }
@@ -190,7 +189,7 @@ public abstract class GeoServerOAuthAuthenticationFilter
         return access_token != null ? access_token : getCustomSessionCookieValue(request);
     }
 
-    protected String getCustomSessionCookieValue(HttpServletRequest request)  {
+    protected String getCustomSessionCookieValue(HttpServletRequest request) {
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.fine("Inspecting the http request looking for the Custom Session ID.");
         }
@@ -218,7 +217,7 @@ public abstract class GeoServerOAuthAuthenticationFilter
 
     @Override
     public void logout(HttpServletRequest request, HttpServletResponse response,
-            Authentication authentication) {
+                       Authentication authentication) {
 
         OAuth2AccessToken token = restTemplate.getOAuth2ClientContext().getAccessToken();
         if ((token != null && token.getTokenType().equalsIgnoreCase(OAuth2AccessToken.BEARER_TYPE))

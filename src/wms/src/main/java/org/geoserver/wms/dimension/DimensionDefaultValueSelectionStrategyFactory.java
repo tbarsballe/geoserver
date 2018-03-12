@@ -11,21 +11,19 @@ import org.geoserver.catalog.ResourceInfo;
 /**
  * A defines a factory for creating a Strategy for selecting
  * the default values the given resource and dimension combination.
- *   
- * @author Ilkka Rinne / Spatineo Inc for the Finnish Meteorological Institute
  *
+ * @author Ilkka Rinne / Spatineo Inc for the Finnish Meteorological Institute
  */
 public interface DimensionDefaultValueSelectionStrategyFactory {
 
     /**
      * Returns a dimension and resource specific strategy for selecting default values
      * for the given resource and dimension in GetMap requests.
-     * 
+     *
      * @param resource
      * @param dimensionName
      * @param dimension
-     *
      */
     public DimensionDefaultValueSelectionStrategy getStrategy(ResourceInfo resource, String dimensionName, DimensionInfo dimension);
-      
+
 }

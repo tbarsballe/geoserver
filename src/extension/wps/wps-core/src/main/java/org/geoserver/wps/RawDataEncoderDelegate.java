@@ -17,7 +17,7 @@ import org.xml.sax.ContentHandler;
 
 /**
  * Encodes objects as base64 binaries
- * 
+ *
  * @author Andrea Aime - OpenGeo
  */
 public class RawDataEncoderDelegate implements EncoderDelegate {

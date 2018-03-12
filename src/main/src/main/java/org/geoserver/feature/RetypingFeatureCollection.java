@@ -31,9 +31,8 @@ import org.opengis.filter.identity.FeatureId;
 
 /**
  * FeatureCollection with "casts" features from on feature type to another.
- * 
+ *
  * @author Justin Deoliveira, The Open Planning Project, jdeolive@openplans.org
- * 
  */
 public class RetypingFeatureCollection extends DecoratingSimpleFeatureCollection {
 
@@ -41,11 +40,11 @@ public class RetypingFeatureCollection extends DecoratingSimpleFeatureCollection
     SimpleFeatureType target;
 
     public RetypingFeatureCollection(SimpleFeatureCollection delegate,
-            SimpleFeatureType target) {
+                                     SimpleFeatureType target) {
         super(delegate);
         this.target = target;
     }
-    
+
     public SimpleFeatureType getSchema() {
         return target;
     }
@@ -53,7 +52,7 @@ public class RetypingFeatureCollection extends DecoratingSimpleFeatureCollection
     public SimpleFeatureIterator features() {
         return new RetypingIterator(delegate.features(), target);
     }
-    
+
     @Override
     protected boolean canDelegate(FeatureVisitor visitor) {
         return ReTypingFeatureCollection.isTypeCompatible(visitor, target);
@@ -61,9 +60,9 @@ public class RetypingFeatureCollection extends DecoratingSimpleFeatureCollection
 
     @Override
     public SimpleFeatureCollection subCollection(Filter filter) {
-        
+
         SimpleFeatureCollection delegateCollection = delegate.subCollection(filter);
-        
+
         return new ReTypingFeatureCollection(delegateCollection, target);
     }
 
@@ -84,21 +83,20 @@ public class RetypingFeatureCollection extends DecoratingSimpleFeatureCollection
         FeatureId id = reTypeId(source.getIdentifier(), source.getFeatureType(), target);
         SimpleFeature retyped = builder.buildFeature(id.getID());
         retyped.getUserData().putAll(source.getUserData());
-        return  retyped;
+        return retyped;
     }
 
     /**
      * Given a feature id following the <typename>.<internalId> convention, the
      * original type and the destination type, this converts the id from
      * <original>.<internalid> to <target>.<internalid>
-     * 
+     *
      * @param id
      * @param original
      * @param target
-     *
      */
     public static FeatureId reTypeId(FeatureId sourceId, SimpleFeatureType original,
-            SimpleFeatureType target) {
+                                     SimpleFeatureType target) {
         final String originalTypeName = original.getName().getLocalPart();
         final String destTypeName = target.getName().getLocalPart();
         if (destTypeName.equals(originalTypeName))
@@ -144,7 +142,7 @@ public class RetypingFeatureCollection extends DecoratingSimpleFeatureCollection
         SimpleFeatureBuilder builder;
 
         public RetypingFeatureReader(FeatureReader<SimpleFeatureType, SimpleFeature> delegate,
-                SimpleFeatureType target) {
+                                     SimpleFeatureType target) {
             this.delegate = delegate;
             this.builder = new SimpleFeatureBuilder(target);
         }
@@ -180,7 +178,7 @@ public class RetypingFeatureCollection extends DecoratingSimpleFeatureCollection
         private SimpleFeature retyped;
 
         public RetypingFeatureWriter(FeatureWriter<SimpleFeatureType, SimpleFeature> delegate,
-                SimpleFeatureType target) {
+                                     SimpleFeatureType target) {
             this.delegate = delegate;
             this.builder = new SimpleFeatureBuilder(target);
         }

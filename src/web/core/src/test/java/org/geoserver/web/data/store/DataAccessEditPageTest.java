@@ -38,7 +38,7 @@ public class DataAccessEditPageTest extends GeoServerWicketTestSupport {
     @Before
     public void init() {
         login();
-        
+
         store = getCatalog().getStoreByName(MockData.CITE_PREFIX, DataStoreInfo.class);
         tester.startPage(new DataAccessEditPage(store.getId()));
     }
@@ -73,7 +73,7 @@ public class DataAccessEditPageTest extends GeoServerWicketTestSupport {
 
     @Test
     public void testNameRequired() {
-        
+
         FormTester form = tester.newFormTester("dataStoreForm");
         form.setValue("dataStoreNamePanel:border:border_body:paramValue", null);
         form.setValue("workspacePanel:border:border_body:paramValue", "cite");
@@ -83,13 +83,13 @@ public class DataAccessEditPageTest extends GeoServerWicketTestSupport {
         tester.debugComponentTrees();
         tester.assertRenderedPage(DataAccessEditPage.class);
 
-        List<String> l = Lists.transform(tester.getMessages(FeedbackMessage.ERROR), 
-            new Function<Serializable, String>() {
-                @Override
-                public String apply(Serializable input) {
-                    return input.toString();
-                }
-        });
+        List<String> l = Lists.transform(tester.getMessages(FeedbackMessage.ERROR),
+                new Function<Serializable, String>() {
+                    @Override
+                    public String apply(Serializable input) {
+                        return input.toString();
+                    }
+                });
         assertTrue(l.contains("Field 'Data Source Name' is required."));
         //tester.assertErrorMessages(new String[] { "Field 'Data Source Name' is required." });
     }
@@ -97,7 +97,7 @@ public class DataAccessEditPageTest extends GeoServerWicketTestSupport {
     /**
      * Test that changing a datastore's workspace updates the datastore's "namespace" parameter as
      * well as the namespace of its previously configured resources
-     * 
+     *
      * @REVISIT: this test fails on maven but is ok on eclipse...
      */
     public void _testWorkspaceSyncsUpWithNamespace() {
@@ -165,11 +165,11 @@ public class DataAccessEditPageTest extends GeoServerWicketTestSupport {
         new CatalogBuilder(catalog).updateDataStore(ds, store);
 
         assertNull(ds.getId());
-        
+
         try {
             tester.startPage(new DataAccessEditPage(ds));
             tester.assertNoErrorMessage();
-            
+
             FormTester form = tester.newFormTester("dataStoreForm");
             form.select("workspacePanel:border:border_body:paramValue", 4);
             Component wsDropDown = tester.getComponentFromLastRenderedPage("dataStoreForm:workspacePanel:border:border_body:paramValue");
@@ -179,14 +179,14 @@ public class DataAccessEditPageTest extends GeoServerWicketTestSupport {
             tester.clickLink("dataStoreForm:save", true);
             tester.assertNoErrorMessage();
             catalog.save(ds);
-    
+
             assertNotNull(ds.getId());
             assertEquals("foo", ds.getName());
         } finally {
             catalog.remove(ds);
         }
     }
-    
+
     @Test
     public void testDataStoreEdit() throws Exception {
         final Catalog catalog = getCatalog();
@@ -194,11 +194,11 @@ public class DataAccessEditPageTest extends GeoServerWicketTestSupport {
         new CatalogBuilder(catalog).updateDataStore(ds, store);
 
         assertNull(ds.getId());
-        
+
         try {
             tester.startPage(new DataAccessEditPage(ds));
             tester.assertNoErrorMessage();
-            
+
             FormTester form = tester.newFormTester("dataStoreForm");
             form.select("workspacePanel:border:border_body:paramValue", 4);
             Component wsDropDown = tester.getComponentFromLastRenderedPage("dataStoreForm:workspacePanel:border:border_body:paramValue");
@@ -208,14 +208,14 @@ public class DataAccessEditPageTest extends GeoServerWicketTestSupport {
             tester.clickLink("dataStoreForm:save", true);
             tester.assertNoErrorMessage();
             catalog.save(ds);
-    
+
             assertNotNull(ds.getId());
-            
+
             DataStoreInfo expandedStore = catalog.getResourcePool().clone(ds, true);
 
             assertNotNull(expandedStore.getId());
             assertNotNull(expandedStore.getCatalog());
-            
+
             catalog.validate(expandedStore, false).throwIfInvalid();
         } finally {
             catalog.remove(ds);

@@ -20,21 +20,24 @@ import org.opengis.feature.type.FeatureType;
 /**
  * FeatureCollection implementation wrapping around a java.util.List. Derived from
  * {@link ListFeatureCollection}, but adapted to work with complex features too
- * 
- * @see Hints#FEATURE_DETACHED
+ *
  * @author Oliver Gottwald
  * @author Jody
  * @author Andrea Aime - GeoSolutions
- * 
  * @source $URL$
+ * @see Hints#FEATURE_DETACHED
  */
 @SuppressWarnings("unchecked")
 class ListComplexFeatureCollection extends BaseFeatureCollection {
 
-    /** wrapped list of features containing the contents */
+    /**
+     * wrapped list of features containing the contents
+     */
     private List<? extends Feature> list;
 
-    /** Cached bounds */
+    /**
+     * Cached bounds
+     */
     private ReferencedEnvelope bounds = null;
 
     /**
@@ -46,7 +49,7 @@ class ListComplexFeatureCollection extends BaseFeatureCollection {
      * The provided list is directly used for storage, most feature collection operations just use a
      * simple iterator so there is no performance advantaged to be gained over using an ArrayList vs
      * a LinkedList (other then for the size() method of course).
-     * 
+     *
      * @param schema
      * @param list
      */
@@ -75,8 +78,6 @@ class ListComplexFeatureCollection extends BaseFeatureCollection {
 
     /**
      * Calculate bounds from features
-     * 
-     *
      */
     private ReferencedEnvelope calculateBounds() {
         ReferencedEnvelope extent = new ReferencedEnvelope();
@@ -98,7 +99,7 @@ class ListComplexFeatureCollection extends BaseFeatureCollection {
 
     /**
      * SimpleFeatureIterator that will use collection close method.
-     * 
+     *
      * @author Jody
      */
     private static class ListComplexFeatureIterator implements FeatureIterator {

@@ -38,9 +38,8 @@ import org.geoserver.web.GeoServerApplication;
 /**
  * Shows and allows editing of the {@link MetadataLinkInfo} attached to a
  * {@link ResourceInfo}
- * 
+ *
  * @author Andrea Aime - OpenGeo
- * 
  */
 public class MetadataLinkEditor extends Panel {
     private static final long serialVersionUID = -5721941745847988670L;
@@ -61,20 +60,20 @@ public class MetadataLinkEditor extends Panel {
     protected Catalog getCatalog() {
         return ((GeoServerApplication) getApplication()).getCatalog();
     }
-    
+
     /**
      * @param id
      * @param resourceModel Must return object that has a "metadataLinks" property
-     * (such as a {@link ResourceInfo} or {@link LayerGroupInfo})
+     *                      (such as a {@link ResourceInfo} or {@link LayerGroupInfo})
      */
     public MetadataLinkEditor(String id, final IModel<?> resourceModel) {
         super(id, resourceModel);
-        
+
         // container for ajax updates
         final WebMarkupContainer container = new WebMarkupContainer("container");
         container.setOutputMarkupId(true);
         add(container);
-        
+
         metadataLinksModel = new PropertyModel<>(resourceModel, "metadataLinks");
 
         // the link list
@@ -87,7 +86,7 @@ public class MetadataLinkEditor extends Panel {
 
             @Override
             protected void populateItem(ListItem<MetadataLinkInfo> item) {
-                
+
                 // odd/even style
                 item.add(AttributeModifier.replace("class",
                         item.getIndex() % 2 == 0 ? "even" : "odd"));
@@ -106,33 +105,33 @@ public class MetadataLinkEditor extends Panel {
                 url.add(new UrlValidator());
                 url.setRequired(true);
                 urlBorder.add(url);
-                
+
                 // remove link
-                AjaxLink<MetadataLinkInfo> link = 
+                AjaxLink<MetadataLinkInfo> link =
                         new AjaxLink<MetadataLinkInfo>("removeLink", item.getModel()) {
 
-                    private static final long serialVersionUID = -6204300287066695521L;
+                            private static final long serialVersionUID = -6204300287066695521L;
 
-                    @Override
-                    public void onClick(AjaxRequestTarget target) {
-                        metadataLinksModel.getObject().remove(getModelObject());
-                        updateLinksVisibility();
-                        target.add(container);
-                    }
-                    
-                };
+                            @Override
+                            public void onClick(AjaxRequestTarget target) {
+                                metadataLinksModel.getObject().remove(getModelObject());
+                                updateLinksVisibility();
+                                target.add(container);
+                            }
+
+                        };
                 item.add(link);
             }
         };
         // this is necessary to avoid loosing item contents on edit/validation checks
         links.setReuseItems(true);
         table.add(links);
-        
+
         // the no metadata links label
         noMetadata = new Label("noLinks", new ResourceModel("noMetadataLinksSoFar"));
         container.add(noMetadata);
         updateLinksVisibility();
-        
+
         // add new link button
         AjaxButton button = new AjaxButton("addlink") {
             private static final long serialVersionUID = -695617463194724617L;
@@ -144,10 +143,10 @@ public class MetadataLinkEditor extends Panel {
                 link.setType("text/plain");
                 metadataLinksModel.getObject().add(link);
                 updateLinksVisibility();
-                
+
                 target.add(container);
             }
-            
+
         };
         add(button);
     }
@@ -157,15 +156,14 @@ public class MetadataLinkEditor extends Panel {
         table.setVisible(anyLink);
         noMetadata.setVisible(!anyLink);
     }
-    
-    public class UrlValidator implements IValidator<String>{
+
+    public class UrlValidator implements IValidator<String> {
         private static final long serialVersionUID = 8435726308689930141L;
 
         @Override
         public void validate(IValidatable validatable) {
-            String url = (String)validatable.getValue();
-            if (url != null )
-            {
+            String url = (String) validatable.getValue();
+            if (url != null) {
                 try {
                     MetadataLinkInfoImpl.validate(url);
                 } catch (IllegalArgumentException ex) {

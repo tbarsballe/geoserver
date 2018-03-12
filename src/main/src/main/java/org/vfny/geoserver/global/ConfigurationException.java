@@ -16,15 +16,15 @@ package org.vfny.geoserver.global;
  */
 public class ConfigurationException extends Exception {
     /**
-         *
-         */
+     *
+     */
     private static final long serialVersionUID = 6333673036778693749L;
 
     /**
-    * Constructs a new instance of ConfigurationException
-    *
-    * @param msg A message explaining the exception
-    */
+     * Constructs a new instance of ConfigurationException
+     *
+     * @param msg A message explaining the exception
+     */
     public ConfigurationException(String msg) {
         super(msg);
     }

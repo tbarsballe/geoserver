@@ -13,10 +13,10 @@ import com.thoughtworks.xstream.XStream;
 
 /**
  * Loads the ogr2ogr.xml configuration file and configures the output format accordingly.
- *
+ * <p>
  * <p>Also keeps tabs on the configuration file, reloading the file as needed.
- * @author Administrator
  *
+ * @author Administrator
  */
 public class Ogr2OgrConfigurator extends AbstractToolConfigurator {
 
@@ -43,7 +43,7 @@ public class Ogr2OgrConfigurator extends AbstractToolConfigurator {
         // setup OGR-specific aliases
         xstream.alias("OgrConfiguration", OgrConfiguration.class);
         xstream.alias("Format", OgrFormat.class);
-	xstream.allowTypes(new Class[] { OgrConfiguration.class, OgrFormat.class });
+        xstream.allowTypes(new Class[]{OgrConfiguration.class, OgrFormat.class});
 
         return xstream;
     }

@@ -31,14 +31,14 @@ public class GZIPFilter implements Filter {
     private Set myCompressedTypes;
 
     public void doFilter(ServletRequest req, ServletResponse res,
-            FilterChain chain) throws IOException, ServletException {
+                         FilterChain chain) throws IOException, ServletException {
         if (req instanceof HttpServletRequest) {
             HttpServletRequest request = (HttpServletRequest) req;
             HttpServletResponse response = (HttpServletResponse) res;
             String ae = request.getHeader("accept-encoding");
             if (ae != null && ae.indexOf("gzip") != -1) {
                 GZIPResponseWrapper wrappedResponse =
-                    new GZIPResponseWrapper(response, myCompressedTypes, request.getRequestURL().toString());
+                        new GZIPResponseWrapper(response, myCompressedTypes, request.getRequestURL().toString());
                 chain.doFilter(req, wrappedResponse);
                 wrappedResponse.finishResponse();
                 return;
@@ -51,14 +51,14 @@ public class GZIPFilter implements Filter {
     public void init(FilterConfig filterConfig) {
         try {
             String compressedTypes = filterConfig.getInitParameter("compressed-types");
-            String[] typeNames = 
-                (compressedTypes == null ? new String[0] : compressedTypes.split(",")); 
+            String[] typeNames =
+                    (compressedTypes == null ? new String[0] : compressedTypes.split(","));
             // TODO: Are commas allowed in mimetypes?
             myCompressedTypes = new HashSet();
-            for (int i = 0; i < typeNames.length; i++){
+            for (int i = 0; i < typeNames.length; i++) {
                 myCompressedTypes.add(Pattern.compile(typeNames[i]));
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             System.out.println("Error while setting up GZIPFilter; " + e);
         }
     }

@@ -38,20 +38,19 @@ import org.geotools.util.logging.Logging;
  * @version 1.0
  */
 public class TestWfsPost extends HttpServlet {
-    
+
     /**
      * The path at which TestWfsPost is exposed. Used to find the full location of GeoServer
      * without doing complex and error prone string building
      */
     static final String TEST_WFS_POST_PATH = "/TestWfsPost";
-    
+
     static final Logger LOGGER = Logging.getLogger(TestWfsPost.class);
-    
+
     /**
      * Initializes the servlet.
      *
      * @param config DOCUMENT ME!
-     *
      * @throws ServletException DOCUMENT ME!
      */
     public void init(ServletConfig config) throws ServletException {
@@ -67,28 +66,26 @@ public class TestWfsPost extends HttpServlet {
     /**
      * Handles the HTTP <code>GET</code> method.
      *
-     * @param request servlet request
+     * @param request  servlet request
      * @param response servlet response
-     *
      * @throws ServletException DOCUMENT ME!
-     * @throws IOException DOCUMENT ME!
+     * @throws IOException      DOCUMENT ME!
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
+            throws ServletException, IOException {
         processRequest(request, response);
     }
 
     /**
      * Handles the HTTP <code>POST</code> method.
      *
-     * @param request servlet request
+     * @param request  servlet request
      * @param response servlet response
-     *
      * @throws ServletException DOCUMENT ME!
-     * @throws IOException DOCUMENT ME!
+     * @throws IOException      DOCUMENT ME!
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
+            throws ServletException, IOException {
         processRequest(request, response);
     }
 
@@ -105,14 +102,13 @@ public class TestWfsPost extends HttpServlet {
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
      *
-     * @param request servlet request
+     * @param request  servlet request
      * @param response servlet response
-     *
      * @throws ServletException DOCUMENT ME!
-     * @throws IOException DOCUMENT ME!
+     * @throws IOException      DOCUMENT ME!
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
+            throws ServletException, IOException {
         String requestString = request.getParameter("body");
         String urlString = request.getParameter("url");
         boolean doGet = (requestString == null) || requestString.trim().equals("");
@@ -126,7 +122,7 @@ public class TestWfsPost extends HttpServlet {
             }
 
             String geoserverUrl = urlInfo.substring(0, urlInfo.indexOf("/", 8))
-                + request.getContextPath();
+                    + request.getContextPath();
             response.setContentType("text/html");
             out.println("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">");
             out.println("<html>");
@@ -174,9 +170,9 @@ public class TestWfsPost extends HttpServlet {
             out.println("<table align=\"center\">");
             out.println("<tr>");
             out.println(
-                "<td><input type=\"button\" value=\"Clear\" onclick=\"clearRequest()\"></td>");
+                    "<td><input type=\"button\" value=\"Clear\" onclick=\"clearRequest()\"></td>");
             out.println(
-                "<td><input type=\"button\" value=\"Submit\" onclick=\"sendRequest()\"></td>");
+                    "<td><input type=\"button\" value=\"Submit\" onclick=\"sendRequest()\"></td>");
             out.println("<td></td>");
             out.println("</tr>");
             out.println("</table>");
@@ -194,7 +190,7 @@ public class TestWfsPost extends HttpServlet {
 
             try {
                 URL u = new URL(urlString);
-                validateURL(request, urlString, getProxyBaseURL() );
+                validateURL(request, urlString, getProxyBaseURL());
                 java.net.HttpURLConnection acon = (java.net.HttpURLConnection) u.openConnection();
                 acon.setAllowUserInteraction(false);
 
@@ -231,7 +227,7 @@ public class TestWfsPost extends HttpServlet {
 
                 if (!doGet) {
                     xmlOut = new PrintWriter(new BufferedWriter(
-                                new OutputStreamWriter(acon.getOutputStream())));
+                            new OutputStreamWriter(acon.getOutputStream())));
                     xmlOut = new java.io.PrintWriter(acon.getOutputStream());
 
                     xmlOut.write(requestString);
@@ -265,7 +261,7 @@ public class TestWfsPost extends HttpServlet {
                     // + acon.getContentType());
                     response.setContentType(acon.getContentType());
                     response.setHeader("Content-disposition",
-                        acon.getHeaderField("Content-disposition"));
+                            acon.getHeaderField("Content-disposition"));
 
                     OutputStream output = response.getOutputStream();
                     int c;
@@ -324,26 +320,26 @@ public class TestWfsPost extends HttpServlet {
 
     String getProxyBaseURL() {
         GeoServer geoServer = (GeoServer) GeoServerExtensions.bean("geoServer");
-        if( geoServer != null ){
+        if (geoServer != null) {
             geoServer.getGlobal().getSettings().getProxyBaseUrl();
         }
         return null;
     }
 
     void validateURL(HttpServletRequest request, String url, String proxyBase) {
-        if(proxyBase != null) {
-            if(!url.startsWith(proxyBase)) {
+        if (proxyBase != null) {
+            if (!url.startsWith(proxyBase)) {
                 throw new IllegalArgumentException("Invalid url requested, the demo requests should be hitting: " + proxyBase);
             }
         } else {
             // use the requested url then, and remove the TestWfsPort
             String requestedUrl = request.getRequestURL().toString();
             // this should not happen, but let's not make it an open proxy if it does
-            if(!requestedUrl.endsWith(TEST_WFS_POST_PATH)) {
+            if (!requestedUrl.endsWith(TEST_WFS_POST_PATH)) {
                 throw new IllegalStateException("Unepected, the TestWfsPost was accessed by a path not ending with TestWfsPost: " + requestedUrl);
             }
             String base = requestedUrl.substring(0, requestedUrl.lastIndexOf(TEST_WFS_POST_PATH));
-            if(!url.startsWith(base)) {
+            if (!url.startsWith(base)) {
                 throw new IllegalArgumentException("Invalid url requested, the demo requests should be hitting: " + base);
             }
         }

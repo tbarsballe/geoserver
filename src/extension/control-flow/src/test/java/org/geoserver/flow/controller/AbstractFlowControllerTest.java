@@ -19,8 +19,8 @@ import org.springframework.mock.web.MockHttpServletResponse;
 
 /**
  * Base class providing utilities to test flow controllers
- * @author Andrea Aime - OpenGeo
  *
+ * @author Andrea Aime - OpenGeo
  */
 public abstract class AbstractFlowControllerTest {
 
@@ -28,11 +28,9 @@ public abstract class AbstractFlowControllerTest {
 
     /**
      * Waits until the thread enters in WAITING or TIMED_WAITING state
-     * 
-     * @param t
-     *            the thread
-     * @param maxWait
-     *            max amount of time we'll wait
+     *
+     * @param t       the thread
+     * @param maxWait max amount of time we'll wait
      */
     void waitBlocked(Thread t, long maxWait) {
         try {
@@ -46,14 +44,12 @@ public abstract class AbstractFlowControllerTest {
             fail("Sometime interrupeted our wait: " + e);
         }
     }
-    
+
     /**
      * Waits until the thread is terminated
-     * 
-     * @param t
-     *            the thread
-     * @param maxWait
-     *            max amount of time we'll wait
+     *
+     * @param t       the thread
+     * @param maxWait max amount of time we'll wait
      */
     void waitTerminated(Thread t, long maxWait) {
         try {
@@ -68,9 +64,10 @@ public abstract class AbstractFlowControllerTest {
         }
     }
 
-    
+
     /**
      * Waits maxWait for the thread to finish by itself, then forcefully kills it
+     *
      * @param t
      * @param maxWait
      */
@@ -95,8 +92,8 @@ public abstract class AbstractFlowControllerTest {
         MockHttpServletRequest httpRequest = new MockHttpServletRequest();
         request.setHttpRequest(httpRequest);
         request.setHttpResponse(new MockHttpServletResponse());
-        
-        if(gsCookieValue != null) {
+
+        if (gsCookieValue != null) {
             httpRequest.setCookies(new Cookie(CookieKeyGenerator.COOKIE_NAME, gsCookieValue));
         }
         return request;
@@ -122,19 +119,20 @@ public abstract class AbstractFlowControllerTest {
     /**
      * Waits for he flow controller testing thread to get into a specified state for a max
      * given amount of time, fail otherwise
+     *
      * @param state
      * @param tt
      * @param maxWait
-     * @throws InterruptedException 
+     * @throws InterruptedException
      */
     protected void waitState(ThreadState state, FlowControllerTestingThread tt, long maxWait) throws InterruptedException {
         long start = System.currentTimeMillis();
-        while(!state.equals(tt.state) && System.currentTimeMillis() - start < maxWait) {
+        while (!state.equals(tt.state) && System.currentTimeMillis() - start < maxWait) {
             Thread.sleep(20);
         }
-        
+
         ThreadState finalState = tt.state;
-        if(!state.equals(finalState)) {
+        if (!state.equals(finalState)) {
             fail("Waited " + maxWait + "ms for FlowControllerTestingThread to get into " + state + ", but it is still in state " + finalState);
         }
     }

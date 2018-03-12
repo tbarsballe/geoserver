@@ -43,7 +43,7 @@ public class SerialVersionSafeSerialBindingTest extends ImporterTestSupport {
 
         DatabaseEntry e = new DatabaseEntry();
         binding.objectToEntry(context, e);
-        
+
         ImportContext context2 = (ImportContext) binding.entryToObject(e);
         context2.reattach(cat, true);
 

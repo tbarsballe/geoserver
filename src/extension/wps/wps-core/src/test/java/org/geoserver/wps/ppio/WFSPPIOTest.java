@@ -35,20 +35,21 @@ import org.opengis.feature.type.AttributeDescriptor;
 
 /**
  * @author ian
- *
  */
-public class WFSPPIOTest extends WPSTestSupport{
+public class WFSPPIOTest extends WPSTestSupport {
 
     private InputStream is;
+
     @Override
     protected void setUpSpring(List<String> springContextLocations) {
         super.setUpSpring(springContextLocations);
         springContextLocations.add("classpath*:/applicationContext-noargs.xml");
     }
+
     @Before
     public void prepareInputStream() throws IOException {
         GeoServerExtensions.bean(WPSResourceManager.class);
-        
+
         is = SystemTestData.class.getResourceAsStream("wfs.xml");
         assertNotNull(is);
     }
@@ -60,7 +61,7 @@ public class WFSPPIOTest extends WPSTestSupport{
 
     /**
      * Test method for {@link org.geoserver.wps.ppio.WFSPPIO#decode(java.io.InputStream)}.
-     * 
+     *
      * @throws Exception
      */
     @Test

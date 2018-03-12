@@ -18,9 +18,8 @@ import org.junit.Test;
 
 /**
  * @author Alessio Fabiani, GeoSolutions S.A.S.
- * 
- *         Validates {@link OAuth2FilterConfig} objects.
- *
+ * <p>
+ * Validates {@link OAuth2FilterConfig} objects.
  */
 public class OAuth2FilterConfigValidatorTest extends GeoServerMockTestSupport {
 

@@ -21,40 +21,39 @@ import org.springframework.security.web.context.HttpSessionSecurityContextReposi
 import org.springframework.security.web.context.SecurityContextPersistenceFilter;
 
 /**
- * Security context persitence filter 
- * 
- * @author mcr
+ * Security context persitence filter
  *
+ * @author mcr
  */
 public class GeoServerSecurityContextPersistenceFilter extends GeoServerCompositeFilter {
-    
-    public final static String ALLOWSESSIONCREATION_ATTR = "_allowSessionCreation"; 
+
+    public final static String ALLOWSESSIONCREATION_ATTR = "_allowSessionCreation";
     Boolean isAllowSessionCreation;
-    
+
     @Override
     public void initializeFromConfig(SecurityNamedServiceConfig config) throws IOException {
         super.initializeFromConfig(config);
-        
-        
-        SecurityContextPersistenceFilterConfig pConfig = 
+
+
+        SecurityContextPersistenceFilterConfig pConfig =
                 (SecurityContextPersistenceFilterConfig) config;
-                
+
         HttpSessionSecurityContextRepository repo = new HttpSessionSecurityContextRepository();
         SecurityContextPersistenceFilter filter = new SecurityContextPersistenceFilter(repo) {
-          @Override
-        public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
-                throws IOException, ServletException {
-                 // set the hint for authentcation servlets
-                 req.setAttribute(ALLOWSESSIONCREATION_ATTR, isAllowSessionCreation);
-                 if (isAllowSessionCreation)
-                     ((HttpServletRequest)req).getSession(); // create session if allowed
-                 // set the hint for other components
-                 req.setAttribute(GeoServerSecurityFilterChainProxy.SECURITY_ENABLED_ATTRIBUTE,Boolean.TRUE);
-                 super.doFilter(req, res, chain);
-        }  
+            @Override
+            public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
+                    throws IOException, ServletException {
+                // set the hint for authentcation servlets
+                req.setAttribute(ALLOWSESSIONCREATION_ATTR, isAllowSessionCreation);
+                if (isAllowSessionCreation)
+                    ((HttpServletRequest) req).getSession(); // create session if allowed
+                // set the hint for other components
+                req.setAttribute(GeoServerSecurityFilterChainProxy.SECURITY_ENABLED_ATTRIBUTE, Boolean.TRUE);
+                super.doFilter(req, res, chain);
+            }
         };
-        isAllowSessionCreation=pConfig.isAllowSessionCreation();
-        repo.setAllowSessionCreation(pConfig.isAllowSessionCreation());        
+        isAllowSessionCreation = pConfig.isAllowSessionCreation();
+        repo.setAllowSessionCreation(pConfig.isAllowSessionCreation());
         filter.setForceEagerSessionCreation(false);
 
         try {
@@ -62,7 +61,7 @@ public class GeoServerSecurityContextPersistenceFilter extends GeoServerComposit
         } catch (ServletException e) {
             throw new RuntimeException(e);
         }
-        getNestedFilters().add(filter);        
+        getNestedFilters().add(filter);
     }
-    
+
 }

@@ -34,7 +34,7 @@ import org.geoserver.platform.ServiceException;
  * <li>JSON: application/json</li>
  * <li>JSONP: text/javascript</li>
  * </ul>
- * 
+ *
  * @author Carlo Cancellieri - GeoSolutions
  */
 public enum JSONType {
@@ -44,14 +44,14 @@ public enum JSONType {
      * The key value into the optional FORMAT_OPTIONS map
      */
     public final static String CALLBACK_FUNCTION_KEY = "callback";
-    
+
     /**
      * The key value into the optional FORMAT_OPTIONS map.
-     * 
+     * <p>
      * Use <code>null</null> for default feature id generation. Use string to nominate an attribute to use.
      */
     public final static String ID_POLICY = "id_policy";
-    
+
 
     /**
      * The default value of the callback function
@@ -73,7 +73,7 @@ public enum JSONType {
 
     /**
      * Check if the passed MimeType is a valid jsonp
-     * 
+     *
      * @param type the MimeType string representation to check
      * @return true if type is equalsIgnoreCase to {@link #jsonp}
      */
@@ -83,7 +83,7 @@ public enum JSONType {
 
     /**
      * Check if the passed MimeType is a valid jsonp and if jsonp is enabled
-     * 
+     *
      * @param type the MimeType string representation to check
      * @return true if type is equalsIgnoreCase to {@link #jsonp} and jsonp is enabled
      * @see {@link JSONType#isJsonMimeType(String)}
@@ -108,9 +108,9 @@ public enum JSONType {
 
     /**
      * Enable disable the jsonp toggle overriding environment and properties.
-     * 
-     * @see {@link JSONType#isJsonpEnabledByEnv()} and {@link JSONType#isJsonpEnabledByProperty()}
+     *
      * @param jsonpEnabled true to enable jsonp
+     * @see {@link JSONType#isJsonpEnabledByEnv()} and {@link JSONType#isJsonpEnabledByProperty()}
      */
     public static void setJsonpEnabled(boolean jsonpEnabled) {
         if (jsonpEnabled != JSONType.jsonpEnabled) {
@@ -125,9 +125,9 @@ public enum JSONType {
 
     /**
      * Parses the ENABLE_JSONP value as a boolean.
-     * 
+     *
      * @return The boolean returned represents the value true if the string argument of the ENABLE_JSONP property is not null and is equal, ignoring
-     *         case, to the string "true".
+     * case, to the string "true".
      */
     private static boolean isJsonpPropertyEnabled() {
         String jsonp = GeoServerExtensions.getProperty(ENABLE_JSONP_KEY);
@@ -136,7 +136,7 @@ public enum JSONType {
 
     /**
      * Check if the passed MimeType is a valid json
-     * 
+     *
      * @param type the MimeType string representation to check
      * @return true if type is equalsIgnoreCase to {@link JSONType#json} or to {@link JSONType#simple_json}
      */
@@ -146,7 +146,7 @@ public enum JSONType {
 
     /**
      * Return the JSNOType enum matching the passed MimeType or null (if no match)
-     * 
+     *
      * @param mime the mimetype to check
      * @return the JSNOType enum matching the passed MimeType or null (if no match)
      */
@@ -162,36 +162,35 @@ public enum JSONType {
 
     /**
      * get the MimeType for this object
-     * 
+     *
      * @return return a string representation of the MimeType
      */
     public String getMimeType() {
         switch (this) {
-        case JSON:
-            return json;
-        case JSONP:
-            return jsonp;
-        default:
-            return null;
+            case JSON:
+                return json;
+            case JSONP:
+                return jsonp;
+            default:
+                return null;
         }
     }
 
     /**
      * get an array containing all the MimeType handled by this object
-     * 
-     * @return return a string array of handled MimeType
      *
+     * @return return a string array of handled MimeType
      */
     public static String[] getSupportedTypes() {
         if (isJsonpEnabled())
-            return new String[] { json, simple_json, jsonp };
+            return new String[]{json, simple_json, jsonp};
         else
-            return new String[] { json, simple_json };
+            return new String[]{json, simple_json};
     }
 
     /**
      * Can be used when {@link #jsonp} format is specified to resolve the callback parameter into the FORMAT_OPTIONS map
-     * 
+     *
      * @param kvp the kay value pair map of the request
      * @return The string name of the callback function or the default {@link #CALLBACK_FUNCTION} if not found.
      */
@@ -208,13 +207,13 @@ public enum JSONType {
             }
         }
     }
-    
+
     /**
      * Can be used when {@link #json} format is specified to resolve the id_policy parameter from FORMAT_OPTIONS map
-     * 
+     * <p>
      * GeoJSON does not require use of an id for each feature, this format option can be used to surpress the use of id (or nominate
      * an specifc attribtue to use).
-     *  
+     *
      * @param kvp request key value pair map possibly including format options
      * @return null to use generated feature id, empty string to surpress id generation, or attribute to use
      */
@@ -227,7 +226,7 @@ public enum JSONType {
                 return null; // use fid as id in output
             }
             String id_policy = formatOptions.get(ID_POLICY);
-    
+
             if (id_policy == null || "true".equals(id_policy)) {
                 return null; // use fid as id in output
             }
@@ -237,19 +236,19 @@ public enum JSONType {
             return id_policy;
         }
     }
-    
+
     /**
      * Handle Exception in JSON and JSONP format
-     * 
-     * @param LOGGER the logger to use (can be null)
+     *
+     * @param LOGGER    the logger to use (can be null)
      * @param exception the exception to write to the response outputStream
-     * @param request the request generated the exception
-     * @param charset the desired charset
-     * @param verbose be verbose
-     * @param isJsonp switch writing json (false) or jsonp (true)
+     * @param request   the request generated the exception
+     * @param charset   the desired charset
+     * @param verbose   be verbose
+     * @param isJsonp   switch writing json (false) or jsonp (true)
      */
     public static void handleJsonException(Logger LOGGER, ServiceException exception,
-            Request request, String charset, boolean verbose, boolean isJsonp) {
+                                           Request request, String charset, boolean verbose, boolean isJsonp) {
 
         final HttpServletResponse response = request.getHttpResponse();
         // TODO: server encoding options?
@@ -295,7 +294,7 @@ public enum JSONType {
     }
 
     private static void writeJsonpException(ServiceException exception, Request request,
-            OutputStream out, String charset, boolean verbose) throws IOException {
+                                            OutputStream out, String charset, boolean verbose) throws IOException {
 
         OutputStreamWriter outWriter = new OutputStreamWriter(out, charset);
         final String callback;
@@ -314,7 +313,7 @@ public enum JSONType {
     }
 
     private static void writeJsonException(ServiceException exception, Request request,
-            OutputStreamWriter outWriter, boolean verbose) throws IOException {
+                                           OutputStreamWriter outWriter, boolean verbose) throws IOException {
         try {
             JSONBuilder json = new JSONBuilder(outWriter);
             json.object().key("version").value(request.getVersion()).key("exceptions").array()

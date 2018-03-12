@@ -18,15 +18,15 @@ import org.opengis.filter.sort.SortBy;
 
 /**
  * Very basic retyper, can only shave off root attributes and does not really reduce
- * the feature type, but only the attributes in the returned features. 
- * 
+ * the feature type, but only the attributes in the returned features.
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class RetypingFeatureCollection extends AbstractFeatureCollection<FeatureType, Feature> {
-    
+
     FeatureCollection delegate;
     List<PropertyName> properties;
-    
+
     public RetypingFeatureCollection(FeatureCollection delegate, List<PropertyName> properties) {
         super(delegate.getSchema());
         this.delegate = delegate;
@@ -53,7 +53,7 @@ public class RetypingFeatureCollection extends AbstractFeatureCollection<Feature
 
     @Override
     protected void closeIterator(Iterator<Feature> close) {
-        if(close instanceof RetypingIterator) {
+        if (close instanceof RetypingIterator) {
             ((RetypingIterator) close).close();
         }
     }

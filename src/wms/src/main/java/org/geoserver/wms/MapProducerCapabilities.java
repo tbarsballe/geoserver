@@ -7,7 +7,7 @@ package org.geoserver.wms;
 
 /**
  * Class to record capabilities for a {@link RasterMapProducer}.
- * 
+ *
  * @author Simone Giannecchini, GeoSolutions SAS
  */
 public class MapProducerCapabilities {
@@ -19,12 +19,12 @@ public class MapProducerCapabilities {
     private final boolean paletteSupported;
 
     private final boolean transparencySupported;
-    
+
     private final String framesMimeType;
 
     public MapProducerCapabilities(boolean tiledRequestsSupported,
-            boolean multivalueRequestsSupported, boolean paletteSupported,
-            boolean transparencySupported, String framesMimeType) {
+                                   boolean multivalueRequestsSupported, boolean paletteSupported,
+                                   boolean transparencySupported, String framesMimeType) {
         super();
         this.tiledRequestsSupported = tiledRequestsSupported;
         this.multivalueRequestsSupported = multivalueRequestsSupported;
@@ -35,7 +35,6 @@ public class MapProducerCapabilities {
 
     /**
      * If the map producer can be used in a meta-tiling context
-     *
      */
     public boolean isTiledRequestsSupported() {
         return tiledRequestsSupported;
@@ -43,8 +42,7 @@ public class MapProducerCapabilities {
 
     /**
      * Returns true if the map producer can handle list or results (one per time/elevation/dimension value)
-     * instead of a single one 
-     *
+     * instead of a single one
      */
     public boolean isMultivalueRequestsSupported() {
         return multivalueRequestsSupported;
@@ -52,7 +50,6 @@ public class MapProducerCapabilities {
 
     /**
      * Returns true if paletted images are supported
-     *
      */
     public boolean isPaletteSupported() {
         return paletteSupported;
@@ -60,7 +57,6 @@ public class MapProducerCapabilities {
 
     /**
      * Returns true if background transparency is supported
-     *
      */
     public boolean isTransparencySupported() {
         return transparencySupported;
@@ -68,7 +64,6 @@ public class MapProducerCapabilities {
 
     /**
      * Returns the MIME TYPE of frames in case of animation is supported by this format
-     *
      */
     public String getFramesMimeType() {
         return framesMimeType;

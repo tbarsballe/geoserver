@@ -26,7 +26,7 @@ import org.opengis.filter.Filter;
 /**
  * Delegates every method to the wrapped feature source. Subclasses will
  * override selected methods to perform their "decoration" job
- * 
+ *
  * @author Andrea Aime
  */
 public abstract class DecoratingFeatureSource<T extends FeatureType, F extends Feature> extends

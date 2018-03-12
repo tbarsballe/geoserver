@@ -35,10 +35,8 @@ import org.opengis.filter.expression.PropertyName;
 import org.opengis.filter.identity.FeatureId;
 
 /**
- * 
  * @author Andrea Aime - GeoSolutions
  * @author Niels Charlier
- *
  */
 public abstract class AbstractCatalogStore implements CatalogStore {
 
@@ -60,77 +58,77 @@ public abstract class AbstractCatalogStore implements CatalogStore {
     public CloseableIterator<String> getDomain(Name typeName, final Name attributeName) throws IOException {
         final RecordDescriptor rd = descriptorByType.get(typeName);
 
-        if (rd==null) {
+        if (rd == null) {
             throw new IOException(typeName + " is not a supported type");
         }
-		
+
         // do we have such attribute?
         final PropertyName property = rd.translateProperty(attributeName);
         AttributeDescriptor ad = (AttributeDescriptor) property.evaluate(rd.getFeatureType());
-        if(ad == null) {
+        if (ad == null) {
             return new CloseableIteratorAdapter<String>(new ArrayList<String>().iterator());
         }
 
         // build the query against csw:record
         Query q = new Query(typeName.getLocalPart());
-        
+
         q.setProperties(Arrays.asList(translateProperty(rd, attributeName)));
-        
+
         // collect the values without duplicates
         final Set<String> values = new HashSet<String>();
         getRecords(q, Transaction.AUTO_COMMIT, rd.getOutputSchema()).accepts(new FeatureVisitor() {
-            
+
             @Override
             public void visit(Feature feature) {
                 Property prop = (Property) property.evaluate(feature);
                 if (prop != null)
                     try {
-                        values.add( new String(((String) prop.getValue()).getBytes("ISO-8859-1"), "UTF-8" ) );
+                        values.add(new String(((String) prop.getValue()).getBytes("ISO-8859-1"), "UTF-8"));
                     } catch (UnsupportedEncodingException e) {
                         throw new RuntimeException(e);
                     }
             }
         }, null);
-        
+
         // sort and return
         List<String> result = new ArrayList(values);
         Collections.sort(result);
         return new CloseableIteratorAdapter<String>(result.iterator());
     }
-    
+
     @Override
     public FeatureCollection getRecords(Query q, Transaction t, String outputSchema) throws IOException {
         RecordDescriptor rd;
         Name typeName = null;
         if (q.getTypeName() == null) {
             typeName = CSWRecordDescriptor.RECORD_DESCRIPTOR.getName();
-        } else if(q.getNamespace() != null) {
+        } else if (q.getNamespace() != null) {
             typeName = new NameImpl(q.getNamespace().toString(), q.getTypeName());
         } else {
             typeName = new NameImpl(q.getTypeName());
         }
         rd = descriptorByType.get(typeName);
-        
+
         RecordDescriptor rdOutput;
         if (outputSchema == null || "".equals(outputSchema)) {
-        	rdOutput = descriptorByOutputSchema.get(CSWRecordDescriptor.getInstance().getOutputSchema());
+            rdOutput = descriptorByOutputSchema.get(CSWRecordDescriptor.getInstance().getOutputSchema());
         } else {
-        	rdOutput = descriptorByOutputSchema.get(outputSchema);
+            rdOutput = descriptorByOutputSchema.get(outputSchema);
         }
-                
-        if (rd==null) {
+
+        if (rd == null) {
             throw new IOException(q.getTypeName() + " is not a supported type");
         }
-        
-        if (rdOutput==null) {
+
+        if (rdOutput == null) {
             throw new IOException(outputSchema + " is not a supported output schema");
         }
-        
+
         return getRecordsInternal(rd, rdOutput, q, t);
     }
-    
+
     public abstract FeatureCollection getRecordsInternal(RecordDescriptor rd, RecordDescriptor rdOutput, Query q, Transaction t) throws IOException;
-    
+
     @Override
     public RepositoryItem getRepositoryItem(String recordId) throws IOException {
         // not supported
@@ -157,15 +155,15 @@ public abstract class AbstractCatalogStore implements CatalogStore {
 
     @Override
     public void updateRecord(Name typeName, Name[] attributeNames, Object[] attributeValues,
-            Filter filter, Transaction t) throws IOException {
+                             Filter filter, Transaction t) throws IOException {
         throw new UnsupportedOperationException("This store does not support transactions yet");
     }
-    
+
     @Override
     public CatalogStoreCapabilities getCapabilities() {
         return new CatalogStoreCapabilities(descriptorByType);
     }
-    
+
     @Override
     public PropertyName translateProperty(RecordDescriptor rd, Name name) {
         return AbstractRecordDescriptor.buildPropertyName(rd.getNamespaceSupport(), name);

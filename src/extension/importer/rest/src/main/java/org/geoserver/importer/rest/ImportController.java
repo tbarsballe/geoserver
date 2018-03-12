@@ -38,8 +38,8 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
-@RequestMapping(path = RestBaseController.ROOT_PATH+"/imports", produces = {
-        MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_HTML_VALUE })
+@RequestMapping(path = RestBaseController.ROOT_PATH + "/imports", produces = {
+        MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_HTML_VALUE})
 public class ImportController extends ImportBaseController {
 
     @Autowired
@@ -47,26 +47,26 @@ public class ImportController extends ImportBaseController {
         super(importer);
     }
 
-    @PostMapping(value = {"/{id}",""})
+    @PostMapping(value = {"/{id}", ""})
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Object> postImports(
-            @PathVariable(required=false) Long id,
-            @RequestParam(name="async", required = false, defaultValue = "false") boolean async,
-            @RequestParam(name="exec", required = false, defaultValue = "false") boolean exec,
-            @RequestBody(required=false) ImportContext obj, UriComponentsBuilder builder) throws IOException {
+            @PathVariable(required = false) Long id,
+            @RequestParam(name = "async", required = false, defaultValue = "false") boolean async,
+            @RequestParam(name = "exec", required = false, defaultValue = "false") boolean exec,
+            @RequestBody(required = false) ImportContext obj, UriComponentsBuilder builder) throws IOException {
 
         ImportContext context = (ImportContext) context(id, true, false);
         if (context != null) {
-             try {
-                 runImport(context, async);
-             } catch (Throwable t) {
+            try {
+                runImport(context, async);
+            } catch (Throwable t) {
                 if (t instanceof ValidationException) {
                     throw new RestException(t.getMessage(), HttpStatus.BAD_REQUEST, t);
                 } else {
                     throw new RestException("Error occured executing import", HttpStatus.INTERNAL_SERVER_ERROR, t);
                 }
-             }
-             return new ResponseEntity<>("", new HttpHeaders(), HttpStatus.NO_CONTENT);
+            }
+            return new ResponseEntity<>("", new HttpHeaders(), HttpStatus.NO_CONTENT);
         }
         context = createImport(id, obj, async, exec);
         if (context != null) {
@@ -81,14 +81,14 @@ public class ImportController extends ImportBaseController {
     }
 
     @GetMapping
-    public ImportWrapper getImports(@RequestParam(required=false) String expand) {
+    public ImportWrapper getImports(@RequestParam(required = false) String expand) {
         Object lookupContext = context(null, true, true);
         if (lookupContext == null) {
             // this means a specific lookup failed
             throw new RestException("Failed to find import context", HttpStatus.NOT_FOUND);
         } else {
             //For ImportContext, the expand parameter is handled at the converter level. Here, we are listing contexts, and use a different (more succinct) default
-            return (writer, builder, converter) -> converter.contexts(builder,(Iterator<ImportContext>)lookupContext, converter.expand(expand, 0));
+            return (writer, builder, converter) -> converter.contexts(builder, (Iterator<ImportContext>) lookupContext, converter.expand(expand, 0));
         }
     }
 
@@ -101,8 +101,8 @@ public class ImportController extends ImportBaseController {
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Object> putImport(
             @PathVariable Long id,
-            @RequestParam(name="async", required = false, defaultValue = "false") boolean async,
-            @RequestParam(name="exec", required = false, defaultValue = "false") boolean exec,
+            @RequestParam(name = "async", required = false, defaultValue = "false") boolean async,
+            @RequestParam(name = "exec", required = false, defaultValue = "false") boolean exec,
             UriComponentsBuilder builder) {
 
         if (id != null) {
@@ -205,7 +205,7 @@ public class ImportController extends ImportBaseController {
                 }
                 context.setData(newContext.getData());
                 context.getDefaultTransforms().addAll(newContext.getDefaultTransforms());
-            } else if (context==null){
+            } else if (context == null) {
                 context = context(id, true);
             }
             if (!async && context.getData() != null) {

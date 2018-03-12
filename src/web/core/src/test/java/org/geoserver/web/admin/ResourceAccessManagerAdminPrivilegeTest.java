@@ -30,13 +30,13 @@ public class ResourceAccessManagerAdminPrivilegeTest extends AbstractAdminPrivil
 
         WorkspaceAccessLimits wsAdminLimits = new WorkspaceAccessLimits(CatalogMode.HIDE, true, true, true);
         WorkspaceAccessLimits wsUserLimits = new WorkspaceAccessLimits(CatalogMode.HIDE, true, true, false);
-        
+
         WorkspaceInfo citeWs = catalog.getWorkspaceByName("cite");
         tam.putLimits("cite", citeWs, wsAdminLimits);
-        
+
         WorkspaceInfo sfWs = catalog.getWorkspaceByName("sf");
         tam.putLimits("sf", sfWs, wsAdminLimits);
-        
+
         tam.setDefaultWorkspaceAccessLimits(wsUserLimits);
     }
 

@@ -17,9 +17,9 @@ import org.geotools.xml.Node;
 
 /**
  * Binding object for the type http://www.opengis.net/wfs:NativeType.
- *
  * <p>
- *        <pre>
+ * <p>
+ * <pre>
  *         <code>
  *  &lt;xsd:complexType name="NativeType"&gt;
  *      &lt;xsd:seq uence>
@@ -52,6 +52,7 @@ import org.geotools.xml.Node;
  *
  *          </code>
  *         </pre>
+ *
  * @generated
  */
 public class NativeTypeBinding extends AbstractComplexBinding {
@@ -85,7 +86,7 @@ public class NativeTypeBinding extends AbstractComplexBinding {
      * @generated modifiable
      */
     public Object parse(ElementInstance instance, Node node, Object value)
-        throws Exception {
+            throws Exception {
         NativeType nativ = wfsfactory.createNativeType();
 
         //&lt;xsd:attribute name="vendorId" type="xsd:string" use="required"&gt;
@@ -93,7 +94,7 @@ public class NativeTypeBinding extends AbstractComplexBinding {
 
         //&lt;xsd:attribute name="safeToIgnore" type="xsd:boolean" use="required"&gt;
         nativ.setSafeToIgnore(((Boolean) node.getAttributeValue("safeToIgnore")).booleanValue());
-        
+
         //&lt;xsd:any processContents="lax" namespace="##other" minOccurs="0"/>
         if (instance.getText() != null && instance.getText().length() != 0) {
             nativ.setValue(instance.getText());

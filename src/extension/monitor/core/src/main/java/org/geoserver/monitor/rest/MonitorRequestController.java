@@ -29,8 +29,8 @@ import java.util.Date;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = { RestBaseController.ROOT_PATH + "/monitor/requests/{request}",
-        RestBaseController.ROOT_PATH + "/monitor/requests" })
+@RequestMapping(path = {RestBaseController.ROOT_PATH + "/monitor/requests/{request}",
+        RestBaseController.ROOT_PATH + "/monitor/requests"})
 public class MonitorRequestController extends RestBaseController {
 
     static final String CSV_MEDIATYPE_VALUE = "application/csv";
@@ -68,7 +68,7 @@ public class MonitorRequestController extends RestBaseController {
         }
     }
 
-    @GetMapping(produces = { MediaType.TEXT_HTML_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE })
+    @GetMapping(produces = {MediaType.TEXT_HTML_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     protected RestWrapper handleObjectGetRestWrapper(
             @PathVariable(name = "request", required = false) String req,
@@ -111,7 +111,7 @@ public class MonitorRequestController extends RestBaseController {
         }
     }
 
-    @GetMapping(produces = { CSV_MEDIATYPE_VALUE, EXCEL_MEDIATYPE_VALUE, ZIP_MEDIATYPE_VALUE })
+    @GetMapping(produces = {CSV_MEDIATYPE_VALUE, EXCEL_MEDIATYPE_VALUE, ZIP_MEDIATYPE_VALUE})
     @ResponseBody
     protected MonitorQueryResults handleObjectGet(
             @PathVariable(name = "request", required = false) String req,

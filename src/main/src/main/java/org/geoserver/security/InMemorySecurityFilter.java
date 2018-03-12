@@ -17,7 +17,7 @@ import org.springframework.security.core.Authentication;
 
 /**
  * Filter function that returns true if a certain object can or cannot be showed to the current user
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class InMemorySecurityFilter extends InternalVolatileFunction {
@@ -28,13 +28,12 @@ public class InMemorySecurityFilter extends InternalVolatileFunction {
 
     /**
      * Returns a filter that will check if the object passed to it can be accessed by the user
-     * 
+     *
      * @param resourceAccesssManager
      * @param user
-     *
      */
     public static Filter buildUserAccessFilter(ResourceAccessManager resourceAccesssManager,
-            Authentication user) {
+                                               Authentication user) {
         org.opengis.filter.expression.Function visible = new InMemorySecurityFilter(
                 resourceAccesssManager, user);
 

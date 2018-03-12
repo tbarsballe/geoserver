@@ -22,7 +22,7 @@ class OgcLinks {
     public OgcLinks(List<OgcLink> links) {
         this.links = links;
     }
-    
+
     public List<OgcLink> getLinks() {
         return links;
     }

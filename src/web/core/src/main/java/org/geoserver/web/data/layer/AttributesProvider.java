@@ -13,7 +13,9 @@ import org.geoserver.web.wicket.GeoServerDataProvider;
 
 class AttributesProvider extends GeoServerDataProvider<AttributeDescription> {
 
-    /** serialVersionUID */
+    /**
+     * serialVersionUID
+     */
     private static final long serialVersionUID = -1478240785822735763L;
 
     List<AttributeDescription> attributes = new ArrayList<AttributeDescription>();
@@ -32,7 +34,7 @@ class AttributesProvider extends GeoServerDataProvider<AttributeDescription> {
 
     static final Property<AttributeDescription> CRS = new BeanProperty<AttributeDescription>(
             "crs", "crs");
-    
+
     static final PropertyPlaceholder<AttributeDescription> UPDOWN = new PropertyPlaceholder<AttributeDescription>("upDown");
 
     public AttributesProvider() {
@@ -59,17 +61,17 @@ class AttributesProvider extends GeoServerDataProvider<AttributeDescription> {
     public boolean isFirst(AttributeDescription attribute) {
         return attributes.get(0).equals(attribute);
     }
-    
+
     public boolean isLast(AttributeDescription attribute) {
         return attributes.get(attributes.size() - 1).equals(attribute);
     }
-    
+
     public void moveUp(AttributeDescription attribute) {
         int idx = attributes.indexOf(attribute);
         attributes.remove(idx);
         attributes.add(idx - 1, attribute);
     }
-    
+
     public void moveDown(AttributeDescription attribute) {
         int idx = attributes.indexOf(attribute);
         attributes.remove(idx);

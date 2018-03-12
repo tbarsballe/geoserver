@@ -18,9 +18,8 @@ import org.opengis.filter.Filter;
 
 /**
  * Secure version of {@link SecuredFeatureSource}
- * 
+ *
  * @author Andrea Aime - GeoSolutions
- * 
  */
 public class SecuredSimpleFeatureSource extends
         SecuredFeatureSource<SimpleFeatureType, SimpleFeature> implements SimpleFeatureSource {
@@ -28,18 +27,18 @@ public class SecuredSimpleFeatureSource extends
     protected SecuredSimpleFeatureSource(SimpleFeatureSource delegate, WrapperPolicy policy) {
         super(delegate, policy);
     }
-    
+
     @Override
     public SimpleFeatureCollection getFeatures() throws IOException {
         return DataUtilities.simple(super.getFeatures());
     }
-    
+
     @Override
     public SimpleFeatureCollection getFeatures(Filter filter)
             throws IOException {
         return DataUtilities.simple(super.getFeatures(filter));
     }
-    
+
     @Override
     public SimpleFeatureCollection getFeatures(Query query)
             throws IOException {

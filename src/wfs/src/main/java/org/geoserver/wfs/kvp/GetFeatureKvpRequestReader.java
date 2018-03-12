@@ -32,9 +32,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 
  * @author Niels Charlier : added 3D BBOX support
- *
  */
 public class GetFeatureKvpRequestReader extends BaseFeatureKvpRequestReader {
 
@@ -49,7 +47,7 @@ public class GetFeatureKvpRequestReader extends BaseFeatureKvpRequestReader {
     protected WFSInfo getWFS() {
         return geoServer.getService(WFSInfo.class);
     }
-    
+
     /**
      * Performs additional GetFeature/GetFeatureWithLock kvp parsing requirements
      */
@@ -57,12 +55,12 @@ public class GetFeatureKvpRequestReader extends BaseFeatureKvpRequestReader {
         //hack but startIndex conflicts with WMS startIndex... which parses to different type, so 
         // we just parse manually
         if (rawKvp.containsKey("startIndex")) {
-            kvp.put("startIndex", 
-                new NumericKvpParser(null, BigInteger.class).parse((String)rawKvp.get("startIndex")));
+            kvp.put("startIndex",
+                    new NumericKvpParser(null, BigInteger.class).parse((String) rawKvp.get("startIndex")));
         }
-        
+
         request = super.read(request, kvp, rawKvp);
-        
+
         //get feature has some additional parsing requirements
         EObject eObject = (EObject) request;
 
@@ -92,14 +90,11 @@ public class GetFeatureKvpRequestReader extends BaseFeatureKvpRequestReader {
         //propertyName
         if (kvp.containsKey("propertyName")) {
             List<String> propertyNames = new ArrayList<String>();
-            if( kvp.get("propertyName") != null && kvp.get("propertyName") instanceof List ) 
-            {
+            if (kvp.get("propertyName") != null && kvp.get("propertyName") instanceof List) {
                 propertyNames = (List) kvp.get("propertyName");
-            }
-            else if( kvp.get("propertyName") != null && kvp.get("propertyName") instanceof String ) 
-            {
+            } else if (kvp.get("propertyName") != null && kvp.get("propertyName") instanceof String) {
                 propertyNames.addAll(KvpUtils.readFlat((String) kvp.get("propertyName")));
-            } 
+            }
             querySet(eObject, "propertyName", propertyNames);
         }
 
@@ -110,42 +105,42 @@ public class GetFeatureKvpRequestReader extends BaseFeatureKvpRequestReader {
 
         //srsName
         if (kvp.containsKey("srsName")) {
-            querySet(eObject, "srsName",Collections.singletonList((URI)kvp.get("srsName")));
+            querySet(eObject, "srsName", Collections.singletonList((URI) kvp.get("srsName")));
         }
 
         //featureversion
         if (kvp.containsKey("featureVersion")) {
             querySet(eObject, "featureVersion",
-                Collections.singletonList((String) kvp.get("featureVersion")));
+                    Collections.singletonList((String) kvp.get("featureVersion")));
         }
-        
+
         GetFeatureRequest req = GetFeatureRequest.adapt(request);
-        if(kvp.containsKey("format_options")) {
+        if (kvp.containsKey("format_options")) {
             req.getFormatOptions().putAll((Map) kvp.get("format_options"));
         }
-        
+
         // sql view params
-        if(kvp.containsKey("viewParams")) {
-            
-            if(req.getViewParams() == null) {
-                req.setViewParams(new ArrayList<Map<String,String>>());
+        if (kvp.containsKey("viewParams")) {
+
+            if (req.getViewParams() == null) {
+                req.setViewParams(new ArrayList<Map<String, String>>());
             }
 
             // fan out over all layers if necessary
             List<Map<String, String>> viewParams = (List<Map<String, String>>) kvp.get("viewParams");
-            if(viewParams.size() > 0) {                
+            if (viewParams.size() > 0) {
                 int layerCount = req.getQueries().size();
 
                 // if we have just one replicate over all layers
-                if(viewParams.size() == 1 && layerCount > 1) {
-                    List<Map<String, String>> replacement = new ArrayList<Map<String,String>>();
+                if (viewParams.size() == 1 && layerCount > 1) {
+                    List<Map<String, String>> replacement = new ArrayList<Map<String, String>>();
                     for (int i = 0; i < layerCount; i++) {
                         replacement.add(viewParams.get(0));
                     }
                     viewParams = replacement;
-                } else if(viewParams.size() != layerCount) {
+                } else if (viewParams.size() != layerCount) {
                     String msg = layerCount + " feature types requested, but found " + viewParams.size()
-                   + " view params specified. ";
+                            + " view params specified. ";
                     throw new WFSException(eObject, msg, getClass().getName());
                 }
             }
@@ -261,5 +256,5 @@ public class GetFeatureKvpRequestReader extends BaseFeatureKvpRequestReader {
         }
     }
 
-   
+
 }

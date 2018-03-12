@@ -15,14 +15,13 @@ import org.opengis.feature.type.Schema;
 
 /**
  * Simple helper for FeatureTypeRegistry, creates feature type for particular name
- * 
- * @author Niels Charlier
  *
+ * @author Niels Charlier
  */
 public class RecordFeatureTypeRegistryConfiguration implements FeatureTypeRegistryConfiguration {
-    
+
     protected String recordFeatureTypeName;
-    
+
     public RecordFeatureTypeRegistryConfiguration(String recordFeatureTypeName) {
         this.recordFeatureTypeName = recordFeatureTypeName;
     }

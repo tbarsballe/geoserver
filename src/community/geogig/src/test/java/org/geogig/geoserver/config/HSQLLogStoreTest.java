@@ -21,7 +21,7 @@ import org.geoserver.platform.resource.Resource;
 import org.geoserver.platform.resource.ResourceStore;
 
 public class HSQLLogStoreTest extends AbstractLogStoreTest {
-	
+
     @Override
     protected void populateConfigProperties(Properties props) {
 

@@ -29,7 +29,7 @@ import com.google.common.collect.Multimap;
 
 /**
  * Provides entries for the process filtering table in the {@link ProcessSelectionPage}
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 @SuppressWarnings("serial")
@@ -38,17 +38,17 @@ public class FilteredProcessesProvider extends
 
     /**
      * Represents a selectable process in the GUI
-     * 
+     *
      * @author Andrea Aime - GeoSolutions
      */
-    static class FilteredProcess implements Serializable, Comparable<FilteredProcess>{
+    static class FilteredProcess implements Serializable, Comparable<FilteredProcess> {
 
         private boolean enabled;
-        
+
         private Name name;
 
         private String description;
-        
+
         private List<String> roles;
 
         private Multimap<String, WPSInputValidator> validators = ArrayListMultimap.create();
@@ -65,7 +65,7 @@ public class FilteredProcessesProvider extends
         public String getDescription() {
             return description;
         }
-        
+
         public List<String> getRoles() {
             return roles;
         }
@@ -84,9 +84,9 @@ public class FilteredProcessesProvider extends
 
         @Override
         public int compareTo(FilteredProcess other) {
-            if(name == null) {
+            if (name == null) {
                 return other.getName() == null ? 0 : -1;
-            } else if(other.getName() == null) {
+            } else if (other.getName() == null) {
                 return 1;
             } else {
                 return name.getURI().compareTo(other.getName().getURI());
@@ -113,7 +113,7 @@ public class FilteredProcessesProvider extends
 
         public void setValidators(Multimap<String, WPSInputValidator> validators) {
             this.validators = validators;
-        }        
+        }
 
         public boolean isValidated() {
             return validators != null && validators.size() > 0;
@@ -136,20 +136,20 @@ public class FilteredProcessesProvider extends
         for (Name name : names) {
             InternationalString description = GeoServerProcessors.getProcessFactory(pfi.getFactoryClass(), false).getDescription(name);
             String des = "";
-            if(description != null){
+            if (description != null) {
                 des = description.toString(locale);
             }
             FilteredProcess sp = new FilteredProcess(name, des);
             sp.setEnabled(true);
-            
-            for (ProcessInfo fp: filteredProcesses) {
-                if(sp.getName().equals(fp.getName())){
+
+            for (ProcessInfo fp : filteredProcesses) {
+                if (sp.getName().equals(fp.getName())) {
                     sp.setEnabled(fp.isEnabled());
                     sp.setRoles(fp.getRoles());
                     sp.setValidators(fp.getValidators());
                 }
             }
-            
+
             selectableProcesses.add(sp);
         }
 
@@ -166,7 +166,8 @@ public class FilteredProcessesProvider extends
             @Override
             public Object getPropertyValue(FilteredProcess item) {
                 return item.getRoles();
-            } 
+            }
+
             @Override
             public IModel getModel(IModel itemModel) {
                 return new PropertyModel(itemModel, "roles");

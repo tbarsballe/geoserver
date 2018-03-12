@@ -21,15 +21,15 @@ import org.geoserver.platform.GeoServerExtensions;
  * Simple filter to set X-Frame-Options header to prevent click jacking attacks. This filter is
  * controlled by two system properties:
  * <br/>
- *
+ * <p>
  * - geoserver.xframe.shouldSetPolicy: controls whether the X-Frame-Options filter should be set
- *   at all. Default is true.
+ * at all. Default is true.
  * <br/>
  * - geoserver.xframe.policy: controls what the set the X-Frame-Options header to. Default is SAMEORIGIN
- *   valid options are DENY, SAMEORIGIN and ALLOW-FROM [uri]
- *
+ * valid options are DENY, SAMEORIGIN and ALLOW-FROM [uri]
+ * <p>
  * <br/>
- *
+ * <p>
  * These properties can be set via command line -D arg, web.xml init or environment variable.
  */
 public class XFrameOptionsFilter implements Filter {
@@ -42,7 +42,7 @@ public class XFrameOptionsFilter implements Filter {
      * The system property to set whether the X-Frame-Options header should be set
      */
     public static final String GEOSERVER_XFRAME_SHOULD_SET_POLICY =
-        "geoserver.xframe.shouldSetPolicy";
+            "geoserver.xframe.shouldSetPolicy";
 
     /**
      * The system property for the value of the X-Frame-Options header
@@ -52,6 +52,7 @@ public class XFrameOptionsFilter implements Filter {
     /**
      * Whether the X-Frame-Option header should be set at all. Check this on the fly for easier
      * testing and in order to potentially make this a GUI controlled option in the future.
+     *
      * @return
      */
     private static boolean shouldSetPolicy() {
@@ -79,10 +80,10 @@ public class XFrameOptionsFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
-        throws IOException, ServletException {
+            throws IOException, ServletException {
 
         if (shouldSetPolicy()) {
-            HttpServletResponse httpResponse = (HttpServletResponse)response;
+            HttpServletResponse httpResponse = (HttpServletResponse) response;
             httpResponse.setHeader(X_FRAME_OPTIONS, getFramePolicy());
         }
 

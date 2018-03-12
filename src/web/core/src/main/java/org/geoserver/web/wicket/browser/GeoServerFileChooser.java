@@ -33,43 +33,45 @@ public class GeoServerFileChooser extends Panel {
 
     private static final long serialVersionUID = -6246944669686555266L;
     static Boolean HIDE_FS = null;
+
     static {
         HIDE_FS = Boolean.valueOf(GeoServerExtensions.getProperty("GEOSERVER_FILEBROWSER_HIDEFS"));
     }
 
     static File USER_HOME = null;
+
     static {
         // try to safely determine the user home location
         try {
             File hf = null;
             String home = System.getProperty("user.home");
-            if(home != null) {
+            if (home != null) {
                 hf = new File(home);
             }
-            if(hf != null && hf.exists()) {
+            if (hf != null && hf.exists()) {
                 USER_HOME = hf;
-            } 
-        } catch(Throwable t) {
+            }
+        } catch (Throwable t) {
             // that's ok, we might not be able to get the user home
         }
     }
-    
+
     static final Logger LOGGER = Logging.getLogger(GeoServerFileChooser.class);
-    
+
     FileBreadcrumbs breadcrumbs;
     FileDataView fileTable;
     boolean hideFileSystem = false;
     IModel<File> file;
-    
+
     public GeoServerFileChooser(String id, IModel<File> file) {
-       this(id, file, HIDE_FS);
+        this(id, file, HIDE_FS);
     }
 
     /**
      * Constructor with optional flag to control how file system resources are exposed.
      * <p>
-     * When <tt>hideFileSyste</tt> is set to <tt>true</tt> only the data directory is exposed 
-     * in the file browser. 
+     * When <tt>hideFileSyste</tt> is set to <tt>true</tt> only the data directory is exposed
+     * in the file browser.
      * </p>
      */
     public GeoServerFileChooser(String id, IModel<File> file, boolean hideFileSystem) {
@@ -85,32 +87,32 @@ public class GeoServerFileChooser extends Panel {
 
         // find under which root the selection should be placed
         File selection = (File) file.getObject();
-        
+
         // first check if the file is a relative reference into the data dir
-        if(selection != null) {
+        if (selection != null) {
             File relativeToDataDir = loader.url(selection.getPath());
-            if(relativeToDataDir != null) {
+            if (relativeToDataDir != null) {
                 selection = relativeToDataDir;
             }
         }
-        
+
         // select the proper root
         File selectionRoot = null;
-        if(selection != null && selection.exists()) {
+        if (selection != null && selection.exists()) {
             for (File root : roots) {
-                if(isSubfile(root, selection.getAbsoluteFile())) {
+                if (isSubfile(root, selection.getAbsoluteFile())) {
                     selectionRoot = root;
                     break;
                 }
             }
-            
+
             // if the file is not part of the known search paths, give up 
             // and switch back to the data directory
-            if(selectionRoot == null) {
+            if (selectionRoot == null) {
                 selectionRoot = dataDirectory;
                 file = new Model<File>(selectionRoot);
             } else {
-                if(!selection.isDirectory()) {
+                if (!selection.isDirectory()) {
                     file = new Model<File>(selection.getParentFile());
                 } else {
                     file = new Model<File>(selection);
@@ -122,8 +124,8 @@ public class GeoServerFileChooser extends Panel {
         }
         this.file = file;
         setDefaultModel(file);
-        
-        
+
+
         // the root chooser
         final DropDownChoice<File> choice = new DropDownChoice<File>("roots", new Model<File>(selectionRoot), new Model<ArrayList<File>>(roots), new FileRootsRenderer(this));
         choice.add(new AjaxFormComponentUpdatingBehavior("change") {
@@ -136,11 +138,11 @@ public class GeoServerFileChooser extends Panel {
                 breadcrumbs.setRootFile(selection);
                 updateFileBrowser(selection, target);
             }
-            
+
         });
         choice.setOutputMarkupId(true);
         add(choice);
-        
+
         // the breadcrumbs
         breadcrumbs = new FileBreadcrumbs("breadcrumbs", new Model<File>(selectionRoot), file) {
 
@@ -150,11 +152,11 @@ public class GeoServerFileChooser extends Panel {
             protected void pathItemClicked(File file, AjaxRequestTarget target) {
                 updateFileBrowser(file, target);
             }
-            
+
         };
         breadcrumbs.setOutputMarkupId(true);
         add(breadcrumbs);
-        
+
         // the file tables
         fileTable = new FileDataView("fileTable", new FileProvider(file)) {
 
@@ -164,16 +166,16 @@ public class GeoServerFileChooser extends Panel {
             protected void linkNameClicked(File file, AjaxRequestTarget target) {
                 updateFileBrowser(file, target);
             }
-            
+
         };
         fileTable.setOutputMarkupId(true);
         add(fileTable);
     }
 
     void updateFileBrowser(File file, AjaxRequestTarget target) {
-        if(file.isDirectory()) {
+        if (file.isDirectory()) {
             directoryClicked(file, target);
-        } else if(file.isFile()) {
+        } else if (file.isFile()) {
             fileClicked(file, target);
         }
     }
@@ -188,6 +190,7 @@ public class GeoServerFileChooser extends Panel {
     /**
      * Action undertaken as a directory is clicked. Default behavior is to drill down into
      * the directory.
+     *
      * @param file
      * @param target
      */
@@ -196,39 +199,39 @@ public class GeoServerFileChooser extends Panel {
         GeoServerFileChooser.this.file.setObject(file);
         fileTable.getProvider().setDirectory(new Model<File>(file));
         breadcrumbs.setSelection(file);
-        
+
         target.add(fileTable);
         target.add(breadcrumbs);
     }
 
     private boolean isSubfile(File root, File selection) {
-        if(selection == null || "".equals(selection.getPath()))
+        if (selection == null || "".equals(selection.getPath()))
             return false;
-        if(selection.equals(root))
+        if (selection.equals(root))
             return true;
-        
+
         return isSubfile(root, selection.getParentFile());
     }
-    
+
     /**
-     * 
      * @param fileFilter
      */
     public void setFilter(IModel<? extends FileFilter> fileFilter) {
         fileTable.provider.setFileFilter(fileFilter);
     }
-    
+
     /**
      * Set the file table fixed height. Set it to null if you don't want fixed height
      * with overflow, and to a valid CSS measure if you want it instead.
      * Default value is "25em"
+     *
      * @param height
      */
     public void setFileTableHeight(String height) {
-       fileTable.setTableHeight(height); 
+        fileTable.setTableHeight(height);
     }
-    
-//    /**
+
+    //    /**
 //     * If the file is in the data directory builds a data dir relative path, otherwise
 //     * returns an absolute path 
 //     * @param file
@@ -254,30 +257,30 @@ public class GeoServerFileChooser extends Panel {
 //        return "file://" + file.getAbsolutePath();
 //    }
 //    
-static class FileRootsRenderer extends ChoiceRenderer<File> {
-    
+    static class FileRootsRenderer extends ChoiceRenderer<File> {
+
         private static final long serialVersionUID = 1389015915737006638L;
-        
+
         Component component;
 
-    public FileRootsRenderer(Component component) {
-        this.component = component;
-    }
+        public FileRootsRenderer(Component component) {
+            this.component = component;
+        }
 
-    public Object getDisplayValue(File f) {
-        
+        public Object getDisplayValue(File f) {
+
             if (f == USER_HOME) {
                 return new ParamResourceModel("userHome", component)
                         .getString();
             } else {
                 GeoServerResourceLoader loader = GeoServerExtensions
                         .bean(GeoServerResourceLoader.class);
-        
+
                 if (f.equals(loader.getBaseDirectory())) {
                     return new ParamResourceModel("dataDirectory", component).getString();
                 }
             }
-        
+
             try {
                 final String displayName = FileSystemView.getFileSystemView()
                         .getSystemDisplayName(f);
@@ -293,11 +296,11 @@ static class FileRootsRenderer extends ChoiceRenderer<File> {
             }
             return f.getName();
         }
-        
+
         public String getIdValue(File f, int count) {
             return "" + count;
         }
-    
+
     }
 
 }

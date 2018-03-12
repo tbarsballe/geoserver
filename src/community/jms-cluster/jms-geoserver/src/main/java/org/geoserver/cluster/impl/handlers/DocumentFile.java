@@ -15,11 +15,9 @@ import org.geoserver.platform.resource.Resources;
 import org.jdom2.JDOMException;
 
 /**
- * 
  * Class used to handle a text file
- * 
- * @author Carlo Cancellieri - carlo.cancellieri@geo-solutions.it
  *
+ * @author Carlo Cancellieri - carlo.cancellieri@geo-solutions.it
  */
 public class DocumentFile {
 
@@ -37,8 +35,8 @@ public class DocumentFile {
 
     /**
      * Constructor
-     * 
-     * @param path the path referring to this file
+     *
+     * @param path     the path referring to this file
      * @param document the string containing the body of the file (should be a valid JDOM document)
      * @throws JDOMException
      * @throws IOException
@@ -73,7 +71,7 @@ public class DocumentFile {
 
     /**
      * write the body to the passed file argument
-     * 
+     *
      * @param file
      * @throws JDOMException
      * @throws IOException

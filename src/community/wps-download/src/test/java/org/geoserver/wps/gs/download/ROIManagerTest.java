@@ -17,9 +17,8 @@ import com.vividsolutions.jts.geom.Polygon;
 
 /**
  * Test case for the {@link ROIManager} class.
- * 
+ *
  * @author Simone Giannecchini, GeoSolutions SAS
- * 
  */
 public class ROIManagerTest extends TestCase {
 

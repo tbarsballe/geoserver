@@ -66,7 +66,7 @@ public class TransactionCallbackTester implements TransactionCallback {
             SimpleFeatureType schema = (SimpleFeatureType) catalog.getFeatureTypeByName(MockData.ROAD_SEGMENTS
                     .getLocalPart()).getFeatureType();
             Geometry geometry = new WKTReader().read("MULTILINESTRING((0 0, 1 1))");
-            SimpleFeature feature = SimpleFeatureBuilder.build(schema, new Object[] {geometry, "107", "New Road"}, null);
+            SimpleFeature feature = SimpleFeatureBuilder.build(schema, new Object[]{geometry, "107", "New Road"}, null);
             features.add(feature);
         } catch (Exception e) {
             throw new RuntimeException(e);

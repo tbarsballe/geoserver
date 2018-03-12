@@ -21,7 +21,7 @@ import org.vfny.geoserver.wcs.WcsException;
 /**
  * A data handler for the fake "geoserver/coverage20" mime type. In fact, it encodes WCS 2.0 GMLCov
  * document (an xml document)
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class GMLCovHandler implements DataContentHandler {
@@ -43,7 +43,7 @@ public class GMLCovHandler implements DataContentHandler {
 
     public void writeTo(Object value, String mimeType, OutputStream os) throws IOException {
         CoverageData data = (CoverageData) value;
-        
+
         final GMLTransformer transformer = new GMLTransformer(data.envelopeDimensionsMapper);
         transformer.setIndentation(4);
         transformer.setFileReference(data.fileReference);
@@ -57,14 +57,14 @@ public class GMLCovHandler implements DataContentHandler {
 
     /**
      * Just a data holder to keep togheter the informations needed to encode the GMLCOV response
-     * 
+     *
      * @author Andrea Aime - GeoSolutions
      */
     static class CoverageData {
         GridCoverage2D coverage;
 
         FileReference fileReference;
-        
+
         EnvelopeAxesLabelsMapper envelopeDimensionsMapper;
 
         public CoverageData(GridCoverage2D coverage, FileReference fileReference, EnvelopeAxesLabelsMapper envelopeDimensionsMapper) {

@@ -32,7 +32,7 @@ import org.geotools.coverage.grid.io.AbstractGridFormat;
 
 /**
  * Supports coverage store configuration
- * 
+ *
  * @author Andrea Aime
  * @see StoreEditPanel
  */
@@ -131,12 +131,10 @@ abstract class AbstractCoverageStorePage extends GeoServerSecuredPage {
     /**
      * Template method for subclasses to take the appropriate action when the coverage store page
      * "save" button is pressed.
-     * 
-     * @param info
-     *            the StoreInfo to save
-     * @throws IllegalArgumentException
-     *             with an appropriate error message if the save action can't be successfully
-     *             performed
+     *
+     * @param info the StoreInfo to save
+     * @throws IllegalArgumentException with an appropriate error message if the save action can't be successfully
+     *                                  performed
      */
     protected abstract void onSave(CoverageStoreInfo info, AjaxRequestTarget target)
             throws IllegalArgumentException;

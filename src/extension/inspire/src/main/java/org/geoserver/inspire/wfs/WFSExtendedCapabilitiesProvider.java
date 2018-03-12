@@ -26,6 +26,7 @@ import org.xml.sax.helpers.AttributesImpl;
 import org.xml.sax.helpers.NamespaceSupport;
 
 import java.io.IOException;
+
 import org.geoserver.catalog.MetadataMap;
 
 public class WFSExtendedCapabilitiesProvider implements

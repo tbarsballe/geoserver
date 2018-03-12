@@ -11,7 +11,7 @@ import java.util.List;
 
 /**
  * Enum of WMS-EO layer types.
- * 
+ *
  * @author Davide Savazzi - geo-solutions.it
  */
 public enum EoLayerType {
@@ -22,10 +22,9 @@ public enum EoLayerType {
      * Key used in LayerInfo metadata to store EO Layer type
      */
     public static final String KEY = "WMSEO-LAYER";
-    
+
     /**
      * Returns a list of the "normal" layer types
-     *
      */
     public static List<EoLayerType> getRegularTypes() {
         List<EoLayerType> result = new ArrayList<EoLayerType>();
@@ -36,14 +35,13 @@ public enum EoLayerType {
         result.add(EoLayerType.BITMASK);
         return result;
     }
-    
+
     /**
      * Returns a list of the raster layer types
-     *
      */
     public static List<EoLayerType> getRasterTypes(boolean includeIgnore) {
         List<EoLayerType> result = new ArrayList<EoLayerType>();
-        if(includeIgnore) {
+        if (includeIgnore) {
             result.add(EoLayerType.IGNORE);
         }
         result.add(EoLayerType.BROWSE_IMAGE);
@@ -52,5 +50,5 @@ public enum EoLayerType {
         result.add(EoLayerType.BITMASK);
         return result;
     }
-    
+
 }

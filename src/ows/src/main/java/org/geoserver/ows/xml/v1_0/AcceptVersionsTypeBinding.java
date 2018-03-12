@@ -17,7 +17,7 @@ import org.geotools.xml.Node;
 
 /**
  * Binding object for the type http://www.opengis.net/ows:AcceptVersionsType.
- *
+ * <p>
  * <pre><code>
  *  &lt;complexType name="AcceptVersionsType"&gt;
  *      &lt;annotation&gt;
@@ -33,11 +33,11 @@ import org.geotools.xml.Node;
  * @generated
  */
 public class AcceptVersionsTypeBinding extends AbstractComplexEMFBinding {
-    
+
     Ows10Factory owsfactory;
-    
+
     public AcceptVersionsTypeBinding(Ows10Factory owsfactory) {
-        super( owsfactory );
+        super(owsfactory);
         this.owsfactory = owsfactory;
     }
 
@@ -65,7 +65,7 @@ public class AcceptVersionsTypeBinding extends AbstractComplexEMFBinding {
      * @generated modifiable
      */
     public Object parse(ElementInstance instance, Node node, Object value)
-        throws Exception {
+            throws Exception {
         AcceptVersionsType acceptVersions = owsfactory.createAcceptVersionsType();
         acceptVersions.getVersion().addAll(node.getChildValues("Version"));
 

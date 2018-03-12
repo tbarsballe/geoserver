@@ -34,7 +34,7 @@ import com.google.common.collect.Lists;
  * <p>
  * The factory methods in this utility also allow for a more compact code by using static imports,
  * so that, for example:
- * 
+ * <p>
  * <pre>
  * <code>
  * FilterFactory ff = CommonFactoryFinder.getFilterFactory();
@@ -44,13 +44,13 @@ import com.google.common.collect.Lists;
  * Filter filter = ff.and(ff.or(f1, f2), f3);
  * </code>
  * </pre>
- * 
+ * <p>
  * becomes:
- * 
+ * <p>
  * <pre>
  * <code>
  * Filter filter = and(
- *              or(equal('name', 'roads'),equal('name', 'streams')), 
+ *              or(equal('name', 'roads'),equal('name', 'streams')),
  *              equal('enabled', Boolean.TRUE));
  * </code>
  * </pre>
@@ -116,18 +116,17 @@ public class Predicates {
      * {@code equal("resource.attributes[1]", myAttribute);}
      * <li>Combined: {@code equal("resource.attributes[1].minOccurs", Integer.valueOf(1));}
      * </ul>
-     * 
+     *
      * @param property the qualified property name of the predicate's input object to evaluate
      * @param expected the value to check the input object's property against
      * @see PropertyIsEqualTo
-     * 
      */
     public static Filter equal(final String property, final Object expected) {
         return equal(property, expected, MatchAction.ANY);
     }
 
     public static Filter equal(final String property, final Object expected,
-            final MatchAction matchAction) {
+                               final MatchAction matchAction) {
         final boolean matchCase = true;
         return factory.equal(factory.property(property), factory.literal(expected), matchCase,
                 matchAction);
@@ -135,7 +134,7 @@ public class Predicates {
 
     /**
      * @return a predicate that evaluates whether the given String {@code property} contains the
-     *         required character string, in a <b>case insensitive</b> manner.
+     * required character string, in a <b>case insensitive</b> manner.
      */
     public static Filter contains(final String property, final String subsequence) {
         PropertyName propertyName = factory.property(property);
@@ -154,9 +153,8 @@ public class Predicates {
 
     /**
      * convienience method to escape any character that is special to the regex system.
-     * 
+     *
      * @param inString the string to fix
-     * 
      * @return the fixed string
      */
     private static String fixSpecials(final String inString) {
@@ -177,9 +175,8 @@ public class Predicates {
 
     /**
      * convienience method to determine if a character is special to the regex system.
-     * 
+     *
      * @param chr the character to test
-     * 
      * @return is the character a special character.
      */
     private static boolean isSpecial(final char chr) {
@@ -198,7 +195,6 @@ public class Predicates {
      * <p>
      * The components are evaluated in order, and evaluation will be "short-circuited" as soon as a
      * false predicate is found.
-     * 
      */
     public static Filter and(Filter op1, Filter op2) {
         List<Filter> children = new ArrayList<Filter>();
@@ -222,7 +218,6 @@ public class Predicates {
      * <p>
      * The components are evaluated in order, and evaluation will be "short-circuited" as soon as a
      * false predicate is found.
-     * 
      */
     public static Filter and(Filter... operands) {
         List<Filter> anded = Lists.newArrayList(operands);
@@ -235,10 +230,9 @@ public class Predicates {
      * <p>
      * The components are evaluated in order, and evaluation will be "short-circuited" as soon as a
      * false predicate is found.
-     * 
      */
     public static Filter and(List<Filter> operands) {
-        if(operands.size() == 0) {
+        if (operands.size() == 0) {
             return Filter.INCLUDE;
         } else if (operands.size() == 1) {
             return operands.get(0);
@@ -275,7 +269,7 @@ public class Predicates {
     }
 
     public static Filter or(List<Filter> operands) {
-        if(operands.size() == 0) {
+        if (operands.size() == 0) {
             return Filter.EXCLUDE;
         } else if (operands.size() == 1) {
             return operands.get(0);
@@ -299,8 +293,8 @@ public class Predicates {
     public static SortBy sortBy(final String propertyName, final boolean ascending) {
         return factory.sort(propertyName, ascending ? SortOrder.ASCENDING : SortOrder.DESCENDING);
     }
-    
-    public static Filter isInstanceOf(Class clazz){
+
+    public static Filter isInstanceOf(Class clazz) {
         return factory.equals(factory.function("isInstanceOf", factory.literal(clazz)), factory.literal(true));
     }
 
@@ -320,11 +314,10 @@ public class Predicates {
      * Evaluation of nested properties for <b>any</b> member of a collection property is at the
      * moment not supported
      * <p>
-     * 
+     *
      * @param property the qualified property name of the predicate's input object to evaluate
      * @param expected the value to check the input object's property against
      * @see PropertyIsEqualTo
-     * 
      */
     public static Filter notEqual(final String property, final Object expected) {
         return factory.notEqual(factory.property(property), factory.literal(expected));

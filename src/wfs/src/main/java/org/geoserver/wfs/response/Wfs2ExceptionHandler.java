@@ -19,10 +19,9 @@ import java.util.List;
  * Handles a WFS 2.0 service exception by producing an exception report.
  *
  * @author Brad Hards, Sigma Bravo
- *
+ * <p>
  * Based on WfsExceptionHandler by Justin Deoliveira - The Open Planning Project
  * and Carlo Cancellieri - GeoSolutions.
- *
  */
 public class Wfs2ExceptionHandler extends OWS11ServiceExceptionHandler {
 
@@ -32,7 +31,7 @@ public class Wfs2ExceptionHandler extends OWS11ServiceExceptionHandler {
      * Constructor.
      *
      * @param services services on offer.
-     * @param gs server context
+     * @param gs       server context
      */
     public Wfs2ExceptionHandler(List services, GeoServer gs) {
         super(services);
@@ -47,9 +46,9 @@ public class Wfs2ExceptionHandler extends OWS11ServiceExceptionHandler {
 
         boolean verbose = gs.getSettings().isVerboseExceptions();
         String charset = gs.getSettings().getCharset();
-        
+
         setHttpHeaders(exception, request);
-        
+
         // first of all check what kind of exception handling we must perform
         final String exceptions;
         try {
@@ -77,7 +76,7 @@ public class Wfs2ExceptionHandler extends OWS11ServiceExceptionHandler {
     private void setHttpHeaders(ServiceException exception, Request request) {
         HttpServletResponse response = request.getHttpResponse();
         String code = exception.getCode();
-        
+
         if (code == null) {
             exception.setCode(WFSException.NO_APPLICABLE_CODE);
         }

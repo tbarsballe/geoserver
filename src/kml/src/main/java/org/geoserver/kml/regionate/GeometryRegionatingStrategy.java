@@ -27,7 +27,7 @@ import com.vividsolutions.jts.geom.Polygon;
  * Strategy using geometry size to determine feature allocation in tiles. Bigger
  * geometries get into the bigger tiles. Does not work with simple points, use
  * attribute sorting or random strategy in that case
- * 
+ *
  * @author Andrea Aime
  */
 public class GeometryRegionatingStrategy extends
@@ -62,10 +62,10 @@ public class GeometryRegionatingStrategy extends
         h2Type = "DOUBLE";
     }
 
-    @Override 
-    protected String checkAttribute(FeatureTypeInfo cfg){
+    @Override
+    protected String checkAttribute(FeatureTypeInfo cfg) {
         String attribute = MapLayerInfo.getRegionateAttribute(cfg);
-        try{
+        try {
             FeatureType ft = cfg.getFeatureType();
             if ((attribute != null) && (ft.getDescriptor(attribute) != null))
                 return attribute;

@@ -14,8 +14,8 @@ import org.apache.wicket.model.IModel;
 
 /**
  * Simple editor for enumerations
- * @author Andrea Aime - GeoSolutions
  *
+ * @author Andrea Aime - GeoSolutions
  */
 public class EnumPanel extends Panel {
 

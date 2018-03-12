@@ -28,7 +28,6 @@ import org.geoserver.web.wicket.ParamResourceModel;
  * first resource configuration window opening <br>
  * After modal dialog is closed the resource page is reloaded and feature configuration table
  * updated
- * 
  */
 public class SolrConfigurationPanel extends ResourceConfigurationPanel {
 
@@ -40,7 +39,7 @@ public class SolrConfigurationPanel extends ResourceConfigurationPanel {
 
     /**
      * Adds SOLR configuration panel link, configure modal dialog and implements modal callback
-     * 
+     *
      * @see {@link SolrConfigurationPage#done}
      */
 
@@ -59,9 +58,9 @@ public class SolrConfigurationPanel extends ResourceConfigurationPanel {
                     FeatureTypeInfo ft = (FeatureTypeInfo) getResourceInfo();
 
                     //Override _isNew state, based on resource informations into catalog
-                    if(ft.getId() != null && app.getCatalog().getResource(ft.getId(),ResourceInfo.class) != null){
+                    if (ft.getId() != null && app.getCatalog().getResource(ft.getId(), ResourceInfo.class) != null) {
                         _isNew = false;
-                    }else{
+                    } else {
                         _isNew = true;
                     }
 
@@ -116,7 +115,7 @@ public class SolrConfigurationPanel extends ResourceConfigurationPanel {
 
         @Override
         public void renderHead(Component component, IHeaderResponse response) {
-            response.render(OnLoadHeaderItem.forScript(getCallbackScript().toString()));          
+            response.render(OnLoadHeaderItem.forScript(getCallbackScript().toString()));
         }
     }
 

@@ -47,7 +47,9 @@ public enum ClassMappings {
         @Override
         public Class getImpl() {
             return WorkspaceInfoImpl.class;
-        };
+        }
+
+        ;
     },
     NAMESPACE {
         @Override
@@ -58,7 +60,9 @@ public enum ClassMappings {
         @Override
         public Class getImpl() {
             return NamespaceInfoImpl.class;
-        };
+        }
+
+        ;
     },
 
     // stores, order matters
@@ -71,7 +75,9 @@ public enum ClassMappings {
         @Override
         public Class getImpl() {
             return DataStoreInfoImpl.class;
-        };
+        }
+
+        ;
     },
     COVERAGESTORE {
         @Override
@@ -82,7 +88,9 @@ public enum ClassMappings {
         @Override
         public Class getImpl() {
             return CoverageStoreInfoImpl.class;
-        };
+        }
+
+        ;
     },
     WMSSTORE {
         @Override
@@ -93,7 +101,9 @@ public enum ClassMappings {
         @Override
         public Class getImpl() {
             return WMSStoreInfoImpl.class;
-        };
+        }
+
+        ;
     },
     WMTSSTORE {
         @Override
@@ -104,7 +114,9 @@ public enum ClassMappings {
         @Override
         public Class getImpl() {
             return WMTSStoreInfoImpl.class;
-        };
+        }
+
+        ;
     },
     STORE {
         @Override
@@ -115,11 +127,13 @@ public enum ClassMappings {
         @Override
         public Class getImpl() {
             return StoreInfoImpl.class;
-        };
+        }
+
+        ;
 
         @Override
         public Class<? extends CatalogInfo>[] concreteInterfaces() {
-            return new Class[] { CoverageStoreInfo.class, DataStoreInfo.class, WMSStoreInfo.class, WMTSStoreInfo.class };
+            return new Class[]{CoverageStoreInfo.class, DataStoreInfo.class, WMSStoreInfo.class, WMTSStoreInfo.class};
         }
     },
 
@@ -133,7 +147,9 @@ public enum ClassMappings {
         @Override
         public Class getImpl() {
             return FeatureTypeInfoImpl.class;
-        };
+        }
+
+        ;
     },
     COVERAGE {
         @Override
@@ -144,7 +160,9 @@ public enum ClassMappings {
         @Override
         public Class getImpl() {
             return CoverageInfoImpl.class;
-        };
+        }
+
+        ;
     },
     WMSLAYER {
         @Override
@@ -155,7 +173,9 @@ public enum ClassMappings {
         @Override
         public Class getImpl() {
             return WMSLayerInfoImpl.class;
-        };
+        }
+
+        ;
     },
     WMTSLAYER {
         @Override
@@ -166,7 +186,9 @@ public enum ClassMappings {
         @Override
         public Class getImpl() {
             return WMTSLayerInfoImpl.class;
-        };
+        }
+
+        ;
     },
     RESOURCE {
         @Override
@@ -177,11 +199,13 @@ public enum ClassMappings {
         @Override
         public Class getImpl() {
             return ResourceInfoImpl.class;
-        };
+        }
+
+        ;
 
         @Override
         public Class<? extends CatalogInfo>[] concreteInterfaces() {
-            return new Class[] { CoverageInfo.class, FeatureTypeInfo.class, WMSLayerInfo.class, WMTSLayerInfo.class };
+            return new Class[]{CoverageInfo.class, FeatureTypeInfo.class, WMSLayerInfo.class, WMTSLayerInfo.class};
         }
     },
     PUBLISHED {
@@ -193,11 +217,13 @@ public enum ClassMappings {
         @Override
         public Class getImpl() {
             return null;
-        };
+        }
+
+        ;
 
         @Override
         public Class<? extends CatalogInfo>[] concreteInterfaces() {
-            return new Class[] { LayerInfo.class, LayerGroupInfo.class };
+            return new Class[]{LayerInfo.class, LayerGroupInfo.class};
         }
     },
     LAYER {
@@ -209,7 +235,9 @@ public enum ClassMappings {
         @Override
         public Class getImpl() {
             return LayerInfoImpl.class;
-        };
+        }
+
+        ;
     },
     LAYERGROUP {
         @Override
@@ -220,7 +248,9 @@ public enum ClassMappings {
         @Override
         public Class getImpl() {
             return LayerGroupInfoImpl.class;
-        };
+        }
+
+        ;
     },
     MAP {
         @Override
@@ -231,7 +261,9 @@ public enum ClassMappings {
         @Override
         public Class getImpl() {
             return MapInfoImpl.class;
-        };
+        }
+
+        ;
     },
     STYLE {
         @Override
@@ -242,7 +274,9 @@ public enum ClassMappings {
         @Override
         public Class getImpl() {
             return StyleInfoImpl.class;
-        };
+        }
+
+        ;
     },
 
     //
@@ -257,7 +291,9 @@ public enum ClassMappings {
         @Override
         public Class getImpl() {
             return GeoServerInfoImpl.class;
-        };
+        }
+
+        ;
     },
 
     LOGGING {
@@ -269,7 +305,9 @@ public enum ClassMappings {
         @Override
         public Class getImpl() {
             return LoggingInfoImpl.class;
-        };
+        }
+
+        ;
     },
 
     SETTINGS {
@@ -281,7 +319,9 @@ public enum ClassMappings {
         @Override
         public Class getImpl() {
             return SettingsInfoImpl.class;
-        };
+        }
+
+        ;
     },
 
     // // services, order matters
@@ -309,17 +349,19 @@ public enum ClassMappings {
         @Override
         public Class getImpl() {
             return ServiceInfoImpl.class;
-        };
+        }
+
+        ;
     };
 
     public abstract <T> Class<T> getInterface();
 
     public abstract Class<? extends Info> getImpl();
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @SuppressWarnings({"rawtypes", "unchecked"})
     public Class<? extends Info>[] concreteInterfaces() {
         Class interf = getInterface();
-        return new Class[] { interf };
+        return new Class[]{interf};
     }
 
     public static ClassMappings fromInterface(Class<? extends Info> interfce) {

@@ -18,9 +18,8 @@ import org.opengis.feature.simple.SimpleFeatureType;
 
 /**
  * Returns a shallow copy of a style with only the active rules at the specified scale denominator
- * 
+ *
  * @author Andrea Aime - GeoSolutions
- * 
  */
 public class ScaleStyleVisitor extends DuplicatingStyleVisitor {
 
@@ -49,8 +48,8 @@ public class ScaleStyleVisitor extends DuplicatingStyleVisitor {
             String ftName = fts.getFeatureTypeName();
             if (fts.featureTypeNames().isEmpty()
                     || ((schema.getName().getLocalPart() != null) && (schema.getName()
-                            .getLocalPart().equalsIgnoreCase(ftName) || FeatureTypes
-                            .isDecendedFrom(schema, null, ftName)))) {
+                    .getLocalPart().equalsIgnoreCase(ftName) || FeatureTypes
+                    .isDecendedFrom(schema, null, ftName)))) {
                 filtered.add(fts);
             }
         }

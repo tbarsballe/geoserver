@@ -15,25 +15,27 @@ import org.apache.wicket.util.convert.IConverter;
 /**
  * Converts roles list as ";" separated string
  */
-public class RolesConverter implements IConverter{
+public class RolesConverter implements IConverter {
 
-    /** serialVersionUID */
+    /**
+     * serialVersionUID
+     */
     private static final long serialVersionUID = -7814332099119849464L;
 
     private List<String> availableRoles;
-    
+
     public RolesConverter(List<String> availableRoles) {
         this.availableRoles = availableRoles;
     }
-    
+
     @Override
     public Object convertToObject(String value, Locale locale) {
         List<String> checkedRoles = new ArrayList<String>();
-        if(value != null && !value.isEmpty()){
+        if (value != null && !value.isEmpty()) {
             String[] selectedRoles = value.split(";");
             //Check roles string
-            for(String role : selectedRoles){
-                if(availableRoles.contains(role)){
+            for (String role : selectedRoles) {
+                if (availableRoles.contains(role)) {
                     checkedRoles.add(role);
                 }
             }
@@ -44,10 +46,10 @@ public class RolesConverter implements IConverter{
     @Override
     public String convertToString(Object value, Locale locale) {
         String roleStr = "";
-        if(value!=null && value instanceof List){
-            List roles = (List)value;
+        if (value != null && value instanceof List) {
+            List roles = (List) value;
             roleStr = StringUtils.join(roles.toArray(), ";");
-            if(!roleStr.isEmpty()){
+            if (!roleStr.isEmpty()) {
                 roleStr = roleStr + ";";
             }
         }

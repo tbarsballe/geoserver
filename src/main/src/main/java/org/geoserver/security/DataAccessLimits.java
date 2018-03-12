@@ -19,7 +19,7 @@ import org.opengis.filter.Filter;
 
 /**
  * Base class for all AccessLimits declared by a {@link ResourceAccessManager}
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class DataAccessLimits extends AccessLimits {
@@ -36,10 +36,9 @@ public class DataAccessLimits extends AccessLimits {
 
     /**
      * Builds a generic DataAccessLimits
-     * 
-     * @param readFilter
-     *            This filter will be merged with the request read filters to limit the
-     *            features/tiles that can be actually read
+     *
+     * @param readFilter This filter will be merged with the request read filters to limit the
+     *                   features/tiles that can be actually read
      */
     public DataAccessLimits(CatalogMode mode, Filter readFilter) {
         super(mode);
@@ -49,8 +48,6 @@ public class DataAccessLimits extends AccessLimits {
     /**
      * This filter will be merged with the request read filters to limit the features/tiles that can
      * be actually read
-     * 
-     *
      */
     public Filter getReadFilter() {
         return readFilter;
@@ -58,13 +55,11 @@ public class DataAccessLimits extends AccessLimits {
 
     /**
      * The catalog mode for this layer
-     * 
-     *
      */
     public CatalogMode getMode() {
         return mode;
     }
-    
+
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
         in.defaultReadObject();
         readFilter = readFilter(in);
@@ -78,7 +73,7 @@ public class DataAccessLimits extends AccessLimits {
     /**
      * Writes the non Serializable Filter object ot the ObjectOutputStream via a OGC Filter XML
      * encoding conversion
-     * 
+     *
      * @param filter
      * @param out
      * @throws IOException
@@ -97,9 +92,8 @@ public class DataAccessLimits extends AccessLimits {
     /**
      * Reads from the object input stream a string representing a filter in OGC XML encoding and
      * parses it back to a Filter object
-     * 
-     * @param in
      *
+     * @param in
      * @throws IOException
      * @throws ClassNotFoundException
      */
@@ -107,11 +101,11 @@ public class DataAccessLimits extends AccessLimits {
         byte[] serializedReadFilter = (byte[]) in.readObject();
         if (serializedReadFilter != null) {
             try {
-            Parser p = new Parser(CONFIGURATION);
+                Parser p = new Parser(CONFIGURATION);
                 return (Filter) p.parse(new ByteArrayInputStream(serializedReadFilter));
             } catch (Exception e) {
                 throw (IOException) new IOException("Failed to parse filter").initCause(e);
-            } 
+            }
         } else {
             return null;
         }
@@ -141,7 +135,6 @@ public class DataAccessLimits extends AccessLimits {
             return false;
         return true;
     }
-    
-    
+
 
 }

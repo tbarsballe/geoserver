@@ -46,14 +46,17 @@ import org.opengis.referencing.operation.TransformException;
  * Class encapsulating the logic to scale a coverage to a pre-defined target size.
  *
  * @author Stefano Costa, GeoSolutions
- *
  */
 class ScaleToTarget {
 
-    /** The overview policy. By default, NEAREST policy is used **/
+    /**
+     * The overview policy. By default, NEAREST policy is used
+     **/
     private OverviewPolicy overviewPolicy;
 
-    /** The interpolation method. By default, NEAREST interpolation is used **/
+    /**
+     * The interpolation method. By default, NEAREST interpolation is used
+     **/
     private Interpolation interpolation;
 
     private GridCoverage2DReader reader;
@@ -76,7 +79,7 @@ class ScaleToTarget {
     /**
      * Two-args constructor.
      *
-     * @param reader the coverage reader to use for reading metadata
+     * @param reader   the coverage reader to use for reading metadata
      * @param envelope the envelope of the ROI we want to scale (if <code>null</code>, the envelope of the whole coverage is used)
      */
     ScaleToTarget(GridCoverage2DReader reader, Envelope envelope) {
@@ -125,12 +128,12 @@ class ScaleToTarget {
      * @return the current target size
      */
     public Integer[] getTargetSize() {
-        return new Integer[] { this.adjustedTargetSizeX, this.adjustedTargetSizeY };
+        return new Integer[]{this.adjustedTargetSizeX, this.adjustedTargetSizeY};
     }
 
     /**
      * Sets the size of the scaled image (target).
-     *
+     * <p>
      * <p>
      * If one of the two inputs is omitted, the missing value is inferred from the provided one so that the aspect ratio of the specified envelope is
      * preserved.
@@ -189,16 +192,16 @@ class ScaleToTarget {
 
     /**
      * Reads the coverage using the provided reader and read parameters, and then scales it to the set target size.
-     *
+     * <p>
      * <p>
      * The method properly sets the {@link AbstractGridFormat#READ_GRIDGEOMETRY2D} parameter before reading.
      * </p>
-     *
+     * <p>
      * <p>
      * If no target size is set, or the requested resolution matches the native resolution of the image, or the resolution of one of its overviews,
      * scaling is not performed.
      * </p>
-     *
+     * <p>
      * <p>
      * In any case, if the selected interpolation method is not Nearest Neighbor, interpolation is performed.
      * </p>
@@ -209,7 +212,7 @@ class ScaleToTarget {
      */
     public GridCoverage2D scale(GeneralParameterValue[] readParameters) throws IOException {
         if (readParameters == null) {
-            readParameters = new GeneralParameterValue[] {};
+            readParameters = new GeneralParameterValue[]{};
         }
 
         // setup reader parameters to have it exploit overviews
@@ -225,23 +228,22 @@ class ScaleToTarget {
 
     /**
      * Scale the provided coverage to the set target size.
-     *
+     * <p>
      * <p>
      * Please note that the method assumes the coverage was read taking overviews into account, i.e. by properly setting the
      * {@link AbstractGridFormat#READ_GRIDGEOMETRY2D} parameter.
      * </p>
-     *
+     * <p>
      * <p>
      * If no target size was set, or the requested resolution matches the native resolution of the image, or the resolution of one of its overviews,
      * scaling is not performed.
      * </p>
-     *
+     * <p>
      * <p>
      * In any case, if the selected interpolation method is not Nearest Neighbor, interpolation is performed.
      * </p>
      *
      * @param sourceGC the scaled coverage
-     *
      * @throws IOException
      */
     /*
@@ -272,7 +274,7 @@ class ScaleToTarget {
                 parameters.parameter("interpolation").setValue(interpolation);
                 parameters.parameter("backgroundValues").setValue(
                         CoverageUtilities.getBackgroundValues(sourceGC));// TODO check and
-                                                                         // improve
+                // improve
                 return (GridCoverage2D) CoverageProcessor.getInstance().doOperation(parameters,
                         hints);
             }
@@ -311,7 +313,7 @@ class ScaleToTarget {
 
     /**
      * Computes the transformation between raster and world coordinates, taking scaling into account.
-     * 
+     *
      * @return the grid-to-CRS transformation
      * @throws IOException
      */
@@ -332,7 +334,7 @@ class ScaleToTarget {
 
     /**
      * Computes the scaling transformation for the overview which would be picked for the requested resolution.
-     * 
+     *
      * @return the scaling transformation
      * @throws IOException
      */
@@ -348,8 +350,8 @@ class ScaleToTarget {
 
         // setup a scaling to get the transformation to be used to access the specified overview
         AffineTransform scaleTransform = new AffineTransform();
-        double[] scaleFactors = new double[] { readResolution[0] / nativeResolution[0],
-                readResolution[1] / nativeResolution[1] };
+        double[] scaleFactors = new double[]{readResolution[0] / nativeResolution[0],
+                readResolution[1] / nativeResolution[1]};
         scaleTransform.scale(scaleFactors[0], scaleFactors[1]);
 
         return scaleTransform;

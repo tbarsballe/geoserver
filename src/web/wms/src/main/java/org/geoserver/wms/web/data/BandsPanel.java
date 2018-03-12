@@ -41,7 +41,7 @@ public class BandsPanel extends Panel {
 
             @Override
             protected GeoServerTablePanel<CoverageDimensionInfo> getComponentForProperty(String id, IModel<CoverageDimensionInfo> itemModel,
-                    Property<CoverageDimensionInfo> property) {
+                                                                                         Property<CoverageDimensionInfo> property) {
                 return null;
             }
 
@@ -73,13 +73,13 @@ public class BandsPanel extends Panel {
                     } else {
                         String name = type.name();
                         try {
-                            String key = BandsPanel.class.getSimpleName() + "." +  name;
+                            String key = BandsPanel.class.getSimpleName() + "." + name;
                             ParamResourceModel rm = new ParamResourceModel(key, null);
                             return rm.getString();
-                        } catch(Exception e) {
+                        } catch (Exception e) {
                             return name;
                         }
-                        
+
                     }
                 }
 

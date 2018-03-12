@@ -33,12 +33,12 @@ public class AuthenticationPageTest extends AbstractSecurityWicketTestSupport {
         initializeForXML();
         createUserPasswordAuthProvider("default2", "default");
         activateRORoleService();
-        
+
         tester.startPage(page = new AuthenticationPage());
         tester.assertComponent("form:providerChain:authProviderNames:recorder", Recorder.class);
 
-        List<String> selected = 
-            (List<String>) (page.get("form:providerChain:authProviderNames")).getDefaultModelObject();
+        List<String> selected =
+                (List<String>) (page.get("form:providerChain:authProviderNames")).getDefaultModelObject();
         assertEquals(1, selected.size());
         assertTrue(selected.contains("default"));
 
@@ -57,13 +57,13 @@ public class AuthenticationPageTest extends AbstractSecurityWicketTestSupport {
                     authProvFound = true;
                     break;
                 }
-    
+
             }
         }
         assertTrue(authProvFound);
     }
-    
-//    protected void assignAuthProvider(String providerName) throws Exception {
+
+    //    protected void assignAuthProvider(String providerName) throws Exception {
 //        form.setValue("config.authProviderNames:recorder", providerName);
 //        // tester.executeAjaxEvent(formComponentId+":config.authProviderNames:recorder",
 //        // change);

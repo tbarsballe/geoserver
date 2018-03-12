@@ -12,7 +12,7 @@ import org.apache.commons.lang.StringUtils;
 /**
  * User property that stores list of groups that a user has {@link GeoServerRole#GROUP_ADMIN_ROLE}
  * privileges for.
- * 
+ *
  * @author Justin Deoliveira, OpenGeo
  */
 public class GroupAdminProperty extends UserProperty<String[]> {

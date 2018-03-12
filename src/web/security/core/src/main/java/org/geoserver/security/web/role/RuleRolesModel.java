@@ -16,15 +16,14 @@ import org.geoserver.web.GeoServerApplication;
 
 public class RuleRolesModel extends RolesModel {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	@Override
+    @Override
     protected Collection<GeoServerRole> load() {
         GeoServerSecurityManager secMgr = GeoServerApplication.get().getSecurityManager();
         try {
             return new ArrayList(secMgr.getRolesForAccessControl());
-        }
-        catch(IOException e) {
+        } catch (IOException e) {
             throw new WicketRuntimeException(e);
         }
     }

@@ -44,15 +44,15 @@ import org.opengis.referencing.operation.TransformException;
 
 /**
  * A class delegated to return the proper GridGeometry to be used by Raster Download
- * when target size is not specified. 
+ * when target size is not specified.
  */
 class GridGeometryProvider {
 
     private static final Logger LOGGER = Logging.getLogger(GridGeometryProvider.class);
-    
+
     /**
      * Class delegate to extract the resolution from a features collection
-     * based on the available resolution related descriptors.  
+     * based on the available resolution related descriptors.
      */
     class ResolutionProvider {
 
@@ -88,17 +88,17 @@ class GridGeometryProvider {
 
         /**
          * Get the best resolution from the input {@link SimpleFeatureCollection}.
-         * 
+         *
          * @param features
-         * @param resolutions 
+         * @param resolutions
          * @return
          * @throws FactoryException
          * @throws TransformException
-         * @throws IOException 
+         * @throws IOException
          */
         public ReferencedEnvelope getBestResolution(SimpleFeatureCollection features, final double[] bestResolution)
                 throws FactoryException, TransformException, IOException {
-            
+
             // Setting up features attributes to be checked
             final String resXAttribute = hasBothResolutions ? resXDescriptor.getStartAttribute()
                     : resDescriptor.getStartAttribute();
@@ -141,7 +141,7 @@ class GridGeometryProvider {
 
         /**
          * Extract the resolution from the specified feature via the resolution attributes.
-         * 
+         *
          * @param feature
          * @param resXAttribute
          * @param resYAttribute
@@ -150,19 +150,19 @@ class GridGeometryProvider {
          * @param resolution
          * @throws FactoryException
          * @throws TransformException
-         * @throws IOException 
+         * @throws IOException
          */
-        private void extractResolution(SimpleFeature feature, String resXAttribute, String resYAttribute, 
-                String crsAttribute, CoordinateReferenceSystem schemaCrs, double[] resolution) 
-                        throws FactoryException, TransformException, IOException {
+        private void extractResolution(SimpleFeature feature, String resXAttribute, String resYAttribute,
+                                       String crsAttribute, CoordinateReferenceSystem schemaCrs, double[] resolution)
+                throws FactoryException, TransformException, IOException {
             resolution[0] = (Double) feature.getAttribute(resXAttribute);
-            resolution[1] = hasBothResolutions ? (Double) feature.getAttribute(resYAttribute) 
+            resolution[1] = hasBothResolutions ? (Double) feature.getAttribute(resYAttribute)
                     : resolution[0];
             if (isHeterogeneousCrs) {
                 String crsId = (String) feature.getAttribute(crsAttribute);
                 CoordinateReferenceSystem granuleCrs = catalog.getResourcePool().getCRS(crsId);
                 transformResolution(feature, schemaCrs, granuleCrs, resolution);
-            }            
+            }
         }
 
         /**
@@ -176,40 +176,40 @@ class GridGeometryProvider {
          * @throws FactoryException
          * @throws TransformException
          */
-        private void transformResolution(SimpleFeature feature, CoordinateReferenceSystem schemaCrs, 
-                CoordinateReferenceSystem granuleCrs, double[] resolution) throws FactoryException, TransformException {
+        private void transformResolution(SimpleFeature feature, CoordinateReferenceSystem schemaCrs,
+                                         CoordinateReferenceSystem granuleCrs, double[] resolution) throws FactoryException, TransformException {
             MathTransform transform = CRS.findMathTransform(schemaCrs, granuleCrs);
-            
+
             // Do nothing if the CRS transformation is the identity
             if (!transform.isIdentity()) {
                 BoundingBox bounds = feature.getBounds();
                 MathTransform inverse = transform.inverse();
-                
+
                 // Get the center coordinate in the granule's CRS
-                double center[] = new double[] {
-                        (bounds.getMaxX() + bounds.getMinX()) / 2, 
+                double center[] = new double[]{
+                        (bounds.getMaxX() + bounds.getMinX()) / 2,
                         (bounds.getMaxY() + bounds.getMinY()) / 2};
-                transform.transform(center, 0, center, 0, 1);    
-                
+                transform.transform(center, 0, center, 0, 1);
+
                 // Setup 2 segments in granule's CRS
-                double [] coords = new double[6];
-                double [] resCoords = new double[6];
+                double[] coords = new double[6];
+                double[] resCoords = new double[6];
 
                 // center
                 coords[0] = center[0];
                 coords[1] = center[1];
-                
+
                 // DX from center
                 coords[2] = center[0] + resolution[0];
                 coords[3] = center[1];
-                
+
                 // DY from center
                 coords[4] = center[0];
                 coords[5] = center[1] + resolution[1];
 
                 // Transform the coordinates back to schemaCrs
                 inverse.transform(coords, 0, resCoords, 0, 3);
-                
+
                 double dx1 = resCoords[2] - resCoords[0];
                 double dx2 = resCoords[3] - resCoords[1];
                 double dy1 = resCoords[4] - resCoords[0];
@@ -224,16 +224,24 @@ class GridGeometryProvider {
         }
     }
 
-    /** The underlying reader */
+    /**
+     * The underlying reader
+     */
     private GridCoverage2DReader reader;
 
-    /** The ROIManager instance */
+    /**
+     * The ROIManager instance
+     */
     private ROIManager roiManager;
 
-    /** The specified filter (may be null) */
+    /**
+     * The specified filter (may be null)
+     */
     private Filter filter;
 
-    /** A reference to the geoserver catalog */
+    /**
+     * A reference to the geoserver catalog
+     */
     private Catalog catalog;
 
     public GridGeometryProvider(GridCoverage2DReader reader, ROIManager roiManager, Filter filter, Catalog catalog) {
@@ -243,9 +251,9 @@ class GridGeometryProvider {
         this.catalog = catalog;
     }
 
-    /** 
+    /**
      * Compute the requested GridGeometry taking into account resolution dimensions descriptor (if any),
-     * specified filter and ROI    
+     * specified filter and ROI
      */
     public GridGeometry2D getGridGeometry()
             throws TransformException, IOException, FactoryException {
@@ -296,18 +304,18 @@ class GridGeometryProvider {
                 return getNativeResolutionGridGeometry();
             }
             // Initialize resolution with infinite numbers
-            double[] resolution = new double[] {Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY};
+            double[] resolution = new double[]{Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY};
             ReferencedEnvelope envelope = provider.getBestResolution(features, resolution);
             AffineTransform at = new AffineTransform(resolution[0], 0, 0, -resolution[1], envelope.getMinX(), envelope.getMaxY());
             MathTransform tx = ProjectiveTransform.create(at);
-            
+
             return new GridGeometry2D(PixelInCell.CELL_CORNER, tx, envelope, GeoTools.getDefaultHints());
         }
     }
 
     /**
      * Initialize the query to get granules, based on provided filter and region of interest (if any)
-     * 
+     *
      * @param granules
      * @return
      * @throws TransformException
@@ -328,7 +336,7 @@ class GridGeometryProvider {
             ReferencedEnvelope envelope = null;
             if (targetCRS != null && !roiManager.isRoiCrsEqualsTargetCrs()) {
                 envelope = new ReferencedEnvelope(
-                    roiManager.getSafeRoiInTargetCRS().getEnvelopeInternal(), targetCRS);
+                        roiManager.getSafeRoiInTargetCRS().getEnvelopeInternal(), targetCRS);
                 MathTransform reprojectionTrasform = null;
                 if (!CRS.equalsIgnoreMetadata(targetCRS, indexCRS)) {
                     reprojectionTrasform = CRS.findMathTransform(targetCRS, indexCRS, true);
@@ -353,13 +361,13 @@ class GridGeometryProvider {
         // Set the query filter
         query = new Query();
         query.setFilter(Predicates.and(filters));
-        
+
         return query;
     }
 
     /**
      * Default GridGeometry retrieval based on native resolution.
-     * 
+     *
      * @return
      * @throws TransformException
      * @throws IOException
@@ -368,7 +376,7 @@ class GridGeometryProvider {
             throws TransformException, IOException {
         final ReferencedEnvelope roiEnvelope = roiManager != null
                 ? new ReferencedEnvelope(roiManager.getSafeRoiInNativeCRS().getEnvelopeInternal(),
-                        roiManager.getNativeCRS()) : null;
+                roiManager.getNativeCRS()) : null;
         ScaleToTarget scaling = new ScaleToTarget(reader, roiEnvelope);
         return scaling.getGridGeometry();
     }

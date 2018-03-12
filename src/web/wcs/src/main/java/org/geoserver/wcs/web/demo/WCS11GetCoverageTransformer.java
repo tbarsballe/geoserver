@@ -27,9 +27,8 @@ import org.xml.sax.helpers.AttributesImpl;
 
 /**
  * Helper class to turn a {@link GetCoverageRequest} into the corresponding WCS 1.1 GetCoverage xml
- * 
+ *
  * @author Andrea Aime - GeoSolutions
- * 
  */
 class WCS11GetCoverageTransformer extends TransformerBase {
 
@@ -52,7 +51,9 @@ class WCS11GetCoverageTransformer extends TransformerBase {
     public class ExecuteRequestTranslator extends TranslatorSupport {
         protected static final String WCS_URI = "http://www.opengis.net/wcs/1.1.1";
 
-        /** xml schema namespace + prefix */
+        /**
+         * xml schema namespace + prefix
+         */
         protected static final String XSI_PREFIX = "xsi";
 
         protected static final String XSI_URI = "http://www.w3.org/2001/XMLSchema-instance";
@@ -91,14 +92,14 @@ class WCS11GetCoverageTransformer extends TransformerBase {
                 start("GridCRS");
                 element("GridBaseCRS", epsgUrnCode(request.targetCRS));
                 AffineTransform at = request.targetGridToWorld;
-                if(at.getTranslateX() == 0 && at.getTranslateY() == 0 && at.getShearX() == 0 && at.getShearY() == 0) {
+                if (at.getTranslateX() == 0 && at.getTranslateY() == 0 && at.getShearX() == 0 && at.getShearY() == 0) {
                     // simple grid mode
                     element("GridType", "urn:ogc:def:method:WCS:1.1:2dSimpleGrid");
-                    element("GridOffsets", at.getScaleX() +  " " + at.getScaleY());
+                    element("GridOffsets", at.getScaleX() + " " + at.getScaleY());
                 } else {
                     element("GridType", "urn:ogc:def:method:WCS:1.1:2dGridIn2dCrs");
                     element("GridOrigin", at.getTranslateX() + " " + at.getTranslateY());
-                    element("GridOffsets", at.getScaleX() +  " " + at.getShearX() + " " + at.getShearY() + " " + at.getScaleY());
+                    element("GridOffsets", at.getScaleX() + " " + at.getShearX() + " " + at.getShearY() + " " + at.getScaleY());
                 }
                 element("GridCS", "urn:ogc:def:cs:OGC:0.0:Grid2dSquareCS");
                 end("GridCRS");
@@ -116,7 +117,7 @@ class WCS11GetCoverageTransformer extends TransformerBase {
                 element("ows:LowerCorner", bounds.getMinX() + " " + bounds.getMinY());
                 element("ows:UpperCorner", bounds.getMaxX() + " " + bounds.getMaxY());
                 end("ows:BoundingBox");
-            } catch(Exception e) {
+            } catch (Exception e) {
                 // should never happen, but anyways
                 throw new RuntimeException(e);
             }
@@ -134,9 +135,8 @@ class WCS11GetCoverageTransformer extends TransformerBase {
 
         /**
          * Helper to build a set of attributes out of a list of key/value pairs
-         * 
-         * @param nameValues
          *
+         * @param nameValues
          */
         AttributesImpl attributes(String... nameValues) {
             AttributesImpl atts = new AttributesImpl();

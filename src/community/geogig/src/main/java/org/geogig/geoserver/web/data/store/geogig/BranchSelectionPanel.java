@@ -37,7 +37,7 @@ public class BranchSelectionPanel extends FormComponentPanel<String> {
     private transient Supplier<RepositoryManager> manager = () -> RepositoryManager.get();
 
     public BranchSelectionPanel(String id, IModel<String> repositoryUriModel,
-            IModel<String> branchNameModel, Form<DataStoreInfo> storeEditForm) {
+                                IModel<String> branchNameModel, Form<DataStoreInfo> storeEditForm) {
         super(id, branchNameModel);
         this.repositoryUriModel = repositoryUriModel;
 

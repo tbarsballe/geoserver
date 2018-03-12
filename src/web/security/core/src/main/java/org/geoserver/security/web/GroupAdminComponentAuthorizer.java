@@ -13,13 +13,13 @@ public class GroupAdminComponentAuthorizer extends AdminComponentAuthorizer {
 
     @Override
     public boolean isAccessAllowed(Class componentClass,
-            Authentication authentication) {
+                                   Authentication authentication) {
         //full admin implies group admin
         if (super.isAccessAllowed(componentClass, authentication)) {
             return true;
         }
-    
+
         return getSecurityManager()
-            .checkAuthenticationForRole(authentication, GeoServerRole.GROUP_ADMIN_ROLE);
+                .checkAuthenticationForRole(authentication, GeoServerRole.GROUP_ADMIN_ROLE);
     }
 }

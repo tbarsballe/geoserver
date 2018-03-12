@@ -22,16 +22,16 @@ public class DecimalTextFieldTest {
 
     WicketTester tester;
     Double theValue;
-    
+
     static Locale originalLocale;
-    
+
     @BeforeClass
     public static void setLocale() {
         // setting the local on the wicket session is not reliable...
         originalLocale = Locale.getDefault();
         Locale.setDefault(Locale.ITALIAN);
     }
-    
+
     @AfterClass
     public static void resetLocale() {
         Locale.setDefault(originalLocale);
@@ -42,38 +42,38 @@ public class DecimalTextFieldTest {
         tester = new WicketTester();
         initResourceSettings(tester);
         tester.startPage(new InputTestPage() {
-            
+
             @Override
             protected Component newTextInput(String id) {
                 return new DecimalTextField(id, new PropertyModel<Double>(DecimalTextFieldTest.this, "theValue"));
             }
         });
     }
-    
+
     @Test
     public void testEmpty() throws Exception {
         FormTester ft = tester.newFormTester("form");
         ft.setValue("input", "");
         ft.submit();
-        
+
         assertNull(theValue);
     }
-    
+
     @Test
     public void testNaN() throws Exception {
         theValue = Double.NaN;
         setUp();
         FormTester ft = tester.newFormTester("form");
         ft.submit();
-        assertEquals((Double)Double.NaN, theValue);
+        assertEquals((Double) Double.NaN, theValue);
     }
-    
+
     @Test
     public void testLocale() throws Exception {
         FormTester ft = tester.newFormTester("form");
         ft.setValue("input", "12,15");
         ft.submit();
-        
+
         assertEquals(12.15, theValue, 0d);
     }
 
@@ -82,7 +82,7 @@ public class DecimalTextFieldTest {
         FormTester ft = tester.newFormTester("form");
         ft.setValue("input", "1E5");
         ft.submit();
-        
+
         assertEquals(100000, theValue, 0d);
     }
 

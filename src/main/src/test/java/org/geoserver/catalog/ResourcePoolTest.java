@@ -94,12 +94,12 @@ import com.vividsolutions.jts.geom.Point;
 
 /**
  * Tests for {@link ResourcePool}.
- * 
+ *
  * @author Ben Caradoc-Davies, CSIRO Exploration and Mining
  */
 @Category(SystemTest.class)
 public class ResourcePoolTest extends GeoServerSystemTestSupport {
-    
+
     private static final String SQLVIEW_DATASTORE = "sqlviews";
 
     private static final String VT_NAME = "pgeo_view";
@@ -109,17 +109,17 @@ public class ResourcePoolTest extends GeoServerSystemTestSupport {
     static {
         System.setProperty("ALLOW_ENV_PARAMETRIZATION", "true");
     }
-    
+
     private static File rockFillSymbolFile;
 
     protected static QName TIMERANGES = new QName(MockData.SF_URI, "timeranges", MockData.SF_PREFIX);
-    
+
     private static final String EXTERNAL_ENTITIES = "externalEntities";
-    
+
     @Override
     protected void onSetUp(SystemTestData testData) throws Exception {
         super.onSetUp(testData);
-        
+
         testData.addStyle("relative", "se_relativepath.sld", ResourcePoolTest.class, getCatalog());
         testData.addStyle("relative_protocol", "se_relativepath_protocol.sld",
                 ResourcePoolTest.class, getCatalog());
@@ -137,13 +137,13 @@ public class ResourcePoolTest extends GeoServerSystemTestSupport {
         assertTrue(image.exists());
         FileUtils.copyFileToDirectory(image, images);
         rockFillSymbolFile = new File(images, image.getName()).getCanonicalFile();
-        
+
         testData.addRasterLayer(TIMERANGES, "timeranges.zip", null, null, SystemTestData.class, getCatalog());
-        
-        FileUtils.copyFileToDirectory(new File("./src/test/resources/geoserver-environment.properties"), 
+
+        FileUtils.copyFileToDirectory(new File("./src/test/resources/geoserver-environment.properties"),
                 testData.getDataDirectoryRoot());
     }
-    
+
     @Override
     protected void setUpTestData(SystemTestData testData) throws Exception {
         super.setUpTestData(testData);
@@ -155,7 +155,8 @@ public class ResourcePoolTest extends GeoServerSystemTestSupport {
      * by some nasty code in other places that tampers with the CRS. If a new {@link FeatureType} is
      * constructed for the same {@link FeatureTypeInfo}, Bad Things Happen (TM).
      */
-    @Test public void testFeatureTypeCacheInstance() throws Exception {
+    @Test
+    public void testFeatureTypeCacheInstance() throws Exception {
         ResourcePool pool = ResourcePool.create(getCatalog());
         FeatureTypeInfo info = getCatalog().getFeatureTypeByName(
                 MockData.LAKES.getNamespaceURI(), MockData.LAKES.getLocalPart());
@@ -165,11 +166,12 @@ public class ResourcePoolTest extends GeoServerSystemTestSupport {
         assertSame(ft1, ft2);
         assertSame(ft1, ft3);
     }
-    
-    @Test public void testAttributeCache() throws Exception {
+
+    @Test
+    public void testAttributeCache() throws Exception {
         final Catalog catalog = getCatalog();
         ResourcePool pool = ResourcePool.create(catalog);
-        
+
         // clean up the lakes type
         FeatureTypeInfo oldInfo = catalog.getFeatureTypeByName(
                 MockData.LAKES.getNamespaceURI(), MockData.LAKES.getLocalPart());
@@ -178,21 +180,21 @@ public class ResourcePoolTest extends GeoServerSystemTestSupport {
             catalog.remove(layerInfo);
         }
         catalog.remove(oldInfo);
-        
+
         // rebuild as new
         CatalogBuilder builder = new CatalogBuilder(catalog);
         builder.setStore(catalog.getStoreByName(MockData.CITE_PREFIX, MockData.CITE_PREFIX, DataStoreInfo.class));
         FeatureTypeInfo info = builder.buildFeatureType(new NameImpl(MockData.LAKES.getNamespaceURI(), MockData.LAKES.getLocalPart()));
-        
+
         // non persisted state, caching should not occurr
         List<AttributeTypeInfo> att1 = pool.getAttributes(info);
         List<AttributeTypeInfo> att2 = pool.getAttributes(info);
         assertNotSame(att1, att2);
         assertEquals(att1, att2);
-        
+
         // save it, making it persistent
         catalog.add(info);
-        
+
         // first check caching actually works against persisted type infos
         List<AttributeTypeInfo> att3 = pool.getAttributes(info);
         List<AttributeTypeInfo> att4 = pool.getAttributes(info);
@@ -200,9 +202,11 @@ public class ResourcePoolTest extends GeoServerSystemTestSupport {
         assertNotSame(att1, att3);
         assertEquals(att1, att3);
     }
-    
+
     boolean cleared = false;
-    @Test public void testCacheClearing() throws IOException {
+
+    @Test
+    public void testCacheClearing() throws IOException {
         cleared = false;
         ResourcePool pool = new ResourcePool(getCatalog()) {
             @Override
@@ -213,22 +217,22 @@ public class ResourcePoolTest extends GeoServerSystemTestSupport {
         };
         FeatureTypeInfo info = getCatalog().getFeatureTypeByName(
                 MockData.LAKES.getNamespaceURI(), MockData.LAKES.getLocalPart());
-        
-        assertNotNull( pool.getFeatureType( info ) );
+
+        assertNotNull(pool.getFeatureType(info));
         info.setTitle("changed");
-        
-        assertFalse( cleared );
-        getCatalog().save( info );
-        assertTrue( cleared );
-        
+
+        assertFalse(cleared);
+        getCatalog().save(info);
+        assertTrue(cleared);
+
         cleared = false;
-        assertNotNull( pool.getFeatureType( info ) );
-        
-        for ( LayerInfo l : getCatalog().getLayers( info ) ) {
-            getCatalog().remove( l );
+        assertNotNull(pool.getFeatureType(info));
+
+        for (LayerInfo l : getCatalog().getLayers(info)) {
+            getCatalog().remove(l);
         }
-        getCatalog().remove( info );
-        assertTrue( cleared );
+        getCatalog().remove(info);
+        assertTrue(cleared);
     }
 
     boolean disposeCalled;
@@ -237,7 +241,8 @@ public class ResourcePoolTest extends GeoServerSystemTestSupport {
      * Make sure {@link ResourcePool#clear(DataStoreInfo)} and {@link ResourcePool#dispose()} call
      * {@link DataAccess#dispose()}
      */
-    @Test public void testDispose() throws IOException {
+    @Test
+    public void testDispose() throws IOException {
         disposeCalled = false;
         class ResourcePool2 extends ResourcePool {
             @SuppressWarnings("serial")
@@ -274,7 +279,8 @@ public class ResourcePoolTest extends GeoServerSystemTestSupport {
         assertTrue(disposeCalled);
     }
 
-    @Test public void testConfigureFeatureTypeCacheSize() {
+    @Test
+    public void testConfigureFeatureTypeCacheSize() {
         GeoServer gs = getGeoServer();
         GeoServerInfo global = gs.getGlobal();
         global.setFeatureTypeCacheSize(200);
@@ -283,10 +289,11 @@ public class ResourcePoolTest extends GeoServerSystemTestSupport {
         Catalog catalog = getCatalog();
         // we actually keep two versions of the feature type in the cache, so we need it 
         // twice as big
-        assertEquals(400, ((SoftValueHashMap)catalog.getResourcePool().getFeatureTypeCache()).getHardReferencesCount());
+        assertEquals(400, ((SoftValueHashMap) catalog.getResourcePool().getFeatureTypeCache()).getHardReferencesCount());
     }
-    
-    @Test public void testDropCoverageStore() throws Exception {
+
+    @Test
+    public void testDropCoverageStore() throws Exception {
         // build the store
         Catalog cat = getCatalog();
         CatalogBuilder cb = new CatalogBuilder(cat);
@@ -294,31 +301,32 @@ public class ResourcePoolTest extends GeoServerSystemTestSupport {
         store.setURL(MockData.class.getResource("tazdem.tiff").toExternalForm());
         store.setType("GeoTIFF");
         cat.add(store);
-        
+
         // build the coverage
         cb.setStore(store);
         CoverageInfo ci = cb.buildCoverage();
         cat.add(ci);
-        
+
         // build the layer
         LayerInfo layer = cb.buildLayer(ci);
         cat.add(layer);
-        
+
         // grab a reader just to inizialize the code
         ci.getGridCoverage(null, null);
         ci.getGridCoverageReader(null, GeoTools.getDefaultHints());
-        
+
         // now drop the store
         CascadeDeleteVisitor visitor = new CascadeDeleteVisitor(cat);
         visitor.visit(store);
-        
+
         // and reload (GEOS-4782 -> BOOM!)
         getGeoServer().reload();
-        
+
     }
 
     @RunTestSetup
-    @Test public void testGeoServerReload() throws Exception {
+    @Test
+    public void testGeoServerReload() throws Exception {
         Catalog cat = getCatalog();
         FeatureTypeInfo lakes = cat.getFeatureTypeByName(MockData.LAKES.getNamespaceURI(),
                 MockData.LAKES.getLocalPart());
@@ -327,12 +335,12 @@ public class ResourcePoolTest extends GeoServerSystemTestSupport {
         GeoServerDataDirectory dd = new GeoServerDataDirectory(getResourceLoader());
         File info = dd.findResourceFile(lakes);
         //File info = getResourceLoader().find("featureTypes", "cite_Lakes", "info.xml");
-        
+
         FileReader in = new FileReader(info);
-        Element dom = ReaderUtils.parse(in); 
+        Element dom = ReaderUtils.parse(in);
         Element title = ReaderUtils.getChildElement(dom, "title");
         title.getFirstChild().setNodeValue("foo");
-        
+
         OutputStream output = new FileOutputStream(info);
         try {
             TransformerFactory.newInstance().newTransformer()
@@ -340,13 +348,13 @@ public class ResourcePoolTest extends GeoServerSystemTestSupport {
         } finally {
             output.close();
         }
-        
+
         getGeoServer().reload();
         lakes = cat.getFeatureTypeByName(MockData.LAKES.getNamespaceURI(),
                 MockData.LAKES.getLocalPart());
         assertEquals("foo", lakes.getTitle());
     }
-    
+
     @Test
     public void testSEStyleWithRelativePath() throws IOException {
         StyleInfo si = getCatalog().getStyleByName("relative");
@@ -360,7 +368,7 @@ public class ResourcePoolTest extends GeoServerSystemTestSupport {
         File actual = URLs.urlToFile(uri.toURL()).getCanonicalFile();
         assertEquals(rockFillSymbolFile, actual);
     }
-    
+
     @Test
     public void testSEStyleWithRelativePathProtocol() throws IOException {
         StyleInfo si = getCatalog().getStyleByName("relative_protocol");
@@ -385,7 +393,7 @@ public class ResourcePoolTest extends GeoServerSystemTestSupport {
         String name = ci.getGridCoverageReader(null, null).getGridCoverageNames()[0];
         ci.setNativeCoverageName(name);
         getCatalog().save(ci);
-        
+
         ci = getCatalog().getCoverageByName(getLayerId(TIMERANGES));
         assertTrue(ci.getGridCoverageReader(null, null) instanceof StructuredGridCoverage2DReader);
     }
@@ -418,10 +426,11 @@ public class ResourcePoolTest extends GeoServerSystemTestSupport {
             }
         }
     }
-    
+
     @RunTestSetup
-    @Test public void testEnvParametrizationValues() throws Exception {
-        
+    @Test
+    public void testEnvParametrizationValues() throws Exception {
+
         final GeoServerEnvironment gsEnvironment = GeoServerExtensions.bean(GeoServerEnvironment.class);
 
         DataStoreInfo ds = getCatalog().getFactory().createDataStore();
@@ -440,45 +449,45 @@ public class ResourcePoolTest extends GeoServerSystemTestSupport {
 
             assertTrue(ds.getConnectionParameters().get("host").equals("${jdbc.host}"));
             assertTrue(ds.getConnectionParameters().get("port").equals("${jdbc.port}"));
-            
+
             if (GeoServerEnvironment.ALLOW_ENV_PARAMETRIZATION) {
                 assertTrue(expandedDs.getConnectionParameters().get("host").equals(gsEnvironment.resolveValue("${jdbc.host}")));
                 assertTrue(expandedDs.getConnectionParameters().get("port").equals(gsEnvironment.resolveValue("${jdbc.port}")));
             } else {
                 assertTrue(expandedDs.getConnectionParameters().get("host").equals("${jdbc.host}"));
-                assertTrue(expandedDs.getConnectionParameters().get("port").equals("${jdbc.port}"));                
+                assertTrue(expandedDs.getConnectionParameters().get("port").equals("${jdbc.port}"));
             }
         } finally {
             getCatalog().remove(ds);
         }
     }
-    
+
     @Test
     public void testCloneStoreInfo() throws Exception {
         Catalog catalog = getCatalog();
-        
+
         DataStoreInfo source1 = catalog.getDataStores().get(0);
         DataStoreInfo clonedDs = catalog.getResourcePool().clone(source1, false);
         assertNotNull(source1);
         assertNotNull(clonedDs);
-        
+
         assertEquals(source1, clonedDs);
-        
+
         CoverageStoreInfo source2 = catalog.getCoverageStores().get(0);
         CoverageStoreInfo clonedCs = catalog.getResourcePool().clone(source2, false);
         assertNotNull(source2);
         assertNotNull(clonedCs);
-        
+
         assertEquals(source2, clonedCs);
     }
-    
+
     @Test
     public void testWmsCascadeEntityExpansion() throws Exception {
         //Other tests mess with or reset the resourcePool, so lets make it is initialized properly
         GeoServerExtensions.extensions(ResourcePoolInitializer.class).get(0).initialize(getGeoServer());
-        
+
         ResourcePool rp = getCatalog().getResourcePool();
-        
+
         WMSStoreInfo info = getCatalog().getFactory().createWebMapServer();
         URL url = getClass().getResource("1.3.0Capabilities-xxe.xml");
         info.setCapabilitiesURL(url.toExternalForm());
@@ -488,11 +497,11 @@ public class ResourcePoolTest extends GeoServerSystemTestSupport {
         try {
             rp.getWebMapServer(info);
             fail("WebMapServer instantiation should fail");
-        } catch(IOException e) {
+        } catch (IOException e) {
             assertThat(e.getCause(), instanceOf(ServiceException.class));
             ServiceException serviceException = (ServiceException) e.getCause();
             assertThat(serviceException.getMessage(), containsString("Error while parsing XML"));
-            
+
             SAXException saxException = (SAXException) serviceException.getCause();
             Exception cause = saxException.getException();
             assertFalse("Expect external entity cause", cause != null && cause instanceof FileNotFoundException);
@@ -500,22 +509,22 @@ public class ResourcePoolTest extends GeoServerSystemTestSupport {
         //make sure clearing the catalog does not clear the EntityResolver
         getGeoServer().reload();
         rp = getCatalog().getResourcePool();
-        
+
         try {
             rp.getWebMapServer(info);
             fail("WebMapServer instantiation should fail");
-        } catch(IOException e) {
+        } catch (IOException e) {
             assertThat(e.getCause(), instanceOf(ServiceException.class));
             ServiceException serviceException = (ServiceException) e.getCause();
             assertThat(serviceException.getMessage(), containsString("Error while parsing XML"));
-            
+
             SAXException saxException = (SAXException) serviceException.getCause();
             Exception cause = saxException.getException();
             assertFalse("Expect external entity cause", cause != null && cause instanceof FileNotFoundException);
         }
-        
+
     }
-    
+
     @Test
     public void testWfsCascadeEntityExpansion() throws Exception {
         CatalogBuilder cb = new CatalogBuilder(getCatalog());
@@ -528,26 +537,26 @@ public class ResourcePoolTest extends GeoServerSystemTestSupport {
         try {
             rp.getDataStore(ds);
             fail("Store creation should have failed to to XXE attack");
-        } catch(Exception e) {
+        } catch (Exception e) {
             String message = e.getMessage();
             assertThat(message, containsString("Entity resolution disallowed"));
             assertThat(message, containsString("file:///file/not/there"));
         }
     }
-    
+
     @Test
     public void testStyleWithExternalEntities() throws Exception {
         StyleInfo si = getCatalog().getStyleByName(EXTERNAL_ENTITIES);
         try {
             si.getStyle();
             fail("Should have failed with a parse error");
-        } catch(Exception e) {
+        } catch (Exception e) {
             String message = e.getMessage();
             assertThat(message, containsString("Entity resolution disallowed"));
             assertThat(message, containsString("/this/file/does/not/exist"));
         }
     }
-    
+
     @Test
     public void testParseExternalMark() throws Exception {
         StyleInfo si = getCatalog().getStyleByName(HUMANS);
@@ -560,7 +569,7 @@ public class ResourcePoolTest extends GeoServerSystemTestSupport {
             }
         });
     }
-    
+
     @Test
     public void testDataStoreScan() throws Exception {
         final Catalog catalog = getCatalog();
@@ -622,8 +631,8 @@ public class ResourcePoolTest extends GeoServerSystemTestSupport {
              */
             @Override
             protected Name getTemporaryName(FeatureTypeInfo info,
-                    DataAccess<? extends FeatureType, ? extends Feature> dataAccess,
-                    FeatureTypeCallback initializer) throws IOException {
+                                            DataAccess<? extends FeatureType, ? extends Feature> dataAccess,
+                                            FeatureTypeCallback initializer) throws IOException {
                 if (VT_NAME.equals(info.getNativeName())) {
                     counter.incrementAndGet();
                 }
@@ -639,7 +648,7 @@ public class ResourcePoolTest extends GeoServerSystemTestSupport {
         testPool.getFeatureSource(ft, null);
         assertThat(counter.get(), greaterThan(0));
     }
-    
+
     @Test
     public void testRepositoryHints() throws Exception {
         Catalog catalog = getCatalog();
@@ -647,7 +656,9 @@ public class ResourcePoolTest extends GeoServerSystemTestSupport {
             // cannot clone the mock objects
             public CoverageStoreInfo clone(CoverageStoreInfo source, boolean allowEnvParametrization) {
                 return source;
-            };
+            }
+
+            ;
         };
 
         // setup all the mocks
@@ -662,14 +673,14 @@ public class ResourcePoolTest extends GeoServerSystemTestSupport {
         expect(storeInfo.getURL()).andReturn(url).anyTimes();
         expect(storeInfo.getFormat()).andReturn(format).anyTimes();
         replay(storeInfo);
-        
+
         // pass no hints
         GridCoverageReader returnedReader = pool.getGridCoverageReader(storeInfo, null);
         assertThat(reader, equalTo(returnedReader));
         final Hints hints1 = capturedHints.getValue();
         assertThat(hints1, notNullValue());
         assertThat(hints1, hasEntry(Hints.REPOSITORY, pool.repository));
-        
+
         // pass some hints
         capturedHints.reset();
         GridCoverageReader returnedReader2 = pool.getGridCoverageReader(storeInfo, new Hints(Hints.KEY_ANTIALIASING, Hints.VALUE_ANTIALIAS_ON));
@@ -690,16 +701,16 @@ public class ResourcePoolTest extends GeoServerSystemTestSupport {
         GeoServerDataDirectory dataDir = new GeoServerDataDirectory(getResourceLoader());
         String absolutePath = dataDir.get("data/test.gpkg").dir().getAbsolutePath();
         assertNotEquals(newParams.get("database"), "file:data/test.gpkg");
-        assertTrue(((String)newParams.get("database")).contains(absolutePath));
+        assertTrue(((String) newParams.get("database")).contains(absolutePath));
     }
-    
+
     @Test
     public void testEmptySort() throws IOException, IllegalAccessException {
         SimpleFeatureSource fsp = getFeatureSource(SystemTestData.PRIMITIVEGEOFEATURE);
         Query q = new Query();
         q.setSortBy(SortBy.UNSORTED);
         SimpleFeatureCollection fc = fsp.getFeatures(q);
-        
+
         // the above call used to add a SortedSimpleFeatureCollection wrapper that in turn killed some visit optimizations
         while (fc instanceof DecoratingFeatureCollection) {
             assertThat(fc, not(instanceOf(SortedSimpleFeatureCollection.class)));

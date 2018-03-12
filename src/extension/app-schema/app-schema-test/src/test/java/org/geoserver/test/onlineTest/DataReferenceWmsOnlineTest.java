@@ -19,11 +19,9 @@ import org.junit.Test;
 import org.w3c.dom.Document;
 
 /**
- * 
  * @author Niels Charlier
- * 
- *         Base class for wms online tests
- * 
+ * <p>
+ * Base class for wms online tests
  */
 public abstract class DataReferenceWmsOnlineTest extends AbstractDataReferenceWfsTest {
 

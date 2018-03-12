@@ -11,16 +11,18 @@ import java.util.Optional;
  * Bean used to register module installation in applicationContext.xml.
  * <p>
  * Bean completly defined by applicationContext.xml - no dynamic content.
- * 
+ * <p>
  * <pre>
  * &lt!-- code example needed --&gt;>
  * </pre>
- * 
+ *
  * @author Morgan Thompson - Boundless
  */
 public class ModuleStatusImpl implements ModuleStatus, Serializable {
 
-    /** serialVersionUID */
+    /**
+     * serialVersionUID
+     */
     private static final long serialVersionUID = -5759469520194940051L;
 
     private String module;

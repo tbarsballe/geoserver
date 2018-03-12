@@ -36,9 +36,9 @@ public class SingleGridCoverage2DReader implements GridCoverage2DReader {
     protected GridCoverage2DReader delegate;
 
     protected String coverageName;
-    
+
     public static SingleGridCoverage2DReader wrap(GridCoverage2DReader delegate, String coverageName) {
-        if(delegate instanceof StructuredGridCoverage2DReader) {
+        if (delegate instanceof StructuredGridCoverage2DReader) {
             return new StructuredSingleGridCoverage2DReader((StructuredGridCoverage2DReader) delegate, coverageName);
         } else {
             return new SingleGridCoverage2DReader((GridCoverage2DReader) delegate, coverageName);
@@ -46,11 +46,11 @@ public class SingleGridCoverage2DReader implements GridCoverage2DReader {
     }
 
     public SingleGridCoverage2DReader(GridCoverage2DReader delegate, String coverageName) {
-        if(delegate == null) {
+        if (delegate == null) {
             throw new IllegalArgumentException("The delegate coverage reader cannot be null");
         }
         this.delegate = delegate;
-        if(coverageName == null) {
+        if (coverageName == null) {
             throw new IllegalArgumentException("The coverage name must be specified");
         }
         this.coverageName = coverageName;
@@ -58,6 +58,7 @@ public class SingleGridCoverage2DReader implements GridCoverage2DReader {
 
     /**
      * Checks the specified name is the one we are expecting
+     *
      * @param coverageName
      */
     protected void checkCoverageName(String coverageName) {
@@ -176,7 +177,7 @@ public class SingleGridCoverage2DReader implements GridCoverage2DReader {
     }
 
     public double[] getReadingResolutions(String coverageName, OverviewPolicy policy,
-            double[] requestedResolution) throws IOException {
+                                          double[] requestedResolution) throws IOException {
         checkCoverageName(coverageName);
         return delegate.getReadingResolutions(coverageName, policy, requestedResolution);
     }

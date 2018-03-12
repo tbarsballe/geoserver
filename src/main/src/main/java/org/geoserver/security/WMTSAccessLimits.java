@@ -10,7 +10,7 @@ import com.vividsolutions.jts.geom.MultiPolygon;
 
 /**
  * Describes access limits on a cascaded WMTS layer
- * 
+ *
  * @author Emanuele Tajariol (etj at geo-solutions dot it)
  */
 public class WMTSAccessLimits extends DataAccessLimits {
@@ -23,14 +23,10 @@ public class WMTSAccessLimits extends DataAccessLimits {
 
     /**
      * Builds a WMTS limits
-     * 
-     * @param rasterFilter
-     *            Used as a ROI on the returned data
-     * @param readFilter
-     *            generic filtering
-     * @param allowFeatureInfo
-     *            unused
      *
+     * @param rasterFilter     Used as a ROI on the returned data
+     * @param readFilter       generic filtering
+     * @param allowFeatureInfo unused
      * @deprecated use the 2 argument constructor
      */
     public WMTSAccessLimits(CatalogMode mode, Filter readFilter, MultiPolygon rasterFilter) {
@@ -40,8 +36,6 @@ public class WMTSAccessLimits extends DataAccessLimits {
 
     /**
      * Acts as a ROI on the returned images
-     * 
-     *
      */
     public MultiPolygon getRasterFilter() {
         return rasterFilter;

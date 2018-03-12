@@ -27,7 +27,7 @@ import org.opengis.filter.sort.SortBy;
  * Internal Catalog Store Feature Collection
  * Creates a Catalog Store from a GeoServer Catalog instance and a Mapping
  * Will map data from GeoServer catalog to a particular CSW Record Type, provided in Record Descriptor
- * 
+ *
  * @author Niels Charlier
  */
 class CatalogStoreFeatureCollection extends AbstractFeatureCollection<FeatureType, Feature> {
@@ -42,16 +42,16 @@ class CatalogStoreFeatureCollection extends AbstractFeatureCollection<FeatureTyp
 
     /**
      * Create new CatalogStoreFeatureCollection
-     * 
-     * @param offset Offset
-     * @param count Count
+     *
+     * @param offset    Offset
+     * @param count     Count
      * @param sortOrder Sort Order
-     * @param filter Filter
-     * @param catalog The GeoServer Catalog
-     * @param mapping The Mapping
-     * @param rd Record Descriptor
+     * @param filter    Filter
+     * @param catalog   The GeoServer Catalog
+     * @param mapping   The Mapping
+     * @param rd        Record Descriptor
      */
-    public CatalogStoreFeatureCollection(int offset, int count, SortBy[] sortOrder, Filter filter, Catalog catalog, CatalogStoreMapping mapping, RecordDescriptor rd,  Map<String, String> interpolationProperties) {
+    public CatalogStoreFeatureCollection(int offset, int count, SortBy[] sortOrder, Filter filter, Catalog catalog, CatalogStoreMapping mapping, RecordDescriptor rd, Map<String, String> interpolationProperties) {
         super(CSWRecordDescriptor.RECORD_TYPE);
         this.offset = offset;
         this.count = count;
@@ -70,7 +70,7 @@ class CatalogStoreFeatureCollection extends AbstractFeatureCollection<FeatureTyp
 
     @Override
     protected void closeIterator(Iterator<Feature> close) {
-    	
+
     }
 
     @Override

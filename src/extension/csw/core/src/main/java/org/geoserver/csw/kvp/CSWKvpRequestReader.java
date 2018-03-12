@@ -13,7 +13,7 @@ import org.geoserver.ows.kvp.EMFKvpRequestReader;
 
 /**
  * CSW KVP Request Reader base class
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class CSWKvpRequestReader extends EMFKvpRequestReader {

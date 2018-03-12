@@ -69,14 +69,14 @@ public class OpenLayers3MapOutputFormat extends AbstractOpenLayersMapOutputForma
 
     protected boolean browserSupportsOL3(WMSMapContent mc) {
         String agent = mc.getRequest().getHttpRequestHeader("USER-AGENT");
-        if(agent == null) {
+        if (agent == null) {
             // play it safe
             return false;
         }
 
         Pattern MSIE_PATTERN = Pattern.compile("MSIE (\\d+)\\.");
         Matcher matcher = MSIE_PATTERN.matcher(agent);
-        if(!matcher.matches()) {
+        if (!matcher.matches()) {
             return true;
         } else {
             return Integer.valueOf(matcher.group(1)) > 8;
@@ -88,7 +88,6 @@ public class OpenLayers3MapOutputFormat extends AbstractOpenLayersMapOutputForma
      * otherwise the scale won't be shown.
      *
      * @param request
-     *
      */
     @Override
     protected String getUnits(WMSMapContent mapContent) {

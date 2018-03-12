@@ -51,30 +51,31 @@ import org.w3c.dom.Document;
 public class DispatcherTest extends TestCase {
     public void testReadContextAndPath() throws Exception {
         Dispatcher dispatcher = new Dispatcher();
-        
+
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.setContextPath("/geoserver");
         request.setRequestURI("/geoserver/hello");
         request.setMethod("get");
-        
+
         Request req = new Request();
         req.httpRequest = request;
-        
+
         dispatcher.init(req);
         assertNull(req.context);
         assertEquals("hello", req.path);
-        
+
         request.setRequestURI("/geoserver/foo/hello");
         dispatcher.init(req);
         assertEquals("foo", req.context);
         assertEquals("hello", req.path);
-        
+
         request.setRequestURI("/geoserver/foo/baz/hello/");
         dispatcher.init(req);
         assertEquals("foo/baz", req.context);
         assertEquals("hello", req.path);
-        
+
     }
+
     public void testReadOpContext() throws Exception {
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.setContextPath("/geoserver");
@@ -82,22 +83,22 @@ public class DispatcherTest extends TestCase {
         request.setMethod("get");
 
         Dispatcher dispatcher = new Dispatcher();
-        
+
         Request req = new Request();
         req.httpRequest = request;
         dispatcher.init(req);
-        
+
         Map map = dispatcher.readOpContext(req);
 
         assertEquals("hello", map.get("service"));
-        
+
         request = new MockHttpServletRequest();
         request.setContextPath("/geoserver");
         request.setRequestURI("/geoserver/foobar/hello");
         request.setMethod("get");
         map = dispatcher.readOpContext(req);
         assertEquals("hello", map.get("service"));
-        
+
         request = new MockHttpServletRequest();
         request.setContextPath("/geoserver");
         request.setRequestURI("/geoserver/foobar/hello/");
@@ -105,7 +106,7 @@ public class DispatcherTest extends TestCase {
         map = dispatcher.readOpContext(req);
 
         assertEquals("hello", map.get("service"));
-        
+
     }
 
     public void testReadOpPost() throws Exception {
@@ -194,20 +195,20 @@ public class DispatcherTest extends TestCase {
         Dispatcher dispatcher = (Dispatcher) context.getBean("dispatcher");
 
         MockHttpServletRequest request = new MockHttpServletRequest() {
-                String encoding;
+            String encoding;
 
-                public int getServerPort() {
-                    return 8080;
-                }
+            public int getServerPort() {
+                return 8080;
+            }
 
-                public String getCharacterEncoding() {
-                    return encoding;
-                }
+            public String getCharacterEncoding() {
+                return encoding;
+            }
 
-                public void setCharacterEncoding(String encoding) {
-                    this.encoding = encoding;
-                }
-            };
+            public void setCharacterEncoding(String encoding) {
+                this.encoding = encoding;
+            }
+        };
 
         request.setScheme("http");
         request.setServerName("localhost");
@@ -223,7 +224,7 @@ public class DispatcherTest extends TestCase {
         request.addParameter("message", "Hello world!");
 
         request.setRequestURI(
-            "http://localhost/geoserver/ows?service=hello&request=hello&message=HelloWorld");
+                "http://localhost/geoserver/ows?service=hello&request=hello&message=HelloWorld");
         request.setQueryString("service=hello&request=hello&message=HelloWorld");
 
         dispatcher.callbacks.add(new AbstractDispatcherCallback() {
@@ -250,33 +251,33 @@ public class DispatcherTest extends TestCase {
 
         final String body = "<Hello service=\"hello\" message=\"Hello world!\" version=\"1.0.0\" />";
         MockHttpServletRequest request = new MockHttpServletRequest() {
-                String encoding;
+            String encoding;
 
-                public int getServerPort() {
-                    return 8080;
-                }
+            public int getServerPort() {
+                return 8080;
+            }
 
-                public String getCharacterEncoding() {
-                    return encoding;
-                }
+            public String getCharacterEncoding() {
+                return encoding;
+            }
 
-                public void setCharacterEncoding(String encoding) {
-                    this.encoding = encoding;
-                }
+            public void setCharacterEncoding(String encoding) {
+                this.encoding = encoding;
+            }
 
-                public ServletInputStream getInputStream() {
-                    final ServletInputStream stream = super.getInputStream();
-                    return new ServletInputStream(){
-                        public int read() throws IOException{
-                            return stream.read();
-                        }
+            public ServletInputStream getInputStream() {
+                final ServletInputStream stream = super.getInputStream();
+                return new ServletInputStream() {
+                    public int read() throws IOException {
+                        return stream.read();
+                    }
 
-                        public int available(){
-                            return body.length();
-                        }
-                    };
-                }
-            };
+                    public int available() {
+                        return body.length();
+                    }
+                };
+            }
+        };
 
         request.setScheme("http");
         request.setServerName("localhost");
@@ -291,7 +292,7 @@ public class DispatcherTest extends TestCase {
         dispatcher.handleRequest(request, response);
         assertEquals("Hello world!", response.getContentAsString());
     }
-    
+
     /**
      * Tests mixed get/post situations for cases in which there is no kvp parser
      */
@@ -305,33 +306,33 @@ public class DispatcherTest extends TestCase {
         final String body = "<Hello service=\"hello\" message=\"Hello world!\" version=\"1.0.0\" />";
 
         MockHttpServletRequest request = new MockHttpServletRequest() {
-                String encoding;
+            String encoding;
 
-                public int getServerPort() {
-                    return 8080;
-                }
+            public int getServerPort() {
+                return 8080;
+            }
 
-                public String getCharacterEncoding() {
-                    return encoding;
-                }
+            public String getCharacterEncoding() {
+                return encoding;
+            }
 
-                public void setCharacterEncoding(String encoding) {
-                    this.encoding = encoding;
-                }
-                
-                public ServletInputStream getInputStream() {
-                    final ServletInputStream stream = super.getInputStream();
-                    return new ServletInputStream(){
-                        public int read() throws IOException{
-                            return stream.read();
-                        }
+            public void setCharacterEncoding(String encoding) {
+                this.encoding = encoding;
+            }
 
-                        public int available(){
-                            return body.length();
-                        }
-                    };
-                }
-            };
+            public ServletInputStream getInputStream() {
+                final ServletInputStream stream = super.getInputStream();
+                return new ServletInputStream() {
+                    public int read() throws IOException {
+                        return stream.read();
+                    }
+
+                    public int available() {
+                        return body.length();
+                    }
+                };
+            }
+        };
 
         request.setScheme("http");
         request.setServerName("localhost");
@@ -348,11 +349,11 @@ public class DispatcherTest extends TestCase {
         dispatcher.handleRequest(request, response);
         assertEquals("Hello world!", response.getContentAsString());
     }
-    
+
     public void testHttpErrorCodeException() throws Exception {
-    	assertHttpErrorCode("httpErrorCodeException", HttpServletResponse.SC_NO_CONTENT);
+        assertHttpErrorCode("httpErrorCodeException", HttpServletResponse.SC_NO_CONTENT);
     }
-    
+
     public void testWrappedHttpErrorCodeException() throws Exception {
         assertHttpErrorCode("wrappedHttpErrorCodeException", HttpServletResponse.SC_NO_CONTENT);
     }
@@ -362,8 +363,8 @@ public class DispatcherTest extends TestCase {
     }
 
     public void testHttpErrorCodeExceptionWithContentType() throws Exception {
-        CodeExpectingHttpServletResponse rsp = 
-            assertHttpErrorCode("httpErrorCodeExceptionWithContentType", HttpServletResponse.SC_OK);
+        CodeExpectingHttpServletResponse rsp =
+                assertHttpErrorCode("httpErrorCodeExceptionWithContentType", HttpServletResponse.SC_OK);
         assertEquals("application/json", rsp.getContentType());
     }
 
@@ -375,20 +376,20 @@ public class DispatcherTest extends TestCase {
         Dispatcher dispatcher = (Dispatcher) context.getBean("dispatcher");
 
         MockHttpServletRequest request = new MockHttpServletRequest() {
-                String encoding;
+            String encoding;
 
-                public int getServerPort() {
-                    return 8080;
-                }
+            public int getServerPort() {
+                return 8080;
+            }
 
-                public String getCharacterEncoding() {
-                    return encoding;
-                }
+            public String getCharacterEncoding() {
+                return encoding;
+            }
 
-                public void setCharacterEncoding(String encoding) {
-                    this.encoding = encoding;
-                }
-            };
+            public void setCharacterEncoding(String encoding) {
+                this.encoding = encoding;
+            }
+        };
 
         request.setScheme("http");
         request.setServerName("localhost");
@@ -399,20 +400,20 @@ public class DispatcherTest extends TestCase {
         CodeExpectingHttpServletResponse response = new CodeExpectingHttpServletResponse(new MockHttpServletResponse());
 
         request.addParameter("service", "hello");
-		request.addParameter("request", requestType);
+        request.addParameter("request", requestType);
         request.addParameter("version", "1.0.0");
 
         request.setRequestURI(
-            "http://localhost/geoserver/ows?service=hello&request=hello&message=HelloWorld");
+                "http://localhost/geoserver/ows?service=hello&request=hello&message=HelloWorld");
         request.setQueryString("service=hello&request=hello&message=HelloWorld");
-        
+
         dispatcher.handleRequest(request, response);
         assertEquals(expectedCode, response.getStatusCode());
 
         assertEquals(expectedCode >= 400, response.isError());
         return response;
-	}
-    
+    }
+
     /**
      * Assert that if the service bean implements the optional {@link DirectInvocationService}
      * operation, then the dispatcher executes the operation through its
@@ -461,7 +462,7 @@ public class DispatcherTest extends TestCase {
 
     public void testDispatchWithNamespace() throws Exception {
         URL url = getClass().getResource("applicationContextNamespace.xml");
-        FileSystemXmlApplicationContext context = 
+        FileSystemXmlApplicationContext context =
                 new FileSystemXmlApplicationContext(url.toString());
 
         Dispatcher dispatcher = (Dispatcher) context.getBean("dispatcher");
@@ -483,7 +484,7 @@ public class DispatcherTest extends TestCase {
 
         request.setScheme("http");
         request.setServerName("localhost");
-    
+
         request.setContextPath("/geoserver");
         request.setMethod("POST");
 
@@ -492,7 +493,7 @@ public class DispatcherTest extends TestCase {
         request.setContentType("application/xml");
         request.setContent("<h:Hello service='hello' message='Hello world!' xmlns:h='http://hello.org' />".getBytes("UTF-8"));
         request.setRequestURI("http://localhost/geoserver/hello");
-        
+
         dispatcher.handleRequest(request, response);
         assertEquals("Hello world!", response.getContentAsString());
 
@@ -502,7 +503,7 @@ public class DispatcherTest extends TestCase {
         dispatcher.handleRequest(request, response);
         assertEquals("Hello world!:V2", response.getContentAsString());
     }
-    
+
     public MockHttpServletRequest setupRequest() {
         MockHttpServletRequest request = new MockHttpServletRequest() {
             String encoding;
@@ -522,21 +523,22 @@ public class DispatcherTest extends TestCase {
 
         request.setScheme("http");
         request.setServerName("localhost");
-    
+
         request.setContextPath("/geoserver");
         request.setMethod("GET");
-        
+
         request.addParameter("service", "hello");
         request.addParameter("request", "Hello");
         request.addParameter("version", "1.0.0");
         request.addParameter("message", "Hello world!");
-    
+
         request.setRequestURI(
-            "http://localhost/geoserver/ows?service=hello&request=hello&message=HelloWorld");
+                "http://localhost/geoserver/ows?service=hello&request=hello&message=HelloWorld");
         request.setQueryString("service=hello&request=hello&message=HelloWorld");
-        
+
         return request;
     }
+
     public void testDispatcherCallback() throws Exception {
         URL url = getClass().getResource("applicationContext.xml");
 
@@ -544,7 +546,7 @@ public class DispatcherTest extends TestCase {
 
         Dispatcher dispatcher = (Dispatcher) context.getBean("dispatcher");
         TestDispatcherCallback callback = new TestDispatcherCallback();
-        
+
         MockHttpServletRequest request = setupRequest();
         MockHttpServletResponse response = new MockHttpServletResponse();
 
@@ -554,16 +556,17 @@ public class DispatcherTest extends TestCase {
         assertEquals("Hello world!", response.getContentAsString());
         assertEquals(TestDispatcherCallback.Status.FINISHED, callback.dispatcherStatus.get());
     }
-    
+
     public void testDispatcherCallbackFailInit() throws Exception {
         URL url = getClass().getResource("applicationContext.xml");
 
         FileSystemXmlApplicationContext context = new FileSystemXmlApplicationContext(url.toString());
 
         Dispatcher dispatcher = (Dispatcher) context.getBean("dispatcher");
-        
+
         final TestDispatcherCallback callback1 = new TestDispatcherCallback();
-        final TestDispatcherCallback callback2 = new TestDispatcherCallback();;
+        final TestDispatcherCallback callback2 = new TestDispatcherCallback();
+        ;
         TestDispatcherCallback callbackFail = new TestDispatcherCallback() {
             @Override
             public Request init(Request request) {
@@ -571,21 +574,21 @@ public class DispatcherTest extends TestCase {
                 throw new RuntimeException("TestDispatcherCallbackFailInit");
             }
         };
-        
+
         MockHttpServletRequest request = setupRequest();
         MockHttpServletResponse response = new MockHttpServletResponse();
 
         dispatcher.callbacks.add(callback1);
         dispatcher.callbacks.add(callbackFail);
         dispatcher.callbacks.add(callback2);
-        
+
         dispatcher.handleRequest(request, response);
-        
+
         assertTrue(response.getContentAsString().contains("ows:ExceptionReport"));
         assertEquals(TestDispatcherCallback.Status.FINISHED, callback1.dispatcherStatus.get());
         assertEquals(TestDispatcherCallback.Status.FINISHED, callback2.dispatcherStatus.get());
     }
-    
+
     public void testDispatcherCallbackFailServiceDispatched() throws Exception {
         URL url = getClass().getResource("applicationContext.xml");
 
@@ -601,21 +604,21 @@ public class DispatcherTest extends TestCase {
                 throw new RuntimeException("TestDispatcherCallbackFailServiceDispatched");
             }
         };
-        
+
         MockHttpServletRequest request = setupRequest();
         MockHttpServletResponse response = new MockHttpServletResponse();
 
         dispatcher.callbacks.add(callback1);
         dispatcher.callbacks.add(callbackFail);
         dispatcher.callbacks.add(callback2);
-        
+
         dispatcher.handleRequest(request, response);
-        
+
         assertTrue(response.getContentAsString().contains("ows:ExceptionReport"));
         assertEquals(TestDispatcherCallback.Status.FINISHED, callback1.dispatcherStatus.get());
         assertEquals(TestDispatcherCallback.Status.FINISHED, callback2.dispatcherStatus.get());
     }
-    
+
     public void testDispatcherCallbackFailOperationDispatched() throws Exception {
         URL url = getClass().getResource("applicationContext.xml");
 
@@ -631,21 +634,21 @@ public class DispatcherTest extends TestCase {
                 throw new RuntimeException("TestDispatcherCallbackFailOperationDispatched");
             }
         };
-        
+
         MockHttpServletRequest request = setupRequest();
         MockHttpServletResponse response = new MockHttpServletResponse();
 
         dispatcher.callbacks.add(callback1);
         dispatcher.callbacks.add(callbackFail);
         dispatcher.callbacks.add(callback2);
-        
+
         dispatcher.handleRequest(request, response);
-        
+
         assertTrue(response.getContentAsString().contains("ows:ExceptionReport"));
         assertEquals(TestDispatcherCallback.Status.FINISHED, callback1.dispatcherStatus.get());
         assertEquals(TestDispatcherCallback.Status.FINISHED, callback2.dispatcherStatus.get());
     }
-    
+
     public void testDispatcherCallbackFailOperationExecuted() throws Exception {
         URL url = getClass().getResource("applicationContext.xml");
 
@@ -661,21 +664,21 @@ public class DispatcherTest extends TestCase {
                 throw new RuntimeException("TestDispatcherCallbackFailOperationExecuted");
             }
         };
-        
+
         MockHttpServletRequest request = setupRequest();
         MockHttpServletResponse response = new MockHttpServletResponse();
 
         dispatcher.callbacks.add(callback1);
         dispatcher.callbacks.add(callbackFail);
         dispatcher.callbacks.add(callback2);
-        
+
         dispatcher.handleRequest(request, response);
-        
+
         assertTrue(response.getContentAsString().contains("ows:ExceptionReport"));
         assertEquals(TestDispatcherCallback.Status.FINISHED, callback1.dispatcherStatus.get());
         assertEquals(TestDispatcherCallback.Status.FINISHED, callback2.dispatcherStatus.get());
     }
-    
+
     public void testDispatcherCallbackFailResponseDispatched() throws Exception {
         URL url = getClass().getResource("applicationContext.xml");
 
@@ -691,25 +694,25 @@ public class DispatcherTest extends TestCase {
                 throw new RuntimeException("TestDispatcherCallbackFailResponseDispatched");
             }
         };
-        
+
         MockHttpServletRequest request = setupRequest();
         MockHttpServletResponse response = new MockHttpServletResponse();
 
         dispatcher.callbacks.add(callback1);
         dispatcher.callbacks.add(callbackFail);
         dispatcher.callbacks.add(callback2);
-        
+
         dispatcher.handleRequest(request, response);
-        
+
         assertTrue(response.getContentAsString().contains("ows:ExceptionReport"));
         assertEquals(TestDispatcherCallback.Status.FINISHED, callback1.dispatcherStatus.get());
         assertEquals(TestDispatcherCallback.Status.FINISHED, callback2.dispatcherStatus.get());
     }
-    
+
     public void testDispatcherCallbackFailFinished() throws Exception {
         URL url = getClass().getResource("applicationContext.xml");
 
-        try(FileSystemXmlApplicationContext context = new FileSystemXmlApplicationContext(url.toString())) {
+        try (FileSystemXmlApplicationContext context = new FileSystemXmlApplicationContext(url.toString())) {
             Dispatcher dispatcher = (Dispatcher) context.getBean("dispatcher");
             final AtomicBoolean firedCallback = new AtomicBoolean(false);
             TestDispatcherCallback callback1 = new TestDispatcherCallback();
@@ -728,14 +731,14 @@ public class DispatcherTest extends TestCase {
                     throw new Error("TestDispatcherCallbackFailFinished");
                 }
             };
-            
+
             MockHttpServletRequest request = setupRequest();
             MockHttpServletResponse response = new MockHttpServletResponse();
-    
+
             dispatcher.callbacks.add(callback1);
             dispatcher.callbacks.add(callbackFail);
             dispatcher.callbacks.add(callback2);
-            
+
             dispatcher.handleRequest(request, response);
             assertEquals("Hello world!", response.getContentAsString());
             assertTrue(firedCallback.get());
@@ -966,11 +969,11 @@ public class DispatcherTest extends TestCase {
 
         assertEquals("Hello world!", response.getContentAsString());
     }
-    
+
     public void testErrorThrowingResponse() throws Exception {
         URL url = getClass().getResource("applicationContext-errorResponse.xml");
 
-        try(FileSystemXmlApplicationContext context = new FileSystemXmlApplicationContext(url.toString())) {
+        try (FileSystemXmlApplicationContext context = new FileSystemXmlApplicationContext(url.toString())) {
             Dispatcher dispatcher = (Dispatcher) context.getBean("dispatcher");
             MockHttpServletRequest request = setupRequest();
             MockHttpServletResponse response = new MockHttpServletResponse();

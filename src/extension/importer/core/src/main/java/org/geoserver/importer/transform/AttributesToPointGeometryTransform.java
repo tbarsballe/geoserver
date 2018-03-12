@@ -19,7 +19,9 @@ import com.vividsolutions.jts.geom.Point;
 public class AttributesToPointGeometryTransform extends AbstractTransform implements
         InlineVectorTransform {
 
-    /** serialVersionUID */
+    /**
+     * serialVersionUID
+     */
     private static final long serialVersionUID = 1L;
 
     private static final String POINT_NAME = "location";
@@ -37,7 +39,7 @@ public class AttributesToPointGeometryTransform extends AbstractTransform implem
     }
 
     public AttributesToPointGeometryTransform(String latField, String lngField,
-            String pointFieldName) {
+                                              String pointFieldName) {
         this.latField = latField;
         this.lngField = lngField;
         this.pointFieldName = pointFieldName;
@@ -46,7 +48,7 @@ public class AttributesToPointGeometryTransform extends AbstractTransform implem
 
     @Override
     public SimpleFeatureType apply(ImportTask task, DataStore dataStore,
-            SimpleFeatureType featureType) throws Exception {
+                                   SimpleFeatureType featureType) throws Exception {
         SimpleFeatureTypeBuilder builder = new SimpleFeatureTypeBuilder();
         builder.init(featureType);
 
@@ -71,7 +73,7 @@ public class AttributesToPointGeometryTransform extends AbstractTransform implem
 
     @Override
     public SimpleFeature apply(ImportTask task, DataStore dataStore, SimpleFeature oldFeature,
-            SimpleFeature feature) throws Exception {
+                               SimpleFeature feature) throws Exception {
         Object latObject = oldFeature.getAttribute(latField);
         Object lngObject = oldFeature.getAttribute(lngField);
         Double lat = asDouble(latObject);

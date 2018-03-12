@@ -18,9 +18,8 @@ import org.opengis.feature.type.FeatureType;
 
 /**
  * Similar to gt-transform code, but building complex features on a custom transformation
- * 
+ *
  * @author Andrea Aime - GeoSolution
- * 
  */
 class MappingFeatureCollection extends BaseFeatureCollection<FeatureType, Feature> {
 
@@ -31,7 +30,7 @@ class MappingFeatureCollection extends BaseFeatureCollection<FeatureType, Featur
     private Function<PushbackFeatureIterator<SimpleFeature>, Feature> mapper;
 
     public MappingFeatureCollection(FeatureType schema, SimpleFeatureCollection features,
-            Function<PushbackFeatureIterator<SimpleFeature>, Feature> mapper) {
+                                    Function<PushbackFeatureIterator<SimpleFeature>, Feature> mapper) {
         super(schema);
         this.features = features;
         this.mapper = mapper;

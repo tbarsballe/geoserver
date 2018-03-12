@@ -43,7 +43,7 @@ public class TopoJSONEncoder {
 
         @Override
         public JsonElement serialize(Topology topology, Type typeOfSrc,
-                JsonSerializationContext context) {
+                                     JsonSerializationContext context) {
 
             JsonObject root = new JsonObject();
             root.addProperty("type", "Topology");
@@ -327,7 +327,7 @@ public class TopoJSONEncoder {
     }
 
     public static JsonArray quantize(final CoordinateSequence coords,
-            PrecisionModel precisionModel) {
+                                     PrecisionModel precisionModel) {
         JsonArray arc = new JsonArray();
         final int size = coords.size();
 

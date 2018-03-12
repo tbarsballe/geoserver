@@ -12,10 +12,10 @@ public class TestDispatcherCallback implements DispatcherCallback {
     public enum Status {
         INIT, SERVICE_DISPATCHED, OPERATION_DISPATCHED, OPERATION_EXECUTED, RESPONSE_DISPATCHED, FINISHED
     }
-    
+
     public ThreadLocal<Status> dispatcherStatus = new ThreadLocal<Status>();
-    
-    
+
+
     @Override
     public Request init(Request request) {
         dispatcherStatus.set(Status.INIT);

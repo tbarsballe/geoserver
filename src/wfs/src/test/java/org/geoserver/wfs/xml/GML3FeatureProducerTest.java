@@ -34,17 +34,17 @@ import org.opengis.feature.type.FeatureType;
 import org.w3c.dom.Document;
 
 public class GML3FeatureProducerTest extends WFSTestSupport {
-    
+
     GML3OutputFormat producer() {
-        FeatureTypeSchemaBuilder sb = new FeatureTypeSchemaBuilder.GML3(getGeoServer()); 
+        FeatureTypeSchemaBuilder sb = new FeatureTypeSchemaBuilder.GML3(getGeoServer());
         WFSConfiguration configuration = new WFSConfiguration(getGeoServer(),
                 sb, new WFS(sb));
         return new GML3OutputFormat(getGeoServer(), configuration);
     }
-    
+
     /**
      * Build a GetFeature operation to request the named types.
-     * 
+     *
      * @param names type names for which queries are present in the returned request
      * @return GetFeature operation to request the named types
      */
@@ -57,7 +57,7 @@ public class GML3FeatureProducerTest extends WFSTestSupport {
             queryType.setTypeName(Collections.singletonList(name));
             type.getQuery().add(queryType);
         }
-        Operation request = new Operation("wfs", service, null, new Object[] { type });
+        Operation request = new Operation("wfs", service, null, new Object[]{type});
         return request;
     }
 
@@ -66,13 +66,13 @@ public class GML3FeatureProducerTest extends WFSTestSupport {
         FeatureSource<? extends FeatureType, ? extends Feature> source = getFeatureSource(MockData.SEVEN);
         FeatureCollection<? extends FeatureType, ? extends Feature> features = source.getFeatures();
 
-        FeatureCollectionResponse fcType = 
-            FeatureCollectionResponse.adapt(WfsFactory.eINSTANCE.createFeatureCollectionType());
+        FeatureCollectionResponse fcType =
+                FeatureCollectionResponse.adapt(WfsFactory.eINSTANCE.createFeatureCollectionType());
 
         fcType.getFeature().add(features);
 
         ByteArrayOutputStream output = new ByteArrayOutputStream();
-        producer().write(fcType, output, request(MockData.SEVEN) );
+        producer().write(fcType, output, request(MockData.SEVEN));
 
         DocumentBuilder docBuilder = DocumentBuilderFactory.newInstance()
                 .newDocumentBuilder();
@@ -87,7 +87,7 @@ public class GML3FeatureProducerTest extends WFSTestSupport {
         FeatureCollectionResponse fcType = FeatureCollectionResponse.adapt(WfsFactory.eINSTANCE
                 .createFeatureCollectionType());
         fcType.getFeature().add(
-               getFeatureSource(MockData.SEVEN).getFeatures());
+                getFeatureSource(MockData.SEVEN).getFeatures());
         fcType.getFeature().add(getFeatureSource(MockData.FIFTEEN).getFeatures());
 
         ByteArrayOutputStream output = new ByteArrayOutputStream();
@@ -108,7 +108,7 @@ public class GML3FeatureProducerTest extends WFSTestSupport {
                 .createFeatureCollectionType());
         fcType.getFeature().add(getFeatureSource(MockData.SEVEN).getFeatures());
         fcType.getFeature().add(getFeatureSource(MockData.POLYGONS).getFeatures());
-        
+
         int npolys = getFeatureSource(MockData.POLYGONS).getFeatures().size();
 
         ByteArrayOutputStream output = new ByteArrayOutputStream();

@@ -30,7 +30,7 @@ public class IconPropertiesTest extends IconTestSupport {
         final Style simple = styleFromRules(catchAllRule(grayCircle()));
         assertEquals("0.0.0=", encode(simple, fieldIs1));
     }
-    
+
     @Test
     public void testWorkspacedStyleEncodesNoProperties() {
         final Style simple = styleFromRules(catchAllRule(grayCircle()));
@@ -130,14 +130,14 @@ public class IconPropertiesTest extends IconTestSupport {
         final Style style = styleFromRules(catchAllRule(symbolizer));
         assertEquals("http://example.com/foo.png", encode(style, fieldIs1));
     }
-    
+
     @Test
     public void testLocalFile() throws Exception {
         final PointSymbolizer symbolizer = externalGraphic("file:foo.png", "image/png");
         final Style style = styleFromRules(catchAllRule(symbolizer));
         assertEquals("http://example.com/styles/foo.png", encode(style, fieldIs1));
     }
-    
+
     @Test
     public void testLocalFileRotate() throws Exception {
         final PointSymbolizer symbolizer = externalGraphic("file:foo.png", "image/png");
@@ -151,7 +151,7 @@ public class IconPropertiesTest extends IconTestSupport {
         assertEquals("http://example.com/styles/foo.png", prop2.href("http://example.com/", null, "test"));
         assertEquals(90.0d, prop2.getHeading(), 0.0001);
     }
-    
+
     @Test
     public void testTwoLocalFilesRotate() throws Exception {
         final PointSymbolizer symbolizer1 = externalGraphic("file:foo.png", "image/png");
@@ -165,6 +165,7 @@ public class IconPropertiesTest extends IconTestSupport {
         assertEquals("http://example.com/kml/icon/test?0.0.0=&0.0.0.rotation=45.0&0.0.1=&0.0.1.rotation=22.5", prop.href("http://example.com/", null, "test"));
         assertEquals(0.0d, prop.getHeading(), 0.0001);
     }
+
     @Test
     public void testTwoLocalFilesOneRotate() throws Exception {
         final PointSymbolizer symbolizer1 = externalGraphic("file:foo.png", "image/png");
@@ -178,6 +179,7 @@ public class IconPropertiesTest extends IconTestSupport {
         assertEquals("http://example.com/kml/icon/test?0.0.0=&0.0.0.rotation=45.0&0.0.1=", prop.href("http://example.com/", null, "test"));
         assertNull(prop.getHeading());
     }
+
     @Test
     public void testMarkRotate() throws Exception {
         final PointSymbolizer symbolizer = grayCircle();
@@ -198,6 +200,6 @@ public class IconPropertiesTest extends IconTestSupport {
     protected String encode(String workspace, Style style, SimpleFeature feature) {
         return IconPropertyExtractor.extractProperties(style, feature)
                 .href("http://example.com/", workspace, "test")
-                .replace("http://example.com/kml/icon/"+workspace+"/test?", "");
+                .replace("http://example.com/kml/icon/" + workspace + "/test?", "");
     }
 }

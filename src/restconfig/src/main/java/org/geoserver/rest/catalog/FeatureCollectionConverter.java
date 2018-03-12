@@ -24,12 +24,13 @@ public abstract class FeatureCollectionConverter<T> extends BaseMessageConverter
     public FeatureCollectionConverter(MediaType... supportedMediaTypes) {
         super(supportedMediaTypes);
     }
-    
+
     @Override
     protected boolean supports(Class<?> clazz) {
         return SimpleFeatureCollection.class.isAssignableFrom(clazz)
                 || JSONCollectionWrapper.class.isAssignableFrom(clazz);
     }
+
     //
     // reading
     //
@@ -37,6 +38,7 @@ public abstract class FeatureCollectionConverter<T> extends BaseMessageConverter
     public boolean canRead(Class<?> clazz, MediaType mediaType) {
         return false;
     }
+
     //
     // writing
     //
@@ -48,7 +50,7 @@ public abstract class FeatureCollectionConverter<T> extends BaseMessageConverter
         json.setEncodeFeatureCollectionCRS(!geometryless);
         json.writeFeatureCollection(features, outputMessage.getBody());
     }
-    
+
     protected void writeGML(SimpleFeatureCollection features, HttpOutputMessage outputMessage)
             throws IOException, HttpMessageNotWritableException {
         GML gml = new GML(Version.WFS1_0);

@@ -12,7 +12,7 @@ import org.geotools.geometry.jts.ReferencedEnvelope;
 /**
  * The GUI configuration for a raster layer. For the time being just the name, but expect to see
  * bbox extraction and resolution setting (probably ND slicing for ND coverages?)
- * 
+ *
  * @author Andrea Aime - OpenGeo
  */
 @SuppressWarnings("serial")

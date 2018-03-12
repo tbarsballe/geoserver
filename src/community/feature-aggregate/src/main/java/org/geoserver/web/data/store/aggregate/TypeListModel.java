@@ -22,7 +22,7 @@ import org.geotools.util.logging.Logging;
 
 /**
  * Reports the list of feature types available in the specified store
- * 
+ *
  * @author Andrea Aime - GeoSolutiosn
  */
 class TypeListModel extends LoadableDetachableModel<List<String>> {

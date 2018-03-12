@@ -9,74 +9,75 @@ import org.geoserver.catalog.impl.WMSLayerInfoImpl;
 
 /**
  * Visitor for catalog objects.
- * 
- * @author Justin Deoliveira, OpenGeo
  *
+ * @author Justin Deoliveira, OpenGeo
  */
 public interface CatalogVisitor {
-    
+
     /**
      * Visits the catalog
      */
-    void visit( Catalog catalog );
-    
+    void visit(Catalog catalog);
+
     /**
      * Visits a workspace.
      */
-    void visit( WorkspaceInfo workspace );
-    
+    void visit(WorkspaceInfo workspace);
+
     /**
      * Visits a namespace.
      */
-    void visit( NamespaceInfo workspace );
-    
+    void visit(NamespaceInfo workspace);
+
     /**
      * Visits a data store.
      */
-    void visit( DataStoreInfo dataStore ); 
+    void visit(DataStoreInfo dataStore);
 
     /**
      * Visits a coverage store.
      */
-    void visit( CoverageStoreInfo coverageStore );
-    
+    void visit(CoverageStoreInfo coverageStore);
+
     /**
      * Visits a WMS data store.
      */
-    void visit( WMSStoreInfo wmsStore ); 
+    void visit(WMSStoreInfo wmsStore);
 
     /**
      * Visits a WMTS data store.
      */
-    default void visit( WMTSStoreInfo store ) {}
+    default void visit(WMTSStoreInfo store) {
+    }
 
     /**
      * Visits a feature type.
      */
-    void visit( FeatureTypeInfo featureType );
-    
+    void visit(FeatureTypeInfo featureType);
+
     /**
      * Visits a coverage.
      */
-    void visit( CoverageInfo coverage );
-    
+    void visit(CoverageInfo coverage);
+
     /**
      * Visits a layer.
      */
-    void visit( LayerInfo layer );
-    
+    void visit(LayerInfo layer);
+
     /**
      * Visits a style.
      */
-    void visit( StyleInfo style );
-    
+    void visit(StyleInfo style);
+
     /**
      * Visits a layer group..
      */
-    void visit( LayerGroupInfo layerGroup );
+    void visit(LayerGroupInfo layerGroup);
 
     /**
      * Visits a WMS layer resource
+     *
      * @param wmsLayerInfoImpl
      */
     void visit(WMSLayerInfo wmsLayer);
@@ -84,5 +85,6 @@ public interface CatalogVisitor {
     /**
      * Visits a WMTS layer resource
      */
-    default void visit(WMTSLayerInfo layer) {}
+    default void visit(WMTSLayerInfo layer) {
+    }
 }

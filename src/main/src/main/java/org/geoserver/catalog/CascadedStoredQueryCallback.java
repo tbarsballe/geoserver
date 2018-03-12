@@ -18,23 +18,23 @@ import org.opengis.feature.type.Name;
  * is stored within the FeatureTypeInfo metadata.
  */
 public class CascadedStoredQueryCallback implements FeatureTypeCallback {
-    
+
     @Override
     public boolean canHandle(FeatureTypeInfo info,
-        DataAccess<? extends FeatureType, ? extends Feature> dataAccess) {
+                             DataAccess<? extends FeatureType, ? extends Feature> dataAccess) {
 
         return dataAccess instanceof WFSDataStore && info.getMetadata() != null &&
-                (info.getMetadata().get(FeatureTypeInfo.STORED_QUERY_CONFIGURATION) instanceof 
+                (info.getMetadata().get(FeatureTypeInfo.STORED_QUERY_CONFIGURATION) instanceof
                         StoredQueryConfiguration);
     }
-    
+
     @Override
     public boolean initialize(FeatureTypeInfo info,
-            DataAccess<? extends FeatureType, ? extends Feature> dataAccess,
-            Name temporaryName) throws IOException {
+                              DataAccess<? extends FeatureType, ? extends Feature> dataAccess,
+                              Name temporaryName) throws IOException {
 
         StoredQueryConfiguration sqc = info.getMetadata().get(FeatureTypeInfo.STORED_QUERY_CONFIGURATION, StoredQueryConfiguration.class);
-        WFSDataStore wstore = (WFSDataStore)dataAccess;
+        WFSDataStore wstore = (WFSDataStore) dataAccess;
 
         String localPart = info.getName();
         boolean usesTemporary = false;
@@ -43,24 +43,24 @@ public class CascadedStoredQueryCallback implements FeatureTypeCallback {
             usesTemporary = true;
         }
 
-        if(!wstore.getConfiguredStoredQueries().containsValue(localPart)) {
+        if (!wstore.getConfiguredStoredQueries().containsValue(localPart)) {
             wstore.addStoredQuery(localPart, sqc.getStoredQueryId());
         }
         return usesTemporary;
     }
-    
+
     @Override
     public void flush(FeatureTypeInfo info,
-            DataAccess<? extends FeatureType, ? extends Feature> dataAccess)
+                      DataAccess<? extends FeatureType, ? extends Feature> dataAccess)
             throws IOException {
         // nothing to do
     }
-    
+
     @Override
     public void dispose(FeatureTypeInfo info,
-            DataAccess<? extends FeatureType, ? extends Feature> dataAccess,
-            Name temporaryName) throws IOException {
-        WFSDataStore wstore = (WFSDataStore)dataAccess;
+                        DataAccess<? extends FeatureType, ? extends Feature> dataAccess,
+                        Name temporaryName) throws IOException {
+        WFSDataStore wstore = (WFSDataStore) dataAccess;
         wstore.removeStoredQuery(temporaryName.getLocalPart());
     }
 

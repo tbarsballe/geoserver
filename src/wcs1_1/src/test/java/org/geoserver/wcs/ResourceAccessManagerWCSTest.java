@@ -43,9 +43,8 @@ import com.vividsolutions.jts.io.WKTReader;
 
 /**
  * Performs integration tests using a mock {@link ResourceAccessManager}
- * 
+ *
  * @author Andrea Aime - GeoSolutions
- * 
  */
 public class ResourceAccessManagerWCSTest extends AbstractGetCoverageTest {
 

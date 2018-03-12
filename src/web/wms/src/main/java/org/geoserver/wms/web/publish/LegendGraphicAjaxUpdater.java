@@ -17,7 +17,7 @@ import org.geoserver.catalog.StyleInfo;
 /**
  * Helper class for a wicket ajax behavior that updates the {@code src} attribute of an
  * {@link Image} component to point to a WMS GetLegendGraphic request.
- * 
+ *
  * @author Gabriel Roldan
  * @sicne 2.1
  */
@@ -33,7 +33,7 @@ class LegendGraphicAjaxUpdater implements Serializable {
     private String wmsURL;
 
     public LegendGraphicAjaxUpdater(final String wmsURL, final Image image,
-            final IModel<StyleInfo> styleInfoModel) {
+                                    final IModel<StyleInfo> styleInfoModel) {
         this.wmsURL = wmsURL;
         this.image = image;
         this.styleInfoModel = styleInfoModel;

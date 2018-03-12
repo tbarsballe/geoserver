@@ -14,13 +14,14 @@ import org.geoserver.ows.DispatcherOutputStream;
 import org.geoserver.ows.ServiceStrategy;
 
 
-/** Fast and Dangeroud service strategy.
- *
+/**
+ * Fast and Dangeroud service strategy.
+ * <p>
  * <p>
  * Will fail when a ServiceException is encountered on writeTo, and will not
  * tell the user about it!
  * </p>
- *
+ * <p>
  * <p>
  * This is the worst case scenario, you are trading speed for danger by using
  * this ServiceStrategy.
@@ -33,24 +34,24 @@ public class SpeedStrategy implements ServiceStrategy {
         return "SPEED";
     }
 
-    /** DOCUMENT ME!  */
+    /**
+     * DOCUMENT ME!
+     */
     private OutputStream out = null;
 
     /**
      * Works against the real output stream provided by the response.
-     *
+     * <p>
      * <p>
      * This is dangerous of course, but fast and exciting.
      * </p>
      *
      * @param response Response provided by doService
-     *
      * @return An OutputStream that works against, the response output stream.
-     *
      * @throws IOException If response output stream could not be aquired
      */
     public DispatcherOutputStream getDestination(HttpServletResponse response)
-        throws IOException {
+            throws IOException {
         out = response.getOutputStream();
 
         return new DispatcherOutputStream(out);

@@ -96,7 +96,7 @@ public class DefaultWebCoverageService111 implements WebCoverageService111 {
     private CoverageResponseDelegateFinder responseFactory;
 
     public DefaultWebCoverageService111(GeoServer geoServer,
-            CoverageResponseDelegateFinder responseFactory) {
+                                        CoverageResponseDelegateFinder responseFactory) {
         this.geoServer = geoServer;
         this.catalog = geoServer.getCatalog();
         this.responseFactory = responseFactory;
@@ -143,7 +143,7 @@ public class DefaultWebCoverageService111 implements WebCoverageService111 {
         throw new WcsException("Could not understand version:" + version);
     }
 
-    @SuppressWarnings({ "deprecation", "unchecked" })
+    @SuppressWarnings({"deprecation", "unchecked"})
     public GridCoverage[] getCoverage(GetCoverageType request) {
         if (LOGGER.isLoggable(Level.FINEST)) {
             LOGGER.finest(new StringBuffer("execute CoverageRequest response. Called request is: ")
@@ -239,13 +239,13 @@ public class DefaultWebCoverageService111 implements WebCoverageService111 {
 
             if (temporalSubset != null && temporalSubset.getTimePosition() != null
                     && temporalSubset.getTimePosition().size() > 0) {
-                for (Iterator it = temporalSubset.getTimePosition().iterator(); it.hasNext();) {
+                for (Iterator it = temporalSubset.getTimePosition().iterator(); it.hasNext(); ) {
                     Date tp = (Date) it.next();
                     timeValues.add(tp);
                 }
             } else if (temporalSubset != null && temporalSubset.getTimePeriod() != null
                     && temporalSubset.getTimePeriod().size() > 0) {
-                for (Iterator it = temporalSubset.getTimePeriod().iterator(); it.hasNext();) {
+                for (Iterator it = temporalSubset.getTimePeriod().iterator(); it.hasNext(); ) {
                     TimePeriodType tp = (TimePeriodType) it.next();
                     Date beginning = (Date) tp.getBeginPosition();
                     Date ending = (Date) tp.getEndPosition();
@@ -456,7 +456,7 @@ public class DefaultWebCoverageService111 implements WebCoverageService111 {
                 // from the specification if grid origin is omitted and the crs
                 // is 2d the default it's 0,0
                 if (origin == null) {
-                    origin = new Double[] { 0.0, 0.0 };
+                    origin = new Double[]{0.0, 0.0};
                 }
 
                 // if no offsets has been specified we try to default on the
@@ -551,9 +551,9 @@ public class DefaultWebCoverageService111 implements WebCoverageService111 {
                 final GridCoverage2D reprojectedCoverage = WCSUtils.resample(bandSelectedCoverage,
                         nativeCRS, targetCRS, destinationGridGeometry, interpolation);
 
-                return new GridCoverage[] { reprojectedCoverage };
+                return new GridCoverage[]{reprojectedCoverage};
             } else {
-                return new GridCoverage[] { bandSelectedCoverage };
+                return new GridCoverage[]{bandSelectedCoverage};
             }
         } catch (Throwable e) {
             if (coverage != null) {
@@ -569,8 +569,8 @@ public class DefaultWebCoverageService111 implements WebCoverageService111 {
     }
 
     private Double[] estimateOffsets(final GridCoverage2DReader reader, final GridCrsType gridCRS,
-            MathTransform gridToCRS, final GeneralEnvelope intersectionEnvelope,
-            boolean reprojectionNeeded) {
+                                     MathTransform gridToCRS, final GeneralEnvelope intersectionEnvelope,
+                                     boolean reprojectionNeeded) {
         Double[] offsets;
         if (!(gridToCRS instanceof AffineTransform2D) && !(gridToCRS instanceof IdentityTransform))
             throw new WcsException(
@@ -581,24 +581,24 @@ public class DefaultWebCoverageService111 implements WebCoverageService111 {
                 if (gridToCRS instanceof IdentityTransform) {
                     if (gridCRS.getGridType().equals(GridType.GT2dSimpleGrid.getXmlConstant())
                             || gridCRS.getGridType().equals(
-                                    GridType.GT2dGridIn2dCrs.getXmlConstant()))
-                        offsets = new Double[] { 1.0, -1.0 };
+                            GridType.GT2dGridIn2dCrs.getXmlConstant()))
+                        offsets = new Double[]{1.0, -1.0};
                     else
-                        offsets = new Double[] { 1.0, 0.0, 0.0, 0.0, -1.0, 0.0 };
+                        offsets = new Double[]{1.0, 0.0, 0.0, 0.0, -1.0, 0.0};
                 } else {
                     AffineTransform2D affine = (AffineTransform2D) gridToCRS;
                     if (gridCRS.getGridType().equals(GridType.GT2dSimpleGrid.getXmlConstant())
                             || gridCRS.getGridType().equals(
-                                    GridType.GT2dGridIn2dCrs.getXmlConstant()))
-                        offsets = new Double[] { affine.getScaleX(), affine.getScaleY() };
+                            GridType.GT2dGridIn2dCrs.getXmlConstant()))
+                        offsets = new Double[]{affine.getScaleX(), affine.getScaleY()};
                     else
-                        offsets = new Double[] { affine.getScaleX(), affine.getShearX(),
-                                affine.getShearY(), affine.getScaleY() };
+                        offsets = new Double[]{affine.getScaleX(), affine.getShearX(),
+                                affine.getShearY(), affine.getScaleY()};
                 }
             } else {
                 AffineTransform2D at = (AffineTransform2D) gridToCRS;
-                offsets = new Double[] { at.getScaleX(), at.getShearX(), 0d, at.getShearY(),
-                        at.getScaleY(), 0d };
+                offsets = new Double[]{at.getScaleX(), at.getShearX(), 0d, at.getShearY(),
+                        at.getScaleY(), 0d};
             }
         } else {
             // the input resolution is going to be completed unrelated to the output one
@@ -617,9 +617,9 @@ public class DefaultWebCoverageService111 implements WebCoverageService111 {
             if (gridCRS == null
                     || gridCRS.getGridType().equals(GridType.GT2dSimpleGrid.getXmlConstant())
                     || gridCRS.getGridType().equals(GridType.GT2dGridIn2dCrs.getXmlConstant())) {
-                offsets = new Double[] { scaleX, scaleY };
+                offsets = new Double[]{scaleX, scaleY};
             } else {
-                offsets = new Double[] { scaleX, 0.0, 0.0, 0.0, scaleY, 0.0 };
+                offsets = new Double[]{scaleX, 0.0, 0.0, 0.0, scaleY, 0.0};
             }
         }
         return offsets;
@@ -733,7 +733,7 @@ public class DefaultWebCoverageService111 implements WebCoverageService111 {
                 // geographic crs
                 String actualCRS = null;
                 final String gridBaseCrsCode = extractCode(gridBaseCrs);
-                for (Iterator it = meta.getResponseSRS().iterator(); it.hasNext();) {
+                for (Iterator it = meta.getResponseSRS().iterator(); it.hasNext(); ) {
                     final String responseCRS = (String) it.next();
                     final String code = extractCode(responseCRS);
                     if (code.equalsIgnoreCase(gridBaseCrsCode)) {
@@ -822,9 +822,8 @@ public class DefaultWebCoverageService111 implements WebCoverageService111 {
     /**
      * Extracts only the final part of an EPSG code allowing for a specification independent comparison (that is, it removes the EPSG:, urn:xxx:,
      * http://... prefixes)
-     * 
-     * @param srsName
      *
+     * @param srsName
      */
     private String extractCode(String srsName) {
         if (srsName.startsWith("http://www.opengis.net/gml/srs/epsg.xml#"))
@@ -840,16 +839,15 @@ public class DefaultWebCoverageService111 implements WebCoverageService111 {
     /**
      * Checks if the supported format string list contains the specified format, doing a case insensitive search. If found the declared output format
      * name is returned, otherwise null is returned.
-     * 
+     *
      * @param supportedFormats
      * @param format
-     *
      */
     private String getDeclaredFormat(List supportedFormats, String format) {
         // supported formats may be setup using old style formats, first scan
         // the
         // configured list
-        for (Iterator it = supportedFormats.iterator(); it.hasNext();) {
+        for (Iterator it = supportedFormats.iterator(); it.hasNext(); ) {
             String sf = (String) it.next();
             if (sf.equalsIgnoreCase(format)) {
                 return sf;
@@ -864,7 +862,7 @@ public class DefaultWebCoverageService111 implements WebCoverageService111 {
 
     /**
      * Checks that the elements of the RangeSubset part of the request do make sense by comparing them to the coverage metadata
-     * 
+     *
      * @param info
      * @param rangeSubset
      */
@@ -956,9 +954,7 @@ public class DefaultWebCoverageService111 implements WebCoverageService111 {
     }
 
     /**
-     * 
      * @param date
-     *
      */
     private static Date cvtToGmt(Date date) {
         TimeZone tz = TimeZone.getDefault();

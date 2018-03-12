@@ -15,14 +15,14 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 /**
  * A parser that allows dateline crossing envelopes
- * 
+ *
  * @author Andrea Aime
  */
 public class OpenSearchBBoxKvpParser extends BBoxKvpParser {
 
     @Override
     protected Object buildEnvelope(int countco, double minx, double miny, double minz, double maxx,
-            double maxy, double maxz, String srs)
+                                   double maxy, double maxz, String srs)
             throws NoSuchAuthorityCodeException, FactoryException {
         if (countco > 4) {
             throw new IllegalArgumentException(
@@ -40,8 +40,8 @@ public class OpenSearchBBoxKvpParser extends BBoxKvpParser {
 
         if (minx > maxx) {
             // dateline crossing case
-            return new ReferencedEnvelope[] { new ReferencedEnvelope(minx, 180, miny, maxy, crs),
-                    new ReferencedEnvelope(-180, maxx, miny, maxy, crs), };
+            return new ReferencedEnvelope[]{new ReferencedEnvelope(minx, 180, miny, maxy, crs),
+                    new ReferencedEnvelope(-180, maxx, miny, maxy, crs),};
         } else {
             return new ReferencedEnvelope(minx, maxx, miny, maxy, crs);
         }

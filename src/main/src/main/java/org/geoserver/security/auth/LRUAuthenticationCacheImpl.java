@@ -19,33 +19,31 @@ import org.springframework.security.core.Authentication;
 
 /**
  * An {@link AuthenticationCache} implementation using a {@link LRUCache} for
- * caching authentication tokens. 
- * 
+ * caching authentication tokens.
+ * <p>
  * For an explanation of the time parameters, see {@link AuthenticationCacheEntry}
- * 
- * The class uses a {@link ReentrantReadWriteLock} object to synchronize 
- * access from multiple threads 
- * 
- * Additionally, a {@link TimerTask} is started to remove expired entries. 
- * 
- * @author christian
+ * <p>
+ * The class uses a {@link ReentrantReadWriteLock} object to synchronize
+ * access from multiple threads
+ * <p>
+ * Additionally, a {@link TimerTask} is started to remove expired entries.
  *
+ * @author christian
  */
 public class LRUAuthenticationCacheImpl implements AuthenticationCache {
 
     protected LRUCache<AuthenticationCacheKey, AuthenticationCacheEntry> cache;
-    int timeToIdleSeconds,timeToLiveSeconds,maxEntries;
-    
+    int timeToIdleSeconds, timeToLiveSeconds, maxEntries;
+
     protected final ReentrantReadWriteLock readWriteLock = new ReentrantReadWriteLock(true);
     protected final Lock readLock = readWriteLock.readLock();
     protected final Lock writeLock = readWriteLock.writeLock();
 
-    
+
     static Logger LOGGER = Logging.getLogger("org.geoserver.security");
-    
+
     /**
      * Timer task to remove unused entries
-     * 
      */
 
     public LRUAuthenticationCacheImpl(int maxEntries) {
@@ -75,7 +73,6 @@ public class LRUAuthenticationCacheImpl implements AuthenticationCache {
     }
 
 
-    
     @Override
     public void removeAll() {
         writeLock.lock();
@@ -88,17 +85,17 @@ public class LRUAuthenticationCacheImpl implements AuthenticationCache {
 
     @Override
     public void removeAll(String filterName) {
-        if (filterName==null) return;
+        if (filterName == null) return;
         writeLock.lock();
         try {
             Set<AuthenticationCacheKey> toBeRemoved = new HashSet<AuthenticationCacheKey>();
-            for (AuthenticationCacheKey key: cache.keySet()) {
-                if(filterName.equals(key.getFilterName()))
+            for (AuthenticationCacheKey key : cache.keySet()) {
+                if (filterName.equals(key.getFilterName()))
                     toBeRemoved.add(key);
             }
-            for (AuthenticationCacheKey key: toBeRemoved)
+            for (AuthenticationCacheKey key : toBeRemoved)
                 cache.remove(key);
-            
+
         } finally {
             writeLock.unlock();
         }
@@ -117,37 +114,38 @@ public class LRUAuthenticationCacheImpl implements AuthenticationCache {
     @Override
     public Authentication get(String filterName, String cacheKey) {
         readLock.lock();
-        boolean hasTobeRemoved=false;
+        boolean hasTobeRemoved = false;
         try {
-            long currentTime=System.currentTimeMillis();
+            long currentTime = System.currentTimeMillis();
             AuthenticationCacheEntry entry = cache.get(new AuthenticationCacheKey(filterName, cacheKey));
-            if (entry==null)
+            if (entry == null)
                 return null;
             if (entry.hasExpired(currentTime)) {
-                hasTobeRemoved=true;                
+                hasTobeRemoved = true;
                 return null;
-            }            
+            }
             entry.setLastAccessed(currentTime);
             return entry.getAuthentication();
-            
+
         } finally {
             readLock.unlock();
             if (hasTobeRemoved)
-                remove(filterName,cacheKey);
+                remove(filterName, cacheKey);
         }
     }
 
     @Override
     public void put(String filterName, String cacheKey, Authentication auth,
-            Integer timeToIdleSeconds, Integer timeToLiveSeconds) {
-        
-        timeToIdleSeconds = timeToIdleSeconds != null ? timeToIdleSeconds : this.timeToIdleSeconds;;
+                    Integer timeToIdleSeconds, Integer timeToLiveSeconds) {
+
+        timeToIdleSeconds = timeToIdleSeconds != null ? timeToIdleSeconds : this.timeToIdleSeconds;
+        ;
         timeToLiveSeconds = timeToLiveSeconds != null ? timeToLiveSeconds : this.timeToLiveSeconds;
 
         writeLock.lock();
         try {
             cache.put(new AuthenticationCacheKey(filterName, cacheKey),
-                    new AuthenticationCacheEntry(auth, 
+                    new AuthenticationCacheEntry(auth,
                             timeToIdleSeconds,
                             timeToLiveSeconds));
         } finally {
@@ -158,7 +156,7 @@ public class LRUAuthenticationCacheImpl implements AuthenticationCache {
 
     @Override
     public void put(String filterName, String cacheKey, Authentication auth) {
-        put(filterName,cacheKey,auth,timeToIdleSeconds,timeToLiveSeconds);
+        put(filterName, cacheKey, auth, timeToIdleSeconds, timeToLiveSeconds);
     }
 
 }

@@ -20,7 +20,7 @@ import org.springframework.context.ApplicationContext;
 
 /**
  * Unit test for {@link WMSExtensions}
- * 
+ *
  * @author Gabriel Roldan (TOPP)
  * @version $Id$
  */
@@ -36,7 +36,7 @@ public class WMSExtensionsTest {
         // the internals of GeoServerExtensions work
         expect(mockContext.getBeanNamesForType(ExtensionFilter.class)).andReturn(new String[0]);
         expect(mockContext.getBeanNamesForType(GetMapOutputFormat.class)).andReturn(
-                new String[] { "producer1", "producer2" });
+                new String[]{"producer1", "producer2"});
         expect(mockContext.getBeanNamesForType(ExtensionProvider.class)).andReturn(new String[0]);
         expect(mockContext.getBeanNamesForType(ExtensionFilter.class)).andReturn(new String[0]);
         expect(mockContext.getBean("producer1")).andReturn(mockProducer1);
@@ -59,7 +59,7 @@ public class WMSExtensionsTest {
         // I'm not so pleasant with this block of code as it implies knowing how
         // the internals of GeoServerExtensions work
         expect(mockContext.getBeanNamesForType(ExtensionFilter.class)).andReturn(new String[0]);
-        expect(mockContext.getBeanNamesForType(GetMapOutputFormat.class)).andReturn(new String[] {});
+        expect(mockContext.getBeanNamesForType(GetMapOutputFormat.class)).andReturn(new String[]{});
         expect(mockContext.getBeanNamesForType(ExtensionProvider.class)).andReturn(new String[0]);
         expect(mockContext.getBeanNamesForType(ExtensionFilter.class)).andReturn(new String[0]);
         expect(mockContext.isSingleton((String) anyObject())).andReturn(false).anyTimes();
@@ -82,14 +82,14 @@ public class WMSExtensionsTest {
         expect(mockContext.isSingleton((String) anyObject())).andReturn(false).anyTimes();
         expect(mockContext.getBeanNamesForType(ExtensionFilter.class)).andReturn(new String[0]);
         expect(mockContext.getBeanNamesForType(GetMapOutputFormat.class)).andReturn(
-                new String[] { "producer1" }); // call#1
+                new String[]{"producer1"}); // call#1
         expect(mockContext.getBeanNamesForType(ExtensionProvider.class)).andReturn(new String[0]);
         expect(mockContext.getBeanNamesForType(ExtensionFilter.class)).andReturn(new String[0]);
         expect(mockContext.getBean("producer1")).andReturn(mockProducer); // call#1
 
         expect(mockContext.getBeanNamesForType(ExtensionFilter.class)).andReturn(new String[0]);
         expect(mockContext.getBeanNamesForType(GetMapOutputFormat.class)).andReturn(
-                new String[] { "producer1" }); // call#2
+                new String[]{"producer1"}); // call#2
         expect(mockContext.getBeanNamesForType(ExtensionProvider.class)).andReturn(new String[0]);
         expect(mockContext.getBeanNamesForType(ExtensionFilter.class)).andReturn(new String[0]);
         expect(mockContext.getBean("producer1")).andReturn(mockProducer); // call#2

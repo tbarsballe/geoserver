@@ -11,9 +11,8 @@ import org.geoserver.wms.eo.EoLayerType;
 
 /**
  * Renders internationalized strings for the {@link EoLayerType} enum items
- * 
+ *
  * @author Andrea Aime - GeoSolutions
- * 
  */
 public class EoLayerTypeRenderer extends ChoiceRenderer<EoLayerType> {
     private static final long serialVersionUID = -6351905251612872379L;

@@ -8,7 +8,7 @@ package org.geoserver.test;
 
 /**
  * Mock data for {@link SpecimenWfsTest}.
- * 
+ *
  * @author Ben Caradoc-Davies, CSIRO Exploration and Mining
  */
 public class SpecimenMockData extends AbstractAppSchemaMockData {

@@ -25,21 +25,18 @@ import org.geoserver.platform.GeoServerExtensions;
  *
  * @author Justin Deoliveira, The Open Planning Project, jdeolive@openplans.org
  * @author Andrea Aime, OpenGeo
- *
  */
 public class ResponseUtils {
     // the path that does contain the GeoServer internal XML schemas
     public static final String SCHEMAS = "schemas";
-    
+
     /**
      * Parses the passed string, and encodes the special characters (used in
      * xml for special purposes) with the appropriate codes. e.g. '&lt;' is
      * changed to '&amp;lt;'
      *
      * @param inData The string to encode into xml.
-     *
      * @return the encoded string. Returns null, if null is passed as argument
-     *
      */
     public static String encodeXML(String inData) {
         //return null, if null is passed as argument
@@ -96,7 +93,7 @@ public class ResponseUtils {
      * with the XML excape strings.
      */
     public static void writeEscapedString(Writer writer, String string)
-        throws IOException {
+            throws IOException {
         for (int i = 0; i < string.length(); i++) {
             char c = string.charAt(i);
 
@@ -126,11 +123,10 @@ public class ResponseUtils {
      * This code can be used to make sure the url ends with ? or &amp; by calling appendQueryString(url, "")
      * </p>
      *
-     * @param url The base url.
+     * @param url         The base url.
      * @param queryString The query string to be appended, should not contain the '?' character.
-     *
      * @return A full url with the query string appended.
-     * 
+     * <p>
      * TODO: remove this and replace with Requetss.appendQueryString
      */
     public static String appendQueryString(String url, String queryString) {
@@ -149,7 +145,6 @@ public class ResponseUtils {
      * Strips the query string off a request url.
      *
      * @param url The url.
-     *
      * @return The original minus the query string.
      */
     public static String stripQueryString(String url) {
@@ -161,56 +156,55 @@ public class ResponseUtils {
 
         return url.substring(0, index);
     }
-    
+
     /**
      * Returns the query string part of a request url.
      * <p>
-     * If the url does not have a query string compopnent, the empty string is 
-     * returned. 
+     * If the url does not have a query string compopnent, the empty string is
+     * returned.
      * </p>
-     * 
+     *
      * @param url The url.
-     * 
      * @return The query string part of the url.
      */
     public static String getQueryString(String url) {
         int index = url.indexOf('?');
 
-        if (index == -1 || index == url.length()-1 ) {
+        if (index == -1 || index == url.length() - 1) {
             return "";
         }
 
-        return url.substring(index+1);
+        return url.substring(index + 1);
     }
-    
+
     /**
      * Returns the parent url of a url.
      * <p>
      * Examples:
      * </p>
      * <ul>
-     *   <li>http://foo.com/bar/foo --&gt; http://foo.com/bar</li>
-     *   <li>http://foo.com/bar/ --&gt; http://foo.com</li>
-     *   <li>http://foo.com/bar --&gt; http://foo.com</li>
+     * <li>http://foo.com/bar/foo --&gt; http://foo.com/bar</li>
+     * <li>http://foo.com/bar/ --&gt; http://foo.com</li>
+     * <li>http://foo.com/bar --&gt; http://foo.com</li>
      * </ul>
      */
-    public static String getParentUrl( String url ) {
-        if ( url.endsWith( "/" ) ) {
-            url = url.substring(0,url.length()-1);
+    public static String getParentUrl(String url) {
+        if (url.endsWith("/")) {
+            url = url.substring(0, url.length() - 1);
         }
-        
+
         int index = url.lastIndexOf('/');
-        if ( index == -1 ) {
+        if (index == -1) {
             return url;
         }
-        
-        return url.substring(0,index);
+
+        return url.substring(0, index);
     }
 
     /**
      * Given a set of path components a full path is built
-     * @param pathComponents The set of path components
      *
+     * @param pathComponents The set of path components
      * @return The full url with the path appended.
      * TODO: remove this and replace with Requetss.appendContextPath
      */
@@ -220,173 +214,172 @@ public class ResponseUtils {
             String component = pathComponents[i];
             boolean endsWithSlash = result.charAt(result.length() - 1) == '/';
             boolean startsWithSlash = component.startsWith("/");
-            if(endsWithSlash && startsWithSlash) {
+            if (endsWithSlash && startsWithSlash) {
                 result.setLength(result.length() - 1);
-            } else if(!endsWithSlash && !startsWithSlash) {
+            } else if (!endsWithSlash && !startsWithSlash) {
                 result.append("/");
             }
             result.append(component);
         }
-        
+
         return result.toString();
     }
-    
+
     /**
      * Strips any remaining part from a path, returning only the first component.
      * <p>
      * Examples:
      * </p>
      * <ul>
-     *   <li>foo/bar --&gt; foo</li>
-     *   <li>/foo/bar --&gt; /foo</li>
+     * <li>foo/bar --&gt; foo</li>
+     * <li>/foo/bar --&gt; /foo</li>
      * </ul>
      */
     public static String stripRemainingPath(String path) {
         int i = 0;
-        if  (path.startsWith("/")) {
+        if (path.startsWith("/")) {
             i = 1;
         }
-        
-        int index = path.indexOf('/',i);
-        if ( index > -1 ) {
-            return path.substring( 0, index );
+
+        int index = path.indexOf('/', i);
+        if (index > -1) {
+            return path.substring(0, index);
         }
         return path;
     }
-    
+
     /**
      * Strips off the first compontent of a path.
      * <p>
-     * Examples: 
+     * Examples:
      * </p>
      * <ul>
-     *   <li>foo/bar --gt; bar</li>
-     *   <li>/foo/bar --gt; bar</li>
-     *   <li>/foo/bar/foobar --gt; bar/foobar</li>
-     *   <li>/foo --gt; ""</li>
+     * <li>foo/bar --gt; bar</li>
+     * <li>/foo/bar --gt; bar</li>
+     * <li>/foo/bar/foobar --gt; bar/foobar</li>
+     * <li>/foo --gt; ""</li>
      * </ul>
      */
-    public static String stripBeginningPath(String path ) {
+    public static String stripBeginningPath(String path) {
         int i = 0;
-        if  (path.startsWith("/")) {
+        if (path.startsWith("/")) {
             i = 1;
         }
-        
-        int index = path.indexOf('/',i);
-        if ( index > -1 ) {
-            return path.substring( index + 1 );
+
+        int index = path.indexOf('/', i);
+        if (index > -1) {
+            return path.substring(index + 1);
         }
-        
+
         return "";
     }
-    
+
     /**
      * Strips off the extension of a path.
      * <p>
      * Examples:
-     * </p> 
+     * </p>
      * <ul>
-     *   <li>foo/bar.xml --gt; foo/bar</li>
-     *   <li>bar.xml --gt; bar</li>
-     *   <li>foo/bar --gt; foo/bar</li>
+     * <li>foo/bar.xml --gt; foo/bar</li>
+     * <li>bar.xml --gt; bar</li>
+     * <li>foo/bar --gt; foo/bar</li>
      * </ul>
-     * 
+     *
      * @return the path minus the extension.
      */
-    public static String stripExtension( String path ) {
-        String ext = getExtension( path );
-        if ( ext != null ) {
-            return path.substring(0,path.length()-ext.length()-1);
+    public static String stripExtension(String path) {
+        String ext = getExtension(path);
+        if (ext != null) {
+            return path.substring(0, path.length() - ext.length() - 1);
         }
         return path;
     }
-    
+
     /**
-     * Returns the last component of a path. 
+     * Returns the last component of a path.
      * <p>
      * Examples:
      * </p>
      * <ul>
-     *   <li>/foo/bar --&gt; bar</li>
-     *   <li>foo/bar/ --&gt; bar</li>
-     *   <li>/foo --&gt; foo</li>
-     *   <li>foo --&gt; foo</li>
+     * <li>/foo/bar --&gt; bar</li>
+     * <li>foo/bar/ --&gt; bar</li>
+     * <li>/foo --&gt; foo</li>
+     * <li>foo --&gt; foo</li>
      * </ul>
-     * 
+     *
      * @param path the Path
-     * 
      * @return the last component of the path
      */
     public static String getLastPartOfPath(String path) {
         int i = path.length();
-        if ( path.endsWith( "/") ) {
+        if (path.endsWith("/")) {
             i--;
         }
-        
-        int j = path.lastIndexOf( "/" );
-        if ( j == -1 ) {
+
+        int j = path.lastIndexOf("/");
+        if (j == -1) {
             return path;
         }
-        return path.substring(j+1,i);
+        return path.substring(j + 1, i);
     }
-    
+
     /**
      * Returns the file extension from a uri string.
      * <p>
      * If the uri does not specify an extension, null is returned.
-     *  </p>
+     * </p>
+     *
      * @param uri the uri.
      * @return The extension, example "txt", or null if it does not exist.
      */
     public static String getExtension(String uri) {
-        int slash = uri.lastIndexOf( '/' );
-        if ( slash != -1 ) {
-            uri = uri.substring( slash+1 ); 
+        int slash = uri.lastIndexOf('/');
+        if (slash != -1) {
+            uri = uri.substring(slash + 1);
         }
-        int dot = uri.lastIndexOf( '.' );
-        if ( dot != -1 ) {
-            return uri.substring(dot+1);
+        int dot = uri.lastIndexOf('.');
+        if (dot != -1) {
+            return uri.substring(dot + 1);
         }
         return null;
     }
-    
+
     /**
      * Ensures a path is absolute (starting with '/').
-     * 
+     *
      * @param path The path.
-     * 
      * @return The path starting with '/'.
      */
     public static String makePathAbsolute(String path) {
-        if ( path.startsWith("/") ) {
+        if (path.startsWith("/")) {
             return path;
         }
-        
+
         return "/" + path;
     }
-    
+
     /**
      * Builds and mangles a URL given its constitutent components. The components will be eventually modified by registered {@link URLMangler}
      * instances to handle proxies or add security tokens
-     * 
+     *
      * @param baseURL the base URL, containing host, port and application
-     * @param path the path after the application name
-     * @param kvp the GET request parameters
-     * @param type URL type
+     * @param path    the path after the application name
+     * @param kvp     the GET request parameters
+     * @param type    URL type
      */
     public static String buildURL(String baseURL, String path, Map<String, String> kvp, URLType type) {
         // prepare modifiable parameters
         StringBuilder baseURLBuffer = new StringBuilder(baseURL);
         StringBuilder pathBuffer = new StringBuilder(path != null ? path : "");
         Map<String, String> kvpBuffer = new LinkedHashMap<String, String>();
-        if(kvp != null)
+        if (kvp != null)
             kvpBuffer.putAll(kvp);
-        
+
         // run all of the manglers
-        for(URLMangler mangler : GeoServerExtensions.extensions(URLMangler.class)) {
+        for (URLMangler mangler : GeoServerExtensions.extensions(URLMangler.class)) {
             mangler.mangleURL(baseURLBuffer, pathBuffer, kvpBuffer, type);
         }
-        
+
         // compose the final URL
         String result = appendPath(baseURLBuffer.toString(), pathBuffer.toString());
         StringBuilder params = new StringBuilder();
@@ -400,27 +393,27 @@ public class ResponseUtils {
             }
             params.append("&");
         }
-        if(params.length() > 1) {
+        if (params.length() > 1) {
             params.setLength(params.length() - 1);
             result = appendQueryString(result, params.toString());
         }
-        
+
         return result;
     }
-    
+
     /**
      * Builds and mangles a URL for a schema contained in GeoServer
-     * 
+     *
      * @param baseURL the base URL, containing host, port and application
-     * @param path the path inside the schema location (.../geoserver/schemas/...)
+     * @param path    the path inside the schema location (.../geoserver/schemas/...)
      */
     public static String buildSchemaURL(String baseURL, String path) {
         return buildURL(baseURL, appendPath(SCHEMAS, path), null, URLType.RESOURCE);
     }
-    
+
     /**
      * Pulls out the base url ( from the client point of view ), from the given request object.
-     * 
+     *
      * @return A String of the form "&lt;scheme&gt;://&lt;server&gt;:&lt;port&gt;/&lt;context&gt;/"
      */
     public static String baseURL(HttpServletRequest req) {
@@ -429,32 +422,32 @@ public class ResponseUtils {
                 .append(req.getContextPath()).append("/");
         return sb.toString();
     }
-    
+
     /**
      * Convenience method to build a KVP parameter map
+     *
      * @param parameters sequence of keys and values
      */
     public static Map<String, String> params(String... parameters) {
         Map<String, String> result = new LinkedHashMap<String, String>();
-        if(parameters.length % 2 != 0)
+        if (parameters.length % 2 != 0)
             throw new IllegalArgumentException("The parameters sequence should be " +
-            		"composed of key/value pairs, but the params passed are odd in number");
-        
-        for (int i = 0; i < parameters.length;) {
+                    "composed of key/value pairs, but the params passed are odd in number");
+
+        for (int i = 0; i < parameters.length; ) {
             String key = parameters[i++];
             String value = parameters[i++];
             result.put(key, value);
         }
-        
+
         return result;
     }
-    
+
     /**
      * URL encodes the value towards the UTF-8 charset
-     * 
-     * @param value the string you want encoded
+     *
+     * @param value   the string you want encoded
      * @param exclude any reserved URL character that and should not be percent encoded (such as '/').
-     * 
      */
     public static String urlEncode(String value, char... exclude) {
         StringBuilder resultStr = new StringBuilder();
@@ -466,7 +459,7 @@ public class ResponseUtils {
         }
         for (byte enc : encArray) {
             if (enc >= 'A' && enc <= 'Z' || enc >= 'a' && enc <= 'z' || enc >= '0' && enc <= '9'
-                    || enc == '-' || enc == '_' || enc == '.' || enc == '~' || 
+                    || enc == '-' || enc == '_' || enc == '.' || enc == '~' ||
                     ArrayUtils.contains(exclude, (char) enc)) {
                 resultStr.append((char) enc);
             } else {
@@ -475,17 +468,17 @@ public class ResponseUtils {
         }
         return resultStr.toString();
     }
-    
+
     /**
      * URL decods the value using ISO-8859-1 as the reference charset
      */
     public static String urlDecode(String value) {
         try {
             return URLDecoder.decode(value, "UTF-8");
-        } catch(UnsupportedEncodingException e) {
+        } catch (UnsupportedEncodingException e) {
             throw new RuntimeException("This is unexpected", e);
         }
     }
-    
-    
+
+
 }

@@ -15,7 +15,7 @@ import org.geoserver.config.LoggingInfo;
 public class LoggingInfoImpl implements LoggingInfo {
 
     String id;
-    
+
     String level;
 
     String location;
@@ -25,11 +25,11 @@ public class LoggingInfoImpl implements LoggingInfo {
     public String getId() {
         return id;
     }
-    
+
     public void setId(String id) {
         this.id = id;
     }
-    
+
     public String getLevel() {
         return level;
     }
@@ -70,7 +70,7 @@ public class LoggingInfoImpl implements LoggingInfo {
             return true;
         if (obj == null)
             return false;
-        if (!( obj instanceof LoggingInfo ) ) {
+        if (!(obj instanceof LoggingInfo)) {
             return false;
         }
         LoggingInfo other = (LoggingInfo) obj;
@@ -88,5 +88,5 @@ public class LoggingInfoImpl implements LoggingInfo {
             return false;
         return true;
     }
-    
+
 }

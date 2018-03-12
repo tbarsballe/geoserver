@@ -13,7 +13,7 @@ import org.geoserver.web.ComponentInfo;
 
 /**
  * Extension point for sections of the configuration pages for individual resources.
- * 
+ *
  * @author David Winslow <dwinslow@openplans.org>
  */
 public class ResourceConfigurationPanelInfo extends ComponentInfo<ResourceConfigurationPanel> {
@@ -23,23 +23,23 @@ public class ResourceConfigurationPanelInfo extends ComponentInfo<ResourceConfig
 
     private List<String> myHandleableClasses;
 
-    public void setSupportedTypes(List<String> classNames){
+    public void setSupportedTypes(List<String> classNames) {
         myHandleableClasses = classNames;
     }
 
-    public List<String> getSupportedTypes(){
+    public List<String> getSupportedTypes() {
         return Collections.unmodifiableList(myHandleableClasses);
     }
 
-    public boolean canHandle(Object obj){
+    public boolean canHandle(Object obj) {
         if (myHandleableClasses == null) return true;
 
-        for (String className : myHandleableClasses){
-            try{
-                if (Class.forName(className).isInstance(obj)){
+        for (String className : myHandleableClasses) {
+            try {
+                if (Class.forName(className).isInstance(obj)) {
                     return true;
-                } 
-            } catch (ClassNotFoundException cnfe){
+                }
+            } catch (ClassNotFoundException cnfe) {
                 LOGGER.severe("Couldn't find class " + className + "; please check your applicationContext.xml.");
             }
         }

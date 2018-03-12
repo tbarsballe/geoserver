@@ -24,9 +24,8 @@ import org.springframework.context.ApplicationContextAware;
  * performs an extension lookup with the following error: <i> Error creating bean with name 'wms':
  * Requested bean is currently in creation: Is there an unresolvable circular reference?</i>
  * </p>
- * 
+ *
  * @author Gabriel Roldan
- * 
  */
 public class SVGStrategyExclusionFilter implements ExtensionFilter, ApplicationContextAware {
 
@@ -37,17 +36,15 @@ public class SVGStrategyExclusionFilter implements ExtensionFilter, ApplicationC
     private ApplicationContext ctx;
 
     /**
-     * @param wmsBeanName
-     *            name of the bean of type {@link WMS} to be lazily looked up in the application
-     *            context
+     * @param wmsBeanName name of the bean of type {@link WMS} to be lazily looked up in the application
+     *                    context
      */
     public SVGStrategyExclusionFilter(final String wmsBeanName) {
         this.wmsBeanName = wmsBeanName;
     }
 
     /**
-     * @param ctx
-     *            context where to look for the {@link WMS} bean named as specified to this class'
+     * @param ctx context where to look for the {@link WMS} bean named as specified to this class'
      *            constructor
      * @see ApplicationContextAware#setApplicationContext(ApplicationContext)
      */
@@ -57,7 +54,7 @@ public class SVGStrategyExclusionFilter implements ExtensionFilter, ApplicationC
 
     /**
      * @return {@code true} if {@code bean} is one of the SVG rendering strategies but not the one
-     *         that shall be used as per {@link WMS#getSvgRenderer()}
+     * that shall be used as per {@link WMS#getSvgRenderer()}
      * @see ExtensionFilter#exclude(String, Object)
      */
     public boolean exclude(String beanId, Object bean) {

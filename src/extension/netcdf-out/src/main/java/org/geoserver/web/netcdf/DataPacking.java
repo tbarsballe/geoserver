@@ -7,25 +7,25 @@ package org.geoserver.web.netcdf;
 import ucar.ma2.DataType;
 
 /**
- * Class used to identify the DataPacking to be applied to NetCDF values 
+ * Class used to identify the DataPacking to be applied to NetCDF values
  * to be stored. DataPacking on write is used to reduce the disk usage
  * (As an instance, storing 64 bit Double data as 16 bit Shorts).
  * Data values are rescaled (packed) using a formula:
- *
+ * <p>
  * packed_value = nearestint((original_value - add_offset) / scale_factor)
- * 
- * add_offset and scale_factor attributes are added to the Variable when 
+ * <p>
+ * add_offset and scale_factor attributes are added to the Variable when
  * data packing occurs. They are computed on top of the dataset's min and max.
- * 
+ * <p>
  * add_offset = (max + min) / 2
  * scale_factor = (max - min) / (2^n - 2)
- * 
+ * <p>
  * [where n is the number of bits of the output packed data type.]
  * Supported packing types are Byte, Short, Integer.
- * 
+ * <p>
  * Data can be read back with the formula:
  * unpacked_value = packed_value * scale_factor + add_offset
- * 
+ *
  * @author Daniele Romagnoli, GeoSolutions SAS
  */
 public enum DataPacking {
@@ -76,7 +76,7 @@ public enum DataPacking {
             double max = stats.getMax();
             double scale = (max - min) / getDenominator();
             double offset = (min - scale);
-            return new DataPacker(offset, scale, getReservedValue()); 
+            return new DataPacker(offset, scale, getReservedValue());
         }
     },
     SHORT {
@@ -134,10 +134,10 @@ public enum DataPacking {
 
     private final static Integer ZERO = 0;
 
-    /** 
+    /**
      * Constants to be used for dataPacking formula, depending on the dataPacking dataType.
      * scale_factor = (max - min) / (2^n - 2).
-     *  
+     * <p>
      * (2^n - 2) is a precomputed denominator.
      */
     // this one uses only half range in order to encode positive bytes, some clients
@@ -150,13 +150,13 @@ public enum DataPacking {
 
     private final static Integer LONG_DENOMINATOR = ((int) Math.pow(2, 64)) - 2;
 
-    /** 
-     * Reserved special values dataType related. 
-     * They will be used to remap a specific input value which can't be represented 
+    /**
+     * Reserved special values dataType related.
+     * They will be used to remap a specific input value which can't be represented
      * in the output type. As an instance, a -1E-20 input fillValue can't be
-     * represented as a short, so we need a reserved value to represent it. 
+     * represented as a short, so we need a reserved value to represent it.
      * The reserved value formula is:
-     *  -(2^(n-1)) where n is the output dataType's number of bits. 
+     * -(2^(n-1)) where n is the output dataType's number of bits.
      */
     private final static Integer SHORT_RESERVED = -((int) Math.pow(2, 15));
 
@@ -164,22 +164,30 @@ public enum DataPacking {
 
     private final static Integer LONG_RESERVED = -((int) Math.pow(2, 63));
 
-    /** Return the denominator to be used in computing the scale_factor */
+    /**
+     * Return the denominator to be used in computing the scale_factor
+     */
     public abstract Integer getDenominator();
 
-    /** Return a reserved value (it can be used to represent fillValue) */
+    /**
+     * Return a reserved value (it can be used to represent fillValue)
+     */
     public abstract Integer getReservedValue();
 
-    /** Return the Variable's {@link DataType} for the specific packing */
+    /**
+     * Return the Variable's {@link DataType} for the specific packing
+     */
     public abstract DataType getDataType();
 
-    /** Get the default DataPacker */
+    /**
+     * Get the default DataPacker
+     */
     public DataPacker getDataPacker(DataStats stats) {
         double min = stats.getMin();
         double max = stats.getMax();
         double offset = (min + max) / 2;
-        double scale = (max - min) / getDenominator(); 
-        return new DataPacker(offset, scale, getReservedValue()); 
+        double scale = (max - min) / getDenominator();
+        return new DataPacker(offset, scale, getReservedValue());
     }
 
     /**
@@ -204,18 +212,20 @@ public enum DataPacking {
             return offset;
         }
 
-        /** Return the reservedValue.  */
+        /**
+         * Return the reservedValue.
+         */
         public int getReservedValue() {
             return reservedValue;
         }
 
         /**
          * Pack the sample using the dataPacking formula:
-         * 
+         * <p>
          * packed_value = nearestint((original_value - add_offset) / scale_factor)
-         * 
+         *
          * @param sample the sample to be packed
-         * @return the packed value 
+         * @return the packed value
          */
         public int pack(double sample) {
             if (Double.isNaN(sample)) {

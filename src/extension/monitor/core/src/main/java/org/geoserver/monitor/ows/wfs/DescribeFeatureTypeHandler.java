@@ -22,11 +22,11 @@ public class DescribeFeatureTypeHandler extends WFSRequestObjectHandler {
     @Override
     public List<String> getLayers(Object request) {
         @SuppressWarnings("unchecked")
-        List<Object> typeNames = (List<Object>) EMFUtils.get((EObject)request, "typeName");
+        List<Object> typeNames = (List<Object>) EMFUtils.get((EObject) request, "typeName");
         if (typeNames == null) {
             return null;
         }
-        
+
         List<String> layers = new ArrayList<String>();
         for (Object o : typeNames) {
             layers.add(toString(o));

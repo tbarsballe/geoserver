@@ -22,8 +22,8 @@ public class PostgresConfigBeanTest {
     private static final String UTF8 = StandardCharsets.UTF_8.name();
 
     private void verifyURI(String expectedHost, @Nullable Integer expectedPort, String expectedDb,
-            @Nullable String expectedSchema, String expectedRepoId, String expectedUser, String expectedPassword,
-            final URI uri) throws UnsupportedEncodingException {
+                           @Nullable String expectedSchema, String expectedRepoId, String expectedUser, String expectedPassword,
+                           final URI uri) throws UnsupportedEncodingException {
         // assert the URI is built correctly
         assertEquals("Unexpected HOST value", expectedHost, uri.getHost());
         if (expectedPort != null) {
@@ -75,7 +75,7 @@ public class PostgresConfigBeanTest {
     }
 
     private URI buildURIFromBean(String expectedHost, @Nullable Integer expectedPort, String expectedDb,
-            @Nullable String expectedSchema, String expectedRepoId, String expectedUser, String expectedPassword)
+                                 @Nullable String expectedSchema, String expectedRepoId, String expectedUser, String expectedPassword)
             throws UnsupportedEncodingException, URISyntaxException {
         // build the bean
         PostgresConfigBean bean = PostgresConfigBean.newInstance();
@@ -91,7 +91,7 @@ public class PostgresConfigBeanTest {
     }
 
     private void test(String expectedHost, @Nullable Integer expectedPort, String expectedDb,
-            @Nullable String expectedSchema, String expectedRepoId, String expectedUser, String expectedPassword)
+                      @Nullable String expectedSchema, String expectedRepoId, String expectedUser, String expectedPassword)
             throws UnsupportedEncodingException, URISyntaxException {
         // build the bean and get the URI
         URI uri = buildURIFromBean(expectedHost, expectedPort, expectedDb, expectedSchema, expectedRepoId, expectedUser,
@@ -102,7 +102,7 @@ public class PostgresConfigBeanTest {
     }
 
     private void verifyBean(PostgresConfigBean bean, String expectedHost, @Nullable Integer expectedPort,
-            String expectedDb, @Nullable String expectedSchema, String expectedUser, String expectedPassword) {
+                            String expectedDb, @Nullable String expectedSchema, String expectedUser, String expectedPassword) {
         assertEquals("Unexpected HOST value", expectedHost, bean.getHost());
         if (expectedPort != null) {
             assertEquals("Unexpected PORT value", expectedPort, bean.getPort());

@@ -27,22 +27,23 @@ import org.geotools.util.logging.Logging;
  * WrappedConnectionJDK6 connections. While a list of well-known Connection implementations is
  * catered for (with both the class name and unwrap method recorded) the GenericUnWrapper is willing
  * to search through the available fields looking for an implementation of Connection to return.
- * 
+ *
  * @author Jody Garnett - OpenGeo
  */
 public class GenericUnWrapper implements UnWrapper {
     private final static Logger LOGGER = Logging
             .getLogger("org.geoserver.data.jdbc.GenericUnWrapper");
-    
+
     private static final Method IGNORE;
+
     static {
         try {
-            IGNORE = GenericUnWrapper.class.getMethod("ignore",new Class[0]);
+            IGNORE = GenericUnWrapper.class.getMethod("ignore", new Class[0]);
         } catch (Exception inconsistent) {
-            throw new IllegalStateException("Expected static GenericUnWrapper ignore() method",inconsistent);
+            throw new IllegalStateException("Expected static GenericUnWrapper ignore() method", inconsistent);
         }
     }
-    
+
     /**
      * Primary record of known access methods used to unwrap conenctions in exotic deployment
      * environments such as JBoss.
@@ -50,6 +51,7 @@ public class GenericUnWrapper implements UnWrapper {
      * This field is package visible to allow local testing.
      */
     static final Map<Class<?>, Method> CONNECTION_METHODS;
+
     static {
         CONNECTION_METHODS = new ConcurrentHashMap<Class<?>, Method>();
 
@@ -68,8 +70,9 @@ public class GenericUnWrapper implements UnWrapper {
      * This field is package visible to allow local testing.
      */
     static final Map<Class<?>, Method> STATEMENT_METHODS;
+
     static {
-        STATEMENT_METHODS =  new ConcurrentHashMap<Class<?>, Method>();
+        STATEMENT_METHODS = new ConcurrentHashMap<Class<?>, Method>();
         methodSearch("JBoss Resource Adapter", STATEMENT_METHODS,
                 "org.jboss.resource.adapter.jdbc.WrappedCallableStatement",
                 "getUnderlyingStatement");
@@ -77,14 +80,14 @@ public class GenericUnWrapper implements UnWrapper {
 
     /**
      * Look up method used for unwrapping (if supported in the application container).
-     * 
+     *
      * @param env
      * @param methods
      * @param className
      * @param methodName
      */
     private static void methodSearch(String env, Map<Class<?>, Method> methods, String className,
-            String methodName) {
+                                     String methodName) {
         try {
             Class<?> wrappedConnection = Class.forName(className);
             Method unwrap = wrappedConnection.getMethod(methodName, (Class[]) null);
@@ -96,11 +99,11 @@ public class GenericUnWrapper implements UnWrapper {
             LOGGER.fine(env + " " + className + " not available:" + e);
         }
     }
-    
+
     /**
      * Used as reflection target of {@link #IGNORE} placeholder.
      */
-    public static void ignore(){
+    public static void ignore() {
         // this space is intentionally left blank
     }
 
@@ -139,11 +142,10 @@ public class GenericUnWrapper implements UnWrapper {
      * is provided, or null is sentinel (indicating no method is available). For classes that do not
      * provide an unwrapping method reflection is tried once (resulting in either a cached method to
      * next time, or null for use as a sentinel
-     * 
+     *
      * @param target
      * @param conn
      * @param methods
-     *
      */
     private <T> T unwrapInternal(Class<T> target, T conn, Map<Class<?>, Method> methods) {
         Class<?> implementation = conn.getClass();
@@ -155,8 +157,7 @@ public class GenericUnWrapper implements UnWrapper {
             }
             T unwrapped = unwrapInternal(target, conn, implementation, accessMethod);
             return unwrapped;
-        }
-        else {
+        } else {
             // Scan for superclass/interface method
             for (Entry<Class<?>, Method> entry : methods.entrySet()) {
                 Class<?> wrapper = entry.getKey();
@@ -183,15 +184,15 @@ public class GenericUnWrapper implements UnWrapper {
             }
             // Give up - mark this one as not possible so we can exit early next time
             methods.put(implementation, IGNORE);
-        }        
+        }
         return null; // not found
     }
 
     /**
      * Safe unwrap method using invoke on the provided accessMethod.
-     * 
+     * <p>
      * All errors are logged at finest detail, and null is returned.
-     * 
+     *
      * @param target
      * @param conn
      * @param wrapper
@@ -199,8 +200,8 @@ public class GenericUnWrapper implements UnWrapper {
      * @return unwrapped instance of target class, or null if not available
      */
     private <T> T unwrapInternal(Class<T> target, T conn, Class<?> wrapper, Method accessMethod) {
-        if (accessMethod == null ) {
-            LOGGER.finest("Using " + wrapper.getName() + " does not have accessMethod to unwrap " + target.getSimpleName() );
+        if (accessMethod == null) {
+            LOGGER.finest("Using " + wrapper.getName() + " does not have accessMethod to unwrap " + target.getSimpleName());
             return null; // skip inaccessible method
         }
         try {

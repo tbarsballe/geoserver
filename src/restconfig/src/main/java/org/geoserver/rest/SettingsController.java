@@ -23,7 +23,7 @@ import java.util.Arrays;
 
 /**
  * Settings controller
- *
+ * <p>
  * Provides access to global settings and contact info
  */
 @RestController
@@ -39,7 +39,7 @@ public class SettingsController extends AbstractGeoServerController {
     @GetMapping(produces = {
             MediaType.APPLICATION_JSON_VALUE,
             MediaType.APPLICATION_XML_VALUE,
-            MediaType.TEXT_HTML_VALUE })
+            MediaType.TEXT_HTML_VALUE})
     public RestWrapper<GeoServerInfo> settingsGet() {
         return wrapObject(geoServer.getGlobal(), GeoServerInfo.class);
     }
@@ -48,7 +48,7 @@ public class SettingsController extends AbstractGeoServerController {
             MediaType.APPLICATION_JSON_VALUE,
             MediaTypeExtensions.TEXT_JSON_VALUE,
             MediaType.APPLICATION_XML_VALUE,
-            MediaType.TEXT_XML_VALUE })
+            MediaType.TEXT_XML_VALUE})
     public void settingsPut(@RequestBody GeoServerInfo geoServerInfo) {
         GeoServerInfo original = geoServer.getGlobal();
         OwsUtils.copy(geoServerInfo, original, GeoServerInfo.class);
@@ -58,7 +58,7 @@ public class SettingsController extends AbstractGeoServerController {
     @GetMapping(value = "/contact", produces = {
             MediaType.APPLICATION_JSON_VALUE,
             MediaType.APPLICATION_XML_VALUE,
-            MediaType.TEXT_HTML_VALUE })
+            MediaType.TEXT_HTML_VALUE})
     public RestWrapper<ContactInfo> contactGet() {
         if (geoServer.getSettings().getContact() == null) {
             throw new ResourceNotFoundException("No contact information available");
@@ -70,7 +70,7 @@ public class SettingsController extends AbstractGeoServerController {
             MediaType.APPLICATION_JSON_VALUE,
             MediaTypeExtensions.TEXT_JSON_VALUE,
             MediaType.APPLICATION_XML_VALUE,
-            MediaType.TEXT_XML_VALUE })
+            MediaType.TEXT_XML_VALUE})
     public void contactSet(@RequestBody ContactInfo contactInfo) {
         GeoServerInfo geoServerInfo = geoServer.getGlobal();
         ContactInfo original = geoServerInfo.getSettings().getContact();

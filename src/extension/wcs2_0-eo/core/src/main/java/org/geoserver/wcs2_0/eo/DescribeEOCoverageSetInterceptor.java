@@ -32,7 +32,7 @@ import org.geoserver.wcs2_0.util.StringUtils;
 
 /**
  * AOP interceptor running DescribeEOCoverageSet for WCS 2.O EO
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class DescribeEOCoverageSetInterceptor implements MethodInterceptor {
@@ -50,9 +50,9 @@ public class DescribeEOCoverageSetInterceptor implements MethodInterceptor {
     private MIMETypeMapper mimemapper;
 
     public DescribeEOCoverageSetInterceptor(GeoServer geoServer,
-            CoverageResponseDelegateFinder responseFactory,
-            EnvelopeAxesLabelsMapper envelopeDimensionsMapper, MIMETypeMapper mimemappe,
-            EOCoverageResourceCodec resourceCodec) {
+                                            CoverageResponseDelegateFinder responseFactory,
+                                            EnvelopeAxesLabelsMapper envelopeDimensionsMapper, MIMETypeMapper mimemappe,
+                                            EOCoverageResourceCodec resourceCodec) {
         this.geoServer = geoServer;
         this.catalog = geoServer.getCatalog();
         this.responseFactory = responseFactory;
@@ -64,7 +64,7 @@ public class DescribeEOCoverageSetInterceptor implements MethodInterceptor {
     public WCSInfo getServiceInfo() {
         return geoServer.getService(WCSInfo.class);
     }
-    
+
     private boolean isEarthObservationEnabled() {
         WCSInfo wcs = getServiceInfo();
         Boolean enabled = wcs.getMetadata().get(WCSEOMetadata.ENABLED.key, Boolean.class);

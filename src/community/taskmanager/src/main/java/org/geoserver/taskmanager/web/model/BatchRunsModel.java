@@ -15,7 +15,7 @@ import org.geoserver.taskmanager.util.TaskManagerBeans;
 import org.geoserver.web.wicket.GeoServerDataProvider;
 
 public class BatchRunsModel extends GeoServerDataProvider<BatchRun> {
-    
+
     private static final long serialVersionUID = -5237816029300683075L;
 
     public static final Property<BatchRun> START = new BeanProperty<BatchRun>("start", "start");
@@ -24,11 +24,11 @@ public class BatchRunsModel extends GeoServerDataProvider<BatchRun> {
     public static final Property<BatchRun> MESSAGE = new BeanProperty<BatchRun>("message", "message");
 
     private IModel<Batch> batchModel;
-    
+
     public BatchRunsModel(IModel<Batch> batchModel) {
-       this.batchModel = batchModel;
+        this.batchModel = batchModel;
     }
-    
+
     @Override
     protected List<org.geoserver.web.wicket.GeoServerDataProvider.Property<BatchRun>> getProperties() {
         return Arrays.asList(START, END, STATUS, MESSAGE);
@@ -39,5 +39,5 @@ public class BatchRunsModel extends GeoServerDataProvider<BatchRun> {
         return new ArrayList<BatchRun>(
                 TaskManagerBeans.get().getDataUtil().init(batchModel.getObject()).getBatchRuns());
     }
-    
+
 }

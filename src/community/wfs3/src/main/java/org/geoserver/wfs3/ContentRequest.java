@@ -8,5 +8,5 @@ package org.geoserver.wfs3;
  * Request for the server contents
  */
 public class ContentRequest extends BaseRequest {
-    
+
 }

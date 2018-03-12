@@ -30,7 +30,7 @@ import org.springframework.context.ApplicationContextAware;
 
 /**
  * Default Web Processing Service class
- * 
+ *
  * @author Lucas Reed, Refractions Research Inc
  */
 public class DefaultWebProcessingService implements WebProcessingService, ApplicationContextAware {
@@ -47,7 +47,7 @@ public class DefaultWebProcessingService implements WebProcessingService, Applic
     private ProcessStatusTracker tracker;
 
     public DefaultWebProcessingService(GeoServer gs, WPSExecutionManager executionManager,
-            WPSResourceManager resources, ProcessStatusTracker tracker) {
+                                       WPSResourceManager resources, ProcessStatusTracker tracker) {
         this.gs = gs;
         this.executionManager = executionManager;
         this.resources = resources;
@@ -81,7 +81,7 @@ public class DefaultWebProcessingService implements WebProcessingService, Applic
     public ExecuteResponseType execute(ExecuteType request) throws WPSException {
         return new Execute(executionManager, context).run(request);
     }
-    
+
     /**
      * @see org.geoserver.wps.WebProcessingService#getSchema
      */
@@ -101,7 +101,7 @@ public class DefaultWebProcessingService implements WebProcessingService, Applic
     public Object getExecutionStatus(GetExecutionStatusType request) throws WPSException {
         return new GetStatus(tracker, resources, context).run(request);
     }
-    
+
     @Override
     public Resource getExecutionResult(GetExecutionResultType request) throws WPSException {
         return new GetResult(resources).run(request);

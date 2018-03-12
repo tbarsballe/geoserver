@@ -20,9 +20,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Class used to handle JMS extensions. Here we define a set of functions to perform resource lookup into the Spring context.
- * 
+ *
  * @author Carlo Cancellieri - carlo.cancellieri@geo-solutions.it
- * 
  */
 public class JMSManager {
     private final static Logger LOGGER = Logging.getLogger(JMSManager.class);
@@ -32,7 +31,7 @@ public class JMSManager {
 
     /**
      * Method to make lookup using the type of the passed eventType.
-     * 
+     *
      * @param <S>
      * @param <O>
      * @param eventType
@@ -59,7 +58,7 @@ public class JMSManager {
                 });
         // for each handler check if it 'canHandle' the incoming object if so
         // add it to the tree
-        for (final Iterator<?> it = beanSet.iterator(); it.hasNext();) {
+        for (final Iterator<?> it = beanSet.iterator(); it.hasNext(); ) {
             final Map.Entry<String, ?> entry = (Entry<String, ?>) it.next();
 
             final JMSEventHandlerSPI<S, O> spi = (JMSEventHandlerSPI) entry.getValue();
@@ -82,7 +81,7 @@ public class JMSManager {
                     return handler;
             } catch (Exception e) {
                 if (LOGGER.isLoggable(Level.WARNING))
-                    LOGGER.log(Level.WARNING,e.getLocalizedMessage(), e);
+                    LOGGER.log(Level.WARNING, e.getLocalizedMessage(), e);
             }
 
         }

@@ -42,8 +42,9 @@ public class CssHandler extends StyleHandler {
     public static final String FORMAT = "css";
 
     public static final String MIME_TYPE = "application/vnd.geoserver.geocss+css";
-    
+
     static final Map<StyleType, String> TEMPLATES = new HashMap<StyleType, String>();
+
     static {
         try {
             TEMPLATES.put(StyleType.POINT, IOUtils.toString(CssHandler.class
@@ -84,7 +85,7 @@ public class CssHandler extends StyleHandler {
 
     @Override
     public StyledLayerDescriptor parse(Object input, Version version,
-            ResourceLocator resourceLocator, EntityResolver entityResolver) throws IOException {
+                                       ResourceLocator resourceLocator, EntityResolver entityResolver) throws IOException {
         // see if we can use the SLD cache, some conversions are expensive.
         if (input instanceof File) {
             // convert to resource, to avoid code duplication (the code for file would be very
@@ -103,7 +104,7 @@ public class CssHandler extends StyleHandler {
                         entityResolver);
             } else {
                 // otherwise convert and write the cache
-                try(Reader reader = toReader(input)) {
+                try (Reader reader = toReader(input)) {
                     StyledLayerDescriptor sld = convertToSLD(reader);
                     try (OutputStream fos = sldResource.out()) {
                         sldHandler.encode(sld, SLDHandler.VERSION_10, true, fos);
@@ -138,7 +139,7 @@ public class CssHandler extends StyleHandler {
 
     @Override
     public void encode(StyledLayerDescriptor sld, Version version, boolean pretty,
-            OutputStream output) throws IOException {
+                       OutputStream output) throws IOException {
         throw new UnsupportedOperationException();
     }
 
@@ -153,7 +154,7 @@ public class CssHandler extends StyleHandler {
             return Arrays.asList(e);
         }
     }
-    
+
     @Override
     public String getCodeMirrorEditMode() {
         return "text/geocss";

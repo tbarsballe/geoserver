@@ -22,7 +22,7 @@ public class GetFeatureWithLockTest extends WFSTestSupport {
 
     @Override
     protected void setUpInternal(SystemTestData systemTestData) throws Exception {
-        getServiceDescriptor11().getOperations().add( "ReleaseLock");
+        getServiceDescriptor11().getOperations().add("ReleaseLock");
     }
 
     @Test
@@ -146,7 +146,7 @@ public class GetFeatureWithLockTest extends WFSTestSupport {
         // dom.getDocumentElement().getNodeName() );
         assertTrue(1 == dom.getElementsByTagName("wfs:FAILED").getLength()
                 || "ServiceExceptionReport".equals(dom.getDocumentElement()
-                        .getNodeName()));
+                .getNodeName()));
     }
 
     @Test
@@ -242,7 +242,7 @@ public class GetFeatureWithLockTest extends WFSTestSupport {
 
         String lockId = dom.getDocumentElement().getAttribute("lockId");
         //System.out.println(lockId);
-        
+
         // relase with "some" but actually releases the only locked feature
         xml = "<wfs:Transaction" + "  service=\"WFS\"" + "  version=\"1.0.0\""
                 + "  releaseAction=\"SOME\""
@@ -264,22 +264,22 @@ public class GetFeatureWithLockTest extends WFSTestSupport {
                 .getNodeName());
         assertEquals(1, dom.getElementsByTagName("wfs:SUCCESS").getLength());
     }
-    
+
     @Test
     public void testWorkspaceQualified() throws Exception {
         String xml = "<wfs:GetFeature" + "  service=\"WFS\""
-        + "  version=\"1.0.0\"" + "  expiry=\"10\""
-        + "  xmlns:cdf=\"http://www.opengis.net/cite/data\""
-        + "  xmlns:ogc=\"http://www.opengis.net/ogc\""
-        + "  xmlns:wfs=\"http://www.opengis.net/wfs\"" + ">"
-        + "  <wfs:Query typeName=\"Locks\"/>" + "</wfs:GetFeature>";
+                + "  version=\"1.0.0\"" + "  expiry=\"10\""
+                + "  xmlns:cdf=\"http://www.opengis.net/cite/data\""
+                + "  xmlns:ogc=\"http://www.opengis.net/ogc\""
+                + "  xmlns:wfs=\"http://www.opengis.net/wfs\"" + ">"
+                + "  <wfs:Query typeName=\"Locks\"/>" + "</wfs:GetFeature>";
         Document dom = postAsDOM("cdf/wfs", xml);
-        
+
         // get two fids
         NodeList locks = dom.getElementsByTagName("cdf:Locks");
         String fid1 = ((Element) locks.item(0)).getAttribute("fid");
         String fid2 = ((Element) locks.item(1)).getAttribute("fid");
-        
+
         xml = "<wfs:GetFeatureWithLock" + "  service=\"WFS\""
                 + "  version=\"1.0.0\"" + "  expiry=\"10\""
                 + "  xmlns:cdf=\"http://www.opengis.net/cite/data\""
@@ -290,11 +290,11 @@ public class GetFeatureWithLockTest extends WFSTestSupport {
                 + "      <ogc:FeatureId fid=\"" + fid2 + "\"/>"
                 + "    </ogc:Filter>" + "  </wfs:Query>"
                 + "</wfs:GetFeatureWithLock>";
-        
+
         dom = postAsDOM("cdf/wfs", xml);
         assertEquals("wfs:FeatureCollection", dom.getDocumentElement()
                 .getNodeName());
-        
+
         String lockId = dom.getDocumentElement().getAttribute("lockId");
         //System.out.println(lockId);
         xml = "<wfs:Transaction" + "  service=\"WFS\"" + "  version=\"1.0.0\""
@@ -310,13 +310,13 @@ public class GetFeatureWithLockTest extends WFSTestSupport {
                 + "      <ogc:FeatureId fid=\"" + fid1 + "\"/>"
                 + "    </ogc:Filter>" + "  </wfs:Update>"
                 + "</wfs:Transaction>";
-        
+
         dom = postAsDOM("cdf/wfs", xml);
-        
+
         assertEquals("wfs:WFS_TransactionResponse", dom.getDocumentElement()
                 .getNodeName());
         assertEquals(1, dom.getElementsByTagName("wfs:SUCCESS").getLength());
-        
+
         xml = "<wfs:Transaction" + "  service=\"WFS\"" + "  version=\"1.0.0\""
                 + "  xmlns:cdf=\"http://www.opengis.net/cite/data\""
                 + "  xmlns:ogc=\"http://www.opengis.net/ogc\""
@@ -329,32 +329,32 @@ public class GetFeatureWithLockTest extends WFSTestSupport {
                 + "      <ogc:FeatureId fid=\"" + fid2 + "\"/>"
                 + "    </ogc:Filter>" + "  </wfs:Update>"
                 + "</wfs:Transaction>";
-        
+
         dom = postAsDOM("cdf/wfs", xml);
-        
+
         // release locks
         get("cdf/wfs?request=ReleaseLock&version=1.1.0&lockId=" + lockId);
-        
+
         assertEquals("wfs:WFS_TransactionResponse", dom.getDocumentElement()
                 .getNodeName());
         assertEquals(1, dom.getElementsByTagName("wfs:SUCCESS").getLength());
     }
-    
+
     @Test
     public void testLayerQualified() throws Exception {
         String xml = "<wfs:GetFeature" + "  service=\"WFS\""
-        + "  version=\"1.0.0\"" + "  expiry=\"10\""
-        + "  xmlns:cdf=\"http://www.opengis.net/cite/data\""
-        + "  xmlns:ogc=\"http://www.opengis.net/ogc\""
-        + "  xmlns:wfs=\"http://www.opengis.net/wfs\"" + ">"
-        + "  <wfs:Query typeName=\"Locks\"/>" + "</wfs:GetFeature>";
+                + "  version=\"1.0.0\"" + "  expiry=\"10\""
+                + "  xmlns:cdf=\"http://www.opengis.net/cite/data\""
+                + "  xmlns:ogc=\"http://www.opengis.net/ogc\""
+                + "  xmlns:wfs=\"http://www.opengis.net/wfs\"" + ">"
+                + "  <wfs:Query typeName=\"Locks\"/>" + "</wfs:GetFeature>";
         Document dom = postAsDOM("cdf/Locks/wfs", xml);
-        
+
         // get two fids
         NodeList locks = dom.getElementsByTagName("cdf:Locks");
         String fid1 = ((Element) locks.item(0)).getAttribute("fid");
         String fid2 = ((Element) locks.item(1)).getAttribute("fid");
-        
+
         xml = "<wfs:GetFeatureWithLock" + "  service=\"WFS\""
                 + "  version=\"1.0.0\"" + "  expiry=\"10\""
                 + "  xmlns:cdf=\"http://www.opengis.net/cite/data\""
@@ -365,15 +365,15 @@ public class GetFeatureWithLockTest extends WFSTestSupport {
                 + "      <ogc:FeatureId fid=\"" + fid2 + "\"/>"
                 + "    </ogc:Filter>" + "  </wfs:Query>"
                 + "</wfs:GetFeatureWithLock>";
-        
-        
+
+
         dom = postAsDOM("cdf/Fifteen/wfs", xml);
         XMLAssert.assertXpathEvaluatesTo("1", "count(//ogc:ServiceException)", dom);
-        
+
         dom = postAsDOM("cdf/Locks/wfs", xml);
         assertEquals("wfs:FeatureCollection", dom.getDocumentElement()
                 .getNodeName());
-        
+
         String lockId = dom.getDocumentElement().getAttribute("lockId");
         //System.out.println(lockId);
         xml = "<wfs:Transaction" + "  service=\"WFS\"" + "  version=\"1.0.0\""
@@ -389,13 +389,13 @@ public class GetFeatureWithLockTest extends WFSTestSupport {
                 + "      <ogc:FeatureId fid=\"" + fid1 + "\"/>"
                 + "    </ogc:Filter>" + "  </wfs:Update>"
                 + "</wfs:Transaction>";
-        
+
         dom = postAsDOM("cdf/Locks/wfs", xml);
-        
+
         assertEquals("wfs:WFS_TransactionResponse", dom.getDocumentElement()
                 .getNodeName());
         assertEquals(1, dom.getElementsByTagName("wfs:SUCCESS").getLength());
-        
+
         xml = "<wfs:Transaction" + "  service=\"WFS\"" + "  version=\"1.0.0\""
                 + "  xmlns:cdf=\"http://www.opengis.net/cite/data\""
                 + "  xmlns:ogc=\"http://www.opengis.net/ogc\""
@@ -408,15 +408,15 @@ public class GetFeatureWithLockTest extends WFSTestSupport {
                 + "      <ogc:FeatureId fid=\"" + fid2 + "\"/>"
                 + "    </ogc:Filter>" + "  </wfs:Update>"
                 + "</wfs:Transaction>";
-        
+
         dom = postAsDOM("cdf/Locks/wfs", xml);
-        
+
         // release locks
         get("cdf/Locks/wfs?request=ReleaseLock&version=1.1.0&lockId=" + lockId);
-        
+
         assertEquals("wfs:WFS_TransactionResponse", dom.getDocumentElement()
                 .getNodeName());
         assertEquals(1, dom.getElementsByTagName("wfs:SUCCESS").getLength());
-        
+
     }
 }

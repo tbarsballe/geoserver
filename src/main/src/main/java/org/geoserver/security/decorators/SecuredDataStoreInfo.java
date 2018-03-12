@@ -19,11 +19,10 @@ import org.opengis.util.ProgressListener;
 /**
  * Given a {@link DataStoreInfo} makes sure no write operations can be performed
  * through it
- * 
- * @author Andrea Aime - TOPP
- * 
+ *
  * @param <T>
  * @param <F>
+ * @author Andrea Aime - TOPP
  */
 @SuppressWarnings("serial")
 public class SecuredDataStoreInfo extends DecoratingDataStoreInfo {
@@ -41,7 +40,7 @@ public class SecuredDataStoreInfo extends DecoratingDataStoreInfo {
                 .getDataStore(listener);
         if (ds == null)
             return null;
-        else if(policy.level == AccessLevel.METADATA)
+        else if (policy.level == AccessLevel.METADATA)
             throw SecureCatalogImpl.unauthorizedAccess(this.getName());
         else
             return (DataAccess<? extends FeatureType, ? extends Feature>) SecuredObjects.secure(ds, policy);

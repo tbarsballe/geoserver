@@ -10,12 +10,11 @@ import org.geoserver.security.web.SecurityNamedServicePanelInfo;
 
 /**
  * Extension point for authentication provider configuration panels.
- * 
- * @author Justin Deoliveira, OpenGeo
  *
+ * @author Justin Deoliveira, OpenGeo
  */
 public class AuthenticationProviderPanelInfo
-    <C extends SecurityAuthProviderConfig, T extends AuthenticationProviderPanel<C>>
-    extends SecurityNamedServicePanelInfo<C,T>{
-    
+        <C extends SecurityAuthProviderConfig, T extends AuthenticationProviderPanel<C>>
+        extends SecurityNamedServicePanelInfo<C, T> {
+
 }

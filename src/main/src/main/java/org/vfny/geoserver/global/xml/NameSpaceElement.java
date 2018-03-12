@@ -19,7 +19,9 @@ package org.vfny.geoserver.global.xml;
  * @version $Id$
  */
 public abstract class NameSpaceElement {
-    /** the namespace prefix to use for qualification*/
+    /**
+     * the namespace prefix to use for qualification
+     */
     protected final String prefix;
 
     /**
@@ -32,6 +34,7 @@ public abstract class NameSpaceElement {
      * If the prefix passed is null, then qualified names will be
      * null unless they have a prefix specified.
      * </p>
+     *
      * @param prefix The prefix to use for qualification.
      */
     public NameSpaceElement(String prefix) {
@@ -63,17 +66,18 @@ public abstract class NameSpaceElement {
      * <p>
      * <code>
      * <xs:complexType name="Lines_Type">
-     *   <xs:complexContent>
-     *     <xs:extension base="gml:AbstractFeatureType">
-     *      <xs:sequence>
-     *        <xs:element name="id" type="xs:string"/>
-     *      <xs:element ref="gml:lineStringProperty" minOccurs="0"/>
-     *     </xs:sequence>
-     *    </xs:extension>
-     *   </xs:complexContent>
+     * <xs:complexContent>
+     * <xs:extension base="gml:AbstractFeatureType">
+     * <xs:sequence>
+     * <xs:element name="id" type="xs:string"/>
+     * <xs:element ref="gml:lineStringProperty" minOccurs="0"/>
+     * </xs:sequence>
+     * </xs:extension>
+     * </xs:complexContent>
      * </xs:complexType>
      * </code>
      * </p>
+     *
      * @return The type def. name, for the above example AbstractFeatureType.
      */
     public abstract String getTypeDefName();
@@ -91,6 +95,7 @@ public abstract class NameSpaceElement {
      * <xs:element ref="gml:lineStringProperty" minOccurs="0"/>
      * </code>
      * </p>
+     *
      * @return The element name, for the above example string or lineStringProperty.
      */
     public abstract String getTypeRefName();
@@ -100,6 +105,7 @@ public abstract class NameSpaceElement {
      * <p>
      * Returns a qualified type definition name <code>prefix:definition name</code>.
      * </p>
+     *
      * @return the name if the default prefix is non null, null otherwise
      * @see #getTypeDefName()
      */
@@ -110,6 +116,7 @@ public abstract class NameSpaceElement {
      * <p>
      * Returns a qualified type reference name <code>prefix:reference name</code>.
      * </p>
+     *
      * @return the name if the default prefix is non null, null otherwise
      * @see #getTypeRefName()
      */
@@ -120,6 +127,7 @@ public abstract class NameSpaceElement {
      * <p>
      * Returns a qualified type definition name <code>prefix:definition name</code> with the specified prefix.
      * </p>
+     *
      * @param prefix The prefix to use for qualification.
      * @return the name if either the specified or default prefix is non null, null otherwise
      * @see #getTypeDefName()
@@ -131,6 +139,7 @@ public abstract class NameSpaceElement {
      * <p>
      * Returns a qualified type reference name <code>prefix:reference name</code> with the specified prefix.
      * </p>
+     *
      * @param prefix The prefix to use for qualification.
      * @return the name if either the specified or default prefix is non null, null otherwise
      * @see #getTypeRefName()
@@ -145,6 +154,7 @@ public abstract class NameSpaceElement {
      * <p>
      * for example an element of type xs:int would return <code>Integer.class</code>.
      * </p>
+     *
      * @return Class instance of the Class object which would best represent this element.
      */
     public abstract Class getJavaClass();

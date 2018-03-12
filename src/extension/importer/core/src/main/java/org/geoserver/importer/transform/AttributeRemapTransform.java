@@ -15,26 +15,30 @@ import org.opengis.feature.type.AttributeDescriptor;
 
 /**
  * Attribute that maps an attribute from one type to another.
- * 
+ *
  * @author Justin Deoliveira, OpenGeo
  */
 public class AttributeRemapTransform extends AbstractTransform implements InlineVectorTransform {
-    
+
     private static final long serialVersionUID = 1L;
 
-    /** field to remap */
+    /**
+     * field to remap
+     */
     protected String field;
 
-    /** type to remap to */
+    /**
+     * type to remap to
+     */
     protected Class type;
-    
+
     public AttributeRemapTransform(String field, Class type) {
         this.field = field;
         this.type = type;
     }
-    
+
     protected AttributeRemapTransform() {
-        
+
     }
 
     public String getField() {
@@ -54,7 +58,7 @@ public class AttributeRemapTransform extends AbstractTransform implements Inline
     }
 
     public SimpleFeatureType apply(ImportTask task, DataStore dataStore,
-            SimpleFeatureType featureType) throws Exception {
+                                   SimpleFeatureType featureType) throws Exception {
         //remap the type
         SimpleFeatureTypeBuilder builder = new SimpleFeatureTypeBuilder();
         builder.init(featureType);
@@ -63,7 +67,7 @@ public class AttributeRemapTransform extends AbstractTransform implements Inline
         if (index < 0) {
             throw new Exception("FeatureType " + featureType.getName() + " does not have attribute named '" + field + "'");
         }
-        
+
         //remap the attribute to type date and ensure schema ordering is the same
         //@todo improve FeatureTypeBuilder to support this directly
         AttributeDescriptor existing = builder.remove(field);
@@ -75,8 +79,8 @@ public class AttributeRemapTransform extends AbstractTransform implements Inline
         return builder.buildFeatureType();
     }
 
-    public SimpleFeature apply(ImportTask task, DataStore dataStore, SimpleFeature oldFeature, 
-        SimpleFeature feature) throws Exception {
+    public SimpleFeature apply(ImportTask task, DataStore dataStore, SimpleFeature oldFeature,
+                               SimpleFeature feature) throws Exception {
         return feature;
     }
 

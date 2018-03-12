@@ -10,7 +10,7 @@ import org.geoserver.catalog.NamespaceInfo;
 
 /**
  * Simple choice renderer for {@link NamespaceInfo}
- * 
+ *
  * @author Gabriel Roldan
  */
 public class NamespaceChoiceRenderer extends ChoiceRenderer<NamespaceInfo> {

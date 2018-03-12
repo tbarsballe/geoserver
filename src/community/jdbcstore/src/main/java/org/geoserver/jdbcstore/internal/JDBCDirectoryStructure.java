@@ -31,13 +31,10 @@ import org.geoserver.jdbcstore.internal.JDBCQueryHelper.*;
 import static org.geoserver.jdbcstore.internal.JDBCQueryHelper.*;
 
 /**
- * 
  * Handles database access & ORM mapping of directory structure
  *
  * @author Kevin Smith, Boundless
  * @author Niels Charlier
- *
- *
  */
 public class JDBCDirectoryStructure {
 
@@ -60,12 +57,12 @@ public class JDBCDirectoryStructure {
     private JDBCResourceStoreProperties config;
 
     private JDBCQueryHelper helper;
-        
+
     Cache<ArrayList<String>, EntryMetaData> entryCache;
-    
+
     private static class EntryMetaData implements Serializable {
         private static final long serialVersionUID = 4442694295286861328L;
-        
+
         public Integer oid;
         public Boolean dir;
         public Timestamp lastModified;
@@ -73,18 +70,17 @@ public class JDBCDirectoryStructure {
 
     /**
      * Resource/Directory entry in the database.
-     *
      */
     public class Entry {
 
         private final ArrayList<String> path;
         private EntryMetaData md;
-                
+
         protected Entry(List<String> path, EntryMetaData md) {
             this.path = new ArrayList<String>(path);
             this.md = md;
         }
-        
+
         @SuppressWarnings("unchecked")
         protected <T> T getValue(Field<T> prop) {
             Map<String, Object> record = helper.selectQuery(TABLE_RESOURCES, new PathSelector(path),
@@ -144,13 +140,13 @@ public class JDBCDirectoryStructure {
                 LOGGER.warning("Delete operation failed or incomplete for entry " + toString());
                 return false;
             }
-            
+
             md.oid = null;
             md.dir = null;
             md.lastModified = null;
-            
+
             entryCache.put(path, md);
-            
+
             return true;
         }
 
@@ -191,16 +187,16 @@ public class JDBCDirectoryStructure {
                 LOGGER.warning("Unable to perform rename operation for entry " + toString());
                 return false;
             }
-            
+
             dest.md.oid = md.oid;
             dest.md.dir = md.dir;
             dest.md.lastModified = md.lastModified;
             md.oid = null;
             md.dir = null;
-            md.lastModified = null;            
+            md.lastModified = null;
 
             entryCache.put(path, md);
-            
+
             return true;
         }
 
@@ -223,7 +219,7 @@ public class JDBCDirectoryStructure {
             while (!parentPath.isEmpty()) {
                 parentPath = parentPath.subList(0, parentPath.size() - 1);
                 if (helper.updateQuery(TABLE_RESOURCES, new PathSelector(parentPath),
-                       new Assignment<Timestamp>(LAST_MODIFIED, md.lastModified)) <= 0) {
+                        new Assignment<Timestamp>(LAST_MODIFIED, md.lastModified)) <= 0) {
                     LOGGER.warning("Unable to update last modified for directory " + toString());
                 }
             }
@@ -250,7 +246,7 @@ public class JDBCDirectoryStructure {
                     parentOid = (Integer) record.get(OID.getFieldName());
                 }
             }
-            
+
             md.oid = parentOid;
             md.dir = true;
 
@@ -276,7 +272,8 @@ public class JDBCDirectoryStructure {
             }
 
             ByteArrayInputStream is = new ByteArrayInputStream(new byte[0]);
-            /*Integer*/ md.oid = helper.insertQuery(TABLE_RESOURCES,
+            /*Integer*/
+            md.oid = helper.insertQuery(TABLE_RESOURCES,
                     new Assignment<String>(NAME, getName()),
                     new Assignment<Integer>(PARENT, parent.getOid()), new Assignment<InputStream>(
                             CONTENT, is));
@@ -289,7 +286,7 @@ public class JDBCDirectoryStructure {
             if (md.oid == null) {
                 throw new IllegalStateException("Did not get OID for new entry " + toString());
             }
-            
+
             md.dir = false;
 
             entryCache.put(path, md);
@@ -352,7 +349,7 @@ public class JDBCDirectoryStructure {
             }
         }
     }
-    
+
     private Cache<ArrayList<String>, EntryMetaData> entryCache() {
         if (entryCache == null) {
             CacheProvider cacheProvider = DefaultCacheProvider.findProvider();
@@ -360,33 +357,33 @@ public class JDBCDirectoryStructure {
         }
         return entryCache;
     }
-        
-    protected Entry createEntry(ArrayList<String> path) {            
+
+    protected Entry createEntry(ArrayList<String> path) {
         try {
-            return new Entry(path, entryCache().get(path, 
-                   new Callable<EntryMetaData>() {
-                @Override
-                public EntryMetaData call() throws Exception {
-                    EntryMetaData md = new EntryMetaData();
-                    Map<String, Object> record = helper.selectQuery(
-                            TABLE_RESOURCES, new PathSelector(path), 
-                            OID, DIRECTORY, LAST_MODIFIED);
-                    if (record != null) {
-                        md.oid = (Integer) record.get(OID.getFieldName());
-                        md.dir = (Boolean) record.get(DIRECTORY.getFieldName());
-                        md.lastModified = (Timestamp) record.get(LAST_MODIFIED.getFieldName());
-                    }
-                    return md;
-                }
-                
-            }));
+            return new Entry(path, entryCache().get(path,
+                    new Callable<EntryMetaData>() {
+                        @Override
+                        public EntryMetaData call() throws Exception {
+                            EntryMetaData md = new EntryMetaData();
+                            Map<String, Object> record = helper.selectQuery(
+                                    TABLE_RESOURCES, new PathSelector(path),
+                                    OID, DIRECTORY, LAST_MODIFIED);
+                            if (record != null) {
+                                md.oid = (Integer) record.get(OID.getFieldName());
+                                md.dir = (Boolean) record.get(DIRECTORY.getFieldName());
+                                md.lastModified = (Timestamp) record.get(LAST_MODIFIED.getFieldName());
+                            }
+                            return md;
+                        }
+
+                    }));
         } catch (ExecutionException e) {
             throw new IllegalStateException(e);
-        }    
+        }
     }
 
     protected Entry createEntry(List<String> parent, String child) {
-        ArrayList<String >path = new ArrayList<String>(parent);
+        ArrayList<String> path = new ArrayList<String>(parent);
         path.add(child);
         return createEntry(path);
     }

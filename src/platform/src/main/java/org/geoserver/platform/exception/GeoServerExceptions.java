@@ -31,7 +31,7 @@ public class GeoServerExceptions {
 
     /**
      * Returns a localized message for the specific exception for the default system locale.
-     * 
+     *
      * @see #localize(IGeoServerException, Locale)
      */
     public static String localize(IGeoServerException e) {
@@ -42,19 +42,19 @@ public class GeoServerExceptions {
      * Returns a localized message for the specific exception, given the specified
      * locale.
      * <p>
-     * This method processes the {@link ResourceBundle} extension point to find the 
+     * This method processes the {@link ResourceBundle} extension point to find the
      * appropriate {@link ResourceBundle} containing the localized message. The base name used
      * to look up the message is the name of the exception class. First the fully qualified
-     * exception name is used, and if no bundle found, the non qualified name is used. 
+     * exception name is used, and if no bundle found, the non qualified name is used.
      * </p>
-     * @param e The exception whose message to localize.
+     *
+     * @param e      The exception whose message to localize.
      * @param locale The locale to use.
-     * 
      * @return The localized message, or <code>null</code> if none could be found.
      */
     public static String localize(IGeoServerException e, Locale locale) {
         Class<? extends IGeoServerException> clazz = e.getClass();
-        while(clazz != null) {
+        while (clazz != null) {
             String localized = doLocalize(e.getId(), e.getArgs(), clazz, locale);
             if (localized != null) {
                 return localized;
@@ -62,27 +62,26 @@ public class GeoServerExceptions {
 
             //could not find string, if the exception parent class is also a geoserver exception
             // move up the hierarchy and try that
-            
-            if (IGeoServerException.class.isAssignableFrom(clazz.getSuperclass()) ) {
+
+            if (IGeoServerException.class.isAssignableFrom(clazz.getSuperclass())) {
                 clazz = (Class<? extends IGeoServerException>) clazz.getSuperclass();
-            }
-            else {
+            } else {
                 clazz = null;
             }
         }
         return null;
     }
-    
-    static String doLocalize(String id, Object[] args, Class<? extends IGeoServerException> clazz, 
-            Locale locale) {
-        
+
+    static String doLocalize(String id, Object[] args, Class<? extends IGeoServerException> clazz,
+                             Locale locale) {
+
         ResourceBundle bundle = null;
         try {
             bundle = ResourceBundle.getBundle("GeoServerException", locale, control);
             //bundle = ResourceBundle.getBundle(clazz.getCanonicalName(), locale, control);
+        } catch (MissingResourceException ex) {
         }
-        catch(MissingResourceException ex) {}
-        
+
         if (bundle == null) {
             //could not locate a bundle
             return null;
@@ -93,13 +92,12 @@ public class GeoServerExceptions {
         try {
             //first try with the qualified class name
             localized = bundle.getString(clazz.getCanonicalName() + "." + id);
-        }
-        catch(MissingResourceException ex) {
+        } catch (MissingResourceException ex) {
             //next try with the non qualifiied
             try {
                 localized = bundle.getString(clazz.getSimpleName() + "." + id);
+            } catch (MissingResourceException ex2) {
             }
-            catch(MissingResourceException ex2) {}
         }
         if (localized == null) {
             if (LOGGER.isLoggable(Level.FINER)) {
@@ -112,7 +110,7 @@ public class GeoServerExceptions {
         if (args != null && args.length > 0) {
             localized = MessageFormat.format(localized, args);
         }
-        
+
         return localized;
     }
 
@@ -129,7 +127,7 @@ public class GeoServerExceptions {
 
         @Override
         public ResourceBundle newBundle(String baseName, Locale locale,
-                String format, ClassLoader loader, boolean reload)
+                                        String format, ClassLoader loader, boolean reload)
                 throws IllegalAccessException, InstantiationException,
                 IOException {
 
@@ -142,7 +140,7 @@ public class GeoServerExceptions {
             filename += ".properties";
 
             Enumeration<URL> e = loader.getResources(filename);
-            Properties props = null; 
+            Properties props = null;
             while (e.hasMoreElements()) {
                 if (props == null) {
                     props = new Properties();
@@ -152,16 +150,13 @@ public class GeoServerExceptions {
                 InputStream in = url.openStream();
                 try {
                     props.load(in);
-                }
-                catch(Exception ex) {
+                } catch (Exception ex) {
                     LOGGER.log(Level.WARNING, "Error loading properties from: ", url);
-                }
-                finally {
+                } finally {
                     if (in != null) {
                         try {
                             in.close();
-                        }
-                        catch(Exception ex2) {
+                        } catch (Exception ex2) {
                             LOGGER.log(Level.FINEST, ex2.getMessage(), ex2);
                         }
                     }
@@ -170,7 +165,7 @@ public class GeoServerExceptions {
             return props != null ? new PropResourceBundle(props) : null;
         }
     }
-    
+
     static class PropResourceBundle extends ResourceBundle {
 
         Properties props;
@@ -188,6 +183,6 @@ public class GeoServerExceptions {
         public Enumeration<String> getKeys() {
             return (Enumeration) props.keys();
         }
-    
+
     }
 }

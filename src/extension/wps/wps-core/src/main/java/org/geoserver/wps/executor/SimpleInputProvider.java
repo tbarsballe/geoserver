@@ -25,9 +25,8 @@ import org.opengis.util.ProgressListener;
 
 /**
  * Performs lazy parsing of a specific input
- * 
+ *
  * @author Andrea Aime - GeoSolutions
- * 
  */
 class SimpleInputProvider extends AbstractInputProvider {
 

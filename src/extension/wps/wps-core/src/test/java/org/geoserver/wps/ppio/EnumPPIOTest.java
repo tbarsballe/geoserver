@@ -15,7 +15,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 public class EnumPPIOTest {
-    
+
     @Test
     public void test() throws Exception {
         EnumPPIO ppio = new EnumPPIO(TestEnum.class);
@@ -26,8 +26,7 @@ public class EnumPPIOTest {
         try {
             ppio.decode("BAZ");
             fail("Invalid value should have thrown an exception");
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
         }
     }
 

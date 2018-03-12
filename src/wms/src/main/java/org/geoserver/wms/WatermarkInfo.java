@@ -9,66 +9,56 @@ import java.io.Serializable;
 
 /**
  * Configuration object for WMS water marking.
- * 
+ *
  * @author Justin Deoliveira, The Open Planning Project
- * 
  */
-public interface WatermarkInfo extends Serializable{
+public interface WatermarkInfo extends Serializable {
 
     /**
      * The position of a watermark logo.
      */
     public static enum Position {
         TOP_LEFT {
-
             public int getCode() {
                 return 0;
             }
         },
         TOP_CENTER {
-
             public int getCode() {
                 return 1;
             }
         },
         TOP_RIGHT {
-
             public int getCode() {
                 return 2;
             }
         },
         MID_LEFT {
-
             public int getCode() {
                 return 3;
             }
         },
         MID_CENTER {
-
             public int getCode() {
                 return 4;
             }
         },
         MID_RIGHT {
-
             public int getCode() {
                 return 5;
             }
         },
         BOT_LEFT {
-
             public int getCode() {
                 return 6;
             }
         },
         BOT_CENTER {
-
             public int getCode() {
                 return 7;
             }
         },
         BOT_RIGHT {
-
             public int getCode() {
                 return 8;
             }
@@ -85,7 +75,9 @@ public interface WatermarkInfo extends Serializable{
 
             return null;
         }
-    };
+    }
+
+    ;
 
     /**
      * Flag indicating if water marking is enabled.
@@ -100,7 +92,7 @@ public interface WatermarkInfo extends Serializable{
     /**
      * The position of the watermark on resulting wms images.
      * <p>
-     * 
+     * <p>
      * <pre>
      * O -- O -- O      0 -- 1 -- 2
      * |    |    |      |    |    |

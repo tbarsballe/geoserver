@@ -55,29 +55,32 @@ import java.util.Set;
 import java.util.logging.Level;
 
 /**
- * A class which takes care of initializing NetCDF dimension from coverages dimension, 
- * variables, values for the NetCDF output file and finally write them when invoking 
+ * A class which takes care of initializing NetCDF dimension from coverages dimension,
+ * variables, values for the NetCDF output file and finally write them when invoking
  * the write method.
- * 
+ *
  * @author Daniele Romagnoli, GeoSolutions SAS
- * 
  */
 public class DefaultNetCDFEncoder extends AbstractNetCDFEncoder {
 
-    /** The user supplied variableName */
+    /**
+     * The user supplied variableName
+     */
     private String variableName;
 
-    /** The user supplied unit of measure */
+    /**
+     * The user supplied unit of measure
+     */
     private String variableUoM;
 
-    /** 
-     * The unitConverter to be used to convert the pixel values from the input unit 
+    /**
+     * The unitConverter to be used to convert the pixel values from the input unit
      * (the one coming from the original coverage) to output unit (the one specified
-     * by the user). As an instance, we may work against a sea_surface_temperature 
+     * by the user). As an instance, we may work against a sea_surface_temperature
      * coverage having temperature in celsius whilst we want to store it back
      * as a sea_surface_temperature in kelvin. In that case the machinery will setup
      * a not-null unitConverter to be used at time of data writing.
-     * */
+     */
     private UnitConverter unitConverter;
 
     private double noDataValue;
@@ -88,8 +91,9 @@ public class DefaultNetCDFEncoder extends AbstractNetCDFEncoder {
 
     /**
      * {@link DefaultNetCDFEncoder} constructor.
-     * @param granuleStack the granule stack to be written
-     * @param file an output file
+     *
+     * @param granuleStack       the granule stack to be written
+     * @param file               an output file
      * @param encodingParameters customized encoding params
      * @throws IOException
      */
@@ -171,14 +175,14 @@ public class DefaultNetCDFEncoder extends AbstractNetCDFEncoder {
                 // by the JSR Unit class. We can refactor this replacement by using bytes check
                 // instead of specific replace calls.
                 String unitString = variableUoM.replace(" ", "*").replace("-", "^-").replace(".", "*")
-                .replace("m2","m^2").replace("m3","m^3").replace("s2", "s^2");
+                        .replace("m2", "m^2").replace("m3", "m^3").replace("s2", "s^2");
                 try {
                     Unit outputUoM = Unit.valueOf(unitString);
                     if (outputUoM != null && !inputUoM.equals(outputUoM)) {
-                        if (!inputUoM.isCompatible(outputUoM)){
+                        if (!inputUoM.isCompatible(outputUoM)) {
                             if (LOGGER.isLoggable(Level.WARNING)) {
-                                LOGGER.warning("input unit " + inputUoM.toString() 
-                                        + " and output unit " + outputUoM.toString() 
+                                LOGGER.warning("input unit " + inputUoM.toString()
+                                        + " and output unit " + outputUoM.toString()
                                         + " are incompatible.\nNo unit conversion will be performed");
                             }
                         } else {
@@ -187,13 +191,13 @@ public class DefaultNetCDFEncoder extends AbstractNetCDFEncoder {
                     }
                 } catch (ConversionException ce) {
                     if (LOGGER.isLoggable(Level.SEVERE)) {
-                        LOGGER.severe("Unable to create a converter for the specified unit: " + unitString 
-                                + "\nNo unit conversion will be performed" );
+                        LOGGER.severe("Unable to create a converter for the specified unit: " + unitString
+                                + "\nNo unit conversion will be performed");
                     }
                 } catch (IllegalArgumentException e) {
                     if (LOGGER.isLoggable(Level.SEVERE)) {
-                        LOGGER.severe("Unable to parse the specified unit: " + unitString 
-                                + "\nNo unit conversion will be performed" );
+                        LOGGER.severe("Unable to parse the specified unit: " + unitString
+                                + "\nNo unit conversion will be performed");
                     }
                 }
             }
@@ -211,11 +215,11 @@ public class DefaultNetCDFEncoder extends AbstractNetCDFEncoder {
             for (GridCoverage2D coverage : this.granuleStack.getGranules()) {
                 updateDimensionValues(coverage);
                 if (!(dataPacking == DataPacking.NONE)) {
-                    this.stats = new DataStats(); 
+                    this.stats = new DataStats();
                     collectStats(coverage, Arrays.asList(this.stats));
                 }
             }
-            
+
             DataStats updatedStats = stats;
             if (unitConverter != null) {
                 //Update stats by applying unitConversion
@@ -231,7 +235,7 @@ public class DefaultNetCDFEncoder extends AbstractNetCDFEncoder {
             Number noData = dataPacker != null ? dataPacker.getReservedValue() : noDataValue;
             writer.addVariableAttribute(var, new Attribute(NetCDFUtilities.FILL_VALUE, NetCDFUtilities.transcodeNumber(varDataType, noData)));
         }
-        
+
         // Initialize the gridMapping part of the variable
         crsWriter.initializeGridMapping(var);
 
@@ -307,10 +311,10 @@ public class DefaultNetCDFEncoder extends AbstractNetCDFEncoder {
 
     }
 
-    
 
     /**
      * Set the variables values
+     *
      * @param writer
      * @throws IOException
      * @throws InvalidRangeException
@@ -321,7 +325,7 @@ public class DefaultNetCDFEncoder extends AbstractNetCDFEncoder {
         final int[] dimSize = new int[numDimensions];
         final String[] dimName = new String[numDimensions];
         int iDim = 0;
-        for (NetCDFDimensionMapping dimension: dimensionsManager.getDimensions()) {
+        for (NetCDFDimensionMapping dimension : dimensionsManager.getDimensions()) {
             dimSize[iDim] = dimension.getDimensionValues().getSize();
             dimName[iDim] = dimension.getNetCDFDimension().getShortName();
             iDim++;
@@ -341,7 +345,7 @@ public class DefaultNetCDFEncoder extends AbstractNetCDFEncoder {
         final Array matrix = NetCDFUtilities.getArray(dimSize, netCDFDataType);
 
         // Loop over all granules
-        for (GridCoverage2D gridCoverage: granuleStack.getGranules()) {
+        for (GridCoverage2D gridCoverage : granuleStack.getGranules()) {
             final RenderedImage ri = gridCoverage.getRenderedImage();
 
             //
@@ -356,10 +360,10 @@ public class DefaultNetCDFEncoder extends AbstractNetCDFEncoder {
             int tileWidth = Math.min(ri.getTileWidth(), width);
             int tileHeight = Math.min(ri.getTileHeight(), height);
 
-            int minTileX = minX / tileWidth - (minX < 0 ? (-minX % tileWidth > 0 ? 1 : 0): 0);
-            int minTileY = minY / tileHeight - (minY < 0 ? (-minY % tileHeight > 0 ? 1 : 0): 0);
-            int maxTileX = maxX / tileWidth - (maxX < 0 ? (-maxX % tileWidth > 0 ? 1 : 0): 0);
-            int maxTileY = maxY / tileHeight - (maxY < 0 ? (-maxY % tileHeight > 0 ? 1 : 0): 0);
+            int minTileX = minX / tileWidth - (minX < 0 ? (-minX % tileWidth > 0 ? 1 : 0) : 0);
+            int minTileY = minY / tileHeight - (minY < 0 ? (-minY % tileHeight > 0 ? 1 : 0) : 0);
+            int maxTileX = maxX / tileWidth - (maxX < 0 ? (-maxX % tileWidth > 0 ? 1 : 0) : 0);
+            int maxTileY = maxY / tileHeight - (maxY < 0 ? (-maxY % tileHeight > 0 ? 1 : 0) : 0);
 
             final Index matrixIndex = matrix.getIndex();
             final int indexing[] = new int[numDimensions];
@@ -389,9 +393,9 @@ public class DefaultNetCDFEncoder extends AbstractNetCDFEncoder {
                                         .contains(indexing[record.dimensionIndex])) {
                                     writer.write(
                                             writer.findVariable(record.extraVariable.getOutput()),
-                                            new int[] { indexing[record.dimensionIndex] },
+                                            new int[]{indexing[record.dimensionIndex]},
                                             source.findVariable(record.extraVariable.getSource())
-                                                    .read().reshape(new int[] { 1 }));
+                                                    .read().reshape(new int[]{1}));
                                     record.writtenIndices.add(indexing[record.dimensionIndex]);
                                 }
                             }
@@ -421,8 +425,8 @@ public class DefaultNetCDFEncoder extends AbstractNetCDFEncoder {
                                     indexing[numDimensions - 1] = k - minX;
                                     indexing[numDimensions - 2] = yPos;
                                     matrixIndex.set(indexing);
-                                    setPixel(k, j, NetCDFUtilities.transcodeImageDataType(imageDataType), 
-                                            netCDFDataType, data, matrix, matrixIndex, dataPacker, noDataValue, 
+                                    setPixel(k, j, NetCDFUtilities.transcodeImageDataType(imageDataType),
+                                            netCDFDataType, data, matrix, matrixIndex, dataPacker, noDataValue,
                                             unitConverter, 0);
                                 }
                             }
@@ -448,7 +452,7 @@ public class DefaultNetCDFEncoder extends AbstractNetCDFEncoder {
             // Wrong Layer name
             return false;
         }
-        
+
         return super.checkCompliant(var);
     }
 }

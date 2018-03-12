@@ -56,48 +56,48 @@ public class RulesRestController extends RestBaseController {
 
     @ExceptionHandler(NotFoundServiceEx.class)
     public void ruleNotFound(NotFoundServiceEx exception, HttpServletRequest request,
-            HttpServletResponse response) throws IOException {
+                             HttpServletResponse response) throws IOException {
         response.sendError(404, exception.getMessage());
     }
 
     @ExceptionHandler(DuplicateKeyException.class)
     public void rule(DuplicateKeyException exception, HttpServletRequest request,
-            HttpServletResponse response) throws IOException {
+                     HttpServletResponse response) throws IOException {
         response.sendError(409, exception.getMessage());
     }
 
     @ExceptionHandler(BadRequestServiceEx.class)
     public void badRequest(BadRequestServiceEx exception, HttpServletRequest request,
-            HttpServletResponse response) throws IOException {
+                           HttpServletResponse response) throws IOException {
         response.sendError(400, exception.getMessage());
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public void messageNotReadableException(HttpMessageNotReadableException exception,
-            HttpServletRequest request, HttpServletResponse response) throws IOException {
+                                            HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.sendError(400, exception.getMessage());
     }
 
-    @RequestMapping(value = "/rules", method = RequestMethod.GET, produces = { "application/xml",
-            "application/json" })
+    @RequestMapping(value = "/rules", method = RequestMethod.GET, produces = {"application/xml",
+            "application/json"})
     public JaxbRuleList get(@RequestParam(value = "page", required = false) Integer page,
-            @RequestParam(value = "entries", required = false) Integer entries,
-            @RequestParam(value = "full", required = false, defaultValue = "false") boolean full,
-            @RequestParam(value = "userName", required = false) String userName,
-            @RequestParam(value = "userAny", required = false) Boolean userDefault,
-            @RequestParam(value = "roleName", required = false) String roleName,
-            @RequestParam(value = "roleAny", required = false) Boolean roleDefault,
-            @RequestParam(value = "instanceId", required = false) Long instanceId,
-            @RequestParam(value = "instanceName", required = false) String instanceName,
-            @RequestParam(value = "instanceAny", required = false) Boolean instanceDefault,
-            @RequestParam(value = "service", required = false) String serviceName,
-            @RequestParam(value = "serviceAny", required = false) Boolean serviceDefault,
-            @RequestParam(value = "request", required = false) String requestName,
-            @RequestParam(value = "requestAny", required = false) Boolean requestDefault,
-            @RequestParam(value = "workspace", required = false) String workspace,
-            @RequestParam(value = "workspaceAny", required = false) Boolean workspaceDefault,
-            @RequestParam(value = "layer", required = false) String layer,
-            @RequestParam(value = "layerAny", required = false) Boolean layerDefault) {
+                            @RequestParam(value = "entries", required = false) Integer entries,
+                            @RequestParam(value = "full", required = false, defaultValue = "false") boolean full,
+                            @RequestParam(value = "userName", required = false) String userName,
+                            @RequestParam(value = "userAny", required = false) Boolean userDefault,
+                            @RequestParam(value = "roleName", required = false) String roleName,
+                            @RequestParam(value = "roleAny", required = false) Boolean roleDefault,
+                            @RequestParam(value = "instanceId", required = false) Long instanceId,
+                            @RequestParam(value = "instanceName", required = false) String instanceName,
+                            @RequestParam(value = "instanceAny", required = false) Boolean instanceDefault,
+                            @RequestParam(value = "service", required = false) String serviceName,
+                            @RequestParam(value = "serviceAny", required = false) Boolean serviceDefault,
+                            @RequestParam(value = "request", required = false) String requestName,
+                            @RequestParam(value = "requestAny", required = false) Boolean requestDefault,
+                            @RequestParam(value = "workspace", required = false) String workspace,
+                            @RequestParam(value = "workspaceAny", required = false) Boolean workspaceDefault,
+                            @RequestParam(value = "layer", required = false) String layer,
+                            @RequestParam(value = "layerAny", required = false) Boolean layerDefault) {
         RuleFilter filter = buildFilter(userName, userDefault, roleName, roleDefault, instanceId,
                 instanceName, instanceDefault, serviceName, serviceDefault, requestName,
                 requestDefault, workspace, workspaceDefault, layer, layerDefault);
@@ -106,28 +106,28 @@ public class RulesRestController extends RestBaseController {
     }
 
     @RequestMapping(value = "/rules/id/{id}", method = RequestMethod.GET, produces = {
-            "application/xml", "application/json" })
+            "application/xml", "application/json"})
     public JaxbRule get(@PathVariable("id") Long id) {
         return new JaxbRule(adminService.get(id));
     }
 
     @RequestMapping(value = "/rules/count", method = RequestMethod.GET, produces = {
-            "application/xml", "application/json" })
+            "application/xml", "application/json"})
     public JaxbRuleList count(@RequestParam(value = "userName", required = false) String userName,
-            @RequestParam(value = "userAny", required = false) Boolean userDefault,
-            @RequestParam(value = "roleName", required = false) String roleName,
-            @RequestParam(value = "roleAny", required = false) Boolean roleDefault,
-            @RequestParam(value = "instanceId", required = false) Long instanceId,
-            @RequestParam(value = "instanceName", required = false) String instanceName,
-            @RequestParam(value = "instanceAny", required = false) Boolean instanceDefault,
-            @RequestParam(value = "service", required = false) String serviceName,
-            @RequestParam(value = "serviceAny", required = false) Boolean serviceDefault,
-            @RequestParam(value = "request", required = false) String requestName,
-            @RequestParam(value = "requestAny", required = false) Boolean requestDefault,
-            @RequestParam(value = "workspace", required = false) String workspace,
-            @RequestParam(value = "workspaceAny", required = false) Boolean workspaceDefault,
-            @RequestParam(value = "layer", required = false) String layer,
-            @RequestParam(value = "layerAny", required = false) Boolean layerDefault) {
+                              @RequestParam(value = "userAny", required = false) Boolean userDefault,
+                              @RequestParam(value = "roleName", required = false) String roleName,
+                              @RequestParam(value = "roleAny", required = false) Boolean roleDefault,
+                              @RequestParam(value = "instanceId", required = false) Long instanceId,
+                              @RequestParam(value = "instanceName", required = false) String instanceName,
+                              @RequestParam(value = "instanceAny", required = false) Boolean instanceDefault,
+                              @RequestParam(value = "service", required = false) String serviceName,
+                              @RequestParam(value = "serviceAny", required = false) Boolean serviceDefault,
+                              @RequestParam(value = "request", required = false) String requestName,
+                              @RequestParam(value = "requestAny", required = false) Boolean requestDefault,
+                              @RequestParam(value = "workspace", required = false) String workspace,
+                              @RequestParam(value = "workspaceAny", required = false) Boolean workspaceDefault,
+                              @RequestParam(value = "layer", required = false) String layer,
+                              @RequestParam(value = "layerAny", required = false) Boolean layerDefault) {
         RuleFilter filter = buildFilter(userName, userDefault, roleName, roleDefault, instanceId,
                 instanceName, instanceDefault, serviceName, serviceDefault, requestName,
                 requestDefault, workspace, workspaceDefault, layer, layerDefault);
@@ -135,9 +135,9 @@ public class RulesRestController extends RestBaseController {
         return new JaxbRuleList(adminService.count(filter));
     }
 
-    @PostMapping(value = { "/rules" }, consumes = { MediaType.TEXT_XML_VALUE,
+    @PostMapping(value = {"/rules"}, consumes = {MediaType.TEXT_XML_VALUE,
             MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE,
-            MediaTypeExtensions.TEXT_JSON_VALUE })
+            MediaTypeExtensions.TEXT_JSON_VALUE})
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Long> insert(@RequestBody(required = true) JaxbRule rule) {
         long priority = rule.getPriority() == null ? 0 : rule.getPriority().longValue();
@@ -158,8 +158,9 @@ public class RulesRestController extends RestBaseController {
     }
 
     @RequestMapping(value = "/rules/id/{id}", method = RequestMethod.POST)
-    public @ResponseStatus(HttpStatus.OK) void update(@PathVariable("id") Long id,
-            @RequestBody JaxbRule rule) {
+    public @ResponseStatus(HttpStatus.OK)
+    void update(@PathVariable("id") Long id,
+                @RequestBody JaxbRule rule) {
         if (rule.getPriority() != null) {
             ShortRule priorityRule = adminService.getRuleByPriority(rule.getPriority().longValue());
             if (priorityRule != null && priorityRule.getId() != id) {
@@ -178,8 +179,9 @@ public class RulesRestController extends RestBaseController {
     }
 
     @RequestMapping(value = "/rules/id/{id}", method = RequestMethod.PUT)
-    public @ResponseStatus(HttpStatus.OK) void clearAndUpdate(@PathVariable("id") Long id,
-            @RequestBody JaxbRule rule) {
+    public @ResponseStatus(HttpStatus.OK)
+    void clearAndUpdate(@PathVariable("id") Long id,
+                        @RequestBody JaxbRule rule) {
         if (rule.getPriority() != null) {
             ShortRule priorityRule = adminService.getRuleByPriority(rule.getPriority().longValue());
             if (priorityRule != null && priorityRule.getId() != id) {
@@ -202,14 +204,15 @@ public class RulesRestController extends RestBaseController {
     }
 
     @RequestMapping(value = "/rules/id/{id}", method = RequestMethod.DELETE)
-    public @ResponseStatus(HttpStatus.OK) void delete(@PathVariable("id") Long id) {
+    public @ResponseStatus(HttpStatus.OK)
+    void delete(@PathVariable("id") Long id) {
         adminService.delete(id);
     }
 
     protected RuleFilter buildFilter(String userName, Boolean userDefault, String roleName,
-            Boolean groupDefault, Long instanceId, String instanceName, Boolean instanceDefault,
-            String serviceName, Boolean serviceDefault, String requestName, Boolean requestDefault,
-            String workspace, Boolean workspaceDefault, String layer, Boolean layerDefault) {
+                                     Boolean groupDefault, Long instanceId, String instanceName, Boolean instanceDefault,
+                                     String serviceName, Boolean serviceDefault, String requestName, Boolean requestDefault,
+                                     String workspace, Boolean workspaceDefault, String layer, Boolean layerDefault) {
 
         RuleFilter filter = new RuleFilter(SpecialFilterType.ANY, true);
 
@@ -270,7 +273,7 @@ public class RulesRestController extends RestBaseController {
      * target priority and the next ones will get an incremented priority value.
      */
     @RequestMapping(value = "/rules/move", method = RequestMethod.GET, produces = {
-            "application/xml", "application/json" })
+            "application/xml", "application/json"})
     public ResponseEntity<JaxbRuleList> move(
             @RequestParam(value = "targetPriority", required = true) int targetPriority,
             @RequestParam(value = "rulesIds", required = true) String rulesIds) {

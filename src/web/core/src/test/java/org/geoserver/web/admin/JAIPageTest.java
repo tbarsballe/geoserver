@@ -34,8 +34,8 @@ public class JAIPageTest extends GeoServerWicketTestSupport {
     @Test
     public void testValues() {
         JAIInfo info = (JAIInfo) getGeoServerApplication()
-            .getGeoServer()
-            .getGlobal().getJAI();
+                .getGeoServer()
+                .getGlobal().getJAI();
 
         login();
 
@@ -43,10 +43,10 @@ public class JAIPageTest extends GeoServerWicketTestSupport {
         tester.assertComponent("form:tileThreads", TextField.class);
         tester.assertModelValue("form:tileThreads", info.getTileThreads());
     }
-    
+
     @Test
-    public void testNativeWarp(){
-        if(!ImageUtilities.isMediaLibAvailable()){
+    public void testNativeWarp() {
+        if (!ImageUtilities.isMediaLibAvailable()) {
             // If medialib acceleration is not available, the test is not needed
             Assert.assertTrue(true);
             return;
@@ -56,10 +56,10 @@ public class JAIPageTest extends GeoServerWicketTestSupport {
         GeoServerInfo global = geoServer
                 .getGlobal();
         JAIInfo info = (JAIInfo) global.getJAI();
-        
+
         // Ensure that by default Warp acceleration is set to false
         Assert.assertFalse(info.isAllowNativeWarp());
-        
+
         // Register Warp as JAI operation
         JAIExt.registerJAIDescriptor("Warp");
         JAIEXTInfo jeinfo = info.getJAIEXTInfo();
@@ -70,7 +70,7 @@ public class JAIPageTest extends GeoServerWicketTestSupport {
         info.setJAIEXTInfo(jeinfo);
         global.setJAI(info);
         geoServer.save(global);
-        
+
         login();
         // Ensure the page is rendered
         tester.startPage(JAIPage.class);
@@ -81,7 +81,7 @@ public class JAIPageTest extends GeoServerWicketTestSupport {
         Collection jaiext;
         Object factory;
         boolean isJAIExtEnabled = ImageWorker.isJaiExtEnabled();
-        
+
         if (isJAIExtEnabled) {
             tester.assertComponent("form:jaiext", JAIEXTPanel.class);
             tester.assertComponent("form:jaiext:jaiextOps", Palette.class);
@@ -97,12 +97,12 @@ public class JAIPageTest extends GeoServerWicketTestSupport {
         FormTester form = tester.newFormTester("form");
         form.setValue("allowNativeWarp", true);
         form.submit("submit");
-        
+
         // Ensure no exception has been thrown
         tester.assertNoErrorMessage();
-        
+
         info = (JAIInfo) global.getJAI();
-        
+
         // Check that Warp is enabled
         if (isJAIExtEnabled) {
             Assert.assertTrue(info.isAllowNativeWarp());
@@ -114,13 +114,13 @@ public class JAIPageTest extends GeoServerWicketTestSupport {
             factory = info.getJAI().getOperationRegistry().getFactory(RenderedRegistryMode.MODE_NAME, "Warp");
             Assert.assertTrue(factory instanceof WarpRIF);
         }
-        
+
         // Unset Native Warp enabled
-        
+
         // Render the page again
         tester.startPage(JAIPage.class);
         tester.assertRenderedPage(JAIPage.class);
-        
+
         if (isJAIExtEnabled) {
             tester.assertComponent("form:jaiext", JAIEXTPanel.class);
             tester.assertComponent("form:jaiext:jaiextOps", Palette.class);
@@ -133,15 +133,15 @@ public class JAIPageTest extends GeoServerWicketTestSupport {
         form = tester.newFormTester("form");
         form.setValue("allowNativeWarp", false);
         form.submit("submit");
-        
+
         // Ensure no exception has been thrown
         tester.assertNoErrorMessage();
-        
+
         info = (JAIInfo) global.getJAI();
-        
+
         // Check that Warp is disabled
         Assert.assertFalse(info.isAllowNativeWarp());
-        
+
         // Ensure the factory is correctly registered
         factory = info.getJAI().getOperationRegistry().getFactory(RenderedRegistryMode.MODE_NAME, "Warp");
         Assert.assertTrue(factory instanceof WarpRIF);

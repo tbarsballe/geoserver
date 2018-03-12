@@ -16,11 +16,10 @@ import java.net.URL;
 import static org.junit.Assert.assertEquals;
 
 public class SecuredGetMapRequestTest extends SecureObjectsTest {
-    
+
     /**
      * Test for GEOS-6362: getFinalURL had side effects and gave different results if called
      * multiple times.
-     * 
      */
     @Test
     public void testNoSideEffectsOnGetFinalUrl() throws Exception {
@@ -34,5 +33,5 @@ public class SecuredGetMapRequestTest extends SecureObjectsTest {
         String secondCallURL = securedRequest.getFinalURL().toExternalForm();
         assertEquals(firstCallURL, secondCallURL);
     }
-   
+
 }

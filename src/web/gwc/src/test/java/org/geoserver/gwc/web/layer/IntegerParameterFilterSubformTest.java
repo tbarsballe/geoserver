@@ -26,74 +26,74 @@ import org.junit.Test;
 public class IntegerParameterFilterSubformTest extends GeoServerWicketTestSupport {
 
     private IModel<IntegerParameterFilter> model;
-    
+
     private IntegerParameterFilter pf;
-    
+
     @Before
     public void setUpInternal() throws Exception {
         pf = new IntegerParameterFilter();
         pf.setKey("TEST");
         model = Model.of(pf);
     }
-    
+
     @Test
     public void testPageLoad() {
         startPage();
-        
+
         tester.assertComponent("form:panel:defaultValue", AbstractTextComponent.class);
         tester.assertComponent("form:panel:values", AbstractTextComponent.class);
-        
+
 
     }
-    
+
     @SuppressWarnings("unchecked")
     @Test
     public void testLoadDefaultValues() {
         startPage();
-        
-        AbstractTextComponent<String> defaultValue = (AbstractTextComponent<String>) 
+
+        AbstractTextComponent<String> defaultValue = (AbstractTextComponent<String>)
                 tester.getComponentFromLastRenderedPage("form:panel:defaultValue");
-        AbstractTextComponent<List<Integer>> values = (AbstractTextComponent<List<Integer>>) 
+        AbstractTextComponent<List<Integer>> values = (AbstractTextComponent<List<Integer>>)
                 tester.getComponentFromLastRenderedPage("form:panel:values");
-        
+
         assertThat(defaultValue.getValue(), equalTo(""));
         assertThat(values.getValue(), equalTo(""));
     }
-    
+
     @SuppressWarnings("unchecked")
     @Test
     public void testLoadSpecifiedValues() {
         pf.setDefaultValue("testDefault");
         pf.setValues(Arrays.asList(1, 2));
         startPage();
-        
-        AbstractTextComponent<String> defaultValue = (AbstractTextComponent<String>) 
+
+        AbstractTextComponent<String> defaultValue = (AbstractTextComponent<String>)
                 tester.getComponentFromLastRenderedPage("form:panel:defaultValue");
-        AbstractTextComponent<List<Integer>> values = (AbstractTextComponent<List<Integer>>) 
+        AbstractTextComponent<List<Integer>> values = (AbstractTextComponent<List<Integer>>)
                 tester.getComponentFromLastRenderedPage("form:panel:values");
-        
+
         assertThat(defaultValue.getValue(), equalTo("testDefault"));
         assertThat(values.getValue(), equalTo("1\r\n2"));
     }
-    
+
     @Test
     public void testChange() {
         startPage();
-        
+
         FormTester formTester = tester.newFormTester("form");
         formTester.setValue("panel:defaultValue", "testDefault");
         formTester.setValue("panel:values", "1\r\n2");
         formTester.submit();
-        
+
         assertThat(pf.getDefaultValue(), equalTo("testDefault"));
         assertThat(pf.getValues(), contains(1, 2));
     }
-   
+
     private void startPage() {
         tester.startPage(new FormTestPage(new ComponentBuilder() {
             /** serialVersionUID */
             private static final long serialVersionUID = 1L;
-            
+
             public Component buildComponent(final String id) {
                 return new IntegerParameterFilterSubform(id, model);
             }

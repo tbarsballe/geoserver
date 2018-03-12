@@ -17,9 +17,8 @@ import org.opengis.feature.simple.SimpleFeatureType;
 
 /**
  * A reader for GML files
- * 
- * @author Andrea Aime - GeoSolutions
  *
+ * @author Andrea Aime - GeoSolutions
  */
 class GMLReader implements FeatureReader<SimpleFeatureType, SimpleFeature> {
 

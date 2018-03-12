@@ -48,7 +48,7 @@ import org.w3c.dom.Document;
 /**
  * Test REST configuration of app-schema. Note that the mapping and properties file are still copied
  * locally.
- * 
+ *
  * @author Ben Caradoc-Davies (CSIRO Earth Science and Resource Engineering)
  */
 public class RestconfigWfsTest extends CatalogRESTTestSupport {
@@ -64,7 +64,7 @@ public class RestconfigWfsTest extends CatalogRESTTestSupport {
         SchemaCache.disableAutomaticConfiguration();
     }
 
-    
+
     @Override
     @SuppressWarnings("deprecated")
     protected void onTearDown(SystemTestData testData) throws Exception {
@@ -131,7 +131,7 @@ public class RestconfigWfsTest extends CatalogRESTTestSupport {
             + "<value>file:./</value>" //
             + "</Parameter>" //
             + "</parameters>"; //
-    
+
     public static final String MAPPING = "<as:AppSchemaDataAccess xmlns:as='http://www.geotools.org/app-schema'>" //
             + "<namespaces>" //
             + "<Namespace>" //
@@ -220,7 +220,7 @@ public class RestconfigWfsTest extends CatalogRESTTestSupport {
         dir.mkdirs();
         File propertiesFile = new File(dir, "MAPPEDFEATURE.properties");
         IOUtils.copy(new ByteArrayInputStream(PROPERTIES.getBytes("UTF-8")), propertiesFile);
-        
+
         String mapping = MAPPING;
         String onlineTestId = System.getProperty("testDatabase");
         if (onlineTestId != null) {
@@ -250,9 +250,8 @@ public class RestconfigWfsTest extends CatalogRESTTestSupport {
 
     /**
      * Return {@link Document} as a pretty-printed string.
-     * 
-     * @param document
-     *            document to be prettified
+     *
+     * @param document document to be prettified
      * @return the prettified string
      */
     private String prettyString(Document document) {
@@ -263,11 +262,9 @@ public class RestconfigWfsTest extends CatalogRESTTestSupport {
 
     /**
      * Pretty-print a {@link Document} to an {@link OutputStream}.
-     * 
-     * @param document
-     *            document to be prettified
-     * @param output
-     *            stream to which output is written
+     *
+     * @param document document to be prettified
+     * @param output   stream to which output is written
      */
     private void prettyPrint(Document document, OutputStream output) {
         try {
@@ -281,7 +278,7 @@ public class RestconfigWfsTest extends CatalogRESTTestSupport {
 
     /**
      * Assert that there are count occurrences of xpath.
-     * 
+     *
      * @param count
      * @param xpath
      * @param document

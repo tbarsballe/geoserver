@@ -13,7 +13,7 @@ import javax.imageio.stream.ImageOutputStream;
 
 /**
  * An image output stream, which limits its data size. This stream is used if the content length is unknown.
- * 
+ *
  * @author "Alessio Fabiani - alessio.fabiani@geo-solutions.it"
  */
 abstract class LimitedImageOutputStream extends FilterImageOutputStream {
@@ -34,8 +34,8 @@ abstract class LimitedImageOutputStream extends FilterImageOutputStream {
 
     /**
      * Creates a new instance.
-     * 
-     * @param pOut The input stream, which shall be limited.
+     *
+     * @param pOut     The input stream, which shall be limited.
      * @param pSizeMax The limit; no more than this number of bytes shall be returned by the source stream.
      */
     public LimitedImageOutputStream(ImageOutputStream pOut, long pSizeMax) {
@@ -45,16 +45,16 @@ abstract class LimitedImageOutputStream extends FilterImageOutputStream {
 
     /**
      * Called to indicate, that the input streams limit has been exceeded.
-     * 
+     *
      * @param pSizeMax The input streams limit, in bytes.
-     * @param pCount The actual number of bytes.
+     * @param pCount   The actual number of bytes.
      * @throws IOException The called method is expected to raise an IOException.
      */
     protected abstract void raiseError(long pSizeMax, long pCount) throws IOException;
 
     /**
      * Called to check, whether the input streams limit is reached.
-     * 
+     *
      * @throws IOException The given limit is exceeded.
      */
     private void checkLimit() throws IOException {
@@ -65,7 +65,7 @@ abstract class LimitedImageOutputStream extends FilterImageOutputStream {
 
     /**
      * Returns, whether this stream is already closed.
-     * 
+     *
      * @return True, if the stream is closed, otherwise false.
      * @throws IOException An I/O error occurred.
      */
@@ -75,7 +75,7 @@ abstract class LimitedImageOutputStream extends FilterImageOutputStream {
 
     /**
      * Closes this input stream and releases any system resources associated with the stream. This method simply performs <code>in.close()</code>.
-     * 
+     *
      * @throws IOException if an I/O error occurs.
      * @see java.io.FilterInputStream#in
      */

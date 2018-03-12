@@ -46,7 +46,7 @@ public class ExcelMonitorConverter extends BaseMonitorConverter {
                 if (obj == null) {
                     continue;
                 }
-   
+
                 if (obj instanceof Date) {
                     cell.setCellValue((Date) obj);
                 } else if (obj instanceof Number) {
@@ -61,7 +61,7 @@ public class ExcelMonitorConverter extends BaseMonitorConverter {
     public ExcelMonitorConverter() {
         super(MonitorRequestController.EXCEL_MEDIATYPE);
     }
-    
+
     @Override
     protected void writeInternal(MonitorQueryResults results, HttpOutputMessage outputMessage)
             throws IOException, HttpMessageNotWritableException {
@@ -69,9 +69,9 @@ public class ExcelMonitorConverter extends BaseMonitorConverter {
         Monitor monitor = results.getMonitor();
 
         // Create the workbook+sheet
-        try( HSSFWorkbook wb = new HSSFWorkbook() ){
+        try (HSSFWorkbook wb = new HSSFWorkbook()) {
             final HSSFSheet sheet = wb.createSheet("requests");
-    
+
             // create the header
             HSSFRow header = sheet.createRow(0);
             String[] fields = results.getFields();
@@ -79,10 +79,10 @@ public class ExcelMonitorConverter extends BaseMonitorConverter {
                 HSSFCell cell = header.createCell(i);
                 cell.setCellValue(new HSSFRichTextString(fields[i]));
             }
-    
+
             // write out the request
             handleRequests(object, new ExcelRequestDataVisitor(sheet, fields), monitor);
-    
+
             // write to output
             wb.write(outputMessage.getBody());
         }

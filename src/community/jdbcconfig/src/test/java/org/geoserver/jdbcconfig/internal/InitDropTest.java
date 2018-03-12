@@ -10,6 +10,7 @@ import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
+
 import org.geoserver.jdbcconfig.JDBCConfigTestSupport;
 import org.junit.Assert;
 import org.junit.Test;
@@ -17,12 +18,11 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
 /**
- *
  * @author Ian Schneider <ischneider@boundlessgeo.com>
  */
 @RunWith(Parameterized.class)
 public class InitDropTest {
-   JDBCConfigTestSupport.DBConfig dbConfig;
+    JDBCConfigTestSupport.DBConfig dbConfig;
 
     JDBCConfigTestSupport testSupport;
 
@@ -40,8 +40,10 @@ public class InitDropTest {
         Logger logger = Logger.getAnonymousLogger();
         logger.setLevel(Level.WARNING);
         logger.addHandler(new Handler() {
-            
-                {setLevel(Level.WARNING);}
+
+            {
+                setLevel(Level.WARNING);
+            }
 
             @Override
             public void close() throws SecurityException {

@@ -11,13 +11,12 @@ import org.opengis.filter.sort.SortBy;
 /**
  * Decorates a given query capabilities, subclasses should override
  * methods they inded to change
- * 
- * @author Andrea Aime - GeoSolutions
  *
+ * @author Andrea Aime - GeoSolutions
  */
 abstract class QueryCapabilitiesDecorator extends QueryCapabilities {
     QueryCapabilities delegate;
-    
+
     public QueryCapabilitiesDecorator(QueryCapabilities delegate) {
         super();
         this.delegate = delegate;
@@ -46,5 +45,5 @@ abstract class QueryCapabilitiesDecorator extends QueryCapabilities {
     public boolean isVersionSupported() {
         return delegate.isVersionSupported();
     }
-    
+
 }

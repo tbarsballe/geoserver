@@ -31,9 +31,8 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 
 /**
  * Loads and persist the {@link WMSInfo} object to and from xstream persistence.
- * 
+ *
  * @author Justin Deoliveira, The Open Planning Project
- * 
  */
 public class WMSXStreamLoader extends XStreamServiceLoader<WMSInfo> {
 
@@ -59,6 +58,7 @@ public class WMSXStreamLoader extends XStreamServiceLoader<WMSInfo> {
 
     /**
      * Sets up aliases and allowed types for the xstream persister
+     *
      * @param xs
      */
     public static void initXStreamPersister(XStreamPersister xp) {
@@ -66,7 +66,7 @@ public class WMSXStreamLoader extends XStreamServiceLoader<WMSInfo> {
         xs.alias("wms", WMSInfo.class, WMSInfoImpl.class);
         xs.registerConverter(new WMSInfoConverter(xp));
         xs.addDefaultImplementation(WatermarkInfoImpl.class, WatermarkInfo.class);
-        xs.allowTypes(new Class[] { WatermarkInfo.class, WatermarkInfoImpl.class });
+        xs.allowTypes(new Class[]{WatermarkInfo.class, WatermarkInfoImpl.class});
     }
 
     @Override
@@ -84,24 +84,24 @@ public class WMSXStreamLoader extends XStreamServiceLoader<WMSInfo> {
         }
         if (service.getSRS() == null) {
             ((WMSInfoImpl) service).setSRS(new ArrayList<String>());
-        }        
+        }
         if (service.getGetFeatureInfoMimeTypes() == null) {
             ((WMSInfoImpl) service).setGetFeatureInfoMimeTypes(new HashSet<String>());
         }
         if (service.getGetMapMimeTypes() == null) {
             ((WMSInfoImpl) service).setGetMapMimeTypes(new HashSet<String>());
-        }        
+        }
         if (service.getInterpolation() == null) {
             service.setInterpolation(WMSInterpolation.Nearest);
         }
         return service;
     }
-    
-    
+
+
     /**
      * Converter for WMSInfo, stores authority urls and identifiers under metadata map in the 2.1.x
      * series.
-     * 
+     *
      * @since 2.1.3
      */
     static class WMSInfoConverter extends ServiceInfoConverter {
@@ -120,7 +120,7 @@ public class WMSXStreamLoader extends XStreamServiceLoader<WMSInfo> {
          */
         @Override
         protected void doMarshal(Object source, HierarchicalStreamWriter writer,
-                MarshallingContext context) {
+                                 MarshallingContext context) {
 
 //            WMSInfo service = (WMSInfo) source;
 //            {
@@ -144,7 +144,7 @@ public class WMSXStreamLoader extends XStreamServiceLoader<WMSInfo> {
 
         @Override
         public Object doUnmarshal(Object result, HierarchicalStreamReader reader,
-                UnmarshallingContext context) {
+                                  UnmarshallingContext context) {
 
             WMSInfoImpl service = (WMSInfoImpl) super.doUnmarshal(result, reader, context);
             MetadataMap metadata = service.getMetadata();

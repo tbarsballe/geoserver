@@ -15,15 +15,13 @@ import org.opengis.filter.sort.SortOrder;
 
 /**
  * Builds comparators against catalog info objects based on {@link SortBy} definitions
- * 
+ *
  * @author Niels Charlier
- * 
  */
 public class CatalogComparatorFactory {
 
     /**
      * Builds a composite comparator matching the specified sortBy array
-     *
      */
     public static Comparator<Info> buildComparator(SortBy... sortBy) {
         if (sortBy.length == 0) {

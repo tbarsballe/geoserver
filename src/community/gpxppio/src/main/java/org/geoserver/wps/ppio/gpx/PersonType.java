@@ -11,16 +11,15 @@
 package org.geoserver.wps.ppio.gpx;
 
 /**
- * 
  * A person or organization.
- * 
- * 
+ * <p>
+ * <p>
  * <p>
  * Java class for personType complex type.
- * 
+ * <p>
  * <p>
  * The following schema fragment specifies the expected content contained within this class.
- * 
+ * <p>
  * <pre>
  * &lt;complexType name="personType">
  *   &lt;complexContent>
@@ -34,8 +33,6 @@ package org.geoserver.wps.ppio.gpx;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 public class PersonType {
     protected String name;
@@ -46,9 +43,8 @@ public class PersonType {
 
     /**
      * Gets the value of the name property.
-     * 
+     *
      * @return possible object is {@link String }
-     * 
      */
     public String getName() {
         return name;
@@ -56,9 +52,8 @@ public class PersonType {
 
     /**
      * Sets the value of the name property.
-     * 
+     *
      * @param value allowed object is {@link String }
-     * 
      */
     public void setName(String value) {
         this.name = value;
@@ -66,9 +61,8 @@ public class PersonType {
 
     /**
      * Gets the value of the email property.
-     * 
+     *
      * @return possible object is {@link EmailType }
-     * 
      */
     public EmailType getEmail() {
         return email;
@@ -76,9 +70,8 @@ public class PersonType {
 
     /**
      * Sets the value of the email property.
-     * 
+     *
      * @param value allowed object is {@link EmailType }
-     * 
      */
     public void setEmail(EmailType value) {
         this.email = value;
@@ -86,9 +79,8 @@ public class PersonType {
 
     /**
      * Gets the value of the link property.
-     * 
+     *
      * @return possible object is {@link LinkType }
-     * 
      */
     public LinkType getLink() {
         return link;
@@ -96,9 +88,8 @@ public class PersonType {
 
     /**
      * Sets the value of the link property.
-     * 
+     *
      * @param value allowed object is {@link LinkType }
-     * 
      */
     public void setLink(LinkType value) {
         this.link = value;

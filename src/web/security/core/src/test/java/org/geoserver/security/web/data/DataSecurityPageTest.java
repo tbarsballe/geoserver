@@ -29,17 +29,19 @@ import org.junit.Test;
 public class DataSecurityPageTest extends AbstractListPageTest<DataAccessRule> {
 
     protected Page listPage(PageParameters params) {
-        return new  DataSecurityPage();
+        return new DataSecurityPage();
     }
-    protected Page newPage(Object...params) {
-        return new  NewDataAccessRulePage();
+
+    protected Page newPage(Object... params) {
+        return new NewDataAccessRulePage();
     }
-    protected Page editPage(Object...params) {
-        if (params.length==0)
-            return new  EditDataAccessRulePage( new DataAccessRule("it.geosolutions", "layer.dots",
+
+    protected Page editPage(Object... params) {
+        if (params.length == 0)
+            return new EditDataAccessRulePage(new DataAccessRule("it.geosolutions", "layer.dots",
                     AccessMode.READ, Collections.singleton("ROLE_ABC")));
         else
-            return new  EditDataAccessRulePage( (DataAccessRule) params[0]);
+            return new EditDataAccessRulePage((DataAccessRule) params[0]);
     }
 
 
@@ -50,15 +52,15 @@ public class DataSecurityPageTest extends AbstractListPageTest<DataAccessRule> {
 
     @Override
     protected boolean checkEditForm(String objectString) {
-        String[] array=objectString.split("\\.");
-        return  array[0].equals(
-                    tester.getComponentFromLastRenderedPage("form:root").getDefaultModelObject()) &&
+        String[] array = objectString.split("\\.");
+        return array[0].equals(
+                tester.getComponentFromLastRenderedPage("form:root").getDefaultModelObject()) &&
                 array[1].equals(
                         tester.getComponentFromLastRenderedPage("form:layerContainer:layerAndLabel:layer").getDefaultModelObject());
     }
 
     @Override
-    protected String getSearchString() throws Exception{
+    protected String getSearchString() throws Exception {
         for (DataAccessRule rule : DataAccessRuleDAO.get().getRules()) {
             if (MockData.CITE_PREFIX.equals(rule.getRoot()) &&
                     MockData.BRIDGES.getLocalPart().equals(rule.getLayer()))
@@ -68,20 +70,19 @@ public class DataSecurityPageTest extends AbstractListPageTest<DataAccessRule> {
     }
 
 
-
     @Override
     protected void simulateDeleteSubmit() throws Exception {
 
         DataAccessRuleDAO.get().reload();
-        assertTrue (DataAccessRuleDAO.get().getRules().size()>0);
+        assertTrue(DataAccessRuleDAO.get().getRules().size() > 0);
 
         SelectionDataRuleRemovalLink link = (SelectionDataRuleRemovalLink) getRemoveLink();
-        Method m = link.delegate.getClass().getDeclaredMethod("onSubmit", AjaxRequestTarget.class,Component.class);
-        m.invoke(link.delegate, null,null);
+        Method m = link.delegate.getClass().getDeclaredMethod("onSubmit", AjaxRequestTarget.class, Component.class);
+        m.invoke(link.delegate, null, null);
 
         DataAccessRuleDAO.get().reload();
         // if there are no rules, DataAccessRuleDAO.loadRules adds two basic rules
-        assertEquals(2,DataAccessRuleDAO.get().getRules().size());
+        assertEquals(2, DataAccessRuleDAO.get().getRules().size());
     }
 
     @Test

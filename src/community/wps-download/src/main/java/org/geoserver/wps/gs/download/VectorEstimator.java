@@ -25,20 +25,21 @@ import com.vividsolutions.jts.geom.Geometry;
 
 /**
  * Checks whether or not the provided request exceeds the provided download limits for a vectorial resource.
- * 
+ *
  * @author Simone Giannecchini, GeoSolutions SAS
- * 
  */
 class VectorEstimator {
 
     private static final Logger LOGGER = Logging.getLogger(VectorEstimator.class);
 
-    /** The downloadServiceConfiguration object containing the limits to check */
+    /**
+     * The downloadServiceConfiguration object containing the limits to check
+     */
     private DownloadServiceConfiguration downloadServiceConfiguration;
 
     /**
      * Constructor.
-     * 
+     *
      * @param limits an instance of the {@link DownloadEstimatorProcess} that contains the limits to enforce
      */
     public VectorEstimator(DownloadServiceConfiguration limits) {
@@ -47,18 +48,18 @@ class VectorEstimator {
 
     /**
      * Checks whether or not the requests exceed download limits for vector data.
-     * 
-     * @param resourceInfo the {@link FeatureTypeInfo} to download from
-     * @param roi the {@link Geometry} for the clip/intersection
-     * @param clip whether or not to clip the resulting data (useless for the moment)
-     * @param filter the {@link Filter} to load the data
-     * @param targetCRS the reproject {@link CoordinateReferenceSystem} (useless for the moment)
+     *
+     * @param resourceInfo     the {@link FeatureTypeInfo} to download from
+     * @param roi              the {@link Geometry} for the clip/intersection
+     * @param clip             whether or not to clip the resulting data (useless for the moment)
+     * @param filter           the {@link Filter} to load the data
+     * @param targetCRS        the reproject {@link CoordinateReferenceSystem} (useless for the moment)
      * @param progressListener
      * @return <code>true</code> if we do not exceeds the limits, <code>false</code> otherwise.
      * @throws Exception in case something bad happens.
      */
     public boolean execute(FeatureTypeInfo resourceInfo, Geometry roi, boolean clip, Filter filter,
-            CoordinateReferenceSystem targetCRS, final ProgressListener progressListener)
+                           CoordinateReferenceSystem targetCRS, final ProgressListener progressListener)
             throws Exception {
 
         //

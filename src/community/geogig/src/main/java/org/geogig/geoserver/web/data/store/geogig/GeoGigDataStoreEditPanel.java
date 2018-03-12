@@ -63,14 +63,15 @@ public class GeoGigDataStoreEditPanel extends StoreEditPanel {
     private final String originalRepo, originalBranch;
 
     private final IModel<Boolean> autoIndexingModel;
+
     /**
-     * @param componentId the wicket component id
+     * @param componentId   the wicket component id
      * @param storeEditForm the data store edit form, as provided by {@link DataAccessEditPage} and
-     *        {@link DataAccessNewPage}
+     *                      {@link DataAccessNewPage}
      */
     @SuppressWarnings("unchecked")
     public GeoGigDataStoreEditPanel(final String componentId,
-            final Form<DataStoreInfo> storeEditForm) {
+                                    final Form<DataStoreInfo> storeEditForm) {
         super(componentId, storeEditForm);
         final IModel<DataStoreInfo> model = storeEditForm.getModel();
         setDefaultModel(model);
@@ -161,7 +162,7 @@ public class GeoGigDataStoreEditPanel extends StoreEditPanel {
                     @SuppressWarnings("unchecked")
                     @Override
                     protected void saved(final RepositoryInfo info,
-                            final AjaxRequestTarget target) {
+                                         final AjaxRequestTarget target) {
                         modalWindow.close(target);
                         updateRepository((Form<DataStoreInfo>) form, target, info);
                     }
@@ -202,7 +203,7 @@ public class GeoGigDataStoreEditPanel extends StoreEditPanel {
                     @SuppressWarnings("unchecked")
                     @Override
                     protected void saved(final RepositoryInfo info,
-                            final AjaxRequestTarget target) {
+                                         final AjaxRequestTarget target) {
                         modalWindow.close(target);
                         updateRepository((Form<DataStoreInfo>) form, target, info);
                     }
@@ -225,7 +226,7 @@ public class GeoGigDataStoreEditPanel extends StoreEditPanel {
 
     @SuppressWarnings("unchecked")
     private void updateRepository(final Form<DataStoreInfo> form, AjaxRequestTarget target,
-            RepositoryInfo info) {
+                                  RepositoryInfo info) {
         repository.setModelObject(GeoServerGeoGigRepositoryResolver.getURI(info.getRepoName()));
         branchNameModel.setObject(null);
         branch.updateChoices(true, form);
@@ -269,7 +270,7 @@ public class GeoGigDataStoreEditPanel extends StoreEditPanel {
                 URI repoUri = new URI(repoUriStr);
                 RepositoryResolver resolver = RepositoryResolver.lookup(repoUri);
                 RepositoryInfo info = RepositoryManager.get().getByRepoName(resolver.getName(repoUri));
-                return info.getRepoName() + " (" + info.getMaskedLocation()+ ")";
+                return info.getRepoName() + " (" + info.getMaskedLocation() + ")";
             } catch (URISyntaxException e) {
                 throw Throwables.propagate(e);
             }

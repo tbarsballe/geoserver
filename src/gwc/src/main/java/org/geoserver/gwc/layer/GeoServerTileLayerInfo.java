@@ -38,6 +38,7 @@ public interface GeoServerTileLayerInfo extends Serializable, Cloneable {
 
     /**
      * Sets the id.
+     *
      * @param id The id of the corresponding {@link LayerInfo} or {@link LayerGroupInfo}
      */
     void setId(String id);
@@ -49,20 +50,21 @@ public interface GeoServerTileLayerInfo extends Serializable, Cloneable {
 
     /**
      * Sets the name
+     *
      * @param name The name of the corresponding {@link GeoServerTileLayer}
      */
     void setName(String name);
 
     /**
      * @return The {@link BlobStoreInfo#getId() blob store id} for this layer's tiles, or
-     *         {@code null} if whatever the default blob store is shall be used
+     * {@code null} if whatever the default blob store is shall be used
      */
     @Nullable
     String getBlobStoreId();
 
     /**
      * @param blobStoreId the {@link BlobStoreInfo#getId() blob store id} for this layer's tiles,
-     *        or {@code null} if whatever the default blob store is shall be used
+     *                    or {@code null} if whatever the default blob store is shall be used
      */
     void setBlobStoreId(@Nullable String blobStoreId);
 
@@ -95,6 +97,7 @@ public interface GeoServerTileLayerInfo extends Serializable, Cloneable {
 
     /**
      * Sets the default expiration time for tiles in the cache.
+     *
      * @param expireCache the expiration time
      */
     void setExpireCache(int expireCache);
@@ -108,18 +111,21 @@ public interface GeoServerTileLayerInfo extends Serializable, Cloneable {
 
     /**
      * Sets the {@link ExpirationRule}s for expiring tiles in the cache
+     *
      * @param expireCacheList the list of expiration rules
      */
     void setExpireCacheList(List<ExpirationRule> expireCacheList);
 
     /**
      * Gets the expiration time to be declared to clients
+     *
      * @return the expiration time, in seconds
      */
     int getExpireClients();
 
     /**
      * Sets the expiration time to be declared to clients
+     *
      * @param seconds the expiration time, in seconds
      */
     void setExpireClients(int seconds);
@@ -137,8 +143,8 @@ public interface GeoServerTileLayerInfo extends Serializable, Cloneable {
     ImmutableSet<String> cachedStyles();
 
     /**
-     * @see GeoServerTileLayer#getMimeTypes()
      * @return set of MIME types supported by the tile layer
+     * @see GeoServerTileLayer#getMimeTypes()
      */
     Set<String> getMimeFormats();
 
@@ -170,28 +176,30 @@ public interface GeoServerTileLayerInfo extends Serializable, Cloneable {
 
     /**
      * Sets the size of the gutter surrounding MetaTiles, in pixels.
-     * @see org.geowebcache.layer.MetaTile
      *
      * @param gutter the size of the gutter, in pixels
+     * @see org.geowebcache.layer.MetaTile
      */
     void setGutter(int gutter);
 
     /**
      * Sets the size of the gutter surrounding MetaTiles, in pixels.
-     * @see org.geowebcache.layer.MetaTile
      *
      * @return the size of the gutter, in pixels
+     * @see org.geowebcache.layer.MetaTile
      */
     int getGutter();
 
     /**
      * Is the tile layer configured to automatically cache all styles
+     *
      * @return true if the tile layer automatically caches all styles
      */
     boolean isAutoCacheStyles();
 
     /**
      * Set whether the tile layer should automaticaly cache all styles
+     *
      * @param autoCacheStyles if the tile layer should automatically cache all styles
      */
     void setAutoCacheStyles(boolean autoCacheStyles);
@@ -203,19 +211,22 @@ public interface GeoServerTileLayerInfo extends Serializable, Cloneable {
 
     /**
      * Replace the set of parameter filters
+     *
      * @param parameterFilters
      */
     void setParameterFilters(Set<ParameterFilter> parameterFilters);
-    
+
     /**
      * Add a parameter filter, replacing any existing filter with the same key.
+     *
      * @param parameterFilter
      * @return true if an existing filter was replaced, false otherwise.
      */
     boolean addParameterFilter(ParameterFilter parameterFilter);
-    
+
     /**
      * Remove the filter with the specified key
+     *
      * @param key
      * @return true if the filter existed, false otherwise
      */
@@ -225,18 +236,21 @@ public interface GeoServerTileLayerInfo extends Serializable, Cloneable {
 
     /**
      * Get the ParameterFilter with the specified key
+     *
      * @param key
      */
     ParameterFilter getParameterFilter(String key);
 
     /**
      * Is the layer cached in-memory
+     *
      * @return true if the layer is cached in-memory
      */
     boolean isInMemoryCached();
 
     /**
      * Set whether or not the layer is cached in-memory
+     *
      * @param inMemoryCached is the layer cached in-memory
      */
     void setInMemoryCached(boolean inMemoryCached);

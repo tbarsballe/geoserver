@@ -19,7 +19,7 @@ import org.geoserver.web.wicket.browser.GeoServerFileChooser;
 
 /**
  * A label, a text field, a directory chooser.
- * 
+ *
  * @author Andrea Aime
  */
 public class DirectoryParamPanel extends FileParamPanel {
@@ -28,18 +28,16 @@ public class DirectoryParamPanel extends FileParamPanel {
     GeoServerDialog gsDialog;
 
     /**
-     * 
      * @param id
      * @param paramsMap
      * @param paramName
      * @param paramLabelModel
      * @param required
-     * @param validators
-     *            any extra validator that should be added to the input field, or {@code null}
+     * @param validators      any extra validator that should be added to the input field, or {@code null}
      */
     @SafeVarargs
-	public DirectoryParamPanel(final String id, final IModel<String> paramValue,
-            final IModel<String> paramLabelModel, final boolean required, IValidator<? super String>... validators) {
+    public DirectoryParamPanel(final String id, final IModel<String> paramValue,
+                               final IModel<String> paramLabelModel, final boolean required, IValidator<? super String>... validators) {
         super(id, paramValue, paramLabelModel, required, validators);
 
         // override the dialog component
@@ -64,17 +62,17 @@ public class DirectoryParamPanel extends FileParamPanel {
                 gsDialog.showOkCancel(target, new GeoServerDialog.DialogDelegate() {
 
                     /**
-					 * 
-					 */
-					private static final long serialVersionUID = 1576266249751904398L;
+                     *
+                     */
+                    private static final long serialVersionUID = 1576266249751904398L;
 
-					@Override
+                    @Override
                     protected boolean onSubmit(AjaxRequestTarget target, Component contents) {
                         GeoServerFileChooser chooser = (GeoServerFileChooser) contents;
                         String path = ((File) chooser.getDefaultModelObject()).getAbsolutePath();
                         // clear the raw input of the field won't show the new model value
                         textField.clearInput();
-                        textField.setModelValue(new String[] { path });
+                        textField.setModelValue(new String[]{path});
 
                         target.add(textField);
                         return true;

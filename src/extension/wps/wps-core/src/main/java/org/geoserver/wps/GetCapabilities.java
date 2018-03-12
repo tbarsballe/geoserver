@@ -86,12 +86,12 @@ public class GetCapabilities {
         // ServiceIdentification
         ServiceIdentificationType si = owsf.createServiceIdentificationType();
         caps.setServiceIdentification(si);
-        
+
         // Check if WPS config is loaded
-        if (wps==null){
+        if (wps == null) {
             throw new ServiceException("WPS config not loaded. Check logs for details.");
         }
-        
+
         si.getTitle().add(Ows11Util.languageString(wps.getTitle()));
         si.getAbstract().add(Ows11Util.languageString(wps.getAbstract()));
 
@@ -166,7 +166,7 @@ public class GetCapabilities {
             public int compare(Object o1, Object o2) {
                 ProcessBriefType pb1 = (ProcessBriefType) o1;
                 ProcessBriefType pb2 = (ProcessBriefType) o2;
-                
+
                 final String id1 = pb1.getIdentifier().getValue();
                 final String id2 = pb2.getIdentifier().getValue();
                 return id1.compareTo(id2);
@@ -188,7 +188,6 @@ public class GetCapabilities {
         // Version detection and alternative invocation if being implemented.
     }
 
-    
 
     ResponsiblePartySubsetType responsibleParty(SettingsInfo settings, Ows11Factory f) {
         ResponsiblePartySubsetType rp = f.createResponsiblePartySubsetType();

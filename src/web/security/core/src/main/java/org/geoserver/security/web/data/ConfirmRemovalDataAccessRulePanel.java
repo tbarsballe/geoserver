@@ -17,17 +17,17 @@ public class ConfirmRemovalDataAccessRulePanel extends AbstractConfirmRemovalPan
 
     private static final long serialVersionUID = 1L;
 
-    
+
     public ConfirmRemovalDataAccessRulePanel(String id, List<DataAccessRule> roots) {
-        super(id, roots);        
+        super(id, roots);
     }
-    
-    public ConfirmRemovalDataAccessRulePanel(String id,DataAccessRule... roots) {
+
+    public ConfirmRemovalDataAccessRulePanel(String id, DataAccessRule... roots) {
         this(id, Arrays.asList(roots));
     }
 
     @Override
-    protected String getConfirmationMessage(DataAccessRule object) throws Exception{
+    protected String getConfirmationMessage(DataAccessRule object) throws Exception {
         return OwsUtils.property(object, "workspace", String.class) + "."
                 + OwsUtils.property(object, "layer", String.class) + "."
                 + OwsUtils.property(object, "accessMode", String.class) + "="

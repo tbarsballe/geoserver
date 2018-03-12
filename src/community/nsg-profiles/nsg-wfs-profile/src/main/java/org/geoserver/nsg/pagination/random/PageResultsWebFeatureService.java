@@ -35,7 +35,6 @@ import java.util.logging.Logger;
  * This service supports the PageResults operation and manage it
  *
  * @author sandr
- *
  */
 
 public class PageResultsWebFeatureService extends DefaultWebFeatureService20 {
@@ -59,7 +58,6 @@ public class PageResultsWebFeatureService extends DefaultWebFeatureService20 {
     }
 
     /**
-     *
      * Recovers the stored request with associated {@link #resultSetID} and overrides the parameters
      * using the ones provided with current operation or the default values:
      * <ul>
@@ -82,7 +80,7 @@ public class PageResultsWebFeatureService extends DefaultWebFeatureService20 {
 
         // Update with incoming parameters or index request or defaults
         Method setBaseUrl = OwsUtils.setter(gft.getClass(), "baseUrl", String.class);
-        setBaseUrl.invoke(gft, new Object[] { request.getBaseUrl() });
+        setBaseUrl.invoke(gft, new Object[]{request.getBaseUrl()});
         BigInteger startIndex = request.getStartIndex() != null ? request.getStartIndex()
                 : gft.getStartIndex() != null ? gft.getStartIndex() : DEFAULT_START;
         BigInteger count = request.getCount() != null ? request.getCount()

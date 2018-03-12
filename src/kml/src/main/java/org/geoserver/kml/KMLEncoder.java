@@ -24,12 +24,11 @@ import de.micromata.opengis.kml.v_2_2_0.Kml;
 
 /**
  * Encodes a KML object onto an output stream
- * 
+ *
  * @author Andrea Aime - GeoSolutions
- * 
  */
 public class KMLEncoder {
-    
+
     private JAXBContext context;
 
     private Templates templates;
@@ -54,7 +53,7 @@ public class KMLEncoder {
         } catch (JAXBException | TransformerException e) {
             throw new ServiceException(e);
         } finally {
-            if(context != null) {
+            if (context != null) {
                 context.closeIterators();
             }
         }

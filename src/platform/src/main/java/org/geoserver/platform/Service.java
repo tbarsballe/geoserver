@@ -22,7 +22,6 @@ import org.geotools.util.Version;
  * </p>
  *
  * @author Justin Deoliveira, The Open Planning Project, jdeolive@openplans.org
- *
  */
 public final class Service {
     /**
@@ -58,7 +57,7 @@ public final class Service {
     /**
      * Creates a new service descriptor.
      *
-     * @param id A string identifing the service.
+     * @param id      A string identifing the service.
      * @param service The object implementing the service.
      * @param version The version of the service.
      */
@@ -69,11 +68,11 @@ public final class Service {
     /**
      * Creates a new service descriptor.
      *
-     * @param id A string identifying the service.
-     * @param namespace The namespace of the service, may be <code>null</code>
-     * @param service The object implementing the service.
-     * @param version The version of the service.
-     * @param operations The list of operations the service provides 
+     * @param id         A string identifying the service.
+     * @param namespace  The namespace of the service, may be <code>null</code>
+     * @param service    The object implementing the service.
+     * @param version    The version of the service.
+     * @param operations The list of operations the service provides
      */
     public Service(String id, String namespace, Object service, Version version, List<String> operations) {
         this.id = id;
@@ -135,7 +134,7 @@ public final class Service {
             }
         }
 
-        return operations.equals( other.operations );
+        return operations.equals(other.operations);
     }
 
     public int hashCode() {

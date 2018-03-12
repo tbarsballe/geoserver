@@ -11,9 +11,8 @@ import org.geoserver.ows.KvpParser;
 
 /**
  * Parses a charset name into a {@link Charset} object
- * 
+ *
  * @author Andrea Aime - OpenGeo
- * 
  */
 public class CharsetKVPParser extends KvpParser {
 

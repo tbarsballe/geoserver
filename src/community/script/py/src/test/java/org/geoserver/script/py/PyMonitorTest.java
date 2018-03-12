@@ -53,7 +53,7 @@ public class PyMonitorTest extends ScriptProcessTestSupport {
     }
 
     public Parameter<?> checkParameter(Map<String, Parameter<?>> parameters, String name,
-            Class type, String description, int minOccurs, int maxOccurs) {
+                                       Class type, String description, int minOccurs, int maxOccurs) {
         assertTrue(parameters.containsKey(name));
         Parameter<?> param = parameters.get(name);
         assertTrue(type.isAssignableFrom(param.type));

@@ -30,8 +30,8 @@ import org.opengis.feature.type.Name;
  * In a sense this class retypes {@link PropertyType#getValue()} to a new xml
  * type so that the encoder can encode it properly.
  * </p>
- * @author Justin Deoliveira, The Open Planning Project, jdeolive@openplans.org
  *
+ * @author Justin Deoliveira, The Open Planning Project, jdeolive@openplans.org
  */
 public class PropertyTypePropertyExtractor implements PropertyExtractor {
     /**
@@ -53,10 +53,10 @@ public class PropertyTypePropertyExtractor implements PropertyExtractor {
         List properties = new ArrayList(2);
 
         //the Name particle we can use as is
-        properties.add(new Object[] {
+        properties.add(new Object[]{
                 Schemas.getChildElementParticle(element.getType(), "Name", false),
                 property.getName()
-            });
+        });
 
         //the Value particle we must retype
 
@@ -75,13 +75,13 @@ public class PropertyTypePropertyExtractor implements PropertyExtractor {
             particle.setMaxOccurs(1);
             particle.setContent(value);
 
-            properties.add(new Object[] { particle, property.getValue() });
+            properties.add(new Object[]{particle, property.getValue()});
         } else {
             //coudl not determine new type, just fall back to xs:anyType
-            Object[] p = new Object[] {
+            Object[] p = new Object[]{
                     Schemas.getChildElementParticle(element.getType(), "Value", false),
                     property.getValue()
-                };
+            };
             properties.add(p);
         }
 
@@ -90,9 +90,9 @@ public class PropertyTypePropertyExtractor implements PropertyExtractor {
 
     private QName guessValueType(Object value) {
         Class clazz = value.getClass();
-        List profiles = Arrays.asList(new Object[] { new XSProfile(), new GML3Profile() });
+        List profiles = Arrays.asList(new Object[]{new XSProfile(), new GML3Profile()});
 
-        for (Iterator it = profiles.iterator(); it.hasNext();) {
+        for (Iterator it = profiles.iterator(); it.hasNext(); ) {
             TypeMappingProfile profile = (TypeMappingProfile) it.next();
             Name name = profile.name(clazz);
 

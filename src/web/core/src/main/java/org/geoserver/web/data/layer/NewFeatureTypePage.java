@@ -44,6 +44,7 @@ import com.vividsolutions.jts.geom.Geometry;
 
 /**
  * Builds a new feature type by having the user specify the attributes
+ *
  * @author aaime
  */
 @SuppressWarnings("serial")
@@ -87,7 +88,7 @@ public class NewFeatureTypePage extends GeoServerSecuredPage {
 
             @Override
             protected Component getComponentForProperty(String id, IModel<AttributeDescription> itemModel,
-                    Property<AttributeDescription> property) {
+                                                        Property<AttributeDescription> property) {
                 AttributeDescription att = (AttributeDescription) itemModel.getObject();
                 if (property == AttributesProvider.NAME) {
                     Fragment f = new Fragment(id, "nameFragment", NewFeatureTypePage.this);
@@ -180,11 +181,11 @@ public class NewFeatureTypePage extends GeoServerSecuredPage {
             throws IOException {
         try {
             return ds.getFeatureSource(name);
-        } catch(IOException e) {
+        } catch (IOException e) {
             // maybe it's Oracle?
             try {
                 return ds.getFeatureSource(name.toUpperCase());
-            } catch(Exception ora) {
+            } catch (Exception ora) {
                 // nope, the reason was another one
                 throw e;
             }
@@ -298,7 +299,7 @@ public class NewFeatureTypePage extends GeoServerSecuredPage {
 
     /**
      * An empty link, put there just so that it will consume the same space as an ImageAjaxLink
-     * 
+     *
      * @author Andrea Aime
      */
     class PlaceholderLink extends ImageAjaxLink<Void> {

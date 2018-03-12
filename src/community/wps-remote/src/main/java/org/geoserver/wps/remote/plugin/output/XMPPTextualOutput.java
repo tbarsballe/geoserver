@@ -11,29 +11,30 @@ import org.geotools.util.logging.Logging;
 
 /**
  * Actual implementation of a STRING Output Type
- * 
- * @author Alessio Fabiani, GeoSolutions
  *
+ * @author Alessio Fabiani, GeoSolutions
  */
 public class XMPPTextualOutput implements XMPPOutputType {
 
-    /** The LOGGER */
+    /**
+     * The LOGGER
+     */
     public static final Logger LOGGER = Logging
             .getLogger(XMPPTextualOutput.class.getPackage().getName());
 
     @Override
     public Object accept(XMPPOutputVisitor visitor, Object value, String type, String pID,
-            String baseURL, XMPPClient xmppClient, boolean publish, String name, String title,
-            String description, String defaultStyle, String targetWorkspace, String metadata)
-                    throws Exception {
+                         String baseURL, XMPPClient xmppClient, boolean publish, String name, String title,
+                         String description, String defaultStyle, String targetWorkspace, String metadata)
+            throws Exception {
         return visitor.visit(this, value, type, pID, baseURL, xmppClient, publish, name, title,
                 description, defaultStyle, targetWorkspace, metadata);
     }
 
     @Override
     public Object produceOutput(Object value, String type, String pID, String baseURL,
-            XMPPClient xmppClient, boolean publish, String name, String title, String description,
-            String defaultStyle, String targetWorkspace, String metadata) throws Exception {
+                                XMPPClient xmppClient, boolean publish, String name, String title, String description,
+                                String defaultStyle, String targetWorkspace, String metadata) throws Exception {
         // Do nothing. The output cannot published neither.
         LOGGER.fine("Do nothing. The output cannot published neither.");
 

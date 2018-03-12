@@ -13,7 +13,7 @@ import org.apache.wicket.model.IModel;
 
 /**
  * A label with a password field
- * 
+ *
  * @author Gabriel Roldan
  */
 public class PasswordParamPanel extends Panel implements ParamPanel {
@@ -23,9 +23,9 @@ public class PasswordParamPanel extends Panel implements ParamPanel {
     private final PasswordTextField passwordField;
 
     public PasswordParamPanel(final String id, final IModel model, final IModel paramLabelModel,
-            final boolean required) {
+                              final boolean required) {
         super(id, model);
-        String requiredMark = required ? " *" : ""; 
+        String requiredMark = required ? " *" : "";
         add(new Label("paramName", paramLabelModel.getObject() + requiredMark));
 
         passwordField = new PasswordTextField("paramValue", model);

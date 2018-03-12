@@ -14,9 +14,8 @@ import org.geoserver.platform.resource.Resource;
  * <br>
  * The concrete classes can be external beans defined as GeoServer Extensions
  * implementing the {@link CatalogAdditionalResourcesWriter} interface.
- * 
- * @author Alessio Fabiani, GeoSolutions
  *
+ * @author Alessio Fabiani, GeoSolutions
  */
 public interface CatalogAdditionalResourcesWriter<T> {
 

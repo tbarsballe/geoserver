@@ -12,9 +12,8 @@ import org.opengis.feature.simple.SimpleFeature;
 
 /**
  * An iterator wrapping a {@link SimpleFeatureIterator} and exposing its close method
- * 
+ *
  * @author Andrea Aime - OpenGeo
- * 
  */
 class WrappingIterator implements Iterator<SimpleFeature> {
     SimpleFeatureIterator delegate;

@@ -8,8 +8,8 @@ package org.geoserver.security.config.impl;
 import org.geoserver.security.config.BaseSecurityNamedServiceConfig;
 import org.geoserver.security.config.SecurityUserGroupServiceConfig;
 
-public class MemoryUserGroupServiceConfigImpl extends BaseSecurityNamedServiceConfig 
-    implements SecurityUserGroupServiceConfig {
+public class MemoryUserGroupServiceConfigImpl extends BaseSecurityNamedServiceConfig
+        implements SecurityUserGroupServiceConfig {
 
     private static final long serialVersionUID = 1L;
     protected String passwordEncoderName;
@@ -21,7 +21,7 @@ public class MemoryUserGroupServiceConfigImpl extends BaseSecurityNamedServiceCo
 
     public MemoryUserGroupServiceConfigImpl(MemoryUserGroupServiceConfigImpl other) {
         super(other);
-        passwordEncoderName = other.getPasswordEncoderName(); 
+        passwordEncoderName = other.getPasswordEncoderName();
         passwordPolicyName = other.getPasswordPolicyName();
         toBeEncrypted = other.getToBeEncrypted();
     }
@@ -34,7 +34,7 @@ public class MemoryUserGroupServiceConfigImpl extends BaseSecurityNamedServiceCo
         this.toBeEncrypted = toBeEncrypted;
     }
 
-    
+
     public String getPasswordPolicyName() {
         return passwordPolicyName;
     }
@@ -50,7 +50,7 @@ public class MemoryUserGroupServiceConfigImpl extends BaseSecurityNamedServiceCo
 
     @Override
     public void setPasswordEncoderName(String name) {
-        passwordEncoderName=name;
+        passwordEncoderName = name;
     }
 
 }

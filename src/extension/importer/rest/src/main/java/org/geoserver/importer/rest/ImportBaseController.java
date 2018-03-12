@@ -84,6 +84,7 @@ public class ImportBaseController extends RestBaseController {
     ImportTransform transform(Long importId, Integer taskId, Integer transformId) {
         return transform(importId, taskId, transformId, false);
     }
+
     ImportTransform transform(Long importId, Integer taskId, Integer transformId, boolean optional) {
         ImportTask task = task(importId, taskId);
 
@@ -109,7 +110,7 @@ public class ImportBaseController extends RestBaseController {
         try {
             return "self".equalsIgnoreCase(ex) ? 1
                     : "all".equalsIgnoreCase(ex) ? Integer.MAX_VALUE
-                            : "none".equalsIgnoreCase(ex) ? 0 : Integer.parseInt(ex);
+                    : "none".equalsIgnoreCase(ex) ? 0 : Integer.parseInt(ex);
         } catch (NumberFormatException e) {
             return def;
         }

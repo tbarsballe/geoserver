@@ -26,7 +26,7 @@ public class JaxbPPIO extends ComplexPPIO {
         super(targetClass, targetClass, "text/xml");
         this.targetClass = targetClass;
         this.resolverProvider = resolverProvider;
-        
+
         // this creation is expensive, do it once and cache it
         this.context = JAXBContext.newInstance((targetClass));
     }
@@ -44,7 +44,7 @@ public class JaxbPPIO extends ComplexPPIO {
         Unmarshaller unmarshaller = this.context.createUnmarshaller();
 
         EntityResolver resolver = resolverProvider != null ? resolverProvider.getEntityResolver() : null;
-        if( resolver == null) {
+        if (resolver == null) {
             return unmarshaller.unmarshal(input);
         } else {
             // setup the entity resolver
@@ -70,6 +70,5 @@ public class JaxbPPIO extends ComplexPPIO {
         // this.context.createMarshaller().marshal(value, os);
     }
 
-    
 
 }

@@ -42,7 +42,7 @@ import org.geotools.geometry.jts.ReferencedEnvelope;
 
 /**
  * Base page for {@link CoverageView} creation/editing
- * 
+ *
  * @author Daniele Romagnoli, GeoSolutions SAS
  */
 @SuppressWarnings("serial")
@@ -51,7 +51,7 @@ public abstract class CoverageViewAbstractPage extends GeoServerSecuredPage {
     public static final String COVERAGESTORE = "storeName";
 
     public static final String WORKSPACE = "wsName";
-    
+
     static final String COVERAGE_VIEW_NAME = "COVERAGEVIEW_NAME";
 
     String storeId;
@@ -71,23 +71,22 @@ public abstract class CoverageViewAbstractPage extends GeoServerSecuredPage {
     List<String> selectedCoverages;
 
     List<CoverageBand> outputBands;
-    
+
     EnvelopeCompositionType envelopeCompositionType = EnvelopeCompositionType.INTERSECTION;
 
     SelectedResolution selectedResolution = SelectedResolution.BEST;
-    
+
     String resolutionReferenceCoverage;
 
     CoverageViewEditor coverageEditor;
-    
-    
+
 
     public CoverageViewAbstractPage(PageParameters params) throws IOException {
         this(params.get(WORKSPACE).toOptionalString(), params.get(COVERAGESTORE).toString(), null, null);
     }
 
     public CoverageViewAbstractPage(String workspaceName, String storeName, String coverageName,
-            CoverageInfo coverageInfo) throws IOException {
+                                    CoverageInfo coverageInfo) throws IOException {
         storeId = getCatalog().getStoreByName(workspaceName, storeName, CoverageStoreInfo.class)
                 .getId();
         Catalog catalog = getCatalog();
@@ -103,7 +102,7 @@ public abstract class CoverageViewAbstractPage extends GeoServerSecuredPage {
             ImageLayout layout = reader.getImageLayout(coverage);
             SampleModel sampleModel = layout.getSampleModel(null);
             final int numBands = sampleModel.getNumBands();
-            if(numBands == 1) {
+            if (numBands == 1) {
                 // simple syntax for simple case
                 availableCoverages.add(coverage);
             } else {
@@ -152,10 +151,10 @@ public abstract class CoverageViewAbstractPage extends GeoServerSecuredPage {
         nameField.add(new CoverageViewNameValidator());
         form.add(nameField);
 
-        coverageEditor = new CoverageViewEditor("coverages", 
-                new PropertyModel<>(this,"selectedCoverages"), 
-                new PropertyModel<>(this, "outputBands"), 
-                new PropertyModel<>(this,"envelopeCompositionType"), 
+        coverageEditor = new CoverageViewEditor("coverages",
+                new PropertyModel<>(this, "selectedCoverages"),
+                new PropertyModel<>(this, "outputBands"),
+                new PropertyModel<>(this, "envelopeCompositionType"),
                 new PropertyModel<>(this, "selectedResolution"),
                 new PropertyModel<>(this, "resolutionReferenceCoverage"),
                 availableCoverages);
@@ -186,7 +185,7 @@ public abstract class CoverageViewAbstractPage extends GeoServerSecuredPage {
             final int referenceCoverageIndex = getReferenceCoverageIndex();
             view.setSelectedResolutionIndex(referenceCoverageIndex);
         }
-        
+
         return view;
     }
 
@@ -203,9 +202,8 @@ public abstract class CoverageViewAbstractPage extends GeoServerSecuredPage {
     /**
      * Data stores tend to return IOExceptions with no explanation, and the actual error coming from the db is in the cause. This method extracts the
      * first not null message in the cause chain
-     * 
-     * @param t
      *
+     * @param t
      */
     protected String getFirstErrorMessage(Throwable t) {
         Throwable original = t;

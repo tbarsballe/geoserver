@@ -6,7 +6,7 @@ package org.geoserver.opensearch.eo;
 
 /**
  * A OpenSearch EO query for metadata of a specific product or collection
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class MetadataRequest extends AbstractProductRequest {

@@ -12,7 +12,6 @@ import org.springframework.security.authentication.AuthenticationDetailsSource;
 
 /**
  * @author christian
- *
  */
 public class GeoServerWebAuthenticationDetailsSource implements AuthenticationDetailsSource<HttpServletRequest, GeoServerWebAuthenticationDetails> {
 

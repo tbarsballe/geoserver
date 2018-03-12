@@ -38,7 +38,7 @@ public class ClusterControllerTest extends GeoServerSystemTestSupport {
     @Test
     public void testGetConfigurationHTML() throws Exception {
         Document dom = getAsDOM("rest/cluster.html");
-        assertEquals( "html", dom.getDocumentElement().getNodeName() );
+        assertEquals("html", dom.getDocumentElement().getNodeName());
     }
 
     @Test

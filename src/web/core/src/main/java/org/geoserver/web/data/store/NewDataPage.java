@@ -41,7 +41,7 @@ import org.vfny.geoserver.util.DataStoreUtils;
  * <p>
  * Meant to be called by {@link DataPage} when about to add a new datastore or coverage.
  * </p>
- * 
+ *
  * @author Gabriel Roldan
  */
 @SuppressWarnings("serial")
@@ -56,9 +56,8 @@ public class NewDataPage extends GeoServerSecuredPage {
     /**
      * Creates the page components to present the list of available vector and raster data source
      * types
-     * 
-     * @param workspaceId
-     *            the id of the workspace to attach the new resource store to.
+     *
+     * @param workspaceId the id of the workspace to attach the new resource store to.
      */
     public NewDataPage() {
 
@@ -130,9 +129,9 @@ public class NewDataPage extends GeoServerSecuredPage {
                 item.add(icon);
             }
         };
-        
+
         final List<OtherStoreDescription> otherStores = getOtherStores();
-        
+
         final ListView otherStoresLinks = new ListView("otherStores", otherStores) {
             @Override
             protected void populateItem(ListItem item) {
@@ -174,7 +173,7 @@ public class NewDataPage extends GeoServerSecuredPage {
 
             while (availableDataStores.hasNext()) {
                 DataAccessFactory factory = availableDataStores.next();
-                if(factory.getDisplayName() != null) {
+                if (factory.getDisplayName() != null) {
                     storeNames.put(factory.getDisplayName(), factory);
                 }
             }
@@ -197,13 +196,13 @@ public class NewDataPage extends GeoServerSecuredPage {
         }
         return coverages;
     }
-    
+
     private List<OtherStoreDescription> getOtherStores() {
         List<OtherStoreDescription> stores = new ArrayList<OtherStoreDescription>();
         PackageResourceReference wmsIcon = new PackageResourceReference(GeoServerApplication.class, "img/icons/geosilk/server_map.png");
         stores.add(new OtherStoreDescription("wms", wmsIcon, WMSStoreNewPage.class));
         stores.add(new OtherStoreDescription("wmts", wmsIcon, WMTSStoreNewPage.class));
-        
+
         return stores;
     }
 
@@ -222,7 +221,7 @@ public class NewDataPage extends GeoServerSecuredPage {
 
         Class<? extends Page> configurationPage;
 
-        public OtherStoreDescription(String key, PackageResourceReference icon,  Class<? extends Page> configurationPage) {
+        public OtherStoreDescription(String key, PackageResourceReference icon, Class<? extends Page> configurationPage) {
             super();
             this.key = key;
             this.icon = icon;

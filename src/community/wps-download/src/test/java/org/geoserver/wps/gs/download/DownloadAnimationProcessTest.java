@@ -38,21 +38,21 @@ public class DownloadAnimationProcessTest extends BaseDownloadImageProcessTest {
 
     @Test
     public void testDescribeProcess() throws Exception {
-        Document d = getAsDOM( root() + "service=wps&request=describeprocess&identifier=gs:DownloadAnimation");
+        Document d = getAsDOM(root() + "service=wps&request=describeprocess&identifier=gs:DownloadAnimation");
         // print(d);
         assertXpathExists("//ComplexOutput/Supported/Format[MimeType='video/mp4']", d);
     }
-    
+
     @Test
     public void testAnimateBmTime() throws Exception {
         String xml = IOUtils.toString(getClass().getResourceAsStream("animateBlueMarble.xml"));
         MockHttpServletResponse response = postAsServletResponse("wps", xml);
         assertEquals("video/mp4", response.getContentType());
-        
+
         // JCodec API works off files only... 
         File testFile = new File("target/animateBmTime.mp4");
         FileUtils.writeByteArrayToFile(testFile, response.getContentAsByteArray());
-        
+
         // check frames and duration
         Format f = JCodecUtil.detectFormat(testFile);
         Demuxer d = JCodecUtil.createDemuxer(f, testFile);
@@ -103,7 +103,7 @@ public class DownloadAnimationProcessTest extends BaseDownloadImageProcessTest {
         // grab first frame for test
         FrameGrab grabber = FrameGrab.createFrameGrab(NIOUtils.readableChannel(testFile));
         BufferedImage frame1 = AWTUtil.toBufferedImage(grabber.getNativeFrame());
-        ImageAssert.assertEquals(new File(SAMPLES +  "animateDecorateFirstFrame.png"), frame1, 100);
+        ImageAssert.assertEquals(new File(SAMPLES + "animateDecorateFirstFrame.png"), frame1, 100);
     }
 
     @Test
@@ -127,7 +127,7 @@ public class DownloadAnimationProcessTest extends BaseDownloadImageProcessTest {
         // grab first frame for test
         FrameGrab grabber = FrameGrab.createFrameGrab(NIOUtils.readableChannel(testFile));
         BufferedImage frame1 = AWTUtil.toBufferedImage(grabber.getNativeFrame());
-        ImageAssert.assertEquals(new File(SAMPLES +  "animateBlueMarbleTimestampedFrame1.png"), frame1, 100);
+        ImageAssert.assertEquals(new File(SAMPLES + "animateBlueMarbleTimestampedFrame1.png"), frame1, 100);
     }
 
     BufferedImage grabImageFromZip(File file, String entryName) throws IOException {
@@ -135,16 +135,16 @@ public class DownloadAnimationProcessTest extends BaseDownloadImageProcessTest {
 
         Enumeration<? extends ZipEntry> entries = zipFile.entries();
 
-        while(entries.hasMoreElements()){
+        while (entries.hasMoreElements()) {
             ZipEntry entry = entries.nextElement();
-            if(entry.getName().equalsIgnoreCase(entryName)) {
-                try(InputStream stream = zipFile.getInputStream(entry)) {
+            if (entry.getName().equalsIgnoreCase(entryName)) {
+                try (InputStream stream = zipFile.getInputStream(entry)) {
                     return ImageIO.read(stream);
                 }
             }
         }
-        
+
         return null;
     }
-    
+
 }

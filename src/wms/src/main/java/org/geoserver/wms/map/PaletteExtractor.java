@@ -62,91 +62,92 @@ import org.opengis.filter.expression.Literal;
  * of the external graphics).
  */
 public class PaletteExtractor extends FilterAttributeExtractor implements StyleVisitor {
-    public static final Color TRANSPARENT = new Color(255,255,255,0);
+    public static final Color TRANSPARENT = new Color(255, 255, 255, 0);
     private static final int TRANSPARENT_CODE = 255 << 16 | 255 << 8 | 255;
-    
+
     Set/*<Color>*/ colors;
     boolean translucentSymbolizers;
     boolean externalGraphicsSymbolizers;
     boolean unknownColors;
     boolean rasterUsed;
-    
+
     /**
      * Initializes a new palette extractor
+     *
      * @param background background color, or null if transparent
      */
     public PaletteExtractor(Color background) {
         super(null);
         colors = new HashSet();
-        if(background == null)
+        if (background == null)
             background = TRANSPARENT;
         colors.add(background);
     }
-    
+
     public boolean canComputePalette() {
         // hard fail conditions
-        if(translucentSymbolizers || externalGraphicsSymbolizers || unknownColors || rasterUsed)
+        if (translucentSymbolizers || externalGraphicsSymbolizers || unknownColors || rasterUsed)
             return false;
-        
+
         // impossible to devise a palette (0 shuold never happen, but you never know...)
-        if(colors.size() == 0 || colors.size() > 256)
+        if (colors.size() == 0 || colors.size() > 256)
             return false;
-        
+
         return true;
     }
-    
+
     /**
      * Returns the palette, or null if it wasn't possible to devise one
-     *
      */
     public IndexColorModel getPalette() {
-        if(!canComputePalette())
+        if (!canComputePalette())
             return null;
-        
+
         int[] cmap = new int[colors.size()];
         int i = 0;
-        for (Iterator it = colors.iterator(); it.hasNext();) {
+        for (Iterator it = colors.iterator(); it.hasNext(); ) {
             Color color = (Color) it.next();
-            cmap[i++] = (color.getAlpha() << 24) | (color.getRed() << 16) | 
-                        (color.getGreen() << 8) | color.getBlue(); 
+            cmap[i++] = (color.getAlpha() << 24) | (color.getRed() << 16) |
+                    (color.getGreen() << 8) | color.getBlue();
         }
-        
+
         // have a nice looking palette
         Arrays.sort(cmap);
         int transparentIndex = cmap[cmap.length - 1] == TRANSPARENT_CODE ? cmap.length - 1 : -1;
-        
+
         // find out the minimum number of bits required to represent the palette, and return it
         int bits = 8;
-        if(cmap.length <= 2) {
+        if (cmap.length <= 2) {
             bits = 1;
-        } else if(cmap.length <= 4) {
+        } else if (cmap.length <= 4) {
             bits = 2;
-        } else if(cmap.length <= 16) {
+        } else if (cmap.length <= 16) {
             bits = 4;
         }
-        
+
         // workaround for GEOS-1341, GEOS-1337 will try to find a solution
 //      int length = (int) Math.pow(2, bits);
         int length = bits == 1 ? 2 : 256;
-        if(cmap.length < length) {
+        if (cmap.length < length) {
             int[] temp = new int[length];
             System.arraycopy(cmap, 0, temp, 0, cmap.length);
             cmap = temp;
         }
-        
+
         return new IndexColorModel(bits, cmap.length, cmap, 0, true, transparentIndex,
                 DataBuffer.TYPE_BYTE);
     }
-    
+
     /**
      * Checks whether translucency is used in the provided expression. Raises the flag
      * of used translucency unless it's possible to determine it's not.
+     *
      * @param opacity
      */
     void handleOpacity(Expression opacity) {
-        if(opacity == null)
+        if (opacity == null)
             return;
-        if(opacity instanceof Literal) {
+        if (opacity instanceof Literal) {
             Literal lo = (Literal) opacity;
             double value = ((Double) lo.evaluate(null, Double.class)).doubleValue();
             translucentSymbolizers = translucentSymbolizers || value != 1;
@@ -155,16 +156,17 @@ public class PaletteExtractor extends FilterAttributeExtractor implements StyleV
             translucentSymbolizers = true;
         }
     }
-    
+
     /**
      * Adds a color to the color set, and raises the unknown color flag if the color
      * is an expression other than a literal
+     *
      * @param color
      */
     void handleColor(Expression color) {
-        if(color == null)
+        if (color == null)
             return;
-        if(color instanceof Literal) {
+        if (color instanceof Literal) {
             Literal lc = (Literal) color;
             String rgbColor = (String) lc.evaluate(null, String.class);
             colors.add(Color.decode(rgbColor));
@@ -172,7 +174,7 @@ public class PaletteExtractor extends FilterAttributeExtractor implements StyleV
             unknownColors = true;
         }
     }
-    
+
 
     /**
      * @see org.geotools.styling.StyleVisitor#visit(org.geotools.styling.Style)
@@ -219,7 +221,7 @@ public class PaletteExtractor extends FilterAttributeExtractor implements StyleV
 
     public void visit(StyledLayerDescriptor sld) {
         StyledLayer[] layers = sld.getStyledLayers();
-    
+
         for (int i = 0; i < layers.length; i++) {
             if (layers[i] instanceof NamedLayer) {
                 ((NamedLayer) layers[i]).accept(this);
@@ -232,7 +234,7 @@ public class PaletteExtractor extends FilterAttributeExtractor implements StyleV
 
     public void visit(NamedLayer layer) {
         Style[] styles = layer.getStyles();
-    
+
         for (int i = 0; i < styles.length; i++) {
             styles[i].accept(this);
         }
@@ -241,7 +243,7 @@ public class PaletteExtractor extends FilterAttributeExtractor implements StyleV
 
     public void visit(UserLayer layer) {
         Style[] styles = layer.getUserStyles();
-    
+
         for (int i = 0; i < styles.length; i++) {
             styles[i].accept(this);
         }
@@ -251,7 +253,7 @@ public class PaletteExtractor extends FilterAttributeExtractor implements StyleV
     public void visit(FeatureTypeConstraint ftc) {
         // nothing to do
     }
-    
+
     /**
      * @see org.geotools.styling.StyleVisitor#visit(org.geotools.styling.Symbolizer)
      */
@@ -286,13 +288,12 @@ public class PaletteExtractor extends FilterAttributeExtractor implements StyleV
 
         handleColor(fill.getColor());
 
-        if(fill.getGraphicFill() != null)
+        if (fill.getGraphicFill() != null)
             fill.getGraphicFill().accept(this);
 
         handleOpacity(fill.getOpacity());
     }
-    
-    
+
 
     /**
      * @see org.geotools.styling.StyleVisitor#visit(org.geotools.styling.Stroke)
@@ -311,10 +312,9 @@ public class PaletteExtractor extends FilterAttributeExtractor implements StyleV
         handleOpacity(stroke.getOpacity());
     }
 
-   
 
     public void visit(RasterSymbolizer rs) {
-        rasterUsed = true;        
+        rasterUsed = true;
     }
 
     /**
@@ -413,21 +413,21 @@ public class PaletteExtractor extends FilterAttributeExtractor implements StyleV
      * @see org.geotools.styling.StyleVisitor#visit(org.geotools.styling.AnchorPoint)
      */
     public void visit(AnchorPoint ap) {
-     // nothing to do
+        // nothing to do
     }
 
     /**
      * @see org.geotools.styling.StyleVisitor#visit(org.geotools.styling.Displacement)
      */
     public void visit(Displacement dis) {
-     // nothing to do
+        // nothing to do
     }
 
     /**
      * @see org.geotools.styling.StyleVisitor#visit(org.geotools.styling.LinePlacement)
      */
     public void visit(LinePlacement lp) {
-     // nothing to do
+        // nothing to do
     }
 
     /**

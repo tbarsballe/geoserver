@@ -73,10 +73,10 @@ public class RemotesListPanel extends GeoServerTablePanel<RemoteInfo> {
         return provider.getItems();
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings({"unchecked", "rawtypes"})
     @Override
     protected Component getComponentForProperty(String id, IModel<RemoteInfo> itemModel,
-            Property<RemoteInfo> property) {
+                                                Property<RemoteInfo> property) {
 
         IModel<RemoteInfo> model = itemModel;
 
@@ -169,7 +169,7 @@ public class RemotesListPanel extends GeoServerTablePanel<RemoteInfo> {
 
             add(new Label("aboutRemoveMsg", new ParamResourceModel(
                     "RemotesListPanel$ConfirmRemovePanel.aboutRemove", this, remote.getObject()
-                            .getName())));
+                    .getName())));
         }
     }
 

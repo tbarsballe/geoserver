@@ -39,21 +39,21 @@ public class DefaultCacheProvider implements CacheProvider {
 
         return cache;
     }
-    
-    
+
+
     public static CacheProvider findProvider() {
         CacheProvider cacheProvider = null;
         // Check for a named bean
         String providerNames = GeoServerExtensions.getProperty(BEAN_NAME_PROPERTY);
-        if(providerNames!=null) {
-            for(String providerName: providerNames.split("\\s*,\\s*")) {
+        if (providerNames != null) {
+            for (String providerName : providerNames.split("\\s*,\\s*")) {
                 cacheProvider = (CacheProvider) (CacheProvider) GeoServerExtensions.bean(providerName);
-                if(cacheProvider!=null) {
+                if (cacheProvider != null) {
                     LOGGER.log(Level.INFO, "Using specified Cache Provider ", providerName);
                     break;
                 }
             }
-            if(cacheProvider == null) {
+            if (cacheProvider == null) {
                 LOGGER.log(Level.INFO, "{0} was specified but no beans matched it.", BEAN_NAME_PROPERTY);
             }
         }
@@ -63,14 +63,14 @@ public class DefaultCacheProvider implements CacheProvider {
                 cacheProvider = GeoServerExtensions.bean(CacheProvider.class);
             } catch (MultipleBeansException ex) {
                 String providerName = ex.getAvailableBeans().iterator().next();
-                if(LOGGER.isLoggable(Level.WARNING)){
+                if (LOGGER.isLoggable(Level.WARNING)) {
                     String available = StringUtils.join(ex.getAvailableBeans(), ", ");
                     LOGGER.log(Level.WARNING, "Multiple Cache Providers in context: {0}\n\tUsing {1}.  Override by setting system property {2}", new Object[]{available, providerName, BEAN_NAME_PROPERTY});
                 }
                 cacheProvider = (CacheProvider) (CacheProvider) GeoServerExtensions.bean(providerName);
             }
         }
-        
+
         // Use the default
         if (cacheProvider == null) {
             cacheProvider = new DefaultCacheProvider();

@@ -22,11 +22,11 @@ public class DataLinkInfoImpl implements DataLinkInfo {
     String type;
 
     String content;
-    
+
     public DataLinkInfoImpl() {
         // nothing to do
     }
-    
+
     public DataLinkInfoImpl(DataLinkInfoImpl other) {
         this.id = other.id;
         this.about = other.about;
@@ -70,12 +70,13 @@ public class DataLinkInfoImpl implements DataLinkInfo {
     }
 
     static final List<String> protocols = Arrays.asList("http", "https", "ftp");
+
     /**
-     * @throws IllegalArgumentException if the url is invalid for use as a Link
      * @param url
+     * @throws IllegalArgumentException if the url is invalid for use as a Link
      */
     public static void validate(String url) {
-        if (url==null) return;
+        if (url == null) return;
         URL dummy;
         try {
             dummy = new URL("http://dummy/");
@@ -85,31 +86,32 @@ public class DataLinkInfoImpl implements DataLinkInfo {
         try {
             // Doing this with exceptions isn't ideal but it works, and we're throwing an
             // exception anyway
-            
+
             // The dummy context will allow it to parse relative URLs, which should be allowed.
             URL parsed = new URL(dummy, url);
             String protocol = parsed.getProtocol();
-            
+
             // Converting to URI forces validation
             parsed.toURI();
-            
-            if(!protocols.contains(protocol)){
-                throw new IllegalArgumentException("Protocol "+protocol+" is not supported in url "+url);
+
+            if (!protocols.contains(protocol)) {
+                throw new IllegalArgumentException("Protocol " + protocol + " is not supported in url " + url);
             }
         } catch (MalformedURLException | URISyntaxException ex) {
-            throw new IllegalArgumentException("Not a valid URL: "+url, ex);
+            throw new IllegalArgumentException("Not a valid URL: " + url, ex);
         }
     }
-    
+
     public void setContent(String content) {
         validate(content);
         this.content = content;
     }
-    
+
     private Object readResolve() {
         validate(content);
         return this;
     }
+
     @Override
     public int hashCode() {
         final int PRIME = 31;
@@ -129,7 +131,7 @@ public class DataLinkInfoImpl implements DataLinkInfo {
         if (!(obj instanceof DataLinkInfo)) {
             return false;
         }
-            
+
         final DataLinkInfo other = (DataLinkInfo) obj;
         if (about == null) {
             if (other.getAbout() != null)
@@ -148,13 +150,12 @@ public class DataLinkInfoImpl implements DataLinkInfo {
             return false;
         return true;
     }
-    
+
     @Override
     public String toString() {
         return new StringBuilder(getClass().getSimpleName()).append("[type:").append(type).append(", content:").append(content)
                 .append(']').toString();
     }
-    
-    
+
 
 }

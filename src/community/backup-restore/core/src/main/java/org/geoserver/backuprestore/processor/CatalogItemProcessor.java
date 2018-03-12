@@ -28,11 +28,10 @@ import org.springframework.batch.item.ItemProcessor;
 
 /**
  * Concrete Spring Batch {@link ItemProcessor}.
- * 
+ * <p>
  * Processes {@link Catalog} resource items while reading.
- * 
- * @author Alessio Fabiani, GeoSolutions
  *
+ * @author Alessio Fabiani, GeoSolutions
  */
 public class CatalogItemProcessor<T> extends BackupRestoreItem<T> implements ItemProcessor<T, T> {
 
@@ -50,12 +49,12 @@ public class CatalogItemProcessor<T> extends BackupRestoreItem<T> implements Ite
 
     /**
      * Default Constructor.
-     * 
+     *
      * @param clazz
      * @param backupFacade
      */
     public CatalogItemProcessor(Class<T> clazz, Backup backupFacade,
-            XStreamPersisterFactory xStreamPersisterFactory) {
+                                XStreamPersisterFactory xStreamPersisterFactory) {
         super(backupFacade, xStreamPersisterFactory);
         this.clazz = clazz;
     }
@@ -74,7 +73,7 @@ public class CatalogItemProcessor<T> extends BackupRestoreItem<T> implements Ite
             if (isNew()) {
                 // Disabling additional validators
                 ((CatalogImpl) getCatalog()).setExtendedValidation(false);
-                
+
                 // Resolving Collections
                 OwsUtils.resolveCollections(resource);
             }
@@ -116,7 +115,7 @@ public class CatalogItemProcessor<T> extends BackupRestoreItem<T> implements Ite
             } else if (resource instanceof CoverageStoreInfo) {
                 WorkspaceInfo ws = ((CoverageStoreInfo) resource).getWorkspace() != null
                         ? getCatalog().getWorkspaceByName(
-                                ((CoverageStoreInfo) resource).getWorkspace().getName())
+                        ((CoverageStoreInfo) resource).getWorkspace().getName())
                         : null;
 
                 if (filteredResource(resource, ws, true)) {
@@ -131,9 +130,9 @@ public class CatalogItemProcessor<T> extends BackupRestoreItem<T> implements Ite
             } else if (resource instanceof ResourceInfo) {
                 WorkspaceInfo ws = ((ResourceInfo) resource).getStore() != null
                         && ((ResourceInfo) resource).getStore().getWorkspace() != null
-                                ? getCatalog().getWorkspaceByName(((ResourceInfo) resource)
-                                        .getStore().getWorkspace().getName())
-                                : null;
+                        ? getCatalog().getWorkspaceByName(((ResourceInfo) resource)
+                        .getStore().getWorkspace().getName())
+                        : null;
 
                 if (filteredResource(resource, ws, true)) {
                     return null;
@@ -150,11 +149,11 @@ public class CatalogItemProcessor<T> extends BackupRestoreItem<T> implements Ite
                     WorkspaceInfo ws = ((LayerInfo) resource).getResource() != null
                             && ((LayerInfo) resource).getResource().getStore() != null
                             && ((LayerInfo) resource).getResource().getStore()
-                                    .getWorkspace() != null
-                                            ? getCatalog().getWorkspaceByName(
-                                                    ((LayerInfo) resource).getResource().getStore()
-                                                            .getWorkspace().getName())
-                                            : null;
+                            .getWorkspace() != null
+                            ? getCatalog().getWorkspaceByName(
+                            ((LayerInfo) resource).getResource().getStore()
+                                    .getWorkspace().getName())
+                            : null;
 
                     if (filteredResource(resource, ws, true)) {
                         return null;
@@ -196,7 +195,7 @@ public class CatalogItemProcessor<T> extends BackupRestoreItem<T> implements Ite
                 try {
                     WorkspaceInfo ws = ((LayerGroupInfo) resource).getWorkspace() != null
                             ? getCatalog().getWorkspaceByName(
-                                    ((LayerGroupInfo) resource).getWorkspace().getName())
+                            ((LayerGroupInfo) resource).getWorkspace().getName())
                             : null;
 
                     if (filteredResource(resource, ws, false)) {
@@ -222,11 +221,9 @@ public class CatalogItemProcessor<T> extends BackupRestoreItem<T> implements Ite
 
     /**
      * Being sure the associated {@link NamespaceInfo} exists and is available on the GeoServer Catalog.
-     * 
+     *
      * @param isNew
-     * 
      * @param {@link WorkspaceInfo} resource
-     * 
      * @return boolean indicating whether the resource is valid or not.
      * @throws Exception
      */
@@ -251,13 +248,11 @@ public class CatalogItemProcessor<T> extends BackupRestoreItem<T> implements Ite
 
     /**
      * Being sure the associated {@link WorkspaceInfo} exists and is available on the GeoServer Catalog.
-     * 
+     * <p>
      * Also if a default {@link DataStoreInfo} has not been defined for the current {@link WorkspaceInfo}, set this one as default.
-     * 
+     *
      * @param isNew
-     * 
      * @param {@link DataStoreInfo} resource
-     * 
      * @return boolean indicating whether the resource is valid or not.
      * @throws Exception
      */
@@ -285,11 +280,9 @@ public class CatalogItemProcessor<T> extends BackupRestoreItem<T> implements Ite
 
     /**
      * Being sure the associated {@link WorkspaceInfo} exists and is available on the GeoServer Catalog.
-     * 
+     *
      * @param isNew
-     * 
      * @param {@link CoverageStoreInfo} resource
-     * 
      * @return boolean indicating whether the resource is valid or not.
      * @throws Exception
      */
@@ -317,15 +310,12 @@ public class CatalogItemProcessor<T> extends BackupRestoreItem<T> implements Ite
 
     /**
      * Being sure the associated {@link StoreInfo} exists and is available on the GeoServer Catalog.
-     * 
+     *
      * @param isNew2
-     * 
      * @param {@link ResourceInfo} resource
-     * @return
-     * 
      * @return boolean indicating whether the resource is valid or not.
      */
-    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @SuppressWarnings({"rawtypes", "unchecked"})
     private boolean validateResource(ResourceInfo resource, boolean isNew) {
         try {
             final StoreInfo store = resource.getStore();

@@ -34,7 +34,7 @@ public class ScriptTransactionPlugin implements TransactionPlugin {
 
     ScriptManager scriptMgr;
 
-    SoftValueHashMap<Resource, ScriptTxDelegate> delegates = new SoftValueHashMap<Resource, ScriptTxDelegate>(); 
+    SoftValueHashMap<Resource, ScriptTxDelegate> delegates = new SoftValueHashMap<Resource, ScriptTxDelegate>();
 
     public ScriptTransactionPlugin(ScriptManager scriptMgr) {
         this.scriptMgr = scriptMgr;
@@ -51,20 +51,15 @@ public class ScriptTransactionPlugin implements TransactionPlugin {
                 TransactionEventType type = event.getType();
                 if (type == TransactionEventType.PRE_INSERT) {
                     input.preInsert(event);
-                }
-                else if (type == TransactionEventType.POST_INSERT) {
+                } else if (type == TransactionEventType.POST_INSERT) {
                     input.postInsert(event);
-                }
-                else if (type == TransactionEventType.PRE_UPDATE) {
+                } else if (type == TransactionEventType.PRE_UPDATE) {
                     input.preUpdate(event);
-                }
-                else if (type == TransactionEventType.POST_UPDATE) {
+                } else if (type == TransactionEventType.POST_UPDATE) {
                     input.postUpdate(event);
-                }
-                else if (type == TransactionEventType.PRE_DELETE) {
+                } else if (type == TransactionEventType.PRE_DELETE) {
                     input.preDelete(event);
-                }
-                else {
+                } else {
                     //TODO: POST_DELETE
                 }
 
@@ -74,14 +69,14 @@ public class ScriptTransactionPlugin implements TransactionPlugin {
     }
 
     void foreach(Iterator<ScriptTxDelegate> it, Function<ScriptTxDelegate, Void> f) {
-        while(it.hasNext()) {
+        while (it.hasNext()) {
             f.apply(it.next());
         }
     }
 
     @Override
     public TransactionType beforeTransaction(TransactionType request) throws WFSException {
-        for (Iterator<ScriptTxDelegate> it = delegates(); it.hasNext();) {
+        for (Iterator<ScriptTxDelegate> it = delegates(); it.hasNext(); ) {
             ScriptTxDelegate delegate = it.next();
             request = delegate.beforeTransaction(request);
         }
@@ -90,7 +85,7 @@ public class ScriptTransactionPlugin implements TransactionPlugin {
 
     @Override
     public void beforeCommit(TransactionType request) throws WFSException {
-        for (Iterator<ScriptTxDelegate> it = delegates(); it.hasNext();) {
+        for (Iterator<ScriptTxDelegate> it = delegates(); it.hasNext(); ) {
             ScriptTxDelegate delegate = it.next();
             delegate.beforeCommit(request);
         }
@@ -98,7 +93,7 @@ public class ScriptTransactionPlugin implements TransactionPlugin {
 
     @Override
     public void afterTransaction(TransactionType request, TransactionResponseType result, boolean committed) {
-        for (Iterator<ScriptTxDelegate> it = delegates(); it.hasNext();) {
+        for (Iterator<ScriptTxDelegate> it = delegates(); it.hasNext(); ) {
             ScriptTxDelegate delegate = it.next();
             delegate.afterTransaction(request, result, committed);
         }
@@ -135,7 +130,7 @@ public class ScriptTransactionPlugin implements TransactionPlugin {
             public ScriptTxDelegate apply(@Nullable Resource input) {
                 return delegate(input);
             }
-        }); 
+        });
     }
 
     ScriptTxDelegate delegate(Resource f) {

@@ -60,9 +60,9 @@ public class IconServiceTest extends IconTestSupport {
         expect(res.getOutputStream()).andReturn(out).anyTimes();
         res.setContentType("image/png");
         expectLastCall();
-        
+
         replay(req, res, out);
-        
+
         IconService service = new IconService(cat);
         service.handleRequestInternal(req, res);
 

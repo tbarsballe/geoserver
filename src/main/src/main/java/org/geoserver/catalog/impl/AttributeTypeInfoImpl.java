@@ -22,7 +22,7 @@ public class AttributeTypeInfoImpl implements AttributeTypeInfo {
     protected FeatureTypeInfo featureType;
     protected Class binding;
     protected Integer length;
-        
+
     public String getId() {
         return id;
     }
@@ -34,7 +34,7 @@ public class AttributeTypeInfoImpl implements AttributeTypeInfo {
     public String getName() {
         return name;
     }
-    
+
     public void setName(String name) {
         this.name = name;
     }
@@ -42,11 +42,11 @@ public class AttributeTypeInfoImpl implements AttributeTypeInfo {
     public int getMaxOccurs() {
         return maxOccurs;
     }
-    
+
     public void setMaxOccurs(int maxOccurs) {
         this.maxOccurs = maxOccurs;
     }
-    
+
     public int getMinOccurs() {
         return minOccurs;
     }
@@ -54,7 +54,7 @@ public class AttributeTypeInfoImpl implements AttributeTypeInfo {
     public void setMinOccurs(int minOccurs) {
         this.minOccurs = minOccurs;
     }
-    
+
     public boolean isNillable() {
         return nillable;
     }
@@ -66,19 +66,19 @@ public class AttributeTypeInfoImpl implements AttributeTypeInfo {
     public FeatureTypeInfo getFeatureType() {
         return featureType;
     }
-    
+
     public void setFeatureType(FeatureTypeInfo featureType) {
         this.featureType = featureType;
     }
-    
+
     public AttributeDescriptor getAttribute() {
         return attribute;
     }
-    
+
     public void setAttribute(AttributeDescriptor attribute) {
         this.attribute = attribute;
     }
-    
+
     public MetadataMap getMetadata() {
         return metadata;
     }
@@ -86,12 +86,12 @@ public class AttributeTypeInfoImpl implements AttributeTypeInfo {
     public void setMetadata(MetadataMap metadata) {
         this.metadata = metadata;
     }
-    
+
     @Override
     public String toString() {
         return name;
     }
-    
+
     public Class getBinding() {
         return binding;
     }

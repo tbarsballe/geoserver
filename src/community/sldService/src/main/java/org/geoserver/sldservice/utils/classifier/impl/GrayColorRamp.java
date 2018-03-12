@@ -15,9 +15,8 @@ import org.geoserver.sldservice.utils.classifier.ColorRamp;
 
 /**
  * Gray Color Ramp Implementation
- * 
- * @author Alessio Fabiani, GeoSolutions SAS
  *
+ * @author Alessio Fabiani, GeoSolutions SAS
  */
 public class GrayColorRamp implements ColorRamp {
 

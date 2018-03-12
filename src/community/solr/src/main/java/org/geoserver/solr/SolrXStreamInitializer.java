@@ -14,17 +14,15 @@ import org.geotools.data.solr.SolrLayerConfiguration;
 import com.thoughtworks.xstream.XStream;
 
 /**
- * 
  * Implementation of XStreamPersisterInitializer extension point to serialize SolrLayerConfiguration
- *
  */
 public class SolrXStreamInitializer implements XStreamPersisterInitializer {
 
     @Override
     public void init(XStreamPersister persister) {
-        persister.registerBreifMapComplexType("solrLayerConfiguration",SolrLayerConfiguration.class);
+        persister.registerBreifMapComplexType("solrLayerConfiguration", SolrLayerConfiguration.class);
         XStream xs = persister.getXStream();
         xs.alias("solrAttribute", SolrAttribute.class);
-        xs.allowTypes(new Class[] { SolrAttribute.class, SolrLayerConfiguration.class });
+        xs.allowTypes(new Class[]{SolrAttribute.class, SolrLayerConfiguration.class});
     }
 }

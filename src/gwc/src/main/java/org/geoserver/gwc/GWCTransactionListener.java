@@ -43,11 +43,10 @@ import org.opengis.referencing.operation.TransformException;
  * <p>
  * TODO: upon deletion, only truncate if feature count > 0
  * </p>
- * 
+ *
  * @author Arne Kepp
  * @author Gabriel Roldan
  * @version $Id$
- * 
  */
 public class GWCTransactionListener implements TransactionCallback {
 
@@ -76,7 +75,7 @@ public class GWCTransactionListener implements TransactionCallback {
     /**
      * Not used, we're interested in the {@link #dataStoreChange} and {@link #afterTransaction}
      * hooks
-     * 
+     *
      * @see org.geoserver.wfs.TransactionPlugin#beforeCommit(net.opengis.wfs.TransactionRequest)
      */
     public void beforeCommit(TransactionRequest request) throws WFSException {
@@ -86,7 +85,7 @@ public class GWCTransactionListener implements TransactionCallback {
     /**
      * If transaction's succeeded then truncate the affected layers at the transaction affected
      * bounds
-     * 
+     *
      * @see org.geoserver.wfs.TransactionPlugin#afterTransaction
      */
     public void afterTransaction(final TransactionRequest request, TransactionResponse result, boolean committed) {
@@ -129,7 +128,7 @@ public class GWCTransactionListener implements TransactionCallback {
     }
 
     private ReferencedEnvelope merge(final String tileLayerName,
-            final List<ReferencedEnvelope> dirtyList) throws TransformException, FactoryException {
+                                     final List<ReferencedEnvelope> dirtyList) throws TransformException, FactoryException {
         if (dirtyList.size() == 0) {
             return null;
         }
@@ -137,7 +136,7 @@ public class GWCTransactionListener implements TransactionCallback {
         final CoordinateReferenceSystem declaredCrs = CRS.getHorizontalCRS(gwc.getDeclaredCrs(tileLayerName));
         ReferencedEnvelope merged = new ReferencedEnvelope(declaredCrs);
         for (ReferencedEnvelope env : dirtyList) {
-            if(env instanceof ReferencedEnvelope3D) {
+            if (env instanceof ReferencedEnvelope3D) {
                 env = new ReferencedEnvelope(env, CRS.getHorizontalCRS(env.getCoordinateReferenceSystem()));
             }
             ReferencedEnvelope transformedDirtyRegion = env.transform(declaredCrs, true, 1000);
@@ -156,7 +155,7 @@ public class GWCTransactionListener implements TransactionCallback {
 
     /**
      * Collects the per TileLayer affected bounds
-     * 
+     *
      * @see org.geoserver.wfs.TransactionListener#dataStoreChange(org.geoserver.wfs.TransactionEvent)
      */
     public void dataStoreChange(final TransactionEvent event) throws WFSException {
@@ -217,7 +216,7 @@ public class GWCTransactionListener implements TransactionCallback {
     }
 
     private void addLayerDirtyRegion(final TransactionRequest transaction, final String tileLayerName,
-            final ReferencedEnvelope affectedBounds) {
+                                     final ReferencedEnvelope affectedBounds) {
 
         Map<String, List<ReferencedEnvelope>> byLayerDirtyRegions = getByLayerDirtyRegions(transaction);
 

@@ -47,9 +47,8 @@ import com.thoughtworks.xstream.security.PrimitiveTypePermission;
  * A XStream subclass allowing conversion of no class other than those explicitly registered using
  * the allowType* methods. To simplify the setup, it already allows the use of primitives, strings,
  * dates and collections
- * 
- * @author Andrea Aime - GeoSolutions
  *
+ * @author Andrea Aime - GeoSolutions
  */
 public class SecureXStream extends XStream {
     private static final String WHITELIST_KEY = "GEOSERVER_XSTREAM_WHITELIST";
@@ -67,27 +66,27 @@ public class SecureXStream extends XStream {
     }
 
     public SecureXStream(ReflectionProvider reflectionProvider, HierarchicalStreamDriver driver,
-            ClassLoaderReference classLoaderReference, Mapper mapper,
-            ConverterLookup converterLookup, ConverterRegistry converterRegistry) {
+                         ClassLoaderReference classLoaderReference, Mapper mapper,
+                         ConverterLookup converterLookup, ConverterRegistry converterRegistry) {
         super(reflectionProvider, driver, classLoaderReference, mapper, converterLookup,
                 converterRegistry);
         init();
     }
 
     public SecureXStream(ReflectionProvider reflectionProvider, HierarchicalStreamDriver driver,
-            ClassLoaderReference classLoaderReference, Mapper mapper) {
+                         ClassLoaderReference classLoaderReference, Mapper mapper) {
         super(reflectionProvider, driver, classLoaderReference, mapper);
         init();
     }
 
     public SecureXStream(ReflectionProvider reflectionProvider, HierarchicalStreamDriver driver,
-            ClassLoaderReference classLoaderReference) {
+                         ClassLoaderReference classLoaderReference) {
         super(reflectionProvider, driver, classLoaderReference);
         init();
     }
 
     public SecureXStream(ReflectionProvider reflectionProvider,
-            HierarchicalStreamDriver hierarchicalStreamDriver) {
+                         HierarchicalStreamDriver hierarchicalStreamDriver) {
         super(reflectionProvider, hierarchicalStreamDriver);
         init();
     }
@@ -102,23 +101,23 @@ public class SecureXStream extends XStream {
         addPermission(NoTypePermission.NONE);
 
         // the placeholder for null values
-        allowTypes(new Class[] { Mapper.Null.class });
+        allowTypes(new Class[]{Mapper.Null.class});
         // allow primitives
         addPermission(new PrimitiveTypePermission());
         // and common non primitives
-        allowTypes(new Class[] { String.class, Date.class, java.sql.Date.class, Timestamp.class,
-                Time.class });
+        allowTypes(new Class[]{String.class, Date.class, java.sql.Date.class, Timestamp.class,
+                Time.class});
         // allow common GeoTools types too
         allowTypeHierarchy(Filter.class);
         allowTypeHierarchy(NumberRange.class);
         allowTypeHierarchy(CoordinateReferenceSystem.class);
         allowTypeHierarchy(Name.class);
-        allowTypes(new Class[] { Version.class, SimpleInternationalString.class });
+        allowTypes(new Class[]{Version.class, SimpleInternationalString.class});
         // common collection types
-        allowTypes(new Class[] { TreeSet.class, SortedSet.class, Set.class, HashSet.class,
+        allowTypes(new Class[]{TreeSet.class, SortedSet.class, Set.class, HashSet.class,
                 LinkedHashSet.class, List.class, ArrayList.class, CopyOnWriteArrayList.class,
                 Map.class, HashMap.class, TreeMap.class,
-                ConcurrentHashMap.class, });
+                ConcurrentHashMap.class,});
 
         // Allow classes from user defined whitelist
         String whitelistProp = GeoServerExtensions.getProperty(WHITELIST_KEY);
@@ -135,7 +134,7 @@ public class SecureXStream extends XStream {
 
     /**
      * A wrapper that adds instructions on what to do when a class was not part of the whitelist
-     * 
+     *
      * @author Andrea Aime - GeoSolutions
      */
     static class DetailedSecurityExceptionWrapper extends MapperWrapper {
@@ -180,9 +179,8 @@ public class SecureXStream extends XStream {
 
     /**
      * Just to have a recognizable class for tests
-     * 
-     * @author Andrea Aime - GeoSolutions
      *
+     * @author Andrea Aime - GeoSolutions
      */
     static class ForbiddenClassExceptionEx extends RuntimeException {
 

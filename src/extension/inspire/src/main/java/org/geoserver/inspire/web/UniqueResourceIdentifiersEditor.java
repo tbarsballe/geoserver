@@ -35,7 +35,7 @@ import org.geoserver.wfs.WFSInfo;
 
 /**
  * Shows and allows editing of the {@link UniqueResourceIdentifiers} attached to a {@link WFSInfo}
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 @SuppressWarnings("serial")
@@ -49,7 +49,7 @@ public class UniqueResourceIdentifiersEditor extends FormComponentPanel<UniqueRe
      * @param identifiersModel Must return a {@link ResourceInfo}
      */
     public UniqueResourceIdentifiersEditor(String id,
-            final IModel<UniqueResourceIdentifiers> identifiersModel) {
+                                           final IModel<UniqueResourceIdentifiers> identifiersModel) {
         super(id, identifiersModel);
 
         if (identifiersModel.getObject() == null) {
@@ -67,8 +67,8 @@ public class UniqueResourceIdentifiersEditor extends FormComponentPanel<UniqueRe
 
             @Override
             protected Component getComponentForProperty(String id,
-                    IModel<UniqueResourceIdentifier> itemModel,
-                    Property<UniqueResourceIdentifier> property) {
+                                                        IModel<UniqueResourceIdentifier> itemModel,
+                                                        Property<UniqueResourceIdentifier> property) {
                 String name = property.getName();
                 if ("code".equals(name)) {
                     Fragment codeFragment = new Fragment(id, "txtFragment",
@@ -130,7 +130,7 @@ public class UniqueResourceIdentifiersEditor extends FormComponentPanel<UniqueRe
         identifiers.setSortable(false);
         identifiers.setFilterable(false);
         container.add(identifiers);
-        
+
         // add new link button
         button = new AjaxButton("addIdentifier") {
 
@@ -141,7 +141,7 @@ public class UniqueResourceIdentifiersEditor extends FormComponentPanel<UniqueRe
 
                 target.add(container);
             }
-            
+
             @Override
             protected void onError(AjaxRequestTarget target, Form<?> form) {
                 // the form validator triggered, but we don't want the msg to display
@@ -149,10 +149,10 @@ public class UniqueResourceIdentifiersEditor extends FormComponentPanel<UniqueRe
                 Session.get().dirty();
                 onSubmit(target, form);
             }
-            
+
         };
         add(button);
-        
+
         // grab a seat... the way I'm adding this validator in onBeforeRender will be hard
         // to stomach... however, could not find other way to add a validation to an editabl table, grrr
         add(new IValidator<UniqueResourceIdentifiers>() {
@@ -160,40 +160,39 @@ public class UniqueResourceIdentifiersEditor extends FormComponentPanel<UniqueRe
             @Override
             public void validate(IValidatable<UniqueResourceIdentifiers> validatable) {
                 UniqueResourceIdentifiers identifiers = identifiersModel.getObject();
-                if(identifiers.size() == 0) {
-                  ValidationError error = new ValidationError();
-                  String message = new ParamResourceModel(
-                          "noSpatialDatasetIdentifiers", UniqueResourceIdentifiersEditor.this).getString();
-                  error.setMessage(message);
-                  validatable.error(error);
+                if (identifiers.size() == 0) {
+                    ValidationError error = new ValidationError();
+                    String message = new ParamResourceModel(
+                            "noSpatialDatasetIdentifiers", UniqueResourceIdentifiersEditor.this).getString();
+                    error.setMessage(message);
+                    validatable.error(error);
                 }
-                
+
             }
-            
+
         });
     }
-    
-    
+
+
     @Override
     public void convertInput() {
         UniqueResourceIdentifiersProvider provider = (UniqueResourceIdentifiersProvider) identifiers.getDataProvider();
         UniqueResourceIdentifiers ids = provider.model.getObject();
         setConvertedInput(ids);
     }
-    
+
     @Override
     public IModelComparator getModelComparator() {
         // if we don't use this one, the call to setObject won't be made, and the metadata
         // map won't be updated
         return new IModelComparator() {
-            
+
             @Override
             public boolean compare(Component component, Object newObject) {
                 return false;
             }
         };
     }
-    
 
 
 }

@@ -17,12 +17,13 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 
 /**
  * @author Alessio Fabiani, GeoSolutions S.A.S.
- *
  */
 public class GoogleOAuth2FilterConfig extends PreAuthenticatedUserNameFilterConfig
         implements SecurityAuthFilterConfig, OAuth2FilterConfig {
 
-    /** serialVersionUID */
+    /**
+     * serialVersionUID
+     */
     private static final long serialVersionUID = -3551428051398501603L;
 
     // DEFAULT VALUES - BEGIN -
@@ -43,13 +44,13 @@ public class GoogleOAuth2FilterConfig extends PreAuthenticatedUserNameFilterConf
     protected String scopes = "https://www.googleapis.com/auth/userinfo.email,https://www.googleapis.com/auth/userinfo.profile";
 
     protected Boolean enableRedirectAuthenticationEntryPoint = false;
-    
+
     protected Boolean forceAccessTokenUriHttps = true;
-    
+
     protected Boolean forceUserAuthorizationUriHttps = true;
-    
+
     protected String loginEndpoint = "/j_spring_oauth2_google_login";
-    
+
     protected String logoutEndpoint = "/j_spring_oauth2_google_logout";
     // DEFAULT VALUES - END -
 
@@ -191,7 +192,7 @@ public class GoogleOAuth2FilterConfig extends PreAuthenticatedUserNameFilterConf
 
             @Override
             public void commence(HttpServletRequest request, HttpServletResponse response,
-                    AuthenticationException authException) throws IOException, ServletException {
+                                 AuthenticationException authException) throws IOException, ServletException {
                 final StringBuilder loginUri = new StringBuilder(getUserAuthorizationUri());
                 loginUri.append("?").append("response_type=code").append("&").append("client_id=")
                         .append(getCliendId()).append("&").append("scope=")

@@ -24,7 +24,7 @@ public class WhitelistRuleEditor extends Panel {
     private boolean isNew;
 
     public WhitelistRuleEditor(String id, IModel<WhitelistRule> model, final ModalWindow window,
-            final WhitelistRulePanel table, boolean isNew) {
+                               final WhitelistRulePanel table, boolean isNew) {
         super(id, model);
         this.isNew = isNew;
         Form<WhitelistRule> form = new Form<>("form", model);

@@ -16,13 +16,14 @@ import org.jivesoftware.smack.packet.Packet;
 
 /**
  * Listens for "LOG" messages from XMPP service channels and takes action accordingly.
- * 
+ *
  * @author Alessio Fabiani, GeoSolutions
- * 
  */
 public class XMPPLogMessage implements XMPPMessage {
 
-    /** The LOGGER */
+    /**
+     * The LOGGER
+     */
     public static final Logger LOGGER = Logging.getLogger(XMPPMessage.class.getPackage().getName());
 
     @Override
@@ -34,7 +35,7 @@ public class XMPPLogMessage implements XMPPMessage {
 
     @Override
     public void handleSignal(XMPPClient xmppClient, Packet packet, Message message,
-            Map<String, String> signalArgs) {
+                             Map<String, String> signalArgs) {
 
         Map<String, Object> metadata = new HashMap<String, Object>();
         metadata.put("serviceJID", packet.getFrom());

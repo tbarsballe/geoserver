@@ -25,7 +25,6 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockServletContext;
 
 /**
- *
  * @author Ian Schneider <ischneider@boundlessgeo.com>
  */
 public class StylePublisherTest extends GeoServerSystemTestSupport {
@@ -45,28 +44,28 @@ public class StylePublisherTest extends GeoServerSystemTestSupport {
         // add style - global
         resourceLoader.copyFromClassPath("org/geoserver/ows/smileyface.png",
                 "styles/smileyface.png");
-        paths.add(new String[] { "styles", "smileyface.png" });
+        paths.add(new String[]{"styles", "smileyface.png"});
 
         // add style - global in subdirectory
         resourceLoader.copyFromClassPath("org/geoserver/ows/smileyface.png",
                 "styles/icons/smileyface.png");
-        paths.add(new String[] { "styles", "icons", "smileyface.png" });
+        paths.add(new String[]{"styles", "icons", "smileyface.png"});
 
         // add style - workspaced
         resourceLoader.copyFromClassPath("org/geoserver/ows/house.svg",
                 "workspaces/cite/styles/house.svg");
-        paths.add(new String[] { "styles", "cite", "house.svg" });
+        paths.add(new String[]{"styles", "cite", "house.svg"});
 
         // add style - workspaced in subdirectory
         resourceLoader.copyFromClassPath("org/geoserver/ows/house.svg",
                 "workspaces/cite/styles/icons/house.svg");
-        paths.add(new String[] { "styles", "cite", "icons", "house.svg" });
+        paths.add(new String[]{"styles", "cite", "icons", "house.svg"});
 
         // add style - workspaced style with global image
-        paths.add(new String[] { "styles", "cite", "smileyface.png" });
+        paths.add(new String[]{"styles", "cite", "smileyface.png"});
 
         // add style - workspaced style with global image in subdirectory
-        paths.add(new String[] { "styles", "cite", "icons", "smileyface.png" });
+        paths.add(new String[]{"styles", "cite", "icons", "smileyface.png"});
 
         // testing over-riding global image with workspaced image
         resourceLoader.copyFromClassPath("org/geoserver/ows/smileyface.png", "styles/override.png");
@@ -112,7 +111,7 @@ public class StylePublisherTest extends GeoServerSystemTestSupport {
 
     @Test
     public void testOverride() throws Exception {
-        String[] path = new String[] { "styles", "override.png" };
+        String[] path = new String[]{"styles", "override.png"};
         MockHttpServletResponse response = request(path, null);
         assertEquals(Arrays.toString(path), 200, response.getStatus());
 
@@ -121,7 +120,7 @@ public class StylePublisherTest extends GeoServerSystemTestSupport {
                         .getResourceAsStream("org/geoserver/ows/smileyface.png")),
                 response.getContentAsByteArray());
 
-        path = new String[] { "styles", "cite", "override.png" };
+        path = new String[]{"styles", "cite", "override.png"};
         response = request(path, null);
         assertEquals(Arrays.toString(path), 200, response.getStatus());
 
@@ -130,7 +129,7 @@ public class StylePublisherTest extends GeoServerSystemTestSupport {
                         .getResourceAsStream("org/geoserver/ows/grass_fill.png")),
                 response.getContentAsByteArray());
 
-        path = new String[] { "styles", "icons", "override.png" };
+        path = new String[]{"styles", "icons", "override.png"};
         response = request(path, null);
         assertEquals(Arrays.toString(path), 200, response.getStatus());
 
@@ -139,7 +138,7 @@ public class StylePublisherTest extends GeoServerSystemTestSupport {
                         .getResourceAsStream("org/geoserver/ows/smileyface.png")),
                 response.getContentAsByteArray());
 
-        path = new String[] { "styles", "cite", "icons", "override.png" };
+        path = new String[]{"styles", "cite", "icons", "override.png"};
         response = request(path, null);
         assertEquals(Arrays.toString(path), 200, response.getStatus());
 

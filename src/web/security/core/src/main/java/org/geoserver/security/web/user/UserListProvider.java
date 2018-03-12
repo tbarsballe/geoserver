@@ -19,57 +19,58 @@ import org.geoserver.security.impl.GeoServerUser;
 import org.geoserver.web.wicket.GeoServerDataProvider;
 
 /**
- * Page listing the users contained in the users.properties file 
+ * Page listing the users contained in the users.properties file
  */
 @SuppressWarnings("serial")
 public class UserListProvider extends GeoServerDataProvider<GeoServerUser> {
-    
+
     public static final Property<GeoServerUser> USERNAME = new BeanProperty<GeoServerUser>("username", "username");
     public static final Property<GeoServerUser> ENABLED = new BeanProperty<GeoServerUser>("enabled", "enabled");
     protected String userGroupServiceName;
-    
+
     public UserListProvider(String userGroupServiceName) {
-        this.userGroupServiceName=userGroupServiceName;
+        this.userGroupServiceName = userGroupServiceName;
     }
-/*     
-    public static final Property<GeoserverUser> ROLES = new Property<GeoserverUser>() {
 
-        public Comparator<GeoserverUser> getComparator() {
-            return new PropertyComparator<GeoserverUser>(this);  
-        }
+    /*
+        public static final Property<GeoserverUser> ROLES = new Property<GeoserverUser>() {
 
-        public IModel getModel(IModel itemModel) {
-            return new Model((String) getPropertyValue((GeoserverUser) itemModel.getObject()));
-        }
-
-        public String getName() {
-            return "roles";
-        }
-
-        public Object getPropertyValue(GeoserverUser item) {
-            if(item.getAuthorities().size() == 0)
-                return "";
-            
-            StringBuffer sb = new StringBuffer();
-            for (GrantedAuthority ga : item.getAuthorities()) {
-                sb.append(ga.getAuthority());
-                sb.append(",");
+            public Comparator<GeoserverUser> getComparator() {
+                return new PropertyComparator<GeoserverUser>(this);
             }
-            sb.setLength(sb.length() - 1);
-            return sb.toString();
-        }
 
-        public boolean isVisible() {
-            return true;
-        }
-        
-        public boolean isSearchable() {
-            return true;
+            public IModel getModel(IModel itemModel) {
+                return new Model((String) getPropertyValue((GeoserverUser) itemModel.getObject()));
+            }
+
+            public String getName() {
+                return "roles";
+            }
+
+            public Object getPropertyValue(GeoserverUser item) {
+                if(item.getAuthorities().size() == 0)
+                    return "";
+
+                StringBuffer sb = new StringBuffer();
+                for (GrantedAuthority ga : item.getAuthorities()) {
+                    sb.append(ga.getAuthority());
+                    sb.append(",");
+                }
+                sb.setLength(sb.length() - 1);
+                return sb.toString();
+            }
+
+            public boolean isVisible() {
+                return true;
+            }
+
+            public boolean isSearchable() {
+                return true;
+            };
+
         };
-        
-    };
-    
-*/    
+
+    */
     public static final Property<GeoServerUser> HASATTRIBUTES = new Property<GeoServerUser>() {
 
         @Override
@@ -79,10 +80,10 @@ public class UserListProvider extends GeoServerDataProvider<GeoServerUser> {
 
         @Override
         public Object getPropertyValue(GeoServerUser item) {
-            if (item.getProperties().size()==0)
+            if (item.getProperties().size() == 0)
                 return Boolean.FALSE;
             else
-                return Boolean.TRUE;                    
+                return Boolean.TRUE;
         }
 
         @Override
@@ -103,7 +104,7 @@ public class UserListProvider extends GeoServerDataProvider<GeoServerUser> {
         @Override
         public boolean isSearchable() {
             return true;
-        }        
+        }
     };
 
     
@@ -140,26 +141,26 @@ public class UserListProvider extends GeoServerDataProvider<GeoServerUser> {
         }
         
     };
-*/    
-    
+*/
+
 //    public static final Property<User> REMOVE = new PropertyPlaceholder<User>("remove");
 
     @Override
     protected List<GeoServerUser> getItems() {
-        SortedSet<GeoServerUser> users=null;
+        SortedSet<GeoServerUser> users = null;
         try {
             GeoServerUserGroupService service = null;
-            if (userGroupServiceName !=null)
-                service = 
-                    getApplication().getSecurityManager().loadUserGroupService(userGroupServiceName);
-            
-            if (service==null)
-                users=new TreeSet<GeoServerUser>();
+            if (userGroupServiceName != null)
+                service =
+                        getApplication().getSecurityManager().loadUserGroupService(userGroupServiceName);
+
+            if (service == null)
+                users = new TreeSet<GeoServerUser>();
             else
-                users=service.getUsers();
+                users = service.getUsers();
 
         } catch (IOException e) {
-            throw new RuntimeException(e); 
+            throw new RuntimeException(e);
         }
         List<GeoServerUser> userList = new ArrayList<GeoServerUser>();
         userList.addAll(users);
@@ -175,7 +176,7 @@ public class UserListProvider extends GeoServerDataProvider<GeoServerUser> {
 //        result.add(ROLES);
 //        result.add(ADMIN);        
         return result;
-                
+
     }
 
 }

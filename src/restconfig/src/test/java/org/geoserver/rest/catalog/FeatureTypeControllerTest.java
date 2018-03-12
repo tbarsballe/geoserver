@@ -120,9 +120,10 @@ public class FeatureTypeControllerTest extends CatalogRESTTestSupport {
         put(BASEPATH + "/workspaces/gs/datastores/ngpds/file.properties?" + q, zbytes.toByteArray(),
                 "application/zip");
     }
-    
+
     /**
      * Add a property data store with multiple feature types, but only configure the first.
+     *
      * @param configureFeatureType
      * @throws Exception
      */
@@ -191,11 +192,11 @@ public class FeatureTypeControllerTest extends CatalogRESTTestSupport {
                 + "/workspaces/gs/datastores/ngpds/featuretypes.xml?list=available_with_geom");
         assertXpathEvaluatesTo("0", "count(//featureTypeName)", dom);
     }
-    
+
 
     /**
      * Test that a list of all feature types for a data source are returned when "list=all", including both
-     * configured and unconfigured ones. 
+     * configured and unconfigured ones.
      */
     @Test
     public void testGetAllByDataStoreWithListAll() throws Exception {
@@ -382,7 +383,7 @@ public class FeatureTypeControllerTest extends CatalogRESTTestSupport {
 
     /**
      * Check feature type modification involving calculation of bounds.
-     * 
+     * <p>
      * Update: Ensure feature type modification does not reset ResourcePool DataStoreCache
      */
     @SuppressWarnings("rawtypes")
@@ -455,7 +456,7 @@ public class FeatureTypeControllerTest extends CatalogRESTTestSupport {
         assertEquals(200,
                 deleteAsServletResponse(
                         BASEPATH + "/workspaces/sf/datastores/sf/featuretypes/PrimitiveGeoFeature")
-                                .getStatus());
+                        .getStatus());
         assertNull(catalog.getFeatureTypeByName("sf", "PrimitiveGeoFeature"));
 
         if (catalog.getResourcePool().getFeatureTypeAttributeCache().containsKey(featureTypeId)) {
@@ -504,7 +505,7 @@ public class FeatureTypeControllerTest extends CatalogRESTTestSupport {
         assertEquals(404,
                 deleteAsServletResponse(
                         BASEPATH + "/workspaces/sf/datastores/sf/featuretypes/NonExistant")
-                                .getStatus());
+                        .getStatus());
     }
 
     @Test
@@ -515,11 +516,11 @@ public class FeatureTypeControllerTest extends CatalogRESTTestSupport {
         assertEquals(403,
                 deleteAsServletResponse(
                         BASEPATH + "/workspaces/sf/datastores/sf/featuretypes/PrimitiveGeoFeature")
-                                .getStatus());
+                        .getStatus());
         assertEquals(200,
                 deleteAsServletResponse(
                         BASEPATH + "/workspaces/sf/datastores/sf/featuretypes/PrimitiveGeoFeature?recurse=true")
-                                .getStatus());
+                        .getStatus());
 
         assertNull(catalog.getFeatureTypeByName("sf", "PrimitiveGeoFeature"));
         assertNull(catalog.getLayerByName("sf:PrimitiveGeoFeature"));
@@ -538,16 +539,16 @@ public class FeatureTypeControllerTest extends CatalogRESTTestSupport {
         assertTrue(response.getHeader("Location")
                 .endsWith("/workspaces/gs/datastores/ngpds/featuretypes/ngpdsa"));
     }
-    
+
     @Test
     public void testDeleteWsNotSameAsStoreName() throws Exception {
         // create a feature type whose store name is not same as workspace name
         testPostGeometrylessFeatureType();
-        
+
         assertEquals(200,
                 deleteAsServletResponse(
                         BASEPATH + "/workspaces/gs/datastores/ngpds/featuretypes/ngpdsa?recurse=true")
-                                .getStatus());
+                        .getStatus());
         assertNull(catalog.getFeatureTypeByName("gs", "ngpdsa"));
 
     }

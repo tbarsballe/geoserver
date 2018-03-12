@@ -12,11 +12,9 @@ import org.geoserver.wms.WMSFilterMosaicTestSupport;
 
 /**
  * Class to test ImageMosaic cql filter
- * 
- * @see {@link WMSFilterMosaicTestSupport}
- * 
+ *
  * @author carlo cancellieri
- * 
+ * @see {@link WMSFilterMosaicTestSupport}
  */
 public class FilterMosaicGetMapTest extends WMSFilterMosaicTestSupport {
 
@@ -65,7 +63,7 @@ public class FilterMosaicGetMapTest extends WMSFilterMosaicTestSupport {
 
         // overriding the default filter using cql_filter parameter
         BufferedImage image = getAsImage(BASE_URL
-                + "&cql_filter=elevation=100 AND ingestion=\'2008-10-31T00:00:00.000Z\'",
+                        + "&cql_filter=elevation=100 AND ingestion=\'2008-10-31T00:00:00.000Z\'",
                 "image/png");
 
         // setting the default filter
@@ -82,7 +80,7 @@ public class FilterMosaicGetMapTest extends WMSFilterMosaicTestSupport {
 
         // overriding the default filter using cql_filter parameter
         BufferedImage image = getAsImage(BASE_URL
-                + "&cql_filter=elevation=100 AND ingestion=\'2008-11-01T00:00:00.000Z\'",
+                        + "&cql_filter=elevation=100 AND ingestion=\'2008-11-01T00:00:00.000Z\'",
                 "image/png");
 
         // setting the default filter

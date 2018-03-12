@@ -13,7 +13,7 @@ import org.geoserver.security.web.SecurityNamedServicesPanel;
 
 /**
  * Panel for providing list of password policy configurations.
- * 
+ *
  * @author Justin Deoliveira, OpenGeo
  */
 public class PasswordPoliciesPanel extends SecurityNamedServicesPanel<PasswordPolicyConfig> {
@@ -31,7 +31,7 @@ public class PasswordPoliciesPanel extends SecurityNamedServicesPanel<PasswordPo
     public void validateRemoveConfig(PasswordPolicyConfig config)
             throws SecurityConfigException {
         SecurityConfigValidator.getConfigurationValiator(PasswordValidator.class, config.getClassName())
-            .validateRemovePasswordPolicy(config);
+                .validateRemovePasswordPolicy(config);
     }
 
     @Override

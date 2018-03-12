@@ -12,14 +12,13 @@ import org.apache.wicket.model.IModel;
 import org.geoserver.security.config.SecurityNamedServiceConfig;
 
 /**
- * Interface to be implemented by {@link SecurityNamedServicePanel} subclasses that should be 
+ * Interface to be implemented by {@link SecurityNamedServicePanel} subclasses that should be
  * layed out in a tabbed view.
  * <p>
  * This class must provide the additional tabs to display.
  * </p>
- *  
- * @author Justin Deoliveira, OpenGeo
  *
+ * @author Justin Deoliveira, OpenGeo
  */
 public interface SecurityNamedServiceTabbedPanel<T extends SecurityNamedServiceConfig> {
 

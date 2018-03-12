@@ -9,13 +9,13 @@ import org.geoserver.wfs.xml.GML3OutputFormat;
 
 /**
  * A GetFeatureInfo response handler specialized in producing GML 3.1.1 data for a GetFeatureInfo request.
- *
  * <p>
- *     This class is an alternative to <code>GML3FeatureInfoOutputFormat</code>.
+ * <p>
+ * This class is an alternative to <code>GML3FeatureInfoOutputFormat</code>.
  * </p>
  *
- * @see GML3FeatureInfoOutputFormat
  * @author Alex van den Hoogen (Geodan)
+ * @see GML3FeatureInfoOutputFormat
  */
 public class XML311FeatureInfoOutputFormat extends GML3FeatureInfoOutputFormat {
 

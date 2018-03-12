@@ -45,7 +45,7 @@ class ParameterBuilder {
         this.prefix = prefix;
         return this;
     }
-    
+
     public ParameterBuilder name(String name) {
         this.name = name;
         return this;

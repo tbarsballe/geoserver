@@ -64,6 +64,7 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 public class ImportTaskTable extends GeoServerTablePanel<ImportTask> {
 
     static Logger LOGGER = Logging.getLogger(Importer.class);
+
     static CoordinateReferenceSystem EPSG_3857() throws FactoryException {
         return CRS.decode("EPSG:3857");
     }
@@ -76,17 +77,18 @@ public class ImportTaskTable extends GeoServerTablePanel<ImportTask> {
         super(id, dataProvider, selectable);
         add(dialog = new GeoServerDialog("dialog"));
         add(popupWindow = new ModalWindow("popup"));
-        ((DataView)get("listContainer:items")).setItemReuseStrategy(DefaultItemReuseStrategy.getInstance());
+        ((DataView) get("listContainer:items")).setItemReuseStrategy(DefaultItemReuseStrategy.getInstance());
     }
 
     public ImportTaskTable setFeedbackPanel(FeedbackPanel feedbackPanel) {
         this.feedbackPanel = feedbackPanel;
         return this;
     }
+
     @Override
     protected Component getComponentForProperty(String id, final IModel itemModel, Property property) {
         if (property == ImportTaskProvider.NAME) {
-              return new LayerLinkPanel(id, itemModel);
+            return new LayerLinkPanel(id, itemModel);
         }
 
         if (property == ImportTaskProvider.STATUS) {
@@ -101,32 +103,31 @@ public class ImportTaskTable extends GeoServerTablePanel<ImportTask> {
                         popupWindow.show(target);
                     }
                 };
-            }
-            else {
-                
+            } else {
+
                 c = new Label(id, new StatusDescriptionModel(property.getModel(itemModel)));
             }
-            
+
             String cssClass = new StatusIconModel(property.getModel(itemModel)).getCssClass();
             return c.add(AttributeModifier.replace("class", cssClass));
         }
         if (property == ImportTaskProvider.ACTION) {
-            
+
             ImportTask.State state = (ImportTask.State) property.getModel(itemModel).getObject();
-            switch(state) {
+            switch (state) {
                 case COMPLETE:
                     //link to map preview
                     return new LayerPreviewPanel(id, itemModel);
                 case NO_CRS:
                     //provide link to choose crs
                     return new NoCRSPanel(id, itemModel);
-                    //return createFixCRSLink(id, itemModel);
+                //return createFixCRSLink(id, itemModel);
                 case READY:
                     //return advanced option link
                     //for now disable if this is not a vector layer
                     ImportTask task = (ImportTask) itemModel.getObject();
                     if (task.getLayer() != null && task.getLayer().getResource() instanceof FeatureTypeInfo) {
-                        return new AdvancedOptionPanel(id, itemModel);    
+                        return new AdvancedOptionPanel(id, itemModel);
                     }
                     return new WebMarkupContainer(id);
                 default:
@@ -166,13 +167,13 @@ public class ImportTaskTable extends GeoServerTablePanel<ImportTask> {
     }
 
     static abstract class StatusModel<T> implements IChainingModel<T> {
-        
+
         IModel chained;
 
         protected StatusModel(IModel model) {
             this.chained = model;
         }
-        
+
         public void setObject(T object) {
         }
 
@@ -188,54 +189,57 @@ public class ImportTaskTable extends GeoServerTablePanel<ImportTask> {
             return chained;
         }
     }
+
     static class StatusIconModel extends StatusModel<PackageResourceReference> {
 
         StatusIconModel(IModel model) {
             super(model);
         }
-        
+
         public PackageResourceReference getObject() {
             ImportTask.State state = (ImportTask.State) chained.getObject();
-            switch(state) {
-            case READY:
-                return new PackageResourceReference(GeoServerApplication.class, "img/icons/silk/bullet_go.png");
-            case RUNNING:
-                return new PackageResourceReference(ImportTaskTable.class, "indicator.gif");
-            case COMPLETE:
-                return new PackageResourceReference(GeoServerApplication.class, "img/icons/silk/accept.png");
-            case NO_BOUNDS:
-            case NO_CRS:
-            case NO_FORMAT:
-            case BAD_FORMAT:
-                return new PackageResourceReference(GeoServerApplication.class, "img/icons/silk/error.png");
-            case ERROR:
-                return new PackageResourceReference(GeoServerApplication.class, "img/icons/silk/delete.png");
+            switch (state) {
+                case READY:
+                    return new PackageResourceReference(GeoServerApplication.class, "img/icons/silk/bullet_go.png");
+                case RUNNING:
+                    return new PackageResourceReference(ImportTaskTable.class, "indicator.gif");
+                case COMPLETE:
+                    return new PackageResourceReference(GeoServerApplication.class, "img/icons/silk/accept.png");
+                case NO_BOUNDS:
+                case NO_CRS:
+                case NO_FORMAT:
+                case BAD_FORMAT:
+                    return new PackageResourceReference(GeoServerApplication.class, "img/icons/silk/error.png");
+                case ERROR:
+                    return new PackageResourceReference(GeoServerApplication.class, "img/icons/silk/delete.png");
             }
             return null;
         }
+
         public String getCssClass() {
             ImportTask.State state = (ImportTask.State) chained.getObject();
-            switch(state) {
-            case READY:
-                return "apply-link";
-            case RUNNING:
-                return "working-link";
-            case COMPLETE:
-                return "accept-link";
-            case NO_BOUNDS:
-            case NO_CRS:
-            case ERROR:
-            case NO_FORMAT:
-            case BAD_FORMAT:
-                return "warning-link";
-            //case ERROR:
-            //    return "error-link";
-            case CANCELED:
-                return "cancel-link";
+            switch (state) {
+                case READY:
+                    return "apply-link";
+                case RUNNING:
+                    return "working-link";
+                case COMPLETE:
+                    return "accept-link";
+                case NO_BOUNDS:
+                case NO_CRS:
+                case ERROR:
+                case NO_FORMAT:
+                case BAD_FORMAT:
+                    return "warning-link";
+                //case ERROR:
+                //    return "error-link";
+                case CANCELED:
+                    return "cancel-link";
             }
             return "";
         }
     }
+
     class StatusDescriptionModel extends StatusModel<String> {
 
         StatusDescriptionModel(IModel model) {
@@ -245,7 +249,7 @@ public class ImportTaskTable extends GeoServerTablePanel<ImportTask> {
         public String getObject() {
             ImportTask.State state = (ImportTask.State) chained.getObject();
             return new StringResourceModel(
-                state.name().toLowerCase(), ImportTaskTable.this, null).getString();
+                    state.name().toLowerCase(), ImportTaskTable.this, null).getString();
         }
     }
 
@@ -268,8 +272,8 @@ public class ImportTaskTable extends GeoServerTablePanel<ImportTask> {
 //
 //        }
 //    }
-    
-//    static class FormatPanel extends Panel {
+
+    //    static class FormatPanel extends Panel {
 //
 //        public FormatPanel(String id, IModel model) {
 //            super(id);
@@ -323,14 +327,13 @@ public class ImportTaskTable extends GeoServerTablePanel<ImportTask> {
             Form form = new Form("form");
             add(form);
 
-            form.add(new CRSPanel("crs", 
-                new SRSToCRSModel(new PropertyModel(model, "layer.resource.sRS"))) {
+            form.add(new CRSPanel("crs",
+                    new SRSToCRSModel(new PropertyModel(model, "layer.resource.sRS"))) {
                 @Override
                 protected CoordinateReferenceSystem fromSRS(String srs) {
                     try {
                         return CRS.decode(srs);
-                    }
-                    catch(Exception e) {
+                    } catch (Exception e) {
                         error(e);
                         return null;
                     }
@@ -342,6 +345,7 @@ public class ImportTaskTable extends GeoServerTablePanel<ImportTask> {
                 protected void onError(AjaxRequestTarget target, Form<?> form) {
                     target.add(feedbackPanel);
                 }
+
                 @Override
                 protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                     target.add(feedbackPanel);
@@ -359,7 +363,7 @@ public class ImportTaskTable extends GeoServerTablePanel<ImportTask> {
     static class LayerLinkPanel extends Panel {
         public LayerLinkPanel(String id, final IModel<ImportTask> model) {
             super(id);
-            
+
             add(new Link<ImportTask>("link", model) {
                 @Override
                 public void onClick() {
@@ -374,56 +378,60 @@ public class ImportTaskTable extends GeoServerTablePanel<ImportTask> {
 
                             //update the item
                             ImporterWebUtils.importer().changed(model.getObject());
-                        };
+                        }
+
+                        ;
                     });
                 }
             }.add(new Label("name", new PropertyModel(model, "layer.name")))
-             .add(new Icon("icon",new DataIconModel(model.getObject().getData()))));
+                    .add(new Icon("icon", new DataIconModel(model.getObject().getData()))));
         }
     }
 
     class LayerPreviewPanel extends Panel {
         public LayerPreviewPanel(String id, IModel<ImportTask> model) {
             super(id);
-            
+
             LayerInfo layer = model.getObject().getLayer();
             PreviewLayer preview = new PreviewLayer(layer);
 
             List<PreviewLink> links = new ArrayList<PreviewLink>();
-            links.add(new PreviewLink("layerPreview", preview.getWmsLink()+ "&format=application/openlayers"));
+            links.add(new PreviewLink("layerPreview", preview.getWmsLink() + "&format=application/openlayers"));
 
             links.add(new PreviewLink("googleearth", "../wms/kml?layers=" + layer.getName()));
 
-            add(new DropDownChoice<PreviewLink>("links", new Model(links.get(0)), links, 
-                new ChoiceRenderer<PreviewLink>() {
-                @Override
-                public Object getDisplayValue(PreviewLink object) {
-                    return new ParamResourceModel(object.id, ImportTaskTable.this, object.id).getString();
-                }
-                @Override
-                public String getIdValue(PreviewLink object, int index) {
-                    return object.href;
-                }
-            }).setNullValid(false).setOutputMarkupId(true));
+            add(new DropDownChoice<PreviewLink>("links", new Model(links.get(0)), links,
+                    new ChoiceRenderer<PreviewLink>() {
+                        @Override
+                        public Object getDisplayValue(PreviewLink object) {
+                            return new ParamResourceModel(object.id, ImportTaskTable.this, object.id).getString();
+                        }
 
-            add(new ExternalLink("go","#").add(new AttributeModifier("onclick", 
-                new Model("go(document.getElementById('" + get("links").getMarkupId() + "'));"))));
-       }
+                        @Override
+                        public String getIdValue(PreviewLink object, int index) {
+                            return object.href;
+                        }
+                    }).setNullValid(false).setOutputMarkupId(true));
+
+            add(new ExternalLink("go", "#").add(new AttributeModifier("onclick",
+                    new Model("go(document.getElementById('" + get("links").getMarkupId() + "'));"))));
+        }
 
         class PreviewLink implements Serializable {
-           String id;
-           String href;
-           PreviewLink(String id, String href) {
-               this.id = id;
-               this.href = href;
-           }
+            String id;
+            String href;
+
+            PreviewLink(String id, String href) {
+                this.id = id;
+                this.href = href;
+            }
         }
     }
 
     static class AdvancedOptionPanel extends Panel {
         public AdvancedOptionPanel(String id, IModel<ImportTask> model) {
             super(id);
-            
+
             add(new Link<ImportTask>("link", model) {
                 @Override
                 public void onClick() {
@@ -438,13 +446,13 @@ public class ImportTaskTable extends GeoServerTablePanel<ImportTask> {
 
         public ErrorPanel(String id, IModel<ImportTask> model) {
             super(id);
-    
+
             add(popupWindow = new ModalWindow("popup"));
             add(new AjaxLink<ImportTask>("link", model) {
                 @Override
                 public void onClick(AjaxRequestTarget target) {
                     popupWindow.setContent(
-                        new ExceptionPanel(popupWindow.getContentId(), getModelObject().getError()));
+                            new ExceptionPanel(popupWindow.getContentId(), getModelObject().getError()));
                     popupWindow.show(target);
                 }
             });
@@ -463,7 +471,7 @@ public class ImportTaskTable extends GeoServerTablePanel<ImportTask> {
                     String text = handleStackTrace(ex);
                     StringSelection selection = new StringSelection(text);
                     Toolkit.getDefaultToolkit()
-                        .getSystemClipboard().setContents(selection, selection);
+                            .getSystemClipboard().setContents(selection, selection);
                 }
             });
         }
@@ -473,7 +481,7 @@ public class ImportTaskTable extends GeoServerTablePanel<ImportTask> {
             PrintWriter writer = new PrintWriter(out);
             ex.printStackTrace(writer);
             writer.flush();
-            
+
             return new String(out.toByteArray());
         }
     }

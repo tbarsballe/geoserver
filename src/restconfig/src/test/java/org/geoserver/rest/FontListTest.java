@@ -40,7 +40,7 @@ public class FontListTest extends GeoServerSystemTestSupport {
         //make assertions
         Node fonts = getFirstElementByTagName(dom, "fonts");
         assertNotNull(fonts);
-        assertTrue( ((Element) fonts).getElementsByTagName("entry").getLength()  > 0);
+        assertTrue(((Element) fonts).getElementsByTagName("entry").getLength() > 0);
     }
 
     @Test

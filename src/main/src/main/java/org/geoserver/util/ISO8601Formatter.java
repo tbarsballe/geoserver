@@ -14,7 +14,7 @@ import org.geotools.util.DateRange;
 
 /**
  * Formats date/times into ISO8601
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class ISO8601Formatter {
@@ -41,18 +41,17 @@ public class ISO8601Formatter {
         }
         buf.append(value);
     }
-    
+
     /**
      * Formats the specified object either as a single time, if it's a Date, or as a continuous
      * interval, if it's a DateRange (and will throw an {@link IllegalArgumentException} otherwise)
-     * 
-     * @param date
      *
+     * @param date
      */
     public String format(Object date) {
-        if(date instanceof Date) {
+        if (date instanceof Date) {
             return format((Date) date);
-        } else if(date instanceof DateRange){
+        } else if (date instanceof DateRange) {
             DateRange range = (DateRange) date;
             StringBuilder sb = new StringBuilder();
             format(range.getMinValue(), sb);
@@ -68,9 +67,8 @@ public class ISO8601Formatter {
 
     /**
      * Formats the specified Date in ISO8601 format
-     * 
-     * @param date
      *
+     * @param date
      */
     public String format(Date date) {
         return format(date, new StringBuilder()).toString();

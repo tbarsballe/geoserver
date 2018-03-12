@@ -43,7 +43,7 @@ public class CoverageViewEditor extends FormComponentPanel<List<String>> {
 
     IModel<List<String>> coverages;
     IModel<List<CoverageBand>> outputBands;
-    List<String> availableCoverages; 
+    List<String> availableCoverages;
     List<CoverageBand> currentOutputBands;
     ListMultipleChoice<String> coveragesChoice;
     CompositionType compositionType;
@@ -55,17 +55,17 @@ public class CoverageViewEditor extends FormComponentPanel<List<String>> {
 
     TextField<String> definition;
     DropDownChoice<CompositionType> compositionChoice;
-    
+
     /**
      * Creates a new editor.
-     * 
+     *
      * @param id
      * @param The module should return a non null collection of strings.
      */
     public CoverageViewEditor(String id, final IModel<List<String>> inputCoverages, final IModel<List<CoverageBand>> bands,
-            IModel<EnvelopeCompositionType> envelopeCompositionType, IModel<SelectedResolution> selectedResolution,
-            IModel<String> resolutionReferenceCoverage,
-            List<String> availableCoverages) {
+                              IModel<EnvelopeCompositionType> envelopeCompositionType, IModel<SelectedResolution> selectedResolution,
+                              IModel<String> resolutionReferenceCoverage,
+                              List<String> availableCoverages) {
         super(id, inputCoverages);
         this.coverages = inputCoverages;
         this.outputBands = bands;
@@ -124,7 +124,7 @@ public class CoverageViewEditor extends FormComponentPanel<List<String>> {
                 //target.add(definition);
             }
         });
-        
+
         // heterogeneous coverage controls
         WebMarkupContainer heterogeneousControlsContainer = new WebMarkupContainer("heterogeneousControlsContainer");
         heterogeneousControlsContainer.setOutputMarkupId(true);
@@ -133,14 +133,14 @@ public class CoverageViewEditor extends FormComponentPanel<List<String>> {
         heterogeneousControlsContainer.add(heterogeneousControls);
         // need the band-merge from JAI-EXT to work in heterogeneous mode
         heterogeneousControls.setVisible(JAIExt.isJAIExtOperation("BandMerge"));
-        
-        DropDownChoice<EnvelopeCompositionType> envelopePolicy = new DropDownChoice<>("envelopeCompositionType",  
+
+        DropDownChoice<EnvelopeCompositionType> envelopePolicy = new DropDownChoice<>("envelopeCompositionType",
                 Arrays.asList(EnvelopeCompositionType.values()));
         envelopePolicy.setModel(envelopeCompositionType);
         envelopePolicy.setChoiceRenderer(new EnumChoiceRenderer<>(CoverageViewEditor.this));
         heterogeneousControls.add(envelopePolicy);
-        
-        DropDownChoice<SelectedResolution> resolutionPolicy = new DropDownChoice<>("selectedResolution",  
+
+        DropDownChoice<SelectedResolution> resolutionPolicy = new DropDownChoice<>("selectedResolution",
                 Arrays.asList(SelectedResolution.values()));
         resolutionPolicy.setModel(selectedResolution);
         resolutionPolicy.setChoiceRenderer(new EnumChoiceRenderer<>(CoverageViewEditor.this));
@@ -159,7 +159,7 @@ public class CoverageViewEditor extends FormComponentPanel<List<String>> {
                 compositionType = compositionChoice.getModelObject();
                 List<CoverageBand> bandsList = new ArrayList<CoverageBand>();
                 int i = currentOutputBands != null && !currentOutputBands.isEmpty() ? currentOutputBands.size() : 0;
-                for (Iterator<String> it = selection.iterator(); it.hasNext();) {
+                for (Iterator<String> it = selection.iterator(); it.hasNext(); ) {
                     String coverage = it.next();
 
                     final int bandIndexChar = coverage.indexOf(CoverageView.BAND_SEPARATOR);
@@ -232,7 +232,7 @@ public class CoverageViewEditor extends FormComponentPanel<List<String>> {
     }
 
     private class CompositionTypeRenderer extends ChoiceRenderer<CompositionType> {
-    
+
         public Object getDisplayValue(CompositionType object) {
             return object.displayValue();
         }

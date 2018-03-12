@@ -29,38 +29,38 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 
 /**
  * Named Basic Authentication Filter
- * 
- * @author mcr
  *
+ * @author mcr
  */
-public class GeoServerBasicAuthenticationFilter extends GeoServerCompositeFilter 
-    implements AuthenticationCachingFilter, GeoServerAuthenticationFilter {
+public class GeoServerBasicAuthenticationFilter extends GeoServerCompositeFilter
+        implements AuthenticationCachingFilter, GeoServerAuthenticationFilter {
     private BasicAuthenticationEntryPoint aep;
     private MessageDigest digest;
+
     @Override
     public void initializeFromConfig(SecurityNamedServiceConfig config) throws IOException {
         super.initializeFromConfig(config);
 
-        try {            
+        try {
             digest = MessageDigest.getInstance("MD5");
         } catch (NoSuchAlgorithmException e) {
             throw new IllegalStateException("No MD5 algorithm available!");
-        } 
+        }
 
-        
-        aep= new BasicAuthenticationEntryPoint();
+
+        aep = new BasicAuthenticationEntryPoint();
         aep.setRealmName(GeoServerSecurityManager.REALM);
         try {
             aep.afterPropertiesSet();
         } catch (Exception e) {
             throw new IOException(e);
         }
-        
-        BasicAuthenticationFilterConfig authConfig = 
+
+        BasicAuthenticationFilterConfig authConfig =
                 (BasicAuthenticationFilterConfig) config;
-        
-        BasicAuthenticationFilter filter = 
-                new BasicAuthenticationFilter(getSecurityManager().authenticationManager(),aep); 
+
+        BasicAuthenticationFilter filter =
+                new BasicAuthenticationFilter(getSecurityManager().authenticationManager(), aep);
 
         if (authConfig.isUseRememberMe()) {
             filter.setRememberMeServices(securityManager.getRememberMeService());
@@ -68,21 +68,21 @@ public class GeoServerBasicAuthenticationFilter extends GeoServerCompositeFilter
             filter.setAuthenticationDetailsSource(s);
         }
         filter.afterPropertiesSet();
-        getNestedFilters().add(filter);        
+        getNestedFilters().add(filter);
     }
-    
+
     @Override
     public AuthenticationEntryPoint getAuthenticationEntryPoint() {
         return aep;
     }
-    
+
     @Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
             throws IOException, ServletException {
-        
+
         req.setAttribute(GeoServerSecurityFilter.AUTHENTICATION_ENTRY_POINT_HEADER, aep);
         super.doFilter(req, res, chain);
-    }            
+    }
 
 
     /**
@@ -90,13 +90,13 @@ public class GeoServerBasicAuthenticationFilter extends GeoServerCompositeFilter
      */
     @Override
     public String getCacheKey(HttpServletRequest request) {
-        
-        if (request.getSession(false)!=null) // no caching if there is an HTTP session
+
+        if (request.getSession(false) != null) // no caching if there is an HTTP session
             return null;
-        
-        String header = request.getHeader("Authorization");        
+
+        String header = request.getHeader("Authorization");
         if ((header != null) && header.startsWith("Basic ")) {
-            byte[] base64Token=null;
+            byte[] base64Token = null;
             try {
                 base64Token = header.substring(6).getBytes("UTF-8");
             } catch (UnsupportedEncodingException e1) {
@@ -114,10 +114,10 @@ public class GeoServerBasicAuthenticationFilter extends GeoServerCompositeFilter
             } else {
                 return null;
             }
-            
+
             if (GeoServerUser.ROOT_USERNAME.equals(username))
-                    return null;
-            
+                return null;
+
             StringBuffer buff = new StringBuffer(password);
             buff.append(":");
             buff.append(getName());
@@ -133,7 +133,7 @@ public class GeoServerBasicAuthenticationFilter extends GeoServerCompositeFilter
             buff = new StringBuffer(username);
             buff.append(":");
             buff.append(digestString);
-            return buff.toString();        
+            return buff.toString();
         } else
             return null;
     }

@@ -20,7 +20,6 @@ import javax.servlet.http.HttpServletResponse;
  * </p>
  *
  * @author Justin Deoliveira, The Open Planning Project, jdeolive@openplans.org
- *
  */
 public class DefaultOutputStrategy implements ServiceStrategy {
     /**
@@ -34,7 +33,7 @@ public class DefaultOutputStrategy implements ServiceStrategy {
      * @return response.getOutputStream();
      */
     public DispatcherOutputStream getDestination(HttpServletResponse response)
-        throws IOException {
+            throws IOException {
         ServletOutputStream outputStream = response.getOutputStream();
         return new DispatcherOutputStream(outputStream);
     }

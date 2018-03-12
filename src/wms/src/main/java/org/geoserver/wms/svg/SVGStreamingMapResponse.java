@@ -14,7 +14,7 @@ import org.geoserver.wms.map.AbstractMapResponse;
 
 /**
  * Handles a GetMap request that expects a map in SVG format.
- * 
+ *
  * @author Gabriel Roldan
  * @version $Id$
  * @see SVGStreamingMapResponse
@@ -28,7 +28,7 @@ public final class SVGStreamingMapResponse extends AbstractMapResponse {
 
     /**
      * @see org.geoserver.ows.Response#write(java.lang.Object, java.io.OutputStream,
-     *      org.geoserver.platform.Operation)
+     * org.geoserver.platform.Operation)
      */
     @Override
     public void write(Object value, OutputStream output, Operation operation) throws IOException,

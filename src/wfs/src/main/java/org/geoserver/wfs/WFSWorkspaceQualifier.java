@@ -71,7 +71,7 @@ public class WFSWorkspaceQualifier extends WorkspaceQualifyingCallback {
                         }
                     }
                     request.getKvp().put("TYPENAME", qualifiedNames);
-    
+
                 }
             }
         }
@@ -82,14 +82,13 @@ public class WFSWorkspaceQualifier extends WorkspaceQualifyingCallback {
      * in the original request, or it has been overridden by
      * parser. If it's been overridden we can qualify with
      * the given namespace.
-     * 
+     *
      * @param request
      * @param ns
      * @param typeName
-     *
      */
     private QName checkOriginallyUnqualified(Request request, NamespaceInfo ns,
-            QName typeName) {
+                                             QName typeName) {
         Map<String, String[]> originalParams = request
                 .getHttpRequest().getParameterMap();
         for (String paramName : originalParams.keySet()) {
@@ -108,27 +107,27 @@ public class WFSWorkspaceQualifier extends WorkspaceQualifyingCallback {
         }
         return typeName;
     }
-    
+
     @Override
     protected void qualifyRequest(WorkspaceInfo workspace, PublishedInfo layer, Operation operation, Request request) {
         NamespaceInfo ns = catalog.getNamespaceByPrefix(workspace.getName());
-        
+
         GetCapabilitiesRequest caps = GetCapabilitiesRequest.adapt(
-            OwsUtils.parameter(operation.getParameters(), EObject.class));
+                OwsUtils.parameter(operation.getParameters(), EObject.class));
         if (caps != null) {
             caps.setNamespace(workspace.getName());
             return;
         }
-        
+
         DescribeFeatureTypeRequest dft = DescribeFeatureTypeRequest.adapt(
                 OwsUtils.parameter(operation.getParameters(), EObject.class));
         if (dft != null) {
             qualifyTypeNames(dft.getTypeNames(), workspace, ns);
             return;
         }
-        
+
         GetFeatureRequest gf = GetFeatureRequest.adapt(
-            OwsUtils.parameter(operation.getParameters(), EObject.class));
+                OwsUtils.parameter(operation.getParameters(), EObject.class));
         if (gf != null) {
             for (Query q : gf.getQueries()) {
                 // in case of stored query usage the typenames might be null
@@ -138,18 +137,18 @@ public class WFSWorkspaceQualifier extends WorkspaceQualifyingCallback {
             }
             return;
         }
-        
+
         LockFeatureRequest lf = LockFeatureRequest.adapt(
-            OwsUtils.parameter(operation.getParameters(), EObject.class));
+                OwsUtils.parameter(operation.getParameters(), EObject.class));
         if (lf != null) {
             for (Lock lock : lf.getLocks()) {
                 lock.setTypeName(qualifyTypeName(lock.getTypeName(), workspace, ns));
             }
             return;
         }
-        
+
         TransactionRequest t = TransactionRequest.adapt(
-            OwsUtils.parameter(operation.getParameters(), EObject.class));
+                OwsUtils.parameter(operation.getParameters(), EObject.class));
         if (t != null) {
             for (TransactionElement el : t.getElements()) {
                 if (el instanceof Insert) {
@@ -158,15 +157,13 @@ public class WFSWorkspaceQualifier extends WorkspaceQualifyingCallback {
                     // so we just check them and throw an exception if a name does not match
                     List features = in.getFeatures();
                     ensureFeatureNamespaceUriMatches(features, ns, t);
-                }
-                else if(el instanceof Replace){
+                } else if (el instanceof Replace) {
                     Replace rep = (Replace) el;
                     //in the replace case the objects are gt feature types which are not mutable
                     // so we just check them and throw an exception if a name does not match
                     List features = rep.getFeatures();
-                    ensureFeatureNamespaceUriMatches(features, ns, t);                	
-                }
-                else {
+                    ensureFeatureNamespaceUriMatches(features, ns, t);
+                } else {
                     el.setTypeName(qualifyTypeName(el.getTypeName(), workspace, ns));
                 }
             }
@@ -175,21 +172,22 @@ public class WFSWorkspaceQualifier extends WorkspaceQualifyingCallback {
 
     /**
      * Iterates the given features and ensures their namespaceURI matches the given namespace
+     *
      * @param features
      * @param ns
      * @param t
      */
-	private void ensureFeatureNamespaceUriMatches(List features,
-            NamespaceInfo ns, TransactionRequest t) {
-	    for (Iterator j = features.iterator(); j.hasNext(); ) {
-	        Feature f = (Feature) j.next();
-	        Name n = f.getType().getName();
-	        if (n.getNamespaceURI() != null && !ns.getURI().equals(n.getNamespaceURI())) {
-	            throw new WFSException(t, "No such feature type " + n);
-	        }
-	    }
+    private void ensureFeatureNamespaceUriMatches(List features,
+                                                  NamespaceInfo ns, TransactionRequest t) {
+        for (Iterator j = features.iterator(); j.hasNext(); ) {
+            Feature f = (Feature) j.next();
+            Name n = f.getType().getName();
+            if (n.getNamespaceURI() != null && !ns.getURI().equals(n.getNamespaceURI())) {
+                throw new WFSException(t, "No such feature type " + n);
+            }
+        }
     }
-    
+
     void qualifyTypeNames(List names, WorkspaceInfo ws, NamespaceInfo ns) {
         if (names != null) {
             for (int i = 0; i < names.size(); i++) {
@@ -198,7 +196,7 @@ public class WFSWorkspaceQualifier extends WorkspaceQualifyingCallback {
             }
         }
     }
-    
+
     QName qualifyTypeName(QName name, WorkspaceInfo ws, NamespaceInfo ns) {
         return new QName(ns.getURI(), name.getLocalPart(), ws.getName());
     }

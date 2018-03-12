@@ -37,19 +37,19 @@ import org.opengis.filter.Filter;
 public class JDBCProductFeatureStore extends AbstractMappingStore {
 
     static final Logger LOGGER = Logging.getLogger(JDBCProductFeatureStore.class);
-    
-    String granuleForeignKey; 
+
+    String granuleForeignKey;
 
     public JDBCProductFeatureStore(JDBCOpenSearchAccess openSearchAccess,
-            FeatureType collectionFeatureType) throws IOException {
+                                   FeatureType collectionFeatureType) throws IOException {
         super(openSearchAccess, collectionFeatureType);
-        
+
         for (AttributeDescriptor ad : getFeatureStoreForTable("granule").getSchema().getAttributeDescriptors()) {
-            if(ad.getLocalName().equalsIgnoreCase("product_id")) {
+            if (ad.getLocalName().equalsIgnoreCase("product_id")) {
                 granuleForeignKey = ad.getLocalName();
             }
         }
-        if(granuleForeignKey == null) {
+        if (granuleForeignKey == null) {
             throw new IllegalStateException("Could not locate a column named 'product'_id in table 'granule'");
         }
     }
@@ -62,7 +62,7 @@ public class JDBCProductFeatureStore extends AbstractMappingStore {
     protected String getMetadataTable() {
         return "product_metadata";
     }
-    
+
     @Override
     protected String getLinkTable() {
         return "product_ogclink";
@@ -105,11 +105,11 @@ public class JDBCProductFeatureStore extends AbstractMappingStore {
             builder.append(OpenSearchAccess.QUICKLOOK_PROPERTY_NAME, attribute);
         }
     }
-    
+
     @Override
     protected void removeChildFeatures(List<String> collectionIdentifiers) throws IOException {
         super.removeChildFeatures(collectionIdentifiers);
-        
+
         // remove thumbnail
         List<Filter> filters = collectionIdentifiers.stream()
                 .map(id -> FF.equal(FF.property("tid"), FF.literal(id), false))
@@ -118,7 +118,7 @@ public class JDBCProductFeatureStore extends AbstractMappingStore {
         SimpleFeatureStore thumbStore = getFeatureStoreForTable("product_thumb");
         thumbStore.setTransaction(getTransaction());
         thumbStore.removeFeatures(metadataFilter);
-        
+
         // remove granules
         filters = collectionIdentifiers.stream()
                 .map(id -> FF.equal(FF.property(granuleForeignKey), FF.literal(id), false))
@@ -128,7 +128,7 @@ public class JDBCProductFeatureStore extends AbstractMappingStore {
         granuleStore.setTransaction(getTransaction());
         granuleStore.removeFeatures(granulesFilter);
     }
-    
+
     @Override
     protected boolean modifySecondaryAttribute(Name name, Object value, Filter mappedFilter) throws IOException {
         if (OpenSearchAccess.GRANULES.equals(name.getLocalPart())) {
@@ -158,7 +158,7 @@ public class JDBCProductFeatureStore extends AbstractMappingStore {
             // this one has been handled
             return true;
         }
-        
+
         return false;
     }
 

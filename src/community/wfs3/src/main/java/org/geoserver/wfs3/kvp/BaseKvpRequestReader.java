@@ -15,7 +15,7 @@ import java.util.Map;
  * Support class for common WFS3 KVP parsing needs
  */
 public abstract class BaseKvpRequestReader extends KvpRequestReader {
-    
+
     /**
      * Creats the new kvp request reader.
      *
@@ -42,8 +42,8 @@ public abstract class BaseKvpRequestReader extends KvpRequestReader {
 //                setFormat(kvp, rawKvp, format);
 //            }
         }
-        
-        return super.read(request, kvp, rawKvp);                            
+
+        return super.read(request, kvp, rawKvp);
     }
 
     public void setFormat(Map kvp, Map rawKvp, Object format) {

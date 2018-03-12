@@ -15,7 +15,7 @@ import org.junit.Test;
 public class WPSResourceManagerTest extends WPSTestSupport {
 
     WPSResourceManager resourceMgr;
-    
+
     @Before
     public void setUpInternal() throws Exception {
         resourceMgr = new WPSResourceManager();

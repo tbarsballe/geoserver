@@ -19,7 +19,7 @@ import org.springframework.util.Assert;
 
 /**
  * An OWS {@link Response} handler that knows how to encode a {@link XMLTransformerMap}
- * 
+ *
  * @author Gabriel Roldan
  * @see XMLTransformerMap
  */
@@ -31,13 +31,10 @@ public class XMLTransformerMapResponse extends AbstractMapResponse {
 
     /**
      * Encodes the {@link XMLTransformerMap} down to the given destination output stream.
-     * 
-     * @param value
-     *            an {@link XMLTransformerMap}
-     * @param output
-     *            xml stream destination
-     * @param operation
-     *            operation descriptor for which the map was produced; not used at all.
+     *
+     * @param value     an {@link XMLTransformerMap}
+     * @param output    xml stream destination
+     * @param operation operation descriptor for which the map was produced; not used at all.
      */
     @Override
     public void write(Object value, OutputStream output, Operation operation) throws IOException,

@@ -10,7 +10,7 @@ import org.geoserver.ows.Request;
 
 /**
  * Returns the IP address as the user key
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class IpKeyGenerator implements KeyGenerator {

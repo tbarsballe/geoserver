@@ -13,9 +13,8 @@ import org.geotools.util.Version;
 
 /**
  * Parses the OWS 2.0 capabilities negotiation related AcceptVersion parameter
- * 
+ *
  * @author Emanuele Tajariol (etj) - GeoSolutions
- * 
  */
 public class WCS20AcceptVersionsKvpParser extends AcceptVersionsKvpParser {
 
@@ -23,8 +22,8 @@ public class WCS20AcceptVersionsKvpParser extends AcceptVersionsKvpParser {
 
     public WCS20AcceptVersionsKvpParser() {
         super(AcceptVersionsType.class);
-        setService( "wcs" );
-        setVersion( new Version( VERSION ) );
+        setService("wcs");
+        setVersion(new Version(VERSION));
     }
 
 //    public Object parse(String value) throws Exception {
@@ -37,5 +36,5 @@ public class WCS20AcceptVersionsKvpParser extends AcceptVersionsKvpParser {
     protected AcceptVersionsType createObject() {
         return Ows20Factory.eINSTANCE.createAcceptVersionsType();
     }
-   
+
 }

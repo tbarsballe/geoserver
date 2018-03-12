@@ -10,12 +10,10 @@ import java.io.Serializable;
 import java.time.LocalTime;
 
 /**
- * 
  * Stores values and configuration of system information metrics This object is serialized by
  * MonitorRest to provide XML, JSON and HTML view of data
- * 
- * @author sandr
  *
+ * @author sandr
  */
 public class MetricValue implements Serializable {
 
@@ -46,8 +44,7 @@ public class MetricValue implements Serializable {
     /**
      * Initialize the metric value coping the definition from infomration obejct {@link MetricInfo}
      *
-     * @param info
-     *            the data associated with information to retrieve
+     * @param info the data associated with information to retrieve
      */
     public MetricValue(MetricInfo info) {
         this.priority = info.getPriority();
@@ -147,7 +144,7 @@ public class MetricValue implements Serializable {
             return bytes + " B";
         }
         int exp = (int) (Math.log(bytes) / Math.log(unit));
-        char pre = "KMGTPE".charAt(exp-1);
+        char pre = "KMGTPE".charAt(exp - 1);
         return String.format("%.1f %siB", bytes / Math.pow(unit, exp), pre);
     }
 

@@ -20,16 +20,15 @@ import javax.servlet.http.HttpServletResponse;
  * of a response. Another example may include a "speed mode" where data is
  * written directly to the output with no buffering.
  * </p>
- * @author Justin Deoliveira, The Open Planning Project, jdeolive@openplans.org
  *
+ * @author Justin Deoliveira, The Open Planning Project, jdeolive@openplans.org
  */
 public interface OutputStrategyFactory {
     /**
      * Creates an output strategy for a response.
      *
      * @param response The response which contains the live output stream in
-     * which to write data to.
-     *
+     *                 which to write data to.
      * @return An output strategy to write output to.
      */
     ServiceStrategy createOutputStrategy(HttpServletResponse response);

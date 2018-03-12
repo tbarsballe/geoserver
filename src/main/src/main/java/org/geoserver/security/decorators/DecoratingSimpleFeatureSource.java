@@ -30,7 +30,7 @@ import org.opengis.filter.Filter;
 /**
  * Delegates every method to the wrapped simple feature source. Subclasses will
  * override selected methods to perform their "decoration" job
- * 
+ *
  * @author Josh Vote, CSIRO Earth Science and Resource Engineering
  */
 public abstract class DecoratingSimpleFeatureSource extends

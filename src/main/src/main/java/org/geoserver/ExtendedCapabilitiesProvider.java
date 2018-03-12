@@ -14,9 +14,8 @@ import org.xml.sax.helpers.NamespaceSupport;
 /**
  * Extension point that allows plugins to dynamically contribute extended properties to the OWS capabilities documents. Each extension point will have
  * an interface that is a subinterface of this interface (like WFSExtendedCapabilitiesProvider)
- * 
+ *
  * @author Jesse Eichar, Camptocamp
- * 
  */
 public interface ExtendedCapabilitiesProvider<Info extends ServiceInfo, Request> {
 
@@ -31,7 +30,7 @@ public interface ExtendedCapabilitiesProvider<Info extends ServiceInfo, Request>
      * bundled within the server the location can be a relative path such as <tt>foo/foo.xsd</tt>. In the latter case the path will be appended to the
      * base url from which the capabilities document is being requested from.
      * </p>
-     * 
+     *
      * @param schemaBaseURL
      */
     String[] getSchemaLocations(String schemaBaseURL);
@@ -43,11 +42,11 @@ public interface ExtendedCapabilitiesProvider<Info extends ServiceInfo, Request>
 
     /**
      * Encodes the extended capabilities.
-     * 
-     * @param tx the translator used to encode the extended capabilities to
-     * @param wms WMS service metadata
+     *
+     * @param tx      the translator used to encode the extended capabilities to
+     * @param wms     WMS service metadata
      * @param request the originating request, may be useful for the provider to decide whether or not, or how, to contribute to the capabilities
-     *        document
+     *                document
      */
     void encode(Translator tx, Info wfs, Request request) throws IOException;
 
@@ -58,29 +57,29 @@ public interface ExtendedCapabilitiesProvider<Info extends ServiceInfo, Request>
 
         /**
          * Starts an element creating the opening tag.
-         * 
+         *
          * @param element The name of the element.
          */
         void start(String element);
 
         /**
          * Starts an element with attributes, creating the opening tag.
-         * 
-         * @param element The name of the element.
+         *
+         * @param element    The name of the element.
          * @param attributes The attributes of the element.
          */
         void start(String element, Attributes attributes);
 
         /**
          * Creates a text node within an element.
-         * 
+         *
          * @param text The character text.
          */
         void chars(String text);
 
         /**
          * Ends an element creating a closing tag.
-         * 
+         *
          * @param element
          */
         void end(String element);

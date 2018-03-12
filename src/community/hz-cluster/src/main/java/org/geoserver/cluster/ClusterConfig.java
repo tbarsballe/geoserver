@@ -9,7 +9,6 @@ import java.util.Properties;
 
 /**
  * Configuration properties for clustered configuration/catalog.
- *
  */
 public class ClusterConfig extends Properties {
 
@@ -38,7 +37,7 @@ public class ClusterConfig extends Properties {
 
     /**
      * @return milliseconds to wait for node ack notifications upon sending a config change event.
-     *         Defaults to 2000ms.
+     * Defaults to 2000ms.
      */
     public int getAckTimeoutMillis() {
         return Integer.parseInt(getProperty("acktimeout", "2000"));

@@ -9,12 +9,13 @@ import org.geoserver.security.config.SecurityRoleServiceConfig;
 
 /**
  * @author Alessio Fabiani, GeoSolutions S.A.S.
- *
  */
 public class GeoServerRestRoleServiceConfig extends BaseSecurityNamedServiceConfig
         implements SecurityRoleServiceConfig {
 
-    /** serialVersionUID */
+    /**
+     * serialVersionUID
+     */
     private static final long serialVersionUID = -8380244566532287415L;
 
     private static final int defaultCacheConcurrencyLevel = 4;
@@ -28,25 +29,25 @@ public class GeoServerRestRoleServiceConfig extends BaseSecurityNamedServiceConf
     private String groupAdminGroup;
 
     private String baseUrl;
-    
+
     private String rolesRESTEndpoint = "/api/roles";
-    
+
     private String adminRoleRESTEndpoint = "/api/adminRole";
-    
+
     private String usersRESTEndpoint = "/api/users";
-    
+
     private String rolesJSONPath = "$.groups";
-    
+
     private String adminRoleJSONPath = "$.adminRole";
-    
+
     private String usersJSONPath = "$.users[?(@.username=='${username}')].groups";
 
     private int cacheConcurrencyLevel = defaultCacheConcurrencyLevel;
-    
+
     private long cacheMaximumSize = defaultCacheMaximumSize;
-    
+
     private long cacheExpirationTime = defaultCacheExpirationTime;
-    
+
     @Override
     public String getAdminRoleName() {
         return adminGroup;

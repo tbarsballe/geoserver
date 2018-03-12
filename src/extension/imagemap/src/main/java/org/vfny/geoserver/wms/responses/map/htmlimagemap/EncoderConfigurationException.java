@@ -11,15 +11,15 @@ import org.geoserver.platform.ServiceException;
 /**
  * DOCUMENT ME!
  *
- * @author Mauro Bartolomeoli 
+ * @author Mauro Bartolomeoli
  */
 public class EncoderConfigurationException extends ServiceException {
     /**
-	 * 
-	 */
-	private static final long serialVersionUID = -791532675720744977L;
+     *
+     */
+    private static final long serialVersionUID = -791532675720744977L;
 
-	public EncoderConfigurationException(String message) {
+    public EncoderConfigurationException(String message) {
         super(message);
     }
 

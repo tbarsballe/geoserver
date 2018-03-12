@@ -11,16 +11,15 @@
 package org.geoserver.wps.ppio.gpx;
 
 /**
- * 
  * Two lat/lon pairs defining the extent of an element.
- * 
- * 
+ * <p>
+ * <p>
  * <p>
  * Java class for boundsType complex type.
- * 
+ * <p>
  * <p>
  * The following schema fragment specifies the expected content contained within this class.
- * 
+ * <p>
  * <pre>
  * &lt;complexType name="boundsType">
  *   &lt;complexContent>
@@ -33,8 +32,6 @@ package org.geoserver.wps.ppio.gpx;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 public class BoundsType {
     protected double maxlat;
@@ -47,7 +44,6 @@ public class BoundsType {
 
     /**
      * Gets the value of the maxlat property.
-     * 
      */
     public double getMaxlat() {
         return maxlat;
@@ -55,7 +51,6 @@ public class BoundsType {
 
     /**
      * Sets the value of the maxlat property.
-     * 
      */
     public void setMaxlat(double value) {
         this.maxlat = value;
@@ -63,7 +58,6 @@ public class BoundsType {
 
     /**
      * Gets the value of the maxlon property.
-     * 
      */
     public double getMaxlon() {
         return maxlon;
@@ -71,7 +65,6 @@ public class BoundsType {
 
     /**
      * Sets the value of the maxlon property.
-     * 
      */
     public void setMaxlon(double value) {
         this.maxlon = value;
@@ -79,7 +72,6 @@ public class BoundsType {
 
     /**
      * Gets the value of the minlat property.
-     * 
      */
     public double getMinlat() {
         return minlat;
@@ -87,7 +79,6 @@ public class BoundsType {
 
     /**
      * Sets the value of the minlat property.
-     * 
      */
     public void setMinlat(double value) {
         this.minlat = value;
@@ -95,7 +86,6 @@ public class BoundsType {
 
     /**
      * Gets the value of the minlon property.
-     * 
      */
     public double getMinlon() {
         return minlon;
@@ -103,7 +93,6 @@ public class BoundsType {
 
     /**
      * Sets the value of the minlon property.
-     * 
      */
     public void setMinlon(double value) {
         this.minlon = value;

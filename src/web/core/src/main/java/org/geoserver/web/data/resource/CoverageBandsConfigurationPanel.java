@@ -60,8 +60,8 @@ public class CoverageBandsConfigurationPanel extends ResourceConfigurationPanel 
                 new CoverageDimensionsProvider(), true) {
 
             @Override
-            protected Component getComponentForProperty(String id, IModel<CoverageDimensionInfo> itemModel, 
-                Property<CoverageDimensionInfo> property) {
+            protected Component getComponentForProperty(String id, IModel<CoverageDimensionInfo> itemModel,
+                                                        Property<CoverageDimensionInfo> property) {
                 if ("band".equals(property.getName())) {
                     Fragment f = new Fragment(id, "bandtext", CoverageBandsConfigurationPanel.this);
                     Component text = new TextField<>("bandtext", (IModel<String>) property.getModel(itemModel));
@@ -80,7 +80,7 @@ public class CoverageBandsConfigurationPanel extends ResourceConfigurationPanel 
                     f.add(text);
                     return f;
                 }
-               if ("minRange".equals(property.getName())) {
+                if ("minRange".equals(property.getName())) {
                     Fragment f = new Fragment(id, "minRange", CoverageBandsConfigurationPanel.this);
                     Component min = new DecimalTextField("minRange", (IModel<Double>) property.getModel(itemModel));
                     f.add(min);
@@ -88,7 +88,7 @@ public class CoverageBandsConfigurationPanel extends ResourceConfigurationPanel 
                 }
                 if ("maxRange".equals(property.getName())) {
                     Fragment f = new Fragment(id, "maxRange", CoverageBandsConfigurationPanel.this);
-                    Component max = new DecimalTextField("maxRange", (IModel<Double>) property.getModel(itemModel));                    
+                    Component max = new DecimalTextField("maxRange", (IModel<Double>) property.getModel(itemModel));
                     f.add(max);
                     return f;
                 }
@@ -122,7 +122,7 @@ public class CoverageBandsConfigurationPanel extends ResourceConfigurationPanel 
                     CoverageInfo rebuilt = null;
                     if (metadata != null && metadata.containsKey(CoverageView.COVERAGE_VIEW)) {
                         GridCoverage2DReader reader = (GridCoverage2DReader) catalog.getResourcePool().getGridCoverageReader(ci, nativeName, GeoTools.getDefaultHints());
-                        rebuilt = cb.buildCoverage(reader, nativeName, null);    
+                        rebuilt = cb.buildCoverage(reader, nativeName, null);
                     } else {
                         rebuilt = cb.buildCoverage(nativeName);
                     }
@@ -187,13 +187,13 @@ public class CoverageBandsConfigurationPanel extends ResourceConfigurationPanel 
                     } else {
                         String name = type.name();
                         try {
-                            String key = CoverageBandsConfigurationPanel.class.getSimpleName() + "." +  name;
+                            String key = CoverageBandsConfigurationPanel.class.getSimpleName() + "." + name;
                             ParamResourceModel rm = new ParamResourceModel(key, null);
                             return rm.getString();
-                        } catch(Exception e) {
+                        } catch (Exception e) {
                             return name;
                         }
-                        
+
                     }
                 }
 
@@ -207,7 +207,7 @@ public class CoverageBandsConfigurationPanel extends ResourceConfigurationPanel 
                         @Override
                         public void detach() {
                             // TODO Auto-generated method stub
-                            
+
                         }
 
                         @Override
@@ -221,7 +221,7 @@ public class CoverageBandsConfigurationPanel extends ResourceConfigurationPanel 
                             values.clear();
                             values.addAll(object);
                         }
-                        
+
                     };
                 }
 
@@ -239,7 +239,7 @@ public class CoverageBandsConfigurationPanel extends ResourceConfigurationPanel 
 
                         @Override
                         public Double getObject() {
-                            if(item.getRange() == null) {
+                            if (item.getRange() == null) {
                                 return null;
                             }
                             return item.getRange().getMinimum(true);
@@ -247,7 +247,7 @@ public class CoverageBandsConfigurationPanel extends ResourceConfigurationPanel 
 
                         @Override
                         public void setObject(Double min) {
-                            if(min != null) {
+                            if (min != null) {
                                 NumberRange range = item.getRange();
                                 NumberRange<Double> newRange = NumberRange.create(min, range != null ? range.getMaximum() : min);
                                 item.setRange(newRange);
@@ -270,7 +270,7 @@ public class CoverageBandsConfigurationPanel extends ResourceConfigurationPanel 
 
                         @Override
                         public Double getObject() {
-                            if(item.getRange() == null) {
+                            if (item.getRange() == null) {
                                 return null;
                             }
                             return item.getRange().getMaximum();
@@ -278,7 +278,7 @@ public class CoverageBandsConfigurationPanel extends ResourceConfigurationPanel 
 
                         @Override
                         public void setObject(Double max) {
-                            if(max != null) {
+                            if (max != null) {
                                 NumberRange range = item.getRange();
                                 NumberRange<Double> newRange = NumberRange.create(range != null ? range.getMinimum() : max, max);
                                 item.setRange(newRange);

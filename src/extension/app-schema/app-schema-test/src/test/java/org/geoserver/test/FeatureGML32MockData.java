@@ -10,9 +10,9 @@ import org.geoserver.data.test.MockData;
 
 /**
  * Mock data for testing GML32
- * 
+ * <p>
  * Inspired by {@link MockData}.
- * 
+ *
  * @author Victor Tey, CSIRO Exploration and Mining
  */
 

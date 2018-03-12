@@ -12,12 +12,13 @@ public abstract class BaseRequest {
     public static final String JSON_MIME = "application/json";
     public static final String YAML_MIME = "application/x-yaml";
     public static final String HTML_MIME = "text/html";
-    
+
     String format;
     String baseUrl;
 
     /**
      * The requested format
+     *
      * @return The format name, or null if not set
      */
     public String getFormat() {
@@ -26,6 +27,7 @@ public abstract class BaseRequest {
 
     /**
      * Sets the format name
+     *
      * @param format
      */
     public void setFormat(String format) {
@@ -34,6 +36,7 @@ public abstract class BaseRequest {
 
     /**
      * The request base url
+     *
      * @return The url, or null if not set
      */
     public String getBaseUrl() {
@@ -42,6 +45,7 @@ public abstract class BaseRequest {
 
     /**
      * Sets the base url
+     *
      * @param baseUrl
      */
     public void setBaseUrl(String baseUrl) {

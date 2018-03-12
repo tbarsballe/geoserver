@@ -23,7 +23,7 @@ public class DescribeStoredQueriesKvpRequestReader extends WFSKvpRequestReader {
     @Override
     public Object read(Object request, Map kvp, Map rawKvp) throws Exception {
         EObject obj = (EObject) super.read(request, kvp, rawKvp);
-        
+
         //handle storedQuery_id parameter
         if (kvp.containsKey("storedQuery_id")) {
             EMFUtils.add(obj, "storedQueryId", kvp.get("storedQuery_id"));

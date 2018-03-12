@@ -21,10 +21,7 @@ import org.geotools.geometry.jts.ReferencedEnvelope;
 import com.vividsolutions.jts.geom.Geometry;
 
 /**
- * 
- * 
  * @author Niels Charlier
- *
  */
 public class MapBoxTileBuilder implements VectorTileBuilder {
 
@@ -39,7 +36,7 @@ public class MapBoxTileBuilder implements VectorTileBuilder {
 
     @Override
     public void addFeature(String layerName, String featureId, String geometryName,
-            Geometry geometry, Map<String, Object> properties) {
+                           Geometry geometry, Map<String, Object> properties) {
 
         encoder.addFeature(layerName, properties, geometry);
     }

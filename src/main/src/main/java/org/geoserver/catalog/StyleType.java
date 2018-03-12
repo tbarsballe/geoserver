@@ -6,7 +6,6 @@ package org.geoserver.catalog;
 
 /**
  * Used by StyleHandler and StyleGenerator to specify which template to use
- * 
  */
 public enum StyleType {
     POINT("Point"),     //Point Feature Type
@@ -14,13 +13,13 @@ public enum StyleType {
     POLYGON("Polygon"), //Polygon Feature Type
     RASTER("Raster"),   //Coverage Type
     GENERIC("Generic"); //Unknown Type
-    
+
     private final String name;
-    
+
     private StyleType(String name) {
         this.name = name;
     }
-    
+
     public String toString() {
         return name;
     }

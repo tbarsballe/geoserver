@@ -27,7 +27,7 @@ public class SRSListTextArea extends TextArea<List<String>> {
 
     public SRSListTextArea(String id, IModel<List<String>> model) {
         super(id, model);
-        
+
         add(new SRSListValidator());
         setType(List.class);
     }

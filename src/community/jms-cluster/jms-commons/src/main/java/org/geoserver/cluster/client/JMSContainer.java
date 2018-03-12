@@ -31,11 +31,9 @@ import org.springframework.jms.JmsException;
 import org.springframework.jms.listener.DefaultMessageListenerContainer;
 
 /**
- * 
  * Connection handler
- * 
+ *
  * @author Carlo Cancellieri - GeoSolutions SAS
- * 
  */
 final public class JMSContainer extends DefaultMessageListenerContainer implements DisposableBean,
         ApplicationListener<ContextRefreshedEvent>, ApplicationContextAware {
@@ -65,7 +63,7 @@ final public class JMSContainer extends DefaultMessageListenerContainer implemen
 
         // configuration
         this.config = config;
-        
+
         // the listener used to handle incoming events
         setMessageListener(listener);
 
@@ -76,24 +74,24 @@ final public class JMSContainer extends DefaultMessageListenerContainer implemen
     private void init() {
         // change the default autostartup status to false
         setAutoStartup(false);
-        
+
         // force no concurrent consumers
         setConcurrentConsumers(1);
-        
+
         // set to topic
         setPubSubDomain(true);
-        
-        
+
+
         // set subscription durability
         setSubscriptionDurable(Boolean.parseBoolean(config.getConfiguration(TopicConfiguration.DURABLE_KEY).toString()));
-        
-        
+
+
         // set subscription ID
         setDurableSubscriptionName(config.getConfiguration(JMSConfiguration.INSTANCE_NAME_KEY).toString());
-        
+
         // times to test (connection)
         max = Integer.parseInt(config.getConfiguration(ConnectionConfiguration.CONNECTION_RETRY_KEY).toString());
-        
+
         // millisecs to wait between tests (connection)
         maxWait = Long.parseLong(config.getConfiguration(ConnectionConfiguration.CONNECTION_MAXWAIT_KEY).toString());
 
@@ -110,7 +108,7 @@ final public class JMSContainer extends DefaultMessageListenerContainer implemen
 
     /**
      * try to disconnect
-     * 
+     *
      * @return true if success
      */
     public boolean disconnect() {
@@ -128,7 +126,7 @@ final public class JMSContainer extends DefaultMessageListenerContainer implemen
                 try {
                     Thread.sleep(maxWait);
                 } catch (InterruptedException e) {
-                    LOGGER.log(Level.SEVERE,e.getLocalizedMessage(), e);
+                    LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
                 }
             }
         } else {
@@ -143,14 +141,14 @@ final public class JMSContainer extends DefaultMessageListenerContainer implemen
 
         // set destination
         setDestination(jmsFactory.getClientDestination(conf));
-        
+
         // use a CachingConnectionFactory
         setConnectionFactory(jmsFactory.getConnectionFactory(conf));
     }
 
     /**
      * try to connect
-     * 
+     *
      * @return true in success case, false otherwise
      */
     public boolean connect() {
@@ -164,7 +162,7 @@ final public class JMSContainer extends DefaultMessageListenerContainer implemen
                         LOGGER.info("Now GeoServer is registered with the destination");
                         return true;
                     } else if (repReg == max) {
-                        LOGGER.log(Level.SEVERE,"Registration aborted due to a connection problem");
+                        LOGGER.log(Level.SEVERE, "Registration aborted due to a connection problem");
                         stop();
                         LOGGER.info("Disconnected");
                     } else {
@@ -174,7 +172,7 @@ final public class JMSContainer extends DefaultMessageListenerContainer implemen
                     try {
                         Thread.sleep(maxWait);
                     } catch (InterruptedException e) {
-                        LOGGER.log(Level.SEVERE,e.getLocalizedMessage(), e);
+                        LOGGER.log(Level.SEVERE, e.getLocalizedMessage(), e);
                     }
                 }
             } else {
@@ -208,7 +206,7 @@ final public class JMSContainer extends DefaultMessageListenerContainer implemen
 
         }
     }
-    
+
     @Override
     public void destroy() {
         super.stop();

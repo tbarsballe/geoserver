@@ -65,9 +65,9 @@ public class GeoServerBasePage extends WebPage implements IAjaxIndicatorAware {
     protected static final String HEADER_PANEL = "headerPanel";
 
     protected static final Logger LOGGER = Logging.getLogger(GeoServerBasePage.class);
-    
+
     protected static volatile GeoServerNodeInfo NODE_INFO;
-    
+
     /**
      * feedback panels to report errors and information.
      */
@@ -79,8 +79,8 @@ public class GeoServerBasePage extends WebPage implements IAjaxIndicatorAware {
      */
     protected Page returnPage;
 
-    /** 
-     * page class for this page to return to when the page is finished, could be null. 
+    /**
+     * page class for this page to return to when the page is finished, could be null.
      */
     protected Class<? extends Page> returnPageClass;
 
@@ -88,30 +88,30 @@ public class GeoServerBasePage extends WebPage implements IAjaxIndicatorAware {
     public GeoServerBasePage() {
         // lookup for a pluggable favicon
         PackageResourceReference faviconReference = null;
-        List<HeaderContribution> cssContribs = 
-            getGeoServerApplication().getBeansOfType(HeaderContribution.class);
+        List<HeaderContribution> cssContribs =
+                getGeoServerApplication().getBeansOfType(HeaderContribution.class);
         for (HeaderContribution csscontrib : cssContribs) {
             try {
                 if (csscontrib.appliesTo(this)) {
                     PackageResourceReference ref = csscontrib.getFavicon();
-                    if(ref != null) {
+                    if (ref != null) {
                         faviconReference = ref;
                     }
                 }
-            } catch( Throwable t ) {
-                LOGGER.log(Level.WARNING, "Problem adding header contribution", t );
+            } catch (Throwable t) {
+                LOGGER.log(Level.WARNING, "Problem adding header contribution", t);
             }
         }
-        
+
         // favicon
-        if(faviconReference == null) {
+        if (faviconReference == null) {
             faviconReference = new PackageResourceReference(GeoServerBasePage.class, "favicon.ico");
         }
         String faviconUrl = RequestCycle.get().urlFor(faviconReference, null).toString();
         add(new ExternalLink("faviconLink", faviconUrl, null));
-	    
-	    // page title
-	    add(new Label("pageTitle", new LoadableDetachableModel<String>() {
+
+        // page title
+        add(new Label("pageTitle", new LoadableDetachableModel<String>() {
 
             @Override
             protected String load() {
@@ -119,16 +119,16 @@ public class GeoServerBasePage extends WebPage implements IAjaxIndicatorAware {
             }
         }));
 
-	// login / logout stuff
-	List<String> securityFilters = 
-	        getGeoServerApplication().getSecurityManager().getSecurityConfig().getFilterChain().filtersFor("/web/**");
+        // login / logout stuff
+        List<String> securityFilters =
+                getGeoServerApplication().getSecurityManager().getSecurityConfig().getFilterChain().filtersFor("/web/**");
 
         final Authentication user = GeoServerSession.get().getAuthentication();
         final boolean anonymous = user == null || user instanceof AnonymousAuthenticationToken;
 
         // login forms
         List<LoginFormInfo> loginforms = filterByAuth(getGeoServerApplication().getBeansOfType(LoginFormInfo.class));
-        
+
         add(new ListView<LoginFormInfo>("loginforms", loginforms) {
             public void populateItem(ListItem<LoginFormInfo> item) {
                 LoginFormInfo info = item.getModelObject();
@@ -137,30 +137,32 @@ public class GeoServerBasePage extends WebPage implements IAjaxIndicatorAware {
                     protected void onComponentTag(org.apache.wicket.markup.ComponentTag tag) {
                         String path = getRequest().getUrl().getPath();
                         StringBuilder loginPath = new StringBuilder();
-                        if(path.isEmpty()) {
+                        if (path.isEmpty()) {
                             // home page
                             loginPath.append("../" + info.getLoginPath());
                         } else {
                             // boomarkable page of sorts
                             String[] pathElements = path.split("/");
                             for (String pathElement : pathElements) {
-                                if(!pathElement.isEmpty()) {
+                                if (!pathElement.isEmpty()) {
                                     loginPath.append("../");
                                 }
                             }
                             loginPath.append(info.getLoginPath());
                         }
-                        tag.put("action", loginPath);                        
-                    };
+                        tag.put("action", loginPath);
+                    }
+
+                    ;
                 };
-                
+
                 Image image;
-                if(info.getIcon() != null) {
+                if (info.getIcon() != null) {
                     image = new Image("link.icon", new PackageResourceReference(info.getComponentClass(), info.getIcon()));
                 } else {
                     image = new Image("link.icon", new PackageResourceReference(GeoServerBasePage.class, "img/icons/silk/door-in.png"));
                 }
-                
+
                 loginForm.add(image);
                 if (info.getTitleKey() != null && !info.getTitleKey().isEmpty()) {
                     loginForm.add(new Label("link.label", new StringResourceModel(info.getTitleKey(), (Component) null, null)));
@@ -168,19 +170,19 @@ public class GeoServerBasePage extends WebPage implements IAjaxIndicatorAware {
                 } else {
                     loginForm.add(new Label("link.label", ""));
                 }
-                
+
                 LoginFormHTMLInclude include;
                 if (info.getInclude() != null) {
-                    include = new LoginFormHTMLInclude("login.include", 
+                    include = new LoginFormHTMLInclude("login.include",
                             new PackageResourceReference(info.getComponentClass(), info.getInclude()));
                 } else {
-                    include = new LoginFormHTMLInclude("login.include", 
-                            new PackageResourceReference(GeoServerBasePage.class, ""));                    
+                    include = new LoginFormHTMLInclude("login.include",
+                            new PackageResourceReference(GeoServerBasePage.class, ""));
                 }
                 loginForm.add(include);
 
                 item.add(loginForm);
-                
+
                 boolean filterInChain = false;
                 for (String filterName : securityFilters) {
                     if (filterName.toLowerCase().contains(info.getName())) {
@@ -197,96 +199,98 @@ public class GeoServerBasePage extends WebPage implements IAjaxIndicatorAware {
         loggedInAsForm.add(new Label("loggedInUsername", anonymous ? "Nobody" : user.getName()));
         loggedInAsForm.setVisible(!anonymous);
         add(loggedInAsForm);
-        
+
         List<LogoutFormInfo> logoutforms = filterByAuth(getGeoServerApplication().getBeansOfType(LogoutFormInfo.class));
 
-                add(new ListView<LogoutFormInfo>("logoutforms", logoutforms) {
-                    public void populateItem(ListItem<LogoutFormInfo> item) {
-                        LogoutFormInfo info = item.getModelObject();
-        
-                        WebMarkupContainer logoutForm = new WebMarkupContainer("logoutform") {
-                            protected void onComponentTag(org.apache.wicket.markup.ComponentTag tag) {
-                                String path = getRequest().getUrl().getPath();
-                                StringBuilder logoutPath = new StringBuilder();
-                                if(path.isEmpty()) {
-                                    // home page
-                                    logoutPath.append("../" + info.getLogoutPath());
-                                } else {
-                                    // boomarkable page of sorts
-                                    String[] pathElements = path.split("/");
-                                    for (String pathElement : pathElements) {
-                                        if(!pathElement.isEmpty()) {
-                                            logoutPath.append("../");
-                                        }
-                                    }
-                                    logoutPath.append(info.getLogoutPath());
+        add(new ListView<LogoutFormInfo>("logoutforms", logoutforms) {
+            public void populateItem(ListItem<LogoutFormInfo> item) {
+                LogoutFormInfo info = item.getModelObject();
+
+                WebMarkupContainer logoutForm = new WebMarkupContainer("logoutform") {
+                    protected void onComponentTag(org.apache.wicket.markup.ComponentTag tag) {
+                        String path = getRequest().getUrl().getPath();
+                        StringBuilder logoutPath = new StringBuilder();
+                        if (path.isEmpty()) {
+                            // home page
+                            logoutPath.append("../" + info.getLogoutPath());
+                        } else {
+                            // boomarkable page of sorts
+                            String[] pathElements = path.split("/");
+                            for (String pathElement : pathElements) {
+                                if (!pathElement.isEmpty()) {
+                                    logoutPath.append("../");
                                 }
-                                tag.put("action", logoutPath);                        
-                            };
-                        };
-                        
-                        Image image;
-                        if(info.getIcon() != null) {
-                            image = new Image("link.icon", new PackageResourceReference(info.getComponentClass(), info.getIcon()));
-                        } else {
-                            image = new Image("link.icon", new PackageResourceReference(GeoServerBasePage.class, "img/icons/silk/door-out.png"));
-                        }
-                        
-                        logoutForm.add(image);
-                        if (info.getTitleKey() != null && !info.getTitleKey().isEmpty()) {
-                            logoutForm.add(new Label("link.label", new StringResourceModel(info.getTitleKey(), (Component) null, null)));
-                            image.add(AttributeModifier.replace("alt", new ParamResourceModel(info.getTitleKey(), null)));
-                        } else {
-                            logoutForm.add(new Label("link.label", ""));
-                        }
-                                
-                        item.add(logoutForm);
-                        
-                        boolean filterInChain = false;
-                        for (String filterName : securityFilters) {
-                            if (filterName.toLowerCase().contains(info.getName())) {
-                                filterInChain = true;
-                                break;
                             }
+                            logoutPath.append(info.getLogoutPath());
                         }
-                        logoutForm.setVisible(!anonymous && filterInChain);
+                        tag.put("action", logoutPath);
                     }
-                });
+
+                    ;
+                };
+
+                Image image;
+                if (info.getIcon() != null) {
+                    image = new Image("link.icon", new PackageResourceReference(info.getComponentClass(), info.getIcon()));
+                } else {
+                    image = new Image("link.icon", new PackageResourceReference(GeoServerBasePage.class, "img/icons/silk/door-out.png"));
+                }
+
+                logoutForm.add(image);
+                if (info.getTitleKey() != null && !info.getTitleKey().isEmpty()) {
+                    logoutForm.add(new Label("link.label", new StringResourceModel(info.getTitleKey(), (Component) null, null)));
+                    image.add(AttributeModifier.replace("alt", new ParamResourceModel(info.getTitleKey(), null)));
+                } else {
+                    logoutForm.add(new Label("link.label", ""));
+                }
+
+                item.add(logoutForm);
+
+                boolean filterInChain = false;
+                for (String filterName : securityFilters) {
+                    if (filterName.toLowerCase().contains(info.getName())) {
+                        filterInChain = true;
+                        break;
+                    }
+                }
+                logoutForm.setVisible(!anonymous && filterInChain);
+            }
+        });
 
         // home page link
-        add( new BookmarkablePageLink( "home", GeoServerHomePage.class )
-            .add( new Label( "label", new StringResourceModel( "home", (Component)null, null ) )  ) );
-        
+        add(new BookmarkablePageLink("home", GeoServerHomePage.class)
+                .add(new Label("label", new StringResourceModel("home", (Component) null, null))));
+
         // dev buttons
         DeveloperToolbar devToolbar = new DeveloperToolbar("devButtons");
         add(devToolbar);
         devToolbar.setVisible(RuntimeConfigurationType.DEVELOPMENT.equals(
                 getApplication().getConfigurationType()));
-        
-        final Map<Category,List<MenuPageInfo>> links = splitByCategory(
-            filterByAuth(getGeoServerApplication().getBeansOfType(MenuPageInfo.class))
+
+        final Map<Category, List<MenuPageInfo>> links = splitByCategory(
+                filterByAuth(getGeoServerApplication().getBeansOfType(MenuPageInfo.class))
         );
 
-        List<MenuPageInfo> standalone = links.containsKey(null) 
-            ? links.get(null)
-            : new ArrayList<MenuPageInfo>();
+        List<MenuPageInfo> standalone = links.containsKey(null)
+                ? links.get(null)
+                : new ArrayList<MenuPageInfo>();
         links.remove(null);
 
         List<Category> categories = new ArrayList<>(links.keySet());
         Collections.sort(categories);
 
-        add(new ListView<Category>("category", categories){
-            public void populateItem(ListItem<Category> item){
+        add(new ListView<Category>("category", categories) {
+            public void populateItem(ListItem<Category> item) {
                 Category category = item.getModelObject();
                 item.add(new Label("category.header", new StringResourceModel(category.getNameKey(), (Component) null, null)));
-                item.add(new ListView<MenuPageInfo>("category.links", links.get(category)){
-                    public void populateItem(ListItem<MenuPageInfo> item){
+                item.add(new ListView<MenuPageInfo>("category.links", links.get(category)) {
+                    public void populateItem(ListItem<MenuPageInfo> item) {
                         MenuPageInfo info = item.getModelObject();
                         BookmarkablePageLink<Page> link = new BookmarkablePageLink<>("link", info.getComponentClass());
                         link.add(AttributeModifier.replace("title", new StringResourceModel(info.getDescriptionKey(), (Component) null, null)));
                         link.add(new Label("link.label", new StringResourceModel(info.getTitleKey(), (Component) null, null)));
                         Image image;
-                        if(info.getIcon() != null) {
+                        if (info.getIcon() != null) {
                             image = new Image("link.icon", new PackageResourceReference(info.getComponentClass(), info.getIcon()));
                         } else {
                             image = new Image("link.icon", new PackageResourceReference(GeoServerBasePage.class, "img/icons/silk/wrench.png"));
@@ -313,17 +317,17 @@ public class GeoServerBasePage extends WebPage implements IAjaxIndicatorAware {
         });
 
         add(topFeedbackPanel = new FeedbackPanel("topFeedback"));
-        topFeedbackPanel.setOutputMarkupId( true );
+        topFeedbackPanel.setOutputMarkupId(true);
         add(bottomFeedbackPanel = new FeedbackPanel("bottomFeedback"));
-        bottomFeedbackPanel.setOutputMarkupId( true );
-        
+        bottomFeedbackPanel.setOutputMarkupId(true);
+
         // ajax feedback image
-        add(new Image("ajaxFeedbackImage", 
+        add(new Image("ajaxFeedbackImage",
                 new PackageResourceReference(GeoServerBasePage.class, "img/ajax-loader.gif")));
-        
+
         add(new WebMarkupContainer(HEADER_PANEL));
-        
-        
+
+
         // allow the subclasses to initialize before getTitle/getDescription are called
         add(new Label("gbpTitle", new LoadableDetachableModel<String>() {
 
@@ -346,8 +350,8 @@ public class GeoServerBasePage extends WebPage implements IAjaxIndicatorAware {
         String id = getNodeInfo().getId();
         Label label = new Label("nodeId", id);
         container.add(label);
-        NODE_INFO.customize(container);     
-        if(id == null) {
+        NODE_INFO.customize(container);
+        if (id == null) {
             container.setVisible(false);
         }
     }
@@ -401,31 +405,29 @@ public class GeoServerBasePage extends WebPage implements IAjaxIndicatorAware {
     protected String getTitle() {
         return new ParamResourceModel("title", this).getString();
     }
-	
-	protected String getDescription() {
-	    return new ParamResourceModel("description", this).getString();
+
+    protected String getDescription() {
+        return new ParamResourceModel("description", this).getString();
     }
 
     /**
-	 * Gets the page title from the PageName.title resource, falling back on "GeoServer" if not found
-	 *
-	 */
-	String getPageTitle() {
-	    try {
-	        return "GeoServer: " + getTitle();
-	    } catch(Exception e) {
-	        LOGGER.warning(getClass().getSimpleName() + " does not have a title set");
-	    }
-	    return "GeoServer";
+     * Gets the page title from the PageName.title resource, falling back on "GeoServer" if not found
+     */
+    String getPageTitle() {
+        try {
+            return "GeoServer: " + getTitle();
+        } catch (Exception e) {
+            LOGGER.warning(getClass().getSimpleName() + " does not have a title set");
+        }
+        return "GeoServer";
     }
 
     /**
      * The base page is built with an empty panel in the page-header section that can be filled by
      * subclasses calling this method
-     * 
-     * @param component
-     *            The component to be placed at the bottom of the page-header section. The component
-     *            must have "page-header" id
+     *
+     * @param component The component to be placed at the bottom of the page-header section. The component
+     *                  must have "page-header" id
      */
     protected void setHeaderPanel(Component component) {
         if (!HEADER_PANEL.equals(component.getId()))
@@ -441,7 +443,7 @@ public class GeoServerBasePage extends WebPage implements IAjaxIndicatorAware {
     protected GeoServerApplication getGeoServerApplication() {
         return (GeoServerApplication) getApplication();
     }
-    
+
     @Override
     public GeoServerSession getSession() {
         return (GeoServerSession) super.getSession();
@@ -461,20 +463,20 @@ public class GeoServerBasePage extends WebPage implements IAjaxIndicatorAware {
     protected Catalog getCatalog() {
         return getGeoServerApplication().getCatalog();
     }
-    
+
     /**
      * Splits up the pages by category, turning the list into a map keyed by category
-     * @param pages
      *
+     * @param pages
      */
-    private Map<Category,List<MenuPageInfo>> splitByCategory(List<MenuPageInfo> pages){
+    private Map<Category, List<MenuPageInfo>> splitByCategory(List<MenuPageInfo> pages) {
         Collections.sort(pages);
-        HashMap<Category,List<MenuPageInfo>> map = new HashMap<Category,List<MenuPageInfo>>();
+        HashMap<Category, List<MenuPageInfo>> map = new HashMap<Category, List<MenuPageInfo>>();
 
-        for (MenuPageInfo page : pages){
+        for (MenuPageInfo page : pages) {
             Category cat = page.getCategory();
 
-            if (!map.containsKey(cat)) 
+            if (!map.containsKey(cat))
                 map.put(cat, new ArrayList<MenuPageInfo>());
 
             map.get(cat).add(page);
@@ -493,94 +495,97 @@ public class GeoServerBasePage extends WebPage implements IAjaxIndicatorAware {
             if (component.getAuthorizer() == null) {
                 continue;
             }
-            
+
             final Class<?> clazz = component.getComponentClass();
-            if(!component.getAuthorizer().isAccessAllowed(clazz, user))
+            if (!component.getAuthorizer().isAccessAllowed(clazz, user))
                 continue;
             result.add(component);
         }
         return result;
     }
-    
-   
-   /**
-    * Returns the id for the component used as a veil for the whole page while Wicket is processing
-    * an ajax request, so it is impossible to trigger the same ajax action multiple times (think of
-    * saving/deleting a resource, etc)
-    *
-    * @see IAjaxIndicatorAware#getAjaxIndicatorMarkupId()
-    */
-   public String getAjaxIndicatorMarkupId() {
-       return "ajaxFeedback";
-   }
-   
-   /**
-    * Returns the top feedback panel included in the GeoServer base page
-    * @deprecated Use {@link #addFeedbackPanels(AjaxRequestTarget)} instead
-    */
-   @Deprecated
-   public FeedbackPanel getFeedbackPanel() {
-       return topFeedbackPanel;
-   }
 
-   /**
-    * Sets the return page to navigate to when this page is done its task.
-    * @see #doReturn()
-    */
-   public GeoServerBasePage setReturnPage(Page returnPage) {
-       this.returnPage = returnPage;
-       return this;
-   }
 
-   /**
-    * Sets the return page class to navigate to when this page is done its task.
-    * @see #doReturn()
-    */
-   public GeoServerBasePage setReturnPage(Class<? extends Page> returnPageClass) {
-       this.returnPageClass = returnPageClass;
-       return this;
-   }
+    /**
+     * Returns the id for the component used as a veil for the whole page while Wicket is processing
+     * an ajax request, so it is impossible to trigger the same ajax action multiple times (think of
+     * saving/deleting a resource, etc)
+     *
+     * @see IAjaxIndicatorAware#getAjaxIndicatorMarkupId()
+     */
+    public String getAjaxIndicatorMarkupId() {
+        return "ajaxFeedback";
+    }
 
-   /**
-    * Returns from the page by navigating to one of {@link #returnPage} or {@link #returnPageClass},
-    * processed in that order.
-    * <p>
-    * This method should be called by pages that must return after doing some task on a form submit
-    * such as a save or a cancel. If no return page has been set via {@link #setReturnPage(Page)} 
-    * or {@link #setReturnPageClass(Class)} then {@link GeoServerHomePage} is used.
-    * </p>
-    */
-   protected void doReturn() {
-       doReturn(null);
-   }
+    /**
+     * Returns the top feedback panel included in the GeoServer base page
+     *
+     * @deprecated Use {@link #addFeedbackPanels(AjaxRequestTarget)} instead
+     */
+    @Deprecated
+    public FeedbackPanel getFeedbackPanel() {
+        return topFeedbackPanel;
+    }
 
-   /**
-    * Returns from the page by navigating to one of {@link #returnPage} or {@link #returnPageClass},
-    * processed in that order.
-    * <p>
-    * This method accepts a parameter to use as a default in cases where {@link #returnPage} and
-    * {@link #returnPageClass} are not set and a default other than {@link GeoServerHomePage} should
-    * be used.
-    * </p>
-    * <p>
-    * This method should be called by pages that must return after doing some task on a form submit
-    * such as a save or a cancel. If no return page has been set via {@link #setReturnPage(Page)} 
-    * or {@link #setReturnPageClass(Class)} then {@link GeoServerHomePage} is used.
-    * </p>
-    */
-   protected void doReturn(Class<? extends Page> defaultPageClass) {
-       if (returnPage != null) {
-           setResponsePage(returnPage);
-           return;
-       }
-       if (returnPageClass != null) {
-           setResponsePage(returnPageClass);
-           return;
-       }
+    /**
+     * Sets the return page to navigate to when this page is done its task.
+     *
+     * @see #doReturn()
+     */
+    public GeoServerBasePage setReturnPage(Page returnPage) {
+        this.returnPage = returnPage;
+        return this;
+    }
 
-       defaultPageClass = defaultPageClass != null ? defaultPageClass : GeoServerHomePage.class;
-       setResponsePage(defaultPageClass);
-   }
+    /**
+     * Sets the return page class to navigate to when this page is done its task.
+     *
+     * @see #doReturn()
+     */
+    public GeoServerBasePage setReturnPage(Class<? extends Page> returnPageClass) {
+        this.returnPageClass = returnPageClass;
+        return this;
+    }
+
+    /**
+     * Returns from the page by navigating to one of {@link #returnPage} or {@link #returnPageClass},
+     * processed in that order.
+     * <p>
+     * This method should be called by pages that must return after doing some task on a form submit
+     * such as a save or a cancel. If no return page has been set via {@link #setReturnPage(Page)}
+     * or {@link #setReturnPageClass(Class)} then {@link GeoServerHomePage} is used.
+     * </p>
+     */
+    protected void doReturn() {
+        doReturn(null);
+    }
+
+    /**
+     * Returns from the page by navigating to one of {@link #returnPage} or {@link #returnPageClass},
+     * processed in that order.
+     * <p>
+     * This method accepts a parameter to use as a default in cases where {@link #returnPage} and
+     * {@link #returnPageClass} are not set and a default other than {@link GeoServerHomePage} should
+     * be used.
+     * </p>
+     * <p>
+     * This method should be called by pages that must return after doing some task on a form submit
+     * such as a save or a cancel. If no return page has been set via {@link #setReturnPage(Page)}
+     * or {@link #setReturnPageClass(Class)} then {@link GeoServerHomePage} is used.
+     * </p>
+     */
+    protected void doReturn(Class<? extends Page> defaultPageClass) {
+        if (returnPage != null) {
+            setResponsePage(returnPage);
+            return;
+        }
+        if (returnPageClass != null) {
+            setResponsePage(returnPageClass);
+            return;
+        }
+
+        defaultPageClass = defaultPageClass != null ? defaultPageClass : GeoServerHomePage.class;
+        setResponsePage(defaultPageClass);
+    }
 
     public void addFeedbackPanels(AjaxRequestTarget target) {
         target.add(topFeedbackPanel);

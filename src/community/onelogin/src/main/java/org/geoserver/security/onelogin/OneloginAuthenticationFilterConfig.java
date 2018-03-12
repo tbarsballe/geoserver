@@ -8,7 +8,7 @@ import org.geoserver.security.config.PreAuthenticatedUserNameFilterConfig;
 
 /**
  * Configuration for OneLogin authentication
- * 
+ *
  * @author Xandros
  */
 

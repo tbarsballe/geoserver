@@ -16,17 +16,17 @@ import org.geoserver.web.wicket.ParamResourceModel;
 
 /**
  * Allows the user to create a new EO layer group
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class EoLayerGroupNewPage extends EoLayerGroupAbstractPage {
-    
+
     public EoLayerGroupNewPage() {
         LayerGroupInfo lg = getCatalog().getFactory().createLayerGroup();
         lg.setMode(Mode.EO);
         initUI(lg);
     }
-    
+
     @Override
     protected void initUI(LayerGroupInfo layerGroup) {
         super.initUI(layerGroup);
@@ -48,21 +48,21 @@ public class EoLayerGroupNewPage extends EoLayerGroupAbstractPage {
         // check the layer group does not exist yet
         LayerGroupInfo preExisting;
         String lgName = lg.getName();
-        if(lg.getWorkspace() != null) {
+        if (lg.getWorkspace() != null) {
             String wsName = lg.getWorkspace().getName();
             preExisting = getCatalog().getLayerGroupByName(wsName, lgName);
-            if(preExisting != null) {
+            if (preExisting != null) {
                 error(new ParamResourceModel("layerGroupAlreadyExistsInWorkspace", this, lgName, wsName).getString());
                 return;
             }
         } else {
             preExisting = getCatalog().getLayerGroupByName(lgName);
-            if(preExisting != null) {
+            if (preExisting != null) {
                 error(new ParamResourceModel("layerGroupAlreadyExists", this, lgName).getString());
                 return;
             }
         }
-        
+
         Catalog catalog = getCatalog();
         catalog.add(lg);
 

@@ -44,25 +44,25 @@ public abstract class StyleListPanel extends GeoServerTablePanel<StyleInfo> {
 
     private static final long serialVersionUID = -811883647153309626L;
 
-    static Property<StyleInfo> NAME = 
-        new BeanProperty<StyleInfo>("name", "name");
-    
+    static Property<StyleInfo> NAME =
+            new BeanProperty<StyleInfo>("name", "name");
+
     public StyleListPanel(String id, StyleListProvider styleProvider) {
         super(id, styleProvider);
         getTopPager().setVisible(false);
     }
-    
+
     public StyleListPanel(String id) {
         this(id, new StyleListProvider());
     }
-    
+
     @SuppressWarnings("unchecked")
-	@Override
+    @Override
     protected Component getComponentForProperty(String id, IModel<StyleInfo> itemModel,
-            Property<StyleInfo> property) {
+                                                Property<StyleInfo> property) {
         final StyleInfo style = (StyleInfo) itemModel.getObject();
         if (property == NAME) {
-            return new SimpleAjaxLink<String>( id, (IModel<String>) NAME.getModel(itemModel) ) {
+            return new SimpleAjaxLink<String>(id, (IModel<String>) NAME.getModel(itemModel)) {
                 private static final long serialVersionUID = -2537227506881638001L;
 
                 @Override
@@ -71,10 +71,10 @@ public abstract class StyleListPanel extends GeoServerTablePanel<StyleInfo> {
                 }
             };
         }
-        
+
         return null;
     }
-    
-    protected abstract void handleStyle( StyleInfo style, AjaxRequestTarget target );
+
+    protected abstract void handleStyle(StyleInfo style, AjaxRequestTarget target);
 
 }

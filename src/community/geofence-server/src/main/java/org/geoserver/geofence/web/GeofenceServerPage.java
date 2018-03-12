@@ -24,9 +24,8 @@ import wicketdnd.theme.WebTheme;
 
 /**
  * GeoFence Server wicket administration UI for GeoServer.
- * 
- * @author Niels Charlier
  *
+ * @author Niels Charlier
  */
 public class GeofenceServerPage extends GeoServerSecuredPage {
 
@@ -71,7 +70,7 @@ public class GeofenceServerPage extends GeoServerSecuredPage {
 
             @Override
             protected Component getComponentForProperty(String id, IModel<ShortRule> itemModel,
-                    Property<ShortRule> property) {
+                                                        Property<ShortRule> property) {
 
                 if (property == GeofenceRulesModel.BUTTONS) {
                     return new ButtonPanel(id, (ShortRule) itemModel.getObject());
@@ -115,9 +114,7 @@ public class GeofenceServerPage extends GeoServerSecuredPage {
     }
 
     /**
-     * 
      * Panel with buttons up, down and edit
-     *
      */
     private class ButtonPanel extends Panel {
 

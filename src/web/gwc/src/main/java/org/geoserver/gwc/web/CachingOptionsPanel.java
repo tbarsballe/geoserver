@@ -74,7 +74,7 @@ public class CachingOptionsPanel extends Panel {
                 target.add(container);
             }
         });
-        
+
         IModel<String> lockProviderModel = new PropertyModel<String>(gwcConfigModel, "lockProviderName");
         ApplicationContext applicationContext = GeoServerApplication.get().getApplicationContext();
         String[] lockProviders = applicationContext.getBeanNamesForType(LockProvider.class);
@@ -174,7 +174,7 @@ public class CachingOptionsPanel extends Panel {
         // Add a new Panel for configuring In Memory caching
         InMemoryBlobStorePanel storePanel = new InMemoryBlobStorePanel("blobstores", gwcConfigModel);
         configs.add(storePanel.setOutputMarkupId(true));
-        
+
         IModel<Set<String>> cachedGridsetsModel = new PropertyModel<Set<String>>(gwcConfigModel,
                 "defaultCachingGridSetIds");
         DefaultGridsetsEditor cachedGridsets = new DefaultGridsetsEditor("cachedGridsets",

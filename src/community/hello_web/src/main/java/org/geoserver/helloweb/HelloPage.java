@@ -11,6 +11,6 @@ import org.geoserver.web.GeoServerBasePage;
 public class HelloPage extends GeoServerBasePage {
 
     public HelloPage() {
-        add( new Label( "label", "Hello World!" ) );
+        add(new Label("label", "Hello World!"));
     }
 }

@@ -32,7 +32,7 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 /**
  * Builds features scanning xml files in the specified folder, and parsing them as CSW Record
  * objects
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 class SimpleRecordIterator implements Iterator<Feature> {
@@ -42,7 +42,7 @@ class SimpleRecordIterator implements Iterator<Feature> {
     Iterator<Resource> files;
 
     RecordType record;
-    
+
     Resource lastFile;
 
     Parser parser;
@@ -134,7 +134,7 @@ class SimpleRecordIterator implements Iterator<Feature> {
     public void remove() {
         throw new UnsupportedOperationException("This iterator is read only");
     }
-    
+
     public Resource getLastFile() {
         return lastFile;
     }

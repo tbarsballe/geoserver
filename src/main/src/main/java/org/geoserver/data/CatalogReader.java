@@ -22,7 +22,7 @@ import org.w3c.dom.NodeList;
  * Reads the GeoServer catalog.xml file.
  * <p>
  * Usage:
- *
+ * <p>
  * <pre>
  *         <code>
  *                 File catalog = new File( ".../catalog.xml" );
@@ -35,7 +35,6 @@ import org.w3c.dom.NodeList;
  * </p>
  *
  * @author Justin Deoliveira, The Open Planning Project, jdeolive@openplans.org
- *
  */
 public class CatalogReader {
     /**
@@ -50,7 +49,6 @@ public class CatalogReader {
      * </p>
      *
      * @param file The catalog.xml file.
-     *
      * @throws IOException In event of a parser error.
      */
     public void read(File file) throws IOException {
@@ -66,12 +64,11 @@ public class CatalogReader {
     /**
      * Reads "datastore" elements from the catalog.xml file.
      * <p>
-     *  For each datastore element read, a map of the connection parameters is
-     *  created.
-     *  </p>
+     * For each datastore element read, a map of the connection parameters is
+     * created.
+     * </p>
      *
      * @return A list of Map objects containg the datastore connection parameters.
-     *
      * @throws Exception If error processing "datastores" element.
      */
     public List /*<Map>*/ dataStores() throws Exception {
@@ -98,12 +95,11 @@ public class CatalogReader {
     /**
      * Reads "namespace" elements from the catalog.xml file.
      * <p>
-     *  For each namespace element read, an entry of <prefix,uri> is created
-     *  in a map. The default uri is located under the empty string key.
-     *  </p>
+     * For each namespace element read, an entry of <prefix,uri> is created
+     * in a map. The default uri is located under the empty string key.
+     * </p>
      *
      * @return A map containing <prefix,uri> tuples.
-     *
      * @throws Exception If error processing "namespaces" element.
      */
     public Map namespaces() throws Exception {
@@ -137,13 +133,11 @@ public class CatalogReader {
      * element.
      *
      * @param dataStoreElement The "datastore" element.
-     *
      * @return The map of connection paramters.
-     *
      * @throws Exception If problem parsing any parameters.
      */
     protected Map dataStoreParams(Element dataStoreElement)
-        throws Exception {
+            throws Exception {
         Element paramsElement = ReaderUtils.getChildElement(dataStoreElement,
                 "connectionParameters", true);
         NodeList paramList = paramsElement.getElementsByTagName("parameter");
@@ -166,28 +160,26 @@ public class CatalogReader {
      * element.
      *
      * @param namespaceElement The "namespace" element.
-     *
      * @return A <prefix,uri> tuple.
-     *
      * @throws Exception If problem parsing any parameters.
      */
     protected Map.Entry namespaceTuple(Element namespaceElement)
-        throws Exception {
+            throws Exception {
         final String pre = namespaceElement.getAttribute("prefix");
         final String uri = namespaceElement.getAttribute("uri");
 
         return new Map.Entry() {
-                public Object getKey() {
-                    return pre;
-                }
+            public Object getKey() {
+                return pre;
+            }
 
-                public Object getValue() {
-                    return uri;
-                }
+            public Object getValue() {
+                return uri;
+            }
 
-                public Object setValue(Object value) {
-                    throw new UnsupportedOperationException();
-                }
-            };
+            public Object setValue(Object value) {
+                throw new UnsupportedOperationException();
+            }
+        };
     }
 }

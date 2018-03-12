@@ -40,7 +40,8 @@ public abstract class AbstractCatalogController extends RestBaseController {
 
     /**
      * Uses messages as a template to update resource.
-     * @param message Possibly incomplete ResourceInfo used to update resource
+     *
+     * @param message  Possibly incomplete ResourceInfo used to update resource
      * @param resource Original resource (to be saved in catalog after modification)
      */
     protected void calculateOptionalFields(ResourceInfo message, ResourceInfo resource, String calculate) {
@@ -90,31 +91,32 @@ public abstract class AbstractCatalogController extends RestBaseController {
     }
 
     private CoordinateReferenceSystem resolveCRS(String srs) {
-        if ( srs == null ) {
+        if (srs == null) {
             return null;
         }
         try {
             return CRS.decode(srs);
-        } catch(Exception e) {
+        } catch (Exception e) {
             throw new RuntimeException("This is unexpected, the layer seems to be mis-configured", e);
         }
     }
-    
+
     /**
      * Determines if the current user is authenticated as full administrator.
      */
     protected boolean isAuthenticatedAsAdmin() {
         return SecurityContextHolder.getContext() != null && GeoServerExtensions.bean(GeoServerSecurityManager.class).checkAuthenticationForAdminRole();
     }
-    
+
     /**
      * Validates the current user can edit the resource (full admin required if workspaceName is null)
+     *
      * @param workspaceName
      */
     protected void checkFullAdminRequired(String workspaceName) {
         // global workspaces/styles can only be edited by a full admin
         if (workspaceName == null && !isAuthenticatedAsAdmin()) {
-            throw new RestException("Cannot edit global resource , full admin credentials required", 
+            throw new RestException("Cannot edit global resource , full admin credentials required",
                     HttpStatus.METHOD_NOT_ALLOWED);
         }
     }

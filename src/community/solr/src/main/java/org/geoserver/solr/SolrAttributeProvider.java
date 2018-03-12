@@ -15,9 +15,7 @@ import org.geoserver.web.wicket.GeoServerDataProvider;
 import org.geotools.data.solr.SolrAttribute;
 
 /**
- * 
  * Provide attributes from SOLR fields
- * 
  */
 public class SolrAttributeProvider extends GeoServerDataProvider<SolrAttribute> {
 
@@ -82,7 +80,7 @@ public class SolrAttributeProvider extends GeoServerDataProvider<SolrAttribute> 
 
     /**
      * Build attribute provider
-     * 
+     *
      * @param attributes list to use as source for provider
      */
     public SolrAttributeProvider(List<SolrAttribute> attributes) {
@@ -110,7 +108,7 @@ public class SolrAttributeProvider extends GeoServerDataProvider<SolrAttribute> 
 
     /**
      * Allows to reload the provider and to show/hide empty fields
-     * 
+     *
      * @param hideEmpty if true the provider reloads but hides empty SOLR attributes
      */
     protected void reload(Boolean hideEmpty) {

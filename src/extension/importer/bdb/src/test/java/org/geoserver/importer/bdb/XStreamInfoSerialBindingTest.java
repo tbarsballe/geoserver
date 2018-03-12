@@ -36,7 +36,7 @@ public class XStreamInfoSerialBindingTest extends ImporterTestSupport {
         ImportContext context = importer.createContext(new Directory(dir));
 
         XStreamPersister xp = importer.createXStreamPersisterXML();
-        XStreamInfoSerialBinding<ImportContext> binding = 
+        XStreamInfoSerialBinding<ImportContext> binding =
                 new XStreamInfoSerialBinding<ImportContext>(xp, ImportContext.class);
         binding.setCompress(false);
 
@@ -46,9 +46,9 @@ public class XStreamInfoSerialBindingTest extends ImporterTestSupport {
         Document dom = dom(new ByteArrayInputStream(e.getData(), 0, e.getSize()));
         print(dom);
         XMLAssert.assertXpathExists("/import", dom);
-        
+
         print(dom);
-        
+
         //workspace referenced by id
         XMLAssert.assertXpathExists("/import/targetWorkspace/id", dom);
 
@@ -82,16 +82,16 @@ public class XStreamInfoSerialBindingTest extends ImporterTestSupport {
 
         DataStoreInfo ds = cat.getFactory().createDataStore();
         ds.setWorkspace(cat.getDefaultWorkspace());
-        ds.setName("spearfish"); 
+        ds.setName("spearfish");
         ds.setType("H2");
 
         Map params = new HashMap();
-        params.put("database", getTestData().getDataDirectoryRoot().getPath()+"/spearfish");
+        params.put("database", getTestData().getDataDirectoryRoot().getPath() + "/spearfish");
         params.put("dbtype", "h2");
         ds.getConnectionParameters().putAll(params);
         ds.setEnabled(true);
         cat.add(ds);
-        
+
         File dir = tmpDir();
         unpack("shape/archsites_epsg_prj.zip", dir);
         unpack("shape/bugsites_esri_prj.tar.gz", dir);
@@ -103,7 +103,7 @@ public class XStreamInfoSerialBindingTest extends ImporterTestSupport {
         XStreamPersister xp = new XStreamPersisterFactory().createXMLPersister();
         xp.getXStream().omitField(ImportTask.class, "context");
 
-        XStreamInfoSerialBinding<ImportContext> binding = 
+        XStreamInfoSerialBinding<ImportContext> binding =
                 new XStreamInfoSerialBinding<ImportContext>(xp, ImportContext.class);
         binding.setCompress(false);
 

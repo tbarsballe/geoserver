@@ -28,17 +28,16 @@ import org.springframework.mock.web.MockHttpServletResponse;
 
 /**
  * Base support class for wcs tests.
- * 
+ *
  * @author Andrea Aime, TOPP
- * 
  */
 public abstract class WCSTestSupport extends CoverageTestSupport {
     protected static XpathEngine xpath;
-    
+
     protected static final boolean IS_WINDOWS;
-    
+
     protected static final Schema WCS11_SCHEMA;
-    
+
     static {
         File wcsTestFile = new File("./schemas/wcs/1.1.1/wcsAll.xsd");
 
@@ -50,13 +49,13 @@ public abstract class WCSTestSupport extends CoverageTestSupport {
         try {
             final SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
             WCS11_SCHEMA = factory.newSchema(wcsTestFile);
-        } catch(Exception e) {
+        } catch (Exception e) {
             throw new RuntimeException("Could not parse the WCS 1.1.1 schemas", e);
         }
         boolean windows = false;
         try {
             windows = System.getProperty("os.name").matches(".*Windows.*");
-        } catch(Exception e) {
+        } catch (Exception e) {
             // no os.name? oh well, never mind
         }
         IS_WINDOWS = windows;
@@ -72,7 +71,7 @@ public abstract class WCSTestSupport extends CoverageTestSupport {
     @Override
     protected void onSetUp(SystemTestData testData) throws Exception {
         super.onSetUp(testData);
-        
+
         // init xmlunit
         Map<String, String> namespaces = new HashMap<String, String>();
         namespaces.put("wcs", "http://www.opengis.net/wcs/1.1.1");
@@ -82,16 +81,16 @@ public abstract class WCSTestSupport extends CoverageTestSupport {
         XMLUnit.setXpathNamespaceContext(new SimpleNamespaceContext(namespaces));
         xpath = XMLUnit.newXpathEngine();
     }
-    
+
     @Override
     protected boolean isMemoryCleanRequired() {
         return IS_WINDOWS;
     }
-    
+
     /**
      * Parses a multipart message from the response
-     * @param response
      *
+     * @param response
      * @throws MessagingException
      * @throws IOException
      */

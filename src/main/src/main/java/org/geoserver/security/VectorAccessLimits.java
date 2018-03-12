@@ -19,18 +19,18 @@ import org.opengis.filter.expression.PropertyName;
 
 /**
  * Describes the access limits on a vector layer
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class VectorAccessLimits extends DataAccessLimits {
     private static final long serialVersionUID = 1646981660625898503L;
-    private static FilterFactory2 FF = CommonFactoryFinder.getFilterFactory2(null); 
+    private static FilterFactory2 FF = CommonFactoryFinder.getFilterFactory2(null);
 
     /**
      * The list of attributes the user is allowed to read (will be band names for raster data)
      */
     transient List<PropertyName> readAttributes;
-    
+
     /**
      * The set of attributes the user is allowed to write on
      */
@@ -43,18 +43,14 @@ public class VectorAccessLimits extends DataAccessLimits {
 
     /**
      * Builds a new vector access limits
-     * 
-     * @param readAttributes
-     *            The list of attributes that can be read
-     * @param readFilter
-     *            Only matching features will be returned to the user
-     * @param writeAttributes
-     *            The list of attributes that can be modified
-     * @param writeFilter
-     *            Only matching features will be allowed to be created/modified/deleted
+     *
+     * @param readAttributes  The list of attributes that can be read
+     * @param readFilter      Only matching features will be returned to the user
+     * @param writeAttributes The list of attributes that can be modified
+     * @param writeFilter     Only matching features will be allowed to be created/modified/deleted
      */
     public VectorAccessLimits(CatalogMode mode, List<PropertyName> readAttributes, Filter readFilter,
-            List<PropertyName> writeAttributes, Filter writeFilter) {
+                              List<PropertyName> writeAttributes, Filter writeFilter) {
         super(mode, readFilter);
         this.readAttributes = readAttributes;
         this.writeAttributes = writeAttributes;
@@ -63,8 +59,6 @@ public class VectorAccessLimits extends DataAccessLimits {
 
     /**
      * The list of attributes the user is allowed to read
-     * 
-     *
      */
     public List<PropertyName> getReadAttributes() {
         return readAttributes;
@@ -72,8 +66,6 @@ public class VectorAccessLimits extends DataAccessLimits {
 
     /**
      * The list of attributes the user is allowed to write
-     * 
-     *
      */
     public List<PropertyName> getWriteAttributes() {
         return writeAttributes;
@@ -81,24 +73,20 @@ public class VectorAccessLimits extends DataAccessLimits {
 
     /**
      * Identifies the features the user can write onto
-     * 
-     *
      */
     public Filter getWriteFilter() {
         return writeFilter;
     }
-    
+
     /**
      * Returns a GeoTools query wrapping the read attributes and the read filter
-     *
      */
     public Query getReadQuery() {
         return buildQuery(readAttributes, readFilter);
     }
-    
+
     /**
      * Returns a GeoTools query wrapping the write attributes and the write filter
-     *
      */
     public Query getWriteQuery() {
         return buildQuery(writeAttributes, writeFilter);
@@ -106,10 +94,9 @@ public class VectorAccessLimits extends DataAccessLimits {
 
     /**
      * Returns a GeoTools query build with the provided attributes and filters
-     *
      */
     private Query buildQuery(List<PropertyName> attributes, Filter filter) {
-        if(attributes == null && (filter == null || filter == Filter.INCLUDE)) {
+        if (attributes == null && (filter == null || filter == Filter.INCLUDE)) {
             return Query.ALL;
         } else {
             Query q = new Query();
@@ -119,22 +106,22 @@ public class VectorAccessLimits extends DataAccessLimits {
             return q;
         }
     }
-    
+
     /**
      * Turns a list of {@link PropertyName} into a list of {@link String}
-     * @param names
      *
+     * @param names
      */
     List<String> flattenNames(List<PropertyName> names) {
-        if(names == null) {
+        if (names == null) {
             return null;
         }
-        
+
         List<String> result = new ArrayList<String>(names.size());
         for (PropertyName name : names) {
             result.add(name.getPropertyName());
         }
-        
+
         return result;
     }
 
@@ -144,8 +131,8 @@ public class VectorAccessLimits extends DataAccessLimits {
                 + writeAttributes + ", writeFilter=" + writeFilter + ", readFilter=" + readFilter
                 + ", mode=" + mode + "]";
     }
-    
-    
+
+
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
         in.defaultReadObject();
         readAttributes = readProperties(in);
@@ -227,7 +214,6 @@ public class VectorAccessLimits extends DataAccessLimits {
             return false;
         return true;
     }
-    
-    
+
 
 }

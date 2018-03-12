@@ -49,46 +49,47 @@ public class StoredQuery {
      * default stored query
      */
     public static final StoredQuery DEFAULT;
+
     static {
         Wfs20Factory factory = Wfs20Factory.eINSTANCE;
         StoredQueryDescriptionType desc = factory.createStoredQueryDescriptionType();
         desc.setId("urn:ogc:def:query:OGC-WFS::GetFeatureById");
-        
+
         TitleType title = factory.createTitleType();
         title.setLang("en");
         title.setValue("Get feature by identifier");
         desc.getTitle().add(title);
-        
+
         ParameterExpressionType param = factory.createParameterExpressionType();
         param.setName("ID");
         param.setType(XS.STRING);
         desc.getParameter().add(param);
-        
+
         QueryExpressionTextType text = factory.createQueryExpressionTextType();
         text.setIsPrivate(true);
         text.setReturnFeatureTypes(new ArrayList());
         text.setLanguage(StoredQueryProvider.LANGUAGE_20);
-        
-        String xml = 
-            "<wfs:Query xmlns:wfs='" + WFS.NAMESPACE + "' xmlns:fes='" + FES.NAMESPACE + "'>" + 
-              "<fes:Filter>" + 
-                "<fes:ResourceId rid = '${ID}'/>" + 
-              "</fes:Filter>" + 
-            "</wfs:Query>";
+
+        String xml =
+                "<wfs:Query xmlns:wfs='" + WFS.NAMESPACE + "' xmlns:fes='" + FES.NAMESPACE + "'>" +
+                        "<fes:Filter>" +
+                        "<fes:ResourceId rid = '${ID}'/>" +
+                        "</fes:Filter>" +
+                        "</wfs:Query>";
         text.setValue(xml);
         desc.getQueryExpressionText().add(text);
-        
+
         DEFAULT = new StoredQuery(desc, null);
     }
 
     StoredQueryDescriptionType queryDef;
     Catalog catalog;
-    
+
     public StoredQuery(StoredQueryDescriptionType query, Catalog catalog) {
         this.queryDef = query;
         this.catalog = catalog;
     }
-    
+
     /**
      * Uniquely identifying name of the stored query.
      */
@@ -107,7 +108,7 @@ public class StoredQuery {
     }
 
     /**
-     * The feature types the stored query returns result for. 
+     * The feature types the stored query returns result for.
      */
     public List<QName> getFeatureTypes() {
         List<QName> types = new ArrayList();
@@ -125,21 +126,21 @@ public class StoredQuery {
         //parse into a dom and check the typeNames.. since we don't have parameter values we can't
         // parse into a QueryType object
         //TODO: use sax
-        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance(); 
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 
         // do a non namespace aware parse... this is because we are only parsing part of the 
         // document here (the query part), and it is unlikley that any namespace prefixes are 
         // declared
         //dbf.setNamespaceAware(true);
-        
+
         DocumentBuilder db;
         try {
             db = dbf.newDocumentBuilder();
-            
+
         } catch (ParserConfigurationException e) {
             throw new IOException(e);
         }
-        
+
         for (QueryExpressionTextType qe : queryDef.getQueryExpressionText()) {
             //verify that the return feature types matched the ones specified by the actual query
             Set<QName> queryTypes = new HashSet();
@@ -157,21 +158,20 @@ public class StoredQuery {
                     Element query = (Element) queries.item(i);
                     String[] typeNames = query.getAttribute("typeNames").split(" ");
                     for (String typeName : typeNames) {
-                        queryTypes.addAll((List)new QNameKvpParser(null, catalog).parse(typeName));
+                        queryTypes.addAll((List) new QNameKvpParser(null, catalog).parse(typeName));
                     }
                 }
-            } 
-            catch (Exception e) {
+            } catch (Exception e) {
                 throw new IOException(e);
             }
 
             Set<QName> returnTypes = new HashSet(qe.getReturnFeatureTypes());
-            for (Iterator<QName> it = queryTypes.iterator(); it.hasNext();) {
+            for (Iterator<QName> it = queryTypes.iterator(); it.hasNext(); ) {
                 QName qName = it.next();
                 if (!returnTypes.contains(qName) && !isParameter(qName.getLocalPart(), queryDef.getParameter())) {
                     throw new WFSException(String.format("StoredQuery references typeName %s:%s " +
-                        "not listed in returnFeatureTypes: %s", qName.getPrefix(), 
-                        qName.getLocalPart(), toString(qe.getReturnFeatureTypes())));
+                                    "not listed in returnFeatureTypes: %s", qName.getPrefix(),
+                            qName.getLocalPart(), toString(qe.getReturnFeatureTypes())));
                 }
                 if (returnTypes.contains(qName)) {
                     returnTypes.remove(qName);
@@ -196,10 +196,10 @@ public class StoredQuery {
         for (QName qName : qNames) {
             sb.append(qName.getPrefix()).append(":").append(qName.getLocalPart()).append(", ");
         }
-        sb.setLength(sb.length()-2);
+        sb.setLength(sb.length() - 2);
         return sb.toString();
     }
-    
+
     public List<QueryType> compile(StoredQueryType query) {
         List list = new ArrayList();
 
@@ -213,12 +213,12 @@ public class StoredQuery {
                 // stored queries can be used in KVP where the parameter name is case insensitive so do a case
                 // insensitive search
                 int i = sb.toString().toLowerCase().indexOf(token.toLowerCase());
-                while(i > 0) {
+                while (i > 0) {
                     sb.replace(i, i + token.length(), p.getValue());
                     i = sb.indexOf(token, i + token.length());
                 }
             }
-            
+
             //parse
             Parser p = new Parser(new WFSConfiguration());
             //"inject" namespace mappings
@@ -227,11 +227,10 @@ public class StoredQuery {
             }
             p.getNamespaces().declarePrefix("gml", GML.NAMESPACE);
             try {
-                QueryType compiled = 
-                    (QueryType) p.parse(new ByteArrayInputStream(sb.toString().getBytes()));
+                QueryType compiled =
+                        (QueryType) p.parse(new ByteArrayInputStream(sb.toString().getBytes()));
                 list.add(compiled);
-            } 
-            catch(Exception e) {
+            } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         }

@@ -36,17 +36,15 @@ import org.springframework.util.Assert;
 /**
  * BindingLdapAuthoritiesPopulator: modified DefaultLdapAuthoritiesPopulator
  * that binds the user before extracting roles.
- * 
+ * <p>
  * Needed for Windows ActiveDirectory support and maybe other LDAP servers
  * requiring binding before searches.
- * 
+ *
  * @author "Mauro Bartolomeoli - mauro.bartolomeoli@geo-solutions.it"
- * 
  */
 public class BindingLdapAuthoritiesPopulator implements
         LdapAuthoritiesPopulator {
 
-    
 
     // ~ Static fields/initializers
     // =====================================================================================
@@ -95,16 +93,14 @@ public class BindingLdapAuthoritiesPopulator implements
     /**
      * Constructor for group search scenarios. <tt>userRoleAttributes</tt> may
      * still be set as a property.
-     * 
-     * @param contextSource
-     *            supplies the contexts used to search for user roles.
-     * @param groupSearchBase
-     *            if this is an empty string the search will be performed from
-     *            the root DN of the context factory. If null, no search will be
-     *            performed.
+     *
+     * @param contextSource   supplies the contexts used to search for user roles.
+     * @param groupSearchBase if this is an empty string the search will be performed from
+     *                        the root DN of the context factory. If null, no search will be
+     *                        performed.
      */
     public BindingLdapAuthoritiesPopulator(ContextSource contextSource,
-            String groupSearchBase) {
+                                           String groupSearchBase) {
         Assert.notNull(contextSource, "contextSource must not be null");
 
         // use a binding LdapTemplate, that doesn't make searches without
@@ -127,27 +123,24 @@ public class BindingLdapAuthoritiesPopulator implements
      * This method should be overridden if required to obtain any additional
      * roles for the given user (on top of those obtained from the standard
      * search implemented by this class).
-     * 
-     * @param user
-     *            the context representing the user who's roles are required
+     *
+     * @param user the context representing the user who's roles are required
      * @return the extra roles which will be merged with those returned by the
-     *         group search
+     * group search
      */
 
     protected Set<GrantedAuthority> getAdditionalRoles(DirContext ctx,
-            DirContextOperations user, String username) {
+                                                       DirContextOperations user, String username) {
         return null;
     }
 
     /**
      * Obtains the authorities for the user who's directory entry is represented
      * by the supplied LdapUserDetails object.
-     * 
-     * @param user
-     *            the user who's authorities are required (or user:password to
-     *            be used to bind to ldap server prior to the search
-     *            operations).
-     * 
+     *
+     * @param user the user who's authorities are required (or user:password to
+     *             be used to bind to ldap server prior to the search
+     *             operations).
      * @return the set of roles granted to the user.
      */
     public final Collection<GrantedAuthority> getGrantedAuthorities(
@@ -158,12 +151,10 @@ public class BindingLdapAuthoritiesPopulator implements
     /**
      * Obtains the authorities for the user who's directory entry is represented
      * by the supplied LdapUserDetails object.
-     * 
-     * @param user
-     *            the user who's authorities are required 
-     * @param pw be used to bind to ldap server prior to the search
-     *            operations, null otherwise
-     * 
+     *
+     * @param user the user who's authorities are required
+     * @param pw   be used to bind to ldap server prior to the search
+     *             operations, null otherwise
      * @return the set of roles granted to the user.
      */
     public final Collection<GrantedAuthority> getGrantedAuthorities(
@@ -185,7 +176,7 @@ public class BindingLdapAuthoritiesPopulator implements
 
                         @Override
                         public void executeWithContext(DirContext ctx,
-                                LdapEntryIdentification ldapEntryIdentification) {
+                                                       LdapEntryIdentification ldapEntryIdentification) {
                             getAllRoles(user, userDn, result, username, ctx);
                         }
                     });
@@ -197,7 +188,7 @@ public class BindingLdapAuthoritiesPopulator implements
     }
 
     public Set<GrantedAuthority> getGroupMembershipRoles(final DirContext ctx,
-            String userDn, String username) {
+                                                         String userDn, String username) {
         if (getGroupSearchBase() == null) {
             return new HashSet<GrantedAuthority>();
         }
@@ -215,8 +206,8 @@ public class BindingLdapAuthoritiesPopulator implements
         authTemplate = (SpringSecurityLdapTemplate) LDAPUtils
                 .getLdapTemplateInContext(ctx, ldapTemplate);
         Set<String> userRoles = authTemplate.searchForSingleAttributeValues(
-                getGroupSearchBase(), groupSearchFilter, new String[] { userDn,
-                        username }, groupRoleAttribute);
+                getGroupSearchBase(), groupSearchFilter, new String[]{userDn,
+                        username}, groupRoleAttribute);
 
         if (logger.isDebugEnabled()) {
             logger.debug("Roles from search: " + userRoles);
@@ -234,7 +225,6 @@ public class BindingLdapAuthoritiesPopulator implements
         return authorities;
     }
 
-    
 
     protected ContextSource getContextSource() {
         return ldapTemplate.getContextSource();
@@ -246,7 +236,7 @@ public class BindingLdapAuthoritiesPopulator implements
 
     /**
      * @deprecated Convert case in the {@code AuthenticationProvider} using a
-     *             {@code GrantedAuthoritiesMapper}.
+     * {@code GrantedAuthoritiesMapper}.
      */
     @Deprecated
     public void setConvertToUpperCase(boolean convertToUpperCase) {
@@ -255,11 +245,10 @@ public class BindingLdapAuthoritiesPopulator implements
 
     /**
      * The default role which will be assigned to all users.
-     * 
-     * @param defaultRole
-     *            the role name, including any desired prefix.
+     *
+     * @param defaultRole the role name, including any desired prefix.
      * @deprecated Assign a default role in the {@code AuthenticationProvider}
-     *             using a {@code GrantedAuthoritiesMapper}.
+     * using a {@code GrantedAuthoritiesMapper}.
      */
     @Deprecated
     public void setDefaultRole(String defaultRole) {
@@ -282,9 +271,9 @@ public class BindingLdapAuthoritiesPopulator implements
     /**
      * Sets the prefix which will be prepended to the values loaded from the
      * directory. Defaults to "ROLE_" for compatibility with <tt>RoleVoter/tt>.
-     * 
+     *
      * @deprecated Map the authorities in the {@code AuthenticationProvider}
-     *             using a {@code GrantedAuthoritiesMapper}.
+     * using a {@code GrantedAuthoritiesMapper}.
      */
     @Deprecated
     public void setRolePrefix(String rolePrefix) {
@@ -295,10 +284,9 @@ public class BindingLdapAuthoritiesPopulator implements
     /**
      * If set to true, a subtree scope search will be performed. If false a
      * single-level search is used.
-     * 
-     * @param searchSubtree
-     *            set to true to enable searching of the entire tree below the
-     *            <tt>groupSearchBase</tt>.
+     *
+     * @param searchSubtree set to true to enable searching of the entire tree below the
+     *                      <tt>groupSearchBase</tt>.
      */
     public void setSearchSubtree(boolean searchSubtree) {
         int searchScope = searchSubtree ? SearchControls.SUBTREE_SCOPE
@@ -309,7 +297,7 @@ public class BindingLdapAuthoritiesPopulator implements
     /**
      * Sets the corresponding property on the underlying template, avoiding
      * specific issues with Active Directory.
-     * 
+     *
      * @see LdapTemplate#setIgnoreNameNotFoundException(boolean)
      */
     public void setIgnorePartialResultException(boolean ignore) {
@@ -317,8 +305,8 @@ public class BindingLdapAuthoritiesPopulator implements
     }
 
     private void getAllRoles(final DirContextOperations user,
-            final String userDn, final List<GrantedAuthority> result,
-            final String userName, DirContext ctx) {
+                             final String userDn, final List<GrantedAuthority> result,
+                             final String userName, DirContext ctx) {
         Set<GrantedAuthority> roles = getGroupMembershipRoles(ctx, userDn,
                 userName);
 

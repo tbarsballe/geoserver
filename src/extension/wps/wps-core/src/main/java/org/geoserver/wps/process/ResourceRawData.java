@@ -12,7 +12,7 @@ import org.geoserver.platform.resource.Resource;
 
 /**
  * An implementation of RawData backed by a Resource
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class ResourceRawData extends AbstractRawData {

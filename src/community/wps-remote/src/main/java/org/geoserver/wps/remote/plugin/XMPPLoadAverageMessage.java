@@ -24,13 +24,14 @@ import net.sf.json.JSONSerializer;
 
 /**
  * Listens for "LOADAVG" messages from XMPP service channels and takes action accordingly.
- * 
+ *
  * @author Alessio Fabiani, GeoSolutions
- * 
  */
 public class XMPPLoadAverageMessage implements XMPPMessage {
 
-    /** The LOGGER */
+    /**
+     * The LOGGER
+     */
     public static final Logger LOGGER = Logging.getLogger(XMPPMessage.class.getPackage().getName());
 
     @Override
@@ -42,7 +43,7 @@ public class XMPPLoadAverageMessage implements XMPPMessage {
 
     @Override
     public void handleSignal(XMPPClient xmppClient, Packet packet, Message message,
-            Map<String, String> signalArgs) {
+                             Map<String, String> signalArgs) {
 
         final String serviceJID = (message != null ? message.getFrom() : packet.getFrom());
 
@@ -84,14 +85,14 @@ public class XMPPLoadAverageMessage implements XMPPMessage {
                                     try {
                                         final Object value = (resultParams
                                                 .get(key + "_value") != null
-                                                        ? resultParams.get(key + "_value") : null);
+                                                ? resultParams.get(key + "_value") : null);
                                         final String description = (resultParams
                                                 .get(key + "_description") != null
                                                 && resultParams.get(result.getKey()
-                                                        + "_description") instanceof String
-                                                                ? (String) resultParams
-                                                                        .get(key + "_description")
-                                                                : null);
+                                                + "_description") instanceof String
+                                                ? (String) resultParams
+                                                .get(key + "_description")
+                                                : null);
 
                                         if ("vmem".equalsIgnoreCase(key)) {
                                             registeredProcessingMachine

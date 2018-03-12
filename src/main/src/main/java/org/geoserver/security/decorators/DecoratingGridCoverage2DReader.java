@@ -28,7 +28,7 @@ import org.opengis.referencing.operation.MathTransform;
 /**
  * Delegates every method to the delegate grid coverage reader. Subclasses will
  * override selected methods to perform their "decoration" job
- * 
+ *
  * @author Andrea Aime
  */
 public abstract class DecoratingGridCoverage2DReader implements GridCoverage2DReader {
@@ -140,7 +140,7 @@ public abstract class DecoratingGridCoverage2DReader implements GridCoverage2DRe
     }
 
     public double[] getReadingResolutions(String coverageName, OverviewPolicy policy,
-            double[] requestedResolution) throws IOException {
+                                          double[] requestedResolution) throws IOException {
         return delegate.getReadingResolutions(coverageName, policy, requestedResolution);
     }
 

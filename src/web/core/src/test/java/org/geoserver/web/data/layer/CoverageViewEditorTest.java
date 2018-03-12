@@ -66,7 +66,7 @@ public class CoverageViewEditorTest extends GeoServerWicketTestSupport {
         formTester.setValue("name", "bands_index_coverage_test");
         formTester.submit("save");
     }
-    
+
     @Test
     public void testMultiBandsIndexIsVisible() throws Exception {
         // perform the login as administrator

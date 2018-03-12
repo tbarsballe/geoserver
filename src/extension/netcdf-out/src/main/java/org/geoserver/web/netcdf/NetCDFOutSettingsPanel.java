@@ -13,9 +13,7 @@ import org.geoserver.web.data.settings.SettingsPluginPanel;
 import org.geoserver.web.util.MetadataMapModel;
 
 /**
- *
  * @author Nicola Lagomarsini Geosolutions S.A.S.
- * 
  */
 public class NetCDFOutSettingsPanel extends SettingsPluginPanel {
 

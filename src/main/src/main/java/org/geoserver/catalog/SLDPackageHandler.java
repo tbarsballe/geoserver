@@ -18,9 +18,8 @@ import java.util.zip.ZipOutputStream;
 
 /**
  * SLD package style handler.
- * 
- * @author Jose García
  *
+ * @author Jose García
  */
 public class SLDPackageHandler extends StyleHandler {
 
@@ -45,13 +44,10 @@ public class SLDPackageHandler extends StyleHandler {
     @Override
     public StyledLayerDescriptor parse(Object input, Version version, ResourceLocator resourceLocator, EntityResolver entityResolver) throws IOException {
         File sldFile = null;
-        try
-        {
+        try {
             sldFile = unzipSldPackage(input);
             return sldHandler.parse(sldFile, version, resourceLocator, entityResolver);
-        }
-        finally
-        {
+        } finally {
             if (sldFile != null) FileUtils.deleteQuietly(sldFile.getParentFile());
         }
     }
@@ -65,13 +61,10 @@ public class SLDPackageHandler extends StyleHandler {
     @Override
     public List<Exception> validate(Object input, Version version, EntityResolver entityResolver) throws IOException {
         File sldFile = null;
-        try
-        {
+        try {
             sldFile = unzipSldPackage(input);
             return sldHandler.validate(input, version, entityResolver);
-        }
-        finally
-        {
+        } finally {
             if (sldFile != null) FileUtils.deleteQuietly(sldFile.getParentFile());
         }
     }
@@ -80,7 +73,6 @@ public class SLDPackageHandler extends StyleHandler {
      * Unzips a SLD package to a temporal folder, returning the SLD file path.
      *
      * @param input
-     *
      * @throws IOException
      */
     private File unzipSldPackage(Object input) throws IOException {

@@ -26,7 +26,7 @@ import org.springframework.util.Assert;
 
 /**
  * OWS {@link Response} that encodes a {@link BufferedImageLegendGraphic} to the image/png MIME Type
- * 
+ *
  * @author Gabriel Roldan
  * @version $Id$
  */
@@ -37,10 +37,8 @@ public class PNGLegendGraphicResponse extends AbstractGetLegendGraphicResponse {
     }
 
     /**
-     * @param legend
-     *            a {@link BufferedImageLegendGraphic}
-     * @param output
-     *            png image destination
+     * @param legend a {@link BufferedImageLegendGraphic}
+     * @param output png image destination
      * @see GetLegendGraphicProducer#writeTo(java.io.OutputStream)
      */
     @Override

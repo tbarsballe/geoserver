@@ -39,7 +39,7 @@ public class DescribeCoverageTest extends WCSTestSupport {
     public static QName NO_RANGE = new QName(MockData.WCS_URI, "NoRange", MockData.WCS_PREFIX);
     private static final QName SF_RAIN = new QName(MockData.SF_URI, "rain", MockData.SF_PREFIX);
     private static final QName GS_RAIN = new QName(MockData.DEFAULT_URI, "rain", MockData.DEFAULT_PREFIX);
-    
+
     // @Override
     // protected String getDefaultLogConfiguration() {
     // return "/DEFAULT_LOGGING.properties";
@@ -83,7 +83,7 @@ public class DescribeCoverageTest extends WCSTestSupport {
         assertEquals("MissingParameterValue", element.getAttribute("exceptionCode"));
         assertEquals("identifiers", element.getAttribute("locator"));
     }
-    
+
     @Test
     public void testDescribeByIdentifiers() throws Exception {
         String queryString = "&request=getcoverage&service=wcs&version=1.1.1&&format=image/geotiff"
@@ -92,7 +92,7 @@ public class DescribeCoverageTest extends WCSTestSupport {
         Document dom = getAsDOM("wcs?request=GetCapabilities&service=WCS");
         NodeList nodes = xpath.getMatchingNodes("//wcs:CoverageSummary/wcs:Identifier[text()[contains(.,'rain')]]", dom);
         assertTrue(nodes.getLength() >= 2);
-        
+
         for (int i = 0; i < nodes.getLength(); i++) {
             String identifier = nodes.item(i).getTextContent();
             dom = getAsDOM("wcs?request=DescribeCoverage&service=WCS&version=1.1.1&identifiers="

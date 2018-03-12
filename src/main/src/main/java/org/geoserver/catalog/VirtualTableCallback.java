@@ -17,7 +17,7 @@ public class VirtualTableCallback implements FeatureTypeCallback {
 
     @Override
     public boolean canHandle(FeatureTypeInfo info,
-            DataAccess<? extends FeatureType, ? extends Feature> dataAccess) {
+                             DataAccess<? extends FeatureType, ? extends Feature> dataAccess) {
         return dataAccess instanceof JDBCDataStore
                 && info.getMetadata() != null
                 && (info.getMetadata().get(FeatureTypeInfo.JDBC_VIRTUAL_TABLE) instanceof VirtualTable);
@@ -26,7 +26,7 @@ public class VirtualTableCallback implements FeatureTypeCallback {
 
     @Override
     public boolean initialize(FeatureTypeInfo info,
-            DataAccess<? extends FeatureType, ? extends Feature> dataAccess, Name temporaryName)
+                              DataAccess<? extends FeatureType, ? extends Feature> dataAccess, Name temporaryName)
             throws IOException {
         JDBCDataStore jstore = (JDBCDataStore) dataAccess;
         VirtualTable vt = info.getMetadata().get(FeatureTypeInfo.JDBC_VIRTUAL_TABLE,
@@ -55,19 +55,19 @@ public class VirtualTableCallback implements FeatureTypeCallback {
                 jstore.createVirtualTable(vt);
             }
         }
-        
+
         return false;
     }
 
     @Override
     public void flush(FeatureTypeInfo info,
-            DataAccess<? extends FeatureType, ? extends Feature> dataAccess) throws IOException {
+                      DataAccess<? extends FeatureType, ? extends Feature> dataAccess) throws IOException {
         // nothing to do
     }
 
     @Override
     public void dispose(FeatureTypeInfo info,
-            DataAccess<? extends FeatureType, ? extends Feature> dataAccess, Name temporaryName)
+                        DataAccess<? extends FeatureType, ? extends Feature> dataAccess, Name temporaryName)
             throws IOException {
         JDBCDataStore ds = (JDBCDataStore) dataAccess;
         if (temporaryName != null) {

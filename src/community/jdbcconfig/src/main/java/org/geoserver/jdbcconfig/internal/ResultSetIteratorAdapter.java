@@ -26,7 +26,7 @@ public class ResultSetIteratorAdapter<T extends CatalogInfo> implements Closeabl
     private boolean hasNext;
 
     public ResultSetIteratorAdapter(final Connection connection, final ResultSet resultSet,
-            final RowMapper<T> rowMapper) {
+                                    final RowMapper<T> rowMapper) {
 
         this.connection = connection;
         this.resultSet = resultSet;

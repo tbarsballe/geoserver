@@ -8,8 +8,8 @@ package org.geoserver.test;
 
 /**
  * Mock data for testing feature chaining with simple content type (gml:name).
- * @author Rini Angreani, CSIRO Earth Science and Resource Engineering
  *
+ * @author Rini Angreani, CSIRO Earth Science and Resource Engineering
  */
 public class SimpleAttributeFeatureChainMockData extends AbstractAppSchemaMockData {
 

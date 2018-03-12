@@ -35,7 +35,7 @@ import org.geotools.data.aggregate.SourceType;
 /**
  * Handles layer group
  */
-@SuppressWarnings({ "rawtypes", "unchecked", "serial" })
+@SuppressWarnings({"rawtypes", "unchecked", "serial"})
 public abstract class AbstractConfigPage extends GeoServerSecuredPage {
 
     AggregateStoreEditPanel master;
@@ -57,7 +57,7 @@ public abstract class AbstractConfigPage extends GeoServerSecuredPage {
     private TextField name;
 
     private AggregateTypeConfiguration originalConfig;
-    
+
 
     public AbstractConfigPage(AggregateStoreEditPanel master) {
         this.master = master;
@@ -65,7 +65,7 @@ public abstract class AbstractConfigPage extends GeoServerSecuredPage {
 
     /**
      * Subclasses must call this method to initialize the UI for this page
-     * 
+     *
      * @param layerGroup
      */
     protected void initUI(AggregateTypeConfiguration config) {
@@ -79,7 +79,7 @@ public abstract class AbstractConfigPage extends GeoServerSecuredPage {
         name.setOutputMarkupId(true);
         name.setRequired(true);
         form.add(name);
-        
+
         sources = new WebMarkupContainer("sources");
         sources.setOutputMarkupId(true);
         form.add(sources);
@@ -87,7 +87,7 @@ public abstract class AbstractConfigPage extends GeoServerSecuredPage {
         stores = new DropDownChoice<StoreInfo>("stores",
                 new Model(null), new StoreListModel(), new StoreListChoiceRenderer());
         stores.add(new AjaxFormComponentUpdatingBehavior("change") {
-            
+
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
                 types.setChoices(new TypeListModel(stores.getModel()));
@@ -107,20 +107,20 @@ public abstract class AbstractConfigPage extends GeoServerSecuredPage {
                 addLink.setEnabled(stores.getModelObject() != null && types.getModelObject() != null);
                 target.add(addLink);
             }
-            
+
         });
         addLink = addConfigLink();
         addLink.setOutputMarkupId(true);
         addLink.setEnabled(false);
         sources.add(addLink);
-        
+
         sourceTypes = new GeoServerTablePanel<SourceType>(
                 "sourceTypes", new SourceTypeProvider(configModel)) {
 
             @Override
             protected Component getComponentForProperty(String id, IModel<SourceType> itemModel,
-                    Property<SourceType> property) {
-                if(property.getName().equals("default")) {
+                                                        Property<SourceType> property) {
+                if (property.getName().equals("default")) {
                     return new Label(id, property.getModel(itemModel));
                 } else if (property.getName().equals("makeDefault")) {
                     return makeDefaultLink(id, itemModel);
@@ -141,7 +141,7 @@ public abstract class AbstractConfigPage extends GeoServerSecuredPage {
 
     protected Component removeLink(String id, IModel itemModel) {
         SimpleAjaxLink link = new SimpleAjaxLink(id, itemModel, new ParamResourceModel("remove", this)) {
-            
+
             @Override
             protected void onClick(AjaxRequestTarget target) {
                 // remove the link
@@ -153,10 +153,10 @@ public abstract class AbstractConfigPage extends GeoServerSecuredPage {
         };
         return link;
     }
-    
+
     protected Component makeDefaultLink(String id, IModel itemModel) {
         return new SimpleAjaxLink(id, itemModel, new ParamResourceModel("makeDefault", this)) {
-            
+
             @Override
             protected void onClick(AjaxRequestTarget target) {
                 // remove the link
@@ -179,7 +179,7 @@ public abstract class AbstractConfigPage extends GeoServerSecuredPage {
                 stores.setModelObject(null);
                 types.setModelObject(null);
                 config.addSourceType(storeName, typeName);
-                if(name.getModelObject() == null || "".equals(name.getModelObject())) {
+                if (name.getModelObject() == null || "".equals(name.getModelObject())) {
                     name.setModelObject(typeName);
                     target.add(name);
                 }
@@ -206,9 +206,9 @@ public abstract class AbstractConfigPage extends GeoServerSecuredPage {
             public void onSubmit() {
                 AggregateTypeConfiguration config = form.getModelObject();
                 List<SourceType> stypes = config.getSourceTypes();
-                if(stypes == null || stypes.size() == 0) {
+                if (stypes == null || stypes.size() == 0) {
                     error(new ParamResourceModel("atLeastOneSource", AbstractConfigPage.this).getString());
-                } else  if (AbstractConfigPage.this.onSubmit()) {
+                } else if (AbstractConfigPage.this.onSubmit()) {
                     originalConfig.copyFrom(config);
                     setResponsePage(master.getPage());
                 }

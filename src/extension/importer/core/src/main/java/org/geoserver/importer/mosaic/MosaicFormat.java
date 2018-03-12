@@ -41,7 +41,7 @@ public class MosaicFormat extends GridFormat {
 
     @Override
     public List<ImportTask> list(ImportData data, Catalog catalog, ProgressMonitor monitor) throws IOException {
-        
+
         List<ImportTask> tasks = super.list(data, catalog, monitor);
 
         Mosaic m = (Mosaic) data;
@@ -58,7 +58,7 @@ public class MosaicFormat extends GridFormat {
                 r.getMetadata().put(ResourceInfo.TIME, dim);
             }
         }
-        
+
         return tasks;
     }
 }

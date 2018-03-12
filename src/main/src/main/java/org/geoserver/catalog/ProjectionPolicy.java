@@ -38,9 +38,8 @@ public enum ProjectionPolicy {
     /**
      * Looks up the projection policy by code, if the lookup fails the default,
      * {@link #FORCE_DECLARED}, is returned.
-     * 
-     * @param code
      *
+     * @param code
      */
     public static ProjectionPolicy get(Integer code) {
         if (code == null)

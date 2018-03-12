@@ -14,7 +14,7 @@ import org.opengis.filter.Filter;
 
 /**
  * Utility class for dealing with ECQL/CQL.
- * 
+ *
  * @author Justin Deoliveira, OpenGeo
  */
 public class XCQL {
@@ -24,20 +24,18 @@ public class XCQL {
      * <p>
      * This method first attempts to parse as ECQL, and on an error falls back to CQL.
      * </p>
+     *
      * @param filter The ecql/cql string.
-     * 
      * @see ECQL#toFilterList(String)
      */
     public static List<Filter> toFilterList(String filter) throws CQLException {
         try {
             return ECQL.toFilterList(filter);
-        }
-        catch(CQLException e) {
+        } catch (CQLException e) {
             //failed to parse as ecql, attempt to fall back on to CQL
             try {
                 return CQL.toFilterList(filter);
-            }
-            catch(CQLException e1) {
+            } catch (CQLException e1) {
                 //throw back original exception
             }
             throw e;
@@ -49,20 +47,18 @@ public class XCQL {
      * <p>
      * This method first attempts to parse as ECQL, and on an error falls back to CQL.
      * </p>
+     *
      * @param filter The ecql/cql string.
-     * 
      * @see ECQL#toFilter(String)
      */
     public static Filter toFilter(String filter) throws CQLException {
         try {
             return ECQL.toFilter(filter);
-        }
-        catch(CQLException e) {
+        } catch (CQLException e) {
             //failed to parse as ecql, attempt to fall back on to CQL
             try {
                 return CQL.toFilter(filter);
-            }
-            catch(CQLException e1) {
+            } catch (CQLException e1) {
                 //throw back original exception
             }
             throw e;

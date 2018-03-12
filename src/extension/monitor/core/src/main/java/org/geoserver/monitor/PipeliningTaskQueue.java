@@ -24,26 +24,25 @@ import java.util.logging.Logger;
 import org.geotools.util.logging.Logging;
 
 /**
- * A task queue that groups tasks by key and ensures that tasks with same key 
+ * A task queue that groups tasks by key and ensures that tasks with same key
  * execute serially.
- * 
- * @author Justin Deoliveira, OpenGeo
  *
  * @param <K> The key type.
+ * @author Justin Deoliveira, OpenGeo
  */
 public class PipeliningTaskQueue<K> implements Runnable {
 
     static Logger LOGGER = Logging.getLogger("org.geoserver.monitor");
-    
+
     ConcurrentHashMap<K, Queue<Pipelineable<K>>> pipelines;
     ScheduledExecutorService executor;
     ExecutorService tasks;
-    
+
     public PipeliningTaskQueue() {
         pipelines = new ConcurrentHashMap();
         tasks = Executors.newCachedThreadPool();
     }
-    
+
     public void start() {
         executor = Executors.newScheduledThreadPool(4);
         executor.scheduleAtFixedRate(this, 0, 10, TimeUnit.MILLISECONDS);
@@ -51,19 +50,19 @@ public class PipeliningTaskQueue<K> implements Runnable {
         executor.scheduleAtFixedRate(this, 0, 10, TimeUnit.MILLISECONDS);
         executor.scheduleAtFixedRate(this, 0, 10, TimeUnit.MILLISECONDS);
     }
-    
+
     public void stop() {
         executor.shutdown();
         executor = null;
-        
+
         tasks.shutdown();
         tasks = null;
     }
-    
+
     public void execute(K key, Runnable task) {
         execute(key, task, "");
     }
-    
+
     public void execute(K key, Runnable task, String desc) {
         Queue<Pipelineable<K>> pipeline = pipelines.get(key);
         if (pipeline == null) {
@@ -75,30 +74,31 @@ public class PipeliningTaskQueue<K> implements Runnable {
                 }
             }
         }
-        
+
         if (LOGGER.isLoggable(Level.FINEST)) {
             LOGGER.finest("Queuing task into pipeline " + key);
         }
         pipeline.add(new Pipelineable<K>(key, task));
     }
-    
-    
+
+
     public void clear(K key) {
         pipelines.remove(key);
     }
-    
+
     public void shutdown() {
         executor.shutdown();
         tasks.shutdown();
-        
+
     }
+
     public void run() {
-        
+
         for (Queue<Pipelineable<K>> pipeline : pipelines.values()) {
             Pipelineable<K> job = pipeline.peek();
             if (job != null) {
                 if (!job.lock.tryLock()) continue; //another thread already handling this job
-                
+
                 if (job.future != null) {
                     //job has been submitted, if it is done remove it from 
                     // the queue
@@ -108,42 +108,41 @@ public class PipeliningTaskQueue<K> implements Runnable {
                         }
                         pipeline.remove();
                     }
-                }
-                else {
+                } else {
                     //start the job
                     if (LOGGER.isLoggable(Level.FINEST)) {
                         LOGGER.finest("Executing task in queue " + job.key);
                     }
                     job.future = tasks.submit(job.task);
                 }
-                
+
                 job.lock.unlock();
             }
         }
-     }
-    
+    }
+
     public class Pipelineable<K> {
-        
+
         K key;
         Runnable task;
         Future<?> future;
         Lock lock;
         String desc;
-        
+
         public Pipelineable(K key, Runnable task) {
             this.key = key;
             this.task = task;
             this.lock = new ReentrantLock();
         }
     }
- 
+
     public void print() {
-       for (Map.Entry<K, Queue<Pipelineable<K>>> e : pipelines.entrySet()) {
-           System.out.print(e.getKey());
-           for (Pipelineable<K> p : e.getValue()) {
-               System.out.print(p.desc + " ");
-           }
-           System.out.println();
-       }
+        for (Map.Entry<K, Queue<Pipelineable<K>>> e : pipelines.entrySet()) {
+            System.out.print(e.getKey());
+            for (Pipelineable<K> p : e.getValue()) {
+                System.out.print(p.desc + " ");
+            }
+            System.out.println();
+        }
     }
 }

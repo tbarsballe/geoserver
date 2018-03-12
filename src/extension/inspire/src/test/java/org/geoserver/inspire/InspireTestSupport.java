@@ -7,12 +7,15 @@ package org.geoserver.inspire;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import org.geoserver.catalog.MetadataMap;
 import org.geoserver.config.ServiceInfo;
+
 import static org.geoserver.inspire.InspireSchema.COMMON_NAMESPACE;
 import static org.geoserver.inspire.InspireSchema.DLS_NAMESPACE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
@@ -36,7 +39,7 @@ public class InspireTestSupport {
     }
 
     public static void assertInspireCommonScenario1Response(final Element extendedCapabilities,
-            final String metadataUrl, final String mediaType, final String language) {
+                                                            final String metadataUrl, final String mediaType, final String language) {
 
         NodeList nodeList = extendedCapabilities.getElementsByTagNameNS(COMMON_NAMESPACE, "MetadataUrl");
         assertEquals("Number of MetadataUrl elements", 1, nodeList.getLength());
@@ -69,7 +72,7 @@ public class InspireTestSupport {
     }
 
     public static void assertInspireMetadataUrlResponse(final Element mdUrl,
-            final String metadataUrl, final String mediaType) {
+                                                        final String metadataUrl, final String mediaType) {
 
         NodeList nodeList = mdUrl.getElementsByTagNameNS(COMMON_NAMESPACE, "URL");
         assertEquals("Number of URL elements", 1, nodeList.getLength());

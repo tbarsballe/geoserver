@@ -12,7 +12,7 @@ public class S3BlobStoreType implements BlobStoreType<S3BlobStoreInfo> {
     private static final long serialVersionUID = 7349157660150568235L;
 
     @Override
-    public String toString(){
+    public String toString() {
         return "S3 BlobStore";
     }
 

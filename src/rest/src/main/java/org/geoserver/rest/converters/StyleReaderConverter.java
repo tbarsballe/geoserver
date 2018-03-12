@@ -28,7 +28,7 @@ public class StyleReaderConverter extends BaseMessageConverter<Style> {
     private final EntityResolver entityResolver;
 
     public StyleReaderConverter(String mimeType, Version version, StyleHandler handler,
-            EntityResolver entityResolver) {
+                                EntityResolver entityResolver) {
         super(MediaType.valueOf(mimeType));
         this.handler = handler;
         this.version = version;

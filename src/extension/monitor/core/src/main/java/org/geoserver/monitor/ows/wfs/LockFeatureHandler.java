@@ -23,19 +23,19 @@ public class LockFeatureHandler extends WFSRequestObjectHandler {
     @Override
     public List<String> getLayers(Object request) {
         @SuppressWarnings("unchecked")
-        List<Object> locks = (List<Object>) EMFUtils.get((EObject)request, "lock");
+        List<Object> locks = (List<Object>) EMFUtils.get((EObject) request, "lock");
         if (locks == null) {
             return null;
         }
-        
+
         List<String> layers = new ArrayList<String>();
         for (Object lock : locks) {
-            layers.add(toString(EMFUtils.get((EObject)lock, "typeName")));
+            layers.add(toString(EMFUtils.get((EObject) lock, "typeName")));
         }
-        
+
         return layers;
     }
-    
+
 
     @SuppressWarnings("unchecked")
     @Override

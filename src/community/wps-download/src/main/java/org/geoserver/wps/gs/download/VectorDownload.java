@@ -40,30 +40,33 @@ import com.vividsolutions.jts.geom.Geometry;
 /**
  * The class that does the real work of checking if we are exceeeding the download limits for vector data. Also this class writes the features in the
  * output file.
- * 
+ *
  * @author Simone Giannecchini, GeoSolutions SAS
- * 
  */
 class VectorDownload {
 
     private static final Logger LOGGER = Logging.getLogger(VectorDownload.class);
 
-    /** The {@link DownloadServiceConfiguration} object containing the configured limits. */
+    /**
+     * The {@link DownloadServiceConfiguration} object containing the configured limits.
+     */
     private DownloadServiceConfiguration limits;
 
-    /** The resource manager for handling the used resources. */
+    /**
+     * The resource manager for handling the used resources.
+     */
     private WPSResourceManager resourceManager;
 
     private ApplicationContext context;
 
     /**
      * Constructor, takes a {@link DownloadServiceConfiguration} and a {@link WPSResourceManager}.
-     * 
-     * @param limits the {@link DownloadServiceConfiguration} to check for not exceeding the download limits.
+     *
+     * @param limits          the {@link DownloadServiceConfiguration} to check for not exceeding the download limits.
      * @param resourceManager the {@link WPSResourceManager} to handle generated resources
      */
     public VectorDownload(DownloadServiceConfiguration limits, WPSResourceManager resourceManager,
-            ApplicationContext context) {
+                          ApplicationContext context) {
         this.limits = limits;
         this.resourceManager = resourceManager;
         this.context = context;
@@ -78,20 +81,19 @@ class VectorDownload {
      * <li>Writes the result</li>
      * <li>Cleanup the generated coverages</li>
      * </ul>
-     * 
-     * 
-     * @param resourceInfo the {@link FeatureTypeInfo} to download from
-     * @param mimeType the mme-type for the requested output format
-     * @param roi the {@link Geometry} for the clip/intersection
-     * @param clip whether or not to clip the resulting data (useless for the moment)
-     * @param filter the {@link Filter} to load the data
-     * @param targetCRS the reproject {@link CoordinateReferenceSystem}
+     *
+     * @param resourceInfo     the {@link FeatureTypeInfo} to download from
+     * @param mimeType         the mme-type for the requested output format
+     * @param roi              the {@link Geometry} for the clip/intersection
+     * @param clip             whether or not to clip the resulting data (useless for the moment)
+     * @param filter           the {@link Filter} to load the data
+     * @param targetCRS        the reproject {@link CoordinateReferenceSystem}
      * @param progressListener
      * @return a file, given the provided mime-type.
      */
     public Resource execute(FeatureTypeInfo resourceInfo, String mimeType, Geometry roi, boolean clip,
-            Filter filter, CoordinateReferenceSystem targetCRS,
-            final ProgressListener progressListener) throws Exception {
+                            Filter filter, CoordinateReferenceSystem targetCRS,
+                            final ProgressListener progressListener) throws Exception {
 
         // prepare native CRS
         CoordinateReferenceSystem nativeCRS = DownloadUtilities.getNativeCRS(resourceInfo);
@@ -208,21 +210,21 @@ class VectorDownload {
 
     /**
      * Write vector output with the provided PPIO. It returns the {@link File} it writes to.
-     * 
+     *
      * @param features {@link SimpleFeatureCollection} containing the features to write
-     * @param name name of the feature source
+     * @param name     name of the feature source
      * @param mimeType mimetype of the result
      * @return a {@link File} containing the written features
      */
     private Resource writeVectorOutput(final SimpleFeatureCollection features, final String name,
-            final String mimeType) throws Exception {
+                                       final String mimeType) throws Exception {
 
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.log(Level.FINE, "Writing features");
         }
         // Search a proper PPIO
         ProcessParameterIO ppio_ = DownloadUtilities.find(new Parameter<SimpleFeatureCollection>(
-"fakeParam", SimpleFeatureCollection.class),
+                        "fakeParam", SimpleFeatureCollection.class),
                 context, mimeType, false);
         if (ppio_ == null) {
             throw new ProcessException("Don't know how to encode in mime type " + mimeType);

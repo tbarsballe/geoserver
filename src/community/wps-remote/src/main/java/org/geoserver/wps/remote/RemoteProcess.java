@@ -19,31 +19,44 @@ import org.opengis.util.ProgressListener;
 
 /**
  * Stub for the remote processes generated at run-time by the {@link RemoteProcessFactory} upon a {@link RemoteProcessClient} registration request.
- * 
+ *
  * @author Alessio Fabiani, GeoSolutions
- * 
  */
 public class RemoteProcess implements Process, RemoteProcessClientListener {
 
-    /** The LOGGER. */
+    /**
+     * The LOGGER.
+     */
     private static final Logger LOGGER = Logging.getLogger(RemoteProcess.class);
 
-    /** Check execution status every 10 seconds */
+    /**
+     * Check execution status every 10 seconds
+     */
     private static final long SIGNAL_TIMEOUT = 10;
 
-    /** The Process Name; declared by the remote service */
+    /**
+     * The Process Name; declared by the remote service
+     */
     private Name name;
 
-    /** The {@link RemoteProcessClient} */
+    /**
+     * The {@link RemoteProcessClient}
+     */
     private RemoteProcessClient remoteClient;
 
-    /** A generic kvp map containing client specific implementation properties */
+    /**
+     * A generic kvp map containing client specific implementation properties
+     */
     private Map<String, Object> metadata;
 
-    /** The Process Outputs; declared by the remote service */
+    /**
+     * The Process Outputs; declared by the remote service
+     */
     private Map<String, Object> outputs;
 
-    /** Whether the Process is still running or not */
+    /**
+     * Whether the Process is still running or not
+     */
     private boolean running;
 
     /**
@@ -52,7 +65,9 @@ public class RemoteProcess implements Process, RemoteProcessClientListener {
      */
     private String pid;
 
-    /** The progess listrener. */
+    /**
+     * The progess listrener.
+     */
     private ProgressListener listener;
 
     /**
@@ -60,19 +75,21 @@ public class RemoteProcess implements Process, RemoteProcessClientListener {
      */
     private Exception exception;
 
-    /** The semaphore */
+    /**
+     * The semaphore
+     */
     CountDownLatch doneSignal = new CountDownLatch(1);
 
     /**
      * Constructs a new stub for the {@link RemoteProcess} execution. Metadata is a kvp map containing specific properties of the
      * {@link RemoteProcessClient} instance
-     * 
+     *
      * @param name
      * @param remoteClient
      * @param metadata
      */
     public RemoteProcess(Name name, RemoteProcessClient remoteClient,
-            Map<String, Object> metadata) {
+                         Map<String, Object> metadata) {
         this.name = name;
         this.remoteClient = remoteClient;
         this.metadata = metadata;
@@ -111,9 +128,9 @@ public class RemoteProcess implements Process, RemoteProcessClientListener {
                 doneSignal.await(SIGNAL_TIMEOUT, TimeUnit.SECONDS);
             }
             LOGGER.info("Stopping the execution of Remote Process with pId [" + pid + "]");
-            
+
             // TODO: Forward Cancel/Expiration signal to RemoteClient
-            
+
         } catch (Exception e) {
             if (listener != null) {
                 listener.exceptionOccurred(e);

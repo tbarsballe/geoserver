@@ -19,13 +19,13 @@ import org.opengis.feature.type.PropertyDescriptor;
  * A provider to show data attributes, sample values and some eventual stats
  */
 class DataAttributesProvider extends GeoServerDataProvider<DataAttribute> {
-    
+
     static final String COMPUTE_STATS = "computeStats";
 
     static final int MAX_SAMPLE_LENGTH = 200;
-    
+
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 3228269047960562646L;
     private final List<DataAttribute> attributes;
@@ -36,7 +36,7 @@ class DataAttributesProvider extends GeoServerDataProvider<DataAttribute> {
             Name name = pd.getName();
             Object value = sample.getProperty(name).getValue();
             String sampleValue = Converters.convert(value, String.class);
-            if(sampleValue != null && sampleValue.length() > MAX_SAMPLE_LENGTH) {
+            if (sampleValue != null && sampleValue.length() > MAX_SAMPLE_LENGTH) {
                 sampleValue = sampleValue.substring(0, MAX_SAMPLE_LENGTH - 3) + "...";
             }
             String typeName = pd.getType().getBinding().getSimpleName();

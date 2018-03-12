@@ -15,9 +15,8 @@ import com.google.common.cache.Cache;
 
 /**
  * Test class for the {@link JDBCCacheProvider}
- * 
- * @author Nicola Lagomarsini geosolutions
  *
+ * @author Nicola Lagomarsini geosolutions
  */
 public class JDBCCacheProviderTest {
 

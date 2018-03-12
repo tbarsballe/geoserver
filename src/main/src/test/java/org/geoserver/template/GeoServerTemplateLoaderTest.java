@@ -18,14 +18,14 @@ import org.opengis.feature.simple.SimpleFeatureType;
 
 
 public class GeoServerTemplateLoaderTest extends GeoServerSystemTestSupport {
-    
+
     public void test() throws Exception {
         File data = getTestData().getDataDirectoryRoot();
-        
+
         File templates = new File(data, "templates");
-        
+
         File featureTypes = new File(data, "featureTypes");
-        
+
         File featureType1 = new File(featureTypes, "ft1");
         featureType1.mkdir();
 
@@ -33,7 +33,7 @@ public class GeoServerTemplateLoaderTest extends GeoServerSystemTestSupport {
         featureType2.mkdir();
 
         GeoServerResourceLoader resources = GeoServerExtensions.bean(GeoServerResourceLoader.class);
-        GeoServerTemplateLoader templateLoader = new GeoServerTemplateLoader(getClass(),resources);
+        GeoServerTemplateLoader templateLoader = new GeoServerTemplateLoader(getClass(), resources);
 
         //test a path relative to templates
         File expected = new File(templates, "1.ftl");
@@ -57,13 +57,13 @@ public class GeoServerTemplateLoaderTest extends GeoServerSystemTestSupport {
         assertNotNull(source);
         assertFalse(source instanceof File);
         templateLoader.getReader(source, "UTF-8");
-        
+
     }
-    
+
     public void testRemoteType() throws Exception {
         SimpleFeatureType ft = DataUtilities.createType("remoteType", "the_geom:MultiPolygon,FID:String,ADDRESS:String");
         GeoServerResourceLoader resources = GeoServerExtensions.bean(GeoServerResourceLoader.class);
-        GeoServerTemplateLoader loader = new GeoServerTemplateLoader(getClass(),resources);
+        GeoServerTemplateLoader loader = new GeoServerTemplateLoader(getClass(), resources);
         loader.setFeatureType(ft);
         loader.findTemplateSource("header.ftl");
     }

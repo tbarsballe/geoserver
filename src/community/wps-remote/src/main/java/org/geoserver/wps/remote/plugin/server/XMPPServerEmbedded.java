@@ -52,28 +52,27 @@ import org.springframework.core.io.Resource;
 
 /**
  * @author Alessio Fabiani, GeoSolutions S.A.S.
- *
  */
 public class XMPPServerEmbedded {
 
     /**
      * Common logger for test cases
      */
-    static final Logger LOGGER = 
-        org.geotools.util.logging.Logging.getLogger(XMPPServerEmbedded.class); 
-    
+    static final Logger LOGGER =
+            org.geotools.util.logging.Logging.getLogger(XMPPServerEmbedded.class);
+
     private final List<SASLMechanism> saslMechanisms = new ArrayList<SASLMechanism>();
 
     private String serverDomain;
 
     private DefaultServerRuntimeContext serverRuntimeContext;
-    
+
     private StorageProviderRegistry storageProviderRegistry;
-    
+
     private RemoteProcessFactoryConfigurationWatcher remoteProcessFactoryConfigurationWatcher;
-    
+
     private RemoteProcessFactoryConfiguration configuration;
-    
+
 
     private final List<Module> listOfModules = new ArrayList<Module>();
 
@@ -87,7 +86,7 @@ public class XMPPServerEmbedded {
         this.serverDomain = remoteProcessFactoryConfigurationWatcher.getConfiguration().get("xmpp_domain");
         this.remoteProcessFactoryConfigurationWatcher = remoteProcessFactoryConfigurationWatcher;
         this.configuration = this.remoteProcessFactoryConfigurationWatcher.getConfiguration();
-        
+
         // default list of SASL mechanisms
         saslMechanisms.add(new Plain());
         saslMechanisms.add(new External());
@@ -113,31 +112,31 @@ public class XMPPServerEmbedded {
     public void setStorageProviderRegistry(StorageProviderRegistry storageProviderRegistry) {
         this.storageProviderRegistry = storageProviderRegistry;
     }
-    
+
     public ServerRuntimeContext getServerRuntimeContext() {
         return serverRuntimeContext;
     }
-    
+
     public void addEndpoint(Endpoint endpoint) {
         endpoints.add(endpoint);
     }
-    
+
     public void init() throws Exception {
         final String xmppDomain = configuration.get("xmpp_domain");
         final String xmppUserName = configuration.get("xmpp_manager_username");
         final String xmppUserPassword = configuration.get("xmpp_manager_password");
 
         final String xmppServerEmbedded = configuration.get("xmpp_server_embedded");
-        
+
         checkSecured(configuration);
-        
+
         if (xmppServerEmbedded != null && Boolean.valueOf(xmppServerEmbedded.trim())) {
             // /
             LOGGER.info("initializing embedded vysper server...");
 
             // Admin User
             final Entity adminJID = EntityImpl.parseUnchecked(xmppUserName + "@" + xmppDomain);
-            final AccountManagement accountManagement = 
+            final AccountManagement accountManagement =
                     (AccountManagement) storageProviderRegistry.retrieve(AccountManagement.class);
 
             if (!accountManagement.verifyAccountExists(adminJID)) {
@@ -155,12 +154,12 @@ public class XMPPServerEmbedded {
                 } else {
                     boshEndpoint.setSSLEnabled(false);
                 }
-                
+
                 addEndpoint(boshEndpoint);
             }
-            
+
             addEndpoint(new StanzaSessionFactory());
-                        
+
             // Start Server
             List<HandlerDictionary> dictionaries = new ArrayList<HandlerDictionary>();
             addCoreDictionaries(dictionaries);
@@ -171,7 +170,7 @@ public class XMPPServerEmbedded {
 
             OfflineStanzaReceiver offlineReceiver = (OfflineStanzaReceiver) storageProviderRegistry.retrieve(OfflineStorageProvider.class);
             DeliveringInternalInboundStanzaRelay internalStanzaRelay = new DeliveringInternalInboundStanzaRelay(serverEntity,
-                    resourceRegistry, accountManagement,offlineReceiver);
+                    resourceRegistry, accountManagement, offlineReceiver);
             DeliveringExternalInboundStanzaRelay externalStanzaRelay = new DeliveringExternalInboundStanzaRelay();
 
             StanzaRelayBroker stanzaRelayBroker = new StanzaRelayBroker();
@@ -200,30 +199,30 @@ public class XMPPServerEmbedded {
 
                 serverRuntimeContext.setTlsContextFactory(tlsContextFactory);
             }
-            
+
             // /
             start();
-            
+
             // Add Modules
             if (listOfModules != null) {
                 for (Module module : listOfModules) {
                     addModule(module);
                 }
             }
-            
+
             final ServiceAdministrationModule serviceAdministrationModule = new ServiceAdministrationModule();
             // unless admin user account with a secure password is added, this will be not become effective
-            serviceAdministrationModule.setAddAdminJIDs(Arrays.asList(adminJID)); 
+            serviceAdministrationModule.setAddAdminJIDs(Arrays.asList(adminJID));
 
             addModule(serviceAdministrationModule);
 
             // add management channels and rooms
             Conference conference = new Conference(configuration.get("xmpp_bus"));
-            
+
             Entity managementRoomJID = EntityImpl.parseUnchecked(configuration.get("xmpp_management_channel") + "@" + configuration.get("xmpp_bus") + "." + xmppDomain);
             Room management = conference.createRoom(managementRoomJID, configuration.get("xmpp_management_channel"), RoomType.PasswordProtected);
             management.setPassword(configuration.get("xmpp_management_channel_pwd"));
-            
+
             final String[] serviceChannels = configuration.get("xmpp_service_channels").split(",");
             if (serviceChannels != null) {
                 for (String channel : serviceChannels) {
@@ -233,7 +232,7 @@ public class XMPPServerEmbedded {
             }
 
             addModule(new MUCModule(configuration.get("xmpp_bus"), conference));
-            
+
             // /
             Thread.sleep(3000);
             LOGGER.info("embedded vysper server is running...");
@@ -253,7 +252,7 @@ public class XMPPServerEmbedded {
         for (Endpoint endpoint : endpoints) {
             endpoint.stop();
         }
-        
+
         serverRuntimeContext.getServerConnectorRegistry().close();
     }
 
@@ -273,12 +272,12 @@ public class XMPPServerEmbedded {
     private void checkSecured(RemoteProcessFactoryConfiguration configuration) {
         final String xmppServerEmbeddedSecure = configuration.get("xmpp_server_embedded_secure");
         final String xmppServerEmbeddedCertFile = configuration.get("xmpp_server_embedded_certificate_file");
-        final String xmppServerEmbeddedCertPwd = configuration.get("xmpp_server_embedded_certificate_password");        
+        final String xmppServerEmbeddedCertPwd = configuration.get("xmpp_server_embedded_certificate_password");
 
         if (xmppServerEmbeddedSecure != null && Boolean.valueOf(xmppServerEmbeddedSecure.trim())) {
             // Override XML properties
             if (xmppServerEmbeddedCertFile != null && xmppServerEmbeddedCertPwd != null) {
-                final org.geoserver.platform.resource.Resource certFileResource = 
+                final org.geoserver.platform.resource.Resource certFileResource =
                         Resources.fromURL(xmppServerEmbeddedCertFile.trim());
                 if (certFileResource != null) {
                     this.certificateFile = certFileResource.file();
@@ -290,8 +289,8 @@ public class XMPPServerEmbedded {
                         // Copy the default property file into the data directory
                         //URL url = RemoteProcessFactoryConfigurationWatcher.class.getResource(xmppServerEmbeddedCertFile.trim());
                         //if (url != null) {
-                            this.certificateFile = loader.createFile(xmppServerEmbeddedCertFile.trim());
-                            loader.copyFromClassPath(xmppServerEmbeddedCertFile.trim(), this.certificateFile/*,
+                        this.certificateFile = loader.createFile(xmppServerEmbeddedCertFile.trim());
+                        loader.copyFromClassPath(xmppServerEmbeddedCertFile.trim(), this.certificateFile/*,
                                     RemoteProcessFactoryConfigurationWatcher.class*/);
                         //}
                         this.certificateFile = loader.find(xmppServerEmbeddedCertFile.trim());

@@ -26,13 +26,12 @@ import org.opengis.filter.FilterFactory;
  * A convenient base class for catalog filters. By default does not filter anything, it is advised
  * to use this class as the base to protect yourself from CatalogFilter API changes, implement
  * CatalogFilter directly only if you need a different base class
- * 
+ *
  * @author Andrea Aime - GeoSolutions
- * 
  */
 public abstract class AbstractCatalogFilter implements CatalogFilter {
-    
-    private static Logger LOGGER = 
+
+    private static Logger LOGGER =
             org.geotools.util.logging.Logging.getLogger(AbstractCatalogFilter.class);
 
     @Override
@@ -59,59 +58,60 @@ public abstract class AbstractCatalogFilter implements CatalogFilter {
     public boolean hideResource(ResourceInfo resource) {
         return false;
     }
-    
+
     protected Catalog getCatalog() {
         return (Catalog) GeoServerExtensions.bean("catalog");
     }
 
     /**
-     * Returns a Filter equivalent to this CatalogFilter when applied to an object of the specified 
-     * type.  Implementers should override and return an appropriate well known filter 
+     * Returns a Filter equivalent to this CatalogFilter when applied to an object of the specified
+     * type.  Implementers should override and return an appropriate well known filter
+     *
      * @see Predicates
      */
     @Override
     public Filter getSecurityFilter(final Class<? extends CatalogInfo> clazz) {
         org.opengis.filter.expression.Function visible;
-        if(ResourceInfo.class.isAssignableFrom(clazz)) {
-             visible = new InternalVolatileFunction() {
+        if (ResourceInfo.class.isAssignableFrom(clazz)) {
+            visible = new InternalVolatileFunction() {
                 @Override
                 public Boolean evaluate(Object object) {
                     return !hideResource((ResourceInfo) object);
                 }
             };
-        } else if(WorkspaceInfo.class.isAssignableFrom(clazz)) {
-             visible = new InternalVolatileFunction() {
+        } else if (WorkspaceInfo.class.isAssignableFrom(clazz)) {
+            visible = new InternalVolatileFunction() {
                 @Override
                 public Boolean evaluate(Object object) {
                     return !hideWorkspace((WorkspaceInfo) object);
                 }
             };
-        } else if(LayerGroupInfo.class.isAssignableFrom(clazz)) {
-             visible = new InternalVolatileFunction() {
+        } else if (LayerGroupInfo.class.isAssignableFrom(clazz)) {
+            visible = new InternalVolatileFunction() {
                 @Override
                 public Boolean evaluate(Object object) {
                     return !hideLayerGroup((LayerGroupInfo) object);
                 }
             };
-        } else if(StyleInfo.class.isAssignableFrom(clazz)) {
-             visible = new InternalVolatileFunction() {
+        } else if (StyleInfo.class.isAssignableFrom(clazz)) {
+            visible = new InternalVolatileFunction() {
                 @Override
                 public Boolean evaluate(Object object) {
                     return !hideStyle((StyleInfo) object);
                 }
             };
-        } else if(LayerInfo.class.isAssignableFrom(clazz)) {
-             visible = new InternalVolatileFunction() {
+        } else if (LayerInfo.class.isAssignableFrom(clazz)) {
+            visible = new InternalVolatileFunction() {
                 @Override
                 public Boolean evaluate(Object object) {
                     return !hideLayer((LayerInfo) object);
                 }
             };
-        } else if(NamespaceInfo.class.isAssignableFrom(clazz)) {
-             visible = new InternalVolatileFunction() {
+        } else if (NamespaceInfo.class.isAssignableFrom(clazz)) {
+            visible = new InternalVolatileFunction() {
                 @Override
                 public Boolean evaluate(Object object) {
-                    WorkspaceInfo wsInfo = getCatalog().getWorkspaceByName(((NamespaceInfo)object).getPrefix());
+                    WorkspaceInfo wsInfo = getCatalog().getWorkspaceByName(((NamespaceInfo) object).getPrefix());
                     return !hideWorkspace(wsInfo);
                 }
             };
@@ -124,8 +124,8 @@ public abstract class AbstractCatalogFilter implements CatalogFilter {
 
         // create a filter combined with the security credentials check
         Filter filter = factory.equals(factory.literal(Boolean.TRUE), visible);
-        
+
         return filter;
-        
+
     }
 }

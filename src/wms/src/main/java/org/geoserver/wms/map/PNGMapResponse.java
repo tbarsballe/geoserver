@@ -26,31 +26,35 @@ import org.geotools.util.logging.Logging;
 
 /**
  * Handles a GetMap request that spects a map in GIF format.
- * 
+ *
  * @author Simone Giannecchini
  * @author Didier Richard
  * @version $Id
  */
 public class PNGMapResponse extends RenderedImageMapResponse {
-    /** Logger */
+    /**
+     * Logger
+     */
     private static final Logger LOGGER = Logging.getLogger(PNGMapResponse.class);
 
     private static final String MIME_TYPE = "image/png";
 
     private static final String MIME_TYPE_8BIT = "image/png; mode=8bit";
 
-    private static final String[] OUTPUT_FORMATS = { MIME_TYPE, MIME_TYPE_8BIT, "image/png8" };
+    private static final String[] OUTPUT_FORMATS = {MIME_TYPE, MIME_TYPE_8BIT, "image/png8"};
 
     /**
      * The two quantizers available for PNG images
      */
     public enum QuantizeMethod {
         Octree, MedianCut
-    };
+    }
+
+    ;
 
     /**
      * Default capabilities for PNG format.
-     * 
+     * <p>
      * <p>
      * <ol>
      * <li>tiled = supported</li>
@@ -82,11 +86,11 @@ public class PNGMapResponse extends RenderedImageMapResponse {
 
     /**
      * Transforms the rendered image into the appropriate format, streaming to the output stream.
-     * 
+     *
      * @see RasterMapOutputFormat#formatImageOutputStream(RenderedImage, OutputStream)
      */
     public void formatImageOutputStream(RenderedImage image, OutputStream outStream,
-            WMSMapContent mapContent) throws ServiceException, IOException {
+                                        WMSMapContent mapContent) throws ServiceException, IOException {
         // /////////////////////////////////////////////////////////////////
         //
         // Reformatting this image for png
@@ -95,12 +99,12 @@ public class PNGMapResponse extends RenderedImageMapResponse {
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.fine("Writing png image ...");
         }
-        
+
         // check to see if we have to see a translucent or bitmask quantizer
         image = applyPalette(image, mapContent, "image/png8", true);
         float quality = (100 - wms.getPngCompression()) / 100.0f;
         JAIInfo.PngEncoderType encoder = wms.getPNGEncoderType();
-        if(encoder == JAIInfo.PngEncoderType.PNGJ) {
+        if (encoder == JAIInfo.PngEncoderType.PNGJ) {
             image = new PNGJWriter().writePNG(image, outStream, quality, mapContent);
             RasterCleaner.addImage(image);
         } else {
@@ -111,14 +115,14 @@ public class PNGMapResponse extends RenderedImageMapResponse {
             boolean nativeAcceleration = PNGNativeAcc.booleanValue() && !(numBits > 1 && numBits < 8);
             ImageWorker iw = new ImageWorker(image);
             iw.writePNG(outStream, "FILTERED", quality, nativeAcceleration, false);
-            RasterCleaner.addImage(iw.getRenderedImage());            
+            RasterCleaner.addImage(iw.getRenderedImage());
         }
 
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.fine("Writing png image ... done!");
         }
     }
-    
+
     @Override
     public MapProducerCapabilities getCapabilities(String outputFormat) {
         return CAPABILITIES;

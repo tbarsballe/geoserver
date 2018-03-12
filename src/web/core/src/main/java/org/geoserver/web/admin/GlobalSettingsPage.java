@@ -58,7 +58,7 @@ public class GlobalSettingsPage extends ServerAdminPage {
     public GlobalSettingsPage() {
         final IModel<GeoServerInfo> globalInfoModel = getGlobalInfoModel();
         final IModel<LoggingInfo> loggingInfoModel = getLoggingInfoModel();
-        
+
         CompoundPropertyModel<GeoServerInfo> compoundPropertyModel = new CompoundPropertyModel<GeoServerInfo>(globalInfoModel);
         Form<GeoServerInfo> form = new Form<GeoServerInfo>("form", compoundPropertyModel);
 
@@ -72,35 +72,36 @@ public class GlobalSettingsPage extends ServerAdminPage {
         form.add(new Select2DropDownChoice<>("resourceErrorHandling", Arrays.asList(ResourceErrorHandling.values()),
                 new ResourceErrorHandlingRenderer()));
         form.add(new TextField<String>("proxyBaseUrl").add(new UrlValidator()));
-        
+
         logLevelsAppend(form, loggingInfoModel);
-        form.add(new CheckBox("stdOutLogging", new PropertyModel<Boolean>( loggingInfoModel, "stdOutLogging")));
-        form.add(new TextField<String>("loggingLocation", new PropertyModel<String>( loggingInfoModel, "location")) );
+        form.add(new CheckBox("stdOutLogging", new PropertyModel<Boolean>(loggingInfoModel, "stdOutLogging")));
+        form.add(new TextField<String>("loggingLocation", new PropertyModel<String>(loggingInfoModel, "location")));
 
         TextField<String> xmlPostRequestLogBufferSize = new TextField<String>("xmlPostRequestLogBufferSize", new PropertyModel<String>(
                 globalInfoModel, "xmlPostRequestLogBufferSize"));
         xmlPostRequestLogBufferSize.add(RangeValidator.minimum(0));
         form.add(xmlPostRequestLogBufferSize);
 
-        form.add(new CheckBox("xmlExternalEntitiesEnabled"));    
-        
+        form.add(new CheckBox("xmlExternalEntitiesEnabled"));
+
         form.add(new TextField<Integer>("featureTypeCacheSize").add(RangeValidator.minimum(0)));
-       
+
         IModel<String> lockProviderModel = new PropertyModel<String>(globalInfoModel, "lockProviderName");
         ApplicationContext applicationContext = GeoServerApplication.get().getApplicationContext();
-        List<String> providers = new ArrayList<String>( Arrays.asList(applicationContext.getBeanNamesForType( LockProvider.class )));
+        List<String> providers = new ArrayList<String>(Arrays.asList(applicationContext.getBeanNamesForType(LockProvider.class)));
         providers.remove("lockProvider"); // remove the global lock provider
-        Collections.sort(providers);;
-        
+        Collections.sort(providers);
+        ;
+
         DropDownChoice<String> lockProviderChoice = new Select2DropDownChoice<>("lockProvider", lockProviderModel, providers, new LocalizedChoiceRenderer(this));
-        
-        form.add( lockProviderChoice );
-        
+
+        form.add(lockProviderChoice);
+
         IModel<GeoServerInfo.WebUIMode> webUIModeModel = new PropertyModel<GeoServerInfo.WebUIMode>(globalInfoModel, "webUIMode");
         if (webUIModeModel.getObject() == null) {
             webUIModeModel.setObject(GeoServerInfo.WebUIMode.DEFAULT);
         }
-        DropDownChoice<GeoServerInfo.WebUIMode> webUIModeChoice = new Select2DropDownChoice<>("webUIMode", 
+        DropDownChoice<GeoServerInfo.WebUIMode> webUIModeChoice = new Select2DropDownChoice<>("webUIMode",
                 webUIModeModel, Arrays.asList(GeoServerInfo.WebUIMode.values()));
 
         form.add(webUIModeChoice);
@@ -115,13 +116,13 @@ public class GlobalSettingsPage extends ServerAdminPage {
             @Override
             public void onSubmit() {
                 GeoServer gs = getGeoServer();
-                gs.save( (GeoServerInfo) globalInfoModel.getObject() );
-                gs.save( (LoggingInfo) loggingInfoModel.getObject() );
+                gs.save((GeoServerInfo) globalInfoModel.getObject());
+                gs.save((LoggingInfo) loggingInfoModel.getObject());
                 doReturn();
             }
         };
         form.add(submit);
-        
+
         Button cancel = new Button("cancel") {
             @Override
             public void onSubmit() {
@@ -138,7 +139,7 @@ public class GlobalSettingsPage extends ServerAdminPage {
         List<String> logProfiles = null;
         try {
             Resource logsDirectory = loader.get("logs");
-            if(logsDirectory.getType() == Type.DIRECTORY) {
+            if (logsDirectory.getType() == Type.DIRECTORY) {
                 List<Resource> propFiles = Resources.list(logsDirectory, new Filter<Resource>() {
                     @Override
                     public boolean accept(Resource obj) {
@@ -156,13 +157,13 @@ public class GlobalSettingsPage extends ServerAdminPage {
                     "Could not load the list of log configurations from the data directory", e);
         }
         // if none is found use the default set
-        if(logProfiles == null || logProfiles.size() == 0)
+        if (logProfiles == null || logProfiles.size() == 0)
             logProfiles = DEFAULT_LOG_PROFILES;
 
         form.add(new ListChoice<String>("log4jConfigFile",
                 new PropertyModel<String>(loggingInfoModel, "level"), logProfiles));
     }
-    
+
     class ResourceErrorHandlingRenderer extends ChoiceRenderer<ResourceErrorHandling> {
         private static final long serialVersionUID = 4183327535180465575L;
 
@@ -178,7 +179,7 @@ public class GlobalSettingsPage extends ServerAdminPage {
 
         @Override
         public ResourceErrorHandling getObject(String id,
-                IModel<? extends List<? extends ResourceErrorHandling>> choices) {
+                                               IModel<? extends List<? extends ResourceErrorHandling>> choices) {
             return id == null || "".equals(id) ? null : ResourceErrorHandling.valueOf(id);
         }
     }

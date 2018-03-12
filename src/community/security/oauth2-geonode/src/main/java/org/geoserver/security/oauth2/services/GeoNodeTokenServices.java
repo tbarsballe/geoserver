@@ -25,7 +25,7 @@ import org.springframework.web.client.RestTemplate;
 
 /**
  * Remote Token Services for GeoNode token details.
- * 
+ *
  * @author Alessio Fabiani, GeoSolutions S.A.S.
  */
 public class GeoNodeTokenServices extends GeoServerOAuthRemoteTokenServices {
@@ -80,9 +80,9 @@ public class GeoNodeTokenServices extends GeoServerOAuthRemoteTokenServices {
     private String getAuthorizationHeader(String accessToken) {
         return "Bearer " + accessToken;
     }
-    
+
     private Map<String, Object> postForMap(String path, MultiValueMap<String, String> formData,
-            HttpHeaders headers) {
+                                           HttpHeaders headers) {
         if (headers.getContentType() == null) {
             headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
         }

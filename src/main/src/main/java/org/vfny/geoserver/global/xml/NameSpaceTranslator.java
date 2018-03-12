@@ -32,12 +32,15 @@ import java.util.Set;
  * String elementName = ((NameSpaceElement)nst.getElements(obj).toArray()[0]).getTypeRefName();
  * </code>
  * </p>
+ *
  * @author dzwiers, Refractions Research, Inc.
  * @author $Author: dmzwiers $ (last modification)
  * @version $Id$
  */
 public abstract class NameSpaceTranslator {
-    /** the prefix for this translator instance*/
+    /**
+     * the prefix for this translator instance
+     */
     private String prefix;
 
     /**
@@ -45,9 +48,10 @@ public abstract class NameSpaceTranslator {
      * <p>
      * Creates an instance of this translator for the given prefix.
      * </p>
+     *
      * @param prefix The prefix for which this tranlator will tranlate.
-     * A null prefix will affect the NameSpaceElements returned by the
-     * access methods.
+     *               A null prefix will affect the NameSpaceElements returned by the
+     *               access methods.
      * @see #NameSpaceElement(String)
      */
     public NameSpaceTranslator(String prefix) {
@@ -56,10 +60,11 @@ public abstract class NameSpaceTranslator {
 
     /**
      * Retrive all elements that can be used with the provided type.
-    * <p>
-    * Looks for Elements who's Class objects, or the parents of the
+     * <p>
+     * Looks for Elements who's Class objects, or the parents of the
      * Class object are compatible with this class object.
      * </p>
+     *
      * @param type Class the class to attempt to find related elements for.
      * @return Set a set of associated NameSpaceElements
      */
@@ -89,9 +94,10 @@ public abstract class NameSpaceTranslator {
 
     /**
      * Looks for Elements who's name is the same or a super set of this name.
-    * <p>
+     * <p>
      * (ie. name.indexOf(type)!=-1)
      * </p>
+     *
      * @param type String the class to attempt to find related elements for.
      * @return Set a set of associated NameSpaceElements
      * @see String#indexOf(String)
@@ -132,6 +138,7 @@ public abstract class NameSpaceTranslator {
      * checks to see if the definition provided is found in the list of
      * elements for this namespace.
      * </p>
+     *
      * @param definition The definition name to check for, may be either definition or prefix:definition.
      * @return true when found, false otherwise.
      */
@@ -172,6 +179,7 @@ public abstract class NameSpaceTranslator {
      * checks to see if the reference provided is found in the list of
      * elements for this namespace.
      * </p>
+     *
      * @param definition The reference name to check for, may be either reference or prefix:reference.
      * @return true when found, false otherwise.
      */
@@ -211,6 +219,7 @@ public abstract class NameSpaceTranslator {
      * <p>
      * returns the set of elements.
      * </p>
+     *
      * @return Set
      */
     public abstract Set getElements();
@@ -220,6 +229,7 @@ public abstract class NameSpaceTranslator {
      * <p>
      * Returns a set of all elements with the exact class specified.
      * </p>
+     *
      * @param type Class the class of elements to get
      * @return Set
      */
@@ -313,11 +323,11 @@ public abstract class NameSpaceTranslator {
     }
 
     /**
-    * Gets an element definition by name.
-    *
-    * @param name The name of the element definition
-    * @return NameSpaceElement
-    */
+     * Gets an element definition by name.
+     *
+     * @param name The name of the element definition
+     * @return NameSpaceElement
+     */
     public NameSpaceElement getElement(Class type, String name) {
         if (type == null) {
             return null;
@@ -373,6 +383,7 @@ public abstract class NameSpaceTranslator {
      * <p>
      * Returns the current namespace. Should be implemented as a constant.
      * </p>
+     *
      * @return String
      */
     public abstract String getNameSpace();
@@ -382,6 +393,7 @@ public abstract class NameSpaceTranslator {
      * <p>
      * Returns the prefix that this namespace represents.
      * </p>
+     *
      * @return String the prefix, null if it does not exist
      */
     public final String getPrefix() {

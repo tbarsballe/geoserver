@@ -29,25 +29,25 @@ import org.geoserver.web.wicket.ParamResourceModel;
  */
 public class RootLayerEntryPanel extends Panel {
 
-	private static final long serialVersionUID = 3471204885852128002L;
+    private static final long serialVersionUID = 3471204885852128002L;
 
-	public RootLayerEntryPanel(String id,WorkspaceInfo workspace, final IModel<LayerGroupInfo> model) {
+    public RootLayerEntryPanel(String id, WorkspaceInfo workspace, final IModel<LayerGroupInfo> model) {
         super(id);
-        
+
         setOutputMarkupId(true);
-        
+
         final TextField<LayerInfo> rootLayerField = new TextField<LayerInfo>("rootLayer") {
             private static final long serialVersionUID = -8033503312874828019L;
 
             @SuppressWarnings("unchecked")
             @Override
-            public <C> IConverter<C> getConverter(Class<C> type) { 
-            	if (LayerInfo.class.isAssignableFrom(type)) {
-            		return (IConverter<C>) new LayerInfoConverter();
-            	} else {
-            		return super.getConverter(type);
-            	}
-            } 
+            public <C> IConverter<C> getConverter(Class<C> type) {
+                if (LayerInfo.class.isAssignableFrom(type)) {
+                    return (IConverter<C>) new LayerInfoConverter();
+                } else {
+                    return super.getConverter(type);
+                }
+            }
         };
         rootLayerField.setOutputMarkupId(true);
         rootLayerField.setRequired(true);
@@ -61,30 +61,30 @@ public class RootLayerEntryPanel extends Panel {
                 globalStyles.add(s);
             }
         }
-        
+
         // available styles
         List<StyleInfo> styles = new ArrayList<StyleInfo>();
         styles.addAll(globalStyles);
         if (workspace != null) {
             styles.addAll(GeoServerApplication.get().getCatalog().getStylesByWorkspace(workspace));
         }
-        
+
         DropDownChoice<StyleInfo> styleField = new DropDownChoice<StyleInfo>("rootLayerStyle", styles) {
             private static final long serialVersionUID = 1190134258726393181L;
 
             @SuppressWarnings("unchecked")
             @Override
-            public <C> IConverter<C> getConverter(Class<C> type) { 
+            public <C> IConverter<C> getConverter(Class<C> type) {
                 if (StyleInfo.class.isAssignableFrom(type)) {
-                    return (IConverter<C>) new StyleInfoConverter(); 
+                    return (IConverter<C>) new StyleInfoConverter();
                 } else {
                     return super.getConverter(type);
                 }
-            }             
+            }
         };
         styleField.setNullValid(true);
         add(styleField);
-        
+
         final ModalWindow popupWindow = new ModalWindow("popup");
         add(popupWindow);
         add(new AjaxLink<Object>("add") {

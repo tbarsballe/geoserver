@@ -14,45 +14,41 @@ import org.geoserver.security.GeoServerUserGroupService;
 import org.geoserver.security.impl.GeoServerRole;
 
 
-
 /**
- * 
  * This class is a validation wrapper for {@link GeoServerRoleStore}
- * 
+ * <p>
  * Usage:
  * <code>
  * GeoserverRoleStore valStore = new RoleStoreValidationWrapper(store);
  * valStore.addRole(..);
  * valStore.store()
  * </code>
- * 
- * Since the {@link GeoServerRoleStore} interface does not allow to 
+ * <p>
+ * Since the {@link GeoServerRoleStore} interface does not allow to
  * throw {@link RoleServiceException} objects directly, these objects
  * a wrapped into an IOException. Use {@link IOException#getCause()} to
  * get the proper exception.
- * 
- * 
- * @author christian
  *
+ * @author christian
  */
-public class RoleStoreValidationWrapper extends RoleServiceValidationWrapper implements GeoServerRoleStore{
+public class RoleStoreValidationWrapper extends RoleServiceValidationWrapper implements GeoServerRoleStore {
 
-    
+
     /**
      * @see RoleServiceValidationWrapper
-     */    
-    public RoleStoreValidationWrapper(GeoServerRoleStore store, boolean checkAgainstRules, 
-            GeoServerUserGroupService ...services) {
-        super(store,checkAgainstRules, services);
+     */
+    public RoleStoreValidationWrapper(GeoServerRoleStore store, boolean checkAgainstRules,
+                                      GeoServerUserGroupService... services) {
+        super(store, checkAgainstRules, services);
     }
 
     /**
      * @see RoleServiceValidationWrapper
-     */    
-    public RoleStoreValidationWrapper(GeoServerRoleStore store, GeoServerUserGroupService ...services) {
-        super(store,services);
+     */
+    public RoleStoreValidationWrapper(GeoServerRoleStore store, GeoServerUserGroupService... services) {
+        super(store, services);
     }
-        
+
     GeoServerRoleStore getStore() {
         return (GeoServerRoleStore) service;
     }
@@ -79,7 +75,7 @@ public class RoleStoreValidationWrapper extends RoleServiceValidationWrapper imp
         getStore().updateRole(role);
     }
 
-    public boolean removeRole(GeoServerRole role) throws IOException {        
+    public boolean removeRole(GeoServerRole role) throws IOException {
         checkRoleIsMapped(role);
         checkRoleIsUsed(role);
         return getStore().removeRole(role);
@@ -103,6 +99,7 @@ public class RoleStoreValidationWrapper extends RoleServiceValidationWrapper imp
         checkValidUserName(username);
         getStore().associateRoleToUser(role, username);
     }
+
     public void disAssociateRoleFromUser(GeoServerRole role, String username) throws IOException {
         checkExistingRoleName(role.getAuthority());
         checkValidUserName(username);
@@ -122,7 +119,7 @@ public class RoleStoreValidationWrapper extends RoleServiceValidationWrapper imp
 
     public void setParentRole(GeoServerRole role, GeoServerRole parentRole) throws IOException {
         checkExistingRoleName(role.getAuthority());
-        if (parentRole!=null)
+        if (parentRole != null)
             checkExistingRoleName(parentRole.getAuthority());
         getStore().setParentRole(role, parentRole);
     }

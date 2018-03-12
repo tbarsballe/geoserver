@@ -13,12 +13,14 @@ import org.geoserver.security.web.usergroup.UserGroupServiceChoice;
 
 /**
  * Configuration panel for {@link GeoServerDigestAuthenticationFilter}.
- * 
+ *
  * @author Justin Deoliveira, OpenGeo
  */
-public class DigestAuthFilterPanel extends AuthenticationFilterPanel<DigestAuthenticationFilterConfig>{
+public class DigestAuthFilterPanel extends AuthenticationFilterPanel<DigestAuthenticationFilterConfig> {
 
-    /** serialVersionUID */
+    /**
+     * serialVersionUID
+     */
     private static final long serialVersionUID = 1L;
 
     public DigestAuthFilterPanel(String id, IModel<DigestAuthenticationFilterConfig> model) {

@@ -16,7 +16,7 @@ import org.geoserver.ows.util.KvpUtils;
  * <p>
  * A value in flat form is a list of tokens separated by a single delimiter. The default delimiter is a comma ( , ). Example:
  * </p>
- * 
+ * <p>
  * <pre><code>
  *         key=token1,token2,...,tokenN
  * </code></pre>
@@ -28,6 +28,7 @@ import org.geoserver.ows.util.KvpUtils;
  * By default, the {@link #parse(String)} method returns an list which contains instances of {@link #getBinding()}. The {@link #parse(List)} method
  * may be overidden to return a differnt type of object.
  * </p>
+ *
  * @author Justin Deoliveira, The Open Planning Project, jdeolive@openplans.org
  */
 public class FlatKvpParser extends KvpParser {
@@ -39,7 +40,7 @@ public class FlatKvpParser extends KvpParser {
     /**
      * Constructs the flat kvp parser specifying the key and class binding.
      *
-     * @param key The key to bind to.
+     * @param key     The key to bind to.
      * @param binding The class of each token in the value.
      */
     public FlatKvpParser(String key, Class binding) {
@@ -50,8 +51,8 @@ public class FlatKvpParser extends KvpParser {
      * Constructs the flat kvp parser specifying the key, class binding, and
      * token delimiter.
      *
-     * @param key The key to bind to.
-     * @param binding The class of each token in the value.
+     * @param key       The key to bind to.
+     * @param binding   The class of each token in the value.
      * @param delimiter The delimiter used to seperate tokens
      */
     public FlatKvpParser(String key, Class binding, String delimiter) {
@@ -67,7 +68,7 @@ public class FlatKvpParser extends KvpParser {
     public final Object parse(String value) throws Exception {
         List tokens = KvpUtils.readFlat(value, delimiter);
         List parsed = new ArrayList(tokens.size());
-        final int size=tokens.size();
+        final int size = tokens.size();
         for (int i = 0; i < size; i++) {
             String token = (String) tokens.get(i);
             parsed.add(parseToken(token));
@@ -82,10 +83,9 @@ public class FlatKvpParser extends KvpParser {
      * Subclasses should override this method, the default implementation
      * just returns token passed in.
      * </p>
+     *
      * @param token Part of the value being parsed.
-     *
      * @return The token parsed into an object.
-     *
      */
     protected Object parseToken(String token) throws Exception {
         return token;
@@ -97,8 +97,8 @@ public class FlatKvpParser extends KvpParser {
      * Subclasses may choose to override this method. The default implementation
      * just return the array passed in.
      * </p>
-     * @param values The parsed tokens, each value is an instance of {@link #getBinding()}.
      *
+     * @param values The parsed tokens, each value is an instance of {@link #getBinding()}.
      * @return The final object.
      */
     protected Object parse(List values) throws Exception {

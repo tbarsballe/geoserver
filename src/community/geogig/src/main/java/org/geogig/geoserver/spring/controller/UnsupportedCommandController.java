@@ -22,11 +22,11 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping(path = GEOGIG_ROUTE_PREFIX + "/" + BASE_REPOSITORY_ROUTE + "/{repoName}/",
-produces = {APPLICATION_XML_VALUE, APPLICATION_JSON_VALUE})
+        produces = {APPLICATION_XML_VALUE, APPLICATION_JSON_VALUE})
 public class UnsupportedCommandController extends AbstractController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UnsupportedCommandController.class);
-    
+
     /**
      * List any unsupported commands in this RequestMapping annotation.
      */
@@ -34,7 +34,7 @@ public class UnsupportedCommandController extends AbstractController {
     public void rename() {
         throw new CommandSpecException("This command is unsupported by the GeoGig plugin.", HttpStatus.BAD_REQUEST);
     }
-    
+
     @Override
     protected Logger getLogger() {
         return LOGGER;

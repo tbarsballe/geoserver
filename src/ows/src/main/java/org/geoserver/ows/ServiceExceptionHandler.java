@@ -76,7 +76,7 @@ public abstract class ServiceExceptionHandler {
      * Handles the service exception.
      *
      * @param exception The service exception.
-     * @param request The informations collected by the dispatcher about the request
+     * @param request   The informations collected by the dispatcher about the request
      */
     public abstract void handleServiceException(ServiceException exception, Request request);
 }

@@ -14,17 +14,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 
  * A Track Segment holds a list of Track Points which are logically connected in order. To represent a single GPS track where GPS reception was lost,
  * or the GPS receiver was turned off, start a new Track Segment for each continuous span of track data.
- * 
- * 
+ * <p>
+ * <p>
  * <p>
  * Java class for trksegType complex type.
- * 
+ * <p>
  * <p>
  * The following schema fragment specifies the expected content contained within this class.
- * 
+ * <p>
  * <pre>
  * &lt;complexType name="trksegType">
  *   &lt;complexContent>
@@ -37,8 +36,6 @@ import java.util.List;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 public class TrksegType {
     protected List<WptType> trkpt;
@@ -47,23 +44,21 @@ public class TrksegType {
 
     /**
      * Gets the value of the trkpt property.
-     * 
+     * <p>
      * <p>
      * This accessor method returns a reference to the live list, not a snapshot. Therefore any modification you make to the returned list will be
      * present inside the JAXB object. This is why there is not a <CODE>set</CODE> method for the trkpt property.
-     * 
+     * <p>
      * <p>
      * For example, to add a new item, do as follows:
-     * 
+     * <p>
      * <pre>
      * getTrkpt().add(newItem);
      * </pre>
-     * 
-     * 
+     * <p>
+     * <p>
      * <p>
      * Objects of the following type(s) are allowed in the list {@link WptType }
-     * 
-     * 
      */
     public List<WptType> getTrkpt() {
         if (trkpt == null) {
@@ -75,9 +70,8 @@ public class TrksegType {
 
     /**
      * Gets the value of the extensions property.
-     * 
+     *
      * @return possible object is {@link ExtensionsType }
-     * 
      */
     public ExtensionsType getExtensions() {
         return extensions;
@@ -85,9 +79,8 @@ public class TrksegType {
 
     /**
      * Sets the value of the extensions property.
-     * 
+     *
      * @param value allowed object is {@link ExtensionsType }
-     * 
      */
     public void setExtensions(ExtensionsType value) {
         this.extensions = value;

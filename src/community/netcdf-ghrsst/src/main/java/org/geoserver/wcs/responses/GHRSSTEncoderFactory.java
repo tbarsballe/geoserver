@@ -21,7 +21,7 @@ import java.util.TreeSet;
  * Returns a GHRSST custom encoder if the configuration has GHRSST encoding enabled
  */
 public class GHRSSTEncoderFactory implements NetCDFEncoderFactory {
-    
+
     @Override
     public NetCDFEncoder getEncoderFor(GranuleStack granuleStack, File file, Map<String, String> encodingParameters,
                                        String outputFormat) throws IOException {
@@ -30,7 +30,7 @@ public class GHRSSTEncoderFactory implements NetCDFEncoderFactory {
                 .class))) {
             return new GHRSSTEncoder(granuleStack, file, encodingParameters, outputFormat);
         }
-        
+
         // if no GHRSST settings, or disabled, then look for some other encoder
         return null;
     }
@@ -44,7 +44,7 @@ public class GHRSSTEncoderFactory implements NetCDFEncoderFactory {
             // nope;
             return null;
         }
-        
+
         // grab reference date/time
         NetCDFDimensionsManager dimensionsManager = new NetCDFDimensionsManager();
         dimensionsManager.collectCoverageDimensions(granuleStack);
@@ -85,11 +85,11 @@ public class GHRSSTEncoderFactory implements NetCDFEncoderFactory {
         sb.append("_GHRSST-");
         sb.append(getConfiguration(metadata, GHRSSTEncoder.SETTINGS_SST_TYPE, "SSTint"));
         sb.append("-");
-        sb.append(getConfiguration(metadata, GHRSSTEncoder.SETTINGS_PRODUCT_STRING, "AVHRR_METOP_A")); 
+        sb.append(getConfiguration(metadata, GHRSSTEncoder.SETTINGS_PRODUCT_STRING, "AVHRR_METOP_A"));
         // additional segregator is optional, not needed here
         sb.append("-v02.0"); // GHRSST specification version
         sb.append("-fv01.0.nc");
-        
+
         return sb.toString();
     }
 

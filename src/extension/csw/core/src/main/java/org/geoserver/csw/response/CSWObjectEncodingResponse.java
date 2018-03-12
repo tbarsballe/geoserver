@@ -16,7 +16,7 @@ import org.geotools.xml.Encoder;
 
 /**
  * A response designed to encode a specific object into XML
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class CSWObjectEncodingResponse extends XmlObjectEncodingResponse {

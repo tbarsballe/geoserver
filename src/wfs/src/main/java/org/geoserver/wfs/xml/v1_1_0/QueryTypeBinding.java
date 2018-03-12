@@ -28,9 +28,9 @@ import org.picocontainer.MutablePicoContainer;
 
 /**
  * Binding object for the type http://www.opengis.net/wfs:QueryType.
- *
  * <p>
- *        <pre>
+ * <p>
+ * <pre>
  *         <code>
  *  &lt;xsd:complexType name="QueryType"&gt;
  *      &lt;xsd:annotation&gt;
@@ -155,6 +155,7 @@ import org.picocontainer.MutablePicoContainer;
  *
  *          </code>
  *         </pre>
+ *
  * @generated
  */
 public class QueryTypeBinding extends AbstractComplexBinding {
@@ -183,16 +184,16 @@ public class QueryTypeBinding extends AbstractComplexBinding {
 
 
     public void initializeChildContext(ElementInstance childInstance,
-            Node node, MutablePicoContainer context) {
+                                       Node node, MutablePicoContainer context) {
         //if an srsName is set for this geometry, put it in the context for
         // children, so they can use it as well
-        if ( node.hasAttribute("srsName") ) {
+        if (node.hasAttribute("srsName")) {
             try {
                 CoordinateReferenceSystem crs = GML2ParsingUtils.crs(node);
-                if ( crs != null ) {
+                if (crs != null) {
                     context.registerComponentInstance(CoordinateReferenceSystem.class, crs);
                 }
-            } catch(Exception e) {
+            } catch (Exception e) {
                 throw new WFSException(e, "InvalidParameterValue");
             }
         }
@@ -205,17 +206,17 @@ public class QueryTypeBinding extends AbstractComplexBinding {
      * @generated modifiable
      */
     public Object parse(ElementInstance instance, Node node, Object value)
-        throws Exception {
+            throws Exception {
         QueryType query = wfsfactory.createQueryType();
 
         //&lt;xsd:choice maxOccurs="unbounded" minOccurs="0"&gt;
         //&lt;xsd:element ref="wfs:PropertyName"&gt;
         if (node.hasChild("PropertyName")) {
             //HACK, stripping of namespace prefix
-            for (Iterator p = node.getChildValues("PropertyName").iterator(); p.hasNext();) {
+            for (Iterator p = node.getChildValues("PropertyName").iterator(); p.hasNext(); ) {
                 Object property = p.next();
                 String propertyName;
-                if(property instanceof String)
+                if (property instanceof String)
                     propertyName = (String) property;
                 else
                     propertyName = (String) ((PropertyName) property).getPropertyName();
@@ -261,11 +262,11 @@ public class QueryTypeBinding extends AbstractComplexBinding {
         if (node.hasAttribute("srsName")) {
             query.setSrsName((URI) node.getAttributeValue("srsName"));
         }
-        
-        if ( node.hasChild( "XlinkPropertyName" ) ) {
-            query.getXlinkPropertyName().addAll( node.getChildValues( "XlinkPropertyName" ));    
+
+        if (node.hasChild("XlinkPropertyName")) {
+            query.getXlinkPropertyName().addAll(node.getChildValues("XlinkPropertyName"));
         }
-        
+
         return query;
     }
 }

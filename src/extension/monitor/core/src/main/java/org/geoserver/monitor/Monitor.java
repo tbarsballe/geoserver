@@ -22,63 +22,62 @@ import org.springframework.context.event.ContextRefreshedEvent;
  * the request and makes operations available that control the life cycle of the request.
  * The life cycle of a monitored request advances through the following states:
  * <ul>
- *  <li>the request is STARTED
- *  <li>the request is UPDATED any number of times.
+ * <li>the request is STARTED
+ * <li>the request is UPDATED any number of times.
  * </ul>
  * </p>
- * 
+ *
  * @author Andrea Aime, OpenGeo
  * @author Justin Deoliveira, OpenGeo
- *
  */
-public class Monitor implements ApplicationListener<ApplicationEvent>{
+public class Monitor implements ApplicationListener<ApplicationEvent> {
 
-    /**  
+    /**
      * thread local request object.
      */
     static ThreadLocal<RequestData> REQUEST = new ThreadLocal<RequestData>();
-    
+
     /**
      * default page size when executing queries
      */
     static long PAGE_SIZE = 1000;
-    
+
     MonitorConfig config;
     MonitorDAO dao;
 
     //info about monitored server
     //JD: look up lazily, using constructor injection causes failure to load main Geoserver
     // configuration, TODO: take another look at the initialization
-    GeoServer server;  
+    GeoServer server;
 
     /**
      * The set of listeners for the monitor
      */
     List<RequestDataListener> listeners = new ArrayList<RequestDataListener>();
-    
+
     public Monitor(MonitorConfig config) {
         this.config = config;
         this.dao = config.createDAO();
     }
-    
+
     public Monitor(MonitorDAO dao) {
         this.config = new MonitorConfig();
         this.dao = dao;
     }
-    
+
     public MonitorConfig getConfig() {
         return config;
     }
-    
+
     public boolean isEnabled() {
         return config.isEnabled();
     }
-    
+
     public RequestData start() {
         RequestData req = new RequestData();
         req = dao.init(req);
         REQUEST.set(req);
-        
+
         // notify listeners
         for (RequestDataListener listener : listeners) {
             listener.requestUpdated(req);
@@ -87,7 +86,7 @@ public class Monitor implements ApplicationListener<ApplicationEvent>{
         if (config.getMode() != Mode.HISTORY) {
             dao.add(req);
         }
-        
+
         return req;
     }
 
@@ -117,7 +116,7 @@ public class Monitor implements ApplicationListener<ApplicationEvent>{
         dao.save(data);
         REQUEST.remove();
     }
-    
+
     public void postProcessed(RequestData rd) {
         // notify listeners
         for (RequestDataListener listener : listeners) {
@@ -132,11 +131,11 @@ public class Monitor implements ApplicationListener<ApplicationEvent>{
         dao.dispose();
         dao = null;
     }
-    
+
     public MonitorDAO getDAO() {
         return dao;
     }
-    
+
     public GeoServer getServer() {
         return server;
     }
@@ -151,7 +150,7 @@ public class Monitor implements ApplicationListener<ApplicationEvent>{
 
     @Override
     public void onApplicationEvent(ApplicationEvent event) {
-        if(event instanceof ContextRefreshedEvent) {
+        if (event instanceof ContextRefreshedEvent) {
             listeners = GeoServerExtensions.extensions(RequestDataListener.class);
         }
     }

@@ -31,7 +31,7 @@ public class WorkspaceNamespaceConstencyTest {
         Catalog cat = createMock(Catalog.class);
         cat.addListener((CatalogListener) anyObject());
         expectLastCall();
-        
+
         NamespaceInfo ns = createMock(NamespaceInfo.class);
         ns.setPrefix("abcd");
         expectLastCall();
@@ -42,12 +42,12 @@ public class WorkspaceNamespaceConstencyTest {
         expectLastCall();
 
         WorkspaceInfo ws = createNiceMock(WorkspaceInfo.class);
-        
+
         CatalogModifyEvent e = createNiceMock(CatalogModifyEvent.class);
         expect(e.getSource()).andReturn(ws).anyTimes();
         expect(e.getPropertyNames()).andReturn(Arrays.asList("name"));
-        expect(e.getOldValues()).andReturn((List)Arrays.asList("gs"));
-        expect(e.getNewValues()).andReturn((List)Arrays.asList("abcd"));
+        expect(e.getOldValues()).andReturn((List) Arrays.asList("gs"));
+        expect(e.getNewValues()).andReturn((List) Arrays.asList("abcd"));
 
         replay(e, ws, ns, cat);
 
@@ -75,8 +75,8 @@ public class WorkspaceNamespaceConstencyTest {
         CatalogModifyEvent e = createNiceMock(CatalogModifyEvent.class);
         expect(e.getSource()).andReturn(ns).anyTimes();
         expect(e.getPropertyNames()).andReturn(Arrays.asList("prefix"));
-        expect(e.getOldValues()).andReturn((List)Arrays.asList("gs"));
-        expect(e.getNewValues()).andReturn((List)Arrays.asList("abcd"));
+        expect(e.getOldValues()).andReturn((List) Arrays.asList("gs"));
+        expect(e.getNewValues()).andReturn((List) Arrays.asList("abcd"));
 
         replay(e, ws, ns, cat);
 
@@ -95,7 +95,7 @@ public class WorkspaceNamespaceConstencyTest {
 
         NamespaceInfo ns = createNiceMock(NamespaceInfo.class);
         expect(cat.getNamespaceByPrefix("abcd")).andReturn(ns);
-        
+
         cat.setDefaultNamespace(ns);
         expectLastCall();
 
@@ -105,8 +105,8 @@ public class WorkspaceNamespaceConstencyTest {
         CatalogModifyEvent e = createNiceMock(CatalogModifyEvent.class);
         expect(e.getSource()).andReturn(cat).anyTimes();
         expect(e.getPropertyNames()).andReturn(Arrays.asList("defaultWorkspace"));
-        expect(e.getNewValues()).andReturn((List)Arrays.asList(ws));
-        
+        expect(e.getNewValues()).andReturn((List) Arrays.asList(ws));
+
         replay(ns, ws, e, cat);
 
         new NamespaceWorkspaceConsistencyListener(cat).handleModifyEvent(e);
@@ -135,8 +135,8 @@ public class WorkspaceNamespaceConstencyTest {
         CatalogModifyEvent e = createNiceMock(CatalogModifyEvent.class);
         expect(e.getSource()).andReturn(cat).anyTimes();
         expect(e.getPropertyNames()).andReturn(Arrays.asList("defaultNamespace"));
-        expect(e.getNewValues()).andReturn((List)Arrays.asList(ns));
-        
+        expect(e.getNewValues()).andReturn((List) Arrays.asList(ns));
+
         replay(ns, ws, e, cat);
 
         new NamespaceWorkspaceConsistencyListener(cat).handleModifyEvent(e);
@@ -184,14 +184,14 @@ public class WorkspaceNamespaceConstencyTest {
         EasyMock.reportMatcher(new IArgumentMatcher() {
             @Override
             public boolean matches(Object argument) {
-                return namespace.equals(((StoreInfo)argument).getConnectionParameters().get("namespace"));
+                return namespace.equals(((StoreInfo) argument).getConnectionParameters().get("namespace"));
             }
 
             @Override
             public void appendTo(StringBuffer buffer) {
                 buffer.append("hasNamespace '").append(namespace).append("'");
             }
-            
+
         });
         return null;
     }

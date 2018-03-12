@@ -50,24 +50,24 @@ public class GetFeatureMissingTypesTest extends WFSTestSupport {
 
         NodeList featureMembers = doc.getElementsByTagName("gml:featureMember");
         assertFalse(featureMembers.getLength() == 0);
-        
+
         // but if we require buildings itself, it should fail
         xml = "<wfs:GetFeature " + "service=\"WFS\" "
-        + "version=\"1.0.0\" "
-        + "xmlns:cdf=\"http://www.opengis.net/cite/data\" "
-        + "xmlns:ogc=\"http://www.opengis.net/ogc\" "
-        + "xmlns:wfs=\"http://www.opengis.net/wfs\" " + "> "
-        + "<wfs:Query typeName=\"" + getLayerId(SystemTestData.BUILDINGS) +"\"/> "
-        + "</wfs:GetFeature>";
+                + "version=\"1.0.0\" "
+                + "xmlns:cdf=\"http://www.opengis.net/cite/data\" "
+                + "xmlns:ogc=\"http://www.opengis.net/ogc\" "
+                + "xmlns:wfs=\"http://www.opengis.net/wfs\" " + "> "
+                + "<wfs:Query typeName=\"" + getLayerId(SystemTestData.BUILDINGS) + "\"/> "
+                + "</wfs:GetFeature>";
 
-		doc = postAsDOM("wfs", xml);
-		
-		assertEquals("ServiceExceptionReport", doc.getDocumentElement()
-		        .getNodeName());
+        doc = postAsDOM("wfs", xml);
+
+        assertEquals("ServiceExceptionReport", doc.getDocumentElement()
+                .getNodeName());
     }
-	
-	@Test
-	public void testPostMissingType11() throws Exception {
+
+    @Test
+    public void testPostMissingType11() throws Exception {
         // let's remove one property file so that its schema cannot be computed
         // (GEOS-3049)
         File root = getTestData().getDataDirectoryRoot();
@@ -77,13 +77,13 @@ public class GetFeatureMissingTypesTest extends WFSTestSupport {
 
         // we're requesting another feature type, that should work
         String xml = "<wfs:GetFeature " + "service=\"WFS\" "
-            + "version=\"1.1.0\" "
-            + "xmlns:cdf=\"http://www.opengis.net/cite/data\" "
-            + "xmlns:ogc=\"http://www.opengis.net/ogc\" "
-            + "xmlns:wfs=\"http://www.opengis.net/wfs\" " + "> "
-            + "<wfs:Query typeName=\"cdf:Other\"> "
-            + "<wfs:PropertyName>cdf:string2</wfs:PropertyName> "
-            + "</wfs:Query> " + "</wfs:GetFeature>";
+                + "version=\"1.1.0\" "
+                + "xmlns:cdf=\"http://www.opengis.net/cite/data\" "
+                + "xmlns:ogc=\"http://www.opengis.net/ogc\" "
+                + "xmlns:wfs=\"http://www.opengis.net/wfs\" " + "> "
+                + "<wfs:Query typeName=\"cdf:Other\"> "
+                + "<wfs:PropertyName>cdf:string2</wfs:PropertyName> "
+                + "</wfs:Query> " + "</wfs:GetFeature>";
 
         Document doc = postAsDOM("wfs", xml);
 
@@ -92,15 +92,15 @@ public class GetFeatureMissingTypesTest extends WFSTestSupport {
 
         // but if we require buildings itself, it should fail
         xml = "<wfs:GetFeature " + "service=\"WFS\" "
-            + "version=\"1.1.0\" "
-            + "xmlns:cdf=\"http://www.opengis.net/cite/data\" "
-            + "xmlns:ogc=\"http://www.opengis.net/ogc\" "
-            + "xmlns:wfs=\"http://www.opengis.net/wfs\" " + "> "
-            + "<wfs:Query typeName=\"" + getLayerId(SystemTestData.BUILDINGS) +"\"/> "
-            + "</wfs:GetFeature>";
+                + "version=\"1.1.0\" "
+                + "xmlns:cdf=\"http://www.opengis.net/cite/data\" "
+                + "xmlns:ogc=\"http://www.opengis.net/ogc\" "
+                + "xmlns:wfs=\"http://www.opengis.net/wfs\" " + "> "
+                + "<wfs:Query typeName=\"" + getLayerId(SystemTestData.BUILDINGS) + "\"/> "
+                + "</wfs:GetFeature>";
 
         doc = postAsDOM("wfs", xml);
-        
+
         assertEquals("ows:ExceptionReport", doc.getDocumentElement()
                 .getNodeName());
     }

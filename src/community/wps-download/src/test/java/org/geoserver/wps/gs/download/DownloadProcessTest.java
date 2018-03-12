@@ -88,7 +88,7 @@ import it.geosolutions.imageio.plugins.tiff.BaselineTIFFTagSet;
 
 /**
  * This class tests checks if the DownloadProcess class behaves correctly.
- * 
+ *
  * @author "Alessio Fabiani - alessio.fabiani@geo-solutions.it"
  */
 public class DownloadProcessTest extends WPSTestSupport {
@@ -96,11 +96,11 @@ public class DownloadProcessTest extends WPSTestSupport {
     private static final FilterFactory2 FF = FeatureUtilities.DEFAULT_FILTER_FACTORY;
 
     private static QName MIXED_RES = new QName(WCS_URI, "mixedres", WCS_PREFIX);
-    
+
     /**
      * This method is used for decoding an input file.
-     * 
-     * @param input the input stream to decode
+     *
+     * @param input         the input stream to decode
      * @param tempDirectory temporary directory on where the file is decoded.
      * @return the object the decoded file
      * @throws Exception the exception TODO review
@@ -146,9 +146,11 @@ public class DownloadProcessTest extends WPSTestSupport {
         return tempDirectory;
     }
 
-    /** Test ROI used */
+    /**
+     * Test ROI used
+     */
     final static Polygon roi;
-    
+
     final static Polygon ROI2;
 
     final static Polygon ROI3;
@@ -191,7 +193,7 @@ public class DownloadProcessTest extends WPSTestSupport {
 
     /**
      * Test get features as shapefile.
-     * 
+     *
      * @throws Exception the exception
      */
     @Test
@@ -221,7 +223,7 @@ public class DownloadProcessTest extends WPSTestSupport {
                 null, // bandSelectIndices
                 null, // Writing params
                 new NullProgressListener() // progressListener
-                );
+        );
 
         // Final checks on the result
         Assert.assertNotNull(shpeZip);
@@ -236,7 +238,7 @@ public class DownloadProcessTest extends WPSTestSupport {
 
     /**
      * Test downloading with a duplicate style
-     * 
+     *
      * @throws Exception the exception
      */
     @Test
@@ -252,7 +254,7 @@ public class DownloadProcessTest extends WPSTestSupport {
 
     /**
      * Test filtered clipped features.
-     * 
+     *
      * @throws Exception the exception
      */
     @Test
@@ -286,7 +288,7 @@ public class DownloadProcessTest extends WPSTestSupport {
                 null, // bandSelectIndices
                 null, // Writing params
                 new NullProgressListener() // progressListener
-                );
+        );
 
 
         // Final checks on the result
@@ -314,7 +316,7 @@ public class DownloadProcessTest extends WPSTestSupport {
 
     /**
      * Test get features as gml.
-     * 
+     *
      * @throws Exception the exception
      */
     @Test
@@ -345,7 +347,7 @@ public class DownloadProcessTest extends WPSTestSupport {
                 null, // bandSelectIndices
                 null, // Writing params
                 new NullProgressListener() // progressListener
-                );
+        );
 
 
         // Final checks on the result
@@ -374,7 +376,7 @@ public class DownloadProcessTest extends WPSTestSupport {
                 null, // bandSelectIndices
                 null, // Writing params
                 new NullProgressListener() // progressListener
-                );
+        );
 
 
         // Final checks on the result
@@ -392,9 +394,8 @@ public class DownloadProcessTest extends WPSTestSupport {
 
     /**
      * This method is used for extracting only the xml file from a GML output file
-     * 
-     * @param gml2Zip
      *
+     * @param gml2Zip
      * @throws IOException
      */
     private File[] exctractGMLFile(File gml2Zip) throws IOException {
@@ -411,9 +412,8 @@ public class DownloadProcessTest extends WPSTestSupport {
 
     /**
      * This method is used for extracting only the json file from a JSON output file
-     * 
-     * @param jsonZip
      *
+     * @param jsonZip
      * @throws IOException
      */
     private File[] exctractJSONFile(File jsonZip) throws IOException {
@@ -430,9 +430,8 @@ public class DownloadProcessTest extends WPSTestSupport {
 
     /**
      * This method is used for extracting only the tiff file from a Tiff/GeoTiff output file
-     * 
-     * @param gtiffZip
      *
+     * @param gtiffZip
      * @throws IOException
      */
     private File[] extractTIFFFile(final File gtiffZip) throws IOException {
@@ -443,9 +442,9 @@ public class DownloadProcessTest extends WPSTestSupport {
             public boolean accept(File dir, String name) {
                 return
 
-                (FilenameUtils.getExtension(name).equalsIgnoreCase("tif")
-                        || FilenameUtils.getExtension(name).equalsIgnoreCase("tiff") || FilenameUtils
-                        .getExtension(name).equalsIgnoreCase("geotiff"));
+                        (FilenameUtils.getExtension(name).equalsIgnoreCase("tif")
+                                || FilenameUtils.getExtension(name).equalsIgnoreCase("tiff") || FilenameUtils
+                                .getExtension(name).equalsIgnoreCase("geotiff"));
             }
         });
         return files;
@@ -453,7 +452,7 @@ public class DownloadProcessTest extends WPSTestSupport {
 
     /**
      * Test get features as geo json.
-     * 
+     *
      * @throws Exception the exception
      */
     @Test
@@ -483,7 +482,7 @@ public class DownloadProcessTest extends WPSTestSupport {
                 null, // bandSelectIndices
                 null, // Writing params
                 new NullProgressListener() // progressListener
-                );
+        );
 
         // Final checks on the result
         Assert.assertNotNull(jsonZip);
@@ -500,7 +499,7 @@ public class DownloadProcessTest extends WPSTestSupport {
 
     /**
      * Test download of raster data.
-     * 
+     *
      * @throws Exception the exception
      */
     @Test
@@ -538,7 +537,7 @@ public class DownloadProcessTest extends WPSTestSupport {
                 null, // bandSelectIndices
                 null, // Writing params
                 new NullProgressListener() // progressListener
-                );
+        );
 
 
         // Final checks on the result
@@ -600,7 +599,7 @@ public class DownloadProcessTest extends WPSTestSupport {
                 null, // bandSelectIndices
                 null, // Writing params
                 new NullProgressListener() // progressListener
-                );
+        );
 
 
         // Final checks on the result
@@ -660,7 +659,7 @@ public class DownloadProcessTest extends WPSTestSupport {
                 null, // bandSelectIndices
                 null, // Writing params
                 new NullProgressListener() // progressListener
-                );
+        );
 
         // Final checks on the result
         Assert.assertNotNull(resampledZip);
@@ -697,7 +696,7 @@ public class DownloadProcessTest extends WPSTestSupport {
 
     /**
      * Test Writing parameters are used
-     * 
+     *
      * @throws Exception the exception
      */
     @Test
@@ -716,7 +715,7 @@ public class DownloadProcessTest extends WPSTestSupport {
         Polygon roi = (Polygon) new WKTReader2()
                 .read("POLYGON (( " + firstXRoi + " " + firstYRoi + ", -130.88669845369998 52.00807146727025, -129.50812897394974 49.85372324691927, -130.5300633861675 49.20465679591609, -129.25955033314003 48.60392508062591, -128.00975216684665 50.986137055052474, -125.8623089087404 48.63154492960477, -123.984159178178 50.68231871628503, -126.91186316993704 52.15307567440926, -125.3444367403868 53.54787804784162, -127.57473954542964 54.06575021619523 ))");
         roi.setSRID(4326);
-        
+
 
         // Setting up custom writing parameters
         Parameters parameters = new Parameters();
@@ -724,12 +723,12 @@ public class DownloadProcessTest extends WPSTestSupport {
         final String tileWidthValue = "32";
         final String tileHeightValue = "32";
         final String compressionValue = "LZW";
-        
+
         parametersList.add(new Parameter("tilewidth", tileWidthValue));
         parametersList.add(new Parameter("tileheight", tileHeightValue));
         parametersList.add(new Parameter("compression", compressionValue));
         parametersList.add(new Parameter("not_supported_ignore_this", "NOT_VALID_IGNORE_THIS"));
-        
+
         // Download the coverage as tiff 
         File rasterZip = downloadProcess.execute(getLayerId(MockData.USA_WORLDIMG), // layerName
                 null, // filter
@@ -744,7 +743,7 @@ public class DownloadProcessTest extends WPSTestSupport {
                 null, // bandSelectIndices
                 parameters, // Writing params
                 new NullProgressListener() // progressListener
-                );
+        );
 
 
         // Final checks on the result
@@ -756,7 +755,7 @@ public class DownloadProcessTest extends WPSTestSupport {
         expectedTiffTagValues.put(Integer.toString(BaselineTIFFTagSet.TAG_TILE_LENGTH), tileHeightValue);
         expectedTiffTagValues.put(Integer.toString(BaselineTIFFTagSet.TAG_COMPRESSION), compressionValue);
         int matchingStillRequired = 3;
-        
+
         try {
             final File[] tiffFiles = extractTIFFFile(rasterZip);
             Assert.assertNotNull(tiffFiles);
@@ -767,7 +766,7 @@ public class DownloadProcessTest extends WPSTestSupport {
 
             // Parsing metadata for check
             Node child = rootNode.getFirstChild().getFirstChild();
-            
+
             if (child != null) {
                 Set<String> expectedTiffTagKeys = expectedTiffTagValues.keySet();
                 while (child != null) {
@@ -811,10 +810,10 @@ public class DownloadProcessTest extends WPSTestSupport {
             resourceManager.finished(resourceManager.getExecutionId(true));
         }
     }
-    
+
     /**
      * Test download of selected bands of raster data. Result contains only bands 0 and 2.
-     * 
+     *
      * @throws Exception the exception
      */
     @Test
@@ -842,10 +841,10 @@ public class DownloadProcessTest extends WPSTestSupport {
                 null, // interpolation
                 null, // targetSizeX
                 null, // targetSizeY
-                new int[]{0,2}, // bandSelectIndices
+                new int[]{0, 2}, // bandSelectIndices
                 null, // Writing params
                 new NullProgressListener() // progressListener
-                );
+        );
 
 
         // Final checks on the result
@@ -864,15 +863,15 @@ public class DownloadProcessTest extends WPSTestSupport {
             // check bands
             Assert.assertEquals(2,
                     gc.getNumSampleDimensions());
-            
+
             // check visible band index for new coverage
             Assert.assertEquals(0,
                     CoverageUtilities.getVisibleBand(gc));
-            
+
             // check non existing band index
             Assert.assertNotEquals(3,
                     gc.getNumSampleDimensions());
-            
+
         } finally {
             if (gc != null) {
                 CoverageCleanerCallback.disposeCoverage(gc);
@@ -885,11 +884,11 @@ public class DownloadProcessTest extends WPSTestSupport {
             resourceManager.finished(resourceManager.getExecutionId(true));
         }
     }
-    
+
     /**
-     * Test download of selected bands of raster data, scald and using a ROI area. 
+     * Test download of selected bands of raster data, scald and using a ROI area.
      * Result contains only band 1.
-     * 
+     *
      * @throws Exception the exception
      */
     @Test
@@ -905,7 +904,7 @@ public class DownloadProcessTest extends WPSTestSupport {
         ///////////////////////////////////////
         //      test full coverage           //
         ///////////////////////////////////////
-        
+
         Polygon roi = (Polygon) new WKTReader2()
                 .read("POLYGON (( "
                         + "-127.57473954542964 54.06575021619523, "
@@ -937,7 +936,7 @@ public class DownloadProcessTest extends WPSTestSupport {
                 new int[]{1}, // bandSelectIndices
                 null, // Writing params
                 new NullProgressListener() // progressListener
-                );
+        );
 
 
         // Final checks on the result
@@ -955,8 +954,8 @@ public class DownloadProcessTest extends WPSTestSupport {
 
             // check bands
             Assert.assertEquals(1,
-                    gc.getNumSampleDimensions());    
-            
+                    gc.getNumSampleDimensions());
+
             Rectangle2D originalGridRange = (GridEnvelope2D) reader.getOriginalGridRange();
             Assert.assertEquals(40, Math.round(originalGridRange.getWidth()));
             Assert.assertEquals(40, Math.round(originalGridRange.getHeight()));
@@ -970,7 +969,7 @@ public class DownloadProcessTest extends WPSTestSupport {
                     gc.getEnvelope().getUpperCorner().getOrdinate(0), 1E-6);
             Assert.assertEquals(54.00577111704634, gc.getEnvelope().getUpperCorner().getOrdinate(1),
                     1E-6);
-            
+
         } finally {
             if (gc != null) {
                 CoverageCleanerCallback.disposeCoverage(gc);
@@ -986,7 +985,7 @@ public class DownloadProcessTest extends WPSTestSupport {
 
     /**
      * Test download of raster data. The output is scaled to fit exactly the provided size.
-     * 
+     *
      * @throws Exception the exception
      */
     @Test
@@ -1017,7 +1016,7 @@ public class DownloadProcessTest extends WPSTestSupport {
                 null, // bandSelectIndices
                 null, // Writing params
                 new NullProgressListener() // progressListener
-                );
+        );
 
         // Final checks on the result
         Assert.assertNotNull(rasterZip);
@@ -1076,7 +1075,7 @@ public class DownloadProcessTest extends WPSTestSupport {
                 null, // bandSelectIndices
                 null, // Writing params
                 new NullProgressListener() // progressListener
-                );
+        );
 
 
         // Final checks on the result
@@ -1128,7 +1127,7 @@ public class DownloadProcessTest extends WPSTestSupport {
                 null, // bandSelectIndices
                 null, // Writing params
                 new NullProgressListener() // progressListener
-                );
+        );
 
 
         // Final checks on the result
@@ -1171,7 +1170,7 @@ public class DownloadProcessTest extends WPSTestSupport {
 
     /**
      * PPIO Test.
-     * 
+     *
      * @throws Exception the exception
      */
     @Test
@@ -1203,7 +1202,7 @@ public class DownloadProcessTest extends WPSTestSupport {
                 null, // bandSelectIndices
                 null, // Writing params
                 new NullProgressListener() // progressListener
-                );
+        );
 
 
         // Final checks on the result
@@ -1225,7 +1224,7 @@ public class DownloadProcessTest extends WPSTestSupport {
 
     /**
      * Test download estimator for raster data. The result should exceed the limits
-     * 
+     *
      * @throws Exception the exception
      */
     @Test
@@ -1262,7 +1261,7 @@ public class DownloadProcessTest extends WPSTestSupport {
                     null, // bandSelectIndices
                     null, // Writing params
                     new NullProgressListener() // progressListener
-                    );
+            );
 
             Assert.assertFalse(true);
         } catch (ProcessException e) {
@@ -1275,7 +1274,7 @@ public class DownloadProcessTest extends WPSTestSupport {
 
     /**
      * Test download estimator write limits raster. The result should exceed the limits
-     * 
+     *
      * @throws Exception the exception
      */
     @Test
@@ -1311,7 +1310,7 @@ public class DownloadProcessTest extends WPSTestSupport {
                     null, // bandSelectIndices
                     null, // Writing params
                     new NullProgressListener() // progressListener
-                    );
+            );
 
 
             Assert.assertFalse(true);
@@ -1324,7 +1323,7 @@ public class DownloadProcessTest extends WPSTestSupport {
 
     /**
      * Test download estimator write limits raster for scaled output. Scaled image should exceed the limits, whereas the original raster should not.
-     * 
+     *
      * @throws Exception the exception
      */
     @Test
@@ -1333,7 +1332,7 @@ public class DownloadProcessTest extends WPSTestSupport {
         DownloadEstimatorProcess limits = new DownloadEstimatorProcess(
                 new StaticDownloadServiceConfiguration(new DownloadServiceConfiguration(
                         DownloadServiceConfiguration.NO_LIMIT,
-                        DownloadServiceConfiguration.NO_LIMIT, 
+                        DownloadServiceConfiguration.NO_LIMIT,
                         DownloadServiceConfiguration.NO_LIMIT, 921600, // 900KB
                         DownloadServiceConfiguration.DEFAULT_COMPRESSION_LEVEL)), getGeoServer());
 
@@ -1355,7 +1354,7 @@ public class DownloadProcessTest extends WPSTestSupport {
                 null, // bandSelectIndices
                 null, // Writing params
                 new NullProgressListener() // progressListener
-                );
+        );
 
         Assert.assertNotNull(nonScaled);
 
@@ -1386,7 +1385,7 @@ public class DownloadProcessTest extends WPSTestSupport {
                     null, // bandSelectIndices
                     null, // Writing params
                     new NullProgressListener() // progressListener
-                    );
+            );
 
 
             // exception should have been thrown at this stage
@@ -1406,14 +1405,14 @@ public class DownloadProcessTest extends WPSTestSupport {
             // clean up process
             resourceManager.finished(resourceManager.getExecutionId(true));
         }
-        
+
         // Test same process for checking write output limits, using selected band indices
         limits = new DownloadEstimatorProcess(
                 new StaticDownloadServiceConfiguration(new DownloadServiceConfiguration(
                         DownloadServiceConfiguration.NO_LIMIT,
-                        DownloadServiceConfiguration.NO_LIMIT, 
+                        DownloadServiceConfiguration.NO_LIMIT,
                         30000,  //= 100x100 pixels x 3 bands x 1 byte (8 bits) per band
-                        DownloadServiceConfiguration.NO_LIMIT, 
+                        DownloadServiceConfiguration.NO_LIMIT,
                         DownloadServiceConfiguration.DEFAULT_COMPRESSION_LEVEL)), getGeoServer());
 
         downloadProcess = new DownloadProcess(getGeoServer(), limits,
@@ -1423,7 +1422,7 @@ public class DownloadProcessTest extends WPSTestSupport {
             // create a scaled 100x100 raster, with 4 bands
             int targetSizeX = 100;
             int targetSizeY = 100;
-            int[] bandIndices = new int[]{0,2,2,2};
+            int[] bandIndices = new int[]{0, 2, 2, 2};
             File scaled = downloadProcess.execute(getLayerId(MockData.USA_WORLDIMG), // layerName
                     null, // filter
                     "image/tiff", // outputFormat
@@ -1437,7 +1436,7 @@ public class DownloadProcessTest extends WPSTestSupport {
                     bandIndices, // bandSelectIndices
                     null, // Writing params
                     new NullProgressListener() // progressListener
-                    );
+            );
 
 
             // exception should have been thrown at this stage
@@ -1445,7 +1444,7 @@ public class DownloadProcessTest extends WPSTestSupport {
         } catch (ProcessException e) {
             Assert.assertEquals(
                     "java.lang.IllegalArgumentException: Download Limits Exceeded. "
-                    + "Unable to proceed!: Download Limits Exceeded. Unable to proceed!",
+                            + "Unable to proceed!: Download Limits Exceeded. Unable to proceed!",
                     e.getMessage() + (e.getCause() != null ? ": " + e.getCause().getMessage() : ""));
         }
     }
@@ -1490,7 +1489,7 @@ public class DownloadProcessTest extends WPSTestSupport {
                     null, // bandSelectIndices
                     null, // Writing params
                     new NullProgressListener() // progressListener
-                    );
+            );
 
             Assert.fail();
         } catch (ProcessException e) {
@@ -1503,7 +1502,7 @@ public class DownloadProcessTest extends WPSTestSupport {
 
     /**
      * Test download estimator for vectorial data. The result should be exceed the hard output limits
-     * 
+     *
      * @throws Exception the exception
      */
     @Test
@@ -1534,7 +1533,7 @@ public class DownloadProcessTest extends WPSTestSupport {
                     null, // bandSelectIndices
                     null, // Writing params
                     new NullProgressListener() // progressListener
-                    );
+            );
 
 
             Assert.assertFalse(true);
@@ -1551,7 +1550,7 @@ public class DownloadProcessTest extends WPSTestSupport {
 
     /**
      * Test download physical limit for raster data. It should throw an exception
-     * 
+     *
      * @throws Exception the exception
      */
     @Test
@@ -1586,7 +1585,7 @@ public class DownloadProcessTest extends WPSTestSupport {
                     null, // bandSelectIndices
                     null, // Writing params
                     listener // progressListener
-                    );
+            );
 
         } catch (Exception e) {
             Throwable e1 = listener.exception;
@@ -1600,7 +1599,7 @@ public class DownloadProcessTest extends WPSTestSupport {
 
     /**
      * Test download physical limit for vectorial data. It should throw an exception
-     * 
+     *
      * @throws Exception the exception
      */
     @Test
@@ -1636,7 +1635,7 @@ public class DownloadProcessTest extends WPSTestSupport {
                     null, // bandSelectIndices
                     null, // Writing params
                     listener // progressListener
-                    );
+            );
 
 
         } catch (ProcessException e) {
@@ -1658,7 +1657,7 @@ public class DownloadProcessTest extends WPSTestSupport {
 
     /**
      * Test with a wrong output format. It should thrown an exception.
-     * 
+     *
      * @throws Exception the exception
      */
     @Test
@@ -1691,7 +1690,7 @@ public class DownloadProcessTest extends WPSTestSupport {
                     null, // bandSelectIndices
                     null, // Writing params
                     progressListener // progressListener
-                    );
+            );
 
             Assert.assertTrue("We did not get an exception", false);
         } catch (Exception e) {
@@ -1702,10 +1701,9 @@ public class DownloadProcessTest extends WPSTestSupport {
     /**
      * Test download of raster data using underlying granules resolution.
      * The sample mosaic is composed of:
-     * 
+     * <p>
      * 18km_32610.tif with resolution = 17550.948453185396000 meters
      * 9km_32610.tif with resolution = 8712.564801039759900 meters
-     * 
      */
     @Test
     public void testDownloadGranuleHeterogeneousResolution() throws Exception {
@@ -1716,28 +1714,28 @@ public class DownloadProcessTest extends WPSTestSupport {
         DownloadProcess downloadProcess = new DownloadProcess(getGeoServer(), limits,
                 resourceManager);
 
-        
+
         // Setting filter to get the granule with resolution
         final PropertyName property = FF.property("resolution");
         Filter filter = (Filter) FF.greaterOrEqual(property, FF.literal(16000));
-        
-        testExpectedResolution(downloadProcess, filter, CRS.decode("EPSG:4326", true), 
+
+        testExpectedResolution(downloadProcess, filter, CRS.decode("EPSG:4326", true),
                 ROI2, resourceManager, 17550.94845318, -17550.94845318);
 
         // Download native resolution 2
         filter = FF.and(FF.lessOrEqual(property, FF.literal(10000)),
                 FF.greaterOrEqual(property, FF.literal(1000)));
 
-        testExpectedResolution(downloadProcess, filter, null, null, resourceManager, 
+        testExpectedResolution(downloadProcess, filter, null, null, resourceManager,
                 8712.564801039759900, -8712.564801039759900);
-        
+
         // Download native resolution 3
         filter = (Filter) FF.lessOrEqual(property, FF.literal(1000));
-        
+
         // Final checks on the result
-        testExpectedResolution(downloadProcess, filter, null, null, resourceManager, 
+        testExpectedResolution(downloadProcess, filter, null, null, resourceManager,
                 7818.453242658203, -10139.712928934865);
-        
+
 
         filter = FF.and(FF.lessOrEqual(property, FF.literal(10000)),
                 FF.greaterOrEqual(property, FF.literal(1000)));
@@ -1746,7 +1744,7 @@ public class DownloadProcessTest extends WPSTestSupport {
                 filter, // filter
                 "image/tiff", // outputFormat
                 null, // targetCRS
-                CRS.decode("EPSG:32610", true), 
+                CRS.decode("EPSG:32610", true),
                 ROI3, // roi
                 false, // cropToGeometry
                 null, // interpolation
@@ -1785,8 +1783,8 @@ public class DownloadProcessTest extends WPSTestSupport {
     }
 
     private void testExpectedResolution(DownloadProcess downloadProcess, Filter filter,
-            CoordinateReferenceSystem roiCrs, Polygon roi, WPSResourceManager resourceManager, 
-            double expectedX, double expectedY) throws IOException {
+                                        CoordinateReferenceSystem roiCrs, Polygon roi, WPSResourceManager resourceManager,
+                                        double expectedX, double expectedY) throws IOException {
 
         File rasterZip = downloadProcess.execute(getLayerId(MIXED_RES), // layerName
                 filter, // filter
@@ -1802,7 +1800,7 @@ public class DownloadProcessTest extends WPSTestSupport {
                 null, // Writing params
                 new NullProgressListener() // progressListener
         );
-       
+
         Assert.assertNotNull(rasterZip);
         GeoTiffReader reader = null;
         GridCoverage2D gc = null;
@@ -1824,7 +1822,7 @@ public class DownloadProcessTest extends WPSTestSupport {
 
             Assert.assertEquals(expectedX, resX, 1E-6);
             Assert.assertEquals(expectedY, resY, 1E-6);
-            
+
         } finally {
             if (gc != null) {
                 CoverageCleanerCallback.disposeCoverage(gc);
@@ -1836,7 +1834,7 @@ public class DownloadProcessTest extends WPSTestSupport {
             // clean up process
             resourceManager.finished(resourceManager.getExecutionId(true));
         }
-        
+
     }
 
     /**
@@ -1844,29 +1842,39 @@ public class DownloadProcessTest extends WPSTestSupport {
      * the object created with that class is registered with a component using the component's <code>addProcessListener<code> method. When
      * the process event occurs, that object's appropriate
      * method is invoked.
-     * 
+     *
      * @see ProcessEvent
      */
     static class ProcessListener implements ProgressListener {
 
-        /** The Constant LOGGER. */
+        /**
+         * The Constant LOGGER.
+         */
         static final Logger LOGGER = Logging.getLogger(ProcessListener.class);
 
-        /** The status. */
+        /**
+         * The status.
+         */
         ExecutionStatus status;
 
-        /** The task. */
+        /**
+         * The task.
+         */
         InternationalString task;
 
-        /** The description. */
+        /**
+         * The description.
+         */
         String description;
 
-        /** The exception. */
+        /**
+         * The exception.
+         */
         Throwable exception;
 
         /**
          * Instantiates a new process listener.
-         * 
+         *
          * @param status the status
          */
         public ProcessListener(ExecutionStatus status) {
@@ -1875,7 +1883,7 @@ public class DownloadProcessTest extends WPSTestSupport {
 
         /**
          * Gets the task.
-         * 
+         *
          * @return the task
          */
         public InternationalString getTask() {
@@ -1884,7 +1892,7 @@ public class DownloadProcessTest extends WPSTestSupport {
 
         /**
          * Sets the task.
-         * 
+         *
          * @param task the new task
          */
         public void setTask(InternationalString task) {
@@ -1893,7 +1901,7 @@ public class DownloadProcessTest extends WPSTestSupport {
 
         /**
          * Gets the description.
-         * 
+         *
          * @return the description
          */
         public String getDescription() {
@@ -1902,7 +1910,7 @@ public class DownloadProcessTest extends WPSTestSupport {
 
         /**
          * Sets the description.
-         * 
+         *
          * @param description the new description
          */
         public void setDescription(String description) {
@@ -1919,7 +1927,7 @@ public class DownloadProcessTest extends WPSTestSupport {
 
         /**
          * Progress.
-         * 
+         *
          * @param percent the percent
          */
         public void progress(float percent) {
@@ -1928,7 +1936,7 @@ public class DownloadProcessTest extends WPSTestSupport {
 
         /**
          * Gets the progress.
-         * 
+         *
          * @return the progress
          */
         public float getProgress() {
@@ -1951,7 +1959,7 @@ public class DownloadProcessTest extends WPSTestSupport {
 
         /**
          * Checks if is canceled.
-         * 
+         *
          * @return true, if is canceled
          */
         public boolean isCanceled() {
@@ -1960,7 +1968,7 @@ public class DownloadProcessTest extends WPSTestSupport {
 
         /**
          * Sets the canceled.
-         * 
+         *
          * @param cancel the new canceled
          */
         public void setCanceled(boolean cancel) {
@@ -1972,10 +1980,10 @@ public class DownloadProcessTest extends WPSTestSupport {
 
         /**
          * Warning occurred.
-         * 
-         * @param source the source
+         *
+         * @param source   the source
          * @param location the location
-         * @param warning the warning
+         * @param warning  the warning
          */
         public void warningOccurred(String source, String location, String warning) {
             LOGGER.log(Level.WARNING,
@@ -1985,7 +1993,7 @@ public class DownloadProcessTest extends WPSTestSupport {
 
         /**
          * Exception occurred.
-         * 
+         *
          * @param exception the exception
          */
         public void exceptionOccurred(Throwable exception) {
@@ -1996,7 +2004,7 @@ public class DownloadProcessTest extends WPSTestSupport {
 
     /**
      * Private method for decoding a Shapefile
-     * 
+     *
      * @param input the input shp
      * @return the object a {@link SimpleFeatureCollection} object related to the shp file.
      * @throws Exception the exception

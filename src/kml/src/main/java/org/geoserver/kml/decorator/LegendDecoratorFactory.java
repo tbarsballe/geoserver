@@ -22,19 +22,19 @@ import de.micromata.opengis.kml.v_2_2_0.Vec2;
 
 /**
  * Encodes previous/next network links when paging is used
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class LegendDecoratorFactory implements KmlDecoratorFactory {
 
     @Override
     public KmlDecorator getDecorator(Class<? extends Feature> featureClass,
-            KmlEncodingContext context) {
+                                     KmlEncodingContext context) {
         // this decorator makes sense only for WMS
-        if(!(context.getService() instanceof WMSInfo)) {
+        if (!(context.getService() instanceof WMSInfo)) {
             return null;
         }
-        
+
         // see if we have to encode a legend
         GetMapRequest request = context.getRequest();
         Boolean legend = (Boolean) request.getFormatOptions().get("legend");
@@ -50,7 +50,7 @@ public class LegendDecoratorFactory implements KmlDecoratorFactory {
         @Override
         public Feature decorate(Feature feature, KmlEncodingContext context) {
             Document doc = (Document) feature;
-            
+
             // create the screen overlay
             ScreenOverlay go = doc.createAndAddScreenOverlay();
             go.setName("Legend");
@@ -62,13 +62,13 @@ public class LegendDecoratorFactory implements KmlDecoratorFactory {
             String legendOptions = (String) context.getRequest().getRawKvp().get("LEGEND_OPTIONS");
             String[] kvpArray = null;
             if (legendOptions != null) {
-                kvpArray = new String[] { "LEGEND_OPTIONS", legendOptions };
+                kvpArray = new String[]{"LEGEND_OPTIONS", legendOptions};
             }
             List<Layer> layerList = context.getMapContent().layers();
             Layer[] layers = (Layer[]) layerList.toArray(new Layer[layerList.size()]);
             icon.setHref(WMSRequests.getGetLegendGraphicUrl(context.getRequest(),
                     layers, kvpArray));
-            
+
             return feature;
         }
 

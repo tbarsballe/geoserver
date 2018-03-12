@@ -19,7 +19,6 @@ import org.geoserver.web.wicket.XMLNameValidator;
 @SuppressWarnings("serial")
 class NewWorkspacePanel extends Panel {
 
-    
 
     String workspace;
 
@@ -43,7 +42,7 @@ class NewWorkspacePanel extends Panel {
             String value = iv.getValue();
             if (GeoServerApplication.get().getCatalog().getWorkspaceByName(value) != null) {
                 iv.error(new ValidationError("NewWorkspacePanel.duplicateWorkspace")
-                .setVariable("workspace", value));
+                        .setVariable("workspace", value));
             }
         }
     }

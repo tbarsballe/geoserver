@@ -11,7 +11,7 @@ import java.io.OutputStream;
 
 /**
  * An output stream, which limits its data size. This stream is used if the content length is unknown.
- * 
+ *
  * @author "Alessio Fabiani - alessio.fabiani@geo-solutions.it"
  */
 abstract class LimitedOutputStream extends FilterOutputStream {
@@ -32,8 +32,8 @@ abstract class LimitedOutputStream extends FilterOutputStream {
 
     /**
      * Creates a new instance.
-     * 
-     * @param pOut The input stream, which shall be limited.
+     *
+     * @param pOut     The input stream, which shall be limited.
      * @param pSizeMax The limit; no more than this number of bytes shall be returned by the source stream.
      */
     public LimitedOutputStream(OutputStream pOut, long pSizeMax) {
@@ -43,16 +43,16 @@ abstract class LimitedOutputStream extends FilterOutputStream {
 
     /**
      * Called to indicate, that the input streams limit has been exceeded.
-     * 
+     *
      * @param pSizeMax The input streams limit, in bytes.
-     * @param pCount The actual number of bytes.
+     * @param pCount   The actual number of bytes.
      * @throws IOException The called method is expected to raise an IOException.
      */
     protected abstract void raiseError(long pSizeMax, long pCount) throws IOException;
 
     /**
      * Called to check, whether the input streams limit is reached.
-     * 
+     *
      * @throws IOException The given limit is exceeded.
      */
     private void checkLimit() throws IOException {
@@ -67,8 +67,8 @@ abstract class LimitedOutputStream extends FilterOutputStream {
      * blocks until input data is available, the end of the stream is detected, or an exception is thrown.
      * <p>
      * This method simply performs <code>in.read()</code> and returns the result.
+     *
      * @param b the b
-     * 
      * @throws IOException if an I/O error occurs.
      * @see java.io.FilterInputStream#in
      */
@@ -83,8 +83,8 @@ abstract class LimitedOutputStream extends FilterOutputStream {
      * until some input is available; otherwise, no bytes are read and <code>0</code> is returned.
      * <p>
      * This method simply performs <code>in.read(b, off, len)</code> and returns the result.
-     * 
-     * @param b the buffer into which the data is read.
+     *
+     * @param b   the buffer into which the data is read.
      * @param off The start offset in the destination array <code>b</code>.
      * @param len the maximum number of bytes read.
      * @throws IOException if an I/O error occurs.
@@ -100,7 +100,7 @@ abstract class LimitedOutputStream extends FilterOutputStream {
 
     /**
      * Returns, whether this stream is already closed.
-     * 
+     *
      * @return True, if the stream is closed, otherwise false.
      * @throws IOException An I/O error occurred.
      */
@@ -110,7 +110,7 @@ abstract class LimitedOutputStream extends FilterOutputStream {
 
     /**
      * Closes this input stream and releases any system resources associated with the stream. This method simply performs <code>in.close()</code>.
-     * 
+     *
      * @throws IOException if an I/O error occurs.
      * @see java.io.FilterInputStream#in
      */

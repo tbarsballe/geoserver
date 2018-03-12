@@ -32,7 +32,7 @@ public class ResourceAccessManagerWPSTest extends WPSTestSupport {
         return Collections.singletonList((javax.servlet.Filter) GeoServerExtensions
                 .bean("filterChainProxy"));
     }
-    
+
     /**
      * Add the test resource access manager in the spring context
      */
@@ -41,11 +41,11 @@ public class ResourceAccessManagerWPSTest extends WPSTestSupport {
         super.setUpSpring(springContextLocations);
         springContextLocations.add("classpath:/org/geoserver/wps/ResourceAccessManagerContext.xml");
     }
-    
+
     @Override
     protected void onSetUp(SystemTestData testData) throws Exception {
         super.onSetUp(testData);
-        
+
         addUser("cite", "cite", null, Collections.singletonList("ROLE_DUMMY"));
 
         // populate the access manager
@@ -68,17 +68,17 @@ public class ResourceAccessManagerWPSTest extends WPSTestSupport {
     public void testDenyAccess() throws Exception {
         Document dom = runBuildingsRequest();
         // print(dom);
-        
+
         assertEquals("1", xp.evaluate("count(//wps:ProcessFailed)", dom));
         assertEquals("0", xp.evaluate("count(//wps:ProcessSucceded)", dom));
     }
-    
+
     @Test
     public void testAllowAccess() throws Exception {
         setRequestAuth("cite", "cite");
         Document dom = runBuildingsRequest();
         // print(dom);
-        
+
         assertEquals("0", xp.evaluate("count(//wps:ProcessFailed)", dom));
         assertEquals("1", xp.evaluate("count(//wps:ProcessSucceeded)", dom));
         String[] lc = xp.evaluate("//wps:Output[ows:Identifier = 'bounds']/wps:Data/wps:BoundingBoxData/ows:LowerCorner", dom).split("\\s+");
@@ -93,30 +93,30 @@ public class ResourceAccessManagerWPSTest extends WPSTestSupport {
         // @formatter:off
         String xml =
                 "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-                + "<wps:Execute version=\"1.0.0\" service=\"WPS\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://www.opengis.net/wps/1.0.0\" xmlns:wfs=\"http://www.opengis.net/wfs\" xmlns:wps=\"http://www.opengis.net/wps/1.0.0\" xmlns:ows=\"http://www.opengis.net/ows/1.1\" xmlns:gml=\"http://www.opengis.net/gml\" xmlns:ogc=\"http://www.opengis.net/ogc\" xmlns:wcs=\"http://www.opengis.net/wcs/1.1.1\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xsi:schemaLocation=\"http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsAll.xsd\">\n"
-                + "  <ows:Identifier>gs:Bounds</ows:Identifier>\n"
-                + "  <wps:DataInputs>\n"
-                + "    <wps:Input>\n"
-                + "      <ows:Identifier>features</ows:Identifier>\n"
-                + "      <wps:Reference mimeType=\"text/xml; subtype=wfs-collection/1.0\" xlink:href=\"http://geoserver/wfs\" method=\"POST\">\n"
-                + "        <wps:Body>\n"
-                + "          <wfs:GetFeature service=\"WFS\" version=\"1.0.0\" outputFormat=\"GML2\">\n"
-                + "            <wfs:Query typeName=\""
-                + getLayerId(MockData.BUILDINGS)
-                + "\"/>\n"
-                + "          </wfs:GetFeature>\n"
-                + "        </wps:Body>\n"
-                + "      </wps:Reference>\n"
-                + "    </wps:Input>\n"
-                + "  </wps:DataInputs>\n"
-                + "  <wps:ResponseForm>\n"
-                + "    <wps:Output>\n"
-                + "      <ows:Identifier>result</ows:Identifier>\n"
-                + "    </wps:Output>\n"
-                + " </wps:ResponseForm>\n" 
-                + "</wps:Execute>";
+                        + "<wps:Execute version=\"1.0.0\" service=\"WPS\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://www.opengis.net/wps/1.0.0\" xmlns:wfs=\"http://www.opengis.net/wfs\" xmlns:wps=\"http://www.opengis.net/wps/1.0.0\" xmlns:ows=\"http://www.opengis.net/ows/1.1\" xmlns:gml=\"http://www.opengis.net/gml\" xmlns:ogc=\"http://www.opengis.net/ogc\" xmlns:wcs=\"http://www.opengis.net/wcs/1.1.1\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xsi:schemaLocation=\"http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsAll.xsd\">\n"
+                        + "  <ows:Identifier>gs:Bounds</ows:Identifier>\n"
+                        + "  <wps:DataInputs>\n"
+                        + "    <wps:Input>\n"
+                        + "      <ows:Identifier>features</ows:Identifier>\n"
+                        + "      <wps:Reference mimeType=\"text/xml; subtype=wfs-collection/1.0\" xlink:href=\"http://geoserver/wfs\" method=\"POST\">\n"
+                        + "        <wps:Body>\n"
+                        + "          <wfs:GetFeature service=\"WFS\" version=\"1.0.0\" outputFormat=\"GML2\">\n"
+                        + "            <wfs:Query typeName=\""
+                        + getLayerId(MockData.BUILDINGS)
+                        + "\"/>\n"
+                        + "          </wfs:GetFeature>\n"
+                        + "        </wps:Body>\n"
+                        + "      </wps:Reference>\n"
+                        + "    </wps:Input>\n"
+                        + "  </wps:DataInputs>\n"
+                        + "  <wps:ResponseForm>\n"
+                        + "    <wps:Output>\n"
+                        + "      <ows:Identifier>result</ows:Identifier>\n"
+                        + "    </wps:Output>\n"
+                        + " </wps:ResponseForm>\n"
+                        + "</wps:Execute>";
         // @formatter:on
-        
+
         Document dom = postAsDOM("wps", xml);
         return dom;
     }

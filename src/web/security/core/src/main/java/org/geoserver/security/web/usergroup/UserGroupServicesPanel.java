@@ -13,7 +13,7 @@ import org.geoserver.security.web.SecurityNamedServicesPanel;
 
 /**
  * Panel for providing list of user group service configurations.
- * 
+ *
  * @author Justin Deoliveira, OpenGeo
  */
 public class UserGroupServicesPanel extends SecurityNamedServicesPanel<SecurityUserGroupServiceConfig> {
@@ -30,8 +30,8 @@ public class UserGroupServicesPanel extends SecurityNamedServicesPanel<SecurityU
     @Override
     protected void validateRemoveConfig(SecurityUserGroupServiceConfig config)
             throws SecurityConfigException {
-        SecurityConfigValidator.getConfigurationValiator(GeoServerUserGroupService.class, 
-            config.getClassName()).validateRemoveUserGroupService(config);
+        SecurityConfigValidator.getConfigurationValiator(GeoServerUserGroupService.class,
+                config.getClassName()).validateRemoveUserGroupService(config);
     }
 
     @Override

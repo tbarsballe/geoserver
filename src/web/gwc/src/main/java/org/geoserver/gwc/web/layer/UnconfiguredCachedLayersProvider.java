@@ -68,7 +68,7 @@ class UnconfiguredCachedLayersProvider extends GeoServerDataProvider<TileLayer> 
     /**
      * Provides a list of transient TileLayers for the LayerInfo and LayerGroupInfo objects in
      * Catalog that don't already have a configured TileLayer on their metadata map.
-     * 
+     *
      * @see org.geoserver.web.wicket.GeoServerDataProvider#getItems()
      */
     @Override

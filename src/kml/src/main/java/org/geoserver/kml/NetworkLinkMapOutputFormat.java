@@ -22,9 +22,8 @@ import de.micromata.opengis.kml.v_2_2_0.Kml;
 
 /**
  * TODO: - handle superoverlay and caching
- * 
+ *
  * @author Andrea Aime - GeoSolutions
- * 
  */
 public class NetworkLinkMapOutputFormat extends AbstractMapOutputFormat {
     static final Logger LOGGER = Logging.getLogger(NetworkLinkMapOutputFormat.class);
@@ -36,7 +35,7 @@ public class NetworkLinkMapOutputFormat extends AbstractMapOutputFormat {
 
     public static final String KMZ_MIME_TYPE = KMZMapOutputFormat.MIME_TYPE + ";mode=networklink";
 
-    public static final String[] OUTPUT_FORMATS = { KML_MIME_TYPE, KMZ_MIME_TYPE };
+    public static final String[] OUTPUT_FORMATS = {KML_MIME_TYPE, KMZ_MIME_TYPE};
 
     private WMS wms;
 
@@ -49,9 +48,9 @@ public class NetworkLinkMapOutputFormat extends AbstractMapOutputFormat {
      * Initializes the KML encoder. None of the map production is done here, it is done in
      * writeTo(). This way the output can be streamed directly to the output response and not
      * written to disk first, then loaded in and then sent to the response.
-     * 
+     *
      * @param mapContent WMSMapContext describing what layers, styles, area of interest etc are to
-     *        be used when producing the map.
+     *                   be used when producing the map.
      * @see org.geoserver.wms.GetMapOutputFormat#produceMap(org.geoserver.wms.WMSMapContent)
      */
     @SuppressWarnings("rawtypes")
@@ -77,9 +76,9 @@ public class NetworkLinkMapOutputFormat extends AbstractMapOutputFormat {
         Kml kml = null;
         KmlEncodingContext context = new KmlEncodingContext(mapContent, wms, kmz);
         if (superoverlay) {
-            kml  = new SuperOverlayNetworkLinkBuilder(context).buildKMLDocument();
+            kml = new SuperOverlayNetworkLinkBuilder(context).buildKMLDocument();
         } else {
-            kml  = new SimpleNetworkLinkBuilder(context).buildKMLDocument();
+            kml = new SimpleNetworkLinkBuilder(context).buildKMLDocument();
         }
 
         // build the output map

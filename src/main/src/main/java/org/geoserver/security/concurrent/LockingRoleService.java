@@ -24,19 +24,18 @@ import org.geoserver.security.impl.GeoServerRole;
 /**
  * This is a wrapper class for a {@link GeoServerRoleService}.
  * This wrapper protects internal data structures using read/write locks
- * 
- * @author christian
  *
+ * @author christian
  */
 public class LockingRoleService extends AbstractLockingService implements
-        GeoServerRoleService,RoleLoadedListener {
+        GeoServerRoleService, RoleLoadedListener {
 
-    protected Set<RoleLoadedListener> listeners = 
-        Collections.synchronizedSet(new HashSet<RoleLoadedListener>());
+    protected Set<RoleLoadedListener> listeners =
+            Collections.synchronizedSet(new HashSet<RoleLoadedListener>());
 
     /**
      * Constructor for the locking wrapper
-     * 
+     *
      * @param service
      */
     public LockingRoleService(GeoServerRoleService service) {
@@ -57,8 +56,9 @@ public class LockingRoleService extends AbstractLockingService implements
         return store != null ? new LockingRoleStore(store) : null;
     }
 
-    /** 
+    /**
      * WRITE_LOCK
+     *
      * @see org.geoserver.security.GeoServerRoleService#load()
      */
     public void load() throws IOException {
@@ -73,6 +73,7 @@ public class LockingRoleService extends AbstractLockingService implements
 
     /**
      * READ_LOCK
+     *
      * @see org.geoserver.security.GeoServerRoleService#getRolesForUser(java.lang.String)
      */
     public SortedSet<GeoServerRole> getRolesForUser(String username) throws IOException {
@@ -81,64 +82,69 @@ public class LockingRoleService extends AbstractLockingService implements
             return getService().getRolesForUser(username);
         } finally {
             readUnLock();
-        }            
+        }
     }
 
     /**
      * READ_LOCK
+     *
      * @see org.geoserver.security.GeoServerRoleService#getRolesForGroup(java.lang.String)
      */
-    public SortedSet<GeoServerRole> getRolesForGroup(String groupname) throws IOException{
+    public SortedSet<GeoServerRole> getRolesForGroup(String groupname) throws IOException {
         readLock();
         try {
-            return getService().getRolesForGroup(groupname) ;
+            return getService().getRolesForGroup(groupname);
         } finally {
             readUnLock();
         }
-            
+
     }
 
     /**
      * READ_LOCK
+     *
      * @see org.geoserver.security.GeoServerRoleService#getRoles()
      */
-    public SortedSet<GeoServerRole> getRoles() throws IOException{
+    public SortedSet<GeoServerRole> getRoles() throws IOException {
         readLock();
         try {
             return getService().getRoles();
         } finally {
             readUnLock();
-        }            
+        }
     }
 
     /**
      * READ_LOCK
+     *
      * @see org.geoserver.security.GeoServerRoleService#createRoleObject(java.lang.String)
      */
-    public GeoServerRole createRoleObject(String role) throws IOException{
+    public GeoServerRole createRoleObject(String role) throws IOException {
         readLock();
         try {
             return getService().createRoleObject(role);
         } finally {
             readUnLock();
-        }            
+        }
     }
 
     /**
      * READ_LOCK
+     *
      * @see org.geoserver.security.GeoServerRoleService#getParentRole(org.geoserver.security.impl.GeoServerRole)
      */
-    public GeoServerRole getParentRole(GeoServerRole role) throws IOException{
+    public GeoServerRole getParentRole(GeoServerRole role) throws IOException {
         readLock();
         try {
             return getService().getParentRole(role);
         } finally {
             readUnLock();
-        }            
+        }
     }
 
     /**
      * READ_LOCK
+     *
      * @see org.geoserver.security.GeoServerRoleService#getRoleByName(java.lang.String)
      */
     public GeoServerRole getRoleByName(String role) throws IOException {
@@ -147,23 +153,24 @@ public class LockingRoleService extends AbstractLockingService implements
             return getService().getRoleByName(role);
         } finally {
             readUnLock();
-        }                    
+        }
     }
 
-    
+
     /**
-     * Fire {@link RoleLoadedEvent} for all listeners 
+     * Fire {@link RoleLoadedEvent} for all listeners
      */
-    protected void fireRoleChangedEvent() {        
+    protected void fireRoleChangedEvent() {
         RoleLoadedEvent event = new RoleLoadedEvent(this);
         for (RoleLoadedListener listener : listeners) {
             listener.rolesChanged(event);
         }
-        
+
     }
 
     /**
      * NO_LOCK
+     *
      * @see org.geoserver.security.GeoServerRoleService#registerRoleLoadedListener(org.geoserver.security.event.RoleLoadedListener)
      */
     public void registerRoleLoadedListener(RoleLoadedListener listener) {
@@ -172,6 +179,7 @@ public class LockingRoleService extends AbstractLockingService implements
 
     /**
      * NO_LOCK
+     *
      * @see org.geoserver.security.GeoServerRoleService#unregisterRoleLoadedListener(org.geoserver.security.event.RoleLoadedListener)
      */
     public void unregisterRoleLoadedListener(RoleLoadedListener listener) {
@@ -180,7 +188,6 @@ public class LockingRoleService extends AbstractLockingService implements
 
     /**
      * NO_LOCK
-     *  
      */
     public void rolesChanged(RoleLoadedEvent event) {
         // release the locks to avoid deadlock situations
@@ -194,60 +201,65 @@ public class LockingRoleService extends AbstractLockingService implements
 
     /**
      * READ_LOCK
+     *
      * @see org.geoserver.security.GeoServerRoleService#getGroupNamesForRole(org.geoserver.security.impl.GeoServerRole)
      */
-    public SortedSet<String> getGroupNamesForRole(GeoServerRole role) throws IOException{
+    public SortedSet<String> getGroupNamesForRole(GeoServerRole role) throws IOException {
         readLock();
         try {
             return getService().getGroupNamesForRole(role);
         } finally {
             readUnLock();
-        }            
+        }
     }
 
     /**
      * READ_LOCK
+     *
      * @see org.geoserver.security.GeoServerRoleService#getUserNamesForRole(org.geoserver.security.impl.GeoServerRole)
      */
-    public SortedSet<String> getUserNamesForRole(GeoServerRole role) throws IOException{
+    public SortedSet<String> getUserNamesForRole(GeoServerRole role) throws IOException {
         readLock();
         try {
             return getService().getUserNamesForRole(role);
         } finally {
             readUnLock();
-        }            
+        }
     }
-    
+
     /**
      * READ_LOCK
+     *
      * @see org.geoserver.security.GeoServerRoleService#getParentMappings()
      */
-    public  Map<String,String> getParentMappings() throws IOException {
+    public Map<String, String> getParentMappings() throws IOException {
         readLock();
         try {
             return getService().getParentMappings();
         } finally {
             readUnLock();
-        }            
+        }
     }
-    
+
     /**
      * READ_LOCK
+     *
      * @see org.geoserver.security.GeoServerRoleService#personalizeRoleParams(java.lang.String, java.util.Properties, java.lang.String, java.util.Properties)
      */
-    public  Properties personalizeRoleParams (String roleName,Properties roleParams, 
-            String userName,Properties userProps) throws IOException {
-        
+    public Properties personalizeRoleParams(String roleName, Properties roleParams,
+                                            String userName, Properties userProps) throws IOException {
+
         readLock();
         try {
             return getService().personalizeRoleParams(roleName, roleParams, userName, userProps);
         } finally {
             readUnLock();
-        }            
+        }
     }
 
     /**
      * WRITE_LOCK
+     *
      * @see org.geoserver.security.GeoServerRoleService#initializeFromConfig(org.geoserver.security.config.SecurityNamedServiceConfig)
      */
     @Override
@@ -262,7 +274,6 @@ public class LockingRoleService extends AbstractLockingService implements
 
     /**
      * NO_LOCK
-     *  
      */
     @Override
     public GeoServerRole getAdminRole() {
@@ -279,15 +290,16 @@ public class LockingRoleService extends AbstractLockingService implements
 
     /**
      * READ_LOCK
+     *
      * @see org.geoserver.security.GeoServerRoleService#getRoleCount()
      */
-    public int getRoleCount() throws IOException{
+    public int getRoleCount() throws IOException {
         readLock();
         try {
             return getService().getRoleCount();
         } finally {
             readUnLock();
-        }            
+        }
     }
 
 

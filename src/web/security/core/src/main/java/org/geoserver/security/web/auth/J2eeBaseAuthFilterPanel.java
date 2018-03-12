@@ -19,13 +19,15 @@ import org.geoserver.security.filter.GeoServerJ2eeAuthenticationFilter;
 
 /**
  * Base Configuration panel for J2EE supporting filters
- * 
+ *
  * @author Mauro Bartolomeoli (mauro.bartolomeoli@geo-solutions.it)
  */
 public abstract class J2eeBaseAuthFilterPanel<T extends J2eeAuthenticationBaseFilterConfig>
         extends PreAuthenticatedUserNameFilterPanel<T> {
 
-    /** serialVersionUID */
+    /**
+     * serialVersionUID
+     */
     private static final long serialVersionUID = 1L;
 
     public J2eeBaseAuthFilterPanel(String id, IModel<T> model) {
@@ -34,29 +36,29 @@ public abstract class J2eeBaseAuthFilterPanel<T extends J2eeAuthenticationBaseFi
 
     @Override
     protected void addRoleSourceDropDown(WebMarkupContainer container,
-            RoleSource rs) {        
+                                         RoleSource rs) {
         if (J2EERoleSource.J2EE.equals(rs)) {
             container.addOrReplace(new RoleServicePanel("panel"));
         } else {
             super.addRoleSourceDropDown(container, rs);
         }
     }
-    
+
     @Override
     protected Panel getRoleSourcePanel(RoleSource model) {
-        if(J2EERoleSource.J2EE.equals(model)) {
+        if (J2EERoleSource.J2EE.equals(model)) {
             return new RoleServicePanel("panel");
         } else {
             return super.getRoleSourcePanel(model);
         }
     }
-    
+
     @Override
     protected void createRoleSourceDropDown() {
-        add(roleSourceChoice = 
-            new DropDownChoice<RoleSource>("roleSource", Arrays.asList(J2EERoleSource.values()),
-            new RoleSourceChoiceRenderer()));
+        add(roleSourceChoice =
+                new DropDownChoice<RoleSource>("roleSource", Arrays.asList(J2EERoleSource.values()),
+                        new RoleSourceChoiceRenderer()));
     }
-    
-    
+
+
 }

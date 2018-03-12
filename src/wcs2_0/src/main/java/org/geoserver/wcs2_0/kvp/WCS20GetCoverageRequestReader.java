@@ -31,7 +31,7 @@ import net.opengis.wcs20.Wcs20Factory;
 
 /**
  * KVP reader for WCS 2.0 GetCoverage request
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 @SuppressWarnings("rawtypes")
@@ -91,7 +91,7 @@ public class WCS20GetCoverageRequestReader extends EMFKvpRequestReader {
     }
 
     private void parseSimpleContentList(GetCoverageType gc, Map kvp, List<String> geoTiffParams,
-            String namespace, String kvpPrefix) {
+                                        String namespace, String kvpPrefix) {
         for (String param : geoTiffParams) {
             String key = param;
             if (kvpPrefix != null) {
@@ -170,7 +170,7 @@ public class WCS20GetCoverageRequestReader extends EMFKvpRequestReader {
             }
         }
     }
-    
+
     @Override
     protected void setValue(EObject eObject, String property, Object value) {
         if ("sortBy".equalsIgnoreCase(property)) {

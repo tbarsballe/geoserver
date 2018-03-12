@@ -11,10 +11,7 @@ import org.w3c.dom.Document;
 import org.junit.Test;
 
 /**
- * 
- * 
  * @author Niels Charlier (Curtin University of Technology)
- * 
  */
 public class IdNotEncodedTest extends AbstractAppSchemaTestSupport {
 
@@ -38,7 +35,7 @@ public class IdNotEncodedTest extends AbstractAppSchemaTestSupport {
                 "//gsml:MappedInterval[@gml:id='789']/gsml:specification/gwml:HydrostratigraphicUnit/@gml:id", doc);
         assertXpathEvaluatesTo("ubspatial.hydrostratigraphicunit.012",
                 "//gsml:MappedInterval[@gml:id='012']/gsml:specification/gwml:HydrostratigraphicUnit/@gml:id", doc);
-       
+
     }
 
 }

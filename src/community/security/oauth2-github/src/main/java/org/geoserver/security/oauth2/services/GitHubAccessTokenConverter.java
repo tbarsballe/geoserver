@@ -20,7 +20,7 @@ import org.springframework.security.oauth2.provider.token.UserAuthenticationConv
 
 /**
  * Access Token Converter for GitHub token details.
- * 
+ *
  * @author Alessio Fabiani, GeoSolutions S.A.S.
  */
 public class GitHubAccessTokenConverter extends DefaultAccessTokenConverter {
@@ -50,7 +50,7 @@ public class GitHubAccessTokenConverter extends DefaultAccessTokenConverter {
         String clientId = (String) map.get(CLIENT_ID);
         parameters.put(CLIENT_ID, clientId);
         Set<String> resourceIds = new LinkedHashSet<>(map.containsKey(AUD)
-                ? (Collection<String>) map.get(AUD) : Collections.<String> emptySet());
+                ? (Collection<String>) map.get(AUD) : Collections.<String>emptySet());
         OAuth2Request request = new OAuth2Request(parameters, clientId, null, true, scope,
                 resourceIds, null, null, null);
         return new OAuth2Authentication(request, user);

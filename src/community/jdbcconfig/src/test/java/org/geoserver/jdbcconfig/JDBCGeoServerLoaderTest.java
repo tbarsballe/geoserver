@@ -33,6 +33,7 @@ import org.junit.runners.Parameterized.Parameters;
 import org.springframework.web.context.WebApplicationContext;
 
 import com.google.common.collect.Maps;
+
 import java.util.List;
 
 @RunWith(Parameterized.class)
@@ -45,11 +46,11 @@ public class JDBCGeoServerLoaderTest {
             @Override
             protected void configureAppContext(WebApplicationContext appContext) {
                 expect(appContext.getBeanNamesForType(XStreamServiceLoader.class))
-                    .andReturn(new String[]{"wmsLoader"}).anyTimes();
-                expect(appContext.getBeanNamesForType((Class)anyObject()))
-                    .andReturn(new String[]{}).anyTimes();
+                        .andReturn(new String[]{"wmsLoader"}).anyTimes();
+                expect(appContext.getBeanNamesForType((Class) anyObject()))
+                        .andReturn(new String[]{}).anyTimes();
                 expect(appContext.getBean("wmsLoader"))
-                    .andReturn(new WMSXStreamLoader(getResourceLoader())).anyTimes();
+                        .andReturn(new WMSXStreamLoader(getResourceLoader())).anyTimes();
 
             }
         };
@@ -78,8 +79,8 @@ public class JDBCGeoServerLoaderTest {
         expect(config.isImport()).andReturn(false).anyTimes();
         replay(config);
 
-        JDBCGeoServerLoader loader = 
-            new JDBCGeoServerLoader(testSupport.getResourceLoader(), config);
+        JDBCGeoServerLoader loader =
+                new JDBCGeoServerLoader(testSupport.getResourceLoader(), config);
         loader.setGeoServerFacade(new JDBCGeoServerFacade(testSupport.getDatabase()));
         loader.setApplicationContext(testSupport.getApplicationContext());
 
@@ -93,7 +94,7 @@ public class JDBCGeoServerLoaderTest {
         geoServer.setLogging((LoggingInfo) anyObject());
         expectLastCall().once();
 
-        geoServer.add((ServiceInfo)anyObject());
+        geoServer.add((ServiceInfo) anyObject());
         expectLastCall().once();
 
         replay(geoServer);

@@ -23,9 +23,9 @@ import org.geotools.xml.Node;
 
 /**
  * Binding object for the type http://www.opengis.net/wfs:GetFeatureType.
- *
  * <p>
- *        <pre>
+ * <p>
+ * <pre>
  *         <code>
  *  &lt;xsd:complexType name="GetFeatureType"&gt;
  *      &lt;xsd:annotation&gt;
@@ -135,6 +135,7 @@ import org.geotools.xml.Node;
  *
  *          </code>
  *         </pre>
+ *
  * @generated
  */
 public class GetFeatureTypeBinding extends AbstractComplexBinding {
@@ -175,9 +176,9 @@ public class GetFeatureTypeBinding extends AbstractComplexBinding {
      * @generated modifiable
      */
     public Object parse(ElementInstance instance, Node node, Object value)
-        throws Exception {
+            throws Exception {
         GetFeatureType getFeature = wfsfactory.createGetFeatureType();
-        
+
         //lt;xsd:element maxOccurs="unbounded" ref="wfs:Query"/&gt;
         getFeature.getQuery().addAll(node.getChildValues(QueryType.class));
 
@@ -203,7 +204,7 @@ public class GetFeatureTypeBinding extends AbstractComplexBinding {
             //since this is not going to be defined as a type in the schema we have to manually
             // convert it since the parser won't parse it into the correct type for us
             getFeature.setStartIndex(
-                Converters.convert(node.getAttributeValue("startIndex"), BigInteger.class));
+                    Converters.convert(node.getAttributeValue("startIndex"), BigInteger.class));
         }
 
         //&lt;xsd:attribute name="traverseXlinkDepth" type="xsd:string" use="optional"&gt;
@@ -217,7 +218,7 @@ public class GetFeatureTypeBinding extends AbstractComplexBinding {
             getFeature.setTraverseXlinkExpiry((BigInteger) node.getAttributeValue(
                     "traverseXlinkExpiry"));
         }
-        
+
         // viewParams
         SqlViewParamsExtractor.viewParams(getFeature, node);
 

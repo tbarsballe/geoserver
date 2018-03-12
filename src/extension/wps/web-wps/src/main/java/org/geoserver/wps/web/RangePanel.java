@@ -17,7 +17,7 @@ import org.geotools.util.NumberRange;
 
 /**
  * A form component for a {@link Range} object.
- * 
+ *
  * @author Andrea Aime, OpenGeo
  */
 @SuppressWarnings("serial")

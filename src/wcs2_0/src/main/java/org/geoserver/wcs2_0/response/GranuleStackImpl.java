@@ -31,24 +31,22 @@ import org.opengis.referencing.operation.MathTransform;
 
 /**
  * A GridCoverage instance composed of several GridCoverage2D Granules which may be obtained through the getGranules() method.
- *
+ * <p>
  * TODO: note that we extends GridCoverage2D since all coverageResponseDelegate.encode has a GridCoverage2D as input parameter.
  * we should propose an API change where we encode a GridCoverage instead and where GridCoverage has a dispose method to be implemented.
- * 
- * @author Daniele Romagnoli, GeoSolutions SAS
  *
+ * @author Daniele Romagnoli, GeoSolutions SAS
  */
 public class GranuleStackImpl extends GridCoverage2D /*AbstractGridCoverage*/ implements GranuleStack {
 
     /**
-     * Right now, all CoverageResponseDelegate work with GridCoverage2D. 
+     * Right now, all CoverageResponseDelegate work with GridCoverage2D.
      * Therefore, in order to encode a granuleStack we need to implement it as a GridCoverage2D.
-     * So we pass a Dummy GridCoverage2D with dummy information to avoid 
+     * So we pass a Dummy GridCoverage2D with dummy information to avoid
      * constructor failures. The provided information will be ignored anyway.
-     * 
+     * <p>
      * Once we move to extending AbstractGridCoverage instead of GridCoverage2D we may remove this
-     * dummy class. 
-     *
+     * dummy class.
      */
     static class DummyGridCoverage2D extends GridCoverage2D {
 
@@ -63,13 +61,13 @@ public class GranuleStackImpl extends GridCoverage2D /*AbstractGridCoverage*/ im
         protected DummyGridCoverage2D(CharSequence name, CoordinateReferenceSystem crs)
                 throws IllegalArgumentException {
             super(name, SAMPLE_IMAGE, new GridGeometry2D(SAMPLE_GRID_ENVELOPE, new GeneralEnvelope(
-                    SAMPLE_GRID_ENVELOPE, PixelInCell.CELL_CENTER, SAMPLE_TRANSFORM, crs)), null,
+                            SAMPLE_GRID_ENVELOPE, PixelInCell.CELL_CENTER, SAMPLE_TRANSFORM, crs)), null,
                     null, null, null);
         }
     }
 
-    /** 
-     * The list of all dimensions available for this stak 
+    /**
+     * The list of all dimensions available for this stak
      */
     private List<DimensionBean> dimensions;
 
@@ -78,11 +76,14 @@ public class GranuleStackImpl extends GridCoverage2D /*AbstractGridCoverage*/ im
         return "GranuleStackImpl [dimensions=" + dimensions + ", coverages=" + coverages + "]";
     }
 
-    /** The coverages stored by this Granule stack */
+    /**
+     * The coverages stored by this Granule stack
+     */
     private List<GridCoverage2D> coverages;
 
     /**
      * Granule stack constructor.
+     *
      * @param name
      * @param crs
      * @param dimensions
@@ -94,9 +95,11 @@ public class GranuleStackImpl extends GridCoverage2D /*AbstractGridCoverage*/ im
         this.coverages = new ArrayList<GridCoverage2D>();
     }
 
-    /** serialVersionUID */
+    /**
+     * serialVersionUID
+     */
     private static final long serialVersionUID = 1L;
-    
+
     public RenderedImage getRenderedImage() {
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.fine("Unable to return a RenderedImage for a GranuleStack which is made of different coverages: returning null");
@@ -134,7 +137,7 @@ public class GranuleStackImpl extends GridCoverage2D /*AbstractGridCoverage*/ im
     @Override
     public boolean dispose(boolean force) {
         boolean disposed = true;
-        for (GridCoverage2D coverage: coverages) {
+        for (GridCoverage2D coverage : coverages) {
             disposed &= coverage.dispose(force);
         }
         return disposed;

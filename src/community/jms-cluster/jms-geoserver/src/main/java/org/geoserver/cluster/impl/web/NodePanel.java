@@ -10,14 +10,16 @@ import org.geoserver.cluster.configuration.JMSConfiguration;
 
 public class NodePanel extends Panel {
 
-    /** serialVersionUID */
+    /**
+     * serialVersionUID
+     */
     private static final long serialVersionUID = 8112885092637425915L;
-    
+
     public NodePanel(String id, final JMSConfiguration configuration) {
         super(id);
-        
+
         add(new Label("instance", (String) configuration.getConfiguration(JMSConfiguration.INSTANCE_NAME_KEY)));
-        add(new Label("group",(String) configuration.getConfiguration(JMSConfiguration.GROUP_KEY)));
+        add(new Label("group", (String) configuration.getConfiguration(JMSConfiguration.GROUP_KEY)));
     }
 
 }

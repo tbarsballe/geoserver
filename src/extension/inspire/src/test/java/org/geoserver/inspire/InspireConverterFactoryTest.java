@@ -11,7 +11,7 @@ import org.junit.Test;
 
 public class InspireConverterFactoryTest {
 
-    
+
     @Test
     public void testCodeOnly() {
         UniqueResourceIdentifiers ids = new UniqueResourceIdentifiers();
@@ -21,7 +21,7 @@ public class InspireConverterFactoryTest {
         UniqueResourceIdentifiers ids2 = Converters.convert(str, UniqueResourceIdentifiers.class);
         assertEquals(ids, ids2);
     }
-    
+
     @Test
     public void testCodeNamespace() {
         UniqueResourceIdentifiers ids = new UniqueResourceIdentifiers();
@@ -31,7 +31,7 @@ public class InspireConverterFactoryTest {
         UniqueResourceIdentifiers ids2 = Converters.convert(str, UniqueResourceIdentifiers.class);
         assertEquals(ids, ids2);
     }
-    
+
     @Test
     public void testCodeMetadata() {
         UniqueResourceIdentifiers ids = new UniqueResourceIdentifiers();
@@ -41,7 +41,7 @@ public class InspireConverterFactoryTest {
         UniqueResourceIdentifiers ids2 = Converters.convert(str, UniqueResourceIdentifiers.class);
         assertEquals(ids, ids2);
     }
-    
+
     @Test
     public void testCodeNamespaceMetadata() {
         UniqueResourceIdentifiers ids = new UniqueResourceIdentifiers();
@@ -51,7 +51,7 @@ public class InspireConverterFactoryTest {
         UniqueResourceIdentifiers ids2 = Converters.convert(str, UniqueResourceIdentifiers.class);
         assertEquals(ids, ids2);
     }
-    
+
     @Test
     public void testMulti() {
         UniqueResourceIdentifiers ids = new UniqueResourceIdentifiers();

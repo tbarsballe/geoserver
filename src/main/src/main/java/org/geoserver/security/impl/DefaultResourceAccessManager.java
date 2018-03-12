@@ -79,12 +79,12 @@ import org.springframework.security.core.Authentication;
  * If no {@link Properties} is provided, one will be looked upon in
  * <code>GEOSERVER_DATA_DIR/security/layers.properties, and the class will
  * keep up to date vs changes in the file</code>
- * 
+ *
  * @author Andrea Aime - TOPP
  */
 public class DefaultResourceAccessManager implements ResourceAccessManager, DataAccessManager {
     static final Logger LOGGER = Logging.getLogger(DefaultResourceAccessManager.class);
-    
+
     /**
      * A {@link LayerGroupSummary} extended with the associated secure tree node
      */
@@ -96,35 +96,36 @@ public class DefaultResourceAccessManager implements ResourceAccessManager, Data
             super(origin);
             this.node = node;
         }
-        
+
         boolean canAccess(Authentication user, AccessMode mode) {
             return node == null || node.canAccess(user, mode);
         }
-        
+
         public SecureTreeNode getNode() {
             return node;
         }
-        
+
     }
-    
+
     SecureTreeNode root;
 
     DataAccessRuleDAO dao;
-    
+
     Catalog rawCatalog;
 
     long lastLoaded = Long.MIN_VALUE;
-    
+
     LayerGroupContainmentCache groupsCache;
 
     @Deprecated
     public DefaultResourceAccessManager(DataAccessRuleDAO dao) {
         this(dao, (Catalog) GeoServerExtensions.bean("rawCatalog"));
     }
-    
+
     /**
      * Pass a reference to the raw, unsecured catalog. The reference is used to evaluate the
      * relationship between layers and the groups containing them
+     *
      * @param dao
      * @param rawCatalog
      */
@@ -135,24 +136,23 @@ public class DefaultResourceAccessManager implements ResourceAccessManager, Data
         this.groupsCache = new LayerGroupContainmentCache(rawCatalog);
     }
 
-    
 
-	public CatalogMode getMode() {
+    public CatalogMode getMode() {
         return dao.getMode();
     }
 
     public boolean canAccess(Authentication user, WorkspaceInfo workspace, AccessMode mode) {
         checkPropertyFile();
-        SecureTreeNode node = root.getDeepestNode(new String[] { workspace.getName() });
-        if(node.canAccess(user, mode)) {
+        SecureTreeNode node = root.getDeepestNode(new String[]{workspace.getName()});
+        if (node.canAccess(user, mode)) {
             return true;
         }
-        
+
         // perform a drill down search, we still allow access to the workspace
         // if there is anything inside the workspace that can be read (otherwise
         // we are denying access to everything below it, which is not the spirit of the
         // tree override design)
-        if(mode == AccessMode.READ && canAccessChild(node, user, mode)) {
+        if (mode == AccessMode.READ && canAccessChild(node, user, mode)) {
             return true;
         } else {
             return false;
@@ -162,23 +162,24 @@ public class DefaultResourceAccessManager implements ResourceAccessManager, Data
     /**
      * Returns true if the user can access the specified node, or one of the nodes
      * below it
-     * 
-     * the specified nodes 
+     * <p>
+     * the specified nodes
+     *
      * @param node
      * @param user
      * @param mode
      * @return
      */
     private boolean canAccessChild(SecureTreeNode node, Authentication user, AccessMode mode) {
-        if(node.canAccess(user, mode)) {
+        if (node.canAccess(user, mode)) {
             return true;
         }
         for (SecureTreeNode child : node.getChildren().values()) {
-            if(canAccessChild(child, user, mode)) {
+            if (canAccessChild(child, user, mode)) {
                 return true;
             }
         }
-        
+
         return false;
     }
 
@@ -207,53 +208,53 @@ public class DefaultResourceAccessManager implements ResourceAccessManager, Data
             // it's a layer whose resource we don't know about
             return true;
         }
-        
+
         // if we have a catalog rule that is at resource level, it's the most specific type,
         // it wins. Or it could be that we do not need to check layer groups at all
-        SecureTreeNode securityNode = root.getDeepestNode(new String[] { workspace, resourceName });
+        SecureTreeNode securityNode = root.getDeepestNode(new String[]{workspace, resourceName});
         int catalogNodeDepth = securityNode.getDepth();
         boolean rulesAllowAccess = securityNode.canAccess(user, mode);
-        if(catalogNodeDepth == SecureTreeNode.RESOURCE_DEPTH || !layerGroupContainmentCheckRequired()) {
+        if (catalogNodeDepth == SecureTreeNode.RESOURCE_DEPTH || !layerGroupContainmentCheckRequired()) {
             return rulesAllowAccess;
         }
-        
+
         // grab the groups containing the resource, if any. If none, there is no group related logic to apply
-        Collection<LayerGroupSummary> containers  = groupsCache.getContainerGroupsFor(resource);
-        if(containers.isEmpty()) {
+        Collection<LayerGroupSummary> containers = groupsCache.getContainerGroupsFor(resource);
+        if (containers.isEmpty()) {
             return rulesAllowAccess;
         }
-        
+
         // there are groups, so there might be more specific rules overriding the catalog one, search for them
         List<LayerGroupSummary> groupOverrides = containers.stream().filter(sg -> {
             LayerGroupInfo gi = rawCatalog.getLayerGroup(sg.getId());
-            if(gi == null) {
+            if (gi == null) {
                 return false;
             }
             SecureTreeNode node = getNodeForGroup(gi);
             return (node != null && node.getDepth() > catalogNodeDepth) || (sg.getMode() == Mode.OPAQUE_CONTAINER);
         }).collect(Collectors.toList());
-        if(!groupOverrides.isEmpty()) {
+        if (!groupOverrides.isEmpty()) {
             // if there are overrides, see if at least one of them allows access
             rulesAllowAccess = groupOverrides.stream().anyMatch(sg -> {
-                if(directAccess && sg.getMode() == Mode.OPAQUE_CONTAINER) {
+                if (directAccess && sg.getMode() == Mode.OPAQUE_CONTAINER) {
                     return false;
                 }
                 LayerGroupInfo gi = rawCatalog.getLayerGroup(sg.getId());
                 return gi != null && canAccess(user, gi, directAccess) && (!directAccess || allowsAccessViaNonOpaqueGroup(gi, resource));
             });
         }
-        
-        if(rulesAllowAccess) {
+
+        if (rulesAllowAccess) {
             return true;
         }
-        
+
         // the rules allow no access, but there might still be a non secured layer group allowing access to the resource
         return containers.stream().anyMatch(sg -> {
-            if(directAccess && sg.getMode() == Mode.OPAQUE_CONTAINER) {
+            if (directAccess && sg.getMode() == Mode.OPAQUE_CONTAINER) {
                 return false;
             }
             LayerGroupInfo gi = rawCatalog.getLayerGroup(sg.getId());
-            if(gi == null) {
+            if (gi == null) {
                 return false;
             }
             SecureTreeNode node = getNodeForGroup(gi);
@@ -261,31 +262,31 @@ public class DefaultResourceAccessManager implements ResourceAccessManager, Data
         });
 
     }
-    
+
     /**
      * Returns true if there is a path from the group to the resource that does not involve crossing
      * a opaque group
      */
     private boolean allowsAccessViaNonOpaqueGroup(LayerGroupInfo gi, ResourceInfo resource) {
         for (PublishedInfo pi : gi.getLayers()) {
-            if(pi instanceof LayerInfo) {
-                if(resource.equals(((LayerInfo) pi).getResource())) {
+            if (pi instanceof LayerInfo) {
+                if (resource.equals(((LayerInfo) pi).getResource())) {
                     return true;
                 }
             } else {
                 LayerGroupInfo lg = (LayerGroupInfo) pi;
-                if(lg.getMode() != LayerGroupInfo.Mode.OPAQUE_CONTAINER && allowsAccessViaNonOpaqueGroup(lg, resource)) {
+                if (lg.getMode() != LayerGroupInfo.Mode.OPAQUE_CONTAINER && allowsAccessViaNonOpaqueGroup(lg, resource)) {
                     return true;
                 }
             }
         }
-        
+
         return false;
     }
 
     private SecureTreeNode getNodeForGroup(LayerGroupInfo lg) {
         SecureTreeNode node;
-        if(lg.getWorkspace() == null) {
+        if (lg.getWorkspace() == null) {
             node = root.getNode(lg.getName());
         } else {
             String[] path = getLayerGroupPath(lg);
@@ -293,14 +294,14 @@ public class DefaultResourceAccessManager implements ResourceAccessManager, Data
         }
         return node;
     }
-    
+
     private boolean layerGroupContainmentCheckRequired() {
         // first, is it WMS?
         Request request = Dispatcher.REQUEST.get();
-        if(request == null) {
+        if (request == null) {
             return false;
         }
-        
+
         // layer groups are used only in WMS
         final String service = request.getService();
         return "WMS".equalsIgnoreCase(service) || "gwc".equalsIgnoreCase(service);
@@ -312,7 +313,7 @@ public class DefaultResourceAccessManager implements ResourceAccessManager, Data
 
     private void rebuildAuthorizationTree(boolean force) {
         long daoLastModified = dao.getLastModified();
-        if(lastLoaded < daoLastModified || force) {
+        if (lastLoaded < daoLastModified || force) {
             root = buildAuthorizationTree(dao);
             lastLoaded = daoLastModified;
         }
@@ -320,12 +321,12 @@ public class DefaultResourceAccessManager implements ResourceAccessManager, Data
 
     SecureTreeNode buildAuthorizationTree(DataAccessRuleDAO dao) {
         SecureTreeNode root = new SecureTreeNode();
-        
-        for(DataAccessRule rule : dao.getRules()) {
+
+        for (DataAccessRule rule : dao.getRules()) {
             String workspace = rule.getRoot();
             String layer = rule.getLayer();
             AccessMode accessMode = rule.getAccessMode();
-            
+
             // look for the node where the rules will have to be set
             SecureTreeNode node;
 
@@ -343,13 +344,13 @@ public class DefaultResourceAccessManager implements ResourceAccessManager, Data
                 // get/create the layer
                 if ("*".equals(layer)) {
                     node = ws;
-                } else if(rule.isGlobalGroupRule()) {
+                } else if (rule.isGlobalGroupRule()) {
                     node = ws;
                 } else {
                     SecureTreeNode layerNode = ws.getChild(layer);
                     if (layerNode == null) {
                         layerNode = ws.addChild(layer);
-                    }                  
+                    }
                     node = layerNode;
                 }
 
@@ -362,7 +363,7 @@ public class DefaultResourceAccessManager implements ResourceAccessManager, Data
             }
             node.setAuthorizedRoles(accessMode, rule.getRoles());
         }
-        
+
         return root;
     }
 
@@ -384,15 +385,15 @@ public class DefaultResourceAccessManager implements ResourceAccessManager, Data
     }
 
     DataAccessLimits buildLimits(Class<? extends ResourceInfo> resourceClass, Filter readFilter,
-            Filter writeFilter) {
+                                 Filter writeFilter) {
         CatalogMode mode = getMode();
 
         // allow the secure catalog to avoid any kind of wrapping if there are no limits
         if ((readFilter == null || readFilter == Filter.INCLUDE)
                 && (writeFilter == null || writeFilter == Filter.INCLUDE
-                        || WMSLayerInfo.class.isAssignableFrom(resourceClass)
-                        || WMTSLayerInfo.class.isAssignableFrom(resourceClass)
-                        || CoverageInfo.class.isAssignableFrom(resourceClass))) {
+                || WMSLayerInfo.class.isAssignableFrom(resourceClass)
+                || WMTSLayerInfo.class.isAssignableFrom(resourceClass)
+                || CoverageInfo.class.isAssignableFrom(resourceClass))) {
             return null;
         }
 
@@ -439,24 +440,24 @@ public class DefaultResourceAccessManager implements ResourceAccessManager, Data
         boolean allowAccess = canAccess(user, layerGroup, containers == null || containers.isEmpty());
         return allowAccess ? null : new LayerGroupAccessLimits(getMode());
     }
-    
-    
+
+
     private boolean canAccess(Authentication user, LayerGroupInfo layerGroup, boolean directAccess) {
         String[] path = getLayerGroupPath(layerGroup);
         SecureTreeNode node = root.getDeepestNode(path);
         boolean catalogNodeAllowsAccess = node.canAccess(user, AccessMode.READ);
         boolean allowAccess;
-        if(node != null && !catalogNodeAllowsAccess) {
+        if (node != null && !catalogNodeAllowsAccess) {
             allowAccess = false;
         } else {
             // grab the groups containing the group, if any. If none, there is no group related logic to apply
-            Collection<LayerGroupSummary> directContainers  = groupsCache.getContainerGroupsFor(layerGroup);
-            if(directContainers.isEmpty()) {
+            Collection<LayerGroupSummary> directContainers = groupsCache.getContainerGroupsFor(layerGroup);
+            if (directContainers.isEmpty()) {
                 allowAccess = true;
             } else {
                 // do we have at least one path that authorizes access to this group? need to check group by group
                 allowAccess = directContainers.stream().anyMatch(sg -> {
-                   if(directAccess && sg.getMode() == Mode.OPAQUE_CONTAINER) {
+                    if (directAccess && sg.getMode() == Mode.OPAQUE_CONTAINER) {
                         return false;
                     }
                     LayerGroupInfo gi = rawCatalog.getLayerGroup(sg.getId());
@@ -464,33 +465,34 @@ public class DefaultResourceAccessManager implements ResourceAccessManager, Data
                 });
             }
         }
-        
+
         return allowAccess;
     }
 
 
     /**
      * Returns the possible location of the group in the secured tree based on name and workspace
+     *
      * @param layerGroup
      * @return
      */
     private String[] getLayerGroupPath(LayerGroupInfo layerGroup) {
-        if(layerGroup.getWorkspace() == null) {
-            return new String[] {layerGroup.getName()};
+        if (layerGroup.getWorkspace() == null) {
+            return new String[]{layerGroup.getName()};
         } else {
-           return new String[] {layerGroup.getWorkspace().getName(), layerGroup.getName()};
+            return new String[]{layerGroup.getWorkspace().getName(), layerGroup.getName()};
         }
     }
 
     @Override
     public Filter getSecurityFilter(Authentication user, Class<? extends CatalogInfo> clazz) {
-        if(getMode() == CatalogMode.CHALLENGE) {
+        if (getMode() == CatalogMode.CHALLENGE) {
             // If we're in CHALLENGE mode, we cannot pre-filter
             // for the other types we have no clue, use the in memory filtering
             return InMemorySecurityFilter.buildUserAccessFilter(this, user);
         }
 
-        
+
         if (WorkspaceInfo.class.isAssignableFrom(clazz)) {
             // base access
             boolean rootAccess = canAccess(user, root);
@@ -554,8 +556,8 @@ public class DefaultResourceAccessManager implements ResourceAccessManager, Data
                 } else if (!rootAccess && wsAccess) {
                     wsFilter = Predicates.equal(wsNameProperty, wsName);
                 }
-                
-                if(layerExceptions.isEmpty()) {
+
+                if (layerExceptions.isEmpty()) {
                     if (wsFilter != null) {
                         exceptions.add(wsFilter);
                     }
@@ -622,14 +624,14 @@ public class DefaultResourceAccessManager implements ResourceAccessManager, Data
             return access;
         }
     }
-    
+
     // backwards compatibility methods
 
     @Override
     public boolean canAccess(Authentication user, ResourceInfo resource, AccessMode mode) {
         return canAccess(user, resource, mode, true);
     }
-    
+
     @Override
     public boolean canAccess(Authentication user, LayerInfo layer, AccessMode mode) {
         return canAccess(user, layer, mode, true);

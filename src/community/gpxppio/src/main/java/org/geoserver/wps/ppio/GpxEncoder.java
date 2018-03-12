@@ -42,7 +42,6 @@ import com.vividsolutions.jts.geom.Point;
 
 /**
  * Encoder class to encode SimpleFeatureCollection to GPX The encoder uses only a XMLStreamWriter for simplicity and performance sake.
- *
  */
 public class GpxEncoder {
     boolean writeExtendedData = false;

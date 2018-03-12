@@ -30,7 +30,7 @@ public class MbtilesBlobStorePanel extends SqliteBlobStorePanel<MbtilesInfo> {
         super.onInitialize();
         // the directory that may contain user provided mbtiles metadata
         DirectoryParamPanel directoryPanel = new DirectoryParamPanel("mbtilesMetadataDirectory", new PropertyModel<>(
-                getDefaultModel().getObject(), "mbtilesMetadataDirectory"), new ParamResourceModel("mbtilesMetadataDirectory",this), false);
+                getDefaultModel().getObject(), "mbtilesMetadataDirectory"), new ParamResourceModel("mbtilesMetadataDirectory", this), false);
         add(directoryPanel);
         directoryPanel.getFormComponent().setModel(new PropertyModel<>(getDefaultModel().getObject(), "mbtilesMetadataDirectory"));
         directoryPanel.setFileFilter(new Model<>((DirectoryFileFilter) DirectoryFileFilter.INSTANCE));

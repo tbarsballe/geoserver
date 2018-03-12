@@ -8,7 +8,7 @@ package org.geoserver.test;
 
 /**
  * Mock data used to test encoding of secondary (transitively imported) namespace.
- * 
+ *
  * @author Jacqui Githaiga, Curtin University of Technology
  */
 public class SecondaryNamespaceMockData extends AbstractAppSchemaMockData {

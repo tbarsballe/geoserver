@@ -14,9 +14,8 @@ import org.opengis.referencing.NoSuchAuthorityCodeException;
 /**
  * A {@link ReferencedEnvelope} subclass that keeps the original SRS after the KVP parse, to ensure
  * we are true to the original SRS when building a BBOX filter
- * 
+ *
  * @author Andrea Aime - GeoSolutions
- * 
  */
 class SRSEnvelope extends ReferencedEnvelope {
     private static final long serialVersionUID = 4510785331988235178L;

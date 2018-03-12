@@ -64,7 +64,7 @@ public class FeatureChainingSharedConnectionTest extends AbstractAppSchemaTestSu
     /**
      * Tests that connection is automatically shared among top feature iterators and nested feature iterators, but only in the context of a single
      * AppSchemaDataAccess instance.
-     * 
+     * <p>
      * <p>
      * What this means in practice is:
      * <ul>
@@ -75,7 +75,7 @@ public class FeatureChainingSharedConnectionTest extends AbstractAppSchemaTestSu
      * "features"</li>
      * </ul>
      * </p>
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -152,8 +152,8 @@ public class FeatureChainingSharedConnectionTest extends AbstractAppSchemaTestSu
     }
 
     private void testSharedConnectionRecursively(FeatureTypeMapping mapping,
-            DataAccessMappingFeatureIterator mappingIt, DataAccess parentDataStore,
-            Transaction parentTx) throws IOException {
+                                                 DataAccessMappingFeatureIterator mappingIt, DataAccess parentDataStore,
+                                                 Transaction parentTx) throws IOException {
         List<AttributeMapping> attrs = mapping.getAttributeMappings();
         assertTrue(attrs != null);
         assertTrue(attrs.size() > 0);

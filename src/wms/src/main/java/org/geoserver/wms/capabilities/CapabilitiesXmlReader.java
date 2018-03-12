@@ -28,7 +28,7 @@ import org.xml.sax.helpers.XMLFilterImpl;
 
 /**
  * Reads a WMS GetCapabilities request from an XML stream
- * 
+ *
  * @author Gabriel Roldan
  * @version $Id$
  */
@@ -38,7 +38,7 @@ public class CapabilitiesXmlReader extends XmlRequestReader {
 
     /**
      * Creates the new reader.
-     * 
+     *
      * @param resolverProvider used to resolve URLs
      */
     public CapabilitiesXmlReader(EntityResolverProvider resolverProvider) {
@@ -78,21 +78,25 @@ public class CapabilitiesXmlReader extends XmlRequestReader {
 
     /**
      * A SAX content handler that acquires a GetCapabilities request from an incoming XML stream.
-     * 
+     *
      * @author Rob Hranac, TOPP
      * @version $Id$
      */
     private static class CapabilitiesHandler extends XMLFilterImpl implements ContentHandler {
-        /** Class logger */
+        /**
+         * Class logger
+         */
         private static Logger LOGGER = org.geotools.util.logging.Logging
                 .getLogger("org.geoserver.wms.xml.CapabilitiesHandler");
 
-        /** Internal Capabilities request for construction. */
+        /**
+         * Internal Capabilities request for construction.
+         */
         private GetCapabilitiesRequest request = null;
 
         /**
          * Creates a new CapabilitiesHandler
-         * 
+         *
          * @param request this is the AbstractService Handling the Request
          */
         public CapabilitiesHandler(GetCapabilitiesRequest request) {
@@ -106,21 +110,15 @@ public class CapabilitiesXmlReader extends XmlRequestReader {
 
         /**
          * Notes the start of the element and sets version and service tags, as required.
-         * 
-         * @param namespaceURI
-         *            URI for namespace appended to element.
-         * @param localName
-         *            Local name of element.
-         * @param rawName
-         *            Raw name of element.
-         * @param atts
-         *            Element attributes.
-         * 
-         * @throws SAXException
-         *             For any standard SAX errors.
+         *
+         * @param namespaceURI URI for namespace appended to element.
+         * @param localName    Local name of element.
+         * @param rawName      Raw name of element.
+         * @param atts         Element attributes.
+         * @throws SAXException For any standard SAX errors.
          */
         public void startElement(String namespaceURI, String localName, String rawName,
-                Attributes atts) throws SAXException {
+                                 Attributes atts) throws SAXException {
             if (localName.equals("GetCapabilities")) {
                 LOGGER.finer("found capabilities start.");
 

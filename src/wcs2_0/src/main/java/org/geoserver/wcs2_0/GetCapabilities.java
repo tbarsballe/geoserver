@@ -25,22 +25,21 @@ import org.geotools.util.logging.Logging;
 import org.geotools.xml.transform.TransformerBase;
 
 /**
- *
  * @author Emanuele Tajariol (etj) - GeoSolutions
  */
 public class GetCapabilities {
 
     protected Logger LOGGER = Logging.getLogger(DefaultWebCoverageService20.class);
-    
+
     private WCSInfo wcs;
     private CoverageResponseDelegateFinder responseFactory;
 
     public static final List<String> PROVIDED_VERSIONS =
             Collections.unmodifiableList(Arrays.asList(
-                WCS20Const.V201,
-                WCS20Const.V20,
-                WCS20Const.V111,
-                WCS20Const.V110));
+                    WCS20Const.V201,
+                    WCS20Const.V20,
+                    WCS20Const.V111,
+                    WCS20Const.V110));
 
     public GetCapabilities(WCSInfo wcs, CoverageResponseDelegateFinder responseFactory) {
         this.wcs = wcs;
@@ -62,7 +61,7 @@ public class GetCapabilities {
             capsTransformer.setEncoding(Charset.forName((wcs.getGeoServer().getSettings().getCharset())));
             return capsTransformer;
         } else {
-            throw new WCS20Exception("Internal error: Could not understand version:" + negotiatedVersion, 
+            throw new WCS20Exception("Internal error: Could not understand version:" + negotiatedVersion,
                     OWS20Exception.OWSExceptionCode.VersionNegotiationFailed, negotiatedVersion);
         }
 

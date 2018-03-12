@@ -33,24 +33,24 @@ import org.opengis.feature.type.Name;
  * This class provides a number of hooks for subclasses that are called throughout the life cycle
  * of the test. These include:
  * <ul>
- *   <li>{@link #createTestData()} - The first subclass hook called to created the {@link TestData}
- *   for the test</li> 
- *   <li>{@link #setUp(TestData)} - Called after the test data setup has been completed and provides
- *   subclass with a chance to any setup it requires</li>
- *   <li>{@link #tearDown(TestData)} - Called after the test has run and before the test setup 
- *   tear down.</li> 
+ * <li>{@link #createTestData()} - The first subclass hook called to created the {@link TestData}
+ * for the test</li>
+ * <li>{@link #setUp(TestData)} - Called after the test data setup has been completed and provides
+ * subclass with a chance to any setup it requires</li>
+ * <li>{@link #tearDown(TestData)} - Called after the test has run and before the test setup
+ * tear down.</li>
  * </ul>
  * </p>
  * <p>
- * Additionally a test class may use the standard JUnit annotations such as {@link Before}, 
- * {@link BeforeClass}, {@link After}, {@link AfterClass} to define additional life cycle setup 
+ * Additionally a test class may use the standard JUnit annotations such as {@link Before},
+ * {@link BeforeClass}, {@link After}, {@link AfterClass} to define additional life cycle setup
  * and tear down methods. Generally these methods will execute after methods of the super class with
  * the same annotation.
  * </p>
  * <h2>Test Setup Frequency</h2>
  * <p>
  * The {@link TestSetup} annotation is used to control the frequency at which the test setup will
- * occur over the life of the test class. It controls whether the test setup is run repeatedly for 
+ * occur over the life of the test class. It controls whether the test setup is run repeatedly for
  * each test method or once for the all the test methods of the class.
  * </p>
  * <p>
@@ -62,19 +62,19 @@ import org.opengis.feature.type.Name;
  * }
  * </pre>
  * </code>
- * 
+ * <p>
  * </p>
- * @author Justin Deoliveira, OpenGeo
  *
  * @param <T>
+ * @author Justin Deoliveira, OpenGeo
  */
 public abstract class GeoServerBaseTestSupport<T extends TestData> {
 
     /**
      * Common logger for test cases
      */
-    protected static final Logger LOGGER = 
-        org.geotools.util.logging.Logging.getLogger("org.geoserver.test"); 
+    protected static final Logger LOGGER =
+            org.geotools.util.logging.Logging.getLogger("org.geoserver.test");
 
     /**
      * test data
@@ -87,7 +87,7 @@ public abstract class GeoServerBaseTestSupport<T extends TestData> {
     protected static GeoServerBaseTestSupport test;
 
     /**
-     * Controls the frequency of the test setup 
+     * Controls the frequency of the test setup
      */
     protected static TestSetupFrequency testSetupFrequency = null;
 
@@ -114,7 +114,7 @@ public abstract class GeoServerBaseTestSupport<T extends TestData> {
     };
 
     /**
-     * Checks for existence of a system property named "quietTests". 
+     * Checks for existence of a system property named "quietTests".
      */
     public static boolean isQuietTests() {
         String quietTests = System.getProperty("quietTests");
@@ -160,17 +160,17 @@ public abstract class GeoServerBaseTestSupport<T extends TestData> {
      * Creates the {@link TestData} implementation for this test.
      * <p>
      * If the concrete {@link TestData} class provides any configurable options that control how
-     * its setup will operate they should be set/unset in this method before turning the new 
-     * instance. 
+     * its setup will operate they should be set/unset in this method before turning the new
+     * instance.
      * </p>
      */
     protected abstract T createTestData() throws Exception;
 
     /**
-     * Subclass hook for set up before the test run. 
+     * Subclass hook for set up before the test run.
      * <p>
-     * This methods should be used for setup that occurs after the {@link TestData} instance has 
-     * been setup. 
+     * This methods should be used for setup that occurs after the {@link TestData} instance has
+     * been setup.
      * </p>
      */
     protected void setUp(T testData) throws Exception {
@@ -188,7 +188,7 @@ public abstract class GeoServerBaseTestSupport<T extends TestData> {
 
     private TestSetupFrequency lookupTestSetupPolicy() {
         Class clazz = getClass();
-        while(clazz != null && !Object.class.equals(clazz)) {
+        while (clazz != null && !Object.class.equals(clazz)) {
             TestSetup testSetup = (TestSetup) clazz.getAnnotation(TestSetup.class);
             if (testSetup != null) {
                 return testSetup.run();
@@ -219,34 +219,34 @@ public abstract class GeoServerBaseTestSupport<T extends TestData> {
     }
 
     /**
-     * Subclass hook for set up before the test run. 
+     * Subclass hook for set up before the test run.
      * <p>
-     * This methods should be used for setup that occurs after the {@link TestData} instance has 
-     * been setup. 
+     * This methods should be used for setup that occurs after the {@link TestData} instance has
+     * been setup.
      * </p>
      */
     protected void tearDown(T testData) throws Exception {
     }
 
     //common convenience methods
+
     /**
-     * Returns a qualified name into a string of the form "[<prefix>:]<localPart>". 
+     * Returns a qualified name into a string of the form "[<prefix>:]<localPart>".
      */
     protected String toString(QName qName) {
-        if(qName.getPrefix() != null) {
+        if (qName.getPrefix() != null) {
             return qName.getPrefix() + ":" + qName.getLocalPart();
-        }
-        else {
+        } else {
             return qName.getLocalPart();
         }
     }
 
     /**
-     * Returns a qualified name into a GeoTools type name. 
+     * Returns a qualified name into a GeoTools type name.
      */
     protected Name toName(QName qName) {
-        return qName.getNamespaceURI() != null ? 
-            new NameImpl(qName.getNamespaceURI(), qName.getLocalPart()) : new NameImpl(qName.getLocalPart());
+        return qName.getNamespaceURI() != null ?
+                new NameImpl(qName.getNamespaceURI(), qName.getLocalPart()) : new NameImpl(qName.getLocalPart());
     }
 
 }

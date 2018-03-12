@@ -18,21 +18,21 @@ import org.opengis.util.ProgressListener;
 /**
  * Helper class that builds a intercepting proxy around feature collections, the proxy will start
  * throwing exceptions as soon as the ProgressListener is cancelled
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 class CancellingFeatureCollectionBuilder {
 
     public static SimpleFeatureCollection wrap(final FeatureCollection delegate,
-            final ProgressListener listener) {
+                                               final ProgressListener listener) {
         InvocationHandler cancellingInvocationHandler = new CancellingInvocationHandler(listener,
                 delegate);
 
         Class[] interfaces;
         if (delegate instanceof SimpleFeatureCollection) {
-            interfaces = new Class[] { SimpleFeatureCollection.class };
+            interfaces = new Class[]{SimpleFeatureCollection.class};
         } else {
-            interfaces = new Class[] { FeatureCollection.class };
+            interfaces = new Class[]{FeatureCollection.class};
         }
         SimpleFeatureCollection proxy = (SimpleFeatureCollection) Proxy.newProxyInstance(
                 CancellingFeatureCollectionBuilder.class.getClassLoader(), interfaces,
@@ -64,9 +64,9 @@ class CancellingFeatureCollectionBuilder {
             if (result instanceof FeatureIterator<?>) {
                 Class[] interfaces;
                 if (result instanceof SimpleFeatureIterator) {
-                    interfaces = new Class[] { SimpleFeatureIterator.class };
+                    interfaces = new Class[]{SimpleFeatureIterator.class};
                 } else {
-                    interfaces = new Class[] { FeatureIterator.class };
+                    interfaces = new Class[]{FeatureIterator.class};
                 }
                 result = Proxy.newProxyInstance(CancellingFeatureCollectionBuilder.class.getClassLoader(),
                         interfaces, new CancellingInvocationHandler(listener, result));

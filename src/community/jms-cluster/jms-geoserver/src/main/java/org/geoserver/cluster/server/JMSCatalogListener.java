@@ -37,11 +37,9 @@ import org.geotools.util.logging.Logging;
 
 /**
  * JMS MASTER (Producer) Listener used to send GeoServer Catalog events over the JMS channel.
- * 
- * @see {@link JMSApplicationListener}
- * 
+ *
  * @author Carlo Cancellieri - carlo.cancellieri@geo-solutions.it
- * 
+ * @see {@link JMSApplicationListener}
  */
 public class JMSCatalogListener extends JMSAbstractGeoServerProducer implements CatalogListener {
 
@@ -53,9 +51,8 @@ public class JMSCatalogListener extends JMSAbstractGeoServerProducer implements 
 
     /**
      * Constructor
-     * 
+     *
      * @param topicTemplate the getJmsTemplate() object used to send message to the topic queue
-     * 
      */
     public JMSCatalogListener(final Catalog catalog, final JMSPublisher jmsPublisher,
                               GeoServerResourceLoader loader, GeoServerDataDirectory dataDirectory) {
@@ -88,28 +85,28 @@ public class JMSCatalogListener extends JMSAbstractGeoServerProducer implements 
             // check if we may publish also the file
             final CatalogInfo info = event.getSource();
             if (info instanceof StyleInfo) {
-                final StyleInfo sInfo=((StyleInfo) info);
-                WorkspaceInfo wInfo =sInfo.getWorkspace();
-                Resource styleFile=null;
-                
+                final StyleInfo sInfo = ((StyleInfo) info);
+                WorkspaceInfo wInfo = sInfo.getWorkspace();
+                Resource styleFile = null;
+
                 // make sure we work fine with workspace specific styles
-                if(wInfo!=null){
-                    styleFile=loader.get(
-                            File.separator+
-                            "workspaces"+
-                            File.separator+
-                            wInfo.getName()+
-                            File.separator+
-                            "styles"+
-                            File.separator+
-                            sInfo.getFilename());
-                    
-                }else{
-                    styleFile=loader.get("styles/" + sInfo.getFilename());
+                if (wInfo != null) {
+                    styleFile = loader.get(
+                            File.separator +
+                                    "workspaces" +
+                                    File.separator +
+                                    wInfo.getName() +
+                                    File.separator +
+                                    "styles" +
+                                    File.separator +
+                                    sInfo.getFilename());
+
+                } else {
+                    styleFile = loader.get("styles/" + sInfo.getFilename());
                 }
                 // checks
-                if(!Resources.exists(styleFile)||!Resources.canRead(styleFile)||!(styleFile.getType() == Type.RESOURCE)){
-                    throw new IllegalStateException("Unable to find style for event: "+sInfo.toString());
+                if (!Resources.exists(styleFile) || !Resources.canRead(styleFile) || !(styleFile.getType() == Type.RESOURCE)) {
+                    throw new IllegalStateException("Unable to find style for event: " + sInfo.toString());
                 }
 
                 // transmit the file

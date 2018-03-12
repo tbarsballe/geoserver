@@ -19,25 +19,31 @@ import java.security.InvalidParameterException;
  * Transform creating a new attribute based on the existing ones
  */
 public class AttributeComputeTransform extends AbstractTransform implements InlineVectorTransform {
-    
+
     private static final long serialVersionUID = 1L;
 
-    /** field to remap */
+    /**
+     * field to remap
+     */
     protected String field;
 
-    /** type to remap to */
+    /**
+     * type to remap to
+     */
     protected Class type;
-    
-    /** the expression to apply (stored as a string as CQL does not always round trip properly */
+
+    /**
+     * the expression to apply (stored as a string as CQL does not always round trip properly
+     */
     protected String cql;
     protected Expression expression;
-    
+
     public AttributeComputeTransform(String field, Class type, String cql) throws CQLException {
         this.field = field;
         this.type = type;
         setCql(cql);
     }
-    
+
     public String getField() {
         return field;
     }
@@ -70,7 +76,7 @@ public class AttributeComputeTransform extends AbstractTransform implements Inli
             throw new InvalidParameterException("The computed attribute " + field + " is already present in the " +
                     "source feature type");
         }
-        
+
         // remap the type
         SimpleFeatureTypeBuilder builder = new SimpleFeatureTypeBuilder();
         builder.init(featureType);
@@ -79,11 +85,11 @@ public class AttributeComputeTransform extends AbstractTransform implements Inli
         return builder.buildFeatureType();
     }
 
-    public SimpleFeature apply(ImportTask task, DataStore dataStore, SimpleFeature oldFeature, 
-        SimpleFeature feature) throws Exception {
+    public SimpleFeature apply(ImportTask task, DataStore dataStore, SimpleFeature oldFeature,
+                               SimpleFeature feature) throws Exception {
         Object value = expression.evaluate(oldFeature);
         feature.setAttribute(field, value);
-        
+
         return feature;
     }
 

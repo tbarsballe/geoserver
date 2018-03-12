@@ -12,7 +12,7 @@ import org.geoserver.security.config.X509CertificateAuthenticationFilterConfig;
 
 /**
  * Security provider for {@link GeoServerUserNamePasswordAuthenticationFilter}
- * 
+ *
  * @author mcr
  */
 public class GeoServerX509CertificateAuthenticationProvider extends AbstractFilterProvider {

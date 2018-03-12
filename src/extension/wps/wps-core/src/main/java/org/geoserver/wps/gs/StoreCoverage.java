@@ -26,7 +26,7 @@ import org.opengis.parameter.ParameterValueGroup;
 
 /**
  * Stores a coverage and the file system and returns a link to retrieve it back
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  * @author ETj <etj at geo-solutions.it>
  */
@@ -63,11 +63,11 @@ public class StoreCoverage implements GSProcess {
         params.parameter(AbstractGridFormat.GEOTOOLS_WRITE_PARAMS.getName().toString()).setValue(
                 DEFAULT_WRITE_PARAMS);
         final GeneralParameterValue[] wps = params.values().toArray(
-                new GeneralParameterValue[1]);        
-        
+                new GeneralParameterValue[1]);
+
         // TODO check file prior to writing        
         try (OutputStream os = resource.out()) {
-            GeoTiffWriter writer = new GeoTiffWriter(os);    
+            GeoTiffWriter writer = new GeoTiffWriter(os);
             try {
                 writer.write(coverage, wps);
             } finally {

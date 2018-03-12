@@ -84,10 +84,10 @@ public class SecurityLoggerTestIntegrationTest extends GeoServerSystemTestSuppor
         SecurityLogger logger = GeoServerExtensions.bean(SecurityLogger.class);
         assertNotNull(logger);
     }
-    
+
     @After
     public void after() {
-		RepositoryManager.close();
+        RepositoryManager.close();
     }
 
     private void login() throws Exception {

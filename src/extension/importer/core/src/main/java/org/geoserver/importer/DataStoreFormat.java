@@ -43,9 +43,8 @@ import org.opengis.feature.type.FeatureType;
 
 /**
  * Base for formats that have a DataStore implementation.
- * 
- * @author Justin Deoliveira, OpenGeo
  *
+ * @author Justin Deoliveira, OpenGeo
  */
 public class DataStoreFormat extends VectorFormat {
 
@@ -75,8 +74,7 @@ public class DataStoreFormat extends VectorFormat {
         DataStore store = createDataStore(data);
         try {
             return store != null;
-        }
-        finally {
+        } finally {
             if (store != null) {
                 store.dispose();
             }
@@ -84,14 +82,14 @@ public class DataStoreFormat extends VectorFormat {
     }
 
     public DataStoreInfo createStore(ImportData data, WorkspaceInfo workspace, Catalog catalog) throws IOException {
-        Map<String,Serializable> params = createConnectionParameters(data, catalog);
+        Map<String, Serializable> params = createConnectionParameters(data, catalog);
         if (params == null) {
             return null;
         }
 
         CatalogBuilder cb = new CatalogBuilder(catalog);
         cb.setWorkspace(workspace);
-        DataStoreInfo store  = cb.buildDataStore(data.getName());
+        DataStoreInfo store = cb.buildDataStore(data.getName());
         DataStoreFactorySpi factory = factory();
         if (store.getName() == null) {
             store.setName(factory.getDisplayName());
@@ -106,11 +104,11 @@ public class DataStoreFormat extends VectorFormat {
         DataStore dataStore = createDataStore(data);
         try {
             CatalogBuilder cb = new CatalogBuilder(catalog);
-            
+
             //create a dummy datastore
             DataStoreInfo store = cb.buildDataStore("dummy");
             cb.setStore(store);
-            
+
             List<ImportTask> tasks = new ArrayList<ImportTask>();
             for (String typeName : dataStore.getTypeNames()) {
                 if (monitor.isCanceled()) {
@@ -120,18 +118,18 @@ public class DataStoreFormat extends VectorFormat {
 
                 // warning - this will log a scary exception if SRS cannot be found
                 try {
-                    FeatureTypeInfo featureType = 
+                    FeatureTypeInfo featureType =
                             cb.buildFeatureType(dataStore.getFeatureSource(typeName));
                     featureType.setStore(null);
                     featureType.setNamespace(null);
-    
-                    SimpleFeatureSource featureSource = dataStore.getFeatureSource(typeName); 
-                    
+
+                    SimpleFeatureSource featureSource = dataStore.getFeatureSource(typeName);
+
                     //Defer bounds calculation
                     featureType.setNativeBoundingBox(EMPTY_BOUNDS);
                     featureType.setLatLonBoundingBox(EMPTY_BOUNDS);
                     featureType.getMetadata().put("recalculate-bounds", Boolean.TRUE);
-    
+
                     //add attributes
                     CatalogFactory factory = catalog.getFactory();
                     SimpleFeatureType schema = featureSource.getSchema();
@@ -141,27 +139,25 @@ public class DataStoreFormat extends VectorFormat {
                         att.setBinding(ad.getType().getBinding());
                         featureType.getAttributes().add(att);
                     }
-    
-                    LayerInfo layer = cb.buildLayer((ResourceInfo)featureType);
-    
+
+                    LayerInfo layer = cb.buildLayer((ResourceInfo) featureType);
+
                     ImportTask task = new ImportTask(data.part(typeName));
                     task.setLayer(layer);
                     task.getMetadata().put(FeatureType.class, schema);
-    
+
                     tasks.add(task);
-                }
-                catch(Exception e) {
+                } catch (Exception e) {
                     LOGGER.log(Level.WARNING, "Error occured loading " + typeName, e);
                 }
             }
 
             return tasks;
-        }
-        finally {
+        } finally {
             dataStore.dispose();
         }
     }
-    
+
     private DataStore getDataStore(ImportData data, ImportTask task) throws IOException {
         DataStore dataStore = (DataStore) task.getMetadata().get(DataStore.class);
         if (dataStore == null) {
@@ -173,7 +169,7 @@ public class DataStoreFormat extends VectorFormat {
         }
         return dataStore;
     }
-    
+
     public FeatureSource getFeatureSource(ImportData data, ImportTask task) throws IOException {
         return getDataStore(data, task).getFeatureSource(task.getOriginalLayerName());
     }
@@ -181,7 +177,7 @@ public class DataStoreFormat extends VectorFormat {
     @Override
     public FeatureReader read(ImportData data, ImportTask task) throws IOException {
         FeatureReader reader = getDataStore(data, task).getFeatureReader(
-            new Query(task.getOriginalLayerName()), Transaction.AUTO_COMMIT);
+                new Query(task.getOriginalLayerName()), Transaction.AUTO_COMMIT);
         return reader;
     }
 
@@ -198,17 +194,17 @@ public class DataStoreFormat extends VectorFormat {
 
     @Override
     public int getFeatureCount(ImportData data, ImportTask task) throws IOException {
-        SimpleFeatureSource featureSource = 
-            getDataStore(data, task).getFeatureSource(task.getOriginalLayerName());
+        SimpleFeatureSource featureSource =
+                getDataStore(data, task).getFeatureSource(task.getOriginalLayerName());
         return featureSource.getCount(Query.ALL);
     }
-    
+
     public DataStore createDataStore(ImportData data) throws IOException {
         DataStoreFactorySpi dataStoreFactory = factory();
 
-        Map<String,Serializable> params = createConnectionParameters(data, null);
+        Map<String, Serializable> params = createConnectionParameters(data, null);
         if (params != null && dataStoreFactory.canProcess(params)) {
-            DataStore dataStore = dataStoreFactory.createDataStore(params); 
+            DataStore dataStore = dataStoreFactory.createDataStore(params);
             if (dataStore != null) {
                 return dataStore;
             }
@@ -217,7 +213,7 @@ public class DataStoreFormat extends VectorFormat {
         return null;
     }
 
-    public Map<String,Serializable> createConnectionParameters(ImportData data, Catalog catalog) throws IOException {
+    public Map<String, Serializable> createConnectionParameters(ImportData data, Catalog catalog) throws IOException {
         //try file based
         if (dataStoreFactory instanceof FileDataStoreFactorySpi) {
             File f = null;
@@ -229,11 +225,11 @@ public class DataStoreFormat extends VectorFormat {
             }
 
             if (f != null) {
-                Map<String,Serializable> map = new HashMap<String, Serializable>();
+                Map<String, Serializable> map = new HashMap<String, Serializable>();
                 map.put("url", relativeDataFileURL(URLs.fileToUrl(f).toString(), catalog));
                 if (data.getCharsetEncoding() != null) {
                     // @todo this map only work for shapefile
-                    map.put("charset",data.getCharsetEncoding());
+                    map.put("charset", data.getCharsetEncoding());
                 }
                 return map;
             }
@@ -253,7 +249,7 @@ public class DataStoreFormat extends VectorFormat {
                 return db.getParameters();
             }
         }
-        
+
         //try non-jdbc db
         Database db = null;
         if (data instanceof Database) {
@@ -265,7 +261,7 @@ public class DataStoreFormat extends VectorFormat {
         if (db != null) {
             return db.getParameters();
         }
-        
+
         return null;
     }
 
@@ -276,8 +272,8 @@ public class DataStoreFormat extends VectorFormat {
                     try {
                         dataStoreFactory = dataStoreFactoryClass.newInstance();
                     } catch (Exception e) {
-                        throw new RuntimeException("Unable to create instance of: " + 
-                            dataStoreFactoryClass.getSimpleName(), e);
+                        throw new RuntimeException("Unable to create instance of: " +
+                                dataStoreFactoryClass.getSimpleName(), e);
                     }
                 }
             }
@@ -302,7 +298,7 @@ public class DataStoreFormat extends VectorFormat {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        
+
         DataStoreFormat other = (DataStoreFormat) obj;
         if (dataStoreFactoryClass == null) {
             if (other.dataStoreFactoryClass != null)

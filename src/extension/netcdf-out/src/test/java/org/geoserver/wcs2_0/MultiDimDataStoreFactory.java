@@ -46,7 +46,7 @@ public class MultiDimDataStoreFactory implements DataStoreFactorySpi {
 
     @Override
     public Param[] getParametersInfo() {
-        return new DataStoreFactorySpi.Param[] { new Param("ParentLocation") };
+        return new DataStoreFactorySpi.Param[]{new Param("ParentLocation")};
     }
 
     @Override

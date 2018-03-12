@@ -19,11 +19,11 @@ import org.geoserver.security.web.SecurityNamedServiceTabbedPanel;
 
 /**
  * Base class for role service panels.
- * 
+ *
  * @author Justin Deoliveira, OpenGeo
  */
-public class RoleServicePanel<T extends SecurityRoleServiceConfig> 
-    extends SecurityNamedServicePanel<T> implements SecurityNamedServiceTabbedPanel<T>{
+public class RoleServicePanel<T extends SecurityRoleServiceConfig>
+        extends SecurityNamedServicePanel<T> implements SecurityNamedServiceTabbedPanel<T> {
 
     public RoleServicePanel(String id, IModel<T> model) {
         super(id, model);
@@ -51,6 +51,8 @@ public class RoleServicePanel<T extends SecurityRoleServiceConfig>
 
     public void doLoad(T config) throws Exception {
         getSecurityManager().loadRoleService(config.getName());
-    };
-    
+    }
+
+    ;
+
 }

@@ -10,7 +10,7 @@ import org.w3c.dom.Document;
 
 /**
  * Tests for a multivalued xlink:href ClientProperty mapping without feature chaining.
- * 
+ *
  * @author Ben Caradoc-Davies (Transient Software Limited)
  */
 public class MultivaluedXlinkHrefTest extends AbstractAppSchemaTestSupport {

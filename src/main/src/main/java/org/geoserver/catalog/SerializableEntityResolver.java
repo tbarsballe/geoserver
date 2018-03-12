@@ -19,10 +19,10 @@ import org.xml.sax.SAXException;
  * from the {@link EntityResolverProvider}
  */
 class SerializableEntityResolver implements EntityResolver, Serializable {
-    
+
     private static final long serialVersionUID = -447221633611119495L;
     transient EntityResolver delegate;
-    
+
     public SerializableEntityResolver(EntityResolver delegate) {
         this.delegate = delegate;
     }
@@ -30,7 +30,7 @@ class SerializableEntityResolver implements EntityResolver, Serializable {
     @Override
     public InputSource resolveEntity(String publicId, String systemId)
             throws SAXException, IOException {
-        if(delegate != null) {
+        if (delegate != null) {
             return delegate.resolveEntity(publicId, systemId);
         } else {
             return null;
@@ -40,10 +40,10 @@ class SerializableEntityResolver implements EntityResolver, Serializable {
     private Object readResolve() throws ObjectStreamException {
         EntityResolverProvider resolverProvider = GeoServerExtensions.bean(EntityResolverProvider.class);
         EntityResolver resolver = null;
-        if(resolverProvider != null) {
+        if (resolverProvider != null) {
             resolver = resolverProvider.getEntityResolver();
         }
         return new SerializableEntityResolver(resolver);
     }
-    
+
 }

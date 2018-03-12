@@ -23,7 +23,7 @@ import org.geoserver.web.wicket.HelpLink;
 
 /**
  * Main menu page for user, group, and role services.
- *  
+ *
  * @author Justin Deoliveira, OpenGeo
  */
 public class UserGroupRoleServicesPage extends AbstractSecurityPage {
@@ -64,7 +64,7 @@ public class UserGroupRoleServicesPage extends AbstractSecurityPage {
 
             add(new UserGroupServicesPanel("userGroupServices"));
             add(new HelpLink("userGroupServicesHelp").setDialog(dialog));
-            
+
             add(new RoleServicesPanel("roleServices"));
             add(new HelpLink("roleServicesHelp").setDialog(dialog));
         }

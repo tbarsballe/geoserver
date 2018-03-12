@@ -28,11 +28,11 @@ import com.vividsolutions.jts.geom.Envelope;
  * Wraps the large number of information normally extracted from a feature info request into a
  * single object, provides facilities to access extra information about the current layer (view
  * parameters, styles)
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class FeatureInfoRequestParameters {
-    
+
     static final FilterFactory2 FF = CommonFactoryFinder.getFilterFactory2();
 
     int x;
@@ -54,13 +54,13 @@ public class FeatureInfoRequestParameters {
     ReferencedEnvelope bbox;
 
     double scaleDenominator;
-    
+
     List<Filter> filters;
-    
+
     List<SortBy[]> sorts;
-    
+
     List<MapLayerInfo> layers;
-    
+
     List<Style> styles;
 
     List<Object> elevations;
@@ -78,7 +78,7 @@ public class FeatureInfoRequestParameters {
     public FeatureInfoRequestParameters(GetFeatureInfoRequest request) {
         // use the layer of the QUERY_LAYERS parameter, not the LAYERS one
         this.layers = request.getQueryLayers();
-        
+
         this.filters = request.getGetMapRequest().getFilter();
         this.sorts = request.getGetMapRequest().getSortByArrays();
         this.styles = getStyles(request, layers);
@@ -118,14 +118,13 @@ public class FeatureInfoRequestParameters {
 
         return mapContent.getScaleDenominator(true);
     }
-    
+
     /**
      * Grab the list of styles for each query layer, we'll use them to auto-evaluate the
      * GetFeatureInfo radius if the user did not specify one
-     * 
+     *
      * @param request
      * @param layers
-     *
      */
     private List<Style> getStyles(final GetFeatureInfoRequest request, List<MapLayerInfo> layers) {
         List<Style> getMapStyles = request.getGetMapRequest().getStyles();
@@ -144,7 +143,7 @@ public class FeatureInfoRequestParameters {
                     break;
                 }
             }
-            if(s != null) {
+            if (s != null) {
                 styles.add(s);
             } else {
                 throw new ServiceException("Failed to locate style for layer " + targetLayer);
@@ -159,29 +158,27 @@ public class FeatureInfoRequestParameters {
     void nextLayer() {
         currentLayer++;
     }
-    
-    
+
+
     /**
      * Returns the current layer
-     * 
-     *
      */
     public MapLayerInfo getLayer() {
         return layers.get(currentLayer);
     }
-    
+
     public Style getStyle() {
         return styles.get(currentLayer);
     }
 
     public Filter getFilter() {
-        if(filters == null || filters.size() <= currentLayer) {
+        if (filters == null || filters.size() <= currentLayer) {
             return null;
         } else {
             return filters.get(currentLayer);
         }
     }
-    
+
     public SortBy[] getSort() {
         if (sorts == null || sorts.size() <= currentLayer) {
             return null;
@@ -212,12 +209,10 @@ public class FeatureInfoRequestParameters {
                 return layerSort;
             }
         }
-    }    
+    }
 
     /**
      * The property names for the specified layer (if any, null otherwise)
-     * 
-     *
      */
     public String[] getPropertyNames() {
         if (propertyNames == null || propertyNames.size() == 0
@@ -231,8 +226,6 @@ public class FeatureInfoRequestParameters {
 
     /**
      * The view parameters for the current layer
-     * 
-     *
      */
     public Map<String, String> getViewParams() {
         if (viewParams == null || viewParams.size() < currentLayer) {
@@ -265,8 +258,6 @@ public class FeatureInfoRequestParameters {
 
     /**
      * The requested coordinate reference system
-     * 
-     *
      */
     public CoordinateReferenceSystem getRequestedCRS() {
         return requestedCRS;
@@ -316,8 +307,6 @@ public class FeatureInfoRequestParameters {
 
     /**
      * A filter factory suitable to build filters
-     * 
-     *
      */
     public FilterFactory2 getFilterFactory() {
         return ff;
@@ -325,8 +314,6 @@ public class FeatureInfoRequestParameters {
 
     /**
      * The GetMap request wrapped by the GetFeatureInfo one
-     * 
-     *
      */
     public GetMapRequest getGetMapRequest() {
         return getMapReq;

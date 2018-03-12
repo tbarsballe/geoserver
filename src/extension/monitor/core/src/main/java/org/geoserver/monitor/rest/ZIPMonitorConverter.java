@@ -41,7 +41,7 @@ public class ZIPMonitorConverter extends BaseMonitorConverter {
         List<String> fields = new ArrayList<>(Arrays.asList(results.getFields()));
         final boolean body = fields.remove("Body");
         final boolean error = fields.remove("Error");
-        
+
         final ZipOutputStream zout = new ZipOutputStream(outputMessage.getBody());
 
         // create the csv entry
@@ -72,7 +72,7 @@ public class ZIPMonitorConverter extends BaseMonitorConverter {
     }
 
     void writeBodyAndError(RequestData data, ZipOutputStream zout, boolean body, boolean error,
-            boolean postfix) throws IOException {
+                           boolean postfix) throws IOException {
 
         long id = data.getId();
         if (body && data.getBody() != null) {

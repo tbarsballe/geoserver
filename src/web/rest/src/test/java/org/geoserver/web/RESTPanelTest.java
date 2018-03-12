@@ -24,7 +24,9 @@ import org.junit.Test;
  */
 public class RESTPanelTest extends GeoServerWicketTestSupport {
 
-    /** Workspace info object called "cite" */
+    /**
+     * Workspace info object called "cite"
+     */
     private WorkspaceInfo citeWorkspace;
 
     @Before
@@ -123,7 +125,7 @@ public class RESTPanelTest extends GeoServerWicketTestSupport {
         assertEquals(
                 gs.getGlobal().getSettings().getMetadata().get(RESTUtils.QUIET_ON_NOT_FOUND_KEY, Boolean.class),
                 false);
-        
+
         // Opening the selected page
         tester.startPage(new GlobalSettingsPage());
         tester.assertRenderedPage(GlobalSettingsPage.class);

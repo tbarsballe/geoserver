@@ -12,6 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.geoserver.flow.config.DefaultControlFlowConfigurator;
+
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
@@ -41,7 +42,7 @@ import org.springframework.context.ConfigurableApplicationContext;
  * Callback that controls the flow of OWS requests based on user specified rules and makes sure
  * GeoServer does not get overwhelmed by too many concurrent ones. Can also be used to provide
  * different quality of service on different users.
- * 
+ *
  * @author Andrea Aime - OpenGeo
  */
 public class ControlFlowCallback extends AbstractDispatcherCallback implements ApplicationContextAware, GeoServerFilter {
@@ -63,9 +64,9 @@ public class ControlFlowCallback extends AbstractDispatcherCallback implements A
         List<FlowController> controllers;
 
         long timeout;
-        
+
         Request request;
-        
+
         int nestingLevel = 1;
 
         public CallbackContext(Request request, List<FlowController> controllers, long timeout) {
@@ -83,7 +84,7 @@ public class ControlFlowCallback extends AbstractDispatcherCallback implements A
     AtomicLong blockedRequests = new AtomicLong();
 
     AtomicLong runningRequests = new AtomicLong();
-    
+
     public ControlFlowCallback() {
         // this is just to isolate tests from shared state, at runtime there is only one callback.
         REQUEST_CONTROLLERS.remove();
@@ -111,24 +112,24 @@ public class ControlFlowCallback extends AbstractDispatcherCallback implements A
         // outside one, e.g., with transparent integration, other times it's completely different, e.g. native
         // tile services). We cannot afford to have the same controller lock twice, that would cause deadlocks 
         if (REQUEST_CONTROLLERS.get() != null) {
-            if(LOGGER.isLoggable(Level.FINE)) {
+            if (LOGGER.isLoggable(Level.FINE)) {
                 LOGGER.fine("Nested request found, not locking on it");
             }
             REQUEST_CONTROLLERS.get().nestingLevel++;
             return operation;
         }
-        
+
         blockedRequests.incrementAndGet();
         long start = System.currentTimeMillis();
         try {
             // the operation has not been set in the Request yet by the dispatcher, do so now in
             // a clone of the Request
             Request requestWithOperation = null;
-            if(request != null) {
+            if (request != null) {
                 requestWithOperation = new Request(request);
                 requestWithOperation.setOperation(operation);
             }
-            
+
             // grab the controllers for this request
             List<FlowController> controllers = null;
             try {
@@ -141,7 +142,7 @@ public class ControlFlowCallback extends AbstractDispatcherCallback implements A
             if (controllers.size() == 0) {
                 LOGGER.info("Control-flow inactive, there are no configured rules");
             } else {
-                if(LOGGER.isLoggable(Level.INFO)) {
+                if (LOGGER.isLoggable(Level.INFO)) {
                     LOGGER.info("Request [" + requestWithOperation + "] starting, processing through flow controllers");
                 }
 
@@ -152,14 +153,14 @@ public class ControlFlowCallback extends AbstractDispatcherCallback implements A
                 for (FlowController flowController : controllers) {
                     if (timeout > 0) {
                         long maxWait = maxTime - System.currentTimeMillis();
-                        if(LOGGER.isLoggable(Level.FINE)) {
+                        if (LOGGER.isLoggable(Level.FINE)) {
                             LOGGER.fine("Request [" + requestWithOperation + "] checking flow controller " + flowController);
                         }
                         if (!flowController.requestIncoming(requestWithOperation, maxWait)) {
                             throw new HttpErrorCodeException(503,
                                     "Requested timeout out while waiting to be executed, please lower your request rate");
                         }
-                        if(LOGGER.isLoggable(Level.FINE)) {
+                        if (LOGGER.isLoggable(Level.FINE)) {
                             LOGGER.fine("Request [" + requestWithOperation + "] passed flow controller " + flowController);
                         }
                     } else {
@@ -170,7 +171,7 @@ public class ControlFlowCallback extends AbstractDispatcherCallback implements A
         } finally {
             blockedRequests.decrementAndGet();
             runningRequests.incrementAndGet();
-            if(REQUEST_CONTROLLERS.get() != null) {
+            if (REQUEST_CONTROLLERS.get() != null) {
                 if (LOGGER.isLoggable(Level.INFO)) {
                     LOGGER.info("Request started, running requests: " + getRunningRequests() + ", blocked requests: "
                             + getBlockedRequests());
@@ -227,12 +228,12 @@ public class ControlFlowCallback extends AbstractDispatcherCallback implements A
             }
         }
     }
-    
+
     public void init(FilterConfig filterConfig) throws ServletException {
         // nothing to do
-        
+
     }
-    
+
     public void finished(Request request) {
         releaseControllers(false);
     }
@@ -247,7 +248,7 @@ public class ControlFlowCallback extends AbstractDispatcherCallback implements A
             // this is a precaution in case finished() is not called by any reason 
             releaseControllers(true);
         }
-        
+
     }
 
     private void releaseControllers(boolean forceRelease) {
@@ -257,7 +258,7 @@ public class ControlFlowCallback extends AbstractDispatcherCallback implements A
             // are actually controllers around
             if (context != null) {
                 context.nestingLevel--;
-                if(context.nestingLevel <= 0 || forceRelease) {
+                if (context.nestingLevel <= 0 || forceRelease) {
                     runningRequests.decrementAndGet();
                     // call back the same controllers we used when the operation started, releasing
                     // them in inverse order
@@ -283,7 +284,7 @@ public class ControlFlowCallback extends AbstractDispatcherCallback implements A
             }
         } finally {
             // clean up the thread local, all controllers have been released
-            if(context != null && (context.nestingLevel <= 0 || forceRelease)) {
+            if (context != null && (context.nestingLevel <= 0 || forceRelease)) {
                 REQUEST_CONTROLLERS.remove();
             }
         }

@@ -15,7 +15,7 @@ import org.xml.sax.helpers.NamespaceSupport;
 
 /**
  * Replaces references to csw:AnyText to a call to the RecordText filter function
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class CSWAnyExpander extends DuplicatingFilterVisitor {

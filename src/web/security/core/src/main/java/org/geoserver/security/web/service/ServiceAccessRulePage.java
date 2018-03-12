@@ -24,17 +24,17 @@ import org.geoserver.web.wicket.SimpleAjaxLink;
 public class ServiceAccessRulePage extends AbstractSecurityPage {
 
     private GeoServerTablePanel<ServiceAccessRule> rules;
-    
+
     private SelectionServiceRemovalLink removal;
 
     public ServiceAccessRulePage() {
-                
+
         ServiceAccessRuleProvider provider = new ServiceAccessRuleProvider();
         add(rules = new GeoServerTablePanel<ServiceAccessRule>("table", provider, true) {
 
             @Override
             protected Component getComponentForProperty(String id, IModel<ServiceAccessRule> itemModel,
-                    Property<ServiceAccessRule> property) {
+                                                        Property<ServiceAccessRule> property) {
                 if (property == ServiceAccessRuleProvider.RULEKEY) {
                     return editRuleLink(id, itemModel, property);
                 }
@@ -43,7 +43,7 @@ public class ServiceAccessRulePage extends AbstractSecurityPage {
                 }
                 throw new RuntimeException("Uknown property " + property);
             }
-            
+
             @Override
             protected void onSelectionUpdate(AjaxRequestTarget target) {
                 removal.setEnabled(rules.getSelection().size() > 0);
@@ -51,11 +51,11 @@ public class ServiceAccessRulePage extends AbstractSecurityPage {
             }
         });
         rules.setOutputMarkupId(true);
-        
+
         setHeaderPanel(headerPanel());
 
     }
-    
+
     protected Component headerPanel() {
         Fragment header = new Fragment(HEADER_PANEL, "header", this);
 

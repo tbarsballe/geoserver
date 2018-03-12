@@ -22,7 +22,7 @@ import org.geoserver.ows.KvpParser;
  * @version $Id$
  */
 public class TimeKvpParser extends KvpParser {
-    
+
     TimeParser parser = new TimeParser();
 
     /**
@@ -34,7 +34,7 @@ public class TimeKvpParser extends KvpParser {
         super(key, List.class);
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings({"unchecked", "rawtypes"})
     public Object parse(String value) throws ParseException {
         return parser.parse(value);
     }

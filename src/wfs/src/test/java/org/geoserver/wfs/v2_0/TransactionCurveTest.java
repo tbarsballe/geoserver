@@ -10,7 +10,7 @@ import org.geoserver.wfs.AbstractTransactionCurveTest;
 
 /**
  * This class is going to use WFS 2.0 xml test fixtures located in this package
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class TransactionCurveTest extends AbstractTransactionCurveTest {

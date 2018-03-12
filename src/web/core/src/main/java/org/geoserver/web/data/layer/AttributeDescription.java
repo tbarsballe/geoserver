@@ -32,13 +32,13 @@ class AttributeDescription implements Serializable {
             Long.class, Float.class, Double.class, Date.class, Time.class, Timestamp.class,
             Geometry.class, Point.class, LineString.class, Polygon.class, MultiPoint.class,
             MultiLineString.class, MultiPolygon.class, GeometryCollection.class);
-    
+
     static final CoordinateReferenceSystem WGS84;
-    
+
     static {
         try {
             WGS84 = CRS.decode("EPSG:4326");
-        } catch(Exception e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
@@ -55,9 +55,8 @@ class AttributeDescription implements Serializable {
 
     /**
      * Returns the localized named of the attribute type
-     * 
-     * @param binding
      *
+     * @param binding
      */
     static String getLocalizedName(Class<?> binding) {
         if (binding == null) {

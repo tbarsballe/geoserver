@@ -9,7 +9,7 @@ import org.geoserver.catalog.Info;
 
 /**
  * Logging configuration.
- * 
+ *
  * @author Justin Deoliveira, OpenGeo
  */
 public interface LoggingInfo extends Info {
@@ -17,7 +17,7 @@ public interface LoggingInfo extends Info {
     /**
      * The GeoServer logging level.
      * <p>
-     * The name of the level is specific to GeoServer, and independent of the 
+     * The name of the level is specific to GeoServer, and independent of the
      * actual logging framework.
      * </p>
      * GeoServer include the following levels internally:
@@ -33,12 +33,12 @@ public interface LoggingInfo extends Info {
      * Additional levels can be defined in the data directory <code>log</code> folder.
      */
     String getLevel();
-    
+
     /**
      * Sets the logging level.
      */
-    void setLevel( String loggingLevel );
-    
+    void setLevel(String loggingLevel);
+
     /**
      * The location where GeoServer logs to.
      * <p>
@@ -47,21 +47,21 @@ public interface LoggingInfo extends Info {
      * </p>
      */
     String getLocation();
-    
+
     /**
      * Sets the logging location.
-     * 
+     *
      * @param loggingLocation A file or url to a location to log.
      */
-    void setLocation( String loggingLocation );
-    
+    void setLocation(String loggingLocation);
+
     /**
      * Flag indicating if GeoServer logs to stdout.
      */
     boolean isStdOutLogging();
-    
+
     /**
      * Sets stdout logging flag.
      */
-    void setStdOutLogging( boolean supressStdOutLogging );
+    void setStdOutLogging(boolean supressStdOutLogging);
 }

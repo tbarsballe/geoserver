@@ -38,8 +38,8 @@ import org.geoserver.web.wicket.SimpleAjaxLink;
 @SuppressWarnings("serial")
 public class DataAccessRulePage extends AbstractSecurityPage {
 
-    static final List<CatalogMode> CATALOG_MODES = 
-        Arrays.asList(CatalogMode.HIDE, CatalogMode.MIXED, CatalogMode.CHALLENGE);
+    static final List<CatalogMode> CATALOG_MODES =
+            Arrays.asList(CatalogMode.HIDE, CatalogMode.MIXED, CatalogMode.CHALLENGE);
 
     private GeoServerTablePanel<DataAccessRule> rules;
 
@@ -53,7 +53,7 @@ public class DataAccessRulePage extends AbstractSecurityPage {
 
             @Override
             protected Component getComponentForProperty(String id, IModel<DataAccessRule> itemModel,
-                    Property<DataAccessRule> property) {
+                                                        Property<DataAccessRule> property) {
                 if (property == DataAccessRuleProvider.RULEKEY) {
                     return editRuleLink(id, itemModel, property);
                 }
@@ -79,19 +79,19 @@ public class DataAccessRulePage extends AbstractSecurityPage {
         form.add(new AjaxLink("catalogModeHelp") {
             @Override
             public void onClick(AjaxRequestTarget target) {
-                dialog.showInfo(target, 
-                    new StringResourceModel("catalogModeHelp.title",getPage(), null),
-                    new StringResourceModel("catalogModeHelp.message",getPage(), null),
-                    new StringResourceModel("catalogModeHelp.hide",getPage(), null),
-                    new StringResourceModel("catalogModeHelp.mixed",getPage(), null),
-                    new StringResourceModel("catalogModeHelp.challenge",getPage(), null));
+                dialog.showInfo(target,
+                        new StringResourceModel("catalogModeHelp.title", getPage(), null),
+                        new StringResourceModel("catalogModeHelp.message", getPage(), null),
+                        new StringResourceModel("catalogModeHelp.hide", getPage(), null),
+                        new StringResourceModel("catalogModeHelp.mixed", getPage(), null),
+                        new StringResourceModel("catalogModeHelp.challenge", getPage(), null));
             }
         });
-        catalogModeChoice 
-            = new RadioChoice("catalogMode", CATALOG_MODES, new CatalogModeRenderer());
+        catalogModeChoice
+                = new RadioChoice("catalogMode", CATALOG_MODES, new CatalogModeRenderer());
         catalogModeChoice.setSuffix(" ");
         form.add(catalogModeChoice);
-        
+
         form.add(new SubmitLink("save") {
             @Override
             public void onSubmit() {

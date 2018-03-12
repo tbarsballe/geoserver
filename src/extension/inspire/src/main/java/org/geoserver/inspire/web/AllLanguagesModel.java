@@ -62,7 +62,7 @@ public class AllLanguagesModel implements IModel<List<String>> {
         langs = null;
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings({"unchecked", "rawtypes"})
     List<String> getAvailableLanguages() throws IOException {
         List<String> langs = new ArrayList<String>();
         URL resource = InspireSchema.class.getResource(LANGUAGES_FILE);

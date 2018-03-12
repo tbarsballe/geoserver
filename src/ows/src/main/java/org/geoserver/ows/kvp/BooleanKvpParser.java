@@ -11,8 +11,8 @@ import org.geotools.xml.impl.DatatypeConverterImpl;
 
 /**
  * Parses double kvp's of the form 'key=&lt;boolean&gt;'.
- * 
- *  @author Justin Deoliveira, The Open Planning Project, jdeolive@openplans.org
+ *
+ * @author Justin Deoliveira, The Open Planning Project, jdeolive@openplans.org
  */
 public class BooleanKvpParser extends KvpParser {
     /**

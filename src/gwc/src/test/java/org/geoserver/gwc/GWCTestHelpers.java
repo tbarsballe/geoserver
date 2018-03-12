@@ -30,13 +30,13 @@ public class GWCTestHelpers {
         return mockLayer(resourceName, null, extraStyles, type);
     }
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @SuppressWarnings({"rawtypes", "unchecked"})
     public static LayerInfoImpl mockLayer(String resourceName, String workSpaceName, String[] extraStyles, PublishedType type) {
         StoreInfo store = new DataStoreInfoImpl(null);
         store.setName(resourceName + "-store");
         store.setEnabled(true);
 
-        if(workSpaceName != null) {
+        if (workSpaceName != null) {
             WorkspaceInfo workspace = new WorkspaceInfoImpl();
             workspace.setName(workSpaceName);
             store.setWorkspace(workspace);
@@ -75,11 +75,11 @@ public class GWCTestHelpers {
         }
 
         layer.setType(type);
-        
+
         return layer;
     }
 
-    public static LayerGroupInfoImpl mockGroup(String name, PublishedInfo ... layers) {
+    public static LayerGroupInfoImpl mockGroup(String name, PublishedInfo... layers) {
         LayerGroupInfoImpl lg = new LayerGroupInfoImpl();
         lg.setId("id-" + name);
         lg.setName(name);

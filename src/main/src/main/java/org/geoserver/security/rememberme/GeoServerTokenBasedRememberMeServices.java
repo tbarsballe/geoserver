@@ -26,8 +26,8 @@ import org.springframework.security.web.authentication.rememberme.TokenBasedReme
  * <p>
  * The user group service name is used by {@link RememberMeUserDetailsService} in order to delegate
  * to the proper user group service.
- * </p> 
- * 
+ * </p>
+ *
  * @author Justin Deoliveira, OpenGeo
  */
 public class GeoServerTokenBasedRememberMeServices extends TokenBasedRememberMeServices {
@@ -43,34 +43,35 @@ public class GeoServerTokenBasedRememberMeServices extends TokenBasedRememberMeS
      */
     @Override
     protected String makeTokenSignature(long tokenExpiryTime, String username, String password) {
-        
+
         Matcher m = RememberMeUserDetailsService.TOKEN_PATTERN.matcher(username);
-        String uName ;
+        String uName;
         if (!m.matches()) {
-            uName=username;
+            uName = username;
         } else {
             uName = m.group(1).replace("\\@", "@");
             //String service = m.group(2);
-        }        
+        }
         return super.makeTokenSignature(tokenExpiryTime, uName, password);
     }
-    
+
     /**
      * A proper {@link GeoServerWebAuthenticationDetails} object
      * must be present
-     * 
      */
     protected String retrieveUserName(Authentication authentication) {
         if (authentication.getDetails() instanceof GeoServerWebAuthenticationDetails) {
-            String userGroupServiceName= ((GeoServerWebAuthenticationDetails) 
+            String userGroupServiceName = ((GeoServerWebAuthenticationDetails)
                     authentication.getDetails()).getUserGroupServiceName();
-            if (userGroupServiceName==null || userGroupServiceName.trim().length()==0)
+            if (userGroupServiceName == null || userGroupServiceName.trim().length() == 0)
                 return ""; // no service specified --> no remember me
-            return encode(super.retrieveUserName(authentication),userGroupServiceName);
-        } else 
+            return encode(super.retrieveUserName(authentication), userGroupServiceName);
+        } else
             return ""; // no remember me feature without a user group service name
-    };
-    
+    }
+
+    ;
+
     String encode(String username, String userGroupServiceName) {
         if (userGroupServiceName == null) {
             return username;
@@ -80,15 +81,15 @@ public class GeoServerTokenBasedRememberMeServices extends TokenBasedRememberMeS
         }
 
         //escape any @ symboles present in the username, and append '@userGroupServiceName')
-        return username.replace("@","\\@") + "@" + userGroupServiceName;
-        
+        return username.replace("@", "\\@") + "@" + userGroupServiceName;
+
     }
-    
+
     @Override
     protected Authentication createSuccessfulAuthentication(HttpServletRequest request, UserDetails user) {
         if (user instanceof RememberMeUserDetails)
             user = ((RememberMeUserDetails) user).getWrappedObject();
-        
+
         Collection<GrantedAuthority> roles = new HashSet<GrantedAuthority>();
         if (user.getAuthorities().contains(GeoServerRole.AUTHENTICATED_ROLE)) {
             roles.addAll(user.getAuthorities());
@@ -96,7 +97,7 @@ public class GeoServerTokenBasedRememberMeServices extends TokenBasedRememberMeS
             roles = new HashSet<GrantedAuthority>();
             roles.addAll(user.getAuthorities());
             roles.add(GeoServerRole.AUTHENTICATED_ROLE);
-        }        
+        }
         RememberMeAuthenticationToken auth = new RememberMeAuthenticationToken(getKey(), user, roles);
         auth.setDetails(getAuthenticationDetailsSource().buildDetails(request));
         return auth;

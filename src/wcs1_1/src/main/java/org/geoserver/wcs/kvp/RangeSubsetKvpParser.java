@@ -33,14 +33,14 @@ import org.vfny.geoserver.wcs.WcsException;
 
 /**
  * Parses the RangeSubset parameter of a GetFeature KVP request
- * @author Andrea Aime
  *
+ * @author Andrea Aime
  */
 public class RangeSubsetKvpParser extends KvpParser {
 
     public RangeSubsetKvpParser() {
         super("RangeSubset", RangeSubsetType.class);
-        
+
     }
 
     @Override
@@ -48,22 +48,22 @@ public class RangeSubsetKvpParser extends KvpParser {
         RangeSubsetParser parser = new RangeSubsetParser(new StringReader(value));
         SimpleNode root = parser.RangeSubset();
         RangeSubsetType result = (RangeSubsetType) root.jjtAccept(new RangeSubsetKvpParserVisitor(), null);
-        
-        for (Iterator it = result.getFieldSubset().iterator(); it.hasNext();) {
+
+        for (Iterator it = result.getFieldSubset().iterator(); it.hasNext(); ) {
             FieldSubsetType type = (FieldSubsetType) it.next();
             String interpolationType = type.getInterpolationType();
-            if(interpolationType != null) {
+            if (interpolationType != null) {
                 try {
                     InterpolationMethod method = InterpolationMethod.valueOf(interpolationType);
-                } catch(IllegalArgumentException e) {
+                } catch (IllegalArgumentException e) {
                     throw new WcsException("Unknown interpolation method " + interpolationType, InvalidParameterValue, "RangeSubset");
                 }
             }
         }
-        
+
         return result;
     }
-    
+
     private static class RangeSubsetKvpParserVisitor implements RangeSubsetParserVisitor {
         Wcs111Factory wcsf = Wcs111Factory.eINSTANCE;
         Ows11Factory owsf = Ows11Factory.eINSTANCE;
@@ -84,16 +84,16 @@ public class RangeSubsetKvpParser extends KvpParser {
 
         public Object visit(ASTFieldSubset node, Object data) {
             FieldSubsetType fs = wcsf.createFieldSubsetType();
-            
+
             for (int i = 0; i < node.jjtGetNumChildren(); i++) {
                 Node child = node.jjtGetChild(i);
-                if(child instanceof ASTFieldId) {
+                if (child instanceof ASTFieldId) {
                     CodeType id = owsf.createCodeType();
                     id.setValue((String) child.jjtAccept(this, null));
                     fs.setIdentifier(id);
-                } else if(child instanceof ASTInterpolation) {
+                } else if (child instanceof ASTInterpolation) {
                     fs.setInterpolationType((String) child.jjtAccept(this, null));
-                } else if(child instanceof ASTAxisSubset) {
+                } else if (child instanceof ASTAxisSubset) {
                     fs.getAxisSubset().add(child.jjtAccept(this, null));
                 }
             }
@@ -126,7 +126,7 @@ public class RangeSubsetKvpParser extends KvpParser {
             return node.getContent();
         }
 
-        
+
     }
 
 }

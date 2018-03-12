@@ -11,7 +11,7 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 /**
  * Interceptor for all rest requests
- *
+ * <p>
  * Adds a {@link RequestInfo} to the request attributes
  */
 public class RestInterceptor extends HandlerInterceptorAdapter {

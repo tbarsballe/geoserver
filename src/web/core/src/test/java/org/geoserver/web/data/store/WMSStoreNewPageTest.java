@@ -102,7 +102,7 @@ public class WMSStoreNewPageTest extends GeoServerWicketTestSupport {
 
         catalog.validate(expandedStore, false).throwIfInvalid();
     }
-    
+
     @Test
     public void testSaveNewStoreEntityExpansion() throws Exception {
 
@@ -127,12 +127,12 @@ public class WMSStoreNewPageTest extends GeoServerWicketTestSupport {
 
         tester.clickLink("form:save", true);
         tester.assertErrorMessages("Connection test failed: Error while parsing XML.");
-        
+
         //make sure clearing the catalog does not clear the EntityResolver
         getGeoServer().reload();
         tester.clickLink("form:save", true);
         tester.assertErrorMessages("Connection test failed: Error while parsing XML.");
-        
+
         catalog.save(info);
 
         assertNotNull(info.getId());

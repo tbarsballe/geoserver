@@ -13,16 +13,15 @@ import org.geotools.util.Version;
 
 /**
  * Parses the OWS 1.1 capabilities negotiation related AcceptVersion parameter
- * 
+ *
  * @author Andrea Aime - TOPP
- * 
  */
 public class AcceptVersionsKvpParser extends org.geoserver.ows.kvp.AcceptVersionsKvpParser {
 
     public AcceptVersionsKvpParser() {
         super(AcceptVersionsType.class);
-        setService( "wcs" );
-        setVersion( new Version( "1.1.1" ) );
+        setService("wcs");
+        setVersion(new Version("1.1.1"));
     }
 
     @Override
@@ -30,5 +29,5 @@ public class AcceptVersionsKvpParser extends org.geoserver.ows.kvp.AcceptVersion
         return Ows11Factory.eINSTANCE.createAcceptVersionsType();
     }
 
-   
+
 }

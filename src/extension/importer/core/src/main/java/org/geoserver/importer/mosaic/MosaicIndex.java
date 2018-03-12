@@ -46,8 +46,8 @@ import com.google.common.io.Files;
 import com.vividsolutions.jts.geom.Polygon;
 
 /**
- * Helper to write out mosaic index shapefile and properties files. 
- * 
+ * Helper to write out mosaic index shapefile and properties files.
+ *
  * @author Justin Deoliveira, OpenGeo
  */
 public class MosaicIndex {
@@ -85,15 +85,15 @@ public class MosaicIndex {
                         // the extension is not matching
                     }
                 }
-                return "properties".equalsIgnoreCase(ext) 
-                    || shpFileType != null;
+                return "properties".equalsIgnoreCase(ext)
+                        || shpFileType != null;
             }
         })) {
             if (!f.delete()) {
                 // throwing exception here caused sporadic test failures on
                 // windows related to file locking but only in the cleanup
                 // method SystemTestData.tearDown
-                 LOGGER.warning("unable to delete mosaic file " + f.getAbsolutePath());
+                LOGGER.warning("unable to delete mosaic file " + f.getAbsolutePath());
             }
         }
     }
@@ -111,8 +111,8 @@ public class MosaicIndex {
         Granule first = Iterators.find(granules.iterator(), new Predicate<Granule>() {
             @Override
             public boolean apply(Granule input) {
-                return input.getEnvelope() != null && 
-                    input.getEnvelope().getCoordinateReferenceSystem() != null;
+                return input.getEnvelope() != null &&
+                        input.getEnvelope().getCoordinateReferenceSystem() != null;
             }
         });
         if (first == null) {
@@ -131,7 +131,7 @@ public class MosaicIndex {
         if (mosaic.getTimeMode() != TimeMode.NONE) {
             typeBuilder.add("time", Date.class);
         }
-        
+
         // tell image mosaic to use the index file we are creating
         File indexerFile = new File(mosaic.getFile(), "indexer.properties");
         Properties indexer = new Properties();
@@ -148,39 +148,37 @@ public class MosaicIndex {
 
         //create a new shapefile feature store
         ShapefileDataStoreFactory shpFactory = new ShapefileDataStoreFactory();
-        DirectoryDataStore dir = new DirectoryDataStore(mosaic.getFile(), 
-            new ShapefileDataStoreFactory.ShpFileStoreFactory(shpFactory, new HashMap()));
+        DirectoryDataStore dir = new DirectoryDataStore(mosaic.getFile(),
+                new ShapefileDataStoreFactory.ShpFileStoreFactory(shpFactory, new HashMap()));
 
         try {
-           dir.createSchema(typeBuilder.buildFeatureType());
+            dir.createSchema(typeBuilder.buildFeatureType());
 
-           FeatureWriter<SimpleFeatureType, SimpleFeature> w = 
-                   dir.getFeatureWriterAppend(mosaic.getName(), Transaction.AUTO_COMMIT);
+            FeatureWriter<SimpleFeatureType, SimpleFeature> w =
+                    dir.getFeatureWriterAppend(mosaic.getName(), Transaction.AUTO_COMMIT);
 
-           try {
-               for (Granule g : mosaic.granules()) {
-                   if (g.getEnvelope() == null) {
-                       LOGGER.warning("Skipping " + g.getFile().getAbsolutePath() + ", no envelope");
-                   }
-    
-                   SimpleFeature f = w.next();
-                   f.setDefaultGeometry(JTS.toGeometry((BoundingBox)g.getEnvelope()));
-                   f.setAttribute("location", g.getFile().getName());
-                   if (mosaic.getTimeMode() != TimeMode.NONE) {
-                       f.setAttribute("time", g.getTimestamp());
-                   }
-                   w.write();
+            try {
+                for (Granule g : mosaic.granules()) {
+                    if (g.getEnvelope() == null) {
+                        LOGGER.warning("Skipping " + g.getFile().getAbsolutePath() + ", no envelope");
+                    }
 
-                   //track total bounds
-                   envelope.include(g.getEnvelope());
-               }
+                    SimpleFeature f = w.next();
+                    f.setDefaultGeometry(JTS.toGeometry((BoundingBox) g.getEnvelope()));
+                    f.setAttribute("location", g.getFile().getName());
+                    if (mosaic.getTimeMode() != TimeMode.NONE) {
+                        f.setAttribute("time", g.getTimestamp());
+                    }
+                    w.write();
 
-           }
-           finally {
-               w.close();
-           }
-        }
-        finally {
+                    //track total bounds
+                    envelope.include(g.getEnvelope());
+                }
+
+            } finally {
+                w.close();
+            }
+        } finally {
             dir.dispose();
         }
 
@@ -188,7 +186,7 @@ public class MosaicIndex {
         ImageMosaicFormat format = new ImageMosaicFormat();
         ImageMosaicReader reader = format.getReader(mosaic.getFile());
         reader.dispose();
-        
+
         // if we have to add the time, do so now
         if (mosaic.getTimeMode() != TimeMode.NONE) {
             File propertyFile = new File(mosaic.getFile(), mosaic.getName() + ".properties");

@@ -52,7 +52,7 @@ public class ImportContextJSONMessageConverter extends BaseMessageConverter<Impo
     //
     @Override
     protected ImportContext readInternal(Class<? extends ImportContext> clazz,
-            HttpInputMessage inputMessage) throws IOException, HttpMessageNotReadableException {
+                                         HttpInputMessage inputMessage) throws IOException, HttpMessageNotReadableException {
         try (InputStream in = inputMessage.getBody()) {
             ImportJSONReader reader = new ImportJSONReader(importer);
             JSONObject json = reader.parse(in);

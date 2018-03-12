@@ -22,15 +22,15 @@ import org.apache.wicket.model.IModel;
 public class CharsetPanel extends Panel implements ParamPanel {
 
     private DropDownChoice<String> choice;
-    
+
     public CharsetPanel(final String id, final IModel<String> charsetModel,
-            final IModel<String> paramLabelModel, final boolean required) {
+                        final IModel<String> paramLabelModel, final boolean required) {
         // make the value of the combo field the model of this panel, for easy
         // value retriaval
         super(id, charsetModel);
 
         // the label
-        String requiredMark = required ? " *" : ""; 
+        String requiredMark = required ? " *" : "";
         Label label = new Label("paramName", paramLabelModel.getObject() + requiredMark);
         add(label);
 
@@ -50,11 +50,9 @@ public class CharsetPanel extends Panel implements ParamPanel {
     /**
      * Returns the form component used in the panel in case it is needed for related form components
      * validation
-     * 
-     *
      */
     public FormComponent<String> getFormComponent() {
         return choice;
     }
-    
+
 }

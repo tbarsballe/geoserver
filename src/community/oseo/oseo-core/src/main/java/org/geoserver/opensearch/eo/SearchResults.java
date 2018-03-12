@@ -37,7 +37,7 @@ public class SearchResults {
 
     /**
      * The search results
-     * 
+     *
      * @return
      */
     public FeatureCollection getResults() {
@@ -46,6 +46,7 @@ public class SearchResults {
 
     /**
      * Total number of matched features
+     *
      * @return
      */
     public int getTotalResults() {

@@ -19,21 +19,20 @@ import org.springframework.util.PropertyPlaceholderHelper.PlaceholderResolver;
 
 /**
  * Utility class uses to process GeoServer configuration workflow through external environment variables.
- * 
+ * <p>
  * This class must be used everytime we need to resolve a configuration placeholder at runtime.
  * <p>
  * An instance of this class needs to be registered in spring context as follows.
- * 
+ * <p>
  * <pre>
  * <code>
  *         &lt;bean id="geoserverEnvironment" class="org.geoserver.GeoServerEnvironment" depends-on="extensions"/&gt;
  * </code>
  * </pre>
- * 
+ * <p>
  * It must be a singleton, and must not be loaded lazily. Furthermore, this bean must be loaded before any beans that use it.
- * 
- * @author Alessio Fabiani, GeoSolutions
  *
+ * @author Alessio Fabiani, GeoSolutions
  */
 public class GeoServerEnvironment {
 
@@ -46,7 +45,7 @@ public class GeoServerEnvironment {
 
     /**
      * Constant set via System Environment in order to instruct GeoServer to make use or not of the config placeholders translation.
-     * 
+     * <p>
      * Default to FALSE
      */
     public final static boolean ALLOW_ENV_PARAMETRIZATION = Boolean
@@ -75,7 +74,7 @@ public class GeoServerEnvironment {
 
     /**
      * Internal "props" getter method.
-     * 
+     *
      * @return the props
      */
     public Properties getProps() {
@@ -149,10 +148,10 @@ public class GeoServerEnvironment {
 
     /**
      * Translates placeholders in the form of Spring Property placemark ${...} into their real values.
-     * 
+     * <p>
      * The method first looks for System variables which take precedence on local ones, then into internal props loaded from configuration file
      * 'geoserver-environment.properties'.
-     * 
+     *
      * @param value
      * @return
      */
@@ -168,7 +167,7 @@ public class GeoServerEnvironment {
 
     /**
      * Returns 'false' whenever the configuration file 'geoserver-environment.properties' has changed.
-     * 
+     *
      * @param value
      * @return
      */

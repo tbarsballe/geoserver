@@ -40,14 +40,14 @@ public class DisabledProcessesSelector extends ProcessSelector implements GeoSer
     @Override
     public void initialize(GeoServer geoServer) throws Exception {
         WPSInfo wps = geoServer.getService(WPSInfo.class);
-        if(wps != null) {
+        if (wps != null) {
             updateFilters(wps);
         }
-        
+
         geoServer.addListener(new ConfigurationListenerAdapter() {
             @Override
             public void handlePostServiceChange(ServiceInfo service) {
-                if(service instanceof WPSInfo) {
+                if (service instanceof WPSInfo) {
                     updateFilters((WPSInfo) service);
                 }
             }
@@ -61,12 +61,12 @@ public class DisabledProcessesSelector extends ProcessSelector implements GeoSer
             for (ProcessGroupInfo group : groups) {
                 if (!group.isEnabled()) {
                     ProcessFactory factory = GeoServerProcessors.getProcessFactory(group.getFactoryClass(), false);
-                    if(factory != null) {
+                    if (factory != null) {
                         disabledProcesses.addAll(factory.getNames());
                     }
                 } else if (group.getFilteredProcesses() != null) {
-                    for(ProcessInfo fp : group.getFilteredProcesses()){
-                        if(!fp.isEnabled()){
+                    for (ProcessInfo fp : group.getFilteredProcesses()) {
+                        if (!fp.isEnabled()) {
                             disabledProcesses.add(fp.getName());
                         }
                     }

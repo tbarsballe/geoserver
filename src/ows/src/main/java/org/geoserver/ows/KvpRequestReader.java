@@ -28,9 +28,9 @@ import org.geotools.util.Converters;
  * and initilization of a request bean cannot be created reflectivley.
  * </p>
  * <p>The class assumes each key is to be provided just once in the request, and will throw exceptions
- *    if multiple values are found for it. For services/requests where having the same key repeated
- *    multiple times is valid (e.g., CSW) call {@link #setRepeatedParameters(boolean)} to enable
- *    support for repeated params
+ * if multiple values are found for it. For services/requests where having the same key repeated
+ * multiple times is valid (e.g., CSW) call {@link #setRepeatedParameters(boolean)} to enable
+ * support for repeated params
  * </p>
  * <p>
  * The type of the request bean must be declared by the class.
@@ -62,7 +62,6 @@ import org.geotools.util.Converters;
  * </pre>
  *
  * @author Justin Deoliveira, The Open Planning Project
- *
  */
 public class KvpRequestReader {
     /**
@@ -79,12 +78,12 @@ public class KvpRequestReader {
      * A list of kvp names to filter.
      */
     protected Set<String> filter;
-    
+
     /**
      * True if the KVP protocol of this service/request has repeated parameter, false otherwise
      */
     boolean hasRepeatedParameters = false;
-    
+
     /**
      * Creats the new kvp request reader.
      *
@@ -108,33 +107,36 @@ public class KvpRequestReader {
     /**
      * Sets a list of kvp's to filter by.
      * <p>
-     * This value usually does not need to be set. The only case is when a kvp 
+     * This value usually does not need to be set. The only case is when a kvp
      * matches a property of a request object, but is not intended to be mapped
-     * to that property.  
+     * to that property.
      * </p>
-     * @param filter A list of names to filter, null to set no filter. 
+     *
+     * @param filter A list of names to filter, null to set no filter.
      */
     public void setFilter(Set<String> filter) {
         this.filter = filter;
     }
-    
+
     /**
      * A list of kvp's to filter.
      * <p>
      * See {@link #setFilter(Set)} for a better description of this property.
      * </p>
+     *
      * @return A list of kvp's to filter, or null for no filter.
      */
     public Set<String> getFilter() {
         return filter;
     }
-    
+
     /**
      * Creats a new instance of the request object.
      * <p>
      * Subclasses may with to override this method. The default implementation
      * attempts to reflectivley create an instance of the request bean.
      * </p>
+     *
      * @return A new instance of the request.
      */
     public Object createRequest() throws Exception {
@@ -155,14 +157,14 @@ public class KvpRequestReader {
      * This method may return a new instance of the request object, or the original
      * passed in.
      * </p>
+     *
      * @param request The request instance.
-     * @param kvp The kvp set, map of String,Object.
-     * @param rawKvp The raw kvp set (unparsed), map of String,String
-     * 
+     * @param kvp     The kvp set, map of String,Object.
+     * @param rawKvp  The raw kvp set (unparsed), map of String,String
      * @return A new request object, or the original
      */
     public Object read(Object request, Map kvp, Map rawKvp) throws Exception {
-        for (Iterator e = kvp.entrySet().iterator(); e.hasNext();) {
+        for (Iterator e = kvp.entrySet().iterator(); e.hasNext(); ) {
             Map.Entry entry = (Map.Entry) e.next();
             String property = (String) entry.getKey();
             Object value = entry.getValue();
@@ -170,17 +172,17 @@ public class KvpRequestReader {
             if (value == null) {
                 continue;
             }
-            
+
             // check the filter
-            if ( filter(property) ) {
+            if (filter(property)) {
                 continue;
             }
-            
+
             // check for repeated parameters
-            if(!hasRepeatedParameters) {
+            if (!hasRepeatedParameters) {
                 Object rawValue = rawKvp.get(property);
-                if(rawValue instanceof String[]) {
-                    throw new ServiceException("Found multiple, inconsistent values for parameter " 
+                if (rawValue instanceof String[]) {
+                    throw new ServiceException("Found multiple, inconsistent values for parameter "
                             + property + ": " + Arrays.toString((String[]) rawValue),
                             ServiceException.INVALID_PARAMETER_VALUE, property);
                 }
@@ -190,24 +192,23 @@ public class KvpRequestReader {
             Class<? extends Object> valueClass = value.getClass();
             Method setter = OwsUtils.setter(targetClass, property, valueClass);
 
-            if ( setter == null ) {
+            if (setter == null) {
                 //no setter matching the object of teh type, try to convert
-                setter = OwsUtils.setter( request.getClass(), property, null );
-                if ( setter != null ) {
+                setter = OwsUtils.setter(request.getClass(), property, null);
+                if (setter != null) {
                     //convert
                     Class target = setter.getParameterTypes()[0];
-                    Object converted = Converters.convert( value, target );
-                    if ( converted != null ) {
+                    Object converted = Converters.convert(value, target);
+                    if (converted != null) {
                         value = converted;
-                    }
-                    else {
+                    } else {
                         setter = null;
                     }
                 }
             }
-            
+
             if (setter != null) {
-                setter.invoke(request, new Object[] { value });
+                setter.invoke(request, new Object[]{value});
             }
         }
 
@@ -220,20 +221,20 @@ public class KvpRequestReader {
      * @param kvp The name of the kvp.
      * @return true if it sould be filtered and ignored, otherwise false.
      */
-    protected boolean filter( String kvp ) {
+    protected boolean filter(String kvp) {
         if (filter == null) {
             return false;
         }
-        
-        for ( String f : filter ) {
-            if ( f.equalsIgnoreCase( kvp ) ) {
+
+        for (String f : filter) {
+            if (f.equalsIgnoreCase(kvp)) {
                 return false;
             }
         }
-        
+
         return true;
     }
-    
+
     /**
      * Equals override, equality is based on {@link #getRequestBean()}
      */
@@ -250,7 +251,7 @@ public class KvpRequestReader {
     public final int hashCode() {
         return requestBean.hashCode();
     }
-    
+
     protected void setRepeatedParameters(boolean hasRepeatedParameters) {
         this.hasRepeatedParameters = hasRepeatedParameters;
     }

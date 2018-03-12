@@ -26,21 +26,19 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 /**
  * User name / password authentication filter
- * 
- * 
+ *
  * @author christian
- * 
  */
 public class GeoServerUserNamePasswordAuthenticationFilter extends GeoServerCompositeFilter
-    implements GeoServerAuthenticationFilter {
+        implements GeoServerAuthenticationFilter {
 
     //public static final String URL_FOR_LOGIN = "/j_spring_security_check";
     public static final String URL_LOGIN_SUCCCESS = "/web";
     public static final String URL_LOGIN_FAILURE = "/web/wicket/bookmarkable/org.geoserver.web.GeoServerLoginPage?error=true";
-    public static final String URL_LOGIN_FORM="/web/wicket/bookmarkable/org.geoserver.web.GeoServerLoginPage?error=false";
+    public static final String URL_LOGIN_FORM = "/web/wicket/bookmarkable/org.geoserver.web.GeoServerLoginPage?error=false";
     //public static final String URL_LOGIN_FORM="/admin/login.do";
-    
-    
+
+
     private LoginUrlAuthenticationEntryPoint aep;
     String[] pathInfos;
 
@@ -48,12 +46,12 @@ public class GeoServerUserNamePasswordAuthenticationFilter extends GeoServerComp
     @Override
     public void initializeFromConfig(SecurityNamedServiceConfig config) throws IOException {
         super.initializeFromConfig(config);
-        
-        pathInfos=GeoServerSecurityFilterChain.FORM_LOGIN_CHAIN.split(",");
-        
+
+        pathInfos = GeoServerSecurityFilterChain.FORM_LOGIN_CHAIN.split(",");
+
         UsernamePasswordAuthenticationFilterConfig upConfig = (UsernamePasswordAuthenticationFilterConfig) config;
-        
-        aep=new LoginUrlAuthenticationEntryPoint(URL_LOGIN_FORM);
+
+        aep = new LoginUrlAuthenticationEntryPoint(URL_LOGIN_FORM);
         aep.setForceHttps(false);
         try {
             aep.afterPropertiesSet();
@@ -61,19 +59,19 @@ public class GeoServerUserNamePasswordAuthenticationFilter extends GeoServerComp
             throw new IOException(e2);
         }
 
-        RememberMeServices rms = securityManager.getRememberMeService(); 
+        RememberMeServices rms = securityManager.getRememberMeService();
 
         // add login filter
         UsernamePasswordAuthenticationFilter filter = new UsernamePasswordAuthenticationFilter() {
             @Override
             protected boolean requiresAuthentication(HttpServletRequest request,
-                    HttpServletResponse response) {
-                
-                for (String pathInfo:pathInfos) {            
-                    if (getRequestPath(request).startsWith(pathInfo)) 
+                                                     HttpServletResponse response) {
+
+                for (String pathInfo : pathInfos) {
+                    if (getRequestPath(request).startsWith(pathInfo))
                         return true;
-                    
-                }   
+
+                }
                 return false;
             }
         };
@@ -103,7 +101,7 @@ public class GeoServerUserNamePasswordAuthenticationFilter extends GeoServerComp
         //filter.afterPropertiesSet();
         getNestedFilters().add(filter);
     }
-    
+
     @Override
     public AuthenticationEntryPoint getAuthenticationEntryPoint() {
         return aep;
@@ -114,7 +112,7 @@ public class GeoServerUserNamePasswordAuthenticationFilter extends GeoServerComp
             throws IOException, ServletException {
         req.setAttribute(GeoServerSecurityFilter.AUTHENTICATION_ENTRY_POINT_HEADER, aep);
         super.doFilter(req, res, chain);
-    }            
+    }
 
     /**
      * @see org.geoserver.security.filter.GeoServerAuthenticationFilter#applicableForHtml()

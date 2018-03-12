@@ -65,6 +65,7 @@ public class DirectoryChooser extends Panel {
     private final IModel<DirectoryFilter> fileFilter = new Model<>(new DirectoryFilter());
 
     static File USER_HOME = null;
+
     static {
         // try to safely determine the user home location
         try {
@@ -101,7 +102,7 @@ public class DirectoryChooser extends Panel {
     }
 
     public DirectoryChooser(final String contentId, IModel<File> initialDirectory,
-            final boolean makeRepositoriesSelectable) {
+                            final boolean makeRepositoriesSelectable) {
         super(contentId, initialDirectory);
         getSession().bind();// so we can store the last visited directory as a session object
         this.makeRepositoriesSelectable = makeRepositoriesSelectable;
@@ -239,6 +240,7 @@ public class DirectoryChooser extends Panel {
 
     /**
      * Called when a file name is clicked. By default it does nothing
+     *
      * @param file
      * @param target
      */
@@ -249,7 +251,7 @@ public class DirectoryChooser extends Panel {
     /**
      * Action undertaken as a directory is clicked. Default behavior is to drill down into the
      * directory.
-     * 
+     *
      * @param file
      * @param target
      */
@@ -279,7 +281,7 @@ public class DirectoryChooser extends Panel {
     /**
      * Set the file table fixed height. Set it to null if you don't want fixed height with overflow,
      * and to a valid CSS measure if you want it instead. Default value is "25em"
-     * 
+     *
      * @param height
      */
     public void setFileTableHeight(String height) {
@@ -389,7 +391,7 @@ public class DirectoryChooser extends Panel {
 
         @SuppressWarnings("unchecked")
         public DirectoryDataView(final String id, final FileProvider fileProvider,
-                final boolean allowSelectingRepositories) {
+                                 final boolean allowSelectingRepositories) {
             super(id);
             this.provider = fileProvider;
             this.allowSelectingRepositories = allowSelectingRepositories;

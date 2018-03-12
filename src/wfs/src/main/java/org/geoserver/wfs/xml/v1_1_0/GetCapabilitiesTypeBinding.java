@@ -17,9 +17,9 @@ import org.geotools.xml.Node;
 
 /**
  * Binding object for the type http://www.opengis.net/wfs:GetCapabilitiesType.
- *
  * <p>
- *        <pre>
+ * <p>
+ * <pre>
  *         <code>
  *  &lt;xsd:complexType name="GetCapabilitiesType"&gt;
  *      &lt;xsd:annotation&gt;
@@ -46,6 +46,7 @@ import org.geotools.xml.Node;
  *
  *          </code>
  *         </pre>
+ *
  * @generated
  */
 public class GetCapabilitiesTypeBinding extends AbstractComplexBinding {
@@ -83,7 +84,7 @@ public class GetCapabilitiesTypeBinding extends AbstractComplexBinding {
      * @generated modifiable
      */
     public Object parse(ElementInstance instance, Node node, Object value)
-        throws Exception {
+            throws Exception {
         net.opengis.ows10.GetCapabilitiesType owsGetCapabilities = (net.opengis.ows10.GetCapabilitiesType) value;
         GetCapabilitiesType getCapabilities = wfsfactory.createGetCapabilitiesType();
 

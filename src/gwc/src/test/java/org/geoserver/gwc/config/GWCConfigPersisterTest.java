@@ -29,7 +29,7 @@ public class GWCConfigPersisterTest {
     private GeoServerResourceLoader resourceLoader;
 
     private GWCConfigPersister persister;
-    
+
     @Rule
     public TemporaryFolder tempFolder = new TemporaryFolder();
 

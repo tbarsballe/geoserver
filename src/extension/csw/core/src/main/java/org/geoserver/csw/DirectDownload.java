@@ -36,7 +36,7 @@ import org.opengis.filter.FilterFactory2;
 
 /**
  * Runs the DirectDownload request
- * 
+ *
  * @author Daniele Romagnoli - GeoSolutions
  */
 public class DirectDownload {
@@ -44,7 +44,7 @@ public class DirectDownload {
     private final static FilterFactory2 FF = FeatureUtilities.DEFAULT_FILTER_FACTORY;
 
     /**
-     * Files collector class which populates a {@link File}s {@link List} 
+     * Files collector class which populates a {@link File}s {@link List}
      * by accessing a {@link FileGroupProvider} instance.
      */
     class FilesCollector {
@@ -53,13 +53,15 @@ public class DirectDownload {
             this.fileGroupProvider = fileGroupProvider;
         }
 
-        /** The underlying FileGroupProvider used to collect the files */
+        /**
+         * The underlying FileGroupProvider used to collect the files
+         */
         private FileGroupProvider fileGroupProvider;
 
-        /** 
+        /**
          * Only collect the subset of files available from the fileGroupProvider,
          * which match the provided fileId.
-         * 
+         * <p>
          * a File Identifier is composed of "hash-baseName".
          * Only the files having same baseName and matching hash will be added to the list
          */
@@ -70,7 +72,7 @@ public class DirectDownload {
                 // SHA-1 are 20 bytes in length
                 String fileBaseName = hash.substring(41);
                 Query query = new Query();
-    
+
                 // Look for files in the catalog having the same base name
                 query.setFilter(FF.like(FF.property("location"), "*" + fileBaseName + "*"));
                 files = fileGroupProvider.getFiles(query);
@@ -78,7 +80,7 @@ public class DirectDownload {
                     FileGroup fileGroup = files.next();
                     File mainFile = fileGroup.getMainFile();
                     String hashedName = DownloadLinkHandler.hashFile(mainFile);
-    
+
                     // Only files fully matching the current hash will 
                     // be added to the download list
                     if (hash.equalsIgnoreCase(hashedName)) {
@@ -89,13 +91,13 @@ public class DirectDownload {
                         }
                     }
                 }
-        } catch (NoSuchAlgorithmException e) {
-            throw new ServiceException("Exception occurred while looking for raw files for :"
-                    + fileId, e);
-        } catch (IOException e) {
-            throw new ServiceException("Exception occurred while looking for raw files for :"
-                    + fileId, e);
-        }   finally {
+            } catch (NoSuchAlgorithmException e) {
+                throw new ServiceException("Exception occurred while looking for raw files for :"
+                        + fileId, e);
+            } catch (IOException e) {
+                throw new ServiceException("Exception occurred while looking for raw files for :"
+                        + fileId, e);
+            } finally {
                 closeIterator(files);
             }
         }
@@ -145,8 +147,8 @@ public class DirectDownload {
 
     /**
      * Prepare the list of files to be downloaded from the current request.
-     * @param request
      *
+     * @param request
      */
     public List<File> run(DirectDownloadType request) {
         List<File> result = new ArrayList<File>();
@@ -154,8 +156,8 @@ public class DirectDownload {
         String fileId = request.getFile();
 
         // Extract namespace, layername from the resourceId
-        String [] identifiers = resourceId.split(":");
-        assert(identifiers.length == 2);
+        String[] identifiers = resourceId.split(":");
+        assert (identifiers.length == 2);
         String nameSpace = identifiers[0];
         String layerName = identifiers[1];
 
@@ -199,6 +201,7 @@ public class DirectDownload {
      * Get extra files for the specified reader and add them to the result list.
      * Extra files are usually auxiliary files like, as an instance,
      * indexer, properties, config files for a mosaic.
+     *
      * @param reader
      * @param result
      */
@@ -218,13 +221,14 @@ public class DirectDownload {
     /**
      * Get the data files from the specified {@link GridCoverage2DReader}, related to the
      * provided coverageName, matching the specified fileId and add them to the result list.
+     *
      * @param reader
      * @param coverageName
      * @param fileId
      * @param result
      */
     private void getFileResources(GridCoverage2DReader reader, String coverageName,
-            String fileId, List<File> result) {
+                                  String fileId, List<File> result) {
         ResourceInfo resourceInfo = reader.getInfo(coverageName);
         if (resourceInfo instanceof FileResourceInfo) {
             FileResourceInfo fileResourceInfo = (FileResourceInfo) resourceInfo;
@@ -247,10 +251,11 @@ public class DirectDownload {
         }
     }
 
-    /** 
+    /**
      * Check the current download is not exceeding the maxDownloadSize limit (if activated).
      * Throws a {@link CSWException} in case the limit is exceeded
-     * @param info 
+     *
+     * @param info
      */
     private void checkSizeLimit(List<File> fileList, CoverageInfo info) {
         DirectDownloadSettings settings = DirectDownloadSettings.getSettingsFromMetadata(info.getMetadata(), csw);
@@ -270,8 +275,8 @@ public class DirectDownload {
         }
     }
 
-    /** 
-     * Format a size in a human readable way 
+    /**
+     * Format a size in a human readable way
      */
     static String formatBytes(long bytes) {
         if (bytes < KILO) {
@@ -287,6 +292,7 @@ public class DirectDownload {
 
     /**
      * Gently close a {@link CloseableIterator}
+     *
      * @param files
      */
     private void closeIterator(CloseableIterator<FileGroup> files) {

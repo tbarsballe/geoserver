@@ -17,7 +17,6 @@ import org.geoserver.wfs.WFSInfo;
  * An xml schema describing a wfs feature type.
  *
  * @author Justin Deoliveira, The Open Planning Project
- *
  */
 public abstract class FeatureTypeSchema {
     /**
@@ -57,11 +56,12 @@ public abstract class FeatureTypeSchema {
      * @return The {@link XSDSchema} representation of the schema.
      */
     public XSDSchema schema(String baseUrl) throws IOException {
-        return builder.build(new FeatureTypeInfo[] { featureType }, baseUrl);
+        return builder.build(new FeatureTypeInfo[]{featureType}, baseUrl);
     }
 
     /**
      * Converts the schema to a gml2 schema.
+     *
      * @param baseUrl is the prefix-base to use for self-referencing urls.
      */
     public FeatureTypeSchema toGML2() {

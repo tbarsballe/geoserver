@@ -74,10 +74,10 @@ public class CachedLayersPage extends GeoServerSecuredPage {
         table = new GeoServerTablePanel<TileLayer>("table", provider, true) {
             private static final long serialVersionUID = 1L;
 
-            @SuppressWarnings({ "unchecked" })
+            @SuppressWarnings({"unchecked"})
             @Override
             protected Component getComponentForProperty(String id, IModel<TileLayer> itemModel,
-                    Property<TileLayer> property) {
+                                                        Property<TileLayer> property) {
 
                 if (property == TYPE) {
                     Fragment f = new Fragment(id, "iconFragment", CachedLayersPage.this);
@@ -92,7 +92,7 @@ public class CachedLayersPage extends GeoServerSecuredPage {
                     IModel<Quota> quotaLimitModel = (IModel<Quota>) property.getModel(itemModel);
                     return quotaLink(id, quotaLimitModel);
                 } else if (property == QUOTA_USAGE) {
-                    IModel<Quota> quotaUsageModel =  (IModel<Quota>) property.getModel(itemModel);
+                    IModel<Quota> quotaUsageModel = (IModel<Quota>) property.getModel(itemModel);
                     return quotaLink(id, quotaUsageModel);
                 } else if (property == ENABLED) {
                     TileLayer layerInfo = (TileLayer) itemModel.getObject();
@@ -187,7 +187,7 @@ public class CachedLayersPage extends GeoServerSecuredPage {
     }
 
     private SimpleAjaxLink<String> truncateLink(final String id,
-            IModel<TileLayer> tileLayerNameModel) {
+                                                IModel<TileLayer> tileLayerNameModel) {
 
         String layerName = tileLayerNameModel.getObject().getName();
         IModel<String> model = new Model<String>(layerName);
@@ -222,13 +222,13 @@ public class CachedLayersPage extends GeoServerSecuredPage {
                                 layerName, usedQuotaStr);
                         Label confirmLabel = new Label(id, model);
                         confirmLabel.setEscapeModelStrings(false);// allow some html inside, like
-                                                                  // <b></b>, etc
+                        // <b></b>, etc
                         return confirmLabel;
                     }
 
                     @Override
                     protected boolean onSubmit(final AjaxRequestTarget target,
-                            final Component contents) {
+                                               final Component contents) {
                         final String layerName = getDefaultModelObjectAsString();
                         GWC facade = GWC.get();
                         facade.truncate(layerName);
@@ -282,7 +282,7 @@ public class CachedLayersPage extends GeoServerSecuredPage {
 
         // build the wms request, redirect to it in a new window, reset the selection
         String demoUrl = "'" + ResponseUtils.baseURL(getGeoServerApplication().servletRequest())
-        		+ "gwc/demo/" + layer.getName()
+                + "gwc/demo/" + layer.getName()
                 + "?' + this.options[this.selectedIndex].value";
         menu.add(new AttributeAppender("onchange", new Model<String>("window.open(" + demoUrl
                 + ");this.selectedIndex=0"), ";"));
@@ -348,11 +348,11 @@ public class CachedLayersPage extends GeoServerSecuredPage {
 
                     IModel<String> model = new StringResourceModel
                             ("CachedLayersPage.confirmSelectionRemoval",
-                            CachedLayerSelectionRemovalLink.this).setParameters(new Object[] {
-                                    selectedLayerCount.toString(), usedQuotaStr });
+                                    CachedLayerSelectionRemovalLink.this).setParameters(new Object[]{
+                            selectedLayerCount.toString(), usedQuotaStr});
                     Label confirmLabel = new Label(id, model);
                     confirmLabel.setEscapeModelStrings(false);// allow some html inside, like
-                                                              // <b></b>, etc
+                    // <b></b>, etc
                     return confirmLabel;
                 }
 

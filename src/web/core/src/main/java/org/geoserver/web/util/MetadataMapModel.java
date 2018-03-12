@@ -19,7 +19,7 @@ import org.geoserver.catalog.MetadataMap;
  * <p>
  * Closely derived from {@link MapModel}
  * </p>
- * 
+ *
  * @author Andrea Aime - Geosolutions
  * @author Justin Deoliveira, The Open Planning Project
  */
@@ -31,23 +31,23 @@ public class MetadataMapModel<T> implements IModel<T> {
     protected String expression;
 
     protected Class<?> target;
-    
+
     protected Serializable value;
 
     public MetadataMapModel(MetadataMap map, String expression, Class<?> target) {
-        this(new MetadataMapWrappingModel(map),expression, target);
+        this(new MetadataMapWrappingModel(map), expression, target);
     }
-    
+
     public MetadataMapModel(IModel<MetadataMap> model, String expression, Class<?> target) {
         this.model = model;
         this.expression = expression;
         this.target = target;
     }
-    
-    
+
+
     @SuppressWarnings("unchecked")
     public T getObject() {
-        if(value == null) {
+        if (value == null) {
             value = (Serializable) model.getObject().get(expression, target);
         }
         return (T) value;
@@ -61,7 +61,7 @@ public class MetadataMapModel<T> implements IModel<T> {
     public void detach() {
         model.detach();
     }
-    
+
     public String getExpression() {
         return expression;
     }

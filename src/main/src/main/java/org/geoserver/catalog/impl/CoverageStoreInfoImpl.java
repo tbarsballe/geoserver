@@ -23,18 +23,18 @@ public class CoverageStoreInfoImpl extends StoreInfoImpl implements
         CoverageStoreInfo {
 
     protected String url;
-    
+
     protected AbstractGridFormat format;
 
     protected CoverageStoreInfoImpl() {
     }
-    
+
     public CoverageStoreInfoImpl(Catalog catalog) {
         super(catalog);
     }
 
-    public CoverageStoreInfoImpl(Catalog catalog,String id) {
-        super(catalog,id);
+    public CoverageStoreInfoImpl(Catalog catalog, String id) {
+        super(catalog, id);
     }
 
     public String getURL() {
@@ -44,13 +44,13 @@ public class CoverageStoreInfoImpl extends StoreInfoImpl implements
     public void setURL(String url) {
         this.url = url;
     }
-    
+
     public AbstractGridFormat getFormat() {
         return catalog.getResourcePool().getGridCoverageFormat(this);
     }
-    
+
     public void accept(CatalogVisitor visitor) {
-        visitor.visit( this );
+        visitor.visit(this);
     }
 
     @Override

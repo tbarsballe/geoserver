@@ -51,44 +51,53 @@ import ucar.nc2.Variable;
  * An inner class delegated to add Coordinates to the output NetCDF file,
  * as well as setting additional attributes and variables needed to properly
  * represent the related CoordinateReferenceSystem.
- * 
+ * <p>
  * Note that NetCDF files write is made in 2 steps:
  * 1) the data initialization (define mode)
  * 2) the data write
- * 
- * Therefore, the NetCDFCoordinates writer needs to be initialized first, through the 
+ * <p>
+ * Therefore, the NetCDFCoordinates writer needs to be initialized first, through the
  * {@link #initialize2DCoordinatesDimensions(Map)}
- * 
+ * <p>
  * Once all other elements of the NetCDF file have been initialized, the Coordinates
  * need to be written through the {@link #setCoordinateVariable(NetCDFDimensionMapping)}
  * calls.
- * 
- * @author Daniele Romagnoli, GeoSolutions
  *
+ * @author Daniele Romagnoli, GeoSolutions
  */
 class NetCDFCRSWriter {
 
     public static final Logger LOGGER = Logging.getLogger(NetCDFCRSWriter.class);
 
-    /** the NetCDF CoordinateReferenceSystem holder */
+    /**
+     * the NetCDF CoordinateReferenceSystem holder
+     */
     private NetCDFCoordinateReferenceSystemType netcdfCrsType;
 
-    /** the NetCDF File writer */
+    /**
+     * the NetCDF File writer
+     */
     private NetcdfFileWriter writer;
 
     /**
-     * A sample granule used to extract properties such as CoordinateReferenceSystem, 
+     * A sample granule used to extract properties such as CoordinateReferenceSystem,
      * Grid2World transformation
      */
     private GridCoverage2D sampleGranule;
 
-    /** A map to assign a Dimension manager to each coordinate */
+    /**
+     * A map to assign a Dimension manager to each coordinate
+     */
     private Map<String, NetCDFDimensionMapping> coordinatesDimensions = new LinkedHashMap<String, NetCDFDimensionMapping>();
 
-    /** The underlying CoordinateReferenceSystem */
+    /**
+     * The underlying CoordinateReferenceSystem
+     */
     private CoordinateReferenceSystem crs;
-    
-    /** The Grid2World transformation, used to setup geoTransformation */
+
+    /**
+     * The Grid2World transformation, used to setup geoTransformation
+     */
     private MathTransform transform;
 
     public NetCDFCRSWriter(NetcdfFileWriter writer, GridCoverage2D sampleGranule) {
@@ -103,7 +112,8 @@ class NetCDFCRSWriter {
     /**
      * Setup lat,lon dimension (or y,x)  and related coordinates variable and add them
      * to the provided dimensionsManager
-     * @param dimensionsManager 
+     *
+     * @param dimensionsManager
      */
     public Map<String, NetCDFDimensionMapping> initialize2DCoordinatesDimensions() {
         final RenderedImage image = sampleGranule.getRenderedImage();
@@ -144,19 +154,20 @@ class NetCDFCRSWriter {
 
     }
 
-    /** 
+    /**
      * Add a coordinate variable to the dataset, along with the related dimension.
      * Finally, add the created dimension to the coordinates map
-     * @param dimensionsManager 
-     * */
+     *
+     * @param dimensionsManager
+     */
     private void addCoordinateVariable(NetCDFCoordinate netCDFCoordinate, int size, double min,
-            double period) {
+                                       double period) {
         String dimensionName = netCDFCoordinate.getDimensionName();
         String standardName = netCDFCoordinate.getStandardName();
 
         // Create the dimension
         final Dimension dimension = writer.addDimension(null, dimensionName, size);
-        final ArrayFloat dimensionData = new ArrayFloat(new int[] { size });
+        final ArrayFloat dimensionData = new ArrayFloat(new int[]{size});
         final Index index = dimensionData.getIndex();
 
         // Create the related coordinate variable
@@ -172,7 +183,7 @@ class NetCDFCRSWriter {
         // Set the coordinate values
         for (int pos = 0; pos < size; pos++) {
             dimensionData.setFloat(index.set(pos),
-            // new Float(ymax - (new Float(yPos).floatValue() * periodY)).floatValue());
+                    // new Float(ymax - (new Float(yPos).floatValue() * periodY)).floatValue());
                     new Float(min + (new Float(pos).floatValue() * period)).floatValue());
         }
 
@@ -185,7 +196,7 @@ class NetCDFCRSWriter {
 
     /**
      * Set the coordinate values for all the dimensions
-     * 
+     *
      * @param writer
      * @throws IOException
      * @throws InvalidRangeException
@@ -224,7 +235,7 @@ class NetCDFCRSWriter {
 
     /**
      * Add gridMapping variable for projected datasets.
-     * 
+     *
      * @param var the {@link Variable} where the mapping attribute needs to be appended
      */
     void initializeGridMapping(Variable var) {
@@ -245,17 +256,17 @@ class NetCDFCRSWriter {
         // update CRS information
         updateProjectionInformation(netcdfCrsType, writer, crs, transform);
     }
-    
+
     /**
-     * Add GeoReferencing information to the writer, 
+     * Add GeoReferencing information to the writer,
      * starting from the CoordinateReferenceSystem and the MathTransform
-     * 
+     *
      * @param writer
      * @param crs
      * @param transform
      */
     public void updateProjectionInformation(NetCDFCoordinateReferenceSystemType crsType,
-            NetcdfFileWriter writer, CoordinateReferenceSystem crs, MathTransform transform) {
+                                            NetcdfFileWriter writer, CoordinateReferenceSystem crs, MathTransform transform) {
         NetCDFProjection projection = crsType.getNetCDFProjection();
 
         // Projection may be exposed as standard NetCDF CF GridMapping (if available)
@@ -270,11 +281,11 @@ class NetCDFCRSWriter {
         }
     }
 
-    /** 
-     * Setup proper projection information to the output NetCDF 
+    /**
+     * Setup proper projection information to the output NetCDF
      */
     private void setGridMappingVariableAttributes(NetcdfFileWriter writer, CoordinateReferenceSystem crs,
-            Variable var, NetCDFProjection projection) {
+                                                  Variable var, NetCDFProjection projection) {
         if (!(crs instanceof ProjectedCRS)) {
             if (LOGGER.isLoggable(Level.FINE)) {
                 LOGGER.fine("The provided CRS is not a projected CRS\n"
@@ -315,7 +326,7 @@ class NetCDFCRSWriter {
 
             // Setup projections attributes
             Set<String> paramKeys = parameterValues.keySet();
-            for (String key: paramKeys) {
+            for (String key : paramKeys) {
                 List<Double> val = parameterValues.get(key);
                 if (val.size() == 1) {
                     // Set attribute as single element
@@ -332,7 +343,7 @@ class NetCDFCRSWriter {
     }
 
     private void updateParameterValues(Map<String, String> referencingToNetCDFParameters,
-            String code, Double value, Map<String, List<Double>> parameterValues) {
+                                       String code, Double value, Map<String, List<Double>> parameterValues) {
         String mappedKey = referencingToNetCDFParameters.get(code);
         if (!mappedKey.contains(NetCDFProjection.PARAMS_SEPARATOR)) {
             updateParam(mappedKey, parameterValues, value);
@@ -341,7 +352,7 @@ class NetCDFCRSWriter {
             // Assign the same value to multiple params.
             // As an instance, Lambert_conformal_conic_1sp use same values
             // for standard_parallel and latitude_of_projection_origin
-            for (String key: keys) {
+            for (String key : keys) {
                 updateParam(key, parameterValues, value);
             }
         }
@@ -349,8 +360,8 @@ class NetCDFCRSWriter {
     }
 
     private void updateParam(String mappedKey, Map<String, List<Double>> parameterValues,
-            Double value) {
-        
+                             Double value) {
+
         // Make sure to proper deal with Number and Arrays
         // Standard Parallels are provided as a single attribute with
         // 2 values
@@ -367,29 +378,29 @@ class NetCDFCRSWriter {
     /**
      * Add GeoReferencing global attributes (GDAL's spatial_ref and GeoTransform).
      * They will be used for datasets with unsupported NetCDF CF projection.
-
+     *
      * @param writer
      * @param crs
      * @param transform
      */
     private void addGlobalAttributes(NetcdfFileWriter writer, CoordinateReferenceSystem crs,
-            MathTransform transform) {
+                                     MathTransform transform) {
         writer.addGroupAttribute(null, getSpatialRefAttribute(crs));
         writer.addGroupAttribute(null, getGeoTransformAttribute(transform));
     }
 
     /**
      * Add the gridMapping attribute
-     * 
+     *
      * @param writer
      * @param crs
      * @param transform
      * @param var
      * @param gridMapping
      */
-    private void setGeoreferencingAttributes(NetcdfFileWriter writer, 
-            CoordinateReferenceSystem crs,
-            MathTransform transform, Variable var) {
+    private void setGeoreferencingAttributes(NetcdfFileWriter writer,
+                                             CoordinateReferenceSystem crs,
+                                             MathTransform transform, Variable var) {
 
         // Adding GDAL Attributes spatial_ref and GeoTransform
         writer.addVariableAttribute(var, getSpatialRefAttribute(crs));
@@ -398,7 +409,7 @@ class NetCDFCRSWriter {
 
     /**
      * Setup a {@link NetCDFUtilities#SPATIAL_REF} attribute on top of the CoordinateReferenceSystem
-     * 
+     *
      * @param crs the {@link CoordinateReferenceSystem} instance
      * @return the {@link Attribute} containing the spatial_ref  attribute
      */
@@ -409,7 +420,7 @@ class NetCDFCRSWriter {
 
     /**
      * Setup a {@link NetCDFUtilities#GEO_TRANSFORM} attribute on top of the MathTransform
-     * 
+     *
      * @param MathTransform the grid2world geoTransformation
      * @return the {@link Attribute} containing the GeotTransform attribute
      */
@@ -423,5 +434,5 @@ class NetCDFCRSWriter {
 
     }
 
-   
+
 }

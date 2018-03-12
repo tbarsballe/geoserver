@@ -41,7 +41,7 @@ import org.springframework.security.web.authentication.logout.LogoutHandler;
 /**
  * OneLogin Authentication filter that configures SP metadata discovery filter and delegates to {@link #SAMLEntryPoint} the SAML authentication
  * process
- * 
+ *
  * @author Xandros
  */
 
@@ -171,7 +171,7 @@ public class OneloginAuthenticationFilter extends GeoServerPreAuthenticatedCompo
 
     @Override
     public void logout(HttpServletRequest request, HttpServletResponse response,
-            Authentication authentication) {
+                       Authentication authentication) {
         request.setAttribute(GeoServerLogoutFilter.LOGOUT_REDIRECT_ATTR,
                 SAMLLogoutFilter.FILTER_URL);
 

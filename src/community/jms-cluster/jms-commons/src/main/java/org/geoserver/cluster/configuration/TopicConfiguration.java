@@ -8,11 +8,9 @@ package org.geoserver.cluster.configuration;
 import java.io.IOException;
 
 /**
- * 
  * class to store and load configuration from global var or properties file
- * 
+ *
  * @author carlo cancellieri - GeoSolutions SAS
- * 
  */
 final public class TopicConfiguration implements JMSConfigurationExt {
 

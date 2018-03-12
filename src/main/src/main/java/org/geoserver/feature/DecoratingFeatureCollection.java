@@ -17,11 +17,11 @@ import org.geotools.data.simple.SimpleFeatureCollection;
  * @author Justin Deoliveira, The Open Planning Project, jdeolive@openplans.org
  * @deprecated use {@link org.geotools.feature.collection.DecoratingFeatureCollection}.
  */
-public class DecoratingFeatureCollection 
-   extends org.geotools.feature.collection.DecoratingSimpleFeatureCollection { 
-    
+public class DecoratingFeatureCollection
+        extends org.geotools.feature.collection.DecoratingSimpleFeatureCollection {
+
     public DecoratingFeatureCollection(SimpleFeatureCollection delegate) {
-        super( delegate );
+        super(delegate);
     }
 
 }

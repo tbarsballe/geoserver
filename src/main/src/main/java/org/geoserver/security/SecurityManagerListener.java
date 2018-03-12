@@ -7,7 +7,7 @@ package org.geoserver.security;
 
 /**
  * Event listener for {@link GeoServerSecurityManager}.
- *  
+ *
  * @author Justin Deoliveira, OpenGeo
  */
 public interface SecurityManagerListener {

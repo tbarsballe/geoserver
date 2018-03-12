@@ -10,7 +10,7 @@ import java.util.Map;
 
 /**
  * A store of geoaspatial resources.
- * 
+ *
  * @author Justin Deoliveira, The Open Planning Project
  */
 public interface StoreInfo extends CatalogInfo {
@@ -19,21 +19,21 @@ public interface StoreInfo extends CatalogInfo {
      * The catalog the store is part of.
      */
     Catalog getCatalog();
-    
+
     /**
      * The store name.
      * <p>
      * This value is unique among all stores and can be used to identify the
      * store.
      * </p>
-     * 
+     *
      * @uml.property name="name"
      */
     String getName();
 
     /**
      * Sets the name of the store.
-     * 
+     *
      * @uml.property name="name"
      */
     void setName(String name);
@@ -43,7 +43,7 @@ public interface StoreInfo extends CatalogInfo {
      * <p>
      * This is usually something that is used in a user interface.
      * </p>
-     * 
+     *
      * @uml.property name="description"
      */
     String getDescription(); // FIXME: InternationalString ?
@@ -53,7 +53,7 @@ public interface StoreInfo extends CatalogInfo {
      * <p>
      * This is usually something that is used in a user interface.
      * </p>
-     * 
+     *
      * @uml.property name="description"
      */
     void setDescription(String description);
@@ -71,7 +71,7 @@ public interface StoreInfo extends CatalogInfo {
      * Sets the type of the store.
      */
     void setType(String type);
-    
+
     /**
      * Map of persistent properties associated with the store.
      * <p>
@@ -82,21 +82,21 @@ public interface StoreInfo extends CatalogInfo {
      * Key values in this map are of type {@link String}, and values are of
      * type {@link Serializable}.
      * </p>
-     * 
+     *
      * @uml.property name="metadata"
      */
     MetadataMap getMetadata();
 
     /**
      * Flag indicating wether or not teh store is enabled or not.
-     * 
+     *
      * @uml.property name="enabled"
      */
     boolean isEnabled();
 
     /**
      * Sets the store enabled / disabled flag.
-     * 
+     *
      * @uml.property name="enabled"
      */
     void setEnabled(boolean enabled);
@@ -107,7 +107,7 @@ public interface StoreInfo extends CatalogInfo {
      * This value is often used to set the namespace of {@link ResourceInfo}objects
      * which are associated to the store.
      * </p>
-     * 
+     *
      * @uml.property name="namespace"
      * @uml.associationEnd inverse="storeInfo:org.geoserver.catalog.NamespaceInfo"
      */
@@ -115,21 +115,20 @@ public interface StoreInfo extends CatalogInfo {
 
     /**
      * Sets the namespace the store is part of.
-     * 
+     *
      * @uml.property name="namespace"
      */
     //void setNamespace(NamespaceInfo namespace);
-    
+
     /**
      * The workspace the store is part of.
-     *
      */
     WorkspaceInfo getWorkspace();
-    
+
     /**
      * Sets the workspace the store is part of.
      */
-    void setWorkspace( WorkspaceInfo workspace );
+    void setWorkspace(WorkspaceInfo workspace);
 
     /**
      * The map of connection paramters specific to the store.
@@ -137,15 +136,15 @@ public interface StoreInfo extends CatalogInfo {
      * Key values in this map are of type {@link String}, and values are of
      * type {@link Serializable}.
      * </p>
-     * 
+     *
      * @uml.property name="connectionParameters"
      */
     Map<String, Serializable> getConnectionParameters();
-    
+
     /**
      * An error associated with the store.
      * <p>
-     * This value is used to store a problem that occured while attemping to 
+     * This value is used to store a problem that occured while attemping to
      * connect to the underlying resource of the store. It returns <code>null</code>
      * if no such error exists.
      * </p>
@@ -161,21 +160,18 @@ public interface StoreInfo extends CatalogInfo {
      * @see #getError()
      */
     void setError(Throwable t);
-    
+
     /**
      * Creates an adapter for the store.
      * <p>
-     * 
+     * <p>
      * </p>
-     * 
-     * @param adapterClass
-     *                The class of the adapter.
-     * @param hints
-     *                Hints to use when creating the adapter.
-     * 
+     *
+     * @param adapterClass The class of the adapter.
+     * @param hints        Hints to use when creating the adapter.
      * @return The adapter, an intsanceof adapterClass, or <code>null</code>.
      */
-    <T extends Object> T getAdapter(Class<T> adapterClass, Map<?,?> hints);
+    <T extends Object> T getAdapter(Class<T> adapterClass, Map<?, ?> hints);
 
     /**
      * @return Returns a resource with the specified name that is provided by 
@@ -189,7 +185,7 @@ public interface StoreInfo extends CatalogInfo {
      */
     //<T extends Resource> T getResource( String name, ProgressListener monitor) 
     //    throws IOException;
-    
+
     /**
      * @return Returns the resources provided by this store.
      * <p>

@@ -43,9 +43,8 @@ import com.vividsolutions.jts.geom.Point;
 /**
  * This test must be run with the server configured with the wfs 1.0 cite
  * configuration, with data initialized.
- * 
+ *
  * @author Justin Deoliveira, The Open Planning Project
- * 
  */
 public class TransactionTest extends WFSTestSupport {
 
@@ -98,10 +97,10 @@ public class TransactionTest extends WFSTestSupport {
                 .getLength());
 
     }
-    
-	@Test
+
+    @Test
     public void testDoubleDelete() throws Exception {
-    	// see 
+        // see
 
         // 1. do a getFeature
         String getFeature = "<wfs:GetFeature " + "service=\"WFS\" "
@@ -121,12 +120,12 @@ public class TransactionTest extends WFSTestSupport {
                 + "xmlns:cgf=\"http://www.opengis.net/cite/geometry\" "
                 + "xmlns:ogc=\"http://www.opengis.net/ogc\" "
                 + "xmlns:wfs=\"http://www.opengis.net/wfs\"> "
-                + "<wfs:Delete typeName=\"cdf:Fifteen\"> " 
+                + "<wfs:Delete typeName=\"cdf:Fifteen\"> "
                 + "<ogc:Filter> "
                 + "<ogc:FeatureId fid=\"Fifteen.1\"/> "
                 + "</ogc:Filter> "
                 + "</wfs:Delete> "
-                + "<wfs:Delete typeName=\"cdf:Fifteen\"> " 
+                + "<wfs:Delete typeName=\"cdf:Fifteen\"> "
                 + "<ogc:Filter> "
                 + "<ogc:FeatureId fid=\"Fifteen.2\"/> "
                 + "</ogc:Filter> "
@@ -143,7 +142,7 @@ public class TransactionTest extends WFSTestSupport {
         XMLAssert.assertXpathEvaluatesTo("13", "count(//gml:featureMember)", dom);
     }
 
-	@Test
+    @Test
     public void testInsert() throws Exception {
 
         // 1. do a getFeature
@@ -185,8 +184,8 @@ public class TransactionTest extends WFSTestSupport {
         assertEquals(2, dom.getElementsByTagName("gml:featureMember")
                 .getLength());
     }
-	
-	@Test
+
+    @Test
     public void testInsertWithGetFeatureInThePath() throws Exception {
         // perform an insert
         String insert = "<wfs:Transaction service=\"WFS\" version=\"1.0.0\" "
@@ -209,7 +208,7 @@ public class TransactionTest extends WFSTestSupport {
         assertTrue(dom.getElementsByTagName("wfs:InsertResult").getLength() != 0);
     }
 
-	@Test
+    @Test
     public void testUpdate() throws Exception {
 
         // 1. do a getFeature
@@ -250,8 +249,8 @@ public class TransactionTest extends WFSTestSupport {
         assertEquals("t0003", dom.getElementsByTagName("cgf:id").item(0)
                 .getFirstChild().getNodeValue());
     }
-    
-	@Test
+
+    @Test
     public void testUpdateLayerQualified() throws Exception {
         // 1. do a getFeature
         String getFeature = "<wfs:GetFeature " + "service=\"WFS\" "
@@ -286,7 +285,7 @@ public class TransactionTest extends WFSTestSupport {
 
         dom = postAsDOM("cgf/Lines/wfs", insert);
         XMLAssert.assertXpathEvaluatesTo("1", "count(//ogc:ServiceException)", dom);
-        
+
         dom = postAsDOM("cgf/Polygons/wfs", insert);
 
         // do another get feature
@@ -295,47 +294,47 @@ public class TransactionTest extends WFSTestSupport {
                 .getFirstChild().getNodeValue());
     }
 
-	@Test
+    @Test
     public void testInsertWithBoundedBy() throws Exception {
         String xml = "<wfs:Transaction service=\"WFS\" version=\"1.0.0\" "
-            + " xmlns:wfs=\"http://www.opengis.net/wfs\" "
-            + " xmlns:gml=\"http://www.opengis.net/gml\" "
-            + " xmlns:cite=\"http://www.opengis.net/cite\">"
-            + "<wfs:Insert>"
-            + " <cite:BasicPolygons>"
-            + "<gml:boundedBy>"
-            + "<gml:Box>"
-            + "<gml:coordinates cs=\",\" decimal=\".\" ts=\" \">-2,-1 2,6</gml:coordinates>"
-            + "</gml:Box>"
-            + "</gml:boundedBy>"
-            + "  <cite:the_geom>"
-            + "<gml:MultiPolygon>"
-            + "<gml:polygonMember>"
-            + "<gml:Polygon>"
-            + "<gml:outerBoundaryIs>"
-            + "<gml:LinearRing>"
-            + "<gml:coordinates cs=\",\" decimal=\".\" ts=\" \">-1,0 0,1 1,0 0,-1 -1,0</gml:coordinates>"
-            + "</gml:LinearRing>"
-            + "</gml:outerBoundaryIs>"
-            + "</gml:Polygon>"
-            + "</gml:polygonMember>"
-            + "</gml:MultiPolygon>"
-            + "  </cite:the_geom>"
-            + "  <cite:ID>foo</cite:ID>"
-            + " </cite:BasicPolygons>"
-            + "</wfs:Insert>"
-            + "</wfs:Transaction>";
-    
+                + " xmlns:wfs=\"http://www.opengis.net/wfs\" "
+                + " xmlns:gml=\"http://www.opengis.net/gml\" "
+                + " xmlns:cite=\"http://www.opengis.net/cite\">"
+                + "<wfs:Insert>"
+                + " <cite:BasicPolygons>"
+                + "<gml:boundedBy>"
+                + "<gml:Box>"
+                + "<gml:coordinates cs=\",\" decimal=\".\" ts=\" \">-2,-1 2,6</gml:coordinates>"
+                + "</gml:Box>"
+                + "</gml:boundedBy>"
+                + "  <cite:the_geom>"
+                + "<gml:MultiPolygon>"
+                + "<gml:polygonMember>"
+                + "<gml:Polygon>"
+                + "<gml:outerBoundaryIs>"
+                + "<gml:LinearRing>"
+                + "<gml:coordinates cs=\",\" decimal=\".\" ts=\" \">-1,0 0,1 1,0 0,-1 -1,0</gml:coordinates>"
+                + "</gml:LinearRing>"
+                + "</gml:outerBoundaryIs>"
+                + "</gml:Polygon>"
+                + "</gml:polygonMember>"
+                + "</gml:MultiPolygon>"
+                + "  </cite:the_geom>"
+                + "  <cite:ID>foo</cite:ID>"
+                + " </cite:BasicPolygons>"
+                + "</wfs:Insert>"
+                + "</wfs:Transaction>";
+
         Document dom = postAsDOM("wfs", xml);
-        
+
         assertEquals("wfs:WFS_TransactionResponse", dom.getDocumentElement().getNodeName());
         assertTrue(dom.getElementsByTagName("ogc:FeatureId").getLength() > 0);
         assertTrue(dom.getElementsByTagName("wfs:SUCCESS").getLength() > 0);
     }
-    
-	@Test
+
+    @Test
     public void testInsertWorkspaceQualified() throws Exception {
-     // 1. do a getFeature
+        // 1. do a getFeature
         String getFeature = "<wfs:GetFeature " + "service=\"WFS\" "
                 + "version=\"1.0.0\" "
                 + "xmlns:cgf=\"http://www.opengis.net/cite/geometry\" "
@@ -371,98 +370,98 @@ public class TransactionTest extends WFSTestSupport {
 
         dom = postAsDOM("sf/wfs", insert);
         XMLAssert.assertXpathEvaluatesTo("1", "count(//ogc:ServiceException)", dom);
-        
+
         // do another get feature
         dom = postAsDOM("cgf/wfs", getFeature);
         assertEquals(2, dom.getElementsByTagName("gml:featureMember")
                 .getLength());
     }
-    
-	@Test
+
+    @Test
     public void testInsertLayerQualified() throws Exception {
         // 1. do a getFeature
-       String getFeature = "<wfs:GetFeature " + "service=\"WFS\" "
-               + "version=\"1.0.0\" "
-               + "xmlns:cgf=\"http://www.opengis.net/cite/geometry\" "
-               + "xmlns:ogc=\"http://www.opengis.net/ogc\" "
-               + "xmlns:wfs=\"http://www.opengis.net/wfs\" " + "> "
-               + "<wfs:Query typeName=\"Lines\"> "
-               + "<ogc:PropertyName>id</ogc:PropertyName> "
-               + "</wfs:Query> " + "</wfs:GetFeature>";
+        String getFeature = "<wfs:GetFeature " + "service=\"WFS\" "
+                + "version=\"1.0.0\" "
+                + "xmlns:cgf=\"http://www.opengis.net/cite/geometry\" "
+                + "xmlns:ogc=\"http://www.opengis.net/ogc\" "
+                + "xmlns:wfs=\"http://www.opengis.net/wfs\" " + "> "
+                + "<wfs:Query typeName=\"Lines\"> "
+                + "<ogc:PropertyName>id</ogc:PropertyName> "
+                + "</wfs:Query> " + "</wfs:GetFeature>";
 
-       Document dom = postAsDOM("cgf/Lines/wfs", getFeature);
-       assertEquals(1, dom.getElementsByTagName("gml:featureMember")
-               .getLength());
+        Document dom = postAsDOM("cgf/Lines/wfs", getFeature);
+        assertEquals(1, dom.getElementsByTagName("gml:featureMember")
+                .getLength());
 
-       // perform an insert
-       String insert = "<wfs:Transaction service=\"WFS\" version=\"1.0.0\" "
-               + "xmlns:cgf=\"http://www.opengis.net/cite/geometry\" "
-               + "xmlns:ogc=\"http://www.opengis.net/ogc\" "
-               + "xmlns:wfs=\"http://www.opengis.net/wfs\" "
-               + "xmlns:gml=\"http://www.opengis.net/gml\"> "
-               + "<wfs:Insert > "
-               + "<cgf:Lines>"
-               + "<cgf:lineStringProperty>"
-               + "<gml:LineString>"
-               + "<gml:coordinates decimal=\".\" cs=\",\" ts=\" \">"
-               + "494475.71056415,5433016.8189323 494982.70115662,5435041.95096618"
-               + "</gml:coordinates>" + "</gml:LineString>"
-               + "</cgf:lineStringProperty>" + "<cgf:id>t0002</cgf:id>"
-               + "</cgf:Lines>" + "</wfs:Insert>" + "</wfs:Transaction>";
+        // perform an insert
+        String insert = "<wfs:Transaction service=\"WFS\" version=\"1.0.0\" "
+                + "xmlns:cgf=\"http://www.opengis.net/cite/geometry\" "
+                + "xmlns:ogc=\"http://www.opengis.net/ogc\" "
+                + "xmlns:wfs=\"http://www.opengis.net/wfs\" "
+                + "xmlns:gml=\"http://www.opengis.net/gml\"> "
+                + "<wfs:Insert > "
+                + "<cgf:Lines>"
+                + "<cgf:lineStringProperty>"
+                + "<gml:LineString>"
+                + "<gml:coordinates decimal=\".\" cs=\",\" ts=\" \">"
+                + "494475.71056415,5433016.8189323 494982.70115662,5435041.95096618"
+                + "</gml:coordinates>" + "</gml:LineString>"
+                + "</cgf:lineStringProperty>" + "<cgf:id>t0002</cgf:id>"
+                + "</cgf:Lines>" + "</wfs:Insert>" + "</wfs:Transaction>";
 
-       dom = postAsDOM("cgf/Lines/wfs", insert);
-       assertTrue(dom.getElementsByTagName("wfs:SUCCESS").getLength() != 0);
-       assertTrue(dom.getElementsByTagName("wfs:InsertResult").getLength() != 0);
+        dom = postAsDOM("cgf/Lines/wfs", insert);
+        assertTrue(dom.getElementsByTagName("wfs:SUCCESS").getLength() != 0);
+        assertTrue(dom.getElementsByTagName("wfs:InsertResult").getLength() != 0);
 
-       dom = postAsDOM("cgf/Polygons/wfs", insert);
-       XMLAssert.assertXpathEvaluatesTo("1", "count(//ogc:ServiceException)", dom);
-       
-       // do another get feature
-       dom = postAsDOM("cgf/Lines/wfs", getFeature);
-       assertEquals(2, dom.getElementsByTagName("gml:featureMember")
-               .getLength());
-   }
+        dom = postAsDOM("cgf/Polygons/wfs", insert);
+        XMLAssert.assertXpathEvaluatesTo("1", "count(//ogc:ServiceException)", dom);
 
-	@Test
-   public void testUpdateWithDifferentPrefix() throws Exception {
+        // do another get feature
+        dom = postAsDOM("cgf/Lines/wfs", getFeature);
+        assertEquals(2, dom.getElementsByTagName("gml:featureMember")
+                .getLength());
+    }
 
-      // 1. do a getFeature
-      String getFeature = "<wfs:GetFeature " + "service=\"WFS\" "
-              + "version=\"1.0.0\" "
-              + "xmlns:cgf=\"http://www.opengis.net/cite/geometry\" "
-              + "xmlns:ogc=\"http://www.opengis.net/ogc\" "
-              + "xmlns:wfs=\"http://www.opengis.net/wfs\" " + "> "
-              + "<wfs:Query typeName=\"cgf:Polygons\"> "
-              + "<ogc:PropertyName>cite:id</ogc:PropertyName> "
-              + "</wfs:Query> " + "</wfs:GetFeature>";
- 
-      Document dom = postAsDOM("wfs", getFeature);
-      assertEquals(1, dom.getElementsByTagName("gml:featureMember")
-              .getLength());
-      assertEquals("t0002", dom.getElementsByTagName("cgf:id").item(0)
-              .getFirstChild().getNodeValue());
- 
-      // perform an update
-      String update = "<wfs:Transaction service=\"WFS\" version=\"1.0.0\" "
-              + "xmlns:ogc=\"http://www.opengis.net/ogc\" "
-              + "xmlns:wfs=\"http://www.opengis.net/wfs\" "
-              + "xmlns:gml=\"http://www.opengis.net/gml\"> "
-              + "<wfs:Update xmlns:foo=\"http://www.opengis.net/cite/geometry\" typeName=\"foo:Polygons\" > " + "<wfs:Property>"
-              + "<wfs:Name>id</wfs:Name>" + "<wfs:Value>t0003</wfs:Value>"
-              + "</wfs:Property>" + "<ogc:Filter>"
-              + "<ogc:PropertyIsEqualTo>"
-              + "<ogc:PropertyName>id</ogc:PropertyName>"
-              + "<ogc:Literal>t0002</ogc:Literal>"
-              + "</ogc:PropertyIsEqualTo>" + "</ogc:Filter>"
-              + "</wfs:Update>" + "</wfs:Transaction>";
- 
-      dom = postAsDOM("wfs", update);
- 
-      // do another get feature
-      dom = postAsDOM("wfs", getFeature);
-      assertEquals("t0003", dom.getElementsByTagName("cgf:id").item(0)
-              .getFirstChild().getNodeValue());
-   }
+    @Test
+    public void testUpdateWithDifferentPrefix() throws Exception {
+
+        // 1. do a getFeature
+        String getFeature = "<wfs:GetFeature " + "service=\"WFS\" "
+                + "version=\"1.0.0\" "
+                + "xmlns:cgf=\"http://www.opengis.net/cite/geometry\" "
+                + "xmlns:ogc=\"http://www.opengis.net/ogc\" "
+                + "xmlns:wfs=\"http://www.opengis.net/wfs\" " + "> "
+                + "<wfs:Query typeName=\"cgf:Polygons\"> "
+                + "<ogc:PropertyName>cite:id</ogc:PropertyName> "
+                + "</wfs:Query> " + "</wfs:GetFeature>";
+
+        Document dom = postAsDOM("wfs", getFeature);
+        assertEquals(1, dom.getElementsByTagName("gml:featureMember")
+                .getLength());
+        assertEquals("t0002", dom.getElementsByTagName("cgf:id").item(0)
+                .getFirstChild().getNodeValue());
+
+        // perform an update
+        String update = "<wfs:Transaction service=\"WFS\" version=\"1.0.0\" "
+                + "xmlns:ogc=\"http://www.opengis.net/ogc\" "
+                + "xmlns:wfs=\"http://www.opengis.net/wfs\" "
+                + "xmlns:gml=\"http://www.opengis.net/gml\"> "
+                + "<wfs:Update xmlns:foo=\"http://www.opengis.net/cite/geometry\" typeName=\"foo:Polygons\" > " + "<wfs:Property>"
+                + "<wfs:Name>id</wfs:Name>" + "<wfs:Value>t0003</wfs:Value>"
+                + "</wfs:Property>" + "<ogc:Filter>"
+                + "<ogc:PropertyIsEqualTo>"
+                + "<ogc:PropertyName>id</ogc:PropertyName>"
+                + "<ogc:Literal>t0002</ogc:Literal>"
+                + "</ogc:PropertyIsEqualTo>" + "</ogc:Filter>"
+                + "</wfs:Update>" + "</wfs:Transaction>";
+
+        dom = postAsDOM("wfs", update);
+
+        // do another get feature
+        dom = postAsDOM("wfs", getFeature);
+        assertEquals("t0003", dom.getElementsByTagName("cgf:id").item(0)
+                .getFirstChild().getNodeValue());
+    }
 
     @Test
     public void elementHandlerOrder() throws Exception {
@@ -544,15 +543,15 @@ public class TransactionTest extends WFSTestSupport {
         dom = getAsDOM("wfs?request=GetFeature&version=1.0.0&service=wfs&typeNames=gs:bar");
 
         NodeList elementsByTagName = dom.getElementsByTagName("gs:bar");
-        for (int i=1; i<=elementsByTagName.getLength(); i++) {
-                String id = elementsByTagName.item(i-1).getAttributes().item(0).getNodeValue();
-                assertEquals("bar."+i, id );
+        for (int i = 1; i <= elementsByTagName.getLength(); i++) {
+            String id = elementsByTagName.item(i - 1).getAttributes().item(0).getNodeValue();
+            assertEquals("bar." + i, id);
         }
 
         dom = getAsDOM("wfs?request=GetFeature&version=1.0.0&service=wfs&featureId=bar.5");
         XMLAssert.assertXpathEvaluatesTo("daffy", "//gs:name/text()", dom);
     }
-    
+
     @Test
     public void testBuildGeotoolsTransaction() throws IOException {
         Authentication authentication = null;
@@ -571,18 +570,20 @@ public class TransactionTest extends WFSTestSupport {
     }
 
     private void testBuildGeotoolsTransaction(Authentication authentication,
-            String expectedVersioningCommitAuthor) throws IOException {
+                                              String expectedVersioningCommitAuthor) throws IOException {
 
         final String wfsReqHandle = "Request handle";
         final Map<Object, Object> extendedProperties = new HashMap<>();
         extendedProperties.put("extKey", "extValue");
 
         TransactionRequest request = new TransactionRequest.WFS11(null) {
-            public @Override Map<?, ?> getExtendedProperties() {
+            public @Override
+            Map<?, ?> getExtendedProperties() {
                 return extendedProperties;
             }
 
-            public @Override String getHandle() {
+            public @Override
+            String getHandle() {
                 return wfsReqHandle;
             }
         };

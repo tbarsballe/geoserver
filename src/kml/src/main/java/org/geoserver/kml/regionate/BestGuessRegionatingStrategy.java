@@ -17,14 +17,14 @@ import com.vividsolutions.jts.geom.Point;
 
 /**
  * Make a best guess as to the appropriate strategy to use for a featuretype
- * and do it automatically.  The heuristic is pretty simple; it's based 
+ * and do it automatically.  The heuristic is pretty simple; it's based
  * entirely on the default geometry of the featuretype:
  * <ol>
  * <li> For polygons, use the area. </li>
  * <li> For line data, use the length. </li>
  * <li> For point data or mixed geometry types, don't sort at all. </li>
  * </ol>
- *
+ * <p>
  * This is applied ONLY when the regionating strategy is 'auto' and no strategy
  * is set by the admin.
  *
@@ -33,13 +33,14 @@ import com.vividsolutions.jts.geom.Point;
 public class BestGuessRegionatingStrategy implements RegionatingStrategy {
 
     GeoServer gs;
-    public BestGuessRegionatingStrategy( GeoServer gs ) {
+
+    public BestGuessRegionatingStrategy(GeoServer gs) {
         this.gs = gs;
     }
-    
+
     public Filter getFilter(WMSMapContent context, Layer layer) {
-        SimpleFeatureType type = 
-            ((SimpleFeatureSource)layer.getFeatureSource()).getSchema();
+        SimpleFeatureType type =
+                ((SimpleFeatureSource) layer.getFeatureSource()).getSchema();
         Class geomtype = type.getGeometryDescriptor().getType().getBinding();
 
         if (Point.class.isAssignableFrom(geomtype))
@@ -48,7 +49,7 @@ public class BestGuessRegionatingStrategy implements RegionatingStrategy {
         return new GeometryRegionatingStrategy(gs).getFilter(context, layer);
     }
 
-    public void clearCache(FeatureTypeInfo cfg){
+    public void clearCache(FeatureTypeInfo cfg) {
         new GeometryRegionatingStrategy(gs).clearCache(cfg);
     }
 }

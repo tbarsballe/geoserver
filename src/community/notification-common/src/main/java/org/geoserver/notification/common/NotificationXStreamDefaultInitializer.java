@@ -11,9 +11,8 @@ import com.thoughtworks.xstream.XStream;
 
 /**
  * Base class for notifier Xstream configuration mapper
- * 
- * @author Xandros
  *
+ * @author Xandros
  */
 public class NotificationXStreamDefaultInitializer implements NotificationXStreamInitializer {
 
@@ -24,8 +23,8 @@ public class NotificationXStreamDefaultInitializer implements NotificationXStrea
         xs.alias("genericProcessor", NotificationProcessor.class);
         xs.addDefaultImplementation(DefaultNotificationProcessor.class, NotificationProcessor.class);
         xs.addImplicitCollection(NotificationConfiguration.class, "notificators");
-        xs.allowTypes(new Class[] { NotificationConfiguration.class, Notificator.class,
-                NotificationProcessor.class, NotificationEncoder.class, NotificationSender.class });
+        xs.allowTypes(new Class[]{NotificationConfiguration.class, Notificator.class,
+                NotificationProcessor.class, NotificationEncoder.class, NotificationSender.class});
     }
 
 }

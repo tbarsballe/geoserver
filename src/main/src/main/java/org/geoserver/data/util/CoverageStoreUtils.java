@@ -34,11 +34,11 @@ import org.opengis.referencing.operation.TransformException;
  * @author Richard Gould, Refractions Research, Inc.
  * @author cholmesny
  * @author $Author: Alessio Fabiani (alessio.fabiani@gmail.com) $ (last
- *         modification)
+ * modification)
  * @author $Author: Simone Giannecchini (simboss1@gmail.com) $ (last
- *         modification)
+ * modification)
  * @version $Id: CoverageStoreUtils.java,v 1.12 2004/09/21 21:14:48 cholmesny
- *          Exp $
+ * Exp $
  */
 public final class CoverageStoreUtils {
     private final static Logger LOGGER = org.geotools.util.logging.Logging.getLogger(CoverageStoreUtils.class.toString());
@@ -48,7 +48,7 @@ public final class CoverageStoreUtils {
     }
 
     public static Format acquireFormat(String type)
-        throws IOException {
+            throws IOException {
         Format[] formats = GridFormatFinder.getFormatArray();
         Format format = null;
         final int length = formats.length;
@@ -72,11 +72,8 @@ public final class CoverageStoreUtils {
     /**
      * Utility method for finding Params
      *
-     * @param factory
-     *            DOCUMENT ME!
-     * @param key
-     *            DOCUMENT ME!
-     *
+     * @param factory DOCUMENT ME!
+     * @param key     DOCUMENT ME!
      * @return DOCUMENT ME!
      */
     public static ParameterValue find(Format format, String key) {
@@ -86,11 +83,8 @@ public final class CoverageStoreUtils {
     /**
      * Utility methods for find param by key
      *
-     * @param params
-     *            DOCUMENT ME!
-     * @param key
-     *            DOCUMENT ME!
-     *
+     * @param params DOCUMENT ME!
+     * @param key    DOCUMENT ME!
      * @return DOCUMENT ME!
      */
     public static ParameterValue find(ParameterValueGroup params, String key) {
@@ -113,12 +107,10 @@ public final class CoverageStoreUtils {
 
     /**
      * When loading from DTO use the params to locate factory.
-     *
+     * <p>
      * <p>
      * bleck
      * </p>
-     *
-     *
      */
     public static Format aquireFactoryByType(String type) {
         final Format[] formats = GridFormatFinder.getFormatArray();
@@ -141,8 +133,6 @@ public final class CoverageStoreUtils {
      * description.
      *
      * @param description
-     *
-     *
      */
     public static Format aquireFactory(String description) {
         Format[] formats = GridFormatFinder.getFormatArray();
@@ -162,7 +152,7 @@ public final class CoverageStoreUtils {
 
     /**
      * Returns the descriptions for the available DataFormats.
-     *
+     * <p>
      * <p>
      * Arrrg! Put these in the select box.
      * </p>
@@ -249,19 +239,16 @@ public final class CoverageStoreUtils {
      *
      * @param factory
      * @param params
-     *
      * @return Map with real values that may be acceptable to GDSFactory
-     *
-     * @throws IOException
-     *             DOCUMENT ME!
+     * @throws IOException DOCUMENT ME!
      */
     public static Map toParams(GridFormatFactorySpi factory, Map params)
-        throws IOException {
+            throws IOException {
         final Map map = new HashMap(params.size());
 
         final ParameterValueGroup info = factory.createFormat().getReadParameters();
         // Convert Params into the kind of Map we actually need
-        for (Iterator i = params.keySet().iterator(); i.hasNext();) {
+        for (Iterator i = params.keySet().iterator(); i.hasNext(); ) {
             String key = (String) i.next();
             Object value = find(info, key).getValue();
             if (value != null) {
@@ -277,13 +264,12 @@ public final class CoverageStoreUtils {
      *
      * @param sourceCRS
      * @param targetEnvelope
-     *
      * @throws IndexOutOfBoundsException
      * @throws FactoryException
      * @throws TransformException
      */
     public static GeneralEnvelope getWGS84LonLatEnvelope(final GeneralEnvelope envelope)
-        throws IndexOutOfBoundsException, FactoryException, TransformException {
+            throws IndexOutOfBoundsException, FactoryException, TransformException {
         final CoordinateReferenceSystem sourceCRS = envelope.getCoordinateReferenceSystem();
 
         ////

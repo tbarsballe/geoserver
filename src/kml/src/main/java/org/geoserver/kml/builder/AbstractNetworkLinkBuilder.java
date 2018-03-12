@@ -44,11 +44,11 @@ public abstract class AbstractNetworkLinkBuilder {
         Document document = kml.createAndSetDocument();
         Map formatOptions = context.getRequest().getFormatOptions();
         String kmltitle = (String) formatOptions.get("kmltitle");
-        if(kmltitle == null) {
+        if (kmltitle == null) {
             kmltitle = context.getMapContent().getTitle();
         }
         document.setName(kmltitle);
-        
+
         // get the callbacks for the document and let them loose
         List<KmlDecorator> decorators = context.getDecoratorsForClass(Document.class);
         for (KmlDecorator decorator : decorators) {
@@ -68,10 +68,10 @@ public abstract class AbstractNetworkLinkBuilder {
 
     /**
      * @return the aggregated bounds for all the requested layers, taking into account whether the
-     *         whole layer or filtered bounds is used for each layer
+     * whole layer or filtered bounds is used for each layer
      */
     protected ReferencedEnvelope computePerLayerQueryBounds(final WMSMapContent context,
-            final List<ReferencedEnvelope> target, final LookAt lookAt) {
+                                                            final List<ReferencedEnvelope> target, final LookAt lookAt) {
 
         // no need to compute queried bounds if request explicitly specified the view area
         final boolean computeQueryBounds = lookAt == null;
@@ -107,7 +107,7 @@ public abstract class AbstractNetworkLinkBuilder {
 
     @SuppressWarnings("rawtypes")
     protected ReferencedEnvelope computeLayerBounds(Layer layer, MapLayerInfo layerInfo,
-            boolean computeQueryBounds) {
+                                                    boolean computeQueryBounds) {
 
         final Query layerQuery = layer.getQuery();
         // make sure if layer is going to be filtered, the resulting bounds are obtained instead of

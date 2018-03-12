@@ -95,7 +95,7 @@ public class ClassifierController extends AbstractCatalogController {
         XStream xstream = persister.getXStream();
         xstream.alias("Rules", RulesList.class);
         xstream.registerConverter(new RulesListConverter());
-        xstream.allowTypes(new Class[] { RulesList.class });
+        xstream.allowTypes(new Class[]{RulesList.class});
     }
 
     /**
@@ -104,7 +104,7 @@ public class ClassifierController extends AbstractCatalogController {
      * form.getFirstValue("intervals", "-1"); final String open = form.getFirstValue("open", "false"); final String colorRamp =
      * form.getFirstValue("ramp", "red"); final boolean reverse = Boolean.parseBoolean(form.getFirstValue("reverse")); final boolean normalize =
      * Boolean.parseBoolean(form.getFirstValue("normalize"));
-     * 
+     *
      * @param layerName
      * @param property
      * @param method
@@ -116,20 +116,20 @@ public class ClassifierController extends AbstractCatalogController {
      * @param normalize
      * @return
      */
-    @GetMapping(path = "/{layerName}/classify", produces = { MediaType.APPLICATION_JSON_VALUE,
-            MediaType.APPLICATION_XML_VALUE, MediaType.TEXT_HTML_VALUE })
+    @GetMapping(path = "/{layerName}/classify", produces = {MediaType.APPLICATION_JSON_VALUE,
+            MediaType.APPLICATION_XML_VALUE, MediaType.TEXT_HTML_VALUE})
     public Object classify(@PathVariable String layerName,
-            @RequestParam(value = "attribute", required = false) String property,
-            @RequestParam(value = "method", required = false, defaultValue = "equalInterval") String method,
-            @RequestParam(value = "intervals", required = false, defaultValue = "2") String intervals,
-            @RequestParam(value = "intervalsForUnique", required = false, defaultValue = "-1") String intervalsForUnique,
-            @RequestParam(value = "open", required = false, defaultValue = "false") String open,
-            @RequestParam(value = "ramp", required = false, defaultValue = "red") String colorRamp,
-            @RequestParam(value = "startColor", required = false) String startColor,
-            @RequestParam(value = "endColor", required = false) String endColor,
-            @RequestParam(value = "midColor", required = false) String midColor,
-            @RequestParam(value = "reverse", required = false, defaultValue = "false") Boolean reverse,
-            @RequestParam(value = "normalize", required = false, defaultValue = "false") Boolean normalize) {
+                           @RequestParam(value = "attribute", required = false) String property,
+                           @RequestParam(value = "method", required = false, defaultValue = "equalInterval") String method,
+                           @RequestParam(value = "intervals", required = false, defaultValue = "2") String intervals,
+                           @RequestParam(value = "intervalsForUnique", required = false, defaultValue = "-1") String intervalsForUnique,
+                           @RequestParam(value = "open", required = false, defaultValue = "false") String open,
+                           @RequestParam(value = "ramp", required = false, defaultValue = "red") String colorRamp,
+                           @RequestParam(value = "startColor", required = false) String startColor,
+                           @RequestParam(value = "endColor", required = false) String endColor,
+                           @RequestParam(value = "midColor", required = false) String midColor,
+                           @RequestParam(value = "reverse", required = false, defaultValue = "false") Boolean reverse,
+                           @RequestParam(value = "normalize", required = false, defaultValue = "false") Boolean normalize) {
         LayerInfo layerInfo = catalog.getLayerByName(layerName);
         if (layerInfo == null) {
             throw new ResourceNotFoundException("No such layer: " + layerName);
@@ -157,7 +157,6 @@ public class ClassifierController extends AbstractCatalogController {
     }
 
     /**
-     * 
      * @param layer
      * @param rules
      * @return
@@ -172,7 +171,6 @@ public class ClassifierController extends AbstractCatalogController {
     }
 
     /**
-     * 
      * @param rule
      * @return a string with json Rule representation
      */
@@ -199,7 +197,6 @@ public class ClassifierController extends AbstractCatalogController {
     }
 
     /**
-     * 
      * @param layerName
      * @param property
      * @param method
@@ -212,9 +209,9 @@ public class ClassifierController extends AbstractCatalogController {
      * @return
      */
     private List<Rule> generateClassifiedSLD(String layerName, String property, String method,
-            String intervals, String intervalsForUnique, String open, String colorRamp,
-            String startColor, String endColor, String midColor, Boolean reverse,
-            Boolean normalize) {
+                                             String intervals, String intervalsForUnique, String open, String colorRamp,
+                                             String startColor, String endColor, String midColor, Boolean reverse,
+                                             Boolean normalize) {
         /* Looks in attribute map if there is the featureType param */
         if (property != null && property.length() > 0) {
             /* First try to find as a FeatureType */
@@ -320,9 +317,7 @@ public class ClassifierController extends AbstractCatalogController {
     }
 
     /**
-     * 
      * @author Fabiani
-     * 
      */
     public class RulesList {
         private String layerName;
@@ -357,9 +352,7 @@ public class ClassifierController extends AbstractCatalogController {
     }
 
     /**
-     * 
      * @author Fabiani
-     * 
      */
     public class RulesListConverter implements Converter {
 
@@ -371,11 +364,11 @@ public class ClassifierController extends AbstractCatalogController {
         }
 
         /**
-         * @see com.thoughtworks.xstream.converters.Converter#marshal(java.lang.Object , com.thoughtworks.xstream.io.HierarchicalStreamWriter,
-         *      com.thoughtworks.xstream.converters.MarshallingContext)
+         * @see com.thoughtworks.xstream.converters.Converter#marshal(java.lang.Object, com.thoughtworks.xstream.io.HierarchicalStreamWriter,
+         * com.thoughtworks.xstream.converters.MarshallingContext)
          */
         public void marshal(Object value, HierarchicalStreamWriter writer,
-                MarshallingContext context) {
+                            MarshallingContext context) {
             RulesList obj = (RulesList) value;
 
             for (JSONObject rule : obj.getRules()) {
@@ -442,9 +435,8 @@ public class ClassifierController extends AbstractCatalogController {
         }
 
         /**
-         * 
          * @see com.thoughtworks.xstream.converters.Converter#unmarshal(com.thoughtworks.xstream.io.
-         *      HierarchicalStreamReader,com.thoughtworks.xstream.converters.UnmarshallingContext)
+         * HierarchicalStreamReader, com.thoughtworks.xstream.converters.UnmarshallingContext)
          */
         public Object unmarshal(HierarchicalStreamReader arg0, UnmarshallingContext arg1) {
             // TODO Auto-generated method stub

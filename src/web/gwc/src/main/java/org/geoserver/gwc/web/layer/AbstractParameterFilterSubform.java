@@ -13,19 +13,19 @@ import org.geowebcache.filter.parameters.ParameterFilter;
 
 /**
  * Subform for a ParameterFilter
- * @author Kevin Smith, OpenGeo
  *
+ * @author Kevin Smith, OpenGeo
  */
 public abstract class AbstractParameterFilterSubform<T extends ParameterFilter> extends FormComponentPanel<T> {
 
     private static final long serialVersionUID = -213688039804104263L;
 
     public AbstractParameterFilterSubform(String id,
-            IModel<T> model) {
+                                          IModel<T> model) {
         super(id, model);
     }
 
-    
+
     @Override
     public void convertInput() {
         visitChildren((component, visit) -> {

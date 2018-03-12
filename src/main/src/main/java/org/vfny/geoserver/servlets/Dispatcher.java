@@ -35,55 +35,82 @@ import org.vfny.geoserver.util.requests.readers.KvpRequestReader;
  * @author Rob Hranac, Vision for New York
  * @author Chris Holmes, TOPP
  * @version $Id$
- *
  * @task TODO: rework to work too for WMS servlets, and to get the servlets
- *       from ServletContext instead of having them hardcoded
+ * from ServletContext instead of having them hardcoded
  */
 
 //JD: kill this class
 public class Dispatcher extends HttpServlet {
-    /** Class logger */
+    /**
+     * Class logger
+     */
     private static Logger LOGGER = org.geotools.util.logging.Logging.getLogger("org.vfny.geoserver.servlets");
 
-    /** Map metadata request type */
+    /**
+     * Map metadata request type
+     */
     public static String META_REQUEST = "GetMeta";
 
-    /** Map get capabilities request type */
+    /**
+     * Map get capabilities request type
+     */
     public static final int GET_CAPABILITIES_REQUEST = 1;
 
-    /** Map describe feature type request type */
+    /**
+     * Map describe feature type request type
+     */
     public static final int DESCRIBE_FEATURE_TYPE_REQUEST = 2;
 
-    /** Map get feature  request type */
+    /**
+     * Map get feature  request type
+     */
     public static final int GET_FEATURE_REQUEST = 3;
 
-    /** Map get feature request type */
+    /**
+     * Map get feature request type
+     */
     public static final int TRANSACTION_REQUEST = 4;
 
-    /** Map get feature with lock request type */
+    /**
+     * Map get feature with lock request type
+     */
     public static final int GET_FEATURE_LOCK_REQUEST = 5;
 
-    /** WMS get feature info request type */
+    /**
+     * WMS get feature info request type
+     */
     public static final int GET_FEATURE_INFO_REQUEST = 6;
 
-    /** int representation of a lock request type */
+    /**
+     * int representation of a lock request type
+     */
     public static final int LOCK_REQUEST = 6;
 
-    /** Map get capabilities request type */
+    /**
+     * Map get capabilities request type
+     */
     public static final int GET_MAP_REQUEST = 7;
 
-    /** WMS DescribeLayer request type */
+    /**
+     * WMS DescribeLayer request type
+     */
     public static final int DESCRIBE_LAYER_REQUEST = 8;
 
-    /** WMS GetLegendGraphic request type */
+    /**
+     * WMS GetLegendGraphic request type
+     */
     public static final int GET_LEGEND_GRAPHIC_REQUEST = 9;
     public static final short WMS_SERVICE = 101;
     public static final short WFS_SERVICE = 102;
 
-    /** Map get feature  request type */
+    /**
+     * Map get feature  request type
+     */
     public static final int UNKNOWN = -1;
 
-    /** Map get feature  request type */
+    /**
+     * Map get feature  request type
+     */
     public static final int ERROR = -2;
     protected ServletConfig servletConfig;
 
@@ -102,14 +129,13 @@ public class Dispatcher extends HttpServlet {
      * Handles all Get requests.  This method implements the main matching
      * logic for the class.
      *
-     * @param request The servlet request object.
+     * @param request  The servlet request object.
      * @param response The servlet response object.
-     *
      * @throws ServletException For any servlet problems.
-     * @throws IOException For any io problems.
+     * @throws IOException      For any io problems.
      */
     public void doGet(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
+            throws ServletException, IOException {
         int targetRequest = 0;
 
         // Examine the incoming request and create appropriate server objects

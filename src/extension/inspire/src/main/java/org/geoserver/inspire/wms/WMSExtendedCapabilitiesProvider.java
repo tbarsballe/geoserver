@@ -39,8 +39,7 @@ public class WMSExtendedCapabilitiesProvider implements ExtendedCapabilitiesProv
 
     /**
      * @return empty list, INSPIRE profile for WMS 1.1.1 not supported.
-     * @see
-     * org.geoserver.wms.ExtendedCapabilitiesProvider#getVendorSpecificCapabilitiesRoots()
+     * @see org.geoserver.wms.ExtendedCapabilitiesProvider#getVendorSpecificCapabilitiesRoots()
      */
     @Override
     public List<String> getVendorSpecificCapabilitiesRoots(GetCapabilitiesRequest request) {
@@ -49,8 +48,7 @@ public class WMSExtendedCapabilitiesProvider implements ExtendedCapabilitiesProv
 
     /**
      * @return empty list, INSPIRE profile for WMS 1.1.1 not supported.
-     * @see
-     * org.geoserver.wms.ExtendedCapabilitiesProvider#getVendorSpecificCapabilitiesChildDecls()
+     * @see org.geoserver.wms.ExtendedCapabilitiesProvider#getVendorSpecificCapabilitiesChildDecls()
      */
     @Override
     public List<String> getVendorSpecificCapabilitiesChildDecls(GetCapabilitiesRequest request) {
@@ -102,7 +100,7 @@ public class WMSExtendedCapabilitiesProvider implements ExtendedCapabilitiesProv
 
     @Override
     public NumberRange<Double> overrideScaleDenominators(PublishedInfo layer,
-            NumberRange<Double> scaleDenominators) {
+                                                         NumberRange<Double> scaleDenominators) {
         return scaleDenominators;
     }
 

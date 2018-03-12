@@ -9,9 +9,8 @@ import java.io.InputStream;
 
 /**
  * A RawData based on a single InputStream.
- * 
+ *
  * @author Andrea Aime - GeoSolutions
- * 
  */
 public class StreamRawData extends AbstractRawData {
 

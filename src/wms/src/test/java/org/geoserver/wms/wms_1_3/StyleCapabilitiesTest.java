@@ -77,13 +77,13 @@ public class StyleCapabilitiesTest extends WMSTestSupport {
         properties = new HashMap<LayerProperty, Object>();
         properties.put(LayerProperty.STYLE, STYLE_NAME_WITHOUT_DESCRIPTION);
 
-        testData.addVectorLayer(LAYER_WITHOUT_STYLE_DESCRIPTION, properties, "states.properties", CapabilitiesTest.class, catalog);        
-        
+        testData.addVectorLayer(LAYER_WITHOUT_STYLE_DESCRIPTION, properties, "states.properties", CapabilitiesTest.class, catalog);
+
         // force the style without description to be null, by default it is not null if not set
         // https://github.com/geotools/geotools/blob/bdcdaeca35f0cb1c465f2e11dd1b04bb7fff30df/modules/library/main/src/main/java/org/geotools/styling/StyleImpl.java#L45
-        StyleImpl style = (StyleImpl)catalog.getStyleByName(STYLE_NAME_WITHOUT_DESCRIPTION).getStyle();
+        StyleImpl style = (StyleImpl) catalog.getStyleByName(STYLE_NAME_WITHOUT_DESCRIPTION).getStyle();
         style.setDescription(null);
-        
+
         // For global set-up
         GeoServerInfo global = getGeoServer().getGlobal();
         global.getSettings().setProxyBaseUrl(BASE);
@@ -116,7 +116,7 @@ public class StyleCapabilitiesTest extends WMSTestSupport {
         // check we have the style name
         assertXpathEvaluatesTo(STYLE_NAME_WITHOUT_TITLE, getLayerStyleTitleXPath(LAYER_NAME_WITHOUT_STYLE_TITLE), dom);
     }
-    
+
     @Test
     public void testLayerStyleWithoutDescription() throws Exception {
         Document dom = dom(get(CAPABILITIES_REQUEST), false);
@@ -124,7 +124,7 @@ public class StyleCapabilitiesTest extends WMSTestSupport {
         // check we have the style name
         assertXpathEvaluatesTo(STYLE_NAME_WITHOUT_DESCRIPTION, getLayerStyleTitleXPath(LAYER_NAME_WITHOUT_STYLE_DESCRIPTION), dom);
     }
-    
+
     private String getLayerStyleTitleXPath(String layerName) {
         return "//wms:Layer[wms:Name='" + MockData.DEFAULT_PREFIX + ":" + layerName + "']/wms:Style/wms:Title";
     }

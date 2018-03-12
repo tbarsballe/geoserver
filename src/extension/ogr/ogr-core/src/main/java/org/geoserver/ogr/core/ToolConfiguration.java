@@ -10,7 +10,7 @@ import java.util.Map;
 /**
  * Represents the tool configuration as a whole.
  * Only used for XStream driven de-serialization.
- * 
+ *
  * @author Andrea Aime - OpenGeo
  * @author Stefano Costa - GeoSolutions
  */

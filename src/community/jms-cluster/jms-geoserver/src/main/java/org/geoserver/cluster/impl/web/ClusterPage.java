@@ -59,7 +59,7 @@ public class ClusterPage extends GeoServerSecuredPage {
         final TextField<String> instanceName = new TextField<String>(
                 JMSConfiguration.INSTANCE_NAME_KEY, String.class);
         form.add(instanceName);
-        
+
         // add instance name setting
         final TextField<String> group = new TextField<String>(
                 JMSConfiguration.GROUP_KEY, String.class);
@@ -89,7 +89,7 @@ public class ClusterPage extends GeoServerSecuredPage {
 
             @Override
             protected void onSubmit(AjaxRequestTarget target,
-                    org.apache.wicket.markup.html.form.Form<?> form) {
+                                    org.apache.wicket.markup.html.form.Form<?> form) {
                 // the container to use
                 final JMSContainer c = getJMSContainer();
                 if (c.isRunning()) {
@@ -152,7 +152,7 @@ public class ClusterPage extends GeoServerSecuredPage {
 
             @Override
             protected void onSubmit(AjaxRequestTarget target,
-                    org.apache.wicket.markup.html.form.Form<?> form) {
+                                    org.apache.wicket.markup.html.form.Form<?> form) {
                 ReadOnlyGeoServerLoader loader = getReadOnlyGeoServerLoader();
                 if (loader.isEnabled()) {
                     readOnlyInfo.getModel().setObject("disabled");
@@ -204,7 +204,7 @@ public class ClusterPage extends GeoServerSecuredPage {
 
             @Override
             protected void onSubmit(AjaxRequestTarget target,
-                    org.apache.wicket.markup.html.form.Form<?> form) {
+                                    org.apache.wicket.markup.html.form.Form<?> form) {
                 JMSFactory factory = getJMSFactory();
                 if (!factory.isEmbeddedBrokerStarted()) {
                     try {
@@ -234,14 +234,14 @@ public class ClusterPage extends GeoServerSecuredPage {
 
         // add the form
         add(form);
-        
+
         // make sure all text fields are not set to null in case of empty string, the
         // property model is based on HastTable, that cannot handle null values
         form.visitChildren(TextField.class, (component, visit) -> {
             TextField tf = (TextField) component;
             tf.setConvertEmptyInputStringToNull(false);
         });
-        
+
 
         // add the status monitor
         add(fp);
@@ -250,7 +250,7 @@ public class ClusterPage extends GeoServerSecuredPage {
 
     // final JMSConfiguration config,
     private void addToggle(final String configKey, final ToggleType type, final String textFieldId,
-            final String buttonId, final Form<?> form, final FeedbackPanel fp) {
+                           final String buttonId, final Form<?> form, final FeedbackPanel fp) {
 
         final TextField<String> toggleInfo = new TextField<String>(textFieldId, String.class);
 
@@ -267,11 +267,13 @@ public class ClusterPage extends GeoServerSecuredPage {
 
             @Override
             protected void onError(AjaxRequestTarget target,
-                    org.apache.wicket.markup.html.form.Form<?> form) {
+                                   org.apache.wicket.markup.html.form.Form<?> form) {
                 fp.error("ERROR");
 
                 target.add(fp);
-            };
+            }
+
+            ;
 
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {

@@ -9,7 +9,7 @@ package org.geoserver.test;
 /**
  * Mock data used to test exception thrown when encoding of secondary (transitively imported)
  * namespace without the secondary namespace declared
- * 
+ *
  * @author Victor Tey, CSIRO Earth Science and Resource Engineering
  */
 public class SecondaryNamespaceExceptionMockData extends AbstractAppSchemaMockData {

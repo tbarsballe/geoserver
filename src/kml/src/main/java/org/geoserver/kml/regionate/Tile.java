@@ -13,11 +13,11 @@ import com.vividsolutions.jts.geom.Envelope;
 
 /**
  * A regionating tile identified by its coordinates
- * 
+ *
  * @author Andrea Aime
  */
 public class Tile {
-    
+
     public static final CoordinateReferenceSystem WGS84;
 
     public static final ReferencedEnvelope WORLD_BOUNDS;
@@ -47,7 +47,7 @@ public class Tile {
                     "Could not initialize the class constants", e);
         }
     }
-    
+
     protected long x;
 
     protected long y;
@@ -58,7 +58,7 @@ public class Tile {
 
     /**
      * Creates a new tile with the given coordinates
-     * 
+     *
      * @param x
      * @param y
      * @param z
@@ -74,14 +74,14 @@ public class Tile {
      * Tile containment check is not trivial due to a couple of issues:
      * <ul>
      * <li>centroids sitting on the tile borders must be associated to exactly one tile,
-     *     so we have to consider only two borders as inclusive in general (S and W)
-     *     but add on occasion the other two when we reach the extent of our data set</li>
+     * so we have to consider only two borders as inclusive in general (S and W)
+     * but add on occasion the other two when we reach the extent of our data set</li>
      * <li>coordinates going beyond the natural lat/lon range</li>
      * </ul>
      * This code takes care of the first, whilst the second issue remains as a TODO
+     *
      * @param x
      * @param y
-     *
      */
     public boolean contains(double x, double y) {
         double minx = envelope.getMinX();
@@ -89,9 +89,9 @@ public class Tile {
         double miny = envelope.getMinY();
         double maxy = envelope.getMaxY();
         // standard borders, N and W in, E and S out
-        if(x >= minx && x < maxx && y >= miny && y < maxy)
+        if (x >= minx && x < maxx && y >= miny && y < maxy)
             return true;
-        
+
         return false;
     }
 
@@ -121,8 +121,6 @@ public class Tile {
     /**
      * Returns the parent of this tile, or null if this tile is (one of) the
      * root of the current dataset
-     * 
-     *
      */
     public Tile getParent() {
         // if we got to one of the root tiles for this data set, just stop
@@ -135,8 +133,6 @@ public class Tile {
 
     /**
      * Returns the four direct children of this tile
-     * 
-     *
      */
     public Tile[] getChildren() {
         Tile[] result = new Tile[4];
@@ -149,8 +145,6 @@ public class Tile {
 
     /**
      * Returns the WGS84 envelope of this tile
-     * 
-     *
      */
     public ReferencedEnvelope getEnvelope() {
         return envelope;

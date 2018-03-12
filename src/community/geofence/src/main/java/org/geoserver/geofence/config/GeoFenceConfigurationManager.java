@@ -34,7 +34,6 @@ import org.geoserver.platform.resource.Resource;
 import org.geotools.util.logging.Logging;
 
 /**
- *
  * @author ETj (etj at geo-solutions.it)
  */
 public class GeoFenceConfigurationManager {
@@ -129,7 +128,6 @@ public class GeoFenceConfigurationManager {
 
     /**
      * Returns a copy of the configuration.
-     *
      */
 
     public void setConfigurer(GeoFencePropertyPlaceholderConfigurer configurer) {

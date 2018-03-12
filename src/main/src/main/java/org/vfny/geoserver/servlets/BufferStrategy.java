@@ -17,7 +17,7 @@ import org.geoserver.ows.ServiceStrategy;
 
 /**
  * A safe Service strategy that buffers output until writeTo completes.
- *
+ * <p>
  * <p>
  * This strategy wastes memory, for saftey. It represents a middle ground
  * between SpeedStrategy and FileStrategy
@@ -30,20 +30,20 @@ public class BufferStrategy implements ServiceStrategy {
         return "BUFFER";
     }
 
-    /** DOCUMENT ME!  */
+    /**
+     * DOCUMENT ME!
+     */
     ByteArrayOutputStream buffer = null;
 
     /**
      * Provides a ByteArrayOutputStream for writeTo.
      *
      * @param response Response being processed.
-     *
      * @return A ByteArrayOutputStream for writeTo opperation.
-     *
      * @throws IOException DOCUMENT ME!
      */
     public DispatcherOutputStream getDestination(HttpServletResponse response)
-        throws IOException {
+            throws IOException {
         buffer = new ByteArrayOutputStream(1024 * 1024);
 
         return new DispatcherOutputStream(buffer);

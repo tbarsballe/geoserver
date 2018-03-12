@@ -29,12 +29,12 @@ public class KmlCentroidOptions {
      * Creates centroid options from the specified encoding context.
      */
     public static KmlCentroidOptions create(KmlEncodingContext context) {
-        return create(context != null && context.getRequest() != null ? 
-            context.getRequest().getFormatOptions() : Collections.EMPTY_MAP);
+        return create(context != null && context.getRequest() != null ?
+                context.getRequest().getFormatOptions() : Collections.EMPTY_MAP);
     }
 
     /**
-     * Creates centroid options from the specified format options. 
+     * Creates centroid options from the specified format options.
      */
     public static KmlCentroidOptions create(Map formatOptions) {
         if (formatOptions != null) {
@@ -42,7 +42,7 @@ public class KmlCentroidOptions {
                 if (key.toString().toLowerCase().startsWith(PREFIX)) {
                     return new KmlCentroidOptions(CaseInsensitiveMap.wrap(formatOptions));
                 }
-            }    
+            }
         }
         return KmlCentroidOptions.DEFAULT;
     }
@@ -54,11 +54,12 @@ public class KmlCentroidOptions {
     }
 
     /**
-     * Determines if the "contain" option is set. 
+     * Determines if the "contain" option is set.
      * <p>
-     *   This option causes the centroid builder to find a point (via sampling if necessary) that is 
-     *   contained within a polygon geometry.
+     * This option causes the centroid builder to find a point (via sampling if necessary) that is
+     * contained within a polygon geometry.
      * </p>
+     *
      * @see #getSamples()
      */
     public boolean isContain() {
@@ -66,10 +67,10 @@ public class KmlCentroidOptions {
     }
 
     /**
-     * Determines if the "clip" option is set. 
+     * Determines if the "clip" option is set.
      * <p>
-     *   This option causes the centroid builder to clip geometries by the request bounding box before
-     *   computing the centroid.
+     * This option causes the centroid builder to clip geometries by the request bounding box before
+     * computing the centroid.
      * </p>
      */
     public boolean isClip() {
@@ -79,14 +80,13 @@ public class KmlCentroidOptions {
     /**
      * The number of samples to try when computing a centroid when {@link #isContain()} is set.
      * <p>
-     *     When unset this falls back to 
-     * </p> 
+     * When unset this falls back to
+     * </p>
      */
     public int getSamples() {
         try {
             return Integer.parseInt(raw.getOrDefault(SAMPLE, String.valueOf(DEFAULT_SAMPLES)).toString());
-        }
-        catch(NumberFormatException e) {
+        } catch (NumberFormatException e) {
             return DEFAULT_SAMPLES;
         }
     }

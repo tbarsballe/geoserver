@@ -17,7 +17,7 @@ import org.xml.sax.ContentHandler;
 import org.xml.sax.helpers.AttributesImpl;
 
 /**
- * A PPIO for encoding the results of the {@link org.geotools.process.vector.FeatureClassStats} and 
+ * A PPIO for encoding the results of the {@link org.geotools.process.vector.FeatureClassStats} and
  * {@link org.geotools.process.raster.CoverageClassStats} processes.
  */
 public class ClassificationStatsPPIO extends XMLPPIO {
@@ -40,14 +40,14 @@ public class ClassificationStatsPPIO extends XMLPPIO {
             atts.addAttribute("", "", "lowerBound", null, range.getMin().toString());
             atts.addAttribute("", "", "upperBound", null, range.getMax().toString());
             atts.addAttribute("", "", "count", null, results.count(i).toString());
-            
+
             h.startElement("", "", "Class", atts);
             for (Statistic stat : results.getStats()) {
                 h.startElement("", "", stat.name(), null);
-                
+
                 String value = String.valueOf(results.value(i, stat));
                 h.characters(value.toCharArray(), 0, value.length());
-                
+
                 h.endElement("", "", stat.name());
             }
             h.endElement("", "", "Class");

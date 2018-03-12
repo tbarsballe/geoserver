@@ -20,7 +20,7 @@ import org.apache.wicket.model.IModel;
 public class FormTestPage extends WebPage {
 
     private static final long serialVersionUID = 4530843789748801989L;
-    
+
     public static final String PANEL = "panel";
     public static final String FORM = "form";
 

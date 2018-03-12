@@ -13,9 +13,8 @@ import org.geoserver.ows.kvp.EMFKvpRequestReader;
 
 /**
  * Parses a DescribeCoverage request for WCS into the correspondent model object
- * 
+ *
  * @author Emanuele Tajariol (etj) - GeoSolutions
- * 
  */
 public class WCS20DescribeCoverageRequestReader extends EMFKvpRequestReader {
 

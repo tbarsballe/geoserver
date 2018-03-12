@@ -9,9 +9,8 @@ import org.geoserver.catalog.Info;
 
 /**
  * GeoServer contact information.
- * 
+ *
  * @author Justin Deoliveira, The Open Planning Project
- * 
  */
 public interface ContactInfo extends Info {
 
@@ -161,9 +160,9 @@ public interface ContactInfo extends Info {
      * @uml.property name="contactVoice"
      */
     void setContactVoice(String contactVoice);
-    
+
     String getOnlineResource();
-    
-    void setOnlineResource( String onlineResource );
+
+    void setOnlineResource(String onlineResource);
 
 }

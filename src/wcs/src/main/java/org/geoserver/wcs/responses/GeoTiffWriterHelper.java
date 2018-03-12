@@ -101,13 +101,13 @@ public class GeoTiffWriterHelper {
         final RenderedImage renderedImage = coverage.getRenderedImage();
         int tileWidth = renderedImage.getTileWidth();
         int tileHeight = renderedImage.getTileHeight();
-        
+
         // avoid tiles bigger than the image
         final GridEnvelope gr = coverage.getGridGeometry().getGridRange();
-        if(gr.getSpan(0) < tileWidth) {
+        if (gr.getSpan(0) < tileWidth) {
             tileWidth = gr.getSpan(0);
         }
-        if(gr.getSpan(1) < tileHeight) {
+        if (gr.getSpan(1) < tileHeight) {
             tileHeight = gr.getSpan(1);
         }
 
@@ -117,7 +117,7 @@ public class GeoTiffWriterHelper {
         writeParams.setTiling(tileWidth, tileHeight);
         return writeParams;
     }
-    
+
     private ParameterValueGroup buildGeoToolsWriteParams(GeoTiffWriteParams writeParams) {
         final ParameterValueGroup wparams = TIFF_FORMAT.getWriteParameters();
         wparams.parameter(AbstractGridFormat.GEOTOOLS_WRITE_PARAMS.getName().toString())
@@ -129,22 +129,23 @@ public class GeoTiffWriterHelper {
 
     /**
      * Returns the write parameters, allowing their customization
-     * 
+     *
      * @return
      */
     public GeoTiffWriteParams getImageIoWriteParams() {
         return imageIoWriteParams;
     }
-    
-    
+
+
     /**
      * Returns the GeoTools grid writer params, allowing their customization
+     *
      * @return
      */
     public ParameterValueGroup getGeotoolsWriteParams() {
         return geotoolsWriteParams;
     }
-    
+
     /**
      * The code can figure out if it's really just copying over a GeoTiff source file and run a straight file copy, call this method if the source
      * copy should be turned off
@@ -154,16 +155,16 @@ public class GeoTiffWriterHelper {
     }
 
     public void write(OutputStream stream) throws IOException {
-        if(sourceFile != null) {
+        if (sourceFile != null) {
             FileUtils.copyFile(sourceFile, stream);
         } else {
             CoordinateReferenceSystem crs = coverage.getCoordinateReferenceSystem();
             boolean unreferenced = crs == null || crs instanceof EngineeringCRS;
-            
-            if(unreferenced) {
+
+            if (unreferenced) {
                 RenderedImage ri = coverage.getRenderedImage();
                 int tileWidth, tileHeight;
-                if(imageIoWriteParams.getTilingMode() == GeoToolsWriteParams.MODE_EXPLICIT) {
+                if (imageIoWriteParams.getTilingMode() == GeoToolsWriteParams.MODE_EXPLICIT) {
                     tileWidth = imageIoWriteParams.getTileWidth();
                     tileHeight = imageIoWriteParams.getTileHeight();
                 } else {
@@ -181,7 +182,7 @@ public class GeoTiffWriterHelper {
             } else {
                 final GeneralParameterValue[] wps = (GeneralParameterValue[]) geotoolsWriteParams.values()
                         .toArray(new GeneralParameterValue[geotoolsWriteParams.values().size()]);
-        
+
                 // write out the coverage
                 AbstractGridCoverageWriter writer = (AbstractGridCoverageWriter) TIFF_FORMAT
                         .getWriter(stream);
@@ -198,14 +199,13 @@ public class GeoTiffWriterHelper {
                     }
                 }
             }
-        } 
+        }
     }
 
     /**
      * Returns true if the coverage has not been processed in any way since it has been read
-     * 
-     * @param coverage
      *
+     * @param coverage
      */
     private boolean isUnprocessed(GridCoverage2D coverage) {
         RenderedImage ri = coverage.getRenderedImage();

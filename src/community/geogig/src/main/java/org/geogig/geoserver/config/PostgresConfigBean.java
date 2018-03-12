@@ -120,7 +120,7 @@ public class PostgresConfigBean implements Serializable {
                     username), uee);
         }
         try {
-            encodedPassword =  URLEncoder.encode(password, UTF8);
+            encodedPassword = URLEncoder.encode(password, UTF8);
         } catch (UnsupportedEncodingException uee) {
             LOGGER.warn("Error encoding PostgreSQL password value, attempting to use unencoded value", uee);
         }

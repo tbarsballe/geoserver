@@ -35,9 +35,7 @@ import org.junit.Test;
 import com.thoughtworks.xstream.XStream;
 
 /**
- * 
  * @author Alessio Fabiani, GeoSolutions
- *
  */
 public class ResourceWriterTest extends BackupRestoreTestSupport {
     @Test
@@ -62,7 +60,7 @@ public class ResourceWriterTest extends BackupRestoreTestSupport {
         assertTrue(Resources.exists(Files.asResource(srcFakeFtl)));
 
         FeatureTypeInfo ft = cat.getFeatureTypeByName("t1");
-        
+
         assertNotNull(ft);
 
         ResourceInfoAdditionalResourceWriter riarw = new ResourceInfoAdditionalResourceWriter();
@@ -119,18 +117,18 @@ public class ResourceWriterTest extends BackupRestoreTestSupport {
         tmpDd.mkdir();
 
         GeoServerDataDirectory dd = new GeoServerDataDirectory(tmpDd);
-        
+
         File tmpTd = File.createTempFile("template", "tmp", new File("target"));
         tmpTd.delete();
         tmpTd.mkdir();
-        
+
         GeoServerDataDirectory td = new GeoServerDataDirectory(tmpTd);
 
         BackupUtils.extractTo(file("data.zip"), dd.get(Paths.BASE));
-        
+
         // Backup other configuration bits, like images, palettes, user projections and so on...
         catalogTsklet.backupRestoreAdditionalResources(dd.getResourceStore(), td.get(Paths.BASE));
-        
+
         assertTrue(Resources
                 .exists(Files.asResource(new File(td.get(Paths.BASE).dir(), "demo"))));
         assertTrue(Resources
@@ -146,7 +144,7 @@ public class ResourceWriterTest extends BackupRestoreTestSupport {
         assertTrue(Resources
                 .exists(Files.asResource(new File(td.get(Paths.BASE).dir(), "www"))));
     }
-    
+
     @Test
     public void testGeoServerGlobalSettingsStorage() throws Exception {
         Catalog cat = getCatalog();
@@ -206,5 +204,5 @@ public class ResourceWriterTest extends BackupRestoreTestSupport {
 
         assertEquals(cat.getDefaultWorkspace().getName(), defaultWorkspace.getName());
     }
-    
+
 }

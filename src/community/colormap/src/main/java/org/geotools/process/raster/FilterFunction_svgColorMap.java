@@ -36,26 +36,25 @@ import it.geosolutions.jaiext.piecewise.TransformationException;
 
 /**
  * Filter function to generate a {@link ColorMap} on top of an SVG file contained within the styles data folder
- * 
- * 
+ *
  * @author Daniele Romagnoli, GeoSolutions SAS
  */
 public class FilterFunction_svgColorMap extends FunctionExpressionImpl {
-    
-    static final int LOG_SAMPLING_DEFAULT = 16; 
-    
+
+    static final int LOG_SAMPLING_DEFAULT = 16;
+
     /**
      * Two colors are used for before and after palette, so this leaves a max of 254 colors to play with
      */
     public static final int MAX_PALETTE_COLORS = 254;
 
     private static final Logger LOGGER = Logging.getLogger(FilterFunction_svgColorMap.class);
-    
-    public static final Color TRANSPARENT_COLOR = new Color(0,0,0,0);
-    
+
+    public static final Color TRANSPARENT_COLOR = new Color(0, 0, 0, 0);
+
     private static StyleFactory SF = CommonFactoryFinder.getStyleFactory();
     private static FilterFactory FF = CommonFactoryFinder.getFilterFactory();
-    
+
     public static FunctionName NAME = new FunctionNameImpl("colormap",
             parameter("colormap", ColorMap.class),
             parameter("name", String.class),
@@ -79,21 +78,21 @@ public class FilterFunction_svgColorMap extends FunctionExpressionImpl {
         boolean logarithmic = false;
         int expressionCount = getParameters().size();
         int numColors = MAX_PALETTE_COLORS;
-        if(expressionCount >= 4) {
+        if (expressionCount >= 4) {
             beforeColor = getParameters().get(3).evaluate(feature, String.class);
         }
-        if(expressionCount >= 5) {
+        if (expressionCount >= 5) {
             afterColor = getParameters().get(4).evaluate(feature, String.class);
         }
-        if(expressionCount >= 6) {
+        if (expressionCount >= 6) {
             Boolean log = getParameters().get(5).evaluate(feature, Boolean.class);
-            if(log != null) {
+            if (log != null) {
                 logarithmic = log;
             }
         }
-        if(expressionCount >= 7) {
+        if (expressionCount >= 7) {
             Integer nc = getParameters().get(6).evaluate(feature, Integer.class);
-            if(nc != null) {
+            if (nc != null) {
                 numColors = nc;
             }
         }
@@ -101,7 +100,7 @@ public class FilterFunction_svgColorMap extends FunctionExpressionImpl {
     }
 
     public Object evaluate(String colorMap, final double min, final double max, String beforeColor, String afterColor, boolean logarithmic, int numColors) {
-        if(numColors < 1 || numColors > 254) {
+        if (numColors < 1 || numColors > 254) {
             throw new InvalidParameterException("Number of colors must be comprised between 1 and 254");
         }
         GradientColorMapGenerator generator = null;
@@ -109,14 +108,14 @@ public class FilterFunction_svgColorMap extends FunctionExpressionImpl {
         if (!colorMap.startsWith(GradientColorMapGenerator.RGB_INLINEVALUE_MARKER)
                 && !colorMap.startsWith(GradientColorMapGenerator.RGBA_INLINEVALUE_MARKER)
                 && !colorMap.startsWith(GradientColorMapGenerator.HEX_INLINEVALUE_MARKER)) {
-            
+
             GeoServerResourceLoader loader = GeoServerExtensions.bean(GeoServerResourceLoader.class);
             colorMap = colorMap.replace('\\', '/');
-            
+
             String path = Paths.path("styles", "ramps", colorMap + ".svg");
-            
-            xmlFile = loader.get( path );
-            if( xmlFile.getType() != Type.RESOURCE ){
+
+            xmlFile = loader.get(path);
+            if (xmlFile.getType() != Type.RESOURCE) {
                 throw new IllegalArgumentException(
                         "The specified colorMap do not exist in the styles/ramps folder\n"
                                 + "Check that "
@@ -133,13 +132,13 @@ public class FilterFunction_svgColorMap extends FunctionExpressionImpl {
             generator.setBeforeColor(beforeColor);
             generator.setAfterColor(afterColor);
             ColorMap cm;
-            if(!logarithmic) {
+            if (!logarithmic) {
                 cm = generator.generateColorMap(min, max);
-                if(numColors < MAX_PALETTE_COLORS) {
+                if (numColors < MAX_PALETTE_COLORS) {
                     cm = sampleColorMap(numColors, min, max, cm, Function.identity(), numColors < MAX_PALETTE_COLORS);
                 }
             } else {
-                if(min <= 0) {
+                if (min <= 0) {
                     throw new InvalidParameterException("Min range value must be positive in log scale mode");
                 }
                 double logMin = Math.log(min);
@@ -148,7 +147,7 @@ public class FilterFunction_svgColorMap extends FunctionExpressionImpl {
                 int colors = numColors < MAX_PALETTE_COLORS ? numColors : LOG_SAMPLING_DEFAULT;
                 cm = sampleColorMap(colors, logMin, logMax, logcm, Math::exp, numColors < MAX_PALETTE_COLORS);
             }
-            if(LOGGER.isLoggable(Level.FINE)) {
+            if (LOGGER.isLoggable(Level.FINE)) {
                 final SLDTransformer tx = new SLDTransformer();
                 tx.setIndentation(2);
                 String sld = tx.transform(cm);
@@ -170,16 +169,16 @@ public class FilterFunction_svgColorMap extends FunctionExpressionImpl {
         cm.addColorMapEntry(entryForValue(min - Math.ulp(min), quantityMapper.apply(min), lcm, icm)); // before color
         double step = (max - min) / (numColors);
         // mind, the entry in interval mode defines the color up to that point
-        for(int i = 0; i < (numColors - 1); i++) {
+        for (int i = 0; i < (numColors - 1); i++) {
             double v = min + step * i;
             double mapValue = v;
-            if(useIntervals) {
+            if (useIntervals) {
                 mapValue = v + step;
             }
-            cm.addColorMapEntry(entryForValue(v, quantityMapper.apply(mapValue), lcm, icm)); 
+            cm.addColorMapEntry(entryForValue(v, quantityMapper.apply(mapValue), lcm, icm));
         }
         cm.addColorMapEntry(entryForValue(max - Math.ulp(max), quantityMapper.apply(max), lcm, icm)); // last color
-        if(useIntervals) {
+        if (useIntervals) {
             cm.setType(ColorMap.TYPE_INTERVALS);
             cm.addColorMapEntry(entryForValue(max, Double.POSITIVE_INFINITY, lcm, icm)); // after color
         } else {
@@ -187,7 +186,7 @@ public class FilterFunction_svgColorMap extends FunctionExpressionImpl {
         }
         return cm;
     }
-    
+
     private ColorMapEntry entryForValue(double value, double quantity, LinearColorMap lcm, IndexColorModel icm)
             throws TransformationException {
         ColorMapEntry entry = SF.createColorMapEntry();
@@ -195,8 +194,8 @@ public class FilterFunction_svgColorMap extends FunctionExpressionImpl {
         Color c = new Color(icm.getRed(position), icm.getGreen(position), icm.getBlue(position));
         entry.setColor(FF.literal(c));
         int alpha = icm.getAlpha(position);
-        if(alpha < 255) {
-           entry.setOpacity(FF.literal(alpha / 255.));
+        if (alpha < 255) {
+            entry.setOpacity(FF.literal(alpha / 255.));
         }
         entry.setQuantity(FF.literal(quantity));
         return entry;

@@ -35,13 +35,13 @@ import org.geotools.util.logging.Logging;
 
 /**
  * Plugs into the layer page a time/elevation selector for vector data
- * 
+ *
  * @author Alessio
  */
 public class ResourceDimensionsTabPanelInfo extends PublishedEditTabPanel<LayerInfo> {
 
     private static final long serialVersionUID = 4702596541385329270L;
-    
+
     static final Logger LOGGER = Logging.getLogger(ResourceDimensionsTabPanelInfo.class);
 
     @SuppressWarnings("unchecked")
@@ -107,7 +107,7 @@ public class ResourceDimensionsTabPanelInfo extends PublishedEditTabPanel<LayerI
                         + model.getExpression()));
                 DimensionEditor editor = new DimensionEditor("dimension", model, resource, String.class);
                 editor.disablePresentationMode(DimensionPresentation.CONTINUOUS_INTERVAL);
-                if(!model.hasRange && !model.hasResolution) {
+                if (!model.hasRange && !model.hasResolution) {
                     editor.disablePresentationMode(DimensionPresentation.DISCRETE_INTERVAL);
                 }
                 item.add(editor);
@@ -125,12 +125,12 @@ public class ResourceDimensionsTabPanelInfo extends PublishedEditTabPanel<LayerI
 
         boolean hasResolution;
 
-        
+
         public RasterDimensionModel(IModel<?> model, String expression, Class<?> target,
-                boolean hasRange, boolean hasResolution) {
+                                    boolean hasRange, boolean hasResolution) {
             super(model, expression, target);
         }
-        
+
         public Object getObject() {
             return ((MetadataMap) model.getObject()).get(ResourceInfo.CUSTOM_DIMENSION_PREFIX + expression, target);
         }

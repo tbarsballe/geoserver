@@ -73,11 +73,11 @@ public class StyleGeneratorTest {
                 Object[] args = getCurrentArguments();
                 InputStream is = (InputStream) args[1];
                 byte[] input = IOUtils.toByteArray(is);
-                
+
                 SLDParser parser = new SLDParser(CommonFactoryFinder.getStyleFactory());
                 parser.setInput(new ByteArrayInputStream(input));
                 StyledLayerDescriptor sld = parser.parseSLD();
-                
+
                 NamedLayer nl = (NamedLayer) sld.getStyledLayers()[0];
                 assertEquals("foo", nl.getName());
                 Style style = nl.getStyles()[0];
@@ -94,12 +94,12 @@ public class StyleGeneratorTest {
                         .toString());
                 assertEquals("orange point", fts.rules().get(3).getDescription().getTitle()
                         .toString());
-                
+
                 // make sure it's valid
                 SLDValidator validator = new SLDValidator();
                 List errors = validator.validateSLD(new ByteArrayInputStream(input));
                 assertEquals(0, errors.size());
-                
+
                 return null;
             }
         });
@@ -118,7 +118,9 @@ public class StyleGeneratorTest {
         StyleGenerator gen = new StyleGenerator(cat) {
             protected void randomizeRamp() {
                 // do not randomize for this test
-            };
+            }
+
+            ;
         };
         gen.setWorkspace(ws);
 
@@ -127,7 +129,7 @@ public class StyleGeneratorTest {
         assertNotNull(style);
         assertNotNull(style.getWorkspace());
     }
-    
+
     @Test
     public void testRasterStyle() throws Exception {
         ResourcePool rp = createNiceMock(ResourcePool.class);
@@ -139,11 +141,11 @@ public class StyleGeneratorTest {
                 Object[] args = getCurrentArguments();
                 InputStream is = (InputStream) args[1];
                 byte[] input = IOUtils.toByteArray(is);
-                
+
                 SLDParser parser = new SLDParser(CommonFactoryFinder.getStyleFactory());
                 parser.setInput(new ByteArrayInputStream(input));
                 StyledLayerDescriptor sld = parser.parseSLD();
-                
+
                 NamedLayer nl = (NamedLayer) sld.getStyledLayers()[0];
                 assertEquals("foo", nl.getName());
                 Style style = nl.getStyles()[0];
@@ -153,13 +155,13 @@ public class StyleGeneratorTest {
                 FeatureTypeStyle fts = style.featureTypeStyles().get(0);
                 assertEquals(1, fts.rules().size());
                 assertThat(fts.rules().get(0).symbolizers().get(0), instanceOf(RasterSymbolizer.class));
-                
+
                 // make sure it's valid
                 SLDValidator validator = new SLDValidator();
                 List errors = validator.validateSLD(new ByteArrayInputStream(input));
                 assertEquals(0, errors.size());
-                
-                
+
+
                 return null;
             }
         });
@@ -178,7 +180,9 @@ public class StyleGeneratorTest {
         StyleGenerator gen = new StyleGenerator(cat) {
             protected void randomizeRamp() {
                 // do not randomize for this test
-            };
+            }
+
+            ;
         };
         gen.setWorkspace(ws);
 

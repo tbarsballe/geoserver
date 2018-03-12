@@ -24,7 +24,9 @@ import org.vfny.geoserver.util.PartialBufferedOutputStream2;
 
 
 public class ServiceStrategyFactory implements OutputStrategyFactory, ApplicationContextAware {
-    /** Class logger */
+    /**
+     * Class logger
+     */
     static Logger LOGGER = org.geotools.util.logging.Logging.getLogger("org.vfny.geoserver.servlets");
 
     /**
@@ -52,7 +54,7 @@ public class ServiceStrategyFactory implements OutputStrategyFactory, Applicatio
     }
 
     public void setApplicationContext(ApplicationContext context)
-        throws BeansException {
+            throws BeansException {
         this.context = context;
     }
 
@@ -94,7 +96,7 @@ public class ServiceStrategyFactory implements OutputStrategyFactory, Applicatio
             theStrategy = (ServiceStrategy) theStrategy.clone();
         } catch (CloneNotSupportedException e) {
             LOGGER.log(Level.SEVERE,
-                "Programming error found, service strategies should be cloneable, " + e, e);
+                    "Programming error found, service strategies should be cloneable, " + e, e);
             throw new RuntimeException("Found a strategy that does not support cloning...", e);
         }
 
@@ -109,14 +111,14 @@ public class ServiceStrategyFactory implements OutputStrategyFactory, Applicatio
 
                         if (partialBufferSize <= 0) {
                             LOGGER.warning("Invalid partial buffer size, defaulting to "
-                                + PartialBufferedOutputStream2.DEFAULT_BUFFER_SIZE + " (was "
-                                + partialBufferSize + ")");
+                                    + PartialBufferedOutputStream2.DEFAULT_BUFFER_SIZE + " (was "
+                                    + partialBufferSize + ")");
                             partialBufferSize = 0;
                         }
                     } catch (NumberFormatException nfe) {
                         LOGGER.warning("Invalid partial buffer size, defaulting to "
-                            + PartialBufferedOutputStream2.DEFAULT_BUFFER_SIZE + " (was "
-                            + partialBufferSize + ")");
+                                + PartialBufferedOutputStream2.DEFAULT_BUFFER_SIZE + " (was "
+                                + partialBufferSize + ")");
                         partialBufferSize = 0;
                     }
                 }

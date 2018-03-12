@@ -16,9 +16,9 @@ import org.geotools.xml.InstanceComponent;
 
 /**
  * Binding object for the type http://www.opengis.net/wfs:ResultTypeType.
- *
  * <p>
- *        <pre>
+ * <p>
+ * <pre>
  *         <code>
  *  &lt;xsd:simpleType name="ResultTypeType"&gt;
  *      &lt;xsd:restriction base="xsd:string"&gt;
@@ -48,6 +48,7 @@ import org.geotools.xml.InstanceComponent;
  *
  *          </code>
  *         </pre>
+ *
  * @generated
  */
 public class ResultTypeTypeBinding extends AbstractSimpleBinding {
@@ -81,7 +82,7 @@ public class ResultTypeTypeBinding extends AbstractSimpleBinding {
      * @generated modifiable
      */
     public Object parse(InstanceComponent instance, Object value)
-        throws Exception {
+            throws Exception {
         if ("results".equals(value)) {
             return ResultTypeType.RESULTS_LITERAL;
         }

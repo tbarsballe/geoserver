@@ -12,14 +12,15 @@ import org.geoserver.importer.job.ProgressMonitor;
 
 /**
  * Base class for all types of data sources that can be imported.
- * 
- * @author Justin Deoliveira, OpenGeo
  *
+ * @author Justin Deoliveira, OpenGeo
  */
 
-public abstract class ImportData implements Serializable{
+public abstract class ImportData implements Serializable {
 
-    /** serialVersionUID */
+    /**
+     * serialVersionUID
+     */
     private static final long serialVersionUID = 1L;
 
     /**
@@ -49,7 +50,7 @@ public abstract class ImportData implements Serializable{
     public void setCharsetEncoding(String charsetEncoding) {
         this.charsetEncoding = charsetEncoding;
     }
-    
+
     public DataFormat getFormat() {
         return format;
     }
@@ -72,14 +73,14 @@ public abstract class ImportData implements Serializable{
     public abstract String getName();
 
     /**
-     * Runs any initial checks against the data preparing for import. 
+     * Runs any initial checks against the data preparing for import.
      */
     public final void prepare() throws IOException {
         prepare(new ProgressMonitor());
     }
 
     /**
-     * Runs any initial checks against the data preparing for import. 
+     * Runs any initial checks against the data preparing for import.
      */
     public void prepare(ProgressMonitor monitor) throws IOException {
     }
@@ -90,8 +91,8 @@ public abstract class ImportData implements Serializable{
 
     /**
      * For data types that contain multiple other types, like directories, databases, etc...
-     *  this method should return the sub part, or simply return itself for data types (liek files)
-     *  that can't be broken up.   
+     * this method should return the sub part, or simply return itself for data types (liek files)
+     * that can't be broken up.
      */
     public ImportData part(String name) {
         return this;
@@ -116,7 +117,7 @@ public abstract class ImportData implements Serializable{
         public void prepare(ProgressMonitor m) throws IOException {
             throw new UnsupportedOperationException();
         }
-    
+
     }
 
     public void reattach() {
@@ -182,7 +183,7 @@ public abstract class ImportData implements Serializable{
 
     public void setParent(ImportTask task) {
         parent = task;
-        
+
     }
 
     public void setParent(ImportContext context) {
@@ -195,6 +196,6 @@ public abstract class ImportData implements Serializable{
     public Object getParent() {
         return parent;
     }
-    
-    
+
+
 }

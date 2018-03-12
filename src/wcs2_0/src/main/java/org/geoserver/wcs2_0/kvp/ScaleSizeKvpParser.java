@@ -15,9 +15,8 @@ import org.geoserver.wcs2_0.exception.WCS20Exception;
 
 /**
  * Parses the WCS 2.0 {@link ScaleToSizeType} from KVP
- * 
+ *
  * @author Andrea Aime - GeoSolutions
- * 
  */
 public class ScaleSizeKvpParser extends AbstractAxisValueKvpParser<TargetAxisSizeType> {
 
@@ -28,10 +27,10 @@ public class ScaleSizeKvpParser extends AbstractAxisValueKvpParser<TargetAxisSiz
     @Override
     public Object parse(String value) throws Exception {
         ScaleToSizeType sabf = Wcs20Factory.eINSTANCE.createScaleToSizeType();
-        
+
         List<TargetAxisSizeType> items = parseItem(value);
         sabf.getTargetAxisSize().addAll(items);
-        
+
         return sabf;
     }
 

@@ -6,6 +6,7 @@
 package org.geoserver.csw;
 
 import java.io.IOException;
+
 import org.geoserver.csw.store.CatalogStore;
 import org.geoserver.csw.store.RepositoryItem;
 import org.geoserver.ows.HttpErrorCodeException;
@@ -13,7 +14,7 @@ import org.geoserver.platform.ServiceException;
 
 /**
  * Runs the GetRepositoryItem request
- * 
+ *
  * @author Alessio Fabiani - GeoSolutions
  */
 public class GetRepositoryItem {
@@ -29,14 +30,13 @@ public class GetRepositoryItem {
 
     /**
      * Returns the requested RepositoryItem
-     * 
-     * @param request
      *
+     * @param request
      */
-    public RepositoryItem run(GetRepositoryItemType request)  {
+    public RepositoryItem run(GetRepositoryItemType request) {
         try {
             RepositoryItem item = store.getRepositoryItem(request.getId());
-            if(item == null) {
+            if (item == null) {
                 // by spec we have to return a 404
                 throw new HttpErrorCodeException(404, "No repository item found for id " + request.getId());
             }

@@ -45,7 +45,7 @@ import org.geoserver.web.data.resource.ResourceConfigurationPanel;
  * one tab to the other. I did not find any effective way to unit test this, so _please_, if you do
  * modify anything in this class (especially the models), manually retest that the edits are not
  * lost on tab switch.
- * 
+ *
  * @author Niels Charlier
  */
 public abstract class PublishedConfigurationPage<T extends PublishedInfo> extends GeoServerSecuredPage {
@@ -72,7 +72,7 @@ public abstract class PublishedConfigurationPage<T extends PublishedInfo> extend
     private LinkedHashMap<Class<? extends PublishedEditTabPanel<T>>, IModel<?>> tabPanelCustomModels;
 
     private boolean inputEnabled = true;
-    
+
     protected PublishedConfigurationPage(boolean isNew) {
         this.isNew = isNew;
     }
@@ -85,14 +85,14 @@ public abstract class PublishedConfigurationPage<T extends PublishedInfo> extend
     protected void setupPublished(T info) {
         setupPublished(new Model<T>(info));
     }
-    
+
     protected void setupPublished(IModel<T> infoModel) {
         myModel = new CompoundPropertyModel<T>(infoModel);
         initComponents();
     }
 
     /**
-     * 
+     *
      */
     @SuppressWarnings("rawtypes")
     private void initComponents() {
@@ -103,7 +103,7 @@ public abstract class PublishedConfigurationPage<T extends PublishedInfo> extend
         add(theForm);
 
         List<ITab> tabs = new ArrayList<ITab>();
-        
+
         // add the "well known" tabs
         tabs.add(new AbstractTab(new org.apache.wicket.model.ResourceModel(
                 "ResourceConfigurationPage.Data")) {
@@ -113,7 +113,7 @@ public abstract class PublishedConfigurationPage<T extends PublishedInfo> extend
                 return createMainTab(panelID).setInputEnabled(inputEnabled);
             }
         });
-        
+
         tabs.add(new AbstractTab(new org.apache.wicket.model.ResourceModel(
                 "ResourceConfigurationPage.Publishing")) {
             private static final long serialVersionUID = 1L;
@@ -122,7 +122,7 @@ public abstract class PublishedConfigurationPage<T extends PublishedInfo> extend
                 return new PublishingEditTabPanel(panelID).setInputEnabled(inputEnabled);
             }
         });
-                                
+
         // add the tabs contributed via extension point
         List<PublishedEditTabPanelInfo> tabPanels = getGeoServerApplication().getBeansOfType(PublishedEditTabPanelInfo.class);
 
@@ -138,10 +138,10 @@ public abstract class PublishedConfigurationPage<T extends PublishedInfo> extend
 
         for (PublishedEditTabPanelInfo ttabPanelInfo : tabPanels) {
             if (ttabPanelInfo.supports(getPublishedInfo())) {
-                
+
                 @SuppressWarnings("unchecked")
                 PublishedEditTabPanelInfo<T> tabPanelInfo = (PublishedEditTabPanelInfo<T>) ttabPanelInfo;
-            
+
                 String titleKey = tabPanelInfo.getTitleKey();
                 IModel<String> titleModel = null;
                 if (titleKey != null) {
@@ -149,14 +149,15 @@ public abstract class PublishedConfigurationPage<T extends PublishedInfo> extend
                 } else {
                     titleModel = new Model<String>(tabPanelInfo.getComponentClass().getSimpleName());
                 }
-                
+
                 final Class<PublishedEditTabPanel<T>> panelClass = tabPanelInfo.getComponentClass();
                 IModel<?> panelCustomModel = tabPanelInfo.createOwnModel(myModel, isNew);
                 tabPanelCustomModels.put(panelClass, panelCustomModel);
-                
+
                 tabs.add(new AbstractTab(titleModel) {
                     private static final long serialVersionUID = -6637277497986497791L;
                     private final Class<PublishedEditTabPanel<T>> panelType = panelClass;
+
                     @Override
                     public Panel getPanel(String panelId) {
                         PublishedEditTabPanel<?> tabPanel;
@@ -206,7 +207,7 @@ public abstract class PublishedConfigurationPage<T extends PublishedInfo> extend
     }
 
     protected abstract PublishedEditTabPanel<T> createMainTab(String panelID);
-    
+
     protected abstract void doSaveInternal() throws IOException;
 
     public void setSelectedTab(Class<? extends PublishedEditTabPanel<?>> selectedTabClass) {
@@ -218,16 +219,16 @@ public abstract class PublishedConfigurationPage<T extends PublishedInfo> extend
             tabbedPanel.setSelectedTab(selectedTabIndex);
         }
     }
-    
+
     public void selectDataTab() {
         tabbedPanel.setSelectedTab(0);
     }
-    
+
     public void selectPublishingTab() {
         tabbedPanel.setSelectedTab(1);
     }
-    
-    
+
+
     protected void disableForm() {
         get("publishedinfo").setEnabled(false);
     }
@@ -242,7 +243,7 @@ public abstract class PublishedConfigurationPage<T extends PublishedInfo> extend
             }
         };
     }
-    
+
     /**
      * Performs the necessary operation on save.
      * <p>
@@ -251,23 +252,23 @@ public abstract class PublishedConfigurationPage<T extends PublishedInfo> extend
      * </p>
      */
     protected void doSave() {
-        try {         
-            doSaveInternal();           
+        try {
+            doSaveInternal();
             if (hasErrorMessage()) {
                 return;
             }
-            
-            for(Entry<Class<? extends PublishedEditTabPanel<T>>, IModel<?>> e : tabPanelCustomModels.entrySet()){
+
+            for (Entry<Class<? extends PublishedEditTabPanel<T>>, IModel<?>> e : tabPanelCustomModels.entrySet()) {
                 Class<? extends PublishedEditTabPanel<T>> panelClass = e.getKey();
                 IModel<?> customModel = e.getValue();
-                if(customModel == null){
+                if (customModel == null) {
                     continue;
                 }
                 PublishedEditTabPanel<?> tabPanel = panelClass.getConstructor(String.class, IModel.class,
                         IModel.class).newInstance("temp", myModel, customModel);
                 tabPanel.save();
             }
-            
+
             onSuccessfulSave();
         } catch (Exception e) {
             LOGGER.log(Level.INFO, "Error saving layer", e);
@@ -275,7 +276,7 @@ public abstract class PublishedConfigurationPage<T extends PublishedInfo> extend
         }
     }
 
-    @SuppressWarnings("rawtypes")    
+    @SuppressWarnings("rawtypes")
     private Link<?> cancelLink() {
         return new Link("cancel") {
             private static final long serialVersionUID = -9007727127569731882L;
@@ -287,7 +288,7 @@ public abstract class PublishedConfigurationPage<T extends PublishedInfo> extend
         };
     }
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @SuppressWarnings({"rawtypes", "unchecked"})
     private List<PublishedConfigurationPanelInfo<T>> filterPublishedPanels(
             List<PublishedConfigurationPanelInfo> list) {
         List<PublishedConfigurationPanelInfo<T>> result = new ArrayList<PublishedConfigurationPanelInfo<T>>();
@@ -301,8 +302,6 @@ public abstract class PublishedConfigurationPage<T extends PublishedInfo> extend
 
     /**
      * Returns the {@link PublishedInfo} contained in this page
-     * 
-     *
      */
     public T getPublishedInfo() {
         return (T) myModel.getObject();
@@ -321,15 +320,16 @@ public abstract class PublishedConfigurationPage<T extends PublishedInfo> extend
     protected void onCancel() {
         doReturn();
     }
+
     /**
      * Allows collaborating pages to update the published info object
-     * 
+     *
      * @param info
      */
     public void updatePublishedInfo(T info) {
         myModel.setObject(info);
     }
-    
+
     protected abstract class ListEditTabPanel extends PublishedEditTabPanel<T> {
 
         private static final long serialVersionUID = -7279044666531992361L;
@@ -347,8 +347,8 @@ public abstract class PublishedConfigurationPage<T extends PublishedInfo> extend
 
         protected abstract ListView<?> createList(String id);
 
-    }    
-    
+    }
+
     protected class PublishingEditTabPanel extends ListEditTabPanel {
         private static final long serialVersionUID = -6575960326680386479L;
 
@@ -358,27 +358,27 @@ public abstract class PublishedConfigurationPage<T extends PublishedInfo> extend
 
         @Override
         public ListView<PublishedConfigurationPanelInfo<T>> createList(String id) {
-            List<PublishedConfigurationPanelInfo<T>> pubPanels 
+            List<PublishedConfigurationPanelInfo<T>> pubPanels
                     = filterPublishedPanels(getGeoServerApplication().getBeansOfType(PublishedConfigurationPanelInfo.class));
-            ListView<PublishedConfigurationPanelInfo<T>> pubPanelList 
+            ListView<PublishedConfigurationPanelInfo<T>> pubPanelList
                     = new ListView<PublishedConfigurationPanelInfo<T>>(id, pubPanels) {
-                            private static final long serialVersionUID = 1L;
-            
-                            @Override
-                            protected void populateItem(ListItem<PublishedConfigurationPanelInfo<T>> item) {
-                                PublishedConfigurationPanelInfo<T> panelInfo = 
-                                        (PublishedConfigurationPanelInfo<T>) item.getModelObject();
-                                try {
-                                    PublishedConfigurationPanel<T> panel = panelInfo.getComponentClass()
-                                            .getConstructor(String.class, IModel.class)
-                                            .newInstance("content", myModel);
-                                    item.add((Component) panel);
-                                } catch (Exception e) {
-                                    throw new WicketRuntimeException(
-                                            "Failed to add pluggable layer configuration panels", e);
-                                }
-                            }
-                        };
+                private static final long serialVersionUID = 1L;
+
+                @Override
+                protected void populateItem(ListItem<PublishedConfigurationPanelInfo<T>> item) {
+                    PublishedConfigurationPanelInfo<T> panelInfo =
+                            (PublishedConfigurationPanelInfo<T>) item.getModelObject();
+                    try {
+                        PublishedConfigurationPanel<T> panel = panelInfo.getComponentClass()
+                                .getConstructor(String.class, IModel.class)
+                                .newInstance("content", myModel);
+                        item.add((Component) panel);
+                    } catch (Exception e) {
+                        throw new WicketRuntimeException(
+                                "Failed to add pluggable layer configuration panels", e);
+                    }
+                }
+            };
             return pubPanelList;
         }
 
@@ -388,8 +388,8 @@ public abstract class PublishedConfigurationPage<T extends PublishedInfo> extend
     protected ComponentAuthorizer getPageAuthorizer() {
         return ComponentAuthorizer.WORKSPACE_ADMIN;
     }
-    
-    public void setInputEnabled(boolean inputEnabled) { 
+
+    public void setInputEnabled(boolean inputEnabled) {
         this.inputEnabled = inputEnabled;
         get("publishedinfo:save").setVisible(inputEnabled);
     }

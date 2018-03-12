@@ -22,9 +22,9 @@ public class WorkspaceProvider extends GeoServerDataProvider<WorkspaceInfo> {
 
     private static final long serialVersionUID = -2464073552094977958L;
 
-    public static Property<WorkspaceInfo> NAME = 
-        new BeanProperty<WorkspaceInfo>( "name", "name" );
-    
+    public static Property<WorkspaceInfo> NAME =
+            new BeanProperty<WorkspaceInfo>("name", "name");
+
     public static Property<WorkspaceInfo> DEFAULT = new AbstractProperty<WorkspaceInfo>("default") {
 
         private static final long serialVersionUID = 7732697329315316826L;
@@ -37,14 +37,14 @@ public class WorkspaceProvider extends GeoServerDataProvider<WorkspaceInfo> {
         }
     };
 
-    public static Property<WorkspaceInfo> ISOLATED = new BeanProperty<>( "isolated", "isolated" );
+    public static Property<WorkspaceInfo> ISOLATED = new BeanProperty<>("isolated", "isolated");
 
     static List<Property<WorkspaceInfo>> PROPERTIES = Arrays.asList(NAME, DEFAULT, ISOLATED);
-    
+
     public WorkspaceProvider() {
         setSort(NAME.getName(), SortOrder.ASCENDING);
     }
-   
+
     @Override
     protected List<WorkspaceInfo> getItems() {
         return getCatalog().getWorkspaces();

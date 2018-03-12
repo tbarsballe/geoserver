@@ -17,9 +17,8 @@ import org.junit.Test;
 
 /**
  * Simple test class to use for checking that the interpolation parser used by the version 1.0.0 is correct.
- * 
+ *
  * @author Nicola Lagomarsini geosolutions
- * 
  */
 public class InterpolationParserTest extends GeoServerSystemTestSupport {
 

@@ -13,7 +13,7 @@ import org.hamcrest.Description;
 
 public class ResourceHasContents extends BaseMatcher<Resource> {
     final byte[] contents;
-    
+
     public ResourceHasContents(byte[] contents) {
         super();
         this.contents = contents;
@@ -21,13 +21,13 @@ public class ResourceHasContents extends BaseMatcher<Resource> {
 
     @Override
     public boolean matches(Object item) {
-        if(item instanceof Resource) {
+        if (item instanceof Resource) {
             try (InputStream in = ((Resource) item).in()) {
                 byte[] result = new byte[contents.length];
                 int len = in.read(result);
                 if (len != contents.length) {
                     return false;
-                } 
+                }
                 if (in.read() != -1) {
                     return false;
                 }
@@ -38,10 +38,10 @@ public class ResourceHasContents extends BaseMatcher<Resource> {
         }
         return false;
     }
-    
+
     @Override
     public void describeTo(Description description) {
-        description.appendText("resource that contains: "+Arrays.toString(contents));
+        description.appendText("resource that contains: " + Arrays.toString(contents));
     }
-    
+
 }

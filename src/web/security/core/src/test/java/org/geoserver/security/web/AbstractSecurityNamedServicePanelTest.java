@@ -6,6 +6,7 @@
 package org.geoserver.security.web;
 
 import static org.junit.Assert.*;
+
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -33,16 +34,16 @@ import org.junit.Before;
 
 public abstract class AbstractSecurityNamedServicePanelTest extends AbstractSecurityWicketTestSupport {
 
-    
-    public static final String FIRST_COLUM_PATH="itemProperties:0:component:link";
-    public static final String CHECKBOX_PATH="selectItemContainer:selectItem";
-    
+
+    public static final String FIRST_COLUM_PATH = "itemProperties:0:component:link";
+    public static final String CHECKBOX_PATH = "selectItemContainer:selectItem";
+
     protected AbstractSecurityPage basePage;
     protected String basePanelId;
     protected FormTester formTester;
-    
-    GeoServerSecurityManager manager; 
-    
+
+    GeoServerSecurityManager manager;
+
     protected void newFormTester() {
         newFormTester("form");
     }
@@ -54,117 +55,118 @@ public abstract class AbstractSecurityNamedServicePanelTest extends AbstractSecu
 
     @Before
     public void init() throws Exception {
-        manager= getSecurityManager();
+        manager = getSecurityManager();
     }
-    
+
     protected abstract AbstractSecurityPage getBasePage();
+
     protected abstract String getBasePanelId();
+
     protected abstract Integer getTabIndex();
+
     protected abstract Class<? extends Component> getNamedServicesClass();
+
     protected abstract String getDetailsFormComponentId();
 
-    
 
-    
     protected void activatePanel() {
-        basePage=getBasePage();
-        basePanelId=getBasePanelId();
+        basePage = getBasePage();
+        basePanelId = getBasePanelId();
         tester.startPage(basePage);
         tester.assertRenderedPage(basePage.getPageClass());
-        
+
         //String linkId = getTabbedPanel().getId()+":tabs-container:tabs:"+getTabIndex()+":link";        
         //tester.clickLink(linkId,true);
         //assertEquals(getNamedServicesClass(), getNamedServicesPanel().getClass());
     }
-    
+
 //    protected AjaxTabbedPanel getTabbedPanel() {
 //        return (AjaxTabbedPanel) tabbedPage.get(AbstractSecurityPage.TabbedPanelId);
 //    }
-    
+
 //    protected NamedServicesPanel getNamedServicesPanel() {
 //        return (NamedServicesPanel) tabbedPage.get(getTabbedPanel().getId()+":panel");
 //        
 //    }
-    
+
     protected void clickAddNew() {
         tester.clickLink(basePanelId + ":add");
     }
-    
+
     protected void clickRemove() {
         tester.clickLink(basePanelId + ":remove");
     }
 
     protected Component getRemoveLink() {
-        Component result =tester.getLastRenderedPage().get("tabbedPanel:panel:removeSelected");
+        Component result = tester.getLastRenderedPage().get("tabbedPanel:panel:removeSelected");
         assertNotNull(result);
         return result;
     }
 
-    
+
     protected DataView<SecurityNamedServiceConfig> getDataView() {
         return (DataView<SecurityNamedServiceConfig>)
-            basePage.get(basePanelId + ":table:listContainer:items");
+                basePage.get(basePanelId + ":table:listContainer:items");
     }
-    
+
     protected long countItems() {
         tester.debugComponentTrees();
         return getDataView().getItemCount();
     }
-    
+
     protected SecurityNamedServiceConfig getSecurityNamedServiceConfig(String name) {
         //<SecurityNamedServiceConfig>
-       Iterator<Item<SecurityNamedServiceConfig>> it = getDataView().getItems();
-       while (it.hasNext()) {
-           Item<SecurityNamedServiceConfig> item = it.next();
-           if (name.equals(item.getModelObject().getName()))
-               return item.getModelObject();
-       }
-    return null;   
+        Iterator<Item<SecurityNamedServiceConfig>> it = getDataView().getItems();
+        while (it.hasNext()) {
+            Item<SecurityNamedServiceConfig> item = it.next();
+            if (name.equals(item.getModelObject().getName()))
+                return item.getModelObject();
+        }
+        return null;
     }
-    
+
     protected void clickNamedServiceConfig(String name) {
         //<SecurityNamedServiceConfig>
-       Iterator<Item<SecurityNamedServiceConfig>> it = getDataView().getItems();
-       while (it.hasNext()) {
-           Item<SecurityNamedServiceConfig> item = it.next();
-           if (name.equals(item.getModelObject().getName()))
-               tester.clickLink(item.getPageRelativePath()+":"+FIRST_COLUM_PATH);
-       }
-       
+        Iterator<Item<SecurityNamedServiceConfig>> it = getDataView().getItems();
+        while (it.hasNext()) {
+            Item<SecurityNamedServiceConfig> item = it.next();
+            if (name.equals(item.getModelObject().getName()))
+                tester.clickLink(item.getPageRelativePath() + ":" + FIRST_COLUM_PATH);
+        }
+
     }
-    
+
 
     protected void checkNamedServiceConfig(String name) {
         //<SecurityNamedServiceConfig>
-       Iterator<Item<SecurityNamedServiceConfig>> it = getDataView().getItems();
-       while (it.hasNext()) {
-           Item<SecurityNamedServiceConfig> item = it.next();
-           if (name.equals(item.getModelObject().getName()))
-               tester.executeAjaxEvent(item.getPageRelativePath()+":"+CHECKBOX_PATH,"click");
-       }       
+        Iterator<Item<SecurityNamedServiceConfig>> it = getDataView().getItems();
+        while (it.hasNext()) {
+            Item<SecurityNamedServiceConfig> item = it.next();
+            if (name.equals(item.getModelObject().getName()))
+                tester.executeAjaxEvent(item.getPageRelativePath() + ":" + CHECKBOX_PATH, "click");
+        }
     }
-    
-    protected void doRemove(String pathForLink, String ... serviceNames) throws Exception {
+
+    protected void doRemove(String pathForLink, String... serviceNames) throws Exception {
         AbstractSecurityPage testPage = (AbstractSecurityPage) tester.getLastRenderedPage();
 
-        if (serviceNames.length==0) {
+        if (serviceNames.length == 0) {
             String selectAllPath = basePanelId + ":table:listContainer:selectAllContainer:selectAll";
             tester.assertComponent(selectAllPath, CheckBox.class);
 
             FormComponent selectAllPathComponent = (FormComponent) tester.getComponentFromLastRenderedPage(selectAllPath);
             setFormComponentValue(selectAllPathComponent, "true");
             tester.executeAjaxEvent(selectAllPath, "click");
-        } 
-        else {
+        } else {
             DataView<SecurityNamedServiceConfig> dataview = (DataView<SecurityNamedServiceConfig>)
-                testPage.get(basePanelId + ":table:listContainer:items");
+                    testPage.get(basePanelId + ":table:listContainer:items");
             List<String> nameList = Arrays.asList(serviceNames);
 
             Iterator<Item<SecurityNamedServiceConfig>> it = getDataView().getItems();
             while (it.hasNext()) {
                 Item<SecurityNamedServiceConfig> item = it.next();
                 if (nameList.contains(item.getModelObject().getName())) {
-                    String checkBoxPath=item.getPageRelativePath()+":"+CHECKBOX_PATH;
+                    String checkBoxPath = item.getPageRelativePath() + ":" + CHECKBOX_PATH;
 
                     tester.assertComponent(checkBoxPath, CheckBox.class);
 
@@ -178,17 +180,17 @@ public abstract class AbstractSecurityNamedServicePanelTest extends AbstractSecu
         }
 
         tester.assertNoErrorMessage();
-        
+
         tester.assertComponent(basePanelId + ":dialog:dialog", ModalWindow.class);
-        ModalWindow w  = (ModalWindow) testPage.get(basePanelId + ":dialog:dialog");
+        ModalWindow w = (ModalWindow) testPage.get(basePanelId + ":dialog:dialog");
                 /*(ModalWindow) testPage.get(
             testPage.getWicketPath() + ":dialog:dialog");*/
 
         assertFalse(w.isShown());
         tester.clickLink(basePanelId + ":remove", true);
         assertTrue(w.isShown());
-        
-        ((GeoServerDialog)w.getParent()).submit(new AjaxRequestHandler(tester.getLastRenderedPage()));
+
+        ((GeoServerDialog) w.getParent()).submit(new AjaxRequestHandler(tester.getLastRenderedPage()));
         //simulateDeleteSubmit();        
         //executeModalWindowCloseButtonCallback(w);
     }
@@ -197,12 +199,12 @@ public abstract class AbstractSecurityNamedServicePanelTest extends AbstractSecu
         //AjaxLink link = (AjaxLInk) tester.getLastRenderedPage().get(basePanelId + ":remove");
         //link.on
     }
-    
+
 
     protected void setSecurityConfigName(String aName) {
         formTester.setValue("panel:content:name", aName);
     }
-    
+
     protected String getSecurityConfigName() {
         return formTester.getForm().get("config.name").getDefaultModelObjectAsString();
     }
@@ -210,7 +212,7 @@ public abstract class AbstractSecurityNamedServicePanelTest extends AbstractSecu
     protected String getSecurityConfigClassName() {
         return formTester.getForm().get("config.className").getDefaultModelObjectAsString();
     }
-    
+
     protected <T extends SecurityNamedServicePanelInfo> void setSecurityConfigClassName(Class<T> clazz) {
         ListView list = (ListView) tester.getLastRenderedPage().get("servicesContainer:services");
         int toClick = -1;
@@ -219,20 +221,21 @@ public abstract class AbstractSecurityNamedServicePanelTest extends AbstractSecu
                 toClick = i;
                 break;
             }
-         }
-        AjaxLink link = (AjaxLink) ((MarkupContainer)list.get(toClick)).get("link");
-        if(link.isEnabled()) {
+        }
+        AjaxLink link = (AjaxLink) ((MarkupContainer) list.get(toClick)).get("link");
+        if (link.isEnabled()) {
             tester.executeAjaxEvent(link, "click");
         }
 //        formTester.select("config.className", index);     
 //        tester.executeAjaxEvent(formTester.getForm().getPageRelativePath()+":config.className", "change");
     }
 
-    protected void clickSave() {        
-          formTester.submit("save");
+    protected void clickSave() {
+        formTester.submit("save");
     }
-    protected void clickCancel() {        
-        formTester.submitLink("cancel",false);
+
+    protected void clickCancel() {
+        formTester.submitLink("cancel", false);
     }
-    
+
 }

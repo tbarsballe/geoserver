@@ -15,7 +15,7 @@ import java.io.IOException;
  * This exception serves as an indicator to the dispatching system that there's
  * no need to report the exception back to the client.
  * </p>
- * 
+ *
  * @author Gabriel Roldan (TOPP)
  * @version $Id$
  * @since 1.6.x

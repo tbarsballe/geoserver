@@ -37,15 +37,14 @@ import org.springframework.util.StringUtils;
 
 /**
  * Filter extending {@link GeoServerSecurityFilter}.
- * 
+ * <p>
  * The encoded user name is passed as an URL parameter named {@link #authKeyParamName}.
- * 
+ * <p>
  * The real user name is retrieved by querying an {@link AuthenticationKeyMapper} object stored in {@link #authKeyMapperName}
- * 
+ * <p>
  * This filter needs a {@link GeoServerUserGroupService} for authentication
- * 
- * @author christian
  *
+ * @author christian
  */
 public class GeoServerAuthenticationKeyFilter extends GeoServerSecurityFilter
         implements AuthenticationCachingFilter, GeoServerAuthenticationFilter {
@@ -130,13 +129,13 @@ public class GeoServerAuthenticationKeyFilter extends GeoServerSecurityFilter
 
     /**
      * Try to authenticate and adds {@link GeoServerRole#AUTHENTICATED_ROLE} Does NOT authenticate {@link GeoServerUser#ROOT_USERNAME}
-     * 
+     *
      * @param request
      * @param response
      * @param authkey
      */
     protected void doAuthenticate(HttpServletRequest request, HttpServletResponse response,
-            String authKey) throws IOException {
+                                  String authKey) throws IOException {
 
         if (authKey == null)
             return;
@@ -163,7 +162,7 @@ public class GeoServerAuthenticationKeyFilter extends GeoServerSecurityFilter
 
         KeyAuthenticationToken result = new KeyAuthenticationToken(authKey, authKeyParamName, user,
                 roles);
-        
+
         SecurityContextHolder.getContext().setAuthentication(result);
     }
 
@@ -176,13 +175,12 @@ public class GeoServerAuthenticationKeyFilter extends GeoServerSecurityFilter
 
     /**
      * Extracts authkey value from the request.
-     * 
-     * @param req
      *
+     * @param req
      */
     private String getAuthKeyParamValue(HttpServletRequest req) {
         String keyParamName = getAuthKeyParamName();
-        for (Enumeration<String> a = req.getParameterNames(); a.hasMoreElements();) {
+        for (Enumeration<String> a = req.getParameterNames(); a.hasMoreElements(); ) {
             String paramName = a.nextElement();
 
             if (keyParamName.equalsIgnoreCase(paramName)) {

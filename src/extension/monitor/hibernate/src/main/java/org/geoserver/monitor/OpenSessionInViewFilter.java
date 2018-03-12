@@ -11,6 +11,7 @@ import org.geoserver.filters.SpringDelegatingFilter;
 
 /**
  * Makes the Hibernate {@link OpenSessionInViewFilter} be picked up by the {@link SpringDelegatingFilter}
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class OpenSessionInViewFilter extends

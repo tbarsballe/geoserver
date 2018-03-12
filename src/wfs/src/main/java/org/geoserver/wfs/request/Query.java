@@ -21,17 +21,15 @@ import org.opengis.filter.sort.SortBy;
 
 /**
  * Query of a GetFeature/LockFeature request.
- * 
- * @author Justin Deoliveira, OpenGeo
  *
+ * @author Justin Deoliveira, OpenGeo
  */
 public abstract class Query extends RequestObject {
 
     public static Query adapt(Object query) {
         if (query instanceof QueryType) {
             return new WFS11((EObject) query);
-        }
-        else if (query instanceof net.opengis.wfs20.QueryType) {
+        } else if (query instanceof net.opengis.wfs20.QueryType) {
             return new WFS20((EObject) query);
         }
         return null;
@@ -40,17 +38,17 @@ public abstract class Query extends RequestObject {
     protected Query(EObject adaptee) {
         super(adaptee);
     }
-    
+
     public URI getSrsName() {
         return eGet(adaptee, "srsName", URI.class);
     }
-    
+
     public String getFeatureVersion() {
         return eGet(adaptee, "featureVersion", String.class);
     }
 
     //public abstract boolean isTypeNamesUnset(List queries);
-    
+
     public abstract List<QName> getTypeNames();
 
     public abstract List<String> getAliases();
@@ -68,7 +66,7 @@ public abstract class Query extends RequestObject {
         public WFS11(EObject adaptee) {
             super(adaptee);
         }
-        
+
         @Override
         public List<QName> getTypeNames() {
             return eGet(adaptee, "typeName", List.class);
@@ -83,17 +81,17 @@ public abstract class Query extends RequestObject {
         public List<String> getPropertyNames() {
             return eGet(adaptee, "propertyName", List.class);
         }
-        
+
         @Override
         public Filter getFilter() {
             return eGet(adaptee, "filter", Filter.class);
         }
-        
+
         @Override
         public List<SortBy> getSortBy() {
             return eGet(adaptee, "sortBy", List.class);
         }
-        
+
         @Override
         public List<XlinkPropertyNameType> getXlinkPropertyNames() {
             return eGet(adaptee, "xlinkPropertyName", List.class);
@@ -102,16 +100,16 @@ public abstract class Query extends RequestObject {
     }
 
     public static class WFS20 extends Query {
-        
+
         public WFS20(EObject adaptee) {
             super(adaptee);
         }
-        
+
         @Override
         public List<QName> getTypeNames() {
             return eGet(adaptee, "typeNames", List.class);
         }
-        
+
         @Override
         public List<String> getAliases() {
             return eGet(adaptee, "aliases", List.class);
@@ -127,17 +125,17 @@ public abstract class Query extends RequestObject {
             }
             return l;
         }
-        
+
         @Override
         public Filter getFilter() {
             return eGet(adaptee, "abstractSelectionClause", Filter.class);
         }
-        
+
         @Override
         public List<SortBy> getSortBy() {
             return eGet(adaptee, "abstractSortingClause", List.class);
         }
-        
+
         @Override
         public List<XlinkPropertyNameType> getXlinkPropertyNames() {
             //no equivalent in wfs 2.0

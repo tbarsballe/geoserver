@@ -13,10 +13,10 @@ public class CSWConfiguration extends org.geotools.csw.CSWConfiguration {
 
     protected void registerBindings(Map bindings) {
         super.registerBindings(bindings);
-        
+
         //binding overrides
     }
-    
+
     @Override
     protected void configureContext(MutablePicoContainer container) {
         super.configureContext(container);

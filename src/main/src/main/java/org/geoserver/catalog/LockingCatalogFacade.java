@@ -14,7 +14,7 @@ import org.geoserver.catalog.impl.WrappingProxy;
 
 /**
  * Performs lock upgrades on the fly
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class LockingCatalogFacade implements InvocationHandler, WrappingProxy {
@@ -45,13 +45,13 @@ public class LockingCatalogFacade implements InvocationHandler, WrappingProxy {
 
     /**
      * Returns a wrapped {@link CatalogFacade} that will upgrade read locks to write before attempting any write operation
-     * 
+     *
      * @param facade
      * @param configurationLock
      * @return
      */
     public static CatalogFacade create(CatalogFacade facade,
-            GeoServerConfigurationLock configurationLock) {
+                                       GeoServerConfigurationLock configurationLock) {
         return ProxyUtils.createProxy(facade, CatalogFacade.class,
                 new LockingCatalogFacade(facade, configurationLock));
     }

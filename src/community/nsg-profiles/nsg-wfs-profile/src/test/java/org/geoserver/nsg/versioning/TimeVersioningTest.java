@@ -62,7 +62,7 @@ public final class TimeVersioningTest extends GeoServerSystemTestSupport {
         Document doc = postAsDOM("wfs", TestsUtils.readResource("/requests/insert_request_1.xml"));
         assertTransactionResponse(doc);
 
-                List<SimpleFeature> features = TestsUtils.searchFeatures(getCatalog(), "gs:versioned");
+        List<SimpleFeature> features = TestsUtils.searchFeatures(getCatalog(), "gs:versioned");
         List<SimpleFeature> foundFeatures = TestsUtils.searchFeatures(features, "NAME", "TIME", "Feature_3", new Date(), 300);
         assertThat(foundFeatures.size(), is(1));
         SimpleFeature foundFeature = foundFeatures.get(0);
@@ -183,7 +183,7 @@ public final class TimeVersioningTest extends GeoServerSystemTestSupport {
 
 
     private void assertTransactionResponse(Document doc) throws XpathException {
-        assertEquals("1",  WFS20_XPATH_ENGINE.evaluate("count(/wfs:TransactionResponse)", doc));
+        assertEquals("1", WFS20_XPATH_ENGINE.evaluate("count(/wfs:TransactionResponse)", doc));
     }
 
     /**

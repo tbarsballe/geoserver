@@ -7,9 +7,7 @@
 package org.geoserver.test;
 
 /**
- * 
  * @author Niels Charlier, Curtin University Of Technology
- * 
  */
 
 public class InvalidColumnTestData extends AbstractAppSchemaMockData {

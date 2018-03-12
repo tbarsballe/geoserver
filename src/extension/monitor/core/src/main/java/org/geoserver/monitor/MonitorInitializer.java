@@ -16,7 +16,7 @@ public class MonitorInitializer implements GeoServerInitializer {
     static Logger LOGGER = Logging.getLogger(Monitor.class);
 
     Monitor monitor;
-    
+
     public MonitorInitializer(Monitor monitor) {
         this.monitor = monitor;
     }

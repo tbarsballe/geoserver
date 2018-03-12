@@ -15,19 +15,26 @@ import java.util.Map;
  * <p>
  * Follows the factory pattern. Creates and stores a list of name space translators.
  * </p>
- * @see NameSpaceTranslator
+ *
  * @author dzwiers, Refractions Research, Inc.
  * @author $Author: dmzwiers $ (last modification)
  * @version $Id$
+ * @see NameSpaceTranslator
  */
 public class NameSpaceTranslatorFactory {
-    /** map of namespace names as Strings -> Class representations of NameSpaceTranslators */
+    /**
+     * map of namespace names as Strings -> Class representations of NameSpaceTranslators
+     */
     private Map namespaceTranslators;
 
-    /** map of prefixs as String -> Instances of NameSpaceTranslators */
+    /**
+     * map of prefixs as String -> Instances of NameSpaceTranslators
+     */
     private Map namespaceTranslatorInstances;
 
-    /** the only instance */
+    /**
+     * the only instance
+     */
     private final static NameSpaceTranslatorFactory instance = new NameSpaceTranslatorFactory();
 
     /**
@@ -35,7 +42,6 @@ public class NameSpaceTranslatorFactory {
      * <p>
      * Loads some default prefixes into memory when the class is first loaded.
      * </p>
-     *
      */
     private NameSpaceTranslatorFactory() {
         namespaceTranslators = new HashMap();
@@ -55,6 +61,7 @@ public class NameSpaceTranslatorFactory {
      * <p>
      * Completes the singleton pattern of this factory class.
      * </p>
+     *
      * @return NameSpaceTranslatorFactory The instance.
      */
     public static NameSpaceTranslatorFactory getInstance() {
@@ -71,7 +78,8 @@ public class NameSpaceTranslatorFactory {
      * Some the magic for creating instances using the classloader occurs here
      * (ie. the translators are not loaded lazily)
      * </p>
-     * @param prefix The desired namespace prefix
+     *
+     * @param prefix    The desired namespace prefix
      * @param namespace The desired namespace.
      */
     public void addNameSpaceTranslator(String prefix, String namespace) {
@@ -86,10 +94,10 @@ public class NameSpaceTranslatorFactory {
                 return;
             }
 
-            Constructor nstConstructor = nstClass.getConstructor(new Class[] { String.class, });
-            NameSpaceTranslator nst = (NameSpaceTranslator) nstConstructor.newInstance(new Object[] {
-                        prefix,
-                    });
+            Constructor nstConstructor = nstClass.getConstructor(new Class[]{String.class,});
+            NameSpaceTranslator nst = (NameSpaceTranslator) nstConstructor.newInstance(new Object[]{
+                    prefix,
+            });
             namespaceTranslatorInstances.put(prefix, nst);
         } catch (Exception e) {
             e.printStackTrace();
@@ -101,6 +109,7 @@ public class NameSpaceTranslatorFactory {
      * <p>
      * Description ...
      * </p>
+     *
      * @param prefix the prefix of the translator to get.
      * @return the translator, or null if it was not found
      */
@@ -113,7 +122,8 @@ public class NameSpaceTranslatorFactory {
      * <p>
      * Registers a namespace and it's translator with the factory. good for adding additional namespaces :)
      * </p>
-     * @param namespace The namespace.
+     *
+     * @param namespace           The namespace.
      * @param nameSpaceTranslator The translator class for this namespace.
      */
     public void registerNameSpaceTranslator(String namespace, Class nameSpaceTranslator) {

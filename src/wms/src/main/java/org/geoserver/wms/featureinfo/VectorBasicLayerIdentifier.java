@@ -48,11 +48,11 @@ import com.vividsolutions.jts.geom.Polygon;
 /**
  * An identifier for vector layers that will take into account the filters, viewparams, styles and
  * build a bbox (plus extra filters) query against the database
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class VectorBasicLayerIdentifier extends AbstractVectorLayerIdentifier {
-    
+
     static final Logger LOGGER = Logging.getLogger(VectorBasicLayerIdentifier.class);
 
     public static final String FEATUREINFO_DEFAULT_BUFFER = "org.geoserver.wms.featureinfo.minBuffer";
@@ -67,7 +67,7 @@ public class VectorBasicLayerIdentifier extends AbstractVectorLayerIdentifier {
     public List<FeatureCollection> identify(FeatureInfoRequestParameters params, int maxFeatures) throws Exception {
         LOGGER.log(Level.FINER, "Appliying bbox based feature info identifier");
 
-        
+
         final MapLayerInfo layer = params.getLayer();
         final Filter filter = params.getFilter();
         final Style style = params.getStyle();
@@ -167,7 +167,7 @@ public class VectorBasicLayerIdentifier extends AbstractVectorLayerIdentifier {
     }
 
     private double getSearchRadius(FeatureInfoRequestParameters params, final MapLayerInfo layer,
-            final List<Rule> rules) {
+                                   final List<Rule> rules) {
         double radius;
         int buffer = params.getBuffer();
         if (buffer <= 0) {
@@ -195,13 +195,13 @@ public class VectorBasicLayerIdentifier extends AbstractVectorLayerIdentifier {
         } else {
             radius = buffer;
         }
-        
+
         // make sure we don't go overboard, the admin might have set a maximum
         int maxRadius = wms.getMaxBuffer();
         if (maxRadius > 0 && radius > maxRadius) {
             radius = maxRadius;
         }
-        
+
         return radius;
     }
 
@@ -220,7 +220,7 @@ public class VectorBasicLayerIdentifier extends AbstractVectorLayerIdentifier {
         return (Filter) or.accept(simplifier, null);
     }
 
-   
+
     private ReferencedEnvelope getEnvelopeFilter(FeatureInfoRequestParameters params, double radius) {
         final int x = params.getX();
         final int y = params.getY();

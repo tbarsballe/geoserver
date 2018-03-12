@@ -31,7 +31,7 @@ public class XFrameOptionsFilterTest {
     @Test
     public void testFilterWithNoSetPolicy() throws IOException, ServletException {
         String currentShouldSetProperty =
-            System.getProperty(XFrameOptionsFilter.GEOSERVER_XFRAME_SHOULD_SET_POLICY);
+                System.getProperty(XFrameOptionsFilter.GEOSERVER_XFRAME_SHOULD_SET_POLICY);
         System.setProperty(XFrameOptionsFilter.GEOSERVER_XFRAME_SHOULD_SET_POLICY, "false");
         String header = getXStreamHeader();
 
@@ -45,7 +45,7 @@ public class XFrameOptionsFilterTest {
     @Test
     public void testFilterWithSameOrigin() throws IOException, ServletException {
         String currentShouldSetProperty =
-            System.getProperty(XFrameOptionsFilter.GEOSERVER_XFRAME_POLICY);
+                System.getProperty(XFrameOptionsFilter.GEOSERVER_XFRAME_POLICY);
         System.setProperty(XFrameOptionsFilter.GEOSERVER_XFRAME_POLICY, "DENY");
         String header = getXStreamHeader();
 

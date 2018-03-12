@@ -32,7 +32,7 @@ abstract class LambdaTransformerBase extends TransformerBase {
         }
 
         public LambdaTranslatorSupport(ContentHandler contentHandler, String prefix, String nsURI,
-                SchemaLocationSupport schemaLocation) {
+                                       SchemaLocationSupport schemaLocation) {
             super(contentHandler, prefix, nsURI, schemaLocation);
         }
 
@@ -42,7 +42,7 @@ abstract class LambdaTransformerBase extends TransformerBase {
 
         /**
          * Encodes an element, delegating encoding its sub-elements to the content encoder, with no attributes
-         * 
+         *
          * @param elementName
          * @param contentsEncoder
          */
@@ -52,13 +52,13 @@ abstract class LambdaTransformerBase extends TransformerBase {
 
         /**
          * Encodes an element, delegating encoding its sub-elements to the content encoder
-         * 
+         *
          * @param elementName
          * @param contentsEncoder
          * @param attributes
          */
         protected void element(String elementName, Runnable contentsEncoder,
-                Attributes attributes) {
+                               Attributes attributes) {
             if (attributes != null) {
                 start(elementName, attributes);
             } else {
@@ -72,7 +72,7 @@ abstract class LambdaTransformerBase extends TransformerBase {
 
         /**
          * Builds {@link Attributes} from a map
-         * 
+         *
          * @param map
          * @return
          */
@@ -88,7 +88,7 @@ abstract class LambdaTransformerBase extends TransformerBase {
 
         /**
          * Builds {@link Attributes} from an array of string pairs, key1, value1, key2, value2, ...
-         * 
+         *
          * @param map
          * @return
          */

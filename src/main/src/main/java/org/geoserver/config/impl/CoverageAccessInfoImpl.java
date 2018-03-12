@@ -15,7 +15,7 @@ public class CoverageAccessInfoImpl implements Serializable, CoverageAccessInfo 
     private static final long serialVersionUID = 8909514231467268331L;
 
     transient ThreadPoolExecutor threadPoolExecutor;
-    
+
     public static final int DEFAULT_MaxPoolSize = 5;
     int maxPoolSize = DEFAULT_MaxPoolSize;
 
@@ -27,14 +27,14 @@ public class CoverageAccessInfoImpl implements Serializable, CoverageAccessInfo 
 
     public static final QueueType DEFAULT_QUEUE_TYPE = QueueType.UNBOUNDED;
     QueueType queueType = DEFAULT_QUEUE_TYPE;
-    
+
     public static final long DEFAULT_ImageIOCacheThreshold = 10 * 1024;
     long imageIOCacheThreshold = DEFAULT_ImageIOCacheThreshold;
 
-    public CoverageAccessInfoImpl(){
+    public CoverageAccessInfoImpl() {
         threadPoolExecutor = null;
     }
-    
+
     public ThreadPoolExecutor getThreadPoolExecutor() {
         return threadPoolExecutor;
     }
@@ -74,16 +74,16 @@ public class CoverageAccessInfoImpl implements Serializable, CoverageAccessInfo 
     public void setQueueType(QueueType queueType) {
         this.queueType = queueType;
     }
-    
+
     public void setImageIOCacheThreshold(long imageIOCacheThreshold) {
         this.imageIOCacheThreshold = imageIOCacheThreshold;
     }
-    
+
     public long getImageIOCacheThreshold() {
         return imageIOCacheThreshold;
     }
-    
-    public void dispose(){
+
+    public void dispose() {
     }
 
     @Override
@@ -122,7 +122,7 @@ public class CoverageAccessInfoImpl implements Serializable, CoverageAccessInfo 
             return false;
         return true;
     }
-    
+
     public CoverageAccessInfoImpl clone() {
         try {
             return (CoverageAccessInfoImpl) super.clone();

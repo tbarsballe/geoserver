@@ -13,7 +13,7 @@ import org.geoserver.catalog.LayerInfo;
 
 /**
  * A Class to manage the WMS Layer structure
- * 
+ *
  * @author fabiania
  */
 class LayerTree {
@@ -28,10 +28,9 @@ class LayerTree {
         this.childrens = new ArrayList<LayerTree>();
         this.data = new ArrayList<LayerInfo>();
     }
-    
+
     /**
-     * @param name
-     *            String
+     * @param name String
      */
     public LayerTree(String name) {
         this.name = name;
@@ -40,15 +39,14 @@ class LayerTree {
     }
 
     /**
-     * @param c
-     *            Collection
+     * @param c Collection
      */
     public LayerTree(Collection<LayerInfo> c) {
         this.name = "";
         this.childrens = new ArrayList<LayerTree>();
         this.data = new ArrayList<LayerInfo>();
 
-        for (Iterator<LayerInfo> it = c.iterator(); it.hasNext();) {
+        for (Iterator<LayerInfo> it = c.iterator(); it.hasNext(); ) {
             LayerInfo layer = it.next();
             add(layer);
         }
@@ -94,7 +92,6 @@ class LayerTree {
 
     /**
      * @param string
-     *
      */
     public LayerTree getNode(String name) {
         for (LayerTree tmpNode : this.childrens) {

@@ -38,27 +38,39 @@ import org.springframework.context.ApplicationContext;
 /**
  * {@link MemoryBlobStore} implementation used for changing {@link CacheProvider} and wrapped {@link BlobStore} at runtime. An instance of this class
  * requires to call the setChanged() method for modifying its configuration.
- * 
+ *
  * @author Nicola Lagomarsini Geosolutions
  */
 public class ConfigurableBlobStore extends MemoryBlobStore implements BlobStore {
 
-    /** Logger instance for the class */
+    /**
+     * Logger instance for the class
+     */
     private final static Logger LOGGER = Logging.getLogger(ConfigurableBlobStore.class);
 
-    /** Delegate Object to use for executing the operations */
+    /**
+     * Delegate Object to use for executing the operations
+     */
     private BlobStore delegate;
 
-    /** {@link MemoryBlobStore} used for in memory caching */
+    /**
+     * {@link MemoryBlobStore} used for in memory caching
+     */
     private MemoryBlobStore memoryStore;
 
-    /** Cache provider to add to the {@link MemoryBlobStore} */
+    /**
+     * Cache provider to add to the {@link MemoryBlobStore}
+     */
     private CacheProvider cache;
 
-    /** {@link NullBlobStore} used for avoiding persistence */
+    /**
+     * {@link NullBlobStore} used for avoiding persistence
+     */
     private NullBlobStore nullStore;
 
-    /** {@link FileBlobStore} used as default by GWC */
+    /**
+     * {@link FileBlobStore} used as default by GWC
+     */
     private BlobStore defaultStore;
 
     /**
@@ -66,7 +78,9 @@ public class ConfigurableBlobStore extends MemoryBlobStore implements BlobStore 
      */
     private AtomicLong actualOperations;
 
-    /** Atomic boolean indicating if the BlobStore has been configured */
+    /**
+     * Atomic boolean indicating if the BlobStore has been configured
+     */
     private AtomicBoolean configured;
 
     /**
@@ -74,10 +88,14 @@ public class ConfigurableBlobStore extends MemoryBlobStore implements BlobStore 
      */
     private Map<String, CacheConfiguration> internalCacheConfigs;
 
-    /** Map containing mapping for {@link CacheProvider} names */
+    /**
+     * Map containing mapping for {@link CacheProvider} names
+     */
     private Map<String, String> cacheProvidersNames;
 
-    /** Map containing mapping for {@link CacheProvider}s */
+    /**
+     * Map containing mapping for {@link CacheProvider}s
+     */
     private Map<String, CacheProvider> cacheProviders;
 
     /**
@@ -86,7 +104,7 @@ public class ConfigurableBlobStore extends MemoryBlobStore implements BlobStore 
     private BlobStoreListenerList listeners = new BlobStoreListenerList();
 
     public ConfigurableBlobStore(BlobStore defaultStore, MemoryBlobStore memoryStore,
-            NullBlobStore nullStore) {
+                                 NullBlobStore nullStore) {
         // Initialization
         configured = new AtomicBoolean(false);
         actualOperations = new AtomicLong(0);
@@ -433,7 +451,7 @@ public class ConfigurableBlobStore extends MemoryBlobStore implements BlobStore 
 
     /**
      * Returns a map of all the cache provider instances, where the key is the {@link CacheProvider} class.
-     * 
+     *
      * @return a Map containing all the CacheProvider instances
      */
     public Map<String, CacheProvider> getCacheProviders() {
@@ -442,7 +460,7 @@ public class ConfigurableBlobStore extends MemoryBlobStore implements BlobStore 
 
     /**
      * Returns a map of all the cache provider description, where the key is the {@link CacheProvider} class.
-     * 
+     *
      * @return a Map containing all the CacheProvider descriptions
      */
     public Map<String, String> getCacheProvidersNames() {
@@ -451,7 +469,7 @@ public class ConfigurableBlobStore extends MemoryBlobStore implements BlobStore 
 
     /**
      * This method changes the {@link ConfigurableBlobStore} configuration. It can be used for changing cache configuration or the blobstore used.
-     * 
+     *
      * @param gwcConfig
      */
     public synchronized void setChanged(GWCConfig gwcConfig, boolean initialization) {
@@ -483,7 +501,7 @@ public class ConfigurableBlobStore extends MemoryBlobStore implements BlobStore 
                 LOGGER.warning("Wrong CacheProvider defined, using default one");
             }
             cacheProvider = GuavaCacheProvider.class.toString();
-            if(!initialization){
+            if (!initialization) {
                 gwcConfig.setCacheProviderClass(cacheProvider);
                 try {
                     GWC.get().saveConfig(gwcConfig);
@@ -563,7 +581,7 @@ public class ConfigurableBlobStore extends MemoryBlobStore implements BlobStore 
         for (BlobStoreListener listener : listeners.getListeners()) {
             delegate.addListener(listener);
         }
-        
+
         // Update the configured parameter
         configured.getAndSet(true);
     }
@@ -577,7 +595,7 @@ public class ConfigurableBlobStore extends MemoryBlobStore implements BlobStore 
 
     /**
      * Setter for the Tests
-     * 
+     *
      * @param cache
      */
     void setCache(CacheProvider cache) {

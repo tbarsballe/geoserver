@@ -28,18 +28,22 @@ import com.vividsolutions.jts.geom.Geometry;
 
 /**
  * The DownloadEstimatorProcess is used for checking if the download request does not exceeds the defined limits.
- * 
+ *
  * @author "Alessio Fabiani - alessio.fabiani@geo-solutions.it"
  */
 @DescribeProcess(title = "Estimator Process", description = "Checks if the input file does not exceed the limits")
 public class DownloadEstimatorProcess implements GSProcess {
 
-    /** The Constant LOGGER. */
+    /**
+     * The Constant LOGGER.
+     */
     private static final Logger LOGGER = Logging.getLogger(DownloadEstimatorProcess.class);
 
     private DownloadServiceConfigurationGenerator downloadServiceConfigurationGenerator;
 
-    /** The catalog. */
+    /**
+     * The catalog.
+     */
     private final Catalog catalog;
 
     /**
@@ -57,18 +61,18 @@ public class DownloadEstimatorProcess implements GSProcess {
 
     /**
      * This process returns a boolean value which indicates if the requested download does not exceed the imposed limits, if present
-     * 
-     * @param layerName the layer name
-     * @param filter the filter
-     * @param email the email
-     * @param outputFormat the output format
-     * @param targetCRS the target crs
-     * @param roiCRS the roi crs
-     * @param roi the roi
-     * @param clip the crop to geometry
-     * @param targetSizeX the size of the target image along the X axis
-     * @param targetSizeY the size of the target image along the Y axis
-     * @param bandIndices the band indices selected for output, in case of raster input
+     *
+     * @param layerName        the layer name
+     * @param filter           the filter
+     * @param email            the email
+     * @param outputFormat     the output format
+     * @param targetCRS        the target crs
+     * @param roiCRS           the roi crs
+     * @param roi              the roi
+     * @param clip             the crop to geometry
+     * @param targetSizeX      the size of the target image along the X axis
+     * @param targetSizeY      the size of the target image along the Y axis
+     * @param bandIndices      the band indices selected for output, in case of raster input
      * @param progressListener the progress listener
      * @return the boolean
      */

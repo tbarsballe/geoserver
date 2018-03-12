@@ -19,9 +19,9 @@ import org.geotools.xml.Node;
 
 /**
  * Binding object for the type http://www.opengis.net/wfs:BaseRequestType.
- *
  * <p>
- *        <pre>
+ * <p>
+ * <pre>
  *         <code>
  *  &lt;xsd:complexType abstract="true" name="BaseRequestType"&gt;
  *      &lt;xsd:annotation&gt;
@@ -80,6 +80,7 @@ import org.geotools.xml.Node;
  *
  *          </code>
  *         </pre>
+ *
  * @generated
  */
 public class BaseRequestTypeBinding extends AbstractComplexBinding {
@@ -113,7 +114,7 @@ public class BaseRequestTypeBinding extends AbstractComplexBinding {
      * @generated modifiable
      */
     public Object parse(ElementInstance instance, Node node, Object value)
-        throws Exception {
+            throws Exception {
         //this binding needs to be executed after the child
         EObject request = (EObject) value;
 

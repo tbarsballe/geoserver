@@ -57,10 +57,10 @@ public class StoreModelTest extends GeoServerWicketTestSupport {
 
     @Test
     public void testStoresModel() throws Exception {
-        WorkspaceDetachableModel ws = 
+        WorkspaceDetachableModel ws =
                 new WorkspaceDetachableModel(getCatalog().getWorkspaceByName("sf"));
         StoresModel model = new StoresModel(ws);
-        
+
         List<StoreInfo> stores = getCatalog().getStoresByWorkspace("ws", StoreInfo.class);
         for (StoreInfo s : stores) {
             assertTrue(model.getObject().contains(s));

@@ -14,36 +14,34 @@ import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 /**
- * 
- * Allows the use of ${GEOSERVER_DATA_DIR} inside properties to refer to the data directory, 
+ * Allows the use of ${GEOSERVER_DATA_DIR} inside properties to refer to the data directory,
  * irrespective of whether that system property has been set or not.
- * 
+ * <p>
  * Also makes locations relative to the GeoServer Data Directory.
- * 
- * @author niels
  *
+ * @author niels
  */
 public class GeoServerPropertyOverrideConfigurer extends PropertyOverrideConfigurer {
-    
+
     private static final Logger LOGGER = Logging.getLogger("org.geoserver.config");
-    
+
     protected GeoServerDataDirectory data;
-    
+
     public GeoServerPropertyOverrideConfigurer(GeoServerDataDirectory data) {
         this.data = data;
     }
-    
+
     @Override
     public void setLocation(Resource location) {
         try {
             location = SpringResourceAdaptor.relative(location, data.getResourceStore());
-        } catch(IOException e) {
+        } catch (IOException e) {
             LOGGER.log(Level.WARNING, "Error reading resource " + location, e);
         }
-        
+
         super.setLocation(location);
     }
-    
+
     @Override
     public void setLocations(Resource[] locations) {
         Resource[] newLocations = new Resource[locations.length];
@@ -58,7 +56,7 @@ public class GeoServerPropertyOverrideConfigurer extends PropertyOverrideConfigu
         }
         super.setLocations(newLocations);
     }
-    
+
     @Override
     protected String convertPropertyValue(String property) {
         return property.replace("${GEOSERVER_DATA_DIR}", data.root().getPath());

@@ -43,13 +43,14 @@ import com.vividsolutions.jts.geom.Polygon;
 
 /**
  * Various Utilities for Download Services.
- * 
+ *
  * @author Simone Giannecchini, GeoSolutions SAS
- * 
  */
 final class DownloadUtilities {
 
-    /** The LOGGER. */
+    /**
+     * The LOGGER.
+     */
     private static final Logger LOGGER = Logging.getLogger(DownloadUtilities.class);
 
     /**
@@ -62,7 +63,7 @@ final class DownloadUtilities {
      * This method checks whether or not the provided geometry is valid {@link Polygon} or not.
      * <p>
      * In case the egometry is not a valid polygon, it throws an {@link IllegalStateException};
-     * 
+     *
      * @param roi the {@link Geometry} to check.
      * @throws IllegalStateException
      */
@@ -85,18 +86,17 @@ final class DownloadUtilities {
 
     /**
      * Looks for a valid PPIO given the provided mime type and process parameter.
-     * 
+     *
      * @param p
      * @param context <p>
-     *        The lenient approach makes this method try harder to send back a result but it is preferrable to be non-lenient since otherwise we might
-     *        get s a PPIO which is not really what we need.
-     * 
-     * @param mime the mime-type for which we are searching for a {@link ProcessParameterIO}
+     *                The lenient approach makes this method try harder to send back a result but it is preferrable to be non-lenient since otherwise we might
+     *                get s a PPIO which is not really what we need.
+     * @param mime    the mime-type for which we are searching for a {@link ProcessParameterIO}
      * @param lenient whether or not trying to be lenient when returning a suitable {@link ProcessParameterIO}.
      * @return either <code>null</code> or the found
      */
     final static ProcessParameterIO find(Parameter<?> p, ApplicationContext context, String mime,
-            boolean lenient) {
+                                         boolean lenient) {
         //
         // lenient approach, try to give something back in any case
         //
@@ -151,7 +151,7 @@ final class DownloadUtilities {
      * This methods checks if the provided {@link FeatureCollection} is empty or not.
      * <p>
      * In case the provided feature collection is empty it throws an {@link IllegalStateException};
-     * 
+     *
      * @param features the {@link SimpleFeatureCollection} to check
      * @throws IllegalStateException
      */
@@ -164,7 +164,7 @@ final class DownloadUtilities {
 
     /**
      * Retrieves the native {@link CoordinateReferenceSystem} for the provided {@link ResourceInfo}.
-     * 
+     *
      * @param resourceInfo
      * @return the native {@link CoordinateReferenceSystem} for the provided {@link ResourceInfo}.
      * @throws IOException in case something bad happems!
@@ -184,9 +184,9 @@ final class DownloadUtilities {
 
     /**
      * Reprojects the input Geometry from its CRS to the defined CRS.
-     * 
+     *
      * @param geometry Geometry to transform
-     * @param crs target CRS for the transformation
+     * @param crs      target CRS for the transformation
      * @return a transformed Geometry object
      * @throws IOException
      */
@@ -233,14 +233,14 @@ final class DownloadUtilities {
 
     /**
      * Retrieves the underlying SLD {@link File} for the provided GeoSerevr Style.
-     * 
+     *
      * @param style the underlying SLD {@link File} for the provided GeoSerevr Style.
      * @return the underlying SLD {@link File} for the provided GeoSerevr Style.
      * @throws IOException
      */
     static Resource findStyle(StyleInfo style) throws IOException {
         GeoServerResourceLoader loader = GeoServerExtensions.bean(GeoServerResourceLoader.class);
-        Resource styleFile = loader.get(Paths.path("styles", style.getFilename())); 
+        Resource styleFile = loader.get(Paths.path("styles", style.getFilename()));
         if (styleFile != null && styleFile.getType() == Resource.Type.RESOURCE
                 && Resources.canRead(styleFile)) {
             if (LOGGER.isLoggable(Level.FINE)) {
@@ -273,7 +273,7 @@ final class DownloadUtilities {
 
     /**
      * Collect all the underlying SLD {@link File}s for the provided GeoServer layer.
-     * 
+     *
      * @param layerInfo the provided GeoServer layer.
      * @return all the underlying SLD {@link File}s for the provided GeoServer layer.
      * @throws IOException

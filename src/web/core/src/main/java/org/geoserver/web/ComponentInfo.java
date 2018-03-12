@@ -16,11 +16,10 @@ import org.apache.wicket.Component;
  * Subclasses of this class are used to implement user interface "extension points".
  * For an example see {@link MenuPageInfo}.
  * </p>
- * 
- * @author Andrea Aime, The Open Planning Project
- * @author Justin Deoliveira, The Open Planning Project
  *
  * @param <C>
+ * @author Andrea Aime, The Open Planning Project
+ * @author Justin Deoliveira, The Open Planning Project
  */
 @SuppressWarnings("serial")
 public abstract class ComponentInfo<C extends Component> implements Serializable {
@@ -45,53 +44,55 @@ public abstract class ComponentInfo<C extends Component> implements Serializable
      * Controls access to the component
      */
     ComponentAuthorizer authorizer = ComponentAuthorizer.ALLOW;
-   
+
     /**
      * The id of the component.
      */
     public String getId() {
         return id;
     }
+
     /**
      * Sets the id of the component.
      */
     public void setId(String id) {
         this.id = id;
     }
+
     /**
      * The i18n key for the title of the component.
      * <p>
      * The exact way this title is used depends one the component. For instance
      * if the component is a page, the title could be the used for a link to the
-     * page. If the component is a panel in a tabbed panel, the title might be 
+     * page. If the component is a panel in a tabbed panel, the title might be
      * the label on the tab.
      * </p>
      */
     public String getTitleKey() {
         return title;
     }
+
     /**
      * The i18n key for the title of the component.
      */
     public void setTitleKey(String title) {
         this.title = title;
     }
-    
+
     /**
      * The i18n key for the description of the component.
      * <p>
      * This description is often used as a tooltip, or some contextual help.
      * </p>
-     * 
      */
     public String getDescriptionKey() {
         return description;
     }
-    
+
     /**
      * Sets the description of the component.
      */
-    public void setDescriptionKey( String description ) {
+    public void setDescriptionKey(String description) {
         this.description = description;
     }
 
@@ -101,26 +102,26 @@ public abstract class ComponentInfo<C extends Component> implements Serializable
     public Class<C> getComponentClass() {
         return componentClass;
     }
-    
+
     /**
      * Sets the implementation class of the component.
      */
     public void setComponentClass(Class<C> componentClass) {
         this.componentClass = componentClass;
     }
-   
+
     /**
      * The authorizer that controls access to the component.
      */
     public ComponentAuthorizer getAuthorizer() {
         return authorizer;
     }
-    
+
     /**
      * Sets the authorizer that controls access to the component.
      */
     public void setAuthorizer(ComponentAuthorizer authorizer) {
         this.authorizer = authorizer;
     }
-   
+
 }

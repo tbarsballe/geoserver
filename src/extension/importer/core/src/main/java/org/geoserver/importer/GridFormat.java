@@ -24,9 +24,8 @@ import org.opengis.referencing.operation.OperationNotFoundException;
 
 /**
  * Base for formats that have a GridFormat implementation.
- *  
- * @author Justin Deoliveira, OpenGeo
  *
+ * @author Justin Deoliveira, OpenGeo
  */
 public class GridFormat extends RasterFormat {
 
@@ -50,7 +49,7 @@ public class GridFormat extends RasterFormat {
     @Override
     public boolean canRead(ImportData data) throws IOException {
         AbstractGridFormat gridFormat = gridFormat();
-        
+
         File f = file(data);
         if (f != null) {
             return gridFormat.accepts(f);
@@ -59,8 +58,8 @@ public class GridFormat extends RasterFormat {
     }
 
     @Override
-    public CoverageStoreInfo createStore(ImportData data, WorkspaceInfo workspace, Catalog catalog) 
-        throws IOException {
+    public CoverageStoreInfo createStore(ImportData data, WorkspaceInfo workspace, Catalog catalog)
+            throws IOException {
         File f = file(data);
         if (f == null) {
             return null;
@@ -68,53 +67,53 @@ public class GridFormat extends RasterFormat {
 
         CatalogBuilder cb = new CatalogBuilder(catalog);
         cb.setWorkspace(workspace);
-        
+
         CoverageStoreInfo store = cb.buildCoverageStore(data.getName());
         store.setURL(relativeDataFileURL(f.toURI().toURL().toString(), catalog));
         store.setType(gridFormat().getName());
-        
+
         return store;
     }
 
     @Override
-    public List<ImportTask> list(ImportData data, Catalog catalog, ProgressMonitor monitor) 
+    public List<ImportTask> list(ImportData data, Catalog catalog, ProgressMonitor monitor)
             throws IOException {
         AbstractGridCoverage2DReader reader = null;
         try {
             reader = gridReader(data);
-        
+
             List<ImportTask> tasks = new ArrayList<ImportTask>();
             if (reader != null) {
                 CatalogBuilder cb = new CatalogBuilder(catalog);
-    
+
                 //create a dummy store
                 CoverageStoreInfo store = cb.buildCoverageStore("dummy");
                 store.setType(gridFormat().getName());
                 cb.setStore(store);
-    
+
                 try {
                     CoverageInfo coverage = cb.buildCoverage(reader, null);
                     coverage.setStore(null);
                     coverage.setNamespace(null);
                     cb.setupBounds(coverage, reader);
-    
-                    LayerInfo layer = cb.buildLayer((ResourceInfo)coverage);
-    
+
+                    LayerInfo layer = cb.buildLayer((ResourceInfo) coverage);
+
                     ImportTask task = new ImportTask(data);
                     task.setLayer(layer);
                     tasks.add(task);
-    
+
                 } catch (OperationNotFoundException onfe) {
                     throw new ValidationException("Unable to process "
                             + " coordinate reference system of data. The specific"
                             + " problem is : " + onfe.getMessage(), onfe);
                 } catch (Exception e) {
-                    throw (IOException) new IOException(). initCause(e);
+                    throw (IOException) new IOException().initCause(e);
                 }
             }
             return tasks;
         } finally {
-            if(reader != null) {
+            if (reader != null) {
                 reader.dispose();
             }
         }
@@ -155,8 +154,8 @@ public class GridFormat extends RasterFormat {
                     try {
                         gridFormat = gridFormatClass.newInstance();
                     } catch (Exception e) {
-                        throw new RuntimeException("Unable to create instance of: " + 
-                            gridFormatClass.getSimpleName(), e);
+                        throw new RuntimeException("Unable to create instance of: " +
+                                gridFormatClass.getSimpleName(), e);
                     }
                 }
             }
@@ -189,5 +188,5 @@ public class GridFormat extends RasterFormat {
         return true;
     }
 
-    
+
 }

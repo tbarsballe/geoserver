@@ -12,13 +12,13 @@ import org.geotools.jdbc.JDBCCallbackFactory;
  */
 public class RequestMetricsFactory implements JDBCCallbackFactory {
 
-  @Override
-  public String getName() {
-    return "request-metrics";
-  }
+    @Override
+    public String getName() {
+        return "request-metrics";
+    }
 
-  @Override
-  public RequestMetricsCallback createReaderCallback() {
-    return new RequestMetricsCallback();
-  }
+    @Override
+    public RequestMetricsCallback createReaderCallback() {
+        return new RequestMetricsCallback();
+    }
 }

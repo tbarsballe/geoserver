@@ -14,14 +14,13 @@ import org.apache.wicket.model.Model;
 
 /**
  * Panel for editing.
- * 
- * @author Niels Charlier
  *
+ * @author Niels Charlier
  */
 public class PanelEdit extends Panel {
 
     private static final long serialVersionUID = -31594049414032328L;
-    
+
     public PanelEdit(String id, String resource, boolean isNew, String contents) {
         super(id);
         add(new FeedbackPanel("feedback").setOutputMarkupId(true));
@@ -29,7 +28,7 @@ public class PanelEdit extends Panel {
             private static final long serialVersionUID = 1019950718780805835L;
 
             @Override
-            protected void onComponentTag(final ComponentTag tag){
+            protected void onComponentTag(final ComponentTag tag) {
                 super.onComponentTag(tag);
                 if (!isNew) {
                     tag.put("readonly", "readonly");
@@ -39,7 +38,7 @@ public class PanelEdit extends Panel {
         add(new WebMarkupContainer("createDirectory").setVisible(isNew));
         add(new TextArea<String>("contents", new Model<String>(contents)));
     }
-        
+
     public String getContents() {
         return (String) get("contents").getDefaultModelObject();
     }
@@ -47,7 +46,7 @@ public class PanelEdit extends Panel {
     public String getResource() {
         return (String) get("resource").getDefaultModelObject();
     }
-        
+
     public FeedbackPanel getFeedbackPanel() {
         return (FeedbackPanel) get("feedback");
     }

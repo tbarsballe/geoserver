@@ -21,6 +21,7 @@ import org.geotools.xml.transform.TransformerBase;
 
 /**
  * Runs the transformer and outputs the capabilities
+ *
  * @author Andrea Aime, TOPP
  * TODO: This is a blatant copy of WFS GetCapabilities response. Find a way to share code.
  */
@@ -28,14 +29,14 @@ public class GetCapabilitiesResponse extends Response {
     public GetCapabilitiesResponse() {
         super(TransformerBase.class);
     }
-    
+
     /**
      * Makes sure this triggers only
      * </p>
      */
     public boolean canHandle(Operation operation) {
         // is this a wcs 1.1.1 or 1.1.0 one?
-        return "GetCapabilities".equalsIgnoreCase(operation.getId()) && 
+        return "GetCapabilities".equalsIgnoreCase(operation.getId()) &&
                 operation.getService().getId().equals("wcs") &&
                 (operation.getService().getVersion().toString().equals("1.1.0") ||
                         operation.getService().getVersion().toString().equals("1.1.1"));
@@ -49,7 +50,7 @@ public class GetCapabilitiesResponse extends Response {
             //look for an accepted format
             List formats = request.getAcceptFormats().getOutputFormat();
 
-            for (Iterator f = formats.iterator(); f.hasNext();) {
+            for (Iterator f = formats.iterator(); f.hasNext(); ) {
                 String format = (String) f.next();
 
                 if (format.endsWith("/xml")) {
@@ -63,7 +64,7 @@ public class GetCapabilitiesResponse extends Response {
     }
 
     public void write(Object value, OutputStream output, Operation operation)
-        throws IOException {
+            throws IOException {
         TransformerBase tx = (TransformerBase) value;
 
         try {
@@ -72,5 +73,5 @@ public class GetCapabilitiesResponse extends Response {
             throw (IOException) new IOException().initCause(e);
         }
     }
-    
+
 }

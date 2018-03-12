@@ -12,7 +12,7 @@ import org.springframework.web.client.RestOperations;
 
 /**
  * Base Class for GeoServer specific {@link RemoteTokenServices}. Each specific GeoServer OAuth2 Extension must implement its own.
- * 
+ *
  * @author Alessio Fabiani, GeoSoltuions S.A.S.
  */
 public abstract class GeoServerOAuthRemoteTokenServices extends RemoteTokenServices {

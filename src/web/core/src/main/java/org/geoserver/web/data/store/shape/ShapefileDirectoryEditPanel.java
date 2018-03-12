@@ -18,9 +18,8 @@ import org.geoserver.web.wicket.browser.ExtensionFileFilter;
 
 /**
  * Provides the form components for the directory of shapefiles store
- * 
+ *
  * @author Andrea Aime - GeoSolutions
- * 
  */
 @SuppressWarnings("serial")
 public class ShapefileDirectoryEditPanel extends ShapefileStoreEditPanel {

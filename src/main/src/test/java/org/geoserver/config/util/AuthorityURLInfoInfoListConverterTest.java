@@ -18,7 +18,7 @@ import org.junit.Test;
 
 public class AuthorityURLInfoInfoListConverterTest {
 
-    @Test 
+    @Test
     public void testFromString() {
         final String serialized = "[{\"name\":\"auth1\",\"href\":\"http://geoserver.org/auth1?\"},{\"name\":\"auth2\",\"href\":\"http://geoserver.org/auth2;someparam=somevalue&\"}]";
         List<AuthorityURLInfo> expected = new ArrayList<AuthorityURLInfo>();

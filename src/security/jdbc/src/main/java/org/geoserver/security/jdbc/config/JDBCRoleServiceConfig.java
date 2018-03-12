@@ -33,7 +33,7 @@ public class JDBCRoleServiceConfig extends JDBCSecurityServiceConfig
 
     @Override
     public void setAdminRoleName(String name) {
-        adminRoleName=name;
+        adminRoleName = name;
     }
 
     @Override

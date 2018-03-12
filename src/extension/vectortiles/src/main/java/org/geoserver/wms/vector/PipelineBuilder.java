@@ -90,26 +90,25 @@ class PipelineBuilder {
     }
 
     /**
-     * 
-     * @param renderingArea The extent of the tile in target CRS
-     * @param paintArea The extent of the tile in screen/pixel coordinates
-     * @param sourceCrs The CRS of the features
+     * @param renderingArea    The extent of the tile in target CRS
+     * @param paintArea        The extent of the tile in screen/pixel coordinates
+     * @param sourceCrs        The CRS of the features
      * @param overSampleFactor Divisor for simplification tolerance.
      * @return
      * @throws FactoryException
      */
     public static PipelineBuilder newBuilder(ReferencedEnvelope renderingArea, Rectangle paintArea,
-            CoordinateReferenceSystem sourceCrs, double overSampleFactor, int queryBuffer)
-                    throws FactoryException {
+                                             CoordinateReferenceSystem sourceCrs, double overSampleFactor, int queryBuffer)
+            throws FactoryException {
 
-        Context context = createContext(renderingArea, paintArea, sourceCrs, overSampleFactor, 
+        Context context = createContext(renderingArea, paintArea, sourceCrs, overSampleFactor,
                 queryBuffer);
         return new PipelineBuilder(context);
     }
 
     private static Context createContext(ReferencedEnvelope mapArea, Rectangle paintArea,
-            CoordinateReferenceSystem sourceCrs, double overSampleFactor, int queryBuffer)
-                    throws FactoryException {
+                                         CoordinateReferenceSystem sourceCrs, double overSampleFactor, int queryBuffer)
+            throws FactoryException {
 
         Context context = new Context();
         context.renderingArea = mapArea;
@@ -161,6 +160,7 @@ class PipelineBuilder {
 
     /**
      * Prepares features for subsequent manipulation
+     *
      * @return
      */
     public PipelineBuilder preprocess() {
@@ -170,6 +170,7 @@ class PipelineBuilder {
 
     /**
      * Flatten singleton feature collections
+     *
      * @return
      */
     public PipelineBuilder collapseCollections() {
@@ -248,6 +249,7 @@ class PipelineBuilder {
 
     /**
      * Transform from source CRS to target.
+     *
      * @param transformToScreenCoordinates If true, further transfrorm from target to screen coordinates
      * @return
      */
@@ -263,6 +265,7 @@ class PipelineBuilder {
 
     /**
      * Simplify the geometry
+     *
      * @param isTransformToScreenCoordinates Use screen coordinate space simplification tolerance
      * @return
      */
@@ -280,7 +283,8 @@ class PipelineBuilder {
 
     /**
      * Clip to the area of the tile plus its gutter
-     * @param clipToMapBounds Do we actually want to clip.  Does nothing if false.
+     *
+     * @param clipToMapBounds              Do we actually want to clip.  Does nothing if false.
      * @param transformToScreenCoordinates is the pipeline working in screen coordinates
      * @return
      */
@@ -293,12 +297,12 @@ class PipelineBuilder {
                 Rectangle screen = context.paintArea;
 
                 Envelope paintArea = new Envelope(0, screen.getWidth(), 0, screen.getHeight());
-                paintArea.expandBy(clipBBOXSizeIncreasePixels+context.queryBuffer);
+                paintArea.expandBy(clipBBOXSizeIncreasePixels + context.queryBuffer);
 
                 clippingEnvelope = paintArea;
             } else {
                 ReferencedEnvelope renderingArea = context.renderingArea;
-                renderingArea.expandBy((clipBBOXSizeIncreasePixels+context.queryBuffer) * context.pixelSizeInTargetCRS);
+                renderingArea.expandBy((clipBBOXSizeIncreasePixels + context.queryBuffer) * context.pixelSizeInTargetCRS);
                 clippingEnvelope = renderingArea;
             }
 
@@ -368,13 +372,12 @@ class PipelineBuilder {
     /**
      * Does the normal clipping, but removes degenerative geometries. For example, a polygon-polygon intersection can result in polygons (normal), but
      * also points and line (degenerative).
-     * 
+     * <p>
      * This will remove the degenerative geometries from the result. ie. input is polygon(s), only polygons are returned input is line(s), only lines
      * are returned input is point(s), only points returned
-     * 
+     * <p>
      * For mixed input (GeometryCollection), we do the above for each component in the GeometryCollection. i.e. for GeometryCollection( POLYGON(...),
      * LINESTRING(...) ) it would ensure that the POLYGON(...) only adds Polygons and that the LINESTRING() only adds Lines
-     * 
      */
     public static final class ClipRemoveDegenerateGeometries extends Clip {
 

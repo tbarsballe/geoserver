@@ -12,7 +12,7 @@ import org.geoserver.security.config.SecurityNamedServiceConfig;
 
 /**
  * Security provider for a security interceptor fitler
- * 
+ *
  * @author mcr
  */
 public class GeoServerSecurityInterceptorProvider extends AbstractFilterProvider {

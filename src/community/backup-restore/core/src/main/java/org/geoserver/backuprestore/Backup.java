@@ -57,9 +57,8 @@ import com.thoughtworks.xstream.XStream;
 
 /**
  * Primary controller/facade of the backup and restore subsystem.
- * 
- * @author Alessio Fabiani, GeoSolutions
  *
+ * @author Alessio Fabiani, GeoSolutions
  */
 @SuppressWarnings("rawtypes")
 public class Backup extends JobExecutionListenerSupport
@@ -69,7 +68,7 @@ public class Backup extends JobExecutionListenerSupport
 
     /* Job Parameters Keys **/
     public static final String PARAM_TIME = "time";
-    
+
     public static final String PARAM_JOB_NAME = "job.execution.name";
 
     public static final String PARAM_OUTPUT_FILE_PATH = "output.file.path";
@@ -77,7 +76,7 @@ public class Backup extends JobExecutionListenerSupport
     public static final String PARAM_INPUT_FILE_PATH = "input.file.path";
 
     public static final String PARAM_CLEANUP_TEMP = "BK_CLEANUP_TEMP";
-    
+
     public static final String PARAM_DRY_RUN_MODE = "BK_DRY_RUN";
 
     public static final String PARAM_BEST_EFFORT_MODE = "BK_BEST_EFFORT";
@@ -89,7 +88,9 @@ public class Backup extends JobExecutionListenerSupport
 
     public static final String RESTORE_CATALOG_KEY = "restore.catalog";
 
-    /** catalog */
+    /**
+     * catalog
+     */
     Catalog catalog;
 
     GeoServer geoServer;
@@ -320,10 +321,9 @@ public class Backup extends JobExecutionListenerSupport
     /**
      * @return
      * @throws IOException
-     * 
      */
     public BackupExecutionAdapter runBackupAsync(final Resource archiveFile,
-            final boolean overwrite, final Filter filter, final Hints params) throws IOException {
+                                                 final boolean overwrite, final Filter filter, final Hints params) throws IOException {
         // Check if archiveFile exists
         if (archiveFile.file().exists()) {
             if (!overwrite && FileUtils.sizeOf(archiveFile.file()) > 0) {
@@ -409,12 +409,10 @@ public class Backup extends JobExecutionListenerSupport
 
     /**
      * @return
-     * @return
      * @throws IOException
-     * 
      */
     public RestoreExecutionAdapter runRestoreAsync(final Resource archiveFile, final Filter filter,
-            final Hints params) throws IOException {
+                                                   final Hints params) throws IOException {
         // Extract archive into a temporary folder
         Resource tmpDir = BackupUtils.geoServerTmpDir(getGeoServerDataDirectory());
         BackupUtils.extractTo(archiveFile, tmpDir);
@@ -494,7 +492,7 @@ public class Backup extends JobExecutionListenerSupport
 
     /**
      * Stop a running Backup/Restore Execution
-     * 
+     *
      * @param executionId
      * @return
      * @throws NoSuchJobExecutionException
@@ -523,7 +521,7 @@ public class Backup extends JobExecutionListenerSupport
                     jobRepository.update(jobExecution);
                 }
             }
-            
+
             // Release locks on GeoServer Configuration:
             try {
                 List<BackupRestoreCallback> callbacks = GeoServerExtensions.extensions(BackupRestoreCallback.class);
@@ -538,7 +536,7 @@ public class Backup extends JobExecutionListenerSupport
 
     /**
      * Restarts a running Backup/Restore Execution
-     * 
+     *
      * @param executionId
      * @return
      * @throws JobInstanceAlreadyCompleteException
@@ -555,7 +553,7 @@ public class Backup extends JobExecutionListenerSupport
 
     /**
      * Abort a running Backup/Restore Execution
-     * 
+     *
      * @param executionId
      * @throws NoSuchJobExecutionException
      * @throws JobExecutionAlreadyRunningException
@@ -579,7 +577,7 @@ public class Backup extends JobExecutionListenerSupport
                 jobExecution.setEndTime(new Date());
                 jobRepository.update(jobExecution);
             }
-            
+
             // Release locks on GeoServer Configuration:
             try {
                 List<BackupRestoreCallback> callbacks = GeoServerExtensions.extensions(BackupRestoreCallback.class);
@@ -603,12 +601,12 @@ public class Backup extends JobExecutionListenerSupport
                     final Set<String> key = ((Hints.OptionKey) param.getKey()).getOptions();
                     for (String k : key) {
                         switch (k) {
-                        case PARAM_CLEANUP_TEMP:                            
-                        case PARAM_DRY_RUN_MODE:
-                        case PARAM_BEST_EFFORT_MODE:
-                            if (paramsBuilder.toJobParameters().getString(k) == null) {
-                                paramsBuilder.addString(k, "true");
-                            }
+                            case PARAM_CLEANUP_TEMP:
+                            case PARAM_DRY_RUN_MODE:
+                            case PARAM_BEST_EFFORT_MODE:
+                                if (paramsBuilder.toJobParameters().getString(k) == null) {
+                                    paramsBuilder.addString(k, "true");
+                                }
                         }
                     }
                 }
@@ -634,7 +632,7 @@ public class Backup extends JobExecutionListenerSupport
         xs.alias("backup", BackupExecutionAdapter.class);
 
         // security
-        xs.allowTypes(new Class[] { BackupExecutionAdapter.class });
+        xs.allowTypes(new Class[]{BackupExecutionAdapter.class});
         xs.allowTypeHierarchy(Resource.class);
 
         return xp;

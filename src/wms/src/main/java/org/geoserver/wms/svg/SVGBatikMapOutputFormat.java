@@ -35,24 +35,23 @@ import org.w3c.dom.Document;
 /**
  * Renders svg using the Batik SVG Toolkit. An SVG context is created for a map and then passed of
  * to {@link org.geotools.renderer.lite.StreamingRenderer}.
- * 
+ *
  * @author Justin Deoliveira, The Open Planning Project
- * 
  */
 public final class SVGBatikMapOutputFormat implements GetMapOutputFormat {
-    
-    /** 
+
+    /**
      * Default capabilities for SVG format.
-     * 
+     * <p>
      * <p>
      * <ol>
-     *         <li>tiled = unsupported</li>
-     *         <li>multipleValues = unsupported</li>
-     *         <li>paletteSupported = unsupported</li>
-     *         <li>transparency = supported</li>
+     * <li>tiled = unsupported</li>
+     * <li>multipleValues = unsupported</li>
+     * <li>paletteSupported = unsupported</li>
+     * <li>transparency = supported</li>
      * </ol>
      */
-    private static MapProducerCapabilities CAPABILITIES= new MapProducerCapabilities(false, false, false, true, null);
+    private static MapProducerCapabilities CAPABILITIES = new MapProducerCapabilities(false, false, false, true, null);
 
     private final WMS wms;
 
@@ -77,7 +76,6 @@ public final class SVGBatikMapOutputFormat implements GetMapOutputFormat {
     }
 
     /**
-     * 
      * @see org.geoserver.wms.GetMapOutputFormat#produceMap(org.geoserver.wms.WMSMapContent)
      */
     public BatikSVGMap produceMap(WMSMapContent mapContent) throws ServiceException, IOException {
@@ -120,7 +118,7 @@ public final class SVGBatikMapOutputFormat implements GetMapOutputFormat {
     }
 
     public SVGGraphics2D createSVGMap(final StreamingRenderer renderer,
-            final WMSMapContent mapContent) throws ServiceException, IOException {
+                                      final WMSMapContent mapContent) throws ServiceException, IOException {
         try {
             MapContent map = renderer.getMapContent();
             double width = -1;

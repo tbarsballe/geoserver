@@ -10,9 +10,8 @@ import com.google.common.base.Predicate;
 
 /**
  * Matches a request by a certain IP address
- * 
+ *
  * @author Andrea Aime - GeoSolutions
- * 
  */
 public class IpRequestMatcher implements Predicate<Request> {
 

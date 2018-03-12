@@ -110,7 +110,7 @@ final class TimeVersioningCallback implements GetFeatureCallback, TransactionCal
     private List<SimpleFeature> getMostRecentFeatures(SimpleFeatureCollection timeSortedFeatures, FeatureTypeInfo featureTypeInfo) {
         String nameProperty = TimeVersioning.getNamePropertyName(featureTypeInfo);
         Map<Object, SimpleFeature> featuresIndexedById = new HashMap<>();
-        try(SimpleFeatureIterator iterator = timeSortedFeatures.features()) {
+        try (SimpleFeatureIterator iterator = timeSortedFeatures.features()) {
             while (iterator.hasNext()) {
                 SimpleFeature feature = iterator.next();
                 Object id = feature.getAttribute(nameProperty);
@@ -126,7 +126,7 @@ final class TimeVersioningCallback implements GetFeatureCallback, TransactionCal
      */
     private TransactionElement transformUpdate(TransactionRequest request, Update update, Date referenceTime) throws IOException {
         FeatureTypeInfo featureTypeInfo = getFeatureTypeInfo(new NameImpl(update.getTypeName()));
-        if(!TimeVersioning.isEnabled(featureTypeInfo)) {
+        if (!TimeVersioning.isEnabled(featureTypeInfo)) {
             return update;
         }
         SimpleFeatureCollection features = getTransactionFeatures(update);
@@ -220,7 +220,7 @@ final class TimeVersioningCallback implements GetFeatureCallback, TransactionCal
             } else if (element instanceof Delete) {
                 Delete delete = (Delete) element;
                 FeatureTypeInfo featureTypeInfo = getFeatureTypeInfo(new NameImpl(delete.getTypeName()));
-                if(TimeVersioning.isEnabled(featureTypeInfo)) {
+                if (TimeVersioning.isEnabled(featureTypeInfo)) {
                     Filter filter = delete.getFilter();
                     Filter adaptedFilter = VersioningFilterAdapter.adapt(featureTypeInfo, filter);
                     delete.setFilter(adaptedFilter);

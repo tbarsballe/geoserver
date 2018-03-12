@@ -38,7 +38,7 @@ public class GdalWpsTest extends WPSTestSupport {
     @Override
     protected void onSetUp(SystemTestData testData) throws Exception {
         super.onSetUp(testData);
-        
+
         addWcs11Coverages(testData);
     }
 
@@ -63,7 +63,7 @@ public class GdalWpsTest extends WPSTestSupport {
         String base = "/wps:ProcessDescriptions/ProcessDescription/ProcessOutputs";
         for (Format f : delegate.getFormats()) {
             assertXpathExists(base + "/Output[1]/ComplexOutput/Supported/Format[MimeType='"
-                        + delegate.getMimeType(f.getGeoserverFormat()) + "; subtype=" + f.getGeoserverFormat() + "']", d);
+                    + delegate.getMimeType(f.getGeoserverFormat()) + "; subtype=" + f.getGeoserverFormat() + "']", d);
         }
     }
 
@@ -111,7 +111,7 @@ public class GdalWpsTest extends WPSTestSupport {
                 GridCoverage2D gc = format.getReader(is).read(null);
 
                 assertTrue(new Envelope(-145.4, 145.6, -41.8, -42.1).contains(new ReferencedEnvelope(gc.getEnvelope())));
-                
+
                 double[] valueInside = (double[]) gc.evaluate(new DirectPosition2D(145.55, -42));
                 assertEquals(615.0, valueInside[0], 1E-12);
                 double[] valueOutside = (double[]) gc.evaluate(new DirectPosition2D(145.57, -41.9));
@@ -167,22 +167,22 @@ public class GdalWpsTest extends WPSTestSupport {
         boolean valueInsideFound = false, valueOutsideFound = false;
         double x1 = -145.4, x2 = 145.6, y1 = -42.1, y2 = -41.8;
         while ((line = reader.readLine()) != null) {
-           String[] cols = line.split(" ");
-           assertTrue(cols.length == 3);
+            String[] cols = line.split(" ");
+            assertTrue(cols.length == 3);
 
-           double x = round(Double.valueOf(cols[0]));
-           double y = round(Double.valueOf(cols[1]));
-           double value = Double.valueOf(cols[2]);
-           assertTrue(x >= x1 && x <= x2);
-           assertTrue(y >= y1 && y <= y2);
-           if (x == 145.55 && y == -42 && !valueInsideFound) {
+            double x = round(Double.valueOf(cols[0]));
+            double y = round(Double.valueOf(cols[1]));
+            double value = Double.valueOf(cols[2]);
+            assertTrue(x >= x1 && x <= x2);
+            assertTrue(y >= y1 && y <= y2);
+            if (x == 145.55 && y == -42 && !valueInsideFound) {
                 assertEquals(550.0, value, 1E-12);
                 valueInsideFound = true;
-           }
-           if (x == 145.57 && y == -41.9 && !valueOutsideFound) {
+            }
+            if (x == 145.57 && y == -41.9 && !valueOutsideFound) {
                 assertEquals(55537.0, value, 1E-12);
                 valueOutsideFound = true;
-           }
+            }
         }
 
         assertTrue(valueInsideFound);

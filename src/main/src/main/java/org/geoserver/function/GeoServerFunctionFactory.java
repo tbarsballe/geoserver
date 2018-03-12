@@ -20,7 +20,7 @@ import org.opengis.filter.expression.Literal;
 /**
  * This class implements the {@link FunctionFactory} interface and can be used for creating a new Function from the input
  * parameters. Actually it implements only the {@link IsInstanceOf} function.
- * 
+ *
  * @author Nicola Lagomarsini geosolutions
  */
 public class GeoServerFunctionFactory implements FunctionFactory {

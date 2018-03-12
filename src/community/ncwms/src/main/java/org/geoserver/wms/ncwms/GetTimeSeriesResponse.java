@@ -56,6 +56,7 @@ public class GetTimeSeriesResponse extends Response {
     private static final Logger LOGGER = Logging.getLogger(GetTimeSeriesResponse.class);
 
     protected static final Set<String> outputFormats = new HashSet<String>();
+
     static {
         outputFormats.add("text/csv");
         outputFormats.add("image/png");
@@ -116,7 +117,7 @@ public class GetTimeSeriesResponse extends Response {
 
     @SuppressWarnings("rawtypes")
     private void writeChart(GetFeatureInfoRequest request, FeatureCollectionType results,
-            OutputStream output, String mimeType) throws IOException {
+                            OutputStream output, String mimeType) throws IOException {
         final TimeSeries series = new TimeSeries("time", Millisecond.class);
         String valueAxisLabel = "Value";
         String title = "Time series";
@@ -152,7 +153,7 @@ public class GetTimeSeriesResponse extends Response {
 
     @SuppressWarnings("rawtypes")
     private void writeCsv(GetFeatureInfoRequest request, FeatureCollectionType results,
-            OutputStream output) {
+                          OutputStream output) {
         Charset charSet = wms.getCharSet();
         OutputStreamWriter osw = new OutputStreamWriter(output, charSet);
         PrintWriter writer = new PrintWriter(osw);

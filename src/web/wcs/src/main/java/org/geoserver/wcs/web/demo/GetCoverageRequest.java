@@ -16,16 +16,15 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 /**
  * A simple model backing the WCS GetCoverage builder GUI
- * 
+ *
  * @author Andrea Aime - GeoSolutions
- * 
  */
 class GetCoverageRequest implements Serializable {
     private static final long serialVersionUID = -1473018934663380028L;
 
     enum Version {
         v1_0_0("1.0.0"), v1_1_1("1.1.1");
-        
+
         String name;
 
         Version(String name) {
@@ -36,7 +35,9 @@ class GetCoverageRequest implements Serializable {
         public String toString() {
             return name;
         }
-    };
+    }
+
+    ;
 
     Version version = Version.v1_0_0;
 

@@ -27,10 +27,10 @@ public class NetCDFCRSOverridingAuthorityFactoryTest extends GeoServerSystemTest
             FileUtils.deleteDirectory(projectionFileDir);
             assertTrue("Unable to create projection dir: " + projectionFileDir, projectionFileDir.mkdir());
         }
-        testData.copyTo(getClass().getResourceAsStream(netcdfProjectionsDefinition), 
-            "user_projections/" + netcdfProjectionsDefinition);
+        testData.copyTo(getClass().getResourceAsStream(netcdfProjectionsDefinition),
+                "user_projections/" + netcdfProjectionsDefinition);
     }
-    
+
     @Test
     public void testCRSOverridingFactory() throws Exception {
         CoordinateReferenceSystem crs = CRS.decode("EPSG:971801");

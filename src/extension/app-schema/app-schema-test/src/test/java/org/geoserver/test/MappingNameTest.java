@@ -12,9 +12,8 @@ import org.junit.Test;
 /**
  * Tests whether the use of special characters in a mapping name can be used for feature chaining
  * (using quotes in LinkElement).
- * 
+ *
  * @author Niels Charlier, Curtin University of Technology
- * 
  */
 
 public class MappingNameTest extends AbstractAppSchemaTestSupport {

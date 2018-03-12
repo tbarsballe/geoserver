@@ -35,28 +35,27 @@ import org.geotools.util.logging.Logging;
  * @author Rob Hranac, TOPP
  * @author Chris Holmes, TOPP
  * @author Justin Deoliveira, The Open Planning Project, jdeolive@openplans.org
- *
  * @version $Id$
  */
 public class DescribeFeatureType {
     /**
-    * Catalog reference
-    */
+     * Catalog reference
+     */
     private Catalog catalog;
 
     /**
      * WFS service
      */
     private WFSInfo wfs;
-    
+
     private static Logger LOGGER = Logging.getLogger(DescribeFeatureType.class);
 
     /**
-         * Creates a new wfs 1.0/1.1 DescribeFeatureType operation.
-         *
-         * @param wfs The wfs configuration
-         * @param catalog The geoserver catalog.
-         */
+     * Creates a new wfs 1.0/1.1 DescribeFeatureType operation.
+     *
+     * @param wfs     The wfs configuration
+     * @param catalog The geoserver catalog.
+     */
     public DescribeFeatureType(WFSInfo wfs, Catalog catalog) {
         this.catalog = catalog;
         this.wfs = wfs;
@@ -79,7 +78,7 @@ public class DescribeFeatureType {
     }
 
     public FeatureTypeInfo[] run(DescribeFeatureTypeRequest request)
-        throws WFSException {
+            throws WFSException {
         List<QName> names = new ArrayList<QName>(request.getTypeNames());
 
         final boolean citeConformance = getWFS().isCiteCompliant();
@@ -128,7 +127,7 @@ public class DescribeFeatureType {
                         if (skipMisconfigured) {
                             LOGGER.log(Level.WARNING,
                                     "Skipping DescribeFeature for " + ftInfo.getPrefixedName()
-                                        + " because we couldn't connect",
+                                            + " because we couldn't connect",
                                     ioe);
                         } else {
                             throw new WFSException(ioe);
@@ -150,7 +149,7 @@ public class DescribeFeatureType {
                 } else {
                     typeInfo = catalog.getFeatureTypeByName(namespaceURI, typeName);
                 }
-               
+
 
                 if (typeInfo != null && typeInfo.enabled()) {
                     requested.add(typeInfo);

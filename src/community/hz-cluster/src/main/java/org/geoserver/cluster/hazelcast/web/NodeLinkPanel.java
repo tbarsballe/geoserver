@@ -30,12 +30,12 @@ public class NodeLinkPanel extends Panel {
             protected void onClick(AjaxRequestTarget target) {
                 //dialog.show(target);
                 dialog.showOkCancel(target, new GeoServerDialog.DialogDelegate() {
-                    
+
                     @Override
                     protected boolean onSubmit(AjaxRequestTarget target, Component contents) {
                         return true;
                     }
-                    
+
                     @Override
                     protected Component getContents(String id) {
                         return new NodeInfoDialog(id);
@@ -43,9 +43,9 @@ public class NodeLinkPanel extends Panel {
                 });
             }
         });
-        
+
         add(new Label("cluster", cluster.getHz().getConfig().getGroupConfig().getName()));
-        
+
         add(dialog = new GeoServerDialog("dialog"));
         dialog.setInitialHeight(350);
         dialog.setInitialWidth(300);

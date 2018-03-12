@@ -85,7 +85,8 @@ public class GeoGigWebAPIIntegrationTest extends GeoServerSystemTestSupport {
 
     private static final Random rnd = new Random();
 
-    public static @ClassRule GeoGigTestData geogigData = new GeoGigTestData();
+    public static @ClassRule
+    GeoGigTestData geogigData = new GeoGigTestData();
 
     @Override
     protected void onSetUp(SystemTestData testData) throws Exception {

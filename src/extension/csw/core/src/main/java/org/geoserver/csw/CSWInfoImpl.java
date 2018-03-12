@@ -10,21 +10,21 @@ import org.geoserver.config.impl.ServiceInfoImpl;
 
 /**
  * CSW information implementation
- * 
+ *
  * @author Andrea Aime, GeoSolutions
  */
 @SuppressWarnings("unchecked")
 public class CSWInfoImpl extends ServiceInfoImpl implements CSWInfo {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = -986573241436434750L;
-    
+
     boolean canonicalSchemaLocation;
-    
-    public CSWInfoImpl(){
-        
+
+    public CSWInfoImpl() {
+
     }
 
     @Override

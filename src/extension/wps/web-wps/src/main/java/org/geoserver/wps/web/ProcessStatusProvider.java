@@ -35,7 +35,7 @@ import org.xml.sax.helpers.NamespaceSupport;
 
 /**
  * Provides a filtered, sorted view over the running/recently completed processes
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 @SuppressWarnings("serial")
@@ -54,8 +54,8 @@ public class ProcessStatusProvider extends GeoServerDataProvider<ExecutionStatus
             // when really it isn't sortable or searchable
             return false;
         }
-        
-        
+
+
     };
 
     static final Property<ExecutionStatus> NODE = new BeanProperty<ExecutionStatus>("node",
@@ -80,9 +80,9 @@ public class ProcessStatusProvider extends GeoServerDataProvider<ExecutionStatus
 
     static final List<Property<ExecutionStatus>> PROPERTIES = Arrays.asList(TYPE, NODE, USER,
             PROCESS, CREATED, PHASE, PROGRESS, TASK);
-    
+
     private long first;
-    
+
     private long count;
 
     @Override
@@ -97,7 +97,6 @@ public class ProcessStatusProvider extends GeoServerDataProvider<ExecutionStatus
         return PROPERTIES;
     }
 
-    
 
     @Override
     protected Filter getFilter() {
@@ -123,7 +122,7 @@ public class ProcessStatusProvider extends GeoServerDataProvider<ExecutionStatus
                 ProcessStatusTracker.class);
         ProcessStatusStore store = tracker.getStore();
         Filter ret = Filter.INCLUDE;
-        if(store.supportsPredicate()) {
+        if (store.supportsPredicate()) {
             for (String keyword : keywords) {
                 Filter propContains = Predicates.fullTextSearch(keyword);
                 // chain the filters together
@@ -133,21 +132,21 @@ public class ProcessStatusProvider extends GeoServerDataProvider<ExecutionStatus
                     ret = or(ret, propContains);
                 }
             }
-        }else {
-            if(keywords.length>0) {
+        } else {
+            if (keywords.length > 0) {
                 List<Filter> likes = new ArrayList<Filter>();
-                for(String word:keywords) {
-                    for(Property<?> prop:getProperties()) {
-                        if(prop.isSearchable()) {
-                            if(prop.equals(NODE)||
-                               prop.equals(PHASE)||
-                               prop.equals(TASK)||
-                               prop.equals(USER)||
-                               prop.equals(PROCESS)) {
-                                likes.add(FF.like(FF.property(prop.getName()), "*"+word+"*"));
+                for (String word : keywords) {
+                    for (Property<?> prop : getProperties()) {
+                        if (prop.isSearchable()) {
+                            if (prop.equals(NODE) ||
+                                    prop.equals(PHASE) ||
+                                    prop.equals(TASK) ||
+                                    prop.equals(USER) ||
+                                    prop.equals(PROCESS)) {
+                                likes.add(FF.like(FF.property(prop.getName()), "*" + word + "*"));
                             }
                             //TODO: support temporal properties if I can work out what searching means
-                                
+
                         }
                     }
                 }
@@ -163,24 +162,24 @@ public class ProcessStatusProvider extends GeoServerDataProvider<ExecutionStatus
                 ProcessStatusTracker.class);
         ProcessStatusStore store = tracker.getStore();
         Query query = new Query("status", getFilter());
-        if(count>0) {
+        if (count > 0) {
             query.setStartIndex((int) first);
             query.setMaxFeatures((int) count);
         }
         SortParam sort = getSort();
-        if(sort!=null) {
+        if (sort != null) {
             SortByImpl[] sortBys = new SortByImpl[1];
             final Property<?> property = getProperty(sort);
-            if(property.isSearchable()) {//we really need another flag
+            if (property.isSearchable()) {//we really need another flag
                 FF.sort(property.getName(), SortOrder.ASCENDING);
-                if(!sort.isAscending()) {
+                if (!sort.isAscending()) {
                     sortBys[0].setSortOrder(SortOrder.DESCENDING);
                 }
                 query.setSortBy(sortBys);
 
             }
         }
-        LOGGER.fine("built query "+query+" to filter statuses");
+        LOGGER.fine("built query " + query + " to filter statuses");
         return store.list(query);
     }
 
@@ -194,7 +193,5 @@ public class ProcessStatusProvider extends GeoServerDataProvider<ExecutionStatus
         return it;
     }
 
-   
-    
-    
+
 }

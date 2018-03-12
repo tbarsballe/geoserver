@@ -25,7 +25,7 @@ import org.geotools.util.logging.Logging;
 
 /**
  * Handles input and output of feature collections as zipped files.
- * 
+ *
  * @author "Alessio Fabiani - alessio.fabiani@geo-solutions.it"
  * @author Simone Giannecchini, GeoSolutions SAS
  */
@@ -35,12 +35,14 @@ public class ZipArchivePPIO extends BinaryPPIO {
 
     private final static Logger LOGGER = Logging.getLogger(ZipArchivePPIO.class);
 
-    /** Parameter indicating the compression level to use */
+    /**
+     * Parameter indicating the compression level to use
+     */
     private int compressionLevel;
 
     /**
      * Instantiates a new zip archive ppio.
-     * 
+     *
      * @param resources the resources
      */
     public ZipArchivePPIO(int compressionLevel) {
@@ -57,7 +59,6 @@ public class ZipArchivePPIO extends BinaryPPIO {
 
     /**
      * Default constructor using ZipOutputStream.STORED compression level.
-     * 
      */
     public ZipArchivePPIO() {
         this(ZipOutputStream.STORED);
@@ -68,9 +69,9 @@ public class ZipArchivePPIO extends BinaryPPIO {
 
     /**
      * Encodes the output file.
-     * 
+     *
      * @param output the output
-     * @param os the os
+     * @param os     the os
      * @throws Exception the exception
      */
     @SuppressWarnings("rawtypes")
@@ -138,7 +139,7 @@ public class ZipArchivePPIO extends BinaryPPIO {
 
     /**
      * Gets the file extension.
-     * 
+     *
      * @return the file extension
      */
     @Override
@@ -148,11 +149,11 @@ public class ZipArchivePPIO extends BinaryPPIO {
 
     /**
      * This method zip the provided file to the provided {@link ZipOutputStream}.
-     * 
+     * <p>
      * <p>
      * It throws {@link IllegalArgumentException} in case the provided file does not exists or is not a readable file.
-     * 
-     * @param file the {@link File} to zip
+     *
+     * @param file   the {@link File} to zip
      * @param zipout the {@link ZipOutputStream} to write to
      * @throws IOException in case something bad happen
      */
@@ -165,10 +166,10 @@ public class ZipArchivePPIO extends BinaryPPIO {
 
     /**
      * This method tells us if the provided {@link File} is a Zip File.
-     * 
+     * <p>
      * <p>
      * It throws {@link IllegalArgumentException} in case the provided file does not exists or is not a readable file.
-     * 
+     *
      * @param file the {@link File} to check for zip
      * @throws IOException in case something bad happen
      */
@@ -207,11 +208,11 @@ public class ZipArchivePPIO extends BinaryPPIO {
 
     /**
      * This method zip the provided file to the provided {@link ZipOutputStream}.
-     * 
+     * <p>
      * <p>
      * It throws {@link IllegalArgumentException} in case the provided file does not exists or is not a readable file.
-     * 
-     * @param file the {@link File} to zip
+     *
+     * @param file   the {@link File} to zip
      * @param zipout the {@link ZipOutputStream} to write to
      * @param buffer the buffer to use for reading/writing
      * @throws IOException in case something bad happen

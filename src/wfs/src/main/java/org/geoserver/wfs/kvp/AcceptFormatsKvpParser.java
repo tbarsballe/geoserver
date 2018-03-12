@@ -17,7 +17,6 @@ import org.geoserver.wfs.WFSInfo;
  * an instance of {@link net.opengis.ows.v1_0_0.AcceptFormatsType}.
  *
  * @author Justin Deoliveira, The Open Planning Project
- *
  */
 public class AcceptFormatsKvpParser extends org.geoserver.ows.kvp.AcceptFormatsKvpParser {
 

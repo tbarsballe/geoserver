@@ -131,7 +131,7 @@ public class GeoServerTileLayerTest {
     }
 
     @Before
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings({"unchecked", "rawtypes"})
     public void setUp() throws Exception {
         mockGWC = mock(GWC.class);
         MemoryLockProvider lockProvider = new MemoryLockProvider();
@@ -390,7 +390,7 @@ public class GeoServerTileLayerTest {
         // these properties are missing from LayerGroupInfo interface
         assertEquals("Group title", title);
         assertEquals("Group abstract", description);
-        
+
         assertEquals(0, keywords.size());
     }
 
@@ -460,7 +460,7 @@ public class GeoServerTileLayerTest {
     }
 
     @Test
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings({"unchecked", "rawtypes"})
     public void testGetFeatureInfo() throws Exception {
 
         layerInfoTileLayer = new GeoServerTileLayer(layerInfo, defaults, gridSetBroker);
@@ -539,7 +539,7 @@ public class GeoServerTileLayerTest {
             assertTrue(e.getMessage().contains("gridset not found"));
         }
         // layer bounds (in WGS84) is -180, -90, 0, 0
-        long[][] outsideTiles = { { 0, 1, 1 }, { 1, 1, 1 }, { 1, 0, 1 } };
+        long[][] outsideTiles = {{0, 1, 1}, {1, 1, 1}, {1, 0, 1}};
 
         for (long[] tileIndex : outsideTiles) {
             MimeType mimeType = MimeType.createFromFormat("image/png");
@@ -555,7 +555,7 @@ public class GeoServerTileLayerTest {
     }
 
     @Test
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings({"unchecked", "rawtypes"})
     public void testGetTile() throws Exception {
 
         Resource mockResult = mock(Resource.class);
@@ -579,7 +579,7 @@ public class GeoServerTileLayerTest {
 
         MockHttpServletRequest servletReq = new MockHttpServletRequest();
         HttpServletResponse servletResp = new MockHttpServletResponse();
-        long[] tileIndex = { 0, 0, 0 };
+        long[] tileIndex = {0, 0, 0};
 
         ConveyorTile tile = new ConveyorTile(storageBroker, layerInfoTileLayer.getName(),
                 "EPSG:4326", tileIndex, mimeType, null, servletReq, servletResp);
@@ -609,26 +609,26 @@ public class GeoServerTileLayerTest {
         assertEquals(1, mimeTypes.size());
         assertEquals(MimeType.createFromFormat("image/gif"), mimeTypes.get(0));
     }
-    
+
     @Test
     public void testTileExpirationList() {
         layerInfoTileLayer = new GeoServerTileLayer(layerInfo, defaults, gridSetBroker);
-        
+
         List<ExpirationRule> list = new ArrayList<ExpirationRule>();
         list.add(new ExpirationRule(0, 10));
-        list.add(new ExpirationRule(10,20));
-        
+        list.add(new ExpirationRule(10, 20));
+
         layerInfoTileLayer.getInfo().setExpireCacheList(list);
-        
-     
+
+
         assertEquals(10, layerInfoTileLayer.getExpireCache(0));
         assertEquals(10, layerInfoTileLayer.getExpireCache(9));
         assertEquals(20, layerInfoTileLayer.getExpireCache(10));
         assertEquals(20, layerInfoTileLayer.getExpireCache(15));
-        
+
         assertEquals(0, layerInfoTileLayer.getExpireCache(-1));
     }
-    
+
     @Test
     public void testCacheExpiration() {
         layerInfoTileLayer = new GeoServerTileLayer(layerInfo, defaults, gridSetBroker);
@@ -658,7 +658,7 @@ public class GeoServerTileLayerTest {
         layerInfoTileLayer = new GeoServerTileLayer(layerInfo, defaults, gridSetBroker);
         assertNotNull(layerInfoTileLayer.getLayerInfo());
         assertNull(layerInfoTileLayer.getLayerGroupInfo());
-        
+
         layerGroupInfoTileLayer = new GeoServerTileLayer(layerGroup, defaults, gridSetBroker);
         assertNull(layerGroupInfoTileLayer.getLayerInfo());
         assertNotNull(layerGroupInfoTileLayer.getLayerGroupInfo());

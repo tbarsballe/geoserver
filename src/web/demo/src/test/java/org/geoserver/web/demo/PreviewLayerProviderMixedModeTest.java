@@ -1,7 +1,8 @@
 /* (c) 2016 Open Source Geospatial Foundation - all rights reserved
  * This code is licensed under the GPL 2.0 license, available at the root
  * application directory.
- */package org.geoserver.web.demo;
+ */
+package org.geoserver.web.demo;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -33,7 +34,7 @@ public class PreviewLayerProviderMixedModeTest extends GeoServerWicketTestSuppor
         super.setUpSpring(springContextLocations);
         springContextLocations.add("classpath:/org/geoserver/web/demo/ResourceAccessManagerContext.xml");
     }
-        
+
     /**
      * Enable the Spring Security auth filters
      */
@@ -49,10 +50,10 @@ public class PreviewLayerProviderMixedModeTest extends GeoServerWicketTestSuppor
     @Override
     protected void onSetUp(SystemTestData testData) throws Exception {
         super.onSetUp(testData);
-        
+
         addUser("cite", "cite", null, Collections.singletonList("ROLE_DUMMY"));
         addUser("cite_mixed", "cite", null, Collections.singletonList("ROLE_DUMMY"));
-        
+
         // populate the access manager
         TestResourceAccessManager tam = (TestResourceAccessManager) applicationContext
                 .getBean("testResourceAccessManager");
@@ -61,17 +62,17 @@ public class PreviewLayerProviderMixedModeTest extends GeoServerWicketTestSuppor
 
         // user in mixed mode
         tam.putLimits("cite_mixed", buildings, new VectorAccessLimits(CatalogMode.MIXED, null, Filter.EXCLUDE, null, Filter.EXCLUDE));
-        
+
     }
-    
+
     @Test
     public void testMixedMode() throws Exception {
         PreviewLayerProvider provider = new PreviewLayerProvider();
-        
+
         // full access
         login("cite", "cite");
         assertTrue(previewHasBuildings(provider));
-        
+
         // no access, but no exception either, since this is not a direct access
         login("cite_mixed", "cite");
         assertFalse(previewHasBuildings(provider));
@@ -80,9 +81,9 @@ public class PreviewLayerProviderMixedModeTest extends GeoServerWicketTestSuppor
     private boolean previewHasBuildings(PreviewLayerProvider provider) {
         Iterator<PreviewLayer> it = provider.iterator(0, provider.size());
         String buildingsPrefixedName = getLayerId(SystemTestData.BUILDINGS);
-        while(it.hasNext()) {
+        while (it.hasNext()) {
             PreviewLayer pl = it.next();
-            if(buildingsPrefixedName.equals(pl.getName())) {
+            if (buildingsPrefixedName.equals(pl.getName())) {
                 return true;
             }
         }
@@ -91,8 +92,8 @@ public class PreviewLayerProviderMixedModeTest extends GeoServerWicketTestSuppor
 
     private PreviewLayer getPreviewLayer(PreviewLayerProvider provider, String prefixedName) {
         for (PreviewLayer pl : Lists.newArrayList(provider.iterator(0, Integer.MAX_VALUE))) {
-            if(pl.getName().equals(prefixedName)) {
-                return pl; 
+            if (pl.getName().equals(prefixedName)) {
+                return pl;
             }
         }
         return null;

@@ -29,9 +29,8 @@ import org.geotools.util.logging.Logging;
  * the server with too many requests. That is, adheres to the expectations of the control-flow and
  * monitoring modules by not bypassing the dispatcher.
  * </p>
- * 
+ *
  * @author Gabriel Roldan
- * 
  */
 public class CacheSeedingWebMapService implements MethodInterceptor {
 
@@ -42,7 +41,7 @@ public class CacheSeedingWebMapService implements MethodInterceptor {
 
     /**
      * Wraps {@link WebMapService#getMap(GetMapRequest)}, called by the {@link Dispatcher}
-     * 
+     *
      * @see WebMapService#getMap(GetMapRequest)
      * @see org.aopalliance.intercept.MethodInterceptor#invoke(org.aopalliance.intercept.MethodInvocation)
      */

@@ -37,6 +37,7 @@ public class SecurityLogsPanel extends GeoServerTablePanel<LogEvent> {
 
     private static final EnumMap<Severity, PackageResourceReference> SEVERITY_ICONS = new EnumMap<>(
             Severity.class);
+
     static {
         final PackageResourceReference infoIcon = new PackageResourceReference(
                 GeoServerBasePage.class,
@@ -81,7 +82,7 @@ public class SecurityLogsPanel extends GeoServerTablePanel<LogEvent> {
 
     @Override
     protected Component getComponentForProperty(final String id,
-            @SuppressWarnings("rawtypes") IModel<LogEvent> itemModel, Property<LogEvent> property) {
+                                                @SuppressWarnings("rawtypes") IModel<LogEvent> itemModel, Property<LogEvent> property) {
 
         LogEvent item = (LogEvent) itemModel.getObject();
         if (property == LogEventProvider.SEVERITY) {
@@ -171,7 +172,7 @@ public class SecurityLogsPanel extends GeoServerTablePanel<LogEvent> {
         static final Property<LogEvent> MESSAGE = new BeanProperty<>("message", "message");
 
         final List<Property<LogEvent>> PROPERTIES = Arrays.asList(/* EVENT_ID, */
-        SEVERITY, TIMESTAMP, REPOSITORY, USER, MESSAGE);
+                SEVERITY, TIMESTAMP, REPOSITORY, USER, MESSAGE);
 
         // private transient List<LogEvent> items;
 

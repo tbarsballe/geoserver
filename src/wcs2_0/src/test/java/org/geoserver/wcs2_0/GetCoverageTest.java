@@ -34,10 +34,9 @@ import net.opengis.wcs20.ScalingType;
 
 /**
  * Testing WCS 2.0 Core {@link GetCoverage}
- * 
+ *
  * @author Simone Giannecchini, GeoSolutions SAS
  * @author Emanuele Tajariol, GeoSolutions SAS
- *
  */
 public class GetCoverageTest extends WCSTestSupport {
 
@@ -49,8 +48,8 @@ public class GetCoverageTest extends WCSTestSupport {
     protected void onSetUp(SystemTestData testData) throws Exception {
         testData.addRasterLayer(RAIN, "rain.zip", "asc", getCatalog());
     }
-    
-    @Before 
+
+    @Before
     public void getRainReader() throws IOException {
         // get the original transform
         CoverageInfo ci = getCatalog().getCoverageByName(getLayerId(RAIN));
@@ -65,13 +64,13 @@ public class GetCoverageTest extends WCSTestSupport {
         raw.put("scalefactor", "0.5");
         assertScalingByHalf(raw);
     }
-    
+
     @Test
     public void testAllowSubsamplingOnScaleExtent() throws Exception {
         GridEnvelope range = coverageReader.getOriginalGridRange();
         int width = range.getSpan(0);
         int height = range.getSpan(1);
-        
+
         // setup a request
         Map<String, String> raw = setupGetCoverageRain();
         raw.put("scaleextent", "i(0," + (width / 2) + "),j(0," + (height / 2) + ")");
@@ -82,7 +81,7 @@ public class GetCoverageTest extends WCSTestSupport {
         Map kvp = parseKvp(raw);
         WCS20GetCoverageRequestReader reader = new WCS20GetCoverageRequestReader();
         GetCoverageType getCoverageRequest = (GetCoverageType) reader.read(reader.createRequest(), kvp, raw);
-        
+
         // setup a getcoverage object we can observe
         WCSInfo service = getGeoServer().getService(WCSInfo.class);
         EnvelopeAxesLabelsMapper axesMapper = GeoServerExtensions.bean(EnvelopeAxesLabelsMapper.class);
@@ -90,14 +89,14 @@ public class GetCoverageTest extends WCSTestSupport {
         GetCoverage getCoverage = new GetCoverage(service, getCatalog(), axesMapper, mimeMapper) {
             @Override
             MathTransform getMathTransform(GridCoverage2DReader reader, Envelope subset,
-                    GridCoverageRequest request, PixelInCell pixelInCell, ScalingType scaling) throws IOException {
+                                           GridCoverageRequest request, PixelInCell pixelInCell, ScalingType scaling) throws IOException {
                 MathTransform mt = super.getMathTransform(reader, subset, request, pixelInCell, scaling);
-                
+
                 // check we are giving the reader the expected scaling factor 
                 AffineTransform2D actual = (AffineTransform2D) mt;
                 assertEquals(0.5, originalMathTransform.getScaleX() / actual.getScaleX(), 1e-6);
                 assertEquals(0.5, originalMathTransform.getScaleY() / actual.getScaleY(), 1e-6);
-                
+
                 return mt;
             }
         };

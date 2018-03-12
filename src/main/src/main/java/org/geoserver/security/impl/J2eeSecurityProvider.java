@@ -17,7 +17,7 @@ import org.geoserver.security.validation.SecurityConfigValidator;
 
 /**
  * Security provider for J2EE security implementations.
- * 
+ *
  * @author christian
  */
 public class J2eeSecurityProvider extends GeoServerSecurityProvider {
@@ -27,7 +27,6 @@ public class J2eeSecurityProvider extends GeoServerSecurityProvider {
         super.configure(xp);
         xp.getXStream().alias("j2eeRoleService", J2eeRoleServiceConfig.class);
     }
-
 
 
     @Override
@@ -42,10 +41,9 @@ public class J2eeSecurityProvider extends GeoServerSecurityProvider {
     }
 
 
-
     @Override
     public SecurityConfigValidator createConfigurationValidator(GeoServerSecurityManager securityManager) {
-        return new SecurityConfigValidator(securityManager); 
-     }
+        return new SecurityConfigValidator(securityManager);
+    }
 
 }

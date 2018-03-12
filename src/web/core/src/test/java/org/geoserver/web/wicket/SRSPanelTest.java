@@ -20,10 +20,10 @@ public class SRSPanelTest extends GeoServerWicketTestSupport implements Serializ
     @Test
     public void testLoad() {
         tester.startPage(new FormTestPage(new ComponentBuilder() {
-            
+
             public Component buildComponent(String id) {
                 return new SRSListPanel(id) {
-                    
+
                     private String codeClicked;
 
                     @Override

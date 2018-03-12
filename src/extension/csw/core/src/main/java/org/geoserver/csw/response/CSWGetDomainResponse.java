@@ -22,7 +22,7 @@ import org.geoserver.platform.ServiceException;
 
 /**
  * Encodes domain values responses
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class CSWGetDomainResponse extends Response {
@@ -61,14 +61,14 @@ public class CSWGetDomainResponse extends Response {
 
     /**
      * Actually encodes the response into a set of records
-     * 
+     *
      * @param output
      * @param result
      * @param request
      * @param csw
      */
     protected void transformResponse(OutputStream output, CloseableIterator<String> result,
-            RequestBaseType request, CSWInfo csw) {
+                                     RequestBaseType request, CSWInfo csw) {
         CSWDomainValuesTransformer transformer = new CSWDomainValuesTransformer(request,
                 csw.isCanonicalSchemaLocation());
         try {

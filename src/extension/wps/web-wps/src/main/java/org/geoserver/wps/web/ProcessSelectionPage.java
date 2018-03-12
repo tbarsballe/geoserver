@@ -38,10 +38,10 @@ import org.geotools.process.ProcessFactory;
 import org.opengis.feature.type.Name;
 
 /**
- * A page listing all WPS process for specific group, 
+ * A page listing all WPS process for specific group,
  * allowing enable/disable single process and add/remove roles to grant access to it
  * This page is opened and return to WPS security group management page.
- * 
+ *
  * @see WPSAccessRulePage
  */
 
@@ -58,7 +58,7 @@ public class ProcessSelectionPage extends AbstractSecurityPage {
         // prepare the process factory title
         Class<? extends ProcessFactory> factoryClass = pfi.getFactoryClass();
         ProcessFactory pf = GeoServerProcessors.getProcessFactory(factoryClass, false);
-        if(pf == null) {
+        if (pf == null) {
             throw new IllegalArgumentException("Failed to locate the process factory " + factoryClass);
         }
         this.title = pf.getTitle().toString(getLocale());
@@ -68,9 +68,9 @@ public class ProcessSelectionPage extends AbstractSecurityPage {
 
         GeoServerRoleService roleService = getSecurityManager().getActiveRoleService();
         try {
-            for(GeoServerRole r : roleService.getRoles()){
+            for (GeoServerRole r : roleService.getRoles()) {
                 availableRoles.add(r.getAuthority());
-            }            
+            }
         } catch (IOException e1) {
             LOGGER.log(Level.FINER, e1.getMessage(), e1);
         }
@@ -85,33 +85,35 @@ public class ProcessSelectionPage extends AbstractSecurityPage {
 
             @Override
             protected Component getComponentForProperty(String id, final IModel<FilteredProcess> itemModel,
-                    Property<FilteredProcess> property) {
-                if(property.getName().equals("enabled")) {
+                                                        Property<FilteredProcess> property) {
+                if (property.getName().equals("enabled")) {
                     Fragment fragment = new Fragment(id, "enabledFragment", ProcessSelectionPage.this);
                     CheckBox enabled = new CheckBox("enabled", (IModel<Boolean>) property.getModel(itemModel));
                     enabled.setOutputMarkupId(true);
                     fragment.add(enabled);
                     return fragment;
-                }else if(property.getName().equals("title")) {
+                } else if (property.getName().equals("title")) {
                     return new Label(id, property.getModel(itemModel));
-                } else if(property.getName().equals("description")) {
+                } else if (property.getName().equals("description")) {
                     return new Label(id, property.getModel(itemModel));
-                } else if(property.getName().equals("roles")) {
+                } else if (property.getName().equals("roles")) {
                     Fragment fragment = new Fragment(id, "rolesFragment", ProcessSelectionPage.this);
                     TextArea<?> roles = new TextArea("roles", property.getModel(itemModel)) {
                         public <C extends Object> org.apache.wicket.util.convert.IConverter<C> getConverter(java.lang.Class<C> type) {
                             return new RolesConverter(availableRoles);
-                        };
+                        }
+
+                        ;
                     };
-                    StringBuilder selectedRoles = new StringBuilder ();
+                    StringBuilder selectedRoles = new StringBuilder();
                     IAutoCompleteRenderer<String> roleRenderer = new RolesRenderer(selectedRoles);
-                    AutoCompleteBehavior<String> b = new RolesAutoCompleteBehavior(roleRenderer,settings,selectedRoles,availableRoles);
+                    AutoCompleteBehavior<String> b = new RolesAutoCompleteBehavior(roleRenderer, settings, selectedRoles, availableRoles);
                     roles.setOutputMarkupId(true);
                     roles.add(b);
                     fragment.add(roles);
                     return fragment;
                 } else if (property.getName().equals("validated")) {
-                    final IModel<Boolean> hasValidatorsModel = (IModel<Boolean>) property.getModel(itemModel); 
+                    final IModel<Boolean> hasValidatorsModel = (IModel<Boolean>) property.getModel(itemModel);
                     IModel<String> availableModel = new AbstractReadOnlyModel<String>() {
 
                         @Override
@@ -141,19 +143,19 @@ public class ProcessSelectionPage extends AbstractSecurityPage {
                     return fragment;
                 }
                 return null;
-            }            
+            }
         };
         processSelector.setFilterable(false);
         processSelector.setPageable(false);
-        processSelector.setOutputMarkupId( true );
+        processSelector.setOutputMarkupId(true);
         form.add(processSelector);
         SubmitLink apply = new SubmitLink("apply") {
             @Override
             public void onSubmit() {
-               // super.onSubmit();
+                // super.onSubmit();
                 pfi.getFilteredProcesses().clear();
-                for (FilteredProcess process : provider.getItems()){
-                    if ((process.getRoles() != null && !process.getRoles().isEmpty()) 
+                for (FilteredProcess process : provider.getItems()) {
+                    if ((process.getRoles() != null && !process.getRoles().isEmpty())
                             || !process.getEnabled()
                             || (process.getValidators() != null && !process.getValidators().isEmpty())) {
                         ProcessInfo pai = process.toProcessInfo();
@@ -161,7 +163,7 @@ public class ProcessSelectionPage extends AbstractSecurityPage {
                     }
                 }
                 setResponsePage(wpsAccessRulePage);
-            }  
+            }
         };
         form.add(apply);
         Link cancel = new Link("cancel") {
@@ -176,7 +178,7 @@ public class ProcessSelectionPage extends AbstractSecurityPage {
     protected Collection<? extends Name> getFilteredProcesses() {
         ProcessFactory pf = GeoServerProcessors.getProcessFactory(pfi.getFactoryClass(), false);
         List<Name> disabled = new ArrayList<Name>(pf.getNames());
-        for(FilteredProcess fp : processSelector.getSelection()) {
+        for (FilteredProcess fp : processSelector.getSelection()) {
             disabled.remove(fp.getName());
         }
 

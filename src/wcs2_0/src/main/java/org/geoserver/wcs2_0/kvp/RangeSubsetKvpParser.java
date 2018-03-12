@@ -15,7 +15,7 @@ import org.geoserver.wcs2_0.exception.WCS20Exception;
 
 /**
  * KVP parser for the WCS 2.0 {@link RangeSubsetType}
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class RangeSubsetKvpParser extends KvpParser {
@@ -30,15 +30,15 @@ public class RangeSubsetKvpParser extends KvpParser {
 
         // remove space
         value = value.trim();
-        
+
         // minimal validation
-        if(value.matches(".*,\\s*,.*")) {
+        if (value.matches(".*,\\s*,.*")) {
             // two consequent commas
             throwInvalidSyntaxException();
-        } else if(value.startsWith(",") || value.endsWith(",")) {
+        } else if (value.startsWith(",") || value.endsWith(",")) {
             throwInvalidSyntaxException();
         }
-        
+
         String[] components = value.split("\\s*,\\s*");
         for (String component : components) {
             if (component.contains(":")) {

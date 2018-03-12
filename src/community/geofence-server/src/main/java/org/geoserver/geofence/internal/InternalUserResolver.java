@@ -28,11 +28,9 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 
 /**
- * 
  * Links GeoServer users/roles to internal Geofence server
- * 
- * @author Niels Charlier
  *
+ * @author Niels Charlier
  */
 @PropertySource("classpath*:application.properties")
 public class InternalUserResolver implements UserResolver {

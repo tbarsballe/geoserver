@@ -38,7 +38,7 @@ import org.springframework.util.Assert;
 /**
  * Shows and allows editing of the list of {@link LayerIdentifierInfo} attached to a {@code WMSInfo}
  * , a {@code LayerInfo}, or a {@code LayerGroupInfo}.
- * 
+ *
  * @author groldan
  * @see WMSInfo#getIdentifiers()
  * @see LayerInfo#getIdentifiers()
@@ -80,14 +80,13 @@ public class LayerIdentifierListEditor extends FormComponentPanel<List<LayerIden
 
     /**
      * @param id
-     * @param model
-     *            the model over the appropriate cataloginfo's list of {@link LayerIdentifierInfo}
+     * @param model the model over the appropriate cataloginfo's list of {@link LayerIdentifierInfo}
      * @see WMSInfo#getIdentifiers()
      * @see LayerInfo#getIdentifiers()
      * @see LayerGroupInfo#getIdentifiers()
      */
     public LayerIdentifierListEditor(final String id, final IModel<List<LayerIdentifierInfo>> list,
-            final AuthorityURLListEditor availableAuthoritiesProvider) {
+                                     final AuthorityURLListEditor availableAuthoritiesProvider) {
         super(id, list);
         this.availableAuthoritiesProvider = availableAuthoritiesProvider;
         Assert.notNull(list.getObject());

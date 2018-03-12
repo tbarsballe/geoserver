@@ -81,20 +81,20 @@ public class ImporterIntegrationTest extends ImporterTestSupport {
         File locations = new File(dir, "locations.csv");
 
         // @formatter:off 
-        String contextDefinition = "{\n" + 
+        String contextDefinition = "{\n" +
                 "   \"import\": {\n" +
-                "      \"targetWorkspace\": {\n" + 
-                "         \"workspace\": {\n" + 
-                "            \"name\": \"" + wsName + "\"\n" + 
-                "         }\n" + 
-                "      },\n" + 
-                "      \"data\": {\n" + 
-                "        \"type\": \"file\",\n" + 
-                "        \"file\": \"" + jsonSafePath(locations) + "\"\n" + 
-                "      },\n" + 
-                "      targetStore: {\n" + 
-                "        dataStore: {\n" + 
-                "        name: \"h2\",\n" + 
+                "      \"targetWorkspace\": {\n" +
+                "         \"workspace\": {\n" +
+                "            \"name\": \"" + wsName + "\"\n" +
+                "         }\n" +
+                "      },\n" +
+                "      \"data\": {\n" +
+                "        \"type\": \"file\",\n" +
+                "        \"file\": \"" + jsonSafePath(locations) + "\"\n" +
+                "      },\n" +
+                "      targetStore: {\n" +
+                "        dataStore: {\n" +
+                "        name: \"h2\",\n" +
                 "        }\n" +
                 "      },\n" +
                 "      \"transforms\": [\n" +
@@ -103,7 +103,7 @@ public class ImporterIntegrationTest extends ImporterTestSupport {
                 "          \"latField\": \"LAT\"," +
                 "          \"lngField\": \"LON\"" +
                 "        }\n" + "      ]" +
-                "   }\n" + 
+                "   }\n" +
                 "}";
         // @formatter:on 
 
@@ -123,16 +123,16 @@ public class ImporterIntegrationTest extends ImporterTestSupport {
         File locations = new File(dir, "locations.csv");
 
         // @formatter:off 
-        String contextDefinition = "{\n" + 
+        String contextDefinition = "{\n" +
                 "   \"import\": {\n" +
-                "      \"targetWorkspace\": {\n" + 
-                "         \"workspace\": {\n" + 
-                "            \"name\": \"" + wsName + "\"\n" + 
-                "         }\n" + 
-                "      },\n" + 
-                "      targetStore: {\n" + 
-                "        dataStore: {\n" + 
-                "        name: \"h2\",\n" + 
+                "      \"targetWorkspace\": {\n" +
+                "         \"workspace\": {\n" +
+                "            \"name\": \"" + wsName + "\"\n" +
+                "         }\n" +
+                "      },\n" +
+                "      targetStore: {\n" +
+                "        dataStore: {\n" +
+                "        name: \"h2\",\n" +
                 "        }\n" +
                 "      },\n" +
                 "      \"transforms\": [\n" +
@@ -141,7 +141,7 @@ public class ImporterIntegrationTest extends ImporterTestSupport {
                 "          \"latField\": \"LAT\"," +
                 "          \"lngField\": \"LON\"" +
                 "        }\n" + "      ]" +
-                "   }\n" + 
+                "   }\n" +
                 "}";
         // @formatter:on 
 
@@ -225,7 +225,7 @@ public class ImporterIntegrationTest extends ImporterTestSupport {
         // set a callback to check that the request spring context is passed to the job thread
         RequestContextListener listener = applicationContext.getBean(RequestContextListener.class);
         SecurityContextHolder.getContext().setAuthentication(createAuthentication());
-        
+
         final boolean[] invoked = {false};
         listener.setCallBack((request, user, resource) -> {
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -239,29 +239,29 @@ public class ImporterIntegrationTest extends ImporterTestSupport {
         String wsName = getCatalog().getDefaultWorkspace().getName();
 
         // @formatter:off 
-        String contextDefinition = "{\n" + 
+        String contextDefinition = "{\n" +
                 "   \"import\": {\n" +
-                "      \"targetWorkspace\": {\n" + 
-                "         \"workspace\": {\n" + 
-                "            \"name\": \"" + wsName + "\"\n" + 
-                "         }\n" + 
-                "      },\n" + 
-                "      \"data\": {\n" + 
-                "        \"type\": \"file\",\n" + 
-                "        \"file\": \"" + jsonSafePath(gmlFile) +  "\"\n" + 
+                "      \"targetWorkspace\": {\n" +
+                "         \"workspace\": {\n" +
+                "            \"name\": \"" + wsName + "\"\n" +
+                "         }\n" +
+                "      },\n" +
+                "      \"data\": {\n" +
+                "        \"type\": \"file\",\n" +
+                "        \"file\": \"" + jsonSafePath(gmlFile) + "\"\n" +
                 "      }," +
-                "      targetStore: {\n" + 
-                "        dataStore: {\n" + 
-                "        name: \"h2\",\n" + 
+                "      targetStore: {\n" +
+                "        dataStore: {\n" +
+                "        name: \"h2\",\n" +
                 "        }\n" +
-                "      }\n" +    
-                "   }\n" + 
+                "      }\n" +
+                "   }\n" +
                 "}";
         // @formatter:on 
 
         JSONObject json = (JSONObject) json(
                 postAsServletResponse("/rest/imports?exec=true"
-                + (async ? "&async=true" : ""), contextDefinition, "application/json"));
+                        + (async ? "&async=true" : ""), contextDefinition, "application/json"));
         // print(json);
         String state = null;
         int importId;
@@ -285,7 +285,7 @@ public class ImporterIntegrationTest extends ImporterTestSupport {
         checkPoiImport();
 
         //Test delete
-        MockHttpServletResponse resp = deleteAsServletResponse("/rest/imports/"+importId);
+        MockHttpServletResponse resp = deleteAsServletResponse("/rest/imports/" + importId);
         assertEquals(204, resp.getStatus());
     }
 
@@ -327,7 +327,7 @@ public class ImporterIntegrationTest extends ImporterTestSupport {
                 "      },\n" +
                 "      \"data\": {\n" +
                 "        \"type\": \"file\",\n" +
-                "        \"file\": \"" + jsonSafePath(gmlFile) +  "\"\n" +
+                "        \"file\": \"" + jsonSafePath(gmlFile) + "\"\n" +
                 "      }," +
                 "      targetStore: {\n" +
                 "        dataStore: {\n" +
@@ -363,7 +363,7 @@ public class ImporterIntegrationTest extends ImporterTestSupport {
         invoked[0] = false;
 
         // run the import
-        postAsServletResponse("/rest/imports/"+importId + (async ? "?async=true" : ""), "", "application/json");
+        postAsServletResponse("/rest/imports/" + importId + (async ? "?async=true" : ""), "", "application/json");
 
         if (async) {
             for (int i = 0; i < 60 * 2 * 2; i++) {
@@ -384,7 +384,7 @@ public class ImporterIntegrationTest extends ImporterTestSupport {
         checkPoiImport();
 
         // test delete
-        MockHttpServletResponse resp = deleteAsServletResponse("/rest/imports/"+importId);
+        MockHttpServletResponse resp = deleteAsServletResponse("/rest/imports/" + importId);
         assertEquals(204, resp.getStatus());
     }
 
@@ -392,11 +392,11 @@ public class ImporterIntegrationTest extends ImporterTestSupport {
         GeoServerUser anonymous = GeoServerUser.createAnonymous();
         List<GrantedAuthority> roles = new ArrayList<GrantedAuthority>();
         roles.addAll(anonymous.getAuthorities());
-        AnonymousAuthenticationToken auth = new AnonymousAuthenticationToken("geoserver", 
-                anonymous.getUsername(),roles);
+        AnonymousAuthenticationToken auth = new AnonymousAuthenticationToken("geoserver",
+                anonymous.getUsername(), roles);
         return auth;
     }
-    
+
     private String jsonSafePath(File gmlFile) throws IOException {
         return gmlFile.getCanonicalPath().replace('\\', '/');
     }
@@ -460,18 +460,18 @@ public class ImporterIntegrationTest extends ImporterTestSupport {
         store = catalog.getCoverageStoreByName(mosaicName);
 
         // @formatter:off 
-        String contextDefinition = "{\n" + 
+        String contextDefinition = "{\n" +
                 "   \"import\": {\n" +
-                "      \"data\": {\n" + 
-                "        \"type\": \"file\",\n" + 
-                "        \"file\": \"" + jsonSafePath(granule.getAbsoluteFile()) +  "\"\n" + 
+                "      \"data\": {\n" +
+                "        \"type\": \"file\",\n" +
+                "        \"file\": \"" + jsonSafePath(granule.getAbsoluteFile()) + "\"\n" +
                 "      }," +
-                "      targetStore: {\n" + 
-                "        dataStore: {\n" + 
-                "        name: \"" + store.getName() + "\",\n" + 
+                "      targetStore: {\n" +
+                "        dataStore: {\n" +
+                "        name: \"" + store.getName() + "\",\n" +
                 "        }\n" +
-                "      }\n" +    
-                "   }\n" + 
+                "      }\n" +
+                "   }\n" +
                 "}";
         // @formatter:on 
 
@@ -495,6 +495,7 @@ public class ImporterIntegrationTest extends ImporterTestSupport {
 
     /**
      * Attribute computation integration test
+     *
      * @throws Exception
      */
     @Test

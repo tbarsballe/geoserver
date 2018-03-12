@@ -17,7 +17,7 @@ import org.geotools.util.Version;
 
 /**
  * Generic / abstract service configuration.
- * 
+ *
  * @author Justin Deoliveira, The Open Planning Project
  */
 public interface ServiceInfo extends Info {
@@ -33,20 +33,20 @@ public interface ServiceInfo extends Info {
      * This value is unique among all instances of ServiceInfo and can be used
      * as an identifier.
      * </p>
-     * 
+     *
      * @uml.property name="name"
      */
     String getName();
 
     /**
      * Sets the name of the service.
-     * 
+     *
      * @uml.property name="name"
      */
     void setName(String name);
 
     /**
-     * The workspace the service is specific or local to, or <code>null</code> if the service is 
+     * The workspace the service is specific or local to, or <code>null</code> if the service is
      * global.
      */
     WorkspaceInfo getWorkspace();
@@ -58,7 +58,7 @@ public interface ServiceInfo extends Info {
 
     /**
      * The global geoserver configuration.
-     * 
+     *
      * @uml.property name="geoServer"
      * @uml.associationEnd inverse="service:org.geoserver.config.GeoServerInfo"
      */
@@ -66,7 +66,7 @@ public interface ServiceInfo extends Info {
 
     /**
      * Sets the global geoserver configuration.
-     * 
+     *
      * @uml.property name="geoServer"
      */
     void setGeoServer(GeoServer geoServer);
@@ -156,14 +156,14 @@ public interface ServiceInfo extends Info {
      * <p>
      * This list contains objects of type {@link Version}.
      * </p>
-     * 
+     *
      * @uml.property name="versions"
      */
     List<Version> getVersions();
 
     /**
      * Keywords associated with the service.
-     * 
+     *
      * @uml.property name="keywords"
      */
     List<KeywordInfo> getKeywords();
@@ -175,14 +175,14 @@ public interface ServiceInfo extends Info {
 
     /**
      * Exception formats the service can provide.
-     * 
+     *
      * @uml.property name="exceptionFormats"
      */
     List<String> getExceptionFormats();
 
     /**
      * The service metadata link.
-     * 
+     *
      * @uml.property name="metadataLink"
      * @uml.associationEnd inverse="service:org.geoserver.catalog.MetadataLinkInfo"
      */
@@ -190,7 +190,7 @@ public interface ServiceInfo extends Info {
 
     /**
      * Setter of the property <tt>metadataLink</tt>
-     * 
+     *
      * @uml.property name="metadataLink"
      */
     void setMetadataLink(MetadataLinkInfo metadataLink);
@@ -198,19 +198,18 @@ public interface ServiceInfo extends Info {
     /**
      * Sets the output strategy used by the service.
      * <p>
-     * This value is an identifier which indicates how the output of a response 
-     * should behave. An example might be "performance", indicating that the 
+     * This value is an identifier which indicates how the output of a response
+     * should behave. An example might be "performance", indicating that the
      * response should be encoded as quickly as possible.
      * </p>
-     * 
      */
     String getOutputStrategy();
-    
+
     /**
      * Sets the output strategy.
      */
-    void setOutputStrategy( String outputStrategy );
-    
+    void setOutputStrategy(String outputStrategy);
+
     /**
      * The base url for the schemas describing the service.
      */
@@ -219,23 +218,23 @@ public interface ServiceInfo extends Info {
     /**
      * Sets the base url for the schemas describing the service.
      */
-    void setSchemaBaseURL( String schemaBaseURL );
-    
+    void setSchemaBaseURL(String schemaBaseURL);
+
     /**
      * Flag indicating if the service should be verbose or not.
      */
     boolean isVerbose();
-    
+
     /**
      * Sets the flag indicating if the service should be verbose or not.
      */
-    void setVerbose( boolean verbose );
-    
+    void setVerbose(boolean verbose);
+
     /**
      * @uml.property name="metadata"
      */
     MetadataMap getMetadata();
-    
-    Map<Object,Object> getClientProperties();
+
+    Map<Object, Object> getClientProperties();
 
 }

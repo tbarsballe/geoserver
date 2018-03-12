@@ -32,12 +32,12 @@ import org.junit.Test;
 
 public class DefaultGeoServerLoaderTest {
     DefaultGeoServerLoader loader;
-    
+
     Catalog catalog;
     XStreamPersister xp;
 
     boolean helloServiceSaved = false;
-    
+
     static interface HelloServiceInfo extends ServiceInfo {
     }
 
@@ -60,7 +60,9 @@ public class DefaultGeoServerLoaderTest {
             return new HelloServiceInfoImpl();
         }
 
-    };
+    }
+
+    ;
 
     @Before
     public void setUp() {
@@ -76,11 +78,11 @@ public class DefaultGeoServerLoaderTest {
         };
         GeoServerExtensionsHelper.singleton("resourceLoader", resourceLoader,
                 GeoServerResourceLoader.class);
-        
+
         loader = new DefaultGeoServerLoader(resourceLoader);
         catalog = new CatalogImpl();
-        catalog.setResourceLoader( resourceLoader );
-        
+        catalog.setResourceLoader(resourceLoader);
+
         XStreamPersisterFactory xpf = new XStreamPersisterFactory();
         xp = xpf.createXMLPersister();
 
@@ -88,45 +90,45 @@ public class DefaultGeoServerLoaderTest {
                 resourceLoader, "hello");
         GeoServerExtensionsHelper.singleton("helloLoader", helloLoader, XStreamServiceLoader.class);
     }
-    
+
     @After
     public void tearDown() {
         GeoServerExtensionsHelper.clear(); // clear singleton
     }
-    
+
     @Test
     public void testGeneratedStyles() throws Exception {
         XStreamPersisterFactory xpf = new XStreamPersisterFactory();
         XStreamPersister xp = xpf.createXMLPersister();
-        xp.setCatalog( catalog );
+        xp.setCatalog(catalog);
         loader.initializeStyles(catalog, xp);
-        
-        StyleInfo polygon = catalog.getStyleByName( StyleInfo.DEFAULT_POLYGON );
-        assertEquals( "default_polygon.sld", polygon.getFilename() );
+
+        StyleInfo polygon = catalog.getStyleByName(StyleInfo.DEFAULT_POLYGON);
+        assertEquals("default_polygon.sld", polygon.getFilename());
     }
-    
+
     @Test
     public void testLoadNestedLayerGroups() throws Exception {
-        GeoServerResourceLoader resources = GeoServerExtensions.bean(GeoServerResourceLoader.class );
-        assertSame( catalog.getResourceLoader(), resources );
+        GeoServerResourceLoader resources = GeoServerExtensions.bean(GeoServerResourceLoader.class);
+        assertSame(catalog.getResourceLoader(), resources);
         loader.readCatalog(catalog, xp);
-        
+
         LayerGroupInfo simpleLayerGroup = catalog.getLayerGroupByName("topp", "simplegroup");
         assertNotNull(simpleLayerGroup);
         assertEquals(101, simpleLayerGroup.getAttribution().getLogoWidth());
         assertEquals(102, simpleLayerGroup.getAttribution().getLogoHeight());
         assertEquals(2, simpleLayerGroup.getMetadataLinks().size());
-        assertEquals("http://my/metadata/link/1", 
+        assertEquals("http://my/metadata/link/1",
                 simpleLayerGroup.getMetadataLinks().get(0).getContent());
-        assertEquals("text/html", 
+        assertEquals("text/html",
                 simpleLayerGroup.getMetadataLinks().get(0).getType());
-        
+
         LayerGroupInfo nestedLayerGroup = catalog.getLayerGroupByName("topp", "nestedgroup");
         assertNotNull(nestedLayerGroup);
         assertNotNull(nestedLayerGroup.getLayers());
         assertEquals(2, nestedLayerGroup.getLayers().size());
         assertTrue(nestedLayerGroup.getLayers().get(0) instanceof LayerGroupInfo);
-        assertNotNull(((LayerGroupInfo)nestedLayerGroup.getLayers().get(0)).getLayers());
+        assertNotNull(((LayerGroupInfo) nestedLayerGroup.getLayers().get(0)).getLayers());
         assertTrue(nestedLayerGroup.getLayers().get(1) instanceof LayerInfo);
     }
 

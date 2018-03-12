@@ -53,137 +53,136 @@ public class GetFeaturePagingTest extends WFS20TestSupport {
         ds.setName("foo");
         ds.setWorkspace(cat.getDefaultWorkspace());
         ds.setEnabled(true);
-        
-        Map params = ds.getConnectionParameters(); 
+
+        Map params = ds.getConnectionParameters();
         params.put("dbtype", "h2");
         params.put("database", getTestData().getDataDirectoryRoot().getAbsolutePath());
         cat.add(ds);
-        
+
         FeatureSource fs1 = getFeatureSource(SystemTestData.FIFTEEN);
         FeatureSource fs2 = getFeatureSource(SystemTestData.SEVEN);
-        
+
         DataStore store = (DataStore) ds.getDataStore(null);
         SimpleFeatureTypeBuilder tb = new SimpleFeatureTypeBuilder();
-        
+
         tb.init((SimpleFeatureType) fs1.getSchema());
         tb.add("num", Integer.class);
         tb.remove("boundedBy");
         store.createSchema(tb.buildFeatureType());
-        
+
         tb.init((SimpleFeatureType) fs2.getSchema());
         tb.add("num", Integer.class);
         tb.remove("boundedBy");
         store.createSchema(tb.buildFeatureType());
-        
+
         CatalogBuilder cb = new CatalogBuilder(cat);
         cb.setStore(ds);
-        
+
         FeatureStore fs = (FeatureStore) store.getFeatureSource("Fifteen");
         addFeatures(fs, fs1.getFeatures());
-        
+
         FeatureTypeInfo ft = cb.buildFeatureType(fs);
         cat.add(ft);
-        
+
         fs = (FeatureStore) store.getFeatureSource("Seven");
         addFeatures(fs, fs2.getFeatures());
-        
+
         ft = cb.buildFeatureType(fs);
         cat.add(ft);
     }
 
     void addFeatures(FeatureStore fs, FeatureCollection features) throws Exception {
         SimpleFeatureBuilder b = new SimpleFeatureBuilder((SimpleFeatureType) fs.getSchema());
-        
+
         DefaultFeatureCollection toAdd = new DefaultFeatureCollection(null, null);
         FeatureIterator it = features.features();
         try {
             SimpleFeature f = null;
             int i = 0;
-            while(it.hasNext()) {
+            while (it.hasNext()) {
                 f = (SimpleFeature) it.next();
                 b.init(f);
                 b.add(f.getAttribute("pointProperty"));
                 b.add(i++);
                 toAdd.add(b.buildFeature(null));
             }
-        }
-        finally {
+        } finally {
             it.close();
         }
         fs.addFeatures(toAdd);
     }
-    
+
     @Test
     public void testSingleType() throws Exception {
         doTestSingleType("gs:Fifteen");
         doTestSingleType("cdf:Fifteen");
     }
-    
+
     void doTestSingleType(String typeName) throws Exception {
-        
+
         Document doc = getAsDOM("/wfs?request=GetFeature&version=2.0.0&service=wfs&" +
-            "typename=" + typeName + "&startIndex=10");
-        XMLAssert.assertXpathEvaluatesTo("5", "count(//" + typeName + ")", doc); 
-        
+                "typename=" + typeName + "&startIndex=10");
+        XMLAssert.assertXpathEvaluatesTo("5", "count(//" + typeName + ")", doc);
+
         doc = getAsDOM("/wfs?request=GetFeature&version=2.0.0&service=wfs&" +
                 "typename=" + typeName + "&startIndex=16");
         XMLAssert.assertXpathEvaluatesTo("0", "count(//" + typeName + ")", doc);
-        
+
         doc = getAsDOM("/wfs?request=GetFeature&version=2.0.0&service=wfs&" +
                 "typename=" + typeName + "&startIndex=0");
         XMLAssert.assertXpathEvaluatesTo("15", "count(//" + typeName + ")", doc);
-        
+
         doc = getAsDOM("/wfs?request=GetFeature&version=2.0.0&service=wfs&" +
                 "typename=" + typeName + "&startIndex=1&count=1");
         XMLAssert.assertXpathEvaluatesTo("1", "count(//" + typeName + ")", doc);
-        
+
         doc = getAsDOM("/wfs?request=GetFeature&version=2.0.0&service=wfs&" +
                 "typename=" + typeName + "&startIndex=16&count=1");
         XMLAssert.assertXpathEvaluatesTo("0", "count(//" + typeName + ")", doc);
     }
-    
+
     @Test
     public void testStartIndexSimplePOST() throws Exception {
         doTestStartIndexSimplePOST("gs:Fifteen");
         doTestStartIndexSimplePOST("cdf:Fifteen");
     }
-    
+
     void doTestStartIndexSimplePOST(String typeName) throws Exception {
-        
-        Document doc = postAsDOM("wfs", startIndexSimpleXML(typeName, 10,-1));
-        XMLAssert.assertXpathEvaluatesTo("5", "count(//" + typeName + ")", doc); 
-    
-        doc = postAsDOM("wfs", startIndexSimpleXML(typeName, 16,-1));
+
+        Document doc = postAsDOM("wfs", startIndexSimpleXML(typeName, 10, -1));
+        XMLAssert.assertXpathEvaluatesTo("5", "count(//" + typeName + ")", doc);
+
+        doc = postAsDOM("wfs", startIndexSimpleXML(typeName, 16, -1));
         XMLAssert.assertXpathEvaluatesTo("0", "count(//" + typeName + ")", doc);
-        
-        doc = postAsDOM("wfs", startIndexSimpleXML(typeName, 0,-1));
+
+        doc = postAsDOM("wfs", startIndexSimpleXML(typeName, 0, -1));
         XMLAssert.assertXpathEvaluatesTo("15", "count(//" + typeName + ")", doc);
-        
-        doc = postAsDOM("wfs", startIndexSimpleXML(typeName, 1,1));
+
+        doc = postAsDOM("wfs", startIndexSimpleXML(typeName, 1, 1));
         XMLAssert.assertXpathEvaluatesTo("1", "count(//" + typeName + ")", doc);
-        
+
         doc = postAsDOM("wfs", startIndexSimpleXML(typeName, 16, 1));
         XMLAssert.assertXpathEvaluatesTo("0", "count(//" + typeName + ")", doc);
     }
 
     String startIndexSimpleXML(String typeName, int startIndex, int count) {
-        String xml = 
-        "<GetFeature version='2.0.0'";
-        
+        String xml =
+                "<GetFeature version='2.0.0'";
+
         if (startIndex > -1) {
-            xml += " startIndex='"+startIndex+"'";
+            xml += " startIndex='" + startIndex + "'";
         }
-        
+
         if (count > -1) {
             xml += " count='" + count + "'";
         }
-        xml += ">" + 
-        " <Query typeNames='" + typeName + "'>" + 
-        " </Query>" + 
-        "</GetFeature>";
+        xml += ">" +
+                " <Query typeNames='" + typeName + "'>" +
+                " </Query>" +
+                "</GetFeature>";
         return xml;
     }
-    
+
     @Test
     public void testStartIndexMultipleTypes() throws Exception {
         doTestStartIndexMultipleTypes("gs:Fifteen", "gs:Seven");
@@ -191,11 +190,11 @@ public class GetFeaturePagingTest extends WFS20TestSupport {
         //doTestStartIndexMultipleTypes("gs:Fifteen", "cdf:Seven");
         //doTestStartIndexMultipleTypes("cdf:Fifteen", "gs:Seven");
     }
-    
+
     public void doTestStartIndexMultipleTypes(String fifteen, String seven) throws Exception {
-        String typeNames = fifteen+","+seven;
+        String typeNames = fifteen + "," + seven;
         Document doc = getAsDOM("/wfs?request=GetFeature&version=2.0.0&service=wfs&" +
-            "typename=" + typeNames + "&startIndex=10");
+                "typename=" + typeNames + "&startIndex=10");
         XMLAssert.assertXpathEvaluatesTo("5", "count(//" + fifteen + ")", doc);
         XMLAssert.assertXpathEvaluatesTo("7", "count(//" + seven + ")", doc);
 
@@ -203,23 +202,23 @@ public class GetFeaturePagingTest extends WFS20TestSupport {
                 "typename=" + typeNames + "&startIndex=16");
         XMLAssert.assertXpathEvaluatesTo("0", "count(//" + fifteen + ")", doc);
         XMLAssert.assertXpathEvaluatesTo("6", "count(//" + seven + ")", doc);
-        
+
         doc = getAsDOM("/wfs?request=GetFeature&version=2.0.0&service=wfs&" +
                 "typename=" + typeNames + "&startIndex=10&count=5");
         XMLAssert.assertXpathEvaluatesTo("5", "count(//" + fifteen + ")", doc);
         XMLAssert.assertXpathEvaluatesTo("0", "count(//" + seven + ")", doc);
-        
+
         doc = getAsDOM("/wfs?request=GetFeature&version=2.0.0&service=wfs&" +
                 "typename=" + typeNames + "&startIndex=10&count=6");
         XMLAssert.assertXpathEvaluatesTo("5", "count(//" + fifteen + ")", doc);
         XMLAssert.assertXpathEvaluatesTo("1", "count(//" + seven + ")", doc);
-        
+
         doc = getAsDOM("/wfs?request=GetFeature&version=2.0.0&service=wfs&" +
                 "typename=" + typeNames + "&startIndex=25");
         XMLAssert.assertXpathEvaluatesTo("0", "count(//" + fifteen + ")", doc);
         XMLAssert.assertXpathEvaluatesTo("0", "count(//" + seven + ")", doc);
     }
-    
+
     @Test
     public void testStartIndexMultipleTypesPOST() throws Exception {
         doTestStartIndexMultipleTypesPOST("gs:Fifteen", "gs:Seven");
@@ -227,7 +226,7 @@ public class GetFeaturePagingTest extends WFS20TestSupport {
         //doTestStartIndexMultipleTypesPOST("gs:Fifteen", "cdf:Seven");
         //doTestStartIndexMultipleTypesPOST("cdf:Fifteen", "gs:Seven");
     }
-    
+
     public void doTestStartIndexMultipleTypesPOST(String fifteen, String seven) throws Exception {
         Document doc = postAsDOM("wfs", startIndexMultiXML(fifteen, seven, 10, -1));
         XMLAssert.assertXpathEvaluatesTo("5", "count(//" + fifteen + ")", doc);
@@ -236,69 +235,69 @@ public class GetFeaturePagingTest extends WFS20TestSupport {
         doc = postAsDOM("wfs", startIndexMultiXML(fifteen, seven, 16, -1));
         XMLAssert.assertXpathEvaluatesTo("0", "count(//" + fifteen + ")", doc);
         XMLAssert.assertXpathEvaluatesTo("6", "count(//" + seven + ")", doc);
-        
+
         doc = postAsDOM("wfs", startIndexMultiXML(fifteen, seven, 10, 5));
         XMLAssert.assertXpathEvaluatesTo("5", "count(//" + fifteen + ")", doc);
         XMLAssert.assertXpathEvaluatesTo("0", "count(//" + seven + ")", doc);
-        
+
         doc = postAsDOM("wfs", startIndexMultiXML(fifteen, seven, 10, 6));
         XMLAssert.assertXpathEvaluatesTo("5", "count(//" + fifteen + ")", doc);
         XMLAssert.assertXpathEvaluatesTo("1", "count(//" + seven + ")", doc);
-        
+
         doc = postAsDOM("wfs", startIndexMultiXML(fifteen, seven, 25, -1));
         XMLAssert.assertXpathEvaluatesTo("0", "count(//" + fifteen + ")", doc);
         XMLAssert.assertXpathEvaluatesTo("0", "count(//" + seven + ")", doc);
     }
-    
+
     String startIndexMultiXML(String fifteen, String seven, int startIndex, int count) {
-        String xml = 
-        "<GetFeature version=\"2.0.0\" startIndex='"+startIndex+"'";
+        String xml =
+                "<GetFeature version=\"2.0.0\" startIndex='" + startIndex + "'";
         if (count > -1) {
             xml += " count='" + count + "'";
         }
-        xml += ">" + 
-        " <Query typeNames='" + fifteen + "'>" + 
-        " </Query>" +
-        " <Query typeNames='" + seven + "'>" + 
-        " </Query>" +
-        "</GetFeature>";
+        xml += ">" +
+                " <Query typeNames='" + fifteen + "'>" +
+                " </Query>" +
+                " <Query typeNames='" + seven + "'>" +
+                " </Query>" +
+                "</GetFeature>";
         return xml;
     }
-    
+
     @Test
     public void testWithFilter() throws Exception {
         doTestWithFilter("gs:Fifteen");
         doTestWithFilter("cdf:Fifteen");
     }
-    
+
     public void doTestWithFilter(String typeName) throws Exception {
         Document doc = getAsDOM("/wfs?request=GetFeature&version=2.0.0&service=wfs&" +
-            "typename=" + typeName + "&startIndex=10");
+                "typename=" + typeName + "&startIndex=10");
         XMLAssert.assertXpathEvaluatesTo("5", "count(//" + typeName + ")", doc);
-        
+
         doc = getAsDOM("/wfs?request=GetFeature&version=2.0.0&service=wfs&" +
-            "typename=" + typeName + "&startIndex=10&count=4");
+                "typename=" + typeName + "&startIndex=10&count=4");
         XMLAssert.assertXpathEvaluatesTo("4", "count(//" + typeName + ")", doc);
-        
+
         String xml = String.format("<GetFeature version='2.0.0' " +
-            "startIndex='%d' count='%d'>" + 
-            "<Query typeNames = '%s'/>" + 
-            "</GetFeature>", 10, 100, typeName);
-        
+                "startIndex='%d' count='%d'>" +
+                "<Query typeNames = '%s'/>" +
+                "</GetFeature>", 10, 100, typeName);
+
         doc = postAsDOM("wfs", xml);
         XMLAssert.assertXpathEvaluatesTo("5", "count(//" + typeName + ")", doc);
-        
+
         xml = String.format("<GetFeature version='2.0.0' xmlns:gml='http://www.opengis.net/gml/2.0' " +
-            "xmlns:fes='http://www.opengis.net/fes/2.0' startIndex='%d' count='%d'>" + 
-            "<Query typeNames = '%s'>" + 
-            "  <fes:Filter>" + 
-            "   <fes:ResourceId rid='%s'></fes:ResourceId>" + 
-            "   <fes:ResourceId rid='%s'></fes:ResourceId>" + 
-            "   <fes:ResourceId rid='%s'></fes:ResourceId>" + 
-            "  </fes:Filter>" + 
-            "</Query>"+
-            "</GetFeature>", 1, 100, typeName, "Fifteen.3", "Fifteen.4", "Fifteen.5");
-            
+                "xmlns:fes='http://www.opengis.net/fes/2.0' startIndex='%d' count='%d'>" +
+                "<Query typeNames = '%s'>" +
+                "  <fes:Filter>" +
+                "   <fes:ResourceId rid='%s'></fes:ResourceId>" +
+                "   <fes:ResourceId rid='%s'></fes:ResourceId>" +
+                "   <fes:ResourceId rid='%s'></fes:ResourceId>" +
+                "  </fes:Filter>" +
+                "</Query>" +
+                "</GetFeature>", 1, 100, typeName, "Fifteen.3", "Fifteen.4", "Fifteen.5");
+
         doc = postAsDOM("wfs", xml);
 
         XMLAssert.assertXpathEvaluatesTo("2", "count(//" + typeName + ")", doc);
@@ -322,8 +321,7 @@ public class GetFeaturePagingTest extends WFS20TestSupport {
             assertEquals(true, fti.getSkipNumberMatched());
             doTestNextPreviousGET("gs:Fifteen");
             doTestNextPreviousGET("cdf:Fifteen");
-        }
-        finally {
+        } finally {
             fti.setSkipNumberMatched(false);
             this.getCatalog().save(fti);
         }
@@ -336,14 +334,14 @@ public class GetFeaturePagingTest extends WFS20TestSupport {
         // Without startindex, results are not sorted and next would be inconsistent,
         // so next is not encoded. See GEOS-5085.
         assertFalse(doc.getDocumentElement().hasAttribute("next"));
-        
+
         doc = getAsDOM("/wfs?request=GetFeature&version=2.0.0&service=wfs&" +
                 "typename=" + typeName + "&startIndex=0&count=5");
         assertFalse(doc.getDocumentElement().hasAttribute("previous"));
         assertStartIndexCount(doc, "next", 5, 5);
-        
+
         doc = getAsDOM("/wfs?request=GetFeature&version=2.0.0&service=wfs&" +
-            "typename=" + typeName + "&startIndex=5&count=7");
+                "typename=" + typeName + "&startIndex=5&count=7");
         assertStartIndexCount(doc, "previous", 0, 5);
         assertStartIndexCount(doc, "next", 12, 7);
 
@@ -357,7 +355,7 @@ public class GetFeaturePagingTest extends WFS20TestSupport {
         assertStartIndexCount(doc, "previous", 0, 15);
         assertFalse(doc.getDocumentElement().hasAttribute("next"));
     }
-    
+
     public void doTestNextPreviousMultipleTypesGET(String fifteen, String seven) throws Exception {
         Document doc = getAsDOM("/wfs?request=GetFeature&version=2.0.0&service=wfs&" +
                 "typename=" + fifteen + "&count=5");
@@ -365,14 +363,14 @@ public class GetFeaturePagingTest extends WFS20TestSupport {
         // Without startindex, results are not sorted and next would be inconsistent,
         // so next is not encoded. See GEOS-5085.
         assertFalse(doc.getDocumentElement().hasAttribute("next"));
-        
+
         doc = getAsDOM("/wfs?request=GetFeature&version=2.0.0&service=wfs&" +
                 "typename=" + fifteen + "&startIndex=0&count=5");
         assertFalse(doc.getDocumentElement().hasAttribute("previous"));
         assertStartIndexCount(doc, "next", 5, 5);
 
         doc = getAsDOM("/wfs?request=GetFeature&version=2.0.0&service=wfs&" +
-            "typename=" + fifteen + "&startIndex=5&count=7");
+                "typename=" + fifteen + "&startIndex=5&count=7");
         assertStartIndexCount(doc, "previous", 0, 5);
         assertStartIndexCount(doc, "next", 12, 3);
 
@@ -387,19 +385,19 @@ public class GetFeaturePagingTest extends WFS20TestSupport {
         doTestNextPreviousPOST("gs:Fifteen");
         doTestNextPreviousPOST("cdf:Fifteen");
     }
-    
+
     public void doTestNextPreviousPOST(String typeName) throws Exception {
-        
+
         Document doc = postAsDOM("wfs", startIndexSimpleXML(typeName, -1, 5));
         assertFalse(doc.getDocumentElement().hasAttribute("previous"));
         // Without startindex, results are not sorted and next would be inconsistent,
         // so next is not encoded. See GEOS-5085.
         assertFalse(doc.getDocumentElement().hasAttribute("next"));
-        
+
         doc = postAsDOM("wfs", startIndexSimpleXML(typeName, 0, 5));
         assertFalse(doc.getDocumentElement().hasAttribute("previous"));
         assertStartIndexCount(doc, "next", 5, 5);
-        
+
         doc = postAsDOM("wfs", startIndexSimpleXML(typeName, 5, 7));
         assertStartIndexCount(doc, "previous", 0, 5);
         assertStartIndexCount(doc, "next", 12, 7);
@@ -415,7 +413,7 @@ public class GetFeaturePagingTest extends WFS20TestSupport {
         String[] kvp = s.split("\\?")[1].split("&");
         int actualStartIndex = -1;
         int actualCount = -1;
-        
+
         for (int i = 0; i < kvp.length; i++) {
             String k = kvp[i].split("=")[0];
             String v = kvp[i].split("=")[1];
@@ -426,38 +424,38 @@ public class GetFeaturePagingTest extends WFS20TestSupport {
                 actualCount = Integer.parseInt(v);
             }
         }
-        
+
         assertEquals(startIndex, actualStartIndex);
         assertEquals(count, actualCount);
     }
-    
+
     @Test
     public void testNextPreviousLinksPOST() throws Exception {
         doTestNextPreviousLinksPOST("gs:Fifteen");
     }
-    
+
     public void doTestNextPreviousLinksPOST(String typeName) throws Exception {
         FilterFactory ff = CommonFactoryFinder.getFilterFactory(null);
         Filter filter = ff.id(new LinkedHashSet<Identifier>(Arrays.asList(ff.featureId("Fifteen.5"),
-            ff.featureId("Fifteen.6"), ff.featureId("Fifteen.7"),ff.featureId("Fifteen.8"),ff.featureId("Fifteen.9"))));
-        
+                ff.featureId("Fifteen.6"), ff.featureId("Fifteen.7"), ff.featureId("Fifteen.8"), ff.featureId("Fifteen.9"))));
+
         String xml = String.format("<GetFeature version='2.0.0' xmlns:gml='http://www.opengis.net/gml/2.0' " +
-            "xmlns:fes='http://www.opengis.net/fes/2.0' startIndex='%d' count='%d'>" + 
-            "<Query typeNames = '%s'>" + 
-            "  <fes:Filter>" + 
-            "   <fes:ResourceId rid='%s'></fes:ResourceId>" + 
-            "   <fes:ResourceId rid='%s'></fes:ResourceId>" + 
-            "   <fes:ResourceId rid='%s'></fes:ResourceId>" +
-            "   <fes:ResourceId rid='%s'></fes:ResourceId>" +
-            "   <fes:ResourceId rid='%s'></fes:ResourceId>" +
-            "  </fes:Filter>" + 
-            "</Query>"+
-            "</GetFeature>", 0, 2, typeName, "Fifteen.5", "Fifteen.6", "Fifteen.7", "Fifteen.8", "Fifteen.9");
+                "xmlns:fes='http://www.opengis.net/fes/2.0' startIndex='%d' count='%d'>" +
+                "<Query typeNames = '%s'>" +
+                "  <fes:Filter>" +
+                "   <fes:ResourceId rid='%s'></fes:ResourceId>" +
+                "   <fes:ResourceId rid='%s'></fes:ResourceId>" +
+                "   <fes:ResourceId rid='%s'></fes:ResourceId>" +
+                "   <fes:ResourceId rid='%s'></fes:ResourceId>" +
+                "   <fes:ResourceId rid='%s'></fes:ResourceId>" +
+                "  </fes:Filter>" +
+                "</Query>" +
+                "</GetFeature>", 0, 2, typeName, "Fifteen.5", "Fifteen.6", "Fifteen.7", "Fifteen.8", "Fifteen.9");
         Document doc = postAsDOM("wfs", xml);
         XMLAssert.assertXpathEvaluatesTo("2", "count(//" + typeName + ")", doc);
         XMLAssert.assertXpathEvaluatesTo("1", "count(//" + typeName + "[@gml:id='Fifteen.5'])", doc);
         XMLAssert.assertXpathEvaluatesTo("1", "count(//" + typeName + "[@gml:id='Fifteen.6'])", doc);
-        
+
         assertFalse(doc.getDocumentElement().hasAttribute("previous"));
         assertTrue(doc.getDocumentElement().hasAttribute("next"));
 
@@ -471,20 +469,20 @@ public class GetFeaturePagingTest extends WFS20TestSupport {
 
         assertTrue(doc.getDocumentElement().hasAttribute("previous"));
         assertTrue(doc.getDocumentElement().hasAttribute("next"));
-        
+
         String prev = doc.getDocumentElement().getAttribute("previous");
         assertKvp(0, 2, typeName, filter, toKvpMap(prev));
-        
+
         next = doc.getDocumentElement().getAttribute("next");
         assertKvp(4, 2, typeName, filter, toKvpMap(next));
 
         doc = getAsDOM(next.substring(next.indexOf("wfs")));
         XMLAssert.assertXpathEvaluatesTo("1", "count(//" + typeName + ")", doc);
         XMLAssert.assertXpathEvaluatesTo("1", "count(//" + typeName + "[@gml:id='Fifteen.9'])", doc);
-        
+
         assertTrue(doc.getDocumentElement().hasAttribute("previous"));
         assertFalse(doc.getDocumentElement().hasAttribute("next"));
-        
+
         prev = doc.getDocumentElement().getAttribute("previous");
         assertKvp(2, 2, typeName, filter, toKvpMap(prev));
     }
@@ -492,35 +490,34 @@ public class GetFeaturePagingTest extends WFS20TestSupport {
     void assertKvp(int startIndex, int count, String typeName, Filter filter, Map kvp) throws Exception {
         assertEquals(String.valueOf(startIndex), kvp.get("STARTINDEX"));
         assertEquals(String.valueOf(count), kvp.get("COUNT"));
-        assertEquals("("+typeName+")", URLDecoder.decode((String)kvp.get("TYPENAMES")));
+        assertEquals("(" + typeName + ")", URLDecoder.decode((String) kvp.get("TYPENAMES")));
         assertNotNull(kvp.get("FILTER"));
-        
+
         assertFilter(filter, URLDecoder.decode((String) kvp.get("FILTER")));
     }
-    
+
     void assertFilter(Filter expected, String filter) throws Exception {
-        filter = filter.substring(1, filter.length()-1);
-        Filter f = (Filter) 
+        filter = filter.substring(1, filter.length() - 1);
+        Filter f = (Filter)
                 new Parser(new FESConfiguration()).parse(new ByteArrayInputStream(filter.getBytes()));
         if (expected instanceof Id) {
             Set s1 = new HashSet();
-            for (Identifier id: ((Id) expected).getIdentifiers()) {
+            for (Identifier id : ((Id) expected).getIdentifiers()) {
                 s1.add(id.toString());
             }
             Set s2 = new HashSet();
-            for (Identifier id: ((Id) f).getIdentifiers()) {
+            for (Identifier id : ((Id) f).getIdentifiers()) {
                 s2.add(id.toString());
             }
             assertEquals(s1, s2);
+        } else {
+            assertEquals(expected, f);
         }
-        else {
-            assertEquals(expected, f);    
-        }
-        
+
     }
-    
+
     KvpMap toKvpMap(String url) {
-        url = url.substring(url.indexOf('?')+1);
+        url = url.substring(url.indexOf('?') + 1);
         String[] kvps = url.split("\\&");
         KvpMap map = new KvpMap();
         for (String kvp : kvps) {
@@ -528,12 +525,12 @@ public class GetFeaturePagingTest extends WFS20TestSupport {
         }
         return map;
     }
-    
+
     @Test
     public void testSortingGET() throws Exception {
         Document dom = getAsDOM("wfs?service=WFS&version=2.0.0&request=GetFeature&typeName=gs:Fifteen&sortBy=num ASC&count=1");
         XMLAssert.assertXpathExists("//gs:Fifteen/gs:num[text() = '0']", dom);
-        
+
         dom = getAsDOM("wfs?service=WFS&version=2.0.0&request=GetFeature&typeName=gs:Fifteen&sortBy=num DESC&count=1");
         XMLAssert.assertXpathExists("//gs:Fifteen/gs:num[text() = '14']", dom);
     }
@@ -543,19 +540,19 @@ public class GetFeaturePagingTest extends WFS20TestSupport {
         doTestNextPreviousHitsGET("gs:Fifteen");
         doTestNextPreviousHitsGET("cdf:Fifteen");
     }
-    
+
     public void doTestNextPreviousHitsGET(String typeName) throws Exception {
         Document doc = getAsDOM("/wfs?request=GetFeature&version=2.0.0&service=wfs&" +
                 "typename=" + typeName + "&count=5&resulttype=hits");
         assertFalse(doc.getDocumentElement().hasAttribute("previous"));
-        
+
         doc = getAsDOM("/wfs?request=GetFeature&version=2.0.0&service=wfs&" +
                 "typename=" + typeName + "&startIndex=0&count=5&resulttype=hits");
         assertFalse(doc.getDocumentElement().hasAttribute("previous"));
         assertStartIndexCount(doc, "next", 0, 5);
-        
+
         doc = getAsDOM("/wfs?request=GetFeature&version=2.0.0&service=wfs&" +
-            "typename=" + typeName + "&startIndex=5&count=7&resulttype=hits");
+                "typename=" + typeName + "&startIndex=5&count=7&resulttype=hits");
         assertFalse(doc.getDocumentElement().hasAttribute("previous"));
         assertStartIndexCount(doc, "next", 0, 7);
 
@@ -569,7 +566,7 @@ public class GetFeaturePagingTest extends WFS20TestSupport {
         assertFalse(doc.getDocumentElement().hasAttribute("previous"));
         assertStartIndexCount(doc, "next", 0, -1 /* not there */);
     }
-    
+
     @Test
     public void testCountZero() throws Exception {
         Document doc = getAsDOM("/wfs?request=GetFeature&version=2.0.0&service=wfs&" +

@@ -13,7 +13,7 @@ import org.geoserver.ows.Request;
 /**
  * Helper class that allows to identify a specific user and returns a unique key for it. The
  * mechanism works by setting a cookie on HTTP request to identify the users.
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class CookieKeyGenerator implements KeyGenerator {

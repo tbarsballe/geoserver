@@ -22,17 +22,17 @@ public class StatusBar extends Panel {
     private static final long serialVersionUID = 1L;
 
     public StatusBar(final String id, final IModel<Number> limitModel,
-            final IModel<Number> progressModel, final IModel<String> progressMessageModel) {
+                     final IModel<Number> progressModel, final IModel<String> progressMessageModel) {
         super(id);
         setOutputMarkupId(true);
         add(new Behavior() {
-                private static final long serialVersionUID = -8058471260136015254L;
+            private static final long serialVersionUID = -8058471260136015254L;
 
-                @Override
-        	public void renderHead(Component component, IHeaderResponse response) {
-        		response.render(CssHeaderItem.forReference(new PackageResourceReference(StatusBar.class, "statusbar.css")));
-        	}
-        	
+            @Override
+            public void renderHead(Component component, IHeaderResponse response) {
+                response.render(CssHeaderItem.forReference(new PackageResourceReference(StatusBar.class, "statusbar.css")));
+            }
+
         });
 
         WebMarkupContainer usageBar = new WebMarkupContainer("statusBarProgress");

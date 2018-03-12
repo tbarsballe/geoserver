@@ -22,8 +22,7 @@ import org.geoserver.data.test.SystemTestData;
 
 public abstract class ImporterDbTestSupport extends ImporterTestSupport {
 
-    
-    
+
     @Override
     public SystemTestData createTestData() throws Exception {
         return new DbmsTestData(getDataDirectory().root(), getFixtureId(), null);
@@ -35,12 +34,12 @@ public abstract class ImporterDbTestSupport extends ImporterTestSupport {
 
     protected abstract String getFixtureId();
 
-    protected Connection getConnection() throws Exception  {
-        return ((DbmsTestData)getTestData()).getConnection();
+    protected Connection getConnection() throws Exception {
+        return ((DbmsTestData) getTestData()).getConnection();
     }
 
     protected Map getConnectionParams() throws IOException {
-        return ((DbmsTestData)getTestData()).getConnectionParams();
+        return ((DbmsTestData) getTestData()).getConnectionParams();
     }
 
     protected void run(String sql, Statement st) throws SQLException {
@@ -50,8 +49,7 @@ public abstract class ImporterDbTestSupport extends ImporterTestSupport {
     protected void runSafe(String sql, Statement st) {
         try {
             run(sql, st);
-        }
-        catch(SQLException e) {
+        } catch (SQLException e) {
             LOGGER.log(Level.FINE, e.getLocalizedMessage(), e);
         }
     }
@@ -59,7 +57,7 @@ public abstract class ImporterDbTestSupport extends ImporterTestSupport {
     class DbmsTestData extends LiveDbmsData {
 
         public DbmsTestData(File dataDirSourceDirectory, String fixtureId, File sqlScript)
-            throws IOException {
+                throws IOException {
             super(dataDirSourceDirectory, fixtureId, sqlScript);
             getFilteredPaths().clear();
         }
@@ -67,10 +65,10 @@ public abstract class ImporterDbTestSupport extends ImporterTestSupport {
         public File getFixture() {
             return fixture;
         }
-        
+
         public Connection getConnection() throws Exception {
             Map p = getConnectionParams();
-            Class.forName((String)p.get("driver"));
+            Class.forName((String) p.get("driver"));
 
             String url = (String) p.get("url");
             String user = (String) p.get("username");
@@ -84,14 +82,13 @@ public abstract class ImporterDbTestSupport extends ImporterTestSupport {
             FileInputStream fin = new FileInputStream(getFixture());
             try {
                 props.load(fin);
-            }
-            finally {
+            } finally {
                 fin.close();
             }
 
             return new HashMap(props);
         }
     }
-    
+
 
 }

@@ -21,9 +21,8 @@ import org.junit.Before;
  * Base class for {@link ThreadLocalTransfer} tests. Just implement a ThreadLocalTransferCallable
  * and call {@link #testThreadLocalTransfer(ThreadLocalTransferCallable)} to have the thread local
  * transfer be tested for proper transfer and cleanup.
- * 
+ *
  * @author Andrea Aime - GeoSolutions
- * 
  */
 public abstract class AbstractThreadLocalTransferTest {
 
@@ -79,5 +78,7 @@ public abstract class AbstractThreadLocalTransferTest {
 
         abstract void assertThreadLocalApplied();
 
-    };
+    }
+
+    ;
 }

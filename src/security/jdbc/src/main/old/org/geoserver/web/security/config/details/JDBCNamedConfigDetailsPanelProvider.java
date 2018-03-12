@@ -13,25 +13,23 @@ import org.geoserver.security.jdbc.JDBCUserGroupService;
 import org.geoserver.web.security.config.SecurityNamedConfigModelHelper;
 
 /**
- * 
  * JDBC implementation of {@link NamedConfigDetailsPanelProvider}
- * 
- * @author christian
  *
+ * @author christian
  */
 public class JDBCNamedConfigDetailsPanelProvider implements NamedConfigDetailsPanelProvider {
 
     @Override
     public AbstractNamedConfigDetailsPanel getDetailsPanel(String className, String id,
-            CompoundPropertyModel<SecurityNamedConfigModelHelper> model) {
-        
+                                                           CompoundPropertyModel<SecurityNamedConfigModelHelper> model) {
+
         if (JDBCUserGroupService.class.getName().equals(className))
-            return new JDBCUserGroupConfigDetailsPanel(id,model);
+            return new JDBCUserGroupConfigDetailsPanel(id, model);
         if (JDBCRoleService.class.getName().equals(className))
             return new JDBCRoleConfigDetailsPanel(id, model);
         if (JDBCConnectAuthProvider.class.getName().equals(className))
             return new JDBCAuthProviderConfigDetailsPanel(id, model);
-             
+
         return null;
     }
 

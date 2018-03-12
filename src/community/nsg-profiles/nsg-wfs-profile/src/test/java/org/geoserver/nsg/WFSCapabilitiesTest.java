@@ -58,18 +58,18 @@ public class WFSCapabilitiesTest extends WFS20TestSupport {
                 assertXpathExists(xpath, dom);
             }
         }
-        
+
         // ensure the timeout parameter is configured on expected operations
         for (String operation : NSGWFSExtendedCapabilitiesProvider.TIMEOUT_OPERATIONS) {
             String xpath = String.format("//ows:OperationsMetadata/ows:Operation[@name = " +
                     "'%s']/ows:Parameter[@name='Timeout' and ows:DefaultValue='300']", operation);
             assertXpathExists(xpath, dom);
         }
-        
+
         // check the PageResults operation is there
         assertXpathExists("//ows:OperationsMetadata/ows:Operation[@name = 'PageResults']", dom);
         assertXpathExists("//ows:OperationsMetadata/ows:Operation[@name = " +
-                "'PageResults']/ows:Parameter[@name='outputFormat' and ows:DefaultValue='" + 
+                "'PageResults']/ows:Parameter[@name='outputFormat' and ows:DefaultValue='" +
                 NSGWFSExtendedCapabilitiesProvider.GML32_FORMAT + "']", dom);
     }
 }

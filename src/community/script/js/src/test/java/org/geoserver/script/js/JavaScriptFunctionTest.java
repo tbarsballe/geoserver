@@ -34,7 +34,7 @@ import com.vividsolutions.jts.geom.PrecisionModel;
 public class JavaScriptFunctionTest extends ScriptIntTestSupport {
 
     ScriptFunctionFactory functionFactory;
-    
+
     @Override
     protected void populateDataDirectory(MockData dataDirectory) throws Exception {
         File fromDir = URLs.urlToFile(getClass().getResource("scripts"));
@@ -48,7 +48,7 @@ public class JavaScriptFunctionTest extends ScriptIntTestSupport {
         super.oneTimeSetUp();
         functionFactory = new ScriptFunctionFactory(getScriptManager());
     }
-    
+
     @SuppressWarnings("unchecked")
     public void testFactorial() {
         Function factorial = functionFactory.function("factorial", Collections.EMPTY_LIST, null);
@@ -85,7 +85,7 @@ public class JavaScriptFunctionTest extends ScriptIntTestSupport {
         PropertyName geometryProperty = filterFactory.property("geometry");
         PropertyName distanceProperty = filterFactory.property("distance");
 
-        Expression[] expressions = new Expression[] {geometryProperty, distanceProperty};
+        Expression[] expressions = new Expression[]{geometryProperty, distanceProperty};
         Function buffer = functionFactory.function("buffer", Arrays.asList(expressions), null);
 
         assertNotNull(buffer);

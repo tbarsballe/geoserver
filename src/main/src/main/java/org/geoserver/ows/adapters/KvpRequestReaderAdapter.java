@@ -40,10 +40,9 @@ import org.vfny.geoserver.util.requests.readers.KvpRequestReader;
  * </p>
  *
  * @author Justin Deoliveira, The Open Planning Project, jdeolive@openplans.org
- *
  */
 public class KvpRequestReaderAdapter extends org.geoserver.ows.KvpRequestReader
-    implements HttpServletRequestAware {
+        implements HttpServletRequestAware {
     Class delegateClass;
     ServiceInfo service;
     HttpServletRequest request;
@@ -64,7 +63,7 @@ public class KvpRequestReaderAdapter extends org.geoserver.ows.KvpRequestReader
         String paramName;
         String paramValue;
 
-        for (Enumeration pnames = request.getParameterNames(); pnames.hasMoreElements();) {
+        for (Enumeration pnames = request.getParameterNames(); pnames.hasMoreElements(); ) {
             paramName = (String) pnames.nextElement();
             paramValue = request.getParameter(paramName);
             kvp.put(paramName.toUpperCase(), paramValue);
@@ -76,29 +75,29 @@ public class KvpRequestReaderAdapter extends org.geoserver.ows.KvpRequestReader
 
         while (clazz != null && constructor == null) {
             try {
-                constructor = delegateClass.getConstructor(new Class[] { Map.class, clazz });
+                constructor = delegateClass.getConstructor(new Class[]{Map.class, clazz});
             } catch (NoSuchMethodException e) {
                 Class[] classes = clazz.getInterfaces();
                 for (Class c : classes) {
-                	try {
-                		constructor = delegateClass.getConstructor(new Class[] { Map.class, c });
-                	} catch(NoSuchMethodException e2) {
-                		// no harm done
-                	}
-				}
+                    try {
+                        constructor = delegateClass.getConstructor(new Class[]{Map.class, c});
+                    } catch (NoSuchMethodException e2) {
+                        // no harm done
+                    }
+                }
                 clazz = clazz.getSuperclass();
             }
         }
-        
+
 
         if (constructor == null) {
             throw new IllegalStateException("No appropriate constructor");
         }
 
         //create an instance of the delegate	
-        KvpRequestReader delegate = (KvpRequestReader) constructor.newInstance(new Object[] {
-                    kvp, service
-                });
+        KvpRequestReader delegate = (KvpRequestReader) constructor.newInstance(new Object[]{
+                kvp, service
+        });
 
         //create the request object
         return delegate.getRequest(request);

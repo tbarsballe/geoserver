@@ -11,7 +11,7 @@ import org.geoserver.ogr.core.ToolWrapperFactory;
 
 /**
  * Factory to create {@link OGRWrapper} instances.
- * 
+ *
  * @author Stefano Costa, GeoSolutions
  */
 public class OGRWrapperFactory implements ToolWrapperFactory {

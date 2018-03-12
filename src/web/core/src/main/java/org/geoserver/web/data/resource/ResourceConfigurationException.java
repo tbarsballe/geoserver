@@ -8,8 +8,7 @@ package org.geoserver.web.data.resource;
 import org.geoserver.platform.exception.GeoServerException;
 
 /**
- * Base class for exceptions used for validation errors in resource configuration 
- * 
+ * Base class for exceptions used for validation errors in resource configuration
  */
 
 public class ResourceConfigurationException extends GeoServerException {
@@ -20,6 +19,6 @@ public class ResourceConfigurationException extends GeoServerException {
         super(id);
         setId(id);
         setArgs(args);
-    } 
+    }
 
 }

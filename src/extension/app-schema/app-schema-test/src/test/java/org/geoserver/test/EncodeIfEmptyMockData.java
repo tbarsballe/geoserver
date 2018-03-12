@@ -8,7 +8,7 @@ package org.geoserver.test;
 
 /**
  * Mock data for {@link EncodeIfEmptyTest}.
- * 
+ *
  * @author Victor Tey (CSIRO Earth Science and Resource Engineering)
  */
 public class EncodeIfEmptyMockData extends AbstractAppSchemaMockData {

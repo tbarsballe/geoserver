@@ -7,7 +7,7 @@ package org.geoserver.notification.common.sender;
 
 /**
  * Sends an encoded payload to some destination
- * 
+ *
  * @author Xandros
  * @see RabbitMQSender
  */

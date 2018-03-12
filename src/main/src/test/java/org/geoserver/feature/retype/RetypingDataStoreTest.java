@@ -121,7 +121,7 @@ public class RetypingDataStoreTest {
         assertTrue(fc.size() > 0);
 
         // make sure the feature schema is good as well
-        FeatureIterator <SimpleFeature> it = fc.features();
+        FeatureIterator<SimpleFeature> it = fc.features();
         SimpleFeature sf = it.next();
         it.close();
 
@@ -159,7 +159,7 @@ public class RetypingDataStoreTest {
         SimpleFeatureCollection fc = fs.getFeatures(new Query(RENAMED, fidFilter));
         assertEquals(RENAMED, fc.getSchema().getName().getLocalPart());
         assertEquals(1, fc.size());
-        FeatureIterator <SimpleFeature> it = fc.features();
+        FeatureIterator<SimpleFeature> it = fc.features();
         assertTrue(it.hasNext());
         SimpleFeature sf = it.next();
         assertFalse(it.hasNext());
@@ -209,7 +209,6 @@ public class RetypingDataStoreTest {
     /**
      * This test is made with mock objects because the property data store does
      * not generate fids in the <type>.<id> form
-     * 
      */
     @SuppressWarnings("unchecked")
     @Test
@@ -219,11 +218,11 @@ public class RetypingDataStoreTest {
 
         SimpleFeatureStore fs = createMock(SimpleFeatureStore.class);
         expect(fs.addFeatures(isA(FeatureCollection.class))).andReturn(
-                Collections.singletonList((FeatureId)(new FeatureIdImpl("trees.105"))));
+                Collections.singletonList((FeatureId) (new FeatureIdImpl("trees.105"))));
         replay(fs);
 
         DataStore ds = createMock(DataStore.class);
-        expect(ds.getTypeNames()).andReturn(new String[] { "trees" }).anyTimes();
+        expect(ds.getTypeNames()).andReturn(new String[]{"trees"}).anyTimes();
         expect(ds.getSchema("trees")).andReturn(type).anyTimes();
         expect(ds.getFeatureSource("trees")).andReturn(fs);
         replay(ds);
@@ -271,7 +270,7 @@ public class RetypingDataStoreTest {
         fl.unLockFeatures(fidFilter);
         assertEquals(1, fl2.lockFeatures(fidFilter));
     }
-    
+
     @Test
     public void testLockUnlockQuery() throws Exception {
         SimpleFeatureLocking fl;
@@ -299,17 +298,17 @@ public class RetypingDataStoreTest {
     public void testQueryWithPropertyNames() throws Exception {
         // check the schemas in feature source and feature collection
         SimpleFeatureSource fs = rts.getFeatureSource(RENAMED);
-        Query q = new Query(RENAMED, Filter.INCLUDE, new String[] { "ADDRESS"} );
-        FeatureCollection<SimpleFeatureType,SimpleFeature> fc = fs.getFeatures( q );
-        assertEquals( 1, fc.getSchema().getAttributeCount() );
-        
+        Query q = new Query(RENAMED, Filter.INCLUDE, new String[]{"ADDRESS"});
+        FeatureCollection<SimpleFeatureType, SimpleFeature> fc = fs.getFeatures(q);
+        assertEquals(1, fc.getSchema().getAttributeCount());
+
         // make sure the feature schema is good as well
-        FeatureIterator <SimpleFeature> it = fc.features();
+        FeatureIterator<SimpleFeature> it = fc.features();
         SimpleFeature sf = it.next();
         it.close();
-        
-        assertEquals( 1, sf.getAttributeCount() );
-        assertNull( sf.getAttribute( "FID" ) );
-        assertNotNull( sf.getAttribute( "ADDRESS"));
+
+        assertEquals(1, sf.getAttributeCount());
+        assertNull(sf.getAttribute("FID"));
+        assertNotNull(sf.getAttribute("ADDRESS"));
     }
 }

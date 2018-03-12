@@ -24,15 +24,15 @@ public class OpenSearchAccessProvider {
     public OpenSearchAccessProvider(GeoServer geoServer) {
         this.geoServer = geoServer;
     }
-    
+
     public OSEOInfo getService() {
         return this.geoServer.getService(OSEOInfo.class);
     }
-    
+
     /**
      * Returns the OpenSearchAccess configured in {@link OSEOInfo}, or throws a service exception
      * in case of mis-configuration
-     * 
+     *
      * @return
      * @throws IOException
      */
@@ -54,7 +54,7 @@ public class OpenSearchAccessProvider {
 
         return (OpenSearchAccess) result;
     }
-    
+
     public DataStoreInfo getDataStoreInfo() throws IOException {
         OSEOInfo service = getService();
         String openSearchAccessStoreId = service.getOpenSearchAccessStoreId();
@@ -63,7 +63,7 @@ public class OpenSearchAccessProvider {
                     + " OpenSearch for EO panel, please do so");
         }
         DataStoreInfo dataStore = this.geoServer.getCatalog().getDataStore(openSearchAccessStoreId);
-        
+
         return dataStore;
     }
 

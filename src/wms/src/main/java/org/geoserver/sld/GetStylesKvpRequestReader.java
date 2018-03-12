@@ -17,7 +17,7 @@ public class GetStylesKvpRequestReader extends KvpRequestReader {
         this.wms = wms;
     }
 
-    
+
     @Override
     public Object createRequest() throws Exception {
         return new GetStylesRequest();

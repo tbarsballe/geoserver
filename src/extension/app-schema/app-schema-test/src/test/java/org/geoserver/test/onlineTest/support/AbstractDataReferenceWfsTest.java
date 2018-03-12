@@ -20,9 +20,8 @@ import org.junit.Assume;
 /**
  * Base class that provides the Wfs test support framework and perform checks on the fixture and the
  * availabilities of the fixture required
- * 
+ *
  * @author Victor Tey, CSIRO Earth Science and Resource Engineering
- * 
  */
 public abstract class AbstractDataReferenceWfsTest extends AbstractAppSchemaTestSupport {
     protected AbstractReferenceDataSetup setup = null;
@@ -38,7 +37,7 @@ public abstract class AbstractDataReferenceWfsTest extends AbstractAppSchemaTest
         if (available)
             initialiseTest();
     }
-    
+
     /**
      * The key in the test fixture property file used to set the behaviour of the online test if
      * {@link #connect()} fails.
@@ -57,14 +56,14 @@ public abstract class AbstractDataReferenceWfsTest extends AbstractAppSchemaTest
      * looking up the file and reporting it not found to the user.
      */
     protected static Map<String, Boolean> found = new HashMap<String, Boolean>();
-    
+
     @Override
     protected void setUpTestData(SystemTestData testData) throws Exception {
         setup.setUp();
-        
+
         super.setUpTestData(testData);
     }
-    
+
     public abstract AbstractReferenceDataSetup getReferenceDataSetup() throws Exception;
 
     public void connect() throws Exception {
@@ -101,7 +100,7 @@ public abstract class AbstractDataReferenceWfsTest extends AbstractAppSchemaTest
     /**
      * Check whether the fixture is available. This method also loads the configuration if present,
      * and tests the connection using {@link #isOnline()}.
-     * 
+     *
      * @return true if fixture is available for use
      * @throws FileNotFoundException
      */

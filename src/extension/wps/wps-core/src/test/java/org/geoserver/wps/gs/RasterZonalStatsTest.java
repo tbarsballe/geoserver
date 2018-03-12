@@ -39,20 +39,20 @@ public class RasterZonalStatsTest extends WPSTestSupport {
 
         // add extra data used by this test
         addWcs11Coverages(testData);
-        
+
         Map<LayerProperty, Object> props = new HashMap<SystemTestData.LayerProperty, Object>();
         props.put(LayerProperty.SRS, 26713);
-        
+
         testData.addRasterLayer(DEM, "sfdem.tiff", ".tiff", props, getClass(), getCatalog());
         testData.addVectorLayer(RESTRICTED, props, "restricted.properties", getClass(), getCatalog());
         testData.addVectorLayer(TASMANIA_BM_ZONES, props, "tazdem_zones.properties", getClass(), getCatalog());
     }
-    
+
     @Override
     protected void registerNamespaces(Map<String, String> namespaces) {
         namespaces.put("feature", "http://cite.opengeospatial.org/gmlsf");
     }
-    
+
     @Test
     public void testStatisticsTazDem() throws Exception {
         String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"

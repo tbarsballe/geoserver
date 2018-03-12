@@ -14,9 +14,8 @@ import org.geoserver.config.ServiceInfo;
 
 /**
  * Configuration object for Web Map Service.
- * 
+ *
  * @author Justin Deoliveira, The Open Planning Project
- * 
  */
 public interface WMSInfo extends ServiceInfo {
 
@@ -42,33 +41,31 @@ public interface WMSInfo extends ServiceInfo {
      * The srs's that the wms service supports.
      */
     List<String> getSRS();
-    
+
     /**
      * A set of mime types allowed for a getMap request. Active
      * if {@link #isGetMapMimeTypeCheckingEnabled()} returns <code>true</code>
-     * 
      */
     Set<String> getGetMapMimeTypes();
 
     boolean isGetMapMimeTypeCheckingEnabled();
 
     void setGetMapMimeTypeCheckingEnabled(boolean getMapMimeTypeCheckingEnabled);
-    
-            
+
+
     /**
      * A set of mime types allowed for a getFeatureInfo request. Active
      * if {@link #isGetFeatureInfoMimeTypeCheckingEnabled()} returns <code>true</code>
-     * 
      */
     Set<String> getGetFeatureInfoMimeTypes();
-    
+
     boolean isGetFeatureInfoMimeTypeCheckingEnabled();
-    
+
     void setGetFeatureInfoMimeTypeCheckingEnabled(boolean getFeatureInfoMimeTypeCheckingEnabled);
-    
+
     /**
-     * Flag controlling whether the WMS service, for each layer, should declare a bounding box 
-     * for every CRS supported, in it's capabilities document. 
+     * Flag controlling whether the WMS service, for each layer, should declare a bounding box
+     * for every CRS supported, in it's capabilities document.
      * <p>
      * By default the number of CRS's supported is huge which does not make this option practical.
      * This flag is only respected in cases there {@link #getSRS()} is non empty.
@@ -77,9 +74,9 @@ public interface WMSInfo extends ServiceInfo {
     Boolean isBBOXForEachCRS();
 
     /**
-     * Sets flag controlling whether the WMS service, for each layer, should declare a bounding box 
+     * Sets flag controlling whether the WMS service, for each layer, should declare a bounding box
      * for every CRS supported.
-     * 
+     *
      * @see #isBBOXForEachCRS()
      */
     void setBBOXForEachCRS(Boolean bboxForEachCRS);
@@ -97,7 +94,7 @@ public interface WMSInfo extends ServiceInfo {
     /**
      * Returns the max amount of memory, in kilobytes, that each WMS request can allocate (each
      * output format will make a best effort attempt to respect it, but there are no guarantees)
-     * 
+     *
      * @return the limit, or 0 if no limit
      */
     int getMaxRequestMemory();
@@ -117,7 +114,7 @@ public interface WMSInfo extends ServiceInfo {
 
     /**
      * Sets the max allowed rendering time, in seconds
-     * 
+     *
      * @param maxRenderingTime
      */
     void setMaxRenderingTime(int maxRenderingTime);
@@ -130,14 +127,14 @@ public interface WMSInfo extends ServiceInfo {
 
     /**
      * Sets the max number of rendering errors tolerated
-     * 
+     *
      * @param maxRenderingTime
      */
     void setMaxRenderingErrors(int maxRenderingTime);
-    
+
     /**
      * Defines the list of authority URLs for the root WMS layer
-     * 
+     *
      * @return the list of WMS root layer's authority URLs
      */
     List<AuthorityURLInfo> getAuthorityURLs();
@@ -146,31 +143,31 @@ public interface WMSInfo extends ServiceInfo {
      * @return the list of identifiers for the WMS root layer
      */
     List<LayerIdentifierInfo> getIdentifiers();
-    
+
     /**
-     * 
      * @return the title of the root layer
      */
     String getRootLayerTitle();
 
     /**
      * Sets the title of the root layer
+     *
      * @param rootLayerTitle
      */
     void setRootLayerTitle(String rootLayerTitle);
-    
+
     /**
-     * 
      * @return the abstract of the root layer
      */
-	public String getRootLayerAbstract();
+    public String getRootLayerAbstract();
 
-	/**
-	 * Sets the abstract of the root layer
+    /**
+     * Sets the abstract of the root layer
+     *
      * @param rootLayerAbstract
-	 */
-	public void setRootLayerAbstract(String rootLayerAbstract);
-    
+     */
+    public void setRootLayerAbstract(String rootLayerAbstract);
+
 
     /**
      * Sets the status of dynamic styling (SLD and SLD_BODY params) allowance

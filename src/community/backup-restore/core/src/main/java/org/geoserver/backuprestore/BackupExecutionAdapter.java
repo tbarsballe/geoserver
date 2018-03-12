@@ -8,9 +8,8 @@ import org.springframework.batch.core.JobExecution;
 
 /**
  * Wraps a Spring Batch Backup {@link JobExecution} by adding specific {@link Backup} I/O parameters.
- * 
- * @author Alessio Fabiani, GeoSolutions
  *
+ * @author Alessio Fabiani, GeoSolutions
  */
 public class BackupExecutionAdapter extends AbstractExecutionAdapter {
 

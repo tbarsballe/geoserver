@@ -118,7 +118,7 @@ public class GHRSSTWCSTest extends WCSKVPTestSupport {
 
         // hope the file name structure is correct, not 100% sure 
         String contentDispostion = response.getHeader("Content-disposition");
-        assertEquals("inline; filename=19121213214553-EUR-L3U_GHRSST-SSTint-AVHRR_METOP_A-v02.0-fv01.0.nc", 
+        assertEquals("inline; filename=19121213214553-EUR-L3U_GHRSST-SSTint-AVHRR_METOP_A-v02.0-fv01.0.nc",
                 contentDispostion);
         byte[] responseBytes = getBinary(response);
         File file = File.createTempFile("ghrsst", ".nc", new File("./target"));
@@ -186,7 +186,7 @@ public class GHRSSTWCSTest extends WCSKVPTestSupport {
 
             // enable ehancing to check values
             dataset.enhance(NetcdfDataset.getEnhanceAll());
-            assertValues(dataset, "sea_surface_temperature", new double[]{301, 302, 303, 304, 305, 306, 307, 308, 
+            assertValues(dataset, "sea_surface_temperature", new double[]{301, 302, 303, 304, 305, 306, 307, 308,
                     309}, 2e-3);
             assertValues(dataset, "wind_speed", new double[]{1, 2, 3, 4, 5, 6, 7, 8, 9}, 0.2);
         } finally {
@@ -199,7 +199,7 @@ public class GHRSSTWCSTest extends WCSKVPTestSupport {
                 .collect(Collectors.toMap(Attribute::getShortName, Function.identity()));
     }
 
-    private void assertValues(NetcdfDataset dataset, String variableName, double[] expectedValues, double tolerance) 
+    private void assertValues(NetcdfDataset dataset, String variableName, double[] expectedValues, double tolerance)
             throws IOException {
         Variable variable = dataset.findVariable(variableName);
         double[] values = (double[]) variable.read().copyTo1DJavaArray();
@@ -223,7 +223,7 @@ public class GHRSSTWCSTest extends WCSKVPTestSupport {
     public void testGHRSSTSubset() throws Exception {
         // test requires NetCDF-4 native libs to be available
         Assume.assumeTrue(NetCDFUtilities.isNC4CAvailable());
-        
+
         // this used to crash
         MockHttpServletResponse response = getAsServletResponse(
                 "ows?request=GetCoverage&service=WCS&version=2.0.1"

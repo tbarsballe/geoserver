@@ -22,71 +22,71 @@ public abstract class AbstractProcessFilterTest extends WPSTestSupport {
         assertXpathEvaluatesTo("0", "count(//wps:Process[ows:Identifier = 'JTS:intersects'])", d);
         assertXpathEvaluatesTo("1", "count(//wps:Process[ows:Identifier = 'JTS:buffer'])", d);
     }
-    
+
     @Test
     public void testDescribeProcessFiltering() throws Exception {
         // this one we can describe
-        Document d = getAsDOM( root() + "service=wps&request=describeprocess&identifier=JTS:buffer");
+        Document d = getAsDOM(root() + "service=wps&request=describeprocess&identifier=JTS:buffer");
         assertXpathExists("/wps:ProcessDescriptions", d);
-        
+
         // not this one, it's filtered out
-        d = getAsDOM( root() + "service=wps&request=describeprocess&identifier=JTS:intersection");
+        d = getAsDOM(root() + "service=wps&request=describeprocess&identifier=JTS:intersection");
         checkOws11Exception(d);
         assertXpathEvaluatesTo("No such process: JTS:intersection", "//ows:ExceptionText", d);
-        
+
         // and not this one, filtered out too
-        d = getAsDOM( root() + "service=wps&request=describeprocess&identifier=gs:Unique");
+        d = getAsDOM(root() + "service=wps&request=describeprocess&identifier=gs:Unique");
         checkOws11Exception(d);
         assertXpathEvaluatesTo("No such process: gs:Unique", "//ows:ExceptionText", d);
     }
-    
+
     @Test
     public void testExecuteFilteringAllow() throws Exception {
-        String xml =  
-                "<wps:Execute service='WPS' version='1.0.0' xmlns:wps='http://www.opengis.net/wps/1.0.0' " + 
-                    "xmlns:ows='http://www.opengis.net/ows/1.1'>" + 
-                  "<ows:Identifier>JTS:buffer</ows:Identifier>" + 
-                   "<wps:DataInputs>" + 
-                      "<wps:Input>" + 
-                         "<ows:Identifier>distance</ows:Identifier>" + 
-                         "<wps:Data>" + 
-                           "<wps:LiteralData>1</wps:LiteralData>" + 
-                         "</wps:Data>" + 
-                      "</wps:Input>" + 
-                      "<wps:Input>" + 
-                      "<ows:Identifier>geom</ows:Identifier>" + 
-                      "<wps:Data>" +
-                        "<wps:ComplexData>" + 
-                          "<gml:Polygon xmlns:gml='http://www.opengis.net/gml'>" +
-                            "<gml:exterior>" + 
-                              "<gml:LinearRing>" + 
-                                "<gml:coordinates>1 1 2 1 2 2 1 2 1 1</gml:coordinates>" + 
-                              "</gml:LinearRing>" + 
-                            "</gml:exterior>" + 
-                          "</gml:Polygon>" +
-                        "</wps:ComplexData>" + 
-                      "</wps:Data>" +     
-                  "</wps:Input>" + 
-                 "</wps:DataInputs>" +
-                 "<wps:ResponseForm>" +  
-                   "<wps:ResponseDocument storeExecuteResponse='false'>" + 
-                     "<wps:Output>" +
-                       "<ows:Identifier>result</ows:Identifier>" +
-                     "</wps:Output>" + 
-                   "</wps:ResponseDocument>" +
-                 "</wps:ResponseForm>" + 
-               "</wps:Execute>";
-        
-        Document d = postAsDOM( "wps", xml );
+        String xml =
+                "<wps:Execute service='WPS' version='1.0.0' xmlns:wps='http://www.opengis.net/wps/1.0.0' " +
+                        "xmlns:ows='http://www.opengis.net/ows/1.1'>" +
+                        "<ows:Identifier>JTS:buffer</ows:Identifier>" +
+                        "<wps:DataInputs>" +
+                        "<wps:Input>" +
+                        "<ows:Identifier>distance</ows:Identifier>" +
+                        "<wps:Data>" +
+                        "<wps:LiteralData>1</wps:LiteralData>" +
+                        "</wps:Data>" +
+                        "</wps:Input>" +
+                        "<wps:Input>" +
+                        "<ows:Identifier>geom</ows:Identifier>" +
+                        "<wps:Data>" +
+                        "<wps:ComplexData>" +
+                        "<gml:Polygon xmlns:gml='http://www.opengis.net/gml'>" +
+                        "<gml:exterior>" +
+                        "<gml:LinearRing>" +
+                        "<gml:coordinates>1 1 2 1 2 2 1 2 1 1</gml:coordinates>" +
+                        "</gml:LinearRing>" +
+                        "</gml:exterior>" +
+                        "</gml:Polygon>" +
+                        "</wps:ComplexData>" +
+                        "</wps:Data>" +
+                        "</wps:Input>" +
+                        "</wps:DataInputs>" +
+                        "<wps:ResponseForm>" +
+                        "<wps:ResponseDocument storeExecuteResponse='false'>" +
+                        "<wps:Output>" +
+                        "<ows:Identifier>result</ows:Identifier>" +
+                        "</wps:Output>" +
+                        "</wps:ResponseDocument>" +
+                        "</wps:ResponseForm>" +
+                        "</wps:Execute>";
+
+        Document d = postAsDOM("wps", xml);
         checkValidationErrors(d);
-        
-        assertEquals( "wps:ExecuteResponse", d.getDocumentElement().getNodeName() );
-        
-        assertXpathExists( "/wps:ExecuteResponse/wps:Status/wps:ProcessSucceeded", d);
-        assertXpathExists( 
-            "/wps:ExecuteResponse/wps:ProcessOutputs/wps:Output/wps:Data/wps:ComplexData/gml:Polygon", d);
+
+        assertEquals("wps:ExecuteResponse", d.getDocumentElement().getNodeName());
+
+        assertXpathExists("/wps:ExecuteResponse/wps:Status/wps:ProcessSucceeded", d);
+        assertXpathExists(
+                "/wps:ExecuteResponse/wps:ProcessOutputs/wps:Output/wps:Data/wps:ComplexData/gml:Polygon", d);
     }
-    
+
     @Test
     public void testExecuteFilteringDeny() throws Exception {
         String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"

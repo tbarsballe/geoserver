@@ -65,7 +65,7 @@ import com.vividsolutions.jts.geom.Polygon;
 /**
  * A data store building OpenSearch for EO records based on a wrapped data store providing all expected tables in form of simple features (and
  * leveraging joins to put them together into complex features as needed).
- * 
+ * <p>
  * The delegate store is fetched on demand to avoid being caught in a ResourcePool dispose
  *
  * @author Andrea Aime - GeoSolutions
@@ -166,7 +166,7 @@ public class JDBCOpenSearchAccess implements OpenSearchAccess {
         AttributeDescriptor metadataDescriptor = buildSimpleDescriptor(METADATA_PROPERTY_NAME,
                 String.class);
         typeBuilder.add(metadataDescriptor);
-        
+
         // adding the layer publishing property
         Name layerPropertyName = new NameImpl(this.namespaceURI, OpenSearchAccess.LAYER);
         AttributeDescriptor layerDescriptor = buildFeatureDescriptor(layerPropertyName, buildCollectionLayerFeatureType(layerPropertyName), 0, 1);
@@ -187,13 +187,13 @@ public class JDBCOpenSearchAccess implements OpenSearchAccess {
         try {
             SimpleFeatureTypeBuilder b = new SimpleFeatureTypeBuilder();
             for (AttributeDescriptor ad : source.getAttributeDescriptors()) {
-                if("bands".equals(ad.getLocalName()) || "browseBands".equals(ad.getLocalName())) {
+                if ("bands".equals(ad.getLocalName()) || "browseBands".equals(ad.getLocalName())) {
                     b.add(ad.getLocalName(), String[].class);
                 } else {
                     b.add(ad);
                 }
             }
-            
+
             b.setName(name);
             return b.buildFeatureType();
         } catch (Exception e) {
@@ -212,7 +212,7 @@ public class JDBCOpenSearchAccess implements OpenSearchAccess {
     private AttributeDescriptor buildFeatureListDescriptor(Name name, SimpleFeatureType schema) {
         return buildFeatureDescriptor(name, schema, 0, Integer.MAX_VALUE);
     }
-    
+
     private AttributeDescriptor buildFeatureDescriptor(Name name, SimpleFeatureType schema, int minOccurs, int maxOccurs) {
         AttributeTypeBuilder ab = new AttributeTypeBuilder();
         ab.name(name.getLocalPart()).namespaceURI(name.getNamespaceURI());
@@ -298,7 +298,7 @@ public class JDBCOpenSearchAccess implements OpenSearchAccess {
 
     /**
      * Returns the store from the repository (which is based on GeoServer own resource pool)
-     * 
+     *
      * @return
      * @throws IOException
      */
@@ -341,9 +341,9 @@ public class JDBCOpenSearchAccess implements OpenSearchAccess {
         names.add(collectionFeatureType.getName());
         names.add(productFeatureType.getName());
         // get all collections and their publishing setups
-        
+
         getCollectionPublishingConfigurations().forEach((name, layer) -> {
-            if(layer != null && layer.isSeparateBands() && layer.getBands() != null && layer.getBands().length > 0) {
+            if (layer != null && layer.isSeparateBands() && layer.getBands() != null && layer.getBands().length > 0) {
                 // one feature type per band needed to setup a coverage view
                 for (String band : layer.getBands()) {
                     names.add(new NameImpl(namespaceURI, name + OpenSearchAccess.BAND_LAYER_SEPARATOR + band));
@@ -359,7 +359,7 @@ public class JDBCOpenSearchAccess implements OpenSearchAccess {
     private Map<String, CollectionLayer> getCollectionPublishingConfigurations() throws IOException {
         FeatureSource<FeatureType, Feature> collectionSource = getCollectionSource();
         Query query = new Query(collectionSource.getName().getLocalPart());
-        query.setPropertyNames(new String[] { COLLECTION_NAME, LAYER });
+        query.setPropertyNames(new String[]{COLLECTION_NAME, LAYER});
         FeatureCollection<FeatureType, Feature> features = collectionSource.getFeatures(query);
         Map<String, CollectionLayer> result = new LinkedHashMap<>();
         features.accepts(f -> {
@@ -367,7 +367,7 @@ public class JDBCOpenSearchAccess implements OpenSearchAccess {
             String name = (String) p.getValue();
             CollectionLayer config = CollectionLayer.buildCollectionLayerFromFeature(f);
             result.put(name, config);
-            
+
         }, null);
         return result;
     }
@@ -399,7 +399,7 @@ public class JDBCOpenSearchAccess implements OpenSearchAccess {
             // silly generics...
             return (FeatureSource) getCollectionGranulesSource(typeName.getLocalPart());
         }
-        
+
         throw new IOException("Schema '" + typeName + "' does not exist.");
     }
 
@@ -408,14 +408,14 @@ public class JDBCOpenSearchAccess implements OpenSearchAccess {
         int idx = typeName.lastIndexOf(OpenSearchAccess.BAND_LAYER_SEPARATOR);
         String collection, band;
         // the two parts must be non empty in order to have a valid combination
-        if(idx > 1 && idx < (typeName.length() - 3)) { 
+        if (idx > 1 && idx < (typeName.length() - 3)) {
             collection = typeName.substring(0, idx);
             band = typeName.substring(idx + OpenSearchAccess.BAND_LAYER_SEPARATOR.length());
         } else {
             collection = typeName;
             band = null;
         }
-        
+
         // using joining for this one is hard because we need a flat representation
         // and be able to run filters on all attributes in whatever combination, the JOIN
         // support from GeoTools is too weak to do that. We'll setup a reusable virtual table instead
@@ -515,17 +515,17 @@ public class JDBCOpenSearchAccess implements OpenSearchAccess {
         sb.append(" as collection ON product.\"eoParentIdentifier\" = collection.\"eoIdentifier\"");
         // comparing with false on purpose, allows to defaul to true if primary is null or empty
         boolean primaryTable = !Boolean.FALSE.equals(collectionFeature.getAttribute("primary"));
-        if(primaryTable || band != null) {
+        if (primaryTable || band != null) {
             sb.append(" WHERE ");
         }
         if (primaryTable) {
             sb.append(" collection.\"id\" = " + collectionFeature.getAttribute("id"));
-        } 
+        }
         if (band != null) {
-            if(primaryTable) {
+            if (primaryTable) {
                 sb.append("\n AND");
             }
-            sb.append( " granule.\"band\" = '" + band + "'");
+            sb.append(" granule.\"band\" = '" + band + "'");
         }
 
         VirtualTable vt = new VirtualTable(typeName, sb.toString());
@@ -566,7 +566,7 @@ public class JDBCOpenSearchAccess implements OpenSearchAccess {
     }
 
     private void encodeTableName(SQLDialect dialect, String databaseSchema, String tableName,
-            StringBuffer sql) {
+                                 StringBuffer sql) {
         if (databaseSchema != null) {
             dialect.encodeSchemaName(databaseSchema, sql);
             sql.append(".");
@@ -595,7 +595,7 @@ public class JDBCOpenSearchAccess implements OpenSearchAccess {
     }
 
     private SimpleFeature getCollectionFeature(String collectionName, JDBCDataStore delegate,
-            String collectionTableName) throws IOException {
+                                               String collectionTableName) throws IOException {
         final PropertyIsEqualTo collectionNameFilter = FF.equal(FF.property("name"),
                 FF.literal(collectionName), true);
         final ContentFeatureCollection collections = delegate.getFeatureSource(collectionTableName)
@@ -666,7 +666,7 @@ public class JDBCOpenSearchAccess implements OpenSearchAccess {
                 .map(ad -> ad.getLocalName()).filter(s -> !s.equals(productIdColumn))
                 .collect(Collectors.toList());
         granulesQuery.setPropertyNames(names);
-        
+
         final SimpleFeatureStore granulesStore = (SimpleFeatureStore) delegate
                 .getFeatureSource(granuleTableName);
         try {
@@ -676,8 +676,8 @@ public class JDBCOpenSearchAccess implements OpenSearchAccess {
                         throws IOException {
                     ListFeatureCollection fc = new ListFeatureCollection(granulesStore.getSchema());
                     SimpleFeatureBuilder fb = new SimpleFeatureBuilder(granulesStore.getSchema());
-                    try(SimpleFeatureIterator fi = (SimpleFeatureIterator) featureCollection.features()) {
-                        while(fi.hasNext()) {
+                    try (SimpleFeatureIterator fi = (SimpleFeatureIterator) featureCollection.features()) {
+                        while (fi.hasNext()) {
                             SimpleFeature sf = fi.next();
                             fb.set("product_id", dbProductId);
                             fb.set("location", sf.getAttribute("location"));
@@ -688,7 +688,9 @@ public class JDBCOpenSearchAccess implements OpenSearchAccess {
                         }
                     }
                     return delegate.addFeatures(fc);
-                };
+                }
+
+                ;
             };
         } catch (SchemaException e) {
             throw new IOException(e);

@@ -18,9 +18,7 @@ import org.geoserver.web.GeoServerWicketTestSupport;
 import org.junit.Test;
 
 /**
- * 
  * @author Martin Davis OpenGeo
- *
  */
 public class WPSRequestBuilderTest extends GeoServerWicketTestSupport {
 
@@ -82,27 +80,26 @@ public class WPSRequestBuilderTest extends GeoServerWicketTestSupport {
         // contents,
         // as that requires a true browser to execute the request
     }
-    
+
     /**
      * Tests initializing page to specific process via name request parameter.
-     * 
      */
     @Test
     public void testNameRequest() throws Exception {
         login();
-        
+
         // start the page
         tester.startPage(new WPSRequestBuilder(new PageParameters().add("name", "JTS:area")));
-        
+
         tester.assertComponent("form:requestBuilder:process", DropDownChoice.class);
-        
+
         // check process description
         tester.assertModelValue("form:requestBuilder:process", "JTS:area");
-        
+
         tester.assertComponent(
                 "form:requestBuilder:inputContainer:inputs:0:paramValue:editor:textarea",
                 TextArea.class);
     }
-    
+
 
 }

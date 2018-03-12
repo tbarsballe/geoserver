@@ -13,9 +13,8 @@ import java.util.List;
  * The {@link #getSource()} method returns the object modified. For access to the object
  * before it has been modified, see {@link CatalogModifyEvent}.
  * </p>
- * 
- * @author Justin Deoliveira, OpenGeo
  *
+ * @author Justin Deoliveira, OpenGeo
  */
 public interface CatalogPostModifyEvent extends CatalogEvent {
 

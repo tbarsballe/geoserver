@@ -30,9 +30,7 @@ import org.opengis.filter.Filter;
 import org.springframework.batch.core.BatchStatus;
 
 /**
- * 
  * @author Alessio Fabiani, GeoSolutions
- *
  */
 public class BackupTest extends BackupRestoreTestSupport {
 
@@ -175,7 +173,7 @@ public class BackupTest extends BackupRestoreTestSupport {
 
         if (restoreCatalog.getWorkspaces().size() > 0) {
             assertTrue(restoreCatalog.getWorkspaces().size() == restoreCatalog.getNamespaces().size());
-    
+
             assertTrue(restoreCatalog.getDataStores().size() == 4);
             assertTrue(restoreCatalog.getResources(FeatureTypeInfo.class).size() == 14);
             assertTrue(restoreCatalog.getResources(CoverageInfo.class).size() == 4);
@@ -233,7 +231,7 @@ public class BackupTest extends BackupRestoreTestSupport {
         assertTrue(restoreExecution.getStatus() == BatchStatus.COMPLETED);
         if (restoreCatalog.getWorkspaces().size() > 0) {
             // assertTrue(restoreCatalog.getWorkspaces().size() == 2);
-    
+
             assertTrue(restoreCatalog.getDataStores().size() == 2);
             assertTrue(restoreCatalog.getStyles().size() == 21);
         }
@@ -246,14 +244,14 @@ public class BackupTest extends BackupRestoreTestSupport {
     public void testStopSpringBatchBackupJob() throws Exception {
         Hints hints = new Hints(new HashMap(2));
         hints.add(new Hints(new Hints.OptionKey(Backup.PARAM_BEST_EFFORT_MODE), Backup.PARAM_BEST_EFFORT_MODE));
-        
+
         BackupExecutionAdapter backupExecution = backupFacade.runBackupAsync(
                 Files.asResource(File.createTempFile("testRunSpringBatchBackupJob", ".zip")), true, null, hints);
 
-        while(backupExecution.getStatus() != BatchStatus.STARTED) {
+        while (backupExecution.getStatus() != BatchStatus.STARTED) {
             // Wait a bit
             Thread.sleep(10);
-            
+
             if (backupExecution.getStatus() == BatchStatus.ABANDONED
                     || backupExecution.getStatus() == BatchStatus.FAILED
                     || backupExecution.getStatus() == BatchStatus.UNKNOWN) {
@@ -265,22 +263,22 @@ public class BackupTest extends BackupRestoreTestSupport {
                 break;
             }
         }
-        
+
         if (backupExecution.getStatus() != BatchStatus.COMPLETED) {
             backupFacade.stopExecution(backupExecution.getId());
-            
+
             // Wait a bit
             Thread.sleep(100);
-    
+
             assertNotNull(backupExecution);
-    
+
             while (backupExecution.getStatus() != BatchStatus.STOPPED) {
                 Thread.sleep(100);
-    
+
                 if (backupExecution.getStatus() == BatchStatus.ABANDONED
                         || backupExecution.getStatus() == BatchStatus.FAILED
                         || backupExecution.getStatus() == BatchStatus.UNKNOWN) {
-    
+
                     for (Throwable exception : backupExecution.getAllFailureExceptions()) {
                         LOGGER.log(Level.INFO, "ERROR: " + exception.getLocalizedMessage(), exception);
                         exception.printStackTrace();
@@ -288,7 +286,7 @@ public class BackupTest extends BackupRestoreTestSupport {
                     break;
                 }
             }
-    
+
             assertTrue(backupExecution.getStatus() == BatchStatus.STOPPED);
         }
     }
@@ -303,7 +301,7 @@ public class BackupTest extends BackupRestoreTestSupport {
         assertThat(extraResource.file().exists(), is(true));
         // load the properties
         Properties extraProperties = new Properties();
-        try(InputStream input = extraResource.in()) {
+        try (InputStream input = extraResource.in()) {
             extraProperties.load(input);
         } catch (Exception exception) {
             throw new RuntimeException("Error reading extra properties file.", exception);

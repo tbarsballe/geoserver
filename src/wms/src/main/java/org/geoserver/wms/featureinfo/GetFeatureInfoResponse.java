@@ -23,7 +23,7 @@ import org.springframework.util.Assert;
  * A GetFeatureInfoResponse object is responsible for generating GetFeatureInfo content in the
  * format specified. The way the content is generated is independent of this class, wich will use a
  * delegate object based on the output format requested
- * 
+ *
  * @author Gabriel Roldan
  * @version $Id$
  */
@@ -37,7 +37,7 @@ public class GetFeatureInfoResponse extends Response {
      * Creates a new GetMapResponse object.
      */
     public GetFeatureInfoResponse(final WMS wms,
-            final GetFeatureInfoOutputFormat defaultOutputFormat) {
+                                  final GetFeatureInfoOutputFormat defaultOutputFormat) {
         super(FeatureCollectionType.class);
         this.wms = wms;
         this.defaultOutputFormat = defaultOutputFormat;
@@ -54,15 +54,11 @@ public class GetFeatureInfoResponse extends Response {
     /**
      * Asks the available GetFeatureInfoOutputFormats for the MIME type of the result that it will
      * generate or is ready to, and returns it
-     * 
-     * @param value
-     *            a {@link FeatureCollectionType} as returned by {@link GetFeatureInfo}
-     * 
-     * @param operation
-     *            the {@link GetFeatureInfo} operation that originated the {@code value}
-     * 
+     *
+     * @param value     a {@link FeatureCollectionType} as returned by {@link GetFeatureInfo}
+     * @param operation the {@link GetFeatureInfo} operation that originated the {@code value}
      * @see org.geoserver.ows.Response#getMimeType(java.lang.Object,
-     *      org.geoserver.platform.Operation)
+     * org.geoserver.platform.Operation)
      */
     @Override
     public String getMimeType(final Object value, final Operation operation)
@@ -83,14 +79,11 @@ public class GetFeatureInfoResponse extends Response {
     }
 
     /**
-     * @param value
-     *            {@link FeatureCollectionType}
-     * @param output
-     *            where to encode the results to
-     * @param operation
-     *            {@link GetFeatureInfo}
+     * @param value     {@link FeatureCollectionType}
+     * @param output    where to encode the results to
+     * @param operation {@link GetFeatureInfo}
      * @see org.geoserver.ows.Response#write(java.lang.Object, java.io.OutputStream,
-     *      org.geoserver.platform.Operation)
+     * org.geoserver.platform.Operation)
      */
     @Override
     public void write(final Object value, final OutputStream output, final Operation operation)
@@ -110,9 +103,8 @@ public class GetFeatureInfoResponse extends Response {
     }
 
     /**
-     * @throws ServiceException
-     *             if no {@link GetFeatureInfoOutputFormat} is configured for the output format
-     *             specified in <code>request</code>
+     * @throws ServiceException if no {@link GetFeatureInfoOutputFormat} is configured for the output format
+     *                          specified in <code>request</code>
      */
     private GetFeatureInfoOutputFormat getRequestedOutputFormat(GetFeatureInfoRequest request)
             throws ServiceException {
@@ -123,15 +115,15 @@ public class GetFeatureInfoResponse extends Response {
         if (format == null) {
             format = defaultOutputFormat;
         }
-        
-        if (wms.isAllowedGetFeatureInfoFormat(format)==false) {
+
+        if (wms.isAllowedGetFeatureInfoFormat(format) == false) {
             throw wms.unallowedGetFeatureInfoFormatException(requestFormat);
         }
-        
+
         return format;
 
     }
-    
+
     @Override
     public String getCharset(Operation operation) {
         Assert.notNull(operation, "operation is null");

@@ -25,9 +25,8 @@ import org.geoserver.wfs.response.dxf.DXFWriterFinder;
 
 /**
  * Outputs feature collections in DXF format
- * 
+ *
  * @author Andrea Aime - OpenGeo, Peter Hopfgartner - R3 GIS
- * 
  */
 public class DXFPPIO extends CDataPPIO {
     private static final Logger LOGGER = Logging.getLogger(DXFPPIO.class);
@@ -38,7 +37,7 @@ public class DXFPPIO extends CDataPPIO {
 
     @Override
     public void encode(Object value, OutputStream os) throws IOException {
-    	Charset dxfcharset = Charset.forName("Cp1252");
+        Charset dxfcharset = Charset.forName("Cp1252");
         BufferedWriter w = new BufferedWriter(new OutputStreamWriter(os, dxfcharset));
         DXFWriter dxfWriter = DXFWriterFinder.getWriter("14", w);
         String[] names = {"wps_result"};
@@ -46,23 +45,23 @@ public class DXFPPIO extends CDataPPIO {
         int[] colors = {1};
         dxfWriter.setOption("colors", colors);
         dxfWriter.setOption("writeattributes", true);
-        
+
         List<Object> lft = new LinkedList<Object>();
         lft.add(value);
-        dxfWriter.write(lft,"14");
-        w.flush();            
+        dxfWriter.write(lft, "14");
+        w.flush();
     }
 
     @Override
     public Object decode(InputStream input) throws UnsupportedOperationException {
-    	throw new UnsupportedOperationException("DXF files can not be used as input");
+        throw new UnsupportedOperationException("DXF files can not be used as input");
     }
 
     @Override
     public Object decode(String input) throws UnsupportedOperationException {
         throw new UnsupportedOperationException("DXF files can not be used as input");
     }
-    
+
     @Override
     public String getFileExtension() {
         return "dxf";

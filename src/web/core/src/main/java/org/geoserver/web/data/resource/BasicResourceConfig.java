@@ -65,7 +65,7 @@ public class BasicResourceConfig extends ResourceConfigurationPanel {
         add(new CheckBox("advertised"));
         add(new TextField<String>("title"));
         add(new TextArea<String>("abstract"));
-        add(new KeywordsEditor("keywords", 
+        add(new KeywordsEditor("keywords",
                 LiveCollectionModel.list(new PropertyModel<List<KeywordInfo>>(model, "keywords"))));
         add(new MetadataLinkEditor("metadataLinks", model));
         add(new DataLinkEditor("dataLinks", model));
@@ -96,7 +96,7 @@ public class BasicResourceConfig extends ResourceConfigurationPanel {
                 new SRSToCRSModel(new PropertyModel<String>(model, "sRS")));
         declaredCRS.setRequired(true);
         refForm.add(declaredCRS);
-        
+
         //compute from native or declared crs links
         refForm.add(computeBoundsFromSRS(refForm, nativeBBox));
 
@@ -109,12 +109,12 @@ public class BasicResourceConfig extends ResourceConfigurationPanel {
             ri.setProjectionPolicy(ProjectionPolicy.FORCE_DECLARED);
         }
         refForm.add(projectionPolicy);
-        
+
         refForm.add(new ReprojectionIsPossibleValidator(nativeCRS, declaredCRS, projectionPolicy));
     }
 
     AjaxSubmitLink computeNativeBoundsLink(final Form refForm,
-            final EnvelopePanel nativeBBox) {
+                                           final EnvelopePanel nativeBBox) {
         return new AjaxSubmitLink("computeNative", refForm) {
 
             private static final long serialVersionUID = 3106345307476297622L;
@@ -129,13 +129,13 @@ public class BasicResourceConfig extends ResourceConfigurationPanel {
                     ReferencedEnvelope bounds = cb.getNativeBounds(resource);
                     resource.setNativeBoundingBox(bounds);
                     nativeBBox.setModelObject(bounds);
-                } catch(IOException e) {
+                } catch (IOException e) {
                     LOGGER.log(Level.SEVERE, "Error computing the native BBOX", e);
                     error("Error computing the native BBOX:" + e.getMessage());
                 }
                 target.add(nativeBBox);
             }
-            
+
             public boolean getDefaultFormProcessing() {
                 // disable the default processing or the link won't trigger
                 // when any validation fails
@@ -144,31 +144,31 @@ public class BasicResourceConfig extends ResourceConfigurationPanel {
 
         };
     }
-    
+
     /**
      * Compute the native bounds from the native CRS. Acts as an alternative to computing the bounds
      * from the data itself.
      */
     AjaxSubmitLink computeBoundsFromSRS(final Form<ResourceInfo> refForm, final EnvelopePanel nativeBoundsPanel) {
-        
+
         return new AjaxSubmitLink("computeLatLonFromNativeSRS", refForm) {
             private static final long serialVersionUID = 9211250161114770325L;
 
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 LOGGER.log(Level.FINE, "Computing bounds from native CRS");
-                ResourceInfo resource = 
+                ResourceInfo resource =
                         (ResourceInfo) BasicResourceConfig.this.getDefaultModelObject();
                 CatalogBuilder cb = new CatalogBuilder(GeoServerApplication.get().getCatalog());
                 ReferencedEnvelope nativeBBox = cb.getBoundsFromCRS(resource);
-                
+
                 if (nativeBBox != null) {
                     nativeBoundsPanel.setModelObject(nativeBBox);
                 }
-                
+
                 target.add(nativeBoundsPanel);
             }
-            
+
             @Override
             public boolean getDefaultFormProcessing() {
                 return false;
@@ -177,7 +177,7 @@ public class BasicResourceConfig extends ResourceConfigurationPanel {
     }
 
     AjaxSubmitLink computeLatLonBoundsLink(final Form refForm,
-            final EnvelopePanel nativeBBox, final EnvelopePanel latLonPanel) {
+                                           final EnvelopePanel nativeBBox, final EnvelopePanel latLonPanel) {
         return new AjaxSubmitLink("computeLatLon", refForm) {
 
             private static final long serialVersionUID = -5981662004745936762L;
@@ -187,11 +187,11 @@ public class BasicResourceConfig extends ResourceConfigurationPanel {
                 // perform manual processing of the required fields
                 form.process(null);
                 form.visitFormComponents(new FeedbackMessageCleaner<>(FeedbackMessage.UNDEFINED));
-                
+
                 ReferencedEnvelope nativeBounds = (ReferencedEnvelope) nativeBBox.getModelObject();
                 try {
                     // if the native bounds are not around compute them
-                    if(nativeBounds == null) {
+                    if (nativeBounds == null) {
                         ResourceInfo resource = (ResourceInfo) BasicResourceConfig.this.getDefaultModelObject();
                         CatalogBuilder cb = new CatalogBuilder(GeoServerApplication.get().getCatalog());
                         nativeBounds = cb.getNativeBounds(resource);
@@ -199,16 +199,16 @@ public class BasicResourceConfig extends ResourceConfigurationPanel {
                         nativeBBox.setModelObject(nativeBounds);
                         target.add(nativeBBox);
                     }
-                
+
                     CatalogBuilder cb = new CatalogBuilder(GeoServerApplication.get().getCatalog());
                     latLonPanel.setModelObject(cb.getLatLonBounds(nativeBounds, declaredCRS.getCRS()));
-                } catch(IOException e) {
+                } catch (IOException e) {
                     LOGGER.log(Level.SEVERE, "Error computing the geographic BBOX", e);
                     error("Error computing the geographic bounds:" + e.getMessage());
                 }
                 target.add(latLonPanel);
             }
-            
+
             @Override
             public boolean getDefaultFormProcessing() {
                 // disable the default processing or the link won't trigger
@@ -231,7 +231,7 @@ public class BasicResourceConfig extends ResourceConfigurationPanel {
             return object.name();
         }
     }
-    
+
     /**
      * Checks a resource name is actually a valid one (WFS/WMS wise),
      * in particular, only word chars
@@ -243,10 +243,10 @@ public class BasicResourceConfig extends ResourceConfigurationPanel {
             super("[\\w][\\w.-]*");
         }
     }
-    
+
     /**
      * Form validator that checks whether the native CRS can be projected to the declared one
-     * whenever the projection policy chosen is "reproject" 
+     * whenever the projection policy chosen is "reproject"
      */
     private static class ReprojectionIsPossibleValidator implements IFormValidator {
 
@@ -261,12 +261,12 @@ public class BasicResourceConfig extends ResourceConfigurationPanel {
         private FormComponent<?> projectionPolicy;
 
         public ReprojectionIsPossibleValidator(final FormComponent<?> nativeCRS,
-                final FormComponent<?> declaredCRS, final FormComponent<?> projectionPolicy) {
+                                               final FormComponent<?> declaredCRS, final FormComponent<?> projectionPolicy) {
             this.nativeCRS = nativeCRS;
             this.declaredCRS = declaredCRS;
             this.projectionPolicy = projectionPolicy;
-            this.dependentFormComponents = new FormComponent[] { nativeCRS, declaredCRS,
-                    projectionPolicy };
+            this.dependentFormComponents = new FormComponent[]{nativeCRS, declaredCRS,
+                    projectionPolicy};
         }
 
         public FormComponent<?>[] getDependentFormComponents() {
@@ -288,7 +288,7 @@ public class BasicResourceConfig extends ResourceConfigurationPanel {
                 } catch (FactoryException e) {
                     String msgKey = "BasicResourceConfig.noTransformFromNativeToDeclaredCRS";
                     String errMsg = e.getMessage();
-                    String message =(String) new ResourceModel(msgKey).getObject();
+                    String message = (String) new ResourceModel(msgKey).getObject();
                     form.error(message, Collections.singletonMap("error", (Object) errMsg));
                 }
             }

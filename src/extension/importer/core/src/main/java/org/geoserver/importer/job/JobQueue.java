@@ -23,13 +23,19 @@ import java.util.concurrent.atomic.AtomicLong;
 
 public class JobQueue {
 
-    /** job id counter */
+    /**
+     * job id counter
+     */
     AtomicLong counter = new AtomicLong();
 
-    /** recent jobs */
-    ConcurrentHashMap<Long,Task<?>> jobs = new ConcurrentHashMap<Long, Task<?>>();
+    /**
+     * recent jobs
+     */
+    ConcurrentHashMap<Long, Task<?>> jobs = new ConcurrentHashMap<Long, Task<?>>();
 
-    /** job runner */
+    /**
+     * job runner
+     */
     //ExecutorService pool = Executors.newCachedThreadPool();
     ExecutorService pool = new ThreadPoolExecutor(0, Integer.MAX_VALUE, 60L, TimeUnit.SECONDS,
             new SynchronousQueue<Runnable>()) {
@@ -38,23 +44,32 @@ public class JobQueue {
                 return new Task((Job) callable);
             }
             return super.newTaskFor(callable);
-        };
-        
+        }
+
+        ;
+
         protected void beforeExecute(Thread t, Runnable r) {
             if (t != null && r instanceof Task) {
-                ((Task)r).started();
+                ((Task) r).started();
             }
-        };
-        
+        }
+
+        ;
+
         protected void afterExecute(Runnable r, Throwable t) {
             if (t != null && r instanceof Task) {
-                ((Task)r).setError(t);
+                ((Task) r).setError(t);
             }
-        };
+        }
+
+        ;
     };
 
-    /** job cleaner */
+    /**
+     * job cleaner
+     */
     ScheduledExecutorService cleaner = Executors.newSingleThreadScheduledExecutor();
+
     {
         cleaner.scheduleAtFixedRate(new Runnable() {
             public void run() {

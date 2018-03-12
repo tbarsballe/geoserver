@@ -17,8 +17,8 @@ import org.opengis.feature.simple.SimpleFeatureType;
 
 /**
  * A single coverage wrapper for structured coverage readers. The structured extra operations
- * are not limited to the single coverage though. 
- *  
+ * are not limited to the single coverage though.
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class StructuredSingleGridCoverage2DReader extends SingleGridCoverage2DReader implements
@@ -27,7 +27,7 @@ public class StructuredSingleGridCoverage2DReader extends SingleGridCoverage2DRe
     private StructuredGridCoverage2DReader structuredDelegate;
 
     public StructuredSingleGridCoverage2DReader(StructuredGridCoverage2DReader delegate,
-            String coverageName) {
+                                                String coverageName) {
         super(delegate, coverageName);
         this.structuredDelegate = delegate;
     }
@@ -35,7 +35,7 @@ public class StructuredSingleGridCoverage2DReader extends SingleGridCoverage2DRe
     @Override
     public GranuleSource getGranules(String coverageName, boolean readOnly) throws IOException,
             UnsupportedOperationException {
-        if(coverageName == null) {
+        if (coverageName == null) {
             coverageName = this.coverageName;
         }
         return structuredDelegate.getGranules(coverageName, readOnly);
@@ -77,7 +77,7 @@ public class StructuredSingleGridCoverage2DReader extends SingleGridCoverage2DRe
 
     @Override
     public List<DimensionDescriptor> getDimensionDescriptors(String coverageName) throws IOException {
-        if(coverageName == null) {
+        if (coverageName == null) {
             coverageName = this.coverageName;
         }
         return structuredDelegate.getDimensionDescriptors(coverageName);

@@ -7,7 +7,7 @@ package org.geoserver.csw;
 public class DirectDownloadType {
 
     private String resourceId;
-    
+
     private String file;
 
     public String getFile() {

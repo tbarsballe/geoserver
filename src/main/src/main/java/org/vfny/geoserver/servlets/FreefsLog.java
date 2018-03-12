@@ -20,10 +20,14 @@ import javax.servlet.http.HttpServletResponse;
  * @version $Id$
  */
 public class FreefsLog extends HttpServlet {
-    /** Standard logging instance for class */
+    /**
+     * Standard logging instance for class
+     */
     private static final Logger LOGGER = org.geotools.util.logging.Logging.getLogger("org.vfny.geoserver.servlets");
 
-    /** Default name for configuration directory */
+    /**
+     * Default name for configuration directory
+     */
     private static final String CONFIG_DIR = "data/";
 
     /**
@@ -63,10 +67,10 @@ public class FreefsLog extends HttpServlet {
      * Closes down the zserver if it is running, and frees up resources.
      *
      * @task REVISIT: what we should consider is having geotools provide a
-     *       nicer way to clean up datastores's resources, something like a
-     *       close, so that we could just iterate through all the datastores
-     *       calling close. Once that's done we can clean up this method a
-     *       bit.
+     * nicer way to clean up datastores's resources, something like a
+     * close, so that we could just iterate through all the datastores
+     * calling close. Once that's done we can clean up this method a
+     * bit.
      */
     public void destroy() {
         super.destroy();
@@ -86,7 +90,7 @@ public class FreefsLog extends HttpServlet {
             LOGGER.fine("got sde connection pool factory instance: " + pfInstance);
 
             java.lang.reflect.Method closeMethod = pfInstance.getClass()
-                                                             .getMethod("closeAll", new Class[0]);
+                    .getMethod("closeAll", new Class[0]);
 
             closeMethod.invoke(pfInstance, new Object[0]);
             LOGGER.info("just asked SDE datasource to release connections");

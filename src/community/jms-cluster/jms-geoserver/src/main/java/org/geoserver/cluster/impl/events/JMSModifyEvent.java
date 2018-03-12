@@ -14,10 +14,9 @@ import java.util.List;
 /**
  * Class implementing a generic JMS Modify event.<br>
  * It is used to handle serialization of a modify event.<br>
- * 
- * @author Carlo Cancellieri - carlo.cancellieri@geo-solutions.it
- * 
+ *
  * @param <S> a Serializable object
+ * @author Carlo Cancellieri - carlo.cancellieri@geo-solutions.it
  */
 public class JMSModifyEvent<S extends Serializable> {
 
@@ -42,7 +41,7 @@ public class JMSModifyEvent<S extends Serializable> {
     }
 
     public JMSModifyEvent(final S source, final List<String> propertyNames,
-            final List<Object> oldValues, final List<Object> newValues, JMSEventType eventType) {
+                          final List<Object> oldValues, final List<Object> newValues, JMSEventType eventType) {
         this.source = source;
         this.propertyNames = propertyNames;
         this.oldValues = oldValues;
@@ -76,8 +75,8 @@ public class JMSModifyEvent<S extends Serializable> {
     }
 
     /**
-	 * 
-	 */
+     *
+     */
     private static final long serialVersionUID = 1L;
 
     public JMSEventType getEventType() {

@@ -14,7 +14,7 @@ import org.geoserver.wms.GetLegendGraphicRequest;
 
 /**
  * PNG output format for the WMS {@link GetLegendGraphic} operation.
- * 
+ *
  * @author Gabriel Roldan
  * @author Justin Deoliveira
  * @version $Id: PNGLegendGraphicProducer.java 4776 2006-07-24 14:43:05Z afabiani $
@@ -32,7 +32,7 @@ public class PNGLegendOutputFormat implements GetLegendGraphicOutputFormat {
 
     /**
      * Builds and returns a {@link BufferedImageLegendGraphic} appropriate to be encoded as PNG
-     * 
+     *
      * @see GetLegendGraphicOutputFormat#produceLegendGraphic(GetLegendGraphicRequest)
      */
     public BufferedImageLegendGraphic produceLegendGraphic(GetLegendGraphicRequest request)

@@ -115,11 +115,10 @@ public class MapXMLConverter extends BaseMessageConverter<Map<?, ?>> {
 
     /**
      * Generate the JDOM element needed to represent an object and insert it into the parent element given.
-     * 
-     * @todo This method is recursive and could cause stack overflow errors for large input maps.
      *
-     * @param elem the parent Element into which to insert the created JDOM element
+     * @param elem   the parent Element into which to insert the created JDOM element
      * @param object the Object to be converted
+     * @todo This method is recursive and could cause stack overflow errors for large input maps.
      */
     protected void insert(Element elem, Object object) {
         if (object instanceof Map) {

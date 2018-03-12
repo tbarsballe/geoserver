@@ -26,7 +26,6 @@ import org.geoserver.util.Filter;
 
 /**
  * @author Alessio Fabiani, GeoSolutions
- *
  */
 public class ImageMosaicAdditionalResourceWriter extends ImageMosaicAdditionalResource
         implements CatalogAdditionalResourcesWriter<StoreInfo> {
@@ -46,7 +45,7 @@ public class ImageMosaicAdditionalResourceWriter extends ImageMosaicAdditionalRe
 
         final Resource targetBackupFolder = BackupUtils.dir(base.parent(),
                 IMAGEMOSAIC_INDEXES_FOLDER);
-        
+
         // Create folder if not exists
         Resources.directory(targetBackupFolder, !Resources.exists(targetBackupFolder));
 
@@ -60,10 +59,10 @@ public class ImageMosaicAdditionalResourceWriter extends ImageMosaicAdditionalRe
         final Resource mosaicBaseFolder = Files.asResource(
                 (Resources.directory(mosaicIndexBase) != null ? Resources.directory(mosaicIndexBase)
                         : Resources.directory(mosaicIndexBase.parent())));
-        
+
         // Create the target mosaic folder
         Resource targetMosaicBaseFolder = BackupUtils.dir(targetBackupFolder, mosaicBaseFolder.name());
-        
+
         if (Resources.exists(mosaicIndexBase)) {
             for (Entry<String, Filter<Resource>> entry : resources.entrySet()) {
                 List<Resource> mosaicIndexerResources = Resources.list(mosaicIndexBase,
@@ -72,7 +71,7 @@ public class ImageMosaicAdditionalResourceWriter extends ImageMosaicAdditionalRe
                 for (Resource res : mosaicIndexerResources) {
                     if (!FilenameUtils.getBaseName(res.name()).equals(mosaicName) &&
                             !FilenameUtils.getBaseName(res.name()).equals(mosaicBaseFolder.name()) &&
-                                Resources.exists(res) && Resources.canRead(res)) {
+                            Resources.exists(res) && Resources.canRead(res)) {
                         final String relative = mosaicIndexBase.parent().dir().toURI()
                                 .relativize(res.file().toURI()).getPath();
 
@@ -87,18 +86,18 @@ public class ImageMosaicAdditionalResourceWriter extends ImageMosaicAdditionalRe
                 }
             }
         }
-        
+
         // Populate "Name=<mosaicName>" property into the indexer
         final File indexerFile = new File(targetMosaicBaseFolder.dir(), "indexer.properties");
-        
+
         Properties indexerProperties = new Properties();
-        
+
         if (indexerFile.exists() && indexerFile.canRead()) {
             indexerProperties.load(new FileInputStream(indexerFile));
         }
-        
+
         indexerProperties.setProperty("Name", mosaicName);
-        
+
         indexerProperties.store(new FileOutputStream(indexerFile), null);
     }
 }

@@ -63,8 +63,6 @@ import com.thoughtworks.xstream.XStream;
  * <p>
  * {@code RepositoryInfo} instances deserialized from XML have its id set by {@link XStream}, and
  * {@link #save(RepositoryInfo)} knows its an existing instance and replaces its file.
- * 
- *
  */
 public class ConfigStore {
 
@@ -121,38 +119,38 @@ public class ConfigStore {
                                 + " on thread " + thread);
                     }
                     switch (event.getKind()) {
-                    case ENTRY_CREATE: {
-                        // ResourceStore may issue entry_create before or after the contents where
-                        // written, but it'll always issue an entry_modify event just after the
-                        // contents are written, so we ignore the create events and wait for the
-                        // modify events to avoid double processing
-                        if (LOGGER.isLoggable(Level.FINE)) {
-                            LOGGER.fine("Received an ENTRY_CREATE event for repo id " + repoId
-                                    + " Event ignored, waiting for the ENTRY_MODIFY event to process it");
+                        case ENTRY_CREATE: {
+                            // ResourceStore may issue entry_create before or after the contents where
+                            // written, but it'll always issue an entry_modify event just after the
+                            // contents are written, so we ignore the create events and wait for the
+                            // modify events to avoid double processing
+                            if (LOGGER.isLoggable(Level.FINE)) {
+                                LOGGER.fine("Received an ENTRY_CREATE event for repo id " + repoId
+                                        + " Event ignored, waiting for the ENTRY_MODIFY event to process it");
+                            }
+                            break;
                         }
-                        break;
-                    }
-                    case ENTRY_MODIFY: {
-                        lock.writeLock().lock();
-                        try {
-                            get(repoId);
-                        } catch (NoSuchElementException e) {
-                            LOGGER.info("Error loading repo " + repoId + " upon event " + event
-                                    + ". Thread: " + thread);
-                            Preconditions.checkState(!infosById.containsKey(repoId));
-                            // ignore, exception already logged by get(), but call
-                            // repositoryInfoChanged for
-                            // RepositoryManager to close the live Repository
-                        } finally {
-                            lock.writeLock().unlock();
+                        case ENTRY_MODIFY: {
+                            lock.writeLock().lock();
+                            try {
+                                get(repoId);
+                            } catch (NoSuchElementException e) {
+                                LOGGER.info("Error loading repo " + repoId + " upon event " + event
+                                        + ". Thread: " + thread);
+                                Preconditions.checkState(!infosById.containsKey(repoId));
+                                // ignore, exception already logged by get(), but call
+                                // repositoryInfoChanged for
+                                // RepositoryManager to close the live Repository
+                            } finally {
+                                lock.writeLock().unlock();
+                            }
+                            repositoryInfoChanged(repoId);
+                            break;
                         }
-                        repositoryInfoChanged(repoId);
-                        break;
-                    }
-                    case ENTRY_DELETE:
-                        infosById.remove(repoId);
-                        repositoryInfoChanged(repoId);
-                        break;
+                        case ENTRY_DELETE:
+                            infosById.remove(repoId);
+                            repositoryInfoChanged(repoId);
+                            break;
                     }
                     if (LOGGER.isLoggable(Level.FINER)) {
                         LOGGER.finer("Finished processing event " + event.getKind() + " for repo "
@@ -165,7 +163,7 @@ public class ConfigStore {
 
     /**
      * Add a callback that will be called whenever a RepositoryInfo is changed.
-     * 
+     *
      * @param callback the callback
      */
     public void addRepositoryInfoChangedCallback(RepositoryInfoChangedCallback callback) {
@@ -174,7 +172,7 @@ public class ConfigStore {
 
     /**
      * Remove a callback that was previously added to the config store.
-     * 
+     *
      * @param callback the callback
      */
     public void removeRepositoryInfoChangedCallback(RepositoryInfoChangedCallback callback) {
@@ -186,15 +184,15 @@ public class ConfigStore {
      * <p>
      * If {@code info} has no id set, one is assigned, meaning it didn't yet exist. Otherwise its
      * xml file is replaced meaning it has been modified.
-     * 
+     *
      * @return {@code info}, possibly with its id set if it was {@code null}
      * @implNote this method saves the {@link RepositoryInfo} to the internal cache, setting its
-     *           {@link RepositoryInfo#getLastModified() timestamp} to {@code -1}, meaning it was
-     *           just saved on this node. The resourcestore event listener will not reload it but
-     *           just update its timestamp, while on other nodes it'll load/reload it as needed.
-     *           This ensures on this node the {@link RepositoryInfo} will be available right after
-     *           this method returns, regardless of how long it takes the resource store event
-     *           dispatcher to notify this or other nodes.
+     * {@link RepositoryInfo#getLastModified() timestamp} to {@code -1}, meaning it was
+     * just saved on this node. The resourcestore event listener will not reload it but
+     * just update its timestamp, while on other nodes it'll load/reload it as needed.
+     * This ensures on this node the {@link RepositoryInfo} will be available right after
+     * this method returns, regardless of how long it takes the resource store event
+     * dispatcher to notify this or other nodes.
      */
     public RepositoryInfo save(RepositoryInfo info) {
         checkNotNull(info, "null RepositoryInfo");
@@ -289,7 +287,7 @@ public class ConfigStore {
     }
 
     /**
-     * Loads and returns all <b>valid</b> {@link RepositoryInfo}'s from {@code 
+     * Loads and returns all <b>valid</b> {@link RepositoryInfo}'s from {@code
      * <data-dir>/geogig/config/repos/}; any xml file that can't be parsed is ignored.
      */
     public List<RepositoryInfo> getRepositories() {
@@ -384,11 +382,11 @@ public class ConfigStore {
     /**
      * Loads a {@link RepositoryInfo} by {@link RepositoryInfo#getId() id} from its xml file under
      * {@code <data-dir>/geogig/config/repos/}
-     * 
+     *
      * @implNote Ensures to return the most current version of the {@link RepositoryInfo} by
-     *           comparing its {@link RepositoryInfo#getLastModified()} with the
-     *           {@link Resource#lastmodified()}, and reloading in case it was cached but the
-     *           timestamps don't match
+     * comparing its {@link RepositoryInfo#getLastModified()} with the
+     * {@link Resource#lastmodified()}, and reloading in case it was cached but the
+     * timestamps don't match
      */
     public RepositoryInfo get(final String id) throws NoSuchElementException {
         checkNotNull(id, "provided a null id");
@@ -431,7 +429,8 @@ public class ConfigStore {
         }
     }
 
-    public @Nullable RepositoryInfo getByName(final String name) {
+    public @Nullable
+    RepositoryInfo getByName(final String name) {
         checkNotNull(name);
         Optional<RepositoryInfo> match = infosById.values().parallelStream()
                 .filter((info) -> name.equals(info.getRepoName())).findFirst();
@@ -447,7 +446,8 @@ public class ConfigStore {
         return match.isPresent();
     }
 
-    public @Nullable RepositoryInfo getByLocation(final URI location) {
+    public @Nullable
+    RepositoryInfo getByLocation(final URI location) {
         checkNotNull(location);
         Optional<RepositoryInfo> match = infosById.values().parallelStream()
                 .filter((info) -> location.equals(info.getLocation())).findFirst();
@@ -468,6 +468,7 @@ public class ConfigStore {
      * are thread safe and it's recommended to share them as they're pretty expensive to create
      */
     private static final XStream xStream = new XStream();
+
     static {
         xStream.alias("RepositoryInfo", RepositoryInfo.class);
     }

@@ -30,23 +30,23 @@ import org.opengis.filter.sort.SortBy;
 /**
  * Catalog decorator handling cases when a {@link LocalWorkspace} is set.
  * <p>
- * This wrapper handles some additional cases that {@link LocalWorkspaceCatalogFilter} can not 
+ * This wrapper handles some additional cases that {@link LocalWorkspaceCatalogFilter} can not
  * handle by simple filtering.
- * </p> 
- * @author Justin Deoliveira, OpenGeo
+ * </p>
  *
+ * @author Justin Deoliveira, OpenGeo
  */
 public class LocalWorkspaceCatalog extends AbstractCatalogDecorator implements Catalog {
 
-	private GeoServer geoServer;
+    private GeoServer geoServer;
 
     public LocalWorkspaceCatalog(Catalog delegate) {
         super(delegate);
     }
 
-	public void setGeoServer(GeoServer geoServer ) {
-		this.geoServer = geoServer;
-	}
+    public void setGeoServer(GeoServer geoServer) {
+        this.geoServer = geoServer;
+    }
 
     @Override
     public StyleInfo getStyleByName(String name) {
@@ -73,11 +73,10 @@ public class LocalWorkspaceCatalog extends AbstractCatalogDecorator implements C
             //prefix the unqualified name
             if (name.contains(":")) {
                 //name already prefixed, ensure it is prefixed with the correct one
-                if (name.startsWith(wsName+":")) {
+                if (name.startsWith(wsName + ":")) {
                     //good to go, just pass call through
                     return wrap(super.getLayerByName(name));
-                }
-                else {
+                } else {
                     //JD: perhaps strip of existing prefix?
                 }
             }
@@ -127,7 +126,7 @@ public class LocalWorkspaceCatalog extends AbstractCatalogDecorator implements C
         super.save(unwrap(layer));
     }
 
-    
+
     @Override
     public void remove(LayerInfo layer) {
         super.remove(unwrap(layer));
@@ -190,8 +189,8 @@ public class LocalWorkspaceCatalog extends AbstractCatalogDecorator implements C
      */
     LayerGroupInfo check(LayerGroupInfo layerGroup) {
         if (LocalWorkspace.get() != null) {
-            if (layerGroup.getWorkspace() != null && 
-                !LocalWorkspace.get().equals(layerGroup.getWorkspace())) {
+            if (layerGroup.getWorkspace() != null &&
+                    !LocalWorkspace.get().equals(layerGroup.getWorkspace())) {
                 return null;
             }
         }
@@ -205,7 +204,7 @@ public class LocalWorkspaceCatalog extends AbstractCatalogDecorator implements C
 
     @Override
     public LayerGroupInfo getLayerGroupByName(WorkspaceInfo workspace,
-            String name) {
+                                              String name) {
         return wrap(super.getLayerGroupByName(workspace, name));
     }
 
@@ -236,7 +235,7 @@ public class LocalWorkspaceCatalog extends AbstractCatalogDecorator implements C
     public void remove(LayerGroupInfo layerGroup) {
         super.remove(unwrap(layerGroup));
     }
-    
+
     public LayerGroupInfo detach(LayerGroupInfo layerGroup) {
         return super.detach(unwrap(layerGroup));
     }
@@ -245,7 +244,7 @@ public class LocalWorkspaceCatalog extends AbstractCatalogDecorator implements C
         return super.validate(unwrap(layerGroup), isNew);
     }
 
-    
+
     LayerGroupInfo wrap(LayerGroupInfo layerGroup) {
         return wrap(layerGroup, LayerGroupInfo.class);
     }
@@ -259,7 +258,7 @@ public class LocalWorkspaceCatalog extends AbstractCatalogDecorator implements C
         }
         return obj;
     }
-    
+
     <T> T unwrap(T obj) {
         return NameDequalifyingProxy.unwrap(obj);
     }
@@ -286,9 +285,9 @@ public class LocalWorkspaceCatalog extends AbstractCatalogDecorator implements C
         @Override
         public Object invoke(Object proxy, Method method, Object[] args)
                 throws Throwable {
-            if ("prefixedName".equals(method.getName()) || 
-                "getPrefixedName".equals(method.getName()) || 
-                "getName".equals(method.getName())) {
+            if ("prefixedName".equals(method.getName()) ||
+                    "getPrefixedName".equals(method.getName()) ||
+                    "getName".equals(method.getName())) {
                 String val = (String) method.invoke(object, args);
                 if (val == null || val.indexOf(':') == -1) {
                     return val;
@@ -299,8 +298,8 @@ public class LocalWorkspaceCatalog extends AbstractCatalogDecorator implements C
 
             return method.invoke(object, args);
         }
-    
-        public static <T> T create( T object, Class<T> clazz) {
+
+        public static <T> T create(T object, Class<T> clazz) {
             return ProxyUtils.createProxy(object, clazz, new NameDequalifyingProxy(object));
         }
 
@@ -318,12 +317,12 @@ public class LocalWorkspaceCatalog extends AbstractCatalogDecorator implements C
             };
         }
 
-        public static <T> T unwrap( T object ) {
+        public static <T> T unwrap(T object) {
             return ProxyUtils.unwrap(object, NameDequalifyingProxy.class);
         }
 
     }
-    
+
     @Override
     public <T extends CatalogInfo> int count(Class<T> of, Filter filter) {
         return delegate.count(of, filter);
@@ -343,19 +342,19 @@ public class LocalWorkspaceCatalog extends AbstractCatalogDecorator implements C
     /**
      * Returns a decorating iterator over the one returned by the delegate that wraps every object
      * it returns, if possible.
-     * 
+     *
      * @see #wrap(Object, Class)
      * @see org.geoserver.catalog.Catalog#list(java.lang.Class, org.geoserver.catalog.Predicate,
-     *      java.lang.Integer, java.lang.Integer, org.geoserver.catalog.OrderBy)
+     * java.lang.Integer, java.lang.Integer, org.geoserver.catalog.OrderBy)
      */
     @Override
     public <T extends CatalogInfo> CloseableIterator<T> list(final Class<T> of,
-            final Filter filter, final Integer offset, final Integer count, final SortBy sortBy) {
+                                                             final Filter filter, final Integer offset, final Integer count, final SortBy sortBy) {
 
         CloseableIterator<T> iterator = delegate.list(of, filter, offset, count, sortBy);
         if (iterator.hasNext() && useNameDequalifyingProxy()) {
             return CloseableIteratorAdapter.transform(iterator, obj ->
-                obj == null ? null : NameDequalifyingProxy.create(obj, of));
+                    obj == null ? null : NameDequalifyingProxy.create(obj, of));
         }
         return iterator;
     }
@@ -363,20 +362,20 @@ public class LocalWorkspaceCatalog extends AbstractCatalogDecorator implements C
     public void removeListeners(Class listenerClass) {
         delegate.removeListeners(listenerClass);
     }
-    
+
     @Override
     public NamespaceInfo getDefaultNamespace() {
         if (LocalWorkspace.get() != null) {
             WorkspaceInfo ws = LocalWorkspace.get();
             NamespaceInfo ns = delegate.getNamespaceByPrefix(ws.getName());
-            if(ns != null) {
+            if (ns != null) {
                 return ns;
             }
         }
-        
+
         return super.getDefaultNamespace();
     }
-    
+
     @Override
     public WorkspaceInfo getDefaultWorkspace() {
         if (LocalWorkspace.get() != null) {

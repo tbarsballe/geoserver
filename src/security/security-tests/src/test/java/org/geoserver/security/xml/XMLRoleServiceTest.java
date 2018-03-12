@@ -33,10 +33,10 @@ import static org.junit.Assert.assertTrue;
 public class XMLRoleServiceTest extends AbstractRoleServiceTest {
 
     static Logger LOGGER = org.geotools.util.logging.Logging.getLogger("org.geoserver.security.xml");
-    
+
     @Override
     public GeoServerRoleService createRoleService(String serviceName) throws Exception {
-        return createRoleService(serviceName,XMLConstants.FILE_RR);
+        return createRoleService(serviceName, XMLConstants.FILE_RR);
     }
 
     @Before
@@ -46,62 +46,61 @@ public class XMLRoleServiceTest extends AbstractRoleServiceTest {
     }
 
     protected GeoServerRoleService createRoleService(String serviceName, String xmlFileName) throws Exception {
-         
-        XMLRoleServiceConfig gaConfig = 
-            (XMLRoleServiceConfig) getSecurityManager().loadRoleServiceConfig(serviceName);
+
+        XMLRoleServiceConfig gaConfig =
+                (XMLRoleServiceConfig) getSecurityManager().loadRoleServiceConfig(serviceName);
         if (gaConfig == null) {
             gaConfig = new XMLRoleServiceConfig();
             gaConfig.setName(serviceName);
         }
         gaConfig.setClassName(XMLRoleService.class.getName());
-        gaConfig.setCheckInterval(1000);   
+        gaConfig.setCheckInterval(1000);
         gaConfig.setFileName(xmlFileName);
         gaConfig.setValidating(true);
         getSecurityManager().saveRoleService(gaConfig/*,isNewRoleService(serviceName)*/);
         return getSecurityManager().loadRoleService(serviceName);
     }
 
-        
-    
-    @Test 
+
+    @Test
     public void testCopyFrom() throws Exception {
         GeoServerRoleService service1 = createRoleService("copyFrom");
         GeoServerRoleService service2 = createRoleService("copyTo");
         GeoServerRoleStore store1 = createStore(service1);
-        GeoServerRoleStore store2 = createStore(service2);                        
-        
+        GeoServerRoleStore store2 = createStore(service2);
+
         store1.clear();
-        checkEmpty(store1);        
+        checkEmpty(store1);
         insertValues(store1);
         Util.copyFrom(store1, store2);
         store1.clear();
         checkEmpty(store1);
         checkValuesInserted(store2);
-                                    
+
     }
 
-    @Test 
+    @Test
     public void testDefault() throws Exception {
         GeoServerRoleService service = getSecurityManager().loadRoleService(XMLRoleService.DEFAULT_NAME);
-        
+
         assertEquals(2, service.getRoles().size());
         GeoServerRole adminRole =
-            service.getRoleByName(XMLRoleService.DEFAULT_LOCAL_ADMIN_ROLE);
-        GeoServerRole groupAdminRole = 
-            service.getRoleByName(XMLRoleService.DEFAULT_LOCAL_GROUP_ADMIN_ROLE);
-        
-        assertEquals(0,service.getGroupNamesForRole(adminRole).size());
-        assertEquals(0,service.getGroupNamesForRole(groupAdminRole).size());
-        assertEquals(1,service.getUserNamesForRole(adminRole).size());
-        assertEquals(0,service.getUserNamesForRole(groupAdminRole).size());
-        assertEquals(1, 
+                service.getRoleByName(XMLRoleService.DEFAULT_LOCAL_ADMIN_ROLE);
+        GeoServerRole groupAdminRole =
+                service.getRoleByName(XMLRoleService.DEFAULT_LOCAL_GROUP_ADMIN_ROLE);
+
+        assertEquals(0, service.getGroupNamesForRole(adminRole).size());
+        assertEquals(0, service.getGroupNamesForRole(groupAdminRole).size());
+        assertEquals(1, service.getUserNamesForRole(adminRole).size());
+        assertEquals(0, service.getUserNamesForRole(groupAdminRole).size());
+        assertEquals(1,
                 service.getRolesForUser(GeoServerUser.ADMIN_USERNAME).size());
         assertTrue(service.getRolesForUser(GeoServerUser.ADMIN_USERNAME).contains(adminRole));
-            
-            
+
+
     }
-    
-    @Test 
+
+    @Test
     public void testLocking() throws Exception {
         File xmlFile = File.createTempFile("roles", ".xml");
         try {
@@ -124,7 +123,7 @@ public class XMLRoleServiceTest extends AbstractRoleServiceTest {
             try {
                 store2.clear();
             } catch (IOException ex) {
-                fail=false;
+                fail = false;
             }
             if (fail)
                 Assert.fail(failMessage);
@@ -138,7 +137,7 @@ public class XMLRoleServiceTest extends AbstractRoleServiceTest {
             try {
                 store1.clear();
             } catch (IOException ex) {
-                fail=false;
+                fail = false;
             }
             if (fail)
                 Assert.fail(failMessage);
@@ -203,7 +202,7 @@ public class XMLRoleServiceTest extends AbstractRoleServiceTest {
                 try {
                     store2.store();
                 } catch (IOException e) {
-                    fail=false;
+                    fail = false;
                 }
             }
             if (fail)
@@ -213,7 +212,7 @@ public class XMLRoleServiceTest extends AbstractRoleServiceTest {
             try {
                 store2.setParentRole(role_test1, null);
             } catch (IOException ex) {
-                fail=false;
+                fail = false;
             }
             if (fail)
                 Assert.fail(failMessage);
@@ -221,62 +220,63 @@ public class XMLRoleServiceTest extends AbstractRoleServiceTest {
             xmlFile.delete();
         }
     }
-    
-    @Test 
+
+    @Test
     public void testDynamicReload() throws Exception {
-        Files.schedule(200,TimeUnit.MILLISECONDS);
+        Files.schedule(200, TimeUnit.MILLISECONDS);
         File xmlFile = File.createTempFile("roles", ".xml");
         try {
-            FileUtils.copyURLToFile(getClass().getResource("rolesTemplate.xml"),xmlFile);
-            GeoServerRoleService service1 =  
-                createRoleService("reload1",xmlFile.getCanonicalPath());
-            GeoServerRoleService service2 =  
-                createRoleService("reload2",xmlFile.getCanonicalPath());
-            
-            GeoServerRoleStore store1= createStore(service1);
-            
-            
+            FileUtils.copyURLToFile(getClass().getResource("rolesTemplate.xml"), xmlFile);
+            GeoServerRoleService service1 =
+                    createRoleService("reload1", xmlFile.getCanonicalPath());
+            GeoServerRoleService service2 =
+                    createRoleService("reload2", xmlFile.getCanonicalPath());
+
+            GeoServerRoleStore store1 = createStore(service1);
+
+
             GeoServerRole role_test1 = store1.createRoleObject("ROLE_TEST1");
-            
+
             checkEmpty(service1);
             checkEmpty(service2);
-            
+
             // prepare for syncing            
-            class CheckRoleLoaded implements RoleLoadedListener {    
+            class CheckRoleLoaded implements RoleLoadedListener {
                 public int notified = 0;
+
                 @Override
                 public void rolesChanged(RoleLoadedEvent event) {
                     synchronized (this) {
                         this.notifyAll();
                         notified++;
-                    }                    
+                    }
                 }
-            };             
+            }
+            ;
             CheckRoleLoaded listener = new CheckRoleLoaded();
             service2.registerRoleLoadedListener(listener);
-            
+
             // modifiy store1
             store1.addRole(role_test1);
             store1.store();
-            assertTrue(service1.getRoles().size()==1);
-            
+            assertTrue(service1.getRoles().size() == 1);
+
             // increment lastmodified adding a second manually, the test is too fast
-            xmlFile.setLastModified(xmlFile.lastModified()+1000); 
-            
+            xmlFile.setLastModified(xmlFile.lastModified() + 1000);
+
             // wait for the listener to unlock when 
             // service 2 triggers a load event
             synchronized (listener) {
-                if(listener.notified == 0 ){
+                if (listener.notified == 0) {
                     listener.wait(); // wait 4 seconds
                 }
             }
-            assertTrue("notification expected",listener.notified > 0 );
-            
+            assertTrue("notification expected", listener.notified > 0);
+
             // here comes the magic !!!
-            assertTrue(service2.getRoles().size()==1);
-        }
-        finally {
-            Files.schedule(10,TimeUnit.SECONDS);
+            assertTrue(service2.getRoles().size() == 1);
+        } finally {
+            Files.schedule(10, TimeUnit.SECONDS);
             xmlFile.delete();
         }
     }

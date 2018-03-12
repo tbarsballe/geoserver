@@ -80,16 +80,15 @@ import com.vividsolutions.jts.geom.Envelope;
  * Deriving from this test class provides the test case with preconfigured geoserver and wms
  * objects.
  * </p>
- * 
+ *
  * @author Justin Deoliveira, The Open Planning Project, jdeolive@openplans.org
- * 
  */
 public abstract class WMSTestSupport extends GeoServerSystemTestSupport {
 
     protected static final String NATURE_GROUP = "nature";
-    
+
     protected static final String CONTAINER_GROUP = "containerGroup";
-    
+
     protected static final String OPAQUE_GROUP = "opaqueGroup";
 
     protected static final int SHOW_TIMEOUT = 2000;
@@ -100,6 +99,7 @@ public abstract class WMSTestSupport extends GeoServerSystemTestSupport {
 
     protected static final Color COLOR_PLACES_GRAY = new Color(170, 170, 170);
     protected static final Color COLOR_LAKES_BLUE = new Color(64, 64, 192);
+
     /**
      * @return The global wms singleton from the application context.
      */
@@ -135,10 +135,10 @@ public abstract class WMSTestSupport extends GeoServerSystemTestSupport {
 
         //Add a raster layer
         testData.setUpRasterLayer(WORLD, "world.tiff", null, null, TestData.class);
-        
+
 
     }
-    
+
     @Override
     protected void onSetUp(SystemTestData testData) throws Exception {
         super.onSetUp(testData);
@@ -147,7 +147,7 @@ public abstract class WMSTestSupport extends GeoServerSystemTestSupport {
         LayerGroupInfo group = catalog.getFactory().createLayerGroup();
         LayerInfo lakes = catalog.getLayerByName(getLayerId(MockData.LAKES));
         LayerInfo forests = catalog.getLayerByName(getLayerId(MockData.FORESTS));
-        if(lakes != null && forests != null) {
+        if (lakes != null && forests != null) {
             group.setName(NATURE_GROUP);
             group.getLayers().add(lakes);
             group.getLayers().add(forests);
@@ -157,9 +157,9 @@ public abstract class WMSTestSupport extends GeoServerSystemTestSupport {
             cb.calculateLayerGroupBounds(group);
             catalog.add(group);
         }
-        testData.addStyle("default", "Default.sld",MockData.class, catalog);
+        testData.addStyle("default", "Default.sld", MockData.class, catalog);
         //"default", MockData.class.getResource("Default.sld")
-        
+
         // create a group containing the other group
         LayerGroupInfo containerGroup = catalog.getFactory().createLayerGroup();
         LayerGroupInfo nature = catalog.getLayerGroupByName(NATURE_GROUP);
@@ -179,19 +179,19 @@ public abstract class WMSTestSupport extends GeoServerSystemTestSupport {
         LayerGroupInfo opaqueGroup = catalog.getFactory().createLayerGroup();
         LayerInfo roadSegments = catalog.getLayerByName(getLayerId(MockData.ROAD_SEGMENTS));
         LayerInfo neatline = catalog.getLayerByName(getLayerId(MockData.MAP_NEATLINE));
-        if(roadSegments != null && neatline != null) {
+        if (roadSegments != null && neatline != null) {
             opaqueGroup.setName(OPAQUE_GROUP);
             opaqueGroup.setMode(Mode.OPAQUE_CONTAINER);
             opaqueGroup.getLayers().add(roadSegments);
             opaqueGroup.getLayers().add(neatline);
             opaqueGroup.getStyles().add(null);
             opaqueGroup.getStyles().add(null);
-	        CatalogBuilder cb = new CatalogBuilder(catalog);
+            CatalogBuilder cb = new CatalogBuilder(catalog);
             cb.calculateLayerGroupBounds(opaqueGroup);
             catalog.add(opaqueGroup);
         }
     }
-    
+
 
     /**
      * subclass hook to register additional namespaces.
@@ -199,17 +199,14 @@ public abstract class WMSTestSupport extends GeoServerSystemTestSupport {
     protected void registerNamespaces(Map<String, String> namespaces) {
     }
 
- 
 
     /**
      * Convenience method for subclasses to create a map layer from a layer name.
      * <p>
      * The map layer is created with the default style for the layer.
      * </p>
-     * 
-     * @param layerName
-     *            The name of the layer.
-     * 
+     *
+     * @param layerName The name of the layer.
      * @return A new map layer.
      */
     protected Layer createMapLayer(QName layerName) throws IOException {
@@ -221,12 +218,9 @@ public abstract class WMSTestSupport extends GeoServerSystemTestSupport {
      * <p>
      * The map layer is created with the default style for the layer.
      * </p>
-     * 
-     * @param layerName
-     *            The name of the layer.
-     * @param a
-     *            style in the catalog (or null if you want to use the default style)
-     * 
+     *
+     * @param layerName The name of the layer.
+     * @param a         style in the catalog (or null if you want to use the default style)
      * @return A new map layer.
      */
     protected Layer createMapLayer(QName layerName, String styleName) throws IOException {
@@ -246,13 +240,12 @@ public abstract class WMSTestSupport extends GeoServerSystemTestSupport {
             featureSource = info.getFeatureSource(null, null);
 
             layer = new FeatureLayer(featureSource, style);
-        }
-        else {
+        } else {
             //try a coverage
-            CoverageInfo cinfo = 
-                catalog.getCoverageByName(layerName.getNamespaceURI(), layerName.getLocalPart());
+            CoverageInfo cinfo =
+                    catalog.getCoverageByName(layerName.getNamespaceURI(), layerName.getLocalPart());
             GridCoverage2D cov = (GridCoverage2D) cinfo.getGridCoverage(null, null);
-        
+
             layer = new GridCoverageLayer(cov, style);
         }
 
@@ -266,10 +259,9 @@ public abstract class WMSTestSupport extends GeoServerSystemTestSupport {
 
     /**
      * Calls through to {@link #createGetMapRequest(QName[])}.
-     * 
      */
     protected GetMapRequest createGetMapRequest(QName layerName) {
-        return createGetMapRequest(new QName[] { layerName });
+        return createGetMapRequest(new QName[]{layerName});
     }
 
     /**
@@ -283,10 +275,8 @@ public abstract class WMSTestSupport extends GeoServerSystemTestSupport {
      * </ul>
      * Caller must set additional parameters of request as need be.
      * </p>
-     * 
-     * @param The
-     *            layer names of the request.
-     * 
+     *
+     * @param The layer names of the request.
      * @return A new GetMapRequest object.
      */
     protected GetMapRequest createGetMapRequest(QName[] layerNames) {
@@ -318,13 +308,10 @@ public abstract class WMSTestSupport extends GeoServerSystemTestSupport {
     /**
      * Asserts that the image is not blank, in the sense that there must be pixels different from
      * the passed background color.
-     * 
-     * @param testName
-     *            the name of the test to throw meaningfull messages if something goes wrong
-     * @param image
-     *            the imgage to check it is not "blank"
-     * @param bgColor
-     *            the background color for which differing pixels are looked for
+     *
+     * @param testName the name of the test to throw meaningfull messages if something goes wrong
+     * @param image    the imgage to check it is not "blank"
+     * @param bgColor  the background color for which differing pixels are looked for
      */
     protected void assertNotBlank(String testName, BufferedImage image, Color bgColor) {
         int pixelsDiffer = countNonBlankPixels(testName, image, bgColor);
@@ -334,10 +321,10 @@ public abstract class WMSTestSupport extends GeoServerSystemTestSupport {
     /**
      * Asserts that the image is blank, in the sense that all pixels will be equal to the background
      * color
-     * 
+     *
      * @param testName the name of the test to throw meaningful messages if something goes wrong
-     * @param image the image to check it is not "blank"
-     * @param bgColor the background color for which differing pixels are looked for
+     * @param image    the image to check it is not "blank"
+     * @param bgColor  the background color for which differing pixels are looked for
      */
     protected void assertBlank(String testName, BufferedImage image, Color bgColor) {
         int pixelsDiffer = countNonBlankPixels(testName, image, bgColor);
@@ -346,11 +333,10 @@ public abstract class WMSTestSupport extends GeoServerSystemTestSupport {
 
     /**
      * Counts the number of non black pixels
-     * 
+     *
      * @param testName
      * @param image
      * @param bgColor
-     *
      */
     protected int countNonBlankPixels(String testName, BufferedImage image, Color bgColor) {
         int pixelsDiffer = 0;
@@ -374,12 +360,10 @@ public abstract class WMSTestSupport extends GeoServerSystemTestSupport {
      * <p>
      * Parsing the response is done in a namespace aware way.
      * </p>
-     * 
-     * @param req
-     *            , the Object to run the xml transformation against with {@code tr}, usually an
+     *
+     * @param req , the Object to run the xml transformation against with {@code tr}, usually an
      *            instance of a {@link Request} subclass
-     * @param tr
-     *            , the transformer to run the transformation with and produce the result as a DOM
+     * @param tr  , the transformer to run the transformation with and produce the result as a DOM
      */
     public static Document transform(Object req, TransformerBase tr) throws Exception {
         return transform(req, tr, true);
@@ -388,14 +372,11 @@ public abstract class WMSTestSupport extends GeoServerSystemTestSupport {
     /**
      * Utility method to run the transformation on tr with the provided request and returns the
      * result as a DOM
-     * 
-     * @param req
-     *            , the Object to run the xml transformation against with {@code tr}, usually an
-     *            instance of a {@link Request} subclass
-     * @param tr
-     *            , the transformer to run the transformation with and produce the result as a DOM
-     * @param namespaceAware
-     *            whether to use a namespace aware parser for the response or not
+     *
+     * @param req            , the Object to run the xml transformation against with {@code tr}, usually an
+     *                       instance of a {@link Request} subclass
+     * @param tr             , the transformer to run the transformation with and produce the result as a DOM
+     * @param namespaceAware whether to use a namespace aware parser for the response or not
      */
     public static Document transform(Object req, TransformerBase tr, boolean namespaceAware)
             throws Exception {
@@ -410,7 +391,7 @@ public abstract class WMSTestSupport extends GeoServerSystemTestSupport {
         /**
          * Resolves everything to an empty xml document, useful for skipping errors due to missing
          * dtds and the like
-         * 
+         *
          * @author Andrea Aime - TOPP
          */
         class EmptyResolver implements org.xml.sax.EntityResolver {
@@ -434,7 +415,7 @@ public abstract class WMSTestSupport extends GeoServerSystemTestSupport {
 
     /**
      * Checks that the image generated by the map producer is not blank.
-     * 
+     *
      * @param testName
      * @param producer
      */
@@ -445,7 +426,7 @@ public abstract class WMSTestSupport extends GeoServerSystemTestSupport {
 
     /**
      * Checks that the image generated by the map producer is not blank.
-     * 
+     *
      * @param testName
      * @param producer
      */
@@ -460,7 +441,7 @@ public abstract class WMSTestSupport extends GeoServerSystemTestSupport {
 
     /**
      * Shows <code>image</code> in a Frame.
-     * 
+     *
      * @param frameName
      * @param timeOut
      * @param image
@@ -480,7 +461,7 @@ public abstract class WMSTestSupport extends GeoServerSystemTestSupport {
             });
 
             Panel p = new Panel(null) { // no layout manager so it respects
-                                        // setSize
+                // setSize
                 public void paint(Graphics g) {
                     g.drawImage(image, 0, 0, this);
                 }
@@ -500,29 +481,29 @@ public abstract class WMSTestSupport extends GeoServerSystemTestSupport {
             frame.dispose();
         }
     }
-    
+
     /**
      * Performs some checks on an image response assuming the image is a png.
+     *
      * @see #checkImage(MockHttpServletResponse, String)
      */
     protected void checkImage(MockHttpServletResponse response) {
         checkImage(response, "image/png", -1, -1);
     }
-    
+
     /**
-     * Performs some checks on an image response such as the mime type and attempts to read the 
+     * Performs some checks on an image response such as the mime type and attempts to read the
      * actual image into a buffered image.
-     * 
      */
     protected void checkImage(MockHttpServletResponse response, String mimeType, int width, int height) {
         assertEquals(mimeType, response.getContentType());
         try {
             BufferedImage image = ImageIO.read(getBinaryInputStream(response));
             assertNotNull(image);
-            if(width > 0) {
+            if (width > 0) {
                 assertEquals(width, image.getWidth());
             }
-            if(height > 0) {
+            if (height > 0) {
                 assertEquals(height, image.getHeight());
             }
         } catch (Throwable t) {
@@ -533,24 +514,23 @@ public abstract class WMSTestSupport extends GeoServerSystemTestSupport {
 
     /**
      * Sets up a template in a feature type directory.
-     * 
+     *
      * @param featureTypeName The name of the feature type.
-     * @param template The name of the template.
-     * @param body The content of the template.
-     * 
+     * @param template        The name of the template.
+     * @param body            The content of the template.
      * @throws IOException
      */
-    protected void setupTemplate(QName featureTypeName,String template,String body)
-        throws IOException {
-        
+    protected void setupTemplate(QName featureTypeName, String template, String body)
+            throws IOException {
+
         ResourceInfo info = getCatalog().getResourceByName(toName(featureTypeName), ResourceInfo.class);
-        getDataDirectory().copyToResourceDir(info, new ByteArrayInputStream(body.getBytes()),template);
-        
+        getDataDirectory().copyToResourceDir(info, new ByteArrayInputStream(body.getBytes()), template);
+
     }
 
     protected LayerGroupInfo createLakesPlacesLayerGroup(Catalog catalog, LayerGroupInfo.Mode mode, LayerInfo rootLayer) throws Exception {
         return createLakesPlacesLayerGroup(catalog, "lakes_and_places", mode, rootLayer);
-    }    
+    }
 
     protected LayerGroupInfo createLakesPlacesLayerGroup(Catalog catalog, String name, LayerGroupInfo.Mode mode, LayerInfo rootLayer) throws Exception {
         LayerInfo lakes = catalog.getLayerByName(getLayerId(MockData.LAKES));
@@ -558,13 +538,13 @@ public abstract class WMSTestSupport extends GeoServerSystemTestSupport {
 
         LayerGroupInfo group = catalog.getFactory().createLayerGroup();
         group.setName(name);
-        
+
         group.setMode(mode);
         if (rootLayer != null) {
             group.setRootLayer(rootLayer);
             group.setRootLayerStyle(rootLayer.getDefaultStyle());
         }
-        
+
         group.getLayers().add(lakes);
         group.getLayers().add(places);
         group.getStyles().add(null);
@@ -572,16 +552,16 @@ public abstract class WMSTestSupport extends GeoServerSystemTestSupport {
 
         CatalogBuilder cb = new CatalogBuilder(catalog);
         cb.calculateLayerGroupBounds(group);
-        
+
         catalog.add(group);
-        
+
         return group;
     }
 
     protected int getRawTopLayerCount() {
         Catalog rawCatalog = (Catalog) GeoServerExtensions.bean("rawCatalog");
         List<LayerInfo> layers = new ArrayList<LayerInfo>(rawCatalog.getLayers());
-        for (ListIterator<LayerInfo> it = layers.listIterator(); it.hasNext();) {
+        for (ListIterator<LayerInfo> it = layers.listIterator(); it.hasNext(); ) {
             LayerInfo next = it.next();
             if (!next.enabled() || next.getName().equals(MockData.GEOMETRYLESS.getLocalPart())) {
                 it.remove();
@@ -592,10 +572,10 @@ public abstract class WMSTestSupport extends GeoServerSystemTestSupport {
         int expectedLayerCount = layers.size() + groups.size() - 1 /* nested layer group */ - opaqueDelta;
         return expectedLayerCount;
     }
-    
+
     /**
      * Validates a document against the
-     * 
+     *
      * @param dom
      * @param configuration
      */
@@ -606,7 +586,7 @@ public abstract class WMSTestSupport extends GeoServerSystemTestSupport {
         p.parse(new DOMSource(dom));
 
         if (!p.getValidationErrors().isEmpty()) {
-            for (Iterator e = p.getValidationErrors().iterator(); e.hasNext();) {
+            for (Iterator e = p.getValidationErrors().iterator(); e.hasNext(); ) {
                 SAXParseException ex = (SAXParseException) e.next();
                 System.out.println(ex.getLineNumber() + "," + ex.getColumnNumber() + " -"
                         + ex.toString());
@@ -620,8 +600,8 @@ public abstract class WMSTestSupport extends GeoServerSystemTestSupport {
      * A number is considered similar to another if the difference between them is
      * inferior or equal to the provided precision.
      *
-     * @param rawValue raw value that should contain a number
-     * @param expected the expected numeric value
+     * @param rawValue  raw value that should contain a number
+     * @param expected  the expected numeric value
      * @param precision precision that should be used to compare the two values
      */
     public static void checkNumberSimilar(String rawValue, double expected, double precision) {

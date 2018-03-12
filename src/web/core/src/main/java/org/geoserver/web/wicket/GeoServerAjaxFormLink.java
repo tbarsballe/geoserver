@@ -14,11 +14,12 @@ import org.geoserver.web.GeoServerBasePage;
 /**
  * A custom {@link AjaxSubmitLink} that:
  * <ul>
- *   <li>does not trigger form processing, thus is invoked even if the form is not validating</li>
- *   <li>automatically adds the {@link GeoServerBasePage} feedback panel in the ajax target</li>
+ * <li>does not trigger form processing, thus is invoked even if the form is not validating</li>
+ * <li>automatically adds the {@link GeoServerBasePage} feedback panel in the ajax target</li>
  * </ul>
  * When using it remember that you have to invoke {@link FormComponent#processInput()} on each
  * component you need input from as the standard form processing has been skipped
+ *
  * @author Andrea Aime
  */
 @SuppressWarnings("serial")
@@ -31,16 +32,16 @@ public abstract class GeoServerAjaxFormLink extends AjaxSubmitLink {
     public GeoServerAjaxFormLink(String id, Form<?> form) {
         super(id, form);
     }
-    
+
     @Override
     public boolean getDefaultFormProcessing() {
         return false;
     }
-    
+
     @Override
     protected final void onSubmit(AjaxRequestTarget target, Form<?> form) {
         onClick(target, form);
-        if(getPage() instanceof GeoServerBasePage) {
+        if (getPage() instanceof GeoServerBasePage) {
             ((GeoServerBasePage) getPage()).addFeedbackPanels(target);
         }
     }

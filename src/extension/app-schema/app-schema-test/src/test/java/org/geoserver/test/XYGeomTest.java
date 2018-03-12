@@ -15,7 +15,7 @@ import org.w3c.dom.Document;
 
 /**
  * WFS GetFeature to test integration of {@link AppSchemaDataAccess} with GeoServer.
- * 
+ *
  * @author Rob Atkinson, CSIRO
  * @author Ben Caradoc-Davies, CSIRO Exploration and Mining
  */

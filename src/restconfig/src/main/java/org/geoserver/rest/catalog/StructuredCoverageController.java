@@ -76,7 +76,7 @@ public class StructuredCoverageController extends AbstractCatalogController {
 
     /**
      * Just holds a list of attributes
-     * 
+     *
      * @author Andrea Aime - GeoSolutions
      */
     static class IndexSchema {
@@ -135,11 +135,11 @@ public class StructuredCoverageController extends AbstractCatalogController {
     @DeleteMapping(path = "/granules")
     @ResponseBody
     public void granulesDelete(@PathVariable String workspaceName,
-            @PathVariable String storeName,
-            @PathVariable String coverageName,
-            @RequestParam(name = "filter", required = false) String filter,
-            @RequestParam(name = "offset", required = false) Integer offset,
-            @RequestParam(name = "limit", required = false) Integer limit) throws IOException {
+                               @PathVariable String storeName,
+                               @PathVariable String coverageName,
+                               @RequestParam(name = "filter", required = false) String filter,
+                               @RequestParam(name = "offset", required = false) Integer offset,
+                               @RequestParam(name = "limit", required = false) Integer limit) throws IOException {
 
         GranuleStore store = getGranuleStore(workspaceName, storeName, coverageName);
         Query q = toQuery(filter, offset, limit);
@@ -155,7 +155,7 @@ public class StructuredCoverageController extends AbstractCatalogController {
      */
     @GetMapping(path = "/granules/{granuleId:.+}", produces = {
             MediaType.APPLICATION_XML_VALUE,
-            MediaType.APPLICATION_JSON_VALUE })
+            MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public FormatCollectionWrapper granuleGet(
             @PathVariable String workspaceName,
@@ -174,11 +174,11 @@ public class StructuredCoverageController extends AbstractCatalogController {
         }
 
         SimpleFeatureCollection collection = forceNonNullNamespace(granules);
-        
+
         // and now for the fun part, figure out the extension if it was there, and force
         // the right output format... ugly as hell, but we could not find a better solution
         // regexes with positive and negative lookaheads were tried
-        if(granuleId.endsWith(".json")) {
+        if (granuleId.endsWith(".json")) {
             return new FormatCollectionWrapper.JSONCollectionWrapper(collection);
         } else {
             return new FormatCollectionWrapper.XMLCollectionWrapper(collection);
@@ -186,14 +186,14 @@ public class StructuredCoverageController extends AbstractCatalogController {
     }
 
     private Filter getGranuleIdFilter(String granuleId) {
-        if(granuleId.endsWith(".xml")) {
+        if (granuleId.endsWith(".xml")) {
             granuleId = granuleId.substring(0, granuleId.length() - 4);
-        } else if(granuleId.endsWith(".json")) {
+        } else if (granuleId.endsWith(".json")) {
             granuleId = granuleId.substring(0, granuleId.length() - 5);
         }
         return FF.id(FF.featureId(granuleId));
     }
-    
+
     /*
      * Note, the .+ regular expression allows granuleId to contain dots instead of having them
      * interpreted as format extension.
@@ -203,9 +203,9 @@ public class StructuredCoverageController extends AbstractCatalogController {
     @DeleteMapping(path = {"/granules/{granuleId:.+}", "/granules/{granuleId:.+}/{format}"})
     @ResponseBody
     public void granuleDelete(@PathVariable(name = "workspaceName") String workspaceName,
-            @PathVariable String storeName,
-            @PathVariable String coverageName,
-            @PathVariable String granuleId) throws IOException {
+                              @PathVariable String storeName,
+                              @PathVariable String coverageName,
+                              @PathVariable String granuleId) throws IOException {
 
         // gsConfigForma allows for weird calls gsconfig does, like granules/granule.id/.json
         GranuleStore store = getGranuleStore(workspaceName, storeName, coverageName);
@@ -216,7 +216,7 @@ public class StructuredCoverageController extends AbstractCatalogController {
 
     @Override
     public boolean supports(MethodParameter methodParameter, Type targetType,
-            Class<? extends HttpMessageConverter<?>> converterType) {
+                            Class<? extends HttpMessageConverter<?>> converterType) {
         return IndexSchema.class.isAssignableFrom(methodParameter.getParameterType());
     }
 
@@ -236,7 +236,7 @@ public class StructuredCoverageController extends AbstractCatalogController {
 
             @Override
             public void marshal(Object original, HierarchicalStreamWriter writer,
-                    MarshallingContext context) {
+                                MarshallingContext context) {
                 super.marshal(original, writer, context);
                 converter.encodeLink("granules", writer);
             }
@@ -245,7 +245,7 @@ public class StructuredCoverageController extends AbstractCatalogController {
     }
 
     private GranuleSource getGranuleSource(String workspaceName, String storeName,
-            String coverageName) throws IOException {
+                                           String coverageName) throws IOException {
         CoverageInfo coverage = getExistingStructuredCoverage(workspaceName, storeName,
                 coverageName);
 
@@ -257,7 +257,7 @@ public class StructuredCoverageController extends AbstractCatalogController {
     }
 
     private GranuleStore getGranuleStore(String workspaceName, String storeName,
-            String coverageName) throws IOException {
+                                         String coverageName) throws IOException {
         CoverageInfo coverage = getExistingStructuredCoverage(workspaceName, storeName,
                 coverageName);
 
@@ -273,7 +273,7 @@ public class StructuredCoverageController extends AbstractCatalogController {
     }
 
     private String getNativeCoverageName(CoverageInfo coverage,
-            StructuredGridCoverage2DReader reader) throws IOException {
+                                         StructuredGridCoverage2DReader reader) throws IOException {
         String nativeCoverageName = coverage.getNativeCoverageName();
         if (nativeCoverageName == null) {
             if (reader.getGridCoverageNames().length > 1) {
@@ -313,7 +313,7 @@ public class StructuredCoverageController extends AbstractCatalogController {
     }
 
     private CoverageInfo getExistingStructuredCoverage(String workspaceName, String storeName,
-            String coverageName) {
+                                                       String coverageName) {
         WorkspaceInfo ws = catalog.getWorkspaceByName(workspaceName);
         if (ws == null) {
             throw new ResourceNotFoundException("No such workspace : " + workspaceName);

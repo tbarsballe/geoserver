@@ -6,9 +6,8 @@ package org.geoserver.wps;
 
 /**
  * A specific exception class for unknown execution id
- * 
- * @author Andrea Aime - GeoSolutions
  *
+ * @author Andrea Aime - GeoSolutions
  */
 public class UnknownExecutionIdException extends WPSException {
     private static final long serialVersionUID = 3886845200543307484L;

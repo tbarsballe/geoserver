@@ -68,7 +68,7 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.w3c.dom.Document;
 
 public class StyleEditPageTest extends GeoServerWicketTestSupport {
-    
+
     StyleInfo buildingsStyle;
     StyleEditPage edit;
 
@@ -76,12 +76,12 @@ public class StyleEditPageTest extends GeoServerWicketTestSupport {
     public void setUp() throws Exception {
         Catalog catalog = getCatalog();
         login();
-        
+
         buildingsStyle = catalog.getStyleByName(MockData.BUILDINGS.getLocalPart());
-        if(buildingsStyle == null) {
+        if (buildingsStyle == null) {
             // undo the rename performed in one of the test methods
             StyleInfo si = catalog.getStyleByName("BuildingsNew");
-            if(si != null) {
+            if (si != null) {
                 si.setName(MockData.BUILDINGS.getLocalPart());
                 catalog.save(si);
             }
@@ -92,15 +92,15 @@ public class StyleEditPageTest extends GeoServerWicketTestSupport {
         StyleInfo defaultStyle = catalog.getStyleByName("Default");
         layer0.setDefaultStyle(defaultStyle);
         catalog.save(layer0);
-        
+
         //Create an inaccesible layer
-        DataStoreInfo  ds = catalog.getStoreByName("sf", "unstore", DataStoreInfo.class);
+        DataStoreInfo ds = catalog.getStoreByName("sf", "unstore", DataStoreInfo.class);
         if (ds == null) {
             CatalogBuilder cb = new CatalogBuilder(catalog);
             cb.setWorkspace(catalog.getWorkspaceByName("sf"));
             ds = cb.buildDataStore("unstore");
             catalog.add(ds);
-            
+
             FeatureTypeInfo ft = catalog.getFactory().createFeatureType();
             ft.setName("unlayer");
             ft.setStore(catalog.getStoreByName("unstore", DataStoreInfo.class));
@@ -111,16 +111,16 @@ public class StyleEditPageTest extends GeoServerWicketTestSupport {
             ft.setNativeCRS(wgs84);
             ft.setLatLonBoundingBox(new ReferencedEnvelope(-110, 0, -60, 50, wgs84));
             ft.setProjectionPolicy(ProjectionPolicy.FORCE_DECLARED);
-            
+
             catalog.add(ft);
-            
+
             LayerInfo ftl = catalog.getFactory().createLayer();
             ftl.setResource(ft);
             ftl.setDefaultStyle(getCatalog().getStyleByName("Default"));
-            
+
             catalog.add(ftl);
         }
-        
+
         //Create a cascaded WMS Layer
         WMSStoreInfo wms = catalog.getStoreByName("sf", "wmsstore", WMSStoreInfo.class);
         if (wms == null) {
@@ -129,7 +129,7 @@ public class StyleEditPageTest extends GeoServerWicketTestSupport {
             wms = cb.buildWMSStore("wmsstore");
             wms.setCapabilitiesURL("http://demo.opengeo.org/geoserver/wms?");
             catalog.add(wms);
-            
+
             WMSLayerInfo wmr = catalog.getFactory().createWMSLayer();
             wmr.setName("states");
             wmr.setNativeName("topp:states");
@@ -141,16 +141,16 @@ public class StyleEditPageTest extends GeoServerWicketTestSupport {
             wmr.setNativeCRS(wgs84);
             wmr.setLatLonBoundingBox(new ReferencedEnvelope(-110, 0, -60, 50, wgs84));
             wmr.setProjectionPolicy(ProjectionPolicy.FORCE_DECLARED);
-            
+
             catalog.add(wmr);
-            
+
             LayerInfo wml = catalog.getFactory().createLayer();
             wml.setResource(wmr);
             wml.setDefaultStyle(getCatalog().getStyleByName("Default"));
-            
+
             catalog.add(wml);
         }
-        
+
         edit = new StyleEditPage(buildingsStyle);
         tester.startPage(edit);
     }
@@ -163,45 +163,45 @@ public class StyleEditPageTest extends GeoServerWicketTestSupport {
         tester.debugComponentTrees();
         tester.assertComponent("styleForm:context:panel:name", TextField.class);
         tester.assertComponent("styleForm:styleEditor:editorContainer:editorParent:editor", TextArea.class);
-        
+
         tester.assertVisible("styleForm:context:panel:upload");
-        
+
         //Load the legend
         tester.executeAjaxEvent("styleForm:context:panel:legendPanel:externalGraphicContainer:showhide:show", "click");
-        
+
         tester.assertComponent("styleForm:context:panel:legendPanel", ExternalGraphicPanel.class);
-        
+
         tester.assertComponent("styleForm:context:panel:legendPanel:externalGraphicContainer:list:onlineResource", TextField.class);
         tester.assertComponent("styleForm:context:panel:legendPanel:externalGraphicContainer:list:width", TextField.class);
         tester.assertComponent("styleForm:context:panel:legendPanel:externalGraphicContainer:list:height", TextField.class);
         tester.assertComponent("styleForm:context:panel:legendPanel:externalGraphicContainer:list:format", TextField.class);
-        
+
         tester.assertModelValue("styleForm:context:panel:name", "Buildings");
-        
+
         GeoServerResourceLoader loader = GeoServerExtensions.bean(GeoServerResourceLoader.class);
-        assertNotNull( loader );
-        
+        assertNotNull(loader);
+
         String path = Paths.path("styles", Paths.convert(buildingsStyle.getFilename()));
         Resource styleFile = loader.get(path);
-        
+
         DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-        Document d1 = db.parse( styleFile.in() );
+        Document d1 = db.parse(styleFile.in());
 
         //GEOS-3257, actually drag into xml and compare with xmlunit to avoid 
         // line ending problems
         String xml = tester.getComponentFromLastRenderedPage("styleForm:styleEditor").getDefaultModelObjectAsString();
-        xml = xml.replaceAll("&lt;","<").replaceAll("&gt;",">").replaceAll("&quot;", "\"");
-        Document d2 = db.parse( new ByteArrayInputStream(xml
-            .getBytes()));
+        xml = xml.replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&quot;", "\"");
+        Document d2 = db.parse(new ByteArrayInputStream(xml
+                .getBytes()));
 
         assertXMLEqual(d1, d2);
     }
-    
+
     @Test
     public void testLoadLegend() {
-        
+
     }
-    
+
     @Test
     public void testLayerAssociationsTab() {
 
@@ -209,20 +209,20 @@ public class StyleEditPageTest extends GeoServerWicketTestSupport {
         assertFalse(l.getDefaultStyle() == buildingsStyle);
         tester.executeAjaxEvent("styleForm:context:tabs-container:tabs:1:link", "click");
         tester.assertComponent("styleForm:context:panel:layer.table", GeoServerTablePanel.class);
-        
+
         //Set the form value of the checkbox to true and force an ajax form update
         FormTester form = tester.newFormTester("styleForm");
         form.setValue("context:panel:layer.table:listContainer:items:1:itemProperties:2:component:default.selected", true);
-        AbstractAjaxBehavior behavior = (AbstractAjaxBehavior)WicketTesterHelper
+        AbstractAjaxBehavior behavior = (AbstractAjaxBehavior) WicketTesterHelper
                 .findBehavior(tester.getComponentFromLastRenderedPage(
                         "styleForm:context:panel:layer.table:listContainer:items:1:itemProperties:2:component:default.selected"),
                         AjaxFormComponentUpdatingBehavior.class);
         tester.executeBehavior(behavior);
-        
+
         l = getCatalog().getLayers().get(0);
         assertEquals(buildingsStyle, l.getDefaultStyle());
     }
-    
+
     @Test
     public void testLayerAssociationsMissingStyle() {
         LayerInfo l = getCatalog().getLayers().get(0);
@@ -240,7 +240,7 @@ public class StyleEditPageTest extends GeoServerWicketTestSupport {
             getCatalog().save(l);
         }
     }
-    
+
     @Test
     public void testLayerAttributesUnreachableLayer() throws Exception {
         tester.executeAjaxEvent("styleForm:context:tabs-container:tabs:3:link", "click");
@@ -251,27 +251,27 @@ public class StyleEditPageTest extends GeoServerWicketTestSupport {
         tester.executeAjaxEvent("styleForm:popup:content:layer.table:listContainer:items:30:itemProperties:2:component:link", "click");
         tester.assertContains("Failed to load attribute list, internal error is:");
     }
-    
+
     @Test
     public void testLayerAttributesTabWMS() {
         tester.executeAjaxEvent("styleForm:context:tabs-container:tabs:3:link", "click");
         tester.executeAjaxEvent("styleForm:context:panel:changeLayer:link", "click");
         tester.assertComponent("styleForm:popup:content:layer.table", GeoServerTablePanel.class);
-        
+
         //31 layers total, 25 layers per page; foo should not appear on page 1 or 2.
         tester.assertContainsNot("wmsstore");
         tester.executeAjaxEvent("styleForm:popup:content:layer.table:navigatorBottom:navigator:last", "click");
         tester.assertContainsNot("wmsstore");
     }
-    
+
     @Test
     public void testMissingName() throws Exception {
         FormTester form = tester.newFormTester("styleForm");
         form.setValue("context:panel:name", "");
         form.submit();
-        
+
         tester.assertRenderedPage(StyleEditPage.class);
-        tester.assertErrorMessages(new String[] {"Field 'Name' is required."});
+        tester.assertErrorMessages(new String[]{"Field 'Name' is required."});
     }
 
     @Test
@@ -279,17 +279,17 @@ public class StyleEditPageTest extends GeoServerWicketTestSupport {
         FormTester form = tester.newFormTester("styleForm");
         form.setValue("context:panel:name", "BuildingsNew");
         form.submit();
-        
+
         assertNull(getCatalog().getStyleByName("Buildings"));
         assertNotNull(getCatalog().getStyleByName("BuildingsNew"));
     }
-    
+
     @Test
     public void testChangeNameAlreadyExists() throws Exception {
         FormTester form = tester.newFormTester("styleForm");
         form.setValue("context:panel:name", "Default");
         tester.executeAjaxEvent("submit", "click");
-        
+
         tester.assertContains("java.lang.IllegalArgumentException: Style named &#039;Default&#039; already exists");
         tester.debugComponentTrees();
     }
@@ -297,14 +297,14 @@ public class StyleEditPageTest extends GeoServerWicketTestSupport {
     @Test
     public void testValidate() throws Exception {
         String xml =
-            "<StyledLayerDescriptor version='1.0.0' " +
-                " xsi:schemaLocation='http://www.opengis.net/sld StyledLayerDescriptor.xsd' " +
-                " xmlns='http://www.opengis.net/sld' " +
-                " xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'>" +
-                "  <NamedLayer>" +
-                "    <Name>Style</Name>" +
-                "  </NamedLayer>" +
-            "</StyledLayerDescriptor>";
+                "<StyledLayerDescriptor version='1.0.0' " +
+                        " xsi:schemaLocation='http://www.opengis.net/sld StyledLayerDescriptor.xsd' " +
+                        " xmlns='http://www.opengis.net/sld' " +
+                        " xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'>" +
+                        "  <NamedLayer>" +
+                        "    <Name>Style</Name>" +
+                        "  </NamedLayer>" +
+                        "</StyledLayerDescriptor>";
 
         // tester.debugComponentTrees();
         tester.newFormTester("styleForm").setValue("styleEditor:editorContainer:editorParent:editor", xml);
@@ -312,7 +312,7 @@ public class StyleEditPageTest extends GeoServerWicketTestSupport {
         tester.executeAjaxEvent("validate", "click");
         tester.assertNoErrorMessage();
     }
-    
+
     @Test
     public void testValidateEntityExpansion() throws Exception {
         String xml = IOUtils.toString(TestData.class.getResource("externalEntities.sld"), "UTF-8");
@@ -367,7 +367,7 @@ public class StyleEditPageTest extends GeoServerWicketTestSupport {
         tester.newFormTester("styleForm").setValue("styleEditor:editorContainer:editorParent:editor", xml);
 
         tester.executeAjaxEvent("validate", "click");
-        tester.assertErrorMessages(new String[] {"No layer or layer group named 'Stream' found in the catalog"});
+        tester.assertErrorMessages(new String[]{"No layer or layer group named 'Stream' found in the catalog"});
     }
 
     /**
@@ -525,14 +525,13 @@ public class StyleEditPageTest extends GeoServerWicketTestSupport {
     }
 
 
-    
     @Test
     public void applyThenSubmit() throws Exception {
         tester.executeAjaxEvent("apply", "click");
         tester.executeAjaxEvent("submit", "click");
         tester.assertNoErrorMessage();
     }
-    
+
     @Test
     public void testLayerPreviewTab() {
 

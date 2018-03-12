@@ -15,9 +15,8 @@ import org.geoserver.ows.Request;
 
 /**
  * Base class for flow controllers using a queue
- * 
+ *
  * @author Juan Marin, OpenGeo
- * 
  */
 
 public abstract class QueueController implements FlowController {

@@ -8,9 +8,8 @@ import org.geoserver.catalog.LayerGroupInfo;
 
 /**
  * Information about panels plugged into additional tabs on layergroup edit page.
- * 
- * @author Niels Charlier
  *
+ * @author Niels Charlier
  */
 public class LayerGroupEditTabPanelInfo extends PublishedEditTabPanelInfo<LayerGroupInfo> {
 

@@ -189,10 +189,10 @@ public class ProductsControllerTest extends OSEORestTestSupport {
         assertEquals(Integer.valueOf(65), json.read("$.properties['eop:orbitNumber']"));
         assertEquals("2018-01-01T00:00:00.000+0000", json.read("$.properties['timeStart']"));
         assertEquals("EPSG:32632", json.read("$.properties['crs']"));
-        
+
         SimpleFeature sf = new FeatureJSON().readFeature(json.jsonString());
         ReferencedEnvelope bounds = ReferencedEnvelope.reference(sf.getBounds());
-        assertTrue(new Envelope(-180,180,-90,90).equals(bounds));
+        assertTrue(new Envelope(-180, 180, -90, 90).equals(bounds));
     }
 
     @Test
@@ -480,7 +480,7 @@ public class ProductsControllerTest extends OSEORestTestSupport {
     @Test
     public void testPutProductGranules() throws Exception {
         testCreateProduct();
-        
+
         // add the granules
         MockHttpServletResponse response = putAsServletResponse(
                 "/rest/oseo/collections/SENTINEL2/products/S2A_OPER_MSI_L1C_TL_SGS__20180101T000000_A006640_T32TPP_N02.04/granules",
@@ -489,11 +489,11 @@ public class ProductsControllerTest extends OSEORestTestSupport {
 
         assertProductGranules();
     }
-    
+
     @Test
     public void testPutProductGranulesWithBands() throws Exception {
         testCreateProduct();
-        
+
         // add the granules
         MockHttpServletResponse response = putAsServletResponse(
                 "/rest/oseo/collections/SENTINEL2/products/S2A_OPER_MSI_L1C_TL_SGS__20180101T000000_A006640_T32TPP_N02.04/granules",
@@ -528,9 +528,9 @@ public class ProductsControllerTest extends OSEORestTestSupport {
         assertEquals(2, fc.size());
         final SimpleFeatureIterator it = fc.features();
         SimpleFeature sf = it.next();
-        assertTrue(new Envelope(10,12,40,42).contains(ReferencedEnvelope.reference(sf.getBounds())));
+        assertTrue(new Envelope(10, 12, 40, 42).contains(ReferencedEnvelope.reference(sf.getBounds())));
         sf = it.next();
-        assertTrue(new Envelope(10,12,40,42).contains(ReferencedEnvelope.reference(sf.getBounds())));
+        assertTrue(new Envelope(10, 12, 40, 42).contains(ReferencedEnvelope.reference(sf.getBounds())));
 
         // check no other granule has been harmed
         json = getAsJSONPath(
@@ -544,13 +544,12 @@ public class ProductsControllerTest extends OSEORestTestSupport {
                 "/efs/geoserver_data/coverages/sentinel/california/S2A_OPER_MSI_L1C_TL_SGS__20160117T141030_A002979_T32TPM_N02.01.tif",
                 json.read("$.features[0].properties.location"));
     }
-    
-    
+
 
     @Test
     public void testDeleteProductGranules() throws Exception {
         testPutProductDescription();
-        
+
         // now delete it
         MockHttpServletResponse response = deleteAsServletResponse(
                 "rest/oseo/collections/SENTINEL2/products/S2A_OPER_MSI_L1C_TL_SGS__20180101T000000_A006640_T32TPP_N02.04/granules");
@@ -563,8 +562,8 @@ public class ProductsControllerTest extends OSEORestTestSupport {
         assertEquals("FeatureCollection", json.read("$.type"));
         assertEquals(new Integer(0), json.read("$.features.length()"));
     }
-    
-    
+
+
     @Test
     public void testCreateProductAsZip() throws Exception {
         // build all possible combinations of elements in the zip and check they all work
@@ -576,47 +575,47 @@ public class ProductsControllerTest extends OSEORestTestSupport {
             if (parts.isEmpty()) {
                 continue;
             }
-            
+
             LOGGER.info("Testing zip product creation with parts:" + parts);
             cleanupTestProduct();
             testCreateProductAsZip(parts);
         }
     }
-    
+
     private void testCreateProductAsZip(Set<ProductPart> parts) throws Exception {
         LOGGER.info("Testing: " + parts);
         byte[] zip = null;
         try (final ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                ZipOutputStream zos = new ZipOutputStream(bos)) {
+             ZipOutputStream zos = new ZipOutputStream(bos)) {
             for (ProductPart part : parts) {
                 String resource, name;
                 switch (part) {
-                case Product:
-                    resource = "/product.json";
-                    name = "product.json";
-                    break;
-                case Description:
-                    resource = "/product-description.html";
-                    name = "description.html";
-                    break;
-                case Metadata:
-                    resource = "/product-metadata.xml";
-                    name = "metadata.xml";
-                    break;
-                case Thumbnail:
-                    resource = "/product-thumb.jpeg";
-                    name = "thumbnail.jpeg";
-                    break;
-                case OwsLinks:
-                    resource = "/product-links.json";
-                    name = "owsLinks.json";
-                    break;
-                case Granules:
-                    resource = "/product-granules.json";
-                    name = "granules.json";
-                    break;
-                default:
-                    throw new RuntimeException("Unexpected part " + part);
+                    case Product:
+                        resource = "/product.json";
+                        name = "product.json";
+                        break;
+                    case Description:
+                        resource = "/product-description.html";
+                        name = "description.html";
+                        break;
+                    case Metadata:
+                        resource = "/product-metadata.xml";
+                        name = "metadata.xml";
+                        break;
+                    case Thumbnail:
+                        resource = "/product-thumb.jpeg";
+                        name = "thumbnail.jpeg";
+                        break;
+                    case OwsLinks:
+                        resource = "/product-links.json";
+                        name = "owsLinks.json";
+                        break;
+                    case Granules:
+                        resource = "/product-granules.json";
+                        name = "granules.json";
+                        break;
+                    default:
+                        throw new RuntimeException("Unexpected part " + part);
                 }
 
                 ZipEntry entry = new ZipEntry(name);
@@ -627,7 +626,7 @@ public class ProductsControllerTest extends OSEORestTestSupport {
             }
             zip = bos.toByteArray();
         }
-        
+
         MockHttpServletResponse response = postAsServletResponse(
                 "rest/oseo/collections/SENTINEL2/products", zip,
                 MediaTypeExtensions.APPLICATION_ZIP_VALUE);
@@ -637,7 +636,7 @@ public class ProductsControllerTest extends OSEORestTestSupport {
                     "http://localhost:8080/geoserver/rest/oseo/collections/SENTINEL2/products/S2A_OPER_MSI_L1C_TL_SGS__20180101T000000_A006640_T32TPP_N02.04",
                     response.getHeader("location"));
 
-            assertProductCreated();            
+            assertProductCreated();
         } else {
             assertEquals(400, response.getStatus());
             assertThat(response.getContentAsString(), containsString("product.json"));
@@ -661,5 +660,5 @@ public class ProductsControllerTest extends OSEORestTestSupport {
             assertProductGranules();
         }
     }
-    
+
 }

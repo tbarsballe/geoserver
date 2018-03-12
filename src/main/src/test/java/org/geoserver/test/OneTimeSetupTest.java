@@ -22,9 +22,10 @@ import junit.framework.TestSuite;
  * also have to add the following static method:
  * <pre>
  * public static Test suite() {
- *     return new OneTimeTestSetup(new MyOneTimeSetupTest()); 
+ *     return new OneTimeTestSetup(new MyOneTimeSetupTest());
  * }
  * </pre>
+ *
  * @author Andrea Aime - TOPP
  * @author Gabriel Roldan - TOPP
  */
@@ -35,7 +36,8 @@ public abstract class OneTimeSetupTest extends TestCase {
     private boolean inTearDown;
 
     /**
-     * Test suite wrapper 
+     * Test suite wrapper
+     *
      * @author Andrea Aime - TOPP
      * @author Gabriel Roldan - TOPP
      */
@@ -47,7 +49,7 @@ public abstract class OneTimeSetupTest extends TestCase {
             super(new TestSuite(test.getClass()));
             this.test = test;
         }
-        
+
         @Override
         protected void setUp() throws Exception {
             super.setUp();
@@ -55,7 +57,7 @@ public abstract class OneTimeSetupTest extends TestCase {
             forceOneTimeTearDown = false;
             test.oneTimeSetUp();
         }
-        
+
         @Override
         protected void tearDown() throws Exception {
             super.tearDown();
@@ -63,7 +65,7 @@ public abstract class OneTimeSetupTest extends TestCase {
             forceOneTimeTearDown = false;
             test.oneTimeTearDown();
         }
-        
+
     }
 
     /**
@@ -72,51 +74,51 @@ public abstract class OneTimeSetupTest extends TestCase {
      * through the test methods (for each one a new instance of the class will be created)
      */
     protected abstract void oneTimeSetUp() throws Exception;
-    
+
     /**
-     * This provides the one time teardown for the expensive fixture. 
+     * This provides the one time teardown for the expensive fixture.
      */
     protected abstract void oneTimeTearDown() throws Exception;
-    
+
     /**
      * Provides the proper behavior so that the one time setup is run once matter how the
      * test is started. If you need to implement a per test method setup, override {@link #setUpInternal()}
      */
     @Override
     protected final void setUp() throws Exception {
-        if(inSetup)
+        if (inSetup)
             throw new RuntimeException("setUpInternal seems to call back to super.setUp(). " +
-            		"It should call super.setUpInternal instead");
+                    "It should call super.setUpInternal instead");
         try {
             inSetup = true;
-        
-            if(!oneTimeSetupDone) {
+
+            if (!oneTimeSetupDone) {
                 oneTimeSetUp();
                 oneTimeSetupDone = true;
                 forceOneTimeTearDown = true;
             }
-        
+
             setUpInternal();
         } finally {
             inSetup = false;
         }
-        
+
     }
-    
+
     /**
      * Provides the proper behavior so that the one time tear down is once no matter how the
      * test is started. If you need to implement a per test method setup, overide {@link #tearDownInternal()}
      */
     @Override
     protected final void tearDown() throws Exception {
-        if(inTearDown)
+        if (inTearDown)
             throw new RuntimeException("tearDownInternal seems to call back to super.tearDown(). " +
                     "It should call super.tearDownInternal instead");
-        
+
         try {
             inTearDown = true;
             tearDownInternal();
-            if(forceOneTimeTearDown) {
+            if (forceOneTimeTearDown) {
                 oneTimeSetupDone = false;
                 forceOneTimeTearDown = false;
                 oneTimeTearDown();
@@ -125,17 +127,17 @@ public abstract class OneTimeSetupTest extends TestCase {
             inTearDown = false;
         }
     }
-    
+
     /**
      * Per method setup (fixture can be stored in non static fields)
      */
     protected void setUpInternal() throws Exception {
     }
-    
+
     /**
-     * Per method tear down 
+     * Per method tear down
      */
     protected void tearDownInternal() throws Exception {
-        
+
     }
 }

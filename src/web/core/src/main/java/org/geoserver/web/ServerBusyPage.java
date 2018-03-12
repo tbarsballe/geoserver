@@ -14,7 +14,7 @@ import org.apache.wicket.model.ResourceModel;
 public class ServerBusyPage extends GeoServerBasePage implements GeoServerUnlockablePage {
 
     public ServerBusyPage() {
-        IModel model = new ResourceModel( "ServerBusyPage.serverBusyMessage" );
+        IModel model = new ResourceModel("ServerBusyPage.serverBusyMessage");
         add(new Label("serverBusyMessage", model));
     }
 }

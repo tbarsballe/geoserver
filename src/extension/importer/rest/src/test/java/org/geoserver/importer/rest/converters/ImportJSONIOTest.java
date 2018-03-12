@@ -32,34 +32,32 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 /**
- *
  * @author Ian Schneider <ischneider@opengeo.org>
  */
 public class ImportJSONIOTest extends ImporterTestSupport {
-    
+
     private ImportJSONWriter writer;
     FlushableJSONBuilder builder;
-    
+
     private ImportJSONReader reader;
-    
+
     private ByteArrayOutputStream outputStream;
 
     private RequestAttributes oldAttributes;
 
-    
 
     @Before
     public void prepareData() throws Exception {
         File dir = unpack("shape/archsites_epsg_prj.zip");
         importer.createContext(new Directory(dir));
-        
+
         RequestInfo info = new RequestInfo();
         info.setServletPath("servletPath");
         info.setBaseURL("baseURL");
         info.setPagePath("pagePath");
 
         newOutputStreamAndBuilder();
-        
+
         writer = new ImportJSONWriter(importer);
         reader = new ImportJSONReader(importer);
 
@@ -81,6 +79,7 @@ public class ImportJSONIOTest extends ImporterTestSupport {
 
     /**
      * Parse json from {@link #outputStream}.
+     *
      * @return json representation of text
      */
     private JSONObject parseJson(ByteArrayOutputStream buffer) {
@@ -91,7 +90,7 @@ public class ImportJSONIOTest extends ImporterTestSupport {
     @Test
     public void testSettingTargetStore() throws IOException {
         ImportTask task = importer.getContext(0).getTasks().get(0);
-        writer.task(builder,task, true, 1);
+        writer.task(builder, task, true, 1);
 
         // update with new target
         JSONObject target = new JSONObject();
@@ -101,10 +100,10 @@ public class ImportJSONIOTest extends ImporterTestSupport {
         workspace.put("name", getCatalog().getDefaultWorkspace().getName());
         dataStore.put("workspace", workspace);
         target.put("dataStore", dataStore);
-        
-        JSONObject json = parseJson( outputStream );
+
+        JSONObject json = parseJson(outputStream);
         json.getJSONObject("task").put("target", target);
-        
+
         ImportTask parsed = reader.task(json);
         StoreInfo store = parsed.getStore();
         Assert.assertNotNull(store);
@@ -115,13 +114,13 @@ public class ImportJSONIOTest extends ImporterTestSupport {
     @Test
     public void testAddingDateTransform() throws IOException {
         ImportTask task = importer.getContext(0).getTasks().get(0);
-        writer.task(builder,task, true, 1);
-        
+        writer.task(builder, task, true, 1);
+
         // update with transform
         JSONObject json = parseJson(outputStream);
 
-        JSONArray transforms = 
-            json.getJSONObject("task").getJSONObject("transformChain").getJSONArray("transforms");
+        JSONArray transforms =
+                json.getJSONObject("task").getJSONObject("transformChain").getJSONArray("transforms");
         JSONObject dateTransform = new JSONObject();
         dateTransform.put("type", "dateFormatTransform");
         dateTransform.put("field", "foobar");
@@ -139,16 +138,16 @@ public class ImportJSONIOTest extends ImporterTestSupport {
         Assert.assertNotNull(chain);
         Assert.assertEquals(1, chain.getTransforms().size());
         DateFormatTransform dft = (DateFormatTransform) chain.getTransforms().get(0);
-        Assert.assertEquals("foobar",dft.getField());
-        Assert.assertEquals("yyyy-MM-dd",dft.getDatePattern().dateFormat().toPattern());
+        Assert.assertEquals("foobar", dft.getField());
+        Assert.assertEquals("yyyy-MM-dd", dft.getDatePattern().dateFormat().toPattern());
     }
 
     @Test
     public void testRemoteDataFreeAccess() throws IOException {
         ImportContext context = importer.registerContext(null);
         context.setData(new RemoteData("http://www.geoserver.org/data"));
-        writer.context(builder,context, true, 3);
-        
+        writer.context(builder, context, true, 3);
+
         JSONObject json = parseJson(outputStream);
         ImportContext readBack = reader.context(json);
 
@@ -163,10 +162,10 @@ public class ImportJSONIOTest extends ImporterTestSupport {
         data.setPassword("bar");
         data.setDomain("myDomain");
         context.setData(data);
-        
+
         writer.context(builder, context, true, 3);
         ByteArrayInputStream inbuf = new ByteArrayInputStream(outputStream.toByteArray());
-        ImportContext readBack = reader.context( reader.parse(inbuf));
+        ImportContext readBack = reader.context(reader.parse(inbuf));
 
         Assert.assertEquals(context.getData(), readBack.getData());
     }

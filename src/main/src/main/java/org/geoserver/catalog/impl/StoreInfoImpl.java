@@ -19,7 +19,6 @@ import org.opengis.util.ProgressListener;
 
 /**
  * Default implementation of {@link StoreInfo}.
- * 
  */
 @SuppressWarnings("serial")
 public abstract class StoreInfoImpl implements StoreInfo {
@@ -31,21 +30,21 @@ public abstract class StoreInfoImpl implements StoreInfo {
     protected String description;
 
     protected String type;
-    
+
     protected boolean enabled;
 
     protected WorkspaceInfo workspace;
-    
+
     protected transient Catalog catalog;
 
     protected Map<String, Serializable> connectionParameters = new HashMap<String, Serializable>();
 
     protected MetadataMap metadata = new MetadataMap();
-    
+
     protected Throwable error;
 
     protected boolean _default;
-    
+
     protected StoreInfoImpl() {
     }
 
@@ -65,15 +64,15 @@ public abstract class StoreInfoImpl implements StoreInfo {
     public void setId(String id) {
         this.id = id;
     }
-    
+
     public Catalog getCatalog() {
         return catalog;
     }
 
-    public void setCatalog( Catalog catalog ) {
+    public void setCatalog(Catalog catalog) {
         this.catalog = catalog;
     }
-    
+
     public String getName() {
         return name;
     }
@@ -93,11 +92,11 @@ public abstract class StoreInfoImpl implements StoreInfo {
     public String getType() {
         return type;
     }
-    
+
     public void setType(String type) {
         this.type = type;
     }
-    
+
     public boolean isEnabled() {
         return enabled;
     }
@@ -109,11 +108,11 @@ public abstract class StoreInfoImpl implements StoreInfo {
     public WorkspaceInfo getWorkspace() {
         return workspace;
     }
-    
+
     public void setWorkspace(WorkspaceInfo workspace) {
         this.workspace = workspace;
     }
-    
+
     public Map<String, Serializable> getConnectionParameters() {
         return connectionParameters;
     }
@@ -152,11 +151,11 @@ public abstract class StoreInfoImpl implements StoreInfo {
     public Throwable getError() {
         return error;
     }
-    
+
     public void setError(Throwable error) {
         this.error = error;
     }
-    
+
     public boolean isDefault() {
         return _default;
     }
@@ -164,13 +163,14 @@ public abstract class StoreInfoImpl implements StoreInfo {
     public void setDefault(boolean _default) {
         this._default = _default;
     }
+
     public int hashCode() {
         final int prime = 31;
         int result = 1;
         result = prime
                 * result
                 + ((connectionParameters == null) ? 0 : connectionParameters
-                        .hashCode());
+                .hashCode());
         result = prime * result
                 + ((description == null) ? 0 : description.hashCode());
         result = prime * result + (enabled ? 1231 : 1237);
@@ -186,10 +186,10 @@ public abstract class StoreInfoImpl implements StoreInfo {
             return true;
         if (obj == null)
             return false;
-        if (!( obj instanceof StoreInfo ) ) {
+        if (!(obj instanceof StoreInfo)) {
             return false;
         }
-        
+
         final StoreInfo other = (StoreInfo) obj;
         if (connectionParameters == null) {
             if (other.getConnectionParameters() != null)

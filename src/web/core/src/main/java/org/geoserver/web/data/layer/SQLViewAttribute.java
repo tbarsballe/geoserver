@@ -8,7 +8,9 @@ package org.geoserver.web.data.layer;
 import java.io.Serializable;
 
 class SQLViewAttribute implements Serializable {
-    /** serialVersionUID */
+    /**
+     * serialVersionUID
+     */
     private static final long serialVersionUID = -926721043289684925L;
 
     String name;
@@ -95,13 +97,12 @@ class SQLViewAttribute implements Serializable {
             return false;
         return true;
     }
-    
+
     @Override
     public String toString() {
         return "SQLViewAttribute [name=" + name + ", pk=" + pk + ", srid=" + srid + ", type="
                 + type + "]";
     }
-    
-    
+
 
 }

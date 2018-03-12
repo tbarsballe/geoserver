@@ -14,10 +14,7 @@ import org.opengis.feature.type.Name;
 import org.opengis.util.ProgressListener;
 
 /**
- * 
- * 
  * @author Alessio Fabiani, GeoSolutions
- * 
  */
 public class MockRemoteClient extends RemoteProcessClient {
 
@@ -37,7 +34,7 @@ public class MockRemoteClient extends RemoteProcessClient {
 
     @Override
     public String execute(Name serviceName, Map<String, Object> input, Map<String, Object> metadata,
-            ProgressListener monitor) throws Exception {
+                          ProgressListener monitor) throws Exception {
 
         if (serviceName != null) {
             for (RemoteProcessFactoryListener listener : getRemoteFactoryListeners()) {

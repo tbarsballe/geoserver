@@ -35,7 +35,7 @@ public class StoreCoverageTest extends WPSTestSupport {
     @Override
     protected void onSetUp(SystemTestData testData) throws Exception {
         super.onSetUp(testData);
-        
+
         addWcs11Coverages(testData);
         testData.addRasterLayer(CUST_WATTEMP, "custwatertemp.zip", null, null,
                 SystemTestData.class, getCatalog());
@@ -90,7 +90,7 @@ public class StoreCoverageTest extends WPSTestSupport {
         GridCoverage original = getCatalog().getCoverageByName(getLayerId(MockData.TASMANIA_DEM))
                 .getGridCoverage(null, null);
         scheduleForDisposal(original);
-        
+
         //
         // check the envelope did not change
         assertEquals(original.getEnvelope().getMinimum(0), gc.getEnvelope().getMinimum(0), EPS);

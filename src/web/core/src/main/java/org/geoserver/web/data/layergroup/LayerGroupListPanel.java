@@ -59,9 +59,9 @@ public abstract class LayerGroupListPanel extends GeoServerTablePanel<LayerGroup
     }
 
     @SuppressWarnings("unchecked")
-	@Override
+    @Override
     protected Component getComponentForProperty(String id, final IModel<LayerGroupInfo> itemModel,
-            Property<LayerGroupInfo> property) {
+                                                Property<LayerGroupInfo> property) {
         IModel<?> model = property.getModel(itemModel);
         if (NAME == property) {
             return new SimpleAjaxLink<String>(id, (IModel<String>) model) {

@@ -21,7 +21,7 @@ public class LocalLayerThreadLocalTransferTest extends AbstractThreadLocalTransf
     public void cleanupThreadLocals() {
         LocalPublished.remove();
     }
-    
+
     @Test
     public void testRequest() throws InterruptedException, ExecutionException {
         // setup the state
@@ -29,12 +29,12 @@ public class LocalLayerThreadLocalTransferTest extends AbstractThreadLocalTransf
         LocalPublished.set(layer);
         // test it's transferred properly using the base class machinery
         testThreadLocalTransfer(new ThreadLocalTransferCallable(new LocalPublishedThreadLocalTransfer()) {
-            
+
             @Override
             void assertThreadLocalCleaned() {
                 assertNull(LocalPublished.get());
             }
-            
+
             @Override
             void assertThreadLocalApplied() {
                 assertSame(layer, LocalPublished.get());

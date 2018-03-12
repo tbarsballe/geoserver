@@ -24,19 +24,19 @@ public class OGRWrapperTest {
         ogr = new OGRWrapper(Ogr2OgrTestUtil.getOgr2Ogr(), Collections.singletonMap("GDAL_DATA",
                 Ogr2OgrTestUtil.getGdalData()));
     }
-    
+
     @Test
     public void testAvaialable() {
         // kind of a smoke test, since ogr2ogrtestutil uses the same command!
         ogr.isAvailable();
     }
-    
+
     @Test
     public void testFormats() {
         Set<String> formats = ogr.getSupportedFormats();
         // well, we can't know which formats ogr was complied with, but at least there will be one, right?
         assertTrue(formats.size() > 0);
-        
+
         // these work on my machine, with fwtools 2.2.8
         //assertTrue(formats.contains("KML"));
         //assertTrue(formats.contains("CSV"));

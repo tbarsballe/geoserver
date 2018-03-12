@@ -22,7 +22,7 @@ public class JavaScriptFunctionHook extends FunctionHook {
     public JavaScriptFunctionHook(ScriptPlugin plugin) {
         super(plugin);
     }
-    
+
     @Override
     public Object run(Object object, List<Object> args, ScriptEngine engine) throws ScriptException {
         Invocable invocable = (Invocable) engine;

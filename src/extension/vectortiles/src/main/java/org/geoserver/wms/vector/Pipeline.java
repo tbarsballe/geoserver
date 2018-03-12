@@ -11,7 +11,6 @@ import com.vividsolutions.jts.geom.GeometryFactory;
 
 /**
  * A chainable unary operation on a geometry.
- *
  */
 abstract class Pipeline {
 
@@ -38,6 +37,7 @@ abstract class Pipeline {
 
     /**
      * Set the next operation in the pipeline
+     *
      * @param step
      */
     void setNext(Pipeline step) {
@@ -47,6 +47,7 @@ abstract class Pipeline {
 
     /**
      * Execute pipeline including all downstream pipelines.
+     *
      * @param geom
      * @return
      * @throws Exception
@@ -62,6 +63,7 @@ abstract class Pipeline {
 
     /**
      * Implementation of the pipeline.  A unary operation on a geometry.
+     *
      * @param geom
      * @return
      * @throws Exception

@@ -19,33 +19,33 @@ public class ConfirmRemovalGroupPanel extends AbstractConfirmRemovalPanel<GeoSer
 
     private static final long serialVersionUID = 1L;
 
-    
-    public ConfirmRemovalGroupPanel(String id, Model<Boolean> model,List<GeoServerUserGroup> roots) {
-        super(id, model,roots);                
-    }
-    
-    public ConfirmRemovalGroupPanel(String id, Model<Boolean> model,GeoServerUserGroup... roots) {
-        super(id, model,roots);                
+
+    public ConfirmRemovalGroupPanel(String id, Model<Boolean> model, List<GeoServerUserGroup> roots) {
+        super(id, model, roots);
     }
 
-    
+    public ConfirmRemovalGroupPanel(String id, Model<Boolean> model, GeoServerUserGroup... roots) {
+        super(id, model, roots);
+    }
+
+
     @Override
-    protected String getConfirmationMessage(GeoServerUserGroup object) throws Exception{
+    protected String getConfirmationMessage(GeoServerUserGroup object) throws Exception {
         StringBuffer buffer = new StringBuffer(OwsUtils.property(object, "groupname", String.class));
         if ((Boolean) getDefaultModelObject()) {
             SortedSet<GeoServerRole> roles =
-                GeoServerApplication.get().getSecurityManager()
-                    .getActiveRoleService().getRolesForGroup(object.getGroupname());
+                    GeoServerApplication.get().getSecurityManager()
+                            .getActiveRoleService().getRolesForGroup(object.getGroupname());
             buffer.append(" [");
-            for (GeoServerRole role: roles) {
+            for (GeoServerRole role : roles) {
                 buffer.append(role.getAuthority()).append(" ");
             }
-            if (roles.size()>0) { // remove last delimiter
-                buffer.setLength(buffer.length()-1);
+            if (roles.size() > 0) { // remove last delimiter
+                buffer.setLength(buffer.length() - 1);
             }
             buffer.append("]");
         }
         return buffer.toString();
     }
- 
+
 }

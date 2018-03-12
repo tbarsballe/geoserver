@@ -49,7 +49,6 @@ public class OWS11ServiceExceptionHandler extends ServiceExceptionHandler {
 
     /**
      * Constructor to be called if the exception is not for a particular service.
-     *
      */
     public OWS11ServiceExceptionHandler() {
         super(Collections.EMPTY_LIST);
@@ -63,7 +62,7 @@ public class OWS11ServiceExceptionHandler extends ServiceExceptionHandler {
     public OWS11ServiceExceptionHandler(List services) {
         super(services);
     }
-    
+
     /**
      * Constructor to be called if the exception is for a particular service.
      *
@@ -84,8 +83,8 @@ public class OWS11ServiceExceptionHandler extends ServiceExceptionHandler {
             version = request.getServiceDescriptor().getVersion().toString();
         }
 
-        ExceptionReportType report = Ows11Util.exceptionReport( exception, verboseExceptions, version );
-        
+        ExceptionReportType report = Ows11Util.exceptionReport(exception, verboseExceptions, version);
+
         HttpServletResponse response = request.getHttpResponse();
         if (!request.isSOAP()) {
             //there will already be a SOAP mime type
@@ -100,13 +99,13 @@ public class OWS11ServiceExceptionHandler extends ServiceExceptionHandler {
         encoder.setIndentSize(2);
         encoder.setLineWidth(60);
         encoder.setOmitXMLDeclaration(request.isSOAP());
-        
+
         String schemaLocation = buildSchemaURL(baseURL(request.getHttpRequest()), "ows/1.1.0/owsAll.xsd");
         encoder.setSchemaLocation(OWS.NAMESPACE, schemaLocation);
 
         try {
             encoder.encode(report, OWS.ExceptionReport,
-                response.getOutputStream());
+                    response.getOutputStream());
         } catch (Exception ex) {
             //throw new RuntimeException(ex);
             // Hmm, not much we can do here.  I guess log the fact that we couldn't write out the exception and be done with it...

@@ -25,7 +25,7 @@ import org.opengis.feature.type.FeatureType;
 
 /**
  * Base class for XML based CSW record responses
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public abstract class AbstractRecordsResponse extends Response {
@@ -95,7 +95,7 @@ public abstract class AbstractRecordsResponse extends Response {
     }
 
     private ResultType getResultType(RequestBaseType request) {
-        if(request instanceof GetRecordsType) {
+        if (request instanceof GetRecordsType) {
             return ((GetRecordsType) request).getResultType();
         } else {
             return ResultType.RESULTS;
@@ -115,12 +115,12 @@ public abstract class AbstractRecordsResponse extends Response {
 
     /**
      * Actually encodes the response into a set of records
-     * 
+     *
      * @param output
      * @param result
      * @param request
      * @param csw
      */
     protected abstract void transformResponse(OutputStream output, CSWRecordsResult result,
-            RequestBaseType request, CSWInfo csw);
+                                              RequestBaseType request, CSWInfo csw);
 }

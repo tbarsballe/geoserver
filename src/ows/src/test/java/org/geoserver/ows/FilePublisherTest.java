@@ -9,21 +9,24 @@ package org.geoserver.ows;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockServletContext;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 import org.geoserver.platform.GeoServerResourceLoader;
 import org.junit.AfterClass;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
- *
  * @author Ian Schneider <ischneider@boundlessgeo.com>
  */
 public class FilePublisherTest {
@@ -86,7 +89,7 @@ public class FilePublisherTest {
 
     @Test
     public void testEncoding() throws Exception {
-        for (String[] path: paths) {
+        for (String[] path : paths) {
             MockHttpServletResponse response = request(path, null);
             assertEquals(Arrays.toString(path), 200, response.getStatus());
             assertEquals(path[path.length - 1], response.getContentAsString());
@@ -95,7 +98,7 @@ public class FilePublisherTest {
 
     @Test
     public void testLastModified() throws Exception {
-        for (String[] path: paths) {
+        for (String[] path : paths) {
             MockHttpServletResponse response = request(path, null);
 
             String lastModified = response.getHeader("Last-Modified");

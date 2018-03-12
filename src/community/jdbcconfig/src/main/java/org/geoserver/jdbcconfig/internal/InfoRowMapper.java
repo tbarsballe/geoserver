@@ -32,7 +32,7 @@ public final class InfoRowMapper<T extends Info> implements RowMapper<T> {
     }
 
     public InfoRowMapper(final Class<T> type, final XStreamInfoSerialBinding binding,
-            final int colNum) {
+                         final int colNum) {
 
         this.type = type;
         this.binding = binding;

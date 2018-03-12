@@ -14,16 +14,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 
  * trk represents a track - an ordered list of points describing a path.
- * 
- * 
+ * <p>
+ * <p>
  * <p>
  * Java class for trkType complex type.
- * 
+ * <p>
  * <p>
  * The following schema fragment specifies the expected content contained within this class.
- * 
+ * <p>
  * <pre>
  * &lt;complexType name="trkType">
  *   &lt;complexContent>
@@ -43,8 +42,6 @@ import java.util.List;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 public class TrkType {
     protected String name;
@@ -67,7 +64,6 @@ public class TrkType {
 
     /**
      * Gets the value of the name property.
-     * 
      */
     public String getName() {
         return name;
@@ -75,7 +71,6 @@ public class TrkType {
 
     /**
      * Sets the value of the name property.
-     * 
      */
     public void setName(String value) {
         this.name = value;
@@ -83,7 +78,6 @@ public class TrkType {
 
     /**
      * Gets the value of the cmt property.
-     * 
      */
     public String getCmt() {
         return cmt;
@@ -91,7 +85,6 @@ public class TrkType {
 
     /**
      * Sets the value of the cmt property.
-     * 
      */
     public void setCmt(String value) {
         this.cmt = value;
@@ -99,7 +92,6 @@ public class TrkType {
 
     /**
      * Gets the value of the desc property.
-     * 
      */
     public String getDesc() {
         return desc;
@@ -107,7 +99,6 @@ public class TrkType {
 
     /**
      * Sets the value of the desc property.
-     * 
      */
     public void setDesc(String value) {
         this.desc = value;
@@ -115,7 +106,6 @@ public class TrkType {
 
     /**
      * Gets the value of the src property.
-     * 
      */
     public String getSrc() {
         return src;
@@ -123,7 +113,6 @@ public class TrkType {
 
     /**
      * Sets the value of the src property.
-     * 
      */
     public void setSrc(String value) {
         this.src = value;
@@ -131,23 +120,21 @@ public class TrkType {
 
     /**
      * Gets the value of the link property.
-     * 
+     * <p>
      * <p>
      * This accessor method returns a reference to the live list, not a snapshot. Therefore any modification you make to the returned list will be
      * present inside the JAXB object. This is why there is not a <CODE>set</CODE> method for the link property.
-     * 
+     * <p>
      * <p>
      * For example, to add a new item, do as follows:
-     * 
+     * <p>
      * <pre>
      * getLink().add(newItem);
      * </pre>
-     * 
-     * 
+     * <p>
+     * <p>
      * <p>
      * Objects of the following type(s) are allowed in the list {@link LinkType }
-     * 
-     * 
      */
     public List<LinkType> getLink() {
         if (link == null) {
@@ -159,7 +146,6 @@ public class TrkType {
 
     /**
      * Gets the value of the number property.
-     * 
      */
     public int getNumber() {
         return number;
@@ -167,7 +153,6 @@ public class TrkType {
 
     /**
      * Sets the value of the number property.
-     * 
      */
     public void setNumber(int value) {
         this.number = value;
@@ -175,7 +160,6 @@ public class TrkType {
 
     /**
      * Gets the value of the type property.
-     * 
      */
     public String getType() {
         return type;
@@ -183,7 +167,6 @@ public class TrkType {
 
     /**
      * Sets the value of the type property.
-     * 
      */
     public void setType(String value) {
         this.type = value;
@@ -191,7 +174,6 @@ public class TrkType {
 
     /**
      * Gets the value of the extensions property.
-     * 
      */
     public ExtensionsType getExtensions() {
         return extensions;
@@ -199,7 +181,6 @@ public class TrkType {
 
     /**
      * Sets the value of the extensions property.
-     * 
      */
     public void setExtensions(ExtensionsType value) {
         this.extensions = value;
@@ -207,23 +188,21 @@ public class TrkType {
 
     /**
      * Gets the value of the trkseg property.
-     * 
+     * <p>
      * <p>
      * This accessor method returns a reference to the live list, not a snapshot. Therefore any modification you make to the returned list will be
      * present inside the JAXB object. This is why there is not a <CODE>set</CODE> method for the trkseg property.
-     * 
+     * <p>
      * <p>
      * For example, to add a new item, do as follows:
-     * 
+     * <p>
      * <pre>
      * getTrkseg().add(newItem);
      * </pre>
-     * 
-     * 
+     * <p>
+     * <p>
      * <p>
      * Objects of the following type(s) are allowed in the list {@link TrksegType }
-     * 
-     * 
      */
     public List<TrksegType> getTrkseg() {
         if (trkseg == null) {

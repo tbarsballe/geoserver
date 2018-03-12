@@ -43,25 +43,26 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * 
  * @see RawMapResponse
  */
 public abstract class AbstractOpenLayersMapOutputFormat implements GetMapOutputFormat {
-    /** A logger for this class. */
+    /**
+     * A logger for this class.
+     */
     protected static final Logger LOGGER = Logging.getLogger(AbstractOpenLayersMapOutputFormat.class);
 
     /**
      * Default capabilities for OpenLayers format.
-     *
+     * <p>
      * <p>
      * <ol>
-     *         <li>tiled = supported</li>
-     *         <li>multipleValues = unsupported</li>
-     *         <li>paletteSupported = supported</li>
-     *         <li>transparency = supported</li>
+     * <li>tiled = supported</li>
+     * <li>multipleValues = unsupported</li>
+     * <li>paletteSupported = supported</li>
+     * <li>transparency = supported</li>
      * </ol>
      */
-    static MapProducerCapabilities CAPABILITIES= new MapProducerCapabilities(true, false, true, true, null);
+    static MapProducerCapabilities CAPABILITIES = new MapProducerCapabilities(true, false, true, true, null);
 
     /**
      * Set of parameters that we can ignore, since they are not part of the OpenLayers WMS request
@@ -126,7 +127,7 @@ public abstract class AbstractOpenLayersMapOutputFormat implements GetMapOutputF
             ProjectionHandler handler = null;
             try {
                 handler = ProjectionHandlerFinder.getHandler(
-                        new ReferencedEnvelope(request.getCrs()), 
+                        new ReferencedEnvelope(request.getCrs()),
                         request.getCrs(), wms.isContinuousMapWrappingEnabled());
             } catch (MismatchedDimensionException e) {
                 LOGGER.log(Level.FINER, e.getMessage(), e);
@@ -182,6 +183,7 @@ public abstract class AbstractOpenLayersMapOutputFormat implements GetMapOutputF
 
     /**
      * Returns the units for the current OL version
+     *
      * @param mapContent
      * @return
      */
@@ -189,6 +191,7 @@ public abstract class AbstractOpenLayersMapOutputFormat implements GetMapOutputF
 
     /**
      * Returns the freemarker template used to generate the output
+     *
      * @param mapContent
      * @return
      */
@@ -203,7 +206,7 @@ public abstract class AbstractOpenLayersMapOutputFormat implements GetMapOutputF
             code = WMS.toInternalSRS(code, WMS.version("1.3.0"));
             CoordinateReferenceSystem crs13 = CRS.decode(code);
             return CRS.getAxisOrder(crs13) == AxisOrder.NORTH_EAST;
-        } catch(Exception e) {
+        } catch (Exception e) {
             LOGGER.log(Level.WARNING, "Failed to determine CRS axis order, assuming is EN", e);
             return false;
         }
@@ -212,9 +215,8 @@ public abstract class AbstractOpenLayersMapOutputFormat implements GetMapOutputF
     /**
      * Guesses if the map context is made only of coverage layers by looking at the wrapping feature
      * type. Ugly, if you come up with better means of doing so, fix it.
-     * 
-     * @param mapContent
      *
+     * @param mapContent
      */
     private boolean hasOnlyCoverages(WMSMapContent mapContent) {
         for (Layer layer : mapContent.layers()) {
@@ -231,7 +233,7 @@ public abstract class AbstractOpenLayersMapOutputFormat implements GetMapOutputF
 
     /**
      * Helper method that checks if filtering support should be activated.
-     *
+     * <p>
      * If the map contains at least one layer that is queryable, filtering should be activated.
      */
     private boolean supportsFiltering(WMSMapContent mapContent) {
@@ -274,11 +276,8 @@ public abstract class AbstractOpenLayersMapOutputFormat implements GetMapOutputF
      * Returns a list of maps with the name and value of each parameter that we have to forward to
      * OpenLayers. Forwarded parameters are all the provided ones, besides a short set contained in
      * {@link #ignoredParameters}.
-     * 
-     * 
-     * 
-     * @param rawKvp
      *
+     * @param rawKvp
      */
     private List<Map<String, String>> getLayerParameter(Map<String, String> rawKvp) {
         List<Map<String, String>> result = new ArrayList<Map<String, String>>(rawKvp.size());
@@ -304,9 +303,8 @@ public abstract class AbstractOpenLayersMapOutputFormat implements GetMapOutputF
     /**
      * Makes sure the url does not end with "/", otherwise we would have URL lik
      * "http://localhost:8080/geoserver//wms?LAYERS=..." and Jetty 6.1 won't digest them...
-     * 
-     * @param baseUrl
      *
+     * @param baseUrl
      */
     private String canonicUrl(String baseUrl) {
         if (baseUrl.endsWith("/")) {

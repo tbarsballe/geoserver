@@ -40,12 +40,12 @@ public class IndexControllerTest extends CatalogRESTTestSupport {
 
         NodeList links = xp.getMatchingNodes("//li/a", dom);
 
-        for ( int i = 0; i < links.getLength(); i++ ) {
-            Element link = (Element) links.item( i );
+        for (int i = 0; i < links.getLength(); i++) {
+            Element link = (Element) links.item(i);
             String linkText = link.getTextContent();
             linksToFind.remove(linkText);
             assertFalse("Index should only contain GET endpoints. Found: " + linkText, invalidLinks.contains(linkText));
         }
-        assertTrue("Could not find the following links in index: "+linksToFind.toString(), linksToFind.size() == 0);
+        assertTrue("Could not find the following links in index: " + linksToFind.toString(), linksToFind.size() == 0);
     }
 }

@@ -23,10 +23,10 @@ import com.vividsolutions.jts.geom.Geometry;
 
 /**
  * FeatureCollection that does two things required by the importer; a) provide cancel functionality b) Do some FeatureType Transforming
- *
+ * <p>
  * This class is simply wraps the FeatureIterator with two iterators wrappers that provide the above functionality.
  */
-  class ImportTransformFeatureCollection extends DecoratingFeatureCollection {
+class ImportTransformFeatureCollection extends DecoratingFeatureCollection {
 
     ProgressMonitor monitor;
 
@@ -40,9 +40,9 @@ import com.vividsolutions.jts.geom.Geometry;
 
     DataStore dataStoreDestination;
 
-    public ImportTransformFeatureCollection(FeatureCollection fc, 
-            FeatureDataConverter featureDataConverter, FeatureType resultingFT,
-            VectorTransformChain vectorTransformChain, ImportTask task, DataStore dataStoreDestination) {
+    public ImportTransformFeatureCollection(FeatureCollection fc,
+                                            FeatureDataConverter featureDataConverter, FeatureType resultingFT,
+                                            VectorTransformChain vectorTransformChain, ImportTask task, DataStore dataStoreDestination) {
         super(fc);
         this.monitor = task.progress();
         this.featureDataConverter = featureDataConverter;
@@ -61,7 +61,7 @@ import com.vividsolutions.jts.geom.Geometry;
 
     /**
      * Simple FeatureIterator that does some transforming of the features.
-     * 
+     * <p>
      * The emulates the behavior of the Importer's low-level feature transformation.
      */
     private class TransformingFeatureIterator extends DecoratingFeatureIterator {
@@ -79,8 +79,8 @@ import com.vividsolutions.jts.geom.Geometry;
         int cnt = 0;
 
         public TransformingFeatureIterator(FeatureIterator fi, FeatureType resultingFT,
-                FeatureDataConverter featureDataConverter, VectorTransformChain vectorTransformChain, ImportTask task,
-                DataStore dataStore) {
+                                           FeatureDataConverter featureDataConverter, VectorTransformChain vectorTransformChain, ImportTask task,
+                                           DataStore dataStore) {
             super(fi);
             this.featureBuilder = new SimpleFeatureBuilder((SimpleFeatureType) resultingFT);
             this.featureDataConverter = featureDataConverter;

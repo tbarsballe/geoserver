@@ -90,7 +90,7 @@ public class RESTECQLTest extends CatalogRESTTestSupport {
 
     /**
      * Initial settings for the root key, mapper and expression used
-     * 
+     *
      * @param expression
      */
     private void initialSetup(String expression) {
@@ -116,7 +116,7 @@ public class RESTECQLTest extends CatalogRESTTestSupport {
     /**
      * Private method for adding the selected coverage inside the defined workspace via REST and then checking if the coverage has been placed inside
      * the defined directory
-     * 
+     *
      * @param root
      * @param workspace
      * @param coverageStore
@@ -126,7 +126,7 @@ public class RESTECQLTest extends CatalogRESTTestSupport {
      * @throws SAXException
      */
     private void testExpression(String workspace, String coverageStore, String expression,
-            List<String> fileNames) throws IOException, Exception, ParserConfigurationException,
+                                List<String> fileNames) throws IOException, Exception, ParserConfigurationException,
             SAXException {
         // Initial Settings
         initialSetup(expression);
@@ -134,22 +134,22 @@ public class RESTECQLTest extends CatalogRESTTestSupport {
         URL zip = MockData.class.getResource("watertemp.zip");
 
         //byte[] bytes = FileUtils.readFileToByteArray(URLs.urlToFile(zip));
-        
+
         InputStream is = null;
         byte[] bytes;
-        try  {
+        try {
             is = zip.openStream();
             bytes = IOUtils.toByteArray(is);
         } finally {
             IOUtils.closeQuietly(is);
         }
-        
+
         // creation of the workspace if not already present
         createWorkSpace(workspace);
 
         // Uploading the file via rest
         MockHttpServletResponse response = putAsServletResponse("/rest/workspaces/" + workspace
-                + "/coveragestores/" + coverageStore + "/file.imagemosaic", bytes,
+                        + "/coveragestores/" + coverageStore + "/file.imagemosaic", bytes,
                 "application/zip");
         assertEquals(201, response.getStatus());
         // Check if the coverage is present
@@ -172,12 +172,11 @@ public class RESTECQLTest extends CatalogRESTTestSupport {
     }
 
     /**
-     * Private method for creating a new file object associated to the input path. 
-     * 
+     * Private method for creating a new file object associated to the input path.
+     *
      * @param expression
      * @param cs
      * @param filename
-     *
      * @throws CQLException
      */
     private File extractFile(String expression, CoverageStoreInfo cs, String itemPath, String filename)
@@ -187,7 +186,7 @@ public class RESTECQLTest extends CatalogRESTTestSupport {
         // Convert the String expression into a CQL expression
         Expression exp = ECQL.toExpression(expression);
         // Feature associated to the input path
-        SimpleFeature feature = SimpleFeatureBuilder.build(type, new Object[] { itemPath, filename }, null);
+        SimpleFeature feature = SimpleFeatureBuilder.build(type, new Object[]{itemPath, filename}, null);
         // Perform Regular Expression match
         String newPath = exp.evaluate(feature, String.class);
         // Final FILE creation
@@ -196,7 +195,7 @@ public class RESTECQLTest extends CatalogRESTTestSupport {
 
     /**
      * Creation of a new workspace defined by the input "workspace" name
-     * 
+     *
      * @param workspace
      */
     private void createWorkSpace(String workspace) throws Exception {

@@ -25,7 +25,7 @@ public class RasterCleaner extends AbstractDispatcherCallback {
 
     /**
      * Schedules a RenderedImage for cleanup at the end of the request
-     * 
+     *
      * @param schema
      */
     public static void addImage(RenderedImage image) {
@@ -43,7 +43,7 @@ public class RasterCleaner extends AbstractDispatcherCallback {
 
     /**
      * Schedules a RenderedImage for cleanup at the end of the request
-     * 
+     *
      * @param schema
      */
     public static void addCoverage(GridCoverage2D coverage) {
@@ -89,7 +89,7 @@ public class RasterCleaner extends AbstractDispatcherCallback {
         } else if (image instanceof BufferedImage) {
             BufferedImage bi = (BufferedImage) image;
             bi.flush();
-        } 
+        }
     }
 
     private void disposeCoverages() {
@@ -102,11 +102,11 @@ public class RasterCleaner extends AbstractDispatcherCallback {
             list.clear();
         }
     }
-    
+
     public List<RenderedImage> getImages() {
         return images.get();
     }
-    
+
     public List<GridCoverage2D> getCoverages() {
         return coverages.get();
     }

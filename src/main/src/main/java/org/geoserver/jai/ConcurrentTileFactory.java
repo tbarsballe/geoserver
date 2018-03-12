@@ -34,7 +34,7 @@ import com.sun.media.jai.util.DataBufferUtils;
 
 /**
  * A thread safe recycling tile factory that using Java 5 Concurrent data structures
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class ConcurrentTileFactory implements TileFactory, TileRecycler {
@@ -46,9 +46,8 @@ public class ConcurrentTileFactory implements TileFactory, TileRecycler {
 
     /**
      * A concurrent multimap geared towards tile data array caching
-     * 
+     *
      * @author Andrea Aime - GeoSolutions
-     * 
      */
     private static class ArrayCache extends
             ConcurrentHashMap<Long, ConcurrentLinkedQueue<SoftReference<?>>> {
@@ -72,7 +71,7 @@ public class ConcurrentTileFactory implements TileFactory, TileRecycler {
                         if (LOGGER.isLoggable(Level.FINER)) {
                             LOGGER.log(Level.FINER,
                                     "Recycling tile hit on type:{1}, banks: {2}, arrayLength: {3}",
-                                    new Object[] { arrayType, numBanks, arrayLength });
+                                    new Object[]{arrayType, numBanks, arrayLength});
                         }
                         return array;
                     }
@@ -82,7 +81,7 @@ public class ConcurrentTileFactory implements TileFactory, TileRecycler {
             if (LOGGER.isLoggable(Level.FINER)) {
                 LOGGER.log(Level.FINER,
                         "Recycling tile miss on type:{1}, banks: {2}, arrayLength: {3}",
-                        new Object[] { arrayType, numBanks, arrayLength });
+                        new Object[]{arrayType, numBanks, arrayLength});
             }
             return null;
         }
@@ -98,7 +97,7 @@ public class ConcurrentTileFactory implements TileFactory, TileRecycler {
             if (LOGGER.isLoggable(Level.FINER)) {
                 LOGGER.log(Level.FINER,
                         "Recycling tile hit on type:{1}, banks: {2}, arrayLength: {3}",
-                        new Object[] { db.getDataType(), db.getNumBanks(), db.getSize() });
+                        new Object[]{db.getDataType(), db.getNumBanks(), db.getSize()});
             }
 
             ConcurrentLinkedQueue<SoftReference<?>> arrays = get(key);
@@ -174,7 +173,7 @@ public class ConcurrentTileFactory implements TileFactory, TileRecycler {
 
         DataBuffer db = null;
 
-        
+
         // get the three elements making the key into the recycled array map
         int type = sampleModel.getTransferType();
         long numBanks = 0;
@@ -200,56 +199,56 @@ public class ConcurrentTileFactory implements TileFactory, TileRecycler {
             Object array = recycledArrays.getRecycledArray(type, numBanks, size);
             if (array != null) {
                 switch (type) {
-                case DataBuffer.TYPE_BYTE: {
-                    byte[][] bankData = (byte[][]) array;
-                    for (int i = 0; i < numBanks; i++) {
-                        Arrays.fill(bankData[i], (byte) 0);
+                    case DataBuffer.TYPE_BYTE: {
+                        byte[][] bankData = (byte[][]) array;
+                        for (int i = 0; i < numBanks; i++) {
+                            Arrays.fill(bankData[i], (byte) 0);
+                        }
+                        db = new DataBufferByte(bankData, (int) size);
                     }
-                    db = new DataBufferByte(bankData, (int) size);
-                }
                     break;
-                case DataBuffer.TYPE_USHORT: {
-                    short[][] bankData = (short[][]) array;
-                    for (int i = 0; i < numBanks; i++) {
-                        Arrays.fill(bankData[i], (short) 0);
+                    case DataBuffer.TYPE_USHORT: {
+                        short[][] bankData = (short[][]) array;
+                        for (int i = 0; i < numBanks; i++) {
+                            Arrays.fill(bankData[i], (short) 0);
+                        }
+                        db = new DataBufferUShort(bankData, (int) size);
                     }
-                    db = new DataBufferUShort(bankData, (int) size);
-                }
                     break;
-                case DataBuffer.TYPE_SHORT: {
-                    short[][] bankData = (short[][]) array;
-                    for (int i = 0; i < numBanks; i++) {
-                        Arrays.fill(bankData[i], (short) 0);
+                    case DataBuffer.TYPE_SHORT: {
+                        short[][] bankData = (short[][]) array;
+                        for (int i = 0; i < numBanks; i++) {
+                            Arrays.fill(bankData[i], (short) 0);
+                        }
+                        db = new DataBufferShort(bankData, (int) size);
                     }
-                    db = new DataBufferShort(bankData, (int) size);
-                }
                     break;
-                case DataBuffer.TYPE_INT: {
-                    int[][] bankData = (int[][]) array;
-                    for (int i = 0; i < numBanks; i++) {
-                        Arrays.fill(bankData[i], 0);
+                    case DataBuffer.TYPE_INT: {
+                        int[][] bankData = (int[][]) array;
+                        for (int i = 0; i < numBanks; i++) {
+                            Arrays.fill(bankData[i], 0);
+                        }
+                        db = new DataBufferInt(bankData, (int) size);
                     }
-                    db = new DataBufferInt(bankData, (int) size);
-                }
                     break;
-                case DataBuffer.TYPE_FLOAT: {
-                    float[][] bankData = (float[][]) array;
-                    for (int i = 0; i < numBanks; i++) {
-                        Arrays.fill(bankData[i], 0.0F);
+                    case DataBuffer.TYPE_FLOAT: {
+                        float[][] bankData = (float[][]) array;
+                        for (int i = 0; i < numBanks; i++) {
+                            Arrays.fill(bankData[i], 0.0F);
+                        }
+                        db = DataBufferUtils.createDataBufferFloat(bankData, (int) size);
                     }
-                    db = DataBufferUtils.createDataBufferFloat(bankData, (int) size);
-                }
                     break;
-                case DataBuffer.TYPE_DOUBLE: {
-                    double[][] bankData = (double[][]) array;
-                    for (int i = 0; i < numBanks; i++) {
-                        Arrays.fill(bankData[i], 0.0);
+                    case DataBuffer.TYPE_DOUBLE: {
+                        double[][] bankData = (double[][]) array;
+                        for (int i = 0; i < numBanks; i++) {
+                            Arrays.fill(bankData[i], 0.0);
+                        }
+                        db = DataBufferUtils.createDataBufferDouble(bankData, (int) size);
                     }
-                    db = DataBufferUtils.createDataBufferDouble(bankData, (int) size);
-                }
                     break;
-                default:
-                    throw new IllegalArgumentException("Unknown array type");
+                    default:
+                        throw new IllegalArgumentException("Unknown array type");
                 }
             }
         }
@@ -295,7 +294,7 @@ public class ConcurrentTileFactory implements TileFactory, TileRecycler {
      * Recycle the given tile.
      */
     public void recycleTile(Raster tile) {
-        if(tile.getWidth() != tile.getHeight() || tile.getWidth() > 512) {
+        if (tile.getWidth() != tile.getHeight() || tile.getWidth() > 512) {
             return;
         }
         recycledArrays.recycleTile(tile);

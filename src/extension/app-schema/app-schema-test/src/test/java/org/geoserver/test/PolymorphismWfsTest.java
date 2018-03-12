@@ -29,7 +29,7 @@ import org.w3c.dom.Document;
 
 /**
  * WFS GetFeature to test polymorphism in Geoserver app-schema.
- * 
+ *
  * @author Rini Angreani, CSIRO Earth Science and Resource Engineering
  */
 public class PolymorphismWfsTest extends AbstractAppSchemaTestSupport {
@@ -73,27 +73,27 @@ public class PolymorphismWfsTest extends AbstractAppSchemaTestSupport {
 //                <isMultiple>true</isMultiple>
 //        </AttributeMapping>
         String xml = //
-        "<wfs:GetFeature " //
-                + "service=\"WFS\" " //
-                + "version=\"1.1.0\" " //
-                + "xmlns:cdf=\"http://www.opengis.net/cite/data\" " //
-                + "xmlns:ogc=\"http://www.opengis.net/ogc\" " //
-                + "xmlns:wfs=\"http://www.opengis.net/wfs\" " //
-                + "xmlns:gml=\"http://www.opengis.net/gml\" " //
-                + "xmlns:ex=\"http://example.com\" " //                
-                + "xmlns:gsml=\""
-                + AbstractAppSchemaMockData.GSML_URI
-                + "\" " //
-                + ">" //
-                + "    <wfs:Query typeName=\"ex:PolymorphicFeature\">" //
-                + "        <ogc:Filter>" //
-                + "            <ogc:PropertyIsEqualTo>" //
-                + "                <ogc:PropertyName>ex:firstValue/gsml:CGI_NumericValue/gsml:principalValue</ogc:PropertyName>" //
-                + "                <ogc:Literal>1.0</ogc:Literal>" //
-                + "            </ogc:PropertyIsEqualTo>" //
-                + "        </ogc:Filter>" //
-                + "    </wfs:Query> " //
-                + "</wfs:GetFeature>";
+                "<wfs:GetFeature " //
+                        + "service=\"WFS\" " //
+                        + "version=\"1.1.0\" " //
+                        + "xmlns:cdf=\"http://www.opengis.net/cite/data\" " //
+                        + "xmlns:ogc=\"http://www.opengis.net/ogc\" " //
+                        + "xmlns:wfs=\"http://www.opengis.net/wfs\" " //
+                        + "xmlns:gml=\"http://www.opengis.net/gml\" " //
+                        + "xmlns:ex=\"http://example.com\" " //
+                        + "xmlns:gsml=\""
+                        + AbstractAppSchemaMockData.GSML_URI
+                        + "\" " //
+                        + ">" //
+                        + "    <wfs:Query typeName=\"ex:PolymorphicFeature\">" //
+                        + "        <ogc:Filter>" //
+                        + "            <ogc:PropertyIsEqualTo>" //
+                        + "                <ogc:PropertyName>ex:firstValue/gsml:CGI_NumericValue/gsml:principalValue</ogc:PropertyName>" //
+                        + "                <ogc:Literal>1.0</ogc:Literal>" //
+                        + "            </ogc:PropertyIsEqualTo>" //
+                        + "        </ogc:Filter>" //
+                        + "    </wfs:Query> " //
+                        + "</wfs:GetFeature>";
         Document doc = postAsDOM("wfs", xml);
         LOGGER.info("WFS filter GetFeature response:\n" + prettyString(doc));
         assertXpathEvaluatesTo("1", "/wfs:FeatureCollection/@numberOfFeatures", doc);
@@ -127,27 +127,27 @@ public class PolymorphismWfsTest extends AbstractAppSchemaTestSupport {
 //            </sourceExpression>
 //        </AttributeMapping>
         String xml = //
-        "<wfs:GetFeature " //
-                + "service=\"WFS\" " //
-                + "version=\"1.1.0\" " //
-                + "xmlns:cdf=\"http://www.opengis.net/cite/data\" " //
-                + "xmlns:ogc=\"http://www.opengis.net/ogc\" " //
-                + "xmlns:wfs=\"http://www.opengis.net/wfs\" " //
-                + "xmlns:gml=\"http://www.opengis.net/gml\" " //
-                + "xmlns:ex=\"http://example.com\" " //  
-                + "xmlns:gsml=\""
-                + AbstractAppSchemaMockData.GSML_URI
-                + "\" " //
-                + ">" //
-                + "    <wfs:Query typeName=\"ex:PolymorphicFeature\">" //
-                + "        <ogc:Filter>" //
-                + "            <ogc:PropertyIsEqualTo>" //
-                + "                <ogc:PropertyName>ex:secondValue/gsml:CGI_NumericValue/gsml:principalValue/@uom</ogc:PropertyName>" //
-                + "                <ogc:Literal>m</ogc:Literal>" //
-                + "            </ogc:PropertyIsEqualTo>" //
-                + "        </ogc:Filter>" //
-                + "    </wfs:Query> " //
-                + "</wfs:GetFeature>";
+                "<wfs:GetFeature " //
+                        + "service=\"WFS\" " //
+                        + "version=\"1.1.0\" " //
+                        + "xmlns:cdf=\"http://www.opengis.net/cite/data\" " //
+                        + "xmlns:ogc=\"http://www.opengis.net/ogc\" " //
+                        + "xmlns:wfs=\"http://www.opengis.net/wfs\" " //
+                        + "xmlns:gml=\"http://www.opengis.net/gml\" " //
+                        + "xmlns:ex=\"http://example.com\" " //
+                        + "xmlns:gsml=\""
+                        + AbstractAppSchemaMockData.GSML_URI
+                        + "\" " //
+                        + ">" //
+                        + "    <wfs:Query typeName=\"ex:PolymorphicFeature\">" //
+                        + "        <ogc:Filter>" //
+                        + "            <ogc:PropertyIsEqualTo>" //
+                        + "                <ogc:PropertyName>ex:secondValue/gsml:CGI_NumericValue/gsml:principalValue/@uom</ogc:PropertyName>" //
+                        + "                <ogc:Literal>m</ogc:Literal>" //
+                        + "            </ogc:PropertyIsEqualTo>" //
+                        + "        </ogc:Filter>" //
+                        + "    </wfs:Query> " //
+                        + "</wfs:GetFeature>";
         Document doc = postAsDOM("wfs", xml);
         LOGGER.info("WFS filter GetFeature response:\n" + prettyString(doc));
         assertXpathEvaluatesTo("2", "/wfs:FeatureCollection/@numberOfFeatures", doc);
@@ -191,27 +191,27 @@ public class PolymorphismWfsTest extends AbstractAppSchemaTestSupport {
 //            </sourceExpression>
 //         </AttributeMapping>
         String xml = //
-        "<wfs:GetFeature " //
-                + "service=\"WFS\" " //
-                + "version=\"1.1.0\" " //
-                + "xmlns:cdf=\"http://www.opengis.net/cite/data\" " //
-                + "xmlns:ogc=\"http://www.opengis.net/ogc\" " //
-                + "xmlns:wfs=\"http://www.opengis.net/wfs\" " //
-                + "xmlns:gml=\"http://www.opengis.net/gml\" " //
-                + "xmlns:ex=\"http://example.com\" " //  
-                + "xmlns:gsml=\""
-                + AbstractAppSchemaMockData.GSML_URI
-                + "\" " //
-                + ">" //
-                + "    <wfs:Query typeName=\"ex:PolymorphicFeature\">" //
-                + "        <ogc:Filter>" //
-                + "            <ogc:PropertyIsEqualTo>" //
-                + "                <ogc:PropertyName>ex:anyValue/gsml:CGI_TermValue/gsml:value</ogc:PropertyName>" //
-                + "                <ogc:Literal>0</ogc:Literal>" //
-                + "            </ogc:PropertyIsEqualTo>" //
-                + "        </ogc:Filter>" //
-                + "    </wfs:Query> " //
-                + "</wfs:GetFeature>";
+                "<wfs:GetFeature " //
+                        + "service=\"WFS\" " //
+                        + "version=\"1.1.0\" " //
+                        + "xmlns:cdf=\"http://www.opengis.net/cite/data\" " //
+                        + "xmlns:ogc=\"http://www.opengis.net/ogc\" " //
+                        + "xmlns:wfs=\"http://www.opengis.net/wfs\" " //
+                        + "xmlns:gml=\"http://www.opengis.net/gml\" " //
+                        + "xmlns:ex=\"http://example.com\" " //
+                        + "xmlns:gsml=\""
+                        + AbstractAppSchemaMockData.GSML_URI
+                        + "\" " //
+                        + ">" //
+                        + "    <wfs:Query typeName=\"ex:PolymorphicFeature\">" //
+                        + "        <ogc:Filter>" //
+                        + "            <ogc:PropertyIsEqualTo>" //
+                        + "                <ogc:PropertyName>ex:anyValue/gsml:CGI_TermValue/gsml:value</ogc:PropertyName>" //
+                        + "                <ogc:Literal>0</ogc:Literal>" //
+                        + "            </ogc:PropertyIsEqualTo>" //
+                        + "        </ogc:Filter>" //
+                        + "    </wfs:Query> " //
+                        + "</wfs:GetFeature>";
         Document doc = postAsDOM("wfs", xml);
         LOGGER.info("WFS filter GetFeature response:\n" + prettyString(doc));
         assertXpathEvaluatesTo("2", "/wfs:FeatureCollection/@numberOfFeatures", doc);
@@ -252,27 +252,27 @@ public class PolymorphismWfsTest extends AbstractAppSchemaTestSupport {
 //            </sourceExpression>
 //    </AttributeMapping>
         String xml = //
-        "<wfs:GetFeature " //
-                + "service=\"WFS\" " //
-                + "version=\"1.1.0\" " //
-                + "xmlns:cdf=\"http://www.opengis.net/cite/data\" " //
-                + "xmlns:ogc=\"http://www.opengis.net/ogc\" " //
-                + "xmlns:wfs=\"http://www.opengis.net/wfs\" " //
-                + "xmlns:gml=\"http://www.opengis.net/gml\" " //
-                + "xmlns:ex=\"http://example.com\" " //  
-                + "xmlns:gsml=\""
-                + AbstractAppSchemaMockData.GSML_URI
-                + "\" " //
-                + ">" //
-                + "    <wfs:Query typeName=\"ex:PolymorphicFeature\">" //
-                + "        <ogc:Filter>" //
-                + "            <ogc:PropertyIsEqualTo>" //
-                + "                <ogc:PropertyName>ex:thirdValue/gsml:CGI_NumericValue/gsml:principalValue</ogc:PropertyName>" //
-                + "                <ogc:Literal>1.0</ogc:Literal>" //
-                + "            </ogc:PropertyIsEqualTo>" //
-                + "        </ogc:Filter>" //
-                + "    </wfs:Query> " //
-                + "</wfs:GetFeature>";
+                "<wfs:GetFeature " //
+                        + "service=\"WFS\" " //
+                        + "version=\"1.1.0\" " //
+                        + "xmlns:cdf=\"http://www.opengis.net/cite/data\" " //
+                        + "xmlns:ogc=\"http://www.opengis.net/ogc\" " //
+                        + "xmlns:wfs=\"http://www.opengis.net/wfs\" " //
+                        + "xmlns:gml=\"http://www.opengis.net/gml\" " //
+                        + "xmlns:ex=\"http://example.com\" " //
+                        + "xmlns:gsml=\""
+                        + AbstractAppSchemaMockData.GSML_URI
+                        + "\" " //
+                        + ">" //
+                        + "    <wfs:Query typeName=\"ex:PolymorphicFeature\">" //
+                        + "        <ogc:Filter>" //
+                        + "            <ogc:PropertyIsEqualTo>" //
+                        + "                <ogc:PropertyName>ex:thirdValue/gsml:CGI_NumericValue/gsml:principalValue</ogc:PropertyName>" //
+                        + "                <ogc:Literal>1.0</ogc:Literal>" //
+                        + "            </ogc:PropertyIsEqualTo>" //
+                        + "        </ogc:Filter>" //
+                        + "    </wfs:Query> " //
+                        + "</wfs:GetFeature>";
         Document doc = postAsDOM("wfs", xml);
         LOGGER.info("WFS filter GetFeature response:\n" + prettyString(doc));
         assertXpathEvaluatesTo("2", "/wfs:FeatureCollection/@numberOfFeatures", doc);
@@ -541,7 +541,7 @@ public class PolymorphismWfsTest extends AbstractAppSchemaTestSupport {
                 "urn:ogc:def:nil:OGC::missing",
                 "//ex:PolymorphicFeature[@gml:id='f1']/ex:fourthValue/@xlink:href",
                 doc);
-        
+
         assertXpathCount(1, "//ex:PolymorphicFeature[@gml:id='f1']/ex:fifthValue", doc);
         assertXpathCount(0,
                 "//ex:PolymorphicFeature[@gml:id='f1']/ex:fifthValue/ex:firstParentFeature", doc);
@@ -549,7 +549,7 @@ public class PolymorphismWfsTest extends AbstractAppSchemaTestSupport {
                 "urn:ogc:def:nil:OGC::missing",
                 "//ex:PolymorphicFeature[@gml:id='f1']/ex:fifthValue/@xlink:href",
                 doc);
-        
+
 
         // f2: make sure only 1 null reference is encoded
         assertXpathCount(1, "//ex:PolymorphicFeature[@gml:id='f2']/ex:fourthValue", doc);
@@ -559,7 +559,7 @@ public class PolymorphismWfsTest extends AbstractAppSchemaTestSupport {
                 "urn:ogc:def:nil:OGC::missing",
                 "//ex:PolymorphicFeature[@gml:id='f2']/ex:fourthValue/@xlink:href",
                 doc);
-        
+
         assertXpathCount(1, "//ex:PolymorphicFeature[@gml:id='f2']/ex:fifthValue", doc);
         assertXpathCount(0,
                 "//ex:PolymorphicFeature[@gml:id='f2']/ex:fifthValue/ex:firstParentFeature", doc);
@@ -576,7 +576,7 @@ public class PolymorphismWfsTest extends AbstractAppSchemaTestSupport {
                 "urn:ogc:def:nil:OGC::missing",
                 "//ex:PolymorphicFeature[@gml:id='f3']/ex:fourthValue/@xlink:href",
                 doc);
-        
+
         assertXpathCount(1, "//ex:PolymorphicFeature[@gml:id='f3']/ex:fifthValue", doc);
         assertXpathCount(0,
                 "//ex:PolymorphicFeature[@gml:id='f3']/ex:fifthValue/ex:firstParentFeature", doc);
@@ -593,7 +593,7 @@ public class PolymorphismWfsTest extends AbstractAppSchemaTestSupport {
                 "urn:ogc:def:nil:OGC::missing",
                 "//ex:PolymorphicFeature[@gml:id='f4']/ex:fourthValue/@xlink:href",
                 doc);
-        
+
         assertXpathCount(1, "//ex:PolymorphicFeature[@gml:id='f4']/ex:fifthValue", doc);
         assertXpathCount(0,
                 "//ex:PolymorphicFeature[@gml:id='f4']/ex:fifthValue/ex:firstParentFeature", doc);
@@ -610,7 +610,7 @@ public class PolymorphismWfsTest extends AbstractAppSchemaTestSupport {
                 "urn:ogc:def:nil:OGC::missing",
                 "//ex:PolymorphicFeature[@gml:id='f5']/ex:fourthValue/@xlink:href",
                 doc);
-        
+
         assertXpathCount(1, "//ex:PolymorphicFeature[@gml:id='f5']/ex:fifthValue", doc);
         assertXpathCount(0,
                 "//ex:PolymorphicFeature[@gml:id='f5']/ex:fifthValue/ex:firstParentFeature", doc);
@@ -634,7 +634,7 @@ public class PolymorphismWfsTest extends AbstractAppSchemaTestSupport {
                 "m",
                 "//ex:PolymorphicFeature[@gml:id='f6']/ex:fourthValue/gsml:CGI_NumericValue/gsml:principalValue/@uom",
                 doc);
-        
+
         // GEOT:4417
         assertXpathCount(1, "//ex:PolymorphicFeature[@gml:id='f6']/ex:fifthValue", doc);
         assertXpathCount(1,

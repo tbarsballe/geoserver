@@ -23,7 +23,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 /**
  * Authentication Filter that add to {@link #GeoServerPreAuthenticatedUserNameFilter} the feature of {@link #GeoServerCompositeFilter} to nested
  * {@link Filter} objects
- * 
+ *
  * @author Xandros
  */
 public abstract class GeoServerPreAuthenticatedCompositeUserNameFilter

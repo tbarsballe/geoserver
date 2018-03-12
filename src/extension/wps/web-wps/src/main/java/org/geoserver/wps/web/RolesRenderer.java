@@ -12,23 +12,23 @@ import org.apache.wicket.request.Response;
  * Renders roles as string
  */
 public class RolesRenderer extends AbstractAutoCompleteRenderer<String> {
-    
+
     private static final long serialVersionUID = 3407675669346346083L;
     private StringBuilder selectedRoles;
 
     public RolesRenderer(StringBuilder selectedRoles) {
         this.selectedRoles = selectedRoles;
     }
-    
+
     @Override
     protected void renderChoice(String object, Response response,
-            String criteria) {
+                                String criteria) {
         response.write(object);
     }
-    
+
     @Override
     protected String getTextValue(String object) {
-        return selectedRoles.toString()+object;
-    }     
+        return selectedRoles.toString() + object;
+    }
 
 };

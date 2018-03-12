@@ -43,7 +43,7 @@ class GeometryTileRangeMask implements TileRangeMask {
             return false;
         }
 
-        long[] tileIndex = new long[] { tileX, tileY, level };
+        long[] tileIndex = new long[]{tileX, tileY, level};
         Envelope tileBounds = toEnvelope(gridSubset.boundsFromIndex(tileIndex));
         /*
          * Instead of "resampling"/buffering the geometry which can be time/heap consuming, increase
@@ -59,7 +59,7 @@ class GeometryTileRangeMask implements TileRangeMask {
     }
 
     public static TileRangeMask build(GeoServerTileLayer tileLayer, GridSubset gridSubset,
-            Geometry geomInGridsetCrs) {
+                                      Geometry geomInGridsetCrs) {
 
         BoundingBox maskBounds = toBoundingBox(geomInGridsetCrs.getEnvelopeInternal());
         long[][] byLevelTileCoverage = gridSubset.getCoverageIntersections(maskBounds);

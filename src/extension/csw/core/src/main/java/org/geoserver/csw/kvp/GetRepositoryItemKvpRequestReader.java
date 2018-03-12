@@ -15,7 +15,7 @@ import org.geoserver.platform.ServiceException;
 
 /**
  * GetRepositoryItemBean KVP request reader
- * 
+ *
  * @author Alessio Fabiani, GeoSolutions
  */
 public class GetRepositoryItemKvpRequestReader extends KvpRequestReader {

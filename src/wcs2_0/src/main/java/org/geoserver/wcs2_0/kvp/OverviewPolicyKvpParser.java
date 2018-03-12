@@ -16,8 +16,8 @@ import org.geotools.coverage.grid.io.OverviewPolicy;
 
 /**
  * Parses overview policy from KVP
- * @author Daniele Romagnoli - GeoSolutions
  *
+ * @author Daniele Romagnoli - GeoSolutions
  */
 public class OverviewPolicyKvpParser extends KvpParser {
 

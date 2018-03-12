@@ -140,7 +140,7 @@ public class DescriptionTransformer extends LambdaTransformerBase {
                 // TODO: make this generic by adding lambdas into the parameter metadata?
                 // difficulty is passing the methods to build elements (we could make them
                 // visible or pass a lexical handler
-                if ("searchTerms".equals(param.getName()) ) {
+                if ("searchTerms".equals(param.getName())) {
                     String searchTermsDocLink = buildSearchTermsDocLink(description);
                     contentsEncoder = () -> {
                         element("atom:link", (Runnable) null,
@@ -150,14 +150,14 @@ public class DescriptionTransformer extends LambdaTransformerBase {
                                         "title", "Simple search term parameter specification"));
                     };
                 } else if ("geometry".equals(param.getName())) {
-                    contentsEncoder  = () -> {
-                        for (String type : new String[] {"LINESTRING", "POINT", "POLYGON", "MULTILINESTRING", "MULTIPOINT", "MULTIPOLYGON"}) {
+                    contentsEncoder = () -> {
+                        for (String type : new String[]{"LINESTRING", "POINT", "POLYGON", "MULTILINESTRING", "MULTIPOINT", "MULTIPOLYGON"}) {
                             element("atom:link", (Runnable) null, attributes(
                                     "rel", "profile", //
                                     "href", "http://www.opengis.net/wkt/" + type, //
                                     "title", "This service accepts WKT " + type)
                             );
-                        }  
+                        }
                     };
                 }
 
@@ -168,8 +168,8 @@ public class DescriptionTransformer extends LambdaTransformerBase {
                     map.put("minimum", "0");
                 }
                 if (param.metadata != null) {
-                    String[] keys = new String[] { OpenSearchParameters.MIN_INCLUSIVE,
-                            OpenSearchParameters.MAX_INCLUSIVE };
+                    String[] keys = new String[]{OpenSearchParameters.MIN_INCLUSIVE,
+                            OpenSearchParameters.MAX_INCLUSIVE};
                     for (String key : keys) {
                         Object value = param.metadata.get(key);
                         if (value != null) {

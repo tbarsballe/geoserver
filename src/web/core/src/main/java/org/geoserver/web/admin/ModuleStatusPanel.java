@@ -33,48 +33,48 @@ import org.geoserver.web.wicket.GeoServerAjaxFormLink;
 import org.opengis.referencing.operation.MathTransform;
 
 public class ModuleStatusPanel extends Panel {
-    
+
     private static final long serialVersionUID = 3892224318224575781L;
-    
+
     final CatalogIconFactory icons = CatalogIconFactory.get();
-    
+
     ModalWindow popup;
-    
+
     AjaxLink msgLink;
-    
+
     public ModuleStatusPanel(String id, AbstractStatusPage parent) {
         super(id);
         initUI();
     }
-    
+
     public void initUI() {
-                
+
         final WebMarkupContainer wmc = new WebMarkupContainer("listViewContainer");
         wmc.setOutputMarkupId(true);
         this.add(wmc);
-        
+
         popup = new ModalWindow("popup");
         add(popup);
-        
+
         //get the list of ModuleStatuses
         GeoServerExtensions gse = new GeoServerExtensions();
         List<ModuleStatus> applicationStatus = gse.extensions(ModuleStatus.class).stream()
                 .map(ModuleStatusImpl::new).collect(Collectors.toList());
 
         ListIterator<ModuleStatus> iter = applicationStatus.listIterator();
-        while(iter.hasNext()) {
-            if ( iter.next().getModule().toString().matches("\\A[system-](.*)")) {
-               iter.remove();
+        while (iter.hasNext()) {
+            if (iter.next().getModule().toString().matches("\\A[system-](.*)")) {
+                iter.remove();
             }
         }
         final ListView<ModuleStatus> moduleView = new ListView<ModuleStatus>("modules", applicationStatus) {
             private static final long serialVersionUID = 235576083712961710L;
-            
+
             @Override
             protected void populateItem(ListItem<ModuleStatus> item) {
                 item.add(new Label("module", new PropertyModel(item.getModel(), "module")));
-                item.add(getIcons("available",item.getModelObject().isAvailable()));
-                item.add(getIcons("enabled",item.getModelObject().isEnabled()));
+                item.add(getIcons("available", item.getModelObject().isAvailable()));
+                item.add(getIcons("enabled", item.getModelObject().isEnabled()));
                 item.add(new Label("component", new Model(item.getModelObject().getComponent().orElse(""))));
                 item.add(new Label("version", new Model(item.getModelObject().getVersion().orElse(""))));
                 msgLink = new AjaxLink("msg") {
@@ -94,14 +94,16 @@ public class ModuleStatusPanel extends Panel {
         };
         wmc.add(moduleView);
     }
-    
+
     final Fragment getIcons(String id, boolean status) {
-        PackageResourceReference icon = status? icons.getEnabledIcon() : icons.getDisabledIcon();
+        PackageResourceReference icon = status ? icons.getEnabledIcon() : icons.getDisabledIcon();
         Fragment f = new Fragment(id, "iconFragment", ModuleStatusPanel.this);
         f.add(new Image("statusIcon", icon));
         return f;
-    };
-    
+    }
+
+    ;
+
     class MessagePanel extends Panel {
 
         private static final long serialVersionUID = -3200098674603724915L;
@@ -110,7 +112,7 @@ public class ModuleStatusPanel extends Panel {
             super(id);
 
             Label name = new Label("name", new PropertyModel(item.getModel(), "name"));
-            Label module = new Label("module", new PropertyModel(item.getModel(),"module"));
+            Label module = new Label("module", new PropertyModel(item.getModel(), "module"));
             Label component = new Label("component", new Model(item.getModelObject().getComponent().orElse("")));
             Label version = new Label("version", new Model(item.getModelObject().getVersion().orElse("")));
             MultiLineLabel msgLabel = new MultiLineLabel("msg", item.getModelObject().getMessage().orElse(""));

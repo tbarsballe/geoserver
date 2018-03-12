@@ -32,17 +32,17 @@ import org.geowebcache.diskquota.storage.StorageUnit;
 
 public class DiskQuotaSettingsPage extends GeoServerSecuredPage {
 
-        private static final long serialVersionUID = 75816375328629448L;
+    private static final long serialVersionUID = 75816375328629448L;
 
-	public DiskQuotaSettingsPage() throws Exception {
+    public DiskQuotaSettingsPage() throws Exception {
         GWC gwc = getGWC();
 
         final boolean diskQuotaModuleDisabled = gwc.getDiskQuotaConfig() == null;
-        
+
         // get the quota store config, show an error message in case the quota
         // store loading failed
         ConfigurableQuotaStoreProvider provider = GeoServerApplication.get().getBeanOfType(ConfigurableQuotaStoreProvider.class);
-        if(provider.getException() != null) {
+        if (provider.getException() != null) {
             ParamResourceModel rm = new ParamResourceModel("GWC.diskQuotaLoadFailed", null, provider.getException().getMessage());
             error(rm.getString());
         }
@@ -55,11 +55,11 @@ public class DiskQuotaSettingsPage extends GeoServerSecuredPage {
         } else {
             diskQuotaConfig = gwc.getDiskQuotaConfig().clone();
         }
-        
+
         // same as above, but we don't need to create a copy of the JDBC quota config since
         // that config is just used to instantiate the quota store, and then gets promptly discarted
         final JDBCConfiguration jdbcQuotaConfiguration;
-        if(gwc.getJDBCDiskQuotaConfig() == null) {
+        if (gwc.getJDBCDiskQuotaConfig() == null) {
             jdbcQuotaConfiguration = new JDBCConfiguration();
             JDBCConfiguration.ConnectionPoolConfiguration configuration = new JDBCConfiguration.ConnectionPoolConfiguration();
             configuration.setMinConnections(1);
@@ -80,12 +80,12 @@ public class DiskQuotaSettingsPage extends GeoServerSecuredPage {
 
         final DiskQuotaConfigPanel diskQuotaConfigPanel = new DiskQuotaConfigPanel(
                 "diskQuotaPanel", diskQuotaModel, jdbcQuotaModel);
-        
+
         if (diskQuotaModuleDisabled) {
             diskQuotaConfigPanel.setEnabled(false);
             super.warn(new ResourceModel("DiskQuotaSettingsPage.disabledWarning").getObject());
         }
-        
+
         form.add(diskQuotaConfigPanel);
 
         form.add(new Button("submit") {
@@ -112,23 +112,23 @@ public class DiskQuotaSettingsPage extends GeoServerSecuredPage {
                     }
                     DiskQuotaConfig dqConfig = diskQuotaModel.getObject();
                     JDBCConfiguration jdbcConfig = jdbcQuotaModel.getObject();
-                    if(dqConfig.getQuotaStore() != null && dqConfig.getQuotaStore().equals("JDBC")) {
+                    if (dqConfig.getQuotaStore() != null && dqConfig.getQuotaStore().equals("JDBC")) {
                         try {
                             gwc.testQuotaConfiguration(jdbcConfig);
-                        } catch(Exception e) {
+                        } catch (Exception e) {
                             LOGGER.log(Level.SEVERE, "Error instantiating the JDBC configuration", e);
-                            error("Failure occurred while saving the JDBC configuration" 
+                            error("Failure occurred while saving the JDBC configuration"
                                     + e.getMessage() + " (see the logs for a full stack trace)");
                             return;
                         }
                     }
-                    
+
                     dqConfig.getGlobalQuota().setValue(chosenQuota.doubleValue(), chosenUnit);
                     try {
                         gwc.saveDiskQuotaConfig(dqConfig, jdbcConfig.clone(false));
-                    } catch(Exception e) {
+                    } catch (Exception e) {
                         LOGGER.log(Level.SEVERE, "Failed to save the JDBC configuration", e);
-                        error("Failure occurred while saving the JDBC configuration" 
+                        error("Failure occurred while saving the JDBC configuration"
                                 + e.getMessage() + " (see the logs for a full stack trace)");
                         return;
                     }

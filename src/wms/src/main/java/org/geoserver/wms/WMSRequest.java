@@ -12,8 +12,7 @@ import org.geotools.util.Version;
 
 /**
  * Defines a general Request type and provides accessor methods for universal request information.
- * 
- * 
+ *
  * @author Rob Hranac, TOPP
  * @author Chris Holmes, TOPP
  * @author Gabriel Roldan
@@ -40,9 +39,8 @@ public abstract class WMSRequest {
 
     /**
      * Creates the new request with the given operation name
-     * 
-     * @param request
-     *            name of the request, (Example, GetCapabiliites)
+     *
+     * @param request name of the request, (Example, GetCapabiliites)
      */
     protected WMSRequest(final String request) {
         setRequest(request);
@@ -52,9 +50,9 @@ public abstract class WMSRequest {
      * Tells whether the originating request used HTTP GET method or not; may be useful, for
      * example, to determine if client can do HTTP caching and then set the corresponding response
      * headers.
-     * 
+     *
      * @return {@code true} if the originating HTTP request used HTTP GET method, {@code false}
-     *         otherwise
+     * otherwise
      */
     public boolean isGet() {
         return get;
@@ -86,7 +84,7 @@ public abstract class WMSRequest {
 
     /**
      * Set by {@link Dispatcher}
-     * 
+     *
      * @param baseUrl
      */
     public void setBaseUrl(final String baseUrl) {
@@ -106,7 +104,6 @@ public abstract class WMSRequest {
 
     /**
      * Setter for the 'WMTVER' parameter, which is an alias for 'VERSION'.
-     * 
      */
     public void setWmtVer(String version) {
         setVersion(version);

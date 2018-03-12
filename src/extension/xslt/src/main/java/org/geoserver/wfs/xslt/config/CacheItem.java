@@ -11,10 +11,9 @@ import org.geoserver.platform.resource.Resource;
  * A cache item for a resource loaded from a file. Helps checking if the cached item is up to date,
  * and avoids flooding the file system with excessive IO requests by preventing the up-to-date check
  * to be hitting the file system too often (at most once per second)
- * 
- * @author Andrea Aime - GeoSolutions
- * 
+ *
  * @param <T>
+ * @author Andrea Aime - GeoSolutions
  */
 class CacheItem<T extends Object> {
 

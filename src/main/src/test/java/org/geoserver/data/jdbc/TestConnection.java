@@ -23,7 +23,9 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Executor;
 
-/** Placeholder connection for testing */
+/**
+ * Placeholder connection for testing
+ */
 class TestConnection implements Connection {
     private int timeout;
 
@@ -157,7 +159,7 @@ class TestConnection implements Connection {
 
     @Override
     public PreparedStatement prepareStatement(String sql, int resultSetType,
-            int resultSetConcurrency) throws SQLException {
+                                              int resultSetConcurrency) throws SQLException {
         throw new SQLException("Not implemented");
     }
 
@@ -209,19 +211,19 @@ class TestConnection implements Connection {
 
     @Override
     public Statement createStatement(int resultSetType, int resultSetConcurrency,
-            int resultSetHoldability) throws SQLException {
+                                     int resultSetHoldability) throws SQLException {
         throw new SQLException("Not implemented");
     }
 
     @Override
     public PreparedStatement prepareStatement(String sql, int resultSetType,
-            int resultSetConcurrency, int resultSetHoldability) throws SQLException {
+                                              int resultSetConcurrency, int resultSetHoldability) throws SQLException {
         throw new SQLException("Not implemented");
     }
 
     @Override
     public CallableStatement prepareCall(String sql, int resultSetType, int resultSetConcurrency,
-            int resultSetHoldability) throws SQLException {
+                                         int resultSetHoldability) throws SQLException {
         throw new SQLException("Not implemented");
     }
 

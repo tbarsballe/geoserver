@@ -52,16 +52,16 @@ public class ImportRepoCommandController extends AbstractController {
 
     @Autowired
     private ImportRepoService importRepoService;
-    
+
     @RequestMapping(method = {GET, PUT, DELETE, PATCH, TRACE, OPTIONS})
     public void catchAll() {
         // if we hit this controller, it's a 405
         supportedMethods(Sets.newHashSet(POST.toString()));
     }
-    
+
     @PostMapping
     public void importRepositoryNoBody(@PathVariable(name = "repoName") String repoName,
-            HttpServletRequest request, HttpServletResponse response)
+                                       HttpServletRequest request, HttpServletResponse response)
             throws RepositoryConnectionException {
         RepositoryImportRepo repo = importRepo(request, repoName);
         encode(repo, request, response);
@@ -69,18 +69,18 @@ public class ImportRepoCommandController extends AbstractController {
 
     @PostMapping(consumes = {APPLICATION_JSON_VALUE, APPLICATION_XML_VALUE})
     public void importRepositoryFromJsonOrXml(
-            @PathVariable(name = "repoName")String repoName,
+            @PathVariable(name = "repoName") String repoName,
             @RequestBody InitRequest requestBody,
             HttpServletRequest request, HttpServletResponse response)
             throws RepositoryConnectionException {
-        
+
         RepositoryImportRepo repo = importRepo(request, repoName, requestBody);
         encode(repo, request, response);
     }
 
     @PostMapping(consumes = {APPLICATION_FORM_URLENCODED_VALUE})
     public void importRepositoryFromForm(
-            @PathVariable(name = "repoName")String repoName,
+            @PathVariable(name = "repoName") String repoName,
             @RequestBody MultiValueMap<String, String> requestBody,
             HttpServletRequest request, HttpServletResponse response)
             throws RepositoryConnectionException {
@@ -100,7 +100,7 @@ public class ImportRepoCommandController extends AbstractController {
     }
 
     private RepositoryImportRepo importRepo(HttpServletRequest request, String repoName,
-            InitRequest requestBody)
+                                            InitRequest requestBody)
             throws RepositoryConnectionException {
         Optional<RepositoryProvider> repoProvider = getRepoProvider(request);
         if (repoProvider.isPresent()) {
@@ -112,7 +112,7 @@ public class ImportRepoCommandController extends AbstractController {
     }
 
     private RepositoryImportRepo importRepo(HttpServletRequest request, String repoName,
-            MultiValueMap<String, String> requestBody)
+                                            MultiValueMap<String, String> requestBody)
             throws RepositoryConnectionException {
         Optional<RepositoryProvider> repoProvider = getRepoProvider(request);
         if (repoProvider.isPresent()) {

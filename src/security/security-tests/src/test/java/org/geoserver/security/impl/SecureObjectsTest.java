@@ -18,7 +18,7 @@ public abstract class SecureObjectsTest {
     public static void initAppContext() {
         // setup extensions so that we can do extension point lookups
         ApplicationContext ac = new ClassPathXmlApplicationContext(
-                new String[] { "classpath:/securedObjectsContext.xml"});
+                new String[]{"classpath:/securedObjectsContext.xml"});
         new GeoServerExtensions().setApplicationContext(ac);
     }
 

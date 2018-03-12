@@ -8,14 +8,12 @@ import org.geoserver.wps.remote.plugin.XMPPClient;
 
 /**
  * Output Type interface
- * 
+ *
  * @author Alessio Fabiani, GeoSolutions
- * 
  */
 public interface XMPPOutputType {
 
     /**
-     * 
      * @param visitor
      * @param outputs
      * @param value
@@ -26,15 +24,13 @@ public interface XMPPOutputType {
      * @param publish
      * @param metadata
      * @param wpsOutputValue
-     *
      */
     public Object accept(XMPPOutputVisitor visitor, Object value, String type, String pID,
-            String baseURL, XMPPClient xmppClient, boolean publish, String name, String title,
-            String description, String defaultStyle, String targetWorkspace, String metadata)
-                    throws Exception;
+                         String baseURL, XMPPClient xmppClient, boolean publish, String name, String title,
+                         String description, String defaultStyle, String targetWorkspace, String metadata)
+            throws Exception;
 
     /**
-     * 
      * @param outputs
      * @param value
      * @param type
@@ -43,6 +39,6 @@ public interface XMPPOutputType {
      * @param publish
      */
     public Object produceOutput(Object value, String type, String pID, String baseURL,
-            XMPPClient xmppClient, boolean publish, String name, String title, String description,
-            String defaultStyle, String targetWorkspace, String metadata) throws Exception;
+                                XMPPClient xmppClient, boolean publish, String name, String title, String description,
+                                String defaultStyle, String targetWorkspace, String metadata) throws Exception;
 }

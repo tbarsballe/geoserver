@@ -6,7 +6,7 @@ package org.geoserver.opensearch.eo;
 
 /**
  * A request to retrieve the quicklook of a particular product
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class QuicklookRequest extends AbstractProductRequest {

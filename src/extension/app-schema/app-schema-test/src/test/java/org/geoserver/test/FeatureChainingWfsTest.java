@@ -58,7 +58,7 @@ import net.sf.json.JSONObject;
 
 /**
  * WFS GetFeature to test integration of {@link AppSchemaDataAccess} with GeoServer.
- * 
+ *
  * @author Ben Caradoc-Davies, CSIRO Earth Science and Resource Engineering
  * @author Rini Angreani, CSIRO Earth Science and Resource Engineering
  * @author Xiangtan Lin, CSIRO Information Management and Technology
@@ -144,7 +144,7 @@ public class FeatureChainingWfsTest extends AbstractAppSchemaTestSupport {
         assertNotNull(getExSchemaTwo());
         assertTrue(getExSchemaTwo().exists());
     }
-    
+
     /**
      * Test whether GetCapabilities returns wfs:WFS_Capabilities.
      */
@@ -153,11 +153,11 @@ public class FeatureChainingWfsTest extends AbstractAppSchemaTestSupport {
         Document doc = getAsDOM("wfs?request=GetCapabilities&version=1.1.0");
         LOGGER.info("WFS GetCapabilities response:\n" + prettyString(doc));
         assertEquals("wfs:WFS_Capabilities", doc.getDocumentElement().getNodeName());
-        
+
         // check wfs schema location is canonical
-        String schemaLocation = evaluate("wfs:WFS_Capabilities/@xsi:schemaLocation", doc);                
+        String schemaLocation = evaluate("wfs:WFS_Capabilities/@xsi:schemaLocation", doc);
         String location = "http://www.opengis.net/wfs " + WFS.CANONICAL_SCHEMA_LOCATION;
-        assertEquals(location , schemaLocation);
+        assertEquals(location, schemaLocation);
 
         // make sure non-feature types don't appear in FeatureTypeList
         assertXpathCount(6, "//wfs:FeatureType", doc);
@@ -330,7 +330,7 @@ public class FeatureChainingWfsTest extends AbstractAppSchemaTestSupport {
         assertFalse(targetNamespace.isEmpty());
         int numberOfImports = getMatchingNodes("//xsd:import", doc).getLength();
         int numberOfIncludes = getMatchingNodes("//xsd:include", doc).getLength();
-        
+
         ArrayList<String> namespaces = new ArrayList<String>();
         namespaces.add(AbstractAppSchemaMockData.GSML_URI);
         namespaces.add(FeatureChainingMockData.OM_URI);
@@ -366,8 +366,8 @@ public class FeatureChainingWfsTest extends AbstractAppSchemaTestSupport {
             // not do it.
             assertEquals(2, numberOfImports);
             assertEquals(1, numberOfIncludes);
-            
-            String schemaLocation = "//xsd:include[" + 1 + "]/@schemaLocation";   
+
+            String schemaLocation = "//xsd:include[" + 1 + "]/@schemaLocation";
             if (targetNamespace.equals(AbstractAppSchemaMockData.GSML_URI)) {
                 // gsml include
                 assertXpathEvaluatesTo(AbstractAppSchemaMockData.GSML_SCHEMA_LOCATION_URL,
@@ -380,12 +380,12 @@ public class FeatureChainingWfsTest extends AbstractAppSchemaTestSupport {
                         schemaLocation, doc);
                 namespaces.remove(FeatureChainingMockData.OM_URI);
             }
-        }                
-        
+        }
+
         // order is unimportant, and could change, so we don't test the order
         for (int i = 1; i <= numberOfImports; i++) {
             String namespace = evaluate("//xsd:import[" + i + "]/@namespace", doc);
-            String schemaLocation = "//xsd:import[" + i + "]/@schemaLocation";            
+            String schemaLocation = "//xsd:import[" + i + "]/@schemaLocation";
             if (namespace.equals(AbstractAppSchemaMockData.GSML_URI)) {
                 // gsml import
                 assertXpathEvaluatesTo(AbstractAppSchemaMockData.GSML_SCHEMA_LOCATION_URL,
@@ -415,10 +415,10 @@ public class FeatureChainingWfsTest extends AbstractAppSchemaTestSupport {
 
     /**
      * Tests that WFS schema is never imported in a DescribeFeatureType response.
-     *
+     * <p>
      * <p>
      * <strong>Remarks:</strong> this test only targets WFS 2.0, as 1.1.0 is sufficiently covered
-     * by other tests. 
+     * by other tests.
      * </p>
      */
     @Test
@@ -487,7 +487,7 @@ public class FeatureChainingWfsTest extends AbstractAppSchemaTestSupport {
     public void testGetFeatureJSON() throws Exception {
         testJsonRequest("gsml:MappedFeature", "/test-data/MappedFeature.json");
     }
-    
+
     @Test
     public void testGetFeatureValid() {
         String path = "wfs?request=GetFeature&version=1.1.0&typename=gsml:MappedFeature";
@@ -496,7 +496,7 @@ public class FeatureChainingWfsTest extends AbstractAppSchemaTestSupport {
         LOGGER.info("Response for " + path + " :" + newline + prettyString(doc));
         validateGet(path);
     }
-    
+
     /**
      * GeologicUnit mapping has mappingName specified, to override targetElementName when feature
      * chained to MappedFeature. This is to test that querying GeologicUnit as top level feature
@@ -585,36 +585,37 @@ public class FeatureChainingWfsTest extends AbstractAppSchemaTestSupport {
         {
             String id = "mf1";
             assertXpathEvaluatesTo(id, "(//gsml:MappedFeature)[1]/@gml:id", doc);
-            checkMf1Content(id, doc);          
+            checkMf1Content(id, doc);
         }
 
         // mf2
         {
             String id = "mf2";
             assertXpathEvaluatesTo(id, "(//gsml:MappedFeature)[2]/@gml:id", doc);
-            checkMf2Content(id, doc);          
+            checkMf2Content(id, doc);
         }
 
         // mf3
         {
             String id = "mf3";
             assertXpathEvaluatesTo(id, "(//gsml:MappedFeature)[3]/@gml:id", doc);
-            checkMf3Content(id, doc);            
+            checkMf3Content(id, doc);
         }
 
         // mf4
         {
             String id = "mf4";
             assertXpathEvaluatesTo(id, "(//gsml:MappedFeature)[4]/@gml:id", doc);
-            checkMf4Content(id, doc);            
+            checkMf4Content(id, doc);
         }
-        
+
         // check for duplicate gml:id
         assertXpathCount(1, "//gsml:GeologicUnit[@gml:id='gu.25678']", doc);
     }
 
     /**
      * Check schema location
+     *
      * @param doc
      */
     private void checkSchemaLocation(Document doc) {
@@ -629,11 +630,12 @@ public class FeatureChainingWfsTest extends AbstractAppSchemaTestSupport {
         } else {
             // WFS schema location was encoded first
             assertEquals(wfsLocation + " " + gsmlLocation, schemaLocation);
-        }       
+        }
     }
 
     /**
      * Check mf1 content are encoded correctly
+     *
      * @param id
      * @param doc
      */
@@ -644,7 +646,7 @@ public class FeatureChainingWfsTest extends AbstractAppSchemaTestSupport {
         assertXpathEvaluatesTo("200.0", "//gsml:MappedFeature[@gml:id='" + id
                 + "']/gsml:positionalAccuracy/gsml:CGI_NumericValue/gsml:principalValue", doc);
         assertXpathEvaluatesTo("urn:ogc:def:uom:UCUM:m", "//gsml:MappedFeature[@gml:id='" + id
-                + "']/gsml:positionalAccuracy/gsml:CGI_NumericValue/gsml:principalValue/@uom",
+                        + "']/gsml:positionalAccuracy/gsml:CGI_NumericValue/gsml:principalValue/@uom",
                 doc);
         // shape
         assertXpathEvaluatesTo("urn:x-ogc:def:crs:EPSG:4326", "//gsml:MappedFeature[@gml:id='" + id
@@ -678,7 +680,7 @@ public class FeatureChainingWfsTest extends AbstractAppSchemaTestSupport {
         assertTrue(names.contains(name));
         names.remove(name);
         assertTrue(names.isEmpty());
-        
+
         // feature link shouldn't appear as it's not in the schema
         assertXpathCount(0, "//gsml:MappedFeature[@gml:id='" + id
                 + "']/gsml:specification/gsml:GeologicUnit/FEATURE_LINK", doc);
@@ -731,17 +733,18 @@ public class FeatureChainingWfsTest extends AbstractAppSchemaTestSupport {
                 + "/gsml:CompositionPart/gsml:role/FEATURE_LINK", doc);
         // lithology
         assertXpathCount(1, "//gsml:MappedFeature[@gml:id='" + id + "']/gsml:specification"
-                + "/gsml:GeologicUnit/gsml:composition/gsml:CompositionPart/gsml:lithology",
+                        + "/gsml:GeologicUnit/gsml:composition/gsml:CompositionPart/gsml:lithology",
                 doc);
         // feature link shouldn't appear as it's not in the schema
         assertXpathCount(0, "//gsml:MappedFeature[@gml:id='" + id
                 + "']/gsml:specification/gsml:GeologicUnit/gsml:composition"
                 + "/gsml:CompositionPart/gsml:lithology/FEATURE_LINK", doc);
-        
+
     }
 
     /**
      * Check mf2 content are encoded correctly
+     *
      * @param id
      * @param doc
      */
@@ -752,7 +755,7 @@ public class FeatureChainingWfsTest extends AbstractAppSchemaTestSupport {
         assertXpathEvaluatesTo("100.0", "//gsml:MappedFeature[@gml:id='" + id
                 + "']/gsml:positionalAccuracy/gsml:CGI_NumericValue/gsml:principalValue", doc);
         assertXpathEvaluatesTo("urn:ogc:def:uom:UCUM:m", "//gsml:MappedFeature[@gml:id='" + id
-                + "']/gsml:positionalAccuracy/gsml:CGI_NumericValue/gsml:principalValue/@uom",
+                        + "']/gsml:positionalAccuracy/gsml:CGI_NumericValue/gsml:principalValue/@uom",
                 doc);
         // shape
         assertXpathEvaluatesTo("urn:x-ogc:def:crs:EPSG:4326", "//gsml:MappedFeature[@gml:id='" + id
@@ -777,22 +780,22 @@ public class FeatureChainingWfsTest extends AbstractAppSchemaTestSupport {
         assertXpathEvaluatesTo(names.get(name), "//gsml:MappedFeature[@gml:id='" + id
                 + "']/gsml:specification/gsml:GeologicUnit/gml:name[1]/@codeSpace", doc);
         names.remove(name);
-        
+
         name = evaluate("//gsml:MappedFeature[@gml:id='" + id
                 + "']/gsml:specification/gsml:GeologicUnit/gml:name[2]", doc);
         assertTrue(names.containsKey(name));
         assertXpathEvaluatesTo(names.get(name), "//gsml:MappedFeature[@gml:id='" + id
                 + "']/gsml:specification/gsml:GeologicUnit/gml:name[2]/@codeSpace", doc);
         names.remove(name);
-        
+
         name = evaluate("//gsml:MappedFeature[@gml:id='" + id
-                + "']/gsml:specification/gsml:GeologicUnit/gml:name[3]", doc);        
+                + "']/gsml:specification/gsml:GeologicUnit/gml:name[3]", doc);
         assertTrue(names.containsKey(name));
         assertXpathEvaluatesTo(names.get(name), "//gsml:MappedFeature[@gml:id='" + id
                 + "']/gsml:specification/gsml:GeologicUnit/gml:name[3]/@codeSpace", doc);
         names.remove(name);
         assertTrue(names.isEmpty());
-     
+
         assertXpathCount(0, "//gsml:MappedFeature[@gml:id='" + id
                 + "']/gsml:specification/gsml:GeologicUnit/FEATURE_LINK", doc);
         // occurrence
@@ -870,18 +873,19 @@ public class FeatureChainingWfsTest extends AbstractAppSchemaTestSupport {
         assertXpathCount(0, "//gsml:MappedFeature[@gml:id='" + id
                 + "']/gsml:specification/gsml:GeologicUnit/gsml:composition[2]"
                 + "/gsml:CompositionPart/gsml:role/FEATURE_LINK", doc);
-    
+
         // lithology
         assertXpathCount(2, "//gsml:MappedFeature[@gml:id='" + id + "']/gsml:specification"
-                + "/gsml:GeologicUnit/gsml:composition/gsml:CompositionPart/gsml:lithology",
+                        + "/gsml:GeologicUnit/gsml:composition/gsml:CompositionPart/gsml:lithology",
                 doc);
         assertXpathCount(0, "//gsml:MappedFeature[@gml:id='" + id
                 + "']/gsml:specification/gsml:GeologicUnit/gsml:composition"
-                + "/gsml:CompositionPart/gsml:lithology/FEATURE_LINK", doc);        
+                + "/gsml:CompositionPart/gsml:lithology/FEATURE_LINK", doc);
     }
 
     /**
      * Check mf3 content are encoded correctly
+     *
      * @param id
      * @param doc
      */
@@ -892,7 +896,7 @@ public class FeatureChainingWfsTest extends AbstractAppSchemaTestSupport {
         assertXpathEvaluatesTo("150.0", "//gsml:MappedFeature[@gml:id='" + id
                 + "']/gsml:positionalAccuracy/gsml:CGI_NumericValue/gsml:principalValue", doc);
         assertXpathEvaluatesTo("urn:ogc:def:uom:UCUM:m", "//gsml:MappedFeature[@gml:id='" + id
-                + "']/gsml:positionalAccuracy/gsml:CGI_NumericValue/gsml:principalValue/@uom",
+                        + "']/gsml:positionalAccuracy/gsml:CGI_NumericValue/gsml:principalValue/@uom",
                 doc);
         // shape
         assertXpathEvaluatesTo("urn:x-ogc:def:crs:EPSG:4326", "//gsml:MappedFeature[@gml:id='" + id
@@ -904,11 +908,12 @@ public class FeatureChainingWfsTest extends AbstractAppSchemaTestSupport {
                 + "']/gsml:specification/@xlink:href", doc);
         // make sure nothing else is encoded
         assertXpathCount(0, "//gsml:MappedFeature[@gml:id='" + id
-                + "']/gsml:specification/gsml:GeologicUnit", doc);        
+                + "']/gsml:specification/gsml:GeologicUnit", doc);
     }
 
     /**
      * Check mf4 content are encoded correctly
+     *
      * @param id
      * @param doc
      */
@@ -919,7 +924,7 @@ public class FeatureChainingWfsTest extends AbstractAppSchemaTestSupport {
         assertXpathEvaluatesTo("120.0", "//gsml:MappedFeature[@gml:id='" + id
                 + "']/gsml:positionalAccuracy/gsml:CGI_NumericValue/gsml:principalValue", doc);
         assertXpathEvaluatesTo("urn:ogc:def:uom:UCUM:m", "//gsml:MappedFeature[@gml:id='" + id
-                + "']/gsml:positionalAccuracy/gsml:CGI_NumericValue/gsml:principalValue/@uom",
+                        + "']/gsml:positionalAccuracy/gsml:CGI_NumericValue/gsml:principalValue/@uom",
                 doc);
         // shape
         assertXpathEvaluatesTo("urn:x-ogc:def:crs:EPSG:4326", "//gsml:MappedFeature[@gml:id='" + id
@@ -950,7 +955,7 @@ public class FeatureChainingWfsTest extends AbstractAppSchemaTestSupport {
         assertTrue(names.contains(name));
         names.remove(name);
         assertTrue(names.isEmpty());
-        
+
         assertXpathCount(0, "//gsml:MappedFeature[@gml:id='" + id
                 + "']/gsml:specification/gsml:GeologicUnit/FEATURE_LINK", doc);
         // occurrence
@@ -999,12 +1004,12 @@ public class FeatureChainingWfsTest extends AbstractAppSchemaTestSupport {
                 + "/gsml:CompositionPart/gsml:role/FEATURE_LINK", doc);
         // lithology
         assertXpathCount(2, "//gsml:MappedFeature[@gml:id='" + id + "']/gsml:specification"
-                + "/gsml:GeologicUnit/gsml:composition/gsml:CompositionPart/gsml:lithology",
+                        + "/gsml:GeologicUnit/gsml:composition/gsml:CompositionPart/gsml:lithology",
                 doc);
         // lithology:1
         assertXpathEvaluatesTo("cc.1", "//gsml:MappedFeature[@gml:id='" + id + "']/gsml:specification"
                 + "/gsml:GeologicUnit/gsml:composition/gsml:CompositionPart/gsml:lithology[1]"
-                + "/gsml:ControlledConcept/@gml:id", doc);            
+                + "/gsml:ControlledConcept/@gml:id", doc);
         assertXpathCount(3, "//gsml:MappedFeature[@gml:id='" + id + "']/gsml:specification"
                 + "/gsml:GeologicUnit/gsml:composition/gsml:CompositionPart/gsml:lithology[1]"
                 + "/gsml:ControlledConcept/gml:name", doc);
@@ -1047,12 +1052,12 @@ public class FeatureChainingWfsTest extends AbstractAppSchemaTestSupport {
                 + "/gsml:ControlledConcept/gml:name", doc);
         assertXpathCount(0, "//gsml:MappedFeature[@gml:id='" + id
                 + "']/gsml:specification/gsml:GeologicUnit/gsml:composition"
-                + "/gsml:CompositionPart/gsml:lithology[2]/FEATURE_LINK", doc);        
+                + "/gsml:CompositionPart/gsml:lithology[2]/FEATURE_LINK", doc);
     }
 
     /**
      * Implementation for tests expected to get mf4 only.
-     * 
+     *
      * @param xml
      */
     private void checkGetMf4Only(String xml) {
@@ -1079,18 +1084,18 @@ public class FeatureChainingWfsTest extends AbstractAppSchemaTestSupport {
     @Test
     public void testGetFeaturePropertyFilter() {
         String xml = //
-        "<wfs:GetFeature " //
-                + GETFEATURE_ATTRIBUTES //
-                + ">" //
-                + "    <wfs:Query typeName=\"gsml:MappedFeature\">" //
-                + "        <ogc:Filter>" //
-                + "            <ogc:PropertyIsEqualTo>" //
-                + "                <ogc:PropertyName>gml:name</ogc:PropertyName>" //
-                + "                <ogc:Literal>MURRADUC BASALT</ogc:Literal>" //
-                + "            </ogc:PropertyIsEqualTo>" //
-                + "        </ogc:Filter>" //
-                + "    </wfs:Query> " //
-                + "</wfs:GetFeature>";
+                "<wfs:GetFeature " //
+                        + GETFEATURE_ATTRIBUTES //
+                        + ">" //
+                        + "    <wfs:Query typeName=\"gsml:MappedFeature\">" //
+                        + "        <ogc:Filter>" //
+                        + "            <ogc:PropertyIsEqualTo>" //
+                        + "                <ogc:PropertyName>gml:name</ogc:PropertyName>" //
+                        + "                <ogc:Literal>MURRADUC BASALT</ogc:Literal>" //
+                        + "            </ogc:PropertyIsEqualTo>" //
+                        + "        </ogc:Filter>" //
+                        + "    </wfs:Query> " //
+                        + "</wfs:GetFeature>";
         validate(xml);
         checkGetMf4Only(xml);
     }
@@ -1101,15 +1106,15 @@ public class FeatureChainingWfsTest extends AbstractAppSchemaTestSupport {
     @Test
     public void testGetFeatureWithFeatureIdFilter() {
         String xml = //
-        "<wfs:GetFeature " //
-                + GETFEATURE_ATTRIBUTES //
-                + ">" //
-                + "    <wfs:Query typeName=\"gsml:MappedFeature\">" //
-                + "        <ogc:Filter>" //
-                + "            <ogc:FeatureId fid=\"mf4\"/>" //
-                + "        </ogc:Filter>" //
-                + "    </wfs:Query> " //
-                + "</wfs:GetFeature>";
+                "<wfs:GetFeature " //
+                        + GETFEATURE_ATTRIBUTES //
+                        + ">" //
+                        + "    <wfs:Query typeName=\"gsml:MappedFeature\">" //
+                        + "        <ogc:Filter>" //
+                        + "            <ogc:FeatureId fid=\"mf4\"/>" //
+                        + "        </ogc:Filter>" //
+                        + "    </wfs:Query> " //
+                        + "</wfs:GetFeature>";
         validate(xml);
         checkGetMf4Only(xml);
     }
@@ -1120,19 +1125,19 @@ public class FeatureChainingWfsTest extends AbstractAppSchemaTestSupport {
     @Test
     public void testGetFeatureWithGmlObjectIdFilter() {
         String xml = //
-        "<wfs:GetFeature " //
-                + GETFEATURE_ATTRIBUTES //
-                + ">" //
-                + "    <wfs:Query typeName=\"gsml:MappedFeature\">" //
-                + "        <ogc:Filter>" //
-                + "            <ogc:GmlObjectId gml:id=\"mf4\"/>" //
-                + "        </ogc:Filter>" //
-                + "    </wfs:Query> " //
-                + "</wfs:GetFeature>";
+                "<wfs:GetFeature " //
+                        + GETFEATURE_ATTRIBUTES //
+                        + ">" //
+                        + "    <wfs:Query typeName=\"gsml:MappedFeature\">" //
+                        + "        <ogc:Filter>" //
+                        + "            <ogc:GmlObjectId gml:id=\"mf4\"/>" //
+                        + "        </ogc:Filter>" //
+                        + "    </wfs:Query> " //
+                        + "</wfs:GetFeature>";
         validate(xml);
         checkGetMf4Only(xml);
     }
-    
+
     /**
      * Test anyType as complex attributes, and placeholder type (e.g AnyOrReference) which contains
      * <any/> element.
@@ -1214,18 +1219,18 @@ public class FeatureChainingWfsTest extends AbstractAppSchemaTestSupport {
     @Test
     public void testFilteringXlinkHref() {
         String xml = //
-        "<wfs:GetFeature " //
-                + GETFEATURE_ATTRIBUTES //
-                + ">" //
-                + "    <wfs:Query typeName=\"gsml:MappedFeature\">" //
-                + "        <ogc:Filter>" //
-                + "            <ogc:PropertyIsEqualTo>" //
-                + "                <ogc:PropertyName>gsml:specification/gsml:GeologicUnit/gml:name</ogc:PropertyName>" //
-                + "                <ogc:Literal>Yaugher Volcanic Group</ogc:Literal>" //
-                + "            </ogc:PropertyIsEqualTo>" //
-                + "        </ogc:Filter>" //
-                + "    </wfs:Query> " //
-                + "</wfs:GetFeature>";
+                "<wfs:GetFeature " //
+                        + GETFEATURE_ATTRIBUTES //
+                        + ">" //
+                        + "    <wfs:Query typeName=\"gsml:MappedFeature\">" //
+                        + "        <ogc:Filter>" //
+                        + "            <ogc:PropertyIsEqualTo>" //
+                        + "                <ogc:PropertyName>gsml:specification/gsml:GeologicUnit/gml:name</ogc:PropertyName>" //
+                        + "                <ogc:Literal>Yaugher Volcanic Group</ogc:Literal>" //
+                        + "            </ogc:PropertyIsEqualTo>" //
+                        + "        </ogc:Filter>" //
+                        + "    </wfs:Query> " //
+                        + "</wfs:GetFeature>";
         validate(xml);
         Document doc = postAsDOM("wfs", xml);
         LOGGER.info("WFS filter GetFeature response:\n" + prettyString(doc));
@@ -1261,26 +1266,26 @@ public class FeatureChainingWfsTest extends AbstractAppSchemaTestSupport {
 //      assertXpathEvaluatesTo("mf2", "//gsml:MappedFeature[1]/@gml:id", doc);
 //      assertXpathEvaluatesTo("mf3", "//gsml:MappedFeature[2]/@gml:id", doc);
     }
-    
+
     /**
-     * Making sure multi-valued attributes in nested features can be queried from the top level. (GEOT-3156) 
+     * Making sure multi-valued attributes in nested features can be queried from the top level. (GEOT-3156)
      */
     @Test
     public void testFilteringNestedMultiValuedAttribute() {
         // PropertyIsEqual
-        String xml = 
-        "<wfs:GetFeature " 
-                + GETFEATURE_ATTRIBUTES 
-                + ">" 
-                + "    <wfs:Query typeName=\"gsml:MappedFeature\">" 
-                + "        <ogc:Filter>" 
-                + "            <ogc:PropertyIsEqualTo>" 
-                + "                <ogc:Literal>Yaugher Volcanic Group 2</ogc:Literal>" 
-                + "                <ogc:PropertyName>gsml:specification/gsml:GeologicUnit/gml:name</ogc:PropertyName>" 
-                + "            </ogc:PropertyIsEqualTo>" 
-                + "        </ogc:Filter>" 
-                + "    </wfs:Query> " 
-                + "</wfs:GetFeature>";
+        String xml =
+                "<wfs:GetFeature "
+                        + GETFEATURE_ATTRIBUTES
+                        + ">"
+                        + "    <wfs:Query typeName=\"gsml:MappedFeature\">"
+                        + "        <ogc:Filter>"
+                        + "            <ogc:PropertyIsEqualTo>"
+                        + "                <ogc:Literal>Yaugher Volcanic Group 2</ogc:Literal>"
+                        + "                <ogc:PropertyName>gsml:specification/gsml:GeologicUnit/gml:name</ogc:PropertyName>"
+                        + "            </ogc:PropertyIsEqualTo>"
+                        + "        </ogc:Filter>"
+                        + "    </wfs:Query> "
+                        + "</wfs:GetFeature>";
         validate(xml);
         Document doc = postAsDOM("wfs", xml);
         LOGGER.info("WFS filter GetFeature response:\n" + prettyString(doc));
@@ -1295,18 +1300,18 @@ public class FeatureChainingWfsTest extends AbstractAppSchemaTestSupport {
 
         // PropertyIsLike
         xml = //
-        "<wfs:GetFeature " 
-                + GETFEATURE_ATTRIBUTES 
-                + ">" 
-                + "    <wfs:Query typeName=\"gsml:MappedFeature\">" 
-                + "        <ogc:Filter>" 
-                + "            <ogc:PropertyIsLike wildCard=\"*\" singleChar=\"#\" escapeChar=\"!\">" 
-                + "                <ogc:PropertyName>gsml:specification/gsml:GeologicUnit/gml:name</ogc:PropertyName>" 
-                + "                <ogc:Literal>Yaugher Volcanic Group*</ogc:Literal>" 
-                + "            </ogc:PropertyIsLike>" 
-                + "        </ogc:Filter>" 
-                + "    </wfs:Query> " 
-                + "</wfs:GetFeature>";
+                "<wfs:GetFeature "
+                        + GETFEATURE_ATTRIBUTES
+                        + ">"
+                        + "    <wfs:Query typeName=\"gsml:MappedFeature\">"
+                        + "        <ogc:Filter>"
+                        + "            <ogc:PropertyIsLike wildCard=\"*\" singleChar=\"#\" escapeChar=\"!\">"
+                        + "                <ogc:PropertyName>gsml:specification/gsml:GeologicUnit/gml:name</ogc:PropertyName>"
+                        + "                <ogc:Literal>Yaugher Volcanic Group*</ogc:Literal>"
+                        + "            </ogc:PropertyIsLike>"
+                        + "        </ogc:Filter>"
+                        + "    </wfs:Query> "
+                        + "</wfs:GetFeature>";
         validate(xml);
         doc = postAsDOM("wfs", xml);
         LOGGER.info("WFS filter GetFeature response:\n" + prettyString(doc));
@@ -1337,11 +1342,11 @@ public class FeatureChainingWfsTest extends AbstractAppSchemaTestSupport {
                 + "            <ogc:PropertyIsEqualTo>"
                 + "                <ogc:Literal>significant</ogc:Literal>"
                 + "                <ogc:PropertyName>gsml:specification/gsml:GeologicUnit/gsml:composition/gsml:CompositionPart/gsml:proportion/gsml:CGI_TermValue/gsml:value</ogc:PropertyName>"
-                + "            </ogc:PropertyIsEqualTo>"                
+                + "            </ogc:PropertyIsEqualTo>"
                 + "            <ogc:PropertyIsEqualTo>"
                 + "                 <ogc:Literal>New Group</ogc:Literal>"
                 + "                 <ogc:PropertyName>gsml:specification/gsml:GeologicUnit/gml:name</ogc:PropertyName>"
-                + "            </ogc:PropertyIsEqualTo>"                
+                + "            </ogc:PropertyIsEqualTo>"
                 + "        </ogc:And>"
                 + "    </ogc:Filter>"
                 + "</wfs:Query> "
@@ -1371,7 +1376,7 @@ public class FeatureChainingWfsTest extends AbstractAppSchemaTestSupport {
 
         id = "gu.25682";
         assertXpathEvaluatesTo(id, "(//gsml:GeologicUnit)[2]/@gml:id", doc);
-        
+
         id = "gu.25699";
         assertXpathEvaluatesTo(id, "(//gsml:GeologicUnit)[3]/@gml:id", doc);
     }
@@ -1386,15 +1391,15 @@ public class FeatureChainingWfsTest extends AbstractAppSchemaTestSupport {
         boolean encodeFeatureMember = wfs.isEncodeFeatureMember();
         wfs.setEncodeFeatureMember(true);
         getGeoServer().save(wfs);
-        
+
         Document doc = getAsDOM("wfs?request=GetFeature&version=1.1.0&typename=gsml:MappedFeature,gsml:GeologicUnit");
         LOGGER.info("WFS GetFeature&typename=gsml:MappedFeature,gsml:GeologicUnit response:\n"
                 + prettyString(doc));
-        
-       checkSchemaLocation(doc);
+
+        checkSchemaLocation(doc);
 
         assertXpathEvaluatesTo("7", "/wfs:FeatureCollection/@numberOfFeatures", doc);
-        assertXpathCount(4, "//gsml:MappedFeature", doc);        
+        assertXpathCount(4, "//gsml:MappedFeature", doc);
 
         assertEquals(7, doc.getElementsByTagName("gml:featureMember").getLength());
         assertEquals(0, doc.getElementsByTagName("gml:featureMembers").getLength());
@@ -1449,13 +1454,13 @@ public class FeatureChainingWfsTest extends AbstractAppSchemaTestSupport {
         boolean encodeFeatureMember = wfs.isEncodeFeatureMember();
         wfs.setEncodeFeatureMember(false);
         getGeoServer().save(wfs);
-        
+
         Document doc = getAsDOM("wfs?request=GetFeature&version=1.1.0&typename=gsml:MappedFeature,gsml:GeologicUnit");
         LOGGER.info("WFS GetFeature&typename=gsml:MappedFeature,gsml:GeologicUnit response:\n"
                 + prettyString(doc));
-        
+
         checkSchemaLocation(doc);
-        
+
         assertXpathEvaluatesTo("7", "/wfs:FeatureCollection/@numberOfFeatures", doc);
         assertXpathCount(4, "//gsml:MappedFeature", doc);
 
@@ -1559,7 +1564,7 @@ public class FeatureChainingWfsTest extends AbstractAppSchemaTestSupport {
         /*
          * test like filter on nested attribute
          */
-         PropertyIsLike like = ff.like(ff.property("gsml:specification/gsml:GeologicUnit/gml:description"), "*sedimentary*");
+        PropertyIsLike like = ff.like(ff.property("gsml:specification/gsml:GeologicUnit/gml:description"), "*sedimentary*");
 
         // Filter involving single nested attribute --> can be encoded
         ComplexFilterSplitter splitterLike = new ComplexFilterSplitter(store.getFilterCapabilities(),

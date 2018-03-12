@@ -33,8 +33,8 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 /**
  * Applies security around the web map server
- * @author Andrea Aime - GeoSolutions
  *
+ * @author Andrea Aime - GeoSolutions
  */
 public class SecuredWebMapServer extends WebMapServer {
 
@@ -44,15 +44,15 @@ public class SecuredWebMapServer extends WebMapServer {
         super(delegate.getCapabilities());
         this.delegate = delegate;
     }
-    
+
     public GetFeatureInfoRequest createGetFeatureInfoRequest(GetMapRequest getMapRequest) {
         return new SecuredGetFeatureInfoRequest(delegate.createGetFeatureInfoRequest(getMapRequest), getMapRequest);
     }
-    
+
     public GetMapRequest createGetMapRequest() {
         return new SecuredGetMapRequest(delegate.createGetMapRequest());
     }
-    
+
     // -------------------------------------------------------------------------------------------
     //
     // Purely delegated methods

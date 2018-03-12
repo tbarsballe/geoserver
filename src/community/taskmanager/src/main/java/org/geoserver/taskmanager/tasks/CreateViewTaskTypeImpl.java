@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class CreateViewTaskTypeImpl extends AbstractCreateViewTaskTypeImpl {
-    
+
     public static final String NAME = "CreateView";
 
     public static final String PARAM_TABLE_NAME = "table-name";
@@ -24,7 +24,7 @@ public class CreateViewTaskTypeImpl extends AbstractCreateViewTaskTypeImpl {
     public static final String PARAM_SELECT = "select-clause";
 
     public static final String PARAM_WHERE = "where-clause";
-    
+
     @Override
     @PostConstruct
     public void initParamInfo() {
@@ -34,16 +34,16 @@ public class CreateViewTaskTypeImpl extends AbstractCreateViewTaskTypeImpl {
         paramInfo.put(PARAM_SELECT, new ParameterInfo(PARAM_SELECT, ParameterType.SQL, true));
         paramInfo.put(PARAM_WHERE, new ParameterInfo(PARAM_WHERE, ParameterType.SQL, false));
     }
-    
+
     public String buildQueryDefinition(Map<String, Object> parameterValues,
-            Map<Object, Object> tempValues, Map<String, Attribute> attributes) {
+                                       Map<Object, Object> tempValues, Map<String, Attribute> attributes) {
         final DbTable table = tempValues.containsKey(parameterValues.get(PARAM_TABLE_NAME)) ?
                 (DbTable) tempValues.get(parameterValues.get(PARAM_TABLE_NAME)) :
                 (DbTable) parameterValues.get(PARAM_TABLE_NAME);
         final String select = (String) parameterValues.get(PARAM_SELECT);
         final String where = (String) parameterValues.get(PARAM_WHERE);
         StringBuilder sb = new StringBuilder("SELECT ").
-            append(select).append(" FROM ").append(table.getTableName());
+                append(select).append(" FROM ").append(table.getTableName());
         if (where != null) {
             sb.append(" WHERE ").append(where);
         }

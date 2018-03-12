@@ -56,7 +56,7 @@ public class GetCoverageXmlParserTest extends WCSTestSupport {
 
         try {
             @SuppressWarnings("unused")
-			GetCoverageType cov = (GetCoverageType) reader.read(null, new StringReader(request),null);
+            GetCoverageType cov = (GetCoverageType) reader.read(null, new StringReader(request), null);
             fail("This request is not valid!!!");
         } catch (WcsException e) {
             // ok, we do expect a validation exception in fact
@@ -117,7 +117,7 @@ public class GetCoverageXmlParserTest extends WCSTestSupport {
         assertEquals("nurc:Pk50095", gc.getSourceCoverage());
 
         GeneralEnvelope envelope = ((GeneralEnvelope) gc.getDomainSubset().getSpatialSubset().getEnvelope().get(0));
-        assertEquals("EPSG:32633", CRS.lookupIdentifier(envelope.getCoordinateReferenceSystem(),true));
+        assertEquals("EPSG:32633", CRS.lookupIdentifier(envelope.getCoordinateReferenceSystem(), true));
         assertEquals(347649.93086859107, envelope.getLowerCorner().getOrdinate(0), 0);
         assertEquals(5176214.082539256, envelope.getLowerCorner().getOrdinate(1), 0);
         assertEquals(370725.976428591, envelope.getUpperCorner().getOrdinate(0), 0);

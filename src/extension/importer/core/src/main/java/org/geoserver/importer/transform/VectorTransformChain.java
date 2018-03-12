@@ -16,7 +16,7 @@ import org.opengis.feature.simple.SimpleFeatureType;
 
 /**
  * Transform chain for vectors.
- * 
+ *
  * @author Justin Deoliveira, OpenGeo
  */
 public class VectorTransformChain extends TransformChain<VectorTransform> {
@@ -31,10 +31,10 @@ public class VectorTransformChain extends TransformChain<VectorTransform> {
     public VectorTransformChain(VectorTransform... transforms) {
         super(transforms);
     }
-    
-    public SimpleFeatureType inline(ImportTask task, DataStore dataStore, SimpleFeatureType featureType) 
-        throws Exception {
-        
+
+    public SimpleFeatureType inline(ImportTask task, DataStore dataStore, SimpleFeatureType featureType)
+            throws Exception {
+
         for (InlineVectorTransform tx : filter(transforms, InlineVectorTransform.class)) {
             try {
                 tx.init();
@@ -43,13 +43,13 @@ public class VectorTransformChain extends TransformChain<VectorTransform> {
                 error(tx, e);
             }
         }
-        
+
         return featureType;
     }
 
-    public SimpleFeature inline(ImportTask task, DataStore dataStore, SimpleFeature oldFeature, 
-        SimpleFeature feature) throws Exception {
-        
+    public SimpleFeature inline(ImportTask task, DataStore dataStore, SimpleFeature oldFeature,
+                                SimpleFeature feature) throws Exception {
+
         for (InlineVectorTransform tx : filter(transforms, InlineVectorTransform.class)) {
             try {
                 feature = tx.apply(task, dataStore, oldFeature, feature);
@@ -60,13 +60,9 @@ public class VectorTransformChain extends TransformChain<VectorTransform> {
                 error(tx, e);
             }
         }
-        
+
         return feature;
     }
-
-
-
-
 
 
 }

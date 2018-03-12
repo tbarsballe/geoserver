@@ -34,7 +34,6 @@ import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.geom.Polygon;
 
 /**
- * 
  * @author Gabriel Roldan
  * @version $Id$
  */
@@ -210,7 +209,7 @@ class SVGWriter extends OutputStreamWriter {
     }
 
     public void writeFeatures(SimpleFeatureType featureType, SimpleFeatureIterator reader,
-            String style) throws IOException {
+                              String style) throws IOException {
         SimpleFeature ft;
 
         try {
@@ -333,7 +332,6 @@ class SVGWriter extends OutputStreamWriter {
 
         /**
          * Creates a new CollectSVGHandler object.
-         * 
          */
         public CollectSVGHandler(SVGFeatureWriter featureWriter) {
             this.featureWriter = featureWriter;
@@ -440,14 +438,11 @@ class SVGWriter extends OutputStreamWriter {
         /**
          * Parses the passed string, and encodes the special characters (used in xml for special
          * purposes) with the appropriate codes. e.g. '&lt;' is changed to '&amp;lt;'
-         * 
-         * @param inData
-         *            The string to encode into xml.
-         * 
-         * 
+         *
+         * @param inData The string to encode into xml.
          * @task REVISIT: Once we write directly to out, as we should, this method should be
-         *       simpler, as we can just write strings with escapes directly to out, replacing as we
-         *       iterate of chars to write them.
+         * simpler, as we can just write strings with escapes directly to out, replacing as we
+         * iterate of chars to write them.
          */
         private void encodeAttribute(String inData) throws IOException {
             // return null, if null is passed as argument
@@ -511,7 +506,7 @@ class SVGWriter extends OutputStreamWriter {
 
         /**
          * Writes the content of the <b>d</b> attribute in a <i>path</i> SVG element
-         * 
+         * <p>
          * <p>
          * While iterating over the coordinate array passed as parameter, this method performs a
          * kind of very basic path generalization, verifying that the distance between the current
@@ -519,9 +514,8 @@ class SVGWriter extends OutputStreamWriter {
          * field <code>minCoordDistance</code> and established by the method
          * {@link #setReferenceSpace(Envelope, float) setReferenceSpace(Envelope, blurFactor)}
          * </p>
-         * 
+         *
          * @param coords
-         * 
          * @throws IOException
          */
         protected void writePathContent(Coordinate[] coords) throws IOException {
@@ -581,7 +575,6 @@ class SVGWriter extends OutputStreamWriter {
         /**
          * overrides writeBounds for points to do nothing. You can get the position of the point
          * with the x and y attributes of the "use" SVG element written to represent each point
-         * 
          */
         protected void writeBounds(Envelope env) throws IOException {
         }
@@ -645,9 +638,8 @@ class SVGWriter extends OutputStreamWriter {
     /**
      * Writer to handle feature types which contain a Geometry attribute that is actually of the
      * class Geometry. This can occur in heterogeneous data sets.
-     * 
+     *
      * @author Justin Deoliveira, jdeolive@openplans.org
-     * 
      */
     private class GeometryWriter extends SVGFeatureWriter {
         SVGFeatureWriter delegate;

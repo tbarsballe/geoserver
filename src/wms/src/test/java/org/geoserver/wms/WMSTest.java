@@ -33,20 +33,19 @@ import java.util.*;
 import static org.junit.Assert.*;
 
 /**
- *
  * @author Ian Schneider <ischneider@opengeo.org>
  */
 public class WMSTest extends WMSTestSupport {
-    
+
     static final QName TIME_WITH_START_END = new QName(MockData.SF_URI, "TimeWithStartEnd", MockData.SF_PREFIX);
     WMS wms;
-    
-    
+
+
     @Override
     protected void onSetUp(SystemTestData testData) throws Exception {
         super.onSetUp(testData);
-        testData.addVectorLayer(TIME_WITH_START_END,Collections.EMPTY_MAP,"TimeElevationWithStartEnd.properties",
-                getClass(),getCatalog());
+        testData.addVectorLayer(TIME_WITH_START_END, Collections.EMPTY_MAP, "TimeElevationWithStartEnd.properties",
+                getClass(), getCatalog());
     }
 
     protected void setupStartEndTimeDimension(String featureTypeName, String dimension, String start, String end) {
@@ -61,12 +60,13 @@ public class WMSTest extends WMSTestSupport {
     }
 
     @Before
-    public  void setWMS() throws Exception {
+    public void setWMS() throws Exception {
         wms = new WMS(getGeoServer());
     }
+
     @Test
     public void testGetTimeElevationToFilterStartEndDate() throws Exception {
-        
+
         setupStartEndTimeDimension(TIME_WITH_START_END.getLocalPart(), "time", "startTime", "endTime");
         setupStartEndTimeDimension(TIME_WITH_START_END.getLocalPart(), "elevation", "startElevation", "endElevation");
         
@@ -75,82 +75,82 @@ public class WMSTest extends WMSTestSupport {
         TimeElevation.1=1|2012-02-12|2012-02-13|2|3
         TimeElevation.2=2|2012-02-11|2012-02-14|1|3
          */
-        
-        doTimeElevationFilter( Date.valueOf("2012-02-10"), null);
-        doTimeElevationFilter( Date.valueOf("2012-02-11"), null, 0, 2);
-        doTimeElevationFilter( Date.valueOf("2012-02-12"), null, 0, 1, 2);
-        doTimeElevationFilter( Date.valueOf("2012-02-13"), null, 1, 2);
-        doTimeElevationFilter( Date.valueOf("2012-02-15"), null);
-       
+
+        doTimeElevationFilter(Date.valueOf("2012-02-10"), null);
+        doTimeElevationFilter(Date.valueOf("2012-02-11"), null, 0, 2);
+        doTimeElevationFilter(Date.valueOf("2012-02-12"), null, 0, 1, 2);
+        doTimeElevationFilter(Date.valueOf("2012-02-13"), null, 1, 2);
+        doTimeElevationFilter(Date.valueOf("2012-02-15"), null);
+
         //Test start and end before all ranges.
-        doTimeElevationFilter( 
+        doTimeElevationFilter(
                 new DateRange(Date.valueOf("2012-02-09"), Date.valueOf("2012-02-10")), null
         );
         //Test start before and end during a range.
-        doTimeElevationFilter( 
+        doTimeElevationFilter(
                 new DateRange(Date.valueOf("2012-02-09"), Date.valueOf("2012-02-11")), null,
                 0, 2
         );
         //Test start on and end after or during a range.
-        doTimeElevationFilter( 
+        doTimeElevationFilter(
                 new DateRange(Date.valueOf("2012-02-11"), Date.valueOf("2012-02-13")), null,
                 0, 1, 2
         );
         //Test start before and end after all ranges.
-        doTimeElevationFilter( 
+        doTimeElevationFilter(
                 new DateRange(Date.valueOf("2012-02-09"), Date.valueOf("2012-02-14")), null,
                 0, 1, 2
         );
-       	//Test start during and end after a range.
-        doTimeElevationFilter( 
+        //Test start during and end after a range.
+        doTimeElevationFilter(
                 new DateRange(Date.valueOf("2012-02-13"), Date.valueOf("2012-02-14")), null,
-                1,2
+                1, 2
         );
         //Test start during and end during a range.
         doTimeElevationFilter(
                 new DateRange(Date.valueOf("2012-02-12"), Date.valueOf("2012-02-13")), null,
-                0,1,2
+                0, 1, 2
         );
         //Test start and end after all ranges.
-        doTimeElevationFilter( 
+        doTimeElevationFilter(
                 new DateRange(Date.valueOf("2012-02-15"), Date.valueOf("2012-02-16")), null
         );
-        
-        doTimeElevationFilter( null, 0);
-        doTimeElevationFilter( null, 1, 0 , 2);
-        doTimeElevationFilter( null, 2, 0 , 1, 2);
-        doTimeElevationFilter( null, 3, 1 , 2);
-        doTimeElevationFilter( null, 4);
-        
-        doTimeElevationFilter( null, new NumberRange(Integer.class,-1,0));
-        doTimeElevationFilter( null, new NumberRange(Integer.class,-1,1),0,2);
-        doTimeElevationFilter( null, new NumberRange(Integer.class,1,3),0,1,2);
-        doTimeElevationFilter( null, new NumberRange(Integer.class,-1,4),0,1,2);
-        doTimeElevationFilter( null, new NumberRange(Integer.class,3,4),1,2);
-        doTimeElevationFilter( null, new NumberRange(Integer.class,4,5));
-        
+
+        doTimeElevationFilter(null, 0);
+        doTimeElevationFilter(null, 1, 0, 2);
+        doTimeElevationFilter(null, 2, 0, 1, 2);
+        doTimeElevationFilter(null, 3, 1, 2);
+        doTimeElevationFilter(null, 4);
+
+        doTimeElevationFilter(null, new NumberRange(Integer.class, -1, 0));
+        doTimeElevationFilter(null, new NumberRange(Integer.class, -1, 1), 0, 2);
+        doTimeElevationFilter(null, new NumberRange(Integer.class, 1, 3), 0, 1, 2);
+        doTimeElevationFilter(null, new NumberRange(Integer.class, -1, 4), 0, 1, 2);
+        doTimeElevationFilter(null, new NumberRange(Integer.class, 3, 4), 1, 2);
+        doTimeElevationFilter(null, new NumberRange(Integer.class, 4, 5));
+
         // combined date/elevation - this should be an 'and' filter
-        doTimeElevationFilter( Date.valueOf("2012-02-12"), 2, 0, 1, 2);
+        doTimeElevationFilter(Date.valueOf("2012-02-12"), 2, 0, 1, 2);
         // disjunct verification
-        doTimeElevationFilter( Date.valueOf("2012-02-11"), 3, 2);
+        doTimeElevationFilter(Date.valueOf("2012-02-11"), 3, 2);
     }
-    
-    public void doTimeElevationFilter( Object time, Object elevation, Integer... expectedIds) throws Exception {
-        
+
+    public void doTimeElevationFilter(Object time, Object elevation, Integer... expectedIds) throws Exception {
+
         FeatureTypeInfo timeWithStartEnd = getCatalog().getFeatureTypeByName(TIME_WITH_START_END.getLocalPart());
         FeatureSource fs = timeWithStartEnd.getFeatureSource(null, null);
-        
+
         List times = time == null ? null : Arrays.asList(time);
         List elevations = elevation == null ? null : Arrays.asList(elevation);
-                
+
         Filter filter = wms.getTimeElevationToFilter(times, elevations, timeWithStartEnd);
         FeatureCollection features = fs.getFeatures(filter);
-        
+
         Set<Integer> results = new HashSet<Integer>();
         FeatureIterator it = features.features();
         try {
             while (it.hasNext()) {
-                results.add( (Integer) it.next().getProperty("id").getValue());
+                results.add((Integer) it.next().getProperty("id").getValue());
             }
         } finally {
             it.close();
@@ -181,5 +181,5 @@ public class WMSTest extends WMSTestSupport {
         getGeoServer().reload();
         assertEquals(0, imageCache.size());
     }
-    
+
 }

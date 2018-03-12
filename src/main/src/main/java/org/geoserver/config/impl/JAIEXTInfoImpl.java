@@ -22,12 +22,12 @@ public class JAIEXTInfoImpl implements JAIEXTInfo {
     public static final Set<String> JAI_OPS = new TreeSet<String>();
 
     private Set<String> jaiOperations = JAI_OPS;
-    
+
     /**
      * Available JAIEXT operations
      */
     public static final TreeSet<String> JAIEXT_OPS = new TreeSet<String>();
-    
+
     private Set<String> jaiExtOperations = JAIEXT_OPS;
 
     static {
@@ -49,7 +49,7 @@ public class JAIEXTInfoImpl implements JAIEXTInfo {
 
     @Override
     public Set<String> getJAIOperations() {
-        if(jaiOperations == null ){
+        if (jaiOperations == null) {
             jaiOperations = JAI_OPS;
         }
         return jaiOperations;
@@ -62,7 +62,7 @@ public class JAIEXTInfoImpl implements JAIEXTInfo {
 
     @Override
     public Set<String> getJAIEXTOperations() {
-        if(jaiExtOperations == null){
+        if (jaiExtOperations == null) {
             jaiExtOperations = JAIEXT_OPS;
         }
         return jaiExtOperations;

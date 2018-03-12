@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * A simple streaming gzipping servlet output stream wrapper
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class GZIPResponseStream extends ServletOutputStream {

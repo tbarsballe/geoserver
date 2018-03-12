@@ -18,34 +18,38 @@ import org.vfny.geoserver.global.ConfigurationException;
 
 /**
  * WriterUtils purpose.
- *
+ * <p>
  * <p>
  * Used to provide assitance writing xml to a Writer.
  * </p>
- *
+ * <p>
  * <p></p>
  *
  * @author dzwiers, Refractions Research, Inc.
  * @version $Id$
  */
 public class WriterHelper {
-    /** Used internally to create log information to detect errors. */
-    private static final Logger LOGGER = org.geotools.util.logging.Logging.getLogger("org.vfny.geoserver.global");
-    
     /**
-     * Will find out if a string contains chars that need to be turned into an xml entity, even if 
+     * Used internally to create log information to detect errors.
+     */
+    private static final Logger LOGGER = org.geotools.util.logging.Logging.getLogger("org.vfny.geoserver.global");
+
+    /**
+     * Will find out if a string contains chars that need to be turned into an xml entity, even if
      * the string has lineends inside of it (thus the DOTALL flag)
      */
     private static final Pattern XML_ENTITIES = Pattern.compile(".*[\"&'<>]+.*", Pattern.DOTALL);
 
-    /** The output writer. */
+    /**
+     * The output writer.
+     */
     protected Writer writer;
     protected int indent;
     protected StringBuffer indentBuffer = new StringBuffer();
 
     /**
      * WriterUtils constructor.
-     *
+     * <p>
      * <p>
      * Should never be called.
      * </p>
@@ -55,7 +59,7 @@ public class WriterHelper {
 
     /**
      * WriterUtils constructor.
-     *
+     * <p>
      * <p>
      * Stores the specified writer to use for output.
      * </p>
@@ -68,13 +72,12 @@ public class WriterHelper {
 
     /**
      * writeln purpose.
-     *
+     * <p>
      * <p>
      * Writes the String specified to the stored output writer.
      * </p>
      *
      * @param s The String to write.
-     *
      * @throws ConfigurationException When an IO exception occurs.
      */
     public void writeln(String s) throws ConfigurationException {
@@ -100,14 +103,13 @@ public class WriterHelper {
 
     /**
      * openTag purpose.
-     *
+     * <p>
      * <p>
      * Writes an open xml tag with the name specified to the stored output
      * writer.
      * </p>
      *
      * @param tagName The tag name to write.
-     *
      * @throws ConfigurationException When an IO exception occurs.
      */
     public void openTag(String tagName) throws ConfigurationException {
@@ -116,19 +118,18 @@ public class WriterHelper {
 
     /**
      * openTag purpose.
-     *
+     * <p>
      * <p>
      * Writes an open xml tag with the name and attributes specified to the
      * stored output writer.
      * </p>
      *
-     * @param tagName The tag name to write.
+     * @param tagName    The tag name to write.
      * @param attributes The tag attributes to write.
-     *
      * @throws ConfigurationException When an IO exception occurs.
      */
     public void openTag(String tagName, Map attributes)
-        throws ConfigurationException {
+            throws ConfigurationException {
         StringBuffer sb = new StringBuffer();
         sb.append("<" + tagName + " ");
 
@@ -149,14 +150,13 @@ public class WriterHelper {
 
     /**
      * closeTag purpose.
-     *
+     * <p>
      * <p>
      * Writes an close xml tag with the name specified to the stored output
      * writer.
      * </p>
      *
      * @param tagName The tag name to write.
-     *
      * @throws ConfigurationException When an IO exception occurs.
      */
     public void closeTag(String tagName) throws ConfigurationException {
@@ -166,37 +166,35 @@ public class WriterHelper {
 
     /**
      * valueTag purpose.
-     *
+     * <p>
      * <p>
      * Writes an xml tag with the name and value specified to the stored output
      * writer.
      * </p>
      *
      * @param tagName The tag name to write.
-     * @param value The text data to write.
-     *
+     * @param value   The text data to write.
      * @throws ConfigurationException When an IO exception occurs.
      */
     public void valueTag(String tagName, String value)
-        throws ConfigurationException {
+            throws ConfigurationException {
         writeln("<" + tagName + " value = \"" + escape(value) + "\" />");
     }
 
     /**
      * attrTag purpose.
-     *
+     * <p>
      * <p>
      * Writes an xml tag with the name and attributes specified to the stored
      * output writer.
      * </p>
      *
-     * @param tagName The tag name to write.
+     * @param tagName    The tag name to write.
      * @param attributes The tag attributes to write.
-     *
      * @throws ConfigurationException When an IO exception occurs.
      */
     public void attrTag(String tagName, Map attributes)
-        throws ConfigurationException {
+            throws ConfigurationException {
         StringBuffer sb = new StringBuffer();
         sb.append("<" + tagName + " ");
 
@@ -216,15 +214,14 @@ public class WriterHelper {
 
     /**
      * textTag purpose.
-     *
+     * <p>
      * <p>
      * Writes a text xml tag with the name and text specified to the stored
      * output writer.
      * </p>
      *
      * @param tagName The tag name to write.
-     * @param data The text data to write.
-     *
+     * @param data    The text data to write.
      * @throws ConfigurationException When an IO exception occurs.
      */
     public void textTag(String tagName, String data) throws ConfigurationException {
@@ -233,20 +230,19 @@ public class WriterHelper {
 
     /**
      * textTag purpose.
-     *
+     * <p>
      * <p>
      * Writes an xml tag with the name, text and attributes specified to the
      * stored output writer.
      * </p>
      *
-     * @param tagName The tag name to write.
+     * @param tagName    The tag name to write.
      * @param attributes The tag attributes to write.
-     * @param data The tag text to write.
-     *
+     * @param data       The tag text to write.
      * @throws ConfigurationException When an IO exception occurs.
      */
     public void textTag(String tagName, Map attributes, String data)
-        throws ConfigurationException {
+            throws ConfigurationException {
         StringBuffer sb = new StringBuffer();
         sb.append("<" + tagName + ((attributes.size() > 0) ? " " : ""));
 
@@ -261,7 +257,7 @@ public class WriterHelper {
         }
 
         String escapedData = "";
-        if(data  != null)
+        if (data != null)
             escapedData = escape(data);
         sb.append(">" + escapedData + "</" + tagName + ">");
         writeln(sb.toString());
@@ -269,14 +265,13 @@ public class WriterHelper {
 
     /**
      * comment purpose.
-     *
+     * <p>
      * <p>
      * Writes an xml comment with the text specified to the stored output
      * writer.
      * </p>
      *
      * @param comment The comment text to write.
-     *
      * @throws ConfigurationException When an IO exception occurs.
      */
     public void comment(String comment) throws ConfigurationException {
@@ -290,26 +285,26 @@ public class WriterHelper {
         decreaseIndent();
         writeln("-->");
     }
-    
+
     /**
-     * Escapes the provided text with XML entities, 
+     * Escapes the provided text with XML entities,
      * see (http://en.wikipedia.org/wiki/List_of_XML_and_HTML_character_entity_references#Character_entities_in_XML)
-     * @param text
      *
+     * @param text
      */
     private String escape(String text) {
         String s = new String(text);
-    	
+
         // All redundant carriage returns should already have been stripped.
         s = s.replaceAll("\r\n", "\n");
-    	
-        if(XML_ENTITIES.matcher(s).matches()) {
+
+        if (XML_ENTITIES.matcher(s).matches()) {
             s = s.replaceAll("&", "&amp;");
-			s = s.replaceAll("\"", "&quot;");
-			s = s.replaceAll("'", "&apos;");
-			s = s.replaceAll("<", "&lt;");
-			s = s.replaceAll(">", "&gt;");
-		}
-    	return s;
+            s = s.replaceAll("\"", "&quot;");
+            s = s.replaceAll("'", "&apos;");
+            s = s.replaceAll("<", "&lt;");
+            s = s.replaceAll(">", "&gt;");
+        }
+        return s;
     }
 }

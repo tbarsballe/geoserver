@@ -24,11 +24,10 @@ import org.springframework.batch.core.launch.NoSuchJobExecutionException;
 
 /**
  * Implements a Spring Batch {@link JobExecutionListener}.
- * 
+ * <p>
  * It's used to perform operations accordingly to the {@link Backup} batch {@link JobExecution} status.
- * 
- * @author Alessio Fabiani, GeoSolutions
  *
+ * @author Alessio Fabiani, GeoSolutions
  */
 public class BackupJobExecutionListener implements JobExecutionListener {
 
@@ -113,7 +112,7 @@ public class BackupJobExecutionListener implements JobExecutionListener {
                     JobParameters jobParameters = backupExecution.getJobParameters();
                     Resource sourceFolder = Resources
                             .fromURL(jobParameters.getString(Backup.PARAM_OUTPUT_FILE_PATH));
-                    
+
                     // Cleanup Temporary Resources
                     String cleanUpTempFolders = jobParameters.getString(Backup.PARAM_CLEANUP_TEMP);
                     if (cleanUpTempFolders != null && Boolean.parseBoolean(cleanUpTempFolders) && sourceFolder != null) {

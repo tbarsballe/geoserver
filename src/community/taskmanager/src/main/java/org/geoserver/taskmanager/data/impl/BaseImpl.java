@@ -7,7 +7,7 @@ package org.geoserver.taskmanager.data.impl;
 import org.geoserver.taskmanager.data.Identifiable;
 
 public abstract class BaseImpl implements Identifiable {
-    
+
     @Override
     public boolean equals(Object o) {
         if (getId() == null) {
@@ -17,7 +17,7 @@ public abstract class BaseImpl implements Identifiable {
                     getId().equals(((Identifiable) o).getId());
         }
     }
-    
+
     @Override
     public int hashCode() {
         if (getId() == null) {

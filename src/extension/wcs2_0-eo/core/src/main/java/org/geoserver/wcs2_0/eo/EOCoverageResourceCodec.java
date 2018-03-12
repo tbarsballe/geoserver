@@ -26,17 +26,16 @@ import org.opengis.filter.FilterFactory;
 
 /**
  * Utility class that maps the coverage data sets and child coverage names
- * 
+ *
  * @author Andrea Aime - GeoSolutions
- * 
  */
 public class EOCoverageResourceCodec {
     private static Logger LOGGER = Logging.getLogger(EOCoverageResourceCodec.class);
-    
+
     private static FilterFactory FF = CommonFactoryFinder.getFilterFactory2();
 
     private static final String DATASET_SUFFIX = "_dss";
-    
+
     private static final String GRANULE_SEPARATOR = "_granule_";
 
     private Catalog catalog;
@@ -57,9 +56,8 @@ public class EOCoverageResourceCodec {
     /**
      * Checks if the specified coverage is a valid dataset, e.g., it has the dataset flag enabled
      * and time dimension, and has a structured grid coverage reader backing it
-     * 
-     * @param ci
      *
+     * @param ci
      */
     public boolean isValidDataset(CoverageInfo ci) {
         Boolean dataset = ci.getMetadata().get(WCSEOMetadata.DATASET.key, Boolean.class);
@@ -76,7 +74,7 @@ public class EOCoverageResourceCodec {
 
     /**
      * Returns the coverage backed by the provided datasetId
-     * 
+     *
      * @param datasetId
      * @return the coverage, or null if not found, or if not a coverage
      */
@@ -104,7 +102,6 @@ public class EOCoverageResourceCodec {
 
     /**
      * Builds the identifier for a granule inside a coverage
-     *
      */
     public String getGranuleId(CoverageInfo coverage, String featureId) {
         return NCNameResourceCodec.encode(coverage) + GRANULE_SEPARATOR + featureId;
@@ -116,23 +113,23 @@ public class EOCoverageResourceCodec {
      */
     public CoverageInfo getGranuleCoverage(String granuleId) {
         // does it have the expected lexical structure?
-        if(!granuleId.contains(GRANULE_SEPARATOR)) {
+        if (!granuleId.contains(GRANULE_SEPARATOR)) {
             return null;
         }
         String[] splitted = granuleId.split(GRANULE_SEPARATOR);
-        if(splitted.length != 2) {
+        if (splitted.length != 2) {
             return null;
         }
-        
+
         // do we have the coverage?
         LayerInfo li = NCNameResourceCodec.getCoverage(catalog, splitted[0]);
-        if(li == null) {
+        if (li == null) {
             return null;
         }
-        
+
         // is it a EO dataset?
         CoverageInfo ci = (CoverageInfo) li.getResource();
-        if(isValidDataset(ci)) {
+        if (isValidDataset(ci)) {
             return ci;
         } else {
             return null;
@@ -141,19 +138,19 @@ public class EOCoverageResourceCodec {
 
     /**
      * Given a valid granule id returns a Filter to extract it from the structured grid coverage reader
-     * @param coverageId
      *
+     * @param coverageId
      */
     public Filter getGranuleFilter(String granuleId) {
         // does it have the expected lexical structure?
-        if(!granuleId.contains(GRANULE_SEPARATOR)) {
+        if (!granuleId.contains(GRANULE_SEPARATOR)) {
             throw new IllegalArgumentException("Not a valid granule id: " + granuleId);
         }
         String[] splitted = granuleId.split(GRANULE_SEPARATOR);
-        if(splitted.length != 2) {
+        if (splitted.length != 2) {
             throw new IllegalArgumentException("Not a valid granule id: " + granuleId);
         }
-        
+
         return FF.id(Collections.singleton(FF.featureId(splitted[1])));
     }
 

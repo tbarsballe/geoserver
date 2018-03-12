@@ -24,9 +24,8 @@ import org.opengis.filter.identity.FeatureId;
  * Interfaces to a storage for CSW record objects. By default it has to provide support for CSW
  * Dublin Core records (in their {@link CSWRecordDescriptor#RECORD_TYPE} form, but can publish more
  * feature types as well (e.g., ISO or ebRIM records)
- * 
+ *
  * @author Andrea Aime - GeoSolutions
- * 
  */
 public interface CatalogStore {
 
@@ -44,25 +43,23 @@ public interface CatalogStore {
     /**
      * Returns the number of records that {@link #getRecords(Query, Transaction, String)} would return given
      * the same query and transaction
-     * 
+     *
      * @param q
      * @param t
-     *
      * @throws IOException
      */
     int getRecordsCount(Query q, Transaction t) throws IOException;
 
     /**
      * Returns the domain of an attribute in the specified record type.
-     * 
-     * @param typeName The record type
+     *
+     * @param typeName      The record type
      * @param attributeName The attribute
      * @return An iteration of possible values, or null if domain extraction for this attribute is
-     *         not supported
-     * 
+     * not supported
      * @throws IOException
      * @see {@link CatalogStoreCapabilities#getDomainQueriables(Name)} to get a list of the properties
-     *      which the store supports the domain extraction from
+     * which the store supports the domain extraction from
      */
     CloseableIterator<String> getDomain(Name typeName, Name attributeName) throws IOException;
 
@@ -70,10 +67,9 @@ public interface CatalogStore {
      * Adds a new record to the store. This method might not be supported, see
      * {@link CatalogStoreCapabilities#supportsTransactions()} to check if the store supports
      * transactions
-     * 
+     *
      * @param f
      * @param t
-     *
      * @throws IOException
      */
     List<FeatureId> addRecord(Feature f, Transaction t) throws IOException;
@@ -82,7 +78,7 @@ public interface CatalogStore {
      * Removes records from the store. This method might not be supported, see
      * {@link CatalogStoreCapabilities#supportsTransactions()} to check if the store supports
      * transactions
-     * 
+     *
      * @param f
      * @param t
      * @throws IOException
@@ -93,7 +89,7 @@ public interface CatalogStore {
      * Updates records in the store. This method might not be supported, see
      * {@link CatalogStoreCapabilities#supportsTransactions()} to check if the store supports
      * transactions
-     * 
+     *
      * @param typeName
      * @param attributeNames
      * @param attributeValues
@@ -102,29 +98,25 @@ public interface CatalogStore {
      * @throws IOException
      */
     void updateRecord(Name typeName, Name[] attributeNames, Object[] attributeValues,
-            Filter filter, Transaction t) throws IOException;
-    
+                      Filter filter, Transaction t) throws IOException;
+
     /**
      * Returns the repository item for the specified record id, or null
-     * if the repository item is not found, or the operation is not supported 
-     * 
-     * @param recordId
+     * if the repository item is not found, or the operation is not supported
      *
+     * @param recordId
      */
     RepositoryItem getRepositoryItem(String recordId) throws IOException;
 
     /**
      * Returns the store capabilities
-     * 
-     *
      */
     CatalogStoreCapabilities getCapabilities();
-    
-    
+
+
     /**
      * Maps a qualified name to it's equivalent property name for the backend store.
-     *
      */
-    PropertyName translateProperty(RecordDescriptor rd, Name name) ;
+    PropertyName translateProperty(RecordDescriptor rd, Name name);
 
 }

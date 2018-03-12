@@ -12,7 +12,7 @@ import org.geotools.data.ows.HTTPClient;
 
 /**
  * Provides mock HTTP clients bound to the {@link #MOCKSERVER} address, to be used for testing.
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class TestHttpClientProvider {
@@ -25,17 +25,17 @@ public class TestHttpClientProvider {
 
     /**
      * Binds the specified http client to the specified path
-     * 
+     *
      * @param client
      * @param path
      */
     public static void bind(HTTPClient client, URL url) {
         bind(client, url.toExternalForm());
     }
-    
+
     /**
      * Binds the specified http client to the specified path
-     * 
+     *
      * @param client
      * @param path
      */
@@ -51,7 +51,7 @@ public class TestHttpClientProvider {
             throw new IllegalArgumentException("The url " + url + " does not start with "
                     + MOCKSERVER);
         }
-        if(!TEST_MODE) {
+        if (!TEST_MODE) {
             throw new IllegalArgumentException("The provider is not in test mode now");
         }
         HTTPClient httpClient = CLIENTS.get(url);

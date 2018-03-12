@@ -74,19 +74,19 @@ import freemarker.template.TemplateSequenceModel;
  * </ul>
  * Example of a template processing a feature collection which will print out
  * the features id of every feature in the collection.
- * 
+ * <p>
  * <pre><code>
  *  &lt;#list features as feature&gt;
  *  FeatureId: ${feature.fid}
  *  &lt;/#list&gt;
  * </code></pre>
- * 
+ * <p>
  * </p>
  * <p>
  * To use this wrapper,use the
  * {@link Configuration#setObjectWrapper(freemarker.template.ObjectWrapper)}
  * method:
- * 
+ * <p>
  * <pre>
  *         <code>
  *  //features we want to apply template to
@@ -99,17 +99,17 @@ import freemarker.template.TemplateSequenceModel;
  *  template.process( features, System.out );
  * </code>
  * </pre>
- * 
+ * <p>
  * </p>
  * </p>
- * 
+ *
  * @author Justin Deoliveira, The Open Planning Project, jdeolive@openplans.org
  * @author Andrea Aime, TOPP
  * @author Gabriel Roldan, TOPP
  */
 public class FeatureWrapper extends BeansWrapper {
     static Catalog gsCatalog;
-    
+
     /**
      * factory to create CollectionTemplateModel from FeatureCollection
      */
@@ -119,22 +119,22 @@ public class FeatureWrapper extends BeansWrapper {
         setSimpleMapWrapper(true);
         this.templateFeatureCollectionFactory = copyTemplateFeatureCollectionFactory;
     }
-    
+
     public FeatureWrapper(TemplateFeatureCollectionFactory templateFeatureCollectionFactory) {
         setSimpleMapWrapper(true);
         this.templateFeatureCollectionFactory = templateFeatureCollectionFactory;
     }
 
     private Catalog getCatalog() {
-        if (gsCatalog != null) 
+        if (gsCatalog != null)
             return gsCatalog;
 
         try {
-            return (gsCatalog = (Catalog)GeoServerExtensions.bean("catalog2"));
-        } catch (NoSuchBeanDefinitionException e){
+            return (gsCatalog = (Catalog) GeoServerExtensions.bean("catalog2"));
+        } catch (NoSuchBeanDefinitionException e) {
             try {
-                return (gsCatalog = (Catalog)GeoServerExtensions.bean("catalog"));
-            } catch (NoSuchBeanDefinitionException e2){
+                return (gsCatalog = (Catalog) GeoServerExtensions.bean("catalog"));
+            } catch (NoSuchBeanDefinitionException e2) {
                 return null;
             }
         }
@@ -152,9 +152,8 @@ public class FeatureWrapper extends BeansWrapper {
      * <li>for any other value returns its toString()</li>
      * </ul>
      * </p>
-     * 
-     * @param o
-     *            could be an instance of Date (a special case)
+     *
+     * @param o could be an instance of Date (a special case)
      * @return the formated date as a String, or the object
      */
     protected String wrapValue(Object o) {
@@ -173,10 +172,9 @@ public class FeatureWrapper extends BeansWrapper {
      * <li>for any other value returns its toString()</li>
      * </ul>
      * </p>
-     * 
-     * @param o
-     *            the object for which to return a String representation
-     *            suitable to be used as template content
+     *
+     * @param o the object for which to return a String representation
+     *          suitable to be used as template content
      * @return the formated date as a String, or the object
      */
     private static String valueToString(Object o) {
@@ -185,11 +183,11 @@ public class FeatureWrapper extends BeansWrapper {
             return "";
         }
         if (o instanceof Date) {
-            if ( o instanceof Timestamp ) {
-                return DateFormat.getDateTimeInstance().format((Date)o);
+            if (o instanceof Timestamp) {
+                return DateFormat.getDateTimeInstance().format((Date) o);
             }
-            if ( o instanceof Time ) {
-                return DateFormat.getTimeInstance().format((Date)o);
+            if (o instanceof Time) {
+                return DateFormat.getTimeInstance().format((Date) o);
             }
             return DateFormat.getInstance().format((Date) o);
         }
@@ -201,7 +199,7 @@ public class FeatureWrapper extends BeansWrapper {
         }
         return String.valueOf(o);
     }
-    
+
     public String getPrefix(Name name) {
         Catalog cat = getCatalog();
         if (cat == null) {
@@ -209,13 +207,13 @@ public class FeatureWrapper extends BeansWrapper {
         }
         if (name.getNamespaceURI() == null) {
             return "";
-        }            
-        NamespaceInfo ni = cat.getNamespaceByURI(name.getNamespaceURI());        
-        return ni==null? "" : ni.getPrefix();
+        }
+        NamespaceInfo ni = cat.getNamespaceByURI(name.getNamespaceURI());
+        return ni == null ? "" : ni.getPrefix();
     }
-    
-    public String getNamespace(Name name) {             
-        return name.getNamespaceURI() == null? "" : name.getNamespaceURI() ;
+
+    public String getNamespace(Name name) {
+        return name.getNamespaceURI() == null ? "" : name.getNamespaceURI();
     }
 
     public TemplateModel wrap(Object object) throws TemplateModelException {
@@ -228,29 +226,29 @@ public class FeatureWrapper extends BeansWrapper {
 
             return map;
         } else if (object instanceof ComplexType) {
-            
-            return buildType ((ComplexType) object);
-            
-       } else if (object instanceof Feature) {
 
-            return buildComplex ((Feature) object);            
+            return buildType((ComplexType) object);
+
+        } else if (object instanceof Feature) {
+
+            return buildComplex((Feature) object);
         }
 
         return super.wrap(object);
     }
-    
+
     private SimpleHash buildType(ComplexType ft) {
         // create a variable "attributes" which his a list of all the
         // attributes, but at the same time, is a map keyed by name
         Map<String, Object> attributeMap = new LinkedHashMap<String, Object>();
         Collection<PropertyDescriptor> descriptors = ft.getDescriptors();
-        for (Iterator<PropertyDescriptor> it = descriptors.iterator(); it.hasNext();) {
+        for (Iterator<PropertyDescriptor> it = descriptors.iterator(); it.hasNext(); ) {
             PropertyDescriptor descr = it.next();
 
             Map<String, Object> attribute = new HashMap<String, Object>();
             attribute.put("name", descr.getName().getLocalPart());
-            attribute.put("namespace", getNamespace( descr.getName()));
-            attribute.put("prefix", getPrefix(descr.getName()) );
+            attribute.put("namespace", getNamespace(descr.getName()));
+            attribute.put("prefix", getPrefix(descr.getName()));
             attribute.put("type", descr.getType().getBinding().getName());
             attribute.put("isGeometry", Boolean.valueOf(Geometry.class.isAssignableFrom(descr.getType().getBinding())));
 
@@ -264,11 +262,11 @@ public class FeatureWrapper extends BeansWrapper {
         map.put("name", ft.getName().getLocalPart());
         map.put("namespace", getNamespace(ft.getName()));
         map.put("prefix", getPrefix(ft.getName()));
-        
+
         return map;
     }
-    
-    private SimpleHash buildComplex(ComplexAttribute att){
+
+    private SimpleHash buildComplex(ComplexAttribute att) {
         // create the model
         SimpleHash map = new SimpleHash();
 
@@ -280,22 +278,22 @@ public class FeatureWrapper extends BeansWrapper {
         Catalog cat = getCatalog();
 
         FeatureTypeInfo info = null;
-        if (cat != null){
+        if (cat != null) {
             info = cat.getResourceByName(
-                        att.getType().getName().getNamespaceURI(),
-                        att.getType().getName().getLocalPart(),
-                        FeatureTypeInfo.class
-                        );
+                    att.getType().getName().getNamespaceURI(),
+                    att.getType().getName().getLocalPart(),
+                    FeatureTypeInfo.class
+            );
 
-            if (info != null){
-               map.put("type", info);
-           }
+            if (info != null) {
+                map.put("type", info);
+            }
         }
 
-        if (info == null){
+        if (info == null) {
             map.put("type", buildDummyFeatureTypeInfo(att));
         }
-        
+
         // Add the metadata after setting the attributes so they aren't masked by feature attributes
         if (att.getIdentifier() != null) {
             map.put("fid", att.getIdentifier().getID());
@@ -303,7 +301,7 @@ public class FeatureWrapper extends BeansWrapper {
             map.put("fid", "");
         }
         map.put("typeName", att.getType().getName().getLocalPart());
-        
+
         // create a variable "attributes" which his a list of all the
         // attributes, but at the same time, is a map keyed by name
         map.put("attributes", new SequenceMapModel(attributeMap, this));
@@ -311,7 +309,7 @@ public class FeatureWrapper extends BeansWrapper {
         return map;
     }
 
-    private Map<String, Object> buildDummyFeatureTypeInfo(ComplexAttribute f){
+    private Map<String, Object> buildDummyFeatureTypeInfo(ComplexAttribute f) {
         Map<String, Object> dummy = new HashMap<String, Object>();
         dummy.put("name", f.getType().getName().getLocalPart());
         dummy.put("namespace", getNamespace(f.getType().getName()));
@@ -322,9 +320,9 @@ public class FeatureWrapper extends BeansWrapper {
         dummy.put("keywords", new ArrayList<String>());
         dummy.put("metadataLinks", new ArrayList<String>());
         dummy.put("SRS", "[SRS]");
-        if (f instanceof Feature){
+        if (f instanceof Feature) {
             final GeometryDescriptor gd = ((Feature) f).getType().getGeometryDescriptor();
-            if(gd != null) {
+            if (gd != null) {
                 dummy.put("nativeCRS", gd.getCoordinateReferenceSystem());
             }
         }
@@ -340,7 +338,7 @@ public class FeatureWrapper extends BeansWrapper {
      * the attribute properties, most notably the toString representation of
      * attribute values.
      * </p>
-     * 
+     *
      * @author Gabriel Roldan
      * @see AttributeMap
      */
@@ -355,11 +353,11 @@ public class FeatureWrapper extends BeansWrapper {
 
         public Set entrySet() {
             if (entrySet == null) {
-                entrySet = new LinkedHashSet<MapEntry>();                
+                entrySet = new LinkedHashSet<MapEntry>();
                 final Collection<PropertyDescriptor> types = feature.getType().getDescriptors();
                 Name attName;
                 Map attributesMap;
-                for (Iterator<PropertyDescriptor> iterator = types.iterator(); iterator.hasNext();) {
+                for (Iterator<PropertyDescriptor> iterator = types.iterator(); iterator.hasNext(); ) {
                     attName = iterator.next().getName();
                     attributesMap = new AttributeMap(attName, feature);
                     entrySet.add(new MapEntry<Object, Object>(attName.getLocalPart(), attributesMap));
@@ -390,7 +388,6 @@ public class FeatureWrapper extends BeansWrapper {
      * geometric type</li>
      * </ul>
      * </p>
-     * 
      */
     private class AttributeMap extends AbstractMap {
 
@@ -403,13 +400,11 @@ public class FeatureWrapper extends BeansWrapper {
         /**
          * Builds an "attribute map" as used in templates for the given
          * attribute of the given feature.
-         * 
-         * @param attributeName
-         *            the name of the feature attribute this attribute map is
-         *            built for
-         * @param feature
-         *            the feature where to lazily grab the attribute named
-         *            <code>attributeName</code> from
+         *
+         * @param attributeName the name of the feature attribute this attribute map is
+         *                      built for
+         * @param feature       the feature where to lazily grab the attribute named
+         *                      <code>attributeName</code> from
          */
         public AttributeMap(final Name attributeName, final ComplexAttribute feature) {
             this.attributeName = attributeName;
@@ -436,49 +431,48 @@ public class FeatureWrapper extends BeansWrapper {
                 final ComplexType featureType = feature.getType();
                 PropertyDescriptor attributeDescr = featureType.getDescriptor(attributeName);
                 Property property = feature.getProperty(attributeName);
-                
+
                 if (property == null) {
                     //maybe polymorphism? let's try
                     @SuppressWarnings("unchecked")
                     List<AttributeDescriptor> substitutionGroup = (List<AttributeDescriptor>) attributeDescr.getUserData().get("substitutionGroup");
-                    if (substitutionGroup != null){
+                    if (substitutionGroup != null) {
                         Iterator<AttributeDescriptor> it = substitutionGroup.iterator();
-                        while (property==null && it.hasNext()) {
-                             property = feature.getProperty(it.next().getName());
+                        while (property == null && it.hasNext()) {
+                            property = feature.getProperty(it.next().getName());
                         }
-                        if (property!=null) {
+                        if (property != null) {
                             attributeDescr = property.getDescriptor();
                         }
-                    }    
+                    }
                 }
-                
+
                 entrySet.add(new MapEntry<Object, Object>("isComplex", property instanceof ComplexAttribute));
 
                 Object value = null;
                 if (property instanceof ComplexAttribute) {
-                    value = buildComplex((ComplexAttribute)property);
-                }
-                else if (property!=null) {
+                    value = buildComplex((ComplexAttribute) property);
+                } else if (property != null) {
                     value = property.getValue();
                 }
-                
+
                 entrySet.add(new DeferredValueEntry("value", value));
                 entrySet.add(new MapEntry<Object, Object>("name", attributeName.getLocalPart()));
                 entrySet.add(new MapEntry<Object, Object>("namespace", getNamespace(attributeName)));
                 entrySet.add(new MapEntry<Object, Object>("prefix", getPrefix(attributeName)));
-                
+
                 if (attributeDescr.getType() instanceof ComplexType) {
-                    entrySet.add(new MapEntry<Object, Object>("type", buildType( (ComplexType) attributeDescr.getType())));
+                    entrySet.add(new MapEntry<Object, Object>("type", buildType((ComplexType) attributeDescr.getType())));
                 } else {
                     entrySet.add(new MapEntry<Object, Object>("type", attributeDescr.getType().getBinding().getName()));
                 }
-                
-                Object rawValue = value == null ? "" : value;                
+
+                Object rawValue = value == null ? "" : value;
                 boolean isGeometry = Geometry.class.isAssignableFrom(attributeDescr.getType().getBinding());
                 entrySet.add(new MapEntry<Object, Object>("isGeometry", Boolean.valueOf(isGeometry)));
                 entrySet.add(new MapEntry<Object, Object>("rawValue", rawValue));
-                   
-                
+
+
             }
             return entrySet;
         }
@@ -487,7 +481,7 @@ public class FeatureWrapper extends BeansWrapper {
          * A special purpose Map.Entry whose value is transformed to String on
          * demand, thus avoiding to hold both the actual value object and its
          * string value.
-         * 
+         *
          * @see FeatureWrapper#valueToString(Object)
          */
         private class DeferredValueEntry extends MapEntry<Object, Object> {
@@ -507,36 +501,34 @@ public class FeatureWrapper extends BeansWrapper {
             }
         }
     }
-    
+
     /**
      * Factory to Create TemplateCollectionModel from FeatureCollection
-     *  
-     * @author Niels Charlier, Curtin University of Technology
      *
+     * @author Niels Charlier, Curtin University of Technology
      */
     public static interface TemplateFeatureCollectionFactory<T extends TemplateCollectionModel & TemplateSequenceModel> {
-        public TemplateCollectionModel createTemplateFeatureCollection(FeatureCollection collection, BeansWrapper wrapper) ;            
+        public TemplateCollectionModel createTemplateFeatureCollection(FeatureCollection collection, BeansWrapper wrapper);
     }
-    
+
     /**
      * Default Factory to Create TemplateCollectionModel from FeatureCollection
      * by making a copy of features in list
-     *  
-     * @author Niels Charlier, Curtin University of Technology
      *
+     * @author Niels Charlier, Curtin University of Technology
      */
     protected static class CopyTemplateFeatureCollectionFactory implements TemplateFeatureCollectionFactory<CollectionModel> {
-                
+
         @SuppressWarnings("unchecked")
         public CollectionModel createTemplateFeatureCollection(FeatureCollection collection, BeansWrapper wrapper) {
             return new CollectionModel(DataUtilities.list(collection), wrapper);
         }
     }
-    
+
     /**
      * Default Template FeatureCollection Factory
      */
     protected static CopyTemplateFeatureCollectionFactory copyTemplateFeatureCollectionFactory = new CopyTemplateFeatureCollectionFactory();
-       
-        
+
+
 }

@@ -28,15 +28,16 @@ public class WorkspacesModel extends LoadableDetachableModel<List<WorkspaceInfo>
         Collections.sort(workspaces, new WorkspaceComparator());
         return workspaces;
     }
-    
+
     protected static class WorkspaceComparator implements Comparator<WorkspaceInfo> {
 
-        public WorkspaceComparator(){
+        public WorkspaceComparator() {
             //
         }
+
         public int compare(WorkspaceInfo w1, WorkspaceInfo w2) {
             return w1.getName().compareToIgnoreCase(w2.getName());
         }
-        
+
     }
 }

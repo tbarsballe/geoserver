@@ -30,10 +30,10 @@ public class RolePaletteFormComponent extends PaletteFormComponent<GeoServerRole
         this(id, model, new RolesModel());
     }
 
-    public RolePaletteFormComponent(String id, IModel<List<GeoServerRole>> model, 
-            IModel<Collection<GeoServerRole>> choicesModel) {
-        super(id, model, choicesModel, new ChoiceRenderer<GeoServerRole>("authority","authority"));
-        
+    public RolePaletteFormComponent(String id, IModel<List<GeoServerRole>> model,
+                                    IModel<Collection<GeoServerRole>> choicesModel) {
+        super(id, model, choicesModel, new ChoiceRenderer<GeoServerRole>("authority", "authority"));
+
 //        rolePalette = new Palette<GeoServerRole>(
 //                "roles", , choicesModel,
 //                , 10, false) {
@@ -55,13 +55,13 @@ public class RolePaletteFormComponent extends PaletteFormComponent<GeoServerRole
 
         GeoServerRoleService roleService = getSecurityManager().getActiveRoleService();
         final String roleServiceName = roleService.getName();
-        
+
         if (choicesModel instanceof RuleRolesModel)
-            add(new Label("roles", new StringResourceModel("roles",this)));
+            add(new Label("roles", new StringResourceModel("roles", this)));
         else
             add(new Label("roles", new StringResourceModel("rolesFromActiveService",
                     this).setParameters(roleServiceName)));
-        
+
         add(new SubmitLink("addRole") {
             @Override
             public void onSubmit() {
@@ -74,15 +74,14 @@ public class RolePaletteFormComponent extends PaletteFormComponent<GeoServerRole
         return GeoServerApplication.get().getSecurityManager();
     }
 
-    public void diff(Collection<GeoServerRole> orig, Collection<GeoServerRole> add, 
-        Collection<GeoServerRole> remove) {
+    public void diff(Collection<GeoServerRole> orig, Collection<GeoServerRole> add,
+                     Collection<GeoServerRole> remove) {
 
         remove.addAll(orig);
-        for(GeoServerRole role : getSelectedRoles()) {
+        for (GeoServerRole role : getSelectedRoles()) {
             if (!orig.contains(role)) {
                 add.add(role);
-            }
-            else {
+            } else {
                 remove.remove(role);
             }
         }
@@ -91,12 +90,12 @@ public class RolePaletteFormComponent extends PaletteFormComponent<GeoServerRole
     public List<GeoServerRole> getSelectedRoles() {
         return new ArrayList(palette.getModelCollection());
     }
-    
+
     @Override
     protected String getSelectedHeaderPropertyKey() {
         return "RolePaletteFormComponent.selectedHeader";
     }
-    
+
     @Override
     protected String getAvaliableHeaderPropertyKey() {
         // TODO Auto-generated method stub

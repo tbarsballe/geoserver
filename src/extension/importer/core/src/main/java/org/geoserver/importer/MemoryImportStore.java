@@ -46,7 +46,7 @@ public class MemoryImportStore implements ImportStore {
         }
         return id;
     }
-    
+
     @Override
     public void add(ImportContext context) {
         context.setId(idseq.getAndIncrement());
@@ -55,7 +55,7 @@ public class MemoryImportStore implements ImportStore {
             clearCompletedImports();
         }
     }
-    
+
     void clearCompletedImports() {
         List<ImportContext> completed = collect(new ImportCollector() {
             @Override
@@ -71,17 +71,17 @@ public class MemoryImportStore implements ImportStore {
         imports.remove(context);
         imports.add(context);
     }
-    
+
     @Override
     public void remove(ImportContext importContext) {
         imports.remove(importContext);
     }
-    
+
     @Override
     public void removeAll() {
         imports.clear();
     }
-    
+
     @Override
     public Iterator<ImportContext> iterator() {
         return imports.iterator();
@@ -103,7 +103,7 @@ public class MemoryImportStore implements ImportStore {
             }
         }).iterator();
     }
-    
+
     @Override
     public Iterator<ImportContext> importsByUser(final String user) {
         return collect(new ImportCollector() {
@@ -113,7 +113,7 @@ public class MemoryImportStore implements ImportStore {
             }
         }).iterator();
     }
-    
+
     @Override
     public void query(ImportVisitor visitor) {
         for (ImportContext context : imports) {
@@ -131,7 +131,7 @@ public class MemoryImportStore implements ImportStore {
         idseq.set(0);
         imports.clear();
     }
-    
+
     static abstract class ImportCollector implements ImportVisitor {
 
         List<ImportContext> collected = new ArrayList();

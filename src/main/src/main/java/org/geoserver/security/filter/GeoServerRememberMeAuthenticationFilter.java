@@ -14,26 +14,25 @@ import org.springframework.security.web.authentication.rememberme.RememberMeAuth
 
 /**
  * Named RemeberMe Authentication Filter
- * 
- * @author mcr
  *
+ * @author mcr
  */
-public class GeoServerRememberMeAuthenticationFilter extends GeoServerCompositeFilter 
-    implements GeoServerAuthenticationFilter {
+public class GeoServerRememberMeAuthenticationFilter extends GeoServerCompositeFilter
+        implements GeoServerAuthenticationFilter {
 
     @Override
     public void initializeFromConfig(SecurityNamedServiceConfig config) throws IOException {
         super.initializeFromConfig(config);
-        
+
 //       not needed at the moment        
 //        RememberMeAuthenticationFilterConfig authConfig = 
 //                (RememberMeAuthenticationFilterConfig) config;
 
         GeoServerSecurityManager secMgr = getSecurityManager();
         RememberMeAuthenticationFilter filter = new RememberMeAuthenticationFilter(
-            secMgr.authenticationManager(), secMgr.getRememberMeService());
+                secMgr.authenticationManager(), secMgr.getRememberMeService());
         filter.afterPropertiesSet();
-        getNestedFilters().add(filter);        
+        getNestedFilters().add(filter);
     }
 
     /**

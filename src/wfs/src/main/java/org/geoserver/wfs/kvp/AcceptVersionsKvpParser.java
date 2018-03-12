@@ -17,10 +17,9 @@ import org.geoserver.wfs.WFSInfo;
  * an instance of {@link net.opengis.ows.v1_0_0.AcceptVersionsType}.
  *
  * @author Justin Deoliveira, The Open Planning Project
- *
  */
 public class AcceptVersionsKvpParser extends org.geoserver.ows.kvp.AcceptVersionsKvpParser {
-    
+
     public AcceptVersionsKvpParser() {
         super(AcceptVersionsType.class);
         setVersion(WFSInfo.Version.V_11.getVersion());

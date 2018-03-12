@@ -6,6 +6,7 @@ package org.geoserver.csw.store.internal;
 
 import static org.custommonkey.xmlunit.XMLAssert.assertXpathEvaluatesTo;
 import static org.custommonkey.xmlunit.XMLAssert.assertXpathExists;
+
 import org.junit.Test;
 import org.w3c.dom.Document;
 

@@ -16,7 +16,6 @@ import org.geoserver.util.EntityResolverProvider;
 import org.junit.Test;
 
 /**
- * 
  * @author Gabriel Roldan
  */
 public class CapabilitiesXmlReaderTest {

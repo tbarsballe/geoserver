@@ -77,7 +77,7 @@ public class LocalWCSSettingsControllerTest extends CatalogRESTTestSupport {
 
     @Test
     public void testGetAsHTML() throws Exception {
-        getAsDOM(RestBaseController.ROOT_PATH + "/services/wcs/workspaces/sf/settings.html" );
+        getAsDOM(RestBaseController.ROOT_PATH + "/services/wcs/workspaces/sf/settings.html");
     }
 
     @Test

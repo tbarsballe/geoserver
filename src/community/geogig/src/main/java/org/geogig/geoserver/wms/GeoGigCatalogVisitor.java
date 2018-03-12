@@ -59,7 +59,7 @@ public class GeoGigCatalogVisitor implements CatalogVisitor {
             DimensionInfo dimension = metadata.get(attributeName, DimensionInfo.class);
             final String attribute = dimension.getAttribute();
             final String endAttribute = dimension.getEndAttribute();
-            return new String[] {attribute, endAttribute};
+            return new String[]{attribute, endAttribute};
         }
         return new String[]{};
     }
@@ -105,24 +105,24 @@ public class GeoGigCatalogVisitor implements CatalogVisitor {
     }
 
     private void createOrUpdateIndex(final LayerInfo geogigLayer, final @Nullable String head,
-            final String[] extraAttributes) {
+                                     final String[] extraAttributes) {
         // schedule the index creation
         final Future<Optional<ObjectId>> indexId = INDEX_SERVICE.submit(
                 new Callable<Optional<ObjectId>>() {
 
-            @Override
-            public Optional<ObjectId> call() throws Exception {
-                RepositoryManager manager = RepositoryManager.get();
-                Repository findRepository = manager.findRepository(geogigLayer);
+                    @Override
+                    public Optional<ObjectId> call() throws Exception {
+                        RepositoryManager manager = RepositoryManager.get();
+                        Repository findRepository = manager.findRepository(geogigLayer);
 
-                String featureTreePath=geogigLayer.getResource().getNativeName();
-                
-                Optional<ObjectId> index = GeoGigDataStore.createOrUpdateIndex(findRepository, head,
+                        String featureTreePath = geogigLayer.getResource().getNativeName();
+
+                        Optional<ObjectId> index = GeoGigDataStore.createOrUpdateIndex(findRepository, head,
                                 featureTreePath, extraAttributes);
-                
-                return index;
-            }
-        });
+
+                        return index;
+                    }
+                });
         // handle the Future and generate an error log if the index create/update fails
         FUTURE_SERVICE.submit(new Runnable() {
             @Override
@@ -158,7 +158,7 @@ public class GeoGigCatalogVisitor implements CatalogVisitor {
             Map<String, Serializable> connectionParams = store.getConnectionParameters();
             Serializable autoIndexingParam = connectionParams
                     .get(GeoGigDataStoreFactory.AUTO_INDEXING.key);
-            
+
             final boolean autoIndexing = autoIndexingParam != null && Boolean.TRUE.equals(
                     Boolean.valueOf(autoIndexingParam.toString()));
 
@@ -172,9 +172,9 @@ public class GeoGigCatalogVisitor implements CatalogVisitor {
             }
             String head = (String) connectionParams.get(GeoGigDataStoreFactory.HEAD.key);
             String branch = (String) connectionParams.get(GeoGigDataStoreFactory.BRANCH.key);
-            
-            String effectiveHead = head == null? branch:head;
-            
+
+            String effectiveHead = head == null ? branch : head;
+
             // get the metadata for the layer resource
             final MetadataMap metadata = resource.getMetadata();
             final String[] timeAttr = getAttribute(metadata, "time");

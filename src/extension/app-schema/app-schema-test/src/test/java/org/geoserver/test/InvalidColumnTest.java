@@ -12,9 +12,8 @@ import org.junit.Test;
 
 /**
  * Tests whether we get an exception thrown when an invalid column name is used
- * 
+ *
  * @author Niels Charlier, Curtin University of Technology
- * 
  */
 public class InvalidColumnTest extends AbstractAppSchemaTestSupport {
 

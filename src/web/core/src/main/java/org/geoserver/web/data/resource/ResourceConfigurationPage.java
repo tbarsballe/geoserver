@@ -154,8 +154,6 @@ public class ResourceConfigurationPage extends PublishedConfigurationPage<LayerI
 
     /**
      * Returns the {@link ResourceInfo} contained in this page
-     *
-     *
      */
     public ResourceInfo getResourceInfo() {
         return (ResourceInfo) myResourceModel.getObject();
@@ -175,7 +173,7 @@ public class ResourceConfigurationPage extends PublishedConfigurationPage<LayerI
     /**
      * Allows collaborating pages to update the resource info object
      *
-     * @param info the resource info to update
+     * @param info   the resource info to update
      * @param target
      */
     public void updateResource(ResourceInfo info, final AjaxRequestTarget target) {

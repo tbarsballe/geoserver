@@ -11,16 +11,16 @@ import org.geoserver.security.config.impl.MemoryRoleServiceConfigImpl;
 /**
  * Configuration panel for {@link ReadOnlyRoleService}.
  * <p>
- * This service is only used for testing, it is only available when running from the development 
- * environment. 
+ * This service is only used for testing, it is only available when running from the development
+ * environment.
  * </p>
- * 
+ *
  * @author Justin Deoliveira, OpenGeo
  */
 public class ReadOnlyRoleServicePanel extends MemoryRoleServicePanel {
 
     public ReadOnlyRoleServicePanel(String id,
-            IModel<MemoryRoleServiceConfigImpl> model) {
+                                    IModel<MemoryRoleServiceConfigImpl> model) {
         super(id, model);
     }
 

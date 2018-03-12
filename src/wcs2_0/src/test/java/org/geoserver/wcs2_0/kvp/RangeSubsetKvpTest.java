@@ -21,163 +21,165 @@ import org.junit.Test;
 import org.w3c.dom.Document;
 
 import org.springframework.mock.web.MockHttpServletResponse;
+
 /**
  * Testing Scaling Extension KVP
- * @author Simone Giannecchini, GeoSolutions SAS
  *
+ * @author Simone Giannecchini, GeoSolutions SAS
  */
 public class RangeSubsetKvpTest extends WCSKVPTestSupport {
-    
-    private Logger LOGGER= Logging.getLogger(RangeSubsetKvpTest.class);
+
+    private Logger LOGGER = Logging.getLogger(RangeSubsetKvpTest.class);
 
     @Test
     public void capabilties() throws Exception {
         Document dom = getAsDOM("wcs?reQueSt=GetCapabilities&seErvIce=WCS");
-         print(dom);
-        
+        print(dom);
+
         // check the KVP extension 1.0.1
         assertXpathEvaluatesTo("1", "count(//ows:ServiceIdentification[ows:Profile='http://www.opengis.net/spec/WCS_service-extension_range-subsetting/1.0/conf/record-subsetting'])", dom);
-        
+
         // proper case enforcing on values
         dom = getAsDOM("wcs?request=Getcapabilities&service=wCS");
         // print(dom);
-        
+
         // check that we have the crs extension
         assertXpathEvaluatesTo("1", "count(//ows:ExceptionReport)", dom);
         assertXpathEvaluatesTo("1", "count(//ows:ExceptionReport//ows:Exception)", dom);
         assertXpathEvaluatesTo("1", "count(//ows:ExceptionReport//ows:Exception[@exceptionCode='InvalidParameterValue'])", dom);
-        assertXpathEvaluatesTo("1", "count(//ows:ExceptionReport//ows:Exception[@locator='wCS'])", dom); 
+        assertXpathEvaluatesTo("1", "count(//ows:ExceptionReport//ows:Exception[@locator='wCS'])", dom);
     }
-    
+
     @Test
     public void test9to3() throws Exception {
-        
+
         MockHttpServletResponse response = getAsServletResponse("wcs?request=GetCoverage&service=WCS&version=2.0.1" +
-        "&coverageId=wcs__multiband&&Format=image/tiff&RANGESUBSET=Band1,Band6,Band7");
-    
+                "&coverageId=wcs__multiband&&Format=image/tiff&RANGESUBSET=Band1,Band6,Band7");
+
         assertEquals("image/tiff", response.getContentType());
         byte[] tiffContents = getBinary(response);
         File file = File.createTempFile("gtiff", "gtiff.tiff", new File("./target"));
         FileUtils.writeByteArrayToFile(file, tiffContents);
-    
+
         final GeoTiffReader reader = new GeoTiffReader(file);
-        assertTrue(CRS.equalsIgnoreMetadata(reader.getCoordinateReferenceSystem(), CRS.decode("EPSG:32611",true)));
+        assertTrue(CRS.equalsIgnoreMetadata(reader.getCoordinateReferenceSystem(), CRS.decode("EPSG:32611", true)));
         assertEquals(68, reader.getOriginalGridRange().getSpan(0));
-        assertEquals(56 , reader.getOriginalGridRange().getSpan(1));
+        assertEquals(56, reader.getOriginalGridRange().getSpan(1));
         final GridCoverage2D coverage = reader.read(null);
         assertEquals(3, coverage.getSampleDimensions().length);
-        
+
         GridCoverage2D sourceCoverage = (GridCoverage2D) this.getCatalog().getCoverageByName("multiband").getGridCoverageReader(null, null).read(null);
         assertEnvelopeEquals(sourceCoverage, coverage);
-        reader.dispose();  
+        reader.dispose();
         scheduleForCleaning(coverage);
-        scheduleForCleaning(sourceCoverage);   
+        scheduleForCleaning(sourceCoverage);
     }
 
     @Test
     public void test9to4() throws Exception {
-        
+
         MockHttpServletResponse response = getAsServletResponse("wcs?request=GetCoverage&service=WCS&version=2.0.1" +
-        "&coverageId=wcs__multiband&&Format=image/tiff&RANGESUBSET=Band1,Band6,Band9,Band4");
-    
+                "&coverageId=wcs__multiband&&Format=image/tiff&RANGESUBSET=Band1,Band6,Band9,Band4");
+
         assertEquals("image/tiff", response.getContentType());
         byte[] tiffContents = getBinary(response);
         File file = File.createTempFile("gtiff", "gtiff.tiff", new File("./target"));
         FileUtils.writeByteArrayToFile(file, tiffContents);
-    
+
         final GeoTiffReader reader = new GeoTiffReader(file);
-        assertTrue(CRS.equalsIgnoreMetadata(reader.getCoordinateReferenceSystem(), CRS.decode("EPSG:32611",true)));
+        assertTrue(CRS.equalsIgnoreMetadata(reader.getCoordinateReferenceSystem(), CRS.decode("EPSG:32611", true)));
         assertEquals(68, reader.getOriginalGridRange().getSpan(0));
-        assertEquals(56 , reader.getOriginalGridRange().getSpan(1));
+        assertEquals(56, reader.getOriginalGridRange().getSpan(1));
         final GridCoverage2D coverage = reader.read(null);
         assertEquals(4, coverage.getSampleDimensions().length);
-        
+
         GridCoverage2D sourceCoverage = (GridCoverage2D) this.getCatalog().getCoverageByName("multiband").getGridCoverageReader(null, null).read(null);
         assertEnvelopeEquals(sourceCoverage, coverage);
-        reader.dispose();  
+        reader.dispose();
         scheduleForCleaning(coverage);
-        scheduleForCleaning(sourceCoverage);   
+        scheduleForCleaning(sourceCoverage);
     }
 
     @Test
     public void test9to7() throws Exception {
-        
+
         MockHttpServletResponse response = getAsServletResponse("wcs?request=GetCoverage&service=WCS&version=2.0.1" +
-        "&coverageId=wcs__multiband&&Format=image/tiff&RANGESUBSET=Band1,Band6,Band4,Band9,Band8,Band7,Band2");
-    
+                "&coverageId=wcs__multiband&&Format=image/tiff&RANGESUBSET=Band1,Band6,Band4,Band9,Band8,Band7,Band2");
+
         assertEquals("image/tiff", response.getContentType());
         byte[] tiffContents = getBinary(response);
         File file = File.createTempFile("gtiff", "gtiff.tiff", new File("./target"));
         FileUtils.writeByteArrayToFile(file, tiffContents);
-    
+
         final GeoTiffReader reader = new GeoTiffReader(file);
-        assertTrue(CRS.equalsIgnoreMetadata(reader.getCoordinateReferenceSystem(), CRS.decode("EPSG:32611",true)));
+        assertTrue(CRS.equalsIgnoreMetadata(reader.getCoordinateReferenceSystem(), CRS.decode("EPSG:32611", true)));
         assertEquals(68, reader.getOriginalGridRange().getSpan(0));
-        assertEquals(56 , reader.getOriginalGridRange().getSpan(1));
+        assertEquals(56, reader.getOriginalGridRange().getSpan(1));
         final GridCoverage2D coverage = reader.read(null);
         assertEquals(7, coverage.getSampleDimensions().length);
-        
+
         GridCoverage2D sourceCoverage = (GridCoverage2D) this.getCatalog().getCoverageByName("multiband").getGridCoverageReader(null, null).read(null);
         assertEnvelopeEquals(sourceCoverage, coverage);
-        reader.dispose();  
+        reader.dispose();
         scheduleForCleaning(coverage);
-        scheduleForCleaning(sourceCoverage);   
+        scheduleForCleaning(sourceCoverage);
     }
 
     @Test
     public void testBasic() throws Exception {
-        
+
         MockHttpServletResponse response = getAsServletResponse("wcs?request=GetCoverage&service=WCS&version=2.0.1" +
-        "&coverageId=wcs__BlueMarble&&Format=image/tiff&RANGESUBSET=RED_BAND");
-    
+                "&coverageId=wcs__BlueMarble&&Format=image/tiff&RANGESUBSET=RED_BAND");
+
         assertEquals("image/tiff", response.getContentType());
         byte[] tiffContents = getBinary(response);
         File file = File.createTempFile("bm_gtiff", "bm_gtiff.tiff", new File("./target"));
         FileUtils.writeByteArrayToFile(file, tiffContents);
-    
+
         final GeoTiffReader reader = new GeoTiffReader(file);
-        assertTrue(CRS.equalsIgnoreMetadata(reader.getCoordinateReferenceSystem(), CRS.decode("EPSG:4326",true)));
+        assertTrue(CRS.equalsIgnoreMetadata(reader.getCoordinateReferenceSystem(), CRS.decode("EPSG:4326", true)));
         assertEquals(360, reader.getOriginalGridRange().getSpan(0));
         assertEquals(360, reader.getOriginalGridRange().getSpan(1));
         final GridCoverage2D coverage = reader.read(null);
         assertEquals(1, coverage.getSampleDimensions().length);
-        
+
         GridCoverage2D sourceCoverage = (GridCoverage2D) this.getCatalog().getCoverageByName("BlueMarble").getGridCoverageReader(null, null).read(null);
         assertEnvelopeEquals(sourceCoverage, coverage);
-        reader.dispose();  
+        reader.dispose();
         scheduleForCleaning(coverage);
-        scheduleForCleaning(sourceCoverage);   
+        scheduleForCleaning(sourceCoverage);
     }
 
     @Test
     public void testRange() throws Exception {
-        
+
         MockHttpServletResponse response = getAsServletResponse("wcs?request=GetCoverage&service=WCS&version=2.0.1" +
-        "&coverageId=wcs__BlueMarble&&Format=image/tiff&RANGESUBSET=RED_BAND:BLUE_BAND");
-    
+                "&coverageId=wcs__BlueMarble&&Format=image/tiff&RANGESUBSET=RED_BAND:BLUE_BAND");
+
         assertEquals("image/tiff", response.getContentType());
         byte[] tiffContents = getBinary(response);
         File file = File.createTempFile("bm_gtiff", "bm_gtiff.tiff", new File("./target"));
         FileUtils.writeByteArrayToFile(file, tiffContents);
-    
+
         final GeoTiffReader reader = new GeoTiffReader(file);
-        assertTrue(CRS.equalsIgnoreMetadata(reader.getCoordinateReferenceSystem(), CRS.decode("EPSG:4326",true)));
+        assertTrue(CRS.equalsIgnoreMetadata(reader.getCoordinateReferenceSystem(), CRS.decode("EPSG:4326", true)));
         assertEquals(360, reader.getOriginalGridRange().getSpan(0));
         assertEquals(360, reader.getOriginalGridRange().getSpan(1));
         final GridCoverage2D coverage = reader.read(null);
         assertEquals(3, coverage.getSampleDimensions().length);
-        
+
         GridCoverage2D sourceCoverage = (GridCoverage2D) this.getCatalog().getCoverageByName("BlueMarble").getGridCoverageReader(null, null).read(null);
         assertEnvelopeEquals(sourceCoverage, coverage);
-        reader.dispose();  
+        reader.dispose();
         scheduleForCleaning(coverage);
-        scheduleForCleaning(sourceCoverage);   
+        scheduleForCleaning(sourceCoverage);
     }
+
     @Test
     public void mixed() throws Exception {
-        
+
         MockHttpServletResponse response = getAsServletResponse("wcs?request=GetCoverage&service=WCS&version=2.0.1" +
-        "&coverageId=wcs__BlueMarble&&Format=image/tiff&RANGESUBSET=RED_BAND:BLUE_BAND,RED_BAND,GREEN_BAND");
+                "&coverageId=wcs__BlueMarble&&Format=image/tiff&RANGESUBSET=RED_BAND:BLUE_BAND,RED_BAND,GREEN_BAND");
 
         assertEquals("image/tiff", response.getContentType());
         byte[] tiffContents = getBinary(response);
@@ -185,27 +187,27 @@ public class RangeSubsetKvpTest extends WCSKVPTestSupport {
         FileUtils.writeByteArrayToFile(file, tiffContents);
 
         final GeoTiffReader reader = new GeoTiffReader(file);
-        assertTrue(CRS.equalsIgnoreMetadata(reader.getCoordinateReferenceSystem(), CRS.decode("EPSG:4326",true)));
+        assertTrue(CRS.equalsIgnoreMetadata(reader.getCoordinateReferenceSystem(), CRS.decode("EPSG:4326", true)));
         assertEquals(360, reader.getOriginalGridRange().getSpan(0));
         assertEquals(360, reader.getOriginalGridRange().getSpan(1));
         final GridCoverage2D coverage = reader.read(null);
         assertEquals(5, coverage.getSampleDimensions().length);
-        
+
         GridCoverage2D sourceCoverage = (GridCoverage2D) this.getCatalog().getCoverageByName("BlueMarble").getGridCoverageReader(null, null).read(null);
         assertEnvelopeEquals(sourceCoverage, coverage);
-        reader.dispose();  
+        reader.dispose();
         scheduleForCleaning(coverage);
-        scheduleForCleaning(sourceCoverage);   
+        scheduleForCleaning(sourceCoverage);
     }
-    
+
     @Test
     public void testWrong() throws Exception {
-        
+
         MockHttpServletResponse response = getAsServletResponse("wcs?request=GetCoverage&service=WCS&version=2.0.1" +
-        "&coverageId=wcs__BlueMarble&&Format=image/tiff&RANGESUBSET=Band1,GREEN_BAND");
-    
+                "&coverageId=wcs__BlueMarble&&Format=image/tiff&RANGESUBSET=Band1,GREEN_BAND");
+
         assertEquals("application/xml", response.getContentType());
         checkOws20Exception(response, 404, WCS20ExceptionCode.NoSuchField.getExceptionCode(), "Band1");
     }
-    
+
 }

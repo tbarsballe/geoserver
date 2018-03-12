@@ -8,20 +8,21 @@ package org.geoserver.wps.gs.download;
 /**
  * Implementation of {@link DownloadServiceConfigurationGenerator} that uses a specific {@link DownloadServiceConfiguration}. This configuraton cannot
  * be changed like for the {@link DownloadServiceConfigurationWatcher} class.
- * 
+ *
  * @author Simone Giannecchini, GeoSolutions
- * 
  */
 public class StaticDownloadServiceConfiguration implements DownloadServiceConfigurationGenerator {
 
-    /** The {@link DownloadServiceConfiguration} instance contained. */
+    /**
+     * The {@link DownloadServiceConfiguration} instance contained.
+     */
     DownloadServiceConfiguration config;
 
     /**
      * Constructor
-     * 
+     * <p>
      * This constructor takes an external {@link DownloadServiceConfiguration} object and stores it without modifications.
-     * 
+     *
      * @param config
      */
     public StaticDownloadServiceConfiguration(DownloadServiceConfiguration config) {
@@ -30,9 +31,8 @@ public class StaticDownloadServiceConfiguration implements DownloadServiceConfig
 
     /**
      * Constructor.
-     * 
+     * <p>
      * It creates a new {@link DownloadServiceConfiguration} object with default values
-     * 
      */
     public StaticDownloadServiceConfiguration() {
         config = new DownloadServiceConfiguration();

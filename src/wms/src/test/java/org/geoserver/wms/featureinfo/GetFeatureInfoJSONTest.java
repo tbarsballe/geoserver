@@ -6,10 +6,10 @@
 package org.geoserver.wms.featureinfo;
 
 
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
@@ -23,10 +23,9 @@ import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletResponse;
 
 public class GetFeatureInfoJSONTest extends GetFeatureInfoTest {
-    
+
     /**
      * Tests JSONP outside of expected polygon
-     * 
      */
     @Test
     public void testSimpleJSONP() throws Exception {
@@ -37,7 +36,7 @@ public class GetFeatureInfoJSONTest extends GetFeatureInfoTest {
 
         // JSONP
         JSONType.setJsonpEnabled(true);
-        MockHttpServletResponse response = getAsServletResponse(request,"");
+        MockHttpServletResponse response = getAsServletResponse(request, "");
         JSONType.setJsonpEnabled(false);
 
         // MimeType
@@ -45,7 +44,7 @@ public class GetFeatureInfoJSONTest extends GetFeatureInfoTest {
 
         // Check if the character encoding is the one expected
         assertTrue("UTF-8".equals(response.getCharacterEncoding()));
-        
+
         // Content
         String result = response.getContentAsString();
 
@@ -67,7 +66,6 @@ public class GetFeatureInfoJSONTest extends GetFeatureInfoTest {
 
     /**
      * Tests jsonp with custom callback function
-     * 
      */
     @Test
     public void testCustomJSONP() throws Exception {
@@ -78,7 +76,7 @@ public class GetFeatureInfoJSONTest extends GetFeatureInfoTest {
                 + "&format_options=" + JSONType.CALLBACK_FUNCTION_KEY + ":custom";
         // JSONP
         JSONType.setJsonpEnabled(true);
-        MockHttpServletResponse response = getAsServletResponse(request,"");
+        MockHttpServletResponse response = getAsServletResponse(request, "");
         JSONType.setJsonpEnabled(false);
 
         // MimeType
@@ -86,12 +84,12 @@ public class GetFeatureInfoJSONTest extends GetFeatureInfoTest {
 
         // Check if the character encoding is the one expected
         assertTrue("UTF-8".equals(response.getCharacterEncoding()));
-        
+
         // Content
         String result = response.getContentAsString();
         // System.out.println(result);
         assertNotNull(result);
-        
+
         assertTrue(result.startsWith("custom("));
         assertTrue(result.endsWith(")"));
         assertTrue(result.indexOf("Green Forest") > 0);
@@ -108,7 +106,6 @@ public class GetFeatureInfoJSONTest extends GetFeatureInfoTest {
 
     /**
      * Tests JSON outside of expected polygon
-     * 
      */
     @Test
     public void testSimpleJSON() throws Exception {
@@ -118,14 +115,14 @@ public class GetFeatureInfoJSONTest extends GetFeatureInfoTest {
                 + "&width=20&height=20&x=10&y=10" + "&info_format=" + JSONType.json;
 
         // JSON
-        MockHttpServletResponse response = getAsServletResponse(request,"");
+        MockHttpServletResponse response = getAsServletResponse(request, "");
 
         // MimeType
         assertEquals(JSONType.json, response.getContentType());
 
         // Check if the character encoding is the one expected
         assertTrue("UTF-8".equals(response.getCharacterEncoding()));
-        
+
         // Content
         String result = response.getContentAsString();
 
@@ -148,14 +145,14 @@ public class GetFeatureInfoJSONTest extends GetFeatureInfoTest {
                 + "&propertyName=NAME";
 
         // JSON
-        MockHttpServletResponse response = getAsServletResponse(request,"");
+        MockHttpServletResponse response = getAsServletResponse(request, "");
 
         // MimeType
         assertEquals(JSONType.json, response.getContentType());
 
         // Check if the character encoding is the one expected
         assertTrue("UTF-8".equals(response.getCharacterEncoding()));
-        
+
         // Content
         String result = response.getContentAsString();
 
@@ -191,10 +188,9 @@ public class GetFeatureInfoJSONTest extends GetFeatureInfoTest {
         assertTrue(new NumberRange<Double>(Double.class, 500025d, 500050d).contains((Number) coords
                 .getDouble(1)));
     }
-    
+
     /**
      * Tests CQL filter
-     * 
      */
     @Test
     public void testCQLFilter() throws Exception {
@@ -224,5 +220,5 @@ public class GetFeatureInfoJSONTest extends GetFeatureInfoTest {
 
     }
 
- 
+
 }

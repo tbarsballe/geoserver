@@ -71,7 +71,7 @@ import org.opengis.util.ProgressListener;
 import org.springframework.context.ApplicationContext;
 
 public class ExecuteResponseBuilder {
-    
+
     static final Logger LOGGER = Logging.getLogger(ExecuteResponseBuilder.class);
 
     ExecuteType request;
@@ -87,7 +87,7 @@ public class ExecuteResponseBuilder {
     WPSResourceManager resourceManager;
 
     public ExecuteResponseBuilder(ExecuteType request, ApplicationContext context,
-            ExecutionStatus status) {
+                                  ExecutionStatus status) {
         this.request = request;
         this.context = context;
         this.resourceManager = context.getBean(WPSResourceManager.class);
@@ -146,10 +146,10 @@ public class ExecuteResponseBuilder {
             } else if (status.getPhase() == ProcessState.RUNNING) {
                 ProcessStartedType startedType = f.createProcessStartedType();
                 int progressPercent = Math.round(status.getProgress());
-                if(progressPercent < 0) {
+                if (progressPercent < 0) {
                     LOGGER.warning("Progress reported is below zero, fixing it to 0: " + progressPercent);
                     progressPercent = 0;
-                } else if(progressPercent > 100) {
+                } else if (progressPercent > 100) {
                     LOGGER.warning("Progress reported is above 100, fixing it to 100: " + progressPercent);
                     progressPercent = 100;
                 }
@@ -186,7 +186,7 @@ public class ExecuteResponseBuilder {
             // inputs
             if (request.getDataInputs() != null && request.getDataInputs().getInput().size() > 0) {
                 response.setDataInputs(f.createDataInputsType1());
-                for (Iterator i = request.getDataInputs().getInput().iterator(); i.hasNext();) {
+                for (Iterator i = request.getDataInputs().getInput().iterator(); i.hasNext(); ) {
                     InputType input = (InputType) i.next();
                     response.getDataInputs().getInput().add(EMFUtils.clone(input, f, true));
                 }
@@ -252,7 +252,7 @@ public class ExecuteResponseBuilder {
     }
 
     OutputDataType encodeOutput(String key, Parameter<?> outputParam, String mimeType,
-            boolean reference, ProgressListener listener) {
+                                boolean reference, ProgressListener listener) {
         Wps10Factory f = Wps10Factory.eINSTANCE;
         OutputDataType output = f.createOutputDataType();
         output.setIdentifier(Ows11Util.code(key));
@@ -274,12 +274,12 @@ public class ExecuteResponseBuilder {
                 // encode as reference
                 OutputReferenceType outputReference = f.createOutputReferenceType();
                 output.setReference(outputReference);
-                
+
                 ComplexPPIO cppio = (ComplexPPIO) ppio;
                 String name = key + "." + cppio.getFileExtension(o);
                 Resource outputResource = resourceManager.getOutputResource(
                         status.getExecutionId(), name);
-                
+
                 // write out the output, wrapping the output stream and other well known
                 // object in classes that will fail upon cancellation
                 try (OutputStream os = new CancellingOutputStream(outputResource.out(), listener)) {
@@ -288,7 +288,7 @@ public class ExecuteResponseBuilder {
                     }
                     cppio.encode(o, os);
                 }
-                
+
                 String mime;
                 if (o instanceof RawData) {
                     RawData rawData = (RawData) o;
@@ -358,9 +358,8 @@ public class ExecuteResponseBuilder {
 
     /**
      * Gets the mime type for the specified output
-     * 
-     * @param key
      *
+     * @param key
      */
     private String getOutputMimeType(String key) {
         // lookup for the OutputDefinitionType

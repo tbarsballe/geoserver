@@ -19,7 +19,7 @@ import org.opengis.style.Description;
 
 /**
  * Base class for style visitors that copies styles but removes certain symbolizers
- * 
+ *
  * @author Andrea Aime - OpenGeo
  */
 public abstract class SymbolizerFilteringVisitor extends DuplicatingStyleVisitor {

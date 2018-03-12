@@ -20,283 +20,410 @@ import org.geotools.xml.XSD;
  * XSD object for GeoServer WFS 1.1.
  * <p>
  * This object is not a singleton in the conventional java sense as the other XSD
- * subclasses (GML,OGC,OWS,etc..) are. It is a singleton, but managed as such by 
+ * subclasses (GML,OGC,OWS,etc..) are. It is a singleton, but managed as such by
  * the spring container. The reason being that it requires the catalog to operate
- * and build the underlying schema. 
+ * and build the underlying schema.
  * </p>
- *
  */
 public class WFS extends XSD {
-    
-    /** @generated */
+
+    /**
+     * @generated
+     */
     public static final String NAMESPACE = "http://www.opengis.net/wfs";
 
     public static final String CANONICAL_SCHEMA_LOCATION = "http://schemas.opengis.net/wfs/1.1.0/wfs.xsd";
     
     /* Type Definitions */
-    /** @generated */
+    /**
+     * @generated
+     */
     public static final QName ACTIONTYPE = new QName("http://www.opengis.net/wfs", "ActionType");
 
-    /** @generated */
+    /**
+     * @generated
+     */
     public static final QName ALLSOMETYPE = new QName("http://www.opengis.net/wfs", "AllSomeType");
 
-    /** @generated */
+    /**
+     * @generated
+     */
     public static final QName BASE_TYPENAMELISTTYPE = new QName("http://www.opengis.net/wfs",
             "Base_TypeNameListType");
 
-    /** @generated */
+    /**
+     * @generated
+     */
     public static final QName BASEREQUESTTYPE = new QName("http://www.opengis.net/wfs",
             "BaseRequestType");
 
-    /** @generated */
+    /**
+     * @generated
+     */
     public static final QName DELETEELEMENTTYPE = new QName("http://www.opengis.net/wfs",
             "DeleteElementType");
 
-    /** @generated */
+    /**
+     * @generated
+     */
     public static final QName DESCRIBEFEATURETYPETYPE = new QName("http://www.opengis.net/wfs",
             "DescribeFeatureTypeType");
 
-    /** @generated */
+    /**
+     * @generated
+     */
     public static final QName FEATURECOLLECTIONTYPE = new QName("http://www.opengis.net/wfs",
             "FeatureCollectionType");
 
-    /** @generated */
+    /**
+     * @generated
+     */
     public static final QName FEATURESLOCKEDTYPE = new QName("http://www.opengis.net/wfs",
             "FeaturesLockedType");
 
-    /** @generated */
+    /**
+     * @generated
+     */
     public static final QName FEATURESNOTLOCKEDTYPE = new QName("http://www.opengis.net/wfs",
             "FeaturesNotLockedType");
 
-    /** @generated */
+    /**
+     * @generated
+     */
     public static final QName FEATURETYPELISTTYPE = new QName("http://www.opengis.net/wfs",
             "FeatureTypeListType");
 
-    /** @generated */
+    /**
+     * @generated
+     */
     public static final QName FEATURETYPETYPE = new QName("http://www.opengis.net/wfs",
             "FeatureTypeType");
 
-    /** @generated */
+    /**
+     * @generated
+     */
     public static final QName GETCAPABILITIESTYPE = new QName("http://www.opengis.net/wfs",
             "GetCapabilitiesType");
 
-    /** @generated */
+    /**
+     * @generated
+     */
     public static final QName GETFEATURETYPE = new QName("http://www.opengis.net/wfs",
             "GetFeatureType");
 
-    /** @generated */
+    /**
+     * @generated
+     */
     public static final QName GETFEATUREWITHLOCKTYPE = new QName("http://www.opengis.net/wfs",
             "GetFeatureWithLockType");
 
-    /** @generated */
+    /**
+     * @generated
+     */
     public static final QName GETGMLOBJECTTYPE = new QName("http://www.opengis.net/wfs",
             "GetGmlObjectType");
 
-    /** @generated */
+    /**
+     * @generated
+     */
     public static final QName GMLOBJECTTYPELISTTYPE = new QName("http://www.opengis.net/wfs",
             "GMLObjectTypeListType");
 
-    /** @generated */
+    /**
+     * @generated
+     */
     public static final QName GMLOBJECTTYPETYPE = new QName("http://www.opengis.net/wfs",
             "GMLObjectTypeType");
 
-    /** @generated */
+    /**
+     * @generated
+     */
     public static final QName IDENTIFIERGENERATIONOPTIONTYPE = new QName("http://www.opengis.net/wfs",
             "IdentifierGenerationOptionType");
 
-    /** @generated */
+    /**
+     * @generated
+     */
     public static final QName INSERTEDFEATURETYPE = new QName("http://www.opengis.net/wfs",
             "InsertedFeatureType");
 
-    /** @generated */
+    /**
+     * @generated
+     */
     public static final QName INSERTELEMENTTYPE = new QName("http://www.opengis.net/wfs",
             "InsertElementType");
 
-    /** @generated */
+    /**
+     * @generated
+     */
     public static final QName INSERTRESULTSTYPE = new QName("http://www.opengis.net/wfs",
             "InsertResultsType");
 
-    /** @generated */
+    /**
+     * @generated
+     */
     public static final QName LOCKFEATURERESPONSETYPE = new QName("http://www.opengis.net/wfs",
             "LockFeatureResponseType");
 
-    /** @generated */
+    /**
+     * @generated
+     */
     public static final QName LOCKFEATURETYPE = new QName("http://www.opengis.net/wfs",
             "LockFeatureType");
 
-    /** @generated */
+    /**
+     * @generated
+     */
     public static final QName LOCKTYPE = new QName("http://www.opengis.net/wfs", "LockType");
 
-    /** @generated */
+    /**
+     * @generated
+     */
     public static final QName METADATAURLTYPE = new QName("http://www.opengis.net/wfs",
             "MetadataURLType");
 
-    /** @generated */
+    /**
+     * @generated
+     */
     public static final QName NATIVETYPE = new QName("http://www.opengis.net/wfs", "NativeType");
 
-    /** @generated */
+    /**
+     * @generated
+     */
     public static final QName OPERATIONSTYPE = new QName("http://www.opengis.net/wfs",
             "OperationsType");
 
-    /** @generated */
+    /**
+     * @generated
+     */
     public static final QName OPERATIONTYPE = new QName("http://www.opengis.net/wfs",
             "OperationType");
 
-    /** @generated */
+    /**
+     * @generated
+     */
     public static final QName OUTPUTFORMATLISTTYPE = new QName("http://www.opengis.net/wfs",
             "OutputFormatListType");
 
-    /** @generated */
+    /**
+     * @generated
+     */
     public static final QName PROPERTYTYPE = new QName("http://www.opengis.net/wfs", "PropertyType");
 
-    /** @generated */
+    /**
+     * @generated
+     */
     public static final QName QUERYTYPE = new QName("http://www.opengis.net/wfs", "QueryType");
 
-    /** @generated */
+    /**
+     * @generated
+     */
     public static final QName RESULTTYPETYPE = new QName("http://www.opengis.net/wfs",
             "ResultTypeType");
 
-    /** @generated */
+    /**
+     * @generated
+     */
     public static final QName TRANSACTIONRESPONSETYPE = new QName("http://www.opengis.net/wfs",
             "TransactionResponseType");
 
-    /** @generated */
+    /**
+     * @generated
+     */
     public static final QName TRANSACTIONRESULTSTYPE = new QName("http://www.opengis.net/wfs",
             "TransactionResultsType");
 
-    /** @generated */
+    /**
+     * @generated
+     */
     public static final QName TRANSACTIONSUMMARYTYPE = new QName("http://www.opengis.net/wfs",
             "TransactionSummaryType");
 
-    /** @generated */
+    /**
+     * @generated
+     */
     public static final QName TRANSACTIONTYPE = new QName("http://www.opengis.net/wfs",
             "TransactionType");
 
-    /** @generated */
+    /**
+     * @generated
+     */
     public static final QName TYPENAMELISTTYPE = new QName("http://www.opengis.net/wfs",
             "TypeNameListType");
 
-    /** @generated */
+    /**
+     * @generated
+     */
     public static final QName UPDATEELEMENTTYPE = new QName("http://www.opengis.net/wfs",
             "UpdateElementType");
 
-    /** @generated */
+    /**
+     * @generated
+     */
     public static final QName WFS_CAPABILITIESTYPE = new QName("http://www.opengis.net/wfs",
             "WFS_CapabilitiesType");
 
     /* Elements */
-    /** @generated */
+    /**
+     * @generated
+     */
     public static final QName DELETE = new QName("http://www.opengis.net/wfs", "Delete");
 
-    /** @generated */
+    /**
+     * @generated
+     */
     public static final QName DESCRIBEFEATURETYPE = new QName("http://www.opengis.net/wfs",
             "DescribeFeatureType");
 
-    /** @generated */
+    /**
+     * @generated
+     */
     public static final QName FEATURECOLLECTION = new QName("http://www.opengis.net/wfs",
             "FeatureCollection");
 
-    /** @generated */
+    /**
+     * @generated
+     */
     public static final QName FEATURETYPELIST = new QName("http://www.opengis.net/wfs",
             "FeatureTypeList");
 
-    /** @generated */
+    /**
+     * @generated
+     */
     public static final QName GETCAPABILITIES = new QName("http://www.opengis.net/wfs",
             "GetCapabilities");
 
-    /** @generated */
+    /**
+     * @generated
+     */
     public static final QName GETFEATURE = new QName("http://www.opengis.net/wfs", "GetFeature");
 
-    /** @generated */
+    /**
+     * @generated
+     */
     public static final QName GETFEATUREWITHLOCK = new QName("http://www.opengis.net/wfs",
             "GetFeatureWithLock");
 
-    /** @generated */
+    /**
+     * @generated
+     */
     public static final QName GETGMLOBJECT = new QName("http://www.opengis.net/wfs", "GetGmlObject");
 
-    /** @generated */
+    /**
+     * @generated
+     */
     public static final QName INSERT = new QName("http://www.opengis.net/wfs", "Insert");
 
-    /** @generated */
+    /**
+     * @generated
+     */
     public static final QName LOCKFEATURE = new QName("http://www.opengis.net/wfs", "LockFeature");
 
-    /** @generated */
+    /**
+     * @generated
+     */
     public static final QName LOCKFEATURERESPONSE = new QName("http://www.opengis.net/wfs",
             "LockFeatureResponse");
 
-    /** @generated */
+    /**
+     * @generated
+     */
     public static final QName LOCKID = new QName("http://www.opengis.net/wfs", "LockId");
 
-    /** @generated */
+    /**
+     * @generated
+     */
     public static final QName NATIVE = new QName("http://www.opengis.net/wfs", "Native");
 
-    /** @generated */
+    /**
+     * @generated
+     */
     public static final QName PROPERTY = new QName("http://www.opengis.net/wfs", "Property");
 
-    /** @generated */
+    /**
+     * @generated
+     */
     public static final QName PROPERYNAME = new QName("http://www.opengis.net/wfs", "ProperyName");
 
-    /** @generated */
+    /**
+     * @generated
+     */
     public static final QName QUERY = new QName("http://www.opengis.net/wfs", "Query");
 
-    /** @generated */
+    /**
+     * @generated
+     */
     public static final QName SERVESGMLOBJECTTYPELIST = new QName("http://www.opengis.net/wfs",
             "ServesGMLObjectTypeList");
 
-    /** @generated */
+    /**
+     * @generated
+     */
     public static final QName SUPPORTSGMLOBJECTTYPELIST = new QName("http://www.opengis.net/wfs",
             "SupportsGMLObjectTypeList");
 
-    /** @generated */
+    /**
+     * @generated
+     */
     public static final QName TRANSACTION = new QName("http://www.opengis.net/wfs", "Transaction");
 
-    /** @generated */
+    /**
+     * @generated
+     */
     public static final QName TRANSACTIONRESPONSE = new QName("http://www.opengis.net/wfs",
             "TransactionResponse");
 
-    /** @generated */
+    /**
+     * @generated
+     */
     public static final QName UPDATE = new QName("http://www.opengis.net/wfs", "Update");
 
-    /** @generated */
+    /**
+     * @generated
+     */
     public static final QName WFS_CAPABILITIES = new QName("http://www.opengis.net/wfs",
             "WFS_Capabilities");
 
-    /** @generated */
+    /**
+     * @generated
+     */
     public static final QName XLINKPROPERTYNAME = new QName("http://www.opengis.net/wfs",
             "XlinkPropertyName");
 
     /* Attributes */
-    
-    /** schema type builder */
+
+    /**
+     * schema type builder
+     */
     FeatureTypeSchemaBuilder schemaBuilder;
-    
+
     public WFS(FeatureTypeSchemaBuilder schemaBuilder) {
         this.schemaBuilder = schemaBuilder;
     }
-    
+
     public FeatureTypeSchemaBuilder getSchemaBuilder() {
         return schemaBuilder;
     }
-    
+
     protected void addDependencies(Set dependencies) {
         super.addDependencies(dependencies);
-        
-        dependencies.add( OGC.getInstance() );
-        dependencies.add( GML.getInstance() );
-        dependencies.add( OWS.getInstance() );
+
+        dependencies.add(OGC.getInstance());
+        dependencies.add(GML.getInstance());
+        dependencies.add(OWS.getInstance());
     }
-    
+
     /**
      * Returns 'http://www.opengis.net/wfs'
      */
     public String getNamespaceURI() {
         return NAMESPACE;
     }
-    
+
     /**
      * Returns the location of 'wfs.xsd'
      */
     public String getSchemaLocation() {
-        return org.geotools.wfs.v1_1.WFS.class.getResource( "wfs.xsd" ).toString();
+        return org.geotools.wfs.v1_1.WFS.class.getResource("wfs.xsd").toString();
     }
 }

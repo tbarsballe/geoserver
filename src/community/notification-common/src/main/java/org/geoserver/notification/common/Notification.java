@@ -9,9 +9,8 @@ import java.util.Map;
 
 /**
  * Stores notification event informations
- * 
- * @author Xandros
  *
+ * @author Xandros
  */
 public interface Notification {
 
@@ -20,14 +19,18 @@ public interface Notification {
      */
     public enum Type {
         Catalog, Data, /* Request, Service */
-    };
+    }
+
+    ;
 
     /**
      * The event action, if applicable
      */
     public enum Action {
         Add, Remove, Update, None
-    };
+    }
+
+    ;
 
     /**
      * An event handle, identifying the event (can be coming from an external system to avoid re-processing notifications for action the external
@@ -42,7 +45,7 @@ public interface Notification {
 
     /**
      * The event action
-     * 
+     *
      * @return
      */
     public Action getAction();
@@ -50,14 +53,14 @@ public interface Notification {
     /**
      * The "object" of the event, could be what has been created/inserted/modified, the container of it, the request, and so on. Typically a catalog
      * object, a service object, or a Request
-     * 
+     *
      * @return
      */
     public Object getObject();
 
     /**
      * A set of "properties" attached to the event, could be properties being changed, the bounds being affected, and so on
-     * 
+     *
      * @return
      */
     public Map<String, Object> getProperties();

@@ -21,6 +21,7 @@ public class DomainType {
 
     /**
      * Builds a constraint with a name, and a default value
+     *
      * @param name
      * @param defaultValue
      */
@@ -32,6 +33,7 @@ public class DomainType {
 
     /**
      * Builds a constraint with a name and a non null list of allowed values (eventually empty)
+     *
      * @param name
      * @param allowedValues
      */

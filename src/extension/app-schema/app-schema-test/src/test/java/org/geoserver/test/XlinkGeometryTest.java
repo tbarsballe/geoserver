@@ -11,11 +11,9 @@ import org.w3c.dom.Document;
 import org.junit.Test;
 
 /**
- * 
  * @author Niels Charlier, Curtin University Of Technology
- * 
- *         Tests manual and automatic xlink:href for Geometries
- * 
+ * <p>
+ * Tests manual and automatic xlink:href for Geometries
  */
 
 public class XlinkGeometryTest extends AbstractAppSchemaTestSupport {

@@ -36,9 +36,9 @@ import com.sun.media.imageioimpl.common.PackageUtil;
 public class JAIPage extends ServerAdminPage {
     private static final long serialVersionUID = -1184717232184497578L;
 
-    public JAIPage(){
+    public JAIPage() {
         final IModel<GeoServer> geoServerModel = getGeoServerModel();
-        
+
         // this invokation will trigger a clone of the JAIInfo
         // which will allow the modification proxy seeing changes on the
         // Jai page with respect to the original JAIInfo object
@@ -46,7 +46,7 @@ public class JAIPage extends ServerAdminPage {
 
         // form and submit
         Form<JAIInfo> form = new Form<JAIInfo>("form", new CompoundPropertyModel<JAIInfo>(jaiModel));
-        add( form );
+        add(form);
 
         // All the fields
         // ... memory capacity and threshold are percentages
@@ -68,9 +68,9 @@ public class JAIPage extends ServerAdminPage {
         addPngEncoderEditor(form);
         CheckBox checkBoxMosaic = new CheckBox("allowNativeMosaic");
         CheckBox checkBoxWarp = new CheckBox("allowNativeWarp");
-        JAIInfo info = (JAIInfo)jaiModel.getObject();
+        JAIInfo info = (JAIInfo) jaiModel.getObject();
         JAIEXTInfo je = null;
-        boolean isJAIExtEnabled = ImageWorker.isJaiExtEnabled(); 
+        boolean isJAIExtEnabled = ImageWorker.isJaiExtEnabled();
         if (isJAIExtEnabled) {
             je = info.getJAIEXTInfo();
         }
@@ -88,19 +88,21 @@ public class JAIPage extends ServerAdminPage {
 
         Button submit = new Button("submit") {
             private static final long serialVersionUID = -2842881187264147131L;
+
             @Override
             public void onSubmit() {
                 GeoServer gs = (GeoServer) geoServerModel.getObject();
                 GeoServerInfo global = gs.getGlobal();
-                global.setJAI( (JAIInfo)jaiModel.getObject());
-                gs.save( global );
+                global.setJAI((JAIInfo) jaiModel.getObject());
+                gs.save(global);
                 doReturn();
             }
         };
         form.add(submit);
-        
+
         Button cancel = new Button("cancel") {
             private static final long serialVersionUID = 7917847596581898225L;
+
             @Override
             public void onSubmit() {
                 doReturn();
@@ -112,28 +114,28 @@ public class JAIPage extends ServerAdminPage {
     private void addPngEncoderEditor(Form<JAIInfo> form) {
         // get the list of available encoders
         List<PngEncoderType> encoders = new ArrayList<PngEncoderType>(Arrays.asList(JAIInfo.PngEncoderType.values()));
-        if(!PackageUtil.isCodecLibAvailable()) {
+        if (!PackageUtil.isCodecLibAvailable()) {
             encoders.remove(PngEncoderType.NATIVE);
         }
         // create the editor, eventually set a default value
         DropDownChoice<JAIInfo.PngEncoderType> editor = new DropDownChoice<JAIInfo.PngEncoderType>(
-            "pngEncoderType", encoders, new ChoiceRenderer<JAIInfo.PngEncoderType>() {
-                private static final long serialVersionUID = 1L;
+                "pngEncoderType", encoders, new ChoiceRenderer<JAIInfo.PngEncoderType>() {
+            private static final long serialVersionUID = 1L;
 
-                @Override
-                public Object getDisplayValue(PngEncoderType type) {
-                    return new ParamResourceModel("pngEncoder." + type.name(), JAIPage.this)
-                            .getString();
-                }
-
-                @Override
-                public String getIdValue(PngEncoderType type, int index) {
-                    return type.name();
-                }
+            @Override
+            public Object getDisplayValue(PngEncoderType type) {
+                return new ParamResourceModel("pngEncoder." + type.name(), JAIPage.this)
+                        .getString();
             }
+
+            @Override
+            public String getIdValue(PngEncoderType type, int index) {
+                return type.name();
+            }
+        }
         );
         form.add(editor);
-        if(!encoders.contains(editor.getModelObject())) {
+        if (!encoders.contains(editor.getModelObject())) {
             editor.setModelObject(PngEncoderType.PNGJ);
         }
     }

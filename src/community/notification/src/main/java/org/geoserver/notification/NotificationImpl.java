@@ -24,7 +24,7 @@ public class NotificationImpl implements Notification {
     private Object object;
 
     public NotificationImpl(Type type, String handle, Action action, Object object,
-            Map<String, Object> properties, String user) {
+                            Map<String, Object> properties, String user) {
         this.type = type;
         this.handle = handle;
         this.action = action;

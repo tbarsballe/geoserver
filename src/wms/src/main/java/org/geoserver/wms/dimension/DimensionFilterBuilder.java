@@ -18,22 +18,21 @@ import org.opengis.filter.expression.PropertyName;
 /**
  * Helper class that builds dimension related filters against reference objects that can be point
  * ones (date, number, string) or range types (DateRange, NumberRange)
- * 
+ *
  * @author Andrea Aime - GeoSolutions
- * 
  */
 public class DimensionFilterBuilder {
 
     Filter filter = null;
 
     FilterFactory ff;
-    
+
     public DimensionFilterBuilder(FilterFactory ff) {
         this.ff = ff;
     }
 
     public void appendFilters(String startAttributeName, String endAttributeName,
-            List<Object> ranges) {
+                              List<Object> ranges) {
         if (ranges == null || ranges.size() == 0) {
             return;
         }
@@ -64,11 +63,10 @@ public class DimensionFilterBuilder {
     /**
      * Build a filter for a single value based on an attribute and optional endAttribute. The value
      * is either a Range or object that can be used as a literal (Date,Number).
-     * 
+     *
      * @param value
      * @param attribute
      * @param endAttribute
-     *
      */
     Filter buildDimensionFilter(Object value, PropertyName attribute, PropertyName endAttribute) {
         Filter filter;

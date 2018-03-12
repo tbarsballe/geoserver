@@ -18,11 +18,11 @@ public class GetCapabilitiesKvpRequestReader extends WFSKvpRequestReader {
     public GetCapabilitiesKvpRequestReader() {
         this(GetCapabilitiesType.class, WfsFactory.eINSTANCE);
     }
-    
+
     public GetCapabilitiesKvpRequestReader(Class requestBean, EFactory factory) {
         super(requestBean, factory);
     }
-    
+
     @Override
     public Object read(Object request, Map kvp, Map rawKvp) throws Exception {
         request = super.read(request, kvp, rawKvp);
@@ -32,7 +32,7 @@ public class GetCapabilitiesKvpRequestReader extends WFSKvpRequestReader {
             GetCapabilitiesRequest req = GetCapabilitiesRequest.adapt(request);
             //TODO: put this check in a cite hack
             if (req.getAcceptVersions() == null || req.getAcceptVersions().isEmpty()) {
-                req.setAcceptVersions((String)kvp.get("version"));    
+                req.setAcceptVersions((String) kvp.get("version"));
             }
         }
 

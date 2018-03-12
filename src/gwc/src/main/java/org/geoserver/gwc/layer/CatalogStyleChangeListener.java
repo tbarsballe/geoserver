@@ -35,7 +35,7 @@ import com.google.common.collect.ImmutableSet;
 /**
  * Listens to changes in {@link StyleInfo styles} for the GeoServer {@link Catalog} and applies the
  * needed {@link ParameterFilter} changes to the corresponding {@link GeoServerTileLayer}.
- * 
+ *
  * @author Arne Kepp
  * @author Gabriel Roldan
  */
@@ -82,7 +82,7 @@ public class CatalogStyleChangeListener implements CatalogListener {
      * imply getting to the parameter filters that refer to that style in the meta-store and change
      * it's value preserving the parametersId)
      * <p>
-     * 
+     *
      * @see org.geoserver.catalog.event.CatalogListener#handleModifyEvent(org.geoserver.catalog.event.CatalogModifyEvent)
      */
     public void handleModifyEvent(CatalogModifyEvent event) throws CatalogException {
@@ -155,7 +155,7 @@ public class CatalogStyleChangeListener implements CatalogListener {
 
     /**
      * Truncates all tile sets referring the modified {@link StyleInfo}
-     * 
+     *
      * @see org.geoserver.catalog.event.CatalogListener#handlePostModifyEvent
      */
     public void handlePostModifyEvent(CatalogPostModifyEvent event) throws CatalogException {
@@ -208,7 +208,7 @@ public class CatalogStyleChangeListener implements CatalogListener {
      * <li>A {@link LayerGroupInfo} contains a layer using {@code modifiedStyle}
      * <li>{@code modifiedStyle} is explicitly assigned to a {@link LayerGroupInfo}
      * </ul>
-     * 
+     *
      * @param modifiedStyle
      */
     private void handleStyleChange(final StyleInfo modifiedStyle) {
@@ -236,7 +236,7 @@ public class CatalogStyleChangeListener implements CatalogListener {
     /**
      * No need to do anything here, when a style is removed all the layers that reference it are
      * updated first
-     * 
+     *
      * @see org.geoserver.catalog.event.CatalogListener#handleRemoveEvent
      */
     public void handleRemoveEvent(CatalogRemoveEvent event) throws CatalogException {
@@ -244,7 +244,7 @@ public class CatalogStyleChangeListener implements CatalogListener {
     }
 
     /**
-     * 
+     *
      */
     public void reloaded() {
         //

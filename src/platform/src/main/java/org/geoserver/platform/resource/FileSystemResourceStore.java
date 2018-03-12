@@ -30,61 +30,64 @@ import org.geotools.util.logging.Logging;
  * Implementation of ResourceStore backed by the file system.
  */
 public class FileSystemResourceStore implements ResourceStore {
-    
+
     static final Logger LOGGER = Logging.getLogger(FileSystemResource.class);
-    
+
     /**
      * When true, the stack trace that got an input stream that wasn't closed is recorded and then
      * printed out when warning the user about this.
      */
     protected static final Boolean TRACE_ENABLED = "true".equalsIgnoreCase(System.getProperty("gs.lock.trace"));
-    
-    /** LockProvider used to secure resources for exclusive access */
+
+    /**
+     * LockProvider used to secure resources for exclusive access
+     */
     protected LockProvider lockProvider = new NullLockProvider();
-    
-    /** Base directory for ResourceStore content */
+
+    /**
+     * Base directory for ResourceStore content
+     */
     protected File baseDirectory = null;
 
     protected FileSystemWatcher watcher;
 
-    protected FileSystemResourceStore(){
+    protected FileSystemResourceStore() {
         // Used by Spring, baseDirectory set by subclass
     }
 
-    
+
     /**
      * LockProvider used during {@link Resource#out()}.
-     * 
+     * <p>
      * Client code that insists on using {@link Resource#file()} can do us using:
      * <pre><code>
      * Resource resource = resoures.get( "example.txt" );
      * Lock lock = resources.getLockProvider().acquire( resource.path() );
      * try {
      *    File file = resoruce.file();
-     *    .. 
+     *    ..
      * }
      * finally {
      *    lock.release();
      * }
      * </code></pre>
-     * 
+     *
      * @return LockProvider used for {@link Resource#out}
-     */    
+     */
     public LockProvider getLockProvider() {
         return lockProvider;
     }
-    
+
     /**
      * Configure LockProvider used during {@link Resource#out()}.
-     * 
-     * @param lockProvider LockProvider used for Resource#out()    
+     *
+     * @param lockProvider LockProvider used for Resource#out()
      */
     public void setLockProvider(LockProvider lockProvider) {
         this.lockProvider = lockProvider;
     }
-    
-    
-    
+
+
     public FileSystemResourceStore(File resourceDirectory) {
         if (resourceDirectory == null) {
             throw new NullPointerException("root resource directory required");
@@ -106,7 +109,7 @@ public class FileSystemResourceStore implements ResourceStore {
             throw new IllegalArgumentException("Unable to acess directory " + resourceDirectory);
         }
     }
-    
+
     @Override
     public Resource get(String path) {
         path = Paths.valid(path);
@@ -180,16 +183,17 @@ public class FileSystemResourceStore implements ResourceStore {
         public Lock lock() {
             return lockProvider.acquire(path);
         }
-        
+
         @Override
         public void addListener(ResourceListener listener) {
             getResourceNotificationDispatcher().addListener(path, listener);
         }
-        
+
         @Override
         public void removeListener(ResourceListener listener) {
             getResourceNotificationDispatcher().removeListener(path, listener);
         }
+
         @Override
         public InputStream in() {
             File actualFile = file();
@@ -198,7 +202,7 @@ public class FileSystemResourceStore implements ResourceStore {
             }
             final Lock lock = lock();
             final Throwable tracer;
-            if(TRACE_ENABLED) {
+            if (TRACE_ENABLED) {
                 tracer = new Exception();
                 tracer.fillInStackTrace();
             } else {
@@ -207,25 +211,25 @@ public class FileSystemResourceStore implements ResourceStore {
             try {
                 return new FileInputStream(file) {
                     boolean closed = false;
-                    
-                    
+
+
                     @Override
                     public void close() throws IOException {
                         closed = true;
                         super.close();
                         lock.release();
                     }
-                    
+
                     @Override
                     protected void finalize() throws IOException {
-                        if(!closed) {
+                        if (!closed) {
                             String warn = "There is code leaving resource input streams open, locks around them might not be cleared! ";
-                            if(!TRACE_ENABLED) {
+                            if (!TRACE_ENABLED) {
                                 warn += "Add -D" + TRACE_ENABLED + "=true to your JVM options to get a full stack trace of the code that acquired the input stream";
                             }
                             LOGGER.warning(warn);
-                            
-                            if(TRACE_ENABLED) {
+
+                            if (TRACE_ENABLED) {
                                 LOGGER.log(Level.WARNING, "The unclosed input stream originated on this stack trace", tracer);
                             }
                         }
@@ -247,20 +251,20 @@ public class FileSystemResourceStore implements ResourceStore {
             try {
                 // first save to a temp file
                 final File temp;
-                synchronized(this) {
+                synchronized (this) {
                     File tryTemp;
                     do {
                         UUID uuid = UUID.randomUUID();
                         tryTemp = new File(actualFile.getParentFile(), String.format("%s.%s.tmp", actualFile.getName(), uuid));
-                    } while(tryTemp.exists());
-                    
+                    } while (tryTemp.exists());
+
                     temp = tryTemp;
                 }
                 // OutputStream wrapper used to write to a temporary file
                 // (and only lock during move to actualFile)
                 return new OutputStream() {
                     FileOutputStream delegate = new FileOutputStream(temp);
-                
+
                     @Override
                     public void close() throws IOException {
                         delegate.close();
@@ -270,28 +274,27 @@ public class FileSystemResourceStore implements ResourceStore {
                             try {
                                 // no errors, overwrite the original file
                                 Files.move(temp, actualFile);
-                            }
-                            finally {
+                            } finally {
                                 lock.release();
                             }
                         }
                     }
-                
+
                     @Override
                     public void write(byte[] b, int off, int len) throws IOException {
                         delegate.write(b, off, len);
                     }
-                
+
                     @Override
                     public void flush() throws IOException {
                         delegate.flush();
                     }
-                
+
                     @Override
                     public void write(byte[] b) throws IOException {
                         delegate.write(b);
                     }
-                
+
                     @Override
                     public void write(int b) throws IOException {
                         delegate.write(b);
@@ -319,8 +322,7 @@ public class FileSystemResourceStore implements ResourceStore {
                         boolean created;
                         try {
                             created = file.createNewFile();
-                        }
-                        finally {
+                        } finally {
                             lock.release();
                         }
                         if (!created) {
@@ -359,8 +361,7 @@ public class FileSystemResourceStore implements ResourceStore {
                         boolean created;
                         try {
                             created = file.mkdir();
-                        }
-                        finally {
+                        } finally {
                             lock.release();
                         }
                         if (!created) {
@@ -432,17 +433,17 @@ public class FileSystemResourceStore implements ResourceStore {
         public Type getType() {
             try {
                 BasicFileAttributes attributes = java.nio.file.Files.readAttributes(file.toPath(), BasicFileAttributes.class);
-                if(attributes.isDirectory()) {
+                if (attributes.isDirectory()) {
                     return Type.DIRECTORY;
-                } else if(attributes.isRegularFile()) {
+                } else if (attributes.isRegularFile()) {
                     return Type.RESOURCE;
                 } else {
                     throw new IllegalStateException(
-                          "Path does not represent a configuration resource: " + path);
+                            "Path does not represent a configuration resource: " + path);
                 }
-            } catch(NoSuchFileException e) {
+            } catch (NoSuchFileException e) {
                 return Type.UNDEFINED;
-            } catch(IOException e) {
+            } catch (IOException e) {
                 throw new IllegalStateException(e);
             }
         }
@@ -494,26 +495,26 @@ public class FileSystemResourceStore implements ResourceStore {
                 return false;
             }
             try {
-                if(dest instanceof FileSystemResource) {
-                    rename(file, ((FileSystemResource)dest).file);
-                } else if(dest instanceof Files.ResourceAdaptor) {
-                    rename(file, ((Files.ResourceAdaptor)dest).file);
+                if (dest instanceof FileSystemResource) {
+                    rename(file, ((FileSystemResource) dest).file);
+                } else if (dest instanceof Files.ResourceAdaptor) {
+                    rename(file, ((Files.ResourceAdaptor) dest).file);
                 } else {
                     return Resources.renameByCopy(this, dest);
                 }
             } catch (IOException e) {
-                LOGGER.log(Level.WARNING, "Failed to rename file resource "+path+" to "+dest.path(), e);
+                LOGGER.log(Level.WARNING, "Failed to rename file resource " + path + " to " + dest.path(), e);
                 return false;
             }
             return true;
         }
-        
-      
+
+
         @Override
         public byte[] getContents() throws IOException {
             return java.nio.file.Files.readAllBytes(file.toPath());
         }
-        
+
         @Override
         public void setContents(byte[] byteArray) throws IOException {
             final File actualFile = file();
@@ -523,16 +524,16 @@ public class FileSystemResourceStore implements ResourceStore {
             try {
                 // first save to a temp file
                 final File temp;
-                synchronized(this) {
+                synchronized (this) {
                     File tryTemp;
                     do {
                         UUID uuid = UUID.randomUUID();
                         tryTemp = new File(actualFile.getParentFile(), String.format("%s.%s.tmp", actualFile.getName(), uuid));
-                    } while(tryTemp.exists());
-                    
+                    } while (tryTemp.exists());
+
                     temp = tryTemp;
                 }
-                
+
                 java.nio.file.Files.write(temp.toPath(), byteArray);
                 Lock lock = lock();
                 try {
@@ -549,14 +550,14 @@ public class FileSystemResourceStore implements ResourceStore {
 
     @Override
     public ResourceNotificationDispatcher getResourceNotificationDispatcher() {
-        if( watcher == null ){
+        if (watcher == null) {
             watcher = new FileSystemWatcher(new FileSystemWatcher.FileExtractor() {
 
                 @Override
                 public File getFile(String path) {
                     return Paths.toFile(baseDirectory, path);
                 }
-                
+
             });
         }
         return watcher;

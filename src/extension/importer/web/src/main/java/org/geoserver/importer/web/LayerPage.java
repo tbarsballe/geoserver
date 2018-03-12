@@ -24,8 +24,7 @@ public class LayerPage extends ResourceConfigurationPage {
             //do not call super.doSave(), because this layer is not part of the catalog yet
 
             onSuccessfulSave();
-        }
-        else {
+        } else {
             super.doSave();
         }
     }

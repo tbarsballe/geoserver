@@ -45,11 +45,10 @@ import com.vividsolutions.jts.geom.Geometry;
 
 /**
  * The main DownloadProcess class.
- * 
+ * <p>
  * This class is simply responsible for deciding who is going to take care of the request and then for putting together the final result as a zip file
  * adding the needed styles.
- * 
- * 
+ *
  * @author "Alessio Fabiani - alessio.fabiani@geo-solutions.it"
  * @author Simone Giannecchini, GeoSolutions SAS
  */
@@ -57,13 +56,19 @@ import com.vividsolutions.jts.geom.Geometry;
 @DescribeProcess(title = "Enterprise Download Process", description = "Downloads Layer Stream and provides a ZIP.")
 public class DownloadProcess implements GSProcess, ApplicationContextAware {
 
-    /** The LOGGER. */
+    /**
+     * The LOGGER.
+     */
     private static final Logger LOGGER = Logging.getLogger(DownloadProcess.class);
 
-    /** The estimator. */
+    /**
+     * The estimator.
+     */
     private final DownloadEstimatorProcess estimator;
 
-    /** The catalog. */
+    /**
+     * The catalog.
+     */
     private final Catalog catalog;
 
     private WPSResourceManager resourceManager;
@@ -72,14 +77,14 @@ public class DownloadProcess implements GSProcess, ApplicationContextAware {
 
     /**
      * Instantiates a new download process.
-     * 
-     * @param geoServer the geo server
-     * @param sendMail the send mail
-     * @param estimator the estimator
+     *
+     * @param geoServer       the geo server
+     * @param sendMail        the send mail
+     * @param estimator       the estimator
      * @param resourceManager the resourceManager to track resources to be cleaned up
      */
     public DownloadProcess(GeoServer geoServer, DownloadEstimatorProcess estimator,
-            WPSResourceManager resourceManager) {
+                           WPSResourceManager resourceManager) {
         Utilities.ensureNonNull("geoServer", geoServer);
         this.catalog = geoServer.getCatalog();
         this.estimator = estimator;
@@ -88,20 +93,20 @@ public class DownloadProcess implements GSProcess, ApplicationContextAware {
 
     /**
      * This process returns a zipped file containing the selected layer, cropped if needed.
-     * 
-     * @param layerName the layer name
-     * @param filter the filter
-     * @param email the email
-     * @param mimeType the output format
-     * @param targetCRS the target crs
-     * @param roiCRS the roi crs
-     * @param roi the roi
-     * @param clip the crop to geometry
-     * @param interpolation interpolation method to use when reprojecting / scaling
-     * @param targetSizeX the size of the target image along the X axis
-     * @param targetSizeY the size of the target image along the Y axis
-     * @param bandIndices the band indices selected for output, in case of raster input
-     * @param writeParameters optional writing parameters
+     *
+     * @param layerName        the layer name
+     * @param filter           the filter
+     * @param email            the email
+     * @param mimeType         the output format
+     * @param targetCRS        the target crs
+     * @param roiCRS           the roi crs
+     * @param roi              the roi
+     * @param clip             the crop to geometry
+     * @param interpolation    interpolation method to use when reprojecting / scaling
+     * @param targetSizeX      the size of the target image along the X axis
+     * @param targetSizeY      the size of the target image along the Y axis
+     * @param bandIndices      the band indices selected for output, in case of raster input
+     * @param writeParameters  optional writing parameters
      * @param progressListener the progress listener
      * @return the file
      * @throws ProcessException the process exception
@@ -277,7 +282,7 @@ public class DownloadProcess implements GSProcess, ApplicationContextAware {
                 // add all SLD to zip
                 for (Resource style : DownloadUtilities.collectStyles(layerInfo)) {
                     filesToDownload.add(style.file());
-                }                
+                }
 
                 if (LOGGER.isLoggable(Level.FINE)) {
                     LOGGER.log(Level.FINE, "Zipping files");

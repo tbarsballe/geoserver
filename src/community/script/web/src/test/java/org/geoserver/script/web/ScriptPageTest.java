@@ -22,7 +22,7 @@ import org.junit.Test;
 public class ScriptPageTest extends GeoServerWicketTestSupport {
 
     private ScriptManager scriptManager;
-    
+
     @Before
     public void init() throws IOException {
         // Add a few scripts
@@ -35,7 +35,7 @@ public class ScriptPageTest extends GeoServerWicketTestSupport {
         login();
         tester.startPage(ScriptPage.class);
     }
-    
+
     @Test
     public void testLoad() {
         tester.assertRenderedPage(ScriptPage.class);
@@ -46,5 +46,5 @@ public class ScriptPageTest extends GeoServerWicketTestSupport {
         assertEquals("buffer", script.getName());
         assertEquals(ScriptType.WPS, ScriptType.getByLabel(script.getType()));
     }
-    
+
 }

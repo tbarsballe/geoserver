@@ -30,21 +30,21 @@ public class MemoryUserGroupServiceTest extends AbstractUserGroupServiceTest {
 
     @Override
     public GeoServerUserGroupService createUserGroupService(String name) throws Exception {
-        MemoryUserGroupServiceConfigImpl config = (MemoryUserGroupServiceConfigImpl ) createConfigObject(name);         
+        MemoryUserGroupServiceConfigImpl config = (MemoryUserGroupServiceConfigImpl) createConfigObject(name);
         getSecurityManager().saveUserGroupService(config);
         return getSecurityManager().loadUserGroupService(name);
-   }
-    
+    }
+
     @Override
-    protected SecurityUserGroupServiceConfig createConfigObject( String name ) {
+    protected SecurityUserGroupServiceConfig createConfigObject(String name) {
         MemoryUserGroupServiceConfigImpl config = new MemoryUserGroupServiceConfigImpl();
         config.setClassName(MemoryUserGroupService.class.getName());
-         config.setName(name);        
-         config.setPasswordEncoderName(getPBEPasswordEncoder().getName());
-         config.setPasswordPolicyName(PasswordValidator.DEFAULT_NAME);
+        config.setName(name);
+        config.setPasswordEncoderName(getPBEPasswordEncoder().getName());
+        config.setPasswordPolicyName(PasswordValidator.DEFAULT_NAME);
         return config;
 
-     }
+    }
 
     @Test
     public void testInsert() throws Exception {
@@ -56,6 +56,6 @@ public class MemoryUserGroupServiceTest extends AbstractUserGroupServiceTest {
             assertTrue(group.getClass() == MemoryGeoserverUserGroup.class);
         }
     }
-    
+
 
 }

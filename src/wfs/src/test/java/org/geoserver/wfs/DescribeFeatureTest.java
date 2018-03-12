@@ -131,8 +131,8 @@ public class DescribeFeatureTest extends WFSTestSupport {
             imprts.put(namespace, params);
         }
 
-        String[] expected = new String[] { CiteTestData.SF_URI, CiteTestData.CDF_URI,
-                CiteTestData.CGF_URI };
+        String[] expected = new String[]{CiteTestData.SF_URI, CiteTestData.CDF_URI,
+                CiteTestData.CGF_URI};
         for (String namespace : expected) {
             assertNotNull(imprts.get(namespace));
             HashMap params = imprts.get(namespace);

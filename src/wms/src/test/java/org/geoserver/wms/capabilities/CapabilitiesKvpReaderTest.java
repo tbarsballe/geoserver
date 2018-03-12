@@ -45,7 +45,6 @@ public class CapabilitiesKvpReaderTest {
     /**
      * 1.0 "WMTVER" parameter supplied instead of "VERSION"? Version negotiation should agree on
      * 1.1.1
-     * 
      */
     @SuppressWarnings("unchecked")
     @Test

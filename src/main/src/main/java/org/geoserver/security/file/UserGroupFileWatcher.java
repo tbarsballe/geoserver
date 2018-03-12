@@ -17,49 +17,47 @@ import org.geoserver.security.event.UserGroupLoadedListener;
 /**
  * Watches a file storing user/group information
  * and triggers a load on an external file change.
- * 
- * @author christian
  *
+ * @author christian
  */
 public class UserGroupFileWatcher extends FileWatcher implements UserGroupLoadedListener {
 
-    
-    public UserGroupFileWatcher(Resource resource,GeoServerUserGroupService service) {
+
+    public UserGroupFileWatcher(Resource resource, GeoServerUserGroupService service) {
         super(resource);
-        this.service=service;
-        checkAndConfigure();
-    }
-    
-    /**
-     * 
-     * @deprecated Use Resource instead of File
-     */
-    public UserGroupFileWatcher(File file,GeoServerUserGroupService service) {
-        super(file);
-        this.service=service;
-        checkAndConfigure();
-    }    
-    public UserGroupFileWatcher(Resource resource,GeoServerUserGroupService service, long lastModified) {
-        super(resource);
-        this.service=service;
-        this.lastModified=lastModified;
-        checkAndConfigure();
-    }
-    
-    /**
-     * 
-     * @deprecated Use Resource instead of File
-     */
-    public UserGroupFileWatcher(File file,GeoServerUserGroupService service, long lastModified) {
-        super(file);
-        this.service=service;
-        this.lastModified=lastModified;
+        this.service = service;
         checkAndConfigure();
     }
 
-    
+    /**
+     * @deprecated Use Resource instead of File
+     */
+    public UserGroupFileWatcher(File file, GeoServerUserGroupService service) {
+        super(file);
+        this.service = service;
+        checkAndConfigure();
+    }
+
+    public UserGroupFileWatcher(Resource resource, GeoServerUserGroupService service, long lastModified) {
+        super(resource);
+        this.service = service;
+        this.lastModified = lastModified;
+        checkAndConfigure();
+    }
+
+    /**
+     * @deprecated Use Resource instead of File
+     */
+    public UserGroupFileWatcher(File file, GeoServerUserGroupService service, long lastModified) {
+        super(file);
+        this.service = service;
+        this.lastModified = lastModified;
+        checkAndConfigure();
+    }
+
+
     protected GeoServerUserGroupService service;
-    
+
     public synchronized GeoServerUserGroupService getService() {
         return service;
     }
@@ -75,18 +73,18 @@ public class UserGroupFileWatcher extends FileWatcher implements UserGroupLoaded
     protected void doOnChange() {
         GeoServerUserGroupService theService = getService();
         try {
-            if (theService!=null)
+            if (theService != null)
                 theService.load();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
-    
+
     @Override
     public String toString() {
         StringBuffer buff = new StringBuffer();
-        String serviceName = service==null ? "UNKNOWN" : service.getName();
-         
+        String serviceName = service == null ? "UNKNOWN" : service.getName();
+
         buff.append("FileWatcher for ").append(serviceName);
         buff.append(", ").append(getFileInfo());
         return buff.toString();
@@ -95,13 +93,14 @@ public class UserGroupFileWatcher extends FileWatcher implements UserGroupLoaded
     /**
      * Another method to avoid reloads if this object
      * is registered
+     *
      * @see GeoServerUserGroupService#registerUserGroupLoadedListener(UserGroupLoadedListener)
-     */ 
+     */
     @Override
     public void usersAndGroupsChanged(UserGroupLoadedEvent event) {
         // avoid unnecessary reloads
         setLastModified(resource.lastmodified());
-        LOGGER.info("Adjusted last modified for file: " +path);
+        LOGGER.info("Adjusted last modified for file: " + path);
     }
 
 }

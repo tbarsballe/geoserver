@@ -32,9 +32,9 @@ import org.opengis.feature.type.AttributeDescriptor;
 
 /**
  * Abstract base class for Excel WFS output format
- * 
+ *
  * @author Sebastian Benthall, OpenGeo, seb@opengeo.org and Shane StClair, Axiom Consulting,
- *         shane@axiomalaska.com
+ * shane@axiomalaska.com
  */
 public abstract class ExcelOutputFormat extends WFSGetFeatureOutputFormat {
     private static Logger log = Logger.getLogger(ExcelOutputFormat.class);
@@ -82,15 +82,15 @@ public abstract class ExcelOutputFormat extends WFSGetFeatureOutputFormat {
      * @see WFSGetFeatureOutputFormat#write(Object, OutputStream, Operation)
      */
     @Override
-    protected void write(FeatureCollectionResponse featureCollection, OutputStream output, 
-        Operation getFeature) throws IOException ,ServiceException {
-    
+    protected void write(FeatureCollectionResponse featureCollection, OutputStream output,
+                         Operation getFeature) throws IOException, ServiceException {
+
         // Create the workbook
         Workbook wb = getNewWorkbook();
         CreationHelper helper = wb.getCreationHelper();
         ExcelCellStyles styles = new ExcelCellStyles(wb);
 
-        for (Iterator it = featureCollection.getFeature().iterator(); it.hasNext();) {
+        for (Iterator it = featureCollection.getFeature().iterator(); it.hasNext(); ) {
             SimpleFeatureCollection fc = (SimpleFeatureCollection) it.next();
 
             // create the sheet for this feature collection
@@ -158,7 +158,7 @@ public abstract class ExcelOutputFormat extends WFSGetFeatureOutputFormat {
                                     stringVal = TRUNCATE_WARNING
                                             + " "
                                             + stringVal.substring(0, CELL_CHAR_LIMIT
-                                                    - TRUNCATE_WARNING.length() - 1);
+                                            - TRUNCATE_WARNING.length() - 1);
                                     cell.setCellStyle(styles.getWarningStyle());
                                 }
                                 cell.setCellValue(helper.createRichTextString(stringVal));

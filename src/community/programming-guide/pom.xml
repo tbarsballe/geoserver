@@ -5,29 +5,29 @@
  application directory.
  -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  
-  <modelVersion>4.0.0</modelVersion>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
-  <parent>
-    <groupId>org.geoserver</groupId>		
-	<artifactId>community</artifactId>
-	<version>2.14-SNAPSHOT</version>
-  </parent>
+    <modelVersion>4.0.0</modelVersion>
 
-  <groupId>org.geoserver.community</groupId>
-  <artifactId>gs-programming-guide</artifactId>
-  <packaging>jar</packaging>
-  <version>2.14-SNAPSHOT</version>
-  <name>Programming Guide</name>
-  <description>Empty module for use with the Programming Guide examples</description>
-  
-  <dependencies>
-    <dependency>
-      <groupId>org.geoserver</groupId>
-      <artifactId>gs-main</artifactId>
-      <version>2.14-SNAPSHOT</version>
-    </dependency>
-  </dependencies>
+    <parent>
+        <groupId>org.geoserver</groupId>
+        <artifactId>community</artifactId>
+        <version>2.14-SNAPSHOT</version>
+    </parent>
+
+    <groupId>org.geoserver.community</groupId>
+    <artifactId>gs-programming-guide</artifactId>
+    <packaging>jar</packaging>
+    <version>2.14-SNAPSHOT</version>
+    <name>Programming Guide</name>
+    <description>Empty module for use with the Programming Guide examples</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.geoserver</groupId>
+            <artifactId>gs-main</artifactId>
+            <version>2.14-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
 
 </project>

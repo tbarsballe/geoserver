@@ -30,14 +30,14 @@ import org.opengis.filter.Filter;
 
 /**
  * WMS GetFeatureInfo operation
- * 
+ *
  * @author Gabriel Roldan
  */
 public class GetFeatureInfo {
 
     private static final Logger LOGGER = Logging.getLogger(GetFeatureInfo.class);
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings({"unchecked", "rawtypes"})
     public FeatureCollectionType run(final GetFeatureInfoRequest request) throws ServiceException {
         List<FeatureCollection> results;
         try {
@@ -52,7 +52,7 @@ public class GetFeatureInfo {
         return buildResults(results);
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings({"unchecked", "rawtypes"})
     private FeatureCollectionType buildResults(List<FeatureCollection> results) {
 
         FeatureCollectionType result = WfsFactory.eINSTANCE.createFeatureCollectionType();
@@ -82,13 +82,13 @@ public class GetFeatureInfo {
                         FeatureCollection fc = selectProperties(requestParams, identifierCollection);
                         maxFeatures = addToResults(fc, results, layer, request, maxFeatures);
                     }
-    
+
                     // exit when we have collected enough features
                     if (maxFeatures <= 0) {
                         break;
                     }
                 }
-            } catch(Exception e) {
+            } catch (Exception e) {
                 throw new ServiceException("Failed to run GetFeatureInfo on layer " + layer.getName(), e);
             }
 
@@ -109,7 +109,7 @@ public class GetFeatureInfo {
     }
 
     private int addToResults(FeatureCollection collection, List<FeatureCollection> results,
-            final MapLayerInfo layer, GetFeatureInfoRequest request, int maxFeatures) {
+                             final MapLayerInfo layer, GetFeatureInfoRequest request, int maxFeatures) {
         if (collection != null) {
             if (!(collection.getSchema() instanceof SimpleFeatureType)) {
                 // put wrapper around it with layer name
@@ -149,7 +149,7 @@ public class GetFeatureInfo {
     }
 
     protected FeatureCollection selectProperties(FeatureInfoRequestParameters params,
-            FeatureCollection collection) throws IOException {
+                                                 FeatureCollection collection) throws IOException {
         String[] names = params.getPropertyNames();
         if (names != Query.ALL_NAMES) {
             Query q = new Query(collection.getSchema().getName().getLocalPart(), Filter.INCLUDE,

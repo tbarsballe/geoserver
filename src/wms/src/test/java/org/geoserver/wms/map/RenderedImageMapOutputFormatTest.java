@@ -170,7 +170,7 @@ public class RenderedImageMapOutputFormatTest extends WMSTestSupport {
 
         @Override
         public void put(String arg0, TextSymbolizer arg1, Feature arg2, LiteShape2 arg3,
-                NumberRange<Double> arg4) {
+                        NumberRange<Double> arg4) {
 
         }
 
@@ -189,8 +189,10 @@ public class RenderedImageMapOutputFormatTest extends WMSTestSupport {
 
         }
 
-    };
-    
+    }
+
+    ;
+
     @Before
     public void setRasterMapProducer() throws Exception {
         Logging.getLogger("org.geotools.rendering").setLevel(Level.OFF);
@@ -288,16 +290,16 @@ public class RenderedImageMapOutputFormatTest extends WMSTestSupport {
                 "src/test/resources/org/geoserver/wms/map/direct-raster-expected.tif"), imageMap.getImage(), 0);
         imageMap.dispose();
     }
-    
+
     @Test
     public void testTimeoutOption() throws Exception {
         Catalog catalog = getCatalog();
         GetMapRequest request = new GetMapRequest();
         final WMSMapContent map = new WMSMapContent();
-        
+
         StyleInfo styleByName = catalog.getStyleByName("Default");
         Style basicStyle = styleByName.getStyle();
-        
+
         //Build up a complex map so that we can reasonably guarantee a 1 ms timout
         SimpleFeatureSource fs = (SimpleFeatureSource) catalog.getFeatureTypeByName(MockData.BASIC_POLYGONS.getPrefix(),
                 MockData.BASIC_POLYGONS.getLocalPart()).getFeatureSource(null, null);
@@ -305,14 +307,14 @@ public class RenderedImageMapOutputFormatTest extends WMSTestSupport {
         SimpleFeatureCollection features = fs.getFeatures();
         SimpleFeatureCollection delayedCollection = new DelayedFeatureCollection(features, 10);
         map.addLayer(new FeatureLayer(delayedCollection, basicStyle));
-        
-        LOGGER.info("about to create map ctx for "+map.layers().size()+" layers with bounds " + env);
-        
+
+        LOGGER.info("about to create map ctx for " + map.layers().size() + " layers with bounds " + env);
+
         map.getViewport().setBounds(new ReferencedEnvelope(env, DefaultGeographicCRS.WGS84));
         map.setMapWidth(1000);
         map.setMapHeight(1000);
         map.setRequest(request);
-        
+
         request.setFormat(getMapFormat());
         Map formatOptions = new HashMap();
         //1 ms timeout
@@ -324,19 +326,19 @@ public class RenderedImageMapOutputFormatTest extends WMSTestSupport {
         } catch (ServiceException e) {
             assertTrue(e.getMessage().startsWith("This request used more time than allowed"));
         }
-        
+
         //Test partial image exception format
         Map rawKvp = new HashMap();
         rawKvp.put("EXCEPTIONS", "PARTIALMAP");
         request.setRawKvp(rawKvp);
-        
+
         try {
             RenderedImageMap imageMap = this.rasterMapProducer.produceMap(map);
             fail("Timeout was not reached");
         } catch (ServiceException e) {
             assertTrue(e instanceof WMSPartialMapException);
             assertTrue(e.getCause().getMessage().startsWith("This request used more time than allowed"));
-            RenderedImageMap partialMap = (RenderedImageMap) ((WMSPartialMapException)e).getMap();
+            RenderedImageMap partialMap = (RenderedImageMap) ((WMSPartialMapException) e).getMap();
             assertNotNull(partialMap);
             assertNotNull(partialMap.getImage());
         }
@@ -353,7 +355,7 @@ public class RenderedImageMapOutputFormatTest extends WMSTestSupport {
         }
     }
 
-    @Test 
+    @Test
     public void testBlueLake() throws IOException, IllegalFilterException, Exception {
         final Catalog catalog = getCatalog();
         org.geoserver.catalog.FeatureTypeInfo typeInfo = catalog.getFeatureTypeByName(
@@ -393,7 +395,7 @@ public class RenderedImageMapOutputFormatTest extends WMSTestSupport {
         imageMap.dispose();
         assertNotBlank("testBlueLake", image);
     }
-    
+
     @Test
     public void testCustomLabelCache() throws IOException {
         final Catalog catalog = getCatalog();
@@ -442,7 +444,7 @@ public class RenderedImageMapOutputFormatTest extends WMSTestSupport {
         assertTrue(usedCustomLabelCache.get());
         assertNotBlank("testBlueLake", image);
     }
-    
+
     @Override
     protected void onSetUp(SystemTestData testData) throws Exception {
         super.onSetUp(testData);
@@ -450,13 +452,13 @@ public class RenderedImageMapOutputFormatTest extends WMSTestSupport {
         testData.addRasterLayer(TAZ_BYTE, "tazbyte.tiff", null, getCatalog());
     }
 
-    
-    @Test 
+
+    @Test
     public void testInterpolations() throws IOException, IllegalFilterException, Exception {
         final Catalog catalog = getCatalog();
         CoverageInfo coverageInfo = catalog.getCoverageByName(MockData.TASMANIA_DEM.getNamespaceURI(),
                 MockData.TASMANIA_DEM.getLocalPart());
-        
+
         Envelope env = coverageInfo.boundingBox();
         double shift = env.getWidth() / 6;
 
@@ -473,17 +475,17 @@ public class RenderedImageMapOutputFormatTest extends WMSTestSupport {
         map.setTransparent(true);
         map.setRequest(request);
         addRasterToMap(map, MockData.TASMANIA_DEM);
-        
+
         map.getViewport().setBounds(new ReferencedEnvelope(env, DefaultGeographicCRS.WGS84));
         request.setInterpolations(Arrays.asList(Interpolation
                 .getInstance(Interpolation.INTERP_NEAREST)));
         request.setFormat(getMapFormat());
         RenderedImageMap imageMap = this.rasterMapProducer.produceMap(map);
-        RenderedOp op = (RenderedOp)imageMap.getImage();
+        RenderedOp op = (RenderedOp) imageMap.getImage();
         BufferedImage imageNearest = op.getAsBufferedImage();
         imageMap.dispose();
         assertNotBlank("testInterpolationsNearest", imageNearest);
-        
+
         request = new GetMapRequest();
         map = new WMSMapContent();
         map.setMapWidth(w);
@@ -492,14 +494,14 @@ public class RenderedImageMapOutputFormatTest extends WMSTestSupport {
         map.setTransparent(true);
         map.setRequest(request);
         addRasterToMap(map, MockData.TASMANIA_DEM);
-        
+
         map.getViewport().setBounds(new ReferencedEnvelope(env, DefaultGeographicCRS.WGS84));
         request.setInterpolations(Arrays.asList(Interpolation
                 .getInstance(Interpolation.INTERP_BICUBIC)));
         request.setFormat(getMapFormat());
 
         imageMap = this.rasterMapProducer.produceMap(map);
-        op = (RenderedOp)imageMap.getImage();
+        op = (RenderedOp) imageMap.getImage();
         BufferedImage imageBicubic = op.getAsBufferedImage();
         imageMap.dispose();
         assertNotBlank("testInterpolationsBicubic", imageBicubic);
@@ -539,7 +541,7 @@ public class RenderedImageMapOutputFormatTest extends WMSTestSupport {
         map.setRequest(request);
 
         RenderedImageMap imageMap = this.rasterMapProducer.produceMap(map);
-        RenderedOp op = (RenderedOp)imageMap.getImage();
+        RenderedOp op = (RenderedOp) imageMap.getImage();
         BufferedImage imageNearest = op.getAsBufferedImage();
         imageMap.dispose();
         assertNotBlank("testInterpolationsNearest", imageNearest);
@@ -558,7 +560,7 @@ public class RenderedImageMapOutputFormatTest extends WMSTestSupport {
         map.setRequest(request);
 
         imageMap = this.rasterMapProducer.produceMap(map);
-        op = (RenderedOp)imageMap.getImage();
+        op = (RenderedOp) imageMap.getImage();
         BufferedImage imageBicubic = op.getAsBufferedImage();
         imageMap.dispose();
         assertNotBlank("testInterpolationsBicubic", imageBicubic);
@@ -628,7 +630,7 @@ public class RenderedImageMapOutputFormatTest extends WMSTestSupport {
         map.setRequest(request);
 
         imageMap = this.rasterMapProducer.produceMap(map);
-        op = (RenderedOp)imageMap.getImage();
+        op = (RenderedOp) imageMap.getImage();
         BufferedImage imageServiceDefault = op.getAsBufferedImage();
         imageMap.dispose();
         assertNotBlank("testInterpolationServiceDefault", imageServiceDefault);
@@ -656,7 +658,7 @@ public class RenderedImageMapOutputFormatTest extends WMSTestSupport {
         WMSMapContent map = new WMSMapContent();
 
         int w = 400;
-        int h = (int) Math.round((bounds.getHeight() * w) /bounds.getWidth());
+        int h = (int) Math.round((bounds.getHeight() * w) / bounds.getWidth());
         map.setMapWidth(w);
         map.setMapHeight(h);
         map.setBgColor(BG_COLOR);
@@ -676,12 +678,12 @@ public class RenderedImageMapOutputFormatTest extends WMSTestSupport {
         List<LayerInfo> layers = getCatalog().getLayers(coverageInfo);
         StyleInfo defaultStyle = layers.get(0).getDefaultStyle();
         Style style = defaultStyle.getStyle();
-        
+
         SimpleFeatureCollection fc = FeatureUtilities.wrapGridCoverageReader(
-                (GridCoverage2DReader)coverageInfo.getGridCoverageReader(null, null), new GeneralParameterValue[] {});
+                (GridCoverage2DReader) coverageInfo.getGridCoverageReader(null, null), new GeneralParameterValue[]{});
         map.addLayer(new FeatureLayer(fc, style));
     }
-    
+
     private void addToMap(final WMSMapContent map, final QName typeName) throws IOException {
         final FeatureTypeInfo ftInfo = getCatalog().getFeatureTypeByName(
                 typeName.getNamespaceURI(), typeName.getLocalPart());
@@ -898,7 +900,7 @@ public class RenderedImageMapOutputFormatTest extends WMSTestSupport {
         int dWidth = destImage.getWidth();
         int dHeight = destImage.getHeight();
 
-        int[] destImageRowBand0 = new int[dWidth*dHeight];
+        int[] destImageRowBand0 = new int[dWidth * dHeight];
         int[] destImageRowBand1 = new int[destImageRowBand0.length];
         int[] destImageRowBand2 = new int[destImageRowBand0.length];
         destImage.getData().getSamples(0, 0, dWidth, dHeight, 0, destImageRowBand0);
@@ -908,7 +910,7 @@ public class RenderedImageMapOutputFormatTest extends WMSTestSupport {
         int sWidth = srcImage.getWidth();
         int sHeight = srcImage.getHeight();
 
-        int[] srcImageRowBand0 = new int[sWidth*sHeight];
+        int[] srcImageRowBand0 = new int[sWidth * sHeight];
         int[] srcImageRowBand2 = new int[srcImageRowBand0.length];
 
         srcImage.getData().getSamples(0, 0, sWidth, sHeight, 0, srcImageRowBand0);
@@ -916,9 +918,9 @@ public class RenderedImageMapOutputFormatTest extends WMSTestSupport {
         // Source and result image first bands should be the same. We have reversed the order
         // of the three first bands of the source coverage and then we re-reversed the three
         // first bands using channel selection on the raster symbolizer used for rendering.
-        Assert.assertTrue(Arrays.equals(destImageRowBand0,srcImageRowBand0));
+        Assert.assertTrue(Arrays.equals(destImageRowBand0, srcImageRowBand0));
         //Result band 0 should not be equal to source image band 2
-        Assert.assertFalse(Arrays.equals(destImageRowBand0,srcImageRowBand2));
+        Assert.assertFalse(Arrays.equals(destImageRowBand0, srcImageRowBand2));
 
         srcImageMap.dispose();
         dstImageMap.dispose();
@@ -928,7 +930,7 @@ public class RenderedImageMapOutputFormatTest extends WMSTestSupport {
 
     /**
      * Test to check the case where a {@link org.geotools.coverage.grid.io.AbstractGridFormat#BANDS}
-     * reading parameter is passed to a coverage reader that does not support it. Reader should 
+     * reading parameter is passed to a coverage reader that does not support it. Reader should
      * ignore it, resulting coverage should not be affected.
      */
     @Test
@@ -961,10 +963,10 @@ public class RenderedImageMapOutputFormatTest extends WMSTestSupport {
 
         final Envelope env = ci.boundingBox();
 
-        final int[] bandIndices = new int[]{1,2,0,2,1};
+        final int[] bandIndices = new int[]{1, 2, 0, 2, 1};
         //Inject bandIndices read param
         Parameter<int[]> bandIndicesParam =
-        		(Parameter<int[]>) AbstractGridFormat.BANDS.createValue();
+                (Parameter<int[]>) AbstractGridFormat.BANDS.createValue();
         bandIndicesParam.setValue(bandIndices);
         List<GeneralParameterValue> paramList = new ArrayList<GeneralParameterValue>();
         paramList.add(bandIndicesParam);
@@ -974,7 +976,7 @@ public class RenderedImageMapOutputFormatTest extends WMSTestSupport {
                 reader,
                 styleBuilder.createStyle(styleBuilder.createRasterSymbolizer()),
                 readParams
-                );
+        );
         map.addLayer(sl);
 
         RenderedImageMap imageMap = this.rasterMapProducer.produceMap(map);
@@ -1007,7 +1009,7 @@ public class RenderedImageMapOutputFormatTest extends WMSTestSupport {
         map.getViewport().setBounds(bbox);
 
         RenderedImageMap imageMap = this.rasterMapProducer.produceMap(map);
-        RenderedOp op = (RenderedOp)imageMap.getImage();
+        RenderedOp op = (RenderedOp) imageMap.getImage();
         BufferedImage image = op.getAsBufferedImage();
         imageMap.dispose();
 
@@ -1015,8 +1017,8 @@ public class RenderedImageMapOutputFormatTest extends WMSTestSupport {
         assertEquals(0, image.getRaster().getSample(40, 400, 0));
         assertEquals(0, image.getRaster().getSample(40, 400, 1));
 
-        }
-    
+    }
+
     /**
      * Sets up a rendering loop and throws {@code renderExceptionToThrow} wrapped to a
      * RuntimeException when the renderer tries to get a Feature to render.
@@ -1184,14 +1186,14 @@ public class RenderedImageMapOutputFormatTest extends WMSTestSupport {
      * This dummy producer adds no functionality to DefaultRasterMapOutputFormat, just implements a
      * void formatImageOutputStream to have a concrete class over which test that
      * DefaultRasterMapOutputFormat correctly generates the BufferedImage.
-     * 
+     *
      * @author Gabriel Roldan
      * @version $Id: DefaultRasterMapOutputFormatTest.java 6797 2007-05-16 10:23:50Z aaime $
      */
     static class DummyRasterMapProducer extends RenderedImageMapOutputFormat {
 
         public DummyRasterMapProducer(WMS wms) {
-            super("image/gif", new String[] { "image/gif" }, wms);
+            super("image/gif", new String[]{"image/gif"}, wms);
         }
     }
 }

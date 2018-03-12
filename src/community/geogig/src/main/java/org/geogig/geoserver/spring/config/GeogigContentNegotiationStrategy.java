@@ -21,11 +21,11 @@ import org.springframework.web.context.request.NativeWebRequest;
  */
 public class GeogigContentNegotiationStrategy implements ContentNegotiationStrategy {
     List<MediaType> mediaTypes;
-    
+
     public GeogigContentNegotiationStrategy() {
         this.mediaTypes = Arrays.asList(MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, Variants.CSV_MEDIA_TYPE, Variants.GEOPKG_MEDIA_TYPE);
     }
-    
+
     @Override
     public List<MediaType> resolveMediaTypes(NativeWebRequest webRequest)
             throws HttpMediaTypeNotAcceptableException {

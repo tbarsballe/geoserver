@@ -22,7 +22,7 @@ import org.geoserver.web.wicket.GeoServerDataProvider.Property;
 public class UserTablePanel extends GeoServerTablePanel<GeoServerUser> {
 
     String ugServiceName;
-    
+
     public UserTablePanel(String id, String ugServiceName, GeoServerDataProvider<GeoServerUser> dataProvider) {
         super(id, dataProvider);
         this.ugServiceName = ugServiceName;
@@ -36,21 +36,21 @@ public class UserTablePanel extends GeoServerTablePanel<GeoServerUser> {
 
     @Override
     protected Component getComponentForProperty(String id, IModel<GeoServerUser> itemModel,
-            Property<GeoServerUser> property) {
+                                                Property<GeoServerUser> property) {
 
         if (property == UserListProvider.USERNAME) {
             return editUserLink(id, itemModel, property);
         } else if (property == UserListProvider.ENABLED) {
-            if((Boolean) property.getModel(itemModel).getObject())
+            if ((Boolean) property.getModel(itemModel).getObject())
                 return new Icon(id, CatalogIconFactory.ENABLED_ICON);
             else
                 return new Label(id, "");
         } else if (property == UserListProvider.HASATTRIBUTES) {
-            if((Boolean) property.getModel(itemModel).getObject())
+            if ((Boolean) property.getModel(itemModel).getObject())
                 return new Icon(id, CatalogIconFactory.ENABLED_ICON);
             else
-                return new Label(id, "");                    
-        }                
+                return new Label(id, "");
+        }
         throw new RuntimeException("Uknown property " + property);
     }
 
@@ -59,8 +59,8 @@ public class UserTablePanel extends GeoServerTablePanel<GeoServerUser> {
 
             @Override
             protected void onClick(AjaxRequestTarget target) {
-                setResponsePage(new EditUserPage(ugServiceName,(GeoServerUser) getDefaultModelObject())
-                    .setReturnPage(getPage()));
+                setResponsePage(new EditUserPage(ugServiceName, (GeoServerUser) getDefaultModelObject())
+                        .setReturnPage(getPage()));
             }
 
         };

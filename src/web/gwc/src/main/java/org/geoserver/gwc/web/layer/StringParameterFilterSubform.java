@@ -23,11 +23,11 @@ import org.geowebcache.filter.parameters.StringParameterFilter;
 
 /**
  * Subform that allows editing of a StringParameterFilter
- * @author Kevin Smith, OpenGeo
  *
+ * @author Kevin Smith, OpenGeo
  */
-public class StringParameterFilterSubform extends 
-    AbstractParameterFilterSubform<StringParameterFilter> {
+public class StringParameterFilterSubform extends
+        AbstractParameterFilterSubform<StringParameterFilter> {
 
     private static final long serialVersionUID = -3815153551079914831L;
 
@@ -37,7 +37,7 @@ public class StringParameterFilterSubform extends
 
         @Override
         public List<String> convertToObject(String value, Locale locale) {
-            if(value==null) {
+            if (value == null) {
                 return null;
             } else {
                 String[] strings = StringUtils.split(value, "\r\n");
@@ -49,46 +49,46 @@ public class StringParameterFilterSubform extends
         public String convertToString(List<String> value, Locale locale) {
             Iterator<String> i = value.iterator();
             StringBuilder sb = new StringBuilder();
-            if(i.hasNext()) {
+            if (i.hasNext()) {
                 sb.append(i.next());
             }
-            while(i.hasNext()){
+            while (i.hasNext()) {
                 sb.append("\r\n");
                 sb.append(i.next());
             }
             return sb.toString();
         }
-        
+
     };
 
     private Component normalize;
 
     public StringParameterFilterSubform(String id,
-            IModel<StringParameterFilter> model) {
+                                        IModel<StringParameterFilter> model) {
         super(id, model);
-        
+
         final Component defaultValue;
-        
+
         defaultValue = new TextField<String>("defaultValue", new PropertyModel<String>(model, "defaultValue"));
         add(defaultValue);
-        
+
         final TextArea<List<String>> values;
         values = new TextArea<List<String>>("values", new PropertyModel<List<String>>(model, "values")) {
             /** serialVersionUID */
             private static final long serialVersionUID = 1L;
 
             @SuppressWarnings("unchecked")
-			@Override
+            @Override
             public <S> IConverter<S> getConverter(Class<S> type) {
-            	if (List.class.isAssignableFrom(type)) {
-            		return (IConverter<S>) CONVERT;
-            	}
-            	return super.getConverter(type);
+                if (List.class.isAssignableFrom(type)) {
+                    return (IConverter<S>) CONVERT;
+                }
+                return super.getConverter(type);
             }
         };
         values.setConvertEmptyInputStringToNull(false);
         add(values);
-        
+
         normalize = new CaseNormalizerSubform("normalize", new PropertyModel<CaseNormalizer>(model, "normalize"));
         add(normalize);
     }

@@ -24,9 +24,7 @@ import com.hazelcast.core.Message;
 import com.hazelcast.core.MessageListener;
 
 /**
- * 
  * @author Niels Charlier
- *
  */
 public class HzResourceNotificationDispatcherTest extends AbstractResourceNotificationDispatcherTest {
 
@@ -41,7 +39,7 @@ public class HzResourceNotificationDispatcherTest extends AbstractResourceNotifi
         final HzCluster hzCluster = createMock(HzCluster.class);
 
         expect(hz.getCluster()).andStubReturn(cluster);
-        expect(hz.<ResourceNotification> getTopic(HzResourceNotificationDispatcher.TOPIC_NAME)).andStubReturn(topic);
+        expect(hz.<ResourceNotification>getTopic(HzResourceNotificationDispatcher.TOPIC_NAME)).andStubReturn(topic);
         expect(topic.addMessageListener(capture(captureTopicListener))).andReturn("fake-id");
         topic.publish(EasyMock.capture(captureTopicPublish));
         expectLastCall().andStubAnswer(new IAnswer<Object>() {
@@ -61,7 +59,7 @@ public class HzResourceNotificationDispatcherTest extends AbstractResourceNotifi
         expect(hzCluster.isEnabled()).andStubReturn(true);
         expect(hzCluster.isRunning()).andStubReturn(true);
         expect(hzCluster.getHz()).andStubReturn(hz);
-        
+
         replay(cluster, topic, hz, hzCluster);
 
         return new HzResourceNotificationDispatcher(hzCluster);

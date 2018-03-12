@@ -38,10 +38,9 @@ import org.geoserver.importer.ImportData;
 
 /**
  * Base class for database configuration panels.
- * 
+ *
  * @author Andrea Aime - OpenGeo
  * @author Justin Deoliveira, OpenGeo
- * 
  */
 @SuppressWarnings("serial")
 public abstract class AbstractDbPanel extends ImportSourcePanel {
@@ -52,7 +51,9 @@ public abstract class AbstractDbPanel extends ImportSourcePanel {
     protected static final String CONNECTION_DEFAULT = "Default";
     protected static final String CONNECTION_JNDI = "JNDI";
 
-    /** connection type */
+    /**
+     * connection type
+     */
     protected String connectionType;
 
     protected WebMarkupContainer paramPanelContainer;
@@ -63,7 +64,7 @@ public abstract class AbstractDbPanel extends ImportSourcePanel {
 
     public AbstractDbPanel(String id) {
         super(id);
-        
+
         Form form = new Form("form");
         add(form);
 
@@ -90,11 +91,11 @@ public abstract class AbstractDbPanel extends ImportSourcePanel {
     public ImportData createImportSource() {
 //        try {
 
-          // build up the store connection param map
-          Map<String, Serializable> params = new HashMap<String, Serializable>();
-          DataStoreFactorySpi factory = fillStoreParams(params);
+        // build up the store connection param map
+        Map<String, Serializable> params = new HashMap<String, Serializable>();
+        DataStoreFactorySpi factory = fillStoreParams(params);
 
-          return new Database(params);
+        return new Database(params);
 
 //          // ok, check we can connect
 //          DataAccess store = null;
@@ -135,8 +136,10 @@ public abstract class AbstractDbPanel extends ImportSourcePanel {
 //          LOGGER.log(Level.SEVERE, "Error while setting up mass import", e);
 //      }
 //        return new DataStoreSource()
-    };
-    
+    }
+
+    ;
+
     /**
      * Switches between the types of param panels
      */
@@ -166,7 +169,7 @@ public abstract class AbstractDbPanel extends ImportSourcePanel {
 
         return choice;
     }
-    
+
     /**
      * Updates the panel visibility to show only the currently selected one.
      * Can also be used to perform actions when the panel visibility is updated
@@ -182,7 +185,7 @@ public abstract class AbstractDbPanel extends ImportSourcePanel {
 
     /**
      * Setups the datastore and moves to the next page
-     * 
+     *
      *
      */
 //    SubmitLink submitLink() {
@@ -251,33 +254,33 @@ public abstract class AbstractDbPanel extends ImportSourcePanel {
 //            }
 //        };
 //    }
-    
+
     /**
-     * Builds and returns a map with parameter panels. 
+     * Builds and returns a map with parameter panels.
      * <p>
-     * The keys are used to fill in the drop down choice and to look for the i18n key using the 
-     * "ConnectionType.${key}" convention. The panels built should have ids made of digits only, 
+     * The keys are used to fill in the drop down choice and to look for the i18n key using the
+     * "ConnectionType.${key}" convention. The panels built should have ids made of digits only,
      * otherwise Wicket will complain about non safe ids in repeater.
      * </p>
      */
     protected abstract LinkedHashMap<String, Component> buildParamPanels();
 
     /**
-     * Builds the advanced panel. 
+     * Builds the advanced panel.
      */
     protected AdvancedDbParamPanel buildAdvancedPanel(String id) {
         return new AdvancedDbParamPanel(id, false);
     }
-    
+
     /**
-     * Populates the connection parameters needed to connect to the datastore and returns the 
+     * Populates the connection parameters needed to connect to the datastore and returns the
      * data store factory.
-     * 
+     *
      * @param params Empty parameter map.
      */
     protected abstract DataStoreFactorySpi fillStoreParams(Map<String, Serializable> params);
 
-    protected void fillInConnPoolParams(Map<String,Serializable> params, BasicDbParamPanel basicParamPanel) {
+    protected void fillInConnPoolParams(Map<String, Serializable> params, BasicDbParamPanel basicParamPanel) {
         params.put(MINCONN.key, basicParamPanel.connPoolPanel.minConnection);
         params.put(MAXCONN.key, basicParamPanel.connPoolPanel.maxConnection);
         params.put(FETCHSIZE.key, basicParamPanel.connPoolPanel.fetchSize);
@@ -286,7 +289,7 @@ public abstract class AbstractDbPanel extends ImportSourcePanel {
         params.put(PREPARED_STATEMENTS.key, basicParamPanel.connPoolPanel.preparedStatements);
     }
 
-    protected void fillInJndiParams(Map<String,Serializable> params, JNDIDbParamPanel jndiParamPanel) {
+    protected void fillInJndiParams(Map<String, Serializable> params, JNDIDbParamPanel jndiParamPanel) {
         params.put(JNDI_REFNAME.key, jndiParamPanel.jndiReferenceName);
         params.put(JDBCDataStoreFactory.SCHEMA.key, jndiParamPanel.schema);
     }

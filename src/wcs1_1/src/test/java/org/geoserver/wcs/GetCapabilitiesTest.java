@@ -43,8 +43,8 @@ public class GetCapabilitiesTest extends WCSTestSupport {
     @Override
     protected void onSetUp(SystemTestData testData) throws Exception {
         super.onSetUp(testData);
-        Catalog cat = getCatalog();                
-        CoverageStoreInfo csi = cat.getCoverageStoreByName(SystemTestData.WORLD.getLocalPart());       
+        Catalog cat = getCatalog();
+        CoverageStoreInfo csi = cat.getCoverageStoreByName(SystemTestData.WORLD.getLocalPart());
         csi.setEnabled(false);
         cat.save(csi);
 
@@ -97,7 +97,7 @@ public class GetCapabilitiesTest extends WCSTestSupport {
         // manually misconfigure one layer
         CoverageInfo cvInfo = getCatalog().getCoverageByName(getLayerId(MockData.TASMANIA_DEM));
         ReferencedEnvelope BBox = cvInfo.getLatLonBoundingBox();
-        try{
+        try {
             cvInfo.setLatLonBoundingBox(null);
             getCatalog().save(cvInfo);
 
@@ -106,11 +106,11 @@ public class GetCapabilitiesTest extends WCSTestSupport {
             checkValidationErrors(dom, WCS11_SCHEMA);
             // print(dom);
             int count = getCatalog().getCoverages().size();
-            assertEquals(count - 2, dom.getElementsByTagName("wcs:CoverageSummary").getLength());        }       
-        finally{
+            assertEquals(count - 2, dom.getElementsByTagName("wcs:CoverageSummary").getLength());
+        } finally {
             cvInfo.setLatLonBoundingBox(BBox);
             getCatalog().save(cvInfo);
-        }        
+        }
 
     }
 
@@ -251,7 +251,7 @@ public class GetCapabilitiesTest extends WCSTestSupport {
     public void testUpdateSequenceEqualsGet() throws Exception {
         long updateIndex = getGeoServer().getGlobal().getUpdateSequence();
         Document dom = getAsDOM(BASEPATH + "?request=GetCapabilities&service=WCS&updateSequence="
-                 + Long.toString(updateIndex));
+                + Long.toString(updateIndex));
         checkValidationErrors(dom, WCS11_SCHEMA);
         final Node root = dom.getFirstChild();
         assertEquals("wcs:Capabilities", root.getNodeName());
@@ -276,7 +276,7 @@ public class GetCapabilitiesTest extends WCSTestSupport {
     @Test
     public void testUpdateSequenceSuperiorGet() throws Exception {
         long updateIndex = getGeoServer().getGlobal().getUpdateSequence() + 1;
-        Document dom = getAsDOM(BASEPATH + "?request=GetCapabilities&service=WCS&updateSequence=" 
+        Document dom = getAsDOM(BASEPATH + "?request=GetCapabilities&service=WCS&updateSequence="
                 + Long.toString(updateIndex));
         checkValidationErrors(dom, WCS11_SCHEMA);
         // print(dom);
@@ -315,11 +315,11 @@ public class GetCapabilitiesTest extends WCSTestSupport {
         assertXpathEvaluatesTo("1", "count(//ows:OperationsMetadata)", dom);
         assertXpathEvaluatesTo("1", "count(//wcs:Contents)", dom);
     }
-    
+
     @Test
     public void testSchemaLocation() throws Exception {
         Document dom = getAsDOM(BASEPATH + "?request=GetCapabilities&service=WCS");
-        checkValidationErrors(dom, WCS11_SCHEMA);        
+        checkValidationErrors(dom, WCS11_SCHEMA);
         assertXpathEvaluatesTo("1", "count(//wcs:Capabilities[contains(@xsi:schemaLocation,'http://www.opengis.net/wcs/1.1.1 ')])", dom);
     }
 
@@ -401,7 +401,7 @@ public class GetCapabilitiesTest extends WCSTestSupport {
         Document dom = getAsDOM("wcs?request=GetCapabilities");
         // print(dom);
         checkValidationErrors(dom, WCS11_SCHEMA);
-        String xpathBase = "//wcs:CoverageSummary[wcs:Identifier = '" + TASMANIA_DEM.getPrefix() 
+        String xpathBase = "//wcs:CoverageSummary[wcs:Identifier = '" + TASMANIA_DEM.getPrefix()
                 + ":" + TASMANIA_DEM.getLocalPart() + "']/ows:Metadata";
         assertXpathEvaluatesTo("http://www.geoserver.org", xpathBase + "/@about", dom);
         assertXpathEvaluatesTo("simple", xpathBase + "/@xlink:type", dom);
@@ -422,7 +422,7 @@ public class GetCapabilitiesTest extends WCSTestSupport {
         String proxyBaseUrl = getGeoServer().getGlobal().getSettings().getProxyBaseUrl();
         Document dom = getAsDOM("wcs?request=GetCapabilities");
         checkValidationErrors(dom, WCS11_SCHEMA);
-        String xpathBase = "//wcs:CoverageSummary[wcs:Identifier = '" + TASMANIA_DEM.getPrefix() 
+        String xpathBase = "//wcs:CoverageSummary[wcs:Identifier = '" + TASMANIA_DEM.getPrefix()
                 + ":" + TASMANIA_DEM.getLocalPart() + "']/ows:Metadata";
         assertXpathEvaluatesTo("http://www.geoserver.org", xpathBase + "/@about", dom);
         assertXpathEvaluatesTo("simple", xpathBase + "/@xlink:type", dom);

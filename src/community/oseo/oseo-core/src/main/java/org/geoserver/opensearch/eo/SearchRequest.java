@@ -13,7 +13,7 @@ import org.geotools.data.Query;
 
 /**
  * A OpenSearch EO query, for either collections (no parent id) or products (with parent id)
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class SearchRequest {

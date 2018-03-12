@@ -22,7 +22,7 @@ import org.geoserver.taskmanager.data.BatchElement;
 import org.geoserver.taskmanager.data.BatchRun;
 import org.geoserver.taskmanager.data.Run;
 
-@Entity 
+@Entity
 @Table
 public class RunImpl extends BaseImpl implements Run {
 
@@ -32,21 +32,21 @@ public class RunImpl extends BaseImpl implements Run {
     @Column
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    
+
     @ManyToOne
     @JoinColumn(name = "batchElement")
     private BatchElementImpl batchElement;
 
     @Column(nullable = false)
     private Date start;
-    
+
     @Column(name = "runEnd")
     private Date end;
-    
+
     @Column(nullable = false)
     @Enumerated
     private Status status = Status.RUNNING;
-    
+
     @Column(length = Integer.MAX_VALUE)
     @Lob
     private String message;
@@ -123,7 +123,6 @@ public class RunImpl extends BaseImpl implements Run {
     public void setBatchRun(BatchRun br) {
         this.batchRun = (BatchRunImpl) br;
     }
-    
-    
-    
+
+
 }

@@ -55,9 +55,8 @@ import org.xml.sax.EntityResolver;
  * introspectively generated list of form input fields based on the {@link DataAccessFactory}
  * parameters for the given {@code DataStoreInfo}.
  * </p>
- * 
+ *
  * @author Gabriel Roldan
- * 
  * @see Param
  * @see ResourcePool#getDataStoreFactory(DataStoreInfo)
  * @see DataStorePanelInfo
@@ -76,12 +75,10 @@ public class DefaultDataStoreEditPanel extends StoreEditPanel {
      * Creates a new parameters panel with a list of input fields matching the {@link Param}s for
      * the factory related to the {@code DataStoreInfo} that's the model of the provided {@code
      * Form}.
-     * 
-     * @param componentId
-     *            the id for this component instance
-     * @param storeEditForm
-     *            the form being build by the calling class, whose model is the
-     *            {@link DataStoreInfo} being edited
+     *
+     * @param componentId   the id for this component instance
+     * @param storeEditForm the form being build by the calling class, whose model is the
+     *                      {@link DataStoreInfo} being edited
      */
     public DefaultDataStoreEditPanel(final String componentId, final Form storeEditForm) {
         super(componentId, storeEditForm);
@@ -145,15 +142,14 @@ public class DefaultDataStoreEditPanel extends StoreEditPanel {
     /**
      * Creates a form input component for the given datastore param based on its type and metadata
      * properties.
-     * 
-     * @param paramMetadata
      *
+     * @param paramMetadata
      */
     private Panel getInputComponent(final String componentId, final IModel paramsModel,
-            final ParamInfo paramMetadata) {
+                                    final ParamInfo paramMetadata) {
 
         final GeoServerEnvironment gsEnvironment = GeoServerExtensions.bean(GeoServerEnvironment.class);
-        
+
         final String paramName = paramMetadata.getName();
         final String paramLabel = paramMetadata.getName();
         final boolean required = paramMetadata.isRequired();
@@ -166,13 +162,13 @@ public class DefaultDataStoreEditPanel extends StoreEditPanel {
             IModel namespaceModel = new NamespaceParamModel(paramsModel, paramName);
             IModel paramLabelModel = new ResourceModel(paramLabel, paramLabel);
             parameterPanel = new NamespacePanel(componentId, namespaceModel, paramLabelModel, true);
-        } else if (options != null && options.size() > 0){
-            
+        } else if (options != null && options.size() > 0) {
+
             IModel<Serializable> valueModel = new MapModel(paramsModel, paramName);
             IModel<String> labelModel = new ResourceModel(paramLabel, paramLabel);
             parameterPanel = new DropDownChoiceParamPanel(componentId, valueModel, labelModel, options,
                     required);
-            
+
         } else if (Boolean.class == binding) {
             // TODO Add prefix for better i18n?
             parameterPanel = new CheckBoxParamPanel(componentId, new MapModel(paramsModel,
@@ -187,24 +183,24 @@ public class DefaultDataStoreEditPanel extends StoreEditPanel {
                     paramName), new ResourceModel(paramLabel, paramLabel), required);
         } else {
             IModel model;
-            if("url".equalsIgnoreCase(paramName)) {
+            if ("url".equalsIgnoreCase(paramName)) {
                 model = new URLModel(paramsModel, paramName);
             } else {
                 model = new MapModel(paramsModel, paramName);
             }
-            
+
             Panel tp;
-            if(paramMetadata.isLargeText()) {
+            if (paramMetadata.isLargeText()) {
                 tp = new TextAreaParamPanel(componentId,
                         model, new ResourceModel(paramLabel, paramLabel), required);
             } else {
                 tp = new TextParamPanel(componentId,
                         model, new ResourceModel(paramLabel, paramLabel), required);
             }
-            
+
             // if it can be a reference to the local filesystem make sure it's valid
             FormComponent<String> fc = ((ParamPanel) tp).getFormComponent();
-            
+
             // AF: Disable Validator if GeoServer Env Parametrization is enabled!
             if (paramName.equalsIgnoreCase("url")) {
                 if (gsEnvironment == null || !GeoServerEnvironment.ALLOW_ENV_PARAMETRIZATION) {
@@ -216,8 +212,8 @@ public class DefaultDataStoreEditPanel extends StoreEditPanel {
             // GR: it doesn't work for File neither.
             // AA: better not mess with files, the converters turn data dir relative to
             // absolute and bye bye data dir portability
-            
-            
+
+
             // AF: Disable Binding if GeoServer Env Parametrization is enabled!
             if (gsEnvironment == null || !GeoServerEnvironment.ALLOW_ENV_PARAMETRIZATION) {
                 if (binding != null && !String.class.equals(binding) && !File.class.equals(binding)
@@ -227,16 +223,15 @@ public class DefaultDataStoreEditPanel extends StoreEditPanel {
             }
             parameterPanel = tp;
         }
-        
+
         Object parameterValue = parameterPanel.getDefaultModelObject();
         boolean visible = !(deprecated && isEmpty(parameterValue)) && !paramMetadata.getLevel().equals("program");
         parameterPanel.setVisible(visible);
         parameterPanel.setVisibilityAllowed(visible);
-        
-        return parameterPanel;
-    }   
 
-    
+        return parameterPanel;
+    }
+
 
     private boolean isEmpty(Object value) {
         if (value == null) {
@@ -251,8 +246,8 @@ public class DefaultDataStoreEditPanel extends StoreEditPanel {
     /**
      * Makes sure the file path for shapefiles do start with file:// otherwise
      * stuff like /home/user/file.shp won't be recognized as valid...
-     * @author aaime
      *
+     * @author aaime
      */
     private final class URLModel extends MapModel {
         private URLModel(IModel model, String expression) {
@@ -262,7 +257,7 @@ public class DefaultDataStoreEditPanel extends StoreEditPanel {
         @Override
         public void setObject(Object object) {
             String file = (String) object;
-            if(!file.startsWith("file://") && !file.startsWith("file:") &&
+            if (!file.startsWith("file://") && !file.startsWith("file:") &&
                     !file.startsWith("http://"))
                 file = "file://" + file;
             super.setObject(file);

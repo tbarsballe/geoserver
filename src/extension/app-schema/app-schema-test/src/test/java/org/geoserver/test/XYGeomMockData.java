@@ -12,12 +12,11 @@ import org.geotools.data.complex.AppSchemaDataAccess;
 /**
  * Mock data for testing use of geometryless data sources {@link AppSchemaDataAccess} with
  * GeoServer.
- * 
+ * <p>
  * Inspired by {@link MockData}.
- * 
+ *
  * @author Rob Atkinson
  * @author Ben Caradoc-Davies, CSIRO Exploration and Mining
- * 
  */
 public class XYGeomMockData extends AbstractAppSchemaMockData {
 

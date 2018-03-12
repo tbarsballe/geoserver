@@ -37,7 +37,6 @@ import javax.servlet.http.HttpServletRequestWrapper;
  * request.
  * <p>
  * See the package documentation for more insights on how these all fit together.
- * 
  */
 public class GwcServiceDispatcherCallback extends AbstractDispatcherCallback implements
         DispatcherCallback {
@@ -91,14 +90,14 @@ public class GwcServiceDispatcherCallback extends AbstractDispatcherCallback imp
                 // we set the layer parameter with GWC expected name
                 kvp.put("LAYER", layerName);
             }
-            
+
             String localPublishedName = localPublished != null ? localPublished.getName() : null;
             // we need to setup a proper context path (gwc doesn't expect the workspace to be part of the URL)
             request.setHttpRequest(new VirtualServiceRequest(request.getHttpRequest(), localWorkspace.getName(), localPublishedName, layerName));
-        } else if(localPublished != null) {
+        } else if (localPublished != null) {
             request.setHttpRequest(new VirtualServiceRequest(request.getHttpRequest(), localPublished.getName(), null, null));
         }
-        
+
 
         request.setKvp(kvp);
         request.setRawKvp(kvp);
@@ -118,7 +117,7 @@ public class GwcServiceDispatcherCallback extends AbstractDispatcherCallback imp
         Matcher matcher = GWC_WS_VIRTUAL_SERVICE_PATTERN.matcher(context);
         if (matcher.matches()) {
             // this is a virtual service, let's see if we have a valid workspace
-            if(LocalWorkspace.get() == null && !(LocalPublished.get() instanceof LayerGroupInfo)) {
+            if (LocalWorkspace.get() == null && !(LocalPublished.get() instanceof LayerGroupInfo)) {
                 // the workspace name has to be valid
                 throw new ServiceException("No such workspace '" + matcher.group(1) + "'");
             }
@@ -128,14 +127,14 @@ public class GwcServiceDispatcherCallback extends AbstractDispatcherCallback imp
         matcher = GWC_LAYER_VIRTUAL_SERVICE_PATTERN.matcher(context);
         if (matcher.matches()) {
             // this is a laye specific virtual service, let's see if we have a valid workspace
-            if(LocalPublished.get() == null) {
+            if (LocalPublished.get() == null) {
                 // the workspace name has to be valid
                 throw new ServiceException("No such layer or layer group '" + matcher.group(2) + "'");
             }
             // the local workspace is set so we have a valid workspace
             return true;
         }
-        
+
         // this request is not targeting gwc service
         return false;
     }
@@ -151,7 +150,7 @@ public class GwcServiceDispatcherCallback extends AbstractDispatcherCallback imp
         private final String layerName;
 
         private final Map<String, String[]> parameters;
-        
+
 
         public VirtualServiceRequest(HttpServletRequest request, String localWorkspaceName, String localPublishedName, String layerName) {
             super(request);
@@ -167,7 +166,7 @@ public class GwcServiceDispatcherCallback extends AbstractDispatcherCallback imp
         @Override
         public String getContextPath() {
             // to GWC the workspace is part of the request context
-            if(localPublishedName == null) {
+            if (localPublishedName == null) {
                 return super.getContextPath() + "/" + localWorkspaceName;
             } else {
                 return super.getContextPath() + "/" + localWorkspaceName + "/" + localPublishedName;

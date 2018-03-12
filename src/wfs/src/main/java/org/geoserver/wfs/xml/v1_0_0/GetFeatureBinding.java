@@ -16,9 +16,9 @@ import org.geotools.xml.Node;
 
 /**
  * Binding object for the element http://www.opengis.net/wfs:GetFeature.
- *
  * <p>
- *        <pre>
+ * <p>
+ * <pre>
  *         <code>
  *  &lt;xsd:element name="GetFeature" type="wfs:GetFeatureType"&gt;
  *          &lt;xsd:annotation&gt;          &lt;xsd:documentation&gt;             The
@@ -28,6 +28,7 @@ import org.geotools.xml.Node;
  *
  *          </code>
  *         </pre>
+ *
  * @generated
  */
 public class GetFeatureBinding extends AbstractComplexBinding {
@@ -61,7 +62,7 @@ public class GetFeatureBinding extends AbstractComplexBinding {
      * @generated modifiable
      */
     public Object parse(ElementInstance instance, Node node, Object value)
-        throws Exception {
+            throws Exception {
         //TODO: implement
         return null;
     }

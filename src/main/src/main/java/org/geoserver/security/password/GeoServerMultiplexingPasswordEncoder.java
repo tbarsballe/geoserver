@@ -22,16 +22,15 @@ import org.springframework.util.StringUtils;
  * <p>
  * The purpose of this class is to decode a previously encoded password without knowing before hand which password
  * encoder was used. The prefix contained in the encoded password is used to route to the appropriate
- * delegate encoder. Therefore only {@link GeoserverPasswordEncoder} implementations that use a 
- * prefix in the encoded password are valid for this encoder.  
+ * delegate encoder. Therefore only {@link GeoserverPasswordEncoder} implementations that use a
+ * prefix in the encoded password are valid for this encoder.
  * </p>
  * <p>
  * This class can also encode (although not typically used to do so). Encoding simply returns the first
  * avaialble and successful encoder.
  * </p>
- * 
- * @author christian
  *
+ * @author christian
  */
 public class GeoServerMultiplexingPasswordEncoder implements PasswordEncoder {
 
@@ -44,13 +43,13 @@ public class GeoServerMultiplexingPasswordEncoder implements PasswordEncoder {
     }
 
     public GeoServerMultiplexingPasswordEncoder(GeoServerSecurityManager secMgr, GeoServerUserGroupService service) {
-        encoders=new HashSet<GeoServerPasswordEncoder>();
+        encoders = new HashSet<GeoServerPasswordEncoder>();
         for (GeoServerPasswordEncoder enc : secMgr.loadPasswordEncoders()) {
             if (StringUtils.hasLength(enc.getPrefix())) {
-                if (service!=null) {
+                if (service != null) {
                     try {
                         if (enc instanceof GeoServerPBEPasswordEncoder) {
-                            if (!secMgr.getKeyStoreProvider().hasUserGroupKey(service.getName())) { 
+                            if (!secMgr.getKeyStoreProvider().hasUserGroupKey(service.getName())) {
                                 continue;  //   cannot use pbe encoder, no key
                             }
                         }
@@ -63,25 +62,24 @@ public class GeoServerMultiplexingPasswordEncoder implements PasswordEncoder {
             }
         }
     }
-    
-    GeoServerPasswordEncoder lookupEncoderForEncodedPassword(String encPass) throws UnsupportedOperationException{
+
+    GeoServerPasswordEncoder lookupEncoderForEncodedPassword(String encPass) throws UnsupportedOperationException {
         for (GeoServerPasswordEncoder enc : encoders) {
             if (enc.isResponsibleForEncoding(encPass))
                 return enc;
         }
-        throw new UnsupportedOperationException("No password decoder for: "+encPass);
+        throw new UnsupportedOperationException("No password decoder for: " + encPass);
     }
-    
+
     @Override
-    public String encodePassword(String rawPass, Object salt) throws UnsupportedOperationException{
+    public String encodePassword(String rawPass, Object salt) throws UnsupportedOperationException {
         for (GeoServerPasswordEncoder enc : encoders) {
             try {
                 return enc.encodePassword(rawPass, salt);
-            }
-            catch(Exception e) {
+            } catch (Exception e) {
                 LOG.fine("Password encode failed with " + enc.getName());
-        }
             }
+        }
         throw new UnsupportedOperationException();
     }
 
@@ -90,7 +88,7 @@ public class GeoServerMultiplexingPasswordEncoder implements PasswordEncoder {
         GeoServerPasswordEncoder enc = lookupEncoderForEncodedPassword(encPass);
         return enc.isPasswordValid(encPass, rawPass, salt);
     }
-    
+
     public boolean isPasswordValid(String encPass, char[] rawPass, Object salt) throws UnsupportedOperationException {
         GeoServerPasswordEncoder enc = lookupEncoderForEncodedPassword(encPass);
         return enc.isPasswordValid(encPass, rawPass, salt);
@@ -98,12 +96,12 @@ public class GeoServerMultiplexingPasswordEncoder implements PasswordEncoder {
 
     public String decode(String encPass) throws UnsupportedOperationException {
         GeoServerPasswordEncoder enc = lookupEncoderForEncodedPassword(encPass);
-        return enc.decode(encPass);        
+        return enc.decode(encPass);
     }
 
     public char[] decodeToCharArray(String encPass) throws UnsupportedOperationException {
         GeoServerPasswordEncoder enc = lookupEncoderForEncodedPassword(encPass);
-        return enc.decodeToCharArray(encPass);        
+        return enc.decodeToCharArray(encPass);
     }
 
 }

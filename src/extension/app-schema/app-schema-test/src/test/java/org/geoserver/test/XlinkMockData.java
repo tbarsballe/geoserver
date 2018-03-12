@@ -11,9 +11,9 @@ import org.geotools.data.complex.AppSchemaDataAccess;
 
 /**
  * Mock data for testing integration of {@link AppSchemaDataAccess} with GeoServer.
- * 
+ * <p>
  * Inspired by {@link MockData}.
- * 
+ *
  * @author Ben Caradoc-Davies, CSIRO Exploration and Mining
  */
 public class XlinkMockData extends AbstractAppSchemaMockData {

@@ -50,6 +50,7 @@ public abstract class CommonPanelTest extends GeoServerWicketTestSupport {
 
     /**
      * Before method that navigates all subclass tests to their respective starting pages.
+     *
      * @throws java.io.IOException
      */
     protected void navigateToStartPage() throws IOException {
@@ -76,7 +77,7 @@ public abstract class CommonPanelTest extends GeoServerWicketTestSupport {
     /**
      * Asserts that FeedbackMessages match the expected list of messages.
      *
-     * @param actualMsgs List of FeedbackMessages received from submitting the form.
+     * @param actualMsgs   List of FeedbackMessages received from submitting the form.
      * @param expectedMsgs List of expected String messages that should appear in the Feedback Panel.
      */
     protected void assertFeedbackMessages(List<FeedbackMessage> actualMsgs, List<String> expectedMsgs) {
@@ -134,7 +135,7 @@ public abstract class CommonPanelTest extends GeoServerWicketTestSupport {
      * Retrieve the String representation of the DropDownChoice panel.
      *
      * @return String representation of the path to the panel containing the DropDownChoice component, relative to the
-     *         start page.
+     * start page.
      */
     protected abstract String getChoicePanel();
 

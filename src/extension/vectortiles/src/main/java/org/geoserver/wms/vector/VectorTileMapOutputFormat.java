@@ -45,10 +45,14 @@ import com.vividsolutions.jts.geom.Geometry;
 
 public class VectorTileMapOutputFormat extends AbstractMapOutputFormat {
 
-    /** A logger for this class. */
+    /**
+     * A logger for this class.
+     */
     private static final Logger LOGGER = Logging.getLogger(VectorTileMapOutputFormat.class);
 
-    /** WMS Service configuration * */
+    /**
+     * WMS Service configuration *
+     */
     private final WMS wms;
 
     private final VectorTileBuilderFactory tileBuilderFactory;
@@ -67,6 +71,7 @@ public class VectorTileMapOutputFormat extends AbstractMapOutputFormat {
 
     /**
      * Multiplies density of simplification from its base value.
+     *
      * @param factor
      */
     public void setOverSamplingFactor(double factor) {
@@ -75,6 +80,7 @@ public class VectorTileMapOutputFormat extends AbstractMapOutputFormat {
 
     /**
      * Does this format use features clipped to the extent of the tile instead of whole features
+     *
      * @param clip
      */
     public void setClipToMapBounds(boolean clip) {
@@ -116,32 +122,32 @@ public class VectorTileMapOutputFormat extends AbstractMapOutputFormat {
             }
 
             sourceCrs = geometryDescriptor.getType().getCoordinateReferenceSystem();
-            int buffer = VectorMapRenderUtils.getComputedBuffer(mapContent.getBuffer(), 
-                    VectorMapRenderUtils.getFeatureStyles(layer, paintArea, 
-                        VectorMapRenderUtils.getMapScale(mapContent, renderingArea), 
-                        (FeatureType)featureSource.getSchema()));
+            int buffer = VectorMapRenderUtils.getComputedBuffer(mapContent.getBuffer(),
+                    VectorMapRenderUtils.getFeatureStyles(layer, paintArea,
+                            VectorMapRenderUtils.getMapScale(mapContent, renderingArea),
+                            (FeatureType) featureSource.getSchema()));
             Pipeline pipeline = getPipeline(mapContent, renderingArea, paintArea, sourceCrs, buffer);
-            
+
             Query query = getStyleQuery(layer, mapContent);
             query.getHints().remove(Hints.SCREENMAP);
 
             FeatureCollection<?, ?> features = featureSource.getFeatures(query);
-            
+
             run(features, pipeline, geometryDescriptor, vectorTileBuilder, layer);
         }
-        
+
         WebMap map = vectorTileBuilder.build(mapContent);
         return map;
     }
 
     protected Pipeline getPipeline(final WMSMapContent mapContent,
-            final ReferencedEnvelope renderingArea, final Rectangle paintArea,
-            CoordinateReferenceSystem sourceCrs, int buffer) {
+                                   final ReferencedEnvelope renderingArea, final Rectangle paintArea,
+                                   CoordinateReferenceSystem sourceCrs, int buffer) {
         Pipeline pipeline;
         try {
             final PipelineBuilder builder = PipelineBuilder.newBuilder(renderingArea, paintArea, sourceCrs,
                     overSamplingFactor, buffer);
-            
+
             pipeline = builder.preprocess().transform(transformToScreenCoordinates)
                     .simplify(transformToScreenCoordinates)
                     .clip(clipToMapBounds, transformToScreenCoordinates).collapseCollections()
@@ -151,7 +157,7 @@ public class VectorTileMapOutputFormat extends AbstractMapOutputFormat {
         }
         return pipeline;
     }
-    
+
     private Map<String, Object> getProperties(ComplexAttribute feature) {
         Map<String, Object> props = new TreeMap<>();
         for (Property p : feature.getProperties()) {
@@ -172,14 +178,14 @@ public class VectorTileMapOutputFormat extends AbstractMapOutputFormat {
         return props;
     }
 
-    void run(FeatureCollection<?, ?> features, Pipeline pipeline, 
-            GeometryDescriptor geometryDescriptor, 
-            VectorTileBuilder vectorTileBuilder, Layer layer){
+    void run(FeatureCollection<?, ?> features, Pipeline pipeline,
+             GeometryDescriptor geometryDescriptor,
+             VectorTileBuilder vectorTileBuilder, Layer layer) {
         Stopwatch sw = Stopwatch.createStarted();
         int count = 0;
         int total = 0;
         Feature feature;
-        
+
         try (FeatureIterator<?> it = features.features()) {
             while (it.hasNext()) {
                 feature = it.next();
@@ -217,7 +223,7 @@ public class VectorTileMapOutputFormat extends AbstractMapOutputFormat {
             LOGGER.fine(msg);
         }
     }
-    
+
     /**
      * @return {@code null}, not a raster format.
      */

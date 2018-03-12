@@ -52,29 +52,29 @@ import com.jayway.jsonpath.DocumentContext;
 public class CollectionLayerTest extends OSEORestTestSupport {
 
     private String resourceBase;
-    
+
     @Override
     protected String getLogConfiguration() {
         // return "/GEOTOOLS_DEVELOPER_LOGGING.properties";
         return super.getLogConfiguration();
     }
-    
+
     @Override
     protected void onSetUp(SystemTestData testData) throws Exception {
         // PNGJ has bugs with band selected data, fall back on JDK
         super.onSetUp(testData);
-        
+
         GeoServer gs = getGeoServer();
         GeoServerInfo gsInfo = gs.getGlobal();
         gsInfo.getJAI().setPngEncoderType(PngEncoderType.JDK);
         gs.save(gsInfo);
     }
-    
+
     @Before
     public void setupTestWorkspace() throws Exception {
         Catalog catalog = getCatalog();
         WorkspaceInfo ws = catalog.getWorkspaceByName("test");
-        if(ws == null) {
+        if (ws == null) {
             ws = catalog.getFactory().createWorkspace();
             ws.setName("test");
             catalog.add(ws);
@@ -84,13 +84,13 @@ public class CollectionLayerTest extends OSEORestTestSupport {
             catalog.add(ns);
         }
     }
-    
+
     @After
     public void cleanupTestWorkspace() throws Exception {
         Catalog catalog = getCatalog();
         CascadeDeleteVisitor remover = new CascadeDeleteVisitor(catalog);
         WorkspaceInfo ws = catalog.getWorkspaceByName("test");
-        if(ws != null) {
+        if (ws != null) {
             remover.visit(ws);
         }
     }
@@ -99,7 +99,7 @@ public class CollectionLayerTest extends OSEORestTestSupport {
     public void setupTestCollectionAndProduct() throws IOException, Exception {
         // create the collection
         createTest123Collection();
-        
+
         // create the product
         MockHttpServletResponse response = postAsServletResponse(
                 "rest/oseo/collections/TEST123/products", getTestData("/test123-product.json"),
@@ -108,16 +108,16 @@ public class CollectionLayerTest extends OSEORestTestSupport {
         assertEquals(
                 "http://localhost:8080/geoserver/rest/oseo/collections/TEST123/products/TEST123_P1",
                 response.getHeader("location"));
-        
+
         // setup the base granule location
         File file = new File("./src/test/resources");
         resourceBase = file.getCanonicalFile().getAbsolutePath();
     }
-    
+
     protected String getTestStringData(String location) throws IOException {
         return IOUtils.toString(getClass().getResourceAsStream(location));
     }
-    
+
     @Test
     public void testCreateCollectionSimpleLayer() throws Exception {
         // setup the granules
@@ -141,7 +141,7 @@ public class CollectionLayerTest extends OSEORestTestSupport {
         assertEquals("test123", json.read("$.layer"));
         assertEquals(Boolean.FALSE, json.read("$.separateBands"));
         assertEquals(Boolean.FALSE, json.read("$.heterogeneousCRS"));
-        
+
         // check the configuration elements are there too
         Catalog catalog = getCatalog();
         // ... the store
@@ -159,12 +159,12 @@ public class CollectionLayerTest extends OSEORestTestSupport {
         assertThat(dimension.getDefaultValue().getStrategyType(), equalTo(Strategy.MAXIMUM));
         // ... its style is the default one
         assertThat(layer.getDefaultStyle().getName(), equalTo("raster"));
-        
+
         BufferedImage image = getAsImage("wms/reflect?layers=gs:test123&format=image/png&width=200", "image/png");
         File expected = new File("src/test/resources/test123-simple-rgb.png");
         ImageAssert.assertEquals(expected, image, 1000);
     }
-    
+
     @Test
     public void testCreateCollectionSimpleLayerTestWorkspace() throws Exception {
         // setup the granules
@@ -188,7 +188,7 @@ public class CollectionLayerTest extends OSEORestTestSupport {
         assertEquals("test123", json.read("$.layer"));
         assertEquals(Boolean.FALSE, json.read("$.separateBands"));
         assertEquals(Boolean.FALSE, json.read("$.heterogeneousCRS"));
-        
+
         // check the configuration elements are there too
         Catalog catalog = getCatalog();
         // ... the store
@@ -206,12 +206,12 @@ public class CollectionLayerTest extends OSEORestTestSupport {
         assertThat(dimension.getDefaultValue().getStrategyType(), equalTo(Strategy.MAXIMUM));
         // ... its style is the default one
         assertThat(layer.getDefaultStyle().getName(), equalTo("raster"));
-        
+
         BufferedImage image = getAsImage("wms/reflect?layers=test:test123&format=image/png&width=200", "image/png");
         File expected = new File("src/test/resources/test123-simple-rgb.png");
         ImageAssert.assertEquals(expected, image, 1000);
     }
-    
+
     @Test
     public void testCreateCollectionSimpleLayerWithCustomStyle() throws Exception {
         // setup the granules
@@ -235,7 +235,7 @@ public class CollectionLayerTest extends OSEORestTestSupport {
         assertEquals("test123", json.read("$.layer"));
         assertEquals(Boolean.FALSE, json.read("$.separateBands"));
         assertEquals(Boolean.FALSE, json.read("$.heterogeneousCRS"));
-        
+
         // check the configuration elements are there too
         Catalog catalog = getCatalog();
         // ... the store
@@ -266,13 +266,13 @@ public class CollectionLayerTest extends OSEORestTestSupport {
         assertNull(cs.getRGBChannels()[1]);
         assertNull(cs.getRGBChannels()[2]);
         assertEquals("1", cs.getGrayChannel().getChannelName());
-        
+
         BufferedImage image = getAsImage("wms/reflect?layers=gs:test123&format=image/png&width=200", "image/png");
         File expected = new File("src/test/resources/test123-simple-gray.png");
         ImageAssert.assertEquals(expected, image, 1000);
 
     }
-    
+
     @Test
     public void testCreateCollectionMultiband() throws Exception {
         // setup the granules
@@ -296,7 +296,7 @@ public class CollectionLayerTest extends OSEORestTestSupport {
         assertEquals("test123", json.read("$.layer"));
         assertEquals(Boolean.TRUE, json.read("$.separateBands"));
         assertEquals(Boolean.TRUE, json.read("$.heterogeneousCRS"));
-        
+
         // check the configuration elements are there too
         Catalog catalog = getCatalog();
         // ... the store
@@ -312,7 +312,7 @@ public class CollectionLayerTest extends OSEORestTestSupport {
         DimensionInfo dimension = coverageInfo.getMetadata().get(ResourceInfo.TIME, DimensionInfo.class);
         assertThat(dimension.getAttribute(), equalTo("timeStart"));
         assertThat(dimension.getDefaultValue().getStrategyType(), equalTo(Strategy.MAXIMUM));
-        
+
         // ... its style is a RGB one based on the B2, B3, B4
         assertThat(layer.getDefaultStyle().prefixedName(), equalTo("gs:test123"));
         Style style = layer.getDefaultStyle().getStyle();
@@ -328,27 +328,28 @@ public class CollectionLayerTest extends OSEORestTestSupport {
         assertEquals("2", cs.getRGBChannels()[1].getChannelName());
         assertEquals("1", cs.getRGBChannels()[2].getChannelName());
         assertNull(cs.getGrayChannel());
-        
+
         BufferedImage image = getAsImage("wms/reflect?layers=gs:test123&format=image/png&width=200", "image/png");
         File expected = new File("src/test/resources/test123-multiband.png");
         ImageAssert.assertEquals(expected, image, 1000);
     }
-    
+
     /**
      * This test checks it's possible to change an existing configuration and stuff still works
+     *
      * @throws Exception
      */
     @Test
     public void testModifyConfigurationSingleBand() throws Exception {
         // setup and check one collection
         testCreateCollectionSimpleLayer();
-        
+
         // now go and setup another single collection
         testCreateCollectionMultiband();
-        
+
         // switch to multiband
         testCreateCollectionMultiband();
-        
+
         // and back to single
         testCreateCollectionSimpleLayer();
     }

@@ -20,6 +20,7 @@ import org.geoserver.wcs2_0.exception.WCS20Exception;
 
 /**
  * Parses a DescribeEOCoverageSet request for WCS EO into the correspondent model object
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class WCS20DescribeEOCoverageSetRequestReader extends EMFKvpRequestReader {
@@ -27,17 +28,17 @@ public class WCS20DescribeEOCoverageSetRequestReader extends EMFKvpRequestReader
     public WCS20DescribeEOCoverageSetRequestReader() {
         super(DescribeEOCoverageSetType.class, Wcs20Factory.eINSTANCE);
     }
-    
+
     @Override
     public Object read(Object request, Map kvp, Map rawKvp) throws Exception {
         SectionsType owsSections = (SectionsType) kvp.get("sections");
-        if(owsSections != null) {
+        if (owsSections != null) {
             Sections sections = Wcs20Factory.eINSTANCE.createSections();
-            for(Object o : owsSections.getSection()) {
+            for (Object o : owsSections.getSection()) {
                 String sectionName = (String) o;
                 Section section = Section.get(sectionName);
-                if(section == null) {
-                    throw new WCS20Exception("Invalid sections value " + sectionName + ", supported values are " + Arrays.asList(Section.values()), 
+                if (section == null) {
+                    throw new WCS20Exception("Invalid sections value " + sectionName + ", supported values are " + Arrays.asList(Section.values()),
                             OWSExceptionCode.InvalidParameterValue, "sections");
                 }
                 sections.getSection().add(section);
@@ -46,12 +47,12 @@ public class WCS20DescribeEOCoverageSetRequestReader extends EMFKvpRequestReader
         }
         // the kvp param is subset, the objet field is dimensionTrim....
         Object subset = kvp.get("subset");
-        if(subset != null) {
+        if (subset != null) {
             kvp.put("dimensionTrim", subset);
         }
         // the kvp param is containment, the object field is containmentType
         Object containment = kvp.get("containment");
-        if(containment != null) {
+        if (containment != null) {
             kvp.put("containmentType", containment);
         }
         return super.read(request, kvp, rawKvp);

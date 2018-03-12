@@ -8,33 +8,30 @@ import org.geoserver.wps.remote.plugin.XMPPClient;
 
 /**
  * Output Type Producer Base Class.
- * 
- * 
+ *
  * @author Alessio Fabiani, GeoSolutions
- * 
  */
 public class XMPPOutputDefaultProducer {
 
     /**
-     * 
+     *
      */
     private final XMPPOutputVisitor visitor;
 
     /**
-     * 
+     *
      */
-    public static final XMPPOutputType[] outputProducers = { new XMPPTextualOutput(),
-            new XMPPRawDataOutput() };
+    public static final XMPPOutputType[] outputProducers = {new XMPPTextualOutput(),
+            new XMPPRawDataOutput()};
 
     /**
-     * 
+     *
      */
     public XMPPOutputDefaultProducer() {
         this.visitor = new XMPPOutputDefaultVisitor();
     }
 
     /**
-     * 
      * @param outputs
      * @param value
      * @param type
@@ -43,11 +40,10 @@ public class XMPPOutputDefaultProducer {
      * @param xmppClient
      * @param publish
      * @param metadata
-     *
      */
     public Object produceOutput(Object value, String type, String pID, String baseURL,
-            XMPPClient xmppClient, boolean publish, String name, String title, String description,
-            String defaultStyle, String targetWorkspace, String metadata) throws Exception {
+                                XMPPClient xmppClient, boolean publish, String name, String title, String description,
+                                String defaultStyle, String targetWorkspace, String metadata) throws Exception {
 
         Object wpsOutputValue = null;
 

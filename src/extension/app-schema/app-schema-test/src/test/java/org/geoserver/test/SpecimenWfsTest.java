@@ -15,7 +15,7 @@ import org.w3c.dom.Document;
 
 /**
  * WFS test based on samplingSpecimen 2.0, a GML 3.2 application schema.
- * 
+ *
  * @author Ben Caradoc-Davies, CSIRO Earth Science and Resource Engineering
  */
 public class SpecimenWfsTest extends AbstractAppSchemaTestSupport {

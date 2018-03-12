@@ -26,15 +26,15 @@ import org.junit.Test;
 import org.w3c.dom.Document;
 
 public class ProcessStatusPageTest extends WPSPagesTestSupport {
-    
+
     static {
         Processors.addProcessFactory(MonkeyProcess.getFactory());
     }
-    
+
     @Override
     protected void onSetUp(SystemTestData testData) throws Exception {
         super.onSetUp(testData);
-        
+
         // init xmlunit
         Map<String, String> namespaces = new HashMap<String, String>();
         namespaces.put("wps", "http://www.opengis.net/wps/1.0.0");
@@ -43,8 +43,8 @@ public class ProcessStatusPageTest extends WPSPagesTestSupport {
         namespaces.put("wfs", "http://www.opengis.net/wfs");
         namespaces.put("xlink", "http://www.w3.org/1999/xlink");
         namespaces.put("xsi", "http://www.w3.org/2001/XMLSchema-instance");
-        namespaces.put("feature", "http://geoserver.sf.net"); 
-        
+        namespaces.put("feature", "http://geoserver.sf.net");
+
         XMLUnit.setXpathNamespaceContext(new SimpleNamespaceContext(namespaces));
     }
 
@@ -52,14 +52,14 @@ public class ProcessStatusPageTest extends WPSPagesTestSupport {
     @Test
     public void test() throws Exception {
         login();
-        
+
 
         // submit a monkey process
         String request = "wps?service=WPS&version=1.0.0&request=Execute&Identifier=gs:Monkey&storeExecuteResponse=true&DataInputs=" + URLEncoder.encode("id=x2", "ASCII");
         Document dom = getAsDOM(request);
         // print(dom);
         assertXpathExists("//wps:ProcessAccepted", dom);
-        
+
         // start the page, should have one process running
         tester.startPage(new ProcessStatusPage());
         // print(tester.getLastRenderedPage(), true, true);
@@ -76,17 +76,17 @@ public class ProcessStatusPageTest extends WPSPagesTestSupport {
         // this makes the dialog actually close
         tester.getComponentFromLastRenderedPage("dialog:dialog").getBehaviors().forEach(b -> {
             final String name = b.getClass().getSimpleName();
-            if(name.contains("WindowClosedBehavior")) {
+            if (name.contains("WindowClosedBehavior")) {
                 tester.executeBehavior((AbstractAjaxBehavior) b);
             }
         });
-        
+
         // check the table is refreshed and process is dismissing
         tester.assertComponentOnAjaxResponse("table");
         tester.assertLabel("table:listContainer:items:2:itemProperties:3:component", "gs:Monkey");
         tester.assertLabel("table:listContainer:items:2:itemProperties:5:component", "DISMISSING");
-        
+
         // let the process exit to ensure clean shutdown 
-        MonkeyProcess.exit("x2", null, true);        
+        MonkeyProcess.exit("x2", null, true);
     }
 }

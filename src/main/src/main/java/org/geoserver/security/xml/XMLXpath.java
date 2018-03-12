@@ -19,28 +19,25 @@ import static org.geoserver.security.xml.XMLConstants.*;
 
 /**
  * This class is a base class for concrete implemenations
- * 
+ * <p>
  * The main purpose is to serve as registry of
  * precompiled {@link XPathExpression} objects
- * 
- * 
- * @author christian
  *
+ * @author christian
  */
 public abstract class XMLXpath {
-    
-    
+
+
     /**
      * Inner class providing a {@link NamespaceContext}
      * implementation
-     * 
-     * @author christian
      *
+     * @author christian
      */
     public class NamespaceContextImpl implements NamespaceContext {
-        private Map<String,String> prefix_ns_Map = new HashMap<String,String>();
-        private Map<String,String> ns_prefix_Map = new HashMap<String,String>();
-        
+        private Map<String, String> prefix_ns_Map = new HashMap<String, String>();
+        private Map<String, String> ns_prefix_Map = new HashMap<String, String>();
+
         public String getNamespaceURI(String prefix) {
             return prefix_ns_Map.get(prefix);
         }
@@ -52,14 +49,14 @@ public abstract class XMLXpath {
         public Iterator getPrefixes(String namespaceURI) {
             return prefix_ns_Map.keySet().iterator();
         }
-        
+
         public void register(String prefix, String ns) {
             prefix_ns_Map.put(prefix, ns);
-            ns_prefix_Map.put(ns,prefix);
-        }        
+            ns_prefix_Map.put(ns, prefix);
+        }
     }
 
-    
+
     /**
      * XML name space context for user/group store
      */
@@ -69,24 +66,24 @@ public abstract class XMLXpath {
      */
     protected NamespaceContextImpl rrContext;
 
-       
+
     protected XMLXpath() {
-        
-        urContext=new NamespaceContextImpl();
+
+        urContext = new NamespaceContextImpl();
         urContext.register(NSP_UR, NS_UR);
-        
-        rrContext=new NamespaceContextImpl();
+
+        rrContext = new NamespaceContextImpl();
         rrContext.register(NSP_RR, NS_RR);
 
     }
-    
+
     /**
      * Compile XPath Strings to {@link XPathExpression}
+     *
      * @param xpath
      * @param expression
-     *
      */
-    protected XPathExpression compile(XPath xpath,String expression) {
+    protected XPathExpression compile(XPath xpath, String expression) {
         try {
             return xpath.compile(expression);
         } catch (XPathExpressionException e) {
@@ -97,16 +94,15 @@ public abstract class XMLXpath {
 
     /**
      * Creates a relatvie XPathExpression for
-     * a XML attribute, needs name space prefix 
-     * 
+     * a XML attribute, needs name space prefix
+     *
      * @param xpath
      * @param attrName
      * @param prefix
-     *
      */
-    protected XPathExpression compileRelativeAttribute(XPath xpath,String attrName,String prefix) {        
+    protected XPathExpression compileRelativeAttribute(XPath xpath, String attrName, String prefix) {
         //return compile(xpath,"@"+prefix+":"+attrName);
-        return compile(xpath,"@"+attrName);
+        return compile(xpath, "@" + attrName);
     }
-        
+
 }

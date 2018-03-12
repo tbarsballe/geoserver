@@ -28,7 +28,6 @@ public class JaxbRule {
 
     /**
      * Specification for "LIMIT" rules.
-     *
      */
     public static class Limits {
 
@@ -72,7 +71,6 @@ public class JaxbRule {
 
     /**
      * Access specification for a Layer Attribute
-     *
      */
     public static class LayerAttribute {
         private String name;
@@ -132,7 +130,6 @@ public class JaxbRule {
 
     /**
      * Details for layer access.
-     *
      */
     public static class LayerDetails {
         private String layerType;

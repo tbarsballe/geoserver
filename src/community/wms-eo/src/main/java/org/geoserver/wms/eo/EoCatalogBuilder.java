@@ -58,7 +58,7 @@ import org.geotools.util.URLs;
 /**
  * Builder class which provides convenience methods for managing EO stores, resources, layers and
  * layer groups.
- * 
+ *
  * @author Davide Savazzi - geo-solutions.it
  */
 public class EoCatalogBuilder implements EoStyles {
@@ -69,7 +69,7 @@ public class EoCatalogBuilder implements EoStyles {
 
     /**
      * EoCatalogBuilder constructor
-     * 
+     *
      * @param catalog
      */
     public EoCatalogBuilder(Catalog catalog) {
@@ -78,15 +78,15 @@ public class EoCatalogBuilder implements EoStyles {
 
     /**
      * Create an EO Geophysical Parameters layer
-     * 
-     * @param ws workspace
-     * @param groupName group name
+     *
+     * @param ws             workspace
+     * @param groupName      group name
      * @param parametersName Geophysical Parameters name
-     * @param parametersUrl Geophysical Parameters url
+     * @param parametersUrl  Geophysical Parameters url
      * @return created layer
      */
     public LayerInfo createEoParametersLayer(WorkspaceInfo ws, String groupName,
-            String parametersName, String parametersUrl) {
+                                             String parametersName, String parametersUrl) {
         String parametersLayerName = groupName + "_" + parametersName;
         return createEoMosaicLayer(ws, parametersLayerName, EoLayerType.GEOPHYSICAL_PARAMETER,
                 parametersUrl, false);
@@ -94,15 +94,15 @@ public class EoCatalogBuilder implements EoStyles {
 
     /**
      * Create an EO Bitmasks layer
-     * 
-     * @param ws workspace
+     *
+     * @param ws        workspace
      * @param groupName group name
      * @param masksName bitmasks name
-     * @param masksUrl bitmasks url
+     * @param masksUrl  bitmasks url
      * @return created layer
      */
     public LayerInfo createEoMasksLayer(WorkspaceInfo ws, String groupName, String masksName,
-            String masksUrl) {
+                                        String masksUrl) {
         Utilities.ensureNonNull("groupName", groupName);
         String masksLayerName = groupName + "_" + masksName;
         LayerInfo masksLayer = createEoMosaicLayer(ws, masksLayerName, EoLayerType.BITMASK,
@@ -120,7 +120,7 @@ public class EoCatalogBuilder implements EoStyles {
     }
 
     public LayerInfo createEoBrowseImageLayer(WorkspaceInfo ws, String groupName,
-            String browseImageUrl) {
+                                              String browseImageUrl) {
         /*
          * Browse Image layer name must be different from EO group name (otherwise GWC will
          * complain) In GetCapabilities this name will not appear
@@ -133,21 +133,21 @@ public class EoCatalogBuilder implements EoStyles {
 
     /**
      * Create an EO layer group
-     * 
-     * @param ws workspace
-     * @param groupName group name
-     * @param groupTitle group title
+     *
+     * @param ws             workspace
+     * @param groupName      group name
+     * @param groupTitle     group title
      * @param browseImageUrl Browse Image url
-     * @param bandsUrl Band Coverage url
-     * @param masksName Bitmasks name
-     * @param masksUrl Bitmasks url
+     * @param bandsUrl       Band Coverage url
+     * @param masksName      Bitmasks name
+     * @param masksUrl       Bitmasks url
      * @param parametersName Geophysical Parameters name
-     * @param parametersUrl Geophysical Parameters url
+     * @param parametersUrl  Geophysical Parameters url
      * @return created group
      */
     public LayerGroupInfo createEoLayerGroup(WorkspaceInfo ws, String groupName, String groupTitle,
-            String browseImageUrl, String bandsUrl, String masksName, String masksUrl,
-            String parametersName, String parametersUrl) {
+                                             String browseImageUrl, String bandsUrl, String masksName, String masksUrl,
+                                             String parametersName, String parametersUrl) {
 
         LayerInfo bandsLayer = createEoBandsLayer(ws, groupName, bandsUrl);
         LayerInfo browseLayer = createEoBrowseImageLayer(ws, groupName, browseImageUrl);
@@ -221,7 +221,7 @@ public class EoCatalogBuilder implements EoStyles {
 
     /**
      * Get database type from DataStoreFactorySpi
-     * 
+     *
      * @param dataStoreFactory
      * @return database type
      */
@@ -246,14 +246,14 @@ public class EoCatalogBuilder implements EoStyles {
 
     /**
      * Create Outline store parameters
-     * 
-     * @param dir mosaic directory
+     *
+     * @param dir              mosaic directory
      * @param dataStoreFactory
      * @return parameters
      * @throws IOException
      */
     protected Map<String, Serializable> getOutlineDataStoreParameters(File dir,
-            DataStoreFactorySpi dataStoreFactory) throws IOException {
+                                                                      DataStoreFactorySpi dataStoreFactory) throws IOException {
         File datastorePropertiesFile = new File(dir, "datastore.properties");
         if (datastorePropertiesFile.exists()) {
             Properties datastoreProperties = loadProperties(datastorePropertiesFile);
@@ -292,7 +292,7 @@ public class EoCatalogBuilder implements EoStyles {
      * Create EO Outline layer
      */
     public LayerInfo createEoOutlineLayer(String url, WorkspaceInfo ws, String groupName,
-            String coverageName, StructuredGridCoverage2DReader reader) throws Exception {
+                                          String coverageName, StructuredGridCoverage2DReader reader) throws Exception {
         File dir = URLs.urlToFile(new URL(url));
 
         if (ws == null) {
@@ -373,7 +373,7 @@ public class EoCatalogBuilder implements EoStyles {
 
     /**
      * Add EO styles to layer
-     * 
+     *
      * @param layer
      * @param defaultStyleName
      */
@@ -401,8 +401,8 @@ public class EoCatalogBuilder implements EoStyles {
 
     /**
      * Create a new mosaic store
-     * 
-     * @param ws workspace
+     *
+     * @param ws   workspace
      * @param name store name
      * @param url
      * @return created store
@@ -431,16 +431,16 @@ public class EoCatalogBuilder implements EoStyles {
 
     /**
      * Create a new mosaic layer
-     * 
-     * @param ws workspace
-     * @param name store name and layer name
-     * @param type EO layer type
-     * @param url mosaic url
+     *
+     * @param ws              workspace
+     * @param name            store name and layer name
+     * @param type            EO layer type
+     * @param url             mosaic url
      * @param checkDimensions check time and at least another dimension is present
      * @return created layer
      */
     public LayerInfo createEoMosaicLayer(WorkspaceInfo ws, String name, EoLayerType type,
-            String url, boolean checkDimensions) {
+                                         String url, boolean checkDimensions) {
         if (StringUtils.isEmpty(url)) {
             return null;
         }
@@ -555,7 +555,7 @@ public class EoCatalogBuilder implements EoStyles {
 
     /**
      * Delete a layer, its resource and its store
-     * 
+     *
      * @param layer
      */
     private void delete(LayerInfo layer) {
@@ -568,7 +568,7 @@ public class EoCatalogBuilder implements EoStyles {
 
     /**
      * Delete a layer group, all its layers and their respective stores
-     * 
+     *
      * @param group
      */
     public void delete(LayerGroupInfo group) {
@@ -592,12 +592,13 @@ public class EoCatalogBuilder implements EoStyles {
 
     /**
      * Check presence of TIME dimension . Enable all dimensions found.
-     * @throws IOException 
+     *
+     * @throws IOException
      */
     private boolean enableDimensions(FeatureTypeInfo fi, String coverageName, StructuredGridCoverage2DReader reader) throws IOException {
         Utilities.ensureNonNull("FeatureTypeInfo", fi);
         Utilities.ensureNonNull("reader", reader);
-        
+
         List<DimensionDescriptor> dimensionDescriptors = reader.getDimensionDescriptors(coverageName == null ? reader.getGridCoverageNames()[0] : coverageName);
         boolean timeDimension = false;
         for (DimensionDescriptor dd : dimensionDescriptors) {
@@ -605,18 +606,18 @@ public class EoCatalogBuilder implements EoStyles {
             String key;
             String units = dd.getUnits();
             String symbol = dd.getUnitSymbol();
-            if(ResourceInfo.TIME.equalsIgnoreCase(dd.getName())) {
+            if (ResourceInfo.TIME.equalsIgnoreCase(dd.getName())) {
                 timeDimension = true;
                 key = ResourceInfo.TIME;
                 units = DimensionInfo.TIME_UNITS;
-            } else if(ResourceInfo.ELEVATION.equalsIgnoreCase(dd.getName())) {
+            } else if (ResourceInfo.ELEVATION.equalsIgnoreCase(dd.getName())) {
                 key = ResourceInfo.ELEVATION;
                 units = DimensionInfo.ELEVATION_UNITS;
                 symbol = DimensionInfo.ELEVATION_UNIT_SYMBOL;
             } else {
                 key = ResourceInfo.CUSTOM_DIMENSION_PREFIX + dd.getName();
             }
-            
+
             di.setEnabled(true);
             di.setAttribute(dd.getStartAttribute());
             di.setEndAttribute(dd.getEndAttribute());

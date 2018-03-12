@@ -69,7 +69,7 @@ public class ProcessSelectionPageTest extends WPSPagesTestSupport {
         // grab the table and check its contents
         DataView datas = (DataView) tester
                 .getComponentFromLastRenderedPage("form:selectionTable:listContainer:items");
-        for (Iterator it = datas.getItems(); it.hasNext();) {
+        for (Iterator it = datas.getItems(); it.hasNext(); ) {
             OddEvenItem item = (OddEvenItem) it.next();
             FilteredProcess fp = (FilteredProcess) item.getDefaultModelObject();
 

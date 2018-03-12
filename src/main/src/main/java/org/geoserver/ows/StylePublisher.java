@@ -25,7 +25,7 @@ import org.springframework.web.context.support.ServletContextResourceLoader;
  * Controller which publishes styles through a web interface.
  * <p>
  * To use this controller, it should be mapped to a particular url in the url mapping of the spring dispatcher servlet.
- * 
+ *
  * @author Alex Goudine, Boundless
  */
 public class StylePublisher extends AbstractURLPublisher {
@@ -41,7 +41,7 @@ public class StylePublisher extends AbstractURLPublisher {
 
     /**
      * Creates the new file publisher.
-     * 
+     *
      * @param loader The loader used to locate files.
      */
     public StylePublisher(Catalog catalog) {
@@ -82,14 +82,14 @@ public class StylePublisher extends AbstractURLPublisher {
                 // global style
                 resource = data.getStyles(stylePath);
             }
-            
+
             switch (resource.getType()) {
-            case RESOURCE:
-                return URLs.fileToUrl(resource.file());
-            case DIRECTORY:
-            case UNDEFINED:
-            default:
-                return null;
+                case RESOURCE:
+                    return URLs.fileToUrl(resource.file());
+                case DIRECTORY:
+                case UNDEFINED:
+                default:
+                    return null;
             }
         }
         return null;

@@ -17,7 +17,7 @@ public class LiveData implements TestData {
     public LiveData(File dataDirSourceDirectory) {
         this.source = dataDirSourceDirectory;
     }
-    
+
 
     /**
      * Deeps copy the dataDirSourceDirectory provided in the constructor into a
@@ -30,7 +30,7 @@ public class LiveData implements TestData {
     }
 
     public void tearDown() throws Exception {
-        if(data != null)
+        if (data != null)
             IOUtils.delete(data);
     }
 

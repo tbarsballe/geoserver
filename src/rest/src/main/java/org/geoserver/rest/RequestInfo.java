@@ -16,7 +16,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 /**
  * An object which contains information about the "page" or "resource" being accessed
  * in a rest request.
- *
+ * <p>
  * Equivalent of PageInfo used by the old rest module.
  * <p>
  * An instance of this class can be referenced by any restlet via:
@@ -24,7 +24,6 @@ import org.springframework.web.context.request.RequestContextHolder;
  * RequestContextHolder.getRequestAttributes().getAttribute( RequestInfo.KEY, RequestAttributes.SCOPE_REQUEST );
  * </pre>
  * </p>
- *
  */
 public class RequestInfo {
 
@@ -37,7 +36,7 @@ public class RequestInfo {
     String servletPath;
     String pagePath;
     String extension;
-    
+
 
     private Map<String, String[]> queryMap;
 
@@ -45,7 +44,8 @@ public class RequestInfo {
     /**
      * Constructs an empty {@link RequestInfo} object
      */
-    public RequestInfo() { }
+    public RequestInfo() {
+    }
 
     /**
      * Constructs a {@link RequestInfo} object, generating content based on the passed request.
@@ -56,24 +56,24 @@ public class RequestInfo {
         // http://host:port/appName
         baseURL = request.getRequestURL().toString().replace(request.getRequestURI(), request.getContextPath());
 
-        servletPath= request.getServletPath();
-        pagePath = request.getServletPath()+request.getPathInfo();
+        servletPath = request.getServletPath();
+        pagePath = request.getServletPath() + request.getPathInfo();
         setQueryMap(request.getParameterMap());
         //strip off the extension
         extension = ResponseUtils.getExtension(pagePath);
-        if ( extension != null ) {
+        if (extension != null) {
             pagePath = pagePath.substring(0, pagePath.length() - extension.length() - 1);
         }
 
         //trim leading slash
-        if ( pagePath.endsWith( "/" ) ) {
-            pagePath = pagePath.substring(0, pagePath.length()-1);
+        if (pagePath.endsWith("/")) {
+            pagePath = pagePath.substring(0, pagePath.length() - 1);
         }
     }
 
     private void setQueryMap(Map<String, String[]> parameterMap) {
         queryMap = parameterMap;
-        
+
     }
 
     /**
@@ -129,9 +129,9 @@ public class RequestInfo {
     }
 
     String buildURI(String base, String path) {
-        if(path != null) {
-            if(path.startsWith(".")) {
-                if(base.endsWith("/"))
+        if (path != null) {
+            if (path.startsWith(".")) {
+                if (base.endsWith("/"))
                     base = base.substring(1);
                 path = base + path;
             } else {
@@ -141,10 +141,10 @@ public class RequestInfo {
 
         return ResponseUtils.buildURL(baseURL, path, null, URLMangler.URLType.SERVICE);
     }
-    
+
     /**
      * Returns the RequestInfo from the current {@link RequestContextHolder}
-     * 
+     *
      * @return
      */
     public static RequestInfo get() {
@@ -156,11 +156,10 @@ public class RequestInfo {
         return queryMap;
     }
 
-    
 
     /**
      * Sets the provided RequestInfo into the {@link RequestContextHolder}
-     * 
+     *
      * @param requestInfo
      */
     public static void set(RequestInfo requestInfo) {

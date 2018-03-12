@@ -63,36 +63,36 @@ public class WPSExecuteTransformerTest extends GeoServerWicketTestSupport {
         WPSExecuteTransformer tx = new WPSExecuteTransformer();
         tx.setIndentation(2);
         String xml = tx.transform(executeBuffer);
-        
-        String expected = 
-            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + 
-            "<wps:Execute version=\"1.0.0\" service=\"WPS\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" " +
-            "xmlns=\"http://www.opengis.net/wps/1.0.0\" xmlns:wfs=\"http://www.opengis.net/wfs\" " +
-            "xmlns:wps=\"http://www.opengis.net/wps/1.0.0\" xmlns:ows=\"http://www.opengis.net/ows/1.1\" " +
-            "xmlns:gml=\"http://www.opengis.net/gml\" xmlns:ogc=\"http://www.opengis.net/ogc\" " +
-            "xmlns:wcs=\"http://www.opengis.net/wcs/1.1.1\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" " +
-            "xsi:schemaLocation=\"http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsAll.xsd\">\n" + 
-            "  <ows:Identifier>JTS:buffer</ows:Identifier>\n" + 
-            "  <wps:DataInputs>\n" + 
-            "    <wps:Input>\n" + 
-            "      <ows:Identifier>geom</ows:Identifier>\n" + 
-            "      <wps:Data>\n" + 
-            "        <wps:ComplexData mimeType=\"application/wkt\"><![CDATA[POINT(0 0)]]></wps:ComplexData>\n" + 
-            "      </wps:Data>\n" + 
-            "    </wps:Input>\n" + 
-            "    <wps:Input>\n" + 
-            "      <ows:Identifier>distance</ows:Identifier>\n" + 
-            "      <wps:Data>\n" + 
-            "        <wps:LiteralData>10</wps:LiteralData>\n" + 
-            "      </wps:Data>\n" + 
-            "    </wps:Input>\n" + 
-            "  </wps:DataInputs>\n" + 
-            "  <wps:ResponseForm>\n" + 
-            "    <wps:RawDataOutput mimeType=\"text/xml; subtype=gml/3.1.1\">\n" + 
-            "      <ows:Identifier>result</ows:Identifier>\n" + 
-            "    </wps:RawDataOutput>\n" + 
-            "  </wps:ResponseForm>\n" + 
-            "</wps:Execute>";
+
+        String expected =
+                "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+                        "<wps:Execute version=\"1.0.0\" service=\"WPS\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" " +
+                        "xmlns=\"http://www.opengis.net/wps/1.0.0\" xmlns:wfs=\"http://www.opengis.net/wfs\" " +
+                        "xmlns:wps=\"http://www.opengis.net/wps/1.0.0\" xmlns:ows=\"http://www.opengis.net/ows/1.1\" " +
+                        "xmlns:gml=\"http://www.opengis.net/gml\" xmlns:ogc=\"http://www.opengis.net/ogc\" " +
+                        "xmlns:wcs=\"http://www.opengis.net/wcs/1.1.1\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" " +
+                        "xsi:schemaLocation=\"http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsAll.xsd\">\n" +
+                        "  <ows:Identifier>JTS:buffer</ows:Identifier>\n" +
+                        "  <wps:DataInputs>\n" +
+                        "    <wps:Input>\n" +
+                        "      <ows:Identifier>geom</ows:Identifier>\n" +
+                        "      <wps:Data>\n" +
+                        "        <wps:ComplexData mimeType=\"application/wkt\"><![CDATA[POINT(0 0)]]></wps:ComplexData>\n" +
+                        "      </wps:Data>\n" +
+                        "    </wps:Input>\n" +
+                        "    <wps:Input>\n" +
+                        "      <ows:Identifier>distance</ows:Identifier>\n" +
+                        "      <wps:Data>\n" +
+                        "        <wps:LiteralData>10</wps:LiteralData>\n" +
+                        "      </wps:Data>\n" +
+                        "    </wps:Input>\n" +
+                        "  </wps:DataInputs>\n" +
+                        "  <wps:ResponseForm>\n" +
+                        "    <wps:RawDataOutput mimeType=\"text/xml; subtype=gml/3.1.1\">\n" +
+                        "      <ows:Identifier>result</ows:Identifier>\n" +
+                        "    </wps:RawDataOutput>\n" +
+                        "  </wps:ResponseForm>\n" +
+                        "</wps:Execute>";
 
         Document test = XMLUnit.buildTestDocument(xml);
         checkValidationErrors(test);
@@ -104,64 +104,64 @@ public class WPSExecuteTransformerTest extends GeoServerWicketTestSupport {
     @Test
     public void testSubprocess() throws Exception {
         Name areaName = new NameImpl("JTS", "area");
-        
+
         InputParameterValues areaGeomValues = new InputParameterValues(areaName, "geom");
         ParameterValue geom = areaGeomValues.values.get(0);
         geom.setType(ParameterType.SUBPROCESS);
         geom.setValue(getExecuteBuffer());
-        
+
         OutputParameter bufferOutput = new OutputParameter(areaName, "result");
-        
+
         ExecuteRequest executeArea = new ExecuteRequest(areaName.getURI(), Arrays.asList(
                 areaGeomValues), Arrays.asList(bufferOutput));
-        
+
         WPSExecuteTransformer tx = new WPSExecuteTransformer();
         tx.setIndentation(2);
         String xml = tx.transform(executeArea);
         // System.out.println(xml);
-        
-        String expected = 
-            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + 
-        		"<wps:Execute version=\"1.0.0\" service=\"WPS\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://www.opengis.net/wps/1.0.0\" xmlns:wfs=\"http://www.opengis.net/wfs\" xmlns:wps=\"http://www.opengis.net/wps/1.0.0\" xmlns:ows=\"http://www.opengis.net/ows/1.1\" xmlns:gml=\"http://www.opengis.net/gml\" xmlns:ogc=\"http://www.opengis.net/ogc\" xmlns:wcs=\"http://www.opengis.net/wcs/1.1.1\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xsi:schemaLocation=\"http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsAll.xsd\">\n" + 
-        		"  <ows:Identifier>JTS:area</ows:Identifier>\n" + 
-        		"  <wps:DataInputs>\n" + 
-        		"    <wps:Input>\n" + 
-        		"      <ows:Identifier>geom</ows:Identifier>\n" + 
-        		"      <wps:Reference mimeType=\"text/xml; subtype=gml/3.1.1\" xlink:href=\"http://geoserver/wps\" method=\"POST\">\n" + 
-        		"        <wps:Body>\n" + 
-        		"          <wps:Execute version=\"1.0.0\" service=\"WPS\">\n" + 
-        		"            <ows:Identifier>JTS:buffer</ows:Identifier>\n" + 
-        		"            <wps:DataInputs>\n" + 
-        		"              <wps:Input>\n" + 
-        		"                <ows:Identifier>geom</ows:Identifier>\n" + 
-        		"                <wps:Data>\n" + 
-        		"                  <wps:ComplexData mimeType=\"application/wkt\"><![CDATA[POINT(0 0)]]></wps:ComplexData>\n" + 
-        		"                </wps:Data>\n" + 
-        		"              </wps:Input>\n" + 
-        		"              <wps:Input>\n" + 
-        		"                <ows:Identifier>distance</ows:Identifier>\n" + 
-        		"                <wps:Data>\n" + 
-        		"                  <wps:LiteralData>10</wps:LiteralData>\n" + 
-        		"                </wps:Data>\n" + 
-        		"              </wps:Input>\n" + 
-        		"            </wps:DataInputs>\n" + 
-        		"            <wps:ResponseForm>\n" + 
-        		"              <wps:RawDataOutput mimeType=\"text/xml; subtype=gml/3.1.1\">\n" + 
-        		"                <ows:Identifier>result</ows:Identifier>\n" + 
-        		"              </wps:RawDataOutput>\n" + 
-        		"            </wps:ResponseForm>\n" + 
-        		"          </wps:Execute>\n" + 
-        		"        </wps:Body>\n" + 
-        		"      </wps:Reference>\n" + 
-        		"    </wps:Input>\n" + 
-        		"  </wps:DataInputs>\n" + 
-        		"  <wps:ResponseForm>\n" + 
-        		"    <wps:RawDataOutput>\n" + 
-        		"      <ows:Identifier>result</ows:Identifier>\n" + 
-        		"    </wps:RawDataOutput>\n" + 
-        		"  </wps:ResponseForm>\n" + 
-        		"</wps:Execute>";
-        
+
+        String expected =
+                "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+                        "<wps:Execute version=\"1.0.0\" service=\"WPS\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://www.opengis.net/wps/1.0.0\" xmlns:wfs=\"http://www.opengis.net/wfs\" xmlns:wps=\"http://www.opengis.net/wps/1.0.0\" xmlns:ows=\"http://www.opengis.net/ows/1.1\" xmlns:gml=\"http://www.opengis.net/gml\" xmlns:ogc=\"http://www.opengis.net/ogc\" xmlns:wcs=\"http://www.opengis.net/wcs/1.1.1\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xsi:schemaLocation=\"http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsAll.xsd\">\n" +
+                        "  <ows:Identifier>JTS:area</ows:Identifier>\n" +
+                        "  <wps:DataInputs>\n" +
+                        "    <wps:Input>\n" +
+                        "      <ows:Identifier>geom</ows:Identifier>\n" +
+                        "      <wps:Reference mimeType=\"text/xml; subtype=gml/3.1.1\" xlink:href=\"http://geoserver/wps\" method=\"POST\">\n" +
+                        "        <wps:Body>\n" +
+                        "          <wps:Execute version=\"1.0.0\" service=\"WPS\">\n" +
+                        "            <ows:Identifier>JTS:buffer</ows:Identifier>\n" +
+                        "            <wps:DataInputs>\n" +
+                        "              <wps:Input>\n" +
+                        "                <ows:Identifier>geom</ows:Identifier>\n" +
+                        "                <wps:Data>\n" +
+                        "                  <wps:ComplexData mimeType=\"application/wkt\"><![CDATA[POINT(0 0)]]></wps:ComplexData>\n" +
+                        "                </wps:Data>\n" +
+                        "              </wps:Input>\n" +
+                        "              <wps:Input>\n" +
+                        "                <ows:Identifier>distance</ows:Identifier>\n" +
+                        "                <wps:Data>\n" +
+                        "                  <wps:LiteralData>10</wps:LiteralData>\n" +
+                        "                </wps:Data>\n" +
+                        "              </wps:Input>\n" +
+                        "            </wps:DataInputs>\n" +
+                        "            <wps:ResponseForm>\n" +
+                        "              <wps:RawDataOutput mimeType=\"text/xml; subtype=gml/3.1.1\">\n" +
+                        "                <ows:Identifier>result</ows:Identifier>\n" +
+                        "              </wps:RawDataOutput>\n" +
+                        "            </wps:ResponseForm>\n" +
+                        "          </wps:Execute>\n" +
+                        "        </wps:Body>\n" +
+                        "      </wps:Reference>\n" +
+                        "    </wps:Input>\n" +
+                        "  </wps:DataInputs>\n" +
+                        "  <wps:ResponseForm>\n" +
+                        "    <wps:RawDataOutput>\n" +
+                        "      <ows:Identifier>result</ows:Identifier>\n" +
+                        "    </wps:RawDataOutput>\n" +
+                        "  </wps:ResponseForm>\n" +
+                        "</wps:Execute>";
+
         Document test = XMLUnit.buildTestDocument(xml);
         checkValidationErrors(test);
         Document control = XMLUnit.buildControlDocument(expected);
@@ -177,61 +177,61 @@ public class WPSExecuteTransformerTest extends GeoServerWicketTestSupport {
         tx.setIndentation(2);
         String xml = tx.transform(executeClipAndShip);
         System.out.println(xml);
-        String expected = 
-            "<?xml version=\"1.0\" encoding=\"UTF-8\"?><wps:Execute version=\"1.0.0\" service=\"WPS\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://www.opengis.net/wps/1.0.0\" xmlns:wfs=\"http://www.opengis.net/wfs\" xmlns:wps=\"http://www.opengis.net/wps/1.0.0\" xmlns:ows=\"http://www.opengis.net/ows/1.1\" xmlns:gml=\"http://www.opengis.net/gml\" xmlns:ogc=\"http://www.opengis.net/ogc\" xmlns:wcs=\"http://www.opengis.net/wcs/1.1.1\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xsi:schemaLocation=\"http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsAll.xsd\">\n" +
-            "  <ows:Identifier>gs:CropCoverage</ows:Identifier>\n" +
-            "  <wps:DataInputs>\n" +
-            "    <wps:Input>\n" +
-            "      <ows:Identifier>coverage</ows:Identifier>\n" +
-            "      <wps:Reference mimeType=\"image/tiff\" xlink:href=\"http://geoserver/wcs\" method=\"POST\">\n" +
-            "        <wps:Body>\n" +
-            "          <wcs:GetCoverage service=\"WCS\" version=\"1.1.1\">\n" +
-            "            <ows:Identifier>geosolutions:usa</ows:Identifier>\n" +
-            "            <wcs:DomainSubset>\n" +
-            "              <ows:BoundingBox crs=\"http://www.opengis.net/gml/srs/epsg.xml#4326\">\n" +
-            "                <ows:LowerCorner>-180.0 -90.000000000036</ows:LowerCorner>\n" +
-            "                <ows:UpperCorner>180.0 90.0</ows:UpperCorner>\n" +
-            "              </ows:BoundingBox>\n" +
-            "            </wcs:DomainSubset>\n" +
-            "            <wcs:Output format=\"image/tiff\"/>\n" +
-            "          </wcs:GetCoverage>\n" +
-            "        </wps:Body>\n" +
-            "      </wps:Reference>\n" +
-            "    </wps:Input>\n" +
-            "    <wps:Input>\n" +
-            "      <ows:Identifier>cropShape</ows:Identifier>\n" +
-            "      <wps:Reference mimeType=\"text/xml; subtype=gml/3.1.1\" xlink:href=\"http://geoserver/wps\" method=\"POST\">\n" +
-            "        <wps:Body>\n" +
-            "          <wps:Execute version=\"1.0.0\" service=\"WPS\">\n" +
-            "            <ows:Identifier>gs:CollectGeometries</ows:Identifier>\n" +
-            "            <wps:DataInputs>\n" +
-            "              <wps:Input>\n" +
-            "                <ows:Identifier>features</ows:Identifier>\n" +
-            "                <wps:Reference mimeType=\"text/xml; subtype=wfs-collection/1.0\" xlink:href=\"http://geoserver/wfs\" method=\"POST\">\n" +
-            "                  <wps:Body>\n" +
-            "                    <wfs:GetFeature service=\"WFS\" version=\"1.0.0\" outputFormat=\"GML2\">\n" +
-            "                      <wfs:Query typeName=\"geosolutions:states\"/>\n" +
-            "                    </wfs:GetFeature>\n" +
-            "                  </wps:Body>\n" +
-            "                </wps:Reference>\n" +
-            "              </wps:Input>\n" +
-            "            </wps:DataInputs>\n" +
-            "            <wps:ResponseForm>\n" +
-            "              <wps:RawDataOutput mimeType=\"text/xml; subtype=gml/3.1.1\">\n" +
-            "                <ows:Identifier>result</ows:Identifier>\n" +
-            "              </wps:RawDataOutput>\n" +
-            "            </wps:ResponseForm>\n" +
-            "          </wps:Execute>\n" +
-            "        </wps:Body>\n" +
-            "      </wps:Reference>\n" +
-            "    </wps:Input>\n" +
-            "  </wps:DataInputs>\n" +
-            "  <wps:ResponseForm>\n" +
-            "    <wps:RawDataOutput mimeType=\"image/tiff\">\n" +
-            "      <ows:Identifier>result</ows:Identifier>\n" +
-            "    </wps:RawDataOutput>\n" +
-            "  </wps:ResponseForm>\n" +
-            "</wps:Execute>";
+        String expected =
+                "<?xml version=\"1.0\" encoding=\"UTF-8\"?><wps:Execute version=\"1.0.0\" service=\"WPS\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://www.opengis.net/wps/1.0.0\" xmlns:wfs=\"http://www.opengis.net/wfs\" xmlns:wps=\"http://www.opengis.net/wps/1.0.0\" xmlns:ows=\"http://www.opengis.net/ows/1.1\" xmlns:gml=\"http://www.opengis.net/gml\" xmlns:ogc=\"http://www.opengis.net/ogc\" xmlns:wcs=\"http://www.opengis.net/wcs/1.1.1\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xsi:schemaLocation=\"http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsAll.xsd\">\n" +
+                        "  <ows:Identifier>gs:CropCoverage</ows:Identifier>\n" +
+                        "  <wps:DataInputs>\n" +
+                        "    <wps:Input>\n" +
+                        "      <ows:Identifier>coverage</ows:Identifier>\n" +
+                        "      <wps:Reference mimeType=\"image/tiff\" xlink:href=\"http://geoserver/wcs\" method=\"POST\">\n" +
+                        "        <wps:Body>\n" +
+                        "          <wcs:GetCoverage service=\"WCS\" version=\"1.1.1\">\n" +
+                        "            <ows:Identifier>geosolutions:usa</ows:Identifier>\n" +
+                        "            <wcs:DomainSubset>\n" +
+                        "              <ows:BoundingBox crs=\"http://www.opengis.net/gml/srs/epsg.xml#4326\">\n" +
+                        "                <ows:LowerCorner>-180.0 -90.000000000036</ows:LowerCorner>\n" +
+                        "                <ows:UpperCorner>180.0 90.0</ows:UpperCorner>\n" +
+                        "              </ows:BoundingBox>\n" +
+                        "            </wcs:DomainSubset>\n" +
+                        "            <wcs:Output format=\"image/tiff\"/>\n" +
+                        "          </wcs:GetCoverage>\n" +
+                        "        </wps:Body>\n" +
+                        "      </wps:Reference>\n" +
+                        "    </wps:Input>\n" +
+                        "    <wps:Input>\n" +
+                        "      <ows:Identifier>cropShape</ows:Identifier>\n" +
+                        "      <wps:Reference mimeType=\"text/xml; subtype=gml/3.1.1\" xlink:href=\"http://geoserver/wps\" method=\"POST\">\n" +
+                        "        <wps:Body>\n" +
+                        "          <wps:Execute version=\"1.0.0\" service=\"WPS\">\n" +
+                        "            <ows:Identifier>gs:CollectGeometries</ows:Identifier>\n" +
+                        "            <wps:DataInputs>\n" +
+                        "              <wps:Input>\n" +
+                        "                <ows:Identifier>features</ows:Identifier>\n" +
+                        "                <wps:Reference mimeType=\"text/xml; subtype=wfs-collection/1.0\" xlink:href=\"http://geoserver/wfs\" method=\"POST\">\n" +
+                        "                  <wps:Body>\n" +
+                        "                    <wfs:GetFeature service=\"WFS\" version=\"1.0.0\" outputFormat=\"GML2\">\n" +
+                        "                      <wfs:Query typeName=\"geosolutions:states\"/>\n" +
+                        "                    </wfs:GetFeature>\n" +
+                        "                  </wps:Body>\n" +
+                        "                </wps:Reference>\n" +
+                        "              </wps:Input>\n" +
+                        "            </wps:DataInputs>\n" +
+                        "            <wps:ResponseForm>\n" +
+                        "              <wps:RawDataOutput mimeType=\"text/xml; subtype=gml/3.1.1\">\n" +
+                        "                <ows:Identifier>result</ows:Identifier>\n" +
+                        "              </wps:RawDataOutput>\n" +
+                        "            </wps:ResponseForm>\n" +
+                        "          </wps:Execute>\n" +
+                        "        </wps:Body>\n" +
+                        "      </wps:Reference>\n" +
+                        "    </wps:Input>\n" +
+                        "  </wps:DataInputs>\n" +
+                        "  <wps:ResponseForm>\n" +
+                        "    <wps:RawDataOutput mimeType=\"image/tiff\">\n" +
+                        "      <ows:Identifier>result</ows:Identifier>\n" +
+                        "    </wps:RawDataOutput>\n" +
+                        "  </wps:ResponseForm>\n" +
+                        "</wps:Execute>";
         Document test = XMLUnit.buildTestDocument(xml);
         checkValidationErrors(test);
         Document control = XMLUnit.buildControlDocument(expected);
@@ -295,23 +295,24 @@ public class WPSExecuteTransformerTest extends GeoServerWicketTestSupport {
                 bufferGeomValues, bufferDistanceValues), Arrays.asList(bufferOutput));
         return executeBuffer;
     }
-    
+
     /**
-     * Validates a document against the 
+     * Validates a document against the
+     *
      * @param dom
      * @param configuration
      */
     protected void checkValidationErrors(Document dom) throws Exception {
         Parser p = new Parser(new WPSConfiguration());
-        p.setValidating( true );
-        p.parse( new DOMSource( dom ) );
-    
-        if ( !p.getValidationErrors().isEmpty() ) {
-            for ( Iterator e = p.getValidationErrors().iterator(); e.hasNext(); ) {
+        p.setValidating(true);
+        p.parse(new DOMSource(dom));
+
+        if (!p.getValidationErrors().isEmpty()) {
+            for (Iterator e = p.getValidationErrors().iterator(); e.hasNext(); ) {
                 SAXParseException ex = (SAXParseException) e.next();
-                System.out.println( ex.getLineNumber() + "," + ex.getColumnNumber() + " -" + ex.toString()  );
+                System.out.println(ex.getLineNumber() + "," + ex.getColumnNumber() + " -" + ex.toString());
             }
-            fail( "Document did not validate.");
+            fail("Document did not validate.");
         }
     }
 
@@ -319,7 +320,7 @@ public class WPSExecuteTransformerTest extends GeoServerWicketTestSupport {
     public void testIncludeNamespaceMapping() throws Exception {
         Name centroidName = new NameImpl("gs", "Centroid");
         InputParameterValues inputValues = new InputParameterValues(centroidName, "features");
-        
+
         VectorLayerConfiguration layer = new VectorLayerConfiguration();
         layer.setLayerName("foo:myLayer");
 
@@ -329,8 +330,8 @@ public class WPSExecuteTransformerTest extends GeoServerWicketTestSupport {
 
         OutputParameter output = new OutputParameter(centroidName, "result");
 
-        ExecuteRequest execute = new ExecuteRequest(centroidName.getURI(), 
-            Arrays.asList(inputValues), Arrays.asList(output));
+        ExecuteRequest execute = new ExecuteRequest(centroidName.getURI(),
+                Arrays.asList(inputValues), Arrays.asList(output));
 
         NamespaceInfo fooNs = EasyMock.createNiceMock(NamespaceInfo.class);
         expect(fooNs.getURI()).andReturn("http://foo.org");
@@ -345,5 +346,5 @@ public class WPSExecuteTransformerTest extends GeoServerWicketTestSupport {
         String xml = tx.transform(execute);
         assertTrue(xml.contains("xmlns:foo=\"http://foo.org\""));
     }
-    
+
 }

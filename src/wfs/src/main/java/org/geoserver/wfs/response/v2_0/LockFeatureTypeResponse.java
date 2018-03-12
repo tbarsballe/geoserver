@@ -17,14 +17,14 @@ import org.geotools.wfs.v2_0.WFS;
 import org.geotools.xml.Encoder;
 
 public class LockFeatureTypeResponse extends WFSResponse {
-    
+
     public LockFeatureTypeResponse(GeoServer gs) {
         super(gs, LockFeatureResponseType.class);
     }
 
     @Override
-    protected void encode(Encoder encoder, Object value, OutputStream output, Operation op) 
-        throws IOException, ServiceException {
+    protected void encode(Encoder encoder, Object value, OutputStream output, Operation op)
+            throws IOException, ServiceException {
         encoder.encode(value, WFS.LockFeatureResponse, output);
     }
 }

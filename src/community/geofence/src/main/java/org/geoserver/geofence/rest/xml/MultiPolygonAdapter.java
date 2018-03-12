@@ -20,9 +20,8 @@ import com.vividsolutions.jts.geom.Polygon;
 
 /**
  * Translates between GML3.2 MultiGeometry and MultiPolygon object for JAXB.
- * 
- * @author Niels Charlier
  *
+ * @author Niels Charlier
  */
 public class MultiPolygonAdapter extends XmlAdapter<Object, MultiPolygon> {
 
@@ -48,7 +47,7 @@ public class MultiPolygonAdapter extends XmlAdapter<Object, MultiPolygon> {
             DOMParser parser = new DOMParser(new GMLConfiguration(), doc);
             Geometry geom = (Geometry) parser.parse();
             if (geom instanceof Polygon) {
-                return new MultiPolygon(new Polygon[] { (Polygon) geom }, geom.getFactory());
+                return new MultiPolygon(new Polygon[]{(Polygon) geom}, geom.getFactory());
             } else if (geom instanceof GeometryCollection) {
                 Polygon[] pols = new Polygon[((GeometryCollection) geom).getNumGeometries()];
                 for (int i = 0; i < pols.length; i++) {

@@ -24,13 +24,13 @@ import org.hibernate.usertype.UserType;
 public class ErrorUserType implements UserType {
 
     /**
-     * flag that determines if we should use the hibernate BlobImpl class when writing to the 
-     * database, since it does not work with oracle. 
-     * 
+     * flag that determines if we should use the hibernate BlobImpl class when writing to the
+     * database, since it does not work with oracle.
+     * <p>
      * http://opensource.atlassian.com/projects/hibernate/browse/EJB-24
      */
     public static String USE_HIBERNATE_BLOB = "USE_HIBERNATE_BLOB";
-    
+
     public Object assemble(Serializable cached, Object owner) throws HibernateException {
         return cached;
     }
@@ -65,8 +65,8 @@ public class ErrorUserType implements UserType {
 //        if (bytes == null) {
 //            return null;
 //        }
-        
-        
+
+
         ObjectInputStream in = null;
         try {
             //in = new ObjectInputStream(new ByteArrayInputStream(bytes));
@@ -76,12 +76,12 @@ public class ErrorUserType implements UserType {
             throw new HibernateException(e);
         } catch (ClassNotFoundException e) {
             throw new HibernateException(e);
-        }
-        finally {
+        } finally {
             if (in != null) {
                 try {
                     in.close();
-                } catch (IOException e) {}
+                } catch (IOException e) {
+                }
             }
         }
     }
@@ -94,21 +94,18 @@ public class ErrorUserType implements UserType {
                 ObjectOutputStream out = new ObjectOutputStream(bytes);
                 out.writeObject(value);
                 out.flush();
-                
+
                 if (useHibernateBlob()) {
                     st.setBlob(index, Hibernate.createBlob(bytes.toByteArray()));
+                } else {
+                    st.setBytes(index, bytes.toByteArray());
                 }
-                else {
-                    st.setBytes(index, bytes.toByteArray());    
-                }
-                
+
                 out.close();
-            } 
-            catch (IOException e) {
+            } catch (IOException e) {
                 throw new HibernateException(e);
             }
-        }
-        else {
+        } else {
             st.setNull(index, Types.BLOB);
             //st.setBytes(index, null);
         }

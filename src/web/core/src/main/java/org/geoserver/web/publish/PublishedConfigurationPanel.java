@@ -19,27 +19,26 @@ import org.geoserver.catalog.PublishedInfo;
  * <p>
  * All the components in the panel must be contained in a {@link Form} to make
  * sure the whole tab switch and page submit workflow function properly
- * 
+ *
  * @author Niels Charlier
- * 
  */
 public class PublishedConfigurationPanel<T extends PublishedInfo> extends Panel {
-	private static final long serialVersionUID = 4881474189619124359L;
+    private static final long serialVersionUID = 4881474189619124359L;
 
-	public PublishedConfigurationPanel(String id, IModel<? extends T> model){
-		super(id, model);
-	}
-	
-	@SuppressWarnings("unchecked")
-        public T getPublishedInfo(){
-		return (T) getDefaultModelObject();
-	}
-	
-        /**
-         * Allows subclasses to override in case they need to save any other state than the
-         *  {@link PublishedInfo} itself
-         */
-        public void save() {
-            // do nothing by default
-        }
+    public PublishedConfigurationPanel(String id, IModel<? extends T> model) {
+        super(id, model);
+    }
+
+    @SuppressWarnings("unchecked")
+    public T getPublishedInfo() {
+        return (T) getDefaultModelObject();
+    }
+
+    /**
+     * Allows subclasses to override in case they need to save any other state than the
+     * {@link PublishedInfo} itself
+     */
+    public void save() {
+        // do nothing by default
+    }
 }

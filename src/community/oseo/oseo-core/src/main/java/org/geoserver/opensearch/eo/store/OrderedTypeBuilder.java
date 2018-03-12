@@ -13,13 +13,13 @@ import org.opengis.feature.type.FeatureTypeFactory;
 import org.opengis.feature.type.PropertyDescriptor;
 
 class OrderedTypeBuilder extends TypeBuilder {
-    
+
     static final FeatureTypeFactory TYPE_FACTORY = CommonFactoryFinder.getFeatureTypeFactory(null);
 
     public OrderedTypeBuilder() {
         super(TYPE_FACTORY);
     }
-    
+
     @Override
     protected Collection<PropertyDescriptor> newCollection() {
         return new LinkedHashSet<PropertyDescriptor>();

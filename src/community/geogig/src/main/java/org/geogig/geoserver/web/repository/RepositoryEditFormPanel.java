@@ -58,17 +58,17 @@ public abstract class RepositoryEditFormPanel extends Panel {
     private static final Logger LOGGER = LoggerFactory.getLogger(RepositoryEditFormPanel.class);
 
     private RemotesListPanel remotes;
-    
+
     private ConfigListPanel localConfig;
-    
+
     private ConfigListPanel globalConfig;
-    
+
     private IndexListPanel indexes;
 
     private ModalWindow popupWindow;
 
     private Form<RepositoryInfo> form;
-    
+
     private boolean isNew = false;
 
     public RepositoryEditFormPanel(final String id) {
@@ -88,22 +88,22 @@ public abstract class RepositoryEditFormPanel extends Panel {
 
         form = new Form<>("repoForm", repoInfo);
         form.add(new RepositoryEditPanel("repo", repoInfo, isNew));
-        
+
         form.add(addRemoteLink());
         List<RemoteInfo> remoteInfos = loadRemoteInfos(repoInfo.getObject());
         form.add(remotes = new RemotesListPanel("remotes", remoteInfos));
-        
+
         form.add(addConfigLink(false));
         Map<String, String> localConfigMap = loadConfig(repoInfo.getObject(), false);
         form.add(localConfig = new ConfigListPanel("localConfig", localConfigMap));
-        
+
         form.add(addConfigLink(true));
         Map<String, String> globalConfigMap = loadConfig(repoInfo.getObject(), true);
         form.add(globalConfig = new ConfigListPanel("globalConfig", globalConfigMap));
-        
+
         List<IndexInfo> indexInfos = loadIndexes(repoInfo.getObject());
         form.add(indexes = new IndexListPanel("indexes", indexInfos));
-        
+
         add(form);
         FeedbackPanel feedback = new FeedbackPanel("feedback");
         form.add(feedback);
@@ -159,24 +159,24 @@ public abstract class RepositoryEditFormPanel extends Panel {
 
         return list;
     }
-    
+
     private Map<String, String> loadConfig(RepositoryInfo repo, boolean global) {
         String repoId = repo.getId();
         if (null == repoId) {
             return Maps.newHashMap();
         }
-        
+
         Repository geogig;
         try {
             geogig = RepositoryManager.get().getRepository(repoId);
             if (geogig != null) {
-            	Optional<Map<String, String>> config = geogig.command(ConfigOp.class)//
-            			.setAction(ConfigAction.CONFIG_LIST)//
-            			.setScope(global ? ConfigScope.GLOBAL : ConfigScope.LOCAL)//
-            			.call();
-            	if (config.isPresent()) {
-            		return config.get();
-            	}
+                Optional<Map<String, String>> config = geogig.command(ConfigOp.class)//
+                        .setAction(ConfigAction.CONFIG_LIST)//
+                        .setScope(global ? ConfigScope.GLOBAL : ConfigScope.LOCAL)//
+                        .call();
+                if (config.isPresent()) {
+                    return config.get();
+                }
             }
         } catch (Exception e) {
             LOGGER.warn("Failed to load config for repository", e);
@@ -184,13 +184,13 @@ public abstract class RepositoryEditFormPanel extends Panel {
 
         return Maps.newHashMap();
     }
-    
+
     private List<IndexInfo> loadIndexes(RepositoryInfo repo) {
         String repoId = repo.getId();
         if (null == repoId) {
             return Lists.newArrayList();
         }
-        
+
         Repository geogig;
         try {
             geogig = RepositoryManager.get().getRepository(repoId);
@@ -221,7 +221,7 @@ public abstract class RepositoryEditFormPanel extends Panel {
             }
         };
     }
-    
+
     private Component addConfigLink(boolean global) {
         return new AjaxLink<Void>(global ? "addGlobalConfig" : "addLocalConfig") {
 
@@ -290,7 +290,7 @@ public abstract class RepositoryEditFormPanel extends Panel {
     }
 
     private void updateRemotes(Context geogig, Map<Integer, RemoteInfo> currentRemotes,
-            Set<RemoteInfo> newRemotes) throws Exception {
+                               Set<RemoteInfo> newRemotes) throws Exception {
 
         // handle deletes first, in case a remote was deleted in the table and then a new one added
         // with the same name
@@ -348,41 +348,41 @@ public abstract class RepositoryEditFormPanel extends Panel {
             }
         }
     }
-    
+
     private void updateConfig(Context geogig, Map<String, String> currentConfig, List<ConfigEntry> newConfig, boolean global) {
-    	ConfigScope scope = global ? ConfigScope.GLOBAL : ConfigScope.LOCAL;
-    	for (ConfigEntry entry : newConfig) {
-    		if (currentConfig.containsKey(entry.getName())) {
-    			if (!currentConfig.get(entry.getName()).equals(entry.getValue())) {
-    				// entry changed
-    				geogig.command(ConfigOp.class)//
-    				  .setAction(ConfigAction.CONFIG_SET)//
-    				  .setName(entry.getName())//
-    				  .setValue(entry.getValue())//
-    				  .setScope(scope)//
-    				  .call();
-    			}
-        		currentConfig.remove(entry.getName());
-    		} else {
-    			// new entry
-				geogig.command(ConfigOp.class)//
-				  .setAction(ConfigAction.CONFIG_SET)//
-				  .setName(entry.getName())//
-				  .setValue(entry.getValue())//
-				  .setScope(scope)//
-				  .call();
-    		}
-    	}
-    	if (!isNew) {
-	    	for(Entry<String, String> entry : currentConfig.entrySet()) {
-	    		// removed entry
-				geogig.command(ConfigOp.class)//
-				  .setAction(ConfigAction.CONFIG_UNSET)//
-				  .setName(entry.getKey())//
-				  .setScope(scope)//
-				  .call();
-	    	}
-    	}
+        ConfigScope scope = global ? ConfigScope.GLOBAL : ConfigScope.LOCAL;
+        for (ConfigEntry entry : newConfig) {
+            if (currentConfig.containsKey(entry.getName())) {
+                if (!currentConfig.get(entry.getName()).equals(entry.getValue())) {
+                    // entry changed
+                    geogig.command(ConfigOp.class)//
+                            .setAction(ConfigAction.CONFIG_SET)//
+                            .setName(entry.getName())//
+                            .setValue(entry.getValue())//
+                            .setScope(scope)//
+                            .call();
+                }
+                currentConfig.remove(entry.getName());
+            } else {
+                // new entry
+                geogig.command(ConfigOp.class)//
+                        .setAction(ConfigAction.CONFIG_SET)//
+                        .setName(entry.getName())//
+                        .setValue(entry.getValue())//
+                        .setScope(scope)//
+                        .call();
+            }
+        }
+        if (!isNew) {
+            for (Entry<String, String> entry : currentConfig.entrySet()) {
+                // removed entry
+                geogig.command(ConfigOp.class)//
+                        .setAction(ConfigAction.CONFIG_UNSET)//
+                        .setName(entry.getKey())//
+                        .setScope(scope)//
+                        .call();
+            }
+        }
     }
 
     protected abstract void saved(RepositoryInfo info, AjaxRequestTarget target);

@@ -31,7 +31,7 @@ public class GeoPkgDataStoreFactoryInitializerTest {
 
         WebApplicationContext appContext = createNiceMock(WebApplicationContext.class);
         expect(appContext.getBeanNamesForType(DataStoreFactoryInitializer.class))
-            .andReturn(new String[]{"geopkgDataStoreFactoryInitializer"}).anyTimes();
+                .andReturn(new String[]{"geopkgDataStoreFactoryInitializer"}).anyTimes();
         expect(appContext.getBean("geopkgDataStoreFactoryInitializer")).andReturn(initializer).anyTimes();
         replay(appContext);
 

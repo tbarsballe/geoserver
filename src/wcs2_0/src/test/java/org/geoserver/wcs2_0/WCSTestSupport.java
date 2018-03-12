@@ -71,9 +71,8 @@ import org.xml.sax.SAXParseException;
 
 /**
  * Base support class for wcs tests.
- * 
+ *
  * @author Andrea Aime, GeoSolutions
- * 
  */
 @SuppressWarnings("serial")
 public abstract class WCSTestSupport extends GeoServerSystemTestSupport {
@@ -82,12 +81,12 @@ public abstract class WCSTestSupport extends GeoServerSystemTestSupport {
     protected static final boolean IS_WINDOWS;
 
     protected static final Schema WCS20_SCHEMA;
-    
+
     List<GridCoverage> coverages = new ArrayList<GridCoverage>();
-    
+
     protected final static String VERSION = WCS20Const.CUR_VERSION;
-    
-    protected static final QName UTM11 = new QName(MockData.WCS_URI, "utm11", MockData.WCS_PREFIX); 
+
+    protected static final QName UTM11 = new QName(MockData.WCS_URI, "utm11", MockData.WCS_PREFIX);
 
     /**
      * Small value for comparaison of sample values. Since most grid coverage implementations in
@@ -117,31 +116,31 @@ public abstract class WCSTestSupport extends GeoServerSystemTestSupport {
         try {
             final SchemaFactory factory = SchemaFactory
                     .newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-            
+
             factory.setResourceResolver(new LSResourceResolver() {
-                
+
                 DOMImplementationLS dom;
-                
+
                 {
                     try {
                         // ok, this is ugly.. the only way I've found to create an InputLS without
                         // having to really implement every bit of it is to create a DOMImplementationLS
-                        DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance(); 
-                        builderFactory.setNamespaceAware( true );
-                       
+                        DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+                        builderFactory.setNamespaceAware(true);
+
                         DocumentBuilder builder = builderFactory.newDocumentBuilder();
                         // fake xml to parse
                         String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><empty></empty>";
                         dom = (DOMImplementationLS) builder.parse(new ByteArrayInputStream(xml.getBytes())).getImplementation();
-                    } catch(Exception e) {
+                    } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
                 }
-                
+
                 @Override
                 public LSInput resolveResource(String type, String namespaceURI, String publicId,
-                        String systemId, String baseURI) {
-                    
+                                               String systemId, String baseURI) {
+
                     String localPosition = namespaceMap.get(namespaceURI);
                     if (localPosition != null) {
                         try {
@@ -223,7 +222,7 @@ public abstract class WCSTestSupport extends GeoServerSystemTestSupport {
 
     /**
      * Validates a document against the
-     * 
+     *
      * @param dom
      * @param configuration
      */
@@ -234,7 +233,7 @@ public abstract class WCSTestSupport extends GeoServerSystemTestSupport {
         p.parse(new DOMSource(dom));
 
         if (!p.getValidationErrors().isEmpty()) {
-            for (Iterator e = p.getValidationErrors().iterator(); e.hasNext();) {
+            for (Iterator e = p.getValidationErrors().iterator(); e.hasNext(); ) {
                 SAXParseException ex = (SAXParseException) e.next();
                 System.out.println(ex.getLineNumber() + "," + ex.getColumnNumber() + " -"
                         + ex.toString());
@@ -242,13 +241,14 @@ public abstract class WCSTestSupport extends GeoServerSystemTestSupport {
             fail("Document did not validate.");
         }
     }
-    
+
     /**
      * Marks the coverage to be cleaned when the test ends
+     *
      * @param coverage
      */
     protected void scheduleForCleaning(GridCoverage coverage) {
-        if(coverage != null) {
+        if (coverage != null) {
             coverages.add(coverage);
         }
     }
@@ -262,13 +262,13 @@ public abstract class WCSTestSupport extends GeoServerSystemTestSupport {
 
     protected void checkFullCapabilitiesDocument(Document dom) throws Exception {
         checkValidationErrors(dom, WCS20_SCHEMA);
-        
+
         // TODO: check all the layers are here, the profiles, and so on
-        
+
         // check that we have the crs extension
         assertXpathEvaluatesTo("1", "count(//ows:ServiceIdentification[ows:Profile='http://www.opengis.net/spec/WCS_service-extension_crs/1.0/conf/crs'])", dom);
         assertXpathEvaluatesTo("1", "count(//wcs:ServiceMetadata/wcs:Extension[wcscrs:crsSupported = 'http://www.opengis.net/def/crs/EPSG/0/4326'])", dom);
-        
+
         // check the interpolation extension
         assertXpathEvaluatesTo("1", "count(//ows:ServiceIdentification[ows:Profile='http://www.opengis.net/spec/WCS_service-extension_interpolation/1.0/conf/interpolation'])", dom);
         assertXpathEvaluatesTo("1", "count(//wcs:ServiceMetadata/wcs:Extension[int:interpolationSupported='http://www.opengis.net/def/interpolation/OGC/1/nearest-neighbor'])", dom);
@@ -279,14 +279,13 @@ public abstract class WCSTestSupport extends GeoServerSystemTestSupport {
     /**
      * Gets a TIFFField node with the given tag number. This is done by searching for a TIFFField
      * with attribute number whose value is the specified tag value.
-     * 
+     *
      * @param tag DOCUMENT ME!
-     * 
      * @return DOCUMENT ME!
      */
     protected IIOMetadataNode getTiffField(Node rootNode, final int tag) {
         Node node = rootNode.getFirstChild();
-        if (node != null){
+        if (node != null) {
             node = node.getFirstChild();
             for (; node != null; node = node.getNextSibling()) {
                 Node number = node.getAttributes().getNamedItem(GeoTiffConstants.NUMBER_ATTRIBUTE);
@@ -322,16 +321,16 @@ public abstract class WCSTestSupport extends GeoServerSystemTestSupport {
     protected static void assertEnvelopeEquals(Coverage expected, Coverage actual) {
         final double scaleA = getScale(expected);
         final double scaleB = getScale(actual);
-    
-        assertEnvelopeEquals((GeneralEnvelope)expected.getEnvelope(),scaleA,(GeneralEnvelope)actual.getEnvelope(),scaleB);
+
+        assertEnvelopeEquals((GeneralEnvelope) expected.getEnvelope(), scaleA, (GeneralEnvelope) actual.getEnvelope(), scaleB);
     }
 
-    protected static void assertEnvelopeEquals(GeneralEnvelope expected,double scaleExpected, GeneralEnvelope actual,double scaleActual) {
+    protected static void assertEnvelopeEquals(GeneralEnvelope expected, double scaleExpected, GeneralEnvelope actual, double scaleActual) {
         final double tolerance;
         if (scaleExpected <= scaleActual) {
-            tolerance = scaleExpected*1E-1;
+            tolerance = scaleExpected * 1E-1;
         } else if (!Double.isNaN(scaleActual)) {
-            tolerance = scaleActual*1E-1;
+            tolerance = scaleActual * 1E-1;
         } else {
             tolerance = EPS;
         }
@@ -343,9 +342,9 @@ public abstract class WCSTestSupport extends GeoServerSystemTestSupport {
      * if none. Note that the returned instance may be an immutable one, not necessarly the
      * default Java2D implementation.
      *
-     * @param  coverage The coverage for which to get the "grid to CRS" affine transform.
+     * @param coverage The coverage for which to get the "grid to CRS" affine transform.
      * @return The "grid to CRS" affine transform of the given coverage, or {@code null}
-     *         if none or if the transform is not affine.
+     * if none or if the transform is not affine.
      */
     protected static AffineTransform getAffineTransform(final Coverage coverage) {
         if (coverage instanceof GridCoverage) {
@@ -368,18 +367,18 @@ public abstract class WCSTestSupport extends GeoServerSystemTestSupport {
     /**
      * Returns the scale of the "grid to CRS" transform, or {@link Double#NaN} if unknown.
      *
-     * @param  coverage The coverage for which to get the "grid to CRS" scale, or {@code null}.
+     * @param coverage The coverage for which to get the "grid to CRS" scale, or {@code null}.
      * @return The "grid to CRS" scale, or {@code NaN} if none or if the transform is not affine.
      */
     protected static double getScale(final Coverage coverage) {
         final AffineTransform gridToCRS = getAffineTransform(coverage);
         return (gridToCRS != null) ? XAffineTransform.getScale(gridToCRS) : Double.NaN;
     }
-    
+
     /**
      * Parses a multipart message from the response
-     * @param response
      *
+     * @param response
      * @throws MessagingException
      * @throws IOException
      */
@@ -392,7 +391,7 @@ public abstract class WCSTestSupport extends GeoServerSystemTestSupport {
 
     /**
      * Configures the specified dimension for a coverage
-     * 
+     *
      * @param coverageName
      * @param metadataKey
      * @param presentation
@@ -403,16 +402,16 @@ public abstract class WCSTestSupport extends GeoServerSystemTestSupport {
         DimensionInfo di = new DimensionInfoImpl();
         di.setEnabled(true);
         di.setPresentation(presentation);
-        if(resolution != null) {
+        if (resolution != null) {
             di.setResolution(new BigDecimal(resolution));
         }
         info.getMetadata().put(metadataKey, di);
         getCatalog().save(info);
     }
-    
+
     /**
      * Configures the specified dimension for a coverage
-     * 
+     *
      * @param coverageName
      * @param metadataKey
      * @param presentation
@@ -424,19 +423,19 @@ public abstract class WCSTestSupport extends GeoServerSystemTestSupport {
         DimensionInfo di = new DimensionInfoImpl();
         di.setEnabled(true);
         di.setPresentation(presentation);
-        if(resolution != null) {
+        if (resolution != null) {
             di.setResolution(new BigDecimal(resolution));
         }
-        if(unitSymbol != null) {
+        if (unitSymbol != null) {
             di.setUnitSymbol(unitSymbol);
         }
         info.getMetadata().put(metadataKey, di);
         getCatalog().save(info);
     }
-    
+
     /**
      * Clears dimension information from the specified coverage
-     * 
+     *
      * @param coverageName
      * @param metadataKey
      * @param presentation
@@ -448,5 +447,5 @@ public abstract class WCSTestSupport extends GeoServerSystemTestSupport {
         info.getMetadata().remove(ResourceInfo.ELEVATION);
         getCatalog().save(info);
     }
-    
+
 }

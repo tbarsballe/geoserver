@@ -9,13 +9,14 @@ import org.geoserver.platform.GeoServerExtensions;
 
 /**
  * Base class for classes implementing factory extension points.
- * 
- * @author Justin Deoliveira, OpenGeo
  *
+ * @author Justin Deoliveira, OpenGeo
  */
 public class ScriptFactory {
 
-    /** script manager, lazily loaded */
+    /**
+     * script manager, lazily loaded
+     */
     private ScriptManager scriptMgr;
 
     protected ScriptFactory() {
@@ -36,7 +37,7 @@ public class ScriptFactory {
         if (scriptMgr != null) {
             return scriptMgr;
         }
-        
+
         return GeoServerExtensions.bean(ScriptManager.class);
     }
 }

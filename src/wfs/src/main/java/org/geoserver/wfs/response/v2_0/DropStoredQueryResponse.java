@@ -23,8 +23,8 @@ public class DropStoredQueryResponse extends WFSResponse {
     }
 
     @Override
-    protected void encode(Encoder encoder, Object value, OutputStream output, Operation op) 
-        throws IOException, ServiceException {
+    protected void encode(Encoder encoder, Object value, OutputStream output, Operation op)
+            throws IOException, ServiceException {
         encoder.encode(value, WFS.DropStoredQueryResponse, output);
     }
 }

@@ -52,7 +52,7 @@ public abstract class AbstractAclController<DAO extends AbstractAccessRuleDAO<Co
             MediaType.APPLICATION_JSON_VALUE,
             MediaTypeExtensions.TEXT_JSON_VALUE,
             MediaType.APPLICATION_XML_VALUE,
-            MediaType.TEXT_XML_VALUE })
+            MediaType.TEXT_XML_VALUE})
     @ResponseBody
     public RuleMap rulesGet() throws IOException {
         checkUserIsAdmin();
@@ -68,7 +68,7 @@ public abstract class AbstractAclController<DAO extends AbstractAccessRuleDAO<Co
             MediaType.APPLICATION_JSON_VALUE,
             MediaTypeExtensions.TEXT_JSON_VALUE,
             MediaType.APPLICATION_XML_VALUE,
-            MediaType.TEXT_XML_VALUE })
+            MediaType.TEXT_XML_VALUE})
     public void rulesPost(@RequestBody RuleMap map) throws IOException {
         checkUserIsAdmin();
 
@@ -83,7 +83,7 @@ public abstract class AbstractAclController<DAO extends AbstractAccessRuleDAO<Co
             MediaType.APPLICATION_JSON_VALUE,
             MediaTypeExtensions.TEXT_JSON_VALUE,
             MediaType.APPLICATION_XML_VALUE,
-            MediaType.TEXT_XML_VALUE })
+            MediaType.TEXT_XML_VALUE})
     public void rulesPut(@RequestBody RuleMap map) throws IOException {
         checkUserIsAdmin();
 
@@ -129,7 +129,7 @@ public abstract class AbstractAclController<DAO extends AbstractAccessRuleDAO<Co
 
     /**
      * Returns the base path of the ACL resource
-     * 
+     *
      * @return
      */
     protected abstract String getBasePath();
@@ -142,7 +142,7 @@ public abstract class AbstractAclController<DAO extends AbstractAccessRuleDAO<Co
 
     /**
      * Adds a rule to a map
-     * 
+     *
      * @param rule
      * @param map
      */
@@ -206,15 +206,14 @@ public abstract class AbstractAclController<DAO extends AbstractAccessRuleDAO<Co
 
     /**
      * Returns the key string for a rule
-     * 
-     * @param rule
      *
+     * @param rule
      */
     protected abstract String keyFor(Comparable<?> rule);
 
     /**
      * Validate a rule, return an error message or <code>null</code> if the rule is ok
-     * 
+     *
      * @param ruleKey ,ruleValue
      */
     protected String validateRule(String ruleKey, String ruleValue) {
@@ -225,23 +224,21 @@ public abstract class AbstractAclController<DAO extends AbstractAccessRuleDAO<Co
 
     /**
      * Validates the string representation of a rule key. Return an error message or <code>null</code> if the rule is ok
-     * 
-     * @param ruleKey
      *
+     * @param ruleKey
      */
     protected abstract String validateRuleKey(String ruleKey);
 
     /**
      * Convert an {@link Entry} to a rule object
-     * 
-     * @param entry
      *
+     * @param entry
      */
     protected abstract Comparable convertEntryToRule(Entry<String, String> entry);
 
     /**
      * Validates the string representation of rule keys and values
-     * 
+     *
      * @param ruleMap
      */
     protected void validateMap(Map<String, String> ruleMap) {
@@ -292,7 +289,7 @@ public abstract class AbstractAclController<DAO extends AbstractAccessRuleDAO<Co
 
     /**
      * Parses a comma separated list of roles into a set of strings, with special handling for the {@link DataAccessRule#ANY} role
-     * 
+     *
      * @param roleCsv Comma separated list of roles.
      */
     protected Set<String> parseRoles(String roleCsv) {

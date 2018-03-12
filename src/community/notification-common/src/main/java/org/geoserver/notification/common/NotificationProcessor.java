@@ -7,7 +7,7 @@ package org.geoserver.notification.common;
 
 /**
  * Processes {@link Notification}
- * 
+ *
  * @author Xandros
  */
 public interface NotificationProcessor {

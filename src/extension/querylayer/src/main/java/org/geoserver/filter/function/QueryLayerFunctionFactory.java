@@ -25,7 +25,7 @@ import org.opengis.filter.expression.Literal;
 /**
  * Factory for the functions that do query the GeoServer catalog as well as the support ones used to
  * mix them into larger filters
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class QueryLayerFunctionFactory implements FunctionFactory {
@@ -60,7 +60,7 @@ public class QueryLayerFunctionFactory implements FunctionFactory {
 
     /**
      * Sets the max number of features returned by a free query
-     * 
+     *
      * @param maxFeatures
      */
     public void setMaxFeatures(int maxFeatures) {
@@ -73,7 +73,7 @@ public class QueryLayerFunctionFactory implements FunctionFactory {
 
     /**
      * Sets the maximum number of coordinates to be collected, a non positive value implies no limit
-     * 
+     *
      * @param maxCoordinates
      */
     public void setMaxCoordinates(long maxCoordinates) {
@@ -82,7 +82,7 @@ public class QueryLayerFunctionFactory implements FunctionFactory {
 
     /**
      * Initializes the catalog reference, without it the factory won't generate any function
-     * 
+     *
      * @param catalog
      */
     public void setCatalog(Catalog catalog) {
@@ -103,7 +103,7 @@ public class QueryLayerFunctionFactory implements FunctionFactory {
             return new QueryFunction(QUERY_SINGLE, catalog, args, fallback, true, 1);
         } else if (QUERY_COLLECTION.equals(name)) {
             return new QueryFunction(QUERY_COLLECTION, catalog, args, fallback, false, maxFeatures);
-        } else if(COLLECT_GEOMETRIES.equals(name)) {
+        } else if (COLLECT_GEOMETRIES.equals(name)) {
             return new CollectGeometriesFunction(COLLECT_GEOMETRIES, args, fallback, maxCoordinates);
         } else {
             return null;

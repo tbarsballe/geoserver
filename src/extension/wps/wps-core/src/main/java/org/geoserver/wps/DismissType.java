@@ -6,7 +6,7 @@ package org.geoserver.wps;
 
 /**
  * The Dismiss request, used to ask the process to stop execution
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class DismissType {

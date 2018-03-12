@@ -26,12 +26,11 @@ import org.geoserver.wfs.json.JSONType;
  *
  * @author Justin Deoliveira, The Open Planning Project
  * @author Carlo Cancellieri - GeoSolutions
- *
  */
 public class WfsExceptionHandler extends OWS10ServiceExceptionHandler {
 
     GeoServer gs;
-    
+
     /**
      * @param service The wfs service descriptors.
      */
@@ -43,7 +42,7 @@ public class WfsExceptionHandler extends OWS10ServiceExceptionHandler {
     public WFSInfo getInfo() {
         return gs.getService(WFSInfo.class);
     }
-    
+
     /**
      * Encodes a ogc:ServiceExceptionReport to output.
      */
@@ -75,9 +74,9 @@ public class WfsExceptionHandler extends OWS10ServiceExceptionHandler {
             handleDefault(exception, request, charset, verbose);
         }
     }
-    
+
     private void handleDefault(ServiceException exception, Request request, String charset,
-            boolean verbose) {
+                               boolean verbose) {
         if ("1.0.0".equals(request.getVersion())) {
             handle1_0(exception, request.getHttpResponse());
         } else {

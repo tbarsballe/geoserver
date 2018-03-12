@@ -11,7 +11,7 @@ import org.geotools.data.DataStore;
 /**
  * Delegates every method to the wrapped feature source. Subclasses will
  * override selected methods to perform their "decoration" job
- * 
+ *
  * @author Andrea Aime - TOPP
  * @deprecated use org.geotools.data.store.DecoratingDataStore
  */

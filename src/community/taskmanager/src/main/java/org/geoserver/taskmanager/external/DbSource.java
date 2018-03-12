@@ -13,48 +13,44 @@ import java.util.Map;
 
 /**
  * A database configuration used by tasks.
- * 
- * @author Niels Charlier
  *
+ * @author Niels Charlier
  */
 public interface DbSource extends Named {
-    
+
     /**
      * Get a data source for this database.
-     * 
+     *
      * @return the data source.
      */
     DataSource getDataSource();
-    
+
     /**
      * Get a geoserver store encoder from this source.
-     * 
+     *
      * @param name name for the source
-     * 
      * @return the geoserver store encoder
      */
     GSAbstractStoreEncoder getStoreEncoder(String name);
 
     /**
      * Generate parameters for GeoServer datastore
-     * 
+     *
      * @return the parameters for GeoServer datastore
      */
     Map<String, Object> getParameters();
 
     /**
-     * schema 
-     * 
+     * schema
+     *
      * @return
      */
     String getSchema();
-    
+
     /**
-     * 
-     * 
      * @param encoder
      * @param origParameters
-     * @return 
+     * @return
      */
     GSAbstractStoreEncoder postProcess(GSAbstractStoreEncoder encoder, DbTable table);
     
@@ -67,7 +63,6 @@ public interface DbSource extends Named {
 
     OutputStream script() throws IOException;
      */
-
 
 
     /**

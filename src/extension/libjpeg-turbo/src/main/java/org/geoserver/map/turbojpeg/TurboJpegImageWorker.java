@@ -38,9 +38,8 @@ import org.geotools.util.logging.Logging;
 
 /**
  * Specific subclass of {@link ImageWorker} for writing JPEG images using libjpeg-turbo.
- * 
+ *
  * @author Simone Giannecchini, GeoSolutions SAS
- * 
  */
 final class TurboJpegImageWorker extends ImageWorker {
 
@@ -48,7 +47,9 @@ final class TurboJpegImageWorker extends ImageWorker {
 
     static final String ERROR_FILE_MESSAGE = "The specified input file can't be read: Skipping";
 
-    /** Is the libjpeg-turbo available? **/
+    /**
+     * Is the libjpeg-turbo available?
+     **/
     private static final TurboJpegImageWriterSpi TURBO_JPEG_SPI = new TurboJpegImageWriterSpi();
 
     /**
@@ -72,10 +73,9 @@ final class TurboJpegImageWorker extends ImageWorker {
      * Writes outs the image contained into this {@link ImageWorker} as a JPEG using the provided destination , compression and compression rate.
      * <p>
      * The destination object can be anything providing that we have an {@link ImageOutputStreamSpi} that recognizes it.
-     * 
-     * @param destination where to write the internal {@link #image} as a JPEG.
+     *
+     * @param destination     where to write the internal {@link #image} as a JPEG.
      * @param compressionRate percentage of compression.
-     * 
      * @throws IOException In case an error occurs during the search for an {@link ImageOutputStream} or during the eoncding process.
      */
     public final void writeTurboJPEG(final OutputStream destination, final float compressionRate)
@@ -146,7 +146,7 @@ final class TurboJpegImageWorker extends ImageWorker {
 
     /**
      * Remove the alpha band
-     * 
+     *
      * @param requestedBands
      */
     private void removeAlpha(int requestedBands) {
@@ -159,14 +159,14 @@ final class TurboJpegImageWorker extends ImageWorker {
             layout = new ImageLayout();
             hints.put(JAI.KEY_IMAGE_LAYOUT, layout);
         }
-        
+
         // Forcing the colormodel with noAlpha
         final ColorModel colorModel = new ComponentColorModel(
-                ColorSpace.getInstance(requestedBands == 3 ? ColorSpace.CS_sRGB : ColorSpace.CS_GRAY), 
+                ColorSpace.getInstance(requestedBands == 3 ? ColorSpace.CS_sRGB : ColorSpace.CS_GRAY),
                 false, false, Transparency.OPAQUE, DataBuffer.TYPE_BYTE);
         SampleModel sm = colorModel.createCompatibleSampleModel(image.getWidth(), image.getHeight());
         layout.setSampleModel(sm);
-        
+
         // Forcing the output format to remove the alpha Band
         ImageWorker worker = new ImageWorker(image);
         worker.setRenderingHints(hints);

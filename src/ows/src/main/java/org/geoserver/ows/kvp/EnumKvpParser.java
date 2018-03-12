@@ -14,9 +14,8 @@ import org.springframework.util.Assert;
 public class EnumKvpParser extends KvpParser {
     /**
      * Creates the parser specifying the name of the key to latch to.
-     * 
-     * @param key
-     *            The key whose associated value to parse.
+     *
+     * @param key The key whose associated value to parse.
      */
     public EnumKvpParser(String key, Class<?> enumClass) {
         super(key, enumClass);

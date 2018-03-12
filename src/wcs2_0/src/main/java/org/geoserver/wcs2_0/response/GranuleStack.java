@@ -11,9 +11,9 @@ import org.geotools.coverage.grid.GridCoverage2D;
 import org.opengis.coverage.grid.GridCoverage;
 
 /**
- * A stack of GridCoverage2D instances (granules). 
+ * A stack of GridCoverage2D instances (granules).
  * This class may be used to deal with multidimensional outputs.
- * 
+ *
  * @author Daniele Romagnoli, GeoSolutions SAS
  */
 public interface GranuleStack extends GridCoverage {

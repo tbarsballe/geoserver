@@ -15,9 +15,8 @@ import org.geoserver.sldservice.utils.classifier.ColorRamp;
 
 /**
  * Blue Color Ramp Implementation
- * 
- * @author Alessio Fabiani, GeoSolutions SAS
  *
+ * @author Alessio Fabiani, GeoSolutions SAS
  */
 public class BlueColorRamp implements ColorRamp {
 

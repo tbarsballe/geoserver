@@ -188,15 +188,16 @@ public class RepositoryManager implements GeoServerInitializer, DisposableBean {
      * Retrieves a RepositoryInfo with a specified name.
      *
      * @param name The name of the repository desired.
-     *
      * @return a RepositoryInfo object, if found. If not found, returns null.
      */
-    public @Nullable RepositoryInfo getByRepoName(final String name) {
+    public @Nullable
+    RepositoryInfo getByRepoName(final String name) {
         RepositoryInfo info = configStore.getByName(name);
         return info;
     }
 
-    public @Nullable RepositoryInfo getByRepoLocation(final URI repoURI) {
+    public @Nullable
+    RepositoryInfo getByRepoLocation(final URI repoURI) {
         RepositoryInfo info = configStore.getByLocation(repoURI);
         return info;
     }
@@ -227,7 +228,7 @@ public class RepositoryManager implements GeoServerInitializer, DisposableBean {
     }
 
     private static List<DataStoreInfo> findGeoGigStores(Catalog catalog,
-            org.opengis.filter.Filter filter) {
+                                                        org.opengis.filter.Filter filter) {
         List<DataStoreInfo> geogigStores;
         try (CloseableIterator<DataStoreInfo> dataStores = catalog.list(DataStoreInfo.class,
                 filter)) {
@@ -382,13 +383,13 @@ public class RepositoryManager implements GeoServerInitializer, DisposableBean {
 
     /**
      * Utility class to connect to a remote to see if its alive and we're able to connect.
-     * 
+     *
      * @return the remote's head ref if succeeded
      * @throws Exception if can't connect for any reason; the exception message should be indicative
-     *         of the problem
+     *                   of the problem
      */
     public static Ref pingRemote(final String location, @Nullable String user,
-            @Nullable String password) throws Exception {
+                                 @Nullable String password) throws Exception {
 
         if (Strings.isNullOrEmpty(location)) {
             throw new IllegalArgumentException("Please indicate the remote repository URL");

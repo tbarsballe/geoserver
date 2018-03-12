@@ -13,9 +13,8 @@ import org.w3c.dom.Document;
 
 /**
  * Tests whether Property Selection is properly applied on complex features
- * 
+ *
  * @author Niels Charlier, Curtin University of Technology
- * 
  */
 public class PropertySelectionTest extends AbstractAppSchemaTestSupport {
 
@@ -23,13 +22,13 @@ public class PropertySelectionTest extends AbstractAppSchemaTestSupport {
     protected PropertySelectionMockData createTestData() {
         return new PropertySelectionMockData();
     }
-    
+
     /**
      * Test GetFeature with Property Selection.
      */
     @Test
     public void testGetFeature() {
-    	Document doc = getAsDOM("wfs?service=WFS&version=1.1.0&request=GetFeature&typeName=gsml:MappedFeature&propertyname=gml:description");
+        Document doc = getAsDOM("wfs?service=WFS&version=1.1.0&request=GetFeature&typeName=gsml:MappedFeature&propertyname=gml:description");
         LOGGER.info("wfs?service=WFS&version=1.1.0&request=GetFeature&typeName=gsml:MappedFeature&propertyname=gml:description Response:\n" + prettyString(doc));
 
         // using custom IDs - this is being tested too

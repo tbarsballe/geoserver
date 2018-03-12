@@ -14,9 +14,8 @@ import org.geoserver.platform.resource.Resource;
 
 /**
  * Tracks and cleans up a set of files and directories
- * 
+ *
  * @author Andrea Aime - OpenGeo
- * 
  */
 public class WPSFileResource implements WPSResource {
     List<Resource> files;
@@ -28,7 +27,7 @@ public class WPSFileResource implements WPSResource {
     public WPSFileResource(Resource file) {
         this(Collections.singletonList(file));
     }
-    
+
     public WPSFileResource(File file) {
         this(Files.asResource(file));
     }

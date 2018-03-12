@@ -8,10 +8,9 @@ package org.geoserver.platform.exception;
 /**
  * Interface class for exceptions whose messages can be localized.
  *
+ * @author Justin Deoliveira, OpenGeo
  * @see GeoServerException
  * @see GeoServerRuntimException
- * 
- * @author Justin Deoliveira, OpenGeo
  */
 public interface IGeoServerException {
 
@@ -20,8 +19,8 @@ public interface IGeoServerException {
      */
     String getId();
 
-    /** 
-     * Arguments to pass into the localized exception message 
+    /**
+     * Arguments to pass into the localized exception message
      */
     Object[] getArgs();
 }

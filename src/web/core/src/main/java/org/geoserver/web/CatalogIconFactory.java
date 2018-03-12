@@ -41,7 +41,7 @@ import com.vividsolutions.jts.geom.Polygon;
  */
 @SuppressWarnings("serial")
 public class CatalogIconFactory implements Serializable {
-    
+
     private static final Logger LOGGER = Logging.getLogger("org.geoserver.web");
 
     public static final PackageResourceReference RASTER_ICON = new PackageResourceReference(
@@ -49,22 +49,22 @@ public class CatalogIconFactory implements Serializable {
 
     public static final PackageResourceReference VECTOR_ICON = new PackageResourceReference(
             GeoServerBasePage.class, "img/icons/geosilk/vector.png");
-    
+
     public static final PackageResourceReference MAP_ICON = new PackageResourceReference(
             GeoServerBasePage.class, "img/icons/geosilk/map.png");
-    
+
     public static final PackageResourceReference MAP_STORE_ICON = new PackageResourceReference(
             GeoServerBasePage.class, "img/icons/geosilk/server_map.png");
-    
+
     public static final PackageResourceReference POINT_ICON = new PackageResourceReference(
             GeoServerBasePage.class, "img/icons/silk/bullet_blue.png");
-    
+
     public static final PackageResourceReference LINE_ICON = new PackageResourceReference(
             GeoServerBasePage.class, "img/icons/silk/line_blue.png");
-    
+
     public static final PackageResourceReference POLYGON_ICON = new PackageResourceReference(
             GeoServerBasePage.class, "img/icons/silk/shape_square_blue.png");
-    
+
     public static final PackageResourceReference GEOMETRY_ICON = new PackageResourceReference(
             GeoServerBasePage.class, "img/icons/geosilk/vector.png");
 
@@ -92,9 +92,8 @@ public class CatalogIconFactory implements Serializable {
 
     /**
      * Returns the appropriate icon for the specified layer
-     * 
-     * @param info
      *
+     * @param info
      */
     public PackageResourceReference getLayerIcon(LayerInfo info) {
         PackageResourceReference icon = UNKNOWN_ICON;
@@ -104,43 +103,43 @@ public class CatalogIconFactory implements Serializable {
             icon = RASTER_ICON;
         return icon;
     }
-    
+
     /**
      * Returns the appropriate icon for the specified layer. This one distinguishes
      * the geometry type inside vector layers.
-     * 
-     * @param info
      *
+     * @param info
      */
     public PackageResourceReference getSpecificLayerIcon(LayerInfo info) {
         if (info.getType() == PublishedType.RASTER) {
             return RASTER_ICON;
-        } else if(info.getType() == PublishedType.VECTOR) {
+        } else if (info.getType() == PublishedType.VECTOR) {
             try {
                 FeatureTypeInfo fti = (FeatureTypeInfo) info.getResource();
                 GeometryDescriptor gd = fti.getFeatureType().getGeometryDescriptor();
                 return getVectoryIcon(gd);
-            } catch(Exception e) {
+            } catch (Exception e) {
                 return GEOMETRY_ICON;
             }
-        } else if(info.getType() == PublishedType.WMS) {
+        } else if (info.getType() == PublishedType.WMS) {
             return MAP_ICON;
-        } else if(info.getType() == PublishedType.WMTS) {
+        } else if (info.getType() == PublishedType.WMTS) {
             return MAP_ICON;
-        }else {
+        } else {
             return UNKNOWN_ICON;
         }
     }
 
     /**
      * Returns the vector icon associated to the specified geometry descriptor
+     *
      * @param gd
      */
     public PackageResourceReference getVectoryIcon(GeometryDescriptor gd) {
-        if(gd == null) {
+        if (gd == null) {
             return GEOMETRY_ICON;
-        } 
-        
+        }
+
         Class<?> geom = gd.getType().getBinding();
         return getVectorIcon(geom);
     }
@@ -161,13 +160,12 @@ public class CatalogIconFactory implements Serializable {
 
     /**
      * Returns the appropriate icon for the specified store.
-     * 
-     * @param storeInfo
      *
+     * @param storeInfo
      * @see #getStoreIcon(Class)
      */
     public PackageResourceReference getStoreIcon(final StoreInfo storeInfo) {
-        
+
         Class<?> factoryClass = null;
 
         Catalog catalog = storeInfo.getCatalog();
@@ -181,25 +179,25 @@ public class CatalogIconFactory implements Serializable {
                 LOGGER.log(Level.INFO, "factory class for storeInfo " + storeInfo.getName()
                         + " not found", e);
             }
-            
-            if(dataStoreFactory != null){
+
+            if (dataStoreFactory != null) {
                 return getStoreIcon(dataStoreFactory.getClass());
             }
-            
+
         } else if (storeInfo instanceof CoverageStoreInfo) {
             AbstractGridFormat format = resourcePool
                     .getGridCoverageFormat((CoverageStoreInfo) storeInfo);
-            if(format != null){
+            if (format != null) {
                 return getStoreIcon(format.getClass());
             }
         } else if (storeInfo instanceof WMSStoreInfo) {
             return MAP_STORE_ICON;
         } else if (storeInfo instanceof WMTSStoreInfo) {
             return MAP_STORE_ICON;
-        }else {
+        } else {
             throw new IllegalStateException(storeInfo.getClass().getName());
         }
-        
+
         LOGGER.info("Could not determine icon for StoreInfo " + storeInfo.getName()
                 + ". Using 'unknown' icon.");
         return UNKNOWN_ICON;
@@ -213,10 +211,8 @@ public class CatalogIconFactory implements Serializable {
      * registered with the id {@code defaultVector} or {@code defaultRaster}, as appropriate will be
      * used.
      * </p>
-     * 
-     * @param factoryClass
-     *            either a {@link DataAccessFactory} or a {@link Format} class
      *
+     * @param factoryClass either a {@link DataAccessFactory} or a {@link Format} class
      */
     public PackageResourceReference getStoreIcon(Class<?> factoryClass) {
         // look for the associated panel info if there is one
@@ -255,7 +251,7 @@ public class CatalogIconFactory implements Serializable {
         }
         throw new IllegalArgumentException("Unrecognized store format class: " + factoryClass);
     }
-    
+
 
     /**
      * Returns a reference to a general purpose icon to indicate an enabled/properly configured

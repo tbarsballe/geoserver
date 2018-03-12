@@ -40,10 +40,10 @@ public class DownloadMapProcessTest extends BaseDownloadImageProcessTest {
         super.registerNamespaces(namespaces);
         namespaces.put("kml", "http://www.opengis.net/kml/2.2");
     }
-    
+
     @Test
     public void testDescribeProcess() throws Exception {
-        Document d = getAsDOM( root() + "service=wps&request=describeprocess&identifier=gs:DownloadMap");
+        Document d = getAsDOM(root() + "service=wps&request=describeprocess&identifier=gs:DownloadMap");
         // print(d);
         assertXpathExists("//ComplexOutput/Supported/Format[MimeType='image/png']", d);
         assertXpathExists("//ComplexOutput/Supported/Format[MimeType='image/jpeg']", d);
@@ -56,7 +56,7 @@ public class DownloadMapProcessTest extends BaseDownloadImageProcessTest {
         MockHttpServletResponse response = postAsServletResponse("wps", xml);
         assertEquals("image/png", response.getContentType());
         BufferedImage image = ImageIO.read(new ByteArrayInputStream(response.getContentAsByteArray()));
-        ImageAssert.assertEquals(new File(SAMPLES +  "mapSimple.png"), image, 100);
+        ImageAssert.assertEquals(new File(SAMPLES + "mapSimple.png"), image, 100);
     }
 
     @Test
@@ -74,7 +74,7 @@ public class DownloadMapProcessTest extends BaseDownloadImageProcessTest {
         MockHttpServletResponse response = postAsServletResponse("wps", xml);
         assertEquals("image/png", response.getContentType());
         BufferedImage image = ImageIO.read(new ByteArrayInputStream(response.getContentAsByteArray()));
-        ImageAssert.assertEquals(new File(SAMPLES +  "watermarked.png"), image, 100);
+        ImageAssert.assertEquals(new File(SAMPLES + "watermarked.png"), image, 100);
     }
 
     @Test
@@ -183,7 +183,7 @@ public class DownloadMapProcessTest extends BaseDownloadImageProcessTest {
         BufferedImage image = ImageIO.read(new ByteArrayInputStream(response.getContentAsByteArray()));
         ImageAssert.assertEquals(new File(SAMPLES + "mapTimeFilterFormattedTimestamp.png"), image, 200);
     }
-    
+
     @Test
     public void downloadMapGif() throws Exception {
         String request = IOUtils.toString(getClass().getResourceAsStream("mapSimple.xml"));

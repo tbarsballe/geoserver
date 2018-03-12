@@ -28,8 +28,8 @@ import java.util.Set;
  */
 
 public class MemorySecurityProvider extends GeoServerSecurityProvider {
-    
-    
+
+
     public void configure(XStreamPersister xp) {
         super.configure(xp);
         xp.getXStream().alias("memorygroupservice", MemoryUserGroupServiceConfigImpl.class);
@@ -38,12 +38,12 @@ public class MemorySecurityProvider extends GeoServerSecurityProvider {
 
     @Override
     public Map<Class<?>, Set<String>> getFieldsForEncryption() {
-        Map<Class<?>, Set<String>> map = new HashMap <Class<?>, Set<String>>();
-        
-        Set<String> fields= new HashSet<String>();
-        fields.add("toBeEncrypted");        
-        map.put(MemoryRoleServiceConfigImpl.class,fields);
-        map.put(MemoryUserGroupServiceConfigImpl.class,fields);
+        Map<Class<?>, Set<String>> map = new HashMap<Class<?>, Set<String>>();
+
+        Set<String> fields = new HashSet<String>();
+        fields.add("toBeEncrypted");
+        map.put(MemoryRoleServiceConfigImpl.class, fields);
+        map.put(MemoryUserGroupServiceConfigImpl.class, fields);
         return map;
     }
 
@@ -71,7 +71,7 @@ public class MemorySecurityProvider extends GeoServerSecurityProvider {
 
     @Override
     public SecurityConfigValidator createConfigurationValidator(GeoServerSecurityManager securityManager) {
-        return new MemorySecurityConfigValidator(securityManager); 
-     }
+        return new MemorySecurityConfigValidator(securityManager);
+    }
 
 }

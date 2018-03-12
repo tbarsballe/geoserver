@@ -14,8 +14,8 @@ import org.apache.wicket.markup.html.navigation.paging.PagingNavigation;
 
 /**
  * A custom navigator that sets classes for the elements
- * @author Andrea Aime - TOPP
  *
+ * @author Andrea Aime - TOPP
  */
 @SuppressWarnings("serial")
 public class GeoServerPagingNavigator extends AjaxPagingNavigator {
@@ -24,7 +24,7 @@ public class GeoServerPagingNavigator extends AjaxPagingNavigator {
         super(id, pageable);
         setOutputMarkupId(true);
     }
-    
+
     @Override
     protected PagingNavigation newNavigation(String id, IPageable pageable, IPagingLabelProvider labelProvider) {
         // make sure we don't have too many links, it gets quite busy in popups
@@ -32,7 +32,7 @@ public class GeoServerPagingNavigator extends AjaxPagingNavigator {
         navigation.setViewSize(5);
         return navigation;
     }
-    
+
     @Override
     protected AbstractLink newPagingNavigationLink(String id, IPageable pageable, int pageNumber) {
         AbstractLink link = super.newPagingNavigationLink(id, pageable, pageNumber);
@@ -40,7 +40,7 @@ public class GeoServerPagingNavigator extends AjaxPagingNavigator {
         link.add(AttributeModifier.replace("class", id));
         return link;
     }
-    
+
     @Override
     protected AbstractLink newPagingNavigationIncrementLink(String id, IPageable pageable, int increment) {
         AbstractLink link = super.newPagingNavigationIncrementLink(id, pageable, increment);
@@ -48,5 +48,5 @@ public class GeoServerPagingNavigator extends AjaxPagingNavigator {
         link.add(AttributeModifier.replace("class", id));
         return link;
     }
-    
+
 }

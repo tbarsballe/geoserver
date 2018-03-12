@@ -16,19 +16,19 @@ public class WorkspaceInfoImpl implements WorkspaceInfo, Serializable {
     protected String id;
     protected String name;
     protected boolean _default;
-    
+
     protected MetadataMap metadata = new MetadataMap();
 
     private boolean isolated = false;
-    
+
     public String getId() {
         return id;
     }
-    
+
     public void setId(String id) {
         this.id = id;
     }
-    
+
     public boolean isDefault() {
         return _default;
     }
@@ -44,15 +44,15 @@ public class WorkspaceInfoImpl implements WorkspaceInfo, Serializable {
     public void setName(String name) {
         this.name = name;
     }
-    
+
     public MetadataMap getMetadata() {
         return metadata;
     }
-    
+
     public void setMetadata(MetadataMap metadata) {
         this.metadata = metadata;
     }
-    
+
     public void accept(CatalogVisitor visitor) {
         visitor.visit(this);
     }
@@ -72,7 +72,7 @@ public class WorkspaceInfoImpl implements WorkspaceInfo, Serializable {
             return false;
         if (!(obj instanceof WorkspaceInfo))
             return false;
-        
+
         final WorkspaceInfo other = (WorkspaceInfo) obj;
         if (id == null) {
             if (other.getId() != null)
@@ -86,7 +86,7 @@ public class WorkspaceInfoImpl implements WorkspaceInfo, Serializable {
             return false;
         return true;
     }
-    
+
     @Override
     public String toString() {
         return new StringBuilder(getClass().getSimpleName()).append('[').append(name).append(']')

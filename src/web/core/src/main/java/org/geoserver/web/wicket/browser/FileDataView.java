@@ -26,23 +26,23 @@ import org.apache.wicket.util.convert.IConverter;
 
 /**
  * A data view listing files in a certain directory, subject to a file filter
- * @author Andrea Aime - OpenGeo
  *
+ * @author Andrea Aime - OpenGeo
  */
 @SuppressWarnings("serial")
 public abstract class FileDataView extends Panel {
     private static final IConverter<File> FILE_NAME_CONVERTER = new StringConverter() {
 
         public String convertToString(File file, Locale locale) {
-            if(file.isDirectory()) {
+            if (file.isDirectory()) {
                 return file.getName() + "/";
             } else {
                 return file.getName();
             }
         }
-        
+
     };
-    
+
     private static final IConverter<File> FILE_LASTMODIFIED_CONVERTER = new StringConverter() {
 
         public String convertToString(File file, Locale locale) {
@@ -54,9 +54,9 @@ public abstract class FileDataView extends Panel {
                         new Date(file.lastModified()));
             }
         }
-        
+
     };
-    
+
     private static final IConverter<File> FILE_SIZE_CONVERTER = new StringConverter() {
         private static final double KBYTE = 1024;
         private static final double MBYTE = KBYTE * 1024;
@@ -65,10 +65,10 @@ public abstract class FileDataView extends Panel {
 
         public String convertToString(File value, Locale locale) {
             File file = (File) value;
-            
-            if(!file.isFile())
+
+            if (!file.isFile())
                 return "";
-            
+
             long size = file.length();
             if (size == 0L)
                 return null;
@@ -83,36 +83,36 @@ public abstract class FileDataView extends Panel {
                 return new DecimalFormat("#.#").format(size / GBYTE) + "G";
             }
         }
-        
+
     };
-    
-    
+
+
     FileProvider provider;
 
     WebMarkupContainer fileContent;
-    
+
     String tableHeight = "25em";
-    
+
     public FileDataView(String id, FileProvider fileProvider) {
         super(id);
-        
+
         this.provider = fileProvider;
 //        provider.setDirectory(currentPosition);
 //        provider.setSort(new SortParam(NAME, true));
-        
+
         final WebMarkupContainer table = new WebMarkupContainer("fileTable");
         table.setOutputMarkupId(true);
         add(table);
-        
+
         DataView<File> fileTable = new DataView<File>("files", fileProvider) {
 
             @Override
             protected void populateItem(final Item<File> item) {
-                
+
                 // odd/even alternate style
                 item.add(AttributeModifier.replace("class",
                         item.getIndex() % 2 == 0 ? "even" : "odd"));
-                
+
                 // navigation/selection links
                 AjaxFallbackLink<?> link = new IndicatingAjaxFallbackLink<Void>("nameLink") {
 
@@ -120,7 +120,7 @@ public abstract class FileDataView extends Panel {
                     public void onClick(AjaxRequestTarget target) {
                         linkNameClicked((File) item.getModelObject(), target);
                     }
-                    
+
                 };
                 link.add(new Label("name", item.getModel()) {
                     @SuppressWarnings("unchecked")
@@ -130,7 +130,7 @@ public abstract class FileDataView extends Panel {
                     }
                 });
                 item.add(link);
-                
+
                 // last modified and size labels
                 item.add(new Label("lastModified", item.getModel()) {
                     @SuppressWarnings("unchecked")
@@ -147,39 +147,39 @@ public abstract class FileDataView extends Panel {
                     }
                 });
             }
-            
+
         };
 
         fileContent = new WebMarkupContainer("fileContent") {
             @Override
             protected void onComponentTag(ComponentTag tag) {
-                if(tableHeight != null) {
+                if (tableHeight != null) {
                     tag.getAttributes().put("style", "overflow:auto; height:" + tableHeight);
                 }
             }
         };
-        
+
         fileContent.add(fileTable);
-        
+
         table.add(fileContent);
         table.add(new OrderByBorder<String>("nameHeader", FileProvider.NAME, fileProvider));
         table.add(new OrderByBorder<String>("lastModifiedHeader", FileProvider.LAST_MODIFIED, fileProvider));
         table.add(new OrderByBorder<String>("sizeHeader", FileProvider.SIZE, fileProvider));
-    }    
-    
+    }
+
     protected abstract void linkNameClicked(File file, AjaxRequestTarget target);
-    
+
     private static abstract class StringConverter implements IConverter<File> {
-        
+
         public File convertToObject(String value, Locale locale) {
             throw new UnsupportedOperationException("This converter works only for strings");
         }
     }
-    
+
     public FileProvider getProvider() {
-    	return provider;
+        return provider;
     }
-    
+
     public void setTableHeight(String tableHeight) {
         this.tableHeight = tableHeight;
     }

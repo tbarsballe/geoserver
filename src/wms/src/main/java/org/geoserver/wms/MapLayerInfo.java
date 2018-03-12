@@ -33,7 +33,7 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 /**
  * A convenience class that hides some of the differences between the various types of layers
- * 
+ *
  * @author $Author: Alessio Fabiani (alessio.fabiani@gmail.com) $ (last modification)
  * @author $Author: Simone Giannecchini (simboss1@gmail.com) $ (last modification)
  * @author Gabriel Roldan
@@ -46,7 +46,7 @@ public final class MapLayerInfo {
     public static int TYPE_REMOTE_VECTOR = PublishedType.REMOTE.getCode();
 
     public static int TYPE_WMS = PublishedType.WMS.getCode();
-    
+
     public static int TYPE_WMTS = PublishedType.WMTS.getCode();
 
     /**
@@ -55,25 +55,21 @@ public final class MapLayerInfo {
     private final SimpleFeatureSource remoteFeatureSource;
 
     /**
-     * 
      * @uml.property name="type" multiplicity="(0 1)"
      */
     private final int type;
 
     /**
-     * 
      * @uml.property name="name" multiplicity="(0 1)"
      */
     private String name;
 
     /**
-     * 
      * @uml.property name="label" multiplicity="(0 1)"
      */
     private final String label;
 
     /**
-     * 
      * @uml.property name="description" multiplicity="(0 1)"
      */
     private final String description;
@@ -122,7 +118,7 @@ public final class MapLayerInfo {
      * The feature source bounds. Mind, it might be null, in that case, grab the lat/lon bounding
      * box and reproject to the native bounds.
      * </p>
-     * 
+     *
      * @return Envelope the feature source bounds.
      */
     public ReferencedEnvelope getBoundingBox() throws Exception {
@@ -141,11 +137,9 @@ public final class MapLayerInfo {
 
     /**
      * Get the bounding box in latitude and longitude for this layer.
-     * 
+     *
      * @return Envelope the feature source bounds.
-     * 
-     * @throws IOException
-     *             when an error occurs
+     * @throws IOException when an error occurs
      */
     public ReferencedEnvelope getLatLongBoundingBox() throws IOException {
         if (layerInfo != null) {
@@ -158,7 +152,6 @@ public final class MapLayerInfo {
     }
 
     /**
-     * 
      * @uml.property name="coverage"
      */
     public CoverageInfo getCoverage() {
@@ -166,7 +159,6 @@ public final class MapLayerInfo {
     }
 
     /**
-     * 
      * @uml.property name="description"
      */
     public String getDescription() {
@@ -174,7 +166,6 @@ public final class MapLayerInfo {
     }
 
     /**
-     * 
      * @uml.property name="feature"
      */
     public FeatureTypeInfo getFeature() {
@@ -186,7 +177,6 @@ public final class MapLayerInfo {
     }
 
     /**
-     * 
      * @uml.property name="label"
      */
     public String getLabel() {
@@ -194,7 +184,6 @@ public final class MapLayerInfo {
     }
 
     /**
-     * 
      * @uml.property name="name"
      */
     public String getName() {
@@ -206,7 +195,6 @@ public final class MapLayerInfo {
     }
 
     /**
-     * 
      * @uml.property name="type"
      */
     public int getType() {
@@ -227,8 +215,6 @@ public final class MapLayerInfo {
 
     /**
      * Returns the remote feature source in case this layer is a remote WFS layer
-     * 
-     *
      */
     public SimpleFeatureSource getRemoteFeatureSource() {
         return remoteFeatureSource;
@@ -236,7 +222,7 @@ public final class MapLayerInfo {
 
     /**
      * @return the resource SRS name or {@code null} if the underlying resource is not a registered
-     *         one
+     * one
      */
     public String getSRS() {
         if (layerInfo != null) {
@@ -262,7 +248,7 @@ public final class MapLayerInfo {
 
     /**
      * Should we add the cache-control: max-age header to maps containing this layer?
-     * 
+     *
      * @return true if we should, false if we should omit the header
      */
     public boolean isCachingEnabled() {
@@ -278,7 +264,7 @@ public final class MapLayerInfo {
         ResourceInfo resource = layerInfo.getResource();
         MetadataMap metadata = resource.getMetadata();
         Boolean cachingEnabled = null;
-        if(metadata!=null) {
+        if (metadata != null) {
             cachingEnabled = metadata.get(ResourceInfo.CACHING_ENABLED, Boolean.class);
         }
         return cachingEnabled == null ? false : cachingEnabled.booleanValue();
@@ -288,9 +274,9 @@ public final class MapLayerInfo {
      * This value is added the headers of generated maps, marking them as being both "cache-able"
      * and designating the time for which they are to remain valid. The specific header added is
      * "Cache-Control: max-age="
-     * 
+     *
      * @return the number of seconds to be added to the "Cache-Control: max-age=" header, or
-     *         {@code 0} if not set
+     * {@code 0} if not set
      */
     public int getCacheMaxAge() {
         if (layerInfo == null) {

@@ -45,8 +45,8 @@ import org.springframework.context.ApplicationContext;
 
 /**
  * Encodes the Execute response either in the normal XML format or in the raw format
- * @author Andrea Aime
  *
+ * @author Andrea Aime
  */
 public class ExecuteProcessResponse extends Response {
 
@@ -58,7 +58,7 @@ public class ExecuteProcessResponse extends Response {
         super(ExecuteResponseType.class);
         this.standardResponse = new XmlObjectEncodingResponse(binding, elementName, xmlConfiguration);
     }
-    
+
     @Override
     public String getMimeType(Object value, Operation operation)
             throws ServiceException {
@@ -68,17 +68,17 @@ public class ExecuteProcessResponse extends Response {
         } else {
             // raw response, let's see what the output is
             ExecuteResponseType response = (ExecuteResponseType) value;
-            if(response.getProcessOutputs() == null) {
+            if (response.getProcessOutputs() == null) {
                 // just a status report or a failure report
                 return "text/xml";
             }
             OutputDataType result = (OutputDataType) response.getProcessOutputs().getOutput().get(0);
             LiteralDataType literal = result.getData().getLiteralData();
             ComplexDataType complex = result.getData().getComplexData();
-            if(literal != null) {
+            if (literal != null) {
                 // literals are encoded as plain strings
                 return "text/plain";
-            } else if(complex != null) {
+            } else if (complex != null) {
                 // Execute should have properly setup the mime type
                 return complex.getMimeType();
             } else {
@@ -90,7 +90,7 @@ public class ExecuteProcessResponse extends Response {
     }
 
     private boolean isStandardDocumentResponse(Operation operation) {
-        if(operation.getParameters()[0] instanceof ExecuteType) {
+        if (operation.getParameters()[0] instanceof ExecuteType) {
             ExecuteType execute = (ExecuteType) operation.getParameters()[0];
             return execute.getResponseForm() == null
                     || execute.getResponseForm().getRawDataOutput() == null;
@@ -121,12 +121,12 @@ public class ExecuteProcessResponse extends Response {
 
     @Override
     public String getAttachmentFileName(Object value, Operation operation) {
-        if(isStandardDocumentResponse(operation)) {
+        if (isStandardDocumentResponse(operation)) {
             return "execute.xml";
         } else {
             ExecuteType execute = (ExecuteType) operation.getParameters()[0];
             ExecuteResponseType response = (ExecuteResponseType) value;
-            if(response.getProcessOutputs() == null) {
+            if (response.getProcessOutputs() == null) {
                 // just a status report or a failure report
                 return "execute.xml";
             }
@@ -138,7 +138,7 @@ public class ExecuteProcessResponse extends Response {
             // if it's a literal, use text, otherwise get the complex ppio and ask for the extension
             if (literal != null) {
                 fext = "txt";
-            } else if(complex != null) {
+            } else if (complex != null) {
                 Name name = Ows11Util.name(response.getProcess().getIdentifier());
                 ProcessFactory factory = GeoServerProcessors.createProcessFactory(name, true);
                 if (factory != null) {
@@ -168,7 +168,7 @@ public class ExecuteProcessResponse extends Response {
     public void write(Object value, OutputStream output, Operation operation)
             throws IOException, ServiceException {
         ExecuteResponseType response = (ExecuteResponseType) value;
-        
+
         // From the spec:
         // In the most primitive case, when a response form of ―RawDataOutput‖ is requested,
         // process execution is successful, and only one complex output is produced, then the
@@ -188,7 +188,7 @@ public class ExecuteProcessResponse extends Response {
             BoundingBoxType bbox = result.getData().getBoundingBoxData();
             if (literal != null) {
                 writeLiteral(output, literal);
-            } else if(bbox != null) {
+            } else if (bbox != null) {
                 writeBBox(output, bbox);
             } else {
                 writeComplex(output, result);
@@ -204,7 +204,7 @@ public class ExecuteProcessResponse extends Response {
     /**
      * Write out complex data assuming {@link Execute} has set up the proper
      * encoder as the output
-     * 
+     *
      * @param output
      * @param result
      * @throws IOException
@@ -219,8 +219,8 @@ public class ExecuteProcessResponse extends Response {
             XMLEncoderDelegate delegate = (XMLEncoderDelegate) rawResult;
 
             try {
-                TransformerHandler xmls = 
-                    ((SAXTransformerFactory)SAXTransformerFactory.newInstance()).newTransformerHandler();
+                TransformerHandler xmls =
+                        ((SAXTransformerFactory) SAXTransformerFactory.newInstance()).newTransformerHandler();
                 xmls.setResult(new StreamResult(output));
                 delegate.encode(xmls);
             } catch (IOException e) {
@@ -229,20 +229,20 @@ public class ExecuteProcessResponse extends Response {
                 throw new WPSException("An error occurred while encoding "
                         + "the results of the process", e);
             }
-        } else if(rawResult instanceof CDataEncoderDelegate) {
-        	try {
+        } else if (rawResult instanceof CDataEncoderDelegate) {
+            try {
                 ((CDataEncoderDelegate) rawResult).encode(output);
-        	} catch(Exception e) {
-        		throw new WPSException("An error occurred while encoding "
+            } catch (Exception e) {
+                throw new WPSException("An error occurred while encoding "
                         + "the results of the process", e);
-        	}
-        } else if(rawResult instanceof BinaryEncoderDelegate) {
-        	try {
-        		((BinaryEncoderDelegate) rawResult).encode(output);
-        	} catch(Exception e) {
-        		throw new WPSException("An error occurred while encoding "
+            }
+        } else if (rawResult instanceof BinaryEncoderDelegate) {
+            try {
+                ((BinaryEncoderDelegate) rawResult).encode(output);
+            } catch (Exception e) {
+                throw new WPSException("An error occurred while encoding "
                         + "the results of the process", e);
-        	}
+            }
         } else {
             throw new WPSException("Cannot encode an object of class "
                     + rawResult.getClass() + " in raw form");
@@ -251,6 +251,7 @@ public class ExecuteProcessResponse extends Response {
 
     /**
      * Write out literal results by converting them to strings
+     *
      * @param output
      * @param literal
      */
@@ -260,6 +261,5 @@ public class ExecuteProcessResponse extends Response {
         writer.flush();
     }
 
-    
 
 }

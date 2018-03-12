@@ -19,7 +19,7 @@ import org.vfny.geoserver.util.requests.readers.XmlRequestReader;
 
 
 public class XmlRequestReaderAdapter extends org.geoserver.ows.XmlRequestReader
-    implements HttpServletRequestAware {
+        implements HttpServletRequestAware {
     Class delegateClass;
     ServiceInfo service;
     HttpServletRequest httpRequest;
@@ -31,7 +31,7 @@ public class XmlRequestReaderAdapter extends org.geoserver.ows.XmlRequestReader
     }
 
     public XmlRequestReaderAdapter(String namespace, String local, ServiceInfo service,
-        Class delegate) {
+                                   Class delegate) {
         this(new QName(namespace, local), service, delegate);
     }
 
@@ -46,16 +46,16 @@ public class XmlRequestReaderAdapter extends org.geoserver.ows.XmlRequestReader
 
         while (clazz != null && constructor == null) {
             try {
-                constructor = delegateClass.getConstructor(new Class[] { clazz });
+                constructor = delegateClass.getConstructor(new Class[]{clazz});
             } catch (NoSuchMethodException e) {
                 Class[] classes = clazz.getInterfaces();
                 for (Class c : classes) {
-                        try {
-                                constructor = delegateClass.getConstructor(new Class[] { c });
-                        } catch(NoSuchMethodException e2) {
-                                // no harm done
-                        }
-                                }
+                    try {
+                        constructor = delegateClass.getConstructor(new Class[]{c});
+                    } catch (NoSuchMethodException e2) {
+                        // no harm done
+                    }
+                }
                 clazz = clazz.getSuperclass();
             }
         }
@@ -64,8 +64,8 @@ public class XmlRequestReaderAdapter extends org.geoserver.ows.XmlRequestReader
             throw new IllegalStateException("No appropriate constructor");
         }
 
-        XmlRequestReader delegate = (XmlRequestReader) constructor.newInstance(new Object[] { service });
-        
+        XmlRequestReader delegate = (XmlRequestReader) constructor.newInstance(new Object[]{service});
+
         return delegate.read(reader, httpRequest);
     }
 }

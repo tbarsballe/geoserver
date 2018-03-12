@@ -15,7 +15,7 @@ import net.opengis.cat.csw20.GetDomainType;
 
 /**
  * GetDomain KVP request reader
- * 
+ *
  * @author Andrea Aime, GeoSolutions
  */
 public class GetDomainKvpRequestReader extends CSWKvpRequestReader {

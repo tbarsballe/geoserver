@@ -16,11 +16,13 @@ import org.geotools.xml.transform.TransformerBase;
 
 /**
  * Runs the transformer and outputs the describe coverage response.
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class WCS20DescribeEOCoverageSetResponse extends Response {
-    /** MIME_TYPE */
+    /**
+     * MIME_TYPE
+     */
     private static final String MIME_TYPE = "application/xml";
 
     public WCS20DescribeEOCoverageSetResponse() {

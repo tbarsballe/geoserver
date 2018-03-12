@@ -12,7 +12,7 @@ import org.w3c.dom.Document;
 
 /**
  * WFS test based for testing encodeIfEmpty tag
- * 
+ *
  * @author Victor Tey (CSIRO Earth Science and Resource Engineering)
  */
 public class EncodeIfEmptyTest extends AbstractAppSchemaTestSupport {

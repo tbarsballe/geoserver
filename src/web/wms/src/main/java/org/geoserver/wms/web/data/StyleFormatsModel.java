@@ -24,7 +24,7 @@ public class StyleFormatsModel extends LoadableDetachableModel<List<String>> {
     @Override
     protected List<String> load() {
         List<StyleHandler> handlers = GeoServerApplication.get().getBeansOfType(StyleHandler.class);
-        return Lists.transform(handlers, new Function<StyleHandler,String>() {
+        return Lists.transform(handlers, new Function<StyleHandler, String>() {
             @Nullable
             @Override
             public String apply(@Nullable StyleHandler styleHandler) {

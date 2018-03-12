@@ -151,7 +151,7 @@ public class GeofencePageTest extends GeoServerWicketTestSupport {
         tester.clickLink("form:invalidate", true);
         String success = new StringResourceModel(
                 GeofencePage.class.getSimpleName() + ".cacheInvalidated").getObject();
-        tester.assertInfoMessages((Serializable[]) new String[] { success });
+        tester.assertInfoMessages((Serializable[]) new String[]{success});
     }
 
 }

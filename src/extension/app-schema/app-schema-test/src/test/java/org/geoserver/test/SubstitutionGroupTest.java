@@ -13,9 +13,8 @@ import org.junit.Test;
 /**
  * Tests whether app-schema can walk through substitution groups automatically,
  * without having to explicitly put a target
- * 
+ *
  * @author Niels Charlier, Curtin University of Technology
- * 
  */
 public class SubstitutionGroupTest extends AbstractAppSchemaTestSupport {
 

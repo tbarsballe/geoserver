@@ -17,9 +17,8 @@ import org.opengis.referencing.cs.CoordinateSystemAxis;
 /**
  * A custom {@link Envelope} that allows to set a min value of longitude higher than the max one in
  * selected methods to deal with the dateline crossing case
- * 
+ *
  * @author Andrea Aime - GeoSolutions
- * 
  */
 public class WCSEnvelope extends AbstractEnvelope {
 
@@ -58,7 +57,7 @@ public class WCSEnvelope extends AbstractEnvelope {
 
     /**
      * Copies an existing envelope
-     * 
+     *
      * @param other
      */
     public WCSEnvelope(Envelope other) {
@@ -71,7 +70,7 @@ public class WCSEnvelope extends AbstractEnvelope {
     /**
      * Sets the range for the given dimension. If the dimension is the longitude, it is allowed to
      * set a minimum greater than the maximum, this envelope will be assumed to span the dateline
-     * 
+     *
      * @param dimension
      * @param minimum
      * @param maximum
@@ -96,8 +95,6 @@ public class WCSEnvelope extends AbstractEnvelope {
      * Returns true if the envelope has a empty span on at least one dimension. A span is empty if
      * its zero or negative, but in case a dimension is the longitude, a negative span will be
      * treated as a dateline crossing, and thus treated as non empty
-     * 
-     *
      */
     public boolean isEmpty() {
         for (int i = 0; i < dimensions; i++) {
@@ -166,12 +163,10 @@ public class WCSEnvelope extends AbstractEnvelope {
      * Returns a list of envelopes that avoid the dateline crossing "odd" representation, that is,
      * in that case two envelopes will be returned covering the portion before and after the
      * dateline
-     * 
-     *
      */
     public GeneralEnvelope[] getNormalizedEnvelopes() {
         if (!isCrossingDateline()) {
-            return new GeneralEnvelope[] { new GeneralEnvelope(this) };
+            return new GeneralEnvelope[]{new GeneralEnvelope(this)};
         } else {
             GeneralEnvelope e1 = new GeneralEnvelope(crs);
             GeneralEnvelope e2 = new GeneralEnvelope(crs);
@@ -189,14 +184,14 @@ public class WCSEnvelope extends AbstractEnvelope {
                 }
             }
 
-            return new GeneralEnvelope[] { e1, e2 };
+            return new GeneralEnvelope[]{e1, e2};
         }
     }
 
     /**
      * Checks if this envelope intersects the provided one, taking into account the case of dateline
      * crossing.
-     * 
+     *
      * @param other
      */
     public void intersect(GeneralEnvelope other) {
@@ -244,8 +239,6 @@ public class WCSEnvelope extends AbstractEnvelope {
 
     /**
      * Returns true if this envelope is crossing the dateline
-     * 
-     *
      */
     public boolean isCrossingDateline() {
         // TODO: handle the case the envelope is in a projected system and still
@@ -256,9 +249,8 @@ public class WCSEnvelope extends AbstractEnvelope {
 
     /**
      * Returns true if the specified dimension index is matching the longitude axis
-     * 
-     * @param dimension
      *
+     * @param dimension
      */
     public boolean isLongitude(int dimension) {
         return longitudeDimension == dimension;

@@ -26,7 +26,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
  * hashcode, but skips the exception in them, as commmon Java exceptions do not sport a usable
  * equals/hashcode implementation, and the exceptions might be cloned to due network/database
  * serialization.
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class ExecutionStatus implements Serializable {
@@ -51,14 +51,14 @@ public class ExecutionStatus implements Serializable {
             InetAddress candidateAddress = null;
             // Iterate all NICs (network interface cards)...
             for (Enumeration interfaces = NetworkInterface.getNetworkInterfaces(); interfaces
-                    .hasMoreElements();) {
+                    .hasMoreElements(); ) {
                 NetworkInterface ni = (NetworkInterface) interfaces.nextElement();
                 if (ni.getName() != null && ni.getName().startsWith("vmnet")) {
                     // skipping vmware interfaces
                     continue;
                 }
                 // each interface can have more than one address
-                for (Enumeration inetAddrs = ni.getInetAddresses(); inetAddrs.hasMoreElements();) {
+                for (Enumeration inetAddrs = ni.getInetAddresses(); inetAddrs.hasMoreElements(); ) {
                     InetAddress inetAddr = (InetAddress) inetAddrs.nextElement();
                     // we are not interested in loopback
                     if (!inetAddr.isLoopbackAddress() && !(inetAddr instanceof Inet6Address)) {
@@ -117,7 +117,7 @@ public class ExecutionStatus implements Serializable {
      * The name of the user that requested the process
      */
     String userName;
-    
+
     /**
      * Request creation time
      */
@@ -211,8 +211,6 @@ public class ExecutionStatus implements Serializable {
 
     /**
      * Returns the progress percentage, as a number between 0 and 100
-     * 
-     *
      */
     public float getProgress() {
         return progress;
@@ -230,7 +228,7 @@ public class ExecutionStatus implements Serializable {
         this.phase = phase;
         if (phase != null && phase.isExecutionCompleted()
                 //if there is already a completionTime don't overwrite it!
-                &&this.completionTime==null) {           
+                && this.completionTime == null) {
             this.completionTime = new Date();
         }
     }
@@ -262,8 +260,6 @@ public class ExecutionStatus implements Serializable {
     /**
      * The original request. This field is available only while the request is being processed, on
      * the node that's processing it. For all other nodes, a copy of the request is stored on disk
-     * 
-     *
      */
     public ExecuteType getRequest() {
         return request;
@@ -306,7 +302,7 @@ public class ExecutionStatus implements Serializable {
 
     /**
      * Sets the last updated time. Only the {@link ProcessStatusTracker} should call this method
-     * 
+     *
      * @param lastUpdated
      */
     public void setLastUpdated(Date lastUpdated) {

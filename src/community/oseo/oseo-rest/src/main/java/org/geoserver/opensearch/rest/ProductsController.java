@@ -85,7 +85,7 @@ public class ProductsController extends AbstractOpenSearchController {
     enum ProductPart implements ZipPart {
         Product("product.json"), Description("description.html"), Metadata(
                 "metadata.xml"), Thumbnail("thumbnail\\.(png|jpeg|jpg)"), OwsLinks(
-                        "owsLinks.json"), Granules("granules.json");
+                "owsLinks.json"), Granules("granules.json");
 
         Pattern pattern;
 
@@ -110,19 +110,19 @@ public class ProductsController extends AbstractOpenSearchController {
         super(accessProvider, jsonConverter);
     }
 
-    @GetMapping(produces = { MediaType.APPLICATION_JSON_VALUE })
+    @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public ProductReferences getProducts(HttpServletRequest request,
-            @PathVariable(name = "collection", required = true) String collection,
-            @RequestParam(name = "offset", required = false) Integer offset,
-            @RequestParam(name = "limit", required = false) Integer limit) throws IOException {
+                                         @PathVariable(name = "collection", required = true) String collection,
+                                         @RequestParam(name = "offset", required = false) Integer offset,
+                                         @RequestParam(name = "limit", required = false) Integer limit) throws IOException {
         // query products for their identifiers
         Query query = new Query();
         PropertyIsEqualTo parentIdFilter = FF.equal(FF.property(PARENT_ID), FF.literal(collection),
                 true);
         query.setFilter(parentIdFilter);
         setupQueryPaging(query, offset, limit);
-        query.setSortBy(new SortBy[] { FF.sort(PRODUCT_ID.getLocalPart(), SortOrder.ASCENDING) });
+        query.setSortBy(new SortBy[]{FF.sort(PRODUCT_ID.getLocalPart(), SortOrder.ASCENDING)});
         query.setProperties(Collections.singletonList(FF.property(PRODUCT_ID)));
         OpenSearchAccess access = accessProvider.getOpenSearchAccess();
         FeatureSource<FeatureType, Feature> fs = access.getProductSource();
@@ -182,8 +182,9 @@ public class ProductsController extends AbstractOpenSearchController {
         SimpleFeature jsonFeature = parseGeoJSONFeature("product.json", productPayload);
         String productId = (String) jsonFeature.getAttribute("eop:identifier");
         String parentId = (String) jsonFeature.getAttribute("eop:parentIdentifier");
-        queryCollection(parentId, q -> {});
-        
+        queryCollection(parentId, q -> {
+        });
+
         Feature productFeature = simpleToComplex(jsonFeature, getProductSchema(), PRODUCT_HREFS);
 
         // grab the other parts
@@ -200,7 +201,7 @@ public class ProductsController extends AbstractOpenSearchController {
         }
         byte[] rawGranules = parts.get(ProductPart.Granules);
         SimpleFeatureCollection granulesCollection;
-        if(rawGranules != null) {
+        if (rawGranules != null) {
             granulesCollection = parseGeoJSONFeatureCollection("granules.json", rawGranules);
         } else {
             granulesCollection = null;
@@ -229,12 +230,12 @@ public class ProductsController extends AbstractOpenSearchController {
                 fs.modifyFeatures(OpenSearchAccess.OGC_LINKS_PROPERTY_NAME, linksCollection,
                         filter);
             }
-            
-            if(thumbnail != null) {
+
+            if (thumbnail != null) {
                 fs.modifyFeatures(OpenSearchAccess.QUICKLOOK_PROPERTY_NAME, thumbnail, filter);
             }
-            
-            if(granulesCollection != null) {
+
+            if (granulesCollection != null) {
                 fs.modifyFeatures(new NameImpl(nsURI, OpenSearchAccess.GRANULES), granulesCollection, filter);
             }
 
@@ -245,7 +246,7 @@ public class ProductsController extends AbstractOpenSearchController {
     }
 
     private ResponseEntity<String> returnCreatedProductReference(String collection,
-            HttpServletRequest request, String productId) throws URISyntaxException {
+                                                                 HttpServletRequest request, String productId) throws URISyntaxException {
         String baseURL = ResponseUtils.baseURL(request);
         String newCollectionLocation = ResponseUtils.buildURL(baseURL,
                 "/rest/oseo/collections/" + collection + "/products/" + productId, null,
@@ -258,11 +259,11 @@ public class ProductsController extends AbstractOpenSearchController {
     /*
      * Note, the .+ regular expression allows the product id to contain dots instead of having them interpreted as format extension
      */
-    @GetMapping(path = "{product:.+}", produces = { MediaType.APPLICATION_JSON_VALUE })
+    @GetMapping(path = "{product:.+}", produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public SimpleFeature getProduct(HttpServletRequest request,
-            @PathVariable(name = "collection", required = true) String collection,
-            @PathVariable(name = "product", required = true) String product) throws IOException {
+                                    @PathVariable(name = "collection", required = true) String collection,
+                                    @PathVariable(name = "product", required = true) String product) throws IOException {
         Feature feature = queryProduct(collection, product, q -> {
         });
 
@@ -298,9 +299,9 @@ public class ProductsController extends AbstractOpenSearchController {
 
     @PutMapping(path = "{product:.+}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public void putProductJson(HttpServletRequest request,
-            @PathVariable(name = "collection", required = true) String collection,
-            @PathVariable(name = "product", required = true) String product,
-            @RequestBody(required = true) SimpleFeature feature)
+                               @PathVariable(name = "collection", required = true) String collection,
+                               @PathVariable(name = "product", required = true) String product,
+                               @RequestBody(required = true) SimpleFeature feature)
             throws IOException, URISyntaxException {
         // check the product exists
         queryProduct(collection, product, q -> {
@@ -330,7 +331,7 @@ public class ProductsController extends AbstractOpenSearchController {
 
     @DeleteMapping(path = "{product:.+}")
     public void deleteProduct(@PathVariable(required = true, name = "collection") String collection,
-            @PathVariable(name = "product", required = true) String product) throws IOException {
+                              @PathVariable(name = "product", required = true) String product) throws IOException {
         // check the product exists
         queryProduct(collection, product, q -> {
         });
@@ -343,11 +344,11 @@ public class ProductsController extends AbstractOpenSearchController {
     /*
      * Note, the .+ regular expression allows the product id to contain dots instead of having them interpreted as format extension
      */
-    @GetMapping(path = "{product:.+}/ogcLinks", produces = { MediaType.APPLICATION_JSON_VALUE })
+    @GetMapping(path = "{product:.+}/ogcLinks", produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public OgcLinks getProductOgcLinks(HttpServletRequest request,
-            @PathVariable(name = "collection", required = true) String collection,
-            @PathVariable(name = "product", required = true) String product) throws IOException {
+                                       @PathVariable(name = "collection", required = true) String collection,
+                                       @PathVariable(name = "product", required = true) String product) throws IOException {
         // query one collection and grab its OGC links
         Feature feature = queryProduct(collection, product, q -> {
             q.setProperties(Collections
@@ -360,9 +361,9 @@ public class ProductsController extends AbstractOpenSearchController {
 
     @PutMapping(path = "{product:.+}/ogcLinks", consumes = MediaType.APPLICATION_JSON_VALUE)
     public void putProductLinks(HttpServletRequest request,
-            @PathVariable(name = "collection", required = true) String collection,
-            @PathVariable(name = "product", required = true) String product,
-            @RequestBody OgcLinks links) throws IOException {
+                                @PathVariable(name = "collection", required = true) String collection,
+                                @PathVariable(name = "product", required = true) String product,
+                                @RequestBody OgcLinks links) throws IOException {
         // check the product exists
         queryProduct(collection, product, q -> {
         });
@@ -391,7 +392,7 @@ public class ProductsController extends AbstractOpenSearchController {
     /*
      * Note, the .+ regular expression allows the product id to contain dots instead of having them interpreted as format extension
      */
-    @GetMapping(path = "{product:.+}/metadata", produces = { MediaType.APPLICATION_JSON_VALUE })
+    @GetMapping(path = "{product:.+}/metadata", produces = {MediaType.APPLICATION_JSON_VALUE})
     public void getProductMetadata(
             @PathVariable(name = "collection", required = true) String collection,
             @PathVariable(name = "product", required = true) String product,
@@ -454,14 +455,14 @@ public class ProductsController extends AbstractOpenSearchController {
     /*
      * Note, the .+ regular expression allows the product id to contain dots instead of having them interpreted as format extension
      */
-    @GetMapping(path = "{product:.+}/description", produces = { MediaType.TEXT_HTML_VALUE })
+    @GetMapping(path = "{product:.+}/description", produces = {MediaType.TEXT_HTML_VALUE})
     public void getProductDescription(
             @PathVariable(name = "collection", required = true) String collection,
             @PathVariable(name = "product", required = true) String product,
             HttpServletResponse response) throws IOException {
         // query one collection and grab its OGC links
         Feature feature = queryProduct(collection, product, q -> {
-            q.setPropertyNames(new String[] { "htmlDescription" });
+            q.setPropertyNames(new String[]{"htmlDescription"});
         });
 
         // grab the description
@@ -517,7 +518,7 @@ public class ProductsController extends AbstractOpenSearchController {
     /*
      * Note, the .+ regular expression allows the product id to contain dots instead of having them interpreted as format extension
      */
-    @GetMapping(path = "{product:.+}/thumbnail", produces = { MediaType.ALL_VALUE })
+    @GetMapping(path = "{product:.+}/thumbnail", produces = {MediaType.ALL_VALUE})
     public void getProductThumbnail(
             @PathVariable(name = "collection", required = true) String collection,
             @PathVariable(name = "product", required = true) String product,
@@ -539,8 +540,8 @@ public class ProductsController extends AbstractOpenSearchController {
         }
     }
 
-    @PutMapping(path = "{product:.+}/thumbnail", consumes = { MediaType.IMAGE_JPEG_VALUE,
-            MediaType.IMAGE_PNG_VALUE })
+    @PutMapping(path = "{product:.+}/thumbnail", consumes = {MediaType.IMAGE_JPEG_VALUE,
+            MediaType.IMAGE_PNG_VALUE})
     public void putProductThumbnail(
             @PathVariable(name = "collection", required = true) String collection,
             @PathVariable(name = "product", required = true) String product,
@@ -565,7 +566,7 @@ public class ProductsController extends AbstractOpenSearchController {
         updateThumbnail(collection, product, null);
     }
 
-    @GetMapping(path = "{product:.+}/granules", produces = { MediaType.APPLICATION_JSON_VALUE })
+    @GetMapping(path = "{product:.+}/granules", produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public SimpleFeatureCollection getProductGranules(
             @PathVariable(name = "collection", required = true) String collection,
@@ -574,7 +575,7 @@ public class ProductsController extends AbstractOpenSearchController {
         return granules.getFeatures();
     }
 
-    @PutMapping(path = "{product:.+}/granules", produces = { MediaType.APPLICATION_JSON_VALUE })
+    @PutMapping(path = "{product:.+}/granules", produces = {MediaType.APPLICATION_JSON_VALUE})
     public void putProductGranules(
             @PathVariable(name = "collection", required = true) String collection,
             @PathVariable(name = "product", required = true) String product,

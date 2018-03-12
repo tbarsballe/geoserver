@@ -14,11 +14,9 @@ import org.geoserver.web.wicket.GeoServerDataProvider;
 import org.geowebcache.config.BlobStoreInfo;
 
 /**
- * 
  * Provider for Table of Blobstores.
- * 
- * @author Niels Charlier
  *
+ * @author Niels Charlier
  */
 public class BlobStoresProvider extends GeoServerDataProvider<BlobStoreInfo> {
 

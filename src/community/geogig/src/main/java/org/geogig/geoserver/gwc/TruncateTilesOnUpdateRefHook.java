@@ -87,7 +87,7 @@ public class TruncateTilesOnUpdateRefHook implements CommandHook {
         //ignore if still inside a transaction or updating a known symref
         boolean ignore = command.context() instanceof GeogigTransaction;
         ignore |= (Ref.WORK_HEAD.equals(refName) || Ref.STAGE_HEAD.equals(refName));
-        
+
         if (ignore) {
             command.getClientData().put("ignore", Boolean.TRUE);
             // ignore updates to work/stage heads, we only care of updates to branches
@@ -104,7 +104,7 @@ public class TruncateTilesOnUpdateRefHook implements CommandHook {
     @SuppressWarnings("unchecked")
     @Override
     public <T> T post(AbstractGeoGigOp<T> command, @Nullable Object retVal,
-            @Nullable RuntimeException exception) throws Exception {
+                      @Nullable RuntimeException exception) throws Exception {
         checkArgument(command instanceof UpdateRef);
         final UpdateRef cmd = (UpdateRef) command;
         final String refName = (String) cmd.getClientData().get("name");
@@ -154,7 +154,7 @@ public class TruncateTilesOnUpdateRefHook implements CommandHook {
     }
 
     private void truncate(GWC mediator, Context geogigContext, LayerInfo layer,
-            Optional<Ref> oldValue, Optional<Ref> newValue) {
+                          Optional<Ref> oldValue, Optional<Ref> newValue) {
 
         GeoServerTileLayer tileLayer = mediator.getTileLayer(layer);
         if (tileLayer == null) {
@@ -191,8 +191,7 @@ public class TruncateTilesOnUpdateRefHook implements CommandHook {
                 if (affectedLayers.containsKey(store)) {
                     affectedLayers.put(store, layerInfo);
                 } else {
-                    @Nullable
-                    final String dataStoreHead = findDataStoreHeadRefName(store, context);
+                    @Nullable final String dataStoreHead = findDataStoreHeadRefName(store, context);
                     if (newRefName.equals(dataStoreHead)) {
                         affectedLayers.put(store, layerInfo);
                     }

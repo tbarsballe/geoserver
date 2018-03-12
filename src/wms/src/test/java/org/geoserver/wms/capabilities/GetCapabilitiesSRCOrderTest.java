@@ -38,10 +38,14 @@ import org.w3c.dom.Element;
  */
 public class GetCapabilitiesSRCOrderTest extends WMSTestSupport {
 
-    /** The xpath. */
+    /**
+     * The xpath.
+     */
     private final XpathEngine xpath;
 
-    /** The Constant BASE_URL. */
+    /**
+     * The Constant BASE_URL.
+     */
     private static final String BASE_URL = "http://localhost/geoserver";
 
     /**
@@ -61,21 +65,21 @@ public class GetCapabilitiesSRCOrderTest extends WMSTestSupport {
      * @throws Exception the exception
      */
     @Test
-    public void testRootLayer()throws Exception{
+    public void testRootLayer() throws Exception {
 
         Document dom = findCapabilities(false);
 
         // print(dom);
         checkWms13ValidationErrors(dom);
-        
+
         DOMSource domSource = new DOMSource(dom);
         StringWriter writer = new StringWriter();
         StreamResult result = new StreamResult(writer);
         TransformerFactory tf = TransformerFactory.newInstance();
         Transformer transformer = tf.newTransformer();
         transformer.transform(domSource, result);
-        
-        assertEquals(writer.toString().indexOf("22222") < writer.toString().indexOf("11111") , true);
+
+        assertEquals(writer.toString().indexOf("22222") < writer.toString().indexOf("11111"), true);
     }
 
 
@@ -86,17 +90,17 @@ public class GetCapabilitiesSRCOrderTest extends WMSTestSupport {
      * @return the document
      * @throws Exception the exception
      */
-    private Document findCapabilities(Boolean scaleHintUnitsPerDiaPixel) throws Exception{
+    private Document findCapabilities(Boolean scaleHintUnitsPerDiaPixel) throws Exception {
         //set the Scalehint units per diagonal pixel setting.
         WMS wms = getWMS();
-        WMSInfo info=wms.getServiceInfo();
-        info.getSRS().add("22222"); 
-        info.getSRS().add("11111"); 
-        MetadataMap mm= info.getMetadata();
+        WMSInfo info = wms.getServiceInfo();
+        info.getSRS().add("22222");
+        info.getSRS().add("11111");
+        MetadataMap mm = info.getMetadata();
         mm.put(WMS.SCALEHINT_MAPUNITS_PIXEL, scaleHintUnitsPerDiaPixel);
         info.getGeoServer().save(info);
-        
-        Capabilities_1_3_0_Transformer tr = new Capabilities_1_3_0_Transformer(wms, BASE_URL, 
+
+        Capabilities_1_3_0_Transformer tr = new Capabilities_1_3_0_Transformer(wms, BASE_URL,
                 wms.getAllowedMapFormats(), new HashSet<ExtendedCapabilitiesProvider>());
         GetCapabilitiesRequest req = new GetCapabilitiesRequest();
         req.setBaseUrl(BASE_URL);
@@ -110,4 +114,4 @@ public class GetCapabilitiesSRCOrderTest extends WMSTestSupport {
         return dom;
     }
 
- }
+}

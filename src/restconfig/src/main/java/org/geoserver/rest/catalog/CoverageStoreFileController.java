@@ -64,6 +64,7 @@ public class CoverageStoreFileController extends AbstractStoreUploadController {
      * Keys every known coverage format by lowercase name
      */
     protected static final HashMap<String, String> FORMAT_LOOKUP = new HashMap<>();
+
     static {
         for (Format format : CoverageStoreUtils.formats) {
             FORMAT_LOOKUP.put(format.getName().toLowerCase(), format.getName());
@@ -116,7 +117,7 @@ public class CoverageStoreFileController extends AbstractStoreUploadController {
         sr.harvest(null, uploadedFiles, GeoTools.getDefaultHints());
     }
 
-    @PutMapping(produces = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE })
+    @PutMapping(produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
     @ResponseStatus(code = HttpStatus.CREATED)
     public RestWrapper<CoverageStoreInfo> coverageStorePut(
             @PathVariable String workspaceName,
@@ -297,8 +298,8 @@ public class CoverageStoreFileController extends AbstractStoreUploadController {
     }
 
     private void configureCoverageInfo(CatalogBuilder builder, CoverageStoreInfo storeInfo,
-            boolean add, String nativeName, String coverageName, GridCoverage2DReader reader,
-            final Map customParameters) throws Exception {
+                                       boolean add, String nativeName, String coverageName, GridCoverage2DReader reader,
+                                       final Map customParameters) throws Exception {
         CoverageInfo cinfo = builder.buildCoverage(reader, customParameters);
 
         if (coverageName != null) {
@@ -397,14 +398,14 @@ public class CoverageStoreFileController extends AbstractStoreUploadController {
 
     /**
      * Does the file upload based on the specified method.
-     * 
-     * @param method The method, one of 'file.' (inline), 'url.' (via url), or 'external.' (already on server)
+     *
+     * @param method    The method, one of 'file.' (inline), 'url.' (via url), or 'external.' (already on server)
      * @param storeName The name of the store being added
-     * @param format The store format.
+     * @param format    The store format.
      * @throws IOException
      */
     protected List<Resource> doFileUpload(UploadMethod method, String workspaceName,
-            String storeName, String filename, String format, HttpServletRequest request) throws IOException {
+                                          String storeName, String filename, String format, HttpServletRequest request) throws IOException {
         Resource directory = null;
 
         boolean postRequest = request != null

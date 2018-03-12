@@ -17,18 +17,18 @@ public class ConfirmRemovalServicePanel extends AbstractConfirmRemovalPanel<Serv
 
     private static final long serialVersionUID = 1L;
 
-    
+
     public ConfirmRemovalServicePanel(String id, List<ServiceAccessRule> roots) {
-        super(id, roots);        
+        super(id, roots);
     }
-    
+
     public ConfirmRemovalServicePanel(String id, ServiceAccessRule... roots) {
         this(id, Arrays.asList(roots));
     }
 
     @Override
-    protected String getConfirmationMessage(ServiceAccessRule object) throws Exception{
-        return  OwsUtils.property(object, "service", String.class) + "."
+    protected String getConfirmationMessage(ServiceAccessRule object) throws Exception {
+        return OwsUtils.property(object, "service", String.class) + "."
                 + OwsUtils.property(object, "method", String.class) + "="
                 + OwsUtils.property(object, "roles", Set.class);
     }

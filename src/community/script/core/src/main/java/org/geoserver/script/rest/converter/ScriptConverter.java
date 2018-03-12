@@ -1,4 +1,5 @@
-/** (c) 2014 Open Source Geospatial Foundation - all rights reserved
+/**
+ * (c) 2014 Open Source Geospatial Foundation - all rights reserved
  * (c) 2001 - 2013 OpenPlans
  * This code is licensed under the GPL 2.0 license, available at the root
  * application directory.
@@ -147,7 +148,7 @@ public abstract class ScriptConverter extends XStreamCatalogListConverter {
         final RequestInfo pg = RequestInfo.get();
 
         // encode as relative or absolute depending on the link type
-        if ( link.startsWith( "/") ) {
+        if (link.startsWith("/")) {
             // absolute, encode from "root"
             return pg.servletURI(link);
         } else {
@@ -163,7 +164,7 @@ public abstract class ScriptConverter extends XStreamCatalogListConverter {
      * @param writer
      */
     protected static void encodeAlternateAtomLinkNoExt(String link, HierarchicalStreamWriter writer) {
-        writer.startNode( "atom:link");
+        writer.startNode("atom:link");
         writer.addAttribute("xmlns:atom", "http://www.w3.org/2005/Atom");
         writer.addAttribute("rel", "alternate");
         writer.addAttribute("href", hrefNoExt(link));

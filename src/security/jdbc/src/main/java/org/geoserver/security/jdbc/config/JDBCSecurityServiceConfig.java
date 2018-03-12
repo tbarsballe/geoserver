@@ -9,7 +9,7 @@ import org.geoserver.security.config.BaseSecurityNamedServiceConfig;
 import org.geoserver.security.config.SecurityNamedServiceConfig;
 
 /**
- * Extension of {@link SecurityNamedServiceConfig} in which the underlying config is stored in 
+ * Extension of {@link SecurityNamedServiceConfig} in which the underlying config is stored in
  * a database accessible via JDBC.
  *
  * @author christian
@@ -44,7 +44,7 @@ public abstract class JDBCSecurityServiceConfig extends BaseSecurityNamedService
     }
 
     /**
-     * Flag controlling whether to connect through JNDI or through creation of a direct connection. 
+     * Flag controlling whether to connect through JNDI or through creation of a direct connection.
      * <p>
      * If set {@link #getJndiName()} is used to obtain the connection.
      * </p>
@@ -54,7 +54,7 @@ public abstract class JDBCSecurityServiceConfig extends BaseSecurityNamedService
     }
 
     /**
-     * Set flag controlling whether to connect through JNDI or through creation of a direct 
+     * Set flag controlling whether to connect through JNDI or through creation of a direct
      * connection.
      */
     public void setJndi(boolean jndi) {
@@ -88,7 +88,7 @@ public abstract class JDBCSecurityServiceConfig extends BaseSecurityNamedService
     /**
      * Sets file name of property file containing DDL statements.
      */
-    public void setPropertyFileNameDDL (String propertyFileNameDDL) {
+    public void setPropertyFileNameDDL(String propertyFileNameDDL) {
         this.propertyFileNameDDL = propertyFileNameDDL;
     }
 
@@ -102,7 +102,7 @@ public abstract class JDBCSecurityServiceConfig extends BaseSecurityNamedService
     /**
      * Sets file name of property file containing DML statements.
      */
-    public void setPropertyFileNameDML (String propertyFileNameDML) {
+    public void setPropertyFileNameDML(String propertyFileNameDML) {
         this.propertyFileNameDML = propertyFileNameDML;
     }
 
@@ -118,14 +118,13 @@ public abstract class JDBCSecurityServiceConfig extends BaseSecurityNamedService
 
     /**
      * Sets the JDBC driver class name.
-     * 
      */
     public void setDriverClassName(String driverClassName) {
         this.driverClassName = driverClassName;
     }
 
     /**
-     * The JDBC url with which to obtain a database connection with.  
+     * The JDBC url with which to obtain a database connection with.
      * <p>
      * Used only if {@link #isJndi()} is false.
      * </p>
@@ -178,17 +177,15 @@ public abstract class JDBCSecurityServiceConfig extends BaseSecurityNamedService
 
     /**
      * Indicates if the tables are created behind the scenes
-     * 
-     *
      */
     public boolean isCreatingTables() {
         return creatingTables;
     }
 
-    
+
     /**
      * set table creation flag
-     * 
+     *
      * @param creatingTables
      */
     public void setCreatingTables(boolean creatingTables) {
@@ -196,14 +193,14 @@ public abstract class JDBCSecurityServiceConfig extends BaseSecurityNamedService
     }
 
     /**
-     * Helper method to determine if the backing database is mysql. 
+     * Helper method to determine if the backing database is mysql.
      */
     protected boolean isMySQL() {
         return "com.mysql.jdbc.Driver".equals(driverClassName);
     }
 
     /**
-     * Initializes the DDL and DML property files based on the database type. 
+     * Initializes the DDL and DML property files based on the database type.
      */
     public void initBeforeSave() {
         if (propertyFileNameDDL == null) {

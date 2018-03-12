@@ -73,7 +73,7 @@ public class LayerCacheOptionsTabPanelTest extends GeoServerWicketTestSupport {
     public void testPageLoadForGeometrylessLayer() {
         LayerInfo geometryless = getCatalog().getLayerByName(
                 super.getLayerId(MockData.GEOMETRYLESS));
-        
+
         assertFalse(CatalogConfiguration.isLayerExposable(geometryless));
         assertNull(GWC.get().getTileLayer(geometryless));
 
@@ -184,25 +184,25 @@ public class LayerCacheOptionsTabPanelTest extends GeoServerWicketTestSupport {
         }));
 
         tester.assertComponent("form:panel", LayerCacheOptionsTabPanel.class);
-        
+
         tester.isVisible("form:panel:tileLayerEditor:container:configs");
-        
+
         // Avoid saving the Layer
         FormTester formTester = tester.newFormTester("form");
         formTester.setValue("panel:tileLayerEditor:createTileLayer", false);
 
         tester.executeAjaxEvent("form:panel:tileLayerEditor:createTileLayer", "change");
-        
+
 
         tester.isInvisible("form:panel:tileLayerEditor:container:configs");
-        
+
         LayerCacheOptionsTabPanel panel = (LayerCacheOptionsTabPanel) tester
                 .getComponentFromLastRenderedPage("form:panel");
-        
+
         formTester.getForm().onFormSubmitted(); // This is an utter hack but is the only way I could
-                                                // figure out to exercise the validators the same 
-                                                // way that happens in a live GeoServer
-        
+        // figure out to exercise the validators the same
+        // way that happens in a live GeoServer
+
         panel.save();
 
         // Ensure the GeoServerTileLayerInfoModel is updated
@@ -277,7 +277,7 @@ public class LayerCacheOptionsTabPanelTest extends GeoServerWicketTestSupport {
         // Ensure that the Component is rendered again
         tester.assertComponent("form:panel:tileLayerEditor", GeoServerTileLayerEditor.class);
         // Ensure that an Error message has been thrown
-        tester.assertErrorMessages((Serializable[]) new String[] { "Filter should not be empty" });
+        tester.assertErrorMessages((Serializable[]) new String[]{"Filter should not be empty"});
         // Create new form tester for the final submit
         FormTester form = tester.newFormTester("form");
         // Save the changes

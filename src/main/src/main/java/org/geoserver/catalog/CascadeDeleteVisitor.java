@@ -20,38 +20,38 @@ import org.opengis.filter.MultiValuedFilter.MatchAction;
  * so that they are still consistent.
  * In particular:
  * <ul>
- *   <li>When removing a {@link LayerInfo} the {@link LayerGroupInfo} are modified 
- *       by removing the layer. If the layer was the last one, the layer group
- *       is removed as well.
- *   </li>
- *   <li>When a {@link StyleInfo} is removed the layers using it as the default
- *       style are set with the default style, the layers that use is as an extra
- *       style are modified by removing it. Also, the layer groups using it 
- *       are changed so that the default layer style is used in place of the
- *       one being removed
- *   </li>
+ * <li>When removing a {@link LayerInfo} the {@link LayerGroupInfo} are modified
+ * by removing the layer. If the layer was the last one, the layer group
+ * is removed as well.
+ * </li>
+ * <li>When a {@link StyleInfo} is removed the layers using it as the default
+ * style are set with the default style, the layers that use is as an extra
+ * style are modified by removing it. Also, the layer groups using it
+ * are changed so that the default layer style is used in place of the
+ * one being removed
+ * </li>
  */
 public class CascadeDeleteVisitor implements CatalogVisitor {
     static final Logger LOGGER = Logging.getLogger(CascadeDeleteVisitor.class);
-    
+
     Catalog catalog;
-    
+
     public CascadeDeleteVisitor(Catalog catalog) {
         this.catalog = catalog;
     }
-    
+
     public void visit(Catalog catalog) {
     }
 
     public void visit(WorkspaceInfo workspace) {
         // remove owned stores
-        for ( StoreInfo s : catalog.getStoresByWorkspace( workspace, StoreInfo.class ) ) {
+        for (StoreInfo s : catalog.getStoresByWorkspace(workspace, StoreInfo.class)) {
             s.accept(this);
         }
 
         // remove any linked namespaces
-        NamespaceInfo ns = catalog.getNamespaceByPrefix( workspace.getName() );
-        if ( ns != null ) {
+        NamespaceInfo ns = catalog.getNamespaceByPrefix(workspace.getName());
+        if (ns != null) {
             ns.accept(this);
         }
 
@@ -71,18 +71,17 @@ public class CascadeDeleteVisitor implements CatalogVisitor {
     public void visit(NamespaceInfo workspace) {
         catalog.remove(workspace);
     }
-    
+
     void visitStore(StoreInfo store) {
         // drill down into layers (into resources since we cannot scan layers)
         List<ResourceInfo> resources = catalog.getResourcesByStore(store, ResourceInfo.class);
         for (ResourceInfo ri : resources) {
             List<LayerInfo> layers = catalog.getLayers(ri);
-            if (!layers.isEmpty()){ 
+            if (!layers.isEmpty()) {
                 for (LayerInfo li : layers) {
                     li.accept(this);
                 }
-            }
-            else {
+            } else {
                 // no layers for the resource, delete directly
                 ri.accept(this);
             }
@@ -98,7 +97,7 @@ public class CascadeDeleteVisitor implements CatalogVisitor {
     public void visit(CoverageStoreInfo coverageStore) {
         visitStore(coverageStore);
     }
-    
+
     public void visit(WMSStoreInfo wmsStore) {
         visitStore(wmsStore);
     }
@@ -136,16 +135,16 @@ public class CascadeDeleteVisitor implements CatalogVisitor {
                     group.getStyles().remove(index);
                     index = group.getLayers().indexOf(layer);
                 }
-                
+
                 // either update or remove the group
-                if(group.getLayers().size() == 0) {
+                if (group.getLayers().size() == 0) {
                     visit(catalog.getLayerGroup(group.getId()));
                 } else {
                     catalog.save(group);
                 }
             }
         }
-        
+
 
         // remove the layer and (for the moment) its resource as well
         // TODO: change this to just remove the resource once the 
@@ -162,25 +161,25 @@ public class CascadeDeleteVisitor implements CatalogVisitor {
         } catch (IOException e) {
             // we fall back on the default style (since we cannot roll back the
             // entire operation, no transactions in the catalog)
-            LOGGER.log(Level.WARNING, "Could not find default style for resource " 
+            LOGGER.log(Level.WARNING, "Could not find default style for resource "
                     + resource + ", using Point style", e);
-        }        
-        
+        }
+
         if (style == null || style.equals(removedStyle)) {
             return catalog.getStyleByName(StyleInfo.DEFAULT_POINT);
         }
-        
+
         return style;
     }
-    
+
     private void removeStyleInLayer(LayerInfo layer, StyleInfo style) {
         boolean dirty = false;
-        
+
         // remove it from the associated styles
         if (layer.getStyles().remove(style)) {
             dirty = true;
         }
-        
+
         // if it's the default style, choose an associated style or reset it to the default one
         StyleInfo ds = layer.getDefaultStyle();
         if (ds != null && ds.equals(style)) {
@@ -193,16 +192,16 @@ public class CascadeDeleteVisitor implements CatalogVisitor {
             } else {
                 newDefaultStyle = getResourceDefaultStyle(layer.getResource(), style);
             }
-            
+
             layer.setDefaultStyle(newDefaultStyle);
         }
-        
-        
+
+
         if (dirty) {
             catalog.save(layer);
-        }        
+        }
     }
-    
+
     private void removeStyleInLayerGroup(LayerGroupInfo group, StyleInfo style) {
         boolean dirty = false;
 
@@ -211,7 +210,7 @@ public class CascadeDeleteVisitor implements CatalogVisitor {
             group.setRootLayerStyle(getResourceDefaultStyle(group.getRootLayer().getResource(), style));
             dirty = true;
         }
-        
+
         // layer styles
         List<StyleInfo> styles = group.getStyles();
         for (int i = 0; i < styles.size(); i++) {
@@ -219,23 +218,23 @@ public class CascadeDeleteVisitor implements CatalogVisitor {
             if (publishedStyle != null && publishedStyle.equals(style)) {
                 // if publishedStyle is not null, we have a layer
                 LayerInfo layer = (LayerInfo) group.getLayers().get(i);
-                
+
                 if (!layer.getDefaultStyle().equals(style)) {
                     // use default style
                     styles.set(i, layer.getDefaultStyle());
                 } else {
                     styles.set(i, getResourceDefaultStyle(layer.getResource(), style));
                 }
-                
+
                 dirty = true;
             }
         }
-        
+
         if (dirty) {
-            catalog.save(group);        
+            catalog.save(group);
         }
     }
-    
+
     public void visit(StyleInfo style) {
         // find the layers having this style as primary or secondary
         Filter anyStyle = Predicates.equal("styles.id", style.getId(), MatchAction.ANY);
@@ -258,7 +257,7 @@ public class CascadeDeleteVisitor implements CatalogVisitor {
                 removeStyleInLayerGroup(group, style);
             }
         }
-        
+
         // finally remove the style
         catalog.remove(style);
     }
@@ -286,7 +285,7 @@ public class CascadeDeleteVisitor implements CatalogVisitor {
                 }
             }
         }
-        
+
         // finally remove the group
         catalog.remove(layerGroupToRemove);
     }
@@ -295,7 +294,7 @@ public class CascadeDeleteVisitor implements CatalogVisitor {
      * Between modification proxies and security buffering the list of layers of a group it's just
      * safer and more predictable to use a id comparison instead of a equals that accounts for
      * each and every field
-     *  
+     *
      * @param layerGroup
      * @param container
      * @return
@@ -304,24 +303,24 @@ public class CascadeDeleteVisitor implements CatalogVisitor {
         int idx = 0;
         final String id = layerGroup.getId();
         for (PublishedInfo pi : container.getLayers()) {
-            if(pi instanceof LayerGroupInfo && id.equals(pi.getId())) {
-                return idx; 
+            if (pi instanceof LayerGroupInfo && id.equals(pi.getId())) {
+                return idx;
             }
             idx++;
         }
-        
+
         return -1;
     }
 
     public void visit(WMSLayerInfo wmsLayer) {
         catalog.remove(wmsLayer);
-        
+
     }
 
     @Override
     public void visit(WMTSLayerInfo wmtsLayer) {
         catalog.remove(wmtsLayer);
-        
+
     }
 
 }

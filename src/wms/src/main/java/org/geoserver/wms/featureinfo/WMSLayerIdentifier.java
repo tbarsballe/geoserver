@@ -38,11 +38,11 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 /**
  * Layer identifier specialized in WMS cascading layers
- * 
- * @author Andrea Aime - GeoSolutions 
+ *
+ * @author Andrea Aime - GeoSolutions
  */
 public class WMSLayerIdentifier implements LayerIdentifier {
-    
+
     static final Logger LOGGER = Logging.getLogger(WMSLayerIdentifier.class);
 
     private EntityResolverProvider resolverProvider;
@@ -108,15 +108,15 @@ public class WMSLayerIdentifier implements LayerIdentifier {
 
                 // retyping feature collections to replace name and namespace
                 // from cascading server with our local WMSLayerInfo
-                for (SimpleFeatureCollection fc : rawResults) {                    
+                for (SimpleFeatureCollection fc : rawResults) {
                     SimpleFeatureType ft = fc.getSchema();
-                                    
-                    SimpleFeatureTypeBuilder builder = new SimpleFeatureTypeBuilder();                    
-                    builder.init(ft);                                                                       
-                    
+
+                    SimpleFeatureTypeBuilder builder = new SimpleFeatureTypeBuilder();
+                    builder.init(ft);
+
                     builder.setName(info.getName());
                     builder.setNamespaceURI(info.getNamespace().getURI());
-                   
+
                     SimpleFeatureType targetFeatureType = builder.buildFeatureType();
                     FeatureCollection rfc = new ReTypingFeatureCollection(fc, targetFeatureType);
 

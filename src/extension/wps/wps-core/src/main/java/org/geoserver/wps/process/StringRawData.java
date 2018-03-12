@@ -12,9 +12,8 @@ import org.apache.commons.io.IOUtils;
 
 /**
  * Raw data backed by a simple java {@link String}
- * 
- * @author Andrea Aime - GeoSolutions
  *
+ * @author Andrea Aime - GeoSolutions
  */
 public class StringRawData extends AbstractRawData {
 

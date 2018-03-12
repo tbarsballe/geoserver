@@ -25,9 +25,8 @@ import org.geoserver.web.wicket.FileExistsValidator;
 
 /**
  * Provides more components for PGRaster store automatic configuration
- * 
+ *
  * @author Daniele Romagnoli, GeoSolutions SAS
- * 
  */
 public final class PGRasterCoverageStoreEditPanel extends StoreEditPanel {
 
@@ -40,7 +39,7 @@ public final class PGRasterCoverageStoreEditPanel extends StoreEditPanel {
         setDefaultModel(model);
         final IModel paramsModel = new PropertyModel(model, "connectionParameters");
 
-     // double container dance to get stuff to show up and hide on demand (grrr)
+        // double container dance to get stuff to show up and hide on demand (grrr)
         final WebMarkupContainer configsContainer = new WebMarkupContainer("configsContainer");
         configsContainer.setOutputMarkupId(true);
         add(configsContainer);
@@ -56,7 +55,7 @@ public final class PGRasterCoverageStoreEditPanel extends StoreEditPanel {
         final FormComponent urlFormComponent = url.getFormComponent();
         urlFormComponent.add(new FileExistsValidator());
         add(url);
-        
+
         // enabled flag, and show the rest only if enabled is true
         IModel<Boolean> enabledModel = new Model<Boolean>(false);
         enabled = new CheckBox("enabled", enabledModel);
@@ -79,10 +78,10 @@ public final class PGRasterCoverageStoreEditPanel extends StoreEditPanel {
             private static final long serialVersionUID = 1L;
 
             public FormComponent[] getDependentFormComponents() {
-                if(enabled.getModelObject()) {
+                if (enabled.getModelObject()) {
                     return advancedConfigPanel.getDependentFormComponents();
                 } else {
-                    return new FormComponent[] {urlFormComponent};
+                    return new FormComponent[]{urlFormComponent};
                 }
             }
 
@@ -91,7 +90,7 @@ public final class PGRasterCoverageStoreEditPanel extends StoreEditPanel {
                 String coverageUrl = urlFormComponent.getValue();
                 if (enabled.getModelObject()) {
                     coverageUrl = advancedConfigPanel.buildURL() + coverageUrl;
-                }  
+                }
 
                 storeInfo.setURL(coverageUrl);
             }

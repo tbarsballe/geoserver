@@ -34,23 +34,23 @@ public class EditRolePageTest extends AbstractSecurityWicketTestSupport {
     }
 
     @Test
-    public void testFill() throws Exception{
+    public void testFill() throws Exception {
         doTestFill();
     }
-    
+
     @Test
-    public void testFill2() throws Exception{
+    public void testFill2() throws Exception {
         doTestFill2();
     }
 
     protected void doTestFill() throws Exception {
-        insertValues();        
-        
+        insertValues();
+
         AbstractSecurityPage returnPage = initializeForRoleServiceNamed(getRoleServiceName());
-        tester.startPage(page=(EditRolePage) new EditRolePage(getRoleServiceName(),
-            gaService.getRoleByName("ROLE_WFS")).setReturnPage(returnPage));
+        tester.startPage(page = (EditRolePage) new EditRolePage(getRoleServiceName(),
+                gaService.getRoleByName("ROLE_WFS")).setReturnPage(returnPage));
         tester.assertRenderedPage(EditRolePage.class);
-        
+
         assertFalse(tester.getComponentFromLastRenderedPage("form:name").isEnabled());
         assertTrue(tester.getComponentFromLastRenderedPage("form:properties").isEnabled());
         assertTrue(tester.getComponentFromLastRenderedPage("form:parent").isEnabled());
@@ -58,23 +58,23 @@ public class EditRolePageTest extends AbstractSecurityWicketTestSupport {
 
         tester.assertModelValue("form:name", "ROLE_WFS");
         tester.assertModelValue("form:parent", "ROLE_AUTHENTICATED");
-        
+
         FormTester form = tester.newFormTester("form");
         form.setValue("parent", null);
         //form.select("parent", index);
-        
-        
+
+
         //tester.executeAjaxEvent("form:properties:add", "click");
         //form = tester.newFormTester("form");
-        
-        
+
+
         //form.setValue("properties:container:list:0:key", "bbox");
         //form.setValue("properties:container:list:0:value", "10 10 20 20");
-                
+
         form.submit("save");
         tester.assertRenderedPage(SecurityNamedServiceEditPage.class);
         tester.assertErrorMessages(new String[0]);
-        
+
         GeoServerRole role = gaService.getRoleByName("ROLE_WFS");
         assertNotNull(role);
         //assertEquals(1,role.getProperties().size());
@@ -82,15 +82,15 @@ public class EditRolePageTest extends AbstractSecurityWicketTestSupport {
         GeoServerRole parentRole = gaService.getParentRole(role);
         assertNull(parentRole);
     }
-    
+
     protected void doTestFill2() throws Exception {
-        insertValues();        
-        
+        insertValues();
+
         AbstractSecurityPage returnPage = initializeForRoleServiceNamed(getRoleServiceName());
-        tester.startPage(page=(EditRolePage) new EditRolePage(getRoleServiceName(),
-            gaService.getRoleByName("ROLE_AUTHENTICATED")).setReturnPage(returnPage));
+        tester.startPage(page = (EditRolePage) new EditRolePage(getRoleServiceName(),
+                gaService.getRoleByName("ROLE_AUTHENTICATED")).setReturnPage(returnPage));
         tester.assertRenderedPage(EditRolePage.class);
-        
+
         tester.assertModelValue("form:name", "ROLE_AUTHENTICATED");
         tester.assertModelValue("form:parent", null);
 
@@ -99,7 +99,7 @@ public class EditRolePageTest extends AbstractSecurityWicketTestSupport {
         tester.assertModelValue("form:properties:container:list:0:value", "lookupAtRuntime");
         tester.assertModelValue("form:properties:container:list:1:key", "employee");
         tester.assertModelValue("form:properties:container:list:1:value", "");
-        
+
         tester.executeAjaxEvent("form:properties:container:list:1:remove", "click");
         FormTester form = tester.newFormTester("form");
         form.submit("save");
@@ -107,19 +107,19 @@ public class EditRolePageTest extends AbstractSecurityWicketTestSupport {
 
         GeoServerRole role = gaService.getRoleByName("ROLE_AUTHENTICATED");
         assertNotNull(role);
-        assertEquals(1,role.getProperties().size());
-        assertEquals("lookupAtRuntime",role.getProperties().get("bbox"));
+        assertEquals(1, role.getProperties().size());
+        assertEquals("lookupAtRuntime", role.getProperties().get("bbox"));
 
     }
-        
+
     @Test
     public void testReadOnlyRoleService() throws Exception {
         //doInitialize();
         activateRORoleService();
-        
+
         AbstractSecurityPage returnPage = initializeForRoleServiceNamed(getRORoleServiceName());
-        tester.startPage(page=(EditRolePage) new EditRolePage(getRORoleServiceName(),
-            GeoServerRole.ADMIN_ROLE).setReturnPage(returnPage));
+        tester.startPage(page = (EditRolePage) new EditRolePage(getRORoleServiceName(),
+                GeoServerRole.ADMIN_ROLE).setReturnPage(returnPage));
         tester.assertRenderedPage(EditRolePage.class);
         assertFalse(tester.getComponentFromLastRenderedPage("form:name").isEnabled());
         assertFalse(tester.getComponentFromLastRenderedPage("form:properties").isEnabled());

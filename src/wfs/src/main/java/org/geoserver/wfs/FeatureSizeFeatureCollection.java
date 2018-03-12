@@ -53,7 +53,7 @@ public class FeatureSizeFeatureCollection extends DecoratingSimpleFeatureCollect
     private Query query;
 
     /**
-     * Defines the maximum number of feature that will be cached in memory to avoid 
+     * Defines the maximum number of feature that will be cached in memory to avoid
      * multiple data reads in case there is no fast {@link FeatureSource#getCount(Query)}
      * implementation for the current query.
      * <p>
@@ -80,7 +80,7 @@ public class FeatureSizeFeatureCollection extends DecoratingSimpleFeatureCollect
     /**
      * Wraps the {@link FeatureCollection} into {@link FeatureSizeFeatureCollection} in case the feature caching
      * is enabled and the the features are simple ones
-     * 
+     *
      * @param features
      * @param source
      * @param gtQuery

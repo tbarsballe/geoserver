@@ -31,25 +31,25 @@ import de.micromata.opengis.kml.v_2_2_0.SimpleField;
 
 /**
  * Adds schema and attributes to the KML output
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class ExtendedDataDecoratorFactory implements KmlDecoratorFactory {
 
     @Override
     public KmlDecorator getDecorator(Class<? extends Feature> featureClass,
-            KmlEncodingContext context) {
+                                     KmlEncodingContext context) {
 
-        if(!context.isExtendedDataEnabled()) {
+        if (!context.isExtendedDataEnabled()) {
             return null;
         }
-        
+
         if (Placemark.class.isAssignableFrom(featureClass)) {
             return new PlacemarkDataDecorator();
-        } else if(Document.class.isAssignableFrom(featureClass)){
+        } else if (Document.class.isAssignableFrom(featureClass)) {
             return new DocumentSchemaDecorator();
         }
-        
+
         return null;
     }
 
@@ -63,7 +63,7 @@ public class ExtendedDataDecoratorFactory implements KmlDecoratorFactory {
             // Document, can't be placed in a Folder unfortunately
             int i = 1;
             for (SimpleFeatureType schema : context.getFeatureTypes()) {
-                if(schema != null) {
+                if (schema != null) {
                     String id = schema.getTypeName() + "_" + i;
                     addSchema(doc, id, schema);
                 }
@@ -150,7 +150,7 @@ public class ExtendedDataDecoratorFactory implements KmlDecoratorFactory {
                 SimpleData sd = schemaData.createAndAddSimpleData(ad.getLocalName());
                 sd.setValue(kmlValue);
             }
-            
+
             return pm;
         }
 

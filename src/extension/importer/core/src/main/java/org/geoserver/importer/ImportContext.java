@@ -29,13 +29,14 @@ import org.geotools.util.logging.Logging;
 
 /**
  * Maintains state about an import.
- * 
- * @author Justin Deoliveira, OpenGeo
  *
+ * @author Justin Deoliveira, OpenGeo
  */
 public class ImportContext implements Serializable {
 
-    /** serialVersionUID */
+    /**
+     * serialVersionUID
+     */
     private static final long serialVersionUID = 8790675013874051197L;
 
     static final Logger LOGGER = Logging.getLogger(ImportContext.class);
@@ -64,10 +65,14 @@ public class ImportContext implements Serializable {
         COMPLETE;
     }
 
-    /** identifier */
+    /**
+     * identifier
+     */
     Long id;
 
-    /** state */
+    /**
+     * state
+     */
     State state = State.PENDING;
 
     /**
@@ -76,7 +81,7 @@ public class ImportContext implements Serializable {
     ImportData data;
 
     /**
-     * target workspace for the import 
+     * target workspace for the import
      */
     WorkspaceInfo targetWorkspace;
 
@@ -85,7 +90,7 @@ public class ImportContext implements Serializable {
      */
     StoreInfo targetStore;
 
-    /** 
+    /**
      * import tasks
      */
     List<ImportTask> tasks = new ArrayList<ImportTask>();
@@ -95,8 +100,8 @@ public class ImportContext implements Serializable {
      */
     List<ImportTransform> defaultTransforms = new ArrayList<>();
 
-    /** 
-     * id generator for task 
+    /**
+     * id generator for task
      */
     int taskid = 0;
 
@@ -115,10 +120,10 @@ public class ImportContext implements Serializable {
      */
     String user;
 
-    /** 
+    /**
      * flag to control whether imported files (indirect) should be archived after import
      * JD: this used to be true by default, now false since by default importing a shapefile
-     * directly from the local file system would result in the shapefile, and its parent directory 
+     * directly from the local file system would result in the shapefile, and its parent directory
      * being deleted
      */
     boolean archive = false;
@@ -240,8 +245,6 @@ public class ImportContext implements Serializable {
     /**
      * Returns a live list with the default transform, can be modified directly to add/remove the
      * default transforms
-     * 
-     *
      */
     public List<ImportTransform> getDefaultTransforms() {
         return defaultTransforms;
@@ -258,16 +261,17 @@ public class ImportContext implements Serializable {
         } else {
             newState = State.COMPLETE;
         }
-     O: for (ImportTask task : tasks) {
-            switch(task.getState()) {
-            case COMPLETE:
-                continue;
-            case RUNNING:
-                newState = State.RUNNING;
-                break O;
-            default: 
-                newState = State.PENDING;
-                break O;
+        O:
+        for (ImportTask task : tasks) {
+            switch (task.getState()) {
+                case COMPLETE:
+                    continue;
+                case RUNNING:
+                    newState = State.RUNNING;
+                    break O;
+                default:
+                    newState = State.PENDING;
+                    break O;
             }
         }
         state = newState;
@@ -356,7 +360,7 @@ public class ImportContext implements Serializable {
 
     /**
      * Returns the current context message, if any
-     * 
+     *
      * @return the message
      */
     public String getMessage() {
@@ -365,7 +369,7 @@ public class ImportContext implements Serializable {
 
     /**
      * Sets the context message
-     * 
+     *
      * @param message the message to set
      */
     public void setMessage(String message) {

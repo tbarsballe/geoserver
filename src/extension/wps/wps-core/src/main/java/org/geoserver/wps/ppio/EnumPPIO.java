@@ -25,31 +25,27 @@ public class EnumPPIO extends LiteralPPIO {
         Method valueOf = getType().getMethod("valueOf", String.class);
         try {
             return valueOf.invoke(null, value);
-        }
-        catch(IllegalAccessException e) {
+        } catch (IllegalAccessException e) {
             // means we can't have access to the enum, fall back to literal
             return new LiteralPPIO(getType()).decode(value);
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             //try upper case
             try {
                 return valueOf.invoke(null, value.toUpperCase());
-            }
-            catch(Exception e1) {
+            } catch (Exception e1) {
                 //try lower case
                 try {
                     return valueOf.invoke(null, value.toLowerCase());
-                }
-                catch(Exception e2) {
+                } catch (Exception e2) {
                     //give up and throw back first exception
                     throw e;
                 }
             }
         }
     }
-    
+
     @Override
     public String encode(Object value) throws Exception {
-        return ((Enum)value).name();
+        return ((Enum) value).name();
     }
 }

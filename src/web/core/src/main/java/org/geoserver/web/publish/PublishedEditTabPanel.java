@@ -26,14 +26,13 @@ import org.geoserver.web.data.resource.ResourceConfigurationPage;
  *
  * @author Justin Deoliveira, OpenGeo
  * @author Niels Charlier
- *
  */
 public class PublishedEditTabPanel<T extends PublishedInfo> extends Panel {
 
     private static final long serialVersionUID = 8044055895040826418L;
 
     /**
-     * @param id The id given to the panel.
+     * @param id    The id given to the panel.
      * @param model The model for the panel which wraps a {@link LayerInfo} instance.
      */
     public PublishedEditTabPanel(String id, IModel<? extends T> model) {

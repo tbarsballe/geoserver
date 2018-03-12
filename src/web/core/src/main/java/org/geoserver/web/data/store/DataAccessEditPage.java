@@ -27,31 +27,32 @@ import org.opengis.feature.type.FeatureType;
 
 /**
  * Provides a form to edit a geotools {@link DataAccess} that already exists in the {@link Catalog}
- * 
+ *
  * @author Gabriel Roldan
  */
 public class DataAccessEditPage extends AbstractDataAccessPage implements Serializable {
 
     public static final String STORE_NAME = "storeName";
     public static final String WS_NAME = "wsName";
-    
+
     /**
      * Dialog to ask for save confirmation in case the store can't be reached
      */
     private GeoServerDialog dialog;
-    
+
     /**
      * Uses a "name" parameter to locate the datastore
+     *
      * @param parameters
      */
     public DataAccessEditPage(PageParameters parameters) {
         String wsName = parameters.get(WS_NAME).toOptionalString();
         String storeName = parameters.get(STORE_NAME).toString();
         DataStoreInfo dsi = getCatalog().getDataStoreByName(wsName, storeName);
-        
-        if(dsi == null) {
+
+        if (dsi == null) {
             getSession().error(
-                new ParamResourceModel("DataAccessEditPage.notFound", this, wsName, storeName).getString()
+                    new ParamResourceModel("DataAccessEditPage.notFound", this, wsName, storeName).getString()
             );
             doReturn(StorePage.class);
             return;
@@ -65,12 +66,11 @@ public class DataAccessEditPage extends AbstractDataAccessPage implements Serial
             return;
         }
     }
-    
+
     /**
      * Creates a new datastore configuration page to edit the properties of the given data store
-     * 
-     * @param dataStoreInfoId
-     *            the datastore id to modify, as per {@link DataStoreInfo#getId()}
+     *
+     * @param dataStoreInfoId the datastore id to modify, as per {@link DataStoreInfo#getId()}
      */
     public DataAccessEditPage(final String dataStoreInfoId) throws IllegalArgumentException {
         final Catalog catalog = getCatalog();
@@ -94,7 +94,7 @@ public class DataAccessEditPage extends AbstractDataAccessPage implements Serial
         // the confirm dialog
         dialog = new GeoServerDialog("dialog");
         add(dialog);
-        
+
         super.initUI(dataStoreInfo);
 
         if (dataStoreInfo.getId() != null) {
@@ -108,15 +108,14 @@ public class DataAccessEditPage extends AbstractDataAccessPage implements Serial
     /**
      * Callback method called when the submit button have been hit and the parameters validation has
      * succeed.
-     * 
-     * @param paramsForm
-     *            the form to report any error to
+     *
+     * @param paramsForm the form to report any error to
      * @see AbstractDataAccessPage#onSaveDataStore(Form)
      */
     protected final void onSaveDataStore(final DataStoreInfo info,
-            final AjaxRequestTarget requestTarget) {
-        
-        if(!storeEditPanel.onSave()) {
+                                         final AjaxRequestTarget requestTarget) {
+
+        if (!storeEditPanel.onSave()) {
             return;
         }
 
@@ -149,7 +148,7 @@ public class DataAccessEditPage extends AbstractDataAccessPage implements Serial
 
     @SuppressWarnings("serial")
     private void confirmSaveOnConnectionFailure(final DataStoreInfo info,
-            final AjaxRequestTarget requestTarget, final Exception error) {
+                                                final AjaxRequestTarget requestTarget, final Exception error) {
 
         getCatalog().getResourcePool().clear(info);
 
@@ -213,12 +212,12 @@ public class DataAccessEditPage extends AbstractDataAccessPage implements Serial
 
             ResourcePool resourcePool = catalog.getResourcePool();
             resourcePool.clear(info);
-            
+
             DataStoreInfo expandedStore = catalog.getResourcePool().clone(info, true);
-            
+
             // Cloning into "expandedStore" through the super class "clone" method
             catalog.validate(expandedStore, false).throwIfInvalid();
-            
+
             catalog.save(info);
             // save the resources after saving the store
             for (FeatureTypeInfo alreadyConfigured : configuredResources) {

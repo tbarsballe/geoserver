@@ -25,7 +25,9 @@ import org.geoserver.web.GeoServerApplication;
 
 public abstract class AbstractStatusPage extends ServerAdminPage {
 
-    /** serialVersionUID */
+    /**
+     * serialVersionUID
+     */
     private static final long serialVersionUID = -6228795354577370186L;
 
     protected AjaxTabbedPanel<ITab> tabbedPanel;
@@ -33,7 +35,7 @@ public abstract class AbstractStatusPage extends ServerAdminPage {
     public AbstractStatusPage() {
         initUI();
     }
-    
+
     protected void initUI() {
 
         List<ITab> tabs = new ArrayList<ITab>();
@@ -61,6 +63,7 @@ public abstract class AbstractStatusPage extends ServerAdminPage {
             String title = new ResourceModel(tabDefinition.getTitleKey()).getObject();
             PanelCachingTab tab = new PanelCachingTab(new AbstractTab(new Model<>(title)) {
                 private static final long serialVersionUID = -5301288750339244612L;
+
                 // create the extra tab panel passing down the container id
                 public Panel getPanel(String panelId) {
                     return tabDefinition.createPanel(panelId, AbstractStatusPage.this);
@@ -80,20 +83,23 @@ public abstract class AbstractStatusPage extends ServerAdminPage {
         });
         add(tabbedPanel);
     }
+
     //Make sure child tabs can see this
     @Override
     protected boolean isAuthenticatedAsAdmin() {
         return super.isAuthenticatedAsAdmin();
     }
+
     @Override
     protected Catalog getCatalog() {
         return super.getCatalog();
     }
-    
+
     @Override
     protected GeoServerApplication getGeoServerApplication() {
         return super.getGeoServerApplication();
     }
+
     @Override
     protected GeoServer getGeoServer() {
         return super.getGeoServerApplication().getGeoServer();

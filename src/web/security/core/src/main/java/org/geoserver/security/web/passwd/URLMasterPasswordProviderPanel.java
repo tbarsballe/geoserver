@@ -17,8 +17,8 @@ import org.geoserver.security.password.URLMasterPasswordProviderConfig;
 import org.geoserver.web.wicket.HelpLink;
 
 @SuppressWarnings("serial")
-public class URLMasterPasswordProviderPanel 
-    extends MasterPasswordProviderPanel<URLMasterPasswordProviderConfig> {
+public class URLMasterPasswordProviderPanel
+        extends MasterPasswordProviderPanel<URLMasterPasswordProviderConfig> {
 
     public URLMasterPasswordProviderPanel(String id, IModel<URLMasterPasswordProviderConfig> model) {
         super(id, model);
@@ -30,8 +30,9 @@ public class URLMasterPasswordProviderPanel
                 return new IConverter() {
                     @Override
                     public String convertToString(Object value, Locale locale) {
-                        return ((URL)value).toExternalForm();
+                        return ((URL) value).toExternalForm();
                     }
+
                     @Override
                     public Object convertToObject(String value, Locale locale) {
                         try {

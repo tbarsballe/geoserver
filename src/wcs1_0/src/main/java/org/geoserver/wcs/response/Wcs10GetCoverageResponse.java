@@ -26,7 +26,7 @@ import org.vfny.geoserver.wcs.WcsException;
 /**
  * Response object for the store=true path, that is, one that stores the coverage on disk and
  * returns its path thru the Coverages document
- * 
+ *
  * @author Andrea Aime - TOPP
  */
 public class Wcs10GetCoverageResponse extends Response {
@@ -56,7 +56,7 @@ public class Wcs10GetCoverageResponse extends Response {
         this.catalog = catalog;
         this.responseFactory = responseFactory;
     }
-    
+
     @Override
     public String getAttachmentFileName(Object value, Operation operation) {
         if (!(operation.getParameters()[0] instanceof GetCoverageType))
@@ -118,7 +118,7 @@ public class Wcs10GetCoverageResponse extends Response {
 
         // write the coverage
         try {
-            delegate.encode(coverage, outputFormat,Collections.EMPTY_MAP, output);
+            delegate.encode(coverage, outputFormat, Collections.EMPTY_MAP, output);
             output.flush();
         } finally {
             // if(output != null) output.close();

@@ -43,7 +43,7 @@ import org.xml.sax.XMLReader;
 
 /**
  * OWS {@link Response} bean to handle WMS {@link GetCapabilities} results.
- * 
+ * <p>
  * <p>
  * Note since the XSLT API does not support declaring internal DTDs, and we may need to in order for
  * {@link ExtendedCapabilitiesProvider}s to contribute to the document type definition, if there's
@@ -56,7 +56,7 @@ import org.xml.sax.XMLReader;
  * list of direct children of the {@code VendorSpecificCapabilities} element, and each
  * {@link ExtendedCapabilitiesProvider#getVendorSpecificCapabilitiesChildDecls()} is added to the
  * list of internal DTD elements, like in the following example:
- * 
+ * <p>
  * <pre>
  * <code>
  * &lt;!DOCTYPE WMT_MS_Capabilities SYSTEM "BASE_URL/schemas/wms/1.1.1/WMS_MS_Capabilities.dtd"[
@@ -66,15 +66,14 @@ import org.xml.sax.XMLReader;
  * ]&gt;
  * </code>
  * </pre>
- * 
+ * <p>
  * Where BASE_URL is the {@link GetMapRequest#getBaseUrl()}, {@code TileSet*} and {@code Test?} are
  * contributed through {@link ExtendedCapabilitiesProvider#getVendorSpecificCapabilitiesRoots()},
  * and {@code <!ELEMENT Resolutions (#PCDATA) >} and {@code <!ELEMENT TestChild (#PCDATA) >} through
  * {@link ExtendedCapabilitiesProvider#getVendorSpecificCapabilitiesChildDecls()}
  * </p>
- * 
+ *
  * @author groldan
- * 
  */
 public class GetCapabilitiesResponse extends BaseCapabilitiesResponse {
 
@@ -83,25 +82,21 @@ public class GetCapabilitiesResponse extends BaseCapabilitiesResponse {
     private WMS wms;
 
     /**
-     * @param wms
-     *            needed for {@link WMS#getAvailableExtendedCapabilitiesProviders()} in order to
+     * @param wms needed for {@link WMS#getAvailableExtendedCapabilitiesProviders()} in order to
      *            check of internal DTD elements shall be added to the output document
      */
     public GetCapabilitiesResponse(final WMS wms) {
-        super(GetCapabilitiesTransformer.class,GetCapabilitiesTransformer.WMS_CAPS_DEFAULT_MIME);
+        super(GetCapabilitiesTransformer.class, GetCapabilitiesTransformer.WMS_CAPS_DEFAULT_MIME);
         this.wms = wms;
     }
 
 
     /**
-     * @param value
-     *            {@link GetCapabilitiesTransformer}
-     * @param output
-     *            destination
-     * @param operation
-     *            The operation identifier which resulted in <code>value</code>
+     * @param value     {@link GetCapabilitiesTransformer}
+     * @param output    destination
+     * @param operation The operation identifier which resulted in <code>value</code>
      * @see org.geoserver.ows.Response#write(java.lang.Object, java.io.OutputStream,
-     *      org.geoserver.platform.Operation)
+     * org.geoserver.platform.Operation)
      */
     @Override
     public void write(final Object value, final OutputStream output, final Operation operation)
@@ -197,7 +192,7 @@ public class GetCapabilitiesResponse extends BaseCapabilitiesResponse {
      * the list of direct children of the {@code VendorSpecificCapabilities} element, and each
      * {@link ExtendedCapabilitiesProvider#getVendorSpecificCapabilitiesChildDecls()} is added to
      * the list of internal DTD elements, like in the following example:
-     * 
+     * <p>
      * <pre>
      * <code>
      * <!DOCTYPE WMT_MS_Capabilities SYSTEM "BASE_URL/schemas/wms/1.1.1/WMS_MS_Capabilities.dtd"[
@@ -207,16 +202,15 @@ public class GetCapabilitiesResponse extends BaseCapabilitiesResponse {
      * ]>
      * </code>
      * </pre>
-     * 
+     * <p>
      * Where BASE_URL is the {@link GetMapRequest#getBaseUrl()}, {@code TileSet*} and {@code Test?}
      * are contributed through
      * {@link ExtendedCapabilitiesProvider#getVendorSpecificCapabilitiesRoots()}, and
      * {@code <!ELEMENT Resolutions (#PCDATA) >} and {@code <!ELEMENT TestChild (#PCDATA) >} through
      * {@link ExtendedCapabilitiesProvider#getVendorSpecificCapabilitiesChildDecls()}
      * </p>
-     * 
-     * @param request
      *
+     * @param request
      */
     private String getInternalDTDDeclaration(final GetCapabilitiesRequest request) {
 

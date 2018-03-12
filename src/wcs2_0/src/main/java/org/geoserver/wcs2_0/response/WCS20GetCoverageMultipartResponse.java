@@ -37,7 +37,7 @@ import org.vfny.geoserver.wcs.WcsException;
 /**
  * Returns a single coverage encoded in the specified output format (eventually the native one)
  * along with the XML describing the coverage, in a MIME multipart package
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class WCS20GetCoverageMultipartResponse extends Response {
@@ -47,11 +47,11 @@ public class WCS20GetCoverageMultipartResponse extends Response {
     EnvelopeAxesLabelsMapper envelopeDimensionsMapper;
 
     public WCS20GetCoverageMultipartResponse(CoverageResponseDelegateFinder responseFactory, EnvelopeAxesLabelsMapper envelopeDimensionsMapper) {
-        super(GridCoverage.class);      
+        super(GridCoverage.class);
         this.responseFactory = responseFactory;
         this.envelopeDimensionsMapper = envelopeDimensionsMapper;
     }
-    
+
     public String getPreferredDisposition(Object value, Operation operation) {
         return DISPOSITION_ATTACH;
     }
@@ -103,9 +103,9 @@ public class WCS20GetCoverageMultipartResponse extends Response {
         try {
             MimeMultipart multipart = new MimeMultipart();
             multipart.setSubType("related");
-            
+
             String fileName = "/coverages/" + getCoverage.getCoverageId() + "." + delegate.getFileExtension(format);
-            
+
             // coverages xml structure, which is very close to the DescribeFeatureType output
             BodyPart coveragesPart = new MimeBodyPart();
             FileReference reference = new FileReference(fileName, delegate.getMimeType(format), delegate.getConformanceClass(format));
@@ -142,22 +142,22 @@ public class WCS20GetCoverageMultipartResponse extends Response {
         GetCoverageType getCoverage = (GetCoverageType) operation.getParameters()[0];
         return getCoverage.getCoverageId() + ".eml";
     }
-    
+
     /**
      * A special mime message that does not set any header other than the
      * content type
-     * 
+     *
      * @author Andrea Aime - GeoSolutions
      */
-   private static class GeoServerMimeMessage extends MimeMessage {
-       public GeoServerMimeMessage() {
-           super((Session) null);
-       }
+    private static class GeoServerMimeMessage extends MimeMessage {
+        public GeoServerMimeMessage() {
+            super((Session) null);
+        }
 
-       @Override
-       protected void updateMessageID() throws MessagingException {
-           // it's just ugly to see ...
-           removeHeader("Message-ID");
-       }
-   }
+        @Override
+        protected void updateMessageID() throws MessagingException {
+            // it's just ugly to see ...
+            removeHeader("Message-ID");
+        }
+    }
 }

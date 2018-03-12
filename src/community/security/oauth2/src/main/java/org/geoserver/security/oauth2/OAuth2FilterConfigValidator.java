@@ -15,9 +15,8 @@ import org.springframework.util.StringUtils;
 
 /**
  * @author Alessio Fabiani, GeoSolutions S.A.S.
- * 
- *         Validates {@link OAuth2FilterConfig} objects.
- *
+ * <p>
+ * Validates {@link OAuth2FilterConfig} objects.
  */
 public class OAuth2FilterConfigValidator extends FilterConfigValidator {
 
@@ -67,7 +66,7 @@ public class OAuth2FilterConfigValidator extends FilterConfigValidator {
                 throw createFilterException(
                         OAuth2FilterConfigException.OAUTH2_ACCESSTOKENURI_MALFORMED);
             }
-            if (filterConfig.getForceAccessTokenUriHttps() && 
+            if (filterConfig.getForceAccessTokenUriHttps() &&
                     "https".equalsIgnoreCase(accessTokenUri.getProtocol()) == false)
                 throw createFilterException(
                         OAuth2FilterConfigException.OAUTH2_ACCESSTOKENURI_NOT_HTTPS);
@@ -81,7 +80,7 @@ public class OAuth2FilterConfigValidator extends FilterConfigValidator {
                 throw createFilterException(
                         OAuth2FilterConfigException.OAUTH2_USERAUTHURI_MALFORMED);
             }
-            if (filterConfig.getForceUserAuthorizationUriHttps() && 
+            if (filterConfig.getForceUserAuthorizationUriHttps() &&
                     "https".equalsIgnoreCase(userAuthorizationUri.getProtocol()) == false)
                 throw createFilterException(
                         OAuth2FilterConfigException.OAUTH2_USERAUTHURI_NOT_HTTPS);

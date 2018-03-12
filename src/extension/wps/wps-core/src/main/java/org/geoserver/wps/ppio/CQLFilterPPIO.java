@@ -15,7 +15,7 @@ import org.opengis.filter.Filter;
 
 /**
  * Parses and encodes an OGC filter using ECQL
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class CQLFilterPPIO extends CDataPPIO {

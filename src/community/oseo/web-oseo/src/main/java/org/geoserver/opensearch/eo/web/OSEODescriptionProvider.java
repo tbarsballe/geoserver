@@ -16,12 +16,10 @@ import org.geotools.util.Version;
 
 /**
  * Contributes a link to the OSEO OSDD document
- * 
  */
 public class OSEODescriptionProvider implements CapabilitiesHomePageLinkProvider {
 
     /**
-     * 
      * @see org.geoserver.web.CapabilitiesHomePageLinkProvider#getCapabilitiesComponent
      */
     public Component getCapabilitiesComponent(final String id) {

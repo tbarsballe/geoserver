@@ -9,9 +9,9 @@ import org.easymock.EasyMock;
 import org.easymock.IArgumentMatcher;
 
 public class EventMatcher implements IArgumentMatcher {
-    
-    Object source; 
-    
+
+    Object source;
+
     public EventMatcher(Object source) {
         super();
         this.source = source;
@@ -21,17 +21,17 @@ public class EventMatcher implements IArgumentMatcher {
         EasyMock.reportMatcher(new EventMatcher(source));
         return null;
     }
-    
+
     @Override
     public boolean matches(Object argument) {
-        if(argument instanceof Event){
+        if (argument instanceof Event) {
             Event evt = (Event) argument;
-            return source==null || evt.getSource().equals(source);
+            return source == null || evt.getSource().equals(source);
         } else {
             return false;
         }
     }
-    
+
     @Override
     public void appendTo(StringBuffer buffer) {
         buffer.append("event(").append(source.toString()).append(")");

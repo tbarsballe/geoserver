@@ -15,7 +15,7 @@ import org.springframework.security.oauth2.client.token.AccessTokenRequest;
 
 /**
  * Base OAuth2 Configuration Class. Each OAuth2 specific Extension must implement its own {@link OAuth2RestTemplate}
- * 
+ *
  * @author Alessio Fabiani, GeoSolutions S.A.S.
  */
 public abstract class GeoServerOAuth2SecurityConfiguration implements OAuth2SecurityConfiguration {
@@ -29,7 +29,7 @@ public abstract class GeoServerOAuth2SecurityConfiguration implements OAuth2Secu
 
     /**
      * Returns the resource bean containing the Access Token Request info.
-     * 
+     *
      * @return the accessTokenRequest
      */
     public AccessTokenRequest getAccessTokenRequest() {
@@ -38,18 +38,18 @@ public abstract class GeoServerOAuth2SecurityConfiguration implements OAuth2Secu
 
     /**
      * Set the accessTokenRequest property.
-     * 
+     *
      * @param accessTokenRequest the accessTokenRequest to set
      */
     public void setAccessTokenRequest(AccessTokenRequest accessTokenRequest) {
         this.accessTokenRequest = accessTokenRequest;
     }
-    
+
     /**
      * Details for an OAuth2-protected resource.
      */
     public abstract OAuth2ProtectedResourceDetails geoServerOAuth2Resource();
-    
+
     /**
      * Rest template that is able to make OAuth2-authenticated REST requests with the credentials of the provided resource.
      */

@@ -29,7 +29,7 @@ public class OgrBinaryPPIO extends BinaryPPIO {
     private String fileExtension;
 
     public OgrBinaryPPIO(String mimeType, String fileExtension,
-            Ogr2OgrOutputFormat ogr2OgrOutputFormat, Operation operation) {
+                         Ogr2OgrOutputFormat ogr2OgrOutputFormat, Operation operation) {
         super(FeatureCollectionType.class, FeatureCollection.class, mimeType);
         this.ogr2OgrOutputFormat = ogr2OgrOutputFormat;
         this.operation = operation;

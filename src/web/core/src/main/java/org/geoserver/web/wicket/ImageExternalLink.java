@@ -14,9 +14,8 @@ import org.apache.wicket.request.resource.PackageResourceReference;
 
 /**
  * A panel which encapsulates an {@link ExternalLink} containing a image and an optional label.
- * 
+ *
  * @author Justin Deoliveira, OpenGeo
- * 
  */
 @SuppressWarnings("serial")
 public class ImageExternalLink extends Panel {
@@ -31,7 +30,7 @@ public class ImageExternalLink extends Panel {
      * Constructs the panel with a link containing an image and a label.
      */
     public ImageExternalLink(final String id, final String href, final PackageResourceReference imageRef,
-            final IModel<String> label) {
+                             final IModel<String> label) {
         super(id);
         add(this.link = new ExternalLink("link", href));
         link.add(this.image = new Image("image", imageRef));
@@ -40,8 +39,6 @@ public class ImageExternalLink extends Panel {
 
     /**
      * Returns the image contained in this link (allows playing with its attributes)
-     * 
-     *
      */
     public Image getImage() {
         return image;
@@ -50,8 +47,6 @@ public class ImageExternalLink extends Panel {
     /**
      * Returns the link wrapped by the {@link ImageExternalLink} panel (allows playing with its
      * attributes and enable/disable the link)
-     * 
-     *
      */
     public ExternalLink getLink() {
         return link;

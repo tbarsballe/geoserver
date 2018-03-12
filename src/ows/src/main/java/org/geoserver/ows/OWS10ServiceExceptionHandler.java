@@ -35,10 +35,9 @@ import org.geotools.xml.Encoder;
  */
 public class OWS10ServiceExceptionHandler extends ServiceExceptionHandler {
     protected boolean verboseExceptions = false;
-    
+
     /**
      * Constructor to be called if the exception is not for a particular service.
-     *
      */
     public OWS10ServiceExceptionHandler() {
         super(Collections.EMPTY_LIST);
@@ -76,7 +75,7 @@ public class OWS10ServiceExceptionHandler extends ServiceExceptionHandler {
         e.getExceptionText().add(sb.toString());
         e.getExceptionText().addAll(exception.getExceptionText());
 
-        if(verboseExceptions) {
+        if (verboseExceptions) {
             //add the entire stack trace
             //exception.
             e.getExceptionText().add("Details:");
@@ -93,7 +92,7 @@ public class OWS10ServiceExceptionHandler extends ServiceExceptionHandler {
             //there will already be a SOAP mime type
             request.getHttpResponse().setContentType("application/xml");
         }
-        
+
 
         //response.setCharacterEncoding( "UTF-8" );
         OWSConfiguration configuration = new OWSConfiguration();
@@ -103,7 +102,7 @@ public class OWS10ServiceExceptionHandler extends ServiceExceptionHandler {
         encoder.setIndentSize(2);
         encoder.setLineWidth(60);
         encoder.setOmitXMLDeclaration(request.isSOAP());
-        
+
         String schemaLocation = buildSchemaURL(baseURL(request.getHttpRequest()), "ows/1.0.0/owsExceptionReport.xsd");
         encoder.setSchemaLocation(org.geoserver.ows.xml.v1_0.OWS.NAMESPACE, schemaLocation);
 

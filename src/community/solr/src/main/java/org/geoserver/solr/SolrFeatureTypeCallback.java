@@ -24,11 +24,9 @@ import org.opengis.feature.type.FeatureType;
 import org.opengis.feature.type.Name;
 
 /**
- * 
  * Implementation of FeatureTypeInitializer extension point to initialize SOLR datastore
- * 
+ *
  * @see {@link FeatureTypeCallback}
- * 
  */
 public class SolrFeatureTypeCallback implements FeatureTypeCallback, CatalogListener {
 
@@ -41,7 +39,7 @@ public class SolrFeatureTypeCallback implements FeatureTypeCallback, CatalogList
 
     @Override
     public boolean canHandle(FeatureTypeInfo info,
-            DataAccess<? extends FeatureType, ? extends Feature> dataAccess) {
+                             DataAccess<? extends FeatureType, ? extends Feature> dataAccess) {
         if (dataAccess instanceof SolrDataStore) {
             return true;
         } else {
@@ -51,7 +49,7 @@ public class SolrFeatureTypeCallback implements FeatureTypeCallback, CatalogList
 
     @Override
     public boolean initialize(FeatureTypeInfo info,
-            DataAccess<? extends FeatureType, ? extends Feature> dataAccess, Name temporaryName)
+                              DataAccess<? extends FeatureType, ? extends Feature> dataAccess, Name temporaryName)
             throws IOException {
         SolrLayerConfiguration configuration = (SolrLayerConfiguration) info.getMetadata().get(
                 SolrLayerConfiguration.KEY);
@@ -65,7 +63,7 @@ public class SolrFeatureTypeCallback implements FeatureTypeCallback, CatalogList
 
     @Override
     public void dispose(FeatureTypeInfo info,
-            DataAccess<? extends FeatureType, ? extends Feature> dataAccess, Name temporaryName)
+                        DataAccess<? extends FeatureType, ? extends Feature> dataAccess, Name temporaryName)
             throws IOException {
         SolrLayerConfiguration configuration = (SolrLayerConfiguration) info.getMetadata().get(
                 SolrLayerConfiguration.KEY);
@@ -75,7 +73,7 @@ public class SolrFeatureTypeCallback implements FeatureTypeCallback, CatalogList
 
     @Override
     public void flush(FeatureTypeInfo info,
-            DataAccess<? extends FeatureType, ? extends Feature> dataAccess) throws IOException {
+                      DataAccess<? extends FeatureType, ? extends Feature> dataAccess) throws IOException {
         // nothing to do
     }
 

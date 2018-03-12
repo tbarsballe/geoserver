@@ -36,22 +36,20 @@ import de.micromata.opengis.kml.v_2_2_0.ViewRefreshMode;
 
 /**
  * Builds a KML document that has a network link for each layer, no superoverlays involved
- * 
- * @author Andrea Aime - GeoSolutions
  *
+ * @author Andrea Aime - GeoSolutions
  */
 public class SimpleNetworkLinkBuilder extends AbstractNetworkLinkBuilder {
-    
+
     static final Logger LOGGER = Logging.getLogger(SimpleNetworkLinkBuilder.class);
-    
+
     static final String REFRESH_KEY = "kmlrefresh";
-    
+
     static final String VISIBLE_KEY = "kmlvisible";
 
     public SimpleNetworkLinkBuilder(KmlEncodingContext context) {
         super(context);
     }
-
 
 
     @Override
@@ -81,21 +79,20 @@ public class SimpleNetworkLinkBuilder extends AbstractNetworkLinkBuilder {
             if (layerInfo.getDescription() != null && layerInfo.getDescription().length() > 0) {
                 nl.setDescription(layerInfo.getDescription());
             }
-            
+
             // Allow for all layers to be disabled by default.  This can be advantageous with
             // multiple large data-sets.
             if (formatOptions.get(VISIBLE_KEY) != null) {
-            	boolean visible = Boolean.parseBoolean(formatOptions.get(VISIBLE_KEY).toString());
-            	nl.setVisibility(visible);
-            }
-            else {
-            	nl.setVisibility(true);
+                boolean visible = Boolean.parseBoolean(formatOptions.get(VISIBLE_KEY).toString());
+                nl.setVisibility(visible);
+            } else {
+                nl.setVisibility(true);
             }
             nl.setOpen(true);
 
             // look at for this layer
             Envelope requestBox = context.getRequestBoxWGS84();
-            
+
             if (requestBox != null) {
                 LookAt la = lookAtFactory.buildLookAt(requestBox, lookAtOptions, false);
                 nl.setAbstractView(la);
@@ -122,25 +119,23 @@ public class SimpleNetworkLinkBuilder extends AbstractNetworkLinkBuilder {
             url.setViewRefreshMode(ViewRefreshMode.ON_STOP);
             url.setViewRefreshTime(1);
             url.setViewBoundScale(1);
-            
+
             // Attempt to parse a value from kmlrefresh format_options parameter.
             // It can be either a set interval in seconds or "expires".
             // "expires" uses the HTTP max-age header and falls-back to expires header
-			// to determine the time when a refresh should occur.
-			if (formatOptions.get(REFRESH_KEY) != null) {
-				String refreshValue = formatOptions.get(REFRESH_KEY).toString();
-				if (refreshValue.equalsIgnoreCase("expires")) {
-					url.setRefreshMode(RefreshMode.ON_EXPIRE);
-				} else {
-					int interval = Integer.parseInt(refreshValue);
-					url.setRefreshInterval(interval);
-					url.setRefreshMode(RefreshMode.ON_INTERVAL);
-				}
-			}
-		}
+            // to determine the time when a refresh should occur.
+            if (formatOptions.get(REFRESH_KEY) != null) {
+                String refreshValue = formatOptions.get(REFRESH_KEY).toString();
+                if (refreshValue.equalsIgnoreCase("expires")) {
+                    url.setRefreshMode(RefreshMode.ON_EXPIRE);
+                } else {
+                    int interval = Integer.parseInt(refreshValue);
+                    url.setRefreshInterval(interval);
+                    url.setRefreshMode(RefreshMode.ON_INTERVAL);
+                }
+            }
+        }
     }
 
-   
-    
-    
+
 }

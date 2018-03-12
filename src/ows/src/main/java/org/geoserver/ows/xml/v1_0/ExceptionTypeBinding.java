@@ -15,9 +15,9 @@ import org.geotools.xml.AbstractComplexEMFBinding;
 
 /**
  * Binding object for the type http://www.opengis.net/ows:ExceptionType.
- *
  * <p>
- *        <pre>
+ * <p>
+ * <pre>
  *         <code>
  *  &lt;complexType name="ExceptionType"&gt;
  *      &lt;annotation&gt;
@@ -45,6 +45,7 @@ import org.geotools.xml.AbstractComplexEMFBinding;
  *
  *          </code>
  *         </pre>
+ *
  * @generated
  */
 public class ExceptionTypeBinding extends AbstractComplexEMFBinding {

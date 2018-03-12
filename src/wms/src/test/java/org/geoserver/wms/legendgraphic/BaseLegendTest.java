@@ -76,7 +76,7 @@ public class BaseLegendTest extends WMSTestSupport {
     }
 
     private BufferedImage getRenderedLabel(BufferedImage image, String label,
-            GetLegendGraphicRequest request) {
+                                           GetLegendGraphicRequest request) {
         Font labelFont = LegendUtils.getLabelFont(request);
         boolean useAA = LegendUtils.isFontAntiAliasing(request);
 

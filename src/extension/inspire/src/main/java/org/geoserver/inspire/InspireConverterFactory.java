@@ -20,7 +20,7 @@ import org.geotools.util.logging.Logging;
 /**
  * Marshals {@link UniqueResourceIdentifiers} to and from String for including in the {@link WFSInfo}
  * {@link MetadataMap}
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class InspireConverterFactory implements ConverterFactory {
@@ -48,7 +48,7 @@ public class InspireConverterFactory implements ConverterFactory {
                 for (int i = 0; i < values.length; i++) {
                     String value = values[i];
                     String[] elements = value.split("\\s*,\\s*");
-                    if(elements.length == 0) {
+                    if (elements.length == 0) {
                         continue;
                     }
                     String code = elements[0];
@@ -58,7 +58,7 @@ public class InspireConverterFactory implements ConverterFactory {
                         continue;
                     }
                     String namespace = null;
-                    if(elements.length > 1) {
+                    if (elements.length > 1) {
                         namespace = elements[1];
                         try {
                             new URI(namespace);
@@ -72,7 +72,7 @@ public class InspireConverterFactory implements ConverterFactory {
                         }
                     }
                     String metadataURL = null;
-                    if(elements.length > 2) {
+                    if (elements.length > 2) {
                         metadataURL = elements[2];
                         try {
                             new URI(metadataURL);
@@ -88,18 +88,18 @@ public class InspireConverterFactory implements ConverterFactory {
                 return (T) identifiers;
             } else if (source instanceof UniqueResourceIdentifiers && String.class.equals(target)) {
                 UniqueResourceIdentifiers ids = (UniqueResourceIdentifiers) source;
-                if(ids.size() > 0) {
+                if (ids.size() > 0) {
                     StringBuilder sb = new StringBuilder();
                     for (UniqueResourceIdentifier id : ids) {
                         String ns = id.getNamespace();
                         String metadata = id.getMetadataURL();
                         String code = id.getCode();
                         sb.append(code).append(",");
-                        if(ns != null) {
+                        if (ns != null) {
                             sb.append(ns);
                         }
                         sb.append(",");
-                        if(metadata != null) {
+                        if (metadata != null) {
                             sb.append(metadata);
                         }
                         sb.append(";");

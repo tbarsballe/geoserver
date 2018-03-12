@@ -30,14 +30,14 @@ import org.w3c.dom.Document;
 public class FeatureTypeInfoSchemaBuilderTest extends WFSTestSupport {
 
     protected QName UUID_TEST = new QName(MockData.CITE_URI, "uuid", MockData.CITE_PREFIX);
-    
+
     @Test
     public void testBuildGml2() throws Exception {
         FeatureTypeSchemaBuilder builder = new FeatureTypeSchemaBuilder.GML2(
                 getGeoServer());
 
         FeatureTypeInfo lines = getFeatureTypeInfo(SystemTestData.LINES);
-        XSDSchema schema = builder.build(new FeatureTypeInfo[] { lines }, null);
+        XSDSchema schema = builder.build(new FeatureTypeInfo[]{lines}, null);
 
         assertNotNull(schema);
         XSDElementDeclaration element = Schemas.getElementDeclaration(schema,
@@ -69,7 +69,7 @@ public class FeatureTypeInfoSchemaBuilderTest extends WFSTestSupport {
         assertEquals(GML.GEOMETRYASSOCIATIONTYPE.getLocalPart(),
                 geometryAssociationType.getName());
     }
-	
+
     @Override
     protected void setUpInternal(SystemTestData testData) throws Exception {
         super.setUpInternal(testData);

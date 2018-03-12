@@ -45,26 +45,26 @@ public final class NamespacesWfsTest extends AbstractAppSchemaTestSupport {
     /* Should return the same result as a GetFeature request against the Station feature type */
     private static final String TEST_STORED_QUERY_DEFINITION =
             "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
-            "<wfs:StoredQueryDescription id='" + TEST_STORED_QUERY_ID + "'" +
+                    "<wfs:StoredQueryDescription id='" + TEST_STORED_QUERY_ID + "'" +
                     " xmlns:xlink=\"http://www.w3.org/1999/xlink\"" +
                     " xmlns:ows=\"http://www.opengis.net/ows/1.1\"" +
                     " xmlns:gml=\"${GML_NAMESPACE}\"" +
                     " xmlns:wfs=\"http://www.opengis.net/wfs/2.0\"" +
                     " xmlns:fes=\"http://www.opengis.net/fes/2.0\">>\n" +
-            "  <wfs:QueryExpressionText\n" +
-            "   returnFeatureTypes='st_${GML_PREFIX}:Station_${GML_PREFIX}'\n" +
-            "   language='urn:ogc:def:queryLanguage:OGC-WFS::WFS_QueryExpression'\n" +
-            "   isPrivate='false'>\n" +
-            "    <wfs:Query typeNames='st_${GML_PREFIX}:Station_${GML_PREFIX}'>\n" +
-            "      <fes:Filter>\n" +
-            "        <fes:PropertyIsEqualTo>\n" +
-            "          <fes:ValueReference>st_${GML_PREFIX}:measurements/ms_${GML_PREFIX}:Measurement_${GML_PREFIX}/ms_${GML_PREFIX}:name</fes:ValueReference>\n" +
-            "          <fes:Literal>wind</fes:Literal>\n" +
-            "        </fes:PropertyIsEqualTo>\n" +
-            "      </fes:Filter>\n" +
-            "    </wfs:Query>\n" +
-            "  </wfs:QueryExpressionText>\n" +
-            "</wfs:StoredQueryDescription>";
+                    "  <wfs:QueryExpressionText\n" +
+                    "   returnFeatureTypes='st_${GML_PREFIX}:Station_${GML_PREFIX}'\n" +
+                    "   language='urn:ogc:def:queryLanguage:OGC-WFS::WFS_QueryExpression'\n" +
+                    "   isPrivate='false'>\n" +
+                    "    <wfs:Query typeNames='st_${GML_PREFIX}:Station_${GML_PREFIX}'>\n" +
+                    "      <fes:Filter>\n" +
+                    "        <fes:PropertyIsEqualTo>\n" +
+                    "          <fes:ValueReference>st_${GML_PREFIX}:measurements/ms_${GML_PREFIX}:Measurement_${GML_PREFIX}/ms_${GML_PREFIX}:name</fes:ValueReference>\n" +
+                    "          <fes:Literal>wind</fes:Literal>\n" +
+                    "        </fes:PropertyIsEqualTo>\n" +
+                    "      </fes:Filter>\n" +
+                    "    </wfs:Query>\n" +
+                    "  </wfs:QueryExpressionText>\n" +
+                    "</wfs:StoredQueryDescription>";
 
     private static final Map<String, String> GML31_PARAMETERS = Collections.unmodifiableMap(Stream.of(
             new SimpleEntry<>("GML_PREFIX", "gml31"),
@@ -181,7 +181,7 @@ public final class NamespacesWfsTest extends AbstractAppSchemaTestSupport {
         }
 
         private static String substituteParametersInTemplateString(String templateString,
-                Map<String, String> parameters) {
+                                                                   Map<String, String> parameters) {
             String processedString = templateString;
 
             for (Map.Entry<String, String> parameter : parameters.entrySet()) {
@@ -333,7 +333,7 @@ public final class NamespacesWfsTest extends AbstractAppSchemaTestSupport {
     }
 
     private void createTestStoredQuery(StoredQueryProvider storedQueryProvider,
-            Map<String, String> parameters) throws Exception {
+                                       Map<String, String> parameters) throws Exception {
         StoredQueryDescriptionType storedQueryDescriptionType = createTestStoredQueryDefinition(
                 parameters);
         StoredQuery result = storedQueryProvider.createStoredQuery(storedQueryDescriptionType);

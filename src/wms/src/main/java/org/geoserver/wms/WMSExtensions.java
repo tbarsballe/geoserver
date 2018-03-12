@@ -17,7 +17,7 @@ import org.springframework.context.ApplicationContext;
 
 /**
  * Utility class uses to process GeoServer WMS extension points.
- * 
+ *
  * @author Gabriel Roldan
  * @version $Id$
  */
@@ -33,16 +33,14 @@ public class WMSExtensions {
     /**
      * Finds out a {@link GetMapOutputFormat} specialized in generating the requested map format,
      * registered in the spring context.
-     * 
-     * @param outputFormat
-     *            a request parameter object wich holds the processed request objects, such as
-     *            layers, bbox, outpu format, etc.
-     * 
+     *
+     * @param outputFormat a request parameter object wich holds the processed request objects, such as
+     *                     layers, bbox, outpu format, etc.
      * @return A specialization of <code>GetMapDelegate</code> wich can produce the requested output
-     *         map format, or {@code null} if none is found
+     * map format, or {@code null} if none is found
      */
     public static GetMapOutputFormat findMapProducer(final String outputFormat,
-            final ApplicationContext applicationContext) {
+                                                     final ApplicationContext applicationContext) {
 
         final Collection<GetMapOutputFormat> producers;
         producers = WMSExtensions.findMapProducers(applicationContext);
@@ -54,7 +52,7 @@ public class WMSExtensions {
      * @return {@link GetMapOutputFormat} for the requested outputFormat, or {@code null}
      */
     public static GetMapOutputFormat findMapProducer(String outputFormat,
-            Collection<GetMapOutputFormat> producers) {
+                                                     Collection<GetMapOutputFormat> producers) {
 
         Set<String> producerFormats;
         for (GetMapOutputFormat producer : producers) {
@@ -77,7 +75,7 @@ public class WMSExtensions {
     }
 
     public static GetLegendGraphicOutputFormat findLegendGraphicFormat(final String outputFormat,
-            final ApplicationContext applicationContext) {
+                                                                       final ApplicationContext applicationContext) {
 
         List<GetLegendGraphicOutputFormat> formats = findLegendGraphicFormats(applicationContext);
 
@@ -98,7 +96,6 @@ public class WMSExtensions {
 
     /**
      * Looks up {@link ExtendedCapabilitiesProvider} extensions.
-     * 
      */
     public static List<ExtendedCapabilitiesProvider> findExtendedCapabilitiesProviders(
             final ApplicationContext applicationContext) {
@@ -107,8 +104,8 @@ public class WMSExtensions {
 
     /**
      * Looks up all the {@link RenderedImageMapResponse} registered in the Spring application context
-     * @param applicationContext
      *
+     * @param applicationContext
      */
     public static Collection<RenderedImageMapResponse> findMapResponses(
             ApplicationContext applicationContext) {

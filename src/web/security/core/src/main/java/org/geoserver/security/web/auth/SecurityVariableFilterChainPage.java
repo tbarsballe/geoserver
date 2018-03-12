@@ -24,39 +24,37 @@ import org.geoserver.web.wicket.HelpLink;
 
 /**
  * Class for configuration panels of {@link VariableFilterChain} objects
- * 
- * @author christan
  *
+ * @author christan
  */
-public  class SecurityVariableFilterChainPage 
-    extends SecurityFilterChainPage {
+public class SecurityVariableFilterChainPage
+        extends SecurityFilterChainPage {
 
     private static final long serialVersionUID = 1L;
 
     /**
      * logger
      */
-    
+
 
     protected AuthFilterChainPalette palette;
-    
-           
 
-    public SecurityVariableFilterChainPage( VariableFilterChain chain, 
-            SecurityManagerConfig secMgrConfig,
-            boolean isNew) {
-        
+
+    public SecurityVariableFilterChainPage(VariableFilterChain chain,
+                                           SecurityManagerConfig secMgrConfig,
+                                           boolean isNew) {
+
         VariableFilterChainWrapper wrapper = new VariableFilterChainWrapper(chain);
-        
-        Form<VariableFilterChainWrapper> theForm  = new Form<VariableFilterChainWrapper>("form",new 
-                CompoundPropertyModel<VariableFilterChainWrapper>(wrapper)); 
-                
+
+        Form<VariableFilterChainWrapper> theForm = new Form<VariableFilterChainWrapper>("form", new
+                CompoundPropertyModel<VariableFilterChainWrapper>(wrapper));
+
         super.initialize(chain, secMgrConfig, isNew, theForm, wrapper);
 
-        List<String> filterNames=new ArrayList<String>();
-        try {  
+        List<String> filterNames = new ArrayList<String>();
+        try {
             filterNames.addAll(getSecurityManager().listFilters(GeoServerExceptionTranslationFilter.class));
-            for (GeoServerExceptionTranslationFilter filter : GeoServerExtensions.extensions(GeoServerExceptionTranslationFilter.class)){
+            for (GeoServerExceptionTranslationFilter filter : GeoServerExtensions.extensions(GeoServerExceptionTranslationFilter.class)) {
                 filterNames.add(filter.getName());
             }
             form.add(new DropDownChoice<String>("exceptionTranslationName",
@@ -65,11 +63,11 @@ public  class SecurityVariableFilterChainPage
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        
-        filterNames=new ArrayList<String>();
-        try {  
+
+        filterNames = new ArrayList<String>();
+        try {
             filterNames.addAll(getSecurityManager().listFilters(GeoServerSecurityInterceptorFilter.class));
-            for (GeoServerSecurityInterceptorFilter filter :GeoServerExtensions.extensions(GeoServerSecurityInterceptorFilter.class)){
+            for (GeoServerSecurityInterceptorFilter filter : GeoServerExtensions.extensions(GeoServerSecurityInterceptorFilter.class)) {
                 filterNames.add(filter.getName());
             }
             form.add(new DropDownChoice<String>("interceptorName",
@@ -78,22 +76,22 @@ public  class SecurityVariableFilterChainPage
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        
-        form.add(palette=new AuthFilterChainPalette("authFilterChain", new AuthFilterNamesModel(getVariableFilterChainWrapper())));            
+
+        form.add(palette = new AuthFilterChainPalette("authFilterChain", new AuthFilterNamesModel(getVariableFilterChainWrapper())));
         palette.setOutputMarkupId(true);
         palette.setChain(getVariableFilterChainWrapper().getVariableFilterChain());
 
-        
+
         form.add(new HelpLink("chainConfigFilterHelp").setDialog(dialog));
-        
-        
+
+
     }
 
     VariableFilterChainWrapper getVariableFilterChainWrapper() {
         return (VariableFilterChainWrapper) chainWrapper;
     }
 
-            
+
     class AuthFilterNamesModel implements IModel<List<String>> {
 
         private static final long serialVersionUID = 1L;
@@ -105,7 +103,7 @@ public  class SecurityVariableFilterChainPage
 
         @Override
         public List<String> getObject() {
-            
+
             GeoServerSecurityManager secMgr = getSecurityManager();
             List<String> filters = new ArrayList<String>(chainModel.getChain().getFilterNames());
             try {
@@ -120,7 +118,7 @@ public  class SecurityVariableFilterChainPage
         public void setObject(List<String> object) {
             chainModel.getChain().setFilterNames(object);
         }
-        
+
         @Override
         public void detach() {
             //chainModel.detach();

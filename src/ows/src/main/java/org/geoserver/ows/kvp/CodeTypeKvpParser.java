@@ -12,9 +12,8 @@ import org.geoserver.ows.KvpParser;
 
 /**
  * Generic KVP parser for {@link CodeType} objects
- * 
+ *
  * @author Andrea Aime - TOPP
- * 
  */
 public class CodeTypeKvpParser extends KvpParser {
 

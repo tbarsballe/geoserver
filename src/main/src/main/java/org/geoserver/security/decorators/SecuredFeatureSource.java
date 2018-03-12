@@ -39,15 +39,14 @@ import org.opengis.filter.expression.PropertyName;
  * can be performed through it or using a object that can be accessed thru it. Depending on the
  * challenge policy, the object and the related ones will simply hide feature source abilities,
  * or will throw Spring security exceptions
- * 
- * @author Andrea Aime - GeoSolutions
- * 
+ *
  * @param <T>
  * @param <F>
+ * @author Andrea Aime - GeoSolutions
  */
 public class SecuredFeatureSource<T extends FeatureType, F extends Feature>
         extends DecoratingFeatureSource<T, F> {
-    
+
     static final Logger LOGGER = Logging.getLogger(SecuredFeatureSource.class);
 
     WrapperPolicy policy;
@@ -61,7 +60,7 @@ public class SecuredFeatureSource<T extends FeatureType, F extends Feature>
         final DataAccess<T, F> store = delegate.getDataStore();
         if (store == null)
             return null;
-        else 
+        else
             return (DataAccess) SecuredObjects.secure(store, policy);
     }
 
@@ -82,13 +81,13 @@ public class SecuredFeatureSource<T extends FeatureType, F extends Feature>
         // mix the external query with the access limits one
         final Query readQuery = getReadQuery();
         final Query mixed = mixQueries(query, readQuery);
-        int limitedAttributeSize = mixed.getProperties() != null ?  mixed.getProperties().size() : 0;
+        int limitedAttributeSize = mixed.getProperties() != null ? mixed.getProperties().size() : 0;
         final FeatureCollection<T, F> fc = delegate.getFeatures(mixed);
         if (fc == null) {
             return null;
         } else {
             if (limitedAttributeSize > 0 && fc.getSchema().getDescriptors().size() > limitedAttributeSize) {
-                if(fc instanceof SimpleFeatureCollection) {
+                if (fc instanceof SimpleFeatureCollection) {
                     // the datastore did not honour the query properties?? It's broken, but we can fix it
                     SimpleFeatureCollection sfc = (SimpleFeatureCollection) fc;
                     SimpleFeatureType target = SimpleFeatureTypeBuilder.retype(sfc.getSchema(), mixed.getPropertyNames());
@@ -97,8 +96,8 @@ public class SecuredFeatureSource<T extends FeatureType, F extends Feature>
                 } else {
                     // complex feature store eh? No way to fix it at least warn the admin
                     LOGGER.log(Level.SEVERE, "Complex store returned more properties than allowed " +
-                    		"by security (because they are required by the schema). " +
-                    		"Either the security setup is broken or you have a security breach");
+                            "by security (because they are required by the schema). " +
+                            "Either the security setup is broken or you have a security breach");
                     return (FeatureCollection) SecuredObjects.secure(fc, policy);
                 }
             } else {
@@ -106,74 +105,74 @@ public class SecuredFeatureSource<T extends FeatureType, F extends Feature>
             }
         }
     }
-    
+
     protected Query getReadQuery() {
-        if(policy.getAccessLevel() == AccessLevel.HIDDEN || policy.getAccessLevel() == AccessLevel.METADATA) {
+        if (policy.getAccessLevel() == AccessLevel.HIDDEN || policy.getAccessLevel() == AccessLevel.METADATA) {
             return new Query(null, Filter.EXCLUDE);
-        } else if(policy.getLimits() == null) {
+        } else if (policy.getLimits() == null) {
             return Query.ALL;
-        } else if(policy.getLimits() instanceof VectorAccessLimits) {
+        } else if (policy.getLimits() instanceof VectorAccessLimits) {
             VectorAccessLimits val = (VectorAccessLimits) policy.getLimits();
-            
+
             // Ugly hack: during WFS transactions the reads we do are used to count the number of features
             // we are deleting/updating: use the write filter instead of the read filter
             Request request = Dispatcher.REQUEST.get();
-            if(request != null && request.getService().equalsIgnoreCase("WFS") && request.getRequest().equalsIgnoreCase("Transaction")) {
+            if (request != null && request.getService().equalsIgnoreCase("WFS") && request.getRequest().equalsIgnoreCase("Transaction")) {
                 return val.getWriteQuery();
             } else {
                 return val.getReadQuery();
             }
-            
+
         } else {
             throw new IllegalArgumentException("SecureFeatureSources has been fed " +
-            		"with unexpected AccessLimits class " + policy.getLimits().getClass());
+                    "with unexpected AccessLimits class " + policy.getLimits().getClass());
         }
     }
-    
+
     /**
      * Mixes two queries with an eye towards security (limiting attributes instead of adding them)
      * and preserves all of the other properties in userQuery (hints, crs handling, sorting)
+     *
      * @param userQuery
      * @param securityQuery
-     *
      */
     protected Query mixQueries(Query userQuery, Query securityQuery) {
         // first rough mix
         Query result = DataUtilities.mixQueries(userQuery, securityQuery, userQuery.getHandle());
-        
+
         // check request attributes and use those ones only
         List<PropertyName> securityProperties = securityQuery.getProperties();
-        if(securityProperties != null && securityProperties.size() > 0) {
+        if (securityProperties != null && securityProperties.size() > 0) {
             List<PropertyName> userProperties = userQuery.getProperties();
-            if(userProperties == null) {
+            if (userProperties == null) {
                 result.setProperties(securityProperties);
             } else {
                 for (PropertyName pn : userProperties) {
-                    if(!securityProperties.contains(pn)) {
+                    if (!securityProperties.contains(pn)) {
                         throw new SecurityException("Attribute " + pn.getPropertyName() + " is not available");
                     }
                 }
                 result.setProperties(userProperties);
             }
         }
-        
+
         // mix the hints, keep all the user ones and override with the query ones
-        if(userQuery.getHints() == null) {
+        if (userQuery.getHints() == null) {
             result.setHints(securityQuery.getHints());
-        } else if(securityQuery.getHints() == null) {
+        } else if (securityQuery.getHints() == null) {
             result.setHints(userQuery.getHints());
         } else {
             Hints mix = userQuery.getHints();
             mix.putAll(securityQuery.getHints());
             result.setHints(mix);
         }
-        
+
         // transfer all other properties from the user query
         result.setCoordinateSystem(userQuery.getCoordinateSystem());
         result.setCoordinateSystemReproject(userQuery.getCoordinateSystemReproject());
         result.setStartIndex(userQuery.getStartIndex());
         result.setSortBy(userQuery.getSortBy());
-        
+
         return result;
     }
 }

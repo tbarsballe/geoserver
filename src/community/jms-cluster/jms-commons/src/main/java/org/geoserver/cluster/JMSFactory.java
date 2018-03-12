@@ -18,19 +18,17 @@ import org.geoserver.cluster.configuration.TopicConfiguration;
 import org.springframework.beans.factory.DisposableBean;
 
 /**
- * 
  * Implement this interface to add a new implementation to the application.<br/>
  * Note that only one implementation at time is permitted.
- * 
+ *
  * @author carlo cancellieri - geosolutions SAS
- * 
  */
 public abstract class JMSFactory implements DisposableBean {
 
     /**
      * Must return a {@link Destination} configured with the passed property.<br/>
      * You may leverage on {@link JMSConfiguration#INSTANCE_NAME_KEY}
-     * 
+     *
      * @param configuration
      * @return a valid destination pointing to a temporary queue to use for responses
      */
@@ -39,7 +37,7 @@ public abstract class JMSFactory implements DisposableBean {
     /**
      * Must return a {@link Destination} configured with the passed property.<br/>
      * You may leverage on {@link BrokerConfiguration} or {@link ConnectionConfiguration}
-     * 
+     *
      * @param configuration
      * @return a valid Topic
      */
@@ -48,7 +46,7 @@ public abstract class JMSFactory implements DisposableBean {
     /**
      * Must return a {@link ConnectionFactory} configured with the passed property.<br/>
      * You may leverage on {@link TopicConfiguration} or {@link ConnectionConfiguration}
-     * 
+     *
      * @param configuration
      * @return a ConnectionFactory
      */
@@ -56,7 +54,7 @@ public abstract class JMSFactory implements DisposableBean {
 
     /**
      * Starts an embedded broker
-     * 
+     *
      * @param configuration
      */
     public boolean startEmbeddedBroker(Properties configuration) throws Exception {
@@ -65,9 +63,8 @@ public abstract class JMSFactory implements DisposableBean {
 
     /**
      * check the status of the embedded broker
-     * 
-     * @param configuration
      *
+     * @param configuration
      */
     public boolean isEmbeddedBrokerStarted() {
         return false;
@@ -75,7 +72,6 @@ public abstract class JMSFactory implements DisposableBean {
 
     /**
      * Stops the embedded broker
-     * 
      */
     public boolean stopEmbeddedBroker() throws Exception {
         throw new UnsupportedOperationException("This functionality is not implemented");

@@ -6,9 +6,8 @@ package org.geoserver.wps.remote;
 
 /**
  * Pojo to pass the attributes of a Web Mapping Context Output format.
- * 
+ *
  * @author Alessio Fabiani, GeoSolutions
- * 
  */
 public class WmcFeature {
 

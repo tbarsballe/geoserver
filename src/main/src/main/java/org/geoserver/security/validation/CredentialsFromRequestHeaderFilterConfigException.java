@@ -6,11 +6,8 @@ package org.geoserver.security.validation;
 
 
 /**
- * 
- * 
  * @author Lorenzo Natali, GeoSolutions
  * @author Mauro Bartolomeoli, GeoSolutions
- *
  */
 public class CredentialsFromRequestHeaderFilterConfigException extends FilterConfigException {
     private static final long serialVersionUID = 1L;
@@ -21,7 +18,7 @@ public class CredentialsFromRequestHeaderFilterConfigException extends FilterCon
     }
 
     public CredentialsFromRequestHeaderFilterConfigException(String errorId, String message,
-            Object... args) {
+                                                             Object... args) {
         super(errorId, message, args);
 
     }

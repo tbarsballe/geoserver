@@ -1,4 +1,5 @@
-/** (c) 2014 Open Source Geospatial Foundation - all rights reserved
+/**
+ * (c) 2014 Open Source Geospatial Foundation - all rights reserved
  * (c) 2001 - 2013 OpenPlans
  * This code is licensed under the GPL 2.0 license, available at the root
  * application directory.
@@ -93,7 +94,6 @@ public class SessionService {
         engine.getContext().setErrorWriter(w);
 
 
-
         try {
             try {
                 String x = IOUtils.toString(request.getInputStream());
@@ -112,7 +112,7 @@ public class SessionService {
                 }
             }
             w.flush();
-        } catch(IOException e) {
+        } catch (IOException e) {
             throw new RestException("i/o error", HttpStatus.INTERNAL_SERVER_ERROR, e);
         }
         try {
@@ -124,14 +124,13 @@ public class SessionService {
     }
 
 
-
     JSONObject toJSON(ScriptSession session) {
         RequestInfo pg = RequestInfo.get();
 
         JSONObject obj = new JSONObject();
         obj.put("id", session.getId());
         obj.put("engine", session.getEngineName());
-        obj.put("self", pg.getBaseURL() + pg.getPagePath() + "/"  + session.getExtension() + "/" + Long.toString(session.getId()));
+        obj.put("self", pg.getBaseURL() + pg.getPagePath() + "/" + session.getExtension() + "/" + Long.toString(session.getId()));
 
         return obj;
     }

@@ -33,13 +33,13 @@ import org.opengis.filter.Filter;
 import org.opengis.filter.FilterFactory2;
 import org.opengis.filter.expression.Expression;
 import org.w3c.dom.Document;
+
 /**
- * 
  * @author Victor Tey(CSIRO Earth Science and Resource Engineering)
- *
  */
 public abstract class DataReferenceWfsOnlineTest extends AbstractDataReferenceWfsTest {
-    private boolean printDoc=false;
+    private boolean printDoc = false;
+
     public DataReferenceWfsOnlineTest() throws Exception {
         super();
     }
@@ -77,9 +77,8 @@ public abstract class DataReferenceWfsOnlineTest extends AbstractDataReferenceWf
         featureTypeNames.add(evaluate("//wfs:FeatureType[4]/wfs:Name", doc));
         featureTypeNames.add(evaluate("//wfs:FeatureType[5]/wfs:Name", doc));
         featureTypeNames.add(evaluate("//wfs:FeatureType[6]/wfs:Name", doc));
-       
 
-       
+
         // gsml:Contact
         assertTrue(featureTypeNames.contains("gsml:Contact"));
         // gsml:DisplacementEvent
@@ -186,7 +185,7 @@ public abstract class DataReferenceWfsOnlineTest extends AbstractDataReferenceWf
         Document doc = getAsDOM(path);
         if (printDoc) {
             LOGGER.info("WFS GetFeature&typename=gsml:GeologicUnit response:\n"
-                            + prettyString(doc));
+                    + prettyString(doc));
         }
         this.checkSchemaLocation(doc);
         // test if_then_else along with Inline mapping,includedTypes, MappingName, eg,
@@ -546,7 +545,7 @@ public abstract class DataReferenceWfsOnlineTest extends AbstractDataReferenceWf
 
     /**
      * Check schema location
-     * 
+     *
      * @param doc
      */
     private void checkSchemaLocation(Document doc) {
@@ -737,21 +736,21 @@ public abstract class DataReferenceWfsOnlineTest extends AbstractDataReferenceWf
     @Test
     public void testGetFeatureWithFeatureIdFilter() {
         String xml = //
-        "<wfs:GetFeature " //
-                + "service=\"WFS\" " //
-                + "version=\"1.1.0\" " //
-                + "xmlns:cdf=\"http://www.opengis.net/cite/data\" " //
-                + "xmlns:ogc=\"http://www.opengis.net/ogc\" " //
-                + "xmlns:wfs=\"http://www.opengis.net/wfs\" " //
-                + "xmlns:gml=\"http://www.opengis.net/gml\" " //
-                + "xmlns:gsml=\"" + AbstractAppSchemaMockData.GSML_URI + "\" " //
-                + ">" //
-                + "    <wfs:Query typeName=\"gsml:GeologicUnit\">" //
-                + "        <ogc:Filter>" //
-                + "            <ogc:FeatureId fid=\"gsml.geologicunit.16777549126932776\"/>" //
-                + "        </ogc:Filter>" //
-                + "    </wfs:Query> " //
-                + "</wfs:GetFeature>";
+                "<wfs:GetFeature " //
+                        + "service=\"WFS\" " //
+                        + "version=\"1.1.0\" " //
+                        + "xmlns:cdf=\"http://www.opengis.net/cite/data\" " //
+                        + "xmlns:ogc=\"http://www.opengis.net/ogc\" " //
+                        + "xmlns:wfs=\"http://www.opengis.net/wfs\" " //
+                        + "xmlns:gml=\"http://www.opengis.net/gml\" " //
+                        + "xmlns:gsml=\"" + AbstractAppSchemaMockData.GSML_URI + "\" " //
+                        + ">" //
+                        + "    <wfs:Query typeName=\"gsml:GeologicUnit\">" //
+                        + "        <ogc:Filter>" //
+                        + "            <ogc:FeatureId fid=\"gsml.geologicunit.16777549126932776\"/>" //
+                        + "        </ogc:Filter>" //
+                        + "    </wfs:Query> " //
+                        + "</wfs:GetFeature>";
         Document doc = postAsDOM("wfs", xml);
         if (printDoc) {
             LOGGER.info("WFS filter GetFeature response:\n" + prettyString(doc));
@@ -766,21 +765,21 @@ public abstract class DataReferenceWfsOnlineTest extends AbstractDataReferenceWf
     @Test
     public void testGetFeatureWithGmlObjectIdFilter() {
         String xml = //
-        "<wfs:GetFeature " //
-                + "service=\"WFS\" " //
-                + "version=\"1.1.0\" " //
-                + "xmlns:cdf=\"http://www.opengis.net/cite/data\" " //
-                + "xmlns:ogc=\"http://www.opengis.net/ogc\" " //
-                + "xmlns:wfs=\"http://www.opengis.net/wfs\" " //
-                + "xmlns:gml=\"http://www.opengis.net/gml\" " //
-                + "xmlns:gsml=\"" + AbstractAppSchemaMockData.GSML_URI + "\" " //
-                + ">" //
-                + "    <wfs:Query typeName=\"gsml:GeologicUnit\">" //
-                + "        <ogc:Filter>" //
-                + "            <ogc:GmlObjectId gml:id=\"gsml.geologicunit.16777549126932776\"/>" //
-                + "        </ogc:Filter>" //
-                + "    </wfs:Query> " //
-                + "</wfs:GetFeature>";
+                "<wfs:GetFeature " //
+                        + "service=\"WFS\" " //
+                        + "version=\"1.1.0\" " //
+                        + "xmlns:cdf=\"http://www.opengis.net/cite/data\" " //
+                        + "xmlns:ogc=\"http://www.opengis.net/ogc\" " //
+                        + "xmlns:wfs=\"http://www.opengis.net/wfs\" " //
+                        + "xmlns:gml=\"http://www.opengis.net/gml\" " //
+                        + "xmlns:gsml=\"" + AbstractAppSchemaMockData.GSML_URI + "\" " //
+                        + ">" //
+                        + "    <wfs:Query typeName=\"gsml:GeologicUnit\">" //
+                        + "        <ogc:Filter>" //
+                        + "            <ogc:GmlObjectId gml:id=\"gsml.geologicunit.16777549126932776\"/>" //
+                        + "        </ogc:Filter>" //
+                        + "    </wfs:Query> " //
+                        + "</wfs:GetFeature>";
 
         Document doc = postAsDOM("wfs", xml);
         if (printDoc) {
@@ -920,24 +919,24 @@ public abstract class DataReferenceWfsOnlineTest extends AbstractDataReferenceWf
     @Test
     public void testGetFeaturePropertyFilter() {
         String xml = //
-        "<wfs:GetFeature " //
-                + "service=\"WFS\" " //
-                + "version=\"1.1.0\" " //
-                + "xmlns:cdf=\"http://www.opengis.net/cite/data\" " //
-                + "xmlns:ogc=\"http://www.opengis.net/ogc\" " //
-                + "xmlns:wfs=\"http://www.opengis.net/wfs\" " //
-                + "xmlns:gml=\"http://www.opengis.net/gml\" " //
-                + "xmlns:gsml=\"" + AbstractAppSchemaMockData.GSML_URI + "\" " //
-                + ">" //
-                + "    <wfs:Query typeName=\"gsml:GeologicUnit\">" //
-                + "        <ogc:Filter>" //
-                + "            <ogc:PropertyIsEqualTo>" //
-                + "                <ogc:PropertyName>gml:name</ogc:PropertyName>" //
-                + "                <ogc:Literal>Unnamed incised alluvium (Na)</ogc:Literal>" //
-                + "            </ogc:PropertyIsEqualTo>" //
-                + "        </ogc:Filter>" //
-                + "    </wfs:Query> " //
-                + "</wfs:GetFeature>";
+                "<wfs:GetFeature " //
+                        + "service=\"WFS\" " //
+                        + "version=\"1.1.0\" " //
+                        + "xmlns:cdf=\"http://www.opengis.net/cite/data\" " //
+                        + "xmlns:ogc=\"http://www.opengis.net/ogc\" " //
+                        + "xmlns:wfs=\"http://www.opengis.net/wfs\" " //
+                        + "xmlns:gml=\"http://www.opengis.net/gml\" " //
+                        + "xmlns:gsml=\"" + AbstractAppSchemaMockData.GSML_URI + "\" " //
+                        + ">" //
+                        + "    <wfs:Query typeName=\"gsml:GeologicUnit\">" //
+                        + "        <ogc:Filter>" //
+                        + "            <ogc:PropertyIsEqualTo>" //
+                        + "                <ogc:PropertyName>gml:name</ogc:PropertyName>" //
+                        + "                <ogc:Literal>Unnamed incised alluvium (Na)</ogc:Literal>" //
+                        + "            </ogc:PropertyIsEqualTo>" //
+                        + "        </ogc:Filter>" //
+                        + "    </wfs:Query> " //
+                        + "</wfs:GetFeature>";
         Document doc = postAsDOM("wfs", xml);
         if (printDoc) {
             LOGGER.info("WFS filter GetFeature response:\n" + prettyString(doc));
@@ -953,26 +952,26 @@ public abstract class DataReferenceWfsOnlineTest extends AbstractDataReferenceWf
     @Test
     public void testFilterOnNestedAttribute() {
         String xml = //
-        "<wfs:GetFeature " //
-                + "service=\"WFS\" " //
-                + "version=\"1.1.0\" " //
-                + "xmlns:cdf=\"http://www.opengis.net/cite/data\" " //
-                + "xmlns:ogc=\"http://www.opengis.net/ogc\" " //
-                + "xmlns:wfs=\"http://www.opengis.net/wfs\" " //
-                + "xmlns:gml=\"http://www.opengis.net/gml\" " //
-                + "xmlns:gsml=\""
-                + AbstractAppSchemaMockData.GSML_URI
-                + "\" " //
-                + ">" //
-                + "    <wfs:Query typeName=\"gsml:GeologicUnit\">" //
-                + "        <ogc:Filter>" //
-                + "            <ogc:PropertyIsEqualTo>" //
-                + "                <ogc:PropertyName>gsml:GeologicUnit/gsml:composition/gsml:CompositionPart/gsml:proportion/gsml:CGI_TermValue/gsml:value</ogc:PropertyName>" //
-                + "                <ogc:Literal>significant</ogc:Literal>" //
-                + "            </ogc:PropertyIsEqualTo>" //
-                + "        </ogc:Filter>" //
-                + "    </wfs:Query> " //
-                + "</wfs:GetFeature>";
+                "<wfs:GetFeature " //
+                        + "service=\"WFS\" " //
+                        + "version=\"1.1.0\" " //
+                        + "xmlns:cdf=\"http://www.opengis.net/cite/data\" " //
+                        + "xmlns:ogc=\"http://www.opengis.net/ogc\" " //
+                        + "xmlns:wfs=\"http://www.opengis.net/wfs\" " //
+                        + "xmlns:gml=\"http://www.opengis.net/gml\" " //
+                        + "xmlns:gsml=\""
+                        + AbstractAppSchemaMockData.GSML_URI
+                        + "\" " //
+                        + ">" //
+                        + "    <wfs:Query typeName=\"gsml:GeologicUnit\">" //
+                        + "        <ogc:Filter>" //
+                        + "            <ogc:PropertyIsEqualTo>" //
+                        + "                <ogc:PropertyName>gsml:GeologicUnit/gsml:composition/gsml:CompositionPart/gsml:proportion/gsml:CGI_TermValue/gsml:value</ogc:PropertyName>" //
+                        + "                <ogc:Literal>significant</ogc:Literal>" //
+                        + "            </ogc:PropertyIsEqualTo>" //
+                        + "        </ogc:Filter>" //
+                        + "    </wfs:Query> " //
+                        + "</wfs:GetFeature>";
         Document doc = postAsDOM("wfs", xml);
         if (printDoc) {
             LOGGER.info("WFS filter GetFeature response:\n" + prettyString(doc));
@@ -997,26 +996,26 @@ public abstract class DataReferenceWfsOnlineTest extends AbstractDataReferenceWf
         this.checkGU16777549126932776(doc);
 
         xml = //
-        "<wfs:GetFeature " //
-                + "service=\"WFS\" " //
-                + "version=\"1.1.0\" " //
-                + "xmlns:cdf=\"http://www.opengis.net/cite/data\" " //
-                + "xmlns:ogc=\"http://www.opengis.net/ogc\" " //
-                + "xmlns:wfs=\"http://www.opengis.net/wfs\" " //
-                + "xmlns:gml=\"http://www.opengis.net/gml\" " //
-                + "xmlns:gsml=\""
-                + AbstractAppSchemaMockData.GSML_URI
-                + "\" " //
-                + ">" //
-                + "    <wfs:Query typeName=\"gsml:GeologicUnit\">" //
-                + "        <ogc:Filter>" //
-                + "            <ogc:PropertyIsEqualTo>" //
-                + "                <ogc:PropertyName>gsml:GeologicUnit/gsml:composition/gsml:CompositionPart/gsml:proportion/gsml:CGI_TermValue/gsml:value/@codeSpace</ogc:PropertyName>" //
-                + "                <ogc:Literal>urn:cgi:classifierScheme:GSV:Proportion</ogc:Literal>" //
-                + "            </ogc:PropertyIsEqualTo>" //
-                + "        </ogc:Filter>" //
-                + "    </wfs:Query> " //
-                + "</wfs:GetFeature>";
+                "<wfs:GetFeature " //
+                        + "service=\"WFS\" " //
+                        + "version=\"1.1.0\" " //
+                        + "xmlns:cdf=\"http://www.opengis.net/cite/data\" " //
+                        + "xmlns:ogc=\"http://www.opengis.net/ogc\" " //
+                        + "xmlns:wfs=\"http://www.opengis.net/wfs\" " //
+                        + "xmlns:gml=\"http://www.opengis.net/gml\" " //
+                        + "xmlns:gsml=\""
+                        + AbstractAppSchemaMockData.GSML_URI
+                        + "\" " //
+                        + ">" //
+                        + "    <wfs:Query typeName=\"gsml:GeologicUnit\">" //
+                        + "        <ogc:Filter>" //
+                        + "            <ogc:PropertyIsEqualTo>" //
+                        + "                <ogc:PropertyName>gsml:GeologicUnit/gsml:composition/gsml:CompositionPart/gsml:proportion/gsml:CGI_TermValue/gsml:value/@codeSpace</ogc:PropertyName>" //
+                        + "                <ogc:Literal>urn:cgi:classifierScheme:GSV:Proportion</ogc:Literal>" //
+                        + "            </ogc:PropertyIsEqualTo>" //
+                        + "        </ogc:Filter>" //
+                        + "    </wfs:Query> " //
+                        + "</wfs:GetFeature>";
         doc = postAsDOM("wfs", xml);
         if (printDoc) {
             LOGGER.info("WFS filter GetFeature response:\n" + prettyString(doc));
@@ -1327,10 +1326,10 @@ public abstract class DataReferenceWfsOnlineTest extends AbstractDataReferenceWf
         assertTrue(ls.contains("urn:cgi:feature:GSV:GeologicUnit:167775491107838881"));
         ls.clear();
         ls.add(evaluate(
-               "//gsml:GeologicUnit[@gml:id='gsml.geologicunit.167775491107838881']/gml:name[1]/@codeSpace",
+                "//gsml:GeologicUnit[@gml:id='gsml.geologicunit.167775491107838881']/gml:name[1]/@codeSpace",
                 doc));
         ls.add(evaluate(
-               "//gsml:GeologicUnit[@gml:id='gsml.geologicunit.167775491107838881']/gml:name[2]/@codeSpace",
+                "//gsml:GeologicUnit[@gml:id='gsml.geologicunit.167775491107838881']/gml:name[2]/@codeSpace",
                 doc));
         assertTrue(ls.contains("http://www.dpi.vic.gov.au/earth-resources"));
         assertTrue(ls.contains("http://www.ietf.org/rfc/rfc2141"));
@@ -1507,20 +1506,20 @@ public abstract class DataReferenceWfsOnlineTest extends AbstractDataReferenceWf
 
         ArrayList<String> ls = new ArrayList<String>();
         ls.add(evaluate(
-               "//gsml:ShearDisplacementStructure[@gml:id='gsml.sheardisplacementstructure.46188']/gml:name[1]",
+                "//gsml:ShearDisplacementStructure[@gml:id='gsml.sheardisplacementstructure.46188']/gml:name[1]",
                 doc));
         ls.add(evaluate(
-              "//gsml:ShearDisplacementStructure[@gml:id='gsml.sheardisplacementstructure.46188']/gml:name[2]",
-               doc));
+                "//gsml:ShearDisplacementStructure[@gml:id='gsml.sheardisplacementstructure.46188']/gml:name[2]",
+                doc));
         assertTrue(ls.contains("Castle Cove Fault"));
         assertTrue(ls.contains("urn:cgi:feature:GSV:ShearDisplacementStructure:46188"));
 
         ls.clear();
         ls.add(evaluate(
-               "//gsml:ShearDisplacementStructure[@gml:id='gsml.sheardisplacementstructure.46188']/gml:name[1]/@codeSpace",
+                "//gsml:ShearDisplacementStructure[@gml:id='gsml.sheardisplacementstructure.46188']/gml:name[1]/@codeSpace",
                 doc));
         ls.add(evaluate(
-               "//gsml:ShearDisplacementStructure[@gml:id='gsml.sheardisplacementstructure.46188']/gml:name[2]/@codeSpace",
+                "//gsml:ShearDisplacementStructure[@gml:id='gsml.sheardisplacementstructure.46188']/gml:name[2]/@codeSpace",
                 doc));
         assertTrue(ls.contains("http://www.dpi.vic.gov.au/earth-resources"));
         assertTrue(ls.contains("http://www.ietf.org/rfc/rfc2141"));
@@ -1601,13 +1600,13 @@ public abstract class DataReferenceWfsOnlineTest extends AbstractDataReferenceWf
                 doc);
 
         ArrayList<String> specs = new ArrayList<String>();
-        
+
         for (int i = 1; i <= 10; i++) {
             specs.add(this.evaluate("/wfs:FeatureCollection/gml:featureMember[" + i
                     + "]/gsml:MappedFeature/gsml:specification/@xlink:href", doc));
         }
         int[] countType = new int[3];
-        for (String spec : specs) {           
+        for (String spec : specs) {
             if (spec.contains("ShearDisplacementStructure")) {
                 countType[0]++;
             }
@@ -1638,10 +1637,10 @@ public abstract class DataReferenceWfsOnlineTest extends AbstractDataReferenceWf
                 "//gsml:MappedFeature[@gml:id='gsml.mappedfeature.192654']/gsml:shape/gml:MultiSurface/@srsDimension",
                 doc);
         expected = "-37.469102166666666 143.76702998333334 -37.470454841666665 143.76797201666668 -37.4716163 "
-                + "143.76817698333332 -37.472777758333336 143.7679037 -37.473939216666665 143.76776705833333 -37.475100675 143.76797201666668 " 
+                + "143.76817698333332 -37.472777758333336 143.7679037 -37.473939216666665 143.76776705833333 -37.475100675 143.76797201666668 "
                 + "-37.475715566666665 143.76899683333335 -37.476877025 143.76927011666666 -37.478038483333336 143.76933844166666 "
                 + "-37.4790633 143.76988500833335 -37.480224766666666 143.76974836666668 -37.480293083333336 "
-                + "143.76858690833333 -37.480088125 143.76742545 -37.478516733333336 143.76571741666666 " 
+                + "143.76858690833333 -37.480088125 143.76742545 -37.478516733333336 143.76571741666666 "
                 + "-37.479336591666666 143.76489756666666 -37.47954155 143.76257465 -37.480429725 143.76332618333333 "
                 + "-37.481591183333336 143.7633945 -37.482684325 143.76291625 -37.483367533333336 143.760729975 "
                 + "-37.4835725 143.75956851666666 -37.48364083333333 143.75840705833335 -37.483504175 143.7572456 "
@@ -1670,196 +1669,196 @@ public abstract class DataReferenceWfsOnlineTest extends AbstractDataReferenceWf
                 "//gsml:MappedFeature[@gml:id='gsml.mappedfeature.192654']/gsml:shape/gml:MultiSurface/gml:surfaceMember/gml:Polygon/gml:exterior/gml:LinearRing/gml:posList",
                 doc);
         assertTrue(this.isEqualGeometry(actual, expected, 5));
-        
+
     }
-    
+
     @Test
     public void testPredicates() {
         //predicates currently only works with complex post-filters used in joining
         if (AppSchemaDataAccessConfigurator.isJoining()) {
-                
+
             //test with slash in predicate
             String xml = //
-                "<wfs:GetFeature " //
-                        + "service=\"WFS\" " //
-                        + "version=\"1.1.0\" " //
-                        + "xmlns:ogc=\"http://www.opengis.net/ogc\" " //
-                        + "xmlns:wfs=\"http://www.opengis.net/wfs\" " //
-                        + "xmlns:gml=\"http://www.opengis.net/gml\" " //
-                        + "xmlns:gsml=\"" + AbstractAppSchemaMockData.GSML_URI
-                        + "\" " //
-                        + "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" " //
-                        + "xsi:schemaLocation=\"" //
-                        + "http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd " //
-                        + AbstractAppSchemaMockData.GSML_URI
-                        + " "
-                        + AbstractAppSchemaMockData.GSML_SCHEMA_LOCATION_URL //
-                        + "\""
-                        + ">" //
-                        + "    <wfs:Query typeName=\"gsml:GeologicUnit\">" //
-                        + "        <ogc:Filter>" //
-                        + "            <ogc:PropertyIsEqualTo>" //
-                        + "                <ogc:PropertyName>gsml:geologicHistory/gsml:GeologicEvent/gsml:eventAge/gsml:CGI_TermRange/gsml:lower/gsml:CGI_TermValue[gsml:value/@codeSpace='urn:cgi:classifierScheme:ICS:StratChart:2008']/gsml:value</ogc:PropertyName>" //
-                        + "                <ogc:Literal>urn:cgi:classifier:ICS:StratChart:2008:Devonian</ogc:Literal>" //                   
-                        + "            </ogc:PropertyIsEqualTo>" //
-                        + "        </ogc:Filter>" //
-                        + "    </wfs:Query> " //
-                        + "</wfs:GetFeature>";
-             validate(xml);
-             Document doc = postAsDOM("wfs", xml);
-             if (printDoc) {
-                 LOGGER.info("WFS filter GetFeature response:\n" + prettyString(doc));
-             }
-             
-             assertXpathCount(3, "//gsml:GeologicUnit", doc);
-             assertXpathCount(1, "//gsml:GeologicUnit[@gml:id='gsml.geologicunit.167775491107843155']", doc);
-             assertXpathCount(1, "//gsml:GeologicUnit[@gml:id='gsml.geologicunit.16777549126941436']", doc);
-             assertXpathCount(1, "//gsml:GeologicUnit[@gml:id='gsml.geologicunit.16777549126942588']", doc);
-             
-             //test that it does *not* give the same result when changing the predicate
-             xml = //
-                 "<wfs:GetFeature " //
-                         + "service=\"WFS\" " //
-                         + "version=\"1.1.0\" " //
-                         + "xmlns:ogc=\"http://www.opengis.net/ogc\" " //
-                         + "xmlns:wfs=\"http://www.opengis.net/wfs\" " //
-                         + "xmlns:gml=\"http://www.opengis.net/gml\" " //
-                         + "xmlns:gsml=\"" + AbstractAppSchemaMockData.GSML_URI
-                         + "\" " //
-                         + "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" " //
-                         + "xsi:schemaLocation=\"" //
-                         + "http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd " //
-                         + AbstractAppSchemaMockData.GSML_URI
-                         + " "
-                         + AbstractAppSchemaMockData.GSML_SCHEMA_LOCATION_URL //
-                         + "\""
-                         + ">" //
-                         + "    <wfs:Query typeName=\"gsml:GeologicUnit\">" //
-                         + "        <ogc:Filter>" //
-                         + "            <ogc:PropertyIsEqualTo>" //
-                         + "                <ogc:PropertyName>gsml:geologicHistory/gsml:GeologicEvent/gsml:eventAge/gsml:CGI_TermRange/gsml:lower/gsml:CGI_TermValue[gsml:value/@codeSpace='urn:cgi:classifierScheme:ICS:StratChart:2008z']/gsml:value</ogc:PropertyName>" //
-                         + "                <ogc:Literal>urn:cgi:classifier:ICS:StratChart:2008:Devonian</ogc:Literal>" //                   
-                         + "            </ogc:PropertyIsEqualTo>" //
-                         + "        </ogc:Filter>" //
-                         + "    </wfs:Query> " //
-                         + "</wfs:GetFeature>";
-              validate(xml);
-              doc = postAsDOM("wfs", xml);
-              if (printDoc) {
-                  LOGGER.info("WFS filter GetFeature response:\n" + prettyString(doc));
-              }
-              
-              assertXpathCount(0, "//gsml:GeologicUnit", doc);
-              
-             
+                    "<wfs:GetFeature " //
+                            + "service=\"WFS\" " //
+                            + "version=\"1.1.0\" " //
+                            + "xmlns:ogc=\"http://www.opengis.net/ogc\" " //
+                            + "xmlns:wfs=\"http://www.opengis.net/wfs\" " //
+                            + "xmlns:gml=\"http://www.opengis.net/gml\" " //
+                            + "xmlns:gsml=\"" + AbstractAppSchemaMockData.GSML_URI
+                            + "\" " //
+                            + "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" " //
+                            + "xsi:schemaLocation=\"" //
+                            + "http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd " //
+                            + AbstractAppSchemaMockData.GSML_URI
+                            + " "
+                            + AbstractAppSchemaMockData.GSML_SCHEMA_LOCATION_URL //
+                            + "\""
+                            + ">" //
+                            + "    <wfs:Query typeName=\"gsml:GeologicUnit\">" //
+                            + "        <ogc:Filter>" //
+                            + "            <ogc:PropertyIsEqualTo>" //
+                            + "                <ogc:PropertyName>gsml:geologicHistory/gsml:GeologicEvent/gsml:eventAge/gsml:CGI_TermRange/gsml:lower/gsml:CGI_TermValue[gsml:value/@codeSpace='urn:cgi:classifierScheme:ICS:StratChart:2008']/gsml:value</ogc:PropertyName>" //
+                            + "                <ogc:Literal>urn:cgi:classifier:ICS:StratChart:2008:Devonian</ogc:Literal>" //
+                            + "            </ogc:PropertyIsEqualTo>" //
+                            + "        </ogc:Filter>" //
+                            + "    </wfs:Query> " //
+                            + "</wfs:GetFeature>";
+            validate(xml);
+            Document doc = postAsDOM("wfs", xml);
+            if (printDoc) {
+                LOGGER.info("WFS filter GetFeature response:\n" + prettyString(doc));
+            }
+
+            assertXpathCount(3, "//gsml:GeologicUnit", doc);
+            assertXpathCount(1, "//gsml:GeologicUnit[@gml:id='gsml.geologicunit.167775491107843155']", doc);
+            assertXpathCount(1, "//gsml:GeologicUnit[@gml:id='gsml.geologicunit.16777549126941436']", doc);
+            assertXpathCount(1, "//gsml:GeologicUnit[@gml:id='gsml.geologicunit.16777549126942588']", doc);
+
+            //test that it does *not* give the same result when changing the predicate
+            xml = //
+                    "<wfs:GetFeature " //
+                            + "service=\"WFS\" " //
+                            + "version=\"1.1.0\" " //
+                            + "xmlns:ogc=\"http://www.opengis.net/ogc\" " //
+                            + "xmlns:wfs=\"http://www.opengis.net/wfs\" " //
+                            + "xmlns:gml=\"http://www.opengis.net/gml\" " //
+                            + "xmlns:gsml=\"" + AbstractAppSchemaMockData.GSML_URI
+                            + "\" " //
+                            + "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" " //
+                            + "xsi:schemaLocation=\"" //
+                            + "http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd " //
+                            + AbstractAppSchemaMockData.GSML_URI
+                            + " "
+                            + AbstractAppSchemaMockData.GSML_SCHEMA_LOCATION_URL //
+                            + "\""
+                            + ">" //
+                            + "    <wfs:Query typeName=\"gsml:GeologicUnit\">" //
+                            + "        <ogc:Filter>" //
+                            + "            <ogc:PropertyIsEqualTo>" //
+                            + "                <ogc:PropertyName>gsml:geologicHistory/gsml:GeologicEvent/gsml:eventAge/gsml:CGI_TermRange/gsml:lower/gsml:CGI_TermValue[gsml:value/@codeSpace='urn:cgi:classifierScheme:ICS:StratChart:2008z']/gsml:value</ogc:PropertyName>" //
+                            + "                <ogc:Literal>urn:cgi:classifier:ICS:StratChart:2008:Devonian</ogc:Literal>" //
+                            + "            </ogc:PropertyIsEqualTo>" //
+                            + "        </ogc:Filter>" //
+                            + "    </wfs:Query> " //
+                            + "</wfs:GetFeature>";
+            validate(xml);
+            doc = postAsDOM("wfs", xml);
+            if (printDoc) {
+                LOGGER.info("WFS filter GetFeature response:\n" + prettyString(doc));
+            }
+
+            assertXpathCount(0, "//gsml:GeologicUnit", doc);
+
+
             //tests use of predicate in one step path + also test an X-path function
-             xml = //
-                 "<wfs:GetFeature " //
-                         + "service=\"WFS\" " //
-                         + "version=\"1.1.0\" " //
-                         + "xmlns:ogc=\"http://www.opengis.net/ogc\" " //
-                         + "xmlns:wfs=\"http://www.opengis.net/wfs\" " //
-                         + "xmlns:gml=\"http://www.opengis.net/gml\" " //
-                         + "xmlns:gsml=\"" + AbstractAppSchemaMockData.GSML_URI
-                         + "\" " //
-                         + "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" " //
-                         + "xsi:schemaLocation=\"" //
-                         + "http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd " //
-                         + AbstractAppSchemaMockData.GSML_URI
-                         + " "
-                         + AbstractAppSchemaMockData.GSML_SCHEMA_LOCATION_URL //
-                         + "\""
-                         + ">" //
-                         + "    <wfs:Query typeName=\"gsml:GeologicUnit\">" //
-                         + "        <ogc:Filter>" //
-                         + "            <ogc:PropertyIsEqualTo>" //
-                         + "                <ogc:PropertyName>gml:name[substring(@codeSpace,3)='tp://www.dpi.vic.gov.au/earth-resources']</ogc:PropertyName>" //
-                         + "                <ogc:Literal>Nelson Creek Granite (G191)</ogc:Literal>" //                     
-                         + "            </ogc:PropertyIsEqualTo>" //
-                         + "        </ogc:Filter>" //
-                         + "    </wfs:Query> " //
-                         + "</wfs:GetFeature>";
-              validate(xml);
-              doc = postAsDOM("wfs", xml);
-              if (printDoc) {
-                  LOGGER.info("WFS filter GetFeature response:\n" + prettyString(doc));
-              }
-              
-              assertXpathCount(1, "//gsml:GeologicUnit", doc);
-              assertXpathCount(1, "//gsml:GeologicUnit[@gml:id='gsml.geologicunit.16777549126942588']", doc);
-              
-             //test that it does *not* give the same result when changing the predicate
-              xml = //
-                  "<wfs:GetFeature " //
-                          + "service=\"WFS\" " //
-                          + "version=\"1.1.0\" " //
-                          + "xmlns:ogc=\"http://www.opengis.net/ogc\" " //
-                          + "xmlns:wfs=\"http://www.opengis.net/wfs\" " //
-                          + "xmlns:gml=\"http://www.opengis.net/gml\" " //
-                          + "xmlns:gsml=\"" + AbstractAppSchemaMockData.GSML_URI
-                          + "\" " //
-                          + "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" " //
-                          + "xsi:schemaLocation=\"" //
-                          + "http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd " //
-                          + AbstractAppSchemaMockData.GSML_URI
-                          + " "
-                          + AbstractAppSchemaMockData.GSML_SCHEMA_LOCATION_URL //
-                          + "\""
-                          + ">" //
-                          + "    <wfs:Query typeName=\"gsml:GeologicUnit\">" //
-                          + "        <ogc:Filter>" //
-                          + "            <ogc:PropertyIsEqualTo>" //
-                          + "                <ogc:PropertyName>gml:name[substring(@codeSpace,2)='tp://www.dpi.vic.gov.au/earth-resources']</ogc:PropertyName>" //
-                          + "                <ogc:Literal>Nelson Creek Granite (G191)</ogc:Literal>" //                     
-                          + "            </ogc:PropertyIsEqualTo>" //
-                          + "        </ogc:Filter>" //
-                          + "    </wfs:Query> " //
-                          + "</wfs:GetFeature>";
-               validate(xml);
-               doc = postAsDOM("wfs", xml);
-               if (printDoc) {
-                   LOGGER.info("WFS filter GetFeature response:\n" + prettyString(doc));
-               }
-               
-               assertXpathCount(0, "//gsml:GeologicUnit", doc);           
+            xml = //
+                    "<wfs:GetFeature " //
+                            + "service=\"WFS\" " //
+                            + "version=\"1.1.0\" " //
+                            + "xmlns:ogc=\"http://www.opengis.net/ogc\" " //
+                            + "xmlns:wfs=\"http://www.opengis.net/wfs\" " //
+                            + "xmlns:gml=\"http://www.opengis.net/gml\" " //
+                            + "xmlns:gsml=\"" + AbstractAppSchemaMockData.GSML_URI
+                            + "\" " //
+                            + "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" " //
+                            + "xsi:schemaLocation=\"" //
+                            + "http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd " //
+                            + AbstractAppSchemaMockData.GSML_URI
+                            + " "
+                            + AbstractAppSchemaMockData.GSML_SCHEMA_LOCATION_URL //
+                            + "\""
+                            + ">" //
+                            + "    <wfs:Query typeName=\"gsml:GeologicUnit\">" //
+                            + "        <ogc:Filter>" //
+                            + "            <ogc:PropertyIsEqualTo>" //
+                            + "                <ogc:PropertyName>gml:name[substring(@codeSpace,3)='tp://www.dpi.vic.gov.au/earth-resources']</ogc:PropertyName>" //
+                            + "                <ogc:Literal>Nelson Creek Granite (G191)</ogc:Literal>" //
+                            + "            </ogc:PropertyIsEqualTo>" //
+                            + "        </ogc:Filter>" //
+                            + "    </wfs:Query> " //
+                            + "</wfs:GetFeature>";
+            validate(xml);
+            doc = postAsDOM("wfs", xml);
+            if (printDoc) {
+                LOGGER.info("WFS filter GetFeature response:\n" + prettyString(doc));
+            }
+
+            assertXpathCount(1, "//gsml:GeologicUnit", doc);
+            assertXpathCount(1, "//gsml:GeologicUnit[@gml:id='gsml.geologicunit.16777549126942588']", doc);
+
+            //test that it does *not* give the same result when changing the predicate
+            xml = //
+                    "<wfs:GetFeature " //
+                            + "service=\"WFS\" " //
+                            + "version=\"1.1.0\" " //
+                            + "xmlns:ogc=\"http://www.opengis.net/ogc\" " //
+                            + "xmlns:wfs=\"http://www.opengis.net/wfs\" " //
+                            + "xmlns:gml=\"http://www.opengis.net/gml\" " //
+                            + "xmlns:gsml=\"" + AbstractAppSchemaMockData.GSML_URI
+                            + "\" " //
+                            + "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" " //
+                            + "xsi:schemaLocation=\"" //
+                            + "http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd " //
+                            + AbstractAppSchemaMockData.GSML_URI
+                            + " "
+                            + AbstractAppSchemaMockData.GSML_SCHEMA_LOCATION_URL //
+                            + "\""
+                            + ">" //
+                            + "    <wfs:Query typeName=\"gsml:GeologicUnit\">" //
+                            + "        <ogc:Filter>" //
+                            + "            <ogc:PropertyIsEqualTo>" //
+                            + "                <ogc:PropertyName>gml:name[substring(@codeSpace,2)='tp://www.dpi.vic.gov.au/earth-resources']</ogc:PropertyName>" //
+                            + "                <ogc:Literal>Nelson Creek Granite (G191)</ogc:Literal>" //
+                            + "            </ogc:PropertyIsEqualTo>" //
+                            + "        </ogc:Filter>" //
+                            + "    </wfs:Query> " //
+                            + "</wfs:GetFeature>";
+            validate(xml);
+            doc = postAsDOM("wfs", xml);
+            if (printDoc) {
+                LOGGER.info("WFS filter GetFeature response:\n" + prettyString(doc));
+            }
+
+            assertXpathCount(0, "//gsml:GeologicUnit", doc);
         }
     }
 
     @Test
     public void testReprojectionInFeatureChaining() {
-      
+
         String path = "wfs?request=GetFeature&srsName=urn:x-ogc:def:crs:EPSG:4326&version=1.1.0&typeName=gsml:GeologicUnit&featureid=gsml.geologicunit.16777549126930540";
         Document doc = getAsDOM(path);
         if (printDoc) {
             LOGGER.info("WFS GetFeature&typename=gsml:GeologicUnit response:\n" + prettyString(doc));
         }
-        
+
         assertXpathEvaluatesTo("urn:x-ogc:def:crs:EPSG:4326",
                 "//gsml:GeologicUnit[@gml:id='gsml.geologicunit.16777549126930540']/gsml:occurrence/gsml:MappedFeature[@gml:id='gsml.mappedfeature.191322']/gsml:shape/gml:MultiSurface/@srsName", doc);
         assertXpathEvaluatesTo("2",
                 "//gsml:GeologicUnit[@gml:id='gsml.geologicunit.16777549126930540']/gsml:occurrence/gsml:MappedFeature[@gml:id='gsml.mappedfeature.191322']/gsml:shape/gml:MultiSurface/@srsDimension", doc);
 
         String expected = "-36.91391191948047 144.0478089083333 -36.91535066114876 144.04748426666666 -36.915274969482006 144.04633634166666 -36.91504654448175"
-                + " 144.0451942 -36.91510365281515 144.04405205833336 -36.91510365281515 144.04290991666667 -36.91476101114809 144.04211040833334" 
-                + " -36.91418048614744 144.04222736666668 -36.91336111114652 144.04308674166666 -36.912202486145226 144.04339155 -36.91174298614471" 
-                + " 144.04447269166667 -36.91133763614426 144.04556750833333 -36.91071870281022 144.04663162500003 -36.910000569476075 144.047540275" 
-                + " -36.90946055280882 144.048551125 -36.90943138614211 144.04873191666667 -36.909494336142174" 
-                + " 144.04969045833334 -36.9095378778089 144.04975733333333 -36.910296377809736 144.050369725" 
-                + " -36.91135182781094 144.04991965833332 -36.91220002781188 144.04912606666667 -36.913342494479835" 
+                + " 144.0451942 -36.91510365281515 144.04405205833336 -36.91510365281515 144.04290991666667 -36.91476101114809 144.04211040833334"
+                + " -36.91418048614744 144.04222736666668 -36.91336111114652 144.04308674166666 -36.912202486145226 144.04339155 -36.91174298614471"
+                + " 144.04447269166667 -36.91133763614426 144.04556750833333 -36.91071870281022 144.04663162500003 -36.910000569476075 144.047540275"
+                + " -36.90946055280882 144.048551125 -36.90943138614211 144.04873191666667 -36.909494336142174"
+                + " 144.04969045833334 -36.9095378778089 144.04975733333333 -36.910296377809736 144.050369725"
+                + " -36.91135182781094 144.04991965833332 -36.91220002781188 144.04912606666667 -36.913342494479835"
                 + " 144.04889391666663 -36.91391191948047 144.0478089083333";
         String orig = evaluate(
                 "//gsml:GeologicUnit[@gml:id='gsml.geologicunit.16777549126930540']/gsml:occurrence/gsml:MappedFeature[@gml:id='gsml.mappedfeature.191322']/gsml:shape/gml:MultiSurface/gml:surfaceMember/gml:Polygon/gml:exterior/gml:LinearRing/gml:posList",
                 doc);
         assertTrue(isEqualGeometry(orig, expected, 5));
-        
-    }    
-    
+
+    }
+
     @Test
     public void testFilteringSplit() throws Exception {
-    	if (AppSchemaDataAccessConfigurator.isJoining()) {
-    		// this is non joining test
-    		return;
-    	}
+        if (AppSchemaDataAccessConfigurator.isJoining()) {
+            // this is non joining test
+            return;
+        }
         FeatureSource<FeatureType, Feature> featureSource;
         try {
             Name gu = Types.typeName("urn:cgi:xmlns:CGI:GeoSciML:2.0", "GeologicUnit");
@@ -1915,5 +1914,5 @@ public abstract class DataReferenceWfsOnlineTest extends AbstractDataReferenceWf
         return (FeatureSource) mfDataAccess.getFeatureSource(feature);
 
     }
-    
+
 }

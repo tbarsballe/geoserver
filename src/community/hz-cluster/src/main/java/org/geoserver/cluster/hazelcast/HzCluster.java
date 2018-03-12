@@ -34,18 +34,16 @@ import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 
 /**
- * 
  * @author Kevin Smith, OpenGeo
- *
  */
 public class HzCluster implements GeoServerPluginConfigurator, DisposableBean, InitializingBean {
-    
+
     protected static Logger LOGGER = Logging.getLogger("org.geoserver.cluster.hazelcast");
-    
+
     static final String CONFIG_DIRECTORY = "cluster";
     static final String CONFIG_FILENAME = "cluster.properties";
     static final String HAZELCAST_FILENAME = "hazelcast.xml";
-    
+
     HazelcastInstance hz;
     ResourceStore rl;
     ClusterConfigWatcher watcher;
@@ -53,19 +51,19 @@ public class HzCluster implements GeoServerPluginConfigurator, DisposableBean, I
     private Catalog rawCatalog;
 
     private static HzCluster CLUSTER;
-    
+
     /**
      * Get a file from the cluster config directory. Create it by copying a template from the
      * classpath if it doesn't exist.
-     * @param fileName Name of the file
-     * @param scope Scope for looking up a default if the file doesn't exist.
      *
+     * @param fileName Name of the file
+     * @param scope    Scope for looking up a default if the file doesn't exist.
      * @throws IOException
      */
     public Resource getConfigFile(String fileName, Class<?> scope) throws IOException {
         return getConfigFile(fileName, scope, this.rl);
     }
-    
+
     protected Resource getConfigFile(String fileName, Class<?> scope, ResourceStore rl) throws IOException {
         Resource dir = rl.get(CONFIG_DIRECTORY);
         Resource file = dir.get(fileName);
@@ -74,65 +72,62 @@ public class HzCluster implements GeoServerPluginConfigurator, DisposableBean, I
         }
         return file;
     }
-    
-    static Optional<HzCluster> getInstanceIfAvailable(){
+
+    static Optional<HzCluster> getInstanceIfAvailable() {
         return Optional.fromNullable(CLUSTER);
     }
-    
+
     /**
      * Is clustering enabled
-     *
      */
     public boolean isEnabled() {
-        return hz!=null;
+        return hz != null;
     }
-    
+
     public boolean isRunning() {
         return isEnabled() && hz.getLifecycleService().isRunning();
     }
-    
+
     /**
      * Is session sharing enabled.  Only true if clustering in general is enabled.
-     *
      */
     public boolean isSessionSharing() {
         return isEnabled() &&
                 Boolean.parseBoolean(getClusterConfig().getProperty("session_sharing", "true"));
     }
-    
+
     /**
      * Is session sharing sticky.  See Hazelcast documentation for details.
-     *
      */
     public boolean isStickySession() {
         return Boolean.parseBoolean(getClusterConfig().getProperty("session_sticky", "false"));
     }
-    
+
     /**
      * @return milliseconds to wait for node ack notifications upon sending a config change event.
-     *         Defaults to 2000ms.
+     * Defaults to 2000ms.
      */
     public int getAckTimeoutMillis() {
         return getClusterConfig().getAckTimeoutMillis();
     }
-    
+
     /**
      * Get the HazelcastInstance being used for clustering
      *
      * @throws IllegalStateException if clustering is not enabled
      */
     public HazelcastInstance getHz() {
-        if(!isEnabled()) throw new IllegalStateException("Hazelcast Clustering has not been enabled.");
+        if (!isEnabled()) throw new IllegalStateException("Hazelcast Clustering has not been enabled.");
         return hz;
     }
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        
+
         Assert.notNull(this.rl);
-        
+
         watcher = loadConfig(this.rl);
-        if(watcher.get().isEnabled()){
+        if (watcher.get().isEnabled()) {
             hz = Hazelcast.newHazelcastInstance(loadHazelcastConfig(this.rl));
             CLUSTER = this;
         }
@@ -148,23 +143,24 @@ public class HzCluster implements GeoServerPluginConfigurator, DisposableBean, I
             LOGGER.info("HzCluster.destroy(): Hazelcast instance shut down complete");
         }
     }
-    
-    private Config loadHazelcastConfig(ResourceStore rl) throws IOException{
+
+    private Config loadHazelcastConfig(ResourceStore rl) throws IOException {
         Resource hzf = getConfigFile(HAZELCAST_FILENAME, HzCluster.class, rl);
         try (InputStream hzIn = hzf.in()) {
             return new XmlConfigBuilder(hzIn).build();
         }
     }
-    
+
     /**
      * For Spring initialisation, don't call otherwise.
+     *
      * @param dd
      * @throws IOException
      */
     public void setResourceStore(ResourceStore dd) throws IOException {
-        rl=dd;
+        rl = dd;
     }
-    
+
     /**
      * For Spring initialisation, don't call otherwise.
      */
@@ -178,14 +174,14 @@ public class HzCluster implements GeoServerPluginConfigurator, DisposableBean, I
 
     ClusterConfigWatcher loadConfig(ResourceStore rl) throws IOException {
         Resource f = getConfigFile(HzCluster.CONFIG_FILENAME, HzCluster.class, rl);
-        
+
         return new ClusterConfigWatcher(f);
     }
-    
+
     ClusterConfigWatcher getConfigWatcher() {
         return watcher;
     }
-    
+
     ClusterConfig getClusterConfig() {
         return watcher.get();
     }
@@ -200,25 +196,25 @@ public class HzCluster implements GeoServerPluginConfigurator, DisposableBean, I
 
     @Override
     public void saveConfiguration(GeoServerResourceLoader resourceLoader) throws IOException {
-        for(Resource configFile : getFileLocations()) {
-            Resource targetDir = 
+        for (Resource configFile : getFileLocations()) {
+            Resource targetDir =
                     Files.asResource(resourceLoader.findOrCreateDirectory(Paths.convert(rl.get("/").dir(), configFile.parent().dir())));
-            
+
             Resources.copy(configFile.file(), targetDir);
         }
     }
 
     @Override
     public void loadConfiguration(GeoServerResourceLoader resourceLoader) throws IOException {
-        synchronized(hz) {
+        synchronized (hz) {
             try {
                 destroy();
             } catch (Exception e) {
                 throw new IOException(e);
             }
-            
+
             watcher = loadConfig(resourceLoader);
-            if(watcher.get().isEnabled()){
+            if (watcher.get().isEnabled()) {
                 hz = Hazelcast.newHazelcastInstance(loadHazelcastConfig(resourceLoader));
                 CLUSTER = this;
             }

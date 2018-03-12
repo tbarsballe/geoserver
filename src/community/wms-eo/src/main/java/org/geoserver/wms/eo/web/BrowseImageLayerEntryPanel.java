@@ -34,9 +34,9 @@ import org.geoserver.web.data.resource.ResourceConfigurationPage;
 public class BrowseImageLayerEntryPanel extends Panel {
 
     private LayerInfo layer;
-    private StyleInfo layerStyle;    
-    
-    @SuppressWarnings({ "rawtypes" })
+    private StyleInfo layerStyle;
+
+    @SuppressWarnings({"rawtypes"})
     public BrowseImageLayerEntryPanel(String id, final Form form, WorkspaceInfo workspace) {
         super(id);
         setOutputMarkupId(true);
@@ -44,7 +44,7 @@ public class BrowseImageLayerEntryPanel extends Panel {
         LayerGroupInfo group = (LayerGroupInfo) form.getModel().getObject();
         layer = group.getRootLayer();
         layerStyle = group.getRootLayerStyle();
-        
+
         Link link = new Link("rootLayer") {
             @Override
             public void onClick() {
@@ -54,11 +54,11 @@ public class BrowseImageLayerEntryPanel extends Panel {
                 }
                 pp.add(ResourceConfigurationPage.NAME, layer.getName());
                 setResponsePage(ResourceConfigurationPage.class, pp);
-            }            
+            }
         };
         link.add(new Label("rootLayerName", new PropertyModel(layer, "name")));
-        add(link);   
-        
+        add(link);
+
         // global styles
         List<StyleInfo> globalStyles = new ArrayList<StyleInfo>();
         List<StyleInfo> allStyles = GeoServerApplication.get().getCatalog().getStyles();
@@ -67,15 +67,15 @@ public class BrowseImageLayerEntryPanel extends Panel {
                 globalStyles.add(s);
             }
         }
-        
+
         // available styles
         List<StyleInfo> styles = new ArrayList<StyleInfo>();
         styles.addAll(globalStyles);
         if (workspace != null) {
             styles.addAll(GeoServerApplication.get().getCatalog().getStylesByWorkspace(workspace));
         }
-        Collections.sort(styles,  new StyleInfoNameComparator());
-        
+        Collections.sort(styles, new StyleInfoNameComparator());
+
         DropDownChoice<StyleInfo> styleField = new DropDownChoice<StyleInfo>("rootLayerStyle", new PropertyModel<StyleInfo>(this, "layerStyle"), styles) {
             @Override
             public <C> IConverter<C> getConverter(Class<C> type) {
@@ -85,20 +85,20 @@ public class BrowseImageLayerEntryPanel extends Panel {
         styleField.setNullValid(true);
         add(styleField);
     }
-    
+
     public void setLayer(LayerInfo layer) {
         this.layer = layer;
     }
-    
+
     public void setLayerStyle(StyleInfo layerStyle) {
         this.layerStyle = layerStyle;
     }
-    
+
     public LayerInfo getLayer() {
         return layer;
     }
-    
+
     public StyleInfo getLayerStyle() {
         return layerStyle;
-    }     
+    }
 }

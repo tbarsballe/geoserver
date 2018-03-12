@@ -20,9 +20,9 @@ import org.geotools.xml.Node;
 
 /**
  * Binding object for the type http://www.opengis.net/wfs:PropertyType.
- *
  * <p>
- *        <pre>
+ * <p>
+ * <pre>
  *         <code>
  *  &lt;xsd:complexType name="PropertyType"&gt;
  *      &lt;xsd:sequence&gt;
@@ -47,6 +47,7 @@ import org.geotools.xml.Node;
  *
  *          </code>
  *         </pre>
+ *
  * @generated
  */
 public class PropertyTypeBinding extends AbstractComplexBinding {
@@ -80,7 +81,7 @@ public class PropertyTypeBinding extends AbstractComplexBinding {
      * @generated modifiable
      */
     public Object parse(ElementInstance instance, Node node, Object value)
-        throws Exception {
+            throws Exception {
         //TODO: much of this method is duplicated in the 1.1.0 binding, it 
         // would be nice if we could sync them up somewhow....
         PropertyType property = wfsfactory.createPropertyType();
@@ -120,7 +121,7 @@ public class PropertyTypeBinding extends AbstractComplexBinding {
      * {@link PropertyTypePropertyExtractor}.
      */
     public Object getProperty(Object object, QName name)
-        throws Exception {
+            throws Exception {
         return null;
     }
 }

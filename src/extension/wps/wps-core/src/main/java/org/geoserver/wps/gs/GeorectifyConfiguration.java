@@ -93,7 +93,7 @@ public class GeorectifyConfiguration implements ApplicationListener {
         }
 
         public void run() {
-            long newLastModified = configFile.lastmodified(); 
+            long newLastModified = configFile.lastmodified();
             if (lastModified == null || newLastModified != lastModified) {
                 lastModified = newLastModified;
                 loadConfiguration();
@@ -103,21 +103,31 @@ public class GeorectifyConfiguration implements ApplicationListener {
 
     private final static String SYSTEM_TEMP_DIR = System.getProperty("java.io.tmpdir");
 
-    /** Temporary folder where the gdal ops will create files */
+    /**
+     * Temporary folder where the gdal ops will create files
+     */
     private File tempFolder;
 
-    /** Temporary folder where to put logging files produced by task executions */
+    /**
+     * Temporary folder where to put logging files produced by task executions
+     */
     private File loggingFolder;
 
-    /** Wait this time when executing an ant task to do gdal processing before give up */
+    /**
+     * Wait this time when executing an ant task to do gdal processing before give up
+     */
     private long executionTimeout = GRDefaults.EXECUTION_TIMEOUT;
 
-    private Map<String,String> envVariables;
+    private Map<String, String> envVariables;
 
-    /** Set on this String any parameter used by gdalwarp */
+    /**
+     * Set on this String any parameter used by gdalwarp
+     */
     private String gdalWarpingParameters = GRDefaults.GDAL_WARPING_PARAMETERS;
 
-    /** Set on this String any parameter used by gdal_translate used to set gcps */
+    /**
+     * Set on this String any parameter used by gdal_translate used to set gcps
+     */
     private String gdalTranslateParameters = GRDefaults.GDAL_TRANSLATE_PARAMETERS;
 
     /**
@@ -135,12 +145,12 @@ public class GeorectifyConfiguration implements ApplicationListener {
     /**
      * Load the configured parameters through the properties file. TODO: Move to XML instead of
      * properties file
-     * 
+     *
      * @throws IOException
      */
     private void loadConfig() throws IOException {
         final boolean hasPropertiesFile = configFile != null && configFile.getType() == Type.RESOURCE;
-        
+
         if (hasPropertiesFile) {
             Properties props = new Properties();
             InputStream fis = null;
@@ -163,7 +173,7 @@ public class GeorectifyConfiguration implements ApplicationListener {
                         } catch (NumberFormatException nfe) {
                             if (LOGGER.isLoggable(Level.WARNING)) {
                                 LOGGER.log(Level.WARNING, "Unable to parse the specified property as a number: "
-                                                + cacheMax, nfe);
+                                        + cacheMax, nfe);
                             }
                         }
                     } else if (key.equalsIgnoreCase(GRKeys.GDAL_DATA)
@@ -179,8 +189,8 @@ public class GeorectifyConfiguration implements ApplicationListener {
                             } else {
                                 if (LOGGER.isLoggable(Level.WARNING)) {
                                     LOGGER.log(Level.WARNING, "The specified folder for " + key + " variable isn't valid, "
-                                                    + "or it doesn't exist or it isn't a readable directory or it is a " 
-                                                    + "destination folder which can't be written: " + path);
+                                            + "or it doesn't exist or it isn't a readable directory or it is a "
+                                            + "destination folder which can't be written: " + path);
                                 }
                             }
                         }
@@ -195,7 +205,7 @@ public class GeorectifyConfiguration implements ApplicationListener {
                         } catch (NumberFormatException nfe) {
                             if (LOGGER.isLoggable(Level.WARNING)) {
                                 LOGGER.log(Level.WARNING, "Unable to parse the specified property as a number: "
-                                                + timeout, nfe);
+                                        + timeout, nfe);
                             }
                         }
                     } else if (key.equalsIgnoreCase(GRKeys.GDAL_WARP_PARAMS)
@@ -289,11 +299,11 @@ public class GeorectifyConfiguration implements ApplicationListener {
         this.executionTimeout = executionTimeout;
     }
 
-    public Map<String,String> getEnvVariables() {
+    public Map<String, String> getEnvVariables() {
         return envVariables;
     }
 
-    public void setEnvVariables(Map<String,String> envVariables) {
+    public void setEnvVariables(Map<String, String> envVariables) {
         this.envVariables = envVariables;
     }
 
@@ -325,9 +335,9 @@ public class GeorectifyConfiguration implements ApplicationListener {
      * Kill all threads on web app context shutdown to avoid permgen leaks
      */
     public void onApplicationEvent(ApplicationEvent event) {
-        if(event instanceof ContextClosedEvent) {
+        if (event instanceof ContextClosedEvent) {
             timer.cancel();
         }
     }
-	
+
 }

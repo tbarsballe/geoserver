@@ -32,19 +32,19 @@ public class VectorZonalStatsTest extends WPSTestSupport {
     @Override
     protected void onSetUp(SystemTestData testData) throws Exception {
         super.onSetUp(testData);
-        
+
         Map<LayerProperty, Object> props = new HashMap<SystemTestData.LayerProperty, Object>();
         props.put(LayerProperty.ENVELOPE, new ReferencedEnvelope(181985.7630, 818014.2370, 1973809.4640, 8894102.4298, CRS.decode("EPSG:26713", true)));
 
         testData.addVectorLayer(BUGSITES, props, "bugsites.properties", getClass(), getCatalog());
         testData.addVectorLayer(RESTRICTED, props, "restricted.properties", getClass(), getCatalog());
     }
-    
+
     @Override
     protected void registerNamespaces(Map<String, String> namespaces) {
         namespaces.put("feature", "http://cite.opengeospatial.org/gmlsf");
     }
-    
+
     @Test
     public void testStatistics() throws Exception {
         String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
@@ -83,17 +83,17 @@ public class VectorZonalStatsTest extends WPSTestSupport {
 
         Document dom = postAsDOM(root(), xml);
         print(dom);
-        
+
         assertXpathEvaluatesTo("", "//feature:restricted[feature:z_cat=2]/feature:count", dom);
         assertXpathEvaluatesTo("23", "//feature:restricted[feature:z_cat=3]/feature:count", dom);
         assertXpathEvaluatesTo("1", "//feature:restricted[feature:z_cat=4]/feature:count", dom);
-        
+
         assertXpathEvaluatesTo("32.0", "//feature:restricted[feature:z_cat=3]/feature:min", dom);
         assertXpathEvaluatesTo("81.0", "//feature:restricted[feature:z_cat=3]/feature:max", dom);
         assertXpathEvaluatesTo("1331.0", "//feature:restricted[feature:z_cat=3]/feature:sum", dom);
         assertXpathEvaluatesTo("57.869565217391305", "//feature:restricted[feature:z_cat=3]/feature:avg", dom);
         assertXpathEvaluatesTo("15.120686514855372", "//feature:restricted[feature:z_cat=3]/feature:stddev", dom);
-        
+
         assertXpathEvaluatesTo("84.0", "//feature:restricted[feature:z_cat=4]/feature:min", dom);
         assertXpathEvaluatesTo("84.0", "//feature:restricted[feature:z_cat=4]/feature:max", dom);
         assertXpathEvaluatesTo("84.0", "//feature:restricted[feature:z_cat=4]/feature:sum", dom);

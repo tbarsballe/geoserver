@@ -29,7 +29,7 @@ public class LogEvent implements Serializable {
     private String message;
 
     LogEvent(long eventId, long timestamp, Severity severity, String repoUrl, String user,
-            String message) {
+             String message) {
         this.eventId = eventId;
         this.timestamp = timestamp;
         this.severity = severity;

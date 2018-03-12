@@ -15,7 +15,7 @@ import com.hazelcast.test.TestHazelcastInstanceFactory;
 
 /**
  * Tests the hazelcast based process status store with a single hazelcast instance
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class HazelcastStatusStoreTest extends AbstractProcessStoreTest {

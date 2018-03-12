@@ -36,14 +36,14 @@ public class ImportTransformTest extends ImporterTestSupport {
     DataStoreInfo store;
 
     ImportTask importTask;
-    
+
     private static String BASEPATH = RestBaseController.ROOT_PATH;
 
     /**
      * Create a test transform context: one import task with two transforms:
-     * 
+     * <p>
      * One ReprojectTransform and one IntegerFieldToDateTransform.
-     * 
+     *
      * @throws Exception
      */
     @Before
@@ -65,7 +65,7 @@ public class ImportTransformTest extends ImporterTestSupport {
     public void testGetTransforms() throws Exception {
         JSON j = getAsJSON(BASEPATH + "/imports/0/tasks/0/transforms");
         List<JSONObject> txs = parseTransformObjectsFromResponse(j);
-        
+
         assertEquals(2, txs.size());
         assertEquals("ReprojectTransform", txs.get(0).get("type"));
         assertEquals("IntegerFieldToDateTransform", txs.get(1).get("type"));
@@ -74,7 +74,7 @@ public class ImportTransformTest extends ImporterTestSupport {
     @Test
     public void testGetTransform() throws Exception {
         JSON j = getAsJSON(BASEPATH + "/imports/0/tasks/0/transforms/0");
-        
+
         assertTrue(j instanceof JSONObject);
         assertEquals("ReprojectTransform", ((JSONObject) j).get("type"));
     }
@@ -83,7 +83,7 @@ public class ImportTransformTest extends ImporterTestSupport {
     public void testGetTransformsExpandNone() throws Exception {
         JSON j = getAsJSON(BASEPATH + "/imports/0/tasks/0/transforms?expand=none");
         List<JSONObject> txs = parseTransformObjectsFromResponse(j);
-        
+
         assertEquals(2, txs.size());
         assertTrue(txs.get(0).containsKey("href"));
         assertTrue(txs.get(1).containsKey("href"));
@@ -131,9 +131,9 @@ public class ImportTransformTest extends ImporterTestSupport {
 
     /**
      * Parses the transforms list out of a /transforms response (example below), asserting that the structure and types are as expected.
-     * 
+     * <p>
      * <pre>
-     *  
+     *
      * {
      *     "transformChain": {
      *         "transforms": [
@@ -153,9 +153,9 @@ public class ImportTransformTest extends ImporterTestSupport {
      *     }
      * }
      * </pre>
-     * 
+     * <p>
      * For the above example, this will check the structure and types and then return:
-     * 
+     * <p>
      * <pre>
      * [
      *     {
@@ -171,7 +171,7 @@ public class ImportTransformTest extends ImporterTestSupport {
      *     }
      * ]
      * </pre>
-     * 
+     *
      * @param transformsResponse
      * @return
      */

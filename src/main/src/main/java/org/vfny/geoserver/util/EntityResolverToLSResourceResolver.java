@@ -76,7 +76,7 @@ class EntityResolverToLSResourceResolver implements LSResourceResolver {
         @Override
         public void setStringData(String stringData) {
             // nothing to do
-            
+
         }
 
         @Override
@@ -98,10 +98,9 @@ class EntityResolverToLSResourceResolver implements LSResourceResolver {
         @Override
         public void setCertifiedText(boolean certifiedText) {
             // TODO Auto-generated method stub
-            
+
         }
 
-        
 
     }
 
@@ -109,17 +108,17 @@ class EntityResolverToLSResourceResolver implements LSResourceResolver {
     LSResourceResolver delegate;
 
     public EntityResolverToLSResourceResolver(LSResourceResolver delegate, EntityResolver entityResolver) {
-        this.entityResolver= entityResolver;
+        this.entityResolver = entityResolver;
         this.delegate = delegate;
     }
 
     @Override
     public LSInput resolveResource(String type, String namespaceURI, String publicId,
-            String systemId, String baseURI) {
+                                   String systemId, String baseURI) {
         // give the entity resolver an opportunity (mostly to throw an exception)
         try {
             InputSource is = entityResolver.resolveEntity(publicId, systemId);
-            if(is != null) {
+            if (is != null) {
                 return new InputSourceToLSResource(is);
             }
         } catch (SAXException | IOException e) {
@@ -128,6 +127,6 @@ class EntityResolverToLSResourceResolver implements LSResourceResolver {
         // otherwise fall back on the default resolution path
         return delegate.resolveResource(type, namespaceURI, publicId, systemId, baseURI);
     }
-    
-    
+
+
 }

@@ -18,9 +18,9 @@ public abstract class NetCDFExtensionPanel extends Panel {
     }
 
     /**
-     * Writes its input into the provided settings, as participation in {@link NetCDFPanel} 
+     * Writes its input into the provided settings, as participation in {@link NetCDFPanel}
      * {@link FormComponentPanel#convertInput()}
-     * 
+     *
      * @param convertedInput
      */
     public abstract void convertInput(NetCDFSettingsContainer settings);

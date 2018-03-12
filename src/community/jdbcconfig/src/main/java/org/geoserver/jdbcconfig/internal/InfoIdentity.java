@@ -10,13 +10,13 @@ import java.util.Arrays;
 import org.geoserver.catalog.Info;
 
 public class InfoIdentity implements Serializable {
-    
+
     private static final long serialVersionUID = -1756381133395681156L;
 
     private Class<? extends Info> clazz;
-    
+
     private String[] descriptor;
-    
+
     private String[] values;
 
     public InfoIdentity(Class<? extends Info> clazz, String[] descriptor, String[] values) {
@@ -72,6 +72,5 @@ public class InfoIdentity implements Serializable {
         return true;
     }
 
-    
 
 }

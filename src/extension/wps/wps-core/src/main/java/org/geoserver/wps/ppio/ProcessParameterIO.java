@@ -30,7 +30,6 @@ import com.vividsolutions.jts.geom.Envelope;
  *
  * @author Lucas Reed, Refractions Research Inc
  * @author Justin Deoliveira, OpenGEO
- *
  */
 public abstract class ProcessParameterIO {
 
@@ -43,18 +42,27 @@ public abstract class ProcessParameterIO {
      * </ul>
      */
     public enum PPIODirection {
-        /** Only encoding supported, PPIO suitable only for outputs */
+        /**
+         * Only encoding supported, PPIO suitable only for outputs
+         */
         ENCODING,
-        /** Only decoding supported, PPIO suitable only for inputs */
+        /**
+         * Only decoding supported, PPIO suitable only for inputs
+         */
         DECODING,
-        /** Both encoding and decoding supported */
+        /**
+         * Both encoding and decoding supported
+         */
         BOTH
-    };
+    }
+
+    ;
 
     /**
      * list of default ppios supported out of the box
      */
     static List<ProcessParameterIO> defaults;
+
     static {
         defaults = new ArrayList<ProcessParameterIO>();
 
@@ -221,7 +229,7 @@ public abstract class ProcessParameterIO {
      * Look for PPIO matching the parameter type and suitable for direction handling
      */
     private static List<ProcessParameterIO> findByDirection(Parameter<?> p,
-            ApplicationContext context, PPIODirection direction) {
+                                                            ApplicationContext context, PPIODirection direction) {
         List<ProcessParameterIO> ppios = new ArrayList<ProcessParameterIO>();
         List<ProcessParameterIO> matches = findAll(p, context);
         for (ProcessParameterIO ppio : matches) {
@@ -251,7 +259,6 @@ public abstract class ProcessParameterIO {
      *
      * @param param
      * @param applicationContext
-     *
      */
     public static boolean isComplex(Parameter<?> param, ApplicationContext applicationContext) {
         List<ProcessParameterIO> ppios = findAll(param, applicationContext);

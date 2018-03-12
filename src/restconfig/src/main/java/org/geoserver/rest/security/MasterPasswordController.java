@@ -47,7 +47,7 @@ public class MasterPasswordController extends RestBaseController {
             MediaType.APPLICATION_JSON_VALUE,
             MediaTypeExtensions.TEXT_JSON_VALUE,
             MediaType.APPLICATION_XML_VALUE,
-            MediaType.TEXT_XML_VALUE })
+            MediaType.TEXT_XML_VALUE})
     public NamedMap<String, String> masterPasswordGet() throws IOException {
 
         if (!getManager().checkAuthenticationForAdminRole()) {
@@ -67,7 +67,7 @@ public class MasterPasswordController extends RestBaseController {
             MediaType.APPLICATION_JSON_VALUE,
             MediaTypeExtensions.TEXT_JSON_VALUE,
             MediaType.APPLICATION_XML_VALUE,
-            MediaType.TEXT_XML_VALUE })
+            MediaType.TEXT_XML_VALUE})
     public void masterPasswordPut(@RequestBody Map<String, String> putMap) throws IOException {
         if (!getManager().checkAuthenticationForAdminRole()) {
             // yes, for backwards compat, it's really METHOD_NOT_ALLOWED

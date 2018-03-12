@@ -11,9 +11,8 @@ import java.util.Map;
  * Implementors of this interface allow to transfer thread locals from the current thread to another
  * one. They are used to make sure important thread local values are transferred into thread
  * pools/scheduled tasks/delayed actions executing portions of the GeoServer work
- * 
+ *
  * @author Andrea Aime - GeoSolutions
- * 
  */
 public interface ThreadLocalTransfer {
 

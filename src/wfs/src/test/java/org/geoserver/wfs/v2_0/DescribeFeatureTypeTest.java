@@ -41,16 +41,16 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 public class DescribeFeatureTypeTest extends WFS20TestSupport {
-	
+
 //    @Override
 //    protected String getLogConfiguration() {
 //        return "/DEFAULT_LOGGING.properties";
 //    }
-    
-	@Override
+
+    @Override
     protected void setUpInternal(SystemTestData dataDirectory) throws Exception {
-    	DataStoreInfo di = getCatalog().getDataStoreByName(CiteTestData.CITE_PREFIX);
-    	di.setEnabled(false);
+        DataStoreInfo di = getCatalog().getDataStoreByName(CiteTestData.CITE_PREFIX);
+        di.setEnabled(false);
         getCatalog().save(di);
     }
 
@@ -59,7 +59,7 @@ public class DescribeFeatureTypeTest extends WFS20TestSupport {
         super.setUpNamespaces(namespaces);
         namespaces.put("soap", "http://www.w3.org/2003/05/soap-envelope");
     }
-        
+
     @Test
     public void testGet() throws Exception {
         String typeName = getLayerId(CiteTestData.PRIMITIVEGEOFEATURE);
@@ -77,7 +77,7 @@ public class DescribeFeatureTypeTest extends WFS20TestSupport {
 
     @Test
     public void testGetPluralKey() throws Exception {
-	    // the WFS 2.0 spec is contracting itself, says "typename" in a table and "typenames" just below
+        // the WFS 2.0 spec is contracting itself, says "typename" in a table and "typenames" just below
         // current CITE tests typenames is used
         String typeName = getLayerId(CiteTestData.PRIMITIVEGEOFEATURE);
         MockHttpServletResponse response = getAsServletResponse(
@@ -91,12 +91,12 @@ public class DescribeFeatureTypeTest extends WFS20TestSupport {
                 "wfs?service=WFS&version=2.0.0&request=DescribeFeatureType&typeName=" + typeName);
         assertThat(response.getContentType(), is("text/xml"));
     }
-    
+
     @Test
     public void testConcurrentGet() throws Exception {
         String typeName = getLayerId(CiteTestData.PRIMITIVEGEOFEATURE);
         ExecutorCompletionService<Object> es = new ExecutorCompletionService<>(Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors()));
-        final int REQUESTS =  200;
+        final int REQUESTS = 200;
         for (int i = 0; i < REQUESTS; i++) {
             es.submit(() -> {
                 Document doc = getAsDOM(
@@ -110,19 +110,19 @@ public class DescribeFeatureTypeTest extends WFS20TestSupport {
         for (int i = 0; i < REQUESTS; i++) {
             es.take().get();
         }
-        
+
     }
 
     @Test
     public void testPost() throws Exception {
         String typeName = getLayerId(CiteTestData.PRIMITIVEGEOFEATURE);
         String xml = "<wfs:DescribeFeatureType service='WFS' version='2.0.0' "
-          + "xmlns:wfs='http://www.opengis.net/wfs/2.0' " 
-          + "xmlns:sf='" + CiteTestData.PRIMITIVEGEOFEATURE.getNamespaceURI() + "'>" 
-          + " <wfs:TypeName>" + typeName + "</wfs:TypeName>"
-          + "</wfs:DescribeFeatureType>";
+                + "xmlns:wfs='http://www.opengis.net/wfs/2.0' "
+                + "xmlns:sf='" + CiteTestData.PRIMITIVEGEOFEATURE.getNamespaceURI() + "'>"
+                + " <wfs:TypeName>" + typeName + "</wfs:TypeName>"
+                + "</wfs:DescribeFeatureType>";
 
-        MockHttpServletResponse response =  postAsServletResponse("wfs", xml);
+        MockHttpServletResponse response = postAsServletResponse("wfs", xml);
         assertThat(response.getContentType(), is("application/gml+xml; version=3.2"));
         Document doc = dom(new ByteArrayInputStream(response.getContentAsString().getBytes()));
         assertSchema(doc, CiteTestData.PRIMITIVEGEOFEATURE);
@@ -131,13 +131,13 @@ public class DescribeFeatureTypeTest extends WFS20TestSupport {
         response = postAsServletResponse("wfs", xml);
         assertThat(response.getContentType(), is("text/xml"));
     }
-    
-    
+
+
     @Test
     public void testConcurrentPost() throws Exception {
         String typeName = getLayerId(CiteTestData.PRIMITIVEGEOFEATURE);
         ExecutorCompletionService<Object> es = new ExecutorCompletionService<>(Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors()));
-        final int REQUESTS =  200;
+        final int REQUESTS = 200;
         for (int i = 0; i < REQUESTS; i++) {
             es.submit(() -> {
                 Document doc = getAsDOM(
@@ -151,41 +151,41 @@ public class DescribeFeatureTypeTest extends WFS20TestSupport {
         for (int i = 0; i < REQUESTS; i++) {
             long start = System.currentTimeMillis();
             es.take().get();
-            if(i % 100 == 0) {
+            if (i % 100 == 0) {
                 long curr = System.currentTimeMillis();
                 LOGGER.info(i + " - " + (curr - start));
                 start = curr;
             }
         }
-        
+
     }
-    
+
     void assertSchema(Document doc, QName... types) throws Exception {
         assertEquals("xsd:schema", doc.getDocumentElement().getNodeName());
         XMLAssert.assertXpathExists("//xsd:import[@namespace='" + GML.NAMESPACE + "']", doc);
-        
+
         for (QName type : types) {
             String eName = type.getLocalPart();
             String tName = eName + "Type";
-            
+
             XMLAssert.assertXpathEvaluatesTo("1", "count(//xsd:complexType[@name='" + tName + "'])", doc);
             XMLAssert.assertXpathEvaluatesTo("1", "count(//xsd:element[@name='" + eName + "'])", doc);
         }
     }
-    
+
     @Test
     public void testDateMappings() throws Exception {
 
         String typeName = getLayerId(CiteTestData.PRIMITIVEGEOFEATURE);
         String xml = "<wfs:DescribeFeatureType service='WFS' version='2.0.0' "
-          + "xmlns:wfs='http://www.opengis.net/wfs/2.0' " 
-          + "xmlns:sf='" + CiteTestData.PRIMITIVEGEOFEATURE.getNamespaceURI() + "'>" 
-          + " <wfs:TypeName>" + typeName + "</wfs:TypeName>"
-          + "</wfs:DescribeFeatureType>";
-        
+                + "xmlns:wfs='http://www.opengis.net/wfs/2.0' "
+                + "xmlns:sf='" + CiteTestData.PRIMITIVEGEOFEATURE.getNamespaceURI() + "'>"
+                + " <wfs:TypeName>" + typeName + "</wfs:TypeName>"
+                + "</wfs:DescribeFeatureType>";
+
         Document doc = postAsDOM("wfs", xml);
         assertSchema(doc, CiteTestData.PRIMITIVEGEOFEATURE);
-        
+
         NodeList elements = doc.getElementsByTagName("xsd:element");
         boolean date = false;
         boolean dateTime = false;
@@ -208,9 +208,9 @@ public class DescribeFeatureTypeTest extends WFS20TestSupport {
     public void testNoNamespaceDeclaration() throws Exception {
         String typeName = getLayerId(CiteTestData.PRIMITIVEGEOFEATURE);
         String xml = "<wfs:DescribeFeatureType service='WFS' version='2.0.0' "
-          + "xmlns:wfs='http://www.opengis.net/wfs/2.0'>" 
-          + " <wfs:TypeName>" + typeName + "</wfs:TypeName>"
-          + "</wfs:DescribeFeatureType>";
+                + "xmlns:wfs='http://www.opengis.net/wfs/2.0'>"
+                + " <wfs:TypeName>" + typeName + "</wfs:TypeName>"
+                + "</wfs:DescribeFeatureType>";
         Document doc = postAsDOM("wfs", xml);
 
         // with previous code missing namespace would have resulted in a service exception
@@ -222,15 +222,15 @@ public class DescribeFeatureTypeTest extends WFS20TestSupport {
         String typeName1 = getLayerId(CiteTestData.PRIMITIVEGEOFEATURE);
         String typeName2 = getLayerId(CiteTestData.GENERICENTITY);
         String xml = "<wfs:DescribeFeatureType service='WFS' version='2.0.0' "
-          + "xmlns:wfs='http://www.opengis.net/wfs/2.0'>" 
-          + " <wfs:TypeName>" + typeName1 + "</wfs:TypeName>"
-          + " <wfs:TypeName>" + typeName2 + "</wfs:TypeName>"
-          + "</wfs:DescribeFeatureType>";
+                + "xmlns:wfs='http://www.opengis.net/wfs/2.0'>"
+                + " <wfs:TypeName>" + typeName1 + "</wfs:TypeName>"
+                + " <wfs:TypeName>" + typeName2 + "</wfs:TypeName>"
+                + "</wfs:DescribeFeatureType>";
 
         Document doc = postAsDOM("wfs", xml);
-        
+
         assertSchema(doc, CiteTestData.PRIMITIVEGEOFEATURE, CiteTestData.GENERICENTITY);
-        
+
         NodeList nodes = doc.getDocumentElement().getChildNodes();
         boolean seenComplexType = false;
         for (int i = 0; i < nodes.getLength(); i++) {
@@ -245,30 +245,28 @@ public class DescribeFeatureTypeTest extends WFS20TestSupport {
 
     /**
      * See https://osgeo-org.atlassian.net/browse/GEOS-3306
-     * 
      */
     @Test
     public void testUserSuppliedTypeNameNamespace() throws Exception {
         final QName typeName = CiteTestData.POLYGONS;
         String path = "ows?service=WFS&version=2.0.0&request=DescribeFeatureType&" +
-            "typeName=myPrefix:" + typeName.getLocalPart() + 
-            "&namespaces=xmlns(myPrefix," + URLEncoder.encode(typeName.getNamespaceURI(), "UTF-8") + ")";
-        
+                "typeName=myPrefix:" + typeName.getLocalPart() +
+                "&namespaces=xmlns(myPrefix," + URLEncoder.encode(typeName.getNamespaceURI(), "UTF-8") + ")";
+
         Document doc = getAsDOM(path);
         assertSchema(doc, CiteTestData.POLYGONS);
     }
 
     /**
      * See https://osgeo-org.atlassian.net/browse/GEOS-3306
-     * 
      */
     @Test
     public void testUserSuppliedTypeNameDefaultNamespace() throws Exception {
         final QName typeName = CiteTestData.POLYGONS;
-        String path = "ows?service=WFS&version=2.0.0&request=DescribeFeatureType&" + 
-            "typeName="+ typeName.getLocalPart() + 
-            "&namespace=xmlns(" + URLEncoder.encode(typeName.getNamespaceURI(), "UTF-8") + ")";
-        
+        String path = "ows?service=WFS&version=2.0.0&request=DescribeFeatureType&" +
+                "typeName=" + typeName.getLocalPart() +
+                "&namespace=xmlns(" + URLEncoder.encode(typeName.getNamespaceURI(), "UTF-8") + ")";
+
         Document doc = getAsDOM(path);
         assertSchema(doc, CiteTestData.POLYGONS);
     }
@@ -287,7 +285,6 @@ public class DescribeFeatureTypeTest extends WFS20TestSupport {
      * in the GeoServer's default namespace, the lookup should fail, since the request does not
      * addresses the typeName either by qualifying it as declared in the getcaps document, or
      * providing an alternate prefix with its corresponding prefix to namespace mapping.
-     * 
      */
     @Test
     public void testCiteCompliance() throws Exception {
@@ -295,7 +292,7 @@ public class DescribeFeatureTypeTest extends WFS20TestSupport {
         // make sure typeName _is_ in the default namespace
         Catalog catalog = getCatalog();
         NamespaceInfo defaultNs = catalog.getDefaultNamespace();
-        
+
         GeoServer geoServer = getGeoServer();
         WFSInfo service = geoServer.getService(WFSInfo.class);
         try {
@@ -307,20 +304,20 @@ public class DescribeFeatureTypeTest extends WFS20TestSupport {
             DataStoreInfo store = typeInfo.getStore();
             store.setEnabled(true);
             catalog.save(store);
-            
+
             // and request typeName without prefix
             String path = "ows?service=WFS&version=2.0.0&request=DescribeFeatureType&typeName="
-                + typeName.getLocalPart();
+                    + typeName.getLocalPart();
             Document doc;
-        
+
             //first, non cite compliant mode should find the type even if namespace is not specified
             service.setCiteCompliant(false);
             geoServer.save(service);
             doc = getAsDOM(path);
             print(doc);
             assertSchema(doc, typeName);
-            
-    
+
+
             //then, in cite compliance more, it should not find the type name
             service.setCiteCompliant(true);
             geoServer.save(service);
@@ -333,10 +330,9 @@ public class DescribeFeatureTypeTest extends WFS20TestSupport {
             geoServer.save(service);
         }
     }
-    
+
     /**
      * See https://osgeo-org.atlassian.net/browse/GEOS-3306
-     * 
      */
     @Test
     public void testPrefixedGetStrictCite() throws Exception {
@@ -345,7 +341,7 @@ public class DescribeFeatureTypeTest extends WFS20TestSupport {
         try {
             service.setCiteCompliant(true);
             geoServer.save(service);
-            
+
             final QName typeName = CiteTestData.POLYGONS;
             String path = "ows?service=WFS&version=2.0.0&request=DescribeFeatureType&typeName="
                     + getLayerId(typeName);
@@ -360,23 +356,23 @@ public class DescribeFeatureTypeTest extends WFS20TestSupport {
     @Test
     public void testGML32OutputFormat() throws Exception {
         Document dom = getAsDOM("ows?service=WFS&version=2.0.0&request=DescribeFeatureType" +
-            "&outputFormat=text/xml;+subtype%3Dgml/3.2&typename=" + getLayerId(CiteTestData.POLYGONS));
+                "&outputFormat=text/xml;+subtype%3Dgml/3.2&typename=" + getLayerId(CiteTestData.POLYGONS));
         assertSchema(dom, CiteTestData.POLYGONS);
     }
-    
+
     @Test
     public void testGMLAttributeMapping() throws Exception {
         WFSInfo wfs = getWFS();
         GMLInfo gml = wfs.getGML().get(WFSInfo.Version.V_11);
         gml.setOverrideGMLAttributes(false);
         getGeoServer().save(wfs);
-        
+
         Document dom = getAsDOM("ows?service=WFS&version=2.0.0&request=DescribeFeatureType" +
                 "&typename=" + getLayerId(CiteTestData.PRIMITIVEGEOFEATURE));
         assertSchema(dom, CiteTestData.PRIMITIVEGEOFEATURE);
         XMLAssert.assertXpathNotExists("//xsd:element[@name = 'name']", dom);
         XMLAssert.assertXpathNotExists("//xsd:element[@name = 'description']", dom);
-        
+
         gml.setOverrideGMLAttributes(true);
         dom = getAsDOM("ows?service=WFS&version=2.0.0&request=DescribeFeatureType" +
                 "&typename=" + getLayerId(CiteTestData.PRIMITIVEGEOFEATURE));
@@ -387,29 +383,29 @@ public class DescribeFeatureTypeTest extends WFS20TestSupport {
 
     @Test
     public void testSOAP() throws Exception {
-        String xml = 
-           "<soap:Envelope xmlns:soap='http://www.w3.org/2003/05/soap-envelope'> " + 
-                " <soap:Header/> " + 
-                " <soap:Body>"
-                + "<wfs:DescribeFeatureType service='WFS' version='2.0.0' "
-                + "xmlns:wfs='http://www.opengis.net/wfs/2.0' " 
-                + "xmlns:sf='" + CiteTestData.PRIMITIVEGEOFEATURE.getNamespaceURI() + "'>" 
-                + " <wfs:TypeName>" + getLayerId(CiteTestData.PRIMITIVEGEOFEATURE) + "</wfs:TypeName>"
-                + "</wfs:DescribeFeatureType>" + 
-                " </soap:Body> " + 
-            "</soap:Envelope> "; 
-              
+        String xml =
+                "<soap:Envelope xmlns:soap='http://www.w3.org/2003/05/soap-envelope'> " +
+                        " <soap:Header/> " +
+                        " <soap:Body>"
+                        + "<wfs:DescribeFeatureType service='WFS' version='2.0.0' "
+                        + "xmlns:wfs='http://www.opengis.net/wfs/2.0' "
+                        + "xmlns:sf='" + CiteTestData.PRIMITIVEGEOFEATURE.getNamespaceURI() + "'>"
+                        + " <wfs:TypeName>" + getLayerId(CiteTestData.PRIMITIVEGEOFEATURE) + "</wfs:TypeName>"
+                        + "</wfs:DescribeFeatureType>" +
+                        " </soap:Body> " +
+                        "</soap:Envelope> ";
+
         MockHttpServletResponse resp = postAsServletResponse("wfs", xml, "application/soap+xml");
         assertEquals("application/soap+xml", resp.getContentType());
-        
+
         Document dom = dom(new ByteArrayInputStream(resp.getContentAsString().getBytes()));
         assertEquals("soap:Envelope", dom.getDocumentElement().getNodeName());
         print(dom);
         XMLAssert.assertXpathEvaluatesTo("xsd:base64", "//soap:Body/@type", dom);
         assertEquals(1, dom.getElementsByTagName("wfs:DescribeFeatureTypeResponse").getLength());
-        
+
         String base64 = dom.getElementsByTagName("wfs:DescribeFeatureTypeResponse").item(0)
-            .getFirstChild().getNodeValue();
+                .getFirstChild().getNodeValue();
         byte[] decoded = Base64.decodeBase64(base64.getBytes());
         dom = dom(new ByteArrayInputStream(decoded));
         assertEquals("xsd:schema", dom.getDocumentElement().getNodeName());

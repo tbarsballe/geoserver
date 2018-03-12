@@ -10,15 +10,14 @@ import org.geoserver.wms.dimension.impl.FixedValueStrategyImpl;
 
 /**
  * Default implementation of FixedValueStrategyFactory.
- * 
+ * <p>
  * Extend / replace this class in the WMS application context binding
- * of fixedValueStrategyFactory property of 
+ * of fixedValueStrategyFactory property of
  * {@link DimensionDefaultValueSelectionStrategyFactoryImpl} to change the
  * implementations used for selecting the dimension default values
  * FIXED strategy.
- *  
- * @author Ilkka Rinne / Spatineo Inc for the Finnish Meteorological Institute
  *
+ * @author Ilkka Rinne / Spatineo Inc for the Finnish Meteorological Institute
  */
 public class DefaultFixedValueStrategyFactory implements FixedValueStrategyFactory {
 
@@ -29,7 +28,7 @@ public class DefaultFixedValueStrategyFactory implements FixedValueStrategyFacto
 
     @Override
     public DimensionDefaultValueSelectionStrategy createFixedValueStrategy(Object value,
-            String fixedCapabilitiesValue) {
+                                                                           String fixedCapabilitiesValue) {
         return new FixedValueStrategyImpl(value, fixedCapabilitiesValue);
     }
 

@@ -10,9 +10,8 @@ import java.util.Map;
 
 /**
  * Information about a particular image format.
- * 
+ *
  * @author Justin Deoliveira, The Open Planning Project
- * 
  */
 public interface ImageFormatInfo {
 
@@ -26,8 +25,8 @@ public interface ImageFormatInfo {
      */
     String getMimeType();
 
-    void setMimeType( String mimeType );
-    
+    void setMimeType(String mimeType);
+
     /**
      * @uml.property name="antiAliasing"
      */
@@ -51,7 +50,7 @@ public interface ImageFormatInfo {
     /**
      * @uml.property name="metadata"
      */
-    Map<String,Serializable> getMetadata();
+    Map<String, Serializable> getMetadata();
 
-    Map<Object,Object> getClientProperties();
+    Map<Object, Object> getClientProperties();
 }

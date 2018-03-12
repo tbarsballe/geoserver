@@ -18,9 +18,8 @@ import org.geotools.styling.StyledLayerDescriptor;
  * Each of the methods on this class corresponds to an operation as defined by the Web Map
  * Specification. See {@link "http://www.opengeospatial.org/standards/wms"} for more details.
  * </p>
- * 
+ *
  * @author Justin Deoliveira, The Open Planning Project, jdeolive@openplans.org
- * 
  */
 public interface WebMapService {
 
@@ -55,9 +54,9 @@ public interface WebMapService {
 
     /**
      * GetLegendGraphic operation.
-     * 
+     *
      * @return the representation of the legend graphic to be encoded by a {@link Response} object
-     *         that can handle it
+     * that can handle it
      */
     Object getLegendGraphic(GetLegendGraphicRequest request);
 
@@ -67,7 +66,7 @@ public interface WebMapService {
     WebMap reflect(GetMapRequest request);
 
     WebMap getMapReflect(GetMapRequest request);
-    
+
     /**
      * KML reflector
      */
@@ -77,6 +76,6 @@ public interface WebMapService {
      * animator
      */
     WebMap animate(GetMapRequest getMap);
-    
+
     StyledLayerDescriptor getStyles(GetStylesRequest request);
 }

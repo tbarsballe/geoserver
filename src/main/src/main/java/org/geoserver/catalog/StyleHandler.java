@@ -17,6 +17,7 @@ import java.io.StringReader;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
+
 import org.geoserver.platform.resource.Resource;
 import org.geotools.factory.CommonFactoryFinder;
 import org.geotools.styling.ResourceLocator;
@@ -29,8 +30,8 @@ import org.xml.sax.EntityResolver;
  * Extension point for handling a style of a particular language/version.
  * <p>
  * </p>
- * @author Justin Deoliveira, Boundless
  *
+ * @author Justin Deoliveira, Boundless
  */
 public abstract class StyleHandler {
 
@@ -85,15 +86,14 @@ public abstract class StyleHandler {
     public String getCodeMirrorEditMode() {
         return getFormat();
     }
-    
+
     /**
      * Generates a style from a template using the provided substitutions.
      *
-     * @param type the template type, see {@link org.geoserver.catalog.StyleType}.
-     * @param color java.aw.Color to use during substitution
+     * @param type      the template type, see {@link org.geoserver.catalog.StyleType}.
+     * @param color     java.aw.Color to use during substitution
      * @param colorName Human readable color name, for use generating comments
      * @param layerName Layer name, for use generating comments
-     * 
      * @return The text content of the style template after performing substitutions
      */
     public String getStyle(StyleType type, Color color, String colorName, String layerName) {
@@ -103,28 +103,28 @@ public abstract class StyleHandler {
     /**
      * Parses a style resource.
      *
-     * @param input The style input, see {@link #toReader(Object)} for accepted inputs.
-     * @param version Optional version of the format, maybe <code>null</code>
+     * @param input           The style input, see {@link #toReader(Object)} for accepted inputs.
+     * @param version         Optional version of the format, maybe <code>null</code>
      * @param resourceLocator Optional locator for resources (icons, etc...) referenced by the style, may be
      *                        <code>null</code>.
-     * @param entityResolver Optional entity resolver for XML based formats, may be <code>null</code>.
-     *
+     * @param entityResolver  Optional entity resolver for XML based formats, may be <code>null</code>.
      */
     public abstract StyledLayerDescriptor parse(Object input, Version version, ResourceLocator resourceLocator,
-        EntityResolver entityResolver) throws IOException;
+                                                EntityResolver entityResolver) throws IOException;
 
     /**
      * Encodes a style.
      * <p>
      * Handlers that don't support encoding should throw {@link java.lang.UnsupportedOperationException}.
      * </p>
-     * @param sld The style to encode.
+     *
+     * @param sld     The style to encode.
      * @param version The version of the format to use to encode the style, may be <code>null</code>.
-     * @param pretty Flag controlling whether or not the style should be encoded in pretty form.
-     * @param output The stream to write the encoded style to.
+     * @param pretty  Flag controlling whether or not the style should be encoded in pretty form.
+     * @param output  The stream to write the encoded style to.
      */
     public abstract void encode(StyledLayerDescriptor sld, Version version, boolean pretty, OutputStream output)
-        throws IOException;
+            throws IOException;
 
     /**
      * Validates a style resource.
@@ -132,24 +132,23 @@ public abstract class StyleHandler {
      * For handlers that don't support an extended form of validation (like against an XML schema) this implementation
      * should at a minimum attempt to parse the input and return any parsing errors.
      * </p>
-     * @param input The style input, see {@link #toReader(Object)} for accepted inputs.
-     * @param version The version of the format to use to validate the style, may be <code>null</code>.
      *
+     * @param input   The style input, see {@link #toReader(Object)} for accepted inputs.
+     * @param version The version of the format to use to validate the style, may be <code>null</code>.
      * @return Any validation errors, or empty list if the style is valid.
      */
     public abstract List<Exception> validate(Object input, Version version, EntityResolver entityResolver) throws IOException;
 
     /**
      * Returns the format mime type for the specified version.
-     *
      */
     public abstract String mimeType(Version version);
 
     /**
      * Returns the format version for the specified mime type.
      * <p>
-     *  This method should only be overriden by formats that support multiple versions. The default
-     *  implementation just returns 1.0.0.
+     * This method should only be overriden by formats that support multiple versions. The default
+     * implementation just returns 1.0.0.
      * </p>
      */
     public Version versionForMimeType(String mimeType) {
@@ -159,9 +158,10 @@ public abstract class StyleHandler {
     /**
      * Determines the version of the format/language of the specified style resource.
      * <p>
-     *  This method should only be overriden by formats that support multiple versions. The default
-     *  implementation just returns 1.0.0.
+     * This method should only be overriden by formats that support multiple versions. The default
+     * implementation just returns 1.0.0.
      * </p>
+     *
      * @param input The style input, see {@link #toReader(Object)} for accepted inputs.
      */
     public Version version(Object input) throws IOException {
@@ -177,25 +177,25 @@ public abstract class StyleHandler {
         if (input instanceof Reader) {
             return (Reader) input;
         }
-        
+
         if (input instanceof InputStream) {
-            return new InputStreamReader((InputStream)input);
+            return new InputStreamReader((InputStream) input);
         }
 
         if (input instanceof String) {
-            return new StringReader((String)input);
+            return new StringReader((String) input);
         }
-        
+
         if (input instanceof URL) {
             return new InputStreamReader(((URL) input).openStream());
         }
 
         if (input instanceof File) {
-            return new FileReader((File)input);
+            return new FileReader((File) input);
         }
 
         if (input instanceof Resource) {
-            return toReader(((Resource)input).in());
+            return toReader(((Resource) input).in());
         }
 
         throw new IllegalArgumentException("Unable to turn " + input + " into reader");

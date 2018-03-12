@@ -116,7 +116,6 @@ public class RestConfiguration extends WebMvcConfigurationSupport {
         }
 
 
-
         //use the default ones as lowest priority
         super.addDefaultHttpMessageConverters(converters);
     }
@@ -132,7 +131,7 @@ public class RestConfiguration extends WebMvcConfigurationSupport {
         // scan and register media types for style handlers
         List<StyleHandler> styleHandlers = GeoServerExtensions.extensions(StyleHandler.class);
         for (StyleHandler handler : styleHandlers) {
-            if(handler.getVersions() != null && handler.getVersions().size() > 0) {
+            if (handler.getVersions() != null && handler.getVersions().size() > 0) {
                 // Spring configuration allows associating a single mime to extensions, pick the latest
                 List<Version> versions = handler.getVersions();
                 final Version firstVersion = versions.get(versions.size() - 1);
@@ -141,7 +140,7 @@ public class RestConfiguration extends WebMvcConfigurationSupport {
         }
         // manually force SLD to v10 for backwards compatibility
         configurer.mediaType("sld", MediaType.valueOf(SLDHandler.MIMETYPE_10));
-        
+
         // other common media types
         configurer.mediaType("html", MediaType.TEXT_HTML);
         configurer.mediaType("xml", MediaType.APPLICATION_XML);
@@ -150,7 +149,7 @@ public class RestConfiguration extends WebMvcConfigurationSupport {
         configurer.mediaType("ftl", MediaType.TEXT_PLAIN);
         configurer.mediaType("xml", MediaType.APPLICATION_XML);
         configurer.favorParameter(true);
-        
+
         // allow extension point configuration of media types
         List<MediaTypeCallback> callbacks = GeoServerExtensions.extensions(MediaTypeCallback.class);
         for (MediaTypeCallback callback : callbacks) {
@@ -168,14 +167,14 @@ public class RestConfiguration extends WebMvcConfigurationSupport {
         configurer.setUrlPathHelper(new GeoServerUrlPathHelper());
         configurer.getUrlPathHelper().setAlwaysUseFullPath(true);
     }
-    
+
     static class GeoServerUrlPathHelper extends UrlPathHelper {
-        
+
         public GeoServerUrlPathHelper() {
             setAlwaysUseFullPath(true);
             setDefaultEncoding("UTF-8");
         }
-        
+
         @Override
         public String decodeRequestString(HttpServletRequest request, String source) {
             // compatibility with old Restlet based config, it also decodes "+" into space

@@ -36,7 +36,7 @@ public class DataAccessRule implements Comparable<DataAccessRule>, Serializable 
     AccessMode accessMode;
 
     Set<String> roles;
-    
+
     boolean globalGroupRule;
 
     /**
@@ -53,7 +53,7 @@ public class DataAccessRule implements Comparable<DataAccessRule>, Serializable 
         else
             this.roles = new HashSet<String>(roles);
     }
-    
+
     /**
      * Builds a new rule
      */
@@ -86,7 +86,7 @@ public class DataAccessRule implements Comparable<DataAccessRule>, Serializable 
     public void setRoot(String root) {
         this.root = root;
     }
-    
+
     /**
      * @deprecated Use getRoot(), the rule root can now be a workspace or a global layer group name
      */
@@ -120,7 +120,7 @@ public class DataAccessRule implements Comparable<DataAccessRule>, Serializable 
     public Set<String> getRoles() {
         return roles;
     }
-    
+
     public boolean isGlobalGroupRule() {
         return globalGroupRule;
     }
@@ -133,19 +133,18 @@ public class DataAccessRule implements Comparable<DataAccessRule>, Serializable 
      * Returns the key for the current rule. No other rule should have the same
      */
     public String getKey() {
-        if(globalGroupRule) {
+        if (globalGroupRule) {
             return root + "." + accessMode.getAlias();
         } else {
             return root + "." + layer + "." + accessMode.getAlias();
         }
     }
-    
+
     /**
      * Returns the list of roles as a comma separated string for this rule
-     *
      */
     public String getValue() {
-        if(roles.isEmpty()) {
+        if (roles.isEmpty()) {
             return DataAccessRule.ANY;
         } else {
             StringBuffer sb = new StringBuffer();
@@ -155,7 +154,7 @@ public class DataAccessRule implements Comparable<DataAccessRule>, Serializable 
             }
             sb.setLength(sb.length() - 1);
             return sb.toString();
-        } 
+        }
     }
 
     /**
@@ -187,12 +186,12 @@ public class DataAccessRule implements Comparable<DataAccessRule>, Serializable 
 
         return 0 == compareTo((DataAccessRule) obj);
     }
-    
+
     /**
      * Full equality, roles included
      */
     public boolean equalsExact(DataAccessRule obj) {
-        if(0 != compareTo(obj))
+        if (0 != compareTo(obj))
             return false;
         else
             return roles.equals(obj.roles);
@@ -211,8 +210,8 @@ public class DataAccessRule implements Comparable<DataAccessRule>, Serializable 
      * Generic string comparison that considers the use of {@link #ANY}
      */
     public int compareCatalogItems(String item, String otherItem) {
-        if(item == null) {
-            return otherItem != null ? -1 : 0; 
+        if (item == null) {
+            return otherItem != null ? -1 : 0;
         }
         if (item.equals(otherItem))
             return 0;
@@ -224,10 +223,10 @@ public class DataAccessRule implements Comparable<DataAccessRule>, Serializable 
             return item.compareTo(otherItem);
 
     }
-    
+
     @Override
     public String toString() {
         return getKey() + "=" + getValue();
     }
-    
+
 }

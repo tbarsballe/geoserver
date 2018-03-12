@@ -21,7 +21,7 @@ import org.geoserver.test.GeoServerSystemTestSupport;
 import org.junit.Test;
 
 public class TolerantStartupTest extends GeoServerSystemTestSupport {
-    
+
     @Override
     protected void setUpTestData(SystemTestData testData) throws Exception {
         QName name = SystemTestData.BASIC_POLYGONS;
@@ -31,19 +31,19 @@ public class TolerantStartupTest extends GeoServerSystemTestSupport {
         props.put(LayerProperty.PROJECTION_POLICY, ProjectionPolicy.REPROJECT_TO_DECLARED);
         props.put(LayerProperty.SRS, 123456);
         testData.setUpVectorLayer(name, props, name.getLocalPart() + ".properties", SystemTestData.class);
-        
+
         testData.setUpVectorLayer(SystemTestData.BUILDINGS);
         testData.setUpSecurity();
     }
-    
+
 //    @Override
 //    protected String getLogConfiguration() {
 //        return "/DEFAULT_LOGGING.properties";
 //    }
-     
+
     @Test
     public void testContextStartup() {
-        GeoServer config = (GeoServer) applicationContext.getBean("geoServer"); 
+        GeoServer config = (GeoServer) applicationContext.getBean("geoServer");
         assertNotNull(config.getCatalog().getFeatureTypeByName(MockData.BUILDINGS.getNamespaceURI(), MockData.BUILDINGS.getLocalPart()));
         assertNotNull(config.getCatalog().getFeatureTypeByName(MockData.BASIC_POLYGONS.getNamespaceURI(), MockData.BASIC_POLYGONS.getLocalPart()));
     }

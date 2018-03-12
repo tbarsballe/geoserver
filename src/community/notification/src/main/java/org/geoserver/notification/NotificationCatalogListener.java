@@ -110,8 +110,8 @@ public class NotificationCatalogListener extends NotificationListener implements
     }
 
     private void handleLayerGroupInfoChange(Map<String, Object> properties,
-            final List<String> changedProperties, final List<Object> oldValues,
-            final List<Object> newValues, final LayerGroupInfo lgInfo) {
+                                            final List<String> changedProperties, final List<Object> oldValues,
+                                            final List<Object> newValues, final LayerGroupInfo lgInfo) {
 
         if (changedProperties.contains("layers")) {
             final int layersIndex = changedProperties.indexOf("layers");
@@ -133,8 +133,8 @@ public class NotificationCatalogListener extends NotificationListener implements
     }
 
     private void handleLayerInfoChange(Map<String, Object> properties,
-            final List<String> changedProperties, final List<Object> oldValues,
-            final List<Object> newValues, final LayerInfo li) {
+                                       final List<String> changedProperties, final List<Object> oldValues,
+                                       final List<Object> newValues, final LayerInfo li) {
 
         if (changedProperties.contains("defaultStyle")) {
             final int propIndex = changedProperties.indexOf("defaultStyle");
@@ -163,16 +163,16 @@ public class NotificationCatalogListener extends NotificationListener implements
     }
 
     private void handleWorkspaceRename(Map<String, Object> properties, final CatalogInfo source,
-            final List<String> changedProperties, final List<Object> oldValues,
-            final List<Object> newValues) {
+                                       final List<String> changedProperties, final List<Object> oldValues,
+                                       final List<Object> newValues) {
         final int nameIndex = changedProperties.indexOf("name");
         final String oldWorkspaceName = (String) oldValues.get(nameIndex);
         final String newWorkspaceName = (String) newValues.get(nameIndex);
     }
 
     private void handleRename(Map<String, Object> properties, final CatalogInfo source,
-            final List<String> changedProperties, final List<Object> oldValues,
-            final List<Object> newValues) {
+                              final List<String> changedProperties, final List<Object> oldValues,
+                              final List<Object> newValues) {
 
         final int nameIndex = changedProperties.indexOf("name");
         final int namespaceIndex = changedProperties.indexOf("namespace");

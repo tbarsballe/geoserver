@@ -45,7 +45,7 @@ public class PaletteStyleHandler extends StyleHandler {
 
     @Override
     public StyledLayerDescriptor parse(Object input, Version version,
-            ResourceLocator resourceLocator, EntityResolver entityResolver) throws IOException {
+                                       ResourceLocator resourceLocator, EntityResolver entityResolver) throws IOException {
         try (Reader reader = toReader(input)) {
             StyledLayerDescriptor sld = new PaletteParser().parseStyle(reader);
             if (LOGGER.isLoggable(Level.FINE)) {
@@ -69,7 +69,7 @@ public class PaletteStyleHandler extends StyleHandler {
 
     @Override
     public void encode(StyledLayerDescriptor sld, Version version, boolean pretty,
-            OutputStream output) throws IOException {
+                       OutputStream output) throws IOException {
         throw new UnsupportedOperationException();
     }
 

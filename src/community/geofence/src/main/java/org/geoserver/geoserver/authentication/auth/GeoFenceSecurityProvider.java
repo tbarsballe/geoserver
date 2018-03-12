@@ -32,7 +32,6 @@ import org.geotools.util.logging.Logging;
 import org.springframework.beans.factory.InitializingBean;
 
 /**
- *
  * @author ETj (etj at geo-solutions.it)
  */
 public class GeoFenceSecurityProvider extends GeoServerSecurityProvider

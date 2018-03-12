@@ -37,8 +37,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Unit test for very slow WMS GetMap response times when the requested 
- * bounding box is much smaller than the resolution of the raster data 
+ * Unit test for very slow WMS GetMap response times when the requested
+ * bounding box is much smaller than the resolution of the raster data
  * and advanced projection handling is disabled.
  */
 public class TinyRasterBoundingBoxTest extends WMSTestSupport {
@@ -88,13 +88,13 @@ public class TinyRasterBoundingBoxTest extends WMSTestSupport {
         Coordinate center = env.centre();
         GridEnvelope range = coverageInfo.getGrid().getGridRange();
         double offset = (env.getMaxX() - env.getMinX()) / range.getSpan(0) / 10.0;
-        Rectangle imageBounds = produceMap(center.x + offset, center.x + 2 * offset, 
-            center.y + offset, center.y + 2 * offset);
+        Rectangle imageBounds = produceMap(center.x + offset, center.x + 2 * offset,
+                center.y + offset, center.y + 2 * offset);
         assertNotBlank("testTinyRasterBboxContained", this.image);
         assertEquals("Mosaic", this.op.getOperationName());
         Rectangle roiBounds = getRoiBounds();
-        assertTrue("Expected " + imageBounds + " to contain " + roiBounds, 
-            imageBounds.contains(roiBounds));
+        assertTrue("Expected " + imageBounds + " to contain " + roiBounds,
+                imageBounds.contains(roiBounds));
     }
 
     @Test
@@ -103,13 +103,13 @@ public class TinyRasterBoundingBoxTest extends WMSTestSupport {
         Envelope env = coverageInfo.boundingBox();
         GridEnvelope range = coverageInfo.getGrid().getGridRange();
         double offset = (env.getMaxX() - env.getMinX()) / range.getSpan(0) / 20.0;
-        Rectangle imageBounds = produceMap(env.getMinX() - offset, env.getMinX() + offset, 
-            env.getMaxY() - offset, env.getMaxY() + offset);
+        Rectangle imageBounds = produceMap(env.getMinX() - offset, env.getMinX() + offset,
+                env.getMaxY() - offset, env.getMaxY() + offset);
         assertNotBlank("testTinyRasterBboxIntersection", this.image);
         assertEquals("Mosaic", this.op.getOperationName());
         Rectangle roiBounds = getRoiBounds();
-        assertTrue("Expected " + imageBounds + " to contain " + roiBounds, 
-            imageBounds.contains(roiBounds));
+        assertTrue("Expected " + imageBounds + " to contain " + roiBounds,
+                imageBounds.contains(roiBounds));
     }
 
     @Test
@@ -118,20 +118,20 @@ public class TinyRasterBoundingBoxTest extends WMSTestSupport {
         Envelope env = coverageInfo.boundingBox();
         GridEnvelope range = coverageInfo.getGrid().getGridRange();
         double offset = (env.getMaxX() - env.getMinX()) / range.getSpan(0) / 10.0;
-        Rectangle imageBounds = produceMap(env.getMaxX() + offset, env.getMaxX() + 2 * offset, 
-            env.getMinY() - 2 * offset, env.getMinY() - offset);
+        Rectangle imageBounds = produceMap(env.getMaxX() + offset, env.getMaxX() + 2 * offset,
+                env.getMinY() - 2 * offset, env.getMinY() - offset);
         assertNotBlank("testTinyRasterBboxNoIntersection", this.image);
         assertEquals("Mosaic", this.op.getOperationName());
         Rectangle roiBounds = getRoiBounds();
-        assertTrue("Expected " + imageBounds + " to contain " + roiBounds, 
-            imageBounds.contains(roiBounds));
+        assertTrue("Expected " + imageBounds + " to contain " + roiBounds,
+                imageBounds.contains(roiBounds));
     }
 
     private CoverageInfo addRasterToMap(QName typeName) throws Exception {
         CoverageInfo coverageInfo = getCatalog().getCoverageByName(
-            typeName.getNamespaceURI(), typeName.getLocalPart());
-        GridCoverage2DReader reader = (GridCoverage2DReader) 
-            coverageInfo.getGridCoverageReader(null, null);
+                typeName.getNamespaceURI(), typeName.getLocalPart());
+        GridCoverage2DReader reader = (GridCoverage2DReader)
+                coverageInfo.getGridCoverageReader(null, null);
         Style style = getCatalog().getStyleByName("rainfall").getStyle();
         this.map.addLayer(new GridReaderLayer(reader, style));
         return coverageInfo;
@@ -145,9 +145,9 @@ public class TinyRasterBoundingBoxTest extends WMSTestSupport {
 
     private Rectangle produceMap(double minX, double maxX, double minY, double maxY) {
         this.map.getViewport().setBounds(new ReferencedEnvelope(
-            minX, maxX, minY, maxY, DefaultGeographicCRS.WGS84));
-        RenderedImageMapOutputFormat rasterMapProducer = 
-            new RenderedImageMapOutputFormat(getWMS());
+                minX, maxX, minY, maxY, DefaultGeographicCRS.WGS84));
+        RenderedImageMapOutputFormat rasterMapProducer =
+                new RenderedImageMapOutputFormat(getWMS());
         RenderedImageMap imageMap = rasterMapProducer.produceMap(this.map);
         this.op = (RenderedOp) imageMap.getImage();
         this.image = this.op.getAsBufferedImage();

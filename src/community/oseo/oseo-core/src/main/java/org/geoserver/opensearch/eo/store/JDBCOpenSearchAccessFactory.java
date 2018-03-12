@@ -33,11 +33,15 @@ public class JDBCOpenSearchAccessFactory implements DataAccessFactory {
     public static final Param STORE_PARAM = new Param("store", String.class, "Delegate data store",
             false, null, new KVP(Param.ELEMENT, String.class));
 
-    /** parameter for database type */
+    /**
+     * parameter for database type
+     */
     public static final Param DBTYPE = new Param("dbtype", String.class, "Type", true,
             "opensearch-eo-jdbc");
 
-    /** parameter for namespace of the datastore */
+    /**
+     * parameter for namespace of the datastore
+     */
     public static final Param NAMESPACE = new Param("namespace", String.class, "Namespace prefix",
             false);
 
@@ -69,7 +73,7 @@ public class JDBCOpenSearchAccessFactory implements DataAccessFactory {
 
     @Override
     public Param[] getParametersInfo() {
-        return new Param[] { DBTYPE, REPOSITORY_PARAM, STORE_PARAM, NAMESPACE };
+        return new Param[]{DBTYPE, REPOSITORY_PARAM, STORE_PARAM, NAMESPACE};
     }
 
     @Override

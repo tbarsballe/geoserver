@@ -6,9 +6,11 @@
 package org.geoserver.wfs;
 
 import java.io.UnsupportedEncodingException;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
@@ -22,7 +24,7 @@ public class WFSServiceExceptionTest extends WFSTestSupport {
 
     @Override
     protected void setUpInternal(SystemTestData data) throws Exception {
-    	WFSInfo wfs = getWFS();
+        WFSInfo wfs = getWFS();
         wfs.setFeatureBounding(true);
         getGeoServer().save(wfs);
     }
@@ -97,7 +99,6 @@ public class WFSServiceExceptionTest extends WFSTestSupport {
 
     /**
      * @param path
-     * 
      */
     private static void testJson(String content, String expectedVersion) {
 

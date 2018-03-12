@@ -16,7 +16,6 @@ import org.geoserver.geofence.rest.xml.MultiPolygonAdapter;
 import org.geoserver.geoserver.authentication.auth.GeoFenceAuthenticationProviderConfig;
 
 /**
- *
  * @author ETj (etj at geo-solutions.it)
  */
 public class GeoFenceXStreamPersisterInitializer implements XStreamPersisterInitializer {
@@ -33,9 +32,9 @@ public class GeoFenceXStreamPersisterInitializer implements XStreamPersisterInit
         xs.alias("AdminRules", JaxbAdminRuleList.class);
         xs.alias("AdminRule", JaxbAdminRule.class);
 
-        xs.allowTypes(new Class[] { GeoFenceAuthenticationProviderConfig.class, JaxbRule.class,
+        xs.allowTypes(new Class[]{GeoFenceAuthenticationProviderConfig.class, JaxbRule.class,
                 JaxbAdminRule.class, JaxbRuleList.class, JaxbAdminRuleList.class,
-                MultiPolygonAdapter.class });
+                MultiPolygonAdapter.class});
 
     }
 

@@ -38,23 +38,23 @@ public class CommonJSEngineFactory implements ScriptEngineFactory {
         names.add("ECMAScript");
         names.add("ecmascript");
         names = Collections.unmodifiableList(names);
-    
+
         mimeTypes = new ArrayList<String>(4);
         mimeTypes.add("application/javascript");
         mimeTypes.add("application/ecmascript");
         mimeTypes.add("text/javascript");
         mimeTypes.add("text/ecmascript");
         mimeTypes = Collections.unmodifiableList(mimeTypes);
-    
+
         extensions = new ArrayList<String>(1);
         extensions.add("js");
         extensions = Collections.unmodifiableList(extensions);
     }
-    
+
     private Global global;
     private RequireBuilder requireBuilder;
     private List<String> modulePaths;
-    
+
     public CommonJSEngineFactory(List<String> modulePaths) {
         this.modulePaths = modulePaths;
         Context cx = CommonJSEngine.enterContext();
@@ -69,7 +69,6 @@ public class CommonJSEngineFactory implements ScriptEngineFactory {
 
     /**
      * Create a new require function using the shared global.
-     *
      */
     @SuppressWarnings("unused")
     private Require createRequire() {
@@ -88,32 +87,32 @@ public class CommonJSEngineFactory implements ScriptEngineFactory {
     public String getEngineName() {
         return (String) getParameter(ScriptEngine.ENGINE);
     }
-    
+
     @Override
     public String getEngineVersion() {
-        return (String)getParameter(ScriptEngine.ENGINE_VERSION);
+        return (String) getParameter(ScriptEngine.ENGINE_VERSION);
     }
-    
+
     @Override
     public List<String> getExtensions() {
         return extensions;
     }
-    
+
     @Override
     public String getLanguageName() {
         return (String) getParameter(ScriptEngine.LANGUAGE);
     }
-    
+
     @Override
     public String getLanguageVersion() {
         return (String) getParameter(ScriptEngine.LANGUAGE_VERSION);
     }
-    
+
     @Override
     public String getMethodCallSyntax(String object, String method, String... args) {
         String syntax = object + "." + method + "(";
         int length = args.length;
-        for (int i=0; i<length; ++i) {
+        for (int i = 0; i < length; ++i) {
             syntax += args[i];
             if (i != length - 1) {
                 syntax += ",";
@@ -121,22 +120,22 @@ public class CommonJSEngineFactory implements ScriptEngineFactory {
         }
         return syntax + ")";
     }
-    
+
     @Override
     public List<String> getMimeTypes() {
         return mimeTypes;
     }
-    
+
     @Override
     public List<String> getNames() {
         return names;
     }
-    
+
     @Override
     public String getOutputStatement(String arg) {
         return "print(" + arg + ")";
     }
-    
+
     @Override
     public Object getParameter(String key) {
         if (key.equals(ScriptEngine.NAME)) {
@@ -155,12 +154,12 @@ public class CommonJSEngineFactory implements ScriptEngineFactory {
             throw new IllegalArgumentException("Invalid key");
         }
     }
-    
+
     @Override
     public String getProgram(String... statements) {
         int length = statements.length;
         String program = "";
-        for (int i=0; i<length; ++i) {
+        for (int i = 0; i < length; ++i) {
             program += statements[i] + ";";
         }
         return program;
@@ -172,7 +171,7 @@ public class CommonJSEngineFactory implements ScriptEngineFactory {
      * provider that reloads modules only when they have changed on disk (with
      * a 60 second interval).  This require builder will be configured with
      * the module paths returned by {@link #getModulePahts()}.
-     * 
+     *
      * @return a shared require builder
      */
     private RequireBuilder getRequireBuilder() {

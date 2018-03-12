@@ -26,13 +26,13 @@ import org.opengis.util.ProgressListener;
 /**
  * Implementation of {@link Process} backed by a script.
  * <p>
- * This class does its work by delegating all methods to the {@link WpsHook} interface. This 
- * class maintains a link to the backing script {@link File} and uses a {@link FileWatcher} to 
- * detect changes to the underlying script. When changed a new {@link ScriptEngine} is created and 
- * the underlying script is reloaded. 
+ * This class does its work by delegating all methods to the {@link WpsHook} interface. This
+ * class maintains a link to the backing script {@link File} and uses a {@link FileWatcher} to
+ * detect changes to the underlying script. When changed a new {@link ScriptEngine} is created and
+ * the underlying script is reloaded.
  * </p>
- * @author Justin Deoliveira, OpenGeo
  *
+ * @author Justin Deoliveira, OpenGeo
  */
 public class ScriptProcess implements Process {
 
@@ -41,18 +41,26 @@ public class ScriptProcess implements Process {
      */
     static final String MONITOR = "monitor";
 
-    /** process name*/
+    /**
+     * process name
+     */
     Name name;
-    
-    /** watcher for file changes */
+
+    /**
+     * watcher for file changes
+     */
     ScriptFileWatcher fw;
-    
-    /** script manager */
+
+    /**
+     * script manager
+     */
     ScriptManager scriptMgr;
 
-    /** the hook for interacting with the script */
+    /**
+     * the hook for interacting with the script
+     */
     WpsHook hook;
-    
+
     ScriptProcess(Name name, Resource script, ScriptManager scriptMgr) {
         this.name = name;
         this.scriptMgr = scriptMgr;
@@ -60,7 +68,7 @@ public class ScriptProcess implements Process {
         hook = scriptMgr.lookupWpsHook(script);
         fw = new ScriptFileWatcher(script, scriptMgr);
     }
-    
+
     @Deprecated
     ScriptProcess(Name name, File script, ScriptManager scriptMgr) {
         this.name = name;

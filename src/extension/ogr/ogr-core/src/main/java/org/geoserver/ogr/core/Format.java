@@ -51,7 +51,7 @@ public class Format {
      * The mime type of the single file output
      */
     private String mimeType;
-  
+
     /**
      * Eventual adapters to to be run before encoding
      */
@@ -62,7 +62,7 @@ public class Format {
     }
 
     public Format(String toolFormat, String formatName, String fileExtension, boolean singleFile,
-            String mimeType, OutputType type, String... options) {
+                  String mimeType, OutputType type, String... options) {
         this.toolFormat = toolFormat;
         this.geoserverFormat = formatName;
         this.fileExtension = fileExtension;
@@ -78,7 +78,7 @@ public class Format {
     }
 
     public Format(String toolFormat, String formatName, String fileExtension, boolean singleFile,
-            String mimeType, String... options) {
+                  String mimeType, String... options) {
         this(toolFormat, formatName, fileExtension, singleFile, mimeType, OutputType.BINARY, options);
     }
 
@@ -112,10 +112,9 @@ public class Format {
 
     /**
      * Returns the configured format adapters, or an empty list if none was setup
-     *
      */
     public List<FormatAdapter> getFormatAdapters() {
-        if(formatAdapters == null) {
+        if (formatAdapters == null) {
             formatAdapters = new ArrayList<>();
         }
         return formatAdapters;

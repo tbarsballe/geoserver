@@ -12,7 +12,7 @@ import org.springframework.context.annotation.AnnotationBeanNameGenerator;
  * Bean name generator that prefixes geogig in front of the default bean name to avoid naming conflicts between geogig and geoserver beans.
  */
 public class GeogigBeanNameGenerator extends AnnotationBeanNameGenerator {
-    
+
     public GeogigBeanNameGenerator() {
         super();
     }

@@ -16,7 +16,6 @@ import org.eclipse.emf.ecore.EObject;
  * an instance of {@link net.opengis.ows.v1_1_0.AcceptFormatsType}.
  *
  * @author Justin Deoliveira, The Open Planning Project
- *
  */
 public class AcceptFormatsKvpParser extends org.geoserver.ows.kvp.AcceptFormatsKvpParser {
     public AcceptFormatsKvpParser() {

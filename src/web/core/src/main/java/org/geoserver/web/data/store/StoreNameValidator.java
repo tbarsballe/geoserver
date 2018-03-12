@@ -19,7 +19,7 @@ import org.geoserver.web.GeoServerApplication;
  * A Form validator that takes the workspace and store name form components and validates there is
  * not an existing {@link StoreInfo} in the selected workspace with the same name as the one assigned
  * through the store name form component.
- * 
+ *
  * @author Andrea Aime - OpenGeo
  * @author Gabriel Roldan - OpenGeo
  */
@@ -35,36 +35,27 @@ public class StoreNameValidator implements IFormValidator {
     private boolean required;
 
     /**
-     * 
-     * @param workspaceFormComponent
-     *            the form component for the {@link WorkspaceInfo} assigned to the {@link StoreInfo}
-     *            being edited
-     * @param storeNameFormComponent
-     *            the form component for the name assigned to the {@link StoreInfo}
-     * @param edittingStoreId
-     *            the id for the store being edited. May be {@code null} if we're talking of a new
-     *            Store
+     * @param workspaceFormComponent the form component for the {@link WorkspaceInfo} assigned to the {@link StoreInfo}
+     *                               being edited
+     * @param storeNameFormComponent the form component for the name assigned to the {@link StoreInfo}
+     * @param edittingStoreId        the id for the store being edited. May be {@code null} if we're talking of a new
+     *                               Store
      */
     public StoreNameValidator(final FormComponent workspaceFormComponent,
-            final FormComponent storeNameFormComponent, final String edittingStoreId) {
+                              final FormComponent storeNameFormComponent, final String edittingStoreId) {
         this(workspaceFormComponent, storeNameFormComponent, edittingStoreId, true);
     }
-    
+
     /**
-     * 
-     * @param workspaceFormComponent
-     *            the form component for the {@link WorkspaceInfo} assigned to the {@link StoreInfo}
-     *            being edited
-     * @param storeNameFormComponent
-     *            the form component for the name assigned to the {@link StoreInfo}
-     * @param edittingStoreId
-     *            the id for the store being edited. May be {@code null} if we're talking of a new
-     *            Store
-     * @param required
-     *            true if store name is required
+     * @param workspaceFormComponent the form component for the {@link WorkspaceInfo} assigned to the {@link StoreInfo}
+     *                               being edited
+     * @param storeNameFormComponent the form component for the name assigned to the {@link StoreInfo}
+     * @param edittingStoreId        the id for the store being edited. May be {@code null} if we're talking of a new
+     *                               Store
+     * @param required               true if store name is required
      */
     public StoreNameValidator(final FormComponent workspaceFormComponent,
-            final FormComponent storeNameFormComponent, final String edittingStoreId, boolean required) {
+                              final FormComponent storeNameFormComponent, final String edittingStoreId, boolean required) {
         this.workspaceComponent = workspaceFormComponent;
         this.storeNameComponent = storeNameFormComponent;
         this.edittingStoreId = edittingStoreId;
@@ -73,7 +64,7 @@ public class StoreNameValidator implements IFormValidator {
 
     @Override
     public FormComponent[] getDependentFormComponents() {
-        return new FormComponent[] { workspaceComponent, storeNameComponent };
+        return new FormComponent[]{workspaceComponent, storeNameComponent};
     }
 
     /**
@@ -83,7 +74,7 @@ public class StoreNameValidator implements IFormValidator {
      * chosen one, then the store name form component is set with a proper {@link IValidationError error
      * message}
      * </p>
-     * 
+     *
      * @see IFormValidator#validate(Form)
      */
     @Override
@@ -94,9 +85,9 @@ public class StoreNameValidator implements IFormValidator {
 
         WorkspaceInfo workspace = (WorkspaceInfo) wsComponent.getConvertedInput();
         String name = (String) nameComponent.getConvertedInput();
-        
-        if(name == null) {
-            if(required) {
+
+        if (name == null) {
+            if (required) {
                 nameComponent.error(new ValidationError("StoreNameValidator.storeNameRequired")
                         .addKey("StoreNameValidator.storeNameRequired"));
             }

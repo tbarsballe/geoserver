@@ -28,7 +28,7 @@ public class ApplicationSchemaXSD1 extends XSD {
 
     FeatureTypeSchemaBuilder schemaBuilder;
 
-    Map<String,Set<FeatureTypeInfo>> featureTypes;
+    Map<String, Set<FeatureTypeInfo>> featureTypes;
     String baseURL;
 
     public ApplicationSchemaXSD1(FeatureTypeSchemaBuilder schemaBuilder) {
@@ -36,7 +36,7 @@ public class ApplicationSchemaXSD1 extends XSD {
     }
 
     public ApplicationSchemaXSD1(FeatureTypeSchemaBuilder schemaBuilder,
-                                 Map<String,Set<FeatureTypeInfo>> featureTypes) {
+                                 Map<String, Set<FeatureTypeInfo>> featureTypes) {
         this.schemaBuilder = schemaBuilder;
         this.featureTypes = featureTypes;
     }
@@ -53,13 +53,13 @@ public class ApplicationSchemaXSD1 extends XSD {
         Map<String, Set<FeatureTypeInfo>> featureTypes = new HashMap<>();
         for (Map.Entry<String, Set<ResourceInfo>> entry : resources.entrySet()) {
             Set<FeatureTypeInfo> fts = new HashSet<>();
-            for(ResourceInfo ri : entry.getValue()) {
-                if(ri instanceof FeatureTypeInfo) {
+            for (ResourceInfo ri : entry.getValue()) {
+                if (ri instanceof FeatureTypeInfo) {
                     fts.add((FeatureTypeInfo) ri);
                 }
             }
 
-            if(!fts.isEmpty()) {
+            if (!fts.isEmpty()) {
                 featureTypes.put(entry.getKey(), fts);
             }
         }
@@ -69,17 +69,17 @@ public class ApplicationSchemaXSD1 extends XSD {
     public Map<String, Set<FeatureTypeInfo>> getFeatureTypes() {
         return featureTypes;
     }
-    
+
     @Override
     public String getNamespaceURI() {
         if (featureTypes.size() == 1) {
             return featureTypes.keySet().iterator().next();
         }
-        
+
         //TODO: return xsd namespace?
         return null;
     }
-    
+
     @Override
     public String getSchemaLocation() {
         StringBuilder sb = new StringBuilder();
@@ -89,14 +89,14 @@ public class ApplicationSchemaXSD1 extends XSD {
             }
         }
         sb.setLength(sb.length() - 1);
-        
+
         HashMap kvp = new HashMap();
         kvp.putAll(schemaBuilder.getDescribeFeatureTypeParams());
         kvp.put("typename", sb.toString());
-        
+
         return ResponseUtils.buildURL(baseURL, "wfs", kvp, URLType.SERVICE);
     }
-    
+
     @Override
     protected XSDSchema buildSchema() throws IOException {
         FeatureTypeInfo[] types = this.featureTypes.values().stream()
@@ -120,11 +120,10 @@ public class ApplicationSchemaXSD1 extends XSD {
     private static boolean containsComplexTypes(FeatureTypeInfo[] featureTypes) {
         for (FeatureTypeInfo featureType : featureTypes) {
             try {
-                if(!(featureType.getFeatureType() instanceof SimpleFeatureType)) {
+                if (!(featureType.getFeatureType() instanceof SimpleFeatureType)) {
                     return true;
                 }
-            }
-            catch(Exception exception) {
+            } catch (Exception exception) {
                 // ignore the broken feature type
             }
         }

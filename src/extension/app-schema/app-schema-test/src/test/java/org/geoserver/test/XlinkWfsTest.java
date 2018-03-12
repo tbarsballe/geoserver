@@ -15,7 +15,7 @@ import org.w3c.dom.Document;
 
 /**
  * WFS GetFeature to test integration of {@link AppSchemaDataAccess} with GeoServer.
- * 
+ *
  * @author Ben Caradoc-Davies, CSIRO Exploration and Mining
  */
 public class XlinkWfsTest extends AbstractAppSchemaTestSupport {
@@ -60,9 +60,9 @@ public class XlinkWfsTest extends AbstractAppSchemaTestSupport {
      */
     @Test
     public void testGetFeatureContent() {
-    	
-    	Document doc = getAsDOM("wfs?request=GetFeature&version=1.1.0&typename=gsml:MappedFeature");
-        
+
+        Document doc = getAsDOM("wfs?request=GetFeature&version=1.1.0&typename=gsml:MappedFeature");
+
         LOGGER.info("WFS testGetFeatureContent response:\n" + prettyString(doc));
 
         assertXpathCount(4, "//gsml:MappedFeature", doc);

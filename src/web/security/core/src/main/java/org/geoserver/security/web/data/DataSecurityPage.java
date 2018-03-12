@@ -39,8 +39,8 @@ import org.geoserver.web.wicket.SimpleAjaxLink;
 @SuppressWarnings("serial")
 public class DataSecurityPage extends AbstractSecurityPage {
 
-    static final List<CatalogMode> CATALOG_MODES = 
-        Arrays.asList(CatalogMode.HIDE, CatalogMode.MIXED, CatalogMode.CHALLENGE);
+    static final List<CatalogMode> CATALOG_MODES =
+            Arrays.asList(CatalogMode.HIDE, CatalogMode.MIXED, CatalogMode.CHALLENGE);
 
     private GeoServerTablePanel<DataAccessRule> rules;
 
@@ -54,7 +54,7 @@ public class DataSecurityPage extends AbstractSecurityPage {
 
             @Override
             protected Component getComponentForProperty(String id, IModel<DataAccessRule> itemModel,
-                    Property<DataAccessRule> property) {
+                                                        Property<DataAccessRule> property) {
                 if (property == DataAccessRuleProvider.RULEKEY) {
                     return editRuleLink(id, itemModel, property);
                 }
@@ -79,11 +79,11 @@ public class DataSecurityPage extends AbstractSecurityPage {
         add(form);
         form.add(new HelpLink("catalogModeHelp").setDialog(dialog));
 
-        catalogModeChoice 
-            = new RadioChoice("catalogMode", CATALOG_MODES, new CatalogModeRenderer());
+        catalogModeChoice
+                = new RadioChoice("catalogMode", CATALOG_MODES, new CatalogModeRenderer());
         catalogModeChoice.setSuffix(" ");
         form.add(catalogModeChoice);
-        
+
         form.add(new SubmitLink("save") {
             @Override
             public void onSubmit() {

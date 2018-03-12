@@ -15,11 +15,10 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 /**
- * Authentication provider that wraps a regular {@link AuthenticationProvider} in the 
- * {@link GeoServerAuthenticationProvider} interface. 
- * 
- * @author Justin Deoliveira, OpenGeo
+ * Authentication provider that wraps a regular {@link AuthenticationProvider} in the
+ * {@link GeoServerAuthenticationProvider} interface.
  *
+ * @author Justin Deoliveira, OpenGeo
  */
 public class DelegatingAuthenticationProvider extends GeoServerAuthenticationProvider {
 
@@ -42,7 +41,7 @@ public class DelegatingAuthenticationProvider extends GeoServerAuthenticationPro
             log(ex);
 
             // pass request to next provider in the chain
-            return null; 
+            return null;
         }
     }
 
@@ -57,8 +56,8 @@ public class DelegatingAuthenticationProvider extends GeoServerAuthenticationPro
      * should be thrown back.
      * </p>
      */
-    protected Authentication doAuthenticate(Authentication authentication, HttpServletRequest request) 
-        throws AuthenticationException { 
+    protected Authentication doAuthenticate(Authentication authentication, HttpServletRequest request)
+            throws AuthenticationException {
         return authProvider.authenticate(authentication);
     }
 }

@@ -27,7 +27,7 @@ import java.util.Collections;
 
 /**
  * Local Settings controller
- *
+ * <p>
  * Provides access to workspace-specific settings
  */
 @RestController
@@ -43,7 +43,7 @@ public class LocalSettingsController extends AbstractGeoServerController {
     @GetMapping(produces = {
             MediaType.APPLICATION_JSON_VALUE,
             MediaType.APPLICATION_XML_VALUE,
-            MediaType.TEXT_HTML_VALUE })
+            MediaType.TEXT_HTML_VALUE})
     public RestWrapper<SettingsInfo> localSettingsGet(@PathVariable String workspaceName) {
 
         WorkspaceInfo workspaceInfo = geoServer.getCatalog().getWorkspaceByName(workspaceName);
@@ -59,7 +59,7 @@ public class LocalSettingsController extends AbstractGeoServerController {
             MediaType.APPLICATION_JSON_VALUE,
             MediaTypeExtensions.TEXT_JSON_VALUE,
             MediaType.APPLICATION_XML_VALUE,
-            MediaType.TEXT_XML_VALUE })
+            MediaType.TEXT_XML_VALUE})
     @ResponseStatus(HttpStatus.CREATED)
     public String localSettingsCreate(@PathVariable String workspaceName, @RequestBody SettingsInfo settingsInfo) {
         String name = "";
@@ -78,7 +78,7 @@ public class LocalSettingsController extends AbstractGeoServerController {
             MediaType.APPLICATION_JSON_VALUE,
             MediaTypeExtensions.TEXT_JSON_VALUE,
             MediaType.APPLICATION_XML_VALUE,
-            MediaType.TEXT_XML_VALUE })
+            MediaType.TEXT_XML_VALUE})
     public void localSettingsPut(@PathVariable String workspaceName, @RequestBody SettingsInfo settingsInfo) {
         if (workspaceName != null) {
             WorkspaceInfo workspaceInfo = geoServer.getCatalog().getWorkspaceByName(workspaceName);

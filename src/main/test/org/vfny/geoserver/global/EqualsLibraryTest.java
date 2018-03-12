@@ -17,11 +17,11 @@ import org.vfny.geoserver.global.dto.EqualsLibrary;
 
 /**
  * EqualsLibraryTest purpose.
- * 
+ * <p>
  * <p>
  * Description of EqualsLibraryTest ...
  * </p>
- * 
+ * <p>
  * <p></p>
  *
  * @author dzwiers, Refractions Research, Inc.

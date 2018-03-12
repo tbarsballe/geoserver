@@ -16,7 +16,7 @@ import org.geoserver.platform.GeoServerExtensions;
  * {@link GeoServerExtensions} mechanism and appended to the home page's central body in no
  * predefined order.
  * </p>
- * 
+ *
  * @author Gabriel Roldan
  * @see CapabilitiesHomePageLinkProvider
  */
@@ -29,11 +29,10 @@ public interface GeoServerHomePageContentProvider {
      * extra content to the home page under a circumstance of their choice. For example, if the
      * contributed content is not meant to be visible to anonymous users, etc.
      * </p>
-     * 
-     * @param id
-     *            the id of the returned component
+     *
+     * @param id the id of the returned component
      * @return a component suitable to be contained by the home page central body, or {@code null}
-     *         if no extra content is provided.
+     * if no extra content is provided.
      */
     public Component getPageBodyComponent(final String id);
 

@@ -21,7 +21,7 @@ public class Keyword implements Serializable, KeywordInfo {
             throw new NullPointerException("value must be non-null");
         }
     }
-    
+
     public Keyword(Keyword other) {
         this.value = other.value;
         this.language = other.language;
@@ -95,5 +95,5 @@ public class Keyword implements Serializable, KeywordInfo {
         return true;
     }
 
-    
+
 }

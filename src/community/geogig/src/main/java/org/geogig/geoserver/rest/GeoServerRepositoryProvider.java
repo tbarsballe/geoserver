@@ -62,7 +62,7 @@ public class GeoServerRepositoryProvider implements RepositoryProvider {
         }
         return null;
     }
-    
+
     @Override
     public void delete(String repoName) {
         Optional<Repository> geogig = getGeogig(repoName);
@@ -102,7 +102,7 @@ public class GeoServerRepositoryProvider implements RepositoryProvider {
             }
         });
     }
-    
+
     @Override
     public Repository createGeogig(String repositoryName, Map<String, String> parameters) {
         if (repositoryName != null && RepositoryManager.get().repoExistsByName(repositoryName)) {
@@ -120,7 +120,7 @@ public class GeoServerRepositoryProvider implements RepositoryProvider {
         return null;
 
     }
-    
+
     public Repository importExistingGeogig(String repositoryName, Map<String, String> parameters) {
         Optional<Repository> importRepo = AddRepoRequestHandler.importGeogig(repositoryName, parameters);
         if (importRepo.isPresent()) {
@@ -150,7 +150,7 @@ public class GeoServerRepositoryProvider implements RepositoryProvider {
         }
     }
 
-    
+
     private static class AddRepoRequestHandler {
 
         private static Optional<Repository> createGeoGIG(String repositoryName, Map<String, String> parameters) {
@@ -164,7 +164,7 @@ public class GeoServerRepositoryProvider implements RepositoryProvider {
             }
             return Optional.absent();
         }
-        
+
         private static Optional<Repository> importGeogig(String repositoryName, Map<String, String> parameters) {
             // if the request is a POST, and the request path ends in "importExistingRepo"
 
@@ -177,14 +177,14 @@ public class GeoServerRepositoryProvider implements RepositoryProvider {
 
                 // set the repo location from the URI
                 if (!hints.get(Hints.REPOSITORY_URL).isPresent()) {
-                        return Optional.absent();
+                    return Optional.absent();
                 }
                 URI uri = new URI(hints.get(Hints.REPOSITORY_URL).get().toString());
                 repoInfo.setLocation(uri);
 
                 // check to see if repo is initialized
                 RepositoryResolver repoResolver = RepositoryResolver.lookup(uri);
-                if(!repoResolver.repoExists(uri)) {
+                if (!repoResolver.repoExists(uri)) {
                     return Optional.absent();
                 }
 

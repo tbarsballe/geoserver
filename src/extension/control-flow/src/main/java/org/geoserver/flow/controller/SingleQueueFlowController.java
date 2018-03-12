@@ -20,9 +20,8 @@ import com.google.common.base.Predicate;
 
 /**
  * Base class for flow controllers using a single queue
- * 
+ *
  * @author Andrea Aime - OpenGeo
- * 
  */
 public class SingleQueueFlowController implements FlowController {
     static final Logger LOGGER = Logging.getLogger(ControlFlowCallback.class);
@@ -54,7 +53,7 @@ public class SingleQueueFlowController implements FlowController {
         boolean retval = true;
         if (matcher.apply(request)) {
             try {
-                if(timeout > 0) {
+                if (timeout > 0) {
                     retval = queue.offer(request, timeout, TimeUnit.MILLISECONDS);
                 } else {
                     queue.put(request);
@@ -74,9 +73,10 @@ public class SingleQueueFlowController implements FlowController {
     public Predicate<Request> getMatcher() {
         return matcher;
     }
-    
+
     /**
      * Returns the current queue size
+     *
      * @return
      */
     public int getRequestsInQueue() {

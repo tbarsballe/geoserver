@@ -24,11 +24,11 @@ public abstract class ConfirmationAjaxLink<T> extends SimpleAjaxLink<T> {
     IModel<String> confirm;
 
     public ConfirmationAjaxLink(String id, IModel<T> linkModel, String label, String confirm) {
-        this( id, linkModel, new Model<String>( label ), new Model<String>( confirm ) );
+        this(id, linkModel, new Model<String>(label), new Model<String>(confirm));
     }
-    
+
     public ConfirmationAjaxLink(String id, IModel<T> linkModel, IModel<String> labelModel,
-            IModel<String> confirm) {
+                                IModel<String> confirm) {
         super(id, linkModel, labelModel);
         this.confirm = confirm;
     }
@@ -44,11 +44,11 @@ public abstract class ConfirmationAjaxLink<T> extends SimpleAjaxLink<T> {
                     @Override
                     public CharSequence getPrecondition(Component component) {
                         CharSequence message = JavaScriptUtils.escapeQuotes(confirm.getObject());
-                        return "if(!confirm('" +  message + "')) return false;";
+                        return "if(!confirm('" + message + "')) return false;";
                     }
                 });
             }
-            
+
             @Override
             public void onClick(AjaxRequestTarget target) {
                 ConfirmationAjaxLink.this.onClick(target);

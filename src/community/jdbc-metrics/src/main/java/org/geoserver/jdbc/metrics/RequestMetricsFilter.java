@@ -23,44 +23,44 @@ import java.util.concurrent.atomic.AtomicLong;
 /**
  * Servlet filter that adds headers providing access to jdbc request metrics.
  * <p>
- *   Since headers need to be written before the start of the response body 
- *   we need to store the metric values into a cache to be later retrieved. See
- *   {@link RequestMetricsController} for details.
+ * Since headers need to be written before the start of the response body
+ * we need to store the metric values into a cache to be later retrieved. See
+ * {@link RequestMetricsController} for details.
  * </p>
  */
 public class RequestMetricsFilter implements GeoServerFilter {
 
-  AtomicLong requestId = new AtomicLong(System.currentTimeMillis());
+    AtomicLong requestId = new AtomicLong(System.currentTimeMillis());
 
-  GeoServerNodeData nodeData = GeoServerNodeData.createFromEnvironment();
+    GeoServerNodeData nodeData = GeoServerNodeData.createFromEnvironment();
 
-  @Override
-  public void init(FilterConfig config) throws ServletException {
-  }
+    @Override
+    public void init(FilterConfig config) throws ServletException {
+    }
 
-  @Override
-  public void doFilter(ServletRequest req, ServletResponse rsp, FilterChain filterChain) throws IOException, ServletException {
-    HttpServletRequest httpReq = (HttpServletRequest) req;
-    HttpServletResponse httpRsp = (HttpServletResponse) rsp;
+    @Override
+    public void doFilter(ServletRequest req, ServletResponse rsp, FilterChain filterChain) throws IOException, ServletException {
+        HttpServletRequest httpReq = (HttpServletRequest) req;
+        HttpServletResponse httpRsp = (HttpServletResponse) rsp;
 
-    // set a header that represents the request id
-    String reqId = String.valueOf(requestId.getAndIncrement());
-    httpRsp.setHeader("x-geoserver-request", reqId);
-    httpRsp.setHeader("x-geoserver-jdbc-metrics", ResponseUtils.baseURL(httpReq)+"jdbc-metrics/"+reqId);
-    httpRsp.setHeader("x-geoserver-node-info", nodeData.getId());
+        // set a header that represents the request id
+        String reqId = String.valueOf(requestId.getAndIncrement());
+        httpRsp.setHeader("x-geoserver-request", reqId);
+        httpRsp.setHeader("x-geoserver-jdbc-metrics", ResponseUtils.baseURL(httpReq) + "jdbc-metrics/" + reqId);
+        httpRsp.setHeader("x-geoserver-node-info", nodeData.getId());
 
-    // do the request
-    filterChain.doFilter(req, rsp);
+        // do the request
+        filterChain.doFilter(req, rsp);
 
-    // write the metrics out to the cache
-    Optional.ofNullable(RequestMetricsCallback.metrics.get()).ifPresent(map -> {
-      RequestMetricsController.METRICS.put(reqId, map);
-      RequestMetricsCallback.metrics.remove();
-    });
-  }
+        // write the metrics out to the cache
+        Optional.ofNullable(RequestMetricsCallback.metrics.get()).ifPresent(map -> {
+            RequestMetricsController.METRICS.put(reqId, map);
+            RequestMetricsCallback.metrics.remove();
+        });
+    }
 
-  @Override
-  public void destroy() {
+    @Override
+    public void destroy() {
 
-  }
+    }
 }

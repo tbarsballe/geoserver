@@ -30,9 +30,8 @@ import org.springframework.util.StringUtils;
 /**
  * Extended BindAuthenticator using a filter to find user data as an alternative
  * to a direct dn access.
- * 
+ *
  * @author "Mauro Bartolomeoli - mauro.bartolomeoli@geo-solutions.it"
- * 
  */
 public class GeoserverLdapBindAuthenticator extends BindAuthenticator {
 
@@ -65,9 +64,8 @@ public class GeoserverLdapBindAuthenticator extends BindAuthenticator {
     /**
      * If userFilter is defined we extract user data using the filter and
      * dnPattern (if defined) to transform username for authentication.
-     * 
-     * @param authentication
      *
+     * @param authentication
      */
     protected DirContextOperations authenticateUsingFilter(
             Authentication authentication) {
@@ -103,7 +101,7 @@ public class GeoserverLdapBindAuthenticator extends BindAuthenticator {
             searchCtls.setSearchScope(SearchControls.SUBTREE_SCOPE);
 
             user = SpringSecurityLdapTemplate.searchForSingleEntryInternal(ctx,
-                    searchCtls, "", userFilter, new Object[] { username, originalUser });
+                    searchCtls, "", userFilter, new Object[]{username, originalUser});
             userDnStr = user.getDn().toString();
             if (ppolicy != null) {
                 user.setAttributeValue(ppolicy.getID(), ppolicy);

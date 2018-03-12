@@ -29,20 +29,19 @@ import org.geoserver.security.web.user.UserPanel;
 
 /**
  * Base class for user group service panels.
- * 
- * @author Justin Deoliveira, OpenGeo
  *
  * @param <T>
+ * @author Justin Deoliveira, OpenGeo
  */
-public class UserGroupServicePanel<T extends SecurityUserGroupServiceConfig> 
-    extends SecurityNamedServicePanel<T> implements SecurityNamedServiceTabbedPanel<T> {
+public class UserGroupServicePanel<T extends SecurityUserGroupServiceConfig>
+        extends SecurityNamedServicePanel<T> implements SecurityNamedServiceTabbedPanel<T> {
 
-    CheckBox recodeCheckBox=null;
+    CheckBox recodeCheckBox = null;
 
     public UserGroupServicePanel(String id, IModel<T> model) {
         super(id, model);
 
-        
+
         add(new PasswordEncoderChoice("passwordEncoderName").add(new OnChangeAjaxBehavior() {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
@@ -53,18 +52,18 @@ public class UserGroupServicePanel<T extends SecurityUserGroupServiceConfig>
             }
         }));
 
-        boolean canCreateStore=false;
+        boolean canCreateStore = false;
         SecurityUserGroupServiceConfig config = model.getObject();
         try {
-            GeoServerUserGroupService s = 
-                (GeoServerUserGroupService) Class.forName(config.getClassName()).newInstance();
-            canCreateStore=s.canCreateStore();
+            GeoServerUserGroupService s =
+                    (GeoServerUserGroupService) Class.forName(config.getClassName()).newInstance();
+            canCreateStore = s.canCreateStore();
         } catch (Exception e) {
             // do nothing
         }
 
-        
-        recodeCheckBox= new CheckBox("recodeExistingPasswords", Model.of(false));
+
+        recodeCheckBox = new CheckBox("recodeExistingPasswords", Model.of(false));
         recodeCheckBox.setOutputMarkupId(true);
         recodeCheckBox.setVisible(canCreateStore);
         recodeCheckBox.setEnabled(false);

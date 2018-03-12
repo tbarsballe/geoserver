@@ -15,9 +15,9 @@ import org.springframework.web.context.ServletContextAware;
 
 /**
  * ResourceStore using ServletContext to look up data directory.
- * 
- * @see GeoServerResourceLoader#lookupGeoServerDataDirectory(ServletContext)
+ *
  * @author Jody Garnett (Boundless)
+ * @see GeoServerResourceLoader#lookupGeoServerDataDirectory(ServletContext)
  */
 public class DataDirectoryResourceStore extends FileSystemResourceStore implements
         ServletContextAware, Serializable {

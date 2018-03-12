@@ -26,21 +26,25 @@ import com.hazelcast.core.HazelcastInstance;
 
 /**
  * This class loads the Hazelcast configuration, making sure it contains the expected elements
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class HazelcastLoader implements DisposableBean {
     private final static Logger LOGGER = Logging.getLogger(HazelcastLoader.class);
 
-    /** Name of the Hazelcast XML file to use */
+    /**
+     * Name of the Hazelcast XML file to use
+     */
     public final static String HAZELCAST_NAME = "hazelcast.xml";
 
-    /** Hazelcast instance to pass to the {@link HazelcastCacheProvider} class */
+    /**
+     * Hazelcast instance to pass to the {@link HazelcastCacheProvider} class
+     */
     private HazelcastInstance instance;
 
     /**
      * Loads a new {@link HazelcastInstance} from the data directory, and
-     * 
+     *
      * @param dd
      * @throws IOException
      */
@@ -49,7 +53,7 @@ public class HazelcastLoader implements DisposableBean {
         Resource resource = store.get(HAZELCAST_NAME);
         if (resource.getType() == Type.UNDEFINED) {
             try (OutputStream os = resource.out();
-                    InputStream is = HazelcastLoader.class.getResourceAsStream(HAZELCAST_NAME)) {
+                 InputStream is = HazelcastLoader.class.getResourceAsStream(HAZELCAST_NAME)) {
                 IOUtils.copy(is, os);
             }
         }
@@ -62,7 +66,7 @@ public class HazelcastLoader implements DisposableBean {
 
     /**
      * Starts with a given Hazelcast instance.
-     * 
+     *
      * @param dd
      * @throws IOException
      */
@@ -73,7 +77,7 @@ public class HazelcastLoader implements DisposableBean {
 
     /**
      * Returns the Hazelcast instance to use
-     * 
+     *
      * @return Hazelcast instance if present or null
      */
     public HazelcastInstance getInstance() {

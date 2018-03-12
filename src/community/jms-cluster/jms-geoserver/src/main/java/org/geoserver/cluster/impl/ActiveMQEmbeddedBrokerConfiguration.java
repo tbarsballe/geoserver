@@ -11,11 +11,9 @@ import org.geoserver.cluster.configuration.JMSConfiguration;
 import org.geoserver.cluster.configuration.JMSConfigurationExt;
 
 /**
- * 
  * class to store and load configuration
- * 
+ *
  * @author carlo cancellieri - GeoSolutions SAS
- * 
  */
 final public class ActiveMQEmbeddedBrokerConfiguration implements JMSConfigurationExt {
 

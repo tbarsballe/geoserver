@@ -8,10 +8,10 @@ import net.opengis.wfs20.GetFeatureType;
 import org.geoserver.wfs.request.FeatureCollectionResponse;
 
 public interface WebFeatureService30 {
-    
+
     ContentsDocument contents(ContentRequest request);
-    
+
     APIDocument api(APIRequest request);
-    
+
     Object getFeature(GetFeatureType request);
 }

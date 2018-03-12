@@ -130,7 +130,7 @@ public class RepositoryImportPanelTest extends CommonPanelTest {
         // and a directory
         TextField parentDirectory = (TextField) tester.getComponentFromLastRenderedPage(
                 SETTINGS_PREFIX +
-                "repoDirectoryPanel:wrapper:wrapper_body:repoDirectory");
+                        "repoDirectoryPanel:wrapper:wrapper_body:repoDirectory");
         formTester.setValue(parentDirectory, repoDir.getCanonicalPath());
         // click the Save button
         tester.executeAjaxEvent(IMPORT_LINK, "click");

@@ -44,7 +44,7 @@ public class GwcServiceProxy {
 
     private final Pattern kmlPattern = Pattern.compile("/service/kml/", Pattern.CASE_INSENSITIVE);
     private final Pattern kmlXyzPattern = Pattern.compile(".*x(?<x>[0-9]+)y(?<y>[0-9]+)z(?<z>[0-9]+).*?", Pattern.CASE_INSENSITIVE);
-    
+
     public GwcServiceProxy() {
         serviceInfo = new ServiceInfoImpl();
         serviceInfo.setId("gwc");
@@ -63,8 +63,6 @@ public class GwcServiceProxy {
      * returned here will always be enabled, we already have a GWC
      * {@link GWCServiceEnablementInterceptor service interceptor} aspect that decorates specific
      * gwc services to check for enablement.
-     * 
-     *
      */
     public ServiceInfo getServiceInfo() {
         return serviceInfo;
@@ -78,16 +76,15 @@ public class GwcServiceProxy {
      * handleRequest(HttpServletRequest, HttpServletResponse)} method, and return a response object
      * so that the GeoServer {@link Dispatcher} looks up a {@link Response} that finally writes the
      * result down to the client response stream.
-     * 
+     *
      * @param rawRequest
      * @param rawRespose
-     *
      * @see GwcOperationProxy
      * @see GwcResponseProxy
      */
     public GwcOperationProxy dispatch(HttpServletRequest rawRequest, HttpServletResponse rawRespose)
             throws Exception {
-        
+
 //        DispatcherController.BASE_URL.set(ResponseUtils.baseURL(rawRequest));
 
         ResponseWrapper responseWrapper = new ResponseWrapper(rawRespose);
@@ -100,43 +97,43 @@ public class GwcServiceProxy {
 
         return new GwcOperationProxy(contentType, headers, bytes);
     }
-    
-    private  static Map<String,String> splitTMSParams(HttpServletRequest request) {
-        
+
+    private static Map<String, String> splitTMSParams(HttpServletRequest request) {
+
         // get all elements of the pathInfo after the leading "/tms/1.0.0/" part.
         String pathInfo = request.getPathInfo();
         pathInfo = pathInfo.substring(pathInfo.indexOf(TMSDocumentFactory.TILEMAPSERVICE_LEADINGPATH));
         String[] params = pathInfo.split("/");
         // {"tms", "1.0.0", "img states@EPSG:4326", ... } 
-        
+
         int paramsLength = params.length;
-        
+
         Map<String, String> parsed = new HashMap<>();
-        
-        if(params.length < 4) {
+
+        if (params.length < 4) {
             return Collections.emptyMap();
         }
-        
+
         String[] yExt = params[paramsLength - 1].split("\\.");
-        
+
         parsed.put("x", params[paramsLength - 2]);
         parsed.put("y", yExt[0]);
         parsed.put("z", params[paramsLength - 3]);
-        
+
         String layerNameAndSRS = params[2];
         String[] lsf = ServletUtils.URLDecode(layerNameAndSRS, request.getCharacterEncoding()).split("@");
         parsed.put("layerId", lsf[0]);
-        if(lsf.length >= 3) {
-           parsed.put("gridSetId", lsf[1]);
+        if (lsf.length >= 3) {
+            parsed.put("gridSetId", lsf[1]);
         }
-        
+
         parsed.put("fileExtension", yExt[1]);
-        
+
         return parsed;
     }
-    
+
     /**
-     * 
+     *
      *
      */
     private final class ResponseWrapper extends HttpServletResponseWrapper {
@@ -152,7 +149,7 @@ public class GwcServiceProxy {
         public ServletOutputStream getOutputStream() throws IOException {
             return out;
         }
-        
+
         @Override
         public void setHeader(String name, String value) {
             headers.put(name, value);

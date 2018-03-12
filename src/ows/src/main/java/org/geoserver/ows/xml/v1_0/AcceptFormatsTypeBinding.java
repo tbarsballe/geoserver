@@ -17,7 +17,7 @@ import org.geotools.xml.Node;
 
 /**
  * Binding object for the type http://www.opengis.net/ows:AcceptFormatsType.
- *
+ * <p>
  * <pre><code>
  *  &lt;complexType name="AcceptFormatsType"&gt;
  *      &lt;annotation&gt;
@@ -62,7 +62,7 @@ public class AcceptFormatsTypeBinding extends AbstractComplexBinding {
      * @generated modifiable
      */
     public Object parse(ElementInstance instance, Node node, Object value)
-        throws Exception {
+            throws Exception {
         AcceptFormatsType acceptFormats = owsfactory.createAcceptFormatsType();
         acceptFormats.getOutputFormat().addAll(node.getChildValues("OutputFormat"));
 

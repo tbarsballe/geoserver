@@ -16,7 +16,7 @@ import java.util.List;
  * It is intended to provide enough map context information about the map over the GetFeatureInfo
  * request is performed.
  * </p>
- * 
+ *
  * @author Gabriel Roldan
  * @version $Id$
  */
@@ -55,7 +55,7 @@ public class GetFeatureInfoRequest extends WMSRequest {
      * Holds the value of the requiered <code>Y</code> parameter
      */
     private int YPixel;
-    
+
     /**
      * Property selection, if any (one list per layer)
      */
@@ -79,8 +79,7 @@ public class GetFeatureInfoRequest extends WMSRequest {
     }
 
     /**
-     * @param exeptionFormat
-     *            The exeptionFormat to set.
+     * @param exeptionFormat The exeptionFormat to set.
      */
     public void setExceptions(String exeptionFormat) {
         this.exeptionFormat = exeptionFormat;
@@ -94,8 +93,7 @@ public class GetFeatureInfoRequest extends WMSRequest {
     }
 
     /**
-     * @param featureCount
-     *            The featureCount to set.
+     * @param featureCount The featureCount to set.
      */
     public void setFeatureCount(int featureCount) {
         this.featureCount = featureCount;
@@ -109,8 +107,7 @@ public class GetFeatureInfoRequest extends WMSRequest {
     }
 
     /**
-     * @param getMapRequest
-     *            The getMapRequest to set.
+     * @param getMapRequest The getMapRequest to set.
      */
     public void setGetMapRequest(GetMapRequest getMapRequest) {
         this.getMapRequest = getMapRequest;
@@ -124,8 +121,7 @@ public class GetFeatureInfoRequest extends WMSRequest {
     }
 
     /**
-     * @param infoFormat
-     *            The infoFormat to set.
+     * @param infoFormat The infoFormat to set.
      */
     public void setInfoFormat(String infoFormat) {
         this.infoFormat = infoFormat;
@@ -139,8 +135,7 @@ public class GetFeatureInfoRequest extends WMSRequest {
     }
 
     /**
-     * @param queryLayers
-     *            The queryLayers to set.
+     * @param queryLayers The queryLayers to set.
      */
     public void setQueryLayers(List<MapLayerInfo> queryLayers) {
         this.queryLayers = queryLayers;
@@ -154,8 +149,7 @@ public class GetFeatureInfoRequest extends WMSRequest {
     }
 
     /**
-     * @param pixel
-     *            The xPixel to set.
+     * @param pixel The xPixel to set.
      */
     public void setXPixel(int pixel) {
         XPixel = pixel;
@@ -169,8 +163,7 @@ public class GetFeatureInfoRequest extends WMSRequest {
     }
 
     /**
-     * @param pixel
-     *            The yPixel to set.
+     * @param pixel The yPixel to set.
      */
     public void setYPixel(int pixel) {
         YPixel = pixel;
@@ -178,7 +171,6 @@ public class GetFeatureInfoRequest extends WMSRequest {
 
     /**
      * The property selection, if any
-     *
      */
     public List<List<String>> getPropertyNames() {
         return propertyNames;
@@ -186,6 +178,7 @@ public class GetFeatureInfoRequest extends WMSRequest {
 
     /**
      * Sets the property selection
+     *
      * @param propertyNames
      */
     public void setPropertyNames(List<List<String>> propertyNames) {

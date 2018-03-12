@@ -13,9 +13,8 @@ import org.geotools.data.Parameter;
 
 /**
  * Summary of a OpenSearch EO description, with indication of URL template parameters and the like
- * 
- * @author Andrea Aime - GeoSolutions
  *
+ * @author Andrea Aime - GeoSolutions
  */
 public class OSEODescription {
 
@@ -30,7 +29,7 @@ public class OSEODescription {
     List<Parameter<?>> searchParameters;
 
     public OSEODescription(OSEODescriptionRequest request, OSEOInfo serviceInfo,
-            GeoServerInfo geoserverInfo, List<Parameter<?>> searchParameters) {
+                           GeoServerInfo geoserverInfo, List<Parameter<?>> searchParameters) {
         this.baseURL = request.getBaseUrl();
         this.parentId = request.getParentId();
         this.serviceInfo = serviceInfo;
@@ -53,7 +52,7 @@ public class OSEODescription {
     public GeoServerInfo getGeoserverInfo() {
         return geoserverInfo;
     }
-    
+
     public List<Parameter<?>> getSearchParameters() {
         return searchParameters;
     }

@@ -39,19 +39,19 @@ public class RangePatternsTest {
         assertEquals(g3, matcher.group(3));
         assertEquals(g4, matcher.group(4));
     }
-    
+
     private void assertPatternNotMatch(Pattern pattern, String testRange) {
         Matcher matcher = pattern.matcher(testRange);
         assertFalse(matcher.matches());
     }
-    
+
     @Test
     public void testLeftRangePattern() {
         // check matches
         assertLeftRangeMatch("[10", "[", "10");
         assertLeftRangeMatch("]10", "]", "10");
         assertLeftRangeMatch("[2010-09-21", "[", "2010-09-21");
-        
+
         // check failures
         assertPatternNotMatch(LEFT_RANGE_PATTERN, "abcd");
         assertPatternNotMatch(LEFT_RANGE_PATTERN, "10");
@@ -68,14 +68,14 @@ public class RangePatternsTest {
         assertEquals(g1, matcher.group(1));
         assertEquals(g2, matcher.group(2));
     }
-    
+
     @Test
     public void testRightRangePattern() {
         // check matches
         assertRightRangeMatch("10]", "10", "]");
         assertRightRangeMatch("10[", "10", "[");
         assertRightRangeMatch("2010-09-21]", "2010-09-21", "]");
-        
+
         // check failures
         assertPatternNotMatch(LEFT_RANGE_PATTERN, "abcd");
         assertPatternNotMatch(LEFT_RANGE_PATTERN, "10");

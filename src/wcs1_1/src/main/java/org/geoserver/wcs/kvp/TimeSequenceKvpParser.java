@@ -21,19 +21,19 @@ public class TimeSequenceKvpParser extends KvpParser {
 
     public TimeSequenceKvpParser() {
         super("TimeSequence", TimeSequenceType.class);
-        
+
     }
 
     @Override
     public Object parse(String value) throws Exception {
         TimeSequenceType timeSequence = Wcs111Factory.eINSTANCE.createTimeSequenceType();
         TimeKvpParser parser = new TimeKvpParser("WCS1_1");
-        
-        Collection<Date> timePositions = (Collection<Date>)parser.parse(value);
+
+        Collection<Date> timePositions = (Collection<Date>) parser.parse(value);
         for (Date tp : timePositions) {
             timeSequence.getTimePosition().add(tp);
         }
-        
+
         return timeSequence;
     }
 

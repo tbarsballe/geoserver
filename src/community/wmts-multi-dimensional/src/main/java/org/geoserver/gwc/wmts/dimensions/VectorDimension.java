@@ -29,7 +29,7 @@ public abstract class VectorDimension extends Dimension {
 
     private final Comparator comparator;
 
-    public VectorDimension(WMS wms, String dimensionName, LayerInfo layerInfo, DimensionInfo dimensionInfo, 
+    public VectorDimension(WMS wms, String dimensionName, LayerInfo layerInfo, DimensionInfo dimensionInfo,
                            Comparator comparator) {
         super(wms, dimensionName, layerInfo, dimensionInfo);
         this.comparator = comparator;

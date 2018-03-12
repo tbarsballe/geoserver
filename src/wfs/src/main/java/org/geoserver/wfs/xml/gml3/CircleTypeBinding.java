@@ -21,9 +21,9 @@ import org.geotools.xml.Node;
  * We include this here, and not part of gml because its job is to fail, its a cite
  * compliance thing :).
  * </p>
- *
  * <p>
- *        <pre>
+ * <p>
+ * <pre>
  *         <code>
  *  &lt;complexType name="CircleType"&gt;
  *      &lt;annotation&gt;
@@ -36,6 +36,7 @@ import org.geotools.xml.Node;
  *
  *          </code>
  *         </pre>
+ *
  * @generated
  */
 public class CircleTypeBinding extends AbstractComplexBinding {
@@ -63,7 +64,7 @@ public class CircleTypeBinding extends AbstractComplexBinding {
      * @generated modifiable
      */
     public Object parse(ElementInstance instance, Node node, Object value)
-        throws Exception {
+            throws Exception {
         throw new WFSException("Circle is not supported", "InvalidParameterValue");
     }
 }

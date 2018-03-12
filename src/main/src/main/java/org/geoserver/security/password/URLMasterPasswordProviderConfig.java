@@ -9,25 +9,26 @@ import java.net.URL;
 
 /**
  * Config object for {@link URLMasterPasswordProvider}.
- * 
- * @author Justin Deoliveira, OpenGeo
  *
+ * @author Justin Deoliveira, OpenGeo
  */
 public class URLMasterPasswordProviderConfig extends
         MasterPasswordProviderConfig {
 
-    /** default password filename */
+    /**
+     * default password filename
+     */
     public static final String MASTER_PASSWD_FILENAME = "passwd";
 
     URL url;
     boolean encrypting;
-    
+
     public URLMasterPasswordProviderConfig() {
     }
 
     public URLMasterPasswordProviderConfig(URLMasterPasswordProviderConfig other) {
         super(other);
-        
+
         this.url = other.getURL();
     }
 

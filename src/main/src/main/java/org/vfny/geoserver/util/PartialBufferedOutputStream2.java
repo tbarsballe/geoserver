@@ -44,18 +44,23 @@ import javax.servlet.http.HttpServletResponse;
  * are removed.
  *
  * @author Brent Owens (The Open Planning Project)
- * @version
  */
 public class PartialBufferedOutputStream2 extends OutputStream {
     public static final int DEFAULT_BUFFER_SIZE = 50;
 
-    /** the number of bytes in a kilobyte */
+    /**
+     * the number of bytes in a kilobyte
+     */
     private final int KILOBYTE = 1024;
 
-    /** Buffer size for the temporary output stream */
+    /**
+     * Buffer size for the temporary output stream
+     */
     private int BUFFER_SIZE = KILOBYTE;
 
-    /** Temporary output stream, the buffered one */
+    /**
+     * Temporary output stream, the buffered one
+     */
     private ByteArrayOutputStream out_buffer;
 
     /**
@@ -71,24 +76,27 @@ public class PartialBufferedOutputStream2 extends OutputStream {
      */
     private HttpServletResponse response;
 
-    /** Set to true when close() is called to prevent further writing */
+    /**
+     * Set to true when close() is called to prevent further writing
+     */
     private boolean closed = false;
 
     /**
-             * Constructor Defaults buffer size to 50KB
-             * @param response
-             */
+     * Constructor Defaults buffer size to 50KB
+     *
+     * @param response
+     */
     public PartialBufferedOutputStream2(HttpServletResponse response)
-        throws IOException {
+            throws IOException {
         this(response, DEFAULT_BUFFER_SIZE); // default to 50KB
     }
 
     /**
-             * @param response the response with its output stream to write to once the buffer is full
-             * @param kilobytes size, in kilobytes, of the buffer
-             */
+     * @param response  the response with its output stream to write to once the buffer is full
+     * @param kilobytes size, in kilobytes, of the buffer
+     */
     public PartialBufferedOutputStream2(HttpServletResponse response, int kilobytes)
-        throws IOException {
+            throws IOException {
         if (kilobytes < 1) {
             throw new IllegalArgumentException("Buffer size not greater than 0: " + kilobytes);
         }
@@ -183,7 +191,7 @@ public class PartialBufferedOutputStream2 extends OutputStream {
             currentStream.flush();
         }
     }
-    
+
     public synchronized void forceFlush() throws IOException {
         if (currentStream == out_buffer) {
             flushBuffer();
@@ -199,17 +207,17 @@ public class PartialBufferedOutputStream2 extends OutputStream {
         if (closed) {
             return;
         }
-        
+
         forceFlush();
-        
+
         closed = true;
 
         out_buffer.close();
         out_buffer = null;
         out_real = null; // get rid of our local pointer
         response = null; // get rid of our local pointer
-                         //if (out_real != null)	// removed so the user has to close their stream
-                         //	out_real.close();
+        //if (out_real != null)	// removed so the user has to close their stream
+        //	out_real.close();
     }
 
     /**
@@ -222,7 +230,6 @@ public class PartialBufferedOutputStream2 extends OutputStream {
      * OutputStream
      *
      * @return DOCUMENT ME!
-     *
      * @throws IOException
      */
     public boolean abort() throws IOException {

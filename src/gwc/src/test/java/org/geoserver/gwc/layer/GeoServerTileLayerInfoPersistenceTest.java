@@ -55,43 +55,43 @@ public class GeoServerTileLayerInfoPersistenceTest {
         defaultVectorInfo.getMimeFormats().clear();
         defaultVectorInfo.getMimeFormats().addAll(defaults.getDefaultVectorCacheFormats());
     }
-    
+
     <T> Matcher<T> sameProperty(T expected, String property) throws Exception {
         return sameProperty(expected, property, Matchers::is);
     }
-    
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+
+    @SuppressWarnings({"unchecked", "rawtypes"})
     <T> Matcher<T> sameProperty(T expected, String property, Function<?, Matcher<?>> valueMatcher) throws Exception {
         Object value = Arrays.stream(
-                    Introspector.getBeanInfo(expected.getClass()).getPropertyDescriptors())
-                .filter(p->p.getName().equals(property))
+                Introspector.getBeanInfo(expected.getClass()).getPropertyDescriptors())
+                .filter(p -> p.getName().equals(property))
                 .findAny()
-                .orElseThrow(()-> new IllegalArgumentException("bean expected lacks the property "+property))
+                .orElseThrow(() -> new IllegalArgumentException("bean expected lacks the property " + property))
                 .getReadMethod()
                 .invoke(expected);
-        return hasProperty(property, (Matcher<?>)((Function)valueMatcher).apply(value));
+        return hasProperty(property, (Matcher<?>) ((Function) valueMatcher).apply(value));
     }
-    
+
     private GeoServerTileLayerInfo testMarshaling(GeoServerTileLayerInfo info) throws Exception {
 
         XStream xstream = XMLConfiguration.getConfiguredXStream(new SecureXStream(), (WebApplicationContext) null);
         xstream = new GWCGeoServerConfigurationProvider().getConfiguredXStream(xstream);
-        xstream.allowTypes(new Class[] { GeoServerTileLayerInfo.class, SortedSet.class });
+        xstream.allowTypes(new Class[]{GeoServerTileLayerInfo.class, SortedSet.class});
 
         String marshalled = xstream.toXML(info);
         GeoServerTileLayerInfo unmarshalled = (GeoServerTileLayerInfo) xstream
                 .fromXML(new StringReader(marshalled));
 
         assertThat(unmarshalled, notNullValue());
-        
-        assertThat(unmarshalled, sameProperty(info ,"enabled"));
-        assertThat(unmarshalled, sameProperty(info ,"autoCacheStyles"));
-        
-        assertThat(unmarshalled, sameProperty(info ,"gutter"));
-        assertThat(unmarshalled, sameProperty(info ,"metaTilingX"));
-        assertThat(unmarshalled, sameProperty(info ,"metaTilingY"));
-        assertThat(unmarshalled, sameProperty(info ,"gridSubsets"));
-        assertThat(unmarshalled, sameProperty(info ,"mimeFormats"));
+
+        assertThat(unmarshalled, sameProperty(info, "enabled"));
+        assertThat(unmarshalled, sameProperty(info, "autoCacheStyles"));
+
+        assertThat(unmarshalled, sameProperty(info, "gutter"));
+        assertThat(unmarshalled, sameProperty(info, "metaTilingX"));
+        assertThat(unmarshalled, sameProperty(info, "metaTilingY"));
+        assertThat(unmarshalled, sameProperty(info, "gridSubsets"));
+        assertThat(unmarshalled, sameProperty(info, "mimeFormats"));
         assertThat(unmarshalled, sameProperty(info, "parameterFilters"));
         assertThat(unmarshalled, equalTo(info));
 

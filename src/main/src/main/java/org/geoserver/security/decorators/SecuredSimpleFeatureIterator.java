@@ -14,8 +14,7 @@ import org.opengis.feature.simple.SimpleFeature;
 /**
  * Simple Feature iterators are read only by design, but just to make extra sure there
  * are no write enabled subclasses floating around we make the wrapping anyways,
- * 
- * 
+ *
  * @author Josh Vote, CSIRO Earth Science and Resource Engineering
  */
 public class SecuredSimpleFeatureIterator implements SimpleFeatureIterator, Iterator<SimpleFeature> {

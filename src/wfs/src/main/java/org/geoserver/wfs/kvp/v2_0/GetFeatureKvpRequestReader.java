@@ -28,7 +28,7 @@ public class GetFeatureKvpRequestReader extends org.geoserver.wfs.kvp.GetFeature
         // special cite compliance check to ensure the client specified typeNames rather than just
         // typeName (but typename is a parameter in a StoredQuery in CITE tests!!)
         if (!kvp.containsKey("typenames") && kvp.containsKey("typename")
-            && getWFS().isCiteCompliant() && !kvp.containsKey("STOREDQUERY_ID")) {
+                && getWFS().isCiteCompliant() && !kvp.containsKey("STOREDQUERY_ID")) {
             throw new WFSException("WFS 2.0 requires typeNames, not typeName");
         }
         return super.read(request, kvp, rawKvp);

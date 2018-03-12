@@ -288,7 +288,8 @@ public class ConfigStoreTest {
         assertFalse(store.delete(dummyId));
     }
 
-    public @Test void testPreload() throws Exception {
+    public @Test
+    void testPreload() throws Exception {
         store.save(dummy(1));
         store.save(dummy(2));
         store.save(dummy(3));
@@ -297,7 +298,8 @@ public class ConfigStoreTest {
         assertEquals(3, store2.getRepositories().size());
     }
 
-    public @Test void testPreloadIgnoresMalformed() throws Exception {
+    public @Test
+    void testPreloadIgnoresMalformed() throws Exception {
         store.save(dummy(7));
         store.save(dummy(8));
         store.save(dummy(9));
@@ -317,7 +319,8 @@ public class ConfigStoreTest {
         assertEquals(3, store2.getRepositories().size());
     }
 
-    public @Test void testGetByName() throws Exception {
+    public @Test
+    void testGetByName() throws Exception {
         store.save(dummy(1));
         store.save(dummy(2));
 
@@ -327,7 +330,8 @@ public class ConfigStoreTest {
         assertEquals(info, store.getByName("name-3"));
     }
 
-    public @Test void testRepoExistsByName() throws Exception {
+    public @Test
+    void testRepoExistsByName() throws Exception {
         store.save(dummy(1));
         store.save(dummy(2));
 
@@ -337,7 +341,8 @@ public class ConfigStoreTest {
         assertTrue(store.repoExistsByName("name-3"));
     }
 
-    public @Test void testGetByLocation() throws Exception {
+    public @Test
+    void testGetByLocation() throws Exception {
         store.save(dummy(1));
         store.save(dummy(2));
 
@@ -348,7 +353,8 @@ public class ConfigStoreTest {
         assertEquals(info, store.getByLocation(uri));
     }
 
-    public @Test void testRepoExistsByLocation() throws Exception {
+    public @Test
+    void testRepoExistsByLocation() throws Exception {
         store.save(dummy(1));
         store.save(dummy(2));
 

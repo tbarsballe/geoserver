@@ -27,10 +27,9 @@ import com.vividsolutions.jts.geom.Geometry;
 
 /**
  * A DescribeFeatureType output format that generates a JSON schema instead of a XML one
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  * @author Carlo Cancellieri - GeoSolutions
- * 
  */
 public class JSONDescribeFeatureTypeResponse extends WFSDescribeFeatureTypeOutputFormat {
 
@@ -42,7 +41,7 @@ public class JSONDescribeFeatureTypeResponse extends WFSDescribeFeatureTypeOutpu
 
     @Override
     protected void write(FeatureTypeInfo[] featureTypeInfos, OutputStream output,
-            Operation describeFeatureType) throws IOException {
+                         Operation describeFeatureType) throws IOException {
 
         if (featureTypeInfos.length == 0) {
             throw new IOException("Unable to write an empty feature info array.");
@@ -116,7 +115,7 @@ public class JSONDescribeFeatureTypeResponse extends WFSDescribeFeatureTypeOutpu
     }
 
     private static void describeProperty(String name, AttributeDescriptor ad, GeoJSONBuilder jw,
-            boolean isGeometry) {
+                                         boolean isGeometry) {
         jw.object();
         jw.key("name").value(name);
         jw.key("maxOccurs").value(ad.getMaxOccurs());

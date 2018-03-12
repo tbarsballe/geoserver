@@ -59,7 +59,7 @@ import com.vividsolutions.jts.geom.Point;
  * <li>caching the assignment of a feature in a specific tile in an H2 database
  * stored in the data directory</li>
  * <li>
- * 
+ *
  * @author Andrea Aime - OpenGeo
  * @author David Winslow - OpenGeo
  * @author Arne Kepp - OpenGeo
@@ -90,7 +90,6 @@ public abstract class CachedHierarchyRegionatingStrategy implements
         }
     }
 
- 
 
     /**
      * The original area occupied by the data
@@ -116,11 +115,11 @@ public abstract class CachedHierarchyRegionatingStrategy implements
      * geoserver configuration
      */
     protected GeoServer gs;
-    
+
     protected CachedHierarchyRegionatingStrategy(GeoServer gs) {
         this.gs = gs;
     }
-    
+
     public Filter getFilter(WMSMapContent context, Layer layer) {
         Catalog catalog = gs.getCatalog();
         Set<String> featuresInTile = Collections.emptySet();
@@ -129,14 +128,14 @@ public abstract class CachedHierarchyRegionatingStrategy implements
             // connection
             FeatureSource featureSource = layer.getFeatureSource();
             featureType = catalog.getFeatureTypeByName(featureSource.getName());
-            
+
             String dataDir = catalog.getResourceLoader().getBaseDirectory().getCanonicalPath();
             tableName = getDatabaseName(context, layer);
 
             // grab the features per tile, use a default if user did not
             // provide a decent value. The default should fill up the
             // tile when it shows up.
-            featuresPerTile = featureType.getMetadata().get( "kml.regionateFeatureLimit",Integer.class );
+            featuresPerTile = featureType.getMetadata().get("kml.regionateFeatureLimit", Integer.class);
             if (featuresPerTile == null || featuresPerTile.intValue() <= 1)
                 featuresPerTile = 64;
 
@@ -149,7 +148,7 @@ public abstract class CachedHierarchyRegionatingStrategy implements
             // small error
             ReferencedEnvelope requestedEnvelope = context.getRenderingArea().transform(Tile.WGS84, true);
             LOGGER.log(Level.FINE, "Requested tile: {0}", requestedEnvelope);
-            dataEnvelope = featureType.getLatLonBoundingBox(); 
+            dataEnvelope = featureType.getLatLonBoundingBox();
 
             // decide which tile we need to load/compute, and make sure
             // it's a valid tile request, that is, that is does fit with
@@ -165,7 +164,7 @@ public abstract class CachedHierarchyRegionatingStrategy implements
 
             // oki doki, let's compute the fids in the requested tile
             featuresInTile = getFeaturesForTile(dataDir, tile);
-            LOGGER.log(Level.FINE, "Found "+featuresInTile.size() + " features in tile " + tile.toString());
+            LOGGER.log(Level.FINE, "Found " + featuresInTile.size() + " features in tile " + tile.toString());
         } catch (Throwable t) {
             LOGGER.log(Level.SEVERE,
                     "Error occurred while pre-processing regionated features",
@@ -186,17 +185,17 @@ public abstract class CachedHierarchyRegionatingStrategy implements
         }
     }
 
-    public void clearCache(FeatureTypeInfo cfg){
-        try{
+    public void clearCache(FeatureTypeInfo cfg) {
+        try {
             GeoServerResourceLoader loader = gs.getCatalog().getResourceLoader();
             Resource geosearch = loader.get("geosearch");
-            if( geosearch.getType() == Type.DIRECTORY ){
+            if (geosearch.getType() == Type.DIRECTORY) {
                 File directory = geosearch.dir();
                 DeleteDbFiles.execute(
                         directory.getCanonicalPath(),
-                    "h2cache_" + getDatabaseName(cfg),
-                    true
-                    );
+                        "h2cache_" + getDatabaseName(cfg),
+                        true
+                );
             }
         } catch (Exception ioe) {
             LOGGER.severe("Couldn't clear out config dir due to: " + ioe);
@@ -209,13 +208,12 @@ public abstract class CachedHierarchyRegionatingStrategy implements
      * {@link #MAX_ERROR}, evaluated as a percentage of the width and height of
      * the envelope.
      * The method assumes both envelopes are in the same CRS
-     * 
-     * @param tileEnvelope
-     * @param expectedEnvelope 
      *
+     * @param tileEnvelope
+     * @param expectedEnvelope
      */
     private boolean envelopeMatch(ReferencedEnvelope tileEnvelope,
-            ReferencedEnvelope expectedEnvelope) {
+                                  ReferencedEnvelope expectedEnvelope) {
         double widthRatio = Math.abs(1.0 - tileEnvelope.getWidth()
                 / expectedEnvelope.getWidth());
         double heightRatio = Math.abs(1.0 - tileEnvelope.getHeight()
@@ -232,10 +230,9 @@ public abstract class CachedHierarchyRegionatingStrategy implements
 
     /**
      * Open/creates the db and then reads/computes the tile features
-     * 
+     *
      * @param dataDir
      * @param tile
-     *
      */
     private Set<String> getFeaturesForTile(String dataDir, Tile tile)
             throws Exception {
@@ -252,7 +249,7 @@ public abstract class CachedHierarchyRegionatingStrategy implements
                 // get a hold to the database that contains the cache (this will
                 // eventually create the db)
                 conn = DriverManager.getConnection("jdbc:h2:file:" + dataDir
-                        + "/geosearch/h2cache_" + tableName, "geoserver",
+                                + "/geosearch/h2cache_" + tableName, "geoserver",
                         "geopass");
 
                 // try to create the table, if it's already there this will fail
@@ -274,12 +271,9 @@ public abstract class CachedHierarchyRegionatingStrategy implements
 
     /**
      * Reads/computes the tile feature set
-     * 
-     * @param tile
-     *            the Tile whose features we must find
-     * @param conn
-     *            the H2 connection
      *
+     * @param tile the Tile whose features we must find
+     * @param conn the H2 connection
      */
     protected Set<String> readFeaturesForTile(Tile tile, Connection conn)
             throws Exception {
@@ -316,7 +310,7 @@ public abstract class CachedHierarchyRegionatingStrategy implements
 
     /**
      * Store the fids inside
-     * 
+     *
      * @param t
      * @param fids
      * @param conn
@@ -354,10 +348,9 @@ public abstract class CachedHierarchyRegionatingStrategy implements
 
     /**
      * Computes the fids that will be stored in the specified tile
-     * 
+     *
      * @param tileCoords
      * @param st
-     *
      * @throws SQLException
      */
     private Set<String> computeFids(Tile tile, Connection conn)
@@ -368,7 +361,7 @@ public abstract class CachedHierarchyRegionatingStrategy implements
         FeatureIterator fi = null;
         try {
             // grab the features
-            FeatureSource fs = featureType.getFeatureSource(null,null);
+            FeatureSource fs = featureType.getFeatureSource(null, null);
             GeometryDescriptor geom = fs.getSchema().getGeometryDescriptor();
             CoordinateReferenceSystem nativeCrs = geom
                     .getCoordinateReferenceSystem();
@@ -381,22 +374,22 @@ public abstract class CachedHierarchyRegionatingStrategy implements
                 } catch (ProjectionException pe) {
                     // the WGS84 envelope of the tile is too big for this project,
                     // let's intersect it with the declared lat/lon bounds then
-                    LOGGER.log(Level.INFO, "Could not reproject the current tile bounds " 
-                            + tile.getEnvelope() + " to the native SRS, intersecting with " 
+                    LOGGER.log(Level.INFO, "Could not reproject the current tile bounds "
+                            + tile.getEnvelope() + " to the native SRS, intersecting with "
                             + "the layer declared lat/lon bounds and retrying");
-                    
+
                     // let's compare against the declared data bounds then
                     ReferencedEnvelope llEnv = featureType.getLatLonBoundingBox();
                     Envelope reduced = tile.getEnvelope().intersection(llEnv);
-                    if(reduced.isNull() || reduced.getWidth() == 0 || reduced.getHeight() == 0) {
+                    if (reduced.isNull() || reduced.getWidth() == 0 || reduced.getHeight() == 0) {
                         // no overlap, no party, the tile will be empty
                         return Collections.emptySet();
                     }
-                    
+
                     // there is some overlap, let's try the reprojection again.
                     // if even this fails, the user has evidently setup the 
                     // geographics bounds improperly
-                    ReferencedEnvelope refRed = new ReferencedEnvelope(reduced, 
+                    ReferencedEnvelope refRed = new ReferencedEnvelope(reduced,
                             tile.getEnvelope().getCoordinateReferenceSystem());
                     nativeTileEnvelope = refRed.transform(nativeCrs, true);
                 }
@@ -451,24 +444,21 @@ public abstract class CachedHierarchyRegionatingStrategy implements
      * the priority used for regionating. The features returned do not have to
      * be the feature type ones, it's sufficient that they have the same FID and
      * a geometry whose centroid is the same as the original feature one.
-     * 
-     * @param envelope
-     * @param indexConnection
-     *            a connection to the feature id cache db
      *
+     * @param envelope
+     * @param indexConnection a connection to the feature id cache db
      */
     protected abstract FeatureIterator getSortedFeatures(
-    		GeometryDescriptor geom, ReferencedEnvelope latLongEnvelope, 
-    		ReferencedEnvelope nativeEnvelope, Connection indexConnection)
+            GeometryDescriptor geom, ReferencedEnvelope latLongEnvelope,
+            ReferencedEnvelope nativeEnvelope, Connection indexConnection)
             throws Exception;
 
     /**
      * Returns a set of all the fids in the specified tile and in the parents of
      * it, recursing up to the root tile
-     * 
+     *
      * @param tile
      * @param st
-     *
      * @throws SQLException
      */
     private Set<String> getUpwardFids(Tile tile, Connection conn)
@@ -482,7 +472,7 @@ public abstract class CachedHierarchyRegionatingStrategy implements
         Set<String> fids = new HashSet();
         fids.addAll(readFeaturesForTile(tile, conn));
         Tile parent = tile.getParent();
-        if(parent != null) {
+        if (parent != null) {
             fids.addAll(getUpwardFids(parent, conn));
         }
         return fids;
@@ -497,7 +487,7 @@ public abstract class CachedHierarchyRegionatingStrategy implements
      * have data, the returned sest will be non empty</li> <li>the tile is new,
      * the db contains nothing, in this case we return "null"</li>
      * <ul>
-     * 
+     *
      * @param tileCoords
      * @param conn
      * @throws SQLException
@@ -537,32 +527,31 @@ public abstract class CachedHierarchyRegionatingStrategy implements
     /**
      * Returns the name to be used for the database. Should be unique for this
      * specific regionated layer.
-     * 
+     *
      * @param con
      * @param layer
-     *
      */
     protected String getDatabaseName(WMSMapContent con, Layer layer)
-        throws Exception {
-            int index =  con.layers().indexOf(layer);
-            return getDatabaseName(featureType);
+            throws Exception {
+        int index = con.layers().indexOf(layer);
+        return getDatabaseName(featureType);
     }
 
     protected String getDatabaseName(FeatureTypeInfo cfg)
-        throws Exception {
-            return cfg.getNamespace().getPrefix() + "_" + cfg.getName();
+            throws Exception {
+        return cfg.getNamespace().getPrefix() + "_" + cfg.getName();
     }
 
     /**
      * A regionating tile identified by its coordinates
-     * 
+     *
      * @author Andrea Aime
      */
     protected class CachedTile extends Tile {
 
         /**
          * Creates a new tile with the given coordinates
-         * 
+         *
          * @param x
          * @param y
          * @param z
@@ -575,28 +564,28 @@ public abstract class CachedHierarchyRegionatingStrategy implements
          * Tile containment check is not trivial due to a couple of issues:
          * <ul>
          * <li>centroids sitting on the tile borders must be associated to exactly one tile,
-         *     so we have to consider only two borders as inclusive in general (S and W)
-         *     but add on occasion the other two when we reach the extent of our data set</li>
+         * so we have to consider only two borders as inclusive in general (S and W)
+         * but add on occasion the other two when we reach the extent of our data set</li>
          * <li>coordinates going beyond the natural lat/lon range</li>
          * </ul>
          * This code takes care of the first, whilst the second issue remains as a TODO
+         *
          * @param x
          * @param y
-         *
          */
         public boolean contains(double x, double y) {
-            if(super.contains(x, y)) {
+            if (super.contains(x, y)) {
                 return true;
             }
-            
+
             // else check if we are on a border tile and the point
             // happens to sit right on the border we usually don't include
             double maxx = envelope.getMaxX();
             double maxy = envelope.getMaxY();
-            if(x == maxx && x >= dataEnvelope.getMaxX()) {
+            if (x == maxx && x >= dataEnvelope.getMaxX()) {
                 return true;
             }
-            if(y == maxy && y >= dataEnvelope.getMaxY()) {
+            if (y == maxy && y >= dataEnvelope.getMaxY()) {
                 return true;
             }
             return false;
@@ -616,23 +605,21 @@ public abstract class CachedHierarchyRegionatingStrategy implements
         /**
          * Returns the parent of this tile, or null if this tile is (one of) the
          * root of the current dataset
-         * 
-         *
          */
         public Tile getParent() {
             if (envelope.contains((BoundingBox) dataEnvelope)) {
                 return null;
             } else {
                 Tile parent = super.getParent();
-                if(parent != null) {
+                if (parent != null) {
                     // wrap it, as we have some custom logic working against the data envelope here
                     parent = new CachedTile(super.getParent());
                 }
-                
+
                 return parent;
             }
         }
-        
+
     }
 
 }

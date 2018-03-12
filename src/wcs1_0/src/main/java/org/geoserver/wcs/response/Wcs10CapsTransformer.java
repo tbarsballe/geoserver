@@ -56,7 +56,7 @@ import org.xml.sax.helpers.AttributesImpl;
 /**
  * Based on the <code>org.geotools.xml.transform</code> framework, does the job of encoding a WCS
  * 1.0.0 Capabilities document.
- * 
+ *
  * @author Alessio Fabiani (alessio.fabiani@gmail.com)
  * @author Simone Giannecchini (simboss1@gmail.com)
  * @author Andrea Aime, TOPP
@@ -78,7 +78,7 @@ public class Wcs10CapsTransformer extends TransformerBase {
     private WCSInfo wcs;
 
     private Catalog catalog;
-    
+
     private final boolean skipMisconfigured;
 
 
@@ -92,7 +92,7 @@ public class Wcs10CapsTransformer extends TransformerBase {
         this.catalog = geoServer.getCatalog();
         setNamespaceDeclarationEnabled(false);
         this.skipMisconfigured = ResourceErrorHandling.SKIP_MISCONFIGURED_LAYERS.equals(
-                    geoServer.getGlobal().getResourceErrorHandling());
+                geoServer.getGlobal().getResourceErrorHandling());
     }
 
     public Translator createTranslator(ContentHandler handler) {
@@ -110,9 +110,8 @@ public class Wcs10CapsTransformer extends TransformerBase {
 
         /**
          * Creates a new WCS100CapsTranslator object.
-         * 
-         * @param handler
-         *            DOCUMENT ME!
+         *
+         * @param handler DOCUMENT ME!
          */
         public WCS100CapsTranslator(ContentHandler handler) {
             super(handler, null, null);
@@ -120,12 +119,9 @@ public class Wcs10CapsTransformer extends TransformerBase {
 
         /**
          * Encode the object.
-         * 
-         * @param o
-         *            The Object to encode.
-         * 
-         * @throws IllegalArgumentException
-         *             if the Object is not encodeable.
+         *
+         * @param o The Object to encode.
+         * @throws IllegalArgumentException if the Object is not encodeable.
          */
         public void encode(Object o) throws IllegalArgumentException {
             if (!(o instanceof GetCapabilitiesType)) {
@@ -187,7 +183,7 @@ public class Wcs10CapsTransformer extends TransformerBase {
             final String locationDef = WCS_URI
                     + " "
                     + buildURL(request.getBaseUrl(), appendPath(SCHEMAS,
-                            "wcs/1.0.0/wcsCapabilities.xsd"), null, URLType.RESOURCE);
+                    "wcs/1.0.0/wcsCapabilities.xsd"), null, URLType.RESOURCE);
 
             attributes.addAttribute("", locationAtt, locationAtt, "", locationDef);
             attributes.addAttribute("", "updateSequence", "updateSequence", "", String
@@ -222,12 +218,12 @@ public class Wcs10CapsTransformer extends TransformerBase {
 
                 if (allSections
                         || section
-                                .equals(CapabilitiesSectionType.WCS_CAPABILITIES_CAPABILITY_LITERAL))
+                        .equals(CapabilitiesSectionType.WCS_CAPABILITIES_CAPABILITY_LITERAL))
                     handleCapabilities(allSections);
 
                 if (allSections
                         || section
-                                .equals(CapabilitiesSectionType.WCS_CAPABILITIES_CONTENT_METADATA_LITERAL))
+                        .equals(CapabilitiesSectionType.WCS_CAPABILITIES_CONTENT_METADATA_LITERAL))
                     handleContentMetadata(allSections);
             }
 
@@ -236,12 +232,9 @@ public class Wcs10CapsTransformer extends TransformerBase {
 
         /**
          * Handles the service section of the capabilities document.
-         * 
-         * @param config
-         *            The OGC service to transform.
-         * 
-         * @throws SAXException
-         *             For any errors.
+         *
+         * @param config The OGC service to transform.
+         * @throws SAXException For any errors.
          */
         private void handleService(boolean allSections) {
             AttributesImpl attributes = new AttributesImpl();
@@ -286,14 +279,14 @@ public class Wcs10CapsTransformer extends TransformerBase {
             if ((linkType != null) && (linkType != "")) {
                 attributes.addAttribute("", "xlink:type", "xlink:type", "", linkType);
             }
-            
+
             if ((mdl.getMetadataType() != null) && (mdl.getMetadataType() != "")) {
                 attributes.addAttribute("", "metadataType", "metadataType", "", mdl
                         .getMetadataType());
             }
 
             if ((mdl.getContent() != null) && (mdl.getContent() != "")) {
-                attributes.addAttribute("", "xlink:href", "xlink:href", 
+                attributes.addAttribute("", "xlink:href", "xlink:href",
                         "", ResponseUtils.proxifyMetadataLink(mdl, request.getBaseUrl()));
             }
 
@@ -304,12 +297,9 @@ public class Wcs10CapsTransformer extends TransformerBase {
 
         /**
          * DOCUMENT ME!
-         * 
-         * @param kwords
-         *            DOCUMENT ME!
-         * 
-         * @throws SAXException
-         *             DOCUMENT ME!
+         *
+         * @param kwords DOCUMENT ME!
+         * @throws SAXException DOCUMENT ME!
          */
         private void handleKeywords(List kwords) {
             if (kwords == null || kwords.isEmpty()) {
@@ -319,7 +309,7 @@ public class Wcs10CapsTransformer extends TransformerBase {
             start("wcs:keywords");
 
             if (kwords != null) {
-                for (Iterator it = kwords.iterator(); it.hasNext();) {
+                for (Iterator it = kwords.iterator(); it.hasNext(); ) {
                     element("wcs:keyword", it.next().toString());
                 }
             }
@@ -329,9 +319,8 @@ public class Wcs10CapsTransformer extends TransformerBase {
 
         /**
          * Handles contacts.
-         * 
-         * @param config
-         *            the service.
+         *
+         * @param config the service.
          */
         private void handleContact() {
             final GeoServer gs = wcs.getGeoServer();
@@ -340,24 +329,23 @@ public class Wcs10CapsTransformer extends TransformerBase {
             SettingsInfo settings = gs.getSettings();
             ContactInfo contact = settings.getContact();
 
-            if (((contact != null) && (contact.getContactPerson() != "")) || 
-                ((contact.getContactOrganization() != null) && (contact.getContactOrganization() != ""))) {
+            if (((contact != null) && (contact.getContactPerson() != "")) ||
+                    ((contact.getContactOrganization() != null) && (contact.getContactOrganization() != ""))) {
                 start("wcs:responsibleParty");
 
                 tmp = contact.getContactPerson();
                 if ((tmp != null) && (tmp != "")) {
                     element("wcs:individualName", tmp);
-                }
-                else {
+                } else {
                     //not optional
                     element("wcs:individualName", "");
                 }
-                
+
                 tmp = contact.getContactOrganization();
                 if ((tmp != null) && (tmp != "")) {
                     element("wcs:organisationName", tmp);
                 }
-                
+
                 tmp = contact.getContactPosition();
 
                 if ((tmp != null) && (tmp != "")) {
@@ -448,12 +436,9 @@ public class Wcs10CapsTransformer extends TransformerBase {
 
         /**
          * DOCUMENT ME!
-         * 
-         * @param serviceConfig
-         *            DOCUMENT ME!
-         * 
-         * @throws SAXException
-         *             DOCUMENT ME!
+         *
+         * @param serviceConfig DOCUMENT ME!
+         * @throws SAXException DOCUMENT ME!
          */
         private void handleCapabilities(boolean allSections) {
             start("wcs:Capability");
@@ -467,12 +452,9 @@ public class Wcs10CapsTransformer extends TransformerBase {
         /**
          * Handles the request portion of the document, printing out the capabilities and where to
          * bind to them.
-         * 
-         * @param config
-         *            The global wms.
-         * 
-         * @throws SAXException
-         *             For any problems.
+         *
+         * @param config The global wms.
+         * @throws SAXException For any problems.
          */
         private void handleRequest() {
             start("wcs:Request");
@@ -492,7 +474,7 @@ public class Wcs10CapsTransformer extends TransformerBase {
             // String baseURL = RequestUtils.proxifiedBaseURL(request.getBaseUrl(),
             // wcs.getGeoServer().getGlobal().getProxyBaseUrl());
             String url = buildURL(request.getBaseUrl(), "wcs", null, URLType.SERVICE);
-            attributes.addAttribute("", "xlink:href", "xlink:href", "", url+"?");
+            attributes.addAttribute("", "xlink:href", "xlink:href", "", url + "?");
 
             start("wcs:Get");
             start("wcs:OnlineResource", attributes);
@@ -502,7 +484,7 @@ public class Wcs10CapsTransformer extends TransformerBase {
             end("wcs:DCPType");
 
             attributes = new AttributesImpl();
-            attributes.addAttribute("", "xlink:href", "xlink:href", "", url+"?");
+            attributes.addAttribute("", "xlink:href", "xlink:href", "", url + "?");
 
             start("wcs:DCPType");
             start("wcs:HTTP");
@@ -518,12 +500,9 @@ public class Wcs10CapsTransformer extends TransformerBase {
         /**
          * Handles the printing of the exceptions information, prints the formats that GeoServer can
          * return exceptions in.
-         * 
-         * @param config
-         *            The wms service global config.
-         * 
-         * @throws SAXException
-         *             For any problems.
+         *
+         * @param config The wms service global config.
+         * @throws SAXException For any problems.
          */
         private void handleExceptions() {
             start("wcs:Exception");
@@ -543,23 +522,19 @@ public class Wcs10CapsTransformer extends TransformerBase {
 
         /**
          * Handles the vendor specific capabilities. Right now there are none, so we do nothing.
-         * 
-         * @param config
-         *            The global config that may contain vendor specifics.
-         * 
-         * @throws SAXException
-         *             For any problems.
+         *
+         * @param config The global config that may contain vendor specifics.
+         * @throws SAXException For any problems.
          */
         private void handleVendorSpecifics() {
         }
 
         /**
-         * 
          * @param referencedEnvelope
-         * @throws IOException 
+         * @throws IOException
          */
-        private void handleEnvelope(ReferencedEnvelope referencedEnvelope, DimensionInfo timeInfo, 
-                ReaderDimensionsAccessor dimensions) throws IOException {
+        private void handleEnvelope(ReferencedEnvelope referencedEnvelope, DimensionInfo timeInfo,
+                                    ReaderDimensionsAccessor dimensions) throws IOException {
             AttributesImpl attributes = new AttributesImpl();
 
             attributes.addAttribute("", "srsName", "srsName", "", /* "WGS84(DD)" */ "urn:ogc:def:crs:OGC:1.3:CRS84");
@@ -567,7 +542,7 @@ public class Wcs10CapsTransformer extends TransformerBase {
             final StringBuffer minCP = new StringBuffer(Double.toString(referencedEnvelope.getMinX())).append(" ").append(referencedEnvelope.getMinY());
             final StringBuffer maxCP = new StringBuffer(Double.toString(referencedEnvelope.getMaxX())).append(" ").append(referencedEnvelope.getMaxY());
 
-            
+
             element("gml:pos", minCP.toString());
             element("gml:pos", maxCP.toString());
 
@@ -577,36 +552,32 @@ public class Wcs10CapsTransformer extends TransformerBase {
                 element("gml:timePosition", timeFormat.format(dimensions.getMinTime()));
                 element("gml:timePosition", timeFormat.format(dimensions.getMaxTime()));
             }
-            
+
             end("wcs:lonLatEnvelope");
         }
 
         /**
-         * 
          * @param originalArray
-         *
          */
         private String[] orderDoubleArray(String[] originalArray) {
             List finalArray = Arrays.asList(originalArray);
-            
+
             Collections.sort(finalArray, new Comparator<String>() {
 
                 public int compare(String o1, String o2) {
                     if (o1.equals(o2))
                         return 0;
-                    
+
                     return (Double.parseDouble(o1) > Double.parseDouble(o2) ? 1 : -1);
                 }
-                
+
             });
-            
+
             return (String[]) finalArray.toArray(new String[1]);
         }
-        
+
         /**
-         * 
          * @param originalArray
-         *
          */
         private String[] orderTimeArray(String[] originalArray) {
             List finalArray = Arrays.asList(originalArray);
@@ -616,35 +587,35 @@ public class Wcs10CapsTransformer extends TransformerBase {
                  * All patterns that are correct regarding the ISO-8601 norm.
                  */
                 final String[] PATTERNS = {
-                    "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
-                    "yyyy-MM-dd'T'HH:mm:sss'Z'",
-                    "yyyy-MM-dd'T'HH:mm:ss'Z'",
-                    "yyyy-MM-dd'T'HH:mm'Z'",
-                    "yyyy-MM-dd'T'HH'Z'",
-                    "yyyy-MM-dd",
-                    "yyyy-MM",
-                    "yyyy"
+                        "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
+                        "yyyy-MM-dd'T'HH:mm:sss'Z'",
+                        "yyyy-MM-dd'T'HH:mm:ss'Z'",
+                        "yyyy-MM-dd'T'HH:mm'Z'",
+                        "yyyy-MM-dd'T'HH'Z'",
+                        "yyyy-MM-dd",
+                        "yyyy-MM",
+                        "yyyy"
                 };
-                
+
                 public int compare(String o1, String o2) {
                     if (o1.equals(o2))
                         return 0;
-                    
+
                     Date d1 = getDate(o1);
                     Date d2 = getDate(o2);
-                    
+
                     if (d1 == null || d2 == null)
                         return 0;
-                    
+
                     return (d1.getTime() > d2.getTime() ? 1 : -1);
                 }
-                
+
                 private Date getDate(final String value) {
-                    
+
                     // special handling for current keyword
-                    if(value.equalsIgnoreCase("current"))
-                            return null;
-                    for (int i=0; i<PATTERNS.length; i++) {
+                    if (value.equalsIgnoreCase("current"))
+                        return null;
+                    for (int i = 0; i < PATTERNS.length; i++) {
                         // rebuild formats at each parse, date formats are not thread safe
                         SimpleDateFormat format = new SimpleDateFormat(PATTERNS[i], Locale.CANADA);
 
@@ -659,18 +630,18 @@ public class Wcs10CapsTransformer extends TransformerBase {
                             return time;
                         }
                     }
-                    
+
                     return null;
                 }
 
-                
+
             });
-            
+
             return (String[]) finalArray.toArray(new String[1]);
         }
 
         /**
-         * 
+         *
          */
         private void handleContentMetadata(boolean allSections) {
             AttributesImpl attributes = new AttributesImpl();
@@ -703,9 +674,8 @@ public class Wcs10CapsTransformer extends TransformerBase {
         }
 
         /**
-         * 
          * @param cv
-         * @throws IOException 
+         * @throws IOException
          */
         private void handleCoverageOfferingBrief(CoverageInfo cv) throws IOException {
             if (cv.isEnabled()) {
@@ -735,19 +705,19 @@ public class Wcs10CapsTransformer extends TransformerBase {
                 }
 
                 CoverageStoreInfo csinfo = cv.getStore();
-                
-                if(csinfo == null) {
+
+                if (csinfo == null) {
                     throw new WcsException("Unable to acquire coverage store resource for coverage: " + cv.getName());
                 }
-                
+
                 GridCoverage2DReader reader = null;
                 try {
                     reader = (GridCoverage2DReader) cv.getGridCoverageReader(null, GeoTools.getDefaultHints());
                 } catch (IOException e) {
                     LOGGER.severe("Unable to acquire a reader for this coverage with format: " + csinfo.getFormat().getName());
                 }
-                
-                if(reader == null)
+
+                if (reader == null)
                     throw new WcsException("Unable to acquire a reader for this coverage with format: " + csinfo.getFormat().getName());
 
                 DimensionInfo timeInfo = cv.getMetadata().get(ResourceInfo.TIME, DimensionInfo.class);
@@ -761,7 +731,7 @@ public class Wcs10CapsTransformer extends TransformerBase {
 
         /**
          * Writes the element if and only if the content is not null and not empty
-         * 
+         *
          * @param elementName
          * @param content
          */

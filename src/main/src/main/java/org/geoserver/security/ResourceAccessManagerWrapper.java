@@ -8,6 +8,7 @@ package org.geoserver.security;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.GeometryComponentFilter;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -29,14 +30,14 @@ import com.vividsolutions.jts.geom.Polygon;
 
 /**
  * Abstract class for wrappers around an existing resource access manager.
- * 
+ *
  * @author David Winslow, OpenGeo
  */
 public abstract class ResourceAccessManagerWrapper implements ResourceAccessManager {
     protected ResourceAccessManager delegate;
     private static FilterFactory2 factory = CommonFactoryFinder.getFilterFactory2(null);
     private static GeometryFactory geomFactory = new GeometryFactory();
-        
+
     protected CatalogMode intersection(CatalogMode a, CatalogMode b) {
         if (a == CatalogMode.HIDE || b == CatalogMode.HIDE) {
             return CatalogMode.HIDE;
@@ -54,18 +55,17 @@ public abstract class ResourceAccessManagerWrapper implements ResourceAccessMana
         if (a == null) return b;
         if (b == null) return a;
 
-        if (a instanceof VectorAccessLimits && b instanceof VectorAccessLimits)
-        {
-            return intersection((VectorAccessLimits)a, (VectorAccessLimits)b);
+        if (a instanceof VectorAccessLimits && b instanceof VectorAccessLimits) {
+            return intersection((VectorAccessLimits) a, (VectorAccessLimits) b);
         } else if (a instanceof CoverageAccessLimits && b instanceof CoverageAccessLimits) {
-            return intersection((CoverageAccessLimits)a, (CoverageAccessLimits)b);
+            return intersection((CoverageAccessLimits) a, (CoverageAccessLimits) b);
         } else if (a instanceof WMSAccessLimits && b instanceof WMSAccessLimits) {
-            return intersection((WMSAccessLimits)a, (WMSAccessLimits)b);
+            return intersection((WMSAccessLimits) a, (WMSAccessLimits) b);
         }
 
         throw new IllegalArgumentException(
-            "Tried to get intersection of differing or unanticipated types of DataAccessLimits ("
-            + a + " && " + b + ")"
+                "Tried to get intersection of differing or unanticipated types of DataAccessLimits ("
+                        + a + " && " + b + ")"
         );
     }
 
@@ -88,7 +88,7 @@ public abstract class ResourceAccessManagerWrapper implements ResourceAccessMana
 
         final CatalogMode mode = intersection(a.getMode(), b.getMode());
         final MultiPolygon rasterFilter;
-         
+
         {
             MultiPolygon aFilter = a.getRasterFilter(), bFilter = b.getRasterFilter();
             if (aFilter == null) rasterFilter = bFilter;
@@ -96,19 +96,19 @@ public abstract class ResourceAccessManagerWrapper implements ResourceAccessMana
             else {
                 Geometry intersection = aFilter.intersection(bFilter);
                 if (intersection instanceof MultiPolygon) {
-                    rasterFilter = (MultiPolygon)intersection;
+                    rasterFilter = (MultiPolygon) intersection;
                 } else {
                     final List<Polygon> accum = new ArrayList<Polygon>();
                     intersection.apply(
-                        new GeometryComponentFilter() {
-                            public void filter(Geometry geom) {
-                                if (geom instanceof Polygon) accum.add((Polygon)geom);
+                            new GeometryComponentFilter() {
+                                public void filter(Geometry geom) {
+                                    if (geom instanceof Polygon) accum.add((Polygon) geom);
+                                }
                             }
-                        }
                     );
 
                     rasterFilter =
-                        geomFactory.createMultiPolygon(accum.toArray(new Polygon[accum.size()]));
+                            geomFactory.createMultiPolygon(accum.toArray(new Polygon[accum.size()]));
                 }
             }
         }
@@ -132,12 +132,12 @@ public abstract class ResourceAccessManagerWrapper implements ResourceAccessMana
         CatalogMode mode = intersection(a.getMode(), b.getMode());
         Filter readFilter = intersection(a.getReadFilter(), b.getReadFilter());
         MultiPolygon rasterFilter = null;
-         
+
         {
             MultiPolygon aFilter = a.getRasterFilter(), bFilter = b.getRasterFilter();
             if (aFilter == null) rasterFilter = bFilter;
             else if (bFilter == null) rasterFilter = aFilter;
-            else rasterFilter = (MultiPolygon)aFilter.intersection(bFilter);
+            else rasterFilter = (MultiPolygon) aFilter.intersection(bFilter);
         }
 
         boolean allowFeatureInfo = a.isAllowFeatureInfo() && b.isAllowFeatureInfo();
@@ -198,8 +198,8 @@ public abstract class ResourceAccessManagerWrapper implements ResourceAccessMana
 
     protected WorkspaceAccessLimits intersection(WorkspaceAccessLimits a, WorkspaceAccessLimits b) {
         CatalogMode mode = intersection(a.getMode(), b.getMode());
-        return new WorkspaceAccessLimits(mode, a.isReadable() && b.isReadable(), 
-            a.isWritable() && b.isWritable(), a.isAdminable() && b.isAdminable());
+        return new WorkspaceAccessLimits(mode, a.isReadable() && b.isReadable(),
+                a.isWritable() && b.isWritable(), a.isAdminable() && b.isAdminable());
     }
 
     public void setDelegate(ResourceAccessManager delegate) {
@@ -214,7 +214,7 @@ public abstract class ResourceAccessManagerWrapper implements ResourceAccessMana
         return delegate.getAccessLimits(user, layer);
     }
 
-    
+
     public DataAccessLimits getAccessLimits(Authentication user, LayerInfo layer, List<LayerGroupInfo> containers) {
         return delegate.getAccessLimits(user, layer, containers);
     }
@@ -226,7 +226,7 @@ public abstract class ResourceAccessManagerWrapper implements ResourceAccessMana
     public StyleAccessLimits getAccessLimits(Authentication user, StyleInfo style) {
         return delegate.getAccessLimits(user, style);
     }
-    
+
     public LayerGroupAccessLimits getAccessLimits(Authentication user, LayerGroupInfo layerGroup) {
         return delegate.getAccessLimits(user, layerGroup);
     }

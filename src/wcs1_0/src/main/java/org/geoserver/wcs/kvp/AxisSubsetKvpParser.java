@@ -20,9 +20,8 @@ import org.vfny.geoserver.wcs.WcsException.WcsExceptionCode;
 
 /**
  * WCS 1.0.0 BBoxKvpParser.
- * 
+ *
  * @author Alessio Fabiani, GeoSolutions
- * 
  */
 public class AxisSubsetKvpParser extends KvpParser {
     public AxisSubsetKvpParser() {

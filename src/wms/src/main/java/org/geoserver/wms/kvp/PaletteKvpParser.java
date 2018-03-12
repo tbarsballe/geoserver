@@ -11,9 +11,7 @@ import org.geoserver.ows.KvpParser;
 import org.geoserver.platform.ServiceException;
 
 /**
- * 
  * @author Simone Giannecchini, GeoSolutions SAS
- * 
  */
 public class PaletteKvpParser extends KvpParser {
     public PaletteKvpParser() {

@@ -29,12 +29,12 @@ import org.geoserver.web.demo.PlainCodePage;
 /**
  * Small embedded WPS client enabling users to visually build a WPS Execute request (and as a side
  * effect also showing what capabilities and describe process would provide).
- * 
+ * <p>
  * Parameters:
  * <ul>
  * <li><b>name=</b>procName - display the page showing given process
  * </ul>
- * 
+ *
  * @author Andrea Aime - OpenGeo
  * @author Martin Davis - OpenGeo
  */
@@ -53,9 +53,8 @@ public class WPSRequestBuilder extends GeoServerBasePage {
     public WPSRequestBuilder() {
         this((String) null);
     }
-    
-    public WPSRequestBuilder(String procName) 
-    {
+
+    public WPSRequestBuilder(String procName) {
         // the form
         Form form = new Form("form");
         add(form);
@@ -63,7 +62,7 @@ public class WPSRequestBuilder extends GeoServerBasePage {
         // the actual request builder component
         ExecuteRequest execRequest = new ExecuteRequest();
         if (procName != null) execRequest.processName = procName;
-        
+
         builder = new WPSRequestBuilderPanel("requestBuilder", execRequest);
         form.add(builder);
 
@@ -76,8 +75,8 @@ public class WPSRequestBuilder extends GeoServerBasePage {
                 return new PlainCodePage(xmlWindow, responseWindow, getRequestXML());
             }
         });
-		
-	// the output response window
+
+        // the output response window
         responseWindow = new ModalWindow("responseWindow");
         add(responseWindow);
         // removed, don't know what it did, but page maps are gone in 1.5...

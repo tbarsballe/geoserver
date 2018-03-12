@@ -11,7 +11,7 @@ import org.geotools.geometry.jts.ReferencedEnvelope;
  * Simple containers of statistics about a domain
  */
 class DomainSummary {
-    
+
     private Object min;
     private Object max;
     private long count = -1;

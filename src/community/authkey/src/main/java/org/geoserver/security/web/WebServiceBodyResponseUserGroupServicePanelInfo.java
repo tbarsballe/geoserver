@@ -10,12 +10,13 @@ import org.geoserver.security.web.usergroup.UserGroupServicePanelInfo;
 
 /**
  * @author Alessio Fabiani, GeoSolutions S.A.S.
- *
  */
 public class WebServiceBodyResponseUserGroupServicePanelInfo extends
         UserGroupServicePanelInfo<WebServiceBodyResponseUserGroupServiceConfig, WebServiceBodyResponseUserGroupServicePanel> {
 
-    /** serialVersionUID */
+    /**
+     * serialVersionUID
+     */
     private static final long serialVersionUID = 5523562464549930885L;
 
     public WebServiceBodyResponseUserGroupServicePanelInfo() {

@@ -56,7 +56,7 @@ public class GdalTransformTest extends ImporterTestSupport {
         assertEquals(ImportTask.State.COMPLETE, task.getState());
 
         runChecks("EmissiveCampania");
-        
+
         // check we did the gdal_transform on the file
         GeoTiffReader reader = null;
         try {
@@ -73,7 +73,7 @@ public class GdalTransformTest extends ImporterTestSupport {
                 reader.dispose();
             }
         }
-        
+
     }
 
     @Test
@@ -121,7 +121,6 @@ public class GdalTransformTest extends ImporterTestSupport {
         }
 
     }
-
 
 
     @Test
@@ -190,7 +189,7 @@ public class GdalTransformTest extends ImporterTestSupport {
         task.getTransform().add(warp);
 
         assertEquals("box_gcp_fixed", task.getLayer().getResource().getName());
-        
+
         CoverageStoreInfo store = (CoverageStoreInfo) task.getStore();
         assertEquals("GeoTIFF", store.getFormat().getName());
 

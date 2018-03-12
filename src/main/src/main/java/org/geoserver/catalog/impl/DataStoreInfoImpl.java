@@ -17,7 +17,6 @@ import org.opengis.util.ProgressListener;
 
 /**
  * Default implementation of {@link DataStoreInfo}.
- * 
  */
 @SuppressWarnings("serial")
 public class DataStoreInfoImpl extends StoreInfoImpl implements DataStoreInfo {
@@ -29,8 +28,8 @@ public class DataStoreInfoImpl extends StoreInfoImpl implements DataStoreInfo {
         super(catalog);
     }
 
-    public DataStoreInfoImpl(Catalog catalog,String id) {
-        super(catalog,id);
+    public DataStoreInfoImpl(Catalog catalog, String id) {
+        super(catalog, id);
     }
 
     public DataAccess<? extends FeatureType, ? extends Feature> getDataStore(
@@ -41,12 +40,12 @@ public class DataStoreInfoImpl extends StoreInfoImpl implements DataStoreInfo {
     public void accept(CatalogVisitor visitor) {
         visitor.visit(this);
     }
-    
+
     public boolean equals(Object obj) {
-        if (!( obj instanceof DataStoreInfo ) ) {
+        if (!(obj instanceof DataStoreInfo)) {
             return false;
         }
-        
-        return super.equals( obj );
+
+        return super.equals(obj);
     }
 }

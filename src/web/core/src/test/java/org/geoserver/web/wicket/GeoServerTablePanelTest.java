@@ -36,34 +36,34 @@ public class GeoServerTablePanelTest {
     public void setUp() throws Exception {
         tester = new WicketTester();
     }
-    
+
     @Test
     public void testBasicTable() throws Exception {
         tester.startPage(new FormTestPage((ComponentBuilder) id -> new IntegerTable(id, false)));
         tester.assertComponent("form:panel", IntegerTable.class);
-        
+
         // check the contents are as expected
         String firstLabelPath = "form:panel:listContainer:items:1:itemProperties:0:component";
         tester.assertComponent(firstLabelPath, Label.class);
         assertEquals(new Integer(0), tester.getComponentFromLastRenderedPage(firstLabelPath).getDefaultModelObject());
-        
+
         // check we actually rendered 10 rows
         DataView dv = (DataView) tester.getComponentFromLastRenderedPage("form:panel:listContainer:items");
         assertEquals(DEFAULT_ITEMS_PER_PAGE, dv.size());
     }
-    
+
     @Test
     public void testFullSelection() throws Exception {
         tester.startPage(new FormTestPage((ComponentBuilder) id -> new IntegerTable(id, true)));
         tester.assertComponent("form:panel", IntegerTable.class);
         IntegerTable table = (IntegerTable) tester.getComponentFromLastRenderedPage("form:panel");
-        
+
         // check the select all check and the row check are there
         String selectAllPath = "form:panel:listContainer:selectAllContainer:selectAll";
         String selectFirstPath = "form:panel:listContainer:items:1:selectItemContainer:selectItem";
         tester.assertComponent(selectAllPath, CheckBox.class);
         tester.assertComponent(selectFirstPath, CheckBox.class);
-        
+
         // test full selection
         assertEquals(0, table.getSelection().size());
         FormTester ft = tester.newFormTester("form");
@@ -71,19 +71,19 @@ public class GeoServerTablePanelTest {
         tester.executeAjaxEvent(selectAllPath, "click");
         assertEquals(DEFAULT_ITEMS_PER_PAGE, table.getSelection().size());
         assertEquals(new Integer(0), table.getSelection().get(0));
-        
+
         // reset selection
         table.setSelection(false);
         assertEquals(0, table.getSelection().size());
     }
-    
+
     @Test
     public void testSingleSelection() throws Exception {
         tester.startPage(new FormTestPage((ComponentBuilder) id -> new IntegerTable(id, true)));
         tester.assertComponent("form:panel", IntegerTable.class);
         IntegerTable table = (IntegerTable) tester.getComponentFromLastRenderedPage("form:panel");
         assertEquals(0, table.getSelection().size());
-        
+
         // select just one
         FormTester ft = tester.newFormTester("form");
         ft.setValue("panel:listContainer:items:1:selectItemContainer:selectItem", "true");
@@ -98,14 +98,14 @@ public class GeoServerTablePanelTest {
     public void testSingleSelectionByObjectAndIndex() throws Exception {
         tester.startPage(new FormTestPage((ComponentBuilder) id -> new IntegerTable(id, true)));
         tester.assertComponent("form:panel", IntegerTable.class);
-        
+
         IntegerTable table = (IntegerTable) tester.getComponentFromLastRenderedPage("form:panel");
         assertEquals(0, table.getSelection().size());
 
         table.selectObject(new Integer(5));
         assertEquals(1, table.getSelection().size());
         assertEquals(new Integer(5), table.getSelection().get(0));
-        
+
         table.selectObject(7);
         assertEquals(2, table.getSelection().size());
         assertEquals(new Integer(5), table.getSelection().get(0));
@@ -139,38 +139,38 @@ public class GeoServerTablePanelTest {
     }
 
     static class IntegerTable extends GeoServerTablePanel<Integer> {
-        
+
         public IntegerTable(String id, boolean selectable) {
             super(id, new IntegerProvider(), selectable);
         }
 
         @Override
         protected Component getComponentForProperty(String id, IModel<Integer> itemModel,
-                Property<Integer> property) {
-            if(property == IntegerProvider.IDX) {
+                                                    Property<Integer> property) {
+            if (property == IntegerProvider.IDX) {
                 return new Label(id, itemModel);
-            } 
+            }
             return null;
         }
-        
+
         @Override
         protected IModel getPropertyTitle(Property<Integer> property) {
             return new Model(property.getName());
         }
-        
+
         @Override
         IModel showingAllRecords(long first, long last, long size) {
             return new Model(first + " -> " + last + " of " + size);
         }
-        
+
         @Override
         IModel matchedXOutOfY(long first, long last, long size, long fullSize) {
             return new Model(first + " -> " + last + " of " + size + "/" + fullSize);
         }
     }
-    
+
     static class IntegerProvider extends GeoServerDataProvider<Integer> {
-        
+
         static final Property<Integer> IDX = new Property<Integer>() {
             @Override
             public String getName() {
@@ -216,6 +216,6 @@ public class GeoServerTablePanelTest {
         protected List<org.geoserver.web.wicket.GeoServerDataProvider.Property<Integer>> getProperties() {
             return Collections.singletonList(IDX);
         }
-        
+
     }
 }

@@ -16,17 +16,15 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 /**
- * 
  * @author Niels Charlier
- *
  */
 @Service
 public class TaskManagerSecurityUtil {
-        
+
     @Autowired
     @Qualifier("rawCatalog")
     private Catalog catalog;
-   
+
     @Autowired
     private SecureCatalogImpl secureCatalog;
 
@@ -37,7 +35,7 @@ public class TaskManagerSecurityUtil {
             return catalog.getWorkspaceByName(workspaceName);
         }
     }
-        
+
     public boolean isReadable(Authentication user, Configuration config) {
         WorkspaceInfo wi = getWorkspace(config.getWorkspace());
         if (wi == null) {

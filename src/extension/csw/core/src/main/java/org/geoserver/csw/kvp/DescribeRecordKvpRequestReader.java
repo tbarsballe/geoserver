@@ -18,7 +18,7 @@ import org.xml.sax.helpers.NamespaceSupport;
 
 /**
  * DescribeRecord KVP request reader
- * 
+ *
  * @author Andrea Aime, GeoSolutions
  */
 public class DescribeRecordKvpRequestReader extends CSWKvpRequestReader {
@@ -34,13 +34,13 @@ public class DescribeRecordKvpRequestReader extends CSWKvpRequestReader {
         // at this point the namespace and type names are separated, we need to merge them and build
         // QNames
         String typename = (String) rawKvp.get("typename");
-        if(typename != null) {
+        if (typename != null) {
             NamespaceSupport namespaces = (NamespaceSupport) kvp.get("namespace");
-            if(namespaces == null) {
+            if (namespaces == null) {
                 // when null the default is the CSW one
                 namespaces = CSWRecordDescriptor.NAMESPACES;
             }
-        
+
             List<QName> qnames = resolver.parseQNames(typename, namespaces);
             kvp.put("typename", qnames);
         }

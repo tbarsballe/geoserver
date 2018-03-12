@@ -52,13 +52,13 @@ import de.micromata.opengis.kml.v_2_2_0.Folder;
 /**
  * A class used by {@link KmlDecorator} to get the current encoding context (request, map content,
  * current layer, feature and so on).
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class KmlEncodingContext {
-    
+
     static final Logger LOGGER = Logging.getLogger(KmlEncodingContext.class);
-    
+
     protected boolean kmz;
 
     protected WMSMapContent mapContent;
@@ -82,7 +82,7 @@ public class KmlEncodingContext {
     protected LookAtOptions lookAtOptions;
 
     protected WMS wms;
-    
+
     protected Map<String, Layer> kmzGroundOverlays = new LinkedHashMap<String, Layer>();
 
     protected boolean placemarkForced;
@@ -100,9 +100,9 @@ public class KmlEncodingContext {
     protected ServiceInfo service;
 
     protected int layerIndex;
-    
+
     protected String mode;
-    
+
     /**
      * Holds the feature iterators that have been opened, but not yet closed, to make sure
      * they get disposed at the end of the encoding even in case of exceptions during the encoding
@@ -123,25 +123,25 @@ public class KmlEncodingContext {
         this.placemarkForced = computeKmplacemark();
         this.superOverlayMode = computeSuperOverlayMode();
         this.superOverlayEnabled = computeSuperOverlayEnabled();
-        this.extendedDataEnabled =  computeExtendedDataEnabled();
+        this.extendedDataEnabled = computeExtendedDataEnabled();
         this.kmScore = computeKmScore();
         this.networkLinksFormat = KMLMapOutputFormat.NL_KML_MIME_TYPE.equals(request.getFormat()) || KMZMapOutputFormat.NL_KMZ_MIME_TYPE.equals(request.getFormat());
         this.kmz = kmz;
         this.service = wms.getServiceInfo();
         this.liveIcons = true;
-        this.iconStyles = new HashMap<String,Style>();
-        
+        this.iconStyles = new HashMap<String, Style>();
+
         Boolean autofit = Converters.convert(request.getFormatOptions().get("autofit"), Boolean.class);
-        if(autofit != null && Converters.convert(autofit, Boolean.class)) {
+        if (autofit != null && Converters.convert(autofit, Boolean.class)) {
             double width = mapContent.getMapWidth();
             double height = mapContent.getMapHeight();
             ReferencedEnvelope bbox = mapContent.getViewport().getBounds();
-            double bbox_width = bbox.getWidth(); 
+            double bbox_width = bbox.getWidth();
             double bbox_height = bbox.getHeight();
             // be on the safe side
-            if(bbox_width > 0 && bbox_height > 0 & width > 0 & height > 0) {
+            if (bbox_width > 0 && bbox_height > 0 & width > 0 & height > 0) {
                 double ratio = bbox_width / bbox_height;
-                if(bbox_width > bbox_height) {
+                if (bbox_width > bbox_height) {
                     height = width / ratio;
                     int h = (int) Math.ceil(height);
                     mapContent.setMapHeight(h);
@@ -155,7 +155,7 @@ public class KmlEncodingContext {
             }
         }
     }
-    
+
     private String computeModeOption(Map<String, String> rawKvp) {
         String mode = KvpUtils.caseInsensitiveParam(rawKvp, "mode", null);
         return mode;
@@ -163,18 +163,18 @@ public class KmlEncodingContext {
 
     /**
      * Force the output to be in WGS84
-     * @param mc
      *
+     * @param mc
      */
     private WMSMapContent fixViewport(WMSMapContent mc) {
         MapViewport viewport = mc.getViewport();
-        if(!CRS.equalsIgnoreMetadata(viewport.getCoordinateReferenceSystem(), DefaultGeographicCRS.WGS84)) {
+        if (!CRS.equalsIgnoreMetadata(viewport.getCoordinateReferenceSystem(), DefaultGeographicCRS.WGS84)) {
             viewport.setCoordinateReferenceSystem(DefaultGeographicCRS.WGS84);
             GetMapRequest req = mc.getRequest();
             req.setSRS("EPSG:4326");
             req.setBbox(viewport.getBounds());
         }
-        
+
         return mc;
     }
 
@@ -182,14 +182,13 @@ public class KmlEncodingContext {
      * Protected constructor used by WFS output format to create a fake kml encoding context
      */
     protected KmlEncodingContext() {
-        
+
     }
-    
+
     /**
      * Returns the the kmplacemark value (either specified in the request, or the default one)
-     * 
-     * @param mapContent
      *
+     * @param mapContent
      */
     boolean computeKmplacemark() {
         Object kmplacemark = request.getFormatOptions().get("kmplacemark");
@@ -200,12 +199,11 @@ public class KmlEncodingContext {
         }
     }
 
-    
+
     /**
      * Returns the the kmattr value (either specified in the request, or the default one)
-     * 
-     * @param mapContent
      *
+     * @param mapContent
      */
     boolean computeKMAttr() {
         Object kmattr = request.getFormatOptions().get("kmattr");
@@ -218,7 +216,7 @@ public class KmlEncodingContext {
             return wms.getKmlKmAttr();
         }
     }
-    
+
     private int computeKmScore() {
         int kmScore = wms.getKmScore();
         Map fo = request.getFormatOptions();
@@ -232,23 +230,23 @@ public class KmlEncodingContext {
 
     /**
      * Checks if the extended data is enabled or not
-     * @param request
      *
+     * @param request
      */
     boolean computeExtendedDataEnabled() {
         Map formatOptions = request.getFormatOptions();
-        Boolean extendedData = Converters.convert(formatOptions.get("extendedData"), Boolean.class); 
+        Boolean extendedData = Converters.convert(formatOptions.get("extendedData"), Boolean.class);
         if (extendedData == null) {
             extendedData = Boolean.FALSE;
         }
 
         return extendedData;
     }
-    
+
     /**
      * Checks if the superoverlay is enabled or not
-     * @param request
      *
+     * @param request
      */
     boolean computeSuperOverlayEnabled() {
         Map formatOptions = request.getFormatOptions();
@@ -259,30 +257,27 @@ public class KmlEncodingContext {
 
         return superoverlay;
     }
-    
-    
+
+
     /**
      * Returns the superoverlay mode (either specified in the request, or the default one)
-     *
      */
     String computeSuperOverlayMode() {
         String overlayMode = (String) request.getFormatOptions().get("superoverlay_mode");
-        if(overlayMode != null) {
+        if (overlayMode != null) {
             return overlayMode;
-        } 
-        
+        }
+
         overlayMode = (String) request.getFormatOptions().get("overlayMode");
-        if(overlayMode != null) {
+        if (overlayMode != null) {
             return overlayMode;
         } else {
             return wms.getKmlSuperoverlayMode();
         }
     }
-   
+
     /**
      * Returns the {@link KmlDecorator} objects for the specified Feature class
-     * 
-     *
      */
     public List<KmlDecorator> getDecoratorsForClass(Class<? extends Feature> clazz) {
         List<KmlDecoratorFactory> factories = GeoServerExtensions
@@ -297,10 +292,10 @@ public class KmlEncodingContext {
 
         return result;
     }
-    
+
     /**
      * Adds features to the folder own list
-     * 
+     *
      * @param folder
      * @param features
      */
@@ -314,10 +309,10 @@ public class KmlEncodingContext {
             folder.setFeature(new CompositeList<Feature>(originalFeatures, features));
         }
     }
-    
+
     /**
      * Adds features to the document own list
-     * 
+     *
      * @param folder
      * @param features
      */
@@ -408,23 +403,23 @@ public class KmlEncodingContext {
     public boolean isKmz() {
         return kmz;
     }
-    
+
     /**
      * Adds a layer to be generated as ground overlay in the kmz package
+     *
      * @param imagePath The path of the ground overlay image inside the kmz archive
      * @param layer
      */
     public void addKmzGroundOverlay(String imagePath, Layer layer) {
-        if(!kmz) {
+        if (!kmz) {
             throw new IllegalStateException("Cannot add ground " +
-            		"overlay layers, the output is not supposed to be a KMZ");
+                    "overlay layers, the output is not supposed to be a KMZ");
         }
         this.kmzGroundOverlays.put(imagePath, layer);
     }
 
     /**
      * Returns the list of ground overlay layers to be included in the KMZ response
-     *
      */
     public Map<String, Layer> getKmzGroundOverlays() {
         return kmzGroundOverlays;
@@ -465,27 +460,25 @@ public class KmlEncodingContext {
     /**
      * Returns a list of the feature types to be encoded. Will provide a feature type only for the
      * vector layers, a null will be placed where a layer of different nature is found
-     *
      */
     public List<SimpleFeatureType> getFeatureTypes() {
         List<SimpleFeatureType> results = new ArrayList<SimpleFeatureType>();
-        for(Layer layer : mapContent.layers()) {
-            if(layer instanceof FeatureLayer) {
+        for (Layer layer : mapContent.layers()) {
+            if (layer instanceof FeatureLayer) {
                 results.add((SimpleFeatureType) layer.getFeatureSource().getSchema());
             } else {
                 results.add(null);
             }
         }
-        
+
         return results;
     }
 
     /**
      * Returns the current feature type is the current layer is made of vector features, null otherwise
-     *
      */
     public SimpleFeatureType getCurrentFeatureType() {
-        if(currentLayer instanceof FeatureLayer) {
+        if (currentLayer instanceof FeatureLayer) {
             FeatureLayer fl = (FeatureLayer) currentLayer;
             return (SimpleFeatureType) fl.getFeatureSource().getSchema();
         }
@@ -494,7 +487,6 @@ public class KmlEncodingContext {
 
     /**
      * Returns the current layer index in the request
-     *
      */
     public int getCurrentLayerIndex() {
         return layerIndex;
@@ -515,17 +507,17 @@ public class KmlEncodingContext {
     public String getMode() {
         return mode;
     }
-    
+
     public FeatureIterator openIterator(FeatureCollection fc) {
         FeatureIterator fi = fc.features();
         iterators.put(fi, fi);
         return fi;
     }
-    
+
     public void closeIterator(FeatureIterator fi) {
         try {
             fi.close();
-        } catch(Exception e) {
+        } catch (Exception e) {
             LOGGER.log(Level.FINE, "An exception occurred while closing a feature iterator "
                     + "during the cleanup phases of the KML encoding", e);
         } finally {
@@ -538,7 +530,7 @@ public class KmlEncodingContext {
         for (FeatureIterator fi : iterators.keySet()) {
             try {
                 fi.close();
-            } catch(Exception e) {
+            } catch (Exception e) {
                 LOGGER.log(Level.FINE, "An exception occurred while closing a feature iterator "
                         + "during the cleanup phases of the KML encoding", e);
             }
@@ -546,36 +538,35 @@ public class KmlEncodingContext {
         iterators.clear();
     }
 
-    
 
-	public Envelope getRequestBoxWGS84() {
-		try {
-			Envelope env = request.getBbox();
-			ReferencedEnvelope re;
-			if(env instanceof ReferencedEnvelope) {
-				re = (ReferencedEnvelope) env;
-				if(re.getCoordinateReferenceSystem() == null) {
-					re = new ReferencedEnvelope(re, DefaultGeographicCRS.WGS84);
-				}
-			} else {
-				if(request.getCrs() != null) {
-					re = new ReferencedEnvelope(env, request.getCrs());
-				} else if(request.getSRS() != null) {
-					CoordinateReferenceSystem crs = CRS.decode(request.getSRS());
-					re = new ReferencedEnvelope(env, crs);
-				} else {
-					re = new ReferencedEnvelope(env, DefaultGeographicCRS.WGS84);
-				}
-			}
-			
-			if(!CRS.equalsIgnoreMetadata(re.getCoordinateReferenceSystem(), DefaultGeographicCRS.WGS84)) {
-				return re.transform(DefaultGeographicCRS.WGS84, true);
-			} else {
-				return re;
-			}
-		} catch(Exception e) {
-			throw new ServiceException("Requested bounding box " + request.getBbox() + " could not be tranformed to WGS84", e);
-		}
-	}
+    public Envelope getRequestBoxWGS84() {
+        try {
+            Envelope env = request.getBbox();
+            ReferencedEnvelope re;
+            if (env instanceof ReferencedEnvelope) {
+                re = (ReferencedEnvelope) env;
+                if (re.getCoordinateReferenceSystem() == null) {
+                    re = new ReferencedEnvelope(re, DefaultGeographicCRS.WGS84);
+                }
+            } else {
+                if (request.getCrs() != null) {
+                    re = new ReferencedEnvelope(env, request.getCrs());
+                } else if (request.getSRS() != null) {
+                    CoordinateReferenceSystem crs = CRS.decode(request.getSRS());
+                    re = new ReferencedEnvelope(env, crs);
+                } else {
+                    re = new ReferencedEnvelope(env, DefaultGeographicCRS.WGS84);
+                }
+            }
+
+            if (!CRS.equalsIgnoreMetadata(re.getCoordinateReferenceSystem(), DefaultGeographicCRS.WGS84)) {
+                return re.transform(DefaultGeographicCRS.WGS84, true);
+            } else {
+                return re;
+            }
+        } catch (Exception e) {
+            throw new ServiceException("Requested bounding box " + request.getBbox() + " could not be tranformed to WGS84", e);
+        }
+    }
 
 }

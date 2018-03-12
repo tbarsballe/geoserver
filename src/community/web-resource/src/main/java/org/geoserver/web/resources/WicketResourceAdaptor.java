@@ -15,27 +15,25 @@ import org.apache.wicket.util.time.Time;
 import org.geoserver.platform.resource.Resource;
 
 /**
- * 
  * Adaptor for Resource -> wicket ResourceStream
- * 
- * @author Niels Charlier
  *
+ * @author Niels Charlier
  */
 public class WicketResourceAdaptor extends AbstractResourceStream {
 
     private static final long serialVersionUID = -1009868612769713937L;
-    
+
     protected Resource resource;
 
     public WicketResourceAdaptor(Resource resource) {
         this.resource = resource;
     }
-    
+
     @Override
     public InputStream getInputStream() throws ResourceStreamNotFoundException {
         return resource.in();
     }
-    
+
     @Override
     public String getContentType() {
         String mimeType = URLConnection.guessContentTypeFromName(resource.name());

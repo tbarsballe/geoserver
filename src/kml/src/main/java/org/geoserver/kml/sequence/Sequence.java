@@ -8,17 +8,14 @@ package org.geoserver.kml.sequence;
 /**
  * Like an iterator, but with the simplification that null values are used to mark the end of the
  * sequence
- * 
- * @author Andrea Aime - GeoSolutions
- * 
+ *
  * @param <T>
+ * @author Andrea Aime - GeoSolutions
  */
 public interface Sequence<T> {
 
     /**
      * Returns the next item, or null if the sequence is completed
-     * 
-     *
      */
     T next();
 }

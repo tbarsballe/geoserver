@@ -17,11 +17,10 @@ import org.geoserver.platform.resource.Resources;
  * the backup target folder.
  * <br>
  * Notice that this one does check actually for icons and everything <b>different</b> from
- * "sld", "ysld", "xml" or "css" (depending on which kind of style the resource is). 
- * Those are managed separately by the {@link AbstractCatalogBackupRestoreTasklet}. 
- * 
- * @author Alessio Fabiani, GeoSolutions
+ * "sld", "ysld", "xml" or "css" (depending on which kind of style the resource is).
+ * Those are managed separately by the {@link AbstractCatalogBackupRestoreTasklet}.
  *
+ * @author Alessio Fabiani, GeoSolutions
  */
 public class StyleInfoAdditionalResourceWriter
         implements CatalogAdditionalResourcesWriter<StyleInfo> {

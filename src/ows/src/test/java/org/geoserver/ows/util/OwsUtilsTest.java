@@ -49,15 +49,15 @@ public class OwsUtilsTest extends TestCase {
         try {
             OwsUtils.put(baz, "map", "k", "v");
             fail("null map should cause exception");
+        } catch (IllegalArgumentException e) {
         }
-        catch(IllegalArgumentException e) {}
 
         baz.map = new HashMap();
         try {
             OwsUtils.put(baz, "xyz", "k", "v");
             fail("bad property should cause exception");
+        } catch (IllegalArgumentException e) {
         }
-        catch(IllegalArgumentException e) {}
 
         assertTrue(baz.map.isEmpty());
         OwsUtils.put(baz, "map", "k", "v");
@@ -72,18 +72,23 @@ public class OwsUtilsTest extends TestCase {
         public String getA() {
             return a;
         }
+
         public void setA(String a) {
             this.a = a;
         }
+
         public Integer getB() {
             return b;
         }
+
         public void setB(Integer b) {
             this.b = b;
         }
+
         public float getC() {
             return c;
         }
+
         public void setC(float c) {
             this.c = c;
         }
@@ -96,12 +101,15 @@ public class OwsUtilsTest extends TestCase {
         public Foo getFoo() {
             return foo;
         }
+
         public void setFoo(Foo foo) {
             this.foo = foo;
         }
+
         public Double getD() {
             return d;
         }
+
         public void setD(Double d) {
             this.d = d;
         }

@@ -10,10 +10,9 @@ import org.geoserver.config.GeoServer;
 /**
  * An extension point for classes that need to participate in the {@link GeoServer} lifecycle.
  * Any subsystem holding configuration and data/styling caches is supposed to participate in
- * this lifecycle 
- * 
+ * this lifecycle
+ *
  * @author Andrea Aime - OpenGeo
- * 
  */
 public interface GeoServerLifecycleHandler {
 
@@ -21,7 +20,7 @@ public interface GeoServerLifecycleHandler {
      * Called as part of {@link GeoServer#reset()} execution
      */
     void onReset();
-    
+
     /**
      * Called as part of {@link GeoServer#dispose()}
      */
@@ -39,6 +38,5 @@ public interface GeoServerLifecycleHandler {
      */
     void onReload();
 
-    
-    
+
 }

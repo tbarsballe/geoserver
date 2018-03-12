@@ -14,7 +14,6 @@ import org.geoserver.wcs.response.WCSCapsTransformer;
 import org.opengis.coverage.grid.GridCoverage;
 
 
-
 /**
  * Web Coverage Services interface.
  * <p>
@@ -22,19 +21,19 @@ import org.opengis.coverage.grid.GridCoverage;
  * by the Web Coverage Specification. See {@link "http://www.opengeospatial.org/standards/wcs"}
  * for more details.
  * </p>
- * @author Andrea Aime, TOPP
  *
+ * @author Andrea Aime, TOPP
  */
 public interface WebCoverageService111 {
-    
+
     /**
      * WCS service info.
      */
     WCSInfo getServiceInfo();
-    
+
     /**
-    * GetCapabilities operation.
-    */
+     * GetCapabilities operation.
+     */
     WCSCapsTransformer getCapabilities(GetCapabilitiesType request);
 
     /**

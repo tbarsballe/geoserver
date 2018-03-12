@@ -5,25 +5,25 @@
  application directory.
  -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-  <parent>
+    <parent>
+        <groupId>org.geoserver.extension</groupId>
+        <artifactId>gs-ogr</artifactId>
+        <version>2.14-SNAPSHOT</version>
+    </parent>
+
     <groupId>org.geoserver.extension</groupId>
-    <artifactId>gs-ogr</artifactId>
-    <version>2.14-SNAPSHOT</version>
-  </parent>
+    <artifactId>gs-ogr-core</artifactId>
+    <packaging>jar</packaging>
+    <name>OGR CORE</name>
 
-  <groupId>org.geoserver.extension</groupId>
-  <artifactId>gs-ogr-core</artifactId>
-  <packaging>jar</packaging>
-  <name>OGR CORE</name>
-
-  <dependencies>
-    <dependency>
-      <groupId>org.geoserver</groupId>
-      <artifactId>gs-main</artifactId>
-    </dependency>
-  </dependencies>
+    <dependencies>
+        <dependency>
+            <groupId>org.geoserver</groupId>
+            <artifactId>gs-main</artifactId>
+        </dependency>
+    </dependencies>
 
 </project>

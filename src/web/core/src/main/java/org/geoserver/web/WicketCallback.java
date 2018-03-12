@@ -10,9 +10,8 @@ import org.apache.wicket.request.cycle.RequestCycle;
 
 /**
  * Pluggable callback exposing the Wicket {@link RequestCycle} stages
- * 
+ *
  * @author Andrea Aime - GeoSolutions
- * 
  */
 public interface WicketCallback {
 
@@ -33,9 +32,9 @@ public interface WicketCallback {
 
     /**
      * Called when a request target is set on the request cycle
-     * 
+     * <p>
      * This method is taken for retro-compatibility with old GeoServer verisons
-     * 
+     *
      * @param requestTarget
      * @deprecated replaced by {@link #onRequestTargetSet(cycle, requestTarget)}
      */
@@ -43,21 +42,21 @@ public interface WicketCallback {
 
     /**
      * Called when a request target is set on the request cycle
-     * 
+     *
      * @param cycle
      * @param requestTarget
      */
-    default void onRequestTargetSet(RequestCycle cycle, 
-            Class<? extends IRequestablePage> requestTarget) {
+    default void onRequestTargetSet(RequestCycle cycle,
+                                    Class<? extends IRequestablePage> requestTarget) {
         onRequestTargetSet(requestTarget);
     }
-    
+
     /**
      * Called when a runtime exception is thrown, just before the actual handling of the runtime
      * exception.
-     * 
+     *
      * @param cycle The request cycle
-     * @param ex The exception
+     * @param ex    The exception
      */
     void onRuntimeException(org.apache.wicket.request.cycle.RequestCycle cycle, Exception ex);
 

@@ -32,7 +32,7 @@ public class RasterSymbolizerVisitorTest {
         assertNotNull(tx);
         assertEquals("ras:CropCoverage", tx.getName());
     }
-    
+
     @Test
     public void testRasterToVectorTransformation() throws IOException {
         Style style = parseStyle("ContourTransform.sld");
@@ -43,7 +43,7 @@ public class RasterSymbolizerVisitorTest {
         Function tx = (Function) visitor.getRasterRenderingTransformation();
         assertNull(tx);
     }
-    
+
     @Test
     public void testVectorToRasterRenderingTransformation() throws IOException {
         Style style = parseStyle("HeatmapTransform.sld");

@@ -18,12 +18,12 @@ public enum PublishedType {
         public Integer getCode() {
             return 1;
         }
-    }, 
+    },
     REMOTE {
         public Integer getCode() {
             return 2;
         }
-        
+
     },
     WMS {
         public Integer getCode() {
@@ -34,12 +34,12 @@ public enum PublishedType {
         public Integer getCode() {
             return 4;
         }
-    },WMTS {
+    }, WMTS {
         public Integer getCode() {
             return 5;
         }
     };
-    
-    
+
+
     public abstract Integer getCode();
 }

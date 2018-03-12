@@ -30,7 +30,7 @@ public class WFSAdminPageTest extends GeoServerWicketTestSupport {
         tester.assertModelValue("form:maxNumberOfFeaturesForPreview", wfs.getMaxNumberOfFeaturesForPreview());
         tester.assertModelValue("form:keywords", wfs.getKeywords());
     }
-    
+
     @Test
     public void testChangesToValues() throws Exception {
         String testValue1 = "100", testValue2 = "0";
@@ -38,16 +38,16 @@ public class WFSAdminPageTest extends GeoServerWicketTestSupport {
         login();
         tester.startPage(WFSAdminPage.class);
         FormTester ft = tester.newFormTester("form");
-        ft.setValue("maxNumberOfFeaturesForPreview", (String)testValue1);
+        ft.setValue("maxNumberOfFeaturesForPreview", (String) testValue1);
         ft.submit("submit");
         wfs = getGeoServerApplication().getGeoServer().getService(WFSInfo.class);
-        assertEquals("testValue1 = 100", 100, (int)wfs.getMaxNumberOfFeaturesForPreview());
+        assertEquals("testValue1 = 100", 100, (int) wfs.getMaxNumberOfFeaturesForPreview());
         tester.startPage(WFSAdminPage.class);
         ft = tester.newFormTester("form");
-        ft.setValue("maxNumberOfFeaturesForPreview", (String)testValue2);
+        ft.setValue("maxNumberOfFeaturesForPreview", (String) testValue2);
         ft.submit("submit");
         wfs = getGeoServerApplication().getGeoServer().getService(WFSInfo.class);
-        assertEquals("testValue2 = 0", 0, (int)wfs.getMaxNumberOfFeaturesForPreview());
+        assertEquals("testValue2 = 0", 0, (int) wfs.getMaxNumberOfFeaturesForPreview());
     }
 
     @Test

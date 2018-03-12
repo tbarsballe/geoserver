@@ -11,7 +11,6 @@ import org.opengis.feature.Property;
 /**
  * Utility class to get complex feature attribute values (actual values, not property wrappers).
  * Can be used to simplify access to values when they are single valued and do not involve
- * 
  *
  * @author Andrea Aime - GeoSolutions
  */
@@ -20,7 +19,7 @@ public class ComplexFeatureAccessor {
     /**
      * Returns a single attribute value assuming the attribute is in the same namespace as the
      * feature
-     * 
+     *
      * @param feature
      * @param attribute
      * @return
@@ -32,6 +31,7 @@ public class ComplexFeatureAccessor {
 
     /**
      * Returns a single attribute value looking it up by qualified name
+     *
      * @param feature
      * @param namespace
      * @param attribute

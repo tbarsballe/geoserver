@@ -30,20 +30,20 @@ public class ImportDataControllerTest extends ImporterTestSupport {
 
     @Test
     public void testGet() throws Exception {
-        JSONObject json = (JSONObject) getAsJSON(ROOT_PATH+"/imports/0/data",200);
+        JSONObject json = (JSONObject) getAsJSON(ROOT_PATH + "/imports/0/data", 200);
         assertEquals("directory", json.getString("type"));
         assertEquals(2, json.getJSONArray("files").size());
     }
 
     @Test
     public void testGetFiles() throws Exception {
-        JSONObject json = (JSONObject) getAsJSON(ROOT_PATH+"/imports/0/data/files",200);
+        JSONObject json = (JSONObject) getAsJSON(ROOT_PATH + "/imports/0/data/files", 200);
         assertEquals(2, json.getJSONArray("files").size());
     }
 
     @Test
     public void testGetFile() throws Exception {
-        JSONObject json = (JSONObject) getAsJSON(ROOT_PATH+"/imports/0/data/files/archsites.shp",200);
+        JSONObject json = (JSONObject) getAsJSON(ROOT_PATH + "/imports/0/data/files/archsites.shp", 200);
         System.out.println(json);
         assertEquals("archsites.shp", json.getString("file"));
         assertEquals("archsites.prj", json.getString("prj"));
@@ -52,16 +52,16 @@ public class ImportDataControllerTest extends ImporterTestSupport {
     @Test
     public void testDelete() throws Exception {
         MockHttpServletResponse response =
-                getAsServletResponse(ROOT_PATH+"/imports/0/data/files/archsites.shp");
+                getAsServletResponse(ROOT_PATH + "/imports/0/data/files/archsites.shp");
         assertEquals(200, response.getStatus());
 
-        response = deleteAsServletResponse(ROOT_PATH+"/imports/0/data/files/archsites.shp");
+        response = deleteAsServletResponse(ROOT_PATH + "/imports/0/data/files/archsites.shp");
         assertEquals(204, response.getStatus());
 
-        response = getAsServletResponse(ROOT_PATH+"/imports/0/data/files/archsites.shp");
+        response = getAsServletResponse(ROOT_PATH + "/imports/0/data/files/archsites.shp");
         assertEquals(404, response.getStatus());
 
-        JSONArray arr = ((JSONObject)getAsJSON(ROOT_PATH+"/imports/0/data/files")).getJSONArray("files");
+        JSONArray arr = ((JSONObject) getAsJSON(ROOT_PATH + "/imports/0/data/files")).getJSONArray("files");
         assertEquals(1, arr.size());
     }
 }

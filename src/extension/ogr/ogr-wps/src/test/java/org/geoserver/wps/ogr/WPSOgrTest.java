@@ -38,15 +38,15 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import com.thoughtworks.xstream.XStream;
 
 public class WPSOgrTest extends WPSTestSupport {
-    
+
     private XmlTestUtil xml;
-    
+
     @Before
     public void setUp() throws Exception {
         xml = new XmlTestUtil();
         xml.addNamespace("kml", "http://www.opengis.net/kml/2.2");
         //xml.setShowXML(System.out); // Uncomment to print XML to stdout on failure
-        
+
         Assume.assumeTrue(Ogr2OgrTestUtil.isOgrAvailable());
     }
 

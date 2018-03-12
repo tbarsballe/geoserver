@@ -25,9 +25,8 @@ import static org.junit.Assert.fail;
 /**
  * Tests that security rules are applied in a real simulation of a GeoServer
  * startup (loading the Spring context, reading the catalog and whatnot)
- * 
+ *
  * @author Andrea Aime - GeoSolutions
- * 
  */
 @Category(SystemTest.class)
 public class SecureCatalogIntegrationTest extends GeoServerSystemTestSupport {
@@ -56,7 +55,7 @@ public class SecureCatalogIntegrationTest extends GeoServerSystemTestSupport {
             getFeatureSource(MockData.BUILDINGS);
             fail("This should have failed with a security exception!");
         } catch (Exception e) {
-            if (ReadOnlyDataStoreTest.isSpringSecurityException(e)==false)
+            if (ReadOnlyDataStoreTest.isSpringSecurityException(e) == false)
                 fail("Should have failed with a security exception");
         }
     }
@@ -64,12 +63,12 @@ public class SecureCatalogIntegrationTest extends GeoServerSystemTestSupport {
     @Test
     public void testCannotWrite() throws Exception {
         FeatureStore fs = (FeatureStore) getFeatureSource(MockData.DELETES);
-                
+
         try {
             fs.removeFeatures(Filter.INCLUDE);
             fail("This should have failed with a security exception!");
         } catch (Exception e) {
-            if (ReadOnlyDataStoreTest.isSpringSecurityException(e)==false)
+            if (ReadOnlyDataStoreTest.isSpringSecurityException(e) == false)
                 fail("Should have failed with a security exception");
         }
     }

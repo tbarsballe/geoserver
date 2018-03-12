@@ -26,7 +26,9 @@ import org.opengis.filter.Filter;
 import org.opengis.filter.sort.SortBy;
 
 import com.google.common.collect.Lists;
+
 import java.util.logging.Level;
+
 import org.geotools.util.logging.Logging;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -50,7 +52,7 @@ public class CatalogImplWithJDBCFacadeTest extends org.geoserver.catalog.impl.Ca
     @Override
     public void setUp() throws Exception {
         super.GET_LAYER_BY_ID_WITH_CONCURRENT_ADD_TEST_COUNT = 10;
-        
+
         testSupport.setUp();
 
         ConfigDatabase configDb = testSupport.getDatabase();
@@ -116,7 +118,7 @@ public class CatalogImplWithJDBCFacadeTest extends org.geoserver.catalog.impl.Ca
         LayerInfo l6 = newLayer(ft3, s3);
         LayerInfo l7 = newLayer(ft2, s1);
         LayerInfo l8 = newLayer(ft1, s2);
-        
+
         catalog.add(l1);
         catalog.add(l2);
         catalog.add(l3);
@@ -162,7 +164,7 @@ public class CatalogImplWithJDBCFacadeTest extends org.geoserver.catalog.impl.Ca
         }
     }
 
-    
+
 //    @Override
 //    public void testGetLayerGroupByNameWithWorkspace() {
 //        try {
@@ -179,7 +181,7 @@ public class CatalogImplWithJDBCFacadeTest extends org.geoserver.catalog.impl.Ca
      * Allow execution of a single test method with a hard-coded DBConfig. Due
      * to the way junit/maven work with parameterized tests, running a single
      * test was not possible at the time of the change.
-     *
+     * <p>
      * To do so, use the public constructor of DBConfig, create your test, call
      * setUp and then the test(s) of interest as in the example below.
      */

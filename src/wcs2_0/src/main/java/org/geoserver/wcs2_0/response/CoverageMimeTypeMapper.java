@@ -13,7 +13,7 @@ import org.opengis.coverage.grid.GridCoverageReader;
 /**
  * Maps a {@link CoverageInfo} to its native mime type, if any. Used to figure out
  * the "native mime" as required by the WCS 2.0 spec.
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public interface CoverageMimeTypeMapper {

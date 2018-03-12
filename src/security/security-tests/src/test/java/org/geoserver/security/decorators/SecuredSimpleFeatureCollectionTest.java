@@ -28,10 +28,10 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 
 public class SecuredSimpleFeatureCollectionTest {
-    
+
     FeatureVisitor lastVisitor = null;
     private ListFeatureCollection collection;
-    
+
     @Before
     public void setup() throws SchemaException {
         GeoServerExtensionsHelper.singleton("secureDataFactory", new DefaultSecureDataFactory(), SecuredObjectFactory.class);
@@ -39,8 +39,10 @@ public class SecuredSimpleFeatureCollectionTest {
         SimpleFeatureType originalSchema = DataUtilities.createType("BasicPolygons", "the_geom:MultiPolygon:srid=4326,ID:String,value:int");
         collection = new ListFeatureCollection(originalSchema) {
             public void accepts(FeatureVisitor visitor, ProgressListener progress) throws IOException {
-                lastVisitor = visitor; 
-            };
+                lastVisitor = visitor;
+            }
+
+            ;
         };
     }
 
@@ -50,7 +52,7 @@ public class SecuredSimpleFeatureCollectionTest {
         WrapperPolicy policy = WrapperPolicy.hide(new VectorAccessLimits(CatalogMode.HIDE, null, null, null, null));
         assertOptimalVisit(visitor, policy);
     }
-    
+
     @Test
     public void testMaxOnHiddenField() throws SchemaException, IOException {
         MaxVisitor visitor = new MaxVisitor(CommonFactoryFinder.getFilterFactory2().property("value"));
@@ -60,7 +62,7 @@ public class SecuredSimpleFeatureCollectionTest {
         secured.accepts(visitor, null);
         assertNull(lastVisitor);
     }
-    
+
     @Test
     public void testCountVisitorDelegation() throws SchemaException, IOException {
         FeatureVisitor visitor = new CountVisitor();

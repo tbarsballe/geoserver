@@ -28,7 +28,7 @@ import org.springframework.context.ApplicationContextAware;
 /**
  * A listener that tracks the evolution of process execution and stores it in a
  * {@link ProcessStatusStore}
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class ProcessStatusTracker implements ApplicationContextAware, ProcessListener,
@@ -53,17 +53,17 @@ public class ProcessStatusTracker implements ApplicationContextAware, ProcessLis
 
     @Override
     public void submitted(ProcessEvent event) throws WPSException {
-        if(store == null) {
+        if (store == null) {
             return;
         }
-        
+
         store.save(event.getStatus());
     }
 
     /**
      * Custom method that updates the status last updated field without touching anything else, to
      * make sure we let the cluster know the process is still running
-     * 
+     *
      * @param executionId
      * @throws WPSException
      */
@@ -144,9 +144,8 @@ public class ProcessStatusTracker implements ApplicationContextAware, ProcessLis
     /**
      * Removes the execution status for the given id, and returns its value, if found, or null, if
      * not found
-     * 
-     * @param executionId
      *
+     * @param executionId
      */
     public ExecutionStatus remove(String executionId) {
         return store.remove(executionId);

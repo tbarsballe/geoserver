@@ -35,8 +35,8 @@ import freemarker.template.Template;
 
 
 public class OpenLayersMapTemplateTest extends WMSTestSupport {
-    
-    
+
+
     @Test
     public void test() throws Exception {
         Configuration cfg = new Configuration();
@@ -72,20 +72,20 @@ public class OpenLayersMapTemplateTest extends WMSTestSupport {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         dbf.setValidating(false);
         dbf.setExpandEntityReferences(false);
-        
+
         DocumentBuilder docBuilder = dbf.newDocumentBuilder();
         docBuilder.setEntityResolver(
-            new EntityResolver() {
+                new EntityResolver() {
 
-                public InputSource resolveEntity(String publicId,
-                    String systemId) throws SAXException, IOException {
-                    StringReader reader = new StringReader("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-                    InputSource source = new InputSource(reader);
-                    source.setPublicId(publicId); 
-                    source.setSystemId(systemId); 
-                    return source;
+                    public InputSource resolveEntity(String publicId,
+                                                     String systemId) throws SAXException, IOException {
+                        StringReader reader = new StringReader("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+                        InputSource source = new InputSource(reader);
+                        source.setPublicId(publicId);
+                        source.setSystemId(systemId);
+                        return source;
+                    }
                 }
-            }
         );
 
         Document document = docBuilder.parse(new ByteArrayInputStream(output.toByteArray()));

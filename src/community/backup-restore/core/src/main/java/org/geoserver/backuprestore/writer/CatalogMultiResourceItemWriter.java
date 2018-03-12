@@ -41,14 +41,13 @@ import org.springframework.util.Assert;
 /**
  * Wraps a {@link ResourceAwareItemWriterItemStream} and creates a new output resource when the count of items written in current resource exceeds
  * {@link #setItemCountLimitPerResource(int)}. Suffix creation can be customized with {@link #setResourceSuffixCreator(ResourceSuffixCreator)}.
- * 
+ * <p>
  * Note that new resources are created only at chunk boundaries i.e. the number of items written into one resource is between the limit set by
  * {@link #setItemCountLimitPerResource(int)} and (limit + chunk size).
- * 
+ * <p>
  * Code based on original {@link MultiResourceItemWriter} by Robert Kasanicky.
- * 
+ *
  * @param <T> item type
- * 
  * @author Robert Kasanicky
  * @author Alessio Fabiani, GeoSolutions
  */
@@ -75,7 +74,7 @@ public class CatalogMultiResourceItemWriter<T> extends CatalogWriter<T> {
     private boolean opened = false;
 
     public CatalogMultiResourceItemWriter(Class<T> clazz, Backup backupFacade,
-            XStreamPersisterFactory xStreamPersisterFactory) {
+                                          XStreamPersisterFactory xStreamPersisterFactory) {
         super(clazz, backupFacade, xStreamPersisterFactory);
     }
 

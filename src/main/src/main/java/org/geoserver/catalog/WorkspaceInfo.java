@@ -8,9 +8,8 @@ package org.geoserver.catalog;
 
 /**
  * A container of grouping for store objects.
- * 
- * @author Justin Deoliveira, The Open Planning Project
  *
+ * @author Justin Deoliveira, The Open Planning Project
  */
 public interface WorkspaceInfo extends CatalogInfo {
 
@@ -18,19 +17,18 @@ public interface WorkspaceInfo extends CatalogInfo {
      * The unique name of the workspace.
      */
     String getName();
-    
+
     /**
      * Sets the name of the workspace.
      */
-    void setName( String name );
-    
+    void setName(String name);
+
     /**
      * A persistent map of metadata.
      * <p>
      * Data in this map is intended to be persisted. Common case of use is to
      * have services associate various bits of data with a particular workspace.
      * </p>
-     * 
      */
     MetadataMap getMetadata();
 

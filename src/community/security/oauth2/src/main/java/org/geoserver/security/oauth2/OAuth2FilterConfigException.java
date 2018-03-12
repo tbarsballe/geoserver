@@ -8,7 +8,7 @@ import org.geoserver.security.validation.FilterConfigException;
 
 /**
  * Exception for OAuth2 filter configurations
- * 
+ *
  * @author Alessio Fabiani, GeoSolutions S.A.S.
  */
 public class OAuth2FilterConfigException extends FilterConfigException {

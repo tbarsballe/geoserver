@@ -25,7 +25,6 @@ import org.opengis.feature.type.Name;
 
 /**
  * Provides entries for the process filtering table in the {@link WPSAccessRulePage}
- * 
  */
 @SuppressWarnings("serial")
 public class ProcessFactoryInfoProvider extends GeoServerDataProvider<ProcessGroupInfo> {
@@ -49,7 +48,7 @@ public class ProcessFactoryInfoProvider extends GeoServerDataProvider<ProcessGro
                 Class factoryClass = item.getFactoryClass();
                 Set<String> prefixes = new HashSet<String>();
                 ProcessFactory pf = GeoServerProcessors.getProcessFactory(factoryClass, false);
-                if(pf != null) {
+                if (pf != null) {
                     Set<Name> names = pf.getNames();
                     for (Name name : names) {
                         prefixes.add(name.getNamespaceURI());
@@ -57,7 +56,7 @@ public class ProcessFactoryInfoProvider extends GeoServerDataProvider<ProcessGro
                 }
 
                 // if we cannot find a title use the class name
-                if(prefixes.isEmpty()) {
+                if (prefixes.isEmpty()) {
                     return "";
                 } else {
                     // build a comma separated list with the prefixes
@@ -66,7 +65,7 @@ public class ProcessFactoryInfoProvider extends GeoServerDataProvider<ProcessGro
                     StringBuilder sb = new StringBuilder();
                     for (int i = 0; i < pl.size(); i++) {
                         sb.append(pl.get(i));
-                        if(i < pl.size() - 1) {
+                        if (i < pl.size() - 1) {
                             sb.append(", ");
                         }
                     }
@@ -83,12 +82,12 @@ public class ProcessFactoryInfoProvider extends GeoServerDataProvider<ProcessGro
                 Class factoryClass = item.getFactoryClass();
                 String title = null;
                 ProcessFactory pf = GeoServerProcessors.getProcessFactory(factoryClass, false);
-                if(pf != null) {
+                if (pf != null) {
                     title = pf.getTitle().toString(locale);
                 }
 
                 // if we cannot find a title use the class name
-                if(title == null) {
+                if (title == null) {
                     title = factoryClass.getName();
                 }
 
@@ -104,25 +103,25 @@ public class ProcessFactoryInfoProvider extends GeoServerDataProvider<ProcessGro
 
                     @Override
                     protected String load() {
-                        if(item.getFilteredProcesses().isEmpty()) {
+                        if (item.getFilteredProcesses().isEmpty()) {
                             // all processes are enabled
                             return new ParamResourceModel("WPSAdminPage.filter.all", null).getString();
                         }
 
                         Class factoryClass = item.getFactoryClass();
                         ProcessFactory pf = GeoServerProcessors.getProcessFactory(factoryClass, false);
-                        if(pf != null) {
+                        if (pf != null) {
                             Set<Name> names = new HashSet<Name>(pf.getNames());
                             int total = names.size();
-                            for(ProcessInfo toRemove : item.getFilteredProcesses()){
-                                if(!toRemove.isEnabled()){
+                            for (ProcessInfo toRemove : item.getFilteredProcesses()) {
+                                if (!toRemove.isEnabled()) {
                                     names.remove(toRemove.getName());
                                 }
                             }
                             int active = names.size();
-                            if(active != total){
+                            if (active != total) {
                                 return new ParamResourceModel("WPSAdminPage.filter.active", null, active, total).getString();
-                            }else{
+                            } else {
                                 return new ParamResourceModel("WPSAdminPage.filter.all", null).getString();
                             }
 
@@ -133,12 +132,13 @@ public class ProcessFactoryInfoProvider extends GeoServerDataProvider<ProcessGro
                 };
             }
 
-        });        
+        });
         props.add(new AbstractProperty<ProcessGroupInfo>("roles") {
             @Override
             public Object getPropertyValue(ProcessGroupInfo item) {
                 return item.getRoles();
-            } 
+            }
+
             @Override
             public IModel getModel(IModel itemModel) {
                 return new PropertyModel(itemModel, "roles");

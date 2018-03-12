@@ -12,7 +12,7 @@ import org.geotools.geometry.jts.ReferencedEnvelope;
 public interface VectorTileBuilderFactory {
 
     /**
-     * A set of identifiers for the format produced by builders from this factory.  May include 
+     * A set of identifiers for the format produced by builders from this factory.  May include
      * MIME type or file extension.
      */
     Set<String> getOutputFormats();
@@ -24,8 +24,9 @@ public interface VectorTileBuilderFactory {
 
     /**
      * Create a builder
+     *
      * @param screenSize The extent of the tile in screen coordinates
-     * @param mapArea The extent of the tile in target CRS coordinates
+     * @param mapArea    The extent of the tile in target CRS coordinates
      */
     VectorTileBuilder newBuilder(Rectangle screenSize, ReferencedEnvelope mapArea);
 

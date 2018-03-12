@@ -15,18 +15,17 @@ import org.geotools.map.Layer;
 public abstract class WebMap {
 
     private String mimeType;
-    
+
     private java.util.Map<String, String> responseHeaders;
 
     protected final WMSMapContent mapContent;
-    
+
     private String extension;
-    
+
     private String disposition;
 
     /**
-     * @param context
-     *            the map context, can be {@code null} is there's _really_ no context around
+     * @param context the map context, can be {@code null} is there's _really_ no context around
      */
     public WebMap(final WMSMapContent context) {
         this.mapContent = context;
@@ -99,7 +98,7 @@ public abstract class WebMap {
     public void setContentDispositionHeader(final WMSMapContent mapContent, final String extension) {
         setContentDispositionHeader(mapContent, extension, true);
     }
-    
+
     /**
      * Utility method to build a standard content disposition header.
      * <p>
@@ -116,34 +115,35 @@ public abstract class WebMap {
         this.extension = extension;
         this.disposition = attachment ? Response.DISPOSITION_ATTACH : Response.DISPOSITION_INLINE;
     }
-    
+
     public String getDisposition() {
         return disposition;
     }
-    
-    public String getAttachmentFileName() {        
+
+    public String getAttachmentFileName() {
         String filename = getSimpleAttachmentFileName();
         if (filename != null && extension != null) {
-            return filename  + extension;
+            return filename + extension;
         }
         return filename;
     }
 
     /**
      * Returns the filename with no extension
+     *
      * @return
      */
     public String getSimpleAttachmentFileName() {
         // see if we can get the original request, before the group expansion happened
         Request request = Dispatcher.REQUEST.get();
         String filename = null;
-        if(request != null && request.getRawKvp() != null && request.getRawKvp().get("LAYERS") != null) {
+        if (request != null && request.getRawKvp() != null && request.getRawKvp().get("LAYERS") != null) {
             String layers = ((String) request.getRawKvp().get("LAYERS")).trim();
-            if(layers.length() > 0) {
+            if (layers.length() > 0) {
                 filename = layers.replace(",", "_");
             }
-        } 
-        if(filename == null && mapContent != null) {
+        }
+        if (filename == null && mapContent != null) {
             StringBuffer sb = new StringBuffer();
             for (Layer layer : mapContent.layers()) {
                 String title = layer.getTitle();
@@ -151,7 +151,7 @@ public abstract class WebMap {
                     sb.append(title).append("_");
                 }
             }
-            if(sb.length() > 0) {
+            if (sb.length() > 0) {
                 sb.setLength(sb.length() - 1);
                 filename = sb.toString();
             }

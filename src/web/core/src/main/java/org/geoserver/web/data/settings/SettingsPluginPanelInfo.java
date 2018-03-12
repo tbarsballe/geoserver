@@ -22,9 +22,8 @@ import org.geoserver.web.data.workspace.WorkspaceEditPage;
 /**
  * This class must be used for implementing new Components which must be added to the {@link ListView}s inside the {@link WorkspaceEditPage} and
  * {@link GlobalSettingsPage}.
- * 
+ *
  * @author Nicola Lagomarsini Geosolutions S.A.S.
- * 
  */
 public class SettingsPluginPanelInfo extends ComponentInfo<SettingsPluginPanel> implements
         ExtensionPriority {
@@ -45,7 +44,7 @@ public class SettingsPluginPanelInfo extends ComponentInfo<SettingsPluginPanel> 
 
     /**
      * Method for setting the priority of the Object. This is used for ordering the various plugin panels.
-     * 
+     *
      * @param priority
      */
     public void setPriority(int priority) {
@@ -55,14 +54,13 @@ public class SettingsPluginPanelInfo extends ComponentInfo<SettingsPluginPanel> 
     /**
      * This method creates a pluggable ListView which can store various panels. All the elements must implement the {@link SettingsPluginPanelInfo}
      * class.
-     * 
+     *
      * @param id
      * @param model
      * @param application
-     *
      */
     public static ListView<SettingsPluginPanelInfo> createExtensions(String id, final IModel<SettingsInfo> model,
-            GeoServerApplication application) {
+                                                                     GeoServerApplication application) {
         // List of all the pluggable components
         List<SettingsPluginPanelInfo> panels = application
                 .getBeansOfType(SettingsPluginPanelInfo.class);
@@ -70,7 +68,7 @@ public class SettingsPluginPanelInfo extends ComponentInfo<SettingsPluginPanel> 
         return new ListView<SettingsPluginPanelInfo>(id, panels) {
 
             /**
-             * 
+             *
              */
             private static final long serialVersionUID = 3967381810650109343L;
 

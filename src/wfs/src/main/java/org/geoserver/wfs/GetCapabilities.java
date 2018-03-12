@@ -28,7 +28,6 @@ import org.springframework.context.ApplicationContextAware;
  * </p>
  *
  * @author Justin Deoliveira, The Open Planning Project, jdeolive@openplans.org
- *
  */
 public class GetCapabilities {
     /**
@@ -41,13 +40,13 @@ public class GetCapabilities {
      */
     Catalog catalog;
 
-	private final Collection<WFSExtendedCapabilitiesProvider> extendedCapabilitiesProviders;
+    private final Collection<WFSExtendedCapabilitiesProvider> extendedCapabilitiesProviders;
 
     /**
      * Creates a new wfs 1.0/1.1 GetCapabilitis operation.
      *
-     * @param wfs The wfs configuration
-     * @param catalog The geoserver catalog.
+     * @param wfs                           The wfs configuration
+     * @param catalog                       The geoserver catalog.
      * @param extendedCapabilitiesProviders the providers for adding extra metadata to the capabilities documents
      */
     public GetCapabilities(WFSInfo wfs, Catalog catalog, Collection<WFSExtendedCapabilitiesProvider> extendedCapabilitiesProviders) {
@@ -57,7 +56,7 @@ public class GetCapabilities {
     }
 
     public CapabilitiesTransformer run(GetCapabilitiesRequest request)
-        throws WFSException {
+            throws WFSException {
         //cite requires that we fail when we see an "invalid" update sequence,
         // since we dont support update sequences, all are invalid, but we take
         // our more lax approach and just ignore it when not doint the cite thing
@@ -108,12 +107,12 @@ public class GetCapabilities {
         provided.add("1.1.0");
 
         if (request instanceof GetCapabilitiesRequest.WFS20) {
-            provided.add("2.0.0");    
+            provided.add("2.0.0");
         }
-        
+
         List<String> accepted = request.getAcceptVersions();
 
         String version = RequestUtils.getVersionPreOws(provided, accepted);
-		return version;
-	}
+        return version;
+    }
 }

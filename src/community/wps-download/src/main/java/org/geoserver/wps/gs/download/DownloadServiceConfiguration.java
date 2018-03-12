@@ -7,13 +7,14 @@ package org.geoserver.wps.gs.download;
 
 /**
  * Bean that includes the configurations parameters for the download service
- * 
+ *
  * @author Simone Giannecchini, GeoSolutions
- * 
  */
 public class DownloadServiceConfiguration {
 
-    /** Value used to indicate no limits */
+    /**
+     * Value used to indicate no limits
+     */
     public static final long NO_LIMIT = 0;
 
     public static final String COMPRESSION_LEVEL_NAME = "compressionLevel";
@@ -36,24 +37,36 @@ public class DownloadServiceConfiguration {
 
     public static final long DEFAULT_MAX_FEATURES = NO_LIMIT;
 
-    /** Max #of features */
+    /**
+     * Max #of features
+     */
     private long maxFeatures = DEFAULT_MAX_FEATURES;
 
-    /** 8000 px X 8000 px */
+    /**
+     * 8000 px X 8000 px
+     */
     private long rasterSizeLimits = DEFAULT_RASTER_SIZE_LIMITS;
 
-    /** Max size in bytes of raw raster output */
+    /**
+     * Max size in bytes of raw raster output
+     */
     private long writeLimits = DEFAULT_WRITE_LIMITS;
 
-    /** 50 MB */
+    /**
+     * 50 MB
+     */
     private long hardOutputLimit = DEFAULT_HARD_OUTPUT_LIMITS;
 
-    /** STORE =0, BEST =8 */
+    /**
+     * STORE =0, BEST =8
+     */
     private int compressionLevel = DEFAULT_COMPRESSION_LEVEL;
 
-    /** Constructor: */
+    /**
+     * Constructor:
+     */
     public DownloadServiceConfiguration(long maxFeatures, long rasterSizeLimits, long writeLimits,
-            long hardOutputLimit, int compressionLevel) {
+                                        long hardOutputLimit, int compressionLevel) {
         this.maxFeatures = maxFeatures;
         this.rasterSizeLimits = rasterSizeLimits;
         this.writeLimits = writeLimits;
@@ -61,7 +74,9 @@ public class DownloadServiceConfiguration {
         this.compressionLevel = compressionLevel;
     }
 
-    /** Default constructor */
+    /**
+     * Default constructor
+     */
     public DownloadServiceConfiguration() {
         this(DEFAULT_MAX_FEATURES, DEFAULT_RASTER_SIZE_LIMITS, DEFAULT_WRITE_LIMITS,
                 DEFAULT_HARD_OUTPUT_LIMITS, DEFAULT_COMPRESSION_LEVEL);

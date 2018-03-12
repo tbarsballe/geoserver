@@ -9,7 +9,7 @@ import org.geoserver.security.config.BaseSecurityNamedServiceConfig;
 
 /**
  * Configuration object for remember me services.
- * 
+ *
  * @author Justin Deoliveira, OpenGeo
  */
 public class RememberMeServicesConfig extends BaseSecurityNamedServiceConfig {

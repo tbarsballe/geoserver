@@ -41,36 +41,54 @@ import org.geowebcache.storage.blobstore.memory.CacheStatistics;
 /**
  * This class is a new Panel for configuring In Memory Caching for GWC. The user can enable/disable In Memory caching, enable/disable file
  * persistence. Also from this panel the user can have information about cache statistics and also change the cache configuration.
- * 
+ *
  * @author Nicola Lagomarsini Geosolutions
  */
 public class InMemoryBlobStorePanel extends Panel {
 
-    /** Key for the miss rate */
+    /**
+     * Key for the miss rate
+     */
     public static final String KEY_MISS_RATE = "missRate";
 
-    /** Key for the hit rate */
+    /**
+     * Key for the hit rate
+     */
     public static final String KEY_HIT_RATE = "hitRate";
 
-    /** Key for the evicted elements number */
+    /**
+     * Key for the evicted elements number
+     */
     public static final String KEY_EVICTED = "evicted";
 
-    /** Key for the miss count */
+    /**
+     * Key for the miss count
+     */
     public static final String KEY_MISS_COUNT = "missCount";
 
-    /** Key for the hit count */
+    /**
+     * Key for the hit count
+     */
     public static final String KEY_HIT_COUNT = "hitCount";
 
-    /** Key for the total elements count */
+    /**
+     * Key for the total elements count
+     */
     public static final String KEY_TOTAL_COUNT = "totalCount";
 
-    /** Key for the cache current memory occupation */
+    /**
+     * Key for the cache current memory occupation
+     */
     public static final String KEY_CURRENT_MEM = "currentMemory";
 
-    /** Key for the cache current/total size */
+    /**
+     * Key for the cache current/total size
+     */
     public static final String KEY_SIZE = "cacheSize";
 
-    /** HashMap containing the values for all the statistics values */
+    /**
+     * HashMap containing the values for all the statistics values
+     */
     private HashMap<String, String> values;
 
     public InMemoryBlobStorePanel(String id, final IModel<GWCConfig> gwcConfigModel) {
@@ -255,7 +273,7 @@ public class InMemoryBlobStorePanel extends Panel {
 
     /**
      * {@link IValidator} implementation for checking if the value is null, or less or equal to 0
-     * 
+     *
      * @author Nicola Lagomarsini Geosolutions
      */
     static class MinimumLongValidator implements IValidator<Long> {
@@ -278,7 +296,7 @@ public class InMemoryBlobStorePanel extends Panel {
 
     /**
      * {@link IValidator} implementation for checking if the concurrency Level is null, or less than or equal to 0
-     * 
+     *
      * @author Nicola Lagomarsini Geosolutions
      */
     static class MinimumConcurrencyValidator implements IValidator<Integer> {
@@ -295,7 +313,7 @@ public class InMemoryBlobStorePanel extends Panel {
 
     /**
      * {@link ChoiceRenderer} implementation mapping available {@link CacheProvider} names with the {@link CacheProvider} class names.
-     * 
+     *
      * @author Nicola Lagomarsini Geosolutions
      */
     static class CacheProviderRenderer extends ChoiceRenderer<String> {
@@ -319,7 +337,7 @@ public class InMemoryBlobStorePanel extends Panel {
 
     /**
      * {@link WebMarkupContainer} extension used for rendering a set of components based on the mapping of a key
-     * 
+     *
      * @author Nicola Lagomarsini Geosolutions
      */
     static class CacheConfigContainerWrapper extends WebMarkupContainer {
@@ -332,7 +350,7 @@ public class InMemoryBlobStorePanel extends Panel {
         /**
          * This method removes all the previous mappings from the container and then adds the components again by setting as default value the one
          * taken from the key mapped.
-         * 
+         *
          * @param key
          * @param gwcConfigModel
          */

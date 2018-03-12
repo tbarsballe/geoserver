@@ -36,7 +36,7 @@ public abstract class ViewServicesTestSupport extends GeoServerSystemTestSupport
     protected abstract String getLanguage();
 
     protected abstract String getAlternateMetadataType();
-    
+
     protected abstract ServiceInfo getServiceInfo();
 
     protected abstract String getInspireNameSpace();

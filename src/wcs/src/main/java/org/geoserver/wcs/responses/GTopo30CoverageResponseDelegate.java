@@ -20,8 +20,8 @@ import org.opengis.coverage.grid.GridCoverageWriter;
 
 /**
  * Encoder for gtopo format
- * @author Simone Giannecchini, GeoSolutions SAS
  *
+ * @author Simone Giannecchini, GeoSolutions SAS
  */
 public class GTopo30CoverageResponseDelegate extends BaseCoverageResponseDelegate implements CoverageResponseDelegate {
 
@@ -31,17 +31,17 @@ public class GTopo30CoverageResponseDelegate extends BaseCoverageResponseDelegat
         super(
                 geoserver,
                 Arrays.asList("GTopo30"), //output formats
-                new HashMap<String, String>(){ // file extensions
+                new HashMap<String, String>() { // file extensions
                     {
                         put("GTopo30", "zip");
                         put("application/gtopo30", "zip");
                     }
                 },
-                new HashMap<String, String>(){ //mime types
+                new HashMap<String, String>() { //mime types
                     {
                         put("GTopo30", "application/gtopo30");
                     }
-                });  
+                });
     }
 
     /*
@@ -49,7 +49,7 @@ public class GTopo30CoverageResponseDelegate extends BaseCoverageResponseDelegat
      * 
      * @see org.vfny.geoserver.wcs.responses.CoverageResponseDelegate#encode(java.io.OutputStream)
      */
-	public void encode(GridCoverage2D sourceCoverage, String outputFormat, Map<String,String> econdingParameters, OutputStream output) throws ServiceException, IOException {
+    public void encode(GridCoverage2D sourceCoverage, String outputFormat, Map<String, String> econdingParameters, OutputStream output) throws ServiceException, IOException {
         // creating a zip outputstream
         final ZipOutputStream outZ = new ZipOutputStream(output);
         output = outZ;

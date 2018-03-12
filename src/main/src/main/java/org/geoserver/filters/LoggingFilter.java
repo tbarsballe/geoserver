@@ -27,25 +27,25 @@ import org.geoserver.ows.util.RequestUtils;
  * @author David Winslow <dwinslow@openplans.org>
  */
 public class LoggingFilter implements Filter {
-    protected Logger logger = 
-        org.geotools.util.logging.Logging.getLogger("org.geoserver.filters");
+    protected Logger logger =
+            org.geotools.util.logging.Logging.getLogger("org.geoserver.filters");
 
     protected boolean enabled = true;
     protected boolean logBodies = true;
 
 
     public void doFilter(ServletRequest req, ServletResponse res,
-            FilterChain chain) throws IOException, ServletException {
+                         FilterChain chain) throws IOException, ServletException {
         String message = "";
         String body = null;
         String path = "";
 
-        if (enabled){
-            if (req instanceof HttpServletRequest){
+        if (enabled) {
+            if (req instanceof HttpServletRequest) {
                 HttpServletRequest hreq = (HttpServletRequest) req;
 
                 path = RequestUtils.getRemoteAddr(hreq) + " \"" + hreq.getMethod() + " " + hreq.getRequestURI();
-                if (hreq.getQueryString() != null){
+                if (hreq.getQueryString() != null) {
                     path += "?" + hreq.getQueryString();
                 }
                 path += "\"";
@@ -55,7 +55,7 @@ public class LoggingFilter implements Filter {
                 message += "\" \"" + noNull(hreq.getHeader("Referer"));
                 message += "\" \"" + noNull(hreq.getHeader("Content-type")) + "\" ";
 
-                if (logBodies && (hreq.getMethod().equals("PUT") || hreq.getMethod().equals("POST"))){
+                if (logBodies && (hreq.getMethod().equals("PUT") || hreq.getMethod().equals("POST"))) {
                     message += " request-size: " + hreq.getContentLength();
                     message += " body: ";
 
@@ -79,32 +79,32 @@ public class LoggingFilter implements Filter {
                 message = "" + req.getRemoteHost() + " made a non-HTTP request";
             }
 
-            logger.info(message + (body == null? "" : "\n" + body + "\n"));
+            logger.info(message + (body == null ? "" : "\n" + body + "\n"));
             long startTime = System.currentTimeMillis();
             chain.doFilter(req, res);
             long requestTime = System.currentTimeMillis() - startTime;
-            logger.info(path +  " took " + requestTime + "ms");
+            logger.info(path + " took " + requestTime + "ms");
         } else {
             chain.doFilter(req, res);
         }
 
-   }
+    }
 
     public void init(FilterConfig filterConfig) {
         enabled = getConfigBool("enabled", filterConfig);
         logBodies = getConfigBool("log-request-bodies", filterConfig);
     }
-    
-    protected boolean getConfigBool(String name, FilterConfig conf){
+
+    protected boolean getConfigBool(String name, FilterConfig conf) {
         try {
             String value = conf.getInitParameter(name);
             return Boolean.valueOf(value).booleanValue();
-        } catch (Exception e){
+        } catch (Exception e) {
             return false;
         }
     }
 
-    protected String noNull(String s){
+    protected String noNull(String s) {
         if (s == null) return "";
         return s;
     }

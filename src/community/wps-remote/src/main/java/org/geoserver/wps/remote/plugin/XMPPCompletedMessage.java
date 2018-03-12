@@ -25,13 +25,14 @@ import net.sf.json.JSONSerializer;
 
 /**
  * Listens for "COMPLETE" messages from XMPP service channels and takes action accordingly.
- * 
+ *
  * @author Alessio Fabiani, GeoSolutions
- * 
  */
 public class XMPPCompletedMessage implements XMPPMessage {
 
-    /** The LOGGER */
+    /**
+     * The LOGGER
+     */
     public static final Logger LOGGER = Logging.getLogger(XMPPMessage.class.getPackage().getName());
 
     @Override
@@ -43,7 +44,7 @@ public class XMPPCompletedMessage implements XMPPMessage {
 
     @Override
     public void handleSignal(XMPPClient xmppClient, Packet packet, Message message,
-            Map<String, String> signalArgs) {
+                             Map<String, String> signalArgs) {
 
         final String pID = signalArgs.get("id");
         final String msg = signalArgs.get("message");
@@ -71,54 +72,54 @@ public class XMPPCompletedMessage implements XMPPMessage {
                             try {
                                 final Object value = (resultParams
                                         .get(result.getKey() + "_value") != null
-                                                ? resultParams.get(result.getKey() + "_value")
-                                                : null);
+                                        ? resultParams.get(result.getKey() + "_value")
+                                        : null);
                                 final String type = (String) (resultParams
                                         .get(result.getKey() + "_type") != null
-                                                ? resultParams.get(result.getKey() + "_type")
-                                                : null);
+                                        ? resultParams.get(result.getKey() + "_type")
+                                        : null);
                                 final String description = (resultParams
                                         .get(result.getKey() + "_description") != null
                                         && resultParams.get(
-                                                result.getKey() + "_description") instanceof String
-                                                        ? (String) resultParams.get(
-                                                                result.getKey() + "_description")
-                                                        : null);
+                                        result.getKey() + "_description") instanceof String
+                                        ? (String) resultParams.get(
+                                        result.getKey() + "_description")
+                                        : null);
                                 final String title = (resultParams
                                         .get(result.getKey() + "_title") != null
                                         && resultParams
-                                                .get(result.getKey() + "_title") instanceof String
-                                                        ? (String) resultParams
-                                                                .get(result.getKey() + "_title")
-                                                        : null);
+                                        .get(result.getKey() + "_title") instanceof String
+                                        ? (String) resultParams
+                                        .get(result.getKey() + "_title")
+                                        : null);
                                 final String layerName = (resultParams
                                         .get(result.getKey() + "_layer_name") != null
                                         && resultParams.get(
-                                                result.getKey() + "_layer_name") instanceof String
-                                                        ? (String) resultParams.get(
-                                                                result.getKey() + "_layer_name")
-                                                        : null);
+                                        result.getKey() + "_layer_name") instanceof String
+                                        ? (String) resultParams.get(
+                                        result.getKey() + "_layer_name")
+                                        : null);
                                 final String defaultStyle = (resultParams
                                         .get(result.getKey() + "_style") != null
                                         && resultParams
-                                                .get(result.getKey() + "_style") instanceof String
-                                                        ? (String) resultParams
-                                                                .get(result.getKey() + "_style")
-                                                        : null);
+                                        .get(result.getKey() + "_style") instanceof String
+                                        ? (String) resultParams
+                                        .get(result.getKey() + "_style")
+                                        : null);
                                 final String targetWorkspace = (resultParams
                                         .get(result.getKey() + "_workspace") != null
                                         && resultParams.get(
-                                                result.getKey() + "_workspace") instanceof String
-                                                        ? (String) resultParams
-                                                                .get(result.getKey() + "_workspace")
-                                                        : null);
+                                        result.getKey() + "_workspace") instanceof String
+                                        ? (String) resultParams
+                                        .get(result.getKey() + "_workspace")
+                                        : null);
                                 final String metadata = (resultParams
                                         .get(result.getKey() + "_metadata") != null
                                         && resultParams.get(
-                                                result.getKey() + "_metadata") instanceof String
-                                                        ? (String) resultParams
-                                                                .get(result.getKey() + "_metadata")
-                                                        : null);
+                                        result.getKey() + "_metadata") instanceof String
+                                        ? (String) resultParams
+                                        .get(result.getKey() + "_metadata")
+                                        : null);
 
                                 Boolean publish = true;
 

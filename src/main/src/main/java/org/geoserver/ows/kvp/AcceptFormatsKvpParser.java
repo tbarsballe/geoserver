@@ -21,7 +21,6 @@ import org.geotools.xml.EMFUtils;
  * the subclasses bind it to a specific OWS version.
  *
  * @author Justin Deoliveira, The Open Planning Project
- *
  */
 public abstract class AcceptFormatsKvpParser extends KvpParser {
 
@@ -32,10 +31,10 @@ public abstract class AcceptFormatsKvpParser extends KvpParser {
     public Object parse(String value) throws Exception {
         List values = KvpUtils.readFlat(value);
 
-        EObject acceptFormats = createObject(); 
+        EObject acceptFormats = createObject();
 
-        for (Iterator v = values.iterator(); v.hasNext();) {
-            ((Collection)EMFUtils.get(acceptFormats, "outputFormat")).add(v.next());
+        for (Iterator v = values.iterator(); v.hasNext(); ) {
+            ((Collection) EMFUtils.get(acceptFormats, "outputFormat")).add(v.next());
         }
 
         return acceptFormats;
@@ -43,7 +42,6 @@ public abstract class AcceptFormatsKvpParser extends KvpParser {
 
     /**
      * Creates the AcceptsFormatType
-     *
      */
     protected abstract EObject createObject();
 }

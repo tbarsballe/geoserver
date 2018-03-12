@@ -22,9 +22,9 @@ import org.geotools.xml.Parser;
 
 /**
  * Xml reader for wfs 1.1.0 xml requests.
- * 
- * @author Justin Deoliveira, The Open Planning Project
  *
+ * @author Justin Deoliveira, The Open Planning Project
+ * <p>
  * TODO: there is too much duplication with the 1.0.0 reader, factor it out.
  */
 public class WfsXmlReader extends XmlRequestReader {
@@ -37,39 +37,39 @@ public class WfsXmlReader extends XmlRequestReader {
      * Xml Configuration
      */
     Configuration configuration;
-    
+
     /**
      * geoserver configuartion
      */
     GeoServer geoServer;
 
     EntityResolverProvider entityResolverProvider;
-    
+
     public WfsXmlReader(String element, GeoServer gs, Configuration configuration) {
-        this(element, gs, configuration, "wfs");        
+        this(element, gs, configuration, "wfs");
     }
-    
+
     protected WfsXmlReader(String element, GeoServer gs, Configuration configuration, String serviceId) {
         super(new QName(org.geoserver.wfs.xml.v1_1_0.WFS.NAMESPACE, element), new Version("1.1.0"),
-            serviceId);
+                serviceId);
         this.geoServer = gs;
-        this.wfs = gs.getService( WFSInfo.class );
+        this.wfs = gs.getService(WFSInfo.class);
         this.configuration = configuration;
         this.entityResolverProvider = new EntityResolverProvider(geoServer);
     }
-    
+
     public Object read(Object request, Reader reader, Map kvp) throws Exception {
         //TODO: make this configurable?
         configuration.getProperties().add(Parser.Properties.PARSE_UNKNOWN_ELEMENTS);
 
         Parser parser = new Parser(configuration);
         parser.setEntityResolver(entityResolverProvider.getEntityResolver());
-        
+
         WFSXmlUtils.initRequestParser(parser, wfs, geoServer, kvp);
         Object parsed = WFSXmlUtils.parseRequest(parser, reader, wfs);
-        
+
         WFSXmlUtils.checkValidationErrors(parser, this);
-        
+
         return parsed;
     }
 }

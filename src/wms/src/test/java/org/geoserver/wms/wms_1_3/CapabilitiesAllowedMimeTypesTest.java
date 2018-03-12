@@ -28,15 +28,14 @@ public class CapabilitiesAllowedMimeTypesTest extends WMSTestSupport {
 
     GetMapOutputFormat getMapFormat;
     GetFeatureInfoOutputFormat getInfoFormat;
-    
+
     @Override
     protected void registerNamespaces(Map<String, String> namespaces) {
         namespaces.put("wms", "http://www.opengis.net/wms");
         namespaces.put("ows", "http://www.opengis.net/ows");
     }
 
-    
-    
+
     void addMimeTypes() {
         getMapFormat = new RenderedImageMapOutputFormat(getWMS());
         getInfoFormat = new TextFeatureInfoOutputFormat(getWMS());
@@ -48,9 +47,9 @@ public class CapabilitiesAllowedMimeTypesTest extends WMSTestSupport {
         getGeoServer().save(wms);
     }
 
-    
+
     @After
-    public void removeMimeTypes () {
+    public void removeMimeTypes() {
         WMSInfo wms = getWMS().getServiceInfo();
         wms.getGetMapMimeTypes().clear();
         wms.getGetFeatureInfoMimeTypes().clear();
@@ -60,48 +59,47 @@ public class CapabilitiesAllowedMimeTypesTest extends WMSTestSupport {
     }
 
 
-    
     @Test
     public void testAllowedMimeTypes() throws Exception {
-        
+
         // check with no restrictions
-        Document doc = getAsDOM("sf/PrimitiveGeoFeature/wms?service=WMS&request=getCapabilities&version=1.3.0", true);        
+        Document doc = getAsDOM("sf/PrimitiveGeoFeature/wms?service=WMS&request=getCapabilities&version=1.3.0", true);
         XpathEngine xpath = XMLUnit.newXpathEngine();
-        
-        
+
+
         NodeList formatNodes = xpath.getMatchingNodes("wms:WMS_Capabilities/wms:Capability/wms:Request/wms:GetMap/wms:Format",
-                doc);       
+                doc);
         Assert.assertTrue(formatNodes.getLength() > 1);
-        
-        formatNodes = xpath.getMatchingNodes("/wms:WMS_Capabilities/wms:Capability/wms:Request/wms:GetFeatureInfo/wms:Format",doc);
+
+        formatNodes = xpath.getMatchingNodes("/wms:WMS_Capabilities/wms:Capability/wms:Request/wms:GetFeatureInfo/wms:Format", doc);
         Assert.assertTrue(formatNodes.getLength() > 1);
-        
+
         // add mime type restrictions        
         addMimeTypes();
-        
-        doc = getAsDOM("sf/PrimitiveGeoFeature/wms?service=WMS&request=getCapabilities&version=1.3.0", true);
-        formatNodes = xpath.getMatchingNodes("wms:WMS_Capabilities/wms:Capability/wms:Request/wms:GetMap/wms:Format",
-                doc);             
-        Assert.assertEquals(1,formatNodes.getLength());
-        Assert.assertEquals(getMapFormat.getMimeType(),formatNodes.item(0).getTextContent());
-        
-        formatNodes = xpath.getMatchingNodes("/wms:WMS_Capabilities/wms:Capability/wms:Request/wms:GetFeatureInfo/wms:Format",doc);
-        Assert.assertEquals(1,formatNodes.getLength());
-        Assert.assertEquals(getInfoFormat.getContentType(),formatNodes.item(0).getTextContent());
-                
-        // remove restrictions
-        removeMimeTypes();
-        
 
         doc = getAsDOM("sf/PrimitiveGeoFeature/wms?service=WMS&request=getCapabilities&version=1.3.0", true);
         formatNodes = xpath.getMatchingNodes("wms:WMS_Capabilities/wms:Capability/wms:Request/wms:GetMap/wms:Format",
-                doc);       
+                doc);
+        Assert.assertEquals(1, formatNodes.getLength());
+        Assert.assertEquals(getMapFormat.getMimeType(), formatNodes.item(0).getTextContent());
+
+        formatNodes = xpath.getMatchingNodes("/wms:WMS_Capabilities/wms:Capability/wms:Request/wms:GetFeatureInfo/wms:Format", doc);
+        Assert.assertEquals(1, formatNodes.getLength());
+        Assert.assertEquals(getInfoFormat.getContentType(), formatNodes.item(0).getTextContent());
+
+        // remove restrictions
+        removeMimeTypes();
+
+
+        doc = getAsDOM("sf/PrimitiveGeoFeature/wms?service=WMS&request=getCapabilities&version=1.3.0", true);
+        formatNodes = xpath.getMatchingNodes("wms:WMS_Capabilities/wms:Capability/wms:Request/wms:GetMap/wms:Format",
+                doc);
         Assert.assertTrue(formatNodes.getLength() > 1);
-        
-        formatNodes = xpath.getMatchingNodes("/wms:WMS_Capabilities/wms:Capability/wms:Request/wms:GetFeatureInfo/wms:Format",doc);
+
+        formatNodes = xpath.getMatchingNodes("/wms:WMS_Capabilities/wms:Capability/wms:Request/wms:GetFeatureInfo/wms:Format", doc);
         Assert.assertTrue(formatNodes.getLength() > 1);
-                
-        
+
+
     }
 
 }

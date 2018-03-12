@@ -24,7 +24,7 @@ import org.geoserver.wcs.WCSInfo;
 /**
  * A data handler for the fake "geoserver/coverage" mime type. In fact, it
  * encodes the WCS 1.1 coverages document (an xml document)
- * 
+ *
  * @author Andrea Aime - TOPP
  */
 public class CoveragesHandler implements DataContentHandler {
@@ -59,6 +59,7 @@ public class CoveragesHandler implements DataContentHandler {
 
     /**
      * Just a data holder to keep togheter the informations needed to encode the coverages response
+     *
      * @author Andrea Aime - TOPP
      */
     static class CoveragesData {

@@ -14,11 +14,10 @@ import org.geotools.feature.visitor.MinVisitor;
 import org.geotools.util.Converters;
 
 /**
- * Default implementation for selecting the default values for dimensions of 
+ * Default implementation for selecting the default values for dimensions of
  * feature (vector) resources using the minimum domain value strategy.
- *  
- * @author Ilkka Rinne / Spatineo Inc for the Finnish Meteorological Institute
  *
+ * @author Ilkka Rinne / Spatineo Inc for the Finnish Meteorological Institute
  */
 public class FeatureMinimumValueSelectionStrategyImpl extends
         AbstractFeatureAttributeVisitorSelectionStrategy {
@@ -31,7 +30,7 @@ public class FeatureMinimumValueSelectionStrategyImpl extends
 
     @Override
     public Object getDefaultValue(ResourceInfo resource, String dimensionName,
-            DimensionInfo dimension, Class clz) {
+                                  DimensionInfo dimension, Class clz) {
         final MinVisitor min = new MinVisitor(dimension.getAttribute());
         CalcResult res = getCalculatedResult((FeatureTypeInfo) resource, dimension, min);
         if (res.equals(CalcResult.NULL_RESULT)) {
@@ -39,5 +38,5 @@ public class FeatureMinimumValueSelectionStrategyImpl extends
         } else {
             return Converters.convert(min.getMin(), clz);
         }
-    }    
+    }
 }

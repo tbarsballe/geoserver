@@ -28,14 +28,14 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.AbstractController;
 
 /**
- * Custom servlet/controller for rendering KML icons. 
+ * Custom servlet/controller for rendering KML icons.
  */
 public class IconService extends AbstractController {
 
     static Logger LOG = Logging.getLogger(IconService.class);
 
     static Pattern URI = Pattern.compile("/icon/(?:([^/]+)/)?([^/]+)/?");
-    
+
     private final Catalog catalog;
 
     public IconService(Catalog catalog) {
@@ -44,13 +44,13 @@ public class IconService extends AbstractController {
 
     @Override
     protected ModelAndView handleRequestInternal(
-        HttpServletRequest request, HttpServletResponse response) throws Exception {
+            HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         String path = request.getPathInfo();
         Matcher m = URI.matcher(path);
         if (!m.matches()) {
-            response.sendError(400, 
-                "Bad request, path must be of form: /icons/[<workspace>/]<style>");
+            response.sendError(400,
+                    "Bad request, path must be of form: /icons/[<workspace>/]<style>");
             return null;
         }
 
@@ -58,13 +58,12 @@ public class IconService extends AbstractController {
         if (m.groupCount() == 2) {
             workspace = m.group(1);
             styleName = m.group(2);
-        }
-        else {
+        } else {
             styleName = m.group(1);
         }
 
-        StyleInfo styleInfo = workspace != null ? catalog.getStyleByName(workspace, styleName) 
-            : catalog.getStyleByName(styleName); 
+        StyleInfo styleInfo = workspace != null ? catalog.getStyleByName(workspace, styleName)
+                : catalog.getStyleByName(styleName);
         if (styleInfo == null) {
             String msg = "No such style " + styleName;
             if (workspace != null) {
@@ -77,8 +76,8 @@ public class IconService extends AbstractController {
         String q = request.getQueryString();
         try {
             Style style = styleInfo.getStyle();
-            Map<String,Object> properties = 
-                q != null ? KvpUtils.parseQueryString("?"+q) : Collections.EMPTY_MAP;
+            Map<String, Object> properties =
+                    q != null ? KvpUtils.parseQueryString("?" + q) : Collections.EMPTY_MAP;
             Map<String, String> kvp = new HashMap<String, String>();
             for (String key : properties.keySet()) {
                 Object value = properties.get(key);

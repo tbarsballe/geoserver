@@ -15,8 +15,8 @@ import org.geoserver.security.config.SecurityNamedServiceConfig;
  *
  * @author christian
  */
-public class JDBCConnectAuthProviderConfig extends BaseSecurityNamedServiceConfig 
-    implements SecurityAuthProviderConfig{
+public class JDBCConnectAuthProviderConfig extends BaseSecurityNamedServiceConfig
+        implements SecurityAuthProviderConfig {
 
     private static final long serialVersionUID = 1L;
 
@@ -47,14 +47,13 @@ public class JDBCConnectAuthProviderConfig extends BaseSecurityNamedServiceConfi
 
     /**
      * Sets the JDBC driver class name.
-     * 
      */
     public void setDriverClassName(String driverClassName) {
         this.driverClassName = driverClassName;
     }
 
     /**
-     * The JDBC url with which to obtain a database connection with.  
+     * The JDBC url with which to obtain a database connection with.
      * <p>
      * Used only if {@link #isJndi()} is false.
      * </p>

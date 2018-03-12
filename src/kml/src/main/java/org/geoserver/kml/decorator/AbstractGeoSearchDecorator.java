@@ -22,7 +22,7 @@ import org.opengis.feature.type.Name;
 
 /**
  * Base class for GeoSearch placemark decorators
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public abstract class AbstractGeoSearchDecorator implements KmlDecorator {

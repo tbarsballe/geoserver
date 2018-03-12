@@ -76,7 +76,7 @@ public class TopologyBuilder implements VectorTileBuilder {
 
     @Override
     public void addFeature(String layerName, String featureId, String geometryName,
-            Geometry geometry, Map<String, Object> properties) {
+                           Geometry geometry, Map<String, Object> properties) {
         TopoGeom topoObj;
         try {
             topoObj = createObject(featureId, geometry, properties);

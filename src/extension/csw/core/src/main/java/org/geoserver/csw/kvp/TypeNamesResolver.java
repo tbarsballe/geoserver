@@ -17,28 +17,26 @@ import org.xml.sax.helpers.NamespaceSupport;
 /**
  * Helper class putting together type names as strings and namespaces to build a list of
  * {@link QName} objects
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 class TypeNamesResolver {
-    
+
     QNameResolver resolver = new QNameResolver();
 
     /**
      * Parses the type names into a list of {@link QName}
-     * 
-     * @param qualifiedString a comma separated value of qualified names
-     *        prefix:name,prefix:name,...
-     * 
-     * @param namespaces Binds prefixes with namespace URIs
      *
+     * @param qualifiedString a comma separated value of qualified names
+     *                        prefix:name,prefix:name,...
+     * @param namespaces      Binds prefixes with namespace URIs
      */
     public List<QName> parseQNames(String qualifiedString, NamespaceSupport namespaces) {
         // simplify the algorithm below so that it does not have to care for NPE
-        if(namespaces == null) {
+        if (namespaces == null) {
             namespaces = new NamespaceSupport();
         }
-        
+
         String[] typeNames = qualifiedString.split("\\s*,\\s*");
         List<QName> result = new ArrayList<QName>();
         for (String tn : typeNames) {
@@ -49,14 +47,14 @@ class TypeNamesResolver {
                         + "declared in the NAMESPACE parameter",
                         ServiceException.INVALID_PARAMETER_VALUE, "typename");
             }
-            
+
             result.add(qname);
-            
-            
+
+
         }
 
         return result;
     }
 
-    
+
 }

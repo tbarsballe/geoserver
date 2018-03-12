@@ -28,11 +28,11 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import com.vividsolutions.jts.geom.Envelope;
 
 public class CropCoverageTest extends WPSTestSupport {
-    
+
     @Override
     protected void onSetUp(SystemTestData testData) throws Exception {
         super.onSetUp(testData);
-        
+
         addWcs11Coverages(testData);
     }
 
@@ -71,12 +71,12 @@ public class CropCoverageTest extends WPSTestSupport {
 
         MockHttpServletResponse response = postAsServletResponse(root(), xml);
         InputStream is = getBinaryInputStream(response);
-        
+
         ArcGridFormat format = new ArcGridFormat();
         GridCoverage2D gc = format.getReader(is).read(null);
 
         assertTrue(new Envelope(-145.4, 145.6, -41.8, -42.1).contains(new ReferencedEnvelope(gc.getEnvelope())));
-        
+
         double[] valueInside = (double[]) gc.evaluate(new DirectPosition2D(145.55, -42));
         assertEquals(615.0, valueInside[0]);
         double[] valueOutside = (double[]) gc.evaluate(new DirectPosition2D(145.57, -41.9));
@@ -85,7 +85,7 @@ public class CropCoverageTest extends WPSTestSupport {
 
         gc.dispose(true);
     }
-    
+
     @Test
     public void invalidCoverage() throws Exception {
         // See GEOS-6921
@@ -122,10 +122,10 @@ public class CropCoverageTest extends WPSTestSupport {
 
         MockHttpServletResponse response = postAsServletResponse(root(), xml);
         InputStream is = getBinaryInputStream(response);
-        
+
         Document dom = dom(is);
         Element status = (Element) dom.getDocumentElement().getElementsByTagName("wps:Status").item(0);
         Node child = status.getChildNodes().item(0);
-        assertEquals("wps:ProcessFailed", child.getNodeName() );
+        assertEquals("wps:ProcessFailed", child.getNodeName());
     }
 }

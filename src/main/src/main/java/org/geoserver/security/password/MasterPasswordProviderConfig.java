@@ -9,17 +9,16 @@ import org.geoserver.security.config.BaseSecurityNamedServiceConfig;
 
 /**
  * Base class for configuration for {@link MasterPasswordProvider} implementations.
- * 
- * @author Justin Deoliveira, OpenGeo
  *
+ * @author Justin Deoliveira, OpenGeo
  */
 public class MasterPasswordProviderConfig extends BaseSecurityNamedServiceConfig {
 
     boolean readOnly;
-    
+
     public MasterPasswordProviderConfig() {
     }
-    
+
     public MasterPasswordProviderConfig(MasterPasswordProviderConfig other) {
         super(other);
         this.readOnly = other.isReadOnly();

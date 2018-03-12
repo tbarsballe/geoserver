@@ -60,7 +60,7 @@ public class NotifierInitializer implements GeoServerInitializer {
             tl.setMessageMultiplexer(mm);
         }
 
-        (new Thread(mm,THREAD_NAME)).start();
+        (new Thread(mm, THREAD_NAME)).start();
     }
 
     private NotificationConfiguration getConfiguration(XStream xs) {

@@ -10,7 +10,7 @@ import java.util.Set;
 
 /**
  * H2 Dialect.
- * 
+ *
  * @author Timothy De Bock
  */
 public class H2DialectImpl extends DefaultDialectImpl {

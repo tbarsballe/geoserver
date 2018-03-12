@@ -12,6 +12,7 @@ import net.opengis.wfs.TransactionType;
 /**
  * A transaction plugin is able to listen to a transaction evolution, perform
  * checks and throw exceptions, alter transaction requests, as well as
+ *
  * @deprecated Use {@link TransactionCallback instead}
  */
 @Deprecated
@@ -20,7 +21,7 @@ public interface TransactionPlugin extends TransactionListener {
      * Check/alter the transaction request elements
      */
     TransactionType beforeTransaction(TransactionType request)
-        throws WFSException;
+            throws WFSException;
 
     /**
      * Say the last word before we actually commit the transaction
@@ -29,16 +30,12 @@ public interface TransactionPlugin extends TransactionListener {
 
     /**
      * Notification the transaction ended
-     * 
-     * @param request
-     *            the originating transaction request
-     * @param result
-     *            {@code null} if {@code committed == false}, the transaction result object to be
-     *            sent back to the client otherwise.
-     * 
-     * @param committed
-     *            true if the transaction was successful, false if the transaction was aborted for
-     *            any reason
+     *
+     * @param request   the originating transaction request
+     * @param result    {@code null} if {@code committed == false}, the transaction result object to be
+     *                  sent back to the client otherwise.
+     * @param committed true if the transaction was successful, false if the transaction was aborted for
+     *                  any reason
      */
     void afterTransaction(TransactionType request, TransactionResponseType result, boolean committed);
 

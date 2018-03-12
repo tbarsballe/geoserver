@@ -12,7 +12,7 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.geoserver.catalog.StyleType;
 
 /**
- * A loadable model for the registered style list that does sort the styles too 
+ * A loadable model for the registered style list that does sort the styles too
  */
 @SuppressWarnings("serial")
 public class StyleTypeModel extends LoadableDetachableModel<List<StyleType>> {

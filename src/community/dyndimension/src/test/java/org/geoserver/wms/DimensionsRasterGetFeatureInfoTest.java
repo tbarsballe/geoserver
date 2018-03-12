@@ -49,12 +49,11 @@ public class DimensionsRasterGetFeatureInfoTest extends WMSDynamicDimensionTestS
 
     /**
      * Ensures there is at most one feature at the specified location, and returns its feature id
-     * 
+     *
      * @param baseFeatureInfo The GetFeatureInfo request, minus x and y
      * @param x
      * @param y
-     * @param layerName TODO
-     *
+     * @param layerName       TODO
      */
     Double getValueAt(String baseFeatureInfo, int x, int y) throws Exception {
         MockHttpServletResponse response = getAsServletResponse(baseFeatureInfo

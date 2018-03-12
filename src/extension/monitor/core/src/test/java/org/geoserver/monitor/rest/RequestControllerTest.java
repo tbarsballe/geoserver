@@ -95,7 +95,7 @@ public class RequestControllerTest extends GeoServerSystemTestSupport {
         assertXpathEvaluatesTo("5", "/org.geoserver.monitor.RequestData/id", dom);
         assertXpathEvaluatesTo("RUNNING", "/org.geoserver.monitor.RequestData/status", dom);
     }
-    
+
     /**
      * This is undocumented/accidental behavior of 2.10.x (and previous) that actually got
      * used by other projects, adding it back preserving its original structure (pure XStream
@@ -143,104 +143,102 @@ public class RequestControllerTest extends GeoServerSystemTestSupport {
 
         assertFalse(it.hasNext());
     }
-    
+
     @Test
     public void testDelete() throws Exception {
         // delete all
         MockHttpServletResponse response = deleteAsServletResponse(RestBaseController.ROOT_PATH + "/monitor/requests");
         assertEquals(200, response.getStatus());
-        
+
         assertEquals(0, monitor.getDAO().getRequests().size());
     }
-    
+
     @Test
     public void testGetAllExcel() throws Exception {
         MockHttpServletResponse response = getAsServletResponse(
                 RestBaseController.ROOT_PATH + "/monitor/requests.xls?fields=id;path;startTime");
         assertEquals(200, response.getStatus());
-        
+
         HSSFWorkbook wb = new HSSFWorkbook(new ByteArrayInputStream(response.getContentAsByteArray()));
         HSSFSheet sheet = wb.getSheet("requests");
-        
+
         Iterator<Row> rows = sheet.iterator();
         Iterator<RequestData> it = monitor.getDAO().getRequests().iterator();
-        
+
         assertTrue(rows.hasNext());
         Row row = rows.next();
         assertEquals("id", row.getCell(0).getStringCellValue());
         assertEquals("path", row.getCell(1).getStringCellValue());
         assertEquals("startTime", row.getCell(2).getStringCellValue());
-       
-        while(rows.hasNext()) {
+
+        while (rows.hasNext()) {
             row = rows.next();
-            
+
             assertTrue(it.hasNext());
             RequestData data = it.next();
-            
+
             assertEquals((double) data.getId(), row.getCell(0).getNumericCellValue(), 0.1);
             assertEquals(data.getPath(), row.getCell(1).getStringCellValue());
             assertEquals(data.getStartTime(), row.getCell(2).getDateCellValue());
         }
-        
+
         assertFalse(it.hasNext());
     }
-    
+
     @Test
     public void testGetZIP() throws Exception {
-        
+
         // setup a single value in the DAO
-        Date startTime  = new Date();
+        Date startTime = new Date();
         Throwable throwable = new Throwable();
         RequestData data = new RequestData();
         data.setId(12345);
         data.setPath("/foo");
         data.setStartTime(startTime);
-        
+
         data.setBody("<foo></foo>".getBytes());
         data.setError(throwable);
-        
+
         monitor.getDAO().dispose();
         monitor.getDAO().add(data);
-        
+
         // running request
         MockHttpServletResponse response = getAsServletResponse(
                 RestBaseController.ROOT_PATH + "/monitor/requests/12345.zip?fields=id;path;startTime;Error;Body");
         assertEquals(200, response.getStatus());
-        
+
         ZipInputStream zin = new ZipInputStream(new ByteArrayInputStream(response.getContentAsByteArray()));
         ZipEntry entry = null;
-        
+
         boolean requests = false;
         boolean body = false;
         boolean error = false;
-        
-        while((entry = zin.getNextEntry()) != null) {
+
+        while ((entry = zin.getNextEntry()) != null) {
             if ("requests.csv".equals(entry.getName())) {
                 requests = true;
-                
+
                 String expected = "id,path,startTime\n12345,/foo," + DateUtil.serializeDateTime(startTime);
                 assertEquals(expected, readEntry(zin));
-            }
-            else if ("body.txt".equals(entry.getName())) {
+            } else if ("body.txt".equals(entry.getName())) {
                 body = true;
                 assertEquals("<foo></foo>", readEntry(zin));
-            }
-            else if ("error.txt".equals(entry.getName())) {
+            } else if ("error.txt".equals(entry.getName())) {
                 error = true;
                 ByteArrayOutputStream bout = new ByteArrayOutputStream();
                 PrintStream stream = new PrintStream(bout);
                 throwable.printStackTrace(stream);
                 stream.flush();
-                
+
                 assertEquals(new String(bout.toByteArray()).trim(), readEntry(zin));
             }
         }
-        
+
         assertTrue(requests);
         assertTrue(body);
         assertTrue(error);
     }
-    
+
     String readEntry(ZipInputStream zin) throws IOException {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         byte[] buf = new byte[1024];
@@ -248,69 +246,69 @@ public class RequestControllerTest extends GeoServerSystemTestSupport {
         while ((n = zin.read(buf)) != -1) {
             out.write(buf, 0, n);
         }
-        
+
         return new String(out.toByteArray()).trim();
     }
-    
+
     @Test
     public void testGetDateRange() throws Exception {
         // running request
         MockHttpServletResponse response = getAsServletResponse(
                 RestBaseController.ROOT_PATH + "/monitor/requests.csv?fields=id;path;startTime&from=2010-07-23T15:56:44&to=2010-07-23T16:16:44");
         assertEquals(200, response.getStatus());
-        
+
         assertCoveredInOrder(response, 6, 5, 4);
     }
-    
+
     @Test
     public void testGetDateRangeWithTimeZone() throws Exception {
         // running request
         MockHttpServletResponse response = getAsServletResponse(
                 RestBaseController.ROOT_PATH + "/monitor/requests.csv?fields=id;path;startTime&from=2010-07-23T15:56:44+0000&to=2010-07-23T16:16:44+0000");
         assertEquals(200, response.getStatus());
-        
+
         assertCoveredInOrder(response, 6, 5, 4);
     }
-    
+
     @Test
     public void testFilter() throws Exception {
         MockHttpServletResponse response = getAsServletResponse(
                 RestBaseController.ROOT_PATH + "/monitor/requests.csv?fields=id;path;startTime&filter=path:EQ:/seven");
         assertEquals(200, response.getStatus());
-        
+
         assertCoveredInOrder(response, 7);
     }
-    
+
     @Test
     public void testFilterIn() throws Exception {
         MockHttpServletResponse response = getAsServletResponse(
                 RestBaseController.ROOT_PATH + "/monitor/requests.csv?fields=id;path;startTime&filter=path:IN:/seven,/six,/five");
         assertEquals(200, response.getStatus());
-        
+
         assertCovered(response, 5, 6, 7);
     }
-    
+
     @Test
     public void testFilterStatus() throws Exception {
         MockHttpServletResponse response = getAsServletResponse(
                 RestBaseController.ROOT_PATH + "/monitor/requests.csv?fields=id;path;startTime&filter=status:EQ:WAITING");
         assertEquals(200, response.getStatus());
-        
+
         assertCovered(response, 2, 6);
     }
-    
+
     @Test
     public void testSorting() throws Exception {
         MockHttpServletResponse response = getAsServletResponse(
                 RestBaseController.ROOT_PATH + "/monitor/requests.csv?fields=id;path;startTime&order=path");
         assertEquals(200, response.getStatus());
         assertCoveredInOrder(response, 8, 5, 4, 9, 1, 7, 6, 10, 3, 2);
-        
+
         response = getAsServletResponse(
                 RestBaseController.ROOT_PATH + "/monitor/requests.csv?fields=id;path;startTime&order=path;ASC");
         assertEquals(200, response.getStatus());
         assertCoveredInOrder(response, 8, 5, 4, 9, 1, 7, 6, 10, 3, 2);
-        
+
         response = getAsServletResponse(
                 RestBaseController.ROOT_PATH + "/monitor/requests.csv?fields=id;path;startTime&order=path;DESC");
         assertEquals(200, response.getStatus());
@@ -333,7 +331,7 @@ public class RequestControllerTest extends GeoServerSystemTestSupport {
         assertEquals(200, response.getStatus());
         assertCovered(response, 1, 2, 5, 6, 9, 10);
     }
-    
+
     private void assertCoveredInOrder(MockHttpServletResponse response, int... expectedIds) throws IOException {
         BufferedReader in = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(response.getContentAsByteArray())));
         // skip the header line
@@ -349,7 +347,7 @@ public class RequestControllerTest extends GeoServerSystemTestSupport {
 
         assertFalse(it.hasNext());
     }
-    
+
     public static void assertCovered(MockHttpServletResponse response, int... expectedIds) throws IOException {
         BufferedReader in = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(response.getContentAsByteArray())));
         // skip the header line
@@ -360,7 +358,7 @@ public class RequestControllerTest extends GeoServerSystemTestSupport {
             String[] split = line.split("\\s*,\\s*");
             actualIds.add(Integer.parseInt(split[0]));
         }
-        
+
         assertEquals(expectedIds.length, actualIds.size());
         for (int i = 0; i < expectedIds.length; i++) {
             assertThat(actualIds, hasItem(expectedIds[i]));

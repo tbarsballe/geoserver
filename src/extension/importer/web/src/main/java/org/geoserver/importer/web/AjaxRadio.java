@@ -19,19 +19,19 @@ import org.apache.wicket.util.string.AppendingStringBuffer;
 public abstract class AjaxRadio<T> extends Radio<T> {
 
     private static final long serialVersionUID = 1L;
-    
+
     public abstract void onAjaxEvent(AjaxRequestTarget target);
-    
+
     public AjaxRadio(String id, IModel<T> model) {
         super(id, model);
         addAjaxBehavior();
         setOutputMarkupId(true);
     }
-    
+
     private void addAjaxBehavior() {
         add(new AjaxEventBehavior("click") {
             private static final long serialVersionUID = 1L;
-    
+
             protected void onEvent(final AjaxRequestTarget target) {
                 RadioGroup<T> radioGroup = getEnclosingRadioGroup();
                 radioGroup.processInput();
@@ -39,9 +39,9 @@ public abstract class AjaxRadio<T> extends Radio<T> {
             }
         });
     }
-    
+
     private RadioGroup<T> getEnclosingRadioGroup() {
-    
+
         RadioGroup<T> group = (RadioGroup<T>) findParent(RadioGroup.class);
         if (group == null) {
             throw new WicketRuntimeException(

@@ -256,7 +256,7 @@ public class DownloadMapProcess implements GeoServerProcess, ApplicationContextA
         progressListener.started();
         int i = 0;
         for (Layer layer : layers) {
-            LOGGER.log(Level.FINE, "Rendering layer %s",  layer);
+            LOGGER.log(Level.FINE, "Rendering layer %s", layer);
             RenderedImage image;
             if (layer.getCapabilities() == null) {
                 RenderedImageMap map = renderInternalLayer(layer, template);
@@ -273,7 +273,7 @@ public class DownloadMapProcess implements GeoServerProcess, ApplicationContextA
 
             // past the first layer switch transparency on to allow overlaying
             template.put("transparent", "true");
-            
+
             // track progress and bail out if necessary
             progressListener.progress(95f * (++i) / layers.length);
         }
@@ -299,14 +299,15 @@ public class DownloadMapProcess implements GeoServerProcess, ApplicationContextA
                 content.dispose();
             }
         }
-        
+
         progressListener.progress(100);
-        
+
         return result;
     }
 
     /**
      * Retrieves the image from the remote web map server
+     *
      * @param layer
      * @param template
      * @param bbox
@@ -327,7 +328,7 @@ public class DownloadMapProcess implements GeoServerProcess, ApplicationContextA
         getMap.setProperty("layers", layer.getName());
         getMap.setFormat(requestFormat);
         getMap.setVersion(server.getCapabilities().getVersion());
-        
+
         // check version, if we are using 1.3 we might need to flip the bbox, if version 1.1 and the
         // original bbox was flipped, we'll need to un-flip (what a mess...)
         Integer code = CRS.lookupEpsgCode(bbox.getCoordinateReferenceSystem(), false);
@@ -341,13 +342,13 @@ public class DownloadMapProcess implements GeoServerProcess, ApplicationContextA
         if (flipNeeded || unflipNeeded) {
             if (flipNeeded && axisOrder == CRS.AxisOrder.NORTH_EAST) {
                 getMap.setBBox(bbox.getMinY() + "," + bbox.getMinX() + "," + bbox.getMaxY() + "," + bbox.getMaxX());
-            } else if(unflipNeeded && axisOrder == CRS.AxisOrder.NORTH_EAST) {
+            } else if (unflipNeeded && axisOrder == CRS.AxisOrder.NORTH_EAST) {
                 getMap.setBBox(bbox.getMinX() + "," + bbox.getMinY() + "," + bbox.getMaxX() + "," + bbox.getMaxY());
             }
         }
 
         GetMapResponse response = server.issueRequest(getMap);
-        try(InputStream is = response.getInputStream()) {
+        try (InputStream is = response.getInputStream()) {
             BufferedImage image = ImageIO.read(new MemoryCacheImageInputStream(is));
             if (image == null) {
                 throw new IOException("GetMap failed: " + getMap.getFinalURL());
@@ -364,7 +365,7 @@ public class DownloadMapProcess implements GeoServerProcess, ApplicationContextA
             server = new WebMapServer(new URL(layer.getCapabilities()), client);
             cache.put(capabilitiesUrl, server);
         }
-        
+
         return server;
     }
 
@@ -373,7 +374,7 @@ public class DownloadMapProcess implements GeoServerProcess, ApplicationContextA
         List<String> formats = server.getCapabilities().getRequest().getGetMap().getFormats();
         String requestFormat = null;
         for (String format : formats) {
-            if (format.toLowerCase().contains("image/png")  || "png".equalsIgnoreCase(format)) {
+            if (format.toLowerCase().contains("image/png") || "png".equalsIgnoreCase(format)) {
                 requestFormat = format;
                 break;
             }
@@ -382,14 +383,14 @@ public class DownloadMapProcess implements GeoServerProcess, ApplicationContextA
         if (requestFormat == null) {
             for (String format : formats) {
                 String loFormat = format.toLowerCase();
-                if (loFormat.contains("jpeg")  || loFormat.contains("gif") || loFormat.contains("tif")) {
+                if (loFormat.contains("jpeg") || loFormat.contains("gif") || loFormat.contains("tif")) {
                     requestFormat = format;
                     break;
-                }    
+                }
             }
         }
 
-        if(requestFormat == null) {
+        if (requestFormat == null) {
             throw new WPSException("Could not find a suitable WMS cascading format among server supported formats: " + formats);
         }
         return requestFormat;
@@ -450,6 +451,7 @@ public class DownloadMapProcess implements GeoServerProcess, ApplicationContextA
 
     /**
      * Returns the current {@link Supplier<HTTPClient>} building http clients for remote WMS connection
+     *
      * @return
      */
     public Supplier<HTTPClient> getHttpClientSupplier() {
@@ -458,6 +460,7 @@ public class DownloadMapProcess implements GeoServerProcess, ApplicationContextA
 
     /**
      * Sets the {@link Supplier<HTTPClient>} used to build http clients for remote WMS connections
+     *
      * @param httpClientSupplier
      */
     public void setHttpClientSupplier(Supplier<HTTPClient> httpClientSupplier) {

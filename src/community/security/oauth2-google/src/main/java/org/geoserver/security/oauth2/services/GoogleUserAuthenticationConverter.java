@@ -12,7 +12,7 @@ import org.springframework.security.oauth2.provider.token.DefaultUserAuthenticat
 
 /**
  * User Authentication Converter for Google token details.
- * 
+ *
  * @author Alessio Fabiani, GeoSolutions S.A.S.
  */
 public class GoogleUserAuthenticationConverter extends DefaultUserAuthenticationConverter {
@@ -21,7 +21,7 @@ public class GoogleUserAuthenticationConverter extends DefaultUserAuthentication
 
     /**
      * Default Constructor.
-     * 
+     *
      * @param username_key
      */
     public GoogleUserAuthenticationConverter(String username_key) {

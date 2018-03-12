@@ -20,11 +20,11 @@ import com.vividsolutions.jts.geom.Envelope;
 
 /**
  * CloneLibraryTest purpose.
- * 
+ * <p>
  * <p>
  * Description of CloneLibraryTest ...
  * </p>
- * 
+ * <p>
  * <p></p>
  *
  * @author dzwiers, Refractions Research, Inc.

@@ -12,9 +12,8 @@ import org.w3c.dom.Document;
 
 /**
  * Test feature chaining where nested feature has no ID
- * 
+ *
  * @author Victor Tey, CSIRO Exploration and Mining
- * 
  */
 public class GUChainNoIDMFTest extends AbstractAppSchemaTestSupport {
 

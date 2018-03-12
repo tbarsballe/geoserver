@@ -4,7 +4,7 @@
  * application directory.
  */
 /**
- * 
+ *
  */
 package org.geoserver.web.data.store;
 
@@ -19,7 +19,7 @@ import org.xml.sax.EntityResolver;
 
 /**
  * A serializable view of a {@link Param}
- * 
+ *
  * @author Gabriel Roldan
  */
 public class ParamInfo implements Serializable {
@@ -31,7 +31,7 @@ public class ParamInfo implements Serializable {
     private final String title;
 
     private boolean password;
-    
+
     private boolean largeText;
 
     private String level;
@@ -39,14 +39,14 @@ public class ParamInfo implements Serializable {
     private Class<?> binding;
 
     private boolean required;
-    
+
     private boolean deprecated;
 
     private Serializable value;
-    
+
     private List<Serializable> options;
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings({"unchecked", "rawtypes"})
     public ParamInfo(Param param) {
         this.name = param.key;
         this.deprecated = param.isDeprecated();
@@ -84,11 +84,11 @@ public class ParamInfo implements Serializable {
             }
         }
     }
-    
-    public List<Serializable> getOptions(){
+
+    public List<Serializable> getOptions() {
         return options;
     }
-    
+
     public Serializable getValue() {
         return value;
     }
@@ -124,11 +124,11 @@ public class ParamInfo implements Serializable {
     public boolean isRequired() {
         return required;
     }
-    
+
     public boolean isDeprecated() {
         return deprecated;
     }
-    
+
     public void setDeprecated(boolean deprecated) {
         this.deprecated = deprecated;
     }

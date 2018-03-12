@@ -65,9 +65,8 @@ import com.hazelcast.query.TruePredicate;
 
 /**
  * Converts a OGC Filter to the Hazelcast Criteria API (a {@link Predicate}).
- * 
+ *
  * @author Andrea Aime - GeoSolutions
- * 
  */
 public class FilterToCriteria implements FilterVisitor {
 

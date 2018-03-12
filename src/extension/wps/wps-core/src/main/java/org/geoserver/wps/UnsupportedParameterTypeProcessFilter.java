@@ -25,16 +25,15 @@ import org.springframework.context.ApplicationContextAware;
 /**
  * A process filter that removes from the supported processes the ones that have inputs of outputs
  * we cannot deal with using the available {@link ProcessParameterIO} objects
- * 
- * @author Andrea Aime - GeoSolutions
  *
+ * @author Andrea Aime - GeoSolutions
  */
 public class UnsupportedParameterTypeProcessFilter extends ProcessSelector implements ApplicationContextAware {
-    
+
     static final Logger LOGGER = Logging.getLogger(UnsupportedParameterTypeProcessFilter.class);
-    
+
     private Set<Name> processBlacklist = new HashSet<Name>();
-    
+
     @Override
     protected boolean allowProcess(Name processName) {
         return !processBlacklist.contains(processName);
@@ -43,7 +42,7 @@ public class UnsupportedParameterTypeProcessFilter extends ProcessSelector imple
     @Override
     public void setApplicationContext(ApplicationContext context) throws BeansException {
         processBlacklist.clear();
-        
+
         for (ProcessFactory pf : Processors.getProcessFactories()) {
             int count = 0;
             for (Name name : pf.getNames()) {

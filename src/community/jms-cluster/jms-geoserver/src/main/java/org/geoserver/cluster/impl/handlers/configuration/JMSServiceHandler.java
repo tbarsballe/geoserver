@@ -18,10 +18,8 @@ import org.geoserver.config.ServiceInfo;
 import com.thoughtworks.xstream.XStream;
 
 /**
- * 
- * @see {@link JMSServiceHandlerSPI}
  * @author Carlo Cancellieri - carlo.cancellieri@geo-solutions.it
- * 
+ * @see {@link JMSServiceHandlerSPI}
  */
 public class JMSServiceHandler extends JMSConfigurationHandler<JMSServiceModifyEvent> {
     private final GeoServer geoServer;
@@ -84,16 +82,16 @@ public class JMSServiceHandler extends JMSConfigurationHandler<JMSServiceModifyE
 
     /**
      * Starting from an incoming de-serialized ServiceInfo modify event, search for it (by name) into local geoserver and update changed members.
-     * 
+     *
      * @param geoServer local GeoServer instance
-     * @param ev the incoming event
+     * @param ev        the incoming event
      * @return the localized and updated ServiceInfo to save
      * @throws IllegalAccessException
      * @throws InvocationTargetException
      * @throws NoSuchMethodException
      */
     private static ServiceInfo localizeService(final GeoServer geoServer,
-            final JMSServiceModifyEvent ev) throws IllegalAccessException,
+                                               final JMSServiceModifyEvent ev) throws IllegalAccessException,
             InvocationTargetException, NoSuchMethodException {
         if (geoServer == null || ev == null)
             throw new IllegalArgumentException("wrong passed arguments are null");
@@ -110,13 +108,12 @@ public class JMSServiceHandler extends JMSConfigurationHandler<JMSServiceModifyE
 
     /**
      * get local object searching by name if name is changed (remotely), search is performed using the old one
-     * 
+     *
      * @param geoServer
      * @param ev
-     *
      */
     public static ServiceInfo getLocalService(final GeoServer geoServer,
-            final JMSServiceModifyEvent ev) {
+                                              final JMSServiceModifyEvent ev) {
 
         final ServiceInfo service = ev.getSource();
         if (service == null) {

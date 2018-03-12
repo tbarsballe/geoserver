@@ -16,7 +16,6 @@ import org.picocontainer.MutablePicoContainer;
  * Parser configuration for ows schema.
  *
  * @author Justin Deoliveira, The Open Planning Project
- *
  */
 public class OWSConfiguration extends Configuration {
     /**
@@ -29,59 +28,59 @@ public class OWSConfiguration extends Configuration {
     }
 
     protected void registerBindings(MutablePicoContainer container) {
-      //Types
+        //Types
         container.registerComponentImplementation(OWS.ACCEPTFORMATSTYPE,
-            AcceptFormatsTypeBinding.class);
+                AcceptFormatsTypeBinding.class);
         container.registerComponentImplementation(OWS.ACCEPTVERSIONSTYPE,
-            AcceptVersionsTypeBinding.class);
+                AcceptVersionsTypeBinding.class);
         container.registerComponentImplementation(OWS.ADDRESSTYPE, AddressTypeBinding.class);
         container.registerComponentImplementation(OWS.BOUNDINGBOXTYPE, BoundingBoxTypeBinding.class);
         container.registerComponentImplementation(OWS.CAPABILITIESBASETYPE,
-            CapabilitiesBaseTypeBinding.class);
+                CapabilitiesBaseTypeBinding.class);
         container.registerComponentImplementation(OWS.CODETYPE, CodeTypeBinding.class);
         container.registerComponentImplementation(OWS.CONTACTTYPE, ContactTypeBinding.class);
         container.registerComponentImplementation(OWS.DESCRIPTIONTYPE, DescriptionTypeBinding.class);
         container.registerComponentImplementation(OWS.DOMAINTYPE, DomainTypeBinding.class);
         container.registerComponentImplementation(OWS.EXCEPTIONTYPE, ExceptionTypeBinding.class);
         container.registerComponentImplementation(OWS.GETCAPABILITIESTYPE,
-            GetCapabilitiesTypeBinding.class);
+                GetCapabilitiesTypeBinding.class);
         container.registerComponentImplementation(OWS.IDENTIFICATIONTYPE,
-            IdentificationTypeBinding.class);
+                IdentificationTypeBinding.class);
         container.registerComponentImplementation(OWS.KEYWORDSTYPE, KeywordsTypeBinding.class);
         container.registerComponentImplementation(OWS.METADATATYPE, MetadataTypeBinding.class);
         //container.registerComponentImplementation(OWS.MIMETYPE,MimeTypeBinding.class);
         container.registerComponentImplementation(OWS.ONLINERESOURCETYPE,
-            OnlineResourceTypeBinding.class);
+                OnlineResourceTypeBinding.class);
         container.registerComponentImplementation(OWS.POSITIONTYPE, PositionTypeBinding.class);
         container.registerComponentImplementation(OWS.POSITIONTYPE2D, PositionType2DBinding.class);
         container.registerComponentImplementation(OWS.REQUESTMETHODTYPE,
-            RequestMethodTypeBinding.class);
+                RequestMethodTypeBinding.class);
         container.registerComponentImplementation(OWS.RESPONSIBLEPARTYSUBSETTYPE,
-            ResponsiblePartySubsetTypeBinding.class);
+                ResponsiblePartySubsetTypeBinding.class);
         container.registerComponentImplementation(OWS.RESPONSIBLEPARTYTYPE,
-            ResponsiblePartyTypeBinding.class);
+                ResponsiblePartyTypeBinding.class);
         container.registerComponentImplementation(OWS.SECTIONSTYPE, SectionsTypeBinding.class);
         //container.registerComponentImplementation(OWS.SERVICETYPE,ServiceTypeBinding.class);
         container.registerComponentImplementation(OWS.TELEPHONETYPE, TelephoneTypeBinding.class);
         //container.registerComponentImplementation(OWS.UPDATESEQUENCETYPE,UpdateSequenceTypeBinding.class);
         //container.registerComponentImplementation(OWS.VERSIONTYPE,VersionTypeBinding.class);
         container.registerComponentImplementation(OWS.WGS84BOUNDINGBOXTYPE,
-            WGS84BoundingBoxTypeBinding.class);
+                WGS84BoundingBoxTypeBinding.class);
 
         //elements
         container.registerComponentImplementation(OWS.EXCEPTIONREPORT, ExceptionReportBinding.class);
     }
-    
-   
+
+
     /**
-    * Configures the ows context.
-    * <p>
-    * The following factories are registered:
-    * <ul>
-    * <li>{@link Ows10Factory}
-    * </ul>
-    * </p>
-    */
+     * Configures the ows context.
+     * <p>
+     * The following factories are registered:
+     * <ul>
+     * <li>{@link Ows10Factory}
+     * </ul>
+     * </p>
+     */
     protected void configureContext(MutablePicoContainer container) {
         super.configureContext(container);
 

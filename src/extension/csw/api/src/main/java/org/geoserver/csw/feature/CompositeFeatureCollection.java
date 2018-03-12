@@ -39,7 +39,7 @@ public class CompositeFeatureCollection extends AbstractFeatureCollection<Featur
         for (FeatureCollection<FeatureType, Feature> fc : filtered) {
             filtered.add(fc.subCollection(filter));
         }
-        
+
         return new CompositeFeatureCollection(filtered);
     }
 
@@ -57,15 +57,15 @@ public class CompositeFeatureCollection extends AbstractFeatureCollection<Featur
     @Override
     protected Iterator<Feature> openIterator() {
         return new CompositeIterator(collections);
-        
+
     }
 
     @Override
     protected void closeIterator(Iterator<Feature> close) {
-        if(close instanceof CompositeIterator) {
+        if (close instanceof CompositeIterator) {
             ((CompositeIterator) close).close();
         }
     }
-    
+
 
 }

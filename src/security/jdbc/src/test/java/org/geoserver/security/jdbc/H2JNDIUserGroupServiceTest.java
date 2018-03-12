@@ -23,8 +23,7 @@ public class H2JNDIUserGroupServiceTest extends JDBCUserGroupServiceTest {
     }
 
 
-    
-    public GeoServerUserGroupService createUserGroupService(String serviceName) throws Exception {        
+    public GeoServerUserGroupService createUserGroupService(String serviceName) throws Exception {
         return JDBCTestSupport.createH2UserGroupServiceFromJNDI(getFixtureId(), getSecurityManager());
     }
 

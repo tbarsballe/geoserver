@@ -65,7 +65,7 @@ public abstract class AbstractStylePage extends GeoServerSecuredPage {
     protected AjaxTabbedPanel<ITab> tabbedPanel;
 
     protected CodeMirrorEditor editor;
-    
+
     protected ModalWindow popup;
 
     protected CompoundPropertyModel<StyleInfo> styleModel;
@@ -81,10 +81,11 @@ public abstract class AbstractStylePage extends GeoServerSecuredPage {
         initPreviewLayer(style);
         initUI(style);
     }
+
     protected void initPreviewLayer(StyleInfo style) {
         Catalog catalog = getCatalog();
         List<LayerInfo> layers;
-        
+
         //Try getting the first layer associated with this style
         if (style != null) {
             layers = catalog.getLayers(style);
@@ -93,7 +94,7 @@ public abstract class AbstractStylePage extends GeoServerSecuredPage {
                 return;
             }
         }
-        
+
         //Try getting the first layer in the default store in the default workspace
         WorkspaceInfo defaultWs = catalog.getDefaultWorkspace();
         if (defaultWs != null) {
@@ -109,18 +110,18 @@ public abstract class AbstractStylePage extends GeoServerSecuredPage {
                 }
             }
         }
-        
+
         //Try getting the first layer returned by the catalog
         layers = catalog.getLayers();
         if (layers.size() > 0) {
             layerModel = new Model<LayerInfo>(layers.get(0));
             return;
         }
-        
+
         //If none of these succeeded, return an empty model
         layerModel = new Model<LayerInfo>(new LayerInfoImpl());
     }
-    
+
     protected void initUI(StyleInfo style) {
         /* init model */
         if (style == null) {
@@ -150,7 +151,7 @@ public abstract class AbstractStylePage extends GeoServerSecuredPage {
         styleForm.add(popup);
         /* init tabs */
         List<ITab> tabs = new ArrayList<ITab>();
-        
+
         //Well known tabs
         PanelCachingTab dataTab = new PanelCachingTab(new AbstractTab(new Model<String>("Data")) {
 
@@ -158,15 +159,17 @@ public abstract class AbstractStylePage extends GeoServerSecuredPage {
                 return new StyleAdminPanel(id, AbstractStylePage.this);
             }
         });
-        
+
         PanelCachingTab publishingTab = new PanelCachingTab(new AbstractTab(new Model<String>("Publishing")) {
             private static final long serialVersionUID = 4184410057835108176L;
 
             public Panel getPanel(String id) {
                 return new LayerAssociationPanel(id, AbstractStylePage.this);
-            };
+            }
+
+            ;
         });
-        
+
         PanelCachingTab previewTab = new PanelCachingTab(new AbstractTab(new Model<String>("Layer Preview")) {
 
             public Panel getPanel(String id) {
@@ -183,7 +186,9 @@ public abstract class AbstractStylePage extends GeoServerSecuredPage {
                 } catch (IOException e) {
                     throw new WicketRuntimeException(e);
                 }
-            };
+            }
+
+            ;
         });
         //If style is null, this is a new style.
         //If so, we want to disable certain tabs
@@ -196,7 +201,7 @@ public abstract class AbstractStylePage extends GeoServerSecuredPage {
 
         //Dynamic tabs
         List<StyleEditTabPanelInfo> tabPanels = getGeoServerApplication().getBeansOfType(StyleEditTabPanelInfo.class);
-        
+
         // sort the tabs based on order
         Collections.sort(tabPanels, new Comparator<StyleEditTabPanelInfo>() {
             public int compare(StyleEditTabPanelInfo o1, StyleEditTabPanelInfo o2) {
@@ -216,11 +221,12 @@ public abstract class AbstractStylePage extends GeoServerSecuredPage {
                 } else {
                     titleModel = new Model<String>(tabPanelInfo.getComponentClass().getSimpleName());
                 }
-                
+
                 final Class<StyleEditTabPanel> panelClass = tabPanelInfo.getComponentClass();
-                
+
                 tabs.add(new AbstractTab(titleModel) {
                     private static final long serialVersionUID = -6637277497986497791L;
+
                     @Override
                     public Panel getPanel(String panelId) {
                         StyleEditTabPanel tabPanel;
@@ -235,12 +241,12 @@ public abstract class AbstractStylePage extends GeoServerSecuredPage {
                 });
             }
         }
-        
+
         tabbedPanel = new AjaxTabbedPanel<ITab>("context", tabs) {
-            protected String getTabContainerCssClass()
-            {
+            protected String getTabContainerCssClass() {
                 return "tab-row tab-row-compact";
             }
+
             @Override
             protected WebMarkupContainer newLink(String linkId, final int index) {
                 /*
@@ -248,7 +254,7 @@ public abstract class AbstractStylePage extends GeoServerSecuredPage {
                  * setDefaultFormProcessing(false) is used so that we do not do a full submit 
                  * (with validation + saving to the catalog)
                  */
-                AjaxSubmitLink link =  new AjaxSubmitLink(linkId) {
+                AjaxSubmitLink link = new AjaxSubmitLink(linkId) {
                     private static final long serialVersionUID = 1L;
 
                     @Override
@@ -280,7 +286,7 @@ public abstract class AbstractStylePage extends GeoServerSecuredPage {
                 return link;
             }
         };
-        
+
         styleForm.add(tabbedPanel);
         
         /* init editor */
@@ -291,7 +297,7 @@ public abstract class AbstractStylePage extends GeoServerSecuredPage {
         editor.setOutputMarkupId(true);
         editor.setRequired(true);
         styleForm.add(editor);
-        
+
         add(validateLink());
         add(new AjaxSubmitLink("apply", styleForm) {
             @Override
@@ -344,6 +350,7 @@ public abstract class AbstractStylePage extends GeoServerSecuredPage {
                     doReturn(StylePage.class);
                 }
             }
+
             @Override
             protected void onError(AjaxRequestTarget target, Form<?> form) {
                 addFeedbackPanels(target);
@@ -356,9 +363,9 @@ public abstract class AbstractStylePage extends GeoServerSecuredPage {
             }
         };
         add(cancelLink);
-        
+
     }
-    
+
     StyleHandler styleHandler() {
         String format = styleModel.getObject().getFormat();
         return Styles.handler(format);
@@ -366,22 +373,22 @@ public abstract class AbstractStylePage extends GeoServerSecuredPage {
 
     Component validateLink() {
         return new GeoServerAjaxFormLink("validate", styleForm) {
-            
+
             @Override
             protected void onClick(AjaxRequestTarget target, Form<?> form) {
                 editor.processInput();
 
                 List<Exception> errors = validateSLD();
 
-                if ( errors.isEmpty() ) {
-                    form.info( "No validation errors.");
+                if (errors.isEmpty()) {
+                    form.info("No validation errors.");
                 } else {
-                    for( Exception e : errors ) {
-                        form.error( sldErrorWithLineNo(e) );
+                    for (Exception e : errors) {
+                        form.error(sldErrorWithLineNo(e));
                     }
                 }
             }
-            
+
             @Override
             protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
                 super.updateAjaxAttributes(attributes);
@@ -396,13 +403,13 @@ public abstract class AbstractStylePage extends GeoServerSecuredPage {
             return "line " + se.getLineNumber() + ": " + e.getLocalizedMessage();
         }
         String message = e.getLocalizedMessage();
-        if(message != null) {
+        if (message != null) {
             return message;
         } else {
             return new ParamResourceModel("genericError", this).getString();
         }
     }
-    
+
     List<Exception> validateSLD() {
         try {
             final String style = editor.getInput();
@@ -415,8 +422,8 @@ public abstract class AbstractStylePage extends GeoServerSecuredPage {
                 validationErrors.addAll(SLDNamedLayerValidator.validate(getCatalog(), sld));
             }
             return validationErrors;
-        } catch( Exception e ) {
-            return Arrays.asList( e );
+        } catch (Exception e) {
+            return Arrays.asList(e);
         }
     }
 
@@ -424,19 +431,18 @@ public abstract class AbstractStylePage extends GeoServerSecuredPage {
         ResourcePool pool = getCatalog().getResourcePool();
         return pool.readStyle(style);
     }
-    
+
     public void setRawStyle(Reader in) throws IOException {
         BufferedReader bin = null;
-        if ( in instanceof BufferedReader ) {
+        if (in instanceof BufferedReader) {
             bin = (BufferedReader) in;
+        } else {
+            bin = new BufferedReader(in);
         }
-        else {
-            bin = new BufferedReader( in );
-        }
-        
+
         StringBuilder builder = new StringBuilder();
         String line = null;
-        while ((line = bin.readLine()) != null ) {
+        while ((line = bin.readLine()) != null) {
             builder.append(line).append("\n");
         }
 
@@ -448,9 +454,9 @@ public abstract class AbstractStylePage extends GeoServerSecuredPage {
     /**
      * Check for an original CSS version of the style created by the old CSS extension (pre-pluggable styles). If a CSS style is found, recover it if
      * the derived SLD has not subsequently been manually edited.
-     * 
+     * <p>
      * The recovery is accomplished by updating the catalog to point to the original CSS file, and changing the style's format to "css".
-     * 
+     *
      * @param si The {@link StyleInfo} for which to check for and potentially recover a CSS version.
      */
     protected void recoverCssStyle(StyleInfo si) {
@@ -514,42 +520,48 @@ public abstract class AbstractStylePage extends GeoServerSecuredPage {
      * Subclasses must implement to define the submit behavior
      */
     protected abstract void onStyleFormSubmit();
-    
+
     protected ModalWindow getPopup() {
         return popup;
     }
+
     protected IModel<LayerInfo> getLayerModel() {
         return layerModel;
     }
+
     protected CompoundPropertyModel<StyleInfo> getStyleModel() {
         return styleModel;
     }
+
     public LayerInfo getLayerInfo() {
         return layerModel.getObject();
     }
-    
+
     public StyleInfo getStyleInfo() {
         return styleModel.getObject();
     }
-    
+
     @Override
     protected ComponentAuthorizer getPageAuthorizer() {
         return ComponentAuthorizer.WORKSPACE_ADMIN;
     }
+
     //Make sure child tabs can see this
     @Override
     protected boolean isAuthenticatedAsAdmin() {
         return super.isAuthenticatedAsAdmin();
     }
+
     @Override
     protected Catalog getCatalog() {
         return super.getCatalog();
     }
+
     @Override
     protected GeoServer getGeoServer() {
         return super.getGeoServer();
     }
-    
+
     @Override
     protected GeoServerApplication getGeoServerApplication() {
         return super.getGeoServerApplication();

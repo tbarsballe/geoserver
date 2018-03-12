@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 import javax.xml.namespace.QName;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.SystemUtils;
@@ -68,25 +69,26 @@ import org.geotools.util.logging.Logging;
 /**
  * Test setup uses for GeoServer system tests.
  * <p>
- * This is the default test setup used by {@link GeoServerSystemTestSupport}. During setup this 
- * class creates a full GeoServer data directory configuration on disk. 
+ * This is the default test setup used by {@link GeoServerSystemTestSupport}. During setup this
+ * class creates a full GeoServer data directory configuration on disk.
  * </p>
  * <p>
  * Customizing the setup can be done in two ways. Customizations that occur pre system startup and
- * those that happen after. Methods that may be called pre system start with the prefix "setUp". 
- * Methods that may be called after system startup are prefixed with "add".  
+ * those that happen after. Methods that may be called pre system start with the prefix "setUp".
+ * Methods that may be called after system startup are prefixed with "add".
  * </p>
  *
  * @author Justin Deoliveira, OpenGeo
- *
  */
 public class SystemTestData extends CiteTestData {
-    
-    /** Multiband tiff */
+
+    /**
+     * Multiband tiff
+     */
     public static final QName MULTIBAND = new QName(WCS_URI, "multiband", WCS_PREFIX);
-    
+
     static final Logger LOGGER = Logging.getLogger(SystemTestData.class);
-    
+
     static final Boolean WINDOWS_LENIENCY = Boolean.valueOf(System.getProperty("windows.leniency", "true"));
 
     /**
@@ -94,36 +96,40 @@ public class SystemTestData extends CiteTestData {
      */
     public static class LayerProperty<T> {
 
-        T get(Map<LayerProperty,Object> map, T def) {
+        T get(Map<LayerProperty, Object> map, T def) {
             return map != null && map.containsKey(this) ? (T) map.get(this) : def;
         }
 
-        public static LayerProperty<String> NAME = new LayerProperty<String>(); 
+        public static LayerProperty<String> NAME = new LayerProperty<String>();
         public static LayerProperty<ProjectionPolicy> PROJECTION_POLICY = new LayerProperty<ProjectionPolicy>();
         public static LayerProperty<String> STYLE = new LayerProperty<String>();
         public static LayerProperty<ReferencedEnvelope> ENVELOPE = new LayerProperty<ReferencedEnvelope>();
         public static LayerProperty<ReferencedEnvelope> LATLON_ENVELOPE = new LayerProperty<ReferencedEnvelope>();
         public static LayerProperty<Integer> SRS = new LayerProperty<Integer>();
     }
-    
+
     /**
      * Keys for overriding default layer properties
      */
     public static class StyleProperty<T> {
 
-        T get(Map<StyleProperty,Object> map, T def) {
+        T get(Map<StyleProperty, Object> map, T def) {
             return map != null && map.containsKey(this) ? (T) map.get(this) : def;
         }
 
-        public static StyleProperty<String> FORMAT = new StyleProperty<String>(); 
+        public static StyleProperty<String> FORMAT = new StyleProperty<String>();
         public static StyleProperty<Version> FORMAT_VERSION = new StyleProperty<Version>();
         public static StyleProperty<LegendInfo> LEGEND_INFO = new StyleProperty<LegendInfo>();
     }
 
-    /** data directory root */
+    /**
+     * data directory root
+     */
     protected File data;
 
-    /** internal catalog, used for setup before the real catalog available */
+    /**
+     * internal catalog, used for setup before the real catalog available
+     */
     Catalog catalog;
 
     public SystemTestData() throws IOException {
@@ -159,14 +165,14 @@ public class SystemTestData extends CiteTestData {
     }
 
     /**
-     * Sets up the default set of raster layers. 
+     * Sets up the default set of raster layers.
      * <p>
      * Layer names included in this set include:
      * <ul>
-     *  <li>{@link CiteTestData#TASMANIA_BM}
-     *  <li>{@link CiteTestData#TASMANIA_DEM}
-     *  <li>{@link CiteTestData#ROTATED_CAD}
-     *  <li>{@link CiteTestData#WORLD}
+     * <li>{@link CiteTestData#TASMANIA_BM}
+     * <li>{@link CiteTestData#TASMANIA_DEM}
+     * <li>{@link CiteTestData#ROTATED_CAD}
+     * <li>{@link CiteTestData#WORLD}
      * </ul>
      * </p>
      */
@@ -176,7 +182,7 @@ public class SystemTestData extends CiteTestData {
         addDefaultRasterLayer(TASMANIA_BM, catalog);
         addDefaultRasterLayer(ROTATED_CAD, catalog);
         addDefaultRasterLayer(WORLD, catalog);
-        addDefaultRasterLayer(MULTIBAND,catalog);
+        addDefaultRasterLayer(MULTIBAND, catalog);
     }
 
     public void setUpWcs10RasterLayers() throws IOException {
@@ -196,12 +202,11 @@ public class SystemTestData extends CiteTestData {
     /**
      * Adds a vector layer to the setup with no custom properties.
      * <p>
-     * This method should be called during the pre system setup phase, for example from 
-     * {@link GeoServerSystemTestSupport#setUpTestData(SystemTestData)}.  
+     * This method should be called during the pre system setup phase, for example from
+     * {@link GeoServerSystemTestSupport#setUpTestData(SystemTestData)}.
      * </p>
      *
      * @see {@link #addVectorLayer(QName, Catalog)}
-     *  
      */
     public void setUpVectorLayer(QName layerName) throws IOException {
         addVectorLayer(layerName, catalog);
@@ -210,55 +215,51 @@ public class SystemTestData extends CiteTestData {
     /**
      * Adds a vector layer to the setup.
      * <p>
-     * This method should be called during the pre system setup phase, for example from 
-     * {@link GeoServerSystemTestSupport#setUpTestData(SystemTestData)}.  
+     * This method should be called during the pre system setup phase, for example from
+     * {@link GeoServerSystemTestSupport#setUpTestData(SystemTestData)}.
      * </p>
      *
      * @see {@link #addVectorLayer(QName, Map, Catalog)}
-     *  
      */
-    public void setUpVectorLayer(QName qName, Map<LayerProperty,Object> props) throws IOException {
+    public void setUpVectorLayer(QName qName, Map<LayerProperty, Object> props) throws IOException {
         addVectorLayer(qName, props, catalog);
     }
 
     /**
      * Adds a vector layer to the setup.
      * <p>
-     * This method should be called during the pre system setup phase, for example from 
-     * {@link GeoServerSystemTestSupport#setUpTestData(SystemTestData)}.  
+     * This method should be called during the pre system setup phase, for example from
+     * {@link GeoServerSystemTestSupport#setUpTestData(SystemTestData)}.
      * </p>
      *
      * @see {@link #addVectorLayer(QName, Map, Class, Catalog)}
-     *  
      */
-    public void setUpVectorLayer(QName qName, Map<LayerProperty,Object> props, Class scope) throws IOException {
+    public void setUpVectorLayer(QName qName, Map<LayerProperty, Object> props, Class scope) throws IOException {
         addVectorLayer(qName, props, scope, catalog);
     }
 
     /**
      * Adds a vector layer to the setup.
      * <p>
-     * This method should be called during the pre system setup phase, for example from 
-     * {@link GeoServerSystemTestSupport#setUpTestData(SystemTestData)}.  
+     * This method should be called during the pre system setup phase, for example from
+     * {@link GeoServerSystemTestSupport#setUpTestData(SystemTestData)}.
      * </p>
      *
      * @see {@link #addVectorLayer(QName, Map, String, Class, Catalog)}
-     *  
      */
-    public void setUpVectorLayer(QName qName, Map<LayerProperty,Object> props, String filename, 
-        Class scope) throws IOException {
+    public void setUpVectorLayer(QName qName, Map<LayerProperty, Object> props, String filename,
+                                 Class scope) throws IOException {
         addVectorLayer(qName, props, filename, scope, catalog);
     }
 
     /**
      * Adds a raster layer to the setup with no custom properties.
      * <p>
-     * This method should be called during the pre system setup phase, for example from 
-     * {@link GeoServerSystemTestSupport#setUpTestData(SystemTestData)}.  
+     * This method should be called during the pre system setup phase, for example from
+     * {@link GeoServerSystemTestSupport#setUpTestData(SystemTestData)}.
      * </p>
      *
      * @see {@link #addRasterLayer(QName, String, String, Catalog)}
-     *  
      */
     public void setUpRasterLayer(QName qName, String filename, String extension) throws IOException {
         addRasterLayer(qName, filename, extension, catalog);
@@ -267,28 +268,28 @@ public class SystemTestData extends CiteTestData {
     /**
      * Adds a raster layer to the setup.
      * <p>
-     * This method should be called during the pre system setup phase, for example from 
-     * {@link GeoServerSystemTestSupport#setUpTestData(SystemTestData)}.  
+     * This method should be called during the pre system setup phase, for example from
+     * {@link GeoServerSystemTestSupport#setUpTestData(SystemTestData)}.
      * </p>
      *
      * @see {@link #addRasterLayer(QName, String, String, Map, Catalog)}
      */
-    public void setUpRasterLayer(QName qName, String filename, String extension, 
-        Map<LayerProperty,Object> props) throws IOException {
+    public void setUpRasterLayer(QName qName, String filename, String extension,
+                                 Map<LayerProperty, Object> props) throws IOException {
         addRasterLayer(qName, filename, extension, props, catalog);
     }
 
     /**
      * Adds a raster layer to the setup.
      * <p>
-     * This method should be called during the pre system setup phase, for example from 
-     * {@link GeoServerSystemTestSupport#setUpTestData(SystemTestData)}.  
+     * This method should be called during the pre system setup phase, for example from
+     * {@link GeoServerSystemTestSupport#setUpTestData(SystemTestData)}.
      * </p>
      *
      * @see {@link #addRasterLayer(QName, String, String, Map, Class, Catalog)}
      */
-    public void setUpRasterLayer(QName qName, String filename, String extension, 
-        Map<LayerProperty,Object> props, Class scope) throws IOException {
+    public void setUpRasterLayer(QName qName, String filename, String extension,
+                                 Map<LayerProperty, Object> props, Class scope) throws IOException {
         addRasterLayer(qName, filename, extension, props, scope, catalog);
     }
 
@@ -297,9 +298,9 @@ public class SystemTestData extends CiteTestData {
         IOUtils.decompress(SystemTestData.class.getResourceAsStream("security.zip"), secDir);
         String javaVendor = System.getProperty("java.vendor");
         if (javaVendor.contains("IBM")) {
-            IOUtils.copy(new File(secDir,"geoserver.jceks.ibm"), new File(secDir,"geoserver.jceks"));
+            IOUtils.copy(new File(secDir, "geoserver.jceks.ibm"), new File(secDir, "geoserver.jceks"));
         } else {
-            IOUtils.copy(new File(secDir,"geoserver.jceks.default"), new File(secDir,"geoserver.jceks"));
+            IOUtils.copy(new File(secDir, "geoserver.jceks.default"), new File(secDir, "geoserver.jceks"));
         }
     }
 
@@ -307,9 +308,9 @@ public class SystemTestData extends CiteTestData {
         CatalogImpl catalog = new CatalogImpl();
         catalog.setExtendedValidation(false);
         catalog.setResourceLoader(new GeoServerResourceLoader(data));
-        
-        catalog.addListener(new GeoServerPersister(catalog.getResourceLoader(), 
-            createXStreamPersister()));
+
+        catalog.addListener(new GeoServerPersister(catalog.getResourceLoader(),
+                createXStreamPersister()));
 
         //workspaces
         addWorkspace(DEFAULT_PREFIX, DEFAULT_URI, catalog);
@@ -327,8 +328,8 @@ public class SystemTestData extends CiteTestData {
 
     protected void createConfig() {
         GeoServerImpl geoServer = new GeoServerImpl();
-        geoServer.addListener(new GeoServerPersister(new GeoServerResourceLoader(data), 
-            createXStreamPersister()));
+        geoServer.addListener(new GeoServerPersister(new GeoServerResourceLoader(data),
+                createXStreamPersister()));
 
         GeoServerInfo global = geoServer.getFactory().createGlobal();
         geoServer.setGlobal(global);
@@ -348,7 +349,7 @@ public class SystemTestData extends CiteTestData {
      * Adds a workspace to the test setup.
      *
      * @param name The name of the workspace.
-     * @param uri The namespace uri associated with the workspace.
+     * @param uri  The namespace uri associated with the workspace.
      */
     public void addWorkspace(String name, String uri, Catalog catalog) {
         addWorkspace(name, uri, false, catalog);
@@ -358,10 +359,10 @@ public class SystemTestData extends CiteTestData {
      * Adds a workspace to the test setup. If the workspace and namespace already exists
      * they will be updated, otherwise they will be created.
      *
-     * @param name name of the workspace
-     * @param uri the namespace URI associated with the workspace
+     * @param name     name of the workspace
+     * @param uri      the namespace URI associated with the workspace
      * @param isolated TRUE if the workspace and associated namespace are isolated
-     * @param catalog the catalog were to store \ update the workspace and associated namespace
+     * @param catalog  the catalog were to store \ update the workspace and associated namespace
      */
     public void addWorkspace(String name, String uri, boolean isolated, Catalog catalog) {
 
@@ -380,7 +381,7 @@ public class SystemTestData extends CiteTestData {
         }
 
         // let's see if the namespace associated with the workspace already exists
-        NamespaceInfo ns =  catalog.getNamespaceByPrefix(name);
+        NamespaceInfo ns = catalog.getNamespaceByPrefix(name);
         if (ns == null) {
             // new namespace, we need to create a new one
             ns = catalog.getFactory().createNamespace();
@@ -388,8 +389,7 @@ public class SystemTestData extends CiteTestData {
             ns.setURI(uri);
             ns.setIsolated(isolated);
             catalog.add(ns);
-        }
-        else {
+        } else {
             // existing namespace, let's update the URI and isolation state
             ns.setURI(uri);
             ns.setIsolated(isolated);
@@ -403,6 +403,7 @@ public class SystemTestData extends CiteTestData {
      * To set up the style a file named <tt>name</tt>.sld is copied from the classpath relative
      * to this class.
      * </p>
+     *
      * @param name The name of the style.
      */
     public void addStyle(String name, Catalog catalog) throws IOException {
@@ -415,7 +416,8 @@ public class SystemTestData extends CiteTestData {
      * To set up the style a file named <tt>name</tt>.sld is copied from the classpath relative
      * to the <tt>scope</tt> parameter.
      * </p>
-     * @param name The name of the style.
+     *
+     * @param name  The name of the style.
      * @param scope Class from which to load sld resource from.
      */
     public void addStyle(String name, Class scope, Catalog catalog) throws IOException {
@@ -428,12 +430,13 @@ public class SystemTestData extends CiteTestData {
      * To set up the style a file named <tt>filename</tt> is copied from the classpath relative
      * to the <tt>scope</tt> parameter.
      * </p>
-     * @param name The name of the style.
+     *
+     * @param name     The name of the style.
      * @param filename The filename to copy from classpath.
-     * @param scope Class from which to load sld resource from.
+     * @param scope    Class from which to load sld resource from.
      */
     public void addStyle(String name, String filename, Class scope, Catalog catalog) throws IOException {
-        addStyle((WorkspaceInfo)null, name, filename, scope, catalog);
+        addStyle((WorkspaceInfo) null, name, filename, scope, catalog);
     }
 
     /**
@@ -443,76 +446,77 @@ public class SystemTestData extends CiteTestData {
      * to the <tt>scope</tt> parameter.
      * </p>
      * Example: "../temperature.sld" is copied to "styles/temperature.sld".
-     * 
-     * @param ws The workspace to include the style in
-     * @param name The name of the style.
+     *
+     * @param ws       The workspace to include the style in
+     * @param name     The name of the style.
      * @param filename The filename to copy from classpath.
-     * @param scope Class from which to load sld resource from.
+     * @param scope    Class from which to load sld resource from.
      */
     public void addStyle(WorkspaceInfo ws, String name, String filename, Class scope, Catalog catalog) throws IOException {
         addStyle(ws, name, filename, scope, catalog, (Map) null);
     }
-    
+
     /**
      * Adds a style to the test setup.
      * <p>
      * To set up the style a file named <tt>filename</tt> is copied from the classpath relative
      * to the <tt>scope</tt> parameter.
      * </p>
-     * @param ws The workspace to include the style in.
-     * @param name The name of the style.
+     *
+     * @param ws       The workspace to include the style in.
+     * @param name     The name of the style.
      * @param filename The filename to copy from classpath.
-     * @param scope Class from which to load sld resource.
-     * @param legend The legend for the style.
+     * @param scope    Class from which to load sld resource.
+     * @param legend   The legend for the style.
      */
     public void addStyle(WorkspaceInfo ws, String name, String filename, Class scope, Catalog catalog,
-            LegendInfo legend) throws IOException {
-        
+                         LegendInfo legend) throws IOException {
+
         addStyle(ws, name, filename, scope, catalog, Collections.singletonMap(StyleProperty.LEGEND_INFO, legend));
     }
-    
+
     /**
      * Adds a style to the test setup.
      * <p>
      * To set up the style a file named <tt>filename</tt> is copied from the classpath relative
      * to the <tt>scope</tt> parameter.
      * </p>
-     * @param ws The workspace to include the style in.
-     * @param name The name of the style.
-     * @param filename The filename to copy from classpath.
-     * @param scope Class from which to load sld resource.
+     *
+     * @param ws         The workspace to include the style in.
+     * @param name       The name of the style.
+     * @param filename   The filename to copy from classpath.
+     * @param scope      Class from which to load sld resource.
      * @param properties One of the well known style properties
      */
     public void addStyle(WorkspaceInfo ws, String name, String filename, Class scope, Catalog catalog,
-            Map<StyleProperty, Object> properties) throws IOException {
-        
+                         Map<StyleProperty, Object> properties) throws IOException {
+
         StyleInfo style = catalog.getStyleByName(ws, name);
         if (style == null) {
             style = catalog.getFactory().createStyle();
             style.setName(name);
             style.setWorkspace(ws);
         }
-        
+
         GeoServerDataDirectory data = new GeoServerDataDirectory(this.data);
         File styles = data.get(style, "").dir();
-        String target = new File( filename ).getName();
-        catalog.getResourceLoader().copyFromClassPath(filename, new File(styles, target ), scope);
+        String target = new File(filename).getName();
+        catalog.getResourceLoader().copyFromClassPath(filename, new File(styles, target), scope);
         style.setFilename(target);
         style.setFormat(StyleProperty.FORMAT.get(properties, SLDHandler.FORMAT));
         style.setFormatVersion(StyleProperty.FORMAT_VERSION.get(properties, SLDHandler.VERSION_10));
         style.setLegend(StyleProperty.LEGEND_INFO.get(properties, null));
         if (style.getId() == null) {
             catalog.add(style);
-        }
-        else {
+        } else {
             catalog.save(style);
         }
     }
-    
+
     /**
      * Adds a vector layer to the catalog setup.
      * <p>
-     * This method calls through to {@link #addVectorLayer(QName, Map, Catalog)} with no custom 
+     * This method calls through to {@link #addVectorLayer(QName, Map, Catalog)} with no custom
      * properties.
      * </p>
      */
@@ -525,58 +529,58 @@ public class SystemTestData extends CiteTestData {
      * <p>
      * This method calls through to {@link #addVectorLayer(QName, Map, Class, Catalog)} passing in
      * this class as the scope.
-     * </p> 
+     * </p>
      */
-    public void addVectorLayer(QName qName, Map<LayerProperty,Object> props, Catalog catalog) 
-        throws IOException {
+    public void addVectorLayer(QName qName, Map<LayerProperty, Object> props, Catalog catalog)
+            throws IOException {
         addVectorLayer(qName, props, getClass(), catalog);
     }
 
     /**
      * Adds a vector layer to the catalog setup.
      * <p>
-     * The layer is created within a store named <code>qName.getPrefix()</code>, creating it 
-     * if it does not exist. The resulting store is a {@link PropertyDataStore} that points at the 
+     * The layer is created within a store named <code>qName.getPrefix()</code>, creating it
+     * if it does not exist. The resulting store is a {@link PropertyDataStore} that points at the
      * directory <code>getDataDirectoryRoot()/qName.getPrefix()</code>. Similarily the layer and
      * store are created within a workspace named <code>qName.getPrefix()</code>, which is created
      * if it does not already exist.
      * </p>
      * <p>
-     * The properties data for the layer is copied from the classpath, with a file name of 
-     * "<code>qName.getLocalPart()</code>.properties". The <tt>scope</tt> parameter is used as the 
-     * class from which to load the properties file relative to. 
+     * The properties data for the layer is copied from the classpath, with a file name of
+     * "<code>qName.getLocalPart()</code>.properties". The <tt>scope</tt> parameter is used as the
+     * class from which to load the properties file relative to.
      * </p>
      * <p>
-     * The <tt>props</tt> parameter is used to define custom properties for the layer. See the 
-     * {@link LayerProperty} class for supported properties. 
+     * The <tt>props</tt> parameter is used to define custom properties for the layer. See the
+     * {@link LayerProperty} class for supported properties.
      * </p>
      */
-    public void addVectorLayer(QName qName, Map<LayerProperty,Object> props, Class scope, 
-        Catalog catalog) throws IOException {
-        addVectorLayer(qName, props, qName.getLocalPart()+".properties", scope, catalog);
+    public void addVectorLayer(QName qName, Map<LayerProperty, Object> props, Class scope,
+                               Catalog catalog) throws IOException {
+        addVectorLayer(qName, props, qName.getLocalPart() + ".properties", scope, catalog);
     }
 
     /**
      * Adds a vector layer to the catalog setup.
      * <p>
-     * The layer is created within a store named <code>qName.getPrefix()</code>, creating it 
-     * if it does not exist. The resulting store is a {@link PropertyDataStore} that points at the 
+     * The layer is created within a store named <code>qName.getPrefix()</code>, creating it
+     * if it does not exist. The resulting store is a {@link PropertyDataStore} that points at the
      * directory <code>getDataDirectoryRoot()/qName.getPrefix()</code>. Similarily the layer and
      * store are created within a workspace named <code>qName.getPrefix()</code>, which is created
      * if it does not already exist.
      * </p>
      * <p>
-     * The properties data for the layer is copied from the classpath, with a file name of 
-     * "<code>filename</code>.properties". The <tt>scope</tt> parameter is used as the 
-     * class from which to load the properties file relative to. 
+     * The properties data for the layer is copied from the classpath, with a file name of
+     * "<code>filename</code>.properties". The <tt>scope</tt> parameter is used as the
+     * class from which to load the properties file relative to.
      * </p>
      * <p>
-     * The <tt>props</tt> parameter is used to define custom properties for the layer. See the 
-     * {@link LayerProperty} class for supported properties. 
+     * The <tt>props</tt> parameter is used to define custom properties for the layer. See the
+     * {@link LayerProperty} class for supported properties.
      * </p>
      */
-    public void addVectorLayer(QName qName, Map<LayerProperty,Object> props, String filename, 
-        Class scope, Catalog catalog) throws IOException {
+    public void addVectorLayer(QName qName, Map<LayerProperty, Object> props, String filename,
+                               Class scope, Catalog catalog) throws IOException {
         String prefix = qName.getPrefix();
         String name = qName.getLocalPart();
         String uri = qName.getNamespaceURI();
@@ -585,7 +589,7 @@ public class SystemTestData extends CiteTestData {
         if (catalog.getWorkspaceByName(prefix) == null) {
             addWorkspace(prefix, uri, catalog);
         }
-        
+
         //configure store if it doesn't already exist
 
         File storeDir = catalog.getResourceLoader().findOrCreateDirectory(prefix);
@@ -603,7 +607,7 @@ public class SystemTestData extends CiteTestData {
         }
 
         //copy the properties file over
-        
+
         catalog.getResourceLoader().copyFromClassPath(filename, new File(storeDir, filename), scope);
 
         //configure feature type
@@ -616,7 +620,7 @@ public class SystemTestData extends CiteTestData {
         featureType.setAbstract("abstract about " + name);
 
         Integer srs = LayerProperty.SRS.get(props, SRS.get(qName));
-        if ( srs == null ) {
+        if (srs == null) {
             srs = 4326;
         }
         featureType.setSRS("EPSG:" + srs);
@@ -638,7 +642,7 @@ public class SystemTestData extends CiteTestData {
             ft = featureType;
             catalog.add(featureType);
         } else {
-            if(layer == null) {
+            if (layer == null) {
                 // handles the case of layer removed, but feature type not
                 catalog.remove(ft);
                 ft = featureType;
@@ -650,7 +654,7 @@ public class SystemTestData extends CiteTestData {
         }
 
         if (layer == null || !layer.getResource().getNamespace().equals(catalog.getNamespaceByPrefix(prefix))) {
-            layer = catalog.getFactory().createLayer();    
+            layer = catalog.getFactory().createLayer();
         }
 
         layer.setResource(ft);
@@ -658,8 +662,7 @@ public class SystemTestData extends CiteTestData {
         StyleInfo defaultStyle = null;
         if (LayerProperty.STYLE.get(props, null) != null) {
             defaultStyle = catalog.getStyleByName(LayerProperty.STYLE.get(props, null));
-        }
-        else {
+        } else {
             //look for a style matching the layer name
             defaultStyle = catalog.getStyleByName(name);
             if (defaultStyle == null) {
@@ -682,8 +685,7 @@ public class SystemTestData extends CiteTestData {
 
         if (layer.getId() == null) {
             catalog.add(layer);
-        }
-        else {
+        } else {
             catalog.save(layer);
         }
     }
@@ -691,32 +693,27 @@ public class SystemTestData extends CiteTestData {
     /**
      * Adds one of the default raster layers.
      * <p>
-     *  The <tt>name</tt> parameter must be one of:
-     *  <ul>
-     *  <li>{@link CiteTestData#TASMANIA_BM}
-     *  <li>{@link CiteTestData#TASMANIA_DEM}
-     *  <li>{@link CiteTestData#ROTATED_CAD}
-     *  <li>{@link CiteTestData#WORLD}
+     * The <tt>name</tt> parameter must be one of:
+     * <ul>
+     * <li>{@link CiteTestData#TASMANIA_BM}
+     * <li>{@link CiteTestData#TASMANIA_DEM}
+     * <li>{@link CiteTestData#ROTATED_CAD}
+     * <li>{@link CiteTestData#WORLD}
      * </ul>
      * </p>
      */
     public void addDefaultRasterLayer(QName name, Catalog catalog) throws IOException {
         if (name.equals(TASMANIA_DEM)) {
-            addRasterLayer(name,  "tazdem.tiff", null, catalog);
-        }
-        else if (name.equals(TASMANIA_BM)) {
+            addRasterLayer(name, "tazdem.tiff", null, catalog);
+        } else if (name.equals(TASMANIA_BM)) {
             addRasterLayer(name, "tazbm.tiff", null, catalog);
-        }
-        else if (name.equals(ROTATED_CAD)) {
+        } else if (name.equals(ROTATED_CAD)) {
             addRasterLayer(name, "rotated.tiff", null, catalog);
-        }
-        else if (name.equals(WORLD)) {
+        } else if (name.equals(WORLD)) {
             addRasterLayer(name, "world.tiff", null, catalog);
-        }
-        else if (name.equals(MULTIBAND)) {
+        } else if (name.equals(MULTIBAND)) {
             addRasterLayer(name, "multiband.tiff", null, catalog);
-        }
-        else {
+        } else {
             throw new IllegalArgumentException("Unknown default raster layer: " + name);
         }
     }
@@ -725,10 +722,10 @@ public class SystemTestData extends CiteTestData {
      * Adds a raster layer to the setup with no custom properties.
      * <p>
      * This method calls through to {@link #addRasterLayer(QName, String, String, Map, Catalog)}
-     * </p> 
+     * </p>
      */
-    public void addRasterLayer(QName qName, String filename, String extension, Catalog catalog) 
-        throws IOException {
+    public void addRasterLayer(QName qName, String filename, String extension, Catalog catalog)
+            throws IOException {
         addRasterLayer(qName, filename, extension, new HashMap(), catalog);
     }
 
@@ -736,47 +733,47 @@ public class SystemTestData extends CiteTestData {
      * Adds a raster layer to the setup.
      * <p>
      * The <tt>filename</tt> parameter defines the raster file to be loaded from the classpath.
-     * This method assumes the scope of this class and calls through to 
+     * This method assumes the scope of this class and calls through to
      * {@link #addRasterLayer(QName, String, String, Map, Class, Catalog)}
      * </p>
      */
-    public void addRasterLayer(QName qName, String filename, String extension, 
-        Map<LayerProperty,Object> props, Catalog catalog) throws IOException {
+    public void addRasterLayer(QName qName, String filename, String extension,
+                               Map<LayerProperty, Object> props, Catalog catalog) throws IOException {
         addRasterLayer(qName, filename, extension, props, getClass(), catalog);
     }
 
     /**
      * Adds a raster layer to the setup.
      * <p>
-     * This method configures a raster layer with the name <code>qName.getLocalPart()</code>. A 
+     * This method configures a raster layer with the name <code>qName.getLocalPart()</code>. A
      * coverage store is created (if it doesn't already exist) with the same name. The workspace
      * of the resulting store and layer is determined by <code>qName.getPrefix()</code>.
      * </p>
      * <p>
-     * The <tt>filename</tt> parameter defines the raster file to be loaded from the classpath 
-     * and copied into the data directory. The <tt>scope</tt> is used as the class from which to 
+     * The <tt>filename</tt> parameter defines the raster file to be loaded from the classpath
+     * and copied into the data directory. The <tt>scope</tt> is used as the class from which to
      * load the file from.
      * </p>
      * <p>
-     * In the case of adding a zipped archive that contains multiple file the <tt>filename</tt> 
-     * paramter should have a ".zip" extension and the <tt>extension</tt> parameter must define the 
-     * extension of the main raster file. The parameter is not necessary and may be null if the 
+     * In the case of adding a zipped archive that contains multiple file the <tt>filename</tt>
+     * paramter should have a ".zip" extension and the <tt>extension</tt> parameter must define the
+     * extension of the main raster file. The parameter is not necessary and may be null if the
      * <tt>filename</tt> does not refer to a zip file.
      * </p>
      * <p>
-     * The <tt>props</tt> parameter is used to define custom properties for the layer. See the 
-     * {@link LayerProperty} class for supported properties. 
+     * The <tt>props</tt> parameter is used to define custom properties for the layer. See the
+     * {@link LayerProperty} class for supported properties.
      * </p>
-     * @param qName The name of the raster layer.
-     * @param filename The name of the file containing the raster, to be loaded from the classpath.
-     * @param extension The file extension (without a ".") of the main raster file. This parameter
-     *   my be <code>null</code> only if <tt>filename</tt> does not refer to a zip file.
-     * @param props Custom properties to assign to the created raster layer.
-     * @param scope The class from which to load the <tt>filename</tt> resource from. 
      *
+     * @param qName     The name of the raster layer.
+     * @param filename  The name of the file containing the raster, to be loaded from the classpath.
+     * @param extension The file extension (without a ".") of the main raster file. This parameter
+     *                  my be <code>null</code> only if <tt>filename</tt> does not refer to a zip file.
+     * @param props     Custom properties to assign to the created raster layer.
+     * @param scope     The class from which to load the <tt>filename</tt> resource from.
      */
-    public void addRasterLayer(QName qName, String filename, String extension, 
-        Map<LayerProperty,Object> props, Class scope, Catalog catalog) throws IOException {
+    public void addRasterLayer(QName qName, String filename, String extension,
+                               Map<LayerProperty, Object> props, Class scope, Catalog catalog) throws IOException {
 
         String prefix = qName.getPrefix();
         String name = qName.getLocalPart();
@@ -794,7 +791,7 @@ public class SystemTestData extends CiteTestData {
 
         String ext = FilenameUtils.getExtension(filename);
         if ("zip".equalsIgnoreCase(ext)) {
-            
+
             //unpack the archive
             IOUtils.decompress(file, dir);
 
@@ -804,13 +801,12 @@ public class SystemTestData extends CiteTestData {
             if (extension == null) {
                 //zip with no extension, we just the directory as the file
                 file = dir;
-            }
-            else {
+            } else {
                 //files may have been top level, or one directory level deep
                 file = new File(dir, FilenameUtils.getBaseName(filename) + "." + extension);
                 if (!file.exists()) {
                     File file2 = new File(new File(dir, dir.getName()), file.getName());
-                    if (file2.exists()){
+                    if (file2.exists()) {
                         file = file2;
                     }
                 }
@@ -832,7 +828,7 @@ public class SystemTestData extends CiteTestData {
             if (reader == null) {
                 throw new RuntimeException("No reader for " + file.getCanonicalPath() + " with format " + format.getName());
             }
-    
+
             //configure workspace if it doesn;t already exist
             if (catalog.getWorkspaceByName(prefix) == null) {
                 addWorkspace(prefix, qName.getNamespaceURI(), catalog);
@@ -851,72 +847,69 @@ public class SystemTestData extends CiteTestData {
 
             if (store.getId() == null) {
                 catalog.add(store);
-            }
-            else {
+            } else {
                 catalog.save(store);
             }
-    
+
             //create the coverage
             CatalogBuilder builder = new CatalogBuilder(catalog);
             builder.setStore(store);
-    
+
             final String coverageNames[] = reader.getGridCoverageNames();
             if (reader instanceof StructuredGridCoverage2DReader && coverageNames != null && coverageNames.length > 1) {
-                for (String coverageName: coverageNames) {
+                for (String coverageName : coverageNames) {
                     addCoverage(store, builder, reader, catalog, format, coverageName, qName, props, coverageName);
                 }
             } else {
                 addCoverage(store, builder, reader, catalog, format, name, qName, props, null);
             }
         } finally {
-            if(reader != null) {
+            if (reader != null) {
                 reader.dispose();
             }
         }
     }
 
     private void addCoverage(CoverageStoreInfo store, CatalogBuilder builder, GridCoverage2DReader reader, Catalog catalog,
-            AbstractGridFormat format, String name, QName qName, Map<LayerProperty, Object> props, String coverageName) throws IOException{
+                             AbstractGridFormat format, String name, QName qName, Map<LayerProperty, Object> props, String coverageName) throws IOException {
         CoverageInfo coverage = null;
-        try { 
+        try {
             coverage = builder.buildCoverage(reader, coverageName, null);
             // coverage read params
             if (format instanceof ImageMosaicFormat) {
                 //  make sure we work in immediate mode
                 coverage.getParameters().put(AbstractGridFormat.USE_JAI_IMAGEREAD.getName().getCode(), Boolean.FALSE);
-            } 
-            
+            }
+
             coverage.setName(name);
             coverage.setTitle(name);
             coverage.setDescription(name);
             coverage.setEnabled(true);
-    
+
             CoverageInfo cov = catalog.getCoverageByCoverageStore(store, name);
             if (cov == null) {
                 catalog.add(coverage);
-            }
-            else {
+            } else {
                 builder.updateCoverage(cov, coverage);
                 catalog.save(cov);
                 coverage = cov;
             }
-    
+
             LayerInfo layer = catalog.getLayerByName(new NameImpl(qName));
             if (layer == null) {
                 layer = catalog.getFactory().createLayer();
             }
             layer.setResource(coverage);
-    
-            
+
+
             layer.setDefaultStyle(
-                catalog.getStyleByName(LayerProperty.STYLE.get(props, DEFAULT_RASTER_STYLE)));
+                    catalog.getStyleByName(LayerProperty.STYLE.get(props, DEFAULT_RASTER_STYLE)));
             layer.setType(PublishedType.RASTER);
             layer.setEnabled(true);
-    
+
             if (layer.getId() == null) {
                 catalog.add(layer);
-            }
-            else {
+            } else {
                 catalog.save(layer);
             }
         } catch (Exception e) {
@@ -929,17 +922,18 @@ public class SystemTestData extends CiteTestData {
      * </p>
      * If the service object already exists it is simply reverted to its original state.
      * </p>
+     *
      * @param serviceClass The class of the service
-     * @param workspace The optional workspace for the service, may be <code>null</code>
-     * @param geoServer The GeoServer configuration object.
+     * @param workspace    The optional workspace for the service, may be <code>null</code>
+     * @param geoServer    The GeoServer configuration object.
      */
-    public <T extends ServiceInfo> void addService(Class<T> serviceClass, String workspace, 
-        GeoServer geoServer) {
-        
+    public <T extends ServiceInfo> void addService(Class<T> serviceClass, String workspace,
+                                                   GeoServer geoServer) {
+
         Catalog catalog = geoServer.getCatalog();
 
-        List<XStreamServiceLoader> loaders = 
-            GeoServerExtensions.extensions(XStreamServiceLoader.class);
+        List<XStreamServiceLoader> loaders =
+                GeoServerExtensions.extensions(XStreamServiceLoader.class);
         for (XStreamServiceLoader loader : loaders) {
             if (serviceClass.equals(loader.getServiceClass())) {
                 //create a new one
@@ -959,8 +953,7 @@ public class SystemTestData extends CiteTestData {
                     //update the old copy
                     OwsUtils.copy(created, old, serviceClass);
                     geoServer.save(old);
-                }
-                else {
+                } else {
                     //add the new one
                     created.setWorkspace(ws);
                     geoServer.add(created);
@@ -976,12 +969,13 @@ public class SystemTestData extends CiteTestData {
      * </p>
      * If the settings object already exists it is simply reverted to its original state.
      * </p>
+     *
      * @param workspace The optional workspace for the settings, may be <code>null</code>
      * @param geoServer The GeoServer configuration object.
      */
     public void addSettings(String workspace, GeoServer geoServer) {
-        WorkspaceInfo ws = workspace != null ? 
-            geoServer.getCatalog().getWorkspaceByName(workspace) : null;
+        WorkspaceInfo ws = workspace != null ?
+                geoServer.getCatalog().getWorkspaceByName(workspace) : null;
 
         GeoServerInfo global = geoServer.getGlobal();
         SettingsInfo settings = ws != null ? geoServer.getSettings(ws) : global.getSettings();
@@ -1001,16 +995,15 @@ public class SystemTestData extends CiteTestData {
         if (ws != null) {
             if (settings.getId() != null) {
                 geoServer.save(settings);
-            }
-            else {
+            } else {
                 geoServer.add(settings);
             }
-        }
-        else {
+        } else {
             //global
             geoServer.save(global);
         }
     }
+
     /**
      * Copies some content to a file under the base of the data directory.
      * <p>
@@ -1021,43 +1014,44 @@ public class SystemTestData extends CiteTestData {
      * Note that the resulting file will be deleted when {@link #tearDown()}
      * is called.
      * </p>
-     * @param input The content to copy.
+     *
+     * @param input    The content to copy.
      * @param location A relative path
      */
     public void copyTo(InputStream input, String location)
-        throws IOException {
+            throws IOException {
         IOUtils.copy(input, new File(getDataDirectoryRoot(), location));
     }
-    
+
     @Override
     public void tearDown() throws Exception {
-        if((SystemUtils.IS_OS_WINDOWS && WINDOWS_LENIENCY) || Boolean.getBoolean("testdata.force.delete")) {
+        if ((SystemUtils.IS_OS_WINDOWS && WINDOWS_LENIENCY) || Boolean.getBoolean("testdata.force.delete")) {
             int MAX_ATTEMPTS = 100;
             for (int i = 0; i < MAX_ATTEMPTS; i++) {
                 try {
                     FileUtils.deleteDirectory(data);
                     break;
-                } catch(IOException e) {
-                    if(i >= MAX_ATTEMPTS) {
-                        throw new IOException("Failed to clean up test data dir after " + MAX_ATTEMPTS  + " attempts", e);
+                } catch (IOException e) {
+                    if (i >= MAX_ATTEMPTS) {
+                        throw new IOException("Failed to clean up test data dir after " + MAX_ATTEMPTS + " attempts", e);
                     }
                     System.err.println("Error occurred while removing files, assuming "
-                                    + "it's a transient lock, sleeping 100ms and re-trying. Error message: "
-                                    + e.getMessage());
+                            + "it's a transient lock, sleeping 100ms and re-trying. Error message: "
+                            + e.getMessage());
                     System.gc();
                     Thread.sleep(100);
                 }
             }
         } else {
-            FileUtils.deleteDirectory(data);  
+            FileUtils.deleteDirectory(data);
         }
     }
-    
+
     @Override
     public File getDataDirectoryRoot() {
         return data;
     }
-    
+
     @Override
     public boolean isTestDataAvailable() {
         return true;

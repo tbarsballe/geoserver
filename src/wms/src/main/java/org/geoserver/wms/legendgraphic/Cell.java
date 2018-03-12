@@ -27,9 +27,8 @@ import com.vividsolutions.jts.awt.PointShapeFactory.Square;
 
 /**
  * This class mimics a simple cell for the final {@link ColorMap} legend reprensentation.
- * 
+ *
  * @author Simone Giannecchini, GeoSolutions SAS
- * 
  */
 @SuppressWarnings("deprecation")
 public abstract class Cell {
@@ -54,9 +53,9 @@ public abstract class Cell {
     protected final Color borderColor;
 
     protected Cell(final Color bkgColor, final double bkgOpacity, final String text,
-            final HAlign hAlign, final VAlign vAlign, final Dimension requestedDimension,
-            final Font labelFont, final Color labelFontColor, final boolean fontAntiAliasing,
-            final Color borderColor) {
+                   final HAlign hAlign, final VAlign vAlign, final Dimension requestedDimension,
+                   final Font labelFont, final Color labelFontColor, final boolean fontAntiAliasing,
+                   final Color borderColor) {
         this.bkgColor = bkgColor;
         this.bkgOpacity = bkgOpacity;
         this.text = text;
@@ -70,24 +69,22 @@ public abstract class Cell {
     }
 
     public abstract void draw(final Graphics2D graphics, final Rectangle2D clipBox,
-            final boolean completeBorder);
+                              final boolean completeBorder);
 
     /**
      * Retrieves the preferred dimension for this {@link Cell} element within the provided graphics
      * element.
-     * 
-     * @param graphics
-     *            {@link Graphics2D} object to use for computing the preferred dimension
+     *
+     * @param graphics {@link Graphics2D} object to use for computing the preferred dimension
      * @return the preferred dimension for this {@link Cell} element within the provided graphics
-     *         element.
+     * element.
      */
     public abstract Dimension getPreferredDimension(final Graphics2D graphics);
-    
+
     /**
      * This class mimics a simple row for the final {@link ColorMap} legend representation.
-     * 
+     *
      * @author Simone Giannecchini, GeoSolutions SAS
-     * 
      */
     public static abstract class Row {
         private final List<Cell> cells = new ArrayList<Cell>();
@@ -106,12 +103,12 @@ public abstract class Cell {
         protected void add(final Cell cell) {
             cells.add(cell);
         }
-        
+
         protected void set(final Cell cell, int idx) {
             cells.set(idx, cell);
         }
     }
-    
+
     public static abstract class ColorMapEntryLegendBuilder extends Row {
 
         protected ColorMapEntryLegendBuilder() {
@@ -124,7 +121,7 @@ public abstract class Cell {
         }
 
         protected ColorMapEntryLegendBuilder(final ColorManager colorManager,
-                final TextManager labelManager, final TextManager ruleManager) {
+                                             final TextManager labelManager, final TextManager ruleManager) {
             super(Arrays.asList(colorManager, ruleManager, labelManager));
 
         }
@@ -146,25 +143,25 @@ public abstract class Cell {
         public Cell getColorManager() {
             return get(0);
         }
-        
+
         protected String formatQuantity(final double quantity, final int digits, final String unit) {
-            final String format ="%." + digits + "f";
+            final String format = "%." + digits + "f";
             return String.format(Locale.US, format, quantity) + (unit != null ? (" " + unit) : "");
         }
-        
+
         protected void setLastRow() {
             // nothing to do by default
         }
     }
-        
+
     public static class SingleColorMapEntryLegendBuilder extends ColorMapEntryLegendBuilder {
-        
+
         @SuppressWarnings("deprecation")
         public SingleColorMapEntryLegendBuilder(final List<ColorMapEntry> cMapEntries,
-                final HAlign hAlign, final VAlign vAling, final Color bkgColor,
-                final double bkgOpacity, final String text, final Dimension requestedDimension,
-                final Font labelFont, final Color labelFontColor, final boolean fontAntiAliasing,
-                final Color borderColor, final String unit, final int digits, boolean formatQuantity) {
+                                                final HAlign hAlign, final VAlign vAling, final Color bkgColor,
+                                                final double bkgOpacity, final String text, final Dimension requestedDimension,
+                                                final Font labelFont, final Color labelFontColor, final boolean fontAntiAliasing,
+                                                final Color borderColor, final String unit, final int digits, boolean formatQuantity) {
 
             final ColorMapEntry currentCME = cMapEntries.get(0);
             Color color = LegendUtils.color(currentCME);
@@ -175,13 +172,13 @@ public abstract class Cell {
             final String label = currentCME.getLabel();
             final double quantity = LegendUtils.getQuantity(currentCME);
             final String symbol = " = ";
-            
+
             String rule;
             //Added variant for DynamicColorMap
-            if(formatQuantity){
+            if (formatQuantity) {
                 String value = formatQuantity(quantity, digits, unit);
                 rule = value + " " + symbol + " x";
-            }else{
+            } else {
                 rule = Double.toString(quantity) + " " + symbol + " x";
             }
 
@@ -197,24 +194,24 @@ public abstract class Cell {
             } else
                 super.add(null);
         }
-        
+
         @SuppressWarnings("deprecation")
         public SingleColorMapEntryLegendBuilder(final List<ColorMapEntry> cMapEntries,
-                final HAlign hAlign, final VAlign vAling, final Color bkgColor,
-                final double bkgOpacity, final String text, final Dimension requestedDimension,
-                final Font labelFont, final Color labelFontColor, final boolean fontAntiAliasing,
-                final Color borderColor) {
-            this(cMapEntries, hAlign, vAling, bkgColor, bkgOpacity, text, requestedDimension, labelFont, labelFontColor, 
+                                                final HAlign hAlign, final VAlign vAling, final Color bkgColor,
+                                                final double bkgOpacity, final String text, final Dimension requestedDimension,
+                                                final Font labelFont, final Color labelFontColor, final boolean fontAntiAliasing,
+                                                final Color borderColor) {
+            this(cMapEntries, hAlign, vAling, bkgColor, bkgOpacity, text, requestedDimension, labelFont, labelFontColor,
                     fontAntiAliasing, borderColor, null, 0, false);
         }
-        
+
         @SuppressWarnings("deprecation")
         public SingleColorMapEntryLegendBuilder(final List<ColorMapEntry> cMapEntries,
-                final HAlign hAlign, final VAlign vAling, final Color bkgColor,
-                final double bkgOpacity, final String text, final Dimension requestedDimension,
-                final Font labelFont, final Color labelFontColor, final boolean fontAntiAliasing,
-                final Color borderColor, final String unit, final int digits) {
-            this(cMapEntries, hAlign, vAling, bkgColor, bkgOpacity, text, requestedDimension, labelFont, labelFontColor, 
+                                                final HAlign hAlign, final VAlign vAling, final Color bkgColor,
+                                                final double bkgOpacity, final String text, final Dimension requestedDimension,
+                                                final Font labelFont, final Color labelFontColor, final boolean fontAntiAliasing,
+                                                final Color borderColor, final String unit, final int digits) {
+            this(cMapEntries, hAlign, vAling, bkgColor, bkgOpacity, text, requestedDimension, labelFont, labelFontColor,
                     fontAntiAliasing, borderColor, unit, digits, true);
         }
 
@@ -227,30 +224,30 @@ public abstract class Cell {
 
         @SuppressWarnings("deprecation")
         public RampColorMapEntryLegendBuilder(final List<ColorMapEntry> mapEntries,
-                final HAlign hAlign, final VAlign vAling, final Color bkgColor,
-                final double bkgOpacity, final String text, final Dimension requestedDimension,
-                final Font labelFont, final Color labelFontColor, final boolean fontAntiAliasing,
-                final Color borderColor) {
-            this(mapEntries, hAlign, vAling, bkgColor, bkgOpacity, text, requestedDimension, 
+                                              final HAlign hAlign, final VAlign vAling, final Color bkgColor,
+                                              final double bkgOpacity, final String text, final Dimension requestedDimension,
+                                              final Font labelFont, final Color labelFontColor, final boolean fontAntiAliasing,
+                                              final Color borderColor) {
+            this(mapEntries, hAlign, vAling, bkgColor, bkgOpacity, text, requestedDimension,
                     labelFont, labelFontColor, fontAntiAliasing, borderColor, null, 0, false);
         }
-        
+
         @SuppressWarnings("deprecation")
         public RampColorMapEntryLegendBuilder(final List<ColorMapEntry> mapEntries,
-                final HAlign hAlign, final VAlign vAling, final Color bkgColor,
-                final double bkgOpacity, final String text, final Dimension requestedDimension,
-                final Font labelFont, final Color labelFontColor, final boolean fontAntiAliasing,
-                final Color borderColor, final String unit, final int digits){
-            this(mapEntries, hAlign, vAling, bkgColor, bkgOpacity, text, requestedDimension, 
+                                              final HAlign hAlign, final VAlign vAling, final Color bkgColor,
+                                              final double bkgOpacity, final String text, final Dimension requestedDimension,
+                                              final Font labelFont, final Color labelFontColor, final boolean fontAntiAliasing,
+                                              final Color borderColor, final String unit, final int digits) {
+            this(mapEntries, hAlign, vAling, bkgColor, bkgOpacity, text, requestedDimension,
                     labelFont, labelFontColor, fontAntiAliasing, borderColor, unit, digits, true);
         }
-        
+
         @SuppressWarnings("deprecation")
         public RampColorMapEntryLegendBuilder(final List<ColorMapEntry> mapEntries,
-                final HAlign hAlign, final VAlign vAling, final Color bkgColor,
-                final double bkgOpacity, final String text, final Dimension requestedDimension,
-                final Font labelFont, final Color labelFontColor, final boolean fontAntiAliasing,
-                final Color borderColor, final String unit, final int digits, boolean formatQuantity) {
+                                              final HAlign hAlign, final VAlign vAling, final Color bkgColor,
+                                              final double bkgOpacity, final String text, final Dimension requestedDimension,
+                                              final Font labelFont, final Color labelFontColor, final boolean fontAntiAliasing,
+                                              final Color borderColor, final String unit, final int digits, boolean formatQuantity) {
 
             final ColorMapEntry previousCME = mapEntries.get(0);
             final ColorMapEntry currentCME = mapEntries.get(1);
@@ -279,32 +276,32 @@ public abstract class Cell {
 
             String label = currentCME.getLabel();
             double quantity = LegendUtils.getQuantity(currentCME);
-            
+
             // Added variation for DynamicColorMap
             String rule;
             String lastRuleText;
-            
-            if(formatQuantity){
+
+            if (formatQuantity) {
                 rule = "";
                 lastRuleText = "";
                 if (opacity > 0) {
                     String formattedQuantity = formatQuantity(quantity, digits, unit);
-                    if(leftEdge) {
+                    if (leftEdge) {
                         rule = formattedQuantity + " >= x";
                         lastRuleText = "";
                     } else {
-                        rule = formattedQuantity  + " ";
-                        lastRuleText = formattedQuantity  + " <= x";
+                        rule = formattedQuantity + " ";
+                        lastRuleText = formattedQuantity + " <= x";
                     }
                 }
             } else {
                 final String formattedQuantity = Double.toString(quantity);
-                if(leftEdge) {
+                if (leftEdge) {
                     rule = formattedQuantity + " >= x";
                     lastRuleText = "";
                 } else {
-                    rule = formattedQuantity  + " = x";
-                    lastRuleText = formattedQuantity  + " <= x";
+                    rule = formattedQuantity + " = x";
+                    lastRuleText = formattedQuantity + " <= x";
                 }
             }
 
@@ -324,12 +321,12 @@ public abstract class Cell {
             }
 
         }
-        
+
         @Override
         protected void setLastRow() {
             set(lastRuleManager, 1);
         }
-        
+
     }
 
     public static class ClassesEntryLegendBuilder extends ColorMapEntryLegendBuilder {
@@ -337,31 +334,31 @@ public abstract class Cell {
         @SuppressWarnings("deprecation")
         public ClassesEntryLegendBuilder(
 
-        final List<ColorMapEntry> mapEntries, final HAlign hAlign, final VAlign vAling,
+                final List<ColorMapEntry> mapEntries, final HAlign hAlign, final VAlign vAling,
                 final Color bkgColor, final double bkgOpacity, final String text,
                 final Dimension requestedDimension, final Font labelFont, final Color labelFontColor,
                 final boolean fontAntiAliasing, final Color borderColor) {
-            this(mapEntries, hAlign, vAling, bkgColor, bkgOpacity, text, requestedDimension, labelFont, 
+            this(mapEntries, hAlign, vAling, bkgColor, bkgOpacity, text, requestedDimension, labelFont,
                     labelFontColor, fontAntiAliasing, borderColor, null, 0, false);
         }
-        
-        
+
+
         @SuppressWarnings("deprecation")
         public ClassesEntryLegendBuilder(
 
-        final List<ColorMapEntry> mapEntries, final HAlign hAlign, final VAlign vAling,
+                final List<ColorMapEntry> mapEntries, final HAlign hAlign, final VAlign vAling,
                 final Color bkgColor, final double bkgOpacity, final String text,
                 final Dimension requestedDimension, final Font labelFont, final Color labelFontColor,
                 final boolean fontAntiAliasing, final Color borderColor, final String unit, final int digits) {
-            this(mapEntries, hAlign, vAling, bkgColor, bkgOpacity, text, requestedDimension, labelFont, 
-                    labelFontColor, fontAntiAliasing, borderColor, unit, digits, true);        
+            this(mapEntries, hAlign, vAling, bkgColor, bkgOpacity, text, requestedDimension, labelFont,
+                    labelFontColor, fontAntiAliasing, borderColor, unit, digits, true);
         }
-        
-        
+
+
         @SuppressWarnings("deprecation")
         public ClassesEntryLegendBuilder(
 
-        final List<ColorMapEntry> mapEntries, final HAlign hAlign, final VAlign vAling,
+                final List<ColorMapEntry> mapEntries, final HAlign hAlign, final VAlign vAling,
                 final Color bkgColor, final double bkgOpacity, final String text,
                 final Dimension requestedDimension, final Font labelFont, final Color labelFontColor,
                 final boolean fontAntiAliasing, final Color borderColor, final String unit, final int digits,
@@ -384,7 +381,7 @@ public abstract class Cell {
             double quantity1 = leftEdge ? LegendUtils.getQuantity(currentCME) : LegendUtils
                     .getQuantity(previousCME);
             double quantity2 = LegendUtils.getQuantity(currentCME);
-            
+
             // Added variation for DynamicColorMap
             String ruleText;
             String symbol1 = null, symbol2 = null;
@@ -394,31 +391,31 @@ public abstract class Cell {
                 symbol1 = " <= ";
                 symbol2 = " < ";
             }
-            if(formatQuantity){
+            if (formatQuantity) {
                 ruleText = "";
                 if (opacity > 0) {
                     String value1 = formatQuantity(quantity1, digits, unit);
                     String value2 = formatQuantity(quantity2, digits, unit);
-                    if(leftEdge) {
+                    if (leftEdge) {
                         ruleText = "x" + symbol1 + value1;
-                    } else if(Double.isInfinite(quantity2)) {
+                    } else if (Double.isInfinite(quantity2)) {
                         ruleText = value1 + symbol1 + "x";
                     } else {
-                        ruleText = value1 + symbol1 + "x" + symbol2 + value2;    
+                        ruleText = value1 + symbol1 + "x" + symbol2 + value2;
                     }
                 }
             } else {
                 final String value1 = Double.toString(quantity1);
                 final String value2 = Double.toString(quantity2);
-                if(leftEdge) {
+                if (leftEdge) {
                     ruleText = "x" + symbol1 + value1;
-                } else if(Double.isInfinite(quantity2)) {
+                } else if (Double.isInfinite(quantity2)) {
                     ruleText = value1 + symbol1 + "x";
                 } else {
-                    ruleText = value1 + symbol1 + "x" + symbol2 + value2;    
+                    ruleText = value1 + symbol1 + "x" + symbol2 + value2;
                 }
             }
-            
+
             super.add(new TextManager(ruleText, vAling, hAlign, bkgColor, requestedDimension, labelFont,
                     labelFontColor, leftEdge, borderColor));
 
@@ -436,15 +433,14 @@ public abstract class Cell {
 
     /**
      * This class mimics a simple text cell for the final {@link ColorMap} legend representation.
-     * 
+     *
      * @author Simone Giannecchini, GeoSolutions SAS
-     * 
      */
     public static class TextManager extends Cell {
 
         public TextManager(final String text, final VAlign vAlign, final HAlign hAlign,
-                final Color bkgColor, final Dimension requestedDimension, final Font labelFont,
-                final Color labelFontColor, final boolean fontAntiAliasing, final Color borderColor) {
+                           final Color bkgColor, final Dimension requestedDimension, final Font labelFont,
+                           final Color labelFontColor, final boolean fontAntiAliasing, final Color borderColor) {
             super(bkgColor, 1.0, text, hAlign, vAlign, requestedDimension, labelFont, labelFontColor,
                     fontAntiAliasing, borderColor);
         }
@@ -468,7 +464,7 @@ public abstract class Cell {
         }
 
         public void draw(final Graphics2D graphics, final Rectangle2D clipBox,
-                final boolean completeBorder) {
+                         final boolean completeBorder) {
 
             // save old font
             final Font oldFont = graphics.getFont();
@@ -489,34 +485,34 @@ public abstract class Cell {
             // where do we draw?
             final int xText;
             switch (hAlign) {
-            case CENTERED:
-                xText = (int) (minx + (w - dimension.getWidth()) / 2.0 + 0.5);
-                break;
-            case LEFT:
-                xText = (int) (minx + 0.5);
-                break;
-            case RIGHT:
-                xText = (int) (minx + (w - dimension.getWidth()) + 0.5);
-                break;
-            case JUSTIFIED:
-                throw new UnsupportedOperationException("Unsupported");
-            default:
-                throw new IllegalStateException("Unsupported horizontal alignment " + hAlign);
+                case CENTERED:
+                    xText = (int) (minx + (w - dimension.getWidth()) / 2.0 + 0.5);
+                    break;
+                case LEFT:
+                    xText = (int) (minx + 0.5);
+                    break;
+                case RIGHT:
+                    xText = (int) (minx + (w - dimension.getWidth()) + 0.5);
+                    break;
+                case JUSTIFIED:
+                    throw new UnsupportedOperationException("Unsupported");
+                default:
+                    throw new IllegalStateException("Unsupported horizontal alignment " + hAlign);
             }
 
             final int yText;
             switch (vAlign) {
-            case BOTTOM:
-                yText = (int) (miny + h - graphics.getFontMetrics().getDescent() + 0.5);
-                break;
-            case TOP:
-                yText = (int) (miny + graphics.getFontMetrics().getHeight() + 0.5);
-                break;
-            case MIDDLE:
-                yText = (int) (miny + (h + graphics.getFontMetrics().getHeight()) / 2 + 0.5);
-                break;
-            default:
-                throw new IllegalStateException("Unsupported vertical alignment " + vAlign);
+                case BOTTOM:
+                    yText = (int) (miny + h - graphics.getFontMetrics().getDescent() + 0.5);
+                    break;
+                case TOP:
+                    yText = (int) (miny + graphics.getFontMetrics().getHeight() + 0.5);
+                    break;
+                case MIDDLE:
+                    yText = (int) (miny + (h + graphics.getFontMetrics().getHeight()) / 2 + 0.5);
+                    break;
+                default:
+                    throw new IllegalStateException("Unsupported vertical alignment " + vAlign);
             }
             // draw
             graphics.drawString(text, xText, yText);
@@ -526,40 +522,39 @@ public abstract class Cell {
 
         }
     }
-    
+
     /**
      * This class mimics a simple color cell for the final {@link ColorMap} legend representation. It is
      * responsible for for drawing colors for a {@link ColorMapEntry}.
-     * 
+     *
      * @author Simone Giannecchini, GeoSolutions SAS
-     * 
      */
     public static abstract class ColorManager extends Cell {
 
         public ColorManager(final Color color, final double opacity,
-                final Dimension requestedDimension, final Color borderColor) {
+                            final Dimension requestedDimension, final Color borderColor) {
             super(color, opacity, null, null, null, requestedDimension, null, null, false, borderColor);
         }
 
         public abstract void draw(final Graphics2D graphics, final Rectangle2D clipBox,
-                final boolean completeBorder);
+                                  final boolean completeBorder);
 
         @Override
         public Dimension getPreferredDimension(final Graphics2D graphics) {
             return new Dimension(requestedDimension);
         }
 
-        
+
         public static class SimpleColorManager extends ColorManager {
 
             public SimpleColorManager(final Color color, final double opacity,
-                    final Dimension requestedDimension, final Color borderColor) {
+                                      final Dimension requestedDimension, final Color borderColor) {
                 super(color, opacity, requestedDimension, borderColor);
             }
 
             @Override
             public void draw(final Graphics2D graphics, final Rectangle2D clipBox,
-                    final boolean completeBorder) {
+                             final boolean completeBorder) {
                 // bkgColor fill
                 if (bkgOpacity > 0) {
                     // OPAQUE
@@ -611,9 +606,7 @@ public abstract class Cell {
 
             }
 
-            
-            
-            
+
             public static class GradientColorManager extends SimpleColorManager {
 
                 @Override
@@ -628,7 +621,7 @@ public abstract class Cell {
                 private boolean leftEdge;
 
                 public GradientColorManager(final Color color, final double opacity, final Color previousColor,
-                        final Dimension requestedDimension, final Color borderColor) {
+                                            final Dimension requestedDimension, final Color borderColor) {
                     super(color, opacity, requestedDimension, borderColor);
                     this.previousColor = previousColor;
                     if (previousColor == null)
@@ -637,7 +630,7 @@ public abstract class Cell {
 
                 @Override
                 public void draw(final Graphics2D graphics, final Rectangle2D clipBox,
-                        final boolean completeBorder) {
+                                 final boolean completeBorder) {
 
                     // getting clipbox dimensions
                     final double minx = clipBox.getMinX();

@@ -94,7 +94,7 @@ public class DbMappings {
             Long.class, //
             Float.class, //
             Double.class //
-            );
+    );
 
     public DbMappings(Dialect dialect) {
         this.dialect = dialect;
@@ -173,8 +173,8 @@ public class DbMappings {
         final Boolean isText;
 
         public PropertyTypeDef(Class<?> propertyOf, String propertyName,
-                @Nullable Class<?> targetPropertyOf, @Nullable String targetPropertyName,
-                boolean isCollection, Boolean isText) {
+                               @Nullable Class<?> targetPropertyOf, @Nullable String targetPropertyName,
+                               boolean isCollection, Boolean isText) {
             this.propertyOf = propertyOf;
             this.propertyName = propertyName;
             this.targetPropertyOf = targetPropertyOf;
@@ -266,7 +266,6 @@ public class DbMappings {
 
     /**
      * @param simpleClassName
-     *
      */
     private Class<?> toClass(String simpleClassName) {
         for (Class<?> c : this.typeIds.keySet()) {
@@ -352,7 +351,7 @@ public class DbMappings {
     }
 
     private void addDirectPropertyTypes(final Class<? extends Info> clazz,
-            final NamedParameterJdbcOperations template) {
+                                        final NamedParameterJdbcOperations template) {
 
         log("Creating property mappings for " + clazz.getName());
 
@@ -379,7 +378,7 @@ public class DbMappings {
                         || CharSequence.class.isAssignableFrom(componentType);
 
                 isText &= !"id".equals(propertyName);// id is not on the full text search list of
-                                                     // properties
+                // properties
                 addPropertyType(template, clazz, propertyName, null, false, isText);
             } else {
                 log("Ignoring property " + propertyName + ":" + returnType.getSimpleName());
@@ -394,7 +393,7 @@ public class DbMappings {
      * @param nestedPropDefs
      */
     private void addNestedPropertyTypes(final NamedParameterJdbcOperations template,
-            Collection<PropertyTypeDef> nestedPropDefs) {
+                                        Collection<PropertyTypeDef> nestedPropDefs) {
 
         for (PropertyTypeDef ptd : nestedPropDefs) {
             final Class<?> propertyOf = ptd.propertyOf;
@@ -446,12 +445,12 @@ public class DbMappings {
      * @param targetProperty
      * @param isCollection
      * @return the newly added property type, or {@code null} if it was not added to the database
-     *         (i.e. already exists)
+     * (i.e. already exists)
      */
     private PropertyType addPropertyType(final NamedParameterJdbcOperations template,
-            final Class<?> infoClazz, final String propertyName,
-            @Nullable final PropertyType targetProperty, final boolean isCollection,
-            final boolean isText) {
+                                         final Class<?> infoClazz, final String propertyName,
+                                         @Nullable final PropertyType targetProperty, final boolean isCollection,
+                                         final boolean isText) {
 
         checkNotNull(template);
         checkNotNull(infoClazz);
@@ -478,14 +477,14 @@ public class DbMappings {
             Integer targetPropertyOid = targetProperty == null ? null : targetProperty.getOid();
 
             String insert = String.format("insert into property_type (oid, target_property, type_id, name, collection, text) "
-                    + "values (%s, :target, :type, :name, :collection, :isText)",
+                            + "values (%s, :target, :type, :name, :collection, :isText)",
                     dialect.nextVal("seq_PROPERTY_TYPE"));
 
             params = params("target", targetPropertyOid, "type", typeId, "name", propertyName,
                     "collection", isCollection, "isText", isText);
             logStatement(insert, params);
             KeyHolder keyHolder = new GeneratedKeyHolder();
-            template.update(insert, new MapSqlParameterSource(params), keyHolder, new String[] {"oid"});
+            template.update(insert, new MapSqlParameterSource(params), keyHolder, new String[]{"oid"});
 
             // looks like some db's return the pk different than others, so lets try both ways
             Number pTypeKey = (Number) keyHolder.getKeys().get("oid");
@@ -513,7 +512,6 @@ public class DbMappings {
 
     /**
      * @param propertyName
-     *
      */
     private String fixCase(String propertyName) {
         if (propertyName.length() > 1) {
@@ -534,7 +532,6 @@ public class DbMappings {
 
     /**
      * @param queryType
-     *
      */
     @SuppressWarnings("unchecked")
     public List<Integer> getConcreteQueryTypes(Class<?> queryType) {
@@ -602,7 +599,6 @@ public class DbMappings {
 
     /**
      * @param info
-     *
      */
     public Iterable<Property> properties(Info object) {
         checkArgument(!(object instanceof Proxy));
@@ -662,7 +658,6 @@ public class DbMappings {
 
     /**
      * @param typeId
-     *
      */
     private ImmutableList<PropertyType> getTypeProperties(Integer typeId) {
         Map<String, PropertyType> properties = this.propertyTypes.get(typeId);

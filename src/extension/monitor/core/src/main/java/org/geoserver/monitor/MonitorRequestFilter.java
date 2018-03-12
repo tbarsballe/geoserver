@@ -29,20 +29,20 @@ public class MonitorRequestFilter {
 
     FileWatcher<List<Filter>> watcher;
     List<Filter> filters;
-    
+
     public MonitorRequestFilter() {
         filters = new ArrayList<Filter>();
     }
-    
+
     public MonitorRequestFilter(GeoServerResourceLoader loader) throws IOException {
-        Resource configFile = loader.get( Paths.path("monitoring", "filter.properties") );
+        Resource configFile = loader.get(Paths.path("monitoring", "filter.properties"));
         if (configFile.getType() == Type.UNDEFINED) {
             IOUtils.copy(getClass().getResourceAsStream("filter.properties"), configFile.out());
         }
         filters = new ArrayList<Filter>();
         watcher = new FilterPropertyFileWatcher(configFile);
     }
-    
+
     public boolean filter(HttpServletRequest req) throws IOException {
         if (watcher != null && watcher.isModified()) {
             synchronized (this) {
@@ -51,27 +51,27 @@ public class MonitorRequestFilter {
                 }
             }
         }
-         
+
         String path = req.getServletPath() + req.getPathInfo();
         if (LOGGER.isLoggable(Level.FINER)) {
             LOGGER.finer("Testing " + path + " for monitor filtering");
         }
-        if(filters != null) {
+        if (filters != null) {
             for (Filter f : filters) {
                 if (f.matches(path)) {
                     return true;
                 }
             }
         }
-        
+
         return false;
     }
-    
+
     /**
      * FileWatcher used to parse List<Filter> from text file.
      */
     private final class FilterPropertyFileWatcher extends FileWatcher<List<Filter>> {
-        
+
         private FilterPropertyFileWatcher(Resource resource) {
             super(resource);
         }
@@ -89,27 +89,27 @@ public class MonitorRequestFilter {
             return filters;
         }
     }
-    
+
     /**
      * Match path contents based on AntPathMatcher pattern
      */
     static class Filter {
-        
+
         AntPathMatcher matcher = new AntPathMatcher();
         String pattern;
-        
+
         /**
          * Filter based on request path.
-         * 
+         *
          * @param pattern AntPathMatcher pattern
          */
         Filter(String pattern) {
             this.pattern = pattern;
         }
-        
+
         /**
          * Request path match.
-         * 
+         *
          * @param path Request path
          * @return Request path match
          */

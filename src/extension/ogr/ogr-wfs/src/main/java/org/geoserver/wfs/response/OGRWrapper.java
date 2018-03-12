@@ -23,10 +23,9 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 /**
  * Helper used to invoke ogr2ogr
- * 
+ *
  * @author Andrea Aime - OpenGeo
  * @author Stefano Costa - GeoSolutions
- * 
  */
 public class OGRWrapper extends AbstractToolWrapper {
 
@@ -50,8 +49,6 @@ public class OGRWrapper extends AbstractToolWrapper {
 
     /**
      * Returns a list of the ogr2ogr supported formats
-     * 
-     *
      */
     public Set<String> getSupportedFormats() {
         try {
@@ -59,10 +56,10 @@ public class OGRWrapper extends AbstractToolWrapper {
             List<String> commands = new ArrayList<String>();
             commands.add(getExecutable());
             commands.add("--help");
-            
+
             Set<String> formats = new HashSet<String>();
             addFormats(commands, formats);
-            
+
             // this one is required starting with ogr2ogr 1.8
             commands = new ArrayList<String>();
             commands.add(getExecutable());
@@ -82,7 +79,7 @@ public class OGRWrapper extends AbstractToolWrapper {
         StringBuilder sb = new StringBuilder();
         // can't trust the exit code, --help exits with -1 on my pc
         run(commands, sb);
-        
+
         String[] lines = sb.toString().split("\n");
         for (String line : lines) {
             if (line.matches("\\s*-f \".*")) {
@@ -95,8 +92,6 @@ public class OGRWrapper extends AbstractToolWrapper {
     /**
      * Returns true if ogr2ogr is available, that is, if executing
      * "ogr2ogr --version" returns 0 as the exit code
-     * 
-     *
      */
     public boolean isAvailable() {
         List<String> commands = new ArrayList<String>();
@@ -105,7 +100,7 @@ public class OGRWrapper extends AbstractToolWrapper {
 
         try {
             return run(commands, null) == 0;
-        } catch(Exception e) {
+        } catch (Exception e) {
             LOGGER.log(Level.SEVERE, getExecutable() + " is not available", e);
             return false;
         }
@@ -113,7 +108,7 @@ public class OGRWrapper extends AbstractToolWrapper {
 
     @Override
     public void onBeforeRun(List<String> cmd, File inputData, File outputDirectory,
-            String typeName, Format format, CoordinateReferenceSystem crs) throws IOException {
+                            String typeName, Format format, CoordinateReferenceSystem crs) throws IOException {
         crsFile = dumpCrs(inputData.getParentFile(), crs);
 
         if (crsFile != null) {

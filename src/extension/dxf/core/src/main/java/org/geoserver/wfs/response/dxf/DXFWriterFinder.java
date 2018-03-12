@@ -16,25 +16,25 @@ import org.geotools.factory.FactoryRegistry;
 
 /**
  * Enable programs to find all available DWFWriter implementations.
- * 
+ * <p>
  * <p>
  * In order to be located by this finder writer must provide an implementation of the
  * {@link DXFWriter} interface.
  * </p>
- * 
  * <p>
- * In addition to implementing this interface writers should 
+ * <p>
+ * In addition to implementing this interface writers should
  * have a services file:<br/><code>META-INF/services/org.geoserver.wfs.response.dxf.DXFWriter</code>
  * </p>
- * 
+ * <p>
  * <p>
  * The file should contain a single line which gives the full name of the implementing class.
  * </p>
- * 
  * <p>
- * 
+ * <p>
+ * <p>
  * </p>
- * 
+ *
  * @author Mauro Bartolomeoli, mbarto@infosia.it
  */
 public final class DXFWriterFinder {
@@ -48,10 +48,9 @@ public final class DXFWriterFinder {
 
     /**
      * Create a new DXFWriter instance for the requested version (null => any available version)
-     * 
-     * @param version requested version compatibility     
-     * @param mew writer
      *
+     * @param version requested version compatibility
+     * @param mew     writer
      */
     public static DXFWriter getWriter(String version, Writer writer) {
         FactoryRegistry writerRegistry = getServiceRegistry();
@@ -59,9 +58,9 @@ public final class DXFWriterFinder {
         DXFWriter candidate;
         while (it.hasNext()) {
             candidate = it.next();
-            LOGGER.log(Level.FINE,"Evaluating candidate: "+candidate.getDescription());
+            LOGGER.log(Level.FINE, "Evaluating candidate: " + candidate.getDescription());
             if (candidate.supportsVersion(version)) {
-                LOGGER.log(Level.FINE,"Chosen candidate: "+candidate.getDescription());
+                LOGGER.log(Level.FINE, "Chosen candidate: " + candidate.getDescription());
                 return candidate.newInstance(writer);
             }
         }
@@ -72,9 +71,9 @@ public final class DXFWriterFinder {
      * Returns the service registry. The registry will be created the first time this method is
      * invoked.
      */
-    private static FactoryRegistry getServiceRegistry() {        
+    private static FactoryRegistry getServiceRegistry() {
         if (registry == null) {
-            registry = new FactoryCreator(Arrays.asList(new Class<?>[] { DXFWriter.class }));
+            registry = new FactoryCreator(Arrays.asList(new Class<?>[]{DXFWriter.class}));
         }
         return registry;
     }

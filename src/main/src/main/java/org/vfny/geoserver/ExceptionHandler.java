@@ -20,7 +20,6 @@ public interface ExceptionHandler {
      * DOCUMENT ME!
      *
      * @param message DOCUMENT ME!
-     *
      * @return DOCUMENT ME!
      */
     public ServiceException newServiceException(String message);
@@ -30,7 +29,6 @@ public interface ExceptionHandler {
      *
      * @param message DOCUMENT ME!
      * @param locator DOCUMENT ME!
-     *
      * @return DOCUMENT ME!
      */
     public ServiceException newServiceException(String message, String locator);
@@ -39,7 +37,6 @@ public interface ExceptionHandler {
      * DOCUMENT ME!
      *
      * @param e DOCUMENT ME!
-     *
      * @return DOCUMENT ME!
      */
     public ServiceException newServiceException(Throwable e);
@@ -47,10 +44,9 @@ public interface ExceptionHandler {
     /**
      * DOCUMENT ME!
      *
-     * @param e DOCUMENT ME!
+     * @param e          DOCUMENT ME!
      * @param preMessage DOCUMENT ME!
-     * @param locator DOCUMENT ME!
-     *
+     * @param locator    DOCUMENT ME!
      * @return DOCUMENT ME!
      */
     public ServiceException newServiceException(Throwable e, String preMessage, String locator);

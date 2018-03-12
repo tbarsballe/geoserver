@@ -6,13 +6,14 @@
 package org.geoserver.catalog;
 
 import java.io.IOException;
+
 import org.geotools.styling.Style;
 import org.geotools.styling.StyledLayerDescriptor;
 import org.geotools.util.Version;
 
 /**
  * A style for a geospatial resource.
- * 
+ *
  * @author Justin Deoliveira, The Open Planning project
  */
 public interface StyleInfo extends CatalogInfo {
@@ -30,7 +31,7 @@ public interface StyleInfo extends CatalogInfo {
      */
     public static String DEFAULT_POLYGON = "polygon";
     /**
-     * Name of the default raster style. 
+     * Name of the default raster style.
      */
     public static String DEFAULT_RASTER = "raster";
 
@@ -39,21 +40,21 @@ public interface StyleInfo extends CatalogInfo {
      */
     public static String DEFAULT_GENERIC = "generic";
 
-    
+
     /**
      * Name of the style.
      * <p>
      * This value is unique among all styles and can be used to identify the
      * style.
      * </p>
-     * 
+     *
      * @uml.property name="name"
      */
     String getName();
 
     /**
      * Sets the name of the style.
-     * 
+     *
      * @uml.property name="name"
      */
     void setName(String name);
@@ -70,12 +71,14 @@ public interface StyleInfo extends CatalogInfo {
 
     /**
      * The sld version of the style.
+     *
      * @deprecated use {@link #getFormatVersion()}
      */
     Version getSLDVersion();
 
     /**
      * Sets the sld version of the style.
+     *
      * @deprecated use {@link #setFormatVersion(Version)}
      */
     void setSLDVersion(Version v);
@@ -108,8 +111,8 @@ public interface StyleInfo extends CatalogInfo {
     /**
      * Sets the name of the file the style originated from.
      */
-    void setFilename( String fileName );
-    
+    void setFilename(String fileName);
+
     /**
      * The style object.
      */
@@ -129,7 +132,7 @@ public interface StyleInfo extends CatalogInfo {
      * Sets the Legend for the style.
      */
     void setLegend(LegendInfo legend);
-    
+
     /**
      * The derived prefixed name.
      * <p>
@@ -141,5 +144,5 @@ public interface StyleInfo extends CatalogInfo {
      * </p>
      */
     String prefixedName();
-    
+
 }

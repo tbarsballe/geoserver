@@ -54,9 +54,10 @@ public class FilteredList<T> extends AbstractList<T> {
         delegate.remove(o);
         return filtered.remove(o);
     }
-    
+
     /**
      * Allows to unwrap an element before setting it into the delegate list
+     *
      * @param element
      * @return
      */

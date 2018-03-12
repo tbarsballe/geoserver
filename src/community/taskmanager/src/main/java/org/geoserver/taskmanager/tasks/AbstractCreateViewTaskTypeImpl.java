@@ -33,7 +33,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public abstract class AbstractCreateViewTaskTypeImpl implements TaskType {
-    
+
     public static final String PARAM_DB_NAME = "database";
 
     public static final String PARAM_VIEW_NAME = "view-name";
@@ -44,7 +44,7 @@ public abstract class AbstractCreateViewTaskTypeImpl implements TaskType {
 
     @Autowired
     protected ExtTypes extTypes;
-    
+
     @PostConstruct
     public void initParamInfo() {
         paramInfo.put(PARAM_DB_NAME, new ParameterInfo(PARAM_DB_NAME, extTypes.dbName, true));
@@ -58,18 +58,18 @@ public abstract class AbstractCreateViewTaskTypeImpl implements TaskType {
 
     @Override
     public TaskResult run(Batch batch, Task task, Map<String, Object> parameterValues,
-            Map<Object, Object> tempValues) throws TaskException {
+                          Map<Object, Object> tempValues) throws TaskException {
         final DbSource db = (DbSource) parameterValues.get(PARAM_DB_NAME);
         final String viewName = (String) parameterValues.get(PARAM_VIEW_NAME);
         final String tempViewName = SqlUtil.qualified(SqlUtil.schema(viewName),
                 "_temp_" + UUID.randomUUID().toString().replace('-', '_'));
         tempValues.put(new DbTableImpl(db, viewName), new DbTableImpl(db, tempViewName));
-        
+
         try (Connection conn = db.getDataSource().getConnection()) {
-            try (Statement stmt = conn.createStatement()){
+            try (Statement stmt = conn.createStatement()) {
                 StringBuilder sb = new StringBuilder("CREATE VIEW ")
                         .append(tempViewName).append(" AS ")
-                        .append(buildQueryDefinition(parameterValues, tempValues, 
+                        .append(buildQueryDefinition(parameterValues, tempValues,
                                 task.getConfiguration().getAttributes()));
                 LOGGER.log(Level.FINE, "creating temporary View: " + sb.toString());
                 stmt.executeUpdate(sb.toString());
@@ -77,12 +77,12 @@ public abstract class AbstractCreateViewTaskTypeImpl implements TaskType {
         } catch (SQLException e) {
             throw new TaskException(e);
         }
-        
-        return new TaskResult() {            
+
+        return new TaskResult() {
             @Override
             public void commit() throws TaskException {
                 try (Connection conn = db.getDataSource().getConnection()) {
-                    try (Statement stmt = conn.createStatement()){
+                    try (Statement stmt = conn.createStatement()) {
                         LOGGER.log(Level.FINE, "commiting view: " + viewName);
                         stmt.executeUpdate("DROP VIEW IF EXISTS " + db.getDialect().quote(viewName));
 
@@ -99,7 +99,7 @@ public abstract class AbstractCreateViewTaskTypeImpl implements TaskType {
             @Override
             public void rollback() throws TaskException {
                 try (Connection conn = db.getDataSource().getConnection()) {
-                    try (Statement stmt = conn.createStatement()){
+                    try (Statement stmt = conn.createStatement()) {
                         LOGGER.log(Level.FINE, "rolling back view: " + viewName);
                         stmt.executeUpdate("DROP VIEW " + tempViewName);
                         LOGGER.log(Level.FINE, "rolled back view: " + viewName);
@@ -111,9 +111,9 @@ public abstract class AbstractCreateViewTaskTypeImpl implements TaskType {
 
         };
     }
-    
+
     public abstract String buildQueryDefinition(Map<String, Object> parameterValues,
-            Map<Object, Object> tempValues, Map<String, Attribute> attributes) ;
+                                                Map<Object, Object> tempValues, Map<String, Attribute> attributes);
 
     @Override
     public void cleanup(Task task, Map<String, Object> parameterValues)
@@ -121,7 +121,7 @@ public abstract class AbstractCreateViewTaskTypeImpl implements TaskType {
         final DbSource db = (DbSource) parameterValues.get(PARAM_DB_NAME);
         final String viewName = (String) parameterValues.get(PARAM_VIEW_NAME);
         try (Connection conn = db.getDataSource().getConnection()) {
-            try (Statement stmt = conn.createStatement()){
+            try (Statement stmt = conn.createStatement()) {
                 stmt.executeUpdate("DROP VIEW IF EXISTS " + db.getDialect().quote(viewName));
             }
         } catch (SQLException e) {

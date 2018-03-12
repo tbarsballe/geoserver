@@ -45,7 +45,7 @@ public class SystemEnvironmentStatus implements ModuleStatus {
     public Optional<String> getMessage() {
         StringBuffer result = new StringBuffer();
         for (Iterator<Entry<String, String>> it = System.getenv().entrySet().iterator(); it
-                .hasNext();) {
+                .hasNext(); ) {
             Entry<String, String> entry = it.next();
             result.append(entry.getKey().toString() + "=" + entry.getValue().toString() + "\n");
         }

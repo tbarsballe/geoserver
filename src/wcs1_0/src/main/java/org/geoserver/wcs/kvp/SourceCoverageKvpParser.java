@@ -23,7 +23,7 @@ import org.vfny.geoserver.wcs.WcsException.WcsExceptionCode;
  * <p>
  * The parser validates the coverage requested on a WCS 1.0.0 GetCoverage request.
  * </p>
- * 
+ *
  * @author Alessio Fabiani, GeoSolutions
  */
 public class SourceCoverageKvpParser extends KvpParser {

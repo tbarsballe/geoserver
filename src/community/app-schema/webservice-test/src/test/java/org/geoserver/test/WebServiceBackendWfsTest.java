@@ -20,20 +20,20 @@ import org.w3c.dom.Document;
 /**
  * WFS GetFeature to test integration of {@link AppSchemaDataAccess} with web service backend with
  * GeoServer.
- * 
+ *
  * @author Rini Angreani, CSIRO Earth Science and Resource Engineering
  */
-public class WebServiceBackendWfsTest extends AbstractAppSchemaTestSupport {    
+public class WebServiceBackendWfsTest extends AbstractAppSchemaTestSupport {
 
-	@Override
-	protected AbstractAppSchemaMockData createTestData() {
-		return new WebServiceBackendMockData();
-	}
+    @Override
+    protected AbstractAppSchemaMockData createTestData() {
+        return new WebServiceBackendMockData();
+    }
 
     /**
      * Test whether GetCapabilities returns wfs:WFS_Capabilities.
      */
-	@Test
+    @Test
     public void testGetCapabilities() {
         Document doc = getAsDOM("wfs?request=GetCapabilities&version=1.1.0");
         LOGGER.info("WFS GetCapabilities response:\n" + prettyString(doc));
@@ -58,10 +58,10 @@ public class WebServiceBackendWfsTest extends AbstractAppSchemaTestSupport {
      * Test whether DescribeFeatureType returns xsd:schema, and if the contents are correct. When no
      * type name specified, it should return imports for all name spaces involved. If type name is
      * specified, it should return imports of GML type and the type's top level schema.
-     * 
+     *
      * @throws IOException
      */
-	@Test
+    @Test
     public void testDescribeFeatureType() throws IOException {
         /**
          * gsml:MappedFeature
@@ -108,7 +108,7 @@ public class WebServiceBackendWfsTest extends AbstractAppSchemaTestSupport {
      * data access with property files backend, but it chains GeologicUnit from a web service
      * backend.
      */
-	@Test
+    @Test
     public void testMappedFeature() throws Exception {
         Document doc = getAsDOM("wfs?request=GetFeature&version=1.1.0&typename=gsml:MappedFeature");
         LOGGER.info("WFS GetFeature&typename=gsml:MappedFeature response:\n" + prettyString(doc));
@@ -155,7 +155,7 @@ public class WebServiceBackendWfsTest extends AbstractAppSchemaTestSupport {
      * chains observationMethod which is a normal app-schema data access with property files backend.
      * It also feature chains CompositionPart which is another app-schema data access with web service.
      */
-	@Test
+    @Test
     public void testGeologicUnit() throws Exception {
         Document doc = getAsDOM("wfs?request=GetFeature&version=1.1.0&typename=gsml:GeologicUnit");
         LOGGER.info("WFS GetFeature&typename=gsml:GeologicUnit response:\n" + prettyString(doc));
@@ -329,7 +329,7 @@ public class WebServiceBackendWfsTest extends AbstractAppSchemaTestSupport {
 
     /**
      * Check schema location
-     * 
+     *
      * @param doc
      */
     private void checkSchemaLocation(Document doc) {
@@ -349,7 +349,7 @@ public class WebServiceBackendWfsTest extends AbstractAppSchemaTestSupport {
 
     /**
      * Check mf1 content are encoded correctly
-     * 
+     *
      * @param id
      * @param doc
      */
@@ -393,7 +393,7 @@ public class WebServiceBackendWfsTest extends AbstractAppSchemaTestSupport {
 
     /**
      * Check mf2 content are encoded correctly
-     * 
+     *
      * @param id
      * @param doc
      */
@@ -448,7 +448,7 @@ public class WebServiceBackendWfsTest extends AbstractAppSchemaTestSupport {
 
     /**
      * Check mf3 content are encoded correctly
-     * 
+     *
      * @param id
      * @param doc
      */
@@ -465,7 +465,7 @@ public class WebServiceBackendWfsTest extends AbstractAppSchemaTestSupport {
 
     /**
      * Check mf4 content are encoded correctly
-     * 
+     *
      * @param id
      * @param doc
      */

@@ -85,6 +85,7 @@ import net.sf.json.util.JSONBuilder;
 public class ImportJSONWriter {
 
     static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+
     static {
         DATE_FORMAT.setTimeZone(TimeZone.getTimeZone("GMT"));
     }
@@ -121,7 +122,7 @@ public class ImportJSONWriter {
      * Determines the number of levels to expand the JSON result
      *
      * @param expand The value of the "expand" parameter
-     * @param def The default value to fall back on
+     * @param def    The default value to fall back on
      * @return
      */
     public int expand(String expand, int def) {
@@ -197,7 +198,7 @@ public class ImportJSONWriter {
 
         json.key("tasks").array();
         for (ImportTask task : tasks) {
-            task(json,task, false, expand);
+            task(json, task, false, expand);
         }
         json.endArray();
 
@@ -384,7 +385,7 @@ public class ImportJSONWriter {
         json.key("transformChain").object();
         json.key("type").value(txChain instanceof VectorTransformChain ? "vector" : "raster");
 
-        transforms(json,task, expand,
+        transforms(json, task, expand,
                 txChain != null ? txChain.getTransforms() : new ArrayList<ImportTransform>());
         json.endObject();
 
@@ -400,14 +401,14 @@ public class ImportJSONWriter {
         json.key("transforms").array();
 
         for (int i = 0; i < transforms.size(); i++) {
-            transform(json,transforms.get(i), i, parent, false, expand);
+            transform(json, transforms.get(i), i, parent, false, expand);
         }
 
         json.endArray();
     }
 
     public void transform(FlushableJSONBuilder json, ImportTransform transform, int index, Object parent, boolean top,
-            int expand) throws IOException {
+                          int expand) throws IOException {
         json.object();
         json.key("type").value(transform.getClass().getSimpleName());
         json.key("href").value(RequestInfo.get().servletURI(pathTo(parent) + "/transforms/" + index));
@@ -498,22 +499,21 @@ public class ImportJSONWriter {
                     directory(json, (Directory) data, parent, expand);
                 }
             } else {
-                file(json,(FileData) data, parent, expand, false);
+                file(json, (FileData) data, parent, expand, false);
             }
         } else if (data instanceof Database) {
-            database(json,(Database) data, parent, expand);
+            database(json, (Database) data, parent, expand);
         } else if (data instanceof Table) {
             table(json, (Table) data, parent, expand);
         } else if (data instanceof RemoteData) {
             remote(json, (RemoteData) data, parent, expand);
-        }
-        else {
-            throw new IllegalArgumentException("Unable to serialize "+data.getClass().getSimpleName()+" as ImportData");
+        } else {
+            throw new IllegalArgumentException("Unable to serialize " + data.getClass().getSimpleName() + " as ImportData");
         }
         json.flush();
     }
 
-    public void remote(FlushableJSONBuilder json,RemoteData data, Object parent, int expand) throws IOException {
+    public void remote(FlushableJSONBuilder json, RemoteData data, Object parent, int expand) throws IOException {
 
         json.object();
 
@@ -533,7 +533,7 @@ public class ImportJSONWriter {
         json.flush();
     }
 
-    public void file(FlushableJSONBuilder json,FileData data, Object parent, int expand, boolean href) throws IOException {
+    public void file(FlushableJSONBuilder json, FileData data, Object parent, int expand, boolean href) throws IOException {
 
         json.object();
 
@@ -587,11 +587,11 @@ public class ImportJSONWriter {
         directory(json, data, "mosaic", parent, expand);
     }
 
-    public void directory(FlushableJSONBuilder json,Directory data, Object parent, int expand) throws IOException {
-        directory(json,data, "directory", parent, expand);
+    public void directory(FlushableJSONBuilder json, Directory data, Object parent, int expand) throws IOException {
+        directory(json, data, "directory", parent, expand);
     }
 
-    public void directory(FlushableJSONBuilder json,Directory data, String typeName, Object parent, int expand)
+    public void directory(FlushableJSONBuilder json, Directory data, String typeName, Object parent, int expand)
             throws IOException {
 
         json.object();
@@ -609,8 +609,8 @@ public class ImportJSONWriter {
             }
 
             json.key("files");
-            files(json,data, parent, false, expand - 1);
-            message(json,data);
+            files(json, data, parent, false, expand - 1);
+            message(json, data);
         }
         json.endObject();
         json.flush();
@@ -634,7 +634,7 @@ public class ImportJSONWriter {
         json.flush();
     }
 
-    public void database(FlushableJSONBuilder json,Database data, Object parent, int expand) throws IOException {
+    public void database(FlushableJSONBuilder json, Database data, Object parent, int expand) throws IOException {
         json.object();
         json.key("type").value("database");
         json.key("format").value(data.getFormat() != null ? data.getFormat().getName() : null);
@@ -642,7 +642,7 @@ public class ImportJSONWriter {
 
         if (expand > 0) {
             json.key("parameters").object();
-            for (Map.Entry<String,Serializable> e : data.getParameters().entrySet()) {
+            for (Map.Entry<String, Serializable> e : data.getParameters().entrySet()) {
                 json.key(e.getKey()).value(e.getValue());
             }
 
@@ -653,7 +653,7 @@ public class ImportJSONWriter {
                 json.value(t.getName());
             }
 
-            message(json,data);
+            message(json, data);
             json.endArray();
         }
 
@@ -737,7 +737,7 @@ public class ImportJSONWriter {
 
             @Override
             protected void postEncodeFeatureType(FeatureTypeInfo ft,
-                    HierarchicalStreamWriter writer, MarshallingContext context) {
+                                                 HierarchicalStreamWriter writer, MarshallingContext context) {
                 try {
                     writer.startNode("attributes");
                     context.convertAnother(ft.attributes());

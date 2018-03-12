@@ -13,9 +13,8 @@ import org.geoserver.importer.Importer;
 
 /**
  * Importer web utilities.
- * 
- * @author Justin Deoliveira, OpenGeo
  *
+ * @author Justin Deoliveira, OpenGeo
  */
 public class ImporterWebUtils {
 

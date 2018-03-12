@@ -7,9 +7,8 @@ package org.geoserver.catalog;
 
 /**
  * A link to underlying data represented by resource.
- * 
+ *
  * @author Marcus Sen, British Geological Survey
- * 
  */
 public interface DataLinkInfo extends Info {
 

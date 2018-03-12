@@ -19,50 +19,69 @@ import com.vividsolutions.jts.geom.Geometry;
 
 /**
  * This class is used for managing ROI and its CRS. ROIManager provides utility method like reprojecting the ROI in the desired CRS.
- * 
+ *
  * @author Simone Giannecchini, GeoSolutions
- * 
  */
 final class ROIManager {
 
     private static final Logger LOGGER = Logging.getLogger(ROIManager.class);
 
-    /** Input Geometry */
+    /**
+     * Input Geometry
+     */
     final Geometry originalRoi;
 
-    /** ROI reprojected in the input ROI CRS */
+    /**
+     * ROI reprojected in the input ROI CRS
+     */
     Geometry roiInNativeCRS;
 
-    /** ROI reprojected in the native ROI CRS (reduced to envelope if possible) */
+    /**
+     * ROI reprojected in the native ROI CRS (reduced to envelope if possible)
+     */
     Geometry safeRoiInNativeCRS;
 
-    /** ROI native CRS */
+    /**
+     * ROI native CRS
+     */
     CoordinateReferenceSystem nativeCRS;
 
-    /** ROI reprojected in the target CRS */
+    /**
+     * ROI reprojected in the target CRS
+     */
     Geometry roiInTargetCRS;
 
-    /** ROI reprojected in the target CRS (reduced to envelope if possible) */
+    /**
+     * ROI reprojected in the target CRS (reduced to envelope if possible)
+     */
     Geometry safeRoiInTargetCRS;
 
-    /** Initial ROI CRS */
+    /**
+     * Initial ROI CRS
+     */
     final CoordinateReferenceSystem roiCRS;
 
-    /** ROI target CRS */
+    /**
+     * ROI target CRS
+     */
     CoordinateReferenceSystem targetCRS;
 
-    /** Boolean indicating if the ROI is a BBOX */
+    /**
+     * Boolean indicating if the ROI is a BBOX
+     */
     final boolean isROIBBOX;
 
-    /** Boolean indicating if the roiCRS equals the targetCRS */
+    /**
+     * Boolean indicating if the roiCRS equals the targetCRS
+     */
     boolean roiCrsEqualsTargetCrs = true;
 
     /**
      * Constructor.
-     * 
-     * @param roi original ROI as a JTS geometry
+     *
+     * @param roi    original ROI as a JTS geometry
      * @param roiCRS {@link CoordinateReferenceSystem} for the provided geometry. If this is null the CRS must be provided with the USerData of the
-     *        roi
+     *               roi
      */
     public ROIManager(Geometry roi, CoordinateReferenceSystem roiCRS) {
         this.originalRoi = roi;
@@ -83,7 +102,7 @@ final class ROIManager {
 
     /**
      * Reproject the initial roi to the provided CRS which is supposedly the native CRS of the data to clip.
-     * 
+     *
      * @param nativeCRS a valid instance of {@link CoordinateReferenceSystem}
      * @throws IOException in case something bad happens.
      */
@@ -111,13 +130,13 @@ final class ROIManager {
 
     /**
      * Reproject the initial roi to the provided CRS which is supposedly the target CRS as per the request.
-     * 
+     * <p>
      * <p>
      * This method should be called once the native CRS has been set, that is the {@link #useNativeCRS(CoordinateReferenceSystem)} has been called.
-     * 
+     *
      * @param targetCRS a valid instance of {@link CoordinateReferenceSystem}
-     * @throws IOException in case something bad happens.
-     * @throws FactoryException 
+     * @throws IOException      in case something bad happens.
+     * @throws FactoryException
      */
     public void useTargetCRS(final CoordinateReferenceSystem targetCRS) throws IOException, FactoryException {
         if (targetCRS == null) {

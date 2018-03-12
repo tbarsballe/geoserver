@@ -36,7 +36,7 @@ import net.sf.json.JSONObject;
 public class AboutControllerTest extends GeoServerSystemTestSupport {
 
     private static String BASEPATH = RestBaseController.ROOT_PATH;
-    
+
     @Test
     public void testEmptyListHTMLTemplate() throws Exception {
         try {
@@ -93,7 +93,7 @@ public class AboutControllerTest extends GeoServerSystemTestSupport {
 
         checkJSONModel(json);
     }
-    
+
     @Test
     public void testGetStatusAsHTML() throws Exception {
         //add an escape char to the environment
@@ -101,24 +101,24 @@ public class AboutControllerTest extends GeoServerSystemTestSupport {
         // make the request, parsing the result into a Dom object
         Document dom = getAsDOM(BASEPATH + "/about/status");
         checkHTMLModel(dom);
-        
+
         Document dom2 = getAsDOM(BASEPATH + "/about/status.html");
         checkHTMLModel(dom2);
     }
-    
+
     @Test
     public void testGetStatusAsJSON() throws Exception {
         // make the request, parsing the result into a Dom object
         JSON dom = getAsJSON(BASEPATH + "/about/status.json");
- 
-        
+
+
     }
-    
+
     @Test
     public void testGetStatusAsXML() throws Exception {
         // make the request, parsing the result into a Dom object
-        Document dom = getAsDOM(BASEPATH + "/about/status.xml");        
-        
+        Document dom = getAsDOM(BASEPATH + "/about/status.xml");
+
     }
 
     private void checkHTMLModel(Document dom) {

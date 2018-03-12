@@ -104,8 +104,7 @@ public class TileMatrixSetEditor extends FormComponentPanel<List<Grid>> {
 
     /**
      * @param id
-     * @param model
-     *            the model over the appropriate list of {@link Grid}
+     * @param model the model over the appropriate list of {@link Grid}
      * @see WMSInfo#getAuthorityURLs()
      * @see LayerInfo#getAuthorityURLs()
      * @see LayerGroupInfo#getAuthorityURLs()
@@ -149,11 +148,11 @@ public class TileMatrixSetEditor extends FormComponentPanel<List<Grid>> {
             protected void onUpdate(AjaxRequestTarget target) {
                 resolutionsOrScales.processInput();
                 final boolean useResolutions = resolutionsOrScales.getModelObject().booleanValue();
-                
+
                 Iterator<Component> iterator = grids.iterator();
                 while (iterator.hasNext()) {
                     @SuppressWarnings("unchecked")
-					ListItem<Grid> next = (ListItem<Grid>) iterator.next();
+                    ListItem<Grid> next = (ListItem<Grid>) iterator.next();
                     next.get("resolution").setEnabled(useResolutions);
                     next.get("scale").setEnabled(!useResolutions);
                 }
@@ -233,7 +232,7 @@ public class TileMatrixSetEditor extends FormComponentPanel<List<Grid>> {
                                 .ceil((extent.getHeight() - mapUnitHeight * 0.01) / mapUnitHeight);
 
                         NumberFormat nf = NumberFormat.getIntegerInstance();// so it shows grouping
-                                                                            // for large numbers
+                        // for large numbers
                         String tilesStr = nf.format(tilesWide) + " x " + nf.format(tilesHigh);
 
                         return tilesStr;

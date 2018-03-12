@@ -10,9 +10,9 @@ import org.geoserver.data.test.MockData;
 
 /**
  * Mock data for testing TimeSeries with list value in app-schema {@link WaterMLTimeSeriesWfsTest}
- * 
+ * <p>
  * Inspired by {@link MockData}.
- * 
+ *
  * @author Rini Angreani (CSIRO Earth Science and Resource Engineering)
  */
 public class WaterMLTimeSeriesMockData extends AbstractAppSchemaMockData {

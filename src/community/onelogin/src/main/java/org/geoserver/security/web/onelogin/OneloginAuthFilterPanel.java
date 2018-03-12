@@ -14,7 +14,7 @@ import org.geoserver.web.wicket.HelpLink;
 
 /**
  * Configuration panel for {@link OneloginAuthenticationFilter}.
- * 
+ *
  * @author Xandros
  */
 public class OneloginAuthFilterPanel

@@ -48,7 +48,7 @@ import org.geotools.util.logging.Logging;
  * Abstract base class for adding/editing a {@link DataStoreInfo}, provides the UI components and a
  * template method {@link #onSaveDataStore(Form)} for the subclasses to perform the insertion or
  * update of the object.
- * 
+ *
  * @author Gabriel Roldan
  * @see DataAccessNewPage
  * @see DataAccessEditPage
@@ -71,7 +71,6 @@ abstract class AbstractDataAccessPage extends GeoServerSecuredPage {
     }
 
     /**
-     * 
      * @param storeInfo
      * @throws IllegalArgumentException
      */
@@ -177,16 +176,14 @@ abstract class AbstractDataAccessPage extends GeoServerSecuredPage {
     /**
      * Call back method called when the save button is hit. Subclasses shall override in order to
      * perform the action over the catalog, whether it is adding a new {@link DataStoreInfo} or
-     * saving the edits to an existing onefinal StoreEditPanel 
-     * 
-     * @param info
-     *            the object to save
+     * saving the edits to an existing onefinal StoreEditPanel
+     *
+     * @param info          the object to save
      * @param requestTarget
-     * @throws IllegalArgumentException
-     *             with an appropriate message for the user if the operation failed
+     * @throws IllegalArgumentException with an appropriate message for the user if the operation failed
      */
     protected abstract void onSaveDataStore(final DataStoreInfo info,
-            AjaxRequestTarget requestTarget) throws IllegalArgumentException;
+                                            AjaxRequestTarget requestTarget) throws IllegalArgumentException;
 
     /**
      * Make the {@link #namespacePanel} model to synch up with the workspace whenever the
@@ -221,9 +218,9 @@ abstract class AbstractDataAccessPage extends GeoServerSecuredPage {
                     Component paramsPanel = AbstractDataAccessPage.this
                             .get("dataStoreForm:parametersPanel");
                     namespacePanel = findNamespacePanel((MarkupContainer) paramsPanel);
-                    
+
                     // if the panel is not there search for the parameter and build a model around it
-                    if(namespacePanel == null) {
+                    if (namespacePanel == null) {
                         final IModel model = paramsForm.getModel();
                         final DataStoreInfo info = (DataStoreInfo) model.getObject();
                         final Catalog catalog = getCatalog();
@@ -237,13 +234,13 @@ abstract class AbstractDataAccessPage extends GeoServerSecuredPage {
 
                         final Param[] dsParams = dsFactory.getParametersInfo();
                         for (Param p : dsParams) {
-                            if("namespace".equals(p.getName())) {
+                            if ("namespace".equals(p.getName())) {
                                 final IModel paramsModel = new PropertyModel(model, "connectionParameters");
                                 namespaceModel = new NamespaceParamModel(paramsModel, "namespace");
                                 break;
                             }
                         }
-                        
+
                     }
                     namespaceLookupOccurred = true;
                 }
@@ -256,7 +253,7 @@ abstract class AbstractDataAccessPage extends GeoServerSecuredPage {
                     // update the GUI
                     namespacePanel.setDefaultModelObject(namespaceInfo);
                     target.add(namespacePanel.getFormComponent());
-                } else if(namespaceModel != null) {
+                } else if (namespaceModel != null) {
                     // update the model directly
                     namespaceModel.setObject(namespaceInfo);
                     // target.add(AbstractDataAccessPage.this);
@@ -267,7 +264,7 @@ abstract class AbstractDataAccessPage extends GeoServerSecuredPage {
 
     private NamespacePanel findNamespacePanel(MarkupContainer c) {
         Component child;
-        for (Iterator<? extends Component> it = ((MarkupContainer) c).iterator(); it.hasNext();) {
+        for (Iterator<? extends Component> it = ((MarkupContainer) c).iterator(); it.hasNext(); ) {
             child = it.next();
             if (child instanceof NamespacePanel) {
                 return (NamespacePanel) child;

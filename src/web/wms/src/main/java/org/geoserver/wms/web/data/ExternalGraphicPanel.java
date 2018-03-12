@@ -52,8 +52,6 @@ import org.geoserver.web.wicket.GeoServerAjaxFormLink;
 
 /**
  * Allows setting the data for using an ExternalImage
- * 
- * 
  */
 @SuppressWarnings("serial")
 public class ExternalGraphicPanel extends Panel {
@@ -65,41 +63,41 @@ public class ExternalGraphicPanel extends Panel {
     private TextField<Integer> height;
     private WebMarkupContainer table;
     private GeoServerAjaxFormLink autoFill;
-    
+
     private Form<StyleInfo> showhideForm;
-    
+
     private AjaxButton show;
     private AjaxButton hide;
-   
+
     private Model<String> showhideStyleModel = new Model<String>("");
 
     /**
      * @param id
      * @param model Must return a {@link ResourceInfo}
      */
-    public ExternalGraphicPanel(String id,  final CompoundPropertyModel<StyleInfo> styleModel, final Form<?> styleForm) {
+    public ExternalGraphicPanel(String id, final CompoundPropertyModel<StyleInfo> styleModel, final Form<?> styleForm) {
         super(id, styleModel);
-        
+
         // container for ajax updates
         final WebMarkupContainer container = new WebMarkupContainer("externalGraphicContainer");
         container.setOutputMarkupId(true);
         add(container);
-        
+
         table = new WebMarkupContainer("list");
         table.setOutputMarkupId(true);
-        
+
         IModel<String> bind = styleModel.bind("legend.onlineResource");
-        onlineResource = new TextField<String>("onlineResource", bind );
+        onlineResource = new TextField<String>("onlineResource", bind);
         onlineResource.add(new IValidator<String>() {
-            final List<String> EXTENSIONS = Arrays.asList(new String[]{"png","gif","jpeg","jpg"});
-            
+            final List<String> EXTENSIONS = Arrays.asList(new String[]{"png", "gif", "jpeg", "jpg"});
+
             @Override
             public void validate(IValidatable<String> input) {
                 String value = input.getValue();
                 int last = value == null ? -1 : value.lastIndexOf('.');
-                if (last == -1 || !EXTENSIONS.contains( value.substring(last + 1).toLowerCase() ) ){
+                if (last == -1 || !EXTENSIONS.contains(value.substring(last + 1).toLowerCase())) {
                     ValidationError error = new ValidationError();
-                    error.setMessage( "Not an image" );
+                    error.setMessage("Not an image");
                     error.addKey("nonImage");
                     input.error(error);
                     return;
@@ -109,16 +107,16 @@ public class ExternalGraphicPanel extends Panel {
                     uri = new URI(value);
                 } catch (URISyntaxException e1) {
                     // Unable to check if absolute
-                } 
-                if( uri != null && uri.isAbsolute()){
+                }
+                if (uri != null && uri.isAbsolute()) {
                     try {
                         String baseUrl = baseURL(onlineResource.getForm());
-                        if( !value.startsWith(baseUrl)){
-                            onlineResource.warn("Recommend use of styles directory at "+baseUrl);
+                        if (!value.startsWith(baseUrl)) {
+                            onlineResource.warn("Recommend use of styles directory at " + baseUrl);
                         }
                         URL url = uri.toURL();
                         URLConnection conn = url.openConnection();
-                        if("text/html".equals(conn.getContentType())){
+                        if ("text/html".equals(conn.getContentType())) {
                             ValidationError error = new ValidationError();
                             error.setMessage("Unable to access image");
                             error.addKey("imageUnavailable");
@@ -137,22 +135,21 @@ public class ExternalGraphicPanel extends Panel {
                         input.error(error);
                     }
                     return; // no further checks possible
-                }
-                else {
+                } else {
                     GeoServerResourceLoader resources = GeoServerApplication.get().getResourceLoader();
                     try {
                         File styles = resources.find("styles");
                         String[] path = value.split(Pattern.quote(File.separator));
                         WorkspaceInfo wsInfo = styleModel.getObject().getWorkspace();
                         File test = null;
-                        if (wsInfo != null){
+                        if (wsInfo != null) {
                             String wsName = wsInfo.getName();
                             List<String> list = new ArrayList();
                             list.addAll(Arrays.asList("workspaces", wsName, "styles"));
                             list.addAll(Arrays.asList(path));
                             test = resources.find(list.toArray(new String[list.size()]));
                         }
-                        if ( test == null){
+                        if (test == null) {
                             test = resources.find(styles, path);
                         }
                         if (test == null) {
@@ -172,12 +169,12 @@ public class ExternalGraphicPanel extends Panel {
         });
         onlineResource.setOutputMarkupId(true);
         table.add(onlineResource);
-        
+
         // add the autofill button
         autoFill = new GeoServerAjaxFormLink("autoFill", styleForm) {
             @Override
             public void onClick(AjaxRequestTarget target, Form<?> form) {
-                
+
                 URLConnection conn = getExternalGraphic(target, form);
                 if (conn == null) {
                     ValidationError error = new ValidationError();
@@ -185,12 +182,12 @@ public class ExternalGraphicPanel extends Panel {
                     error.addKey("imageUnavailable");
                     onlineResource.error(error);
                 } else {
-                    format.setModelValue(new String[] {conn.getContentType()});
+                    format.setModelValue(new String[]{conn.getContentType()});
                     BufferedImage image;
                     try {
                         image = ImageIO.read(conn.getInputStream());
-                        width.setModelValue(new String[] {"" + image.getWidth()});
-                        height.setModelValue(new String[] {"" + image.getHeight()});
+                        width.setModelValue(new String[]{"" + image.getWidth()});
+                        height.setModelValue(new String[]{"" + image.getHeight()});
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -200,7 +197,7 @@ public class ExternalGraphicPanel extends Panel {
                 }
             }
         };
-        
+
         table.add(autoFill);
 
         format = new TextField<String>("format", styleModel.bind("legend.format"));
@@ -215,14 +212,14 @@ public class ExternalGraphicPanel extends Panel {
 
         height = new TextField<Integer>("height", styleModel.bind("legend.height"), Integer.class);
         height.add(RangeValidator.minimum(0));
-        height.setRequired(true);        
+        height.setRequired(true);
         height.setOutputMarkupId(true);
         table.add(height);
-        
+
         table.add(new AttributeModifier("style", showhideStyleModel));
-        
+
         container.add(table);
-        
+
         showhideForm = new Form<StyleInfo>("showhide") {
             @Override
             protected void onSubmit() {
@@ -232,11 +229,11 @@ public class ExternalGraphicPanel extends Panel {
         showhideForm.setMarkupId("showhideForm");
         container.add(showhideForm);
         showhideForm.setMultiPart(true);
-        
-        
+
+
         show = new AjaxButton("show") {
             private static final long serialVersionUID = 1L;
-            
+
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 updateVisibility(true);
@@ -245,10 +242,10 @@ public class ExternalGraphicPanel extends Panel {
         };
         container.add(show);
         showhideForm.add(show);
-        
+
         hide = new AjaxButton("hide") {
             private static final long serialVersionUID = 1L;
-            
+
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 onlineResource.setModelObject("");
@@ -259,25 +256,26 @@ public class ExternalGraphicPanel extends Panel {
                 width.clearInput();
                 height.setModelObject(0);
                 height.clearInput();
-                
+
                 updateVisibility(false);
                 target.add(ExternalGraphicPanel.this);
             }
         };
         container.add(hide);
         showhideForm.add(hide);
-        
+
         LegendInfo legend = styleModel.getObject().getLegend();
         boolean visible = legend != null && legend.getOnlineResource() != null && !legend.getOnlineResource().isEmpty();
         updateVisibility(visible);
-        
+
     }
-    
+
     /**
      * Lookup base URL using provided form
+     *
      * @param form
-     * @see ResponseUtils
      * @return baseUrl
+     * @see ResponseUtils
      */
     protected String baseURL(Form<?> form) {
         HttpServletRequest httpServletRequest = (HttpServletRequest) form.getRequest().getContainerRequest();
@@ -295,7 +293,7 @@ public class ExternalGraphicPanel extends Panel {
     /**
      * Validates the external graphic and returns a connection to the graphic.
      * If validation fails, error messages will be added to the passed form
-     * 
+     *
      * @param target
      * @param form
      * @return URLConnection to the External Graphic file
@@ -307,47 +305,46 @@ public class ExternalGraphicPanel extends Panel {
             try {
                 String baseUrl = baseURL(form);
                 String external = onlineResource.getModelObject().toString();
-                
-                URI uri = new URI( external );
-                if( uri.isAbsolute() ){
+
+                URI uri = new URI(external);
+                if (uri.isAbsolute()) {
                     url = uri.toURL();
-                    if( !external.startsWith(baseUrl)){
-                        form.warn( "Recommend use of styles directory at "+baseUrl);
+                    if (!external.startsWith(baseUrl)) {
+                        form.warn("Recommend use of styles directory at " + baseUrl);
                     }
-                }
-                else {
-                    WorkspaceInfo wsInfo = ((StyleInfo)getDefaultModelObject()).getWorkspace();
+                } else {
+                    WorkspaceInfo wsInfo = ((StyleInfo) getDefaultModelObject()).getWorkspace();
                     if (wsInfo != null) {
                         url = new URL(ResponseUtils.appendPath(baseUrl, "styles", wsInfo.getName(), external));
                     } else {
                         url = new URL(ResponseUtils.appendPath(baseUrl, "styles", external));
                     }
                 }
-                
+
                 URLConnection conn = url.openConnection();
-                if("text/html".equals(conn.getContentType())){
+                if ("text/html".equals(conn.getContentType())) {
                     form.error("Unable to access url");
                     return null; // error message back!
                 }
                 return conn;
 
-            } catch (FileNotFoundException notFound ){
-                form.error( "Unable to access "+url);
+            } catch (FileNotFoundException notFound) {
+                form.error("Unable to access " + url);
             } catch (Exception e) {
                 e.printStackTrace();
-                form.error( "Recommend use of styles directory at "+e);
+                form.error("Recommend use of styles directory at " + e);
             }
         }
         return null;
     }
-    
+
     /**
      * @return the value of the onlineResource field
      */
     protected String getOnlineResource() {
         return onlineResource.getInput();
     }
-    
+
     private void updateVisibility(boolean b) {
         if (b) {
             showhideStyleModel.setObject("");

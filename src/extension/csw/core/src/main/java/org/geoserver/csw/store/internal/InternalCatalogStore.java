@@ -31,9 +31,8 @@ import org.opengis.filter.sort.SortBy;
  * Internal Catalog Store
  * Creates a Catalog Store from a GeoServer Catalog instance and a set of Mappings
  * It can map the internal GS catalog data to 1 or more CSW Record Types, based on one mapping per record type
- * 
+ *
  * @author Niels Charlier
- * 
  */
 public class InternalCatalogStore extends AbstractCatalogStore {
 
@@ -47,20 +46,20 @@ public class InternalCatalogStore extends AbstractCatalogStore {
 
         this.catalog = catalog;
     }
-    
+
     /**
      * Add a Mapping to the Internal Catalog Store
-     * 
+     *
      * @param typeName record type name for mapping
-     * @param mapping the mapping
+     * @param mapping  the mapping
      */
     public void addMapping(String typeName, CatalogStoreMapping mapping) {
         mappings.put(typeName, mapping);
     }
-    
+
     /**
      * Get Mapping
-     * 
+     *
      * @param typeName
      * @return the mapping
      */
@@ -70,9 +69,9 @@ public class InternalCatalogStore extends AbstractCatalogStore {
 
     @Override
     public FeatureCollection getRecordsInternal(RecordDescriptor rd, RecordDescriptor rdOutput, Query q, Transaction t) throws IOException {
-        
-        Map<String, String> interpolationProperties = new HashMap<String, String>();       
-        
+
+        Map<String, String> interpolationProperties = new HashMap<String, String>();
+
         String baseUrl = (String) q.getHints().get(GetRecords.KEY_BASEURL);
         if (baseUrl != null) {
             interpolationProperties.put("url.wfs", ResponseUtils.buildURL(baseUrl, "wfs", null, URLType.SERVICE));
@@ -86,7 +85,7 @@ public class InternalCatalogStore extends AbstractCatalogStore {
         if (q.getStartIndex() != null) {
             startIndex = q.getStartIndex();
         }
-        
+
         CSWUnmappingFilterVisitor unmapper = new CSWUnmappingFilterVisitor(mapping, rd);
 
         Filter unmapped = Filter.INCLUDE;
@@ -95,7 +94,7 @@ public class InternalCatalogStore extends AbstractCatalogStore {
             Filter filter = q.getFilter();
             unmapped = (Filter) filter.accept(unmapper, null);
         }
-        
+
         // unmap sortby
         SortBy[] unmappedSortBy = null;
         if (q.getSortBy() != null && q.getSortBy().length > 0) {
@@ -113,9 +112,9 @@ public class InternalCatalogStore extends AbstractCatalogStore {
 
             }
         }
-        
+
         if (q.getProperties() != null && q.getProperties().size() > 0) {
-        	outputMapping = outputMapping.subMapping(q.getProperties(), rd);
+            outputMapping = outputMapping.subMapping(q.getProperties(), rd);
         }
 
         return new CatalogStoreFeatureCollection(startIndex,

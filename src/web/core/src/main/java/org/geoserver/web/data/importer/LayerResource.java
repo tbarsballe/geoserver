@@ -12,14 +12,16 @@ import org.opengis.feature.type.Name;
 
 /**
  * The bean to be rendered in the wms mass publisher page
- * 
+ *
  * @author Andrea Aime - OpenGeo
  */
 public class LayerResource implements Comparable<LayerResource>, Serializable {
-    
+
     private static final long serialVersionUID = 7584589248746230483L;
 
-    enum LayerStatus {ERROR, NEWLY_PUBLISHED, UPDATED, NEW, PUBLISHED}; 
+    enum LayerStatus {ERROR, NEWLY_PUBLISHED, UPDATED, NEW, PUBLISHED}
+
+    ;
 
     /**
      * The resource name
@@ -28,10 +30,10 @@ public class LayerResource implements Comparable<LayerResource>, Serializable {
     String uri;
 
     /**
-     * Status of the resource in the workflow 
+     * Status of the resource in the workflow
      */
     LayerStatus status = LayerStatus.NEW;
-    
+
     /**
      * The eventual import error
      */
@@ -50,7 +52,7 @@ public class LayerResource implements Comparable<LayerResource>, Serializable {
         this.name = name.getLocalPart();
         this.uri = name.getURI();
     }
-    
+
     public String getLocalName() {
         return name;
     }
@@ -59,7 +61,7 @@ public class LayerResource implements Comparable<LayerResource>, Serializable {
         return new NameImpl(uri, name);
     }
 
-    
+
     @Override
     public int hashCode() {
         final int prime = 31;

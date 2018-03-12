@@ -33,7 +33,6 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
  * doesn't distinguish betwee {@link TileLayer} objects and tile layer configuration objects (as the
  * GWC/GeoServer integration does with {@link GeoServerTileLayer} and {@link GeoServerTileLayerInfo}
  * ).
- * 
  */
 public class GWCGeoServerRESTConfigurationProvider implements ContextualConfigurationProvider {
 
@@ -50,12 +49,12 @@ public class GWCGeoServerRESTConfigurationProvider implements ContextualConfigur
         xs.processAnnotations(StyleParameterFilter.class);
         xs.registerConverter(new RESTConverterHelper());
         xs.addDefaultImplementation(GeoServerTileLayerInfoImpl.class, GeoServerTileLayerInfo.class);
-        
+
         // Omit the values cached from the backing layer.  They are only needed for the
         // persisted config file.
         xs.omitField(StyleParameterFilter.class, "availableStyles");
         xs.omitField(StyleParameterFilter.class, "defaultStyle");
-        
+
         // Omit autoCacheStyles as it is no longer needed.  
         // It'd be better to read it but not write it, but blocking it from REST is good enough and
         // a lot easier to get XStream to do.
@@ -66,7 +65,6 @@ public class GWCGeoServerRESTConfigurationProvider implements ContextualConfigur
 
     /**
      * @author groldan
-     * 
      */
     private final class RESTConverterHelper implements Converter {
         @Override
@@ -76,7 +74,7 @@ public class GWCGeoServerRESTConfigurationProvider implements ContextualConfigur
 
         @Override
         public GeoServerTileLayer unmarshal(HierarchicalStreamReader reader,
-                UnmarshallingContext context) {
+                                            UnmarshallingContext context) {
 
             Object current = new GeoServerTileLayerInfoImpl();
             Class<?> type = GeoServerTileLayerInfo.class;
@@ -145,7 +143,7 @@ public class GWCGeoServerRESTConfigurationProvider implements ContextualConfigur
 
         @Override
         public void marshal(/* GeoServerTileLayer */Object source, HierarchicalStreamWriter writer,
-                MarshallingContext context) {
+                            MarshallingContext context) {
             GeoServerTileLayer tileLayer = (GeoServerTileLayer) source;
             GeoServerTileLayerInfo info = tileLayer.getInfo();
             context.convertAnother(info);
@@ -154,16 +152,15 @@ public class GWCGeoServerRESTConfigurationProvider implements ContextualConfigur
 
     @Override
     public boolean appliesTo(Context ctxt) {
-        return Context.REST==ctxt;
+        return Context.REST == ctxt;
     }
 
     /**
-     * @see ContextualConfigurationProvider#canSave(Info)
-     *
-     * Always returns false, as persistence is not relevant for REST.
-     *
      * @param i Info to save
      * @return <code>false</code>
+     * @see ContextualConfigurationProvider#canSave(Info)
+     * <p>
+     * Always returns false, as persistence is not relevant for REST.
      */
     @Override
     public boolean canSave(Info i) {

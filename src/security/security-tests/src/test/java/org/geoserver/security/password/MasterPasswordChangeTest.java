@@ -31,101 +31,101 @@ public class MasterPasswordChangeTest extends GeoServerSecurityTestSupport {
     protected void setUpSpring(List<String> springContextLocations) {
         super.setUpSpring(springContextLocations);
         springContextLocations.add(
-            getClass().getResource(getClass().getSimpleName() + "-context.xml").toString());
+                getClass().getResource(getClass().getSimpleName() + "-context.xml").toString());
     }
 
     @Override
     protected void onSetUp(SystemTestData testData) throws Exception {
         super.onSetUp(testData);
         applicationContext.getBeanFactory()
-            .registerSingleton("testMasterPasswordProvider", new TestMasterPasswordProvider());
+                .registerSingleton("testMasterPasswordProvider", new TestMasterPasswordProvider());
     }
 
     @Test
     public void testMasterPasswordChange() throws Exception {
         // keytool -storepasswd -new geoserver1 -storepass geoserver -storetype jceks -keystore geoserver.jks
-        
-        
+
+
         String masterPWAsString = getMasterPassword();
         MasterPasswordConfig config = getSecurityManager().getMasterPasswordConfig();
-        
-        URLMasterPasswordProviderConfig mpConfig = (URLMasterPasswordProviderConfig) 
-            getSecurityManager().loadMasterPassswordProviderConfig(config.getProviderName());
-        
+
+        URLMasterPasswordProviderConfig mpConfig = (URLMasterPasswordProviderConfig)
+                getSecurityManager().loadMasterPassswordProviderConfig(config.getProviderName());
+
         assertTrue(mpConfig.getURL().toString().endsWith(URLMasterPasswordProviderConfig.MASTER_PASSWD_FILENAME));
         getSecurityManager().getKeyStoreProvider().reloadKeyStore();
-        
+
         try {
             getSecurityManager().saveMasterPasswordConfig(config, null, null, null);
             fail();
         } catch (MasterPasswordChangeException ex) {
         }
-        
+
         ///// First change using rw_url
         mpConfig = new URLMasterPasswordProviderConfig();
         mpConfig.setName("rw");
         mpConfig.setClassName(URLMasterPasswordProvider.class.getCanonicalName());
         mpConfig.setReadOnly(false);
 
-        File tmp = new File(getSecurityManager().get("security").dir(),"mpw1.properties");
+        File tmp = new File(getSecurityManager().get("security").dir(), "mpw1.properties");
         mpConfig.setURL(URLs.fileToUrl(tmp));
         getSecurityManager().saveMasterPasswordProviderConfig(mpConfig);
-        
+
         config = getSecurityManager().getMasterPasswordConfig();
         config.setProviderName(mpConfig.getName());
         getSecurityManager().saveMasterPasswordConfig(
-            config, masterPWAsString.toCharArray(), "geoserver1".toCharArray(), "geoserver1".toCharArray());
+                config, masterPWAsString.toCharArray(), "geoserver1".toCharArray(), "geoserver1".toCharArray());
         assertEquals("geoserver1", getMasterPassword());
-        
+
         getSecurityManager().getKeyStoreProvider().getConfigPasswordKey();
-        
+
         /////////////// change with ro url
         mpConfig = new URLMasterPasswordProviderConfig();
         mpConfig.setName("ro");
         mpConfig.setClassName(URLMasterPasswordProvider.class.getCanonicalName());
         mpConfig.setReadOnly(true);
-        
-        tmp = new File(getSecurityManager().get("security").dir(),"mpw2.properties");
+
+        tmp = new File(getSecurityManager().get("security").dir(), "mpw2.properties");
         mpConfig.setURL(URLs.fileToUrl(tmp));
-        
+
         FileUtils.writeStringToFile(tmp, "geoserver2");
-        
+
         getSecurityManager().saveMasterPasswordProviderConfig(mpConfig);
         config = getSecurityManager().getMasterPasswordConfig();
         config.setProviderName("ro");
-        
+
         getSecurityManager().saveMasterPasswordConfig(
-            config, "geoserver1".toCharArray(), null, "geoserver2".toCharArray());
-        
-        assertEquals("geoserver2",getMasterPassword());
+                config, "geoserver1".toCharArray(), null, "geoserver2".toCharArray());
+
+        assertEquals("geoserver2", getMasterPassword());
         getSecurityManager().getKeyStoreProvider().getConfigPasswordKey();
-        
+
         /////////////////////// change simulating spring injection
         MasterPasswordProviderConfig mpConfig2 = new MasterPasswordProviderConfig();
         mpConfig2.setName("test");
         mpConfig2.setClassName(TestMasterPasswordProvider.class.getCanonicalName());
         getSecurityManager().saveMasterPasswordProviderConfig(mpConfig2);
-        
-        config =getSecurityManager().getMasterPasswordConfig();
+
+        config = getSecurityManager().getMasterPasswordConfig();
         config.setProviderName("test");
         getSecurityManager().saveMasterPasswordConfig(
-            config, "geoserver2".toCharArray(), "geoserver3".toCharArray(), "geoserver3".toCharArray());
-        
+                config, "geoserver2".toCharArray(), "geoserver3".toCharArray(), "geoserver3".toCharArray());
+
         // now, a geoserver restart should appear, simulate with
         getSecurityManager().getKeyStoreProvider().commitMasterPasswordChange();
 
         //////////
-        assertEquals("geoserver3",getMasterPassword());
+        assertEquals("geoserver3", getMasterPassword());
         getSecurityManager().getKeyStoreProvider().getConfigPasswordKey();
 
-        
+
         /// Test root login after master password change
         Authentication auth = new UsernamePasswordAuthenticationToken("root", "geoserver3");
         GeoServerRootAuthenticationProvider authProvider = new GeoServerRootAuthenticationProvider();
         authProvider.setSecurityManager(getSecurityManager());
         auth = authProvider.authenticate(auth);
         assertTrue(auth.isAuthenticated());
-        
+
         auth = new UsernamePasswordAuthenticationToken("root", "abcdefghijk");
         assertNull(authProvider.authenticate(auth));
         assertFalse(auth.isAuthenticated());

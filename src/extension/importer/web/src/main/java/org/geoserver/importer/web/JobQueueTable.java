@@ -20,29 +20,29 @@ import org.geoserver.importer.job.Task;
 
 public class JobQueueTable extends GeoServerTablePanel<Task<ImportContext>> {
 
-    static final Property<Task<ImportContext>> IMPORT = 
+    static final Property<Task<ImportContext>> IMPORT =
             new AbstractProperty<Task<ImportContext>>("import") {
-        @Override
-        public Object getPropertyValue(Task<ImportContext> item) {
-            //have to check for null since the job might be out of the queue
-            return item != null ? item.toString() : "null";
-        }
-    };
+                @Override
+                public Object getPropertyValue(Task<ImportContext> item) {
+                    //have to check for null since the job might be out of the queue
+                    return item != null ? item.toString() : "null";
+                }
+            };
 
-    static final Property<Task<ImportContext>> STATUS = 
+    static final Property<Task<ImportContext>> STATUS =
             new AbstractProperty<Task<ImportContext>>("status") {
-        @Override
-        public Object getPropertyValue(Task<ImportContext> item) {
-            if (item == null) {
-                return "Finished";
-            }
+                @Override
+                public Object getPropertyValue(Task<ImportContext> item) {
+                    if (item == null) {
+                        return "Finished";
+                    }
 
-            return item.isCancelled() ? "Cancelled" : 
-                item.isDone() ? "Finished" : 
-                item.isStarted() ? "Running" : "Pending";
-        }
-    };
-    
+                    return item.isCancelled() ? "Cancelled" :
+                            item.isDone() ? "Finished" :
+                                    item.isStarted() ? "Running" : "Pending";
+                }
+            };
+
     public JobQueueTable(String id) {
         super(id, new GeoServerDataProvider<Task<ImportContext>>() {
 
@@ -92,6 +92,6 @@ public class JobQueueTable extends GeoServerTablePanel<Task<ImportContext>> {
         @Override
         public void setObject(Task<ImportContext> object) {
         }
-    
+
     }
 }

@@ -78,7 +78,7 @@ public class ServicePersisterTest extends GeoServerSystemTestSupport {
         s.setName("foo");
         s.setWorkspace(ws);
 
-        File f = new File(dataDirRoot, "workspaces"+"/"+ws.getName()+"/service.xml");
+        File f = new File(dataDirRoot, "workspaces" + "/" + ws.getName() + "/service.xml");
         assertFalse(f.exists());
 
         geoServer.add(s);
@@ -92,9 +92,9 @@ public class ServicePersisterTest extends GeoServerSystemTestSupport {
         File dataDirRoot = getTestData().getDataDirectoryRoot();
         WorkspaceInfo ws = getCatalog().getDefaultWorkspace();
 
-        File f = new File(dataDirRoot, "workspaces"+"/"+ws.getName()+"/service.xml");
+        File f = new File(dataDirRoot, "workspaces" + "/" + ws.getName() + "/service.xml");
         assertTrue(f.exists());
-        
+
         Logger logger = Logging.getLogger(GeoServerImpl.class);
         Level level = logger.getLevel();
         try {
@@ -102,12 +102,11 @@ public class ServicePersisterTest extends GeoServerSystemTestSupport {
             ServiceInfo s = geoServer.getServiceByName(ws, "foo", ServiceInfo.class);
             geoServer.remove(s);
             assertFalse(f.exists());
-        }
-        finally {
+        } finally {
             logger.setLevel(level);
         }
     }
-    
+
     @Test
     public void testReloadWithLocalServices() throws Exception {
         // setup a non default workspace
@@ -124,9 +123,9 @@ public class ServicePersisterTest extends GeoServerSystemTestSupport {
         s.setWorkspace(ws);
 
         geoServer.add(s);
-        
+
         getGeoServer().reload();
-        
+
     }
 
     @Test

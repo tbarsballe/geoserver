@@ -46,11 +46,11 @@ import com.sleepycat.je.TransactionConfig;
 
 /**
  * Import store implementation based on Berkley DB Java Edition.
- * 
+ *
  * @author Justin Deoliveira, OpenGeo
  */
 public class BDBImportStore implements ImportStore {
-    
+
     static Logger LOGGER = Logging.getLogger(Importer.class);
 
     public static enum BindingType {
@@ -59,7 +59,7 @@ public class BDBImportStore implements ImportStore {
             ImportBinding createBinding() {
                 return new SerialImportBinding();
             }
-        }, 
+        },
         XSTREAM {
             @Override
             ImportBinding createBinding() {
@@ -67,7 +67,7 @@ public class BDBImportStore implements ImportStore {
             }
         };
 
-        abstract ImportBinding createBinding(); 
+        abstract ImportBinding createBinding();
     }
 
     Importer importer;
@@ -115,7 +115,7 @@ public class BDBImportStore implements ImportStore {
 
         File dbRoot = new File(importer.getImportRoot(), "bdb");
         dbRoot.mkdir();
-        
+
         Environment env = new Environment(dbRoot, envCfg);
 
         DatabaseConfig dbConfig = new DatabaseConfig();
@@ -125,7 +125,7 @@ public class BDBImportStore implements ImportStore {
         initDb(dbConfig, env);
     }
 
-    
+
     void initDb(DatabaseConfig dbConfig, Environment env) {
         //main database
         db = env.openDatabase(null, "imports", dbConfig);
@@ -154,11 +154,11 @@ public class BDBImportStore implements ImportStore {
         } catch (RuntimeException re) {
             if (re.getCause() instanceof java.io.ObjectStreamException) {
                 LOGGER.warning("Unable to read import database, attempting recovery");
-                
+
                 // wipe out the catalog
                 dbBinding.closeDb(env);
                 dbBinding.destroyDb(env);
-                
+
                 // and the import db
                 db.close();
                 env.removeDatabase(null, "imports");
@@ -175,10 +175,10 @@ public class BDBImportStore implements ImportStore {
         assert id != null;
         // if not an advance, error
         long current = importIdSeq.getStats(StatsConfig.DEFAULT).getCurrent();
-        if (id.longValue() < current ) {
+        if (id.longValue() < current) {
             id = new Long(current);
         }
-        
+
         // reserve the spot now (the delta must have one added to it)
         int delta = (int) (id.longValue() - current + 1);
         current = importIdSeq.get(null, delta);
@@ -190,7 +190,7 @@ public class BDBImportStore implements ImportStore {
         put(reserved);
         return id;
     }
-    
+
     public ImportContext get(long id) {
         DatabaseEntry val = new DatabaseEntry();
         OperationStatus op = db.get(null, key(id), val, LockMode.DEFAULT);
@@ -219,13 +219,13 @@ public class BDBImportStore implements ImportStore {
     }
 
     public void remove(ImportContext importContext) {
-        db.delete(null, key(importContext) );
+        db.delete(null, key(importContext));
     }
 
     public void removeAll() {
 
         Transaction tx = db.getEnvironment().beginTransaction(null, null);
-        Cursor c  = db.openCursor(tx,null);
+        Cursor c = db.openCursor(tx, null);
 
         DatabaseEntry key = new DatabaseEntry();
         DatabaseEntry val = new DatabaseEntry();
@@ -234,7 +234,7 @@ public class BDBImportStore implements ImportStore {
         List<Long> ids = new ArrayList();
 
         OperationStatus op = null;
-        while((op  = c.getNext(key, val, LockMode.DEFAULT)) == OperationStatus.SUCCESS) {
+        while ((op = c.getNext(key, val, LockMode.DEFAULT)) == OperationStatus.SUCCESS) {
             ids.add(LongBinding.entryToLong(key));
         }
         c.close();
@@ -246,20 +246,19 @@ public class BDBImportStore implements ImportStore {
 
         tx.commit();
     }
-   
+
     public void save(ImportContext context) {
         dettach(context);
         if (context.getId() == null) {
             add(context);
-        }
-        else {
+        } else {
             put(context);
         }
     }
 
     public Iterator<ImportContext> iterator() {
         return new StoredMap<Long, ImportContext>(db, new LongBinding(), importBinding, false)
-            .values().iterator();
+                .values().iterator();
     }
 
     public Iterator<ImportContext> iterator(String sortBy) {
@@ -279,36 +278,35 @@ public class BDBImportStore implements ImportStore {
             }
         });
     }
-    
-    public Iterator<ImportContext> importsByUser(final String user) {        
+
+    public Iterator<ImportContext> importsByUser(final String user) {
         // if this becomes too slow a secondary database could be used for indexing
         return new FilterIterator(allNonCompleteImports(), new Predicate() {
 
             public boolean evaluate(Object o) {
-                return user.equals( ((ImportContext) o).getUser() );
+                return user.equals(((ImportContext) o).getUser());
             }
         });
     }
 
     public void query(ImportVisitor visitor) {
-        Cursor c  = db.openCursor(null, null);
+        Cursor c = db.openCursor(null, null);
         try {
             DatabaseEntry key = new DatabaseEntry();
             DatabaseEntry val = new DatabaseEntry();
-    
+
             OperationStatus op = null;
-            while((op  = c.getNext(key, val, LockMode.DEFAULT)) == OperationStatus.SUCCESS) {
+            while ((op = c.getNext(key, val, LockMode.DEFAULT)) == OperationStatus.SUCCESS) {
                 visitor.visit(importBinding.entryToObject(val));
             }
-        }
-        finally {
+        } finally {
             c.close();
         }
     }
 
     synchronized void put(ImportContext context) {
         assert context.getId() != null;
-        
+
         DatabaseEntry val = new DatabaseEntry();
         importBinding.objectToEntry(context, val);
 
@@ -327,16 +325,17 @@ public class BDBImportStore implements ImportStore {
 
     byte[] toBytes(long l) {
         byte[] b = new byte[8];
-        b[0]   = (byte)(0xff & (l >> 56));
-        b[1] = (byte)(0xff & (l >> 48));
-        b[2] = (byte)(0xff & (l >> 40));
-        b[3] = (byte)(0xff & (l >> 32));
-        b[4] = (byte)(0xff & (l >> 24));
-        b[5] = (byte)(0xff & (l >> 16));
-        b[6] = (byte)(0xff & (l >> 8));
-        b[7] = (byte)(0xff & l);
+        b[0] = (byte) (0xff & (l >> 56));
+        b[1] = (byte) (0xff & (l >> 48));
+        b[2] = (byte) (0xff & (l >> 40));
+        b[3] = (byte) (0xff & (l >> 32));
+        b[4] = (byte) (0xff & (l >> 24));
+        b[5] = (byte) (0xff & (l >> 16));
+        b[6] = (byte) (0xff & (l >> 8));
+        b[7] = (byte) (0xff & l);
         return b;
     }
+
     public void destroy() {
         //destroy the db environment
         Environment env = db.getEnvironment();
@@ -355,7 +354,7 @@ public class BDBImportStore implements ImportStore {
         void closeDb(Environment env) {
         }
 
-        void destroyDb( Environment env) {
+        void destroyDb(Environment env) {
         }
 
         abstract protected EntryBinding<ImportContext> createImportBinding(Importer importer);
@@ -364,7 +363,7 @@ public class BDBImportStore implements ImportStore {
     static class SerialImportBinding extends ImportBinding {
         Database classDb;
         ClassCatalog classCatalog;
-        
+
         @Override
         void initDb(DatabaseConfig dbConfig, Environment env) {
             //class database
@@ -393,8 +392,8 @@ public class BDBImportStore implements ImportStore {
         @Override
         protected EntryBinding<ImportContext> createImportBinding(Importer importer) {
             return new XStreamInfoSerialBinding<ImportContext>(
-                importer.createXStreamPersisterXML(), ImportContext.class);
+                    importer.createXStreamPersisterXML(), ImportContext.class);
         }
-    
+
     }
 }

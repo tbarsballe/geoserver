@@ -60,10 +60,10 @@ public class DefaultTileLayerCatalog implements TileLayerCatalog {
     private volatile boolean initialized;
 
     public DefaultTileLayerCatalog(GeoServerResourceLoader resourceLoader,
-            XMLConfiguration xmlPersisterFactory) throws IOException {
+                                   XMLConfiguration xmlPersisterFactory) throws IOException {
         this(resourceLoader,
                 xmlPersisterFactory.getConfiguredXStreamWithContext(new SecureXStream(),
-                Context.PERSIST));
+                        Context.PERSIST));
     }
 
     DefaultTileLayerCatalog(GeoServerResourceLoader resourceLoader, XStream configuredXstream)
@@ -100,7 +100,7 @@ public class DefaultTileLayerCatalog implements TileLayerCatalog {
 
         LOGGER.info("GeoServer TileLayer store base directory is: " + baseDir.path());
         LOGGER.info("Loading tile layers from " + baseDir.path());
-        
+
         ExtensionFilter xmlFilter = new Resources.ExtensionFilter("XML");
         baseDir.list().parallelStream().filter(r -> xmlFilter.accept(r)).forEach(res -> {
             GeoServerTileLayerInfoImpl info;
@@ -278,16 +278,16 @@ public class DefaultTileLayerCatalog implements TileLayerCatalog {
             LOGGER.fine("Depersisting GeoServerTileLayerInfo from " + res.path());
         }
         GeoServerTileLayerInfoImpl info;
-        try(Reader reader = new InputStreamReader(new ByteArrayInputStream(res.getContents()), "UTF-8")) {
+        try (Reader reader = new InputStreamReader(new ByteArrayInputStream(res.getContents()), "UTF-8")) {
             info = (GeoServerTileLayerInfoImpl) serializer.fromXML(reader);
         }
 
         return info;
     }
-    
+
     private GeoServerTileLayerInfoImpl depersist(final byte[] contents) throws IOException {
         GeoServerTileLayerInfoImpl info;
-        try(Reader reader = new InputStreamReader(new ByteArrayInputStream(contents), "UTF-8")) {
+        try (Reader reader = new InputStreamReader(new ByteArrayInputStream(contents), "UTF-8")) {
             info = (GeoServerTileLayerInfoImpl) serializer.fromXML(reader);
         }
 
@@ -324,7 +324,7 @@ public class DefaultTileLayerCatalog implements TileLayerCatalog {
         checkInitialized();
         return layersById.get(layerId).getName();
     }
-    
+
     @Override
     public String getPersistenceLocation() {
         return resourceLoader.get(baseDirectory).path();

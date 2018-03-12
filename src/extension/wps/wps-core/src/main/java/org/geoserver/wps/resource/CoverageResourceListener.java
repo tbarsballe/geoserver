@@ -19,14 +19,14 @@ import org.opengis.coverage.grid.GridCoverage;
 /**
  * Listens to progress events and makes sure the input/output coverages are marked as resources to
  * clean up (to release readers and thus file system locks and associated tiles in the tile cache)
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class CoverageResourceListener extends ProcessListenerAdapter {
 
     /**
      * A simple check to assess whether the
-     * 
+     *
      * @author Andrea Aime - GeoSolutions
      */
     private static class ResourceStatus {
@@ -36,8 +36,8 @@ public class CoverageResourceListener extends ProcessListenerAdapter {
     }
 
     WPSResourceManager resourceManager;
-    CoverageCleanerCallback  cleaner;
-    
+    CoverageCleanerCallback cleaner;
+
     Map<String, ResourceStatus> resourceStates = new ConcurrentHashMap<>();
 
     public CoverageResourceListener(WPSResourceManager resourceManager, CoverageCleanerCallback cleaner) {

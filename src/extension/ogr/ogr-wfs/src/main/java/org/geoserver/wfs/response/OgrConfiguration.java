@@ -19,17 +19,17 @@ import com.thoughtworks.xstream.XStream;
  *
  * @author Andrea Aime - OpenGeo
  * @author Stefano Costa - GeoSolutions
-
  */
 public class OgrConfiguration extends ToolConfiguration {
 
     public static final OgrConfiguration DEFAULT;
+
     static {
         DEFAULT = new OgrConfiguration();
         // assume it's in the classpath and GDAL_DATA is properly set in the enviroment
         DEFAULT.ogr2ogrLocation = "ogr2ogr";
         // add some default formats
-        DEFAULT.formats = new OgrFormat[] {
+        DEFAULT.formats = new OgrFormat[]{
                 new OgrFormat("MapInfo File", "OGR-TAB", ".tab", false, null),
                 new OgrFormat("MapInfo File", "OGR-MIF", ".mif", false, null, "-dsco", "FORMAT=MIF"),
                 new OgrFormat("CSV", "OGR-CSV", ".csv", true, "text/csv", OutputType.TEXT),

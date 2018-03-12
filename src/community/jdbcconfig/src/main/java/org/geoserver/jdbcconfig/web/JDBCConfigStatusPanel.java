@@ -11,12 +11,10 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.geoserver.jdbcconfig.internal.JDBCConfigProperties;
 
 /**
- * 
  * @author Kevin Smith, OpenGeo
- *
  */
 public class JDBCConfigStatusPanel extends Panel {
-    
+
     public JDBCConfigStatusPanel(String id, JDBCConfigProperties config) {
         super(id);
         this.add(new Label("jdbcConfigDatasourceId", config.getDatasourceId()));

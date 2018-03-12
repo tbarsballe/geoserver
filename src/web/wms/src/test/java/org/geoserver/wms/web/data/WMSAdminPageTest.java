@@ -23,7 +23,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class WMSAdminPageTest extends GeoServerWicketTestSupport {
-    
+
     private WMSInfo wms;
 
     @Before
@@ -31,14 +31,14 @@ public class WMSAdminPageTest extends GeoServerWicketTestSupport {
         wms = getGeoServerApplication().getGeoServer().getService(WMSInfo.class);
         login();
     }
-    
+
     @Test
     public void testValues() throws Exception {
         tester.startPage(WMSAdminPage.class);
         tester.assertModelValue("form:keywords", wms.getKeywords());
         tester.assertModelValue("form:srs", new ArrayList<String>());
     }
-    
+
     @Test
     public void testFormSubmit() throws Exception {
         tester.startPage(WMSAdminPage.class);
@@ -67,7 +67,7 @@ public class WMSAdminPageTest extends GeoServerWicketTestSupport {
         ft.submit("submit");
         List errors = tester.getMessages(FeedbackMessage.ERROR);
         assertEquals(1, errors.size());
-        assertTrue(((ValidationErrorFeedback)errors.get(0)).getMessage().toString().contains("bla"));
+        assertTrue(((ValidationErrorFeedback) errors.get(0)).getMessage().toString().contains("bla"));
         tester.assertRenderedPage(WMSAdminPage.class);
     }
 
@@ -81,7 +81,7 @@ public class WMSAdminPageTest extends GeoServerWicketTestSupport {
         assertTrue(wms.isBBOXForEachCRS());
     }
 
-    
+
     @Test
     public void testRootLayerTitle() throws Exception {
         tester.startPage(WMSAdminPage.class);

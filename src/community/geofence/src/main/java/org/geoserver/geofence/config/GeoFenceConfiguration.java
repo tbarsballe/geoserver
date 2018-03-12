@@ -27,9 +27,8 @@ import com.google.common.collect.Lists;
 
 /**
  * Configuration object for GeofenceAccessManager.
- * 
- * @author "Mauro Bartolomeoli - mauro.bartolomeoli@geo-solutions.it"
  *
+ * @author "Mauro Bartolomeoli - mauro.bartolomeoli@geo-solutions.it"
  */
 public class GeoFenceConfiguration implements Serializable, Cloneable {
 
@@ -57,7 +56,6 @@ public class GeoFenceConfiguration implements Serializable, Cloneable {
 
     /**
      * Remote GeoFence services url.
-     *
      */
     public String getServicesUrl() {
         return servicesUrl;
@@ -65,7 +63,7 @@ public class GeoFenceConfiguration implements Serializable, Cloneable {
 
     /**
      * Remote GeoFence services url.
-     * 
+     *
      * @param servicesUrl
      */
     public void setServicesUrl(String servicesUrl) {
@@ -74,7 +72,7 @@ public class GeoFenceConfiguration implements Serializable, Cloneable {
 
     /**
      * Name of this GeoServer instance for GeoFence rule configuration.
-     * 
+     *
      * @param instanceName the instanceName to set
      */
     public void setInstanceName(String instanceName) {
@@ -83,7 +81,7 @@ public class GeoFenceConfiguration implements Serializable, Cloneable {
 
     /**
      * Name of this GeoServer instance for GeoFence rule configuration.
-     * 
+     *
      * @return the instanceName
      */
     public String getInstanceName() {
@@ -92,7 +90,7 @@ public class GeoFenceConfiguration implements Serializable, Cloneable {
 
     /**
      * Flag to allow usage of remote and inline layers in SLDs.
-     * 
+     *
      * @param allowRemoteAndInlineLayers
      */
     public void setAllowRemoteAndInlineLayers(boolean allowRemoteAndInlineLayers) {
@@ -101,7 +99,6 @@ public class GeoFenceConfiguration implements Serializable, Cloneable {
 
     /**
      * Flag to allow usage of remote and inline layers in SLDs.
-     *
      */
     public boolean isAllowRemoteAndInlineLayers() {
         return allowRemoteAndInlineLayers;
@@ -109,7 +106,7 @@ public class GeoFenceConfiguration implements Serializable, Cloneable {
 
     /**
      * Allows write access to resources to authenticated users, if false only ADMINs have write access.
-     * 
+     *
      * @return the grantWriteToWorkspacesToAuthenticatedUsers
      */
     public boolean isGrantWriteToWorkspacesToAuthenticatedUsers() {
@@ -118,7 +115,7 @@ public class GeoFenceConfiguration implements Serializable, Cloneable {
 
     /**
      * Allows write access to resources to authenticated users, if false only ADMINs have write access.
-     * 
+     *
      * @param grantWriteToWorkspacesToAuthenticatedUsers the grantWriteToWorkspacesToAuthenticatedUsers to set
      */
     public void setGrantWriteToWorkspacesToAuthenticatedUsers(
@@ -128,7 +125,7 @@ public class GeoFenceConfiguration implements Serializable, Cloneable {
 
     /**
      * Use authenticated users roles to match rules, instead of username.
-     * 
+     *
      * @return the useRolesToFilter
      */
     public boolean isUseRolesToFilter() {
@@ -137,7 +134,7 @@ public class GeoFenceConfiguration implements Serializable, Cloneable {
 
     /**
      * Use authenticated users roles to match rules, instead of username.
-     * 
+     *
      * @param useRolesToFilter the useRolesToFilter to set
      */
     public void setUseRolesToFilter(boolean useRolesToFilter) {
@@ -146,7 +143,7 @@ public class GeoFenceConfiguration implements Serializable, Cloneable {
 
     /**
      * List of mutually exclusive roles used for rule matching when useRolesToFilter is true.
-     * 
+     *
      * @return the acceptedRoles
      */
     public String getAcceptedRoles() {
@@ -155,7 +152,7 @@ public class GeoFenceConfiguration implements Serializable, Cloneable {
 
     /**
      * List of mutually exclusive roles used for rule matching when useRolesToFilter is true.
-     * 
+     *
      * @param acceptedRoles the acceptedRoles to set
      */
     public void setAcceptedRoles(String acceptedRoles) {
@@ -178,7 +175,6 @@ public class GeoFenceConfiguration implements Serializable, Cloneable {
     }
 
     /**
-     * 
      * @return
      */
     public String getGwcContextSuffix() {
@@ -200,7 +196,6 @@ public class GeoFenceConfiguration implements Serializable, Cloneable {
     }
 
     /**
-     * 
      * @return
      */
     public String getDefaultUserGroupServiceName() {

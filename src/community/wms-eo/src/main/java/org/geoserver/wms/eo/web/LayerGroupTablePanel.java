@@ -25,38 +25,38 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 /**
  * A layer group table panel.
- * 
+ *
  * @author Davide Savazzi - geo-solutions.it
  */
 @SuppressWarnings("serial")
 public class LayerGroupTablePanel extends GeoServerTablePanel<LayerGroupInfo> {
 
     protected AbstractLink[] editSelectionLinks;
-    
-    
+
+
     public LayerGroupTablePanel(String id) {
         this(id, null);
     }
-    
+
     public LayerGroupTablePanel(String id, LayerGroupProviderFilter groupFilter) {
         super("table", new LayerGroupProvider(groupFilter), true);
     }
 
-    
+
     public void setSelectionLinks(AbstractLink[] editSelectionLinks) {
         this.editSelectionLinks = editSelectionLinks;
     }
-    
+
     public AbstractLink[] getSelectionLinks() {
         return editSelectionLinks;
     }
-    
+
     @Override
     protected Component getComponentForProperty(String id, IModel<LayerGroupInfo> itemModel, Property<LayerGroupInfo> property) {
         if (property == LayerGroupProvider.NAME) {
-            return createLayerGroupLink(id, itemModel); 
+            return createLayerGroupLink(id, itemModel);
         }
-        
+
         if (property == LayerGroupProvider.WORKSPACE) {
             return createWorkspaceLink(id, itemModel);
         }
@@ -79,7 +79,7 @@ public class LayerGroupTablePanel extends GeoServerTablePanel<LayerGroupInfo> {
         } else {
             canEdit = false;
         }
-        
+
         if (editSelectionLinks != null) {
             for (AbstractLink link : editSelectionLinks) {
                 link.setEnabled(canEdit);
@@ -87,7 +87,7 @@ public class LayerGroupTablePanel extends GeoServerTablePanel<LayerGroupInfo> {
             }
         }
     }
-    
+
     protected Component createLayerGroupLink(String id, IModel itemModel) {
         IModel groupNameModel = LayerGroupProvider.NAME.getModel(itemModel);
         IModel wsModel = LayerGroupProvider.WORKSPACE.getModel(itemModel);
@@ -109,9 +109,9 @@ public class LayerGroupTablePanel extends GeoServerTablePanel<LayerGroupInfo> {
             return new WebMarkupContainer(id);
         }
     }
-    
+
     protected boolean isAuthenticatedAsAdmin() {
-        return ComponentAuthorizer.ADMIN.isAccessAllowed(GeoServerSecuredPage.class, 
-            SecurityContextHolder.getContext().getAuthentication());
+        return ComponentAuthorizer.ADMIN.isAccessAllowed(GeoServerSecuredPage.class,
+                SecurityContextHolder.getContext().getAuthentication());
     }
 }

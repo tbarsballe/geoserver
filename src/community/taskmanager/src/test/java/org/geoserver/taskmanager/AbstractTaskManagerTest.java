@@ -12,15 +12,14 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 /**
  * Abstract test class.
- * 
- * @author Niels Charlier
  *
+ * @author Niels Charlier
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({"classpath*:/applicationContext.xml", "classpath*:/applicationSecurityContext.xml"})
 @WebAppConfiguration //we need web app context to have data directory set.
-public abstract class AbstractTaskManagerTest {    
-    
+public abstract class AbstractTaskManagerTest {
+
     protected static MockData DATA_DIRECTORY;
 
     @Autowired
@@ -30,21 +29,21 @@ public abstract class AbstractTaskManagerTest {
     public static void init() throws Exception {
         //set data directory
         DATA_DIRECTORY = new MockData();
-        System.setProperty("GEOSERVER_DATA_DIR", 
+        System.setProperty("GEOSERVER_DATA_DIR",
                 DATA_DIRECTORY.getDataDirectoryRoot().toString());
 
     }
-    
+
     protected boolean setupDataDirectory() throws Exception {
         return false;
     }
-    
+
     @Before
-    public final void setupAndLoadDataDirectory() throws Exception {        
+    public final void setupAndLoadDataDirectory() throws Exception {
         if (setupDataDirectory()) {
             DATA_DIRECTORY.setUp();
             geoServer.reload();
         }
     }
-    
+
 }

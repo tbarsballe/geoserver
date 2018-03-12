@@ -10,9 +10,7 @@ import org.junit.Test;
 import org.w3c.dom.Document;
 
 /**
- * 
  * @author Niels Charlier
- * 
  */
 public class GetRecordByIdTest extends CSWInternalTestSupport {
 
@@ -23,7 +21,7 @@ public class GetRecordByIdTest extends CSWInternalTestSupport {
         String request = "csw?service=CSW&version=2.0.2&request=GetRecordById&typeNames=csw:Record&id="
                 + forestId;
         Document d = getAsDOM(request);
-         print(d);
+        print(d);
         checkValidationErrors(d);
 
         // check we have the expected results

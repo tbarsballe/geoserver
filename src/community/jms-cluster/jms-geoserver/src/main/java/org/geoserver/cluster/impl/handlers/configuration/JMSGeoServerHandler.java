@@ -26,9 +26,7 @@ import org.geoserver.config.SettingsInfo;
 import com.thoughtworks.xstream.XStream;
 
 /**
- * 
  * @author Carlo Cancellieri - carlo.cancellieri@geo-solutions.it
- * 
  */
 public class JMSGeoServerHandler extends JMSConfigurationHandler<JMSGlobalModifyEvent> {
     private final GeoServer geoServer;
@@ -75,19 +73,17 @@ public class JMSGeoServerHandler extends JMSConfigurationHandler<JMSGlobalModify
 
     /**
      * Return the local GeoServerInfo updating its member with the ones coming from the passed GeoServerInfo
-     * 
+     *
      * @param geoServer the local GeoServer instance
      * @param deserInfo the de-serialized GeoServerInfo instance
      * @return the updated and local GeoServerInfo
-     * 
      * @throws IllegalAccessException
      * @throws InvocationTargetException
-     * @throws NoSuchMethodException {@link BeanUtilsBean.copyProperties}
-     * @throws IllegalArgumentException if arguments are null
-     * 
+     * @throws NoSuchMethodException     {@link BeanUtilsBean.copyProperties}
+     * @throws IllegalArgumentException  if arguments are null
      */
     private static GeoServerInfo localizeGeoServerInfo(final GeoServer geoServer,
-            final JMSGlobalModifyEvent ev) throws IllegalAccessException,
+                                                       final JMSGlobalModifyEvent ev) throws IllegalAccessException,
             InvocationTargetException, NoSuchMethodException {
         if (geoServer == null || ev == null)
             throw new IllegalArgumentException("Wrong passed arguments are null");
@@ -119,14 +115,13 @@ public class JMSGeoServerHandler extends JMSConfigurationHandler<JMSGlobalModify
 
     /**
      * Return the local JAIInfo updating its member with the ones coming from the passed JAIInfo
-     * 
+     *
      * @param geoServer the local GeoServer instance
      * @param deserInfo the de-serialized JAIInfo instance
      * @return the updated and local JAIInfo
-     * 
-     * @throws IllegalAccessException {@link BeanUtilsBean.copyProperties}
+     * @throws IllegalAccessException    {@link BeanUtilsBean.copyProperties}
      * @throws InvocationTargetException {@link BeanUtilsBean.copyProperties}
-     * @throws IllegalArgumentException if arguments are null
+     * @throws IllegalArgumentException  if arguments are null
      */
     private static JAIInfo localizeJAIInfo(final GeoServer geoServer, final JAIInfo deserInfo)
             throws IllegalAccessException, InvocationTargetException {
@@ -146,17 +141,16 @@ public class JMSGeoServerHandler extends JMSConfigurationHandler<JMSGlobalModify
 
     /**
      * Return the local SettingsInfo updating its member with the ones coming from the passed JAIInfo
-     * 
+     *
      * @param geoServer the local GeoServer instance
      * @param deserInfo the de-serialized JAIInfo instance
      * @return the updated and local JAIInfo
-     * 
-     * @throws IllegalAccessException {@link BeanUtilsBean.copyProperties}
+     * @throws IllegalAccessException    {@link BeanUtilsBean.copyProperties}
      * @throws InvocationTargetException {@link BeanUtilsBean.copyProperties}
-     * @throws IllegalArgumentException if arguments are null
+     * @throws IllegalArgumentException  if arguments are null
      */
     private static SettingsInfo localizeSettingsInfo(final GeoServer geoServer,
-            final SettingsInfo deserInfo) throws IllegalAccessException, InvocationTargetException {
+                                                     final SettingsInfo deserInfo) throws IllegalAccessException, InvocationTargetException {
         if (geoServer == null || deserInfo == null)
             throw new IllegalArgumentException("Wrong passed arguments are null");
 
@@ -181,17 +175,16 @@ public class JMSGeoServerHandler extends JMSConfigurationHandler<JMSGlobalModify
 
     /**
      * Return the updated local ContactInfo object replacing all the members with the ones coming from the passed ContactInfo
-     * 
+     *
      * @param geoServer the local GeoServer instance
      * @param deserInfo the de-serialized JAIInfo instance
      * @return the updated local ContactInfo.
-     * 
      * @throws IllegalAccessException
      * @throws InvocationTargetException
-     * @throws IllegalArgumentException if arguments are null
+     * @throws IllegalArgumentException  if arguments are null
      */
     private static ContactInfo localizeContactInfo(final GeoServer geoServer,
-            final ContactInfo deserInfo) throws IllegalAccessException, InvocationTargetException {
+                                                   final ContactInfo deserInfo) throws IllegalAccessException, InvocationTargetException {
         if (geoServer == null || deserInfo == null)
             throw new IllegalArgumentException("Wrong passed arguments are null");
         // get local instance
@@ -205,17 +198,16 @@ public class JMSGeoServerHandler extends JMSConfigurationHandler<JMSGlobalModify
 
     /**
      * Return the updated local CoverageAccessInfo object replacing all the members with the ones coming from the passed CoverageAccessInfo
-     * 
+     *
      * @param geoServer the local GeoServer instance
      * @param deserInfo the de-serialized JAIInfo instance
      * @return the updated local CoverageAccessInfo.
-     * 
      * @throws IllegalAccessException
      * @throws InvocationTargetException
-     * @throws IllegalArgumentException if arguments are null
+     * @throws IllegalArgumentException  if arguments are null
      */
     private static CoverageAccessInfo localizeCoverageAccessInfo(final GeoServer geoServer,
-            final CoverageAccessInfo deserInfo) throws IllegalAccessException,
+                                                                 final CoverageAccessInfo deserInfo) throws IllegalAccessException,
             InvocationTargetException {
         if (geoServer == null || deserInfo == null)
             throw new IllegalArgumentException("Wrong passed arguments are null");

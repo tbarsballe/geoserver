@@ -411,7 +411,7 @@ public class MultiDimensionalExtensionTest extends TestsSupport {
      * Also checks the content type of the response.
      */
     private Document getResultAsDocument(MockHttpServletResponse response, String contentType) throws Exception {
-       return getResultAsDocument(response, contentType, HttpStatus.OK);
+        return getResultAsDocument(response, contentType, HttpStatus.OK);
     }
 
     private Document getResultAsDocument(MockHttpServletResponse response, String contentType, HttpStatus expectedStatus) throws Exception {

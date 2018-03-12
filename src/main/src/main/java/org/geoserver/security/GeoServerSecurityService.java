@@ -11,9 +11,8 @@ import org.geoserver.security.config.SecurityNamedServiceConfig;
 
 /**
  * Common interface for {@link GeoServerRoleService} and {@link GeoServerUserGroupService}.
- *  
- * @author Justin Deoliveira, OpenGeo
  *
+ * @author Justin Deoliveira, OpenGeo
  */
 public interface GeoServerSecurityService {
 
@@ -23,7 +22,7 @@ public interface GeoServerSecurityService {
     void initializeFromConfig(SecurityNamedServiceConfig config) throws IOException;
 
     /**
-     * Flag specifying whether the service can create an associated store. 
+     * Flag specifying whether the service can create an associated store.
      */
     boolean canCreateStore();
 
@@ -41,13 +40,13 @@ public interface GeoServerSecurityService {
      * Sets the reference to the security manager facade for the service.
      * <p>
      * This method is called when the service is loaded.
-     * </p>  
+     * </p>
      */
     void setSecurityManager(GeoServerSecurityManager securityManager);
 
     /**
-     * Returns the reference to the security manager, set by 
-     *  {@link #setSecurityManager(GeoServerSecurityManager)}.
+     * Returns the reference to the security manager, set by
+     * {@link #setSecurityManager(GeoServerSecurityManager)}.
      */
     GeoServerSecurityManager getSecurityManager();
 

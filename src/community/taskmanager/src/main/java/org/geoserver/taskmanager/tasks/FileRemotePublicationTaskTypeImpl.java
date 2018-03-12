@@ -24,18 +24,18 @@ import it.geosolutions.geoserver.rest.GeoServerRESTPublisher.UploadMethod;
 public class FileRemotePublicationTaskTypeImpl extends AbstractRemotePublicationTaskTypeImpl {
 
     public static final String NAME = "RemoteFilePublication";
-    
-    @Override             
-    protected boolean createStore(ExternalGS extGS, GeoServerRESTManager restManager, 
-            StoreInfo store, Map<String, Object> parameterValues) throws IOException {
-        final StoreType storeType = store instanceof CoverageStoreInfo ? 
+
+    @Override
+    protected boolean createStore(ExternalGS extGS, GeoServerRESTManager restManager,
+                                  StoreInfo store, Map<String, Object> parameterValues) throws IOException {
+        final StoreType storeType = store instanceof CoverageStoreInfo ?
                 StoreType.COVERAGESTORES : StoreType.DATASTORES;
         final File file = Resources.fromURL(getURL(store)).file();
-        return restManager.getPublisher().createStore(store.getWorkspace().getName(), storeType, store.getName(), 
-                UploadMethod.FILE, store.getType().toLowerCase(), Files.probeContentType(file.toPath()), 
+        return restManager.getPublisher().createStore(store.getWorkspace().getName(), storeType, store.getName(),
+                UploadMethod.FILE, store.getType().toLowerCase(), Files.probeContentType(file.toPath()),
                 file.toURI(), null);
     }
-    
+
     private String getURL(StoreInfo storeInfo) {
         if (storeInfo instanceof CoverageStoreInfo) {
             return ((CoverageStoreInfo) storeInfo).getURL();

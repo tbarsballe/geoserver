@@ -40,7 +40,6 @@ import org.geotools.util.logging.Logging;
 
 /**
  * @author cancellieri carlo - GeoSolutions SAS
- * 
  */
 public class ManifestLoader {
 
@@ -67,8 +66,7 @@ public class ManifestLoader {
     private static ClassLoader classLoader;
 
     /**
-     * @throws Exception 
-     * 
+     * @throws Exception
      */
     public ManifestLoader(GeoServerResourceLoader loader) throws Exception {
 
@@ -91,7 +89,7 @@ public class ManifestLoader {
         // override settings from datadir
         try {
             // datadir search
-            Resource resource = loader.get( PROPERTIES_FILE );
+            Resource resource = loader.get(PROPERTIES_FILE);
             if (resource.getType() == Type.RESOURCE) {
                 is = resource.in();
                 props.load(is);
@@ -121,16 +119,15 @@ public class ManifestLoader {
             versionAttributeInclusions = ai.split(",");
         } else {
             // defaults
-            throw new Exception("Include attribute array cannot be null"); 
+            throw new Exception("Include attribute array cannot be null");
         }
 
     }
 
     /**
      * load an about model
-     * 
-     * @param loader
      *
+     * @param loader
      * @throws IllegalArgumentException if arguments are null
      */
     private static AboutModel getAboutModel(final ClassLoader loader)
@@ -211,25 +208,25 @@ public class ManifestLoader {
         String fullPath = clz.getResource(resource).toString();
         String archivePath = fullPath.substring(0, fullPath.length() - resource.length());
         if (archivePath.endsWith("\\WEB-INF\\classes") || archivePath.endsWith("/WEB-INF/classes")) {
-          archivePath = archivePath.substring(0, archivePath.length() - "/WEB-INF/classes".length()); // Required for wars
+            archivePath = archivePath.substring(0, archivePath.length() - "/WEB-INF/classes".length()); // Required for wars
         }
 
         try (InputStream input = new URL(archivePath + "/META-INF/MANIFEST.MF").openStream()) {
-          return new Manifest(input);
+            return new Manifest(input);
         } catch (Exception e) {
-          throw new RuntimeException("Loading MANIFEST for class " + clz + " failed!", e);
+            throw new RuntimeException("Loading MANIFEST for class " + clz + " failed!", e);
         }
-      }
-    
+    }
+
     /**
      * @return dynamically built AboutModel of the geoserver's versions
      */
     public static AboutModel getVersions() {
-        
+
         if (classLoader == null) {
             throw new IllegalArgumentException("Unable to run with null classLoader");
         }
-        
+
         // load metadata
         Map<String, Manifest> manifests = ManifestLoader.loadManifest(classLoader);
 
@@ -242,7 +239,7 @@ public class ManifestLoader {
             geoserverPath = geoserverPath + "!/META-INF/MANIFEST.MF";
 
             Class geoserver_class = GeoServer.class;
-            Manifest manifest = ManifestLoader.getManifest(geoserver_class); 
+            Manifest manifest = ManifestLoader.getManifest(geoserver_class);
             if (manifest != null) {
                 model.add(ManifestModel.parseManifest("GeoServer", manifest,
                         new ManifestModel.IncludeAttributeFilter(versionAttributeInclusions)));
@@ -260,7 +257,7 @@ public class ManifestLoader {
             path = path + "!/META-INF/MANIFEST.MF";
 
             Class geoserver_class = GeoTools.class;
-            Manifest manifest = ManifestLoader.getManifest(geoserver_class); 
+            Manifest manifest = ManifestLoader.getManifest(geoserver_class);
 
             if (manifest != null) {
                 model.add(ManifestModel.parseManifest("GeoTools", manifest,
@@ -283,7 +280,7 @@ public class ManifestLoader {
             path = path + "!/META-INF/MANIFEST.MF";
 
             Class geoserver_class = Class.forName("org.geowebcache.GeoWebCache");
-            Manifest manifest = ManifestLoader.getManifest(geoserver_class); 
+            Manifest manifest = ManifestLoader.getManifest(geoserver_class);
             if (manifest != null) {
                 model.add(ManifestModel.parseManifest("GeoWebCache", manifest,
                         new ManifestModel.IncludeAttributeFilter(versionAttributeInclusions)));
@@ -307,7 +304,7 @@ public class ManifestLoader {
 
     /**
      * This is the model used to store resources from the class loader.
-     * 
+     *
      * @author Cancellieri Carlo - GeoSolutions SAS
      */
     public static class AboutModel {
@@ -328,7 +325,6 @@ public class ManifestLoader {
         }
 
         /**
-         * 
          * @param am
          * @throws IllegalArgumentException
          */
@@ -350,7 +346,7 @@ public class ManifestLoader {
         /**
          * Filter resources from the used model generating a new one containing only resources having the name between from and to string.<br>
          * Note that objects are shared between models so changes to objects in the filtered model will also affect the current model.
-         * 
+         *
          * @param from
          * @param to
          * @return the filtered model
@@ -367,7 +363,7 @@ public class ManifestLoader {
         /**
          * Filter resources from the used model generating a new one containing only resources having the name matching the passed regular expression.<br>
          * Note that objects are shared between models so changes to objects in the filtered model will also affect the current model.
-         * 
+         *
          * @param regex regular expression
          * @return a filtered model
          * @throws IllegalArgumentException if the regex is null
@@ -394,7 +390,7 @@ public class ManifestLoader {
         /**
          * Filter resources from the used model generating a new one containing only resources having a key matching the passed string.<br>
          * Note that objects are shared between models so changes to objects in the filtered model will also affect the current model.
-         * 
+         *
          * @param key the key to match
          * @return a filtered model
          * @throws IllegalArgumentException if the key is null
@@ -415,10 +411,9 @@ public class ManifestLoader {
         }
 
         /**
-         * 
          * Filter resources from the used model generating a new one containing only resources having a property matching the passed string.<br>
          * Note that objects are shared between models so changes to objects in the filtered model will also affect the current model.
-         * 
+         *
          * @param value the value of the property
          * @return the filtered model
          * @throws IllegalArgumentException if the value is null
@@ -439,13 +434,12 @@ public class ManifestLoader {
         }
 
         /**
-         * 
          * Filter resources from the used model generating a new one containing only resources having a property key matching the passed key string
          * with a value matching the passed value string.<br>
          * Note that objects are shared between models so changes to objects in the filtered model will also affect the current model.
-         * 
+         *
          * @param value the value of the property
-         * @param key the name of the property
+         * @param key   the name of the property
          * @return the filtered model
          * @throws IllegalArgumentException if the key or the value are null
          */
@@ -466,7 +460,7 @@ public class ManifestLoader {
         }
 
         private boolean filterPropertyByKeyValue(final ManifestModel tModel, final String key,
-                final String value) {
+                                                 final String value) {
             // filter over properties
             for (Entry<String, String> e : tModel.getEntries().entrySet()) {
                 if (e.getKey().matches(key) && e.getValue().matches(value)) {
@@ -501,7 +495,7 @@ public class ManifestLoader {
 
         /**
          * Add a manifest file as resource with the given name
-         * 
+         *
          * @param name
          * @param manifest
          * @return true if this set did not already contain the specified name
@@ -513,7 +507,7 @@ public class ManifestLoader {
 
         /**
          * Add a manifest file as resource
-         * 
+         *
          * @param manifest
          * @return true if this set did not already contain the specified name
          */
@@ -523,7 +517,7 @@ public class ManifestLoader {
 
         /**
          * remove the resource named 'name'
-         * 
+         *
          * @param name (if null false is returned)
          * @return true if this set contained the specified element
          */
@@ -540,9 +534,8 @@ public class ManifestLoader {
 
         /**
          * This is the model used to store one resource from the class loader.
-         * 
+         *
          * @author Cancellieri Carlo - GeoSolutions SAS
-         * 
          */
         public static class ManifestModel {
 
@@ -587,13 +580,13 @@ public class ManifestLoader {
 
             /**
              * A parser for {@link Manifest} bean which generates {@link ManifestModel}s
-             * 
+             *
              * @param name the name to assign to the generated model
-             * @param m the manifest bean to load
+             * @param m    the manifest bean to load
              * @return the generated model
              */
             private static ManifestModel parseManifest(final String name, final Manifest manifest,
-                    final AttributesFilter<Map<String, String>> filter) {
+                                                       final AttributesFilter<Map<String, String>> filter) {
 
                 final ManifestModel m = new ManifestModel(name);
 
@@ -619,10 +612,9 @@ public class ManifestLoader {
 
             /**
              * Interface used to define Attributes filter in {@link ManifestModel#parseManifest(String, Manifest, AttributesFilter)}
-             * 
-             * @author cancellieri
-             * 
+             *
              * @param <T> the type return for the filter function
+             * @author cancellieri
              */
             public interface AttributesFilter<T> {
                 T filter(final Attributes at) throws Exception;
@@ -630,10 +622,9 @@ public class ManifestLoader {
 
             /**
              * INTERSECTION: create a map of properties from an attributes including only those matching the include array elements<br>
-             * 
+             * <p>
              * This implementation also supports attribute renaming using into the include array the pattern:<br>
              * include= { "attrName1:replaceName1", "attrName2:replaceName2", ...}<br>
-             * 
              */
             public static class IncludeAttributeFilter implements
                     AttributesFilter<Map<String, String>> {
@@ -655,7 +646,7 @@ public class ManifestLoader {
                  * @return a map of properties
                  */
                 private static Map<String, String> filterIncludingAttributes(final Attributes at,
-                        String[] include) {
+                                                                             String[] include) {
                     if (at == null)
                         throw new IllegalArgumentException("Null argument");
 
@@ -716,12 +707,12 @@ public class ManifestLoader {
                 }
 
                 /**
-                 * @param at the attribute to parse
+                 * @param at      the attribute to parse
                  * @param exclude the list of properties to exlude
                  * @return a map
                  */
                 private static Map<String, String> filterExcludingAttributes(final Attributes at,
-                        String[] exclude) {
+                                                                             String[] exclude) {
                     if (at == null)
                         throw new IllegalArgumentException("Null arguments");
                     if (exclude == null) {

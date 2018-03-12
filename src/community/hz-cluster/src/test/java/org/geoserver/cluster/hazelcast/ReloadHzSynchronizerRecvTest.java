@@ -30,9 +30,9 @@ public class ReloadHzSynchronizerRecvTest extends HzSynchronizerRecvTest {
             ScheduledExecutorService getNewExecutor() {
                 return getMockExecutor();
             }
-                        
+
             @Override
-            public boolean isStarted(){
+            public boolean isStarted() {
                 return true;
             }
         };
@@ -40,82 +40,99 @@ public class ReloadHzSynchronizerRecvTest extends HzSynchronizerRecvTest {
 
     @Override
     protected void expectationTestDisableLayer(LayerInfo info, String layerName, String layerId) throws Exception {
-        getGeoServer().reload(); expectLastCall();
+        getGeoServer().reload();
+        expectLastCall();
     }
 
     @Override
     protected void expectationTestStoreDelete(DataStoreInfo info, String storeName, String storeId, Class clazz)
             throws Exception {
-        getGeoServer().reload(); expectLastCall();
+        getGeoServer().reload();
+        expectLastCall();
     }
+
     @Override
     protected void expectationTestFTDelete(FeatureTypeInfo info, String ftName, String ftId, String storeId, Class clazz)
             throws Exception {
-        getGeoServer().reload(); expectLastCall();
+        getGeoServer().reload();
+        expectLastCall();
     }
 
     @Override
     protected void expectationTestContactChange(GeoServerInfo info,
-            String storeId) throws Exception {
-        getGeoServer().reload(); expectLastCall();
+                                                String storeId) throws Exception {
+        getGeoServer().reload();
+        expectLastCall();
     }
 
     @Override
     protected void expectationTestMultipleChange(GeoServerInfo gsInfo,
-            String globalId, LayerInfo layerInfo, String layerId) throws Exception {
-        
-        getGeoServer().reload(); expectLastCall();
-        getGeoServer().reload(); expectLastCall();
+                                                 String globalId, LayerInfo layerInfo, String layerId) throws Exception {
+
+        getGeoServer().reload();
+        expectLastCall();
+        getGeoServer().reload();
+        expectLastCall();
     }
 
     @Override
     protected void expectationTestTwoAddressChangeNoPause(GeoServerInfo gsInfo,
-            String globalId) throws Exception {
-        getGeoServer().reload(); expectLastCall();
+                                                          String globalId) throws Exception {
+        getGeoServer().reload();
+        expectLastCall();
     }
 
     @Override
     protected void expectationTestTwoAddressChangeWithPause(
             GeoServerInfo gsInfo, String globalId) throws Exception {
-        getGeoServer().reload(); expectLastCall();
-        getGeoServer().reload(); expectLastCall();
+        getGeoServer().reload();
+        expectLastCall();
+        getGeoServer().reload();
+        expectLastCall();
     }
 
     @Override
     protected void expectationTestTwoLayerChangeNoPause(LayerInfo layerInfo,
-            String layerId) throws Exception {
-        getGeoServer().reload(); expectLastCall();
+                                                        String layerId) throws Exception {
+        getGeoServer().reload();
+        expectLastCall();
     }
 
     @Override
     protected void expectationTestTwoLayerChangeWithPause(LayerInfo layerInfo,
-            String layerId) throws Exception {
-        getGeoServer().reload(); expectLastCall();
-        getGeoServer().reload(); expectLastCall();
+                                                          String layerId) throws Exception {
+        getGeoServer().reload();
+        expectLastCall();
+        getGeoServer().reload();
+        expectLastCall();
     }
 
     @Override
     protected void expectationTestWorkspaceAdd(WorkspaceInfo info,
-            String workspaceName, String workspaceId) throws Exception {
-        getGeoServer().reload(); expectLastCall();
+                                               String workspaceName, String workspaceId) throws Exception {
+        getGeoServer().reload();
+        expectLastCall();
     }
 
     @Override
     protected void expectationTestChangeSettings(SettingsInfo info,
-            String settingsId, WorkspaceInfo wsInfo, String workspaceId) throws Exception {
-        getGeoServer().reload(); expectLastCall();
+                                                 String settingsId, WorkspaceInfo wsInfo, String workspaceId) throws Exception {
+        getGeoServer().reload();
+        expectLastCall();
     }
 
     @Override
     protected void expectationTestChangeLogging(LoggingInfo info,
-            String loggingId) throws Exception {
-        getGeoServer().reload(); expectLastCall();
+                                                String loggingId) throws Exception {
+        getGeoServer().reload();
+        expectLastCall();
     }
 
     @Override
     protected void expectationTestChangeService(ServiceInfo info,
-            String ServiceId) throws Exception {
-        getGeoServer().reload(); expectLastCall();
+                                                String ServiceId) throws Exception {
+        getGeoServer().reload();
+        expectLastCall();
     }
 
     /**
@@ -123,7 +140,7 @@ public class ReloadHzSynchronizerRecvTest extends HzSynchronizerRecvTest {
      */
     @Override
     protected void verify(Object... mocks) {
-        ExecutorService reloadService = ((ReloadHzSynchronizer)sync).reloadService;
+        ExecutorService reloadService = ((ReloadHzSynchronizer) sync).reloadService;
         reloadService.shutdown();
         try {
             reloadService.awaitTermination(5, TimeUnit.SECONDS);

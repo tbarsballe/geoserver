@@ -38,9 +38,9 @@ public class CoverageResourceListenerTest {
     public void setUp() {
         this.resourceManager = createMock(WPSResourceManager.class);
         this.listener = new CoverageResourceListener(
-            this.resourceManager, new CoverageCleanerCallback());
+                this.resourceManager, new CoverageCleanerCallback());
         this.status = new ExecutionStatus(
-            new NameImpl("gs", "TestProcess"), UUID.randomUUID().toString(), false);
+                new NameImpl("gs", "TestProcess"), UUID.randomUUID().toString(), false);
         this.status.setPhase(ProcessState.RUNNING);
         this.inputs = new HashMap<>();
         this.inputs.put("coverageA", null);
@@ -52,7 +52,7 @@ public class CoverageResourceListenerTest {
     @Test
     public void testCheckInputWhenSucceeded() {
         // expected addResource to be called twice
-        this.resourceManager.addResource(EasyMock.<GridCoverageResource> anyObject());
+        this.resourceManager.addResource(EasyMock.<GridCoverageResource>anyObject());
         expectLastCall().times(2);
         replay(this.resourceManager);
 
@@ -76,7 +76,7 @@ public class CoverageResourceListenerTest {
     @Test
     public void testCheckInputWhenFailed() {
         // expected addResource to be called once
-        this.resourceManager.addResource(EasyMock.<GridCoverageResource> anyObject());
+        this.resourceManager.addResource(EasyMock.<GridCoverageResource>anyObject());
         expectLastCall().once();
         replay(this.resourceManager);
 

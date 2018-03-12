@@ -9,7 +9,6 @@ package org.geoserver.test;
 /**
  * Mock data for testing 3D BBOXes in app-schema
  *
- * 
  * @author Niels Charlier
  */
 public class BBox3DMockData extends AbstractAppSchemaMockData {

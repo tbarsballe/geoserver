@@ -30,7 +30,7 @@ import org.springframework.util.Assert;
 
 /**
  * Tests for ManifestLoader, AboutModel and ManifestModel
- * 
+ *
  * @author Carlo Cancellieri - Geo-Solutions SAS
  */
 @Category(SystemTest.class)
@@ -174,11 +174,9 @@ public class ManifestLoaderTest extends GeoServerSystemTestSupport {
     }
 
     /**
-     * 
      * SubTests to check properties personalizations
-     * 
-     * @author Carlo Cancellieri - GeoSolutions
      *
+     * @author Carlo Cancellieri - GeoSolutions
      */
     @Category(SystemTest.class)
     @TestSetup(run = TestSetupFrequency.REPEAT)
@@ -191,13 +189,13 @@ public class ManifestLoaderTest extends GeoServerSystemTestSupport {
         @Override
         protected void setUpTestData(SystemTestData testData) throws Exception {
         }
-        
+
         @Before
         public void paranoidCleanup() {
             // this file randomly shows up on the main module root and breaks the test
             // could not find where it's coming from, just going to remove it if it's there.
             File rootMonitor = new File(".", "manifest.properties");
-            if(rootMonitor.exists()) {
+            if (rootMonitor.exists()) {
                 rootMonitor.delete();
             }
         }

@@ -25,11 +25,10 @@ import org.springframework.util.ClassUtils;
 
 /**
  * Abstract Spring Batch {@link ItemReader}.
- * 
+ * <p>
  * Configures the {@link Catalog} and initizializes the {@link XStreamPersister}.
- * 
- * @author Alessio Fabiani, GeoSolutions
  *
+ * @author Alessio Fabiani, GeoSolutions
  */
 @SuppressWarnings("rawtypes")
 public abstract class CatalogWriter<T> extends BackupRestoreItem
@@ -38,7 +37,7 @@ public abstract class CatalogWriter<T> extends BackupRestoreItem
     protected Class clazz;
 
     public CatalogWriter(Class<T> clazz, Backup backupFacade,
-            XStreamPersisterFactory xStreamPersisterFactory) {
+                         XStreamPersisterFactory xStreamPersisterFactory) {
         super(backupFacade, xStreamPersisterFactory);
         this.clazz = clazz;
 
@@ -49,7 +48,7 @@ public abstract class CatalogWriter<T> extends BackupRestoreItem
 
     /**
      * No-op.
-     * 
+     *
      * @see org.springframework.batch.item.ItemStream#close()
      */
     @Override
@@ -58,7 +57,7 @@ public abstract class CatalogWriter<T> extends BackupRestoreItem
 
     /**
      * No-op.
-     * 
+     *
      * @see org.springframework.batch.item.ItemStream#open(ExecutionContext)
      */
     @Override
@@ -67,7 +66,7 @@ public abstract class CatalogWriter<T> extends BackupRestoreItem
 
     /**
      * Return empty {@link ExecutionContext}.
-     * 
+     *
      * @see org.springframework.batch.item.ItemStream#update(ExecutionContext)
      */
     @Override
@@ -77,7 +76,7 @@ public abstract class CatalogWriter<T> extends BackupRestoreItem
     /**
      * The name of the component which will be used as a stem for keys in the {@link ExecutionContext}. Subclasses should provide a default value,
      * e.g. the short form of the class name.
-     * 
+     *
      * @param name the name for the component
      */
     public void setName(String name) {

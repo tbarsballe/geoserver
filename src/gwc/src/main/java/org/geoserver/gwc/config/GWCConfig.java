@@ -101,7 +101,7 @@ public class GWCConfig implements Cloneable, Serializable {
      * Default cache formats for non coverage/vector layers (LayerGroups and WMS layers)
      */
     private HashSet<String> defaultOtherCacheFormats;
-    
+
     private String lockProviderName;
 
     /**
@@ -186,11 +186,11 @@ public class GWCConfig implements Cloneable, Serializable {
     public void setTMSEnabled(boolean tMSEnabled) {
         TMSEnabled = tMSEnabled;
     }
-    
+
     public void setSecurityEnabled(boolean securityEnabled) {
         this.securityEnabled = securityEnabled;
     }
-    
+
     public boolean isSecurityEnabled() {
         return securityEnabled;
     }
@@ -237,10 +237,10 @@ public class GWCConfig implements Cloneable, Serializable {
 
     /**
      * @return an instance of GWCConfig (possibly {@code this}) that is sane, in case the configured
-     *         defaults are not (like in missing some config option). This is just a safety measure
-     *         to ensure a mis configured gwc-gs.xml does not prevent the creation of tile layers
-     *         (ej, automatic creation of new tile layers may be disabled in gwc-gs.xml and its
-     *         contents may not lead to a sane state to be used as default settings).
+     * defaults are not (like in missing some config option). This is just a safety measure
+     * to ensure a mis configured gwc-gs.xml does not prevent the creation of tile layers
+     * (ej, automatic creation of new tile layers may be disabled in gwc-gs.xml and its
+     * contents may not lead to a sane state to be used as default settings).
      */
     public GWCConfig saneConfig() {
         if (isSane()) {
@@ -374,15 +374,15 @@ public class GWCConfig implements Cloneable, Serializable {
     public boolean equals(Object o) {
         return EqualsBuilder.reflectionEquals(this, o);
     }
-    
+
     public String getLockProviderName() {
         return lockProviderName;
     }
-    
+
     /**
      * Sets the name of the {@link LockProvider} Spring bean to be used as the lock provider
      * for this GWC instance
-     * 
+     *
      * @param lockProviderName
      */
     public void setLockProviderName(String lockProviderName) {
@@ -403,7 +403,7 @@ public class GWCConfig implements Cloneable, Serializable {
      * This method sets a flag indicating if GWC tiles must be cached in memory
      *
      * @param innerCachingEnabled If this flag is set to true, GWC tiles will be cached
-     * in memory instead of being cached on the disk.
+     *                            in memory instead of being cached on the disk.
      */
     public void setInnerCachingEnabled(boolean innerCachingEnabled) {
         this.innerCachingEnabled = innerCachingEnabled;
@@ -424,7 +424,7 @@ public class GWCConfig implements Cloneable, Serializable {
      * even if they are also cached in memory
      *
      * @param persistenceEnabled If this flag is set to true, GWC tiles are stored
-     * in the File System as backup.
+     *                           in the File System as backup.
      */
     public void setEnabledPersistence(boolean persistenceEnabled) {
         this.persistenceEnabled = persistenceEnabled;
@@ -443,7 +443,7 @@ public class GWCConfig implements Cloneable, Serializable {
      * This method allows to set a new {@link CacheProvider} instance by defining its name.
      *
      * @param cacheProviderClass The name of the new {@link CacheProvider} instance to
-     * set.
+     *                           set.
      */
     public void setCacheProviderClass(String cacheProviderClass) {
         this.cacheProviderClass = cacheProviderClass;
@@ -464,7 +464,7 @@ public class GWCConfig implements Cloneable, Serializable {
      * the related {@link CacheConfiguration}.
      *
      * @param cacheConfigurations A {@link Map} containing {@link CacheConfiguration}s associated
-     * to the {@link CacheProvider} keys.
+     *                            to the {@link CacheProvider} keys.
      */
     public void setCacheConfigurations(Map<String, CacheConfiguration> cacheConfigurations) {
         this.cacheConfigurations = new HashMap<String, CacheConfiguration>(cacheConfigurations);

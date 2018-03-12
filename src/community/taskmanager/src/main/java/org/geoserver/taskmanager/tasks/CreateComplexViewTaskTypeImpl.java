@@ -20,11 +20,11 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class CreateComplexViewTaskTypeImpl extends AbstractCreateViewTaskTypeImpl {
-    
+
     public static final String NAME = "CreateComplexView";
 
     public static final String PARAM_DEFINITION = "definition";
-    
+
     private static final Pattern PATTERN_PLACEHOLDER = Pattern.compile("\\$\\{([^}]+)\\}");
 
     @Override
@@ -33,11 +33,11 @@ public class CreateComplexViewTaskTypeImpl extends AbstractCreateViewTaskTypeImp
         super.initParamInfo();
         paramInfo.put(PARAM_DEFINITION, new ParameterInfo(PARAM_DEFINITION, ParameterType.SQL, true));
     }
-    
+
     public String buildQueryDefinition(Map<String, Object> parameterValues,
-            Map<Object, Object> tempValues, Map<String, Attribute> attributes) {
+                                       Map<Object, Object> tempValues, Map<String, Attribute> attributes) {
         String definition = (String) parameterValues.get(PARAM_DEFINITION);
-        
+
         Matcher m = PATTERN_PLACEHOLDER.matcher(definition);
 
         while (m.find()) {

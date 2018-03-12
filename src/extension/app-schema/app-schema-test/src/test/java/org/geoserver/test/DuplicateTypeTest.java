@@ -11,7 +11,7 @@ import org.w3c.dom.Document;
 
 /**
  * Test two WFS feature types (XSD elements) with the same XSD type.
- * 
+ *
  * @author Ben Caradoc-Davies, CSIRO Earth Science and Resource Engineering
  */
 public class DuplicateTypeTest extends AbstractAppSchemaTestSupport {

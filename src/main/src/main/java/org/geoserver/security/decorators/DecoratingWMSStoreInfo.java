@@ -21,7 +21,7 @@ import org.opengis.util.ProgressListener;
 /**
  * Delegates every method to the delegate wms store info. Subclasses will override selected methods
  * to perform their "decoration" job
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public class DecoratingWMSStoreInfo extends AbstractDecorator<WMSStoreInfo> implements WMSStoreInfo {
@@ -141,7 +141,7 @@ public class DecoratingWMSStoreInfo extends AbstractDecorator<WMSStoreInfo> impl
 
     @Override
     public void setMaxConnections(int maxConcurrentConnections) {
-        delegate.setMaxConnections(maxConcurrentConnections);        
+        delegate.setMaxConnections(maxConcurrentConnections);
     }
 
     public int getReadTimeout() {

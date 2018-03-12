@@ -33,6 +33,7 @@ public class RecordCustomizer extends FeatureCustomizer {
     private final static String REFERENCES = "references";
 
     private final static String TYPENAME = "RecordType";
+
     static {
         REFERENCES_DESCRIPTOR = CSWRecordDescriptor.getDescriptor(REFERENCES);
         ComplexType referenceType = (ComplexType) REFERENCES_DESCRIPTOR.getType();
@@ -40,7 +41,9 @@ public class RecordCustomizer extends FeatureCustomizer {
 
     }
 
-    /** An instance of {@link DownloadLinkHandler}, used to deal with download links */
+    /**
+     * An instance of {@link DownloadLinkHandler}, used to deal with download links
+     */
     private DownloadLinkHandler downloadLinkHandler;
 
     public void setDownloadLinkHandler(DownloadLinkHandler downloadLinkHandler) {
@@ -53,7 +56,7 @@ public class RecordCustomizer extends FeatureCustomizer {
 
     @Override
     public void customizeFeature(Feature feature, CatalogInfo resource) {
-        CloseableIterator<String> links = null; 
+        CloseableIterator<String> links = null;
         List<Property> newReferencesList = new ArrayList<Property>();
         String link = null;
         try {

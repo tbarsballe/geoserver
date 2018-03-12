@@ -20,10 +20,14 @@ import static org.junit.Assert.assertSame;
 
 public class ProcessParameterIOTest {
 
-    public static class TestType {};
+    public static class TestType {
+    }
+
+    ;
 
     private static ProcessParameterIO testPPIO =
-        new ProcessParameterIO(TestType.class, TestType.class, "testPPIO") {};
+            new ProcessParameterIO(TestType.class, TestType.class, "testPPIO") {
+            };
 
     private static GenericApplicationContext context = new GenericApplicationContext();
 
@@ -43,7 +47,7 @@ public class ProcessParameterIOTest {
     @Test
     public void testFindAllWithNullContext() {
         List<ProcessParameterIO> matches = ProcessParameterIO
-            .findAll(new Parameter<>("testPPIO", TestType.class), null);
+                .findAll(new Parameter<>("testPPIO", TestType.class), null);
         assertEquals(1, matches.size());
         assertSame(testPPIO, matches.get(0));
     }
@@ -51,7 +55,7 @@ public class ProcessParameterIOTest {
     @Test
     public void testFindAllWithSameContext() {
         List<ProcessParameterIO> matches = ProcessParameterIO
-            .findAll(new Parameter<>("testPPIO", TestType.class), context);
+                .findAll(new Parameter<>("testPPIO", TestType.class), context);
         assertEquals(1, matches.size());
         assertSame(testPPIO, matches.get(0));
     }
@@ -61,7 +65,7 @@ public class ProcessParameterIOTest {
         GenericApplicationContext myContext = new GenericApplicationContext();
         myContext.refresh();
         List<ProcessParameterIO> matches = ProcessParameterIO
-            .findAll(new Parameter<>("testPPIO", TestType.class), myContext);
+                .findAll(new Parameter<>("testPPIO", TestType.class), myContext);
         assertEquals(0, matches.size());
     }
 }

@@ -33,10 +33,10 @@ public class UserGroupPaletteFormComponent extends PaletteFormComponent<GeoServe
         this(id, new SelectedGroupsModel(ugServiceName, user), ugServiceName, user);
     }
 
-    public UserGroupPaletteFormComponent(String id, IModel<List<GeoServerUserGroup>> model, 
-        final String ugServiceName, GeoServerUser user) {
-        super(id, model, (IModel) new GroupsModel(ugServiceName), 
-            new ChoiceRenderer<GeoServerUserGroup>("groupname", "groupname"));
+    public UserGroupPaletteFormComponent(String id, IModel<List<GeoServerUserGroup>> model,
+                                         final String ugServiceName, GeoServerUser user) {
+        super(id, model, (IModel) new GroupsModel(ugServiceName),
+                new ChoiceRenderer<GeoServerUserGroup>("groupname", "groupname"));
 
         add(new SubmitLink("addGroup") {
             @Override
@@ -50,15 +50,14 @@ public class UserGroupPaletteFormComponent extends PaletteFormComponent<GeoServe
         return new ArrayList(palette.getModelCollection());
     }
 
-    public void diff(Collection<GeoServerUserGroup> orig, Collection<GeoServerUserGroup> add, 
-        Collection<GeoServerUserGroup> remove) {
-        
+    public void diff(Collection<GeoServerUserGroup> orig, Collection<GeoServerUserGroup> add,
+                     Collection<GeoServerUserGroup> remove) {
+
         remove.addAll(orig);
         for (GeoServerUserGroup group : getSelectedGroups()) {
             if (!orig.contains(group)) {
                 add.add(group);
-            }
-            else {
+            } else {
                 remove.remove(group);
             }
         }
@@ -91,12 +90,12 @@ public class UserGroupPaletteFormComponent extends PaletteFormComponent<GeoServe
         }
 
     }
-    
+
     @Override
     protected String getSelectedHeaderPropertyKey() {
         return "UserGroupPaletteFormComponent.selectedHeader";
     }
-    
+
     @Override
     protected String getAvaliableHeaderPropertyKey() {
         return "UserGroupPaletteFormComponent.availableHeader";

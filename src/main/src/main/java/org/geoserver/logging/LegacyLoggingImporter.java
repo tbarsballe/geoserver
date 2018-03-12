@@ -16,13 +16,14 @@ import org.geotools.util.logging.Logging;
 
 /**
  * Imports logging configuration from the legacy services.xml file.
- * 
+ *
  * @author Justin Deoliveira, OpenGEO
- * 
  */
 public class LegacyLoggingImporter {
 
-    /** logger */
+    /**
+     * logger
+     */
     static Logger LOGGER = Logging.getLogger("org.geoserver.confg");
 
     private String configFileName;

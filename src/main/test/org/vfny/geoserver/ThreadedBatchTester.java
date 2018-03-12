@@ -18,7 +18,7 @@ import java.util.Date;
 
 /**
  * ThreadedBatchTester purpose.
- * 
+ * <p>
  * <p>
  * Description of ThreadedBatchTester ...
  * </p>
@@ -36,7 +36,7 @@ public class ThreadedBatchTester extends Thread {
     private static long start;
     private static int finished = 0;
     private static int wait = 2;
-	private static String postUrl = "http://localhost:8080/geoserver/wfs";
+    private static String postUrl = "http://localhost:8080/geoserver/wfs";
 
     public ThreadedBatchTester() {
     }
@@ -48,7 +48,7 @@ public class ThreadedBatchTester extends Thread {
             Thread[] threads = new Thread[runs];
 
             if (isPost) {
-            	url = new URL(postUrl);
+                url = new URL(postUrl);
                 for (int i = 0; i < runs; i++)
                     threads[i] = new TestPostThread(url, req);
             } else {
@@ -68,12 +68,12 @@ public class ThreadedBatchTester extends Thread {
                 //container or this client code...  Seems like there should
                 //be someway to tell the threads to maybe try to wait for a
                 //bit?
-            	sleep(wait);
+                sleep(wait);
             }
 
-			while (finished < runs) {
-            	sleep(1);
-			}
+            while (finished < runs) {
+                sleep(1);
+            }
 
             PrintStream os = System.out;
 
@@ -89,9 +89,9 @@ public class ThreadedBatchTester extends Thread {
         }
     }
 
-	public static synchronized void threadDone(){
-		finished++;
-	}
+    public static synchronized void threadDone() {
+        finished++;
+    }
 
     public static void main(String[] args) {
         try {
@@ -110,23 +110,24 @@ public class ThreadedBatchTester extends Thread {
 
         for (int i = 0; i < runs; i++) {
             switch (((TestGetThread) threads[i]).getResult()) {
-            case HttpURLConnection.HTTP_OK:
-                good++;
+                case HttpURLConnection.HTTP_OK:
+                    good++;
 
-            default:}
+                default:
+            }
         }
 
         os.println(good + "/" + runs + " Tests 'OK' ("
-            + ((good * 1.0) / (runs * 1.0)) + ")\n");
+                + ((good * 1.0) / (runs * 1.0)) + ")\n");
 
         for (int i = 0; i < runs; i++) {
             TestGetThread tpt = (TestGetThread) threads[i];
 
-			int result = tpt.getResult();
+            int result = tpt.getResult();
             if (tpt.getTime2() == null) {
                 os.print(result + " Could not connect\n");
             } else if (tpt.getTime3() == null) {
-            	os.print(result + " Could not complete read\n");
+                os.print(result + " Could not complete read\n");
             } else {
                 os.print(tpt.getResult() + ", ");
                 os.print(tpt.getTime1().getTime() + ", ");
@@ -138,8 +139,8 @@ public class ThreadedBatchTester extends Thread {
                 if (tpt.getTime3() != null) {
                     os.print(tpt.getTime3().getTime() + ", ");
                     double time = (tpt.getTime3().getTime() - tpt.getTime1().getTime())
-                    				/ 1000.0;
-                    os.print("time (s): " + time +"\n");
+                            / 1000.0;
+                    os.print("time (s): " + time + "\n");
                 } else {
                     os.print("null\n");
                 }
@@ -148,10 +149,10 @@ public class ThreadedBatchTester extends Thread {
 
         long end = new Date().getTime();
         os.println(good + "/" + runs + " Tests 'OK' ("
-            + ((good * 1.0) / (runs * 1.0)) + ")\n");
+                + ((good * 1.0) / (runs * 1.0)) + ")\n");
 
         os.println("Total time (s): " + ((end - start) / 1000.0) + " (start: "
-            + start + ", end: " + end + ")");
+                + start + ", end: " + end + ")");
     }
 
     private static void loadArgs(String[] args) throws IOException {
@@ -161,7 +162,7 @@ public class ThreadedBatchTester extends Thread {
 
         int i = 0;
 
-		//Is this weird nested structure necessary? ch
+        //Is this weird nested structure necessary? ch
         while (i < args.length) {
             String key = args[i++];
 
@@ -175,8 +176,8 @@ public class ThreadedBatchTester extends Thread {
                     FileReader fr = new FileReader(f);
                     BufferedReader br = new BufferedReader(fr);
                     String t = "";
-					//does this ready loop work here?  It doesn't for 
-					//the threads... ch
+                    //does this ready loop work here?  It doesn't for
+                    //the threads... ch
                     while (br.ready())
                         t += br.readLine();
 
@@ -195,11 +196,11 @@ public class ThreadedBatchTester extends Thread {
                             if ("-p".equals(key)) {
                                 isPost = true;
                             } else { // usage
-                                if ("-w".equals(key) && i < args.length){
-                                	wait = Integer.parseInt(args[i++]);
+                                if ("-w".equals(key) && i < args.length) {
+                                    wait = Integer.parseInt(args[i++]);
                                 } else {
-                                   usage();
-                            	}
+                                    usage();
+                                }
                             }
                         }
                     }
@@ -212,14 +213,14 @@ public class ThreadedBatchTester extends Thread {
         System.out.println("USAGE:\n");
         System.out.println("ThreadedBatchTester [-p][-n][-w] [-r | -u]");
         System.out.println(
-            "-n\t Optional\t Number of duplicate requests to create and run.");
+                "-n\t Optional\t Number of duplicate requests to create and run.");
         System.out.println(
-            "-p\t Optional\t Number of duplicate requests to create and run.");
+                "-p\t Optional\t Number of duplicate requests to create and run.");
         System.out.println(
-            "-r\t Optional\t Mutually Exclusive with -u\t The file containing the request to execute.");
+                "-r\t Optional\t Mutually Exclusive with -u\t The file containing the request to execute.");
         System.out.println(
-            "-u\t Optional\t Mutually Exclusive with -r\t The URL to execute.");
+                "-u\t Optional\t Mutually Exclusive with -r\t The URL to execute.");
         System.out.println("-l\t Optional\t The Log file.");
-		System.out.println("-w\t Optional\t Amount of time to wait between dispatching requests (in ms)");
+        System.out.println("-w\t Optional\t Amount of time to wait between dispatching requests (in ms)");
     }
 }

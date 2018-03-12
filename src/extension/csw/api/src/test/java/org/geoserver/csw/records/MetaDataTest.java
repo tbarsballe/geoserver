@@ -25,16 +25,16 @@ import org.opengis.geometry.MismatchedDimensionException;
 import com.vividsolutions.jts.geom.MultiPolygon;
 
 public class MetaDataTest {
-    
+
     FilterFactory2 ff = CommonFactoryFinder.getFilterFactory2();
-    
+
 
     @Test
     public void testConfirmTypeBuilt() {
         assertNotNull(MetaDataDescriptor.METADATA_TYPE);
         assertNotNull(MetaDataDescriptor.METADATA_DESCRIPTOR);
     }
-    
+
     @Test
     public void testBuildMDRecord() throws MismatchedDimensionException, Exception {
         GenericRecordBuilder rb = new GenericRecordBuilder(MetaDataDescriptor.getInstance());
@@ -56,7 +56,7 @@ public class MetaDataTest {
         assertRecordElement(f, "gmd:identificationInfo/gmd:AbstractMD_Identification/gmd:descriptiveKeywords/gmd:MD_Keywords/gmd:keyword/gco:CharacterString", "imagery", "baseMaps", "earthCover");
         assertBBox(f, new ReferencedEnvelope(14.05, 17.24, 46.46, 28.42, DefaultGeographicCRS.WGS84));
     }
-    
+
     private void assertBBox(Feature f, ReferencedEnvelope... envelopes) throws Exception {
         PropertyName bbox = ff.property("gmd:identificationInfo/gmd:MD_DataIdentification/gmd:extent/gmd:EX_Extent/gmd:geographicElement/gmd:EX_GeographicBoundingBox", MetaDataDescriptor.NAMESPACES);
         Property p = (Property) bbox.evaluate(f);
@@ -66,22 +66,22 @@ public class MetaDataTest {
         for (int i = 0; i < envelopes.length; i++) {
             assertEquals(envelopes[i], featureEnvelopes.get(i));
             ReferencedEnvelope re = envelopes[i].transform(CSWRecordDescriptor.DEFAULT_CRS, true);
-            if(total == null) {
+            if (total == null) {
                 total = re;
             } else {
                 total.expandToInclude(re);
             }
         }
-        
+
         assertTrue(total.contains(geometry.getEnvelopeInternal()));
     }
-    
+
     private void assertRecordElement(Feature f, String elementName, Object... values) {
         PropertyName pn = ff.property(elementName, MetaDataDescriptor.NAMESPACES);
-        
-        Object value = pn.evaluate( f);
-        
-        if (value instanceof Collection) {        
+
+        Object value = pn.evaluate(f);
+
+        if (value instanceof Collection) {
             Collection<Property> propertyList = (Collection<Property>) value;
             Property[] properties = (Property[]) propertyList.toArray(new Property[propertyList.size()]);
             assertEquals(properties.length, values.length);

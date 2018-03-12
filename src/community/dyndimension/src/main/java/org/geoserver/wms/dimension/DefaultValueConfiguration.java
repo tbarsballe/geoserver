@@ -9,7 +9,7 @@ import java.io.Serializable;
 
 /**
  * Configures the dynamic dimension values for a specific dimension
- * 
+ *
  * @author Andrea Aime - GeoSolutions
  */
 public final class DefaultValueConfiguration implements Serializable, Cloneable {
@@ -37,7 +37,6 @@ public final class DefaultValueConfiguration implements Serializable, Cloneable 
     String defaultValueExpression;
 
     /**
-     * 
      * @param dimension
      * @param policy
      */

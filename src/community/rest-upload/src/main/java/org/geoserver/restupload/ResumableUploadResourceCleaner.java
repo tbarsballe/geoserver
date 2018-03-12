@@ -14,22 +14,27 @@ import org.geotools.util.logging.Logging;
 
 /**
  * Class used for cleaning the resources in the temporary directory after that the "expirationDelay" has passed
- * 
+ *
  * @author Nicola Lagomarsini
- * 
  */
 public class ResumableUploadResourceCleaner extends TimerTask {
-    /** LOGGER class */
+    /**
+     * LOGGER class
+     */
     private Logger LOGGER = Logging.getLogger(ResumableUploadResourceCleaner.class);
 
-    /** Parameter indicating the cleaning period in milliseconds */
+    /**
+     * Parameter indicating the cleaning period in milliseconds
+     */
     private Long expirationDelay;
 
-    /** Manager handling all the REST upload operations */
+    /**
+     * Manager handling all the REST upload operations
+     */
     private ResumableUploadResourceManager resourceManager;
 
     public ResumableUploadResourceCleaner(ResumableUploadResourceManager resourceManager,
-            Long expirationDelay) throws IOException {
+                                          Long expirationDelay) throws IOException {
         this.resourceManager = resourceManager;
         this.expirationDelay = expirationDelay;
     }
@@ -51,8 +56,6 @@ public class ResumableUploadResourceCleaner extends TimerTask {
 
     /**
      * The file expiration delay in milliseconds. A file will be deleted when it's been around more than expirationDelay
-     *
-     *
      */
     public long getExpirationDelay() {
         return expirationDelay;

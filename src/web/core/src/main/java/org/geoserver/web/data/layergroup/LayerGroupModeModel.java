@@ -17,7 +17,7 @@ import org.geoserver.catalog.LayerGroupInfo;
  * Simple detachable model listing all the available LayerGroup modes.
  */
 public class LayerGroupModeModel extends LoadableDetachableModel<List<LayerGroupInfo.Mode>> {
-    
+
     private static final long serialVersionUID = 1781202562325730121L;
 
     @Override

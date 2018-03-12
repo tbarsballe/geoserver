@@ -44,7 +44,9 @@ public class RemotesPage extends GeoServerSecuredPage {
                 window.setContent(new WhitelistRuleEditor(window.getContentId(), model, window,
                         whitelistRulePanel, true));
                 window.show(target);
-            };
+            }
+
+            ;
         });
     }
 }
