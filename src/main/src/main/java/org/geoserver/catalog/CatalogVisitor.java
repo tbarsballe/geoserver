@@ -5,7 +5,6 @@
  */
 package org.geoserver.catalog;
 
-
 /**
  * Visitor for catalog objects.
  *

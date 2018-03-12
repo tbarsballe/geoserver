@@ -1576,7 +1576,7 @@ public class GetCoverage {
       indexes[i++] =
           bandsNames.indexOf(
               bandName); // I am assuming there is no duplication in band names which is ok I
-                         // believe
+      // believe
     }
 
     // === enforce limits

@@ -24,7 +24,7 @@ public abstract class LDAPBaseSecurityServiceConfig extends BaseSecurityNamedSer
   String allGroupsSearchFilter;
   String
       groupSearchFilter; // more appropriate name would be groupMembershipFilter - XStream backwards
-                         // compatibility
+  // compatibility
   String groupMembershipAttribute;
   String userSearchBase;
   String

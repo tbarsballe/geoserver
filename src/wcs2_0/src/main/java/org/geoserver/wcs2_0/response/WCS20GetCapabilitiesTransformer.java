@@ -344,7 +344,7 @@ public class WCS20GetCapabilitiesTransformer extends TransformerBase {
       element(
           "ows:Profile",
           "http://www.opengis.net/spec/WCS_protocol-binding_get-kvp/1.0.1"); // requirement #1 in
-                                                                             // OGC 09-147r3
+      // OGC 09-147r3
       element("ows:Profile", "http://www.opengis.net/spec/WCS_protocol-binding_post-xml/1.0");
 
       // don't believe we support this one
@@ -360,10 +360,10 @@ public class WCS20GetCapabilitiesTransformer extends TransformerBase {
       element(
           "ows:Profile",
           " http://www.opengis.net/spec/WCS_geotiff-coverages/1.0/conf/geotiff-coverage"); // TODO:
-                                                                                           // check
-                                                                                           // specs
-                                                                                           // and
-                                                                                           // URL
+      // check
+      // specs
+      // and
+      // URL
 
       // === GML encoding
       element("ows:Profile", "http://www.opengis.net/spec/GMLCOV/1.0/conf/gml-coverage");

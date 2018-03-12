@@ -124,7 +124,7 @@ public class SLDValidator {
                 body =
                     body + body + body + body + body
                         + body; // make it longer (not usually required, but might be for
-                                // SLD_BODY=... which is all one line)
+                // SLD_BODY=... which is all one line)
 
                 if (colNum > body.length()) {
                   colNum = body.length();
