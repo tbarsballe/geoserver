@@ -142,7 +142,6 @@ import com.vividsolutions.jts.geom.MultiPolygon;
 
 /**
  * @author groldan
- *
  */
 public class GWCTest {
 

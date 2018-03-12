@@ -15,7 +15,7 @@ import org.geotools.data.complex.AppSchemaDataAccess;
 
 /**
  * Mock data for testing integration of {@link AppSchemaDataAccess} with Wms.
- *
+ * <p>
  * Inspired by {@link MockData}.
  *
  * @author Niels Charlier, Curtin University of Technology

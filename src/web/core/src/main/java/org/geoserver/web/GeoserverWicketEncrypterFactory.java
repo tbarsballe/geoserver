@@ -33,7 +33,6 @@ import org.jasypt.encryption.pbe.StandardPBEByteEncryptor;
  * Encryptor factory for apache wicket
  *
  * @author christian
- *
  */
 public class GeoserverWicketEncrypterFactory implements ICryptFactory {
 
@@ -83,7 +82,6 @@ public class GeoserverWicketEncrypterFactory implements ICryptFactory {
      * Look up in the Spring Context for an implementation
      * of {@link ICryptFactory}
      * if nothing found use this default.
-     *
      */
     public static ICryptFactory get() {
         if (Factory != null) return Factory;
