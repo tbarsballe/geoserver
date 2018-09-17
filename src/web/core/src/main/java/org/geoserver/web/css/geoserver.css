@@ -93,6 +93,44 @@ input[readonly] {
   padding: 0;
 }
 
+palette-theme-default {
+  display: table;
+}
+
+.palette-theme-default > div {
+  display: table-cell;
+}
+
+.palette-theme-default .palette-choices {
+  min-width: 40%;
+  width: auto;
+  float: none;
+}
+
+.palette-theme-default .palette-buttons {
+  float: none;
+  vertical-align: top;
+}
+
+.palette-theme-default .palette-selected {
+  min-width: 40%;
+  width: auto;
+  float: none;
+}
+
+.palette-theme-default .palette-choices select {
+  min-width: 100%;
+  width: auto;
+}
+.palette-theme-default .palette-buttons div {
+  display: inline-block;
+}
+
+.palette-theme-default .palette-selected select {
+  min-width: 100%;
+  width: auto;
+}
+
 /*-----------------------
 Utility Classes
 -----------------------*/
