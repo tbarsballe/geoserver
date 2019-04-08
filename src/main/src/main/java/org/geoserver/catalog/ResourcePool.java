@@ -94,6 +94,7 @@ import org.geotools.data.wms.WebMapServer;
 import org.geotools.data.wms.xml.WMSSchema;
 import org.geotools.data.wmts.WebMapTileServer;
 import org.geotools.data.wmts.model.WMTSCapabilities;
+import org.geotools.data.wmts.model.WMTSLayer;
 import org.geotools.factory.Hints;
 import org.geotools.feature.AttributeTypeBuilder;
 import org.geotools.feature.FeatureTypes;
@@ -1937,7 +1938,7 @@ public class ResourcePool {
      * @param info
      * @throws IOException
      */
-    public Layer getWMTSLayer(WMTSLayerInfo info) throws IOException {
+    public WMTSLayer getWMTSLayer(WMTSLayerInfo info) throws IOException {
 
         String name = info.getName();
         if (info.getNativeName() != null) {
@@ -1948,7 +1949,7 @@ public class ResourcePool {
 
         caps = info.getStore().getWebMapTileServer(null).getCapabilities();
 
-        for (Layer layer : caps.getLayerList()) {
+        for (WMTSLayer layer : caps.getLayerList()) {
             if (name.equals(layer.getName())) {
                 return layer;
             }
