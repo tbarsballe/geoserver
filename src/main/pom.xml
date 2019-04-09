@@ -16,6 +16,7 @@
  
  <groupId>org.geoserver</groupId>
  <artifactId>gs-main</artifactId>
+ <version>2.12.5-GEOS-8813-TRANSGLOBAL-PATCH</version>
  <packaging>jar</packaging>
  <name>Main Module</name>
  
